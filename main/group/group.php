@@ -261,7 +261,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
             false
         );
 
-        echo $category['description'];
+        echo Security::remove_XSS($category['description']);
         echo $groupToShow;
     }
 } else {

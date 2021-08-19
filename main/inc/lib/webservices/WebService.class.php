@@ -32,6 +32,15 @@ class WebService
         /** @var User user */
         $this->user = UserManager::getManager()->findUserByUsername($username);
         $this->apiKey = $apiKey;
+
+        $_user = [
+            'user_id' => $this->user->getId(),
+            'status' => $this->user->getStatus(),
+            'uidReset' => true,
+        ];
+        ChamiloSession::write('_user', $_user);
+
+        Login::init_user($this->user->getId(), true);
     }
 
     /**

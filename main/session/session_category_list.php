@@ -27,15 +27,15 @@ $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 $page = isset($_GET['page']) ? (int) $_GET['page'] : null;
 $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : null;
-$sort = isset($_GET['sort']) && in_array($_GET['sort'], ['name', 'nbr_session', 'date_start', 'date_end'])
-    ? Security::remove_XSS($_GET['sort'])
-    : 'name';
+$columns = ['name', 'nbr_session', 'date_start', 'date_end'];
+$sort = isset($_GET['sort']) && in_array($_GET['sort'], $columns) ? Security::remove_XSS($_GET['sort']) : 'name';
 $idChecked = isset($_REQUEST['idChecked']) ? Security::remove_XSS($_REQUEST['idChecked']) : null;
-$order = isset($_REQUEST['order']) ? Security::remove_XSS($_REQUEST['order']) : 'ASC';
+$order = $_REQUEST['order'] ?? 'ASC';
+$order = $order === 'ASC' ? 'DESC' : 'ASC';
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : null;
 
 if ($action === 'delete_on_session' || $action === 'delete_off_session') {
-    $delete_session = $action == 'delete_on_session' ? true : false;
+    $delete_session = $action === 'delete_on_session' ? true : false;
     SessionManager::delete_session_category($idChecked, $delete_session);
     Display::addFlash(Display::return_message(get_lang('SessionCategoryDelete')));
     header('Location: '.api_get_self().'?sort='.$sort);
@@ -91,7 +91,6 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 
     $query_rows = "SELECT count(*) as total_rows
                   FROM $tbl_session_category sc $where ";
-    $order = ($order == 'ASC') ? 'DESC' : 'ASC';
     $result_rows = Database::query($query_rows);
     $recorset = Database::fetch_array($result_rows);
     $num = $recorset['total_rows'];

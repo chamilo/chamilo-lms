@@ -16,6 +16,8 @@
  */
 require_once __DIR__.'/../../inc/global.inc.php';
 
+api_protect_webservices();
+
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
 
 if ($hash) {
@@ -40,8 +42,16 @@ try {
     $restApi = $apiKey ? Rest::validate($username, $apiKey) : null;
 
     if ($restApi) {
+        LoginCheck($restApi->getUser()->getId());
+        Tracking::updateUserLastLogin($restApi->getUser()->getId());
+
         $restApi->setCourse($course);
         $restApi->setSession($session);
+
+        if ($course) {
+            Event::accessCourse();
+            Event::eventCourseLoginUpdate(api_get_course_int_id(), api_get_user_id(), api_get_session_id());
+        }
     }
 
     switch ($action) {
@@ -202,6 +212,10 @@ try {
             break;
         case Rest::SAVE_SESSION:
             $data = $restApi->addSession($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::UPDATE_SESSION:
+            $data = $restApi->updateSession($_POST);
             $restResponse->setData($data);
             break;
         case Rest::GET_USERS:
@@ -415,6 +429,22 @@ try {
             $plugin = PauseTraining::create();
             $data = $plugin->updateUserPauseTraining($_POST['user_id'], $_POST);
             $restResponse->setData([$data]);
+            break;
+        case Rest::CHECK_CONDITIONAL_LOGIN:
+            $restResponse->setData(
+                [
+                    'check_conditional_login' => $restApi->checkConditionalLogin()
+                ]
+            );
+            break;
+        case Rest::GET_LEGAL_CONDITIONS:
+            $restResponse->setData(
+                $restApi->getLegalConditions()
+            );
+            break;
+        case Rest::UPDATE_CONDITION_ACCEPTED:
+            $restApi->updateConditionAccepted();
+            $restResponse->setData(['status' => true]);
             break;
         default:
             throw new Exception(get_lang('InvalidAction'));

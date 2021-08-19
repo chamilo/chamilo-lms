@@ -341,7 +341,7 @@ if (isset($modifyAnswers)) {
     }
 
     // construction of the Answer object
-    $objAnswer = new Answer($objQuestion->id);
+    $objAnswer = new Answer($objQuestion->iid);
     Session::write('objAnswer', $objAnswer);
 
     if ($debug > 0) {

@@ -124,7 +124,7 @@ class GradebookDataGenerator
         foreach ($visibleItems as $item) {
             $row = [];
             $row[] = $item;
-            $row[] = $item->get_name();
+            $row[] = Security::remove_XSS($item->get_name());
             // display the 2 first line of description and all description
             // on mouseover (https://support.chamilo.org/issues/6588)
             $row[] = '<span title="'.api_remove_tags_with_space($item->get_description()).'">'.

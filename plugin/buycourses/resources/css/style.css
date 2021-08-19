@@ -71,6 +71,23 @@
     color: #666666;
 }
 
+.buy-info .coupon-question, .service-buy .coupon {
+    font-size: 16px;
+    line-height: 6px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-top: 24px;
+    letter-spacing: -0.020em;
+}
+
+.buy-info .coupon, .service-buy .coupon {
+    line-height: 32px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    letter-spacing: -0.1em;
+}
+
 .buy-summary {
     margin-top: 10px;
     border-top: 1px solid #CCCCCC;
@@ -86,6 +103,11 @@
     background-color: #e8f2f8;
     border-color: #bce8f1;
 }
+
+.btn.btn-default.btn-sm {
+    white-space: unset;
+}
+
 tr.sale-row {
     font-size: 12px;
 }

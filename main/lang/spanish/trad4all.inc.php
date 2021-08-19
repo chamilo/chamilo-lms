@@ -8802,4 +8802,22 @@ $EmailToTeachersWhenNewPost = "Enviar correo electrónico a los profesores sobre
 $PortfolioAlertNewPostContent = "Hay un nuevo artículo por %s en el portafolio del curso %s. Para verlo haga <a href='%s'>click aquí</a>.";
 $PortfolioAlertNewPostSubject = "[Portfolio] Nuevo artículo en el curso %s";
 $OngoingTraining = "Formación(es) en curso";
+$QuizRemindSubject = "Tienes un nuevo mensaje de %s";
+$QuizFirstRemindBody = "Hola \%s,<br /><br /> Un nuevo ejercicio %s ha sido agregado en el curso %s.<br /><br />Curso: %s <br />Ejercicio: %s <br />";
+$QuizLastRemindBody = "Visitar el ejercicio en <a href=\"%s\">%s</a><br />";
+$QuizDhrRemindBody = "Hola %s,<br /><br />Como padre, estan recibiendo este correo para avisarle que %s tiene un nuevo ejercicio %s en el curso %s.<br /><br />Estudiante: %s<br /> Curso: %s<br />Ejercicio: %s<br />";
+$QuizRemindDuration = "Duration del ejercicio: %s <br />";
+$QuizRemindStartDate = "Fecha de inicio del ejercicio: %s <br />";
+$QuizRemindEndDate = "Fecha de fin del ejercicio: %s <br />";
+$CareerDiagramLegend = "Leyenda del diagrama de carrera";
+$CareerDiagramDisclaimer = "Descargo de responsabilidad del diagrama de carrera";
+$SuccessfulAttempt = "Intento exitoso";
+$FailedAttempt = "Intento fallido";
+$StudentWithSuccessfulAttempt = "Estudiantes con intento exitoso";
+$StudentWithFailedAttempt = "Estudiantes con intento fallido";
+$ExerciseAttemptStatsReport = "Reporte de intentos de ejercicio";
+$ComparativeGroupReport = "Reporte comparativo por grupo";
+$CoursesUsage = "Uso de cursos";
+$HideConnectionTime = "Ocultar tiempo de conexión";
+$CourseInWhichTheQuestionWasInitiallyCreated = "Curso en el cual la pregunta fue creada.";
 ?>

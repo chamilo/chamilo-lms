@@ -113,7 +113,9 @@ class RemedialCoursePlugin extends Plugin
         Exercise $objExercise,
         int $userId = 0,
         int $sessionId = 0,
-        bool $review = false
+        bool $review = false,
+        int $lpId = 0,
+        int $lpItemId = 0
     ): ?string {
         if ('true' !== $this->get(self::SETTING_ENABLED)) {
             return null;
@@ -149,7 +151,9 @@ class RemedialCoursePlugin extends Plugin
             $userId,
             $objExercise->iId,
             $objExercise->course_id,
-            $sessionId
+            $sessionId,
+            $lpId,
+            $lpItemId
         );
         $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
             $userId,
@@ -220,14 +224,20 @@ class RemedialCoursePlugin extends Plugin
 
                 if ($courseExistsInSession) {
                     SessionManager::subscribe_users_to_session_course([$userId], $sessionId, $courseData['code']);
-                    $courses[] = $courseData['title'];
+                    $courses[] = Display::url(
+                        $courseData['title'],
+                        api_get_course_url($courseData['code'], $sessionId)
+                    );
                 }
             } else {
                 $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseData['code']);
 
                 if (!$isSubscribed) {
                     CourseManager::subscribeUser($userId, $courseData['code']);
-                    $courses[] = $courseData['title'];
+                    $courses[] = Display::url(
+                        $courseData['title'],
+                        api_get_course_url($courseData['code'])
+                    );
                 }
             }
         }
@@ -243,8 +253,13 @@ class RemedialCoursePlugin extends Plugin
      * When a student takes an exam, and he gets an acceptable grade, he is enrolled in a series of courses that
      * represent the next level BT#18165.
      */
-    public function getAdvancedCourseList(Exercise $objExercise, int $userId = 0, int $sessionId = 0): ?string
-    {
+    public function getAdvancedCourseList(
+        Exercise $objExercise,
+        int $userId = 0,
+        int $sessionId = 0,
+        int $lpId = 0,
+        int $lpItemId = 0
+    ): ?string {
         if ('true' !== $this->get(self::SETTING_ENABLED)) {
             return null;
         }
@@ -271,7 +286,9 @@ class RemedialCoursePlugin extends Plugin
                 $userId,
                 $objExercise->iId,
                 $objExercise->course_id,
-                $sessionId
+                $sessionId,
+                $lpId,
+                $lpItemId
             );
             $bestAttempt['exe_result'] = 0;
 
@@ -357,7 +374,10 @@ class RemedialCoursePlugin extends Plugin
                 );
             }
 
-            $courses[] = $courseData['title'];
+            $courses[] = Display::url(
+                $courseData['title'],
+                api_get_course_url($courseData['code'], $sessionId)
+            );
         }
 
         if (empty($courses)) {

@@ -32,7 +32,7 @@ if (empty($track_exercise_info)) {
     api_not_allowed($printHeaders);
 }
 
-$exercise_id = $track_exercise_info['id'];
+$exercise_id = $track_exercise_info['iid'];
 $student_id = $track_exercise_info['exe_user_id'];
 $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
@@ -79,6 +79,7 @@ if (empty($nbrQuestions)) {
 if (empty($questionList)) {
     $questionList = Session::read('questionList');
 }
+/* @var Exercise $objExercise */
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
@@ -271,7 +272,7 @@ if (!empty($track_exercise_info)) {
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
             $attempts = Event::getExerciseResultsByUser(
                 $currentUserId,
-                $objExercise->id,
+                $objExercise->iid,
                 api_get_course_int_id(),
                 api_get_session_id(),
                 $track_exercise_info['orig_lp_id'],
@@ -330,7 +331,7 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
 $i = $totalScore = $totalWeighting = 0;
 $arrques = [];
 $arrans = [];
-$user_restriction = $is_allowedToEdit ? '' : " AND user_id= $student_id ";
+$user_restriction = $is_allowedToEdit ? '' : " AND user_id = $student_id ";
 $sql = "SELECT attempts.question_id, answer
         FROM $TBL_TRACK_ATTEMPT as attempts
         INNER JOIN $TBL_TRACK_EXERCISES AS stats_exercises
@@ -342,8 +343,7 @@ $sql = "SELECT attempts.question_id, answer
             quizz_rel_questions.c_id=".api_get_course_int_id()."
         INNER JOIN $TBL_QUESTIONS AS questions
         ON
-            questions.id = quizz_rel_questions.question_id AND
-            questions.c_id = ".api_get_course_int_id()."
+            questions.iid = quizz_rel_questions.question_id
         WHERE
             attempts.exe_id = $id $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
@@ -441,6 +441,7 @@ foreach ($questionList as $questionId) {
         case CALCULATED_ANSWER:
         case GLOBAL_MULTIPLE_ANSWER:
         case FREE_ANSWER:
+        case UPLOAD_ANSWER:
         case ORAL_EXPRESSION:
         case MATCHING:
         case DRAGGABLE:
@@ -511,7 +512,7 @@ foreach ($questionList as $questionId) {
                                     $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: {$objExercise->id},
+                                            exerciseId: {$objExercise->iid},
                                             exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
@@ -604,7 +605,7 @@ foreach ($questionList as $questionId) {
         if ($isFeedbackAllowed && $action !== 'export') {
             $name = 'fckdiv'.$questionId;
             $marksname = 'marksName'.$questionId;
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
                 $url_name = get_lang('AddComments');
@@ -679,7 +680,7 @@ foreach ($questionList as $questionId) {
         }
 
         if ($is_allowedToEdit && $isFeedbackAllowed && $action !== 'export') {
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                 $marksname = 'marksName'.$questionId;
                 $arrmarks[] = $questionId;
 
@@ -836,7 +837,7 @@ foreach ($questionList as $questionId) {
         }
     }
 
-    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
         $scoreToReview = [
             'score' => $my_total_score,
             'comments' => isset($comnt) ? $comnt : null,

@@ -124,23 +124,27 @@ class BigBlueButtonBN
 		$creationUrl = $this->_bbbServerBaseUrl."api/create?";
 		// Add params:
 		$params =
-		'name='.urlencode($this->_meetingName).
-		'&meetingID='.urlencode($this->_meetingId).
-		'&attendeePW='.urlencode($creationParams['attendeePw']).
-		'&moderatorPW='.urlencode($creationParams['moderatorPw']).
-		'&dialNumber='.urlencode($creationParams['dialNumber']).
-		'&voiceBridge='.urlencode($creationParams['voiceBridge']).
-		'&webVoice='.urlencode($creationParams['webVoice']).
-		'&logoutURL='.urlencode($creationParams['logoutUrl']).
-		'&maxParticipants='.urlencode($creationParams['maxParticipants']).
-		'&record='.urlencode($creationParams['record']).
-		'&duration='.urlencode($creationParams['duration']);
+            'name='.urlencode($this->_meetingName).
+            '&meetingID='.urlencode($this->_meetingId).
+            '&attendeePW='.urlencode($creationParams['attendeePw']).
+            '&moderatorPW='.urlencode($creationParams['moderatorPw']).
+            '&dialNumber='.urlencode($creationParams['dialNumber']).
+            '&voiceBridge='.urlencode($creationParams['voiceBridge']).
+            '&webVoice='.urlencode($creationParams['webVoice']).
+            '&logoutURL='.urlencode($creationParams['logoutUrl']).
+            '&maxParticipants='.urlencode($creationParams['maxParticipants']).
+            '&record='.urlencode($creationParams['record']).
+            '&duration='.urlencode($creationParams['duration'])
+        ;
+
 		//'&meta_category='.urlencode($creationParams['meta_category']);
 		$welcomeMessage = $creationParams['welcomeMsg'];
-		if(trim($welcomeMessage))
-			$params .= '&welcome='.urlencode($welcomeMessage);
+        if (trim($welcomeMessage)) {
+            $params .= '&welcome='.urlencode($welcomeMessage);
+        }
+
 		// Return the complete URL:
-		return ( $creationUrl.$params.'&checksum='.sha1("create".$params.$this->_securitySalt) );
+		return ($creationUrl.$params.'&checksum='.sha1("create".$params.$this->_securitySalt));
 	}
 
 	public function createMeetingWithXmlResponseArray($creationParams)
@@ -167,7 +171,7 @@ class BigBlueButtonBN
 
         if ($xml) {
             if ($xml->meetingID) {
-                return array(
+                return [
                     'returncode' => $xml->returncode->__toString(),
                     'message' => $xml->message->__toString(),
                     'messageKey' => $xml->messageKey->__toString(),
@@ -176,21 +180,22 @@ class BigBlueButtonBN
                     'moderatorPw' => $xml->moderatorPW->__toString(),
                     'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
                     'createTime' => $xml->createTime->__toString(),
-                    'internalMeetingID' => $xml->internalMeetingID->__toString()
-                );
+                    'internalMeetingID' => $xml->internalMeetingID->__toString(),
+                ];
             } else {
-                return array(
+                return [
                     'returncode' => $xml->returncode->__toString(),
                     'message' => $xml->message->__toString(),
                     'messageKey' => $xml->messageKey->__toString(),
-                );
+                ];
             }
         } else {
             return null;
         }
 	}
 
-	public function getJoinMeetingURL($joinParams) {
+	public function getJoinMeetingURL($joinParams)
+    {
 		/*
 		NOTE: At this point, we don't use a corresponding joinMeetingWithXmlResponse here because the API
 		doesn't respond on success, but you can still code that method if you need it. Or, you can take the URL
@@ -208,35 +213,38 @@ class BigBlueButtonBN
 		$this->_meetingId = $this->_requiredParam($joinParams['meetingId']);
 		$this->_username = $this->_requiredParam($joinParams['username']);
 		$this->_password = $this->_requiredParam($joinParams['password']);
+
 		// Establish the basic join URL:
 		$joinUrl = $this->_bbbServerBaseUrl."api/join?";
+
 		// Add parameters to the URL:
 		$params =
-		'meetingID='.urlencode($this->_meetingId).
-		'&fullName='.urlencode($this->_username).
-		'&password='.urlencode($this->_password).
-		'&userID='.urlencode($joinParams['userID']).
-		'&webVoiceConf='.urlencode($joinParams['webVoiceConf']);
+            'meetingID='.urlencode($this->_meetingId).
+            '&fullName='.urlencode($this->_username).
+            '&password='.urlencode($this->_password).
+            '&userID='.urlencode($joinParams['userID']).
+            '&webVoiceConf='.urlencode($joinParams['webVoiceConf'])
+        ;
+
 		// Only use createTime if we really want to use it. If it's '', then don't pass it:
-		if (((isset($joinParams['createTime'])) && ($joinParams['createTime'] != ''))) {
+		if ((isset($joinParams['createTime']) && $joinParams['createTime'] != '')) {
 			$params .= '&createTime='.urlencode($joinParams['createTime']);
 		}
 
-		if (isset($joinParams['interface']) && (int) $joinParams['interface'] === BBBPlugin::INTERFACE_HTML5) {
+		/*if (isset($joinParams['interface']) && (int) $joinParams['interface'] === BBBPlugin::INTERFACE_HTML5) {
 			$bbbHost = api_remove_trailing_slash(CONFIG_SERVER_URL_WITH_PROTOCOL);
 			if (preg_match('#/bigbluebutton$#', $bbbHost)) {
 			    $bbbHost = preg_replace('#/bigbluebutton$#', '', $bbbHost);
             }
             $params .= '&redirectClient=true&clientURL='.$bbbHost.'/html5client/join';
-        }
+        }*/
 
 		// Return the URL:
-		$url = $joinUrl.$params.'&checksum='.sha1('join'.$params.$this->_securitySalt);
-
-		return $url;
+		return $joinUrl.$params.'&checksum='.sha1('join'.$params.$this->_securitySalt);
 	}
 
-	public function getEndMeetingURL($endParams) {
+	public function getEndMeetingURL($endParams)
+    {
 		/* USAGE:
 		$endParams = array (
 			'meetingId' => '1234',		-- REQUIRED - The unique id for the meeting
@@ -247,8 +255,10 @@ class BigBlueButtonBN
 		$this->_password = $this->_requiredParam($endParams['password']);
 		$endUrl = $this->_bbbServerBaseUrl."api/end?";
 		$params =
-		'meetingID='.urlencode($this->_meetingId).
-		'&password='.urlencode($this->_password);
+            'meetingID='.urlencode($this->_meetingId).
+            '&password='.urlencode($this->_password)
+        ;
+
 		return ($endUrl.$params.'&checksum='.sha1("end".$params.$this->_securitySalt));
 	}
 
@@ -279,7 +289,6 @@ class BigBlueButtonBN
 	-- getMeetings
 	-- getMeetingInfo
 	*/
-
 	public function getIsMeetingRunningUrl($meetingId) {
 		/* USAGE:
 		$meetingId = '1234'		-- REQUIRED - The unique id for the meeting
@@ -305,7 +314,6 @@ class BigBlueButtonBN
 		else {
 			return null;
 		}
-
 	}
 
 	public function getGetMeetingsUrl() {
@@ -317,7 +325,8 @@ class BigBlueButtonBN
 		return $getMeetingsUrl;
 	}
 
-	public function getMeetingsWithXmlResponseArray() {
+	public function getMeetingsWithXmlResponseArray()
+    {
 		/* USAGE:
 		We don't need to pass any parameters with this one, so we just send the query URL off to BBB
 		and then handle the results that we get in the XML response.

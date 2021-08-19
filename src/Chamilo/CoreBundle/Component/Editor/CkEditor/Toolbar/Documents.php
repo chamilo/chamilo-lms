@@ -67,6 +67,7 @@ class Documents extends Basic
                 'Audio',
                 'Asciimath',
                 'Asciisvg',
+                'CodeSnippet',
             ],
             ['Table', 'SpecialChar'],
             [
@@ -115,6 +116,7 @@ class Documents extends Basic
                 'SpecialChar',
                 'Asciimath',
                 'Asciisvg',
+                'CodeSnippet',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -163,6 +165,7 @@ class Documents extends Basic
                 'Table',
                 'Asciimath',
                 'Asciisvg',
+                'CodeSnippet',
             ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],

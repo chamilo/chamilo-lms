@@ -1342,7 +1342,7 @@ function filter_extension(&$filename)
             if ($skip == 'true') {
                 return 0;
             } else {
-                $new_ext = api_get_setting('upload_extensions_replace_by');
+                $new_ext = getReplacedByExtension();
                 $filename = str_replace('.'.$ext, '.'.$new_ext, $filename);
 
                 return 1;
@@ -1362,7 +1362,7 @@ function filter_extension(&$filename)
             if ($skip == 'true') {
                 return 0;
             } else {
-                $new_ext = api_get_setting('upload_extensions_replace_by');
+                $new_ext = getReplacedByExtension();
                 $filename = str_replace('.'.$ext, '.'.$new_ext, $filename);
 
                 return 1;
@@ -1371,6 +1371,13 @@ function filter_extension(&$filename)
             return 1;
         }
     }
+}
+
+function getReplacedByExtension()
+{
+    $extension = api_get_setting('upload_extensions_replace_by');
+
+    return 'REPLACED_'.api_replace_dangerous_char(str_replace('.', '', $extension));
 }
 
 /**

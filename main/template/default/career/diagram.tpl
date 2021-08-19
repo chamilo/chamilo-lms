@@ -6,7 +6,7 @@
         min-width: 100% !important;
     }
 </style>
-<script type="text/javascript" src="{{ _p.web_lib }}mxgraph/src/js/mxClient.js"></script>
+<script src="{{ _p.web_lib }}mxgraph/src/js/mxClient.js"></script>
 <script>
     // Overridden to define per-shape connection points
     mxGraph.prototype.getAllConnectionConstraints = function(terminal, source) {
@@ -80,7 +80,11 @@
                 {% endfor %}
 
                 {% for vertex in vertex_list %}
-                    {{ vertex }}
+                    {% if 0 == iframe %}
+                        {{ vertex |replace({'iframe=1': 'iframe=0',})}}
+                    {% else %}
+                        {{ vertex }}
+                    {% endif %}
                 {% endfor %}
 
                 {% for vertex in connections %}

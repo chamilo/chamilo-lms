@@ -961,7 +961,7 @@ class GradebookUtils
                             $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         } else {
-                            $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
+                            $select_gradebook->addOption(Security::remove_XSS($my_cat->get_name()), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         }
                     } else {

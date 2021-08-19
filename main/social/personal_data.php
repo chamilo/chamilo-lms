@@ -63,11 +63,6 @@ switch ($action) {
         }
 
         $legalAcceptType = $terms['version'].':'.$terms['language_id'].':'.time();
-        UserManager::update_extra_field_value(
-            $userId,
-            'legal_accept',
-            $legalAcceptType
-        );
 
         Event::addEvent(
             LOG_TERM_CONDITION_ACCEPTED,
@@ -76,29 +71,8 @@ switch ($action) {
             api_get_utc_datetime()
         );
 
-        $bossList = UserManager::getStudentBossList($userId);
-        if (!empty($bossList)) {
-            $bossList = array_column($bossList, 'boss_id');
-            $currentUserInfo = api_get_user_info($userId);
-            foreach ($bossList as $bossId) {
-                $subjectEmail = sprintf(
-                    get_lang('UserXSignedTheAgreement'),
-                    $currentUserInfo['complete_name']
-                );
-                $contentEmail = sprintf(
-                    get_lang('UserXSignedTheAgreementTheDateY'),
-                    $currentUserInfo['complete_name'],
-                    api_get_local_time($time)
-                );
+        LegalManager::sendEmailToUserBoss($userId, $legalAcceptType);
 
-                MessageManager::send_message_simple(
-                    $bossId,
-                    $subjectEmail,
-                    $contentEmail,
-                    $user_id
-                );
-            }
-        }
         Display::addFlash(Display::return_message(get_lang('Saved')));
         header('Location: '.api_get_self());
         exit;

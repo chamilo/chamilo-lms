@@ -455,4 +455,33 @@ class LegalManager
             'privacy_terms_profiling' => 'profiling',
         ];
     }
+
+    public static function sendEmailToUserBoss($userId, $conditionToSave)
+    {
+        UserManager::update_extra_field_value($userId, 'legal_accept', $conditionToSave);
+
+        $bossList = UserManager::getStudentBossList($userId);
+
+        if (empty($bossList)) {
+            return;
+        }
+
+        $bossList = array_column($bossList, 'boss_id');
+
+        $currentUserInfo = api_get_user_info($userId);
+
+        foreach ($bossList as $bossId) {
+            $subjectEmail = sprintf(
+                get_lang('UserXSignedTheAgreement'),
+                $currentUserInfo['complete_name']
+            );
+            $contentEmail = sprintf(
+                get_lang('UserXSignedTheAgreementTheY'),
+                $currentUserInfo['complete_name'],
+                api_get_local_time()
+            );
+
+            MessageManager::send_message_simple($bossId, $subjectEmail, $contentEmail, $userId);
+        }
+    }
 }

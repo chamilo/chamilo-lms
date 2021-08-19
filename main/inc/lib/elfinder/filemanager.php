@@ -17,7 +17,9 @@ if (file_exists($file)) {
     $includeFile = '<script type="text/javascript" src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
     $language = $iso;
 }
+$questionId = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : 0;
 
+$template->assign('question_id', $questionId);
 $template->assign('elfinder_lang', $language);
 $template->assign('elfinder_translation_file', $includeFile);
 $template->display('default/javascript/editor/ckeditor/elfinder.tpl');

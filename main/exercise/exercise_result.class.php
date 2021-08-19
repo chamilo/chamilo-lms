@@ -92,15 +92,15 @@ class ExerciseResult
                     te.status as exstatus
                 FROM $TBL_EXERCISES  AS ce
                 INNER JOIN $TBL_TRACK_EXERCISES AS te
-                ON (te.exe_exo_id = ce.id)
+                ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $TBL_USER AS user
                 ON (user.user_id = exe_user_id)
                 LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
                 ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                 WHERE
                     ce.c_id = $course_id AND
-                    te.c_id = ce.c_id $user_id_and  $session_id_and AND
-                    ce.active <>-1";
+                    te.c_id = ce.c_id $user_id_and $session_id_and AND
+                    ce.active <> -1";
         } else {
             $user_id_and = ' AND te.exe_user_id = '.api_get_user_id().' ';
             $orderBy = 'lastname';
@@ -129,7 +129,7 @@ class ExerciseResult
                         te.status as exstatus
                     FROM $TBL_EXERCISES  AS ce
                     INNER JOIN $TBL_TRACK_EXERCISES AS te
-                    ON (te.exe_exo_id = ce.id)
+                    ON (te.exe_exo_id = ce.iid)
                     INNER JOIN $TBL_USER AS user
                     ON (user.user_id = exe_user_id)
                     LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
@@ -266,7 +266,7 @@ class ExerciseResult
                             $return[$i]['lastname'] = $student['lastname'];
                             $return[$i]['user_id'] = $student['user_id'];
                             $return[$i]['email'] = $student['email'];
-                            $return[$i]['username'] = $student[$i]['username'];
+                            $return[$i]['username'] = $student['username'];
                         }
                         $return[$i]['title'] = null;
                         $return[$i]['start_date'] = null;

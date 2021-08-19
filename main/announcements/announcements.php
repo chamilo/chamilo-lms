@@ -317,6 +317,10 @@ switch ($action) {
         }
 
         if ($delete) {
+            if (api_get_configuration_value('course_announcement_scheduled_by_date')) {
+                $extraFieldValue = new ExtraFieldValue('course_announcement');
+                $extraFieldValue->deleteValuesByItem($id);
+            }
             AnnouncementManager::delete_announcement($_course, $id);
             Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
         }
@@ -617,8 +621,26 @@ switch ($action) {
 
         $form->addHidden('sec_token', $token);
 
+        $announcementScheduledByDate = api_get_configuration_value('course_announcement_scheduled_by_date');
         if (empty($sessionId)) {
-            $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
+            if ($announcementScheduledByDate) {
+                $extraField = new ExtraField('course_announcement');
+
+                $extra = $extraField->addElements(
+                    $form,
+                    $id ? $id : 0,
+                    [],
+                    false,
+                    false,
+                    ['send_to_users_in_session'],
+                    [],
+                    [],
+                    false,
+                    true
+                );
+            } else {
+                $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
+            }
         }
 
         $config = api_get_configuration_value('announcements_hide_send_to_hrm_users');
@@ -634,6 +656,74 @@ switch ($action) {
 
         $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('SendAnnouncementCopyToMyself'));
         $defaults['send_me_a_copy_by_email'] = true;
+
+        if ($announcementScheduledByDate) {
+            $extraField = new ExtraField('course_announcement');
+            $extraFieldValue = new ExtraFieldValue('course_announcement');
+            $valueCheckbox = $extraFieldValue->get_values_by_handler_and_field_variable($id, 'send_notification_at_a_specific_date');
+
+            $form->addElement('html', '<div id="email_ann_date">');
+            if (!$id) {
+                $defaults['extra_date_to_send_notification'] = date('Y-m-d', strtotime('+1 day'));
+            }
+
+            $extra = $extraField->addElements(
+                $form,
+                $id ? $id : 0,
+                [],
+                false,
+                false,
+                ['send_notification_at_a_specific_date'],
+                [],
+                [],
+                false,
+                true
+            );
+
+            $elementConditional = $valueCheckbox['value'] == 0 ? '<div id="course_announcement_date" style="display:none">' : '<div id="course_announcement_date">';
+
+            $form->addElement('html', $elementConditional);
+            $extra = $extraField->addElements(
+                $form,
+                $id ? $id : 0,
+                [],
+                false,
+                false,
+                ['date_to_send_notification'],
+                [],
+                [],
+                false,
+                true
+            );
+
+            $form->addElement('html', '</div>');
+            $form->addElement('html', '</div>');
+
+            $form->addHtml('<script>
+                $(function() {
+                    $(\'input[name="extra_send_notification_at_a_specific_date[extra_send_notification_at_a_specific_date]"]\').click(function() {
+                        var checked = $(this).is(\':checked\');
+                        if (checked){
+                            $("#extra_date_to_send_notification").val("'.date('Y-m-d', strtotime('+1 day')).'");
+                            $("#course_announcement_date").css("display", "block");
+                        } else {
+                            $("#course_announcement_date").css("display", "none");
+                        }
+                    });
+
+                    $(\'input[name="email_ann"]\').click(function() {
+                        var checked = $(this).is(\':checked\');
+                        if (checked){
+                            $("#email_ann_date").css("display", "block");
+                        } else {
+                            $(\'input[name="extra_send_notification_at_a_specific_date[extra_send_notification_at_a_specific_date]"]\').prop("checked", false);
+                            $("#email_ann_date").css("display", "none");
+                            $("#course_announcement_date").css("display", "none");
+                        }
+                    });
+                });
+            </script>');
+        }
 
         if ($showSubmitButton) {
             $form->addLabel('',
@@ -652,7 +742,11 @@ switch ($action) {
         if ($form->validate()) {
             $data = $form->getSubmitValues();
             $data['users'] = isset($data['users']) ? $data['users'] : [];
-            $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
+            if ($announcementScheduledByDate) {
+                $sendToUsersInSession = isset($data['extra_send_to_users_in_session']) ? true : false;
+            } else {
+                $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
+            }
             $sendMeCopy = isset($data['send_me_a_copy_by_email']) ? true : false;
 
             if (isset($id) && $id) {
@@ -673,14 +767,35 @@ switch ($action) {
 
                     // Send mail
                     $messageSentTo = [];
-                    if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
-                        $messageSentTo = AnnouncementManager::sendEmail(
-                            api_get_course_info(),
-                            api_get_session_id(),
-                            $id,
-                            $sendToUsersInSession,
-                            isset($data['send_to_hrm_users'])
-                        );
+
+                    if ($announcementScheduledByDate) {
+                        if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
+                            if ($data['extra_send_notification_at_a_specific_date']['extra_send_notification_at_a_specific_date'] == 0) {
+                                $messageSentTo = AnnouncementManager::sendEmail(
+                                    api_get_course_info(),
+                                    api_get_session_id(),
+                                    $id,
+                                    $sendToUsersInSession,
+                                    isset($data['send_to_hrm_users'])
+                                );
+                            } else {
+                                $extraFieldValue = new ExtraFieldValue('course_announcement');
+                                $extraFieldValue->saveFieldValues($data);
+                            }
+                        } else {
+                            $extraFieldValue = new ExtraFieldValue('course_announcement');
+                            $extraFieldValue->deleteValuesByItem($id);
+                        }
+                    } else {
+                        if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
+                            $messageSentTo = AnnouncementManager::sendEmail(
+                                api_get_course_info(),
+                                api_get_session_id(),
+                                $id,
+                                $sendToUsersInSession,
+                                isset($data['send_to_hrm_users'])
+                            );
+                        }
                     }
 
                     if ($sendMeCopy && !in_array(api_get_user_id(), $messageSentTo)) {
@@ -738,14 +853,33 @@ switch ($action) {
 
                         // Send mail
                         $messageSentTo = [];
-                        if (isset($data['email_ann']) && $data['email_ann']) {
-                            $messageSentTo = AnnouncementManager::sendEmail(
-                                api_get_course_info(),
-                                api_get_session_id(),
-                                $insert_id,
-                                $sendToUsersInSession,
-                                isset($data['send_to_hrm_users'])
-                            );
+
+                        if ($announcementScheduledByDate) {
+                            if (isset($data['email_ann']) && $data['email_ann']) {
+                                if ($data['extra_send_notification_at_a_specific_date']['extra_send_notification_at_a_specific_date'] == 0) {
+                                    $messageSentTo = AnnouncementManager::sendEmail(
+                                        api_get_course_info(),
+                                        api_get_session_id(),
+                                        $insert_id,
+                                        $sendToUsersInSession,
+                                        isset($data['send_to_hrm_users'])
+                                    );
+                                } else {
+                                    $extraFieldValues = new ExtraFieldValue('course_announcement');
+                                    $data['item_id'] = $insert_id;
+                                    $extraFieldValues->saveFieldValues($data);
+                                }
+                            }
+                        } else {
+                            if (isset($data['email_ann']) && $data['email_ann']) {
+                                $messageSentTo = AnnouncementManager::sendEmail(
+                                    api_get_course_info(),
+                                    api_get_session_id(),
+                                    $insert_id,
+                                    $sendToUsersInSession,
+                                    isset($data['send_to_hrm_users'])
+                                );
+                            }
                         }
 
                         if ($sendMeCopy && !in_array(api_get_user_id(), $messageSentTo)) {

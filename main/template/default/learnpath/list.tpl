@@ -370,6 +370,7 @@
                                             {% endif %}
                                             <div class="col-md-1">
                                                 {{ row.action_pdf }}
+                                                {{ row.action_export }}
                                             </div>
                                         </div>
                                     </div>
@@ -380,6 +381,7 @@
                 {% endif %}
 
                 {% if categories|length > 1 and lp_data.category.id %}
+                    {% set number = number + 1 %}
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="heading-{{ lp_data.category.getId() }}">
                             {% if is_allowed_to_edit %}
@@ -463,7 +465,7 @@
                             {% endif %}
                             <h4 class="panel-title">
                                 <a role="button" data-toggle="collapse" data-parent="#lp-accordion"
-                                   href="#collapse-{{ lp_data.category.getId() }}" aria-expanded="true"
+                                   href="#collapse-{{ lp_data.category.getId() }}" aria-expanded="{{ number == 1 ? 'true' : 'false' }}"
                                    aria-controls="collapse-{{ lp_data.category.getId() }}">
                                     {{ lp_data.category.getName() }}
 
@@ -473,7 +475,6 @@
                                 </a>
                             </h4>
                         </div>
-                        {% set number = number + 1 %}
                         <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse {{ (number == 1 ? 'in':'') }}"
                              role="tabpanel" aria-labelledby="heading-{{ lp_data.category.getId() }}">
                             <div class="panel-body">
@@ -621,6 +622,7 @@
                                                     {% endif %}
                                                     <div class="col-md-1">
                                                         {{ row.action_pdf }}
+                                                        {{ row.action_export }}
                                                     </div>
                                                 </div>
                                             </div>

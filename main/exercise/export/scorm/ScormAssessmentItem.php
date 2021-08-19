@@ -26,7 +26,7 @@ class ScormAssessmentItem
     {
         $this->question = $question;
         $this->question->setAnswer();
-        $this->questionIdent = 'QST_'.$question->id;
+        $this->questionIdent = 'QST_'.$question->iid;
     }
 
     /**

@@ -27,7 +27,7 @@ class SortableTableFromArrayConfig extends SortableTable
 
     private $doc_filter;
     private $handlePagination = true;
-    
+
     /**
      * Constructor.
      *
@@ -94,7 +94,7 @@ class SortableTableFromArrayConfig extends SortableTable
         if ($this->handlePagination) {
             return array_slice($table, $from, $this->per_page);
         }
-        
+
         return $table;
     }
 

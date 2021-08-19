@@ -94,7 +94,7 @@ switch ($action) {
     case 'unsubscribe':
         // We are unsubscribing from a course (=Unsubscribe from course).
         if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
-            $result = $auth->remove_user_from_course($_GET['course_code']);
+            $result = $auth->remove_user_from_course($_GET['unsubscribe']);
             if ($result) {
                 Display::addFlash(
                     Display::return_message(get_lang('YouAreNowUnsubscribed'))

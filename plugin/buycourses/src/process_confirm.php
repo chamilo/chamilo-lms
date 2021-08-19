@@ -11,12 +11,17 @@ require_once '../config.php';
 $plugin = BuyCoursesPlugin::create();
 
 $saleId = $_SESSION['bc_sale_id'];
+$couponId = $_SESSION['bc_coupon_id'];
 
 if (empty($saleId)) {
     api_not_allowed(true);
 }
 
 $sale = $plugin->getSale($saleId);
+
+if (!empty($couponId)) {
+    $coupon = $plugin->getCoupon($couponId, $sale['product_type'], $sale['product_id']);
+}
 
 $userInfo = api_get_user_info($sale['user_id']);
 
@@ -95,11 +100,11 @@ switch ($sale['payment_type']) {
         switch ($sale['product_type']) {
             case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
                 $buyingCourse = true;
-                $course = $plugin->getCourseInfo($sale['product_id']);
+                $course = $plugin->getCourseInfo($sale['product_id'], $coupon);
                 break;
             case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
                 $buyingSession = true;
-                $session = $plugin->getSessionInfo($sale['product_id']);
+                $session = $plugin->getSessionInfo($sale['product_id'], $coupon);
                 break;
         }
 
@@ -122,6 +127,7 @@ switch ($sale['payment_type']) {
                 $plugin->cancelSale($sale['id']);
 
                 unset($_SESSION['bc_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
 
                 header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
                 exit;
@@ -182,6 +188,7 @@ switch ($sale['payment_type']) {
             );
 
             unset($_SESSION['bc_sale_id']);
+            unset($_SESSION['bc_coupon_id']);
             header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/course_catalog.php');
             exit;
         }
@@ -232,11 +239,11 @@ switch ($sale['payment_type']) {
         switch ($sale['product_type']) {
             case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
                 $buyingCourse = true;
-                $course = $plugin->getCourseInfo($sale['product_id']);
+                $course = $plugin->getCourseInfo($sale['product_id'], $coupon);
                 break;
             case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
                 $buyingSession = true;
-                $session = $plugin->getSessionInfo($sale['product_id']);
+                $session = $plugin->getSessionInfo($sale['product_id'], $coupon);
                 break;
         }
 
@@ -256,6 +263,7 @@ switch ($sale['payment_type']) {
                 $plugin->cancelSale($sale['id']);
 
                 unset($_SESSION['bc_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
 
                 Display::addFlash(
                     Display::return_message(

@@ -23,7 +23,7 @@ class ExerciseShowFunctions
         $id,
         $questionId,
         $resultsDisabled,
-        $originalStudentAnswer = '',
+        $originalStudentAnswer,
         $showTotalScoreAndUserChoices
     ) {
         $answerHTML = FillBlanks::getHtmlDisplayForAnswer(
@@ -97,6 +97,49 @@ class ExerciseShowFunctions
             } else {
                 echo '<tr><td>';
                 echo Security::remove_XSS($answer);
+                echo '</tr>';
+            }
+        }
+    }
+
+    /**
+     * Shows the answer to an upload question.
+     *
+     * @param float|null $questionScore   Only used to check if > 0
+     * @param int        $resultsDisabled Unused
+     */
+    public static function displayUploadAnswer(
+        string $feedbackType,
+        string $answer,
+        int $exeId,
+        int $questionId,
+        $questionScore = null,
+        $resultsDisabled = 0
+    ) {
+        if (!empty($answer)) {
+            $exeInfo = Event::get_exercise_results_by_attempt($exeId);
+            if (empty($exeInfo)) {
+                global $exercise_stat_info;
+                $userId = $exercise_stat_info['exe_user_id'];
+            } else {
+                $userId = $exeInfo[$exeId]['exe_user_id'];
+            }
+            $userWebpath = UserManager::getUserPathById($userId, 'web').'my_files'.'/upload_answer/'.$exeId.'/'.$questionId.'/';
+            $filesNames = explode('|', $answer);
+            echo '<tr><td>';
+            foreach ($filesNames as $filename) {
+                $filename = Security::remove_XSS($filename);
+                echo '<p><a href="'.$userWebpath.$filename.'" target="_blank">'.$filename.'</a></p>';
+            }
+            echo '</td></tr>';
+        }
+
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
+            $comments = Event::get_comments($exeId, $questionId);
+            if ($questionScore > 0 || !empty($comments)) {
+            } else {
+                echo '<tr>';
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText());
                 echo '</tr>';
             }
         }
@@ -282,7 +325,7 @@ class ExerciseShowFunctions
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
                 $content .= '<td class="text-left" width="60%">';
                 if ($studentChoice) {
-                    $content .= '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
+                    $content .= '<span style="font-weight: bold; color: #008000;">'.Security::remove_XSS(nl2br($answerComment)).'</span>';
                 } else {
                     $content .= '&nbsp;';
                 }
@@ -415,7 +458,7 @@ class ExerciseShowFunctions
         }
 
         echo '<td width="40%">';
-        echo $answer;
+        echo Security::remove_XSS($answer);
         echo '</td>';
 
         if ($exercise->showExpectedChoice()) {
@@ -541,7 +584,7 @@ class ExerciseShowFunctions
         }
 
         $content .= '<td width="40%">';
-        $content .= $answer;
+        $content .= Security::remove_XSS($answer);
         $content .= '</td>';
 
         if ($exercise->showExpectedChoice()) {
@@ -575,7 +618,7 @@ class ExerciseShowFunctions
                     if ($hide_expected_answer) {
                         $color = '';
                     }
-                    $content .= '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
+                    $content .= '<span style="font-weight: bold; color: '.$color.';">'.Security::remove_XSS(nl2br($answerComment)).'</span>';
                 }
                 $content .= '</td>';
             }
@@ -643,7 +686,7 @@ class ExerciseShowFunctions
         }
 
         echo '<td width="20%">';
-        echo $answer;
+        echo Security::remove_XSS($answer);
         echo '</td><td width="5%" style="text-align:center;">';
         if (isset($newOptions[$studentChoiceDegree])) {
             echo $newOptions[$studentChoiceDegree]['name'];
@@ -768,7 +811,7 @@ class ExerciseShowFunctions
         }
 
         echo '<td width="40%">';
-        echo $answer;
+        echo Security::remove_XSS($answer);
         echo '</td>';
 
         if ($exercise->showExpectedChoice()) {

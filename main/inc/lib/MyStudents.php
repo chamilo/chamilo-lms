@@ -18,10 +18,10 @@ class MyStudents
 
         $title = Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
 
-        return $title.self::getCareersTable($careers);
+        return $title.self::getCareersTable($careers, $studentId);
     }
 
-    public static function getCareersTable(array $careers): string
+    public static function getCareersTable(array $careers, int $studentId): string
     {
         if (empty($careers)) {
             return '';
@@ -29,6 +29,7 @@ class MyStudents
 
         $webCodePath = api_get_path(WEB_CODE_PATH);
         $iconDiagram = Display::return_icon('multiplicate_survey.png', get_lang('Diagram'));
+        $careerModel = new Career();
 
         $headers = [
             get_lang('Career'),
@@ -36,8 +37,13 @@ class MyStudents
         ];
 
         $data = array_map(
-            function (array $careerInfo) use ($webCodePath, $iconDiagram) {
-                $url = $webCodePath.'user/career_diagram.php?career_id='.$careerInfo['id'];
+            function (array $careerInfo) use ($careerModel, $webCodePath, $iconDiagram, $studentId) {
+                $careerId = $careerInfo['id'];
+                if (api_get_configuration_value('use_career_external_id_as_identifier_in_diagrams')) {
+                    $careerId = $careerModel->getCareerIdFromInternalToExternal($careerId);
+                }
+
+                $url = $webCodePath.'user/career_diagram.php?career_id='.$careerId.'&user_id='.$studentId;
 
                 return [
                     $careerInfo['name'],

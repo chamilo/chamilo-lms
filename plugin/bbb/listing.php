@@ -447,50 +447,6 @@ $urlList[] = Display::url(
     ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
 );
 
-$type = $plugin->get('launch_type');
-$warningInterfaceMessage = '';
-$showClientOptions = false;
-
-switch ($type) {
-    case BBBPlugin::LAUNCH_TYPE_DEFAULT:
-        $urlList = [];
-        $urlList[] = Display::url(
-            $plugin->get_lang('EnterConference'),
-            $conferenceUrl.'&interface='.$plugin->get('interface'),
-            ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
-        );
-        break;
-    case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
-        if ($conferenceManager) {
-            $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
-            $warningInterfaceMessage = Display::return_message($plugin->get_lang('ParticipantsWillUseSameInterface'));
-            $showClientOptions = true;
-        } else {
-            $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
-            switch ($meetingInfo['interface']) {
-                case BBBPlugin::INTERFACE_FLASH:
-                    $url = $plugin->getFlashUrl($conferenceUrl);
-                    break;
-                case BBBPlugin::INTERFACE_HTML5:
-                    $url = $plugin->getHtmlUrl($conferenceUrl);
-                    break;
-            }
-        }
-        break;
-    case BBBPlugin::LAUNCH_TYPE_SET_BY_STUDENT:
-        if ($conferenceManager) {
-            $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
-            $showClientOptions = true;
-        } else {
-            if ($meetingExists) {
-                $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
-                $showClientOptions = true;
-            }
-        }
-
-        break;
-}
-
 $tpl = new Template($tool_name);
 
 $tpl->assign('allow_to_edit', $allowToEdit);
@@ -504,8 +460,6 @@ $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
-$tpl->assign('warning_interface_msg', $warningInterfaceMessage);
-$tpl->assign('show_client_options', $showClientOptions);
 
 $content = $tpl->fetch('bbb/view/listing.tpl');
 

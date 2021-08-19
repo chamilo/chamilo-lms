@@ -385,12 +385,11 @@ class Tracking
                     $result_disabled_ext_all = false;
                     if ('quiz' === $row['item_type']) {
                         // Check results_disabled in quiz table.
-                        $my_path = Database::escape_string($row['path']);
+                        $lpItemPath = (int) $row['path'];
                         $sql = "SELECT results_disabled
                                 FROM $TBL_QUIZ
                                 WHERE
-                                    c_id = $course_id AND
-                                    id ='".$my_path."'";
+                                    iid = $lpItemPath";
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -688,14 +687,13 @@ class Tracking
                     $my_id = $row['myid'];
                     $my_lp_id = $row['mylpid'];
                     $my_lp_view_id = $row['mylpviewid'];
-                    $my_path = $row['path'];
+                    $lpItemPath = (int) $row['path'];
                     $result_disabled_ext_all = false;
                     if ($row['item_type'] === 'quiz') {
                         // Check results_disabled in quiz table.
-                        $my_path = Database::escape_string($my_path);
                         $sql = "SELECT results_disabled
                                 FROM $TBL_QUIZ
-                                WHERE c_id = $course_id AND id = '$my_path' ";
+                                WHERE iid = $lpItemPath";
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -819,7 +817,7 @@ class Tracking
                                             question_id, marks, ponderation
                                         FROM $tbl_stats_attempts as at
                                         INNER JOIN $tbl_quiz_questions as q
-                                        ON (q.id = at.question_id AND q.c_id = $course_id)
+                                        ON q.iid = at.question_id
                                         WHERE exe_id ='$id_last_attempt'
                                     ) as t";
 
@@ -1313,11 +1311,10 @@ class Tracking
         $assignedCourses = [];
         $drhCount = 0;
         $teachersCount = 0;
-        $studentsCount = 0;
         $studentBossCount = 0;
         $courseCount = 0;
-        $sessionCount = 0;
         $assignedCourseCount = 0;
+        $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
 
         if (api_is_drh() && api_drh_can_access_all_session_content()) {
             $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -1459,7 +1456,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             $students = [];
@@ -1481,7 +1480,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             if ($getCount) {
@@ -1507,7 +1508,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             if ($getCount) {
@@ -1531,7 +1534,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             if ($getCount) {
@@ -2307,7 +2312,7 @@ class Tracking
                 $select_lp_id = ', orig_lp_id as lp_id ';
             }
 
-            $sql = "SELECT count(id)
+            $sql = "SELECT count(iid)
     		        FROM $tbl_course_quiz
     				WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz ";
             $count_quiz = 0;
@@ -2326,14 +2331,14 @@ class Tracking
                 }
 
                 if (empty($exercise_id)) {
-                    $sql = "SELECT id FROM $tbl_course_quiz
+                    $sql = "SELECT iid FROM $tbl_course_quiz
                             WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz";
                     $result = Database::query($sql);
                     $exercise_list = [];
                     $exercise_id = null;
                     if (!empty($result) && Database::num_rows($result)) {
                         while ($row = Database::fetch_array($result)) {
-                            $exercise_list[] = $row['id'];
+                            $exercise_list[] = $row['iid'];
                         }
                     }
                     if (!empty($exercise_list)) {
@@ -2533,7 +2538,7 @@ class Tracking
         $result = 0;
         if (!empty($exercise_list)) {
             foreach ($exercise_list as $exercise_data) {
-                $exercise_id = $exercise_data['id'];
+                $exercise_id = $exercise_data['iid'];
                 $best_attempt = Event::get_best_attempt_exercise_results_per_user(
                     $user_id,
                     $exercise_id,
@@ -2985,7 +2990,7 @@ class Tracking
                         $num = Database::num_rows($result_last_attempt);
                         if ($num > 0) {
                             $attemptResult = Database::fetch_array($result_last_attempt, 'ASSOC');
-                            $id_last_attempt = $attemptResult['exe_id'];
+                            $id_last_attempt = (int) $attemptResult['exe_id'];
                             // We overwrite the score with the best one not the one saved in the LP (latest)
                             if ($getOnlyBestAttempt && $get_only_latest_attempt_results == false) {
                                 if ($debug) {
@@ -3008,10 +3013,10 @@ class Tracking
                                             ponderation
                                         FROM $tbl_stats_attempts AS at
                                         INNER JOIN $tbl_quiz_questions AS q
-                                        ON (q.id = at.question_id AND q.c_id = q.c_id)
+                                        ON q.iid = at.question_id
                                         WHERE
-                                            exe_id ='$id_last_attempt' AND
-                                            q.c_id = $course_id
+                                            exe_id = $id_last_attempt AND
+                                            at.c_id = $course_id
                                     )
                                     AS t";
 
@@ -4925,7 +4930,7 @@ class Tracking
                     if (!empty($exerciseList)) {
                         foreach ($exerciseList as $exerciseData) {
                             $results = Event::get_best_exercise_results_by_user(
-                                $exerciseData['id'],
+                                $exerciseData['iid'],
                                 $courseInfo['real_id'],
                                 0,
                                 $user_id
@@ -5040,13 +5045,13 @@ class Tracking
 
                     foreach ($exercise_list as $exercise_data) {
                         $exercise_obj = new Exercise($course_data['real_id']);
-                        $exercise_obj->read($exercise_data['id']);
+                        $exercise_obj->read($exercise_data['iid']);
                         // Exercise is not necessary to be visible to show results check the result_disable configuration instead
                         //$visible_return = $exercise_obj->is_visible();
                         if ($exercise_data['results_disabled'] == 0 || $exercise_data['results_disabled'] == 2) {
                             $best_average = (int)
                                 ExerciseLib::get_best_average_score_by_exercise(
-                                    $exercise_data['id'],
+                                    $exercise_data['iid'],
                                     $course_data['real_id'],
                                     $my_session_id,
                                     $user_count
@@ -5058,7 +5063,7 @@ class Tracking
 
                             $user_result_data = ExerciseLib::get_best_attempt_by_user(
                                 api_get_user_id(),
-                                $exercise_data['id'],
+                                $exercise_data['iid'],
                                 $course_data['real_id'],
                                 $my_session_id
                             );
@@ -5166,7 +5171,7 @@ class Tracking
                         foreach ($exercises as $exercise_item) {
                             $attempts = Event::count_exercise_attempts_by_user(
                                 api_get_user_id(),
-                                $exercise_item['id'],
+                                $exercise_item['iid'],
                                 $courseInfo['real_id'],
                                 $my_session_id
                             );
@@ -5290,7 +5295,7 @@ class Tracking
                     foreach ($exercises as $exercise_item) {
                         $attempts = Event::count_exercise_attempts_by_user(
                             api_get_user_id(),
-                            $exercise_item['id'],
+                            $exercise_item['iid'],
                             $courseId,
                             $session_id_from_get
                         );
@@ -5457,9 +5462,8 @@ class Tracking
      * @param int    $user_id
      * @param string $course_code
      * @param int    $session_id
-     * @param bool   $showDiagram
      */
-    public static function show_course_detail($user_id, $course_code, $session_id, $showDiagram = false): string
+    public static function show_course_detail($user_id, $course_code, $session_id, $isAllowedToEdit = true): string
     {
         if (empty($user_id) || empty($course_code)) {
             return '';
@@ -5476,18 +5480,10 @@ class Tracking
 
         $html = '<a name="course_session_data"></a>';
         $html .= Display::page_subheader2($course_info['title']);
-
-        if ($showDiagram && !empty($session_id)) {
-            $visibility = api_get_session_visibility($session_id);
-            if (SESSION_AVAILABLE === $visibility) {
-                $html .= Display::page_subheader2($course_info['title']);
-            }
-        }
-
         // Show exercise results of invisible exercises? see BT#4091
         $quizzesHtml = self::generateQuizzesTable($course_info, $session_id);
         // LP table results
-        $learningPathsHtml = self::generateLearningPathsTable($user, $course_info, $session_id);
+        $learningPathsHtml = self::generateLearningPathsTable($user, $course_info, $session_id, $isAllowedToEdit);
         $skillsHtml = self::displayUserSkills($user_id, $course_info['id'], $session_id);
 
         $toolsHtml = [
@@ -6114,20 +6110,19 @@ class Tracking
                 ta.answer as answer_id,
                 ta.tms as time,
                 te.exe_exo_id as quiz_id,
-                CONCAT ('c', q.c_id, '_e', q.id) as exercise_id,
+                CONCAT ('c', q.c_id, '_e', q.iid) as exercise_id,
                 q.title as quiz_title,
                 qq.description as description
                 FROM $ttrack_exercises te
                 INNER JOIN $ttrack_attempt ta
                 ON ta.exe_id = te.exe_id
                 INNER JOIN $tquiz q
-                ON q.id = te.exe_exo_id
+                ON q.iid = te.exe_exo_id
                 INNER JOIN $tquiz_rel_question rq
-                ON rq.exercice_id = q.id AND rq.c_id = q.c_id
+                ON rq.exercice_id = q.iid AND rq.c_id = q.c_id
                 INNER JOIN $tquiz_question qq
                 ON
-                    qq.id = rq.question_id AND
-                    qq.c_id = rq.c_id AND
+                    qq.iid = rq.question_id AND
                     qq.position = rq.question_order AND
                     ta.question_id = rq.question_id
                 WHERE
@@ -6152,12 +6147,11 @@ class Tracking
                 }
             }
             // Now fill questions data. Query all questions and answers for this test to avoid
-            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto,
+            $sqlQuestions = "SELECT tq.c_id, tq.iid as question_id, tq.question, tqa.id_auto,
                             tqa.answer, tqa.correct, tq.position, tqa.id_auto as answer_id
                             FROM $tquiz_question tq, $tquiz_answer tqa
                             WHERE
-                                tqa.question_id = tq.id AND
-                                tqa.c_id = tq.c_id AND
+                                tqa.question_id = tq.iid AND
                                 tq.c_id = $courseIdx AND
                                 tq.id IN (".implode(',', $questionIds).")";
 
@@ -7382,20 +7376,20 @@ class Tracking
 
         foreach ($exerciseList as $exercices) {
             $objExercise = new Exercise($courseInfo['real_id']);
-            $objExercise->read($exercices['id']);
+            $objExercise->read($exercices['iid']);
             $visibleReturn = $objExercise->is_visible();
 
             // Getting count of attempts by user
             $attempts = Event::count_exercise_attempts_by_user(
                 api_get_user_id(),
-                $exercices['id'],
+                $exercices['iid'],
                 $courseInfo['real_id'],
                 $sessionId
             );
 
             $url = $webCodePath.'exercise/overview.php?'
                 .http_build_query(
-                    ['cidReq' => $courseInfo['code'], 'id_session' => $sessionId, 'exerciseId' => $exercices['id']]
+                    ['cidReq' => $courseInfo['code'], 'id_session' => $sessionId, 'exerciseId' => $exercices['iid']]
                 );
 
             if ($visibleReturn['value'] == true) {
@@ -7428,19 +7422,19 @@ class Tracking
 
             //For graphics
             $bestExerciseAttempts = Event::get_best_exercise_results_by_user(
-                $exercices['id'],
+                $exercices['iid'],
                 $courseInfo['real_id'],
                 $sessionId
             );
 
-            $toGraphExerciseResult[$exercices['id']] = [
+            $toGraphExerciseResult[$exercices['iid']] = [
                 'title' => $exercices['title'],
                 'data' => $bestExerciseAttempts,
             ];
 
             // Getting best results
             $bestScoreData = ExerciseLib::get_best_attempt_in_course(
-                $exercices['id'],
+                $exercices['iid'],
                 $courseInfo['real_id'],
                 $sessionId
             );
@@ -7454,7 +7448,7 @@ class Tracking
 
             $exerciseAttempt = ExerciseLib::get_best_attempt_by_user(
                 api_get_user_id(),
-                $exercices['id'],
+                $exercices['iid'],
                 $courseInfo['real_id'],
                 $sessionId
             );
@@ -7490,18 +7484,18 @@ class Tracking
                 $quizData[4] = ExerciseLib::get_exercise_result_ranking(
                     $myScore,
                     $exeId,
-                    $exercices['id'],
+                    $exercices['iid'],
                     $courseInfo['code'],
                     $sessionId,
                     $userList
                 );
-                $graph = self::generate_exercise_result_thumbnail_graph($toGraphExerciseResult[$exercices['id']]);
-                $normalGraph = self::generate_exercise_result_graph($toGraphExerciseResult[$exercices['id']]);
+                $graph = self::generate_exercise_result_thumbnail_graph($toGraphExerciseResult[$exercices['iid']]);
+                $normalGraph = self::generate_exercise_result_graph($toGraphExerciseResult[$exercices['iid']]);
 
                 $quizData[6] = Display::url(
                     Display::img($graph, '', [], false),
                     $normalGraph,
-                    ['id' => $exercices['id'], 'class' => 'expand-image']
+                    ['id' => $exercices['iid'], 'class' => 'expand-image']
                 );
             }
 
@@ -7515,8 +7509,12 @@ class Tracking
             );
     }
 
-    private static function generateLearningPathsTable(User $user, array $courseInfo, int $sessionId = 0): string
-    {
+    private static function generateLearningPathsTable(
+        User $user,
+        array $courseInfo,
+        int $sessionId = 0,
+        bool $isAllowedToEdit = true
+    ): string {
         $html = [];
 
         $columnHeaders = [
@@ -7555,11 +7553,7 @@ class Tracking
         }
 
         $addLpInvisibleCheckbox = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
-        $showInvisibleLp = api_get_configuration_value('student_follow_page_show_invisible_lp_students');
-
-        if ($addLpInvisibleCheckbox && $showInvisibleLp) {
-            $addLpInvisibleCheckbox = false;
-        }
+        $includeNotsubscribedLp = api_get_configuration_value('student_follow_page_include_not_subscribed_lp_students');
 
         $columnHeadersKeys = array_keys($columnHeaders);
 
@@ -7579,7 +7573,8 @@ class Tracking
                 true,
                 $category->getId(),
                 false,
-                $showInvisibleLp
+                false,
+                $includeNotsubscribedLp === false
             );
             $lpList = $objLearnpathList->get_flat_list();
 
@@ -7701,7 +7696,8 @@ class Tracking
                         $learnpath,
                         $user->getId(),
                         $courseInfo['real_id'],
-                        $sessionId
+                        $sessionId,
+                        $isAllowedToEdit
                     );
                 }
 
@@ -7732,6 +7728,45 @@ class Tracking
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    public static function updateUserLastLogin($userId)
+    {
+        $tblTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $sql = "SELECT login_id, login_date
+            FROM $tblTrackLogin
+            WHERE
+                login_user_id='".$userId."'
+            ORDER BY login_date DESC
+            LIMIT 0,1";
+
+        $qLastConnection = Database::query($sql);
+        if (Database::num_rows($qLastConnection) > 0) {
+            $now = api_get_utc_datetime();
+            $iIdLastConnection = Database::result($qLastConnection, 0, 'login_id');
+
+            // is the latest logout_date still relevant?
+            $sql = "SELECT logout_date FROM $tblTrackLogin
+                WHERE login_id = $iIdLastConnection";
+            $qLogoutDate = Database::query($sql);
+            $resLogoutDate = convert_sql_date(Database::result($qLogoutDate, 0, 'logout_date'));
+            $lifeTime = api_get_configuration_value('session_lifetime');
+
+            if ($resLogoutDate < time() - $lifeTime) {
+                // it isn't, we should create a fresh entry
+                Event::eventLogin($userId);
+                // now that it's created, we can get its ID and carry on
+            } else {
+                $sql = "UPDATE $tblTrackLogin SET logout_date = '$now'
+                    WHERE login_id = '$iIdLastConnection'";
+                Database::query($sql);
+            }
+
+            $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+            $sql = "UPDATE $tableUser SET last_login = '$now'
+                WHERE user_id = ".$userId;
+            Database::query($sql);
+        }
     }
 }
 
@@ -8068,7 +8103,7 @@ class TrackingCourseLog
             case 'quiz':
                 $table_name = TABLE_QUIZ_TEST;
                 $link_tool = 'exercise/exercise.php';
-                $id_tool = 'id';
+                $id_tool = 'iid';
                 break;
             case 'glossary':
                 $table_name = TABLE_GLOSSARY;
@@ -8118,9 +8153,11 @@ class TrackingCourseLog
     }
 
     /**
+     * @param array $exclude Extra fields to be skipped, by ID
+     *
      * @return string
      */
-    public static function display_additional_profile_fields()
+    public static function display_additional_profile_fields($exclude = [])
     {
         // getting all the extra profile fields that are defined by the platform administrator
         $extra_fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
@@ -8134,6 +8171,10 @@ class TrackingCourseLog
         $return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
         $extra_fields_to_show = 0;
         foreach ($extra_fields as $key => $field) {
+            // exclude extra profile fields by id
+            if (in_array($field[3], $exclude)) {
+                continue;
+            }
             // show only extra fields that are visible + and can be filtered, added by J.Montoya
             if ($field[6] == 1 && $field[8] == 1) {
                 if (isset($_GET['additional_profile_field']) && $field[0] == $_GET['additional_profile_field']) {
@@ -8646,7 +8687,17 @@ class TrackingCourseLog
             $user_row['count_messages'] = $user['count_messages'];
 
             $userGroupManager = new UserGroup();
-            $user_row['classes'] = $userGroupManager->getLabelsFromNameList($user['user_id'], UserGroup::NORMAL_CLASS);
+            if ($export_csv) {
+                $user_row['classes'] = implode(
+                    ',',
+                    $userGroupManager->getNameListByUser($user['user_id'], UserGroup::NORMAL_CLASS)
+                );
+            } else {
+                $user_row['classes'] = $userGroupManager->getLabelsFromNameList(
+                    $user['user_id'],
+                    UserGroup::NORMAL_CLASS
+                );
+            }
 
             if (empty($session_id)) {
                 $user_row['survey'] = $user['survey'];
@@ -8682,6 +8733,25 @@ class TrackingCourseLog
                 }
             }
 
+            $data = Session::read('default_additional_user_profile_info');
+            $defaultExtraFieldInfo = Session::read('default_extra_field_info');
+            if (isset($defaultExtraFieldInfo) && isset($data)) {
+                foreach ($data as $key => $val) {
+                    if (isset($val[$user['user_id']])) {
+                        if (is_array($val[$user['user_id']])) {
+                            $user_row[$defaultExtraFieldInfo[$key]['variable']] = implode(
+                                ', ',
+                                $val[$user['user_id']]
+                            );
+                        } else {
+                            $user_row[$defaultExtraFieldInfo[$key]['variable']] = $val[$user['user_id']];
+                        }
+                    } else {
+                        $user_row[$defaultExtraFieldInfo[$key]['variable']] = '';
+                    }
+                }
+            }
+
             if (api_get_setting('show_email_addresses') === 'true') {
                 $user_row['email'] = $user['col4'];
             }
@@ -8690,13 +8760,12 @@ class TrackingCourseLog
 
             if ($export_csv) {
                 if (empty($session_id)) {
-                    unset($user_row['classes']);
+                    //unset($user_row['classes']);
                     unset($user_row['link']);
                 } else {
-                    unset($user_row['classes']);
+                    //unset($user_row['classes']);
                     unset($user_row['link']);
                 }
-
                 $csv_content[] = $user_row;
             }
             $users[] = array_values($user_row);
@@ -8708,6 +8777,8 @@ class TrackingCourseLog
 
         Session::erase('additional_user_profile_info');
         Session::erase('extra_field_info');
+        Session::erase('default_additional_user_profile_info');
+        Session::erase('default_extra_field_info');
         Session::write('user_id_list', $userIdList);
 
         return $users;

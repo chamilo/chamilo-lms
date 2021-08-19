@@ -35,7 +35,7 @@ $categories = Category::load(null, null, $course->getCode());
 
 switch ($action) {
     case 'add':
-        $form = new FrmAdd('ims_lti_add_tool', [], $baseTool);
+        $form = new \Chamilo\PluginBundle\ImsLti\Form\FrmAdd('ims_lti_add_tool', [], $baseTool);
         $form->build();
 
         if ($baseTool) {
@@ -173,7 +173,7 @@ switch ($action) {
             break;
         }
 
-        $form = new FrmEdit('ims_lti_edit_tool', [], $tool);
+        $form = new \Chamilo\PluginBundle\Form\FrmEdit('ims_lti_edit_tool', [], $tool);
         $form->build(false);
 
         if ($form->validate()) {

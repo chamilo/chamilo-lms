@@ -191,10 +191,16 @@ if (api_is_anonymous()) {
 }
 // direct login to course
 if (isset($_GET['firstpage'])) {
-    api_set_firstpage_parameter($_GET['firstpage']);
-    // if we are already logged, go directly to course
-    if (api_user_is_login()) {
-        echo "<script>self.location.href='index.php?firstpage=".Security::remove_XSS($_GET['firstpage'])."'</script>";
+    $firstPage = $_GET['firstpage'];
+    $courseInfo = api_get_course_info($firstPage);
+
+    if (!empty($courseInfo)) {
+        api_set_firstpage_parameter($firstPage);
+
+        // if we are already logged, go directly to course
+        if (api_user_is_login()) {
+            echo "<script>self.location.href='index.php?firstpage=".Security::remove_XSS($firstPage)."'</script>";
+        }
     }
 } else {
     api_delete_firstpage_parameter();

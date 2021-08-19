@@ -24,10 +24,9 @@ class QuizzesScoresLoader implements LoaderInterface
         $sql = "SELECT SUM(ponderation)
             FROM $tblQuizQuestion as quiz_question
             INNER JOIN $tblQuizRelQuestion as quiz_rel_question
-            ON (quiz_question.id = quiz_rel_question.question_id AND quiz_question.c_id = quiz_rel_question.c_id)
+            ON quiz_question.iid = quiz_rel_question.question_id
             WHERE
                 quiz_rel_question.exercice_id = {$incomingData['quiz_id']}
-                AND quiz_question.c_id = {$incomingData['c_id']}
                 AND quiz_rel_question.c_id = {$incomingData['c_id']}";
 
         $rsQuiz = \Database::query($sql);

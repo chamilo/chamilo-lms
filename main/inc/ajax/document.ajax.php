@@ -15,6 +15,22 @@ switch ($action) {
         $size = DocumentManager::getTotalFolderSize($path, $isAllowedToEdit);
         echo format_file_size($size);
         break;
+    case 'get_dirs_size':
+        api_protect_course_script(true);
+        $requests = isset($_GET['requests']) ? $_GET['requests'] : '';
+        $isAllowedToEdit = api_is_allowed_to_edit();
+        $response = [];
+        $requests = explode(',', $requests);
+        foreach ($requests as $request) {
+            $fileSize = DocumentManager::getTotalFolderSize($request, $isAllowedToEdit);
+            $data = [
+                'id' => $request,
+                'size' => format_file_size($fileSize),
+            ];
+            array_push($response, $data);
+        }
+        echo json_encode($response);
+        break;
     case 'get_document_quota':
         // Getting the course quota
         $courseQuota = DocumentManager::get_course_quota();
@@ -138,6 +154,65 @@ switch ($action) {
         }
         exit;
         break;
+    case 'ck_uploadimage':
+        api_protect_course_script(true);
+
+        // it comes from uploaimage drag and drop ckeditor
+        $isCkUploadImage = ($_COOKIE['ckCsrfToken'] == $_POST['ckCsrfToken']);
+
+        if (!$isCkUploadImage) {
+            exit;
+        }
+
+        $data = [];
+        $fileUpload = $_FILES['upload'];
+        $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+        if ($isAllowedToEdit) {
+            $globalFile = ['files' => $fileUpload];
+            $result = DocumentManager::upload_document(
+                $globalFile,
+                $currentDirectory,
+                '',
+                '',
+                0,
+                'rename',
+                false,
+                false,
+                'files'
+            );
+            if ($result) {
+                $data = [
+                    'uploaded' => 1,
+                    'fileName' => $fileUpload['name'],
+                    'url' => $result['direct_url'],
+                ];
+            }
+        } else {
+            $userId = api_get_user_id();
+            $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
+            if (!is_dir($syspath)) {
+                mkdir($syspath, api_get_permissions_for_new_directories(), true);
+            }
+            $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
+            $fileUploadName = $fileUpload['name'];
+            if (file_exists($syspath.$fileUploadName)) {
+                $extension = pathinfo($fileUploadName, PATHINFO_EXTENSION);
+                $fileName = pathinfo($fileUploadName, PATHINFO_FILENAME);
+                $suffix = '_'.uniqid();
+                $fileUploadName = $fileName.$suffix.'.'.$extension;
+            }
+            if (move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUploadName)) {
+                $url = $webpath.$fileUploadName;
+                $data = [
+                    'uploaded' => 1,
+                    'fileName' => $fileUploadName,
+                    'url' => $url,
+                ];
+            }
+        }
+        echo json_encode($data);
+        exit;
     case 'document_preview':
         $courseInfo = api_get_course_info_by_id($_REQUEST['course_id']);
         if (!empty($courseInfo) && is_array($courseInfo)) {

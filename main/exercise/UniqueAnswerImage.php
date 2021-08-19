@@ -144,8 +144,8 @@ class UniqueAnswerImage extends UniqueAnswer
         $defaults = [];
         $correct = 0;
 
-        if (!empty($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
 
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
@@ -299,7 +299,7 @@ class UniqueAnswerImage extends UniqueAnswer
         global $text;
         $buttonGroup = [];
         if ($objExercise->edit_exercise_in_lp == true ||
-            (empty($this->exerciseList) && empty($objExercise->id))
+            (empty($this->exerciseList) && empty($objExercise->iid))
         ) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
@@ -315,7 +315,7 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $defaults['correct'] = $correct;
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             if (1 == $this->isContent) {
@@ -336,7 +336,7 @@ class UniqueAnswerImage extends UniqueAnswer
     {
         $questionWeighting = $nbrGoodAnswers = 0;
         $correct = $form->getSubmitValue('correct');
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $numberAnswers = $form->getSubmitValue('nb_answers');
 
         for ($i = 1; $i <= $numberAnswers; $i++) {
@@ -348,11 +348,12 @@ class UniqueAnswerImage extends UniqueAnswer
 
             //$listDestination = $form -> getSubmitValue('destination'.$i);
             //$destinationStr = $form -> getSubmitValue('destination'.$i);
-
-            $try = $scenario['try'.$i];
-            $lp = $scenario['lp'.$i];
-            $destination = $scenario['destination'.$i];
-            $url = trim($scenario['url'.$i]);
+            if (!empty($scenario)) {
+                $try = $scenario['try'.$i];
+                $lp = $scenario['lp'.$i];
+                $destination = $scenario['destination'.$i];
+                $url = trim($scenario['url'.$i]);
+            }
 
             /*
               How we are going to parse the destination value

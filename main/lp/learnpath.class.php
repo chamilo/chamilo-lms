@@ -564,11 +564,9 @@ class learnpath
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
                     ON
-                        quiz_question.id = quiz_rel_question.question_id AND
-                        quiz_question.c_id = quiz_rel_question.c_id
+                        quiz_question.iid = quiz_rel_question.question_id
                     WHERE
                         quiz_rel_question.exercice_id = '.$id." AND
-                        quiz_question.c_id = $course_id AND
                         quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database::result($rsQuiz, 0, 0);
@@ -2299,6 +2297,7 @@ class learnpath
      * @param int   $student_id
      * @param array $courseInfo
      * @param int   $sessionId
+     * @param bool  $checkSubscription Optional. Allow don't check if user is subscribed to the LP.
      *
      * @return bool
      */
@@ -2306,7 +2305,8 @@ class learnpath
         $lp_id,
         $student_id,
         $courseInfo = [],
-        $sessionId = 0
+        $sessionId = 0,
+        bool $checkSubscription = true
     ) {
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
         $lp_id = (int) $lp_id;
@@ -2390,7 +2390,7 @@ class learnpath
                 }
             }
 
-            if ($is_visible) {
+            if ($is_visible && $checkSubscription) {
                 $is_visible = self::isUserSubscribedToLp(
                     $row,
                     (int) $student_id,
@@ -2847,23 +2847,23 @@ class learnpath
     /**
      * Returns the XML DOM document's node.
      *
-     * @param resource $children Reference to a list of objects to search for the given ITEM_*
-     * @param string   $id       The identifier to look for
+     * @param DOMNodeList $children Reference to a list of objects to search for the given ITEM_*
+     * @param string      $id       The identifier to look for
      *
      * @return mixed The reference to the element found with that identifier. False if not found
      */
-    public function get_scorm_xml_node(&$children, $id)
+    public function get_scorm_xml_node(DOMNodeList &$children, string $id, $nodeName = 'item', $attributeName = 'identifier')
     {
         for ($i = 0; $i < $children->length; $i++) {
             $item_temp = $children->item($i);
-            if ($item_temp->nodeName == 'item') {
-                if ($item_temp->getAttribute('identifier') == $id) {
+            if ($item_temp->nodeName == $nodeName) {
+                if ($item_temp instanceof DOMElement && $item_temp->getAttribute($attributeName) == $id) {
                     return $item_temp;
                 }
             }
             $subchildren = $item_temp->childNodes;
             if ($subchildren && $subchildren->length > 0) {
-                $val = $this->get_scorm_xml_node($subchildren, $id);
+                $val = $this->get_scorm_xml_node($subchildren, $id, $nodeName, $attributeName);
                 if (is_object($val)) {
                     return $val;
                 }
@@ -3539,7 +3539,7 @@ class learnpath
      */
     public function getNameNoTags()
     {
-        return strip_tags($this->get_name());
+        return Security::remove_XSS(strip_tags($this->get_name()));
     }
 
     /**
@@ -6642,7 +6642,7 @@ class learnpath
         $list .= '</ul>';
 
         $return = Display::panelCollapse(
-            $this->name,
+            $this->getNameNoTags(),
             $list,
             'scorm-list',
             null,
@@ -7585,7 +7585,6 @@ class learnpath
         ];
 
         $xApiPlugin = XApiPlugin::create();
-
         if ($xApiPlugin->isEnabled()) {
             $headers[] = Display::return_icon(
                 'import_scorm.png',
@@ -7688,7 +7687,7 @@ class learnpath
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT title, description
                     FROM $tbl_quiz
-                    WHERE c_id = $course_id AND iid = ".$extra_info;
+                    WHERE iid = $extra_info";
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -10623,10 +10622,10 @@ class learnpath
 
             $link = Display::url(
                 $previewIcon,
-                $exerciseUrl.'&exerciseId='.$row_quiz['id'],
+                $exerciseUrl.'&exerciseId='.$row_quiz['iid'],
                 ['target' => '_blank']
             );
-            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$title.'" >';
+            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['iid'].'" data_type="quiz" title="'.$title.'" >';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
             $sessionStar = api_get_session_image(
@@ -10635,7 +10634,7 @@ class learnpath
             );
             $return .= Display::url(
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
-                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id,
+                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['iid'].'&lp_id='.$this->lp_id,
                 [
                     'class' => $visibility == 0 ? 'moved text-muted' : 'moved',
                 ]
@@ -11204,9 +11203,14 @@ class learnpath
                                                     substr($file_path, $pos, strlen($file_path))
                                                 );
                                             }
-                                            $replace = $onlyDirectory;
+                                            $replace = './'.$onlyDirectory;
                                             $destinationFile = $replace;
                                         }
+
+                                        if (strpos($file_path, '/web') === 0) {
+                                            $replace = str_replace('/web', 'web', $file_path);
+                                        }
+
                                         $zip_files_abs[] = $file_path;
                                         $link_updates[$my_file_path][] = [
                                             'orig' => $doc_info[0],
@@ -11293,16 +11297,14 @@ class learnpath
                                         $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
 
                                         if (file_exists($file_path)) {
-                                            if (strstr($file_path, 'main/default_course_document') !== false) {
+                                            $pos = strpos($file_path, 'main/default_course_document/');
+                                            if ($pos !== false) {
                                                 // We get the relative path.
-                                                $pos = strpos($file_path, 'main/default_course_document/');
-                                                if ($pos !== false) {
-                                                    $onlyDirectory = str_replace(
-                                                        'main/default_course_document/',
-                                                        '',
-                                                        substr($file_path, $pos, strlen($file_path))
-                                                    );
-                                                }
+                                                $onlyDirectory = str_replace(
+                                                    'main/default_course_document/',
+                                                    '',
+                                                    substr($file_path, $pos, strlen($file_path))
+                                                );
 
                                                 $destinationFile = 'default_course_document/'.$onlyDirectory;
                                                 $fileAbs = substr($file_path, strlen(api_get_path(SYS_PATH)));
@@ -11311,7 +11313,7 @@ class learnpath
                                                     'orig' => $doc_info[0],
                                                     'dest' => $destinationFile,
                                                 ];
-                                                $my_dep_file->setAttribute('href', 'document/'.$file_path);
+                                                $my_dep_file->setAttribute('href', 'document/'.$destinationFile);
                                                 $my_dep->setAttribute('xml:base', '');
                                             }
                                         }
@@ -11902,6 +11904,14 @@ EOD;
         $manifest = @$xmldoc->saveXML();
         $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
         file_put_contents($archivePath.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
+
+        $htmlIndex = new LpIndexGenerator($this);
+
+        file_put_contents(
+            $archivePath.'/'.$temp_dir_short.'/index.html',
+            $htmlIndex->generate()
+        );
+
         $zip_folder->add(
             $archivePath.'/'.$temp_dir_short,
             PCLZIP_OPT_REMOVE_PATH,
@@ -13160,9 +13170,7 @@ EOD;
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));
         $form->addHidden('previous', $this->get_last());
-        $form->setDefaults(
-            ['title' => $title, 'content_lp_certificate' => $content]
-        );
+        $form->setDefaults(['title' => $title, 'content_lp_certificate' => $content]);
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -13422,7 +13430,7 @@ EOD;
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
-                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v'];
+                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'wav'];
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
                 $showDirectUrl = !in_array($extension, $mediaSupportedFiles);
 
@@ -13570,7 +13578,7 @@ EOD;
                 break;
             case TOOL_QUIZ:
                 $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $id");
+                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE iid = $id");
                 $myrow = Database::fetch_array($result);
                 $output = $myrow['title'];
                 break;

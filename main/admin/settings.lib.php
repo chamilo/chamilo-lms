@@ -159,7 +159,7 @@ function handlePluginUpload()
     $form = new FormValidator(
         'plugin_upload',
         'post',
-        'settings.php?category=Plugins#tabs-4'
+        api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins#tabs-4'
     );
     $form->addElement(
         'file',
@@ -181,30 +181,29 @@ function handlePluginUpload()
         'required'
     );
     $form->addButtonUpload(get_lang('Upload'), 'plugin_upload');
+    $form->protect();
 
     // Plugin upload.
-    if (isset($_POST['plugin_upload'])) {
-        if ($form->validate()) {
-            $fileElement = $form->getElement('new_plugin');
-            $file = $fileElement->getValue();
-            $result = uploadPlugin($file);
+    if ($form->validate()) {
+        $fileElement = $form->getElement('new_plugin');
+        $file = $fileElement->getValue();
+        $result = uploadPlugin($file);
 
-            // Add event to the system log.
-            $user_id = api_get_user_id();
-            $category = $_GET['category'];
-            Event::addEvent(
-                LOG_PLUGIN_CHANGE,
-                LOG_PLUGIN_UPLOAD,
-                $file['name'],
-                api_get_utc_datetime(),
-                $user_id
-            );
+        // Add event to the system log.
+        $user_id = api_get_user_id();
+        $category = $_GET['category'];
+        Event::addEvent(
+            LOG_PLUGIN_CHANGE,
+            LOG_PLUGIN_UPLOAD,
+            $file['name'],
+            api_get_utc_datetime(),
+            $user_id
+        );
 
-            if ($result) {
-                Display::addFlash(Display::return_message(get_lang('PluginUploaded'), 'success', false));
-                header('Location: ?category=Plugins#');
-                exit;
-            }
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('PluginUploaded'), 'success', false));
+            header('Location: ?category=Plugins#');
+            exit;
         }
     }
     echo $form->returnForm();
@@ -222,7 +221,7 @@ function handlePlugins()
 {
     Session::erase('plugin_data');
     $plugin_obj = new AppPlugin();
-    $token = Security::get_token();
+    $token = Security::get_existing_token();
     if (isset($_POST['submit_plugins'])) {
         storePlugins();
         // Add event to the system log.
@@ -398,8 +397,9 @@ function handleStylesheets()
     $form = new FormValidator(
         'stylesheet_upload',
         'post',
-        'settings.php?category=Stylesheets#tabs-3'
+        api_get_path().'admin/settings.php?category=Stylesheets#tabs-3'
     );
+    $form->protect();
     $form->addElement(
         'text',
         'name_stylesheet',
@@ -1641,8 +1641,9 @@ function generateSettingsForm($settings, $settings_by_access_list)
     $form = new FormValidator(
         'settings',
         'post',
-        'settings.php?category='.Security::remove_XSS($_GET['category'])
+        api_get_path(WEB_CODE_PATH).'admin/settings.php?category='.Security::remove_XSS($_GET['category'])
     );
+    $form->protect();
 
     $form->addElement(
         'hidden',
@@ -1966,6 +1967,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
         }
 
         switch ($row['variable']) {
+            case 'upload_extensions_replace_by':
+                $default_values[$row['variable']] = api_replace_dangerous_char(
+                    str_replace('.', '', $default_values[$row['variable']])
+                );
+                break;
             case 'pdf_export_watermark_enable':
                 $url = PDF::get_watermark(null);
 

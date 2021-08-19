@@ -105,15 +105,14 @@ class StudentFollowUpPlugin extends Plugin
             $showPrivate = true;
         } else {
             $isDrh = api_is_drh();
-            $isCareTaker = false;
             $isDrhRelatedViaPost = false;
             $isCourseCoach = false;
             $isDrhRelatedToSession = false;
 
-            // Only admins and DRH that follow the user
+            // Only admins and DRH that follow the user.
             $isAdmin = api_is_platform_admin();
 
-            // Check if user is care taker
+            // Check if user is care taker.
             if ($isDrh) {
                 $criteria = [
                     'user' => $studentId,
@@ -126,11 +125,12 @@ class StudentFollowUpPlugin extends Plugin
                 }
             }
 
-            // Check if course session coach
+            // Student sessions.
             $sessions = SessionManager::get_sessions_by_user($studentId, false, true);
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
                     $sessionId = $session['session_id'];
+                    // Check if the current user is following that session.
                     $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
                         $currentUserId,
                         $sessionId
@@ -139,21 +139,31 @@ class StudentFollowUpPlugin extends Plugin
                         $isDrhRelatedToSession = true;
                         break;
                     }
-                    foreach ($session['courses'] as $course) {
-                        $coachList = SessionManager::getCoachesByCourseSession(
-                            $sessionId,
-                            $course['real_id']
-                        );
-                        if (!empty($coachList) && in_array($currentUserId, $coachList)) {
-                            $isCourseCoach = true;
-                            break 2;
+
+                    // Check if teacher is coach between the date limits.
+                    $visibility = api_get_session_visibility(
+                        $sessionId,
+                        null,
+                        true,
+                        $currentUserId
+                    );
+
+                    if (SESSION_AVAILABLE === $visibility && isset($session['courses']) && !empty($session['courses'])) {
+                        foreach ($session['courses'] as $course) {
+                            $coachList = SessionManager::getCoachesByCourseSession(
+                                $sessionId,
+                                $course['real_id']
+                            );
+                            if (!empty($coachList) && in_array($currentUserId, $coachList)) {
+                                $isCourseCoach = true;
+                                break 2;
+                            }
                         }
                     }
                 }
             }
 
             $isCareTaker = $isDrhRelatedViaPost && $isDrhRelatedToSession;
-
             $isAllow = $isAdmin || $isCareTaker || $isDrhRelatedToSession || $isCourseCoach;
             $showPrivate = $isAdmin || $isCareTaker;
         }

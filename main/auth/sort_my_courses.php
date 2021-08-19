@@ -363,8 +363,7 @@ if (!empty($user_course_categories)) {
                                     'aria-label' => get_lang('Unreg'),
                                 ]
                             );
-                            echo $unsubscribe_button;
-                            ?>
+                            echo $unsubscribe_button; ?>
               </div>
                   <?php
                         }
@@ -455,8 +454,7 @@ if (!empty($courses_without_category)) {
                                 'aria-label' => get_lang('Unreg'),
                             ]
                         );
-                        echo $unsubscribe_button;
-                        ?>                
+                        echo $unsubscribe_button; ?>                
                 </div>
               <?php
                     }

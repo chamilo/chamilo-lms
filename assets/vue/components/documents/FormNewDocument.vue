@@ -28,9 +28,9 @@
           plugins: [
             'fullpage advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste wordcount emoticons'
+            'insertdatetime media table paste wordcount emoticons ' + extraPlugins
           ],
-          toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
+          toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | ' + extraPlugins,
         }
         "
     />
@@ -42,12 +42,23 @@
 <script>
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-import { useRouter, useRoute } from 'vue-router'
+import {ref} from "vue";
+import isEmpty from "lodash/isEmpty";
 
 export default {
   name: 'DocumentsForm',
   setup () {
-    return { v$: useVuelidate() }
+    const config = ref([]);
+    const extraPlugins = ref('');
+
+    if (!isEmpty(window.config)) {
+      config.value = window.config;
+      if (config.value['editor.translate_html']) {
+        extraPlugins.value = 'translatehtml';
+      }
+    }
+
+    return { v$: useVuelidate(), extraPlugins }
   },
   props: {
     values: {

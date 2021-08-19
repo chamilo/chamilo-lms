@@ -143,100 +143,34 @@ class Basic extends Toolbar
 
     /**
      * Get the toolbar config.
-     *
-     * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $config = [];
-        /*if ('true' === api_get_setting('more_buttons_maximized_mode')) {
-            $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
-            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
-        }
-
-        $config['customConfig'] = api_get_path(WEB_PUBLIC_PATH).'editor/config?'.api_get_cidreq().'&tool=document&type=files';*/
-        //$config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
-
-        /*filebrowserFlashBrowseUrl
-        filebrowserFlashUploadUrl
-        filebrowserImageBrowseLinkUrl
-        filebrowserImageBrowseUrl
-        filebrowserImageUploadUrl
-        filebrowserUploadUrl*/
-
-        //$config['extraPlugins'] = $this->getPluginsToString();
-
-        //$config['oembed_maxWidth'] = '560';
-        //$config['oembed_maxHeight'] = '315';
-
-        /*$config['wordcount'] = array(
-            // Whether or not you want to show the Word Count
-            'showWordCount' => true,
-            // Whether or not you want to show the Char Count
-            'showCharCount' => true,
-            // Option to limit the characters in the Editor
-            'charLimit' => 'unlimited',
-            // Option to limit the words in the Editor
-            'wordLimit' => 'unlimited'
-        );*/
-
-        /*$config['skin'] = 'moono-lisa';
-        $config['image2_chamilo_alignClasses'] = [
-            'pull-left',
-            'text-center',
-            'pull-right',
-            'img-va-baseline',
-            'img-va-top',
-            'img-va-bottom',
-            'img-va-middle',
-            'img-va-super',
-            'img-va-sub',
-            'img-va-text-top',
-            'img-va-text-bottom',
-        ];
-        $config['startupOutlineBlocks'] = true === api_get_configuration_value('ckeditor_startup_outline_blocks');*/
-
         $customPlugins = '';
         $customPluginsPath = [];
         if ('true' === api_get_setting('editor.translate_html')) {
             $customPlugins .= ' translatehtml';
             $customPluginsPath['translatehtml'] = api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js';
-
-            $languageList = api_get_languages();
-            $rtlIsocodes = ['ps', 'ar', 'he', 'fa'];
-            $list = [];
-            foreach ($languageList as $isocode => $name) {
-                // Example format language list : ['ar:Arabic:rtl', 'fr:French', 'es:Spanish'];
-                $rtl = (\in_array($isocode, $rtlIsocodes, true) ? ':rtl' : '');
-                $list[] = $isocode.':'.$name.$rtl;
-            }
-            $config['translatehtml_lenguage_list'] = $list;
         }
 
         $plugins = [
             'advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste wordcount'.$customPlugins,
+            'insertdatetime media table paste wordcount '.$customPlugins,
         ];
-
-        /*plugins: [
-           'fullpage advlist autolink lists link image charmap print preview anchor',
-           'searchreplace visualblocks code fullscreen',
-           'insertdatetime media table paste wordcount emoticons'
-       ],*/
 
         if ($this->getConfigAttribute('fullPage')) {
             $plugins[] = 'fullpage';
         }
 
         $config['plugins'] = implode(' ', $plugins);
-        $config['toolbar'] = 'undo redo directionality | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl'.$customPlugins;
+        $config['toolbar'] = 'undo redo directionality | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | '.$customPlugins;
 
         if (!empty($customPluginsPath)) {
             $config['external_plugins'] = $customPluginsPath;
         }
 
-        //$config['skin'] = 'oxide';
         $config['skin_url'] = '/build/libs/tinymce/skins/ui/oxide';
         $config['content_css'] = '/build/libs/tinymce/skins/content/default/content.css';
         $config['branding'] = false;

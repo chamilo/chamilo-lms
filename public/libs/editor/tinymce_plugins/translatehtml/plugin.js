@@ -3,7 +3,6 @@
     'use strict';
 
     var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
-    var translatedSelector = 'span[class="mce-translatehtml"]';
 
     var cleanTranslated = function (newElement) {
         var nodes = $(newElement).find(".mce-translatehtml");
@@ -36,7 +35,7 @@
     }
 
     var register = function (editor) {
-        var languagesConfigStrings = editor.getParam("translatehtml_lenguage_list");
+        const languagesConfigStrings = window.languages;
         editor.ui.registry.addSplitButton('translatehtml', {
             tooltip: 'Translate html',
             icon: 'translate',
@@ -49,18 +48,18 @@
                 }
             },
             fetch: function (callback) {
-              var items = [], parts, curLanguageId, dir, i;
+                const rtlList = ['ps', 'ar', 'he', 'fa'];
+                var items = [], dir, i;
                 for (i = 0; i < languagesConfigStrings.length; i++) {
-                    parts = languagesConfigStrings[i].split(':');
-                    curLanguageId = parts[0];
-                    dir = 'rtl';
-                    if (('' + parts[2]).toLowerCase() != 'rtl') {
-                        dir = 'ltr';
+                    let iso = languagesConfigStrings[i]['isocode'];
+                    dir = 'ltr';
+                    if (rtlList.includes(iso)) {
+                        dir = 'rtl';
                     }
                     items.push({
                         type: 'choiceitem',
-                        text: parts[1],
-                        value: [dir, curLanguageId]
+                        text: languagesConfigStrings[i]['originalName'],
+                        value: [dir, iso]
                     });
                 }
                 items.push({
@@ -76,8 +75,7 @@
 
     function Plugin () {
       global.add('translatehtml', function (editor) {
-        console.warn('translatehtml plugin is enabled');       
-        register(editor);
+          register(editor);
       });
     }
 

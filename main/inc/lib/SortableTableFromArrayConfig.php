@@ -66,7 +66,7 @@ class SortableTableFromArrayConfig extends SortableTable
             $itemsPerPage,
             $direction
         );
-        $this->table_data = $data;        
+        $this->table_data = $data;
     }
 
     /**
@@ -90,10 +90,11 @@ class SortableTableFromArrayConfig extends SortableTable
             SORT_REGULAR,
             $this->doc_filter
         );
-        
+
         if ($this->handlePagination) {
-            return array_slice($table, $from, $this->per_page); 
+            return array_slice($table, $from, $this->per_page);
         }
+        
         return $table;
     }
 

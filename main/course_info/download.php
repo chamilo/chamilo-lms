@@ -26,7 +26,7 @@ if (empty($extension) || !file_exists($archive_path.$archive_file)) {
 $extension = strtolower($extension);
 $content_type = '';
 
-if (in_array($extension, ['xml', 'csv']) &&
+if (in_array($extension, ['xml', 'csv', 'imscc']) &&
     (api_is_platform_admin(true) || api_is_drh())
 ) {
     $content_type = 'application/force-download';

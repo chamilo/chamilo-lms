@@ -17,17 +17,17 @@ class Imscc13Import
         if (file_exists($manifest)) {
             // Looks promising, lets load some information.
             $handle = fopen($manifest, 'r');
-            $xml_snippet = fread($handle, 1024);
+            $xmlSnippet = fread($handle, 1024);
             fclose($handle);
 
             // Check if it has the required strings.
-            $xml_snippet = strtolower($xml_snippet);
-            $xml_snippet = preg_replace('/\s*/m', '', $xml_snippet);
-            $xml_snippet = str_replace("'", '', $xml_snippet);
-            $xml_snippet = str_replace('"', '', $xml_snippet);
+            $xmlSnippet = strtolower($xmlSnippet);
+            $xmlSnippet = preg_replace('/\s*/m', '', $xmlSnippet);
+            $xmlSnippet = str_replace("'", '', $xmlSnippet);
+            $xmlSnippet = str_replace('"', '', $xmlSnippet);
 
             $search_string = "xmlns=http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1";
-            if (strpos($xml_snippet, $search_string) !== false) {
+            if (strpos($xmlSnippet, $search_string) !== false) {
                 return self::FORMAT_IMSCC13;
             }
         }
@@ -51,7 +51,7 @@ class Imscc13Import
 
         $cc113Convert = new Cc1p3Convert($manifest);
 
-        if ($cc113Convert->is_auth()) {
+        if ($cc113Convert->isAuth()) {
             throw new RuntimeException('protected_cc_not_supported');
         }
 

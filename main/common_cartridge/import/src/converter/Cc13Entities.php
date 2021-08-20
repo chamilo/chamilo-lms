@@ -17,7 +17,7 @@ class Cc13Entities extends CcEntities
     {
         $permDirs = api_get_permissions_for_new_directories();
 
-        $all_files = [];
+        $allFiles = [];
         $xpath = Cc1p3Convert::newxPath(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
         foreach (Cc1p3Convert::$restypes as $type) {
             $files = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@type="'.
@@ -32,7 +32,7 @@ class Cc13Entities extends CcEntities
                 if (in_array($ext, ['html', 'htm', 'xhtml'])) {
                     continue;
                 }
-                $all_files[] = $file->nodeValue;
+                $allFiles[] = $file->nodeValue;
             }
             unset($files);
         }
@@ -48,10 +48,10 @@ class Cc13Entities extends CcEntities
             if (!file_exists($dpath)) {
                 mkdir($dpath, $permDirs, true);
             }
-            $all_files[] = $rfpath;
+            $allFiles[] = $rfpath;
         }
-        $all_files = empty($all_files) ? '' : $all_files;
+        $allFiles = empty($allFiles) ? '' : $allFiles;
 
-        return $all_files;
+        return $allFiles;
     }
 }

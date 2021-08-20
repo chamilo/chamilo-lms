@@ -24,14 +24,14 @@ class CcConverterQuiz extends CcConverters
         $metadata->enableHints();
         $metadata->enableSolutions();
         // Attempts.
-        $max_attempts = $objQuizz['max_attempt'];
+        $maxAttempts = $objQuizz['max_attempt'];
 
-        if ($max_attempts > 0) {
+        if ($maxAttempts > 0) {
             // Qti does not support number of specific attempts bigger than 5 (??)
-            if ($max_attempts > 5) {
-                $max_attempts = cc_qti_values::unlimited;
+            if ($maxAttempts > 5) {
+                $maxAttempts = CcQtiValues::unlimited;
             }
-            $metadata->setMaxattempts($max_attempts);
+            $metadata->setMaxattempts($maxAttempts);
         }
 
         // Time limit must be converted into minutes.
@@ -50,7 +50,7 @@ class CcConverterQuiz extends CcConverters
                                                     $contextid,
                                                     $outdir);
 
-        CcAssesmentHelper::addAssesmentDescription($rt, $result[0], cc_qti_values::htmltype);
+        CcAssesmentHelper::addAssesmentDescription($rt, $result[0], CcQtiValues::htmltype);
 
         // Section.
         $section = new CcAssesmentSection();

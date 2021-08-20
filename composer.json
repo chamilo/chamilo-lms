@@ -28,7 +28,9 @@
             "main/install",
             "main/lp",
             "main/survey",
-            "plugin"
+	    "main/common_cartridge/export",
+	    "main/common_cartridge/import",
+	    "plugin"
         ]
     },
     "require": {

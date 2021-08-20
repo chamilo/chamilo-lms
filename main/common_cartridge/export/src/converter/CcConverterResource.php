@@ -5,7 +5,7 @@ class CcConverterResource extends CcConverters
 {
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
-        $this->cc_type = CcVersion13::webcontent;
+        $this->ccType = CcVersion13::webcontent;
         $this->defaultfile = 'resource.xml';
         parent::__construct($item, $manifest, $rootpath, $path);
     }

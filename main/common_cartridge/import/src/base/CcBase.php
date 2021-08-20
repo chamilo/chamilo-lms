@@ -93,7 +93,7 @@ class CcBase
         return $result;
     }
 
-    public function is_auth()
+    public function isAuth()
     {
         $xpath = static::newxPath(static::$manifest, static::$namespaces);
 
@@ -108,7 +108,7 @@ class CcBase
         return $response;
     }
 
-    public function get_nodes_by_criteria($key, $value)
+    public function getNodesByCriteria($key, $value)
     {
         $response = [];
 
@@ -123,7 +123,7 @@ class CcBase
         return $response;
     }
 
-    public function count_instances($type)
+    public function countInstances($type)
     {
         $quantity = 0;
 
@@ -135,15 +135,15 @@ class CcBase
                     }
                 }
 
-                $quantity_instances = array_count_values($types);
-                $quantity = array_key_exists($type, $quantity_instances) ? $quantity_instances[$type] : 0;
+                $quantityInstances = array_count_values($types);
+                $quantity = array_key_exists($type, $quantityInstances) ? $quantityInstances[$type] : 0;
             }
         }
 
         return $quantity;
     }
 
-    public function get_item_cc_type($identifier)
+    public function getItemCcType($identifier)
     {
         $xpath = static::newxPath(static::$manifest, static::$namespaces);
 
@@ -187,30 +187,30 @@ class CcBase
         }
     }
 
-    public function convertToToolType($cc_type)
+    public function convertToToolType($ccType)
     {
         $type = TYPE_UNKNOWN;
 
-        if ($cc_type == static::CC_TYPE_FORUM) {
+        if ($ccType == static::CC_TYPE_FORUM) {
             $type = TOOL_TYPE_FORUM;
         }
 
-        if ($cc_type == static::CC_TYPE_QUIZ) {
+        if ($ccType == static::CC_TYPE_QUIZ) {
             $type = TOOL_TYPE_QUIZ;
         }
 
-        if ($cc_type == static::CC_TYPE_WEBLINK) {
+        if ($ccType == static::CC_TYPE_WEBLINK) {
             $type = TOOL_TYPE_WEBLINK;
         }
 
-        if ($cc_type == static::CC_TYPE_WEBCONTENT) {
+        if ($ccType == static::CC_TYPE_WEBCONTENT) {
             $type = TOOL_TYPE_DOCUMENT;
         }
 
         return $type;
     }
 
-    protected function get_metadata($section, $key)
+    protected function getMetadata($section, $key)
     {
         $xpath = static::newxPath(static::$manifest, static::$namespaces);
 
@@ -227,7 +227,7 @@ class CcBase
      *
      * @return number
      */
-    protected function get_module_visible($identifier)
+    protected function getModuleVisible($identifier)
     {
         //Should item be hidden or not
         $mod_visible = 1;
@@ -269,8 +269,8 @@ class CcBase
                         $title = $titles->item(0)->nodeValue;
                     }
 
-                    $cc_type = $this->get_item_cc_type($identifierref);
-                    $tool_type = $this->convertToToolType($cc_type);
+                    $ccType = $this->getItemCcType($identifierref);
+                    $tool_type = $this->convertToToolType($ccType);
                     //Fix the label issue - MDL-33523
                     if (empty($identifierref) && empty($title)) {
                         $tool_type = TYPE_UNKNOWN;
@@ -279,28 +279,28 @@ class CcBase
                     $identifierref = $xpath->query('@identifier', $item);
                     $identifierref = !empty($identifierref->item(0)->nodeValue) ? $identifierref->item(0)->nodeValue : '';
 
-                    $cc_type = $this->get_item_cc_type($identifierref);
-                    $tool_type = $this->convertToToolType($cc_type);
+                    $ccType = $this->getItemCcType($identifierref);
+                    $tool_type = $this->convertToToolType($ccType);
 
-                    $title = 'Quiz Bank '.($this->count_instances($tool_type) + 1);
+                    $title = 'Quiz Bank '.($this->countInstances($tool_type) + 1);
                 }
 
                 if ($level == ROOT_DEEP) {
                     $index_root = $array_index;
                 }
 
-                static::$instances['index'][$array_index]['common_cartriedge_type'] = $cc_type;
+                static::$instances['index'][$array_index]['common_cartriedge_type'] = $ccType;
                 static::$instances['index'][$array_index]['tool_type'] = $tool_type;
                 static::$instances['index'][$array_index]['title'] = $title ? $title : '';
                 static::$instances['index'][$array_index]['root_parent'] = $index_root;
                 static::$instances['index'][$array_index]['index'] = $array_index;
                 static::$instances['index'][$array_index]['deep'] = $level;
-                static::$instances['index'][$array_index]['instance'] = $this->count_instances($tool_type);
+                static::$instances['index'][$array_index]['instance'] = $this->countInstances($tool_type);
                 static::$instances['index'][$array_index]['resource_indentifier'] = $identifierref;
 
                 static::$instances['instances'][$tool_type][] = ['title' => $title,
                                                                         'instance' => static::$instances['index'][$array_index]['instance'],
-                                                                        'common_cartriedge_type' => $cc_type,
+                                                                        'common_cartriedge_type' => $ccType,
                                                                         'resource_indentifier' => $identifierref,
                                                                         'deep' => $level, ];
 

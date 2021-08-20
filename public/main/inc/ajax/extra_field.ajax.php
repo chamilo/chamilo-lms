@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
-use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../global.inc.php';

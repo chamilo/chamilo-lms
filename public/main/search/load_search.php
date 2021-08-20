@@ -22,7 +22,7 @@ $(function() {
 api_block_anonymous_users();
 $allowToSee = api_is_drh() || api_is_student_boss() || api_is_platform_admin();
 
-if ($allowToSee === false) {
+if (false === $allowToSee) {
     api_not_allowed(true);
 }
 $userId = api_get_user_id();
@@ -128,7 +128,7 @@ if (!empty($items)) {
     /** @var ExtraFieldSavedSearch $item */
     foreach ($items as $item) {
         $variable = 'extra_'.$item->getField()->getVariable();
-        if ($item->getField()->getFieldType() === ExtraField::FIELD_TYPE_TAG) {
+        if (ExtraField::FIELD_TYPE_TAG === $item->getField()->getFieldType()) {
             $tagsData[$variable] = $item->getValue();
         }
         $defaults[$variable] = $item->getValue();
@@ -216,7 +216,6 @@ $extra = $extraFieldUser->addElements(
 );
 $userForm->addEndPanel();
 
-
 $userForm->addStartPanel('dispo', get_lang('Disponibilite Pendant Mon Stage'));
 $userForm->addHtml('<p class="text-info">'.get_lang('Disponibilite Pendant Mon Stage Explanation').'</p>');
 
@@ -298,13 +297,13 @@ if (isset($_POST) && !empty($_POST)) {
     Session::write('search_using_3', $searchChecked3);
 } else {
     $searchChecked1 = Session::read('search_using_1');
-    $searchChecked1 = $searchChecked1 === null ? 'checked' : $searchChecked1;
+    $searchChecked1 = null === $searchChecked1 ? 'checked' : $searchChecked1;
 
     $searchChecked2 = Session::read('search_using_2');
-    $searchChecked2 = $searchChecked2 === null ? 'checked' : $searchChecked2;
+    $searchChecked2 = null === $searchChecked2 ? 'checked' : $searchChecked2;
 
     $searchChecked3 = Session::read('search_using_3');
-    $searchChecked3 = $searchChecked3 === null ? 'checked' : $searchChecked3;
+    $searchChecked3 = null === $searchChecked3 ? 'checked' : $searchChecked3;
 }
 
 $form->addStartPanel('dispo_avant', get_lang('Disponibilite Avant'));
@@ -564,7 +563,7 @@ if ($formSearch->validate()) {
 // Search filter
 $filters = [];
 foreach ($defaults as $key => $value) {
-    if (substr($key, 0, 6) !== 'extra_' && substr($key, 0, 7) !== '_extra_') {
+    if ('extra_' !== substr($key, 0, 6) && '_extra_' !== substr($key, 0, 7)) {
         continue;
     }
     if (!empty($value)) {
@@ -629,7 +628,7 @@ if ($form->validate()) {
     if ($search) {
         // Parse params.
         foreach ($params as $key => $value) {
-            if (substr($key, 0, 6) !== 'extra_' && substr($key, 0, 7) !== '_extra_') {
+            if ('extra_' !== substr($key, 0, 6) && '_extra_' !== substr($key, 0, 7)) {
                 continue;
             }
             if (!empty($value)) {
@@ -700,7 +699,7 @@ if ($form->validate()) {
 
         foreach ($userData as $key => $value) {
             $found = strpos($key, '__persist__');
-            if ($found === false) {
+            if (false === $found) {
                 continue;
             }
         }
@@ -710,7 +709,7 @@ if ($form->validate()) {
         ) {
             $wantStage = $userData['extra_filiere_want_stage']['extra_filiere_want_stage'];
 
-            if ($wantStage === 'yes') {
+            if ('yes' === $wantStage) {
                 if (isset($userData['extra_filiere_user'])) {
                     $userData['extra_filiere'] = [];
                     $userData['extra_filiere']['extra_filiere'] = $userData['extra_filiere_user']['extra_filiere_user'];
@@ -720,7 +719,7 @@ if ($form->validate()) {
 
         // save in ExtraFieldSavedSearch.
         foreach ($userData as $key => $value) {
-            if (substr($key, 0, 6) !== 'extra_' && substr($key, 0, 7) !== '_extra_') {
+            if ('extra_' !== substr($key, 0, 6) && '_extra_' !== substr($key, 0, 7)) {
                 continue;
             }
 
@@ -822,7 +821,7 @@ if (!empty($filterToSend)) {
         $userEndDatePlus = api_get_utc_datetime(substr($userEndDatePlus, 0, 11).'23:59:59');
 
         // Special OFAJ date logic
-        if ($userEndDate == '') {
+        if ('' == $userEndDate) {
             $sql = " AND (
                 (s.access_start_date >= '$userStartDateMinus') OR
                 ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
@@ -952,7 +951,7 @@ if (!empty($filterToSend)) {
 
         if ($deleteFiliere) {
             foreach ($filterToSend['rules'] as &$filterItem) {
-                if (isset($filterItem['field']) && $filterItem['field'] == 'extra_filiere') {
+                if (isset($filterItem['field']) && 'extra_filiere' == $filterItem['field']) {
                     $filterItem = [];
                 }
             }
@@ -1172,13 +1171,9 @@ $userReportButton = Display::url(
     ['class' => 'btn btn-primary']
 );
 
-
 $tpl->assign('grid', $grid.$button.$table->toHtml().$userReportButton);
 $tpl->assign('grid_js', $griJs);
 $templateName = $tpl->get_template('search/search_extra_field.html.twig');
 $contentTemplate = $tpl->fetch($templateName);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();
-
-
-

@@ -446,10 +446,14 @@ try {
             $restApi->updateConditionAccepted();
             $restResponse->setData(['status' => true]);
             break;
-        case Rest::LOGOUT:
+        case Rest::DELETE_USER:
+            $result = UserManager::delete_user($_REQUEST['user_id']);
+            $restResponse->setData(['status' => $result]);
+            break;
             $restApi->logout();
             $restResponse->setData(['status' => true]);
             break;
+        case Rest::LOGOUT:
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

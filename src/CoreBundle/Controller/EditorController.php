@@ -71,14 +71,6 @@ class EditorController extends BaseController
     }
 
     /**
-     * Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager").
-     */
-//    public function documentsFileManager(): Response
-//    {
-//        return $this->render('@ChamiloCore/Index/vue.html.twig');
-//    }
-
-    /**
      * @Route("/resources/{tool}/{type}/{parentId}", methods={"GET"}, name="resources_filemanager_temp")
      */
     public function customEditorFileManager(ResourceFactory $resourceFactory, Request $request, $tool, $type, int $parentId = 0): Response

@@ -20,13 +20,7 @@ api_protect_course_script();
 $learnPath = Session::read('oLP');
 
 /* Header and action code */
-$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'
-$(function() {
-    CKEDITOR.on("instanceReady", function (e) {
-        showTemplates("content_lp");
-    });
-});
-</script>';
+$htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 
 /* Constants and variables */
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);

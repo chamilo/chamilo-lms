@@ -53,9 +53,6 @@ $(function() {
     $('.lp_resource_element').click(function() {
         //window.location.href = $('a', this).attr('href');
     });
-    /*CKEDITOR.on('instanceReady', function (e) {
-        showTemplates('content_lp');
-    });*/
 });
 </script>";
 

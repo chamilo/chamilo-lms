@@ -587,4 +587,4 @@ window.setCheckbox = setCheckbox;
 window.action_click = action_click;
 window.hideUnhide = hideUnhide;
 window.addMainEvent = addMainEvent;
-window.showTemplates = showTemplates;
+//window.showTemplates = showTemplates;

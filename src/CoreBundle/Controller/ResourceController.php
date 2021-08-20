@@ -607,8 +607,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 }
 
                 // Modify the HTML content before displaying it.
-                /*if (str_contains($mimeType, 'html')) {
+                if (str_contains($mimeType, 'html')) {
                     $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+
                     $response = new Response();
                     $disposition = $response->headers->makeDisposition(
                         ResponseHeaderBag::DISPOSITION_INLINE,
@@ -617,10 +618,34 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $response->headers->set('Content-Disposition', $disposition);
                     $response->headers->set('Content-Type', 'text/html');
 
+                    /*$crawler = new Crawler();
+                    $crawler->addHtmlContent($content);
+                    var_dump($crawler->filter('head')->count());
+                    $head = $crawler->filter('head');
+                    var_dump($head->html());exit;*/
+
+                    // @todo move into a function/class
+                    if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
+                        $user = $this->getUser();
+                        if (null !== $user) {
+                            $user = json_encode(['locale' => $user->getLocale()]);
+                            $js = '
+                               <script>
+                                window.user = '.$user.'                                
+                               </script> 
+                               <script src="/build/runtime.js"></script>
+                               <script src="/build/translatehtml.js"></script>';
+                            $content = str_replace('</html>', $js.'</html>', $content);
+                        }
+                    }
+
                     $response->setContent($content);
+                    /*$contents = $this->renderView('@ChamiloCore/Resource/view_html.twig', [
+                        'category' => '...',
+                    ]);*/
 
                     return $response;
-                }*/
+                }
 
                 break;
         }

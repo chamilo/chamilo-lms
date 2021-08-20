@@ -37,7 +37,7 @@ $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
     'diagnosis_completed'
 );
 $diagnosisComplete = false;
-if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1) {
+if ($diagnosisComplete && isset($diagnosisComplete['value']) && 1 == $diagnosisComplete['value']) {
     if (!isset($_GET['result'])) {
         header('Location:'.api_get_self().'?result=1');
         exit;
@@ -45,12 +45,12 @@ if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComple
 }
 
 $hide = true;
-if ($wantStage !== false) {
-    $hide = $wantStage['value'] === 'yes';
+if (false !== $wantStage) {
+    $hide = 'yes' === $wantStage['value'];
 }
 
 $defaultValueStatus = 'extraFiliere.hide()';
-if ($hide === false) {
+if (false === $hide) {
     $defaultValueStatus = '';
 }
 
@@ -58,7 +58,7 @@ $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$user
 
 // Use current user language
 $langInfo = api_get_language_from_iso($userInfo['language']);
-$targetLanguage =  $langInfo->getEnglishName();
+$targetLanguage = $langInfo->getEnglishName();
 $theme = 'theme_fr';
 switch ($targetLanguage) {
     case 'italian':
@@ -200,7 +200,7 @@ if (!empty($items)) {
     /** @var ExtraFieldSavedSearch $item */
     foreach ($items as $item) {
         $variable = 'extra_'.$item->getField()->getVariable();
-        if ($item->getField()->getFieldType() === Extrafield::FIELD_TYPE_TAG) {
+        if (Extrafield::FIELD_TYPE_TAG === $item->getField()->getFieldType()) {
             $tagsData[$variable] = $item->getValue();
         }
         $defaults[$variable] = $item->getValue();
@@ -599,7 +599,7 @@ if ($userForm->validate()) {
         $isPartial = true;
     }
 
-    if ($isPartial === false) {
+    if (false === $isPartial) {
         $userData['extra_diagnosis_completed'] = 1;
     }
 
@@ -640,7 +640,7 @@ if ($userForm->validate()) {
 
     foreach ($userData as $key => $value) {
         $found = strpos($key, '__persist__');
-        if ($found === false) {
+        if (false === $found) {
             continue;
         }
     }
@@ -650,7 +650,7 @@ if ($userForm->validate()) {
     ) {
         $wantStage = $userData['extra_filiere_want_stage']['extra_filiere_want_stage'];
 
-        if ($wantStage === 'yes') {
+        if ('yes' === $wantStage) {
             if (isset($userData['extra_filiere_user'])) {
                 $userData['extra_filiere'] = [];
                 $userData['extra_filiere']['extra_filiere'] = $userData['extra_filiere_user']['extra_filiere_user'];
@@ -662,7 +662,7 @@ if ($userForm->validate()) {
     $extraFieldRepo = Container::getExtraFieldRepository();
 
     foreach ($userData as $key => $value) {
-        if (substr($key, 0, 6) !== 'extra_' && substr($key, 0, 7) !== '_extra_') {
+        if ('extra_' !== substr($key, 0, 6) && '_extra_' !== substr($key, 0, 7)) {
             continue;
         }
 
@@ -752,7 +752,7 @@ $tpl->assign('grid', '');
 $tpl->assign('grid_js', '');
 $tpl->assign('form_search', '');
 $tpl->assign('form', '');
-if ($result === false) {
+if (false === $result) {
     $tpl->assign('form', $userFormToString);
 } else {
     Display::addFlash(Display::return_message(get_lang('Your session search diagnosis is saved')));
@@ -761,6 +761,3 @@ if ($result === false) {
 $content = $tpl->fetch($tpl->get_template('search/search_extra_field.tpl'));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-
-
-

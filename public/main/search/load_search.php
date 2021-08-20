@@ -15,7 +15,7 @@ if ('false' === api_get_setting('session.allow_search_diagnostic')) {
 
 $htmlHeadXtra[] = '<script>
 $(function() {
-    $("#user_form select").select2();
+    //$("#user_form select").select2();
 });
 </script>';
 

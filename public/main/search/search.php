@@ -220,7 +220,7 @@ $userForm = new FormValidator('user_form');
 $jqueryExtra = '';
 $htmlHeadXtra[] = '<script>
 $(function() {
-    $("#user_form select").select2();
+    //$("#user_form select").select2();
 });
 </script>';
 

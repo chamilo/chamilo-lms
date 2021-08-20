@@ -240,9 +240,6 @@ $(function () {
     }
   );
 
-  /* Make responsive image maps */
-  //$('map').imageMapResize();
-
   jQuery.fn.filterByText = function (textbox) {
     return this.each(function () {
       var select = this;
@@ -290,20 +287,6 @@ $(function () {
   //moment.locale(locale);
   //$.datepicker.setDefaults($.datepicker.regional[locale]);
   //$.datepicker.regional["local"] = $.datepicker.regional[locale];
-
-  // Fix old calls of "inc/lib/mediaplayer/player.swf" and convert to <audio> tag, then rendered by media element js
-  // see BT#13405
-  $('embed').each(function () {
-    var flashVars = $(this).attr('flashvars');
-    if (flashVars && flashVars.indexOf("file") == -1) {
-      var audioId = Math.floor(Math.random() * 99999);
-      flashVars = flashVars.replace('&autostart=false', '');
-      flashVars = flashVars.replace('&autostart=true', '');
-      var audioDiv = '<audio id="'+audioId+'" controls="controls" style="width:400px;" width:"400px;" src="'+flashVars+'" ><source src="'+flashVars+'" type="audio/mp3"></source></audio>';
-      $(this).hide();
-      $(this).after(audioDiv);
-    }
-  });
 
   // Chosen select
   // $(".chzn-select").chosen({
@@ -408,26 +391,6 @@ $(function () {
     placement: 'right'
   };
   //$('.boot-tooltip').tooltip(tip_options);
-
-  $('.star-rating li a').on('click', function (event) {
-    var id = $(this).parents('ul').attr('id');
-    //$('#vote_label2_' + id).html("{{'Loading'|get_lang}}");
-    $('#vote_label2_' + id).html("loading");
-    $.ajax({
-      url: $(this).attr('data-link'),
-      success: function (data) {
-        $("#rating_wrapper_" + id).html(data);
-        if (data == 'added') {
-          //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
-        }
-        if (data == 'updated') {
-          //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
-        }
-      }
-    });
-  });
-
-  $("#notifications").load(webAjax + "online.ajax.php?a=get_users_online");
 });
 
 $(document).scroll(function () {
@@ -589,85 +552,6 @@ function expandColumnToggle(buttonSelector, col1Info, col2Info)
     col2.removeClass('col-md-12').addClass('col-md-' + col2Info.width);
     col1.removeClass('hide').addClass('col-md-' + col1Info.width);
   });
-}
-
-// Load ckeditor plugins
-if (typeof CKEDITOR !== 'undefined') {
-  // External plugins not part of the default Ckeditor package.
-  var plugins = [
-    'asciimath',
-    'asciisvg',
-    'audio',
-    'ckeditor_wiris',
-    'dialogui',
-    'flash',
-    'glossary',
-    'image2_chamilo',
-    'inserthtml',
-    'leaflet',
-    'mapping',
-    'mathjax',
-    'maximize',
-    'oembed',
-    'qmarkersrolls',
-    'toolbar',
-    'toolbarswitch',
-    'video',
-    'wikilink',
-    'wordcount',
-    'youtube',
-  ];
-
-  plugins.forEach(function (plugin) {
-    CKEDITOR.plugins.addExternal(
-      plugin,
-      mainUrl + 'inc/lib/javascript/ckeditor/plugins/' + plugin + '/'
-    );
-  });
-
-  /**
-     * Function use to load templates in a div
-     **/
-  var showTemplates = function (ckeditorName) {
-    var editorName = 'content';
-    if (ckeditorName && ckeditorName.length > 0) {
-      editorName = ckeditorName;
-    }
-    CKEDITOR.editorConfig(CKEDITOR.config);
-
-    /*CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a) {
-      var templatesConfig = CKEDITOR.getTemplates("default");
-      var $templatesUL = $("<ul>");
-      if (templatesConfig) {
-        $.each(templatesConfig.templates, function () {
-          var template = this;
-          var $templateLi = $("<li>");
-          var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
-          templateHTML += "<b>" + template.title + "</b>";
-
-          if (template.description) {
-            templateHTML += "<div class=description>" + template.description + "</div>";
-          }
-          templateHTML += "</div>";
-
-          $("<a>", {
-            href: "#",
-            html: templateHTML,
-            click: function (e) {
-              e.preventDefault();
-              if (CKEDITOR.instances[editorName]) {
-                CKEDITOR.instances[editorName].setData(template.html, function () {
-                  this.checkDirty();
-                });
-              }
-            }
-          }).appendTo($templateLi);
-          $templatesUL.append($templateLi);
-        });
-      }
-      $templatesUL.appendTo("#frmModel");
-    });*/
-  };
 }
 
 function addMainEvent(elm, evType, fn, useCapture)

@@ -7,15 +7,15 @@
     >
     </Toolbar>
 
-    <p class="text-lg" v-if="item">
-      {{ item['title'] }}
-    </p>
-
     <div v-if="item" class="flex flex-row">
       <div class="w-1/2">
-        <div class ="flex justify-center" v-if="item['resourceNode']['resourceFile']">
+        <p class="text-lg">
+          {{ item['title'] }}
+        </p>
 
-          <div class="w-64">
+        <div v-if="item['resourceNode']['resourceFile']" class="flex justify-center">
+
+          <div class="w-4/5">
             <q-img
                 spinner-color="primary"
                 v-if="item['resourceNode']['resourceFile']['image']"
@@ -24,30 +24,31 @@
 
             <span v-else-if="item['resourceNode']['resourceFile']['video']">
               <video controls>
-                <source :src="item['contentUrl']" />
+                <source :src="item['contentUrl']"/>
               </video>
             </span>
 
             <span v-if="'text/html' === item['resourceNode']['resourceFile']['mimeType']">
                 <iframe
                     border="0"
+                    height="100%"
                     width="100%"
                     :src="item['contentUrl']"
                 />
             </span>
 
-<!--            <span v-else>-->
-<!--                <q-btn-->
-<!--                    class="btn btn-primary"-->
-<!--                    :to="item['downloadUrl']"-->
-<!--                >-->
-<!--                  <v-icon icon="mdi-file-download"/>-->
-<!--                  {{ $t('Download file') }}-->
-<!--                </q-btn>-->
-<!--              </span>-->
+            <!--            <span v-else>-->
+            <!--                <q-btn-->
+            <!--                    class="btn btn-primary"-->
+            <!--                    :to="item['downloadUrl']"-->
+            <!--                >-->
+            <!--                  <v-icon icon="mdi-file-download"/>-->
+            <!--                  {{ $t('Download file') }}-->
+            <!--                </q-btn>-->
+            <!--              </span>-->
           </div>
         </div>
-        <div class ="flex justify-center" v-else>
+        <div v-else class="flex justify-center">
           <v-icon icon="mdi-folder"/>
         </div>
       </div>
@@ -61,7 +62,7 @@
               {{ item['resourceNode'].creator.username }}
             </td>
             <td></td>
-            <td />
+            <td/>
           </tr>
           <tr>
             <td><strong>{{ $t('Comment') }}</strong></td>
@@ -72,16 +73,16 @@
           <tr>
             <td><strong>{{ $t('Created at') }}</strong></td>
             <td>
-              {{ item['resourceNode'] ? $luxonDateTime.fromISO(item['resourceNode'].createdAt).toRelative() : ''}}
+              {{ item['resourceNode'] ? $luxonDateTime.fromISO(item['resourceNode'].createdAt).toRelative() : '' }}
             </td>
-            <td />
+            <td/>
           </tr>
           <tr>
             <td><strong>{{ $t('Updated at') }}</strong></td>
             <td>
-              {{ item['resourceNode'] ? $luxonDateTime.fromISO(item['resourceNode'].updatedAt).toRelative() : ''}}
+              {{ item['resourceNode'] ? $luxonDateTime.fromISO(item['resourceNode'].updatedAt).toRelative() : '' }}
             </td>
-            <td />
+            <td/>
           </tr>
           <tr v-if="item['resourceNode']['resourceFile']">
             <td><strong>{{ $t('File') }}</strong></td>
@@ -96,14 +97,14 @@
                 </a>
               </div>
             </td>
-            <td />
+            <td/>
           </tr>
           </tbody>
         </q-markup-table>
 
-        <hr />
+        <hr/>
 
-        <ShowLinks :item="item" />
+        <ShowLinks :item="item"/>
 
       </span>
     </div>

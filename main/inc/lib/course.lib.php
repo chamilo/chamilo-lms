@@ -659,9 +659,7 @@ class CourseManager
                 try {
                     $duration = new DateInterval(sprintf('P%dD', $numberOfDays));
                 } catch (Exception $exception) {
-                    throw new Exception(
-                        get_lang('WrongNumberOfDays').': '.$numberOfDays.': '.$exception->getMessage()
-                    );
+                    throw new Exception(get_lang('WrongNumberOfDays').': '.$numberOfDays.': '.$exception->getMessage());
                 }
                 $endDate = new DateTime();
                 $endDate->add($duration);
@@ -679,9 +677,7 @@ class CourseManager
                 try {
                     Database::getManager()->flush();
                 } catch (\Doctrine\ORM\OptimisticLockException $exception) {
-                    throw new Exception(
-                        get_lang('InternalDatabaseError').': '.$exception->getMessage()
-                    );
+                    throw new Exception(get_lang('InternalDatabaseError').': '.$exception->getMessage());
                 }
                 $accessUrlRelSession = new \Chamilo\CoreBundle\Entity\AccessUrlRelSession();
                 $accessUrlRelSession->setAccessUrlId(api_get_current_access_url_id());
@@ -690,9 +686,7 @@ class CourseManager
                 try {
                     Database::getManager()->flush();
                 } catch (\Doctrine\ORM\OptimisticLockException $exception) {
-                    throw new Exception(
-                        get_lang('InternalDatabaseError').': '.$exception->getMessage()
-                    );
+                    throw new Exception(get_lang('InternalDatabaseError').': '.$exception->getMessage());
                 }
             } else {
                 // user has at least one accessible session, let's use it
@@ -704,9 +698,7 @@ class CourseManager
             try {
                 Database::getManager()->flush();
             } catch (\Doctrine\ORM\OptimisticLockException $exception) {
-                throw new Exception(
-                    get_lang('InternalDatabaseError').': '.$exception->getMessage()
-                );
+                throw new Exception(get_lang('InternalDatabaseError').': '.$exception->getMessage());
             }
             // subscribe user to course within this session
             SessionManager::subscribe_users_to_session_course([$userId], $session->getId(), $course->getCode());
@@ -718,8 +710,6 @@ class CourseManager
     /**
      * @param string $courseCode
      * @param int    $status
-     *
-     * @return bool
      */
     public static function autoSubscribeToCourse($courseCode, $status = STUDENT): bool
     {

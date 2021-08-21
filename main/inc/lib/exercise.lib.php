@@ -973,23 +973,26 @@ class ExerciseLib
                             $exe_id = (int) $exe_id;
                             $trackAttempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
                             $sql = "SELECT answer FROM $trackAttempts
-                                    WHERE exe_id = $exe_id AND question_id= $questionId";
+                                    WHERE exe_id = $exe_id AND question_id = $questionId";
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
 
                             $answer = null;
                             if (isset($rowLastAttempt['answer'])) {
                                 $answer = $rowLastAttempt['answer'];
-                            }
-
-                            if (empty($answer)) {
-                                $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
-                                    1,
-                                    $nbrAnswers
-                                );
-                                $answer = $objAnswerTmp->selectAnswer(
-                                    $_SESSION['calculatedAnswerId'][$questionId]
-                                );
+                                $answerParts = explode(':::', $answer);
+                                if (isset($answerParts[1])) {
+                                    $answer = $answerParts[0];
+                                    $calculatedAnswerList[$questionId] = $answerParts[1];
+                                    Session::write('calculatedAnswerId', $calculatedAnswerList);
+                                }
+                            } else {
+                                $calculatedAnswerList = Session::read('calculatedAnswerId');
+                                if (!isset($calculatedAnswerList[$questionId])) {
+                                    $calculatedAnswerList[$questionId] = mt_rand(1, $nbrAnswers);
+                                    Session::write('calculatedAnswerId', $calculatedAnswerList);
+                                }
+                                $answer = $objAnswerTmp->selectAnswer($calculatedAnswerList[$questionId]);
                             }
                         }
 
@@ -1063,7 +1066,7 @@ class ExerciseLib
                             $answer = '';
                             $i = 0;
                             foreach ($studentAnswerList as $studentItem) {
-                                // Remove surronding brackets
+                                // Remove surrounding brackets
                                 $studentResponse = api_substr(
                                     $studentItem,
                                     1,

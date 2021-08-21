@@ -65,6 +65,8 @@ class ExerciseShowFunctions
         $choice = '',
         $status = ''
     ) {
+        $answer = explode(':::', $answer);
+        $answer = $answer[0];
         if ($exercise->showExpectedChoice()) {
             if (empty($id)) {
                 echo '<tr><td>'.Security::remove_XSS($answer).'</td>';

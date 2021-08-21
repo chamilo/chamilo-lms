@@ -78,6 +78,7 @@ class Rest extends WebService
     const GET_LEGAL_CONDITIONS = 'get_legal_conditions';
     const UPDATE_CONDITION_ACCEPTED = 'update_condition_accepted';
     const LOGOUT = 'logout';
+    const DELETE_USER = 'delete_user';
 
     /**
      * @var Session

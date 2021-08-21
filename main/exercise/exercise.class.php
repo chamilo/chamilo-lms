@@ -4417,8 +4417,10 @@ class Exercise
                     break;
                 case CALCULATED_ANSWER:
                     $calculatedAnswerList = Session::read('calculatedAnswerId');
-                    if (!empty($calculatedAnswerList)) {
-                        $answer = $objAnswerTmp->selectAnswer($calculatedAnswerList[$questionId]);
+                    $calculatedAnswerId = null;
+                    if (!empty($calculatedAnswerList) && isset($calculatedAnswerList[$questionId])) {
+                        $calculatedAnswerId = $calculatedAnswerList[$questionId];
+                        $answer = $objAnswerTmp->selectAnswer($calculatedAnswerId);
                         $preArray = explode('@@', $answer);
                         $last = count($preArray) - 1;
                         $answer = '';
@@ -4461,6 +4463,7 @@ class Exercise
                                             question_id = $questionId ";
                                 $result = Database::query($sql);
                                 $str = Database::result($result, 0, 'answer');
+
                                 api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
                                 $str = str_replace('\r\n', '', $str);
                                 $choice = $arr[1];
@@ -6249,6 +6252,10 @@ class Exercise
                     $questionDuration
                 );
             } else {
+                if ($answerType === CALCULATED_ANSWER && !empty($calculatedAnswerId)) {
+                    $answer .= ':::'.$calculatedAnswerId;
+                }
+
                 Event::saveQuestionAttempt(
                     $questionScore,
                     $answer,

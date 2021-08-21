@@ -51,6 +51,7 @@ class Rest extends WebService
     const SAVE_USER = 'save_user';
     const SAVE_USER_JSON = 'save_user_json';
     const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
+    const SUBSCRIBE_USER_TO_COURSE_PASSWORD = 'subscribe_user_to_course_password';
     const UNSUBSCRIBE_USER_FROM_COURSE = 'unsubscribe_user_from_course';
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
     const DELETE_USER_MESSAGE = 'delete_user_message';
@@ -1520,6 +1521,26 @@ class Rest extends WebService
         }
 
         return [false];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function subscribeUserToCoursePassword($courseCode, $password)
+    {
+        $courseInfo = api_get_course_info($courseCode);
+
+        if (empty($courseInfo)) {
+            throw new Exception(get_lang('NoCourse'));
+        }
+
+        if (sha1($password) === $courseInfo['registration_code']) {
+            CourseManager::processAutoSubscribeToCourse($courseCode);
+
+            return;
+        }
+
+        throw new Exception(get_lang('CourseRegistrationCodeIncorrect'));
     }
 
     public function unSubscribeUserToCourse(array $params): array

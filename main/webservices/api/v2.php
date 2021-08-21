@@ -194,6 +194,13 @@ try {
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::SUBSCRIBE_USER_TO_COURSE_PASSWORD:
+            $courseCode = isset($_POST['code']) ? Security::remove_XSS($_POST['code']) : null;
+            $password = $_POST['password'] ?? null;
+
+            $restApi->subscribeUserToCoursePassword($courseCode, $password);
+            $restResponse->setData(['status' => true]);
+            break;
         case Rest::UNSUBSCRIBE_USER_FROM_COURSE:
             $data = $restApi->unSubscribeUserToCourse($_POST);
             $restResponse->setData($data);

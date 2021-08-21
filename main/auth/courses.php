@@ -90,6 +90,23 @@ if (!empty($settings)) {
     }
 }
 
+function generateRedirectUrlAfterSubscription($redirectAfterSubscription, $coursePublicUrl): string
+{
+    if ('course_home' !== $redirectAfterSubscription) {
+        return api_get_self();
+    }
+
+    if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+        $user = api_get_user_entity(api_get_user_id());
+
+        if ($user && $accesibleSessions = $user->getCurrentlyAccessibleSessions()) {
+            return $coursePublicUrl.'?id_session='.$accesibleSessions[0]->getId();
+        }
+    }
+
+    return $coursePublicUrl;
+}
+
 switch ($action) {
     case 'unsubscribe':
         // We are unsubscribing from a course (=Unsubscribe from course).
@@ -114,22 +131,12 @@ switch ($action) {
         if (Security::check_token('get')) {
             $courseInfo = api_get_course_info($courseCodeToSubscribe);
             CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
-            if ('course_home' === $redirectAfterSubscription) {
-                $redirectionTarget = $courseInfo['course_public_url'];
-                if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-                    $user = api_get_user_entity(api_get_user_id());
-                    if ($user) {
-                        foreach ($user->getCurrentlyAccessibleSessions() as $session) {
-                            $redirectionTarget = $redirectionTarget.'?id_session='.$session->getId();
-                            break;
-                        }
-                    }
-                }
-                header('Location: '.$redirectionTarget);
+            $redirectionTarget = generateRedirectUrlAfterSubscription(
+                $redirectAfterSubscription,
+                $courseInfo['course_public_url']
+            );
 
-                exit;
-            }
-            header('Location: '.api_get_self());
+            header("Location: $redirectionTarget");
             exit;
         }
         break;
@@ -162,28 +169,17 @@ switch ($action) {
             if (sha1($_POST['course_registration_code']) === $courseInfo['registration_code']) {
                 CourseManager::autoSubscribeToCourse($_POST['subscribe_user_with_password']);
 
-                if ('course_home' === $redirectAfterSubscription) {
-                    $redirectionTarget = $courseInfo['course_public_url'];
-                    if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-                        $user = api_get_user_entity(api_get_user_id());
-                        if ($user) {
-                            foreach ($user->getCurrentlyAccessibleSessions() as $session) {
-                                $redirectionTarget = $redirectionTarget.'?id_session='.$session->getId();
-                                break;
-                            }
-                        }
-                    }
-                    header('Location: '.$redirectionTarget);
-                    exit;
-                }
+                $redirectionTarget = generateRedirectUrlAfterSubscription(
+                    $redirectAfterSubscription,
+                    $courseInfo['course_public_url']
+                );
 
-                header('Location: '.api_get_self());
-                exit;
+                header("Location: $redirectionTarget");
             } else {
-                Display::addFlash(Display::return_message(get_lang('CourseRegistrationCodeIncorrect')), 'warning');
+                Display::addFlash(Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'warning'));
                 header('Location: '.$action);
-                exit;
             }
+            exit;
         }
 
         break;

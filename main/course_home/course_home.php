@@ -229,40 +229,35 @@ if ($isSpecialCourse) {
 
 $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 
-if ($action === 'subscribe') {
-    if (Security::check_token('get')) {
-        Security::clear_token();
+if ($action === 'subscribe' && Security::check_token('get')) {
+    Security::clear_token();
+    $generateRedirectUrlAfterSubscription = function () use ($course_code, $courseId, $user_id) {
         $redirectionTarget = api_get_self();
         if (CourseManager::autoSubscribeToCourse($course_code)) {
             if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
                 Session::write('is_allowed_in_course', true);
             }
             if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-                // append session id to redirect URL
-                /**
-                 * @var Chamilo\UserBundle\Entity\User
-                 */
-                $user = UserManager::getRepository()->find(api_get_user_id());
-                if ($user) {
-                    foreach ($user->getCurrentlyAccessibleSessions() as $session) {
-                        $redirectionTarget = api_get_self().'?id_session='.$session->getId();
-                        break;
-                    }
+                $user = api_get_user_entity(api_get_user_id());
+
+                if ($user && $accesibleSessions = $user->getCurrentlyAccessibleSessions()) {
+                    return api_get_self().'?id_session='.$accesibleSessions[0]->getId();
                 }
             }
         } elseif (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-            /**
-             * @var Chamilo\UserBundle\Entity\User
-             */
-            $user = UserManager::getRepository()->find(api_get_user_id());
+            $user = api_get_user_entity(api_get_user_id());
+
             if ($user && !$user->getCurrentlyAccessibleSessions()) {
                 // subscription was probably refused because user session expired, go back to page "about"
-                $redirectionTarget = api_get_path(WEB_PATH).'course/'.$courseId.'/about';
+                return api_get_path(WEB_PATH).'course/'.$courseId.'/about';
             }
         }
-        header('Location: '.$redirectionTarget);
-        exit;
-    }
+
+        return $redirectionTarget;
+    };
+
+    header('Location: '.$generateRedirectUrlAfterSubscription());
+    exit;
 }
 
 /*	Is the user allowed here? */

@@ -7,7 +7,7 @@
 abstract class CcVersionBase
 {
     public $resources = null;
-    public $resources_ind = null;
+    public $resourcesInd = null;
     public $organizations = null;
     public $ccversion = null;
     public $camversion = null;

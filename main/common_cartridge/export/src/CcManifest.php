@@ -311,8 +311,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
     private function getIdentifierByFilename($name)
     {
         $result = null;
-        if (isset($this->activemanifest->resources_ind[$name])) {
-            $result = $this->activemanifest->resources_ind[$name];
+        if (isset($this->activemanifest->resourcesInd[$name])) {
+            $result = $this->activemanifest->resourcesInd[$name];
         }
 
         return $result;

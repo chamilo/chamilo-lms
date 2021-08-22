@@ -33,7 +33,7 @@ class CcEntities
         return $resource;
     }
 
-    public function updateSources($html, $root_path = '')
+    public function updateSources($html, $rootPath = '')
     {
         $document = $this->loadHtml($html);
 
@@ -48,7 +48,7 @@ class CcEntities
 
                 if (empty($protocol)) {
                     $attribute_value = str_replace("\$IMS-CC-FILEBASE\$", "", $attribute_value);
-                    $attribute_value = $this->fullPath($root_path."/".$attribute_value, "/");
+                    $attribute_value = $this->fullPath($rootPath."/".$attribute_value, "/");
                     $attribute_value = "\$@FILEPHP@\$"."/".$attribute_value;
                 }
 

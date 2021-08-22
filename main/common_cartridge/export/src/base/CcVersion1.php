@@ -246,7 +246,7 @@ class CcVersion1 extends CcVersionBase
             $dnode->appendChild($nd);
         }
         $this->resources[$res->identifier] = $res;
-        $this->resources_ind[$res->files[0]] = $res->identifier;
+        $this->resourcesInd[$res->files[0]] = $res->identifier;
 
         foreach ($res->dependency as $dependency) {
             $nd = $doc->createElementNS($this->ccnamespaces['imscc'], 'dependency');

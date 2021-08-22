@@ -28,33 +28,20 @@ class Cc13Quiz extends Cc13Entities
         $exercise->updateAttempts($quiz['max_attempts']);
         $exercise->updateFeedbackType(0);
 
-        // Match shuffle question with chamilo
-        if (isset($moduleValues['shufflequestions']) &&
-            (int) $moduleValues['shufflequestions'] === 1
-        ) {
-            $exercise->setRandom(-1);
-        } else {
-            $exercise->setRandom(0);
-        }
+        $exercise->setRandom(0);
         $exercise->updateRandomAnswers(!empty($moduleValues['shuffleanswers']));
-        // @todo divide to minutes
-        $exercise->updateExpiredTime((int) $moduleValues['timelimit']);
-
-        if ($moduleValues['questionsperpage'] == 1) {
-            $exercise->updateType(2);
-        } else {
-            $exercise->updateType(1);
-        }
+        $exercise->updateExpiredTime((int) $quiz['timelimit']);
+        $exercise->updateType(1);
 
         // Create the new Quiz
         $exercise->save();
 
         if (!empty($quiz['questions'])) {
             foreach ($quiz['questions'] as $question) {
-                $qType = $question['type'];
+                $qtype = $question['type'];
 
                 $types = ['unique_answer' => 1, 'multiple_answer' => 2];
-                $questionType = $types[$qType];
+                $questionType = $types[$qtype];
 
                 $questionInstance = Question::getInstance($questionType);
                 if (empty($questionInstance)) {
@@ -79,15 +66,15 @@ class Cc13Quiz extends Cc13Entities
                 if ($questionInstance->type != MEDIA_QUESTION) {
                     $questionInstance->save($exercise);
                     // modify the exercise
-                    $exercise->addToList($questionInstance->id);
+                    $exercise->addToList($questionInstance->iid);
                     $exercise->update_question_positions();
                 }
 
                 if ($qtype == 'unique_answer') {
-                    $objAnswer = new Answer($questionInstance->id);
+                    $objAnswer = new Answer($questionInstance->iid);
                     $questionWeighting = 0;
                     foreach ($question['answers'] as $slot => $answerValues) {
-                        $correct = (int) $answerValues['score'] ? (int) $answerValues['score'] : 0;
+                        $correct = $answerValues['score'] ? (int) $answerValues['score'] : 0;
                         $answer = $answerValues['title'];
                         $comment = $answerValues['feedback'];
                         $weighting = $answerValues['score'];
@@ -114,7 +101,7 @@ class Cc13Quiz extends Cc13Entities
                     $questionInstance->updateWeighting($questionWeighting);
                     $questionInstance->save($exercise);
                 } else {
-                    $objAnswer = new Answer($questionInstance->id);
+                    $objAnswer = new Answer($questionInstance->iid);
                     $questionWeighting = 0;
                     foreach ($question['answers'] as $slot => $answerValues) {
                         $answer = $answerValues['title'];
@@ -160,8 +147,8 @@ class Cc13Quiz extends Cc13Entities
     {
         $values = [];
         if (!empty($instance)) {
+            $questions = [];
             if (!empty($instance['questions'])) {
-                $questions = [];
                 foreach ($instance['questions'] as $question) {
                     $questions[$question['id']] = [
                         'title' => $question['title'],
@@ -208,7 +195,7 @@ class Cc13Quiz extends Cc13Entities
                         $assessment = $this->loadXmlResource(Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$assessmentFile);
 
                         if (!empty($assessment)) {
-                            $replace_values = ['unlimited' => 0];
+                            $replaceValues = ['unlimited' => 0];
 
                             $questions = $this->getQuestions($assessment, $lastQuestionId, $lastAnswerId, dirname($assessmentFile), $is_question_bank);
                             $questionCount = count($questions);
@@ -221,7 +208,7 @@ class Cc13Quiz extends Cc13Entities
                                 $instances[$instance['resource_indentifier']]['title'] = $instance['title'];
                                 $instances[$instance['resource_indentifier']]['is_question_bank'] = $is_question_bank;
                                 $instances[$instance['resource_indentifier']]['options']['timelimit'] = $this->getGlobalConfig($assessment, 'qmd_timelimit', 0);
-                                $instances[$instance['resource_indentifier']]['options']['max_attempts'] = $this->getGlobalConfig($assessment, 'cc_maxattempts', 0, $replace_values);
+                                $instances[$instance['resource_indentifier']]['options']['max_attempts'] = $this->getGlobalConfig($assessment, 'cc_maxattempts', 0, $replaceValues);
                             }
                         }
                     }
@@ -232,50 +219,50 @@ class Cc13Quiz extends Cc13Entities
         return $instances;
     }
 
-    private function getGlobalConfig($assessment, $option, $default_value, $replace_values = '')
+    private function getGlobalConfig($assessment, $option, $defaultValue, $replaceValues = '')
     {
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
         $metadata = $xpath->query('/xmlns:questestinterop/xmlns:assessment/xmlns:qtimetadata/xmlns:qtimetadatafield');
 
         foreach ($metadata as $field) {
-            $field_label = $xpath->query('xmlns:fieldlabel', $field);
-            $field_label = !empty($field_label->item(0)->nodeValue) ? $field_label->item(0)->nodeValue : '';
+            $fieldLabel = $xpath->query('xmlns:fieldlabel', $field);
+            $fieldLabel = !empty($fieldLabel->item(0)->nodeValue) ? $fieldLabel->item(0)->nodeValue : '';
 
-            if (strtolower($field_label) == strtolower($option)) {
-                $field_entry = $xpath->query('xmlns:fieldentry', $field);
-                $response = !empty($field_entry->item(0)->nodeValue) ? $field_entry->item(0)->nodeValue : '';
+            if (strtolower($fieldLabel) == strtolower($option)) {
+                $fieldEntry = $xpath->query('xmlns:fieldentry', $field);
+                $response = !empty($fieldEntry->item(0)->nodeValue) ? $fieldEntry->item(0)->nodeValue : '';
             }
         }
 
         $response = !empty($response) ? trim($response) : '';
 
-        if (!empty($replace_values)) {
-            foreach ($replace_values as $key => $value) {
+        if (!empty($replaceValues)) {
+            foreach ($replaceValues as $key => $value) {
                 $response = ($key == $response) ? $value : $response;
             }
         }
 
-        $response = empty($response) ? $default_value : $response;
+        $response = empty($response) ? $defaultValue : $response;
 
         return $response;
     }
 
-    private function getQuestions($assessment, &$lastQuestionId, &$last_answer_id, $root_path, $is_question_bank)
+    private function getQuestions($assessment, &$lastQuestionId, &$last_answer_id, $rootPath, $is_question_bank)
     {
         $questions = [];
 
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
         if (!$is_question_bank) {
-            $questions_items = $xpath->query('/xmlns:questestinterop/xmlns:assessment/xmlns:section/xmlns:item');
+            $questionsItems = $xpath->query('/xmlns:questestinterop/xmlns:assessment/xmlns:section/xmlns:item');
         } else {
-            $questions_items = $xpath->query('/xmlns:questestinterop/xmlns:objectbank/xmlns:item');
+            $questionsItems = $xpath->query('/xmlns:questestinterop/xmlns:objectbank/xmlns:item');
         }
 
-        foreach ($questions_items as $question_item) {
-            $count_questions = $xpath->evaluate('count(xmlns:presentation/xmlns:flow/xmlns:material/xmlns:mattext)', $question_item);
+        foreach ($questionsItems as $question_item) {
+            $countQuestions = $xpath->evaluate('count(xmlns:presentation/xmlns:flow/xmlns:material/xmlns:mattext)', $question_item);
 
-            if ($count_questions == 0) {
+            if ($countQuestions == 0) {
                 $questionTitle = $xpath->query('xmlns:presentation/xmlns:material/xmlns:mattext', $question_item);
             } else {
                 $questionTitle = $xpath->query('xmlns:presentation/xmlns:flow/xmlns:material/xmlns:mattext', $question_item);
@@ -283,31 +270,31 @@ class Cc13Quiz extends Cc13Entities
 
             $questionTitle = !empty($questionTitle->item(0)->nodeValue) ? $questionTitle->item(0)->nodeValue : '';
 
-            $question_identifier = $xpath->query('@ident', $question_item);
-            $question_identifier = !empty($question_identifier->item(0)->nodeValue) ? $question_identifier->item(0)->nodeValue : '';
+            $questionIdentifier = $xpath->query('@ident', $question_item);
+            $questionIdentifier = !empty($questionIdentifier->item(0)->nodeValue) ? $questionIdentifier->item(0)->nodeValue : '';
 
-            if (!empty($question_identifier)) {
-                $question_type = $this->getQuestionType($question_identifier, $assessment);
+            if (!empty($questionIdentifier)) {
+                $questionType = $this->getQuestionType($questionIdentifier, $assessment);
 
-                if (!empty($question_type['qtype'])) {
+                if (!empty($questionType['qtype'])) {
                     $lastQuestionId++;
 
-                    $questions[$question_identifier]['id'] = $lastQuestionId;
+                    $questions[$questionIdentifier]['id'] = $lastQuestionId;
 
-                    $questionTitle = $this->updateSources($questionTitle, $root_path);
+                    $questionTitle = $this->updateSources($questionTitle, $rootPath);
                     $questionTitle = !empty($questionTitle) ? str_replace("%24", "\$", $this->includeTitles($questionTitle)) : '';
 
                     $questionname = $xpath->query('@title', $question_item);
                     $questionname = !empty($questionname->item(0)->nodeValue) ? $questionname->item(0)->nodeValue : '';
 
-                    $questions[$question_identifier]['title'] = $questionTitle;
-                    $questions[$question_identifier]['name'] = $questionname;
-                    $questions[$question_identifier]['identifier'] = $question_identifier;
-                    $questions[$question_identifier]['qtype'] = $question_type['qtype'];
-                    $questions[$question_identifier]['cc_type'] = $question_type['cc'];
-                    $questions[$question_identifier]['feedback'] = $this->get_general_feedback($assessment, $question_identifier);
-                    $questions[$question_identifier]['defaultgrade'] = $this->get_defaultgrade($assessment, $question_identifier);
-                    $questions[$question_identifier]['answers'] = $this->getAnswers($question_identifier, $assessment, $lastAnswerId);
+                    $questions[$questionIdentifier]['title'] = $questionTitle;
+                    $questions[$questionIdentifier]['name'] = $questionname;
+                    $questions[$questionIdentifier]['identifier'] = $questionIdentifier;
+                    $questions[$questionIdentifier]['qtype'] = $questionType['qtype'];
+                    $questions[$questionIdentifier]['cc_type'] = $questionType['cc'];
+                    $questions[$questionIdentifier]['feedback'] = $this->getGeneralFeedback($assessment, $questionIdentifier);
+                    $questions[$questionIdentifier]['defaultgrade'] = $this->getDefaultgrade($assessment, $questionIdentifier);
+                    $questions[$questionIdentifier]['answers'] = $this->getAnswers($questionIdentifier, $assessment, $lastAnswerId);
                 }
             }
         }
@@ -317,11 +304,11 @@ class Cc13Quiz extends Cc13Entities
         return $questions;
     }
 
-    private function get_defaultgrade($assessment, $question_identifier)
+    private function getDefaultgrade($assessment, $questionIdentifier)
     {
         $result = 1;
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
-        $query = '//xmlns:item[@ident="'.$question_identifier.'"]';
+        $query = '//xmlns:item[@ident="'.$questionIdentifier.'"]';
         $query .= '//xmlns:qtimetadatafield[xmlns:fieldlabel="cc_weighting"]/xmlns:fieldentry';
         $defgrade = $xpath->query($query);
         if (!empty($defgrade) && ($defgrade->length > 0)) {
@@ -334,11 +321,11 @@ class Cc13Quiz extends Cc13Entities
         return $result;
     }
 
-    private function get_general_feedback($assessment, $question_identifier)
+    private function getGeneralFeedback($assessment, $questionIdentifier)
     {
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
-        $respconditions = $xpath->query('//xmlns:item[@ident="'.$question_identifier.'"]/xmlns:resprocessing/xmlns:respcondition');
+        $respconditions = $xpath->query('//xmlns:item[@ident="'.$questionIdentifier.'"]/xmlns:resprocessing/xmlns:respcondition');
 
         if (!empty($respconditions)) {
             foreach ($respconditions as $respcondition) {
@@ -346,15 +333,15 @@ class Cc13Quiz extends Cc13Entities
                 $continue = !empty($continue->nodeValue) ? strtolower($continue->nodeValue) : '';
 
                 if ($continue == 'yes') {
-                    $display_feedback = $xpath->query('xmlns:displayfeedback', $respcondition);
+                    $displayFeedback = $xpath->query('xmlns:displayfeedback', $respcondition);
 
-                    if (!empty($display_feedback)) {
-                        foreach ($display_feedback as $feedback) {
-                            $feedback_identifier = $feedback->getAttributeNode('linkrefid');
-                            $feedback_identifier = !empty($feedback_identifier->nodeValue) ? $feedback_identifier->nodeValue : '';
+                    if (!empty($displayFeedback)) {
+                        foreach ($displayFeedback as $feedback) {
+                            $feedbackIdentifier = $feedback->getAttributeNode('linkrefid');
+                            $feedbackIdentifier = !empty($feedbackIdentifier->nodeValue) ? $feedbackIdentifier->nodeValue : '';
 
-                            if (!empty($feedback_identifier)) {
-                                $feedbacks_identifiers[] = $feedback_identifier;
+                            if (!empty($feedbackIdentifier)) {
+                                $feedbackIdentifiers[] = $feedbackIdentifier;
                             }
                         }
                     }
@@ -363,11 +350,11 @@ class Cc13Quiz extends Cc13Entities
         }
 
         $feedback = '';
-        $feedbacks_identifiers = empty($feedbacks_identifiers) ? '' : $feedbacks_identifiers;
+        $feedbackIdentifiers = empty($feedbackIdentifiers) ? '' : $feedbackIdentifiers;
 
-        if (!empty($feedbacks_identifiers)) {
-            foreach ($feedbacks_identifiers as $feedback_identifier) {
-                $feedbacks = $xpath->query('//xmlns:item[@ident="'.$question_identifier.'"]/xmlns:itemfeedback[@ident="'.$feedback_identifier.'"]/xmlns:flow_mat/xmlns:material/xmlns:mattext');
+        if (!empty($feedbackIdentifiers)) {
+            foreach ($feedbackIdentifiers as $feedbackIdentifier) {
+                $feedbacks = $xpath->query('//xmlns:item[@ident="'.$questionIdentifier.'"]/xmlns:itemfeedback[@ident="'.$feedbackIdentifier.'"]/xmlns:flow_mat/xmlns:material/xmlns:mattext');
                 $feedback .= !empty($feedbacks->item(0)->nodeValue) ? $feedbacks->item(0)->nodeValue.' ' : '';
             }
         }
@@ -375,27 +362,27 @@ class Cc13Quiz extends Cc13Entities
         return $feedback;
     }
 
-    private function getFeedback($assessment, $identifier, $item_identifier, $question_type)
+    private function getFeedback($assessment, $identifier, $itemIdentifier, $questionType)
     {
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
-        $resource_processing = $xpath->query('//xmlns:item[@ident="'.$item_identifier.'"]/xmlns:resprocessing/xmlns:respcondition');
+        $resourceProcessing = $xpath->query('//xmlns:item[@ident="'.$itemIdentifier.'"]/xmlns:resprocessing/xmlns:respcondition');
 
-        if (!empty($resource_processing)) {
-            foreach ($resource_processing as $response) {
+        if (!empty($resourceProcessing)) {
+            foreach ($resourceProcessing as $response) {
                 $varequal = $xpath->query('xmlns:conditionvar/xmlns:varequal', $response);
                 $varequal = !empty($varequal->item(0)->nodeValue) ? $varequal->item(0)->nodeValue : '';
 
-                if (strtolower($varequal) == strtolower($identifier) || ($question_type == CC_QUIZ_ESSAY)) {
-                    $display_feedback = $xpath->query('xmlns:displayfeedback', $response);
+                if (strtolower($varequal) == strtolower($identifier) || ($questionType == CC_QUIZ_ESSAY)) {
+                    $displayFeedback = $xpath->query('xmlns:displayfeedback', $response);
 
-                    if (!empty($display_feedback)) {
-                        foreach ($display_feedback as $feedback) {
-                            $feedback_identifier = $feedback->getAttributeNode('linkrefid');
-                            $feedback_identifier = !empty($feedback_identifier->nodeValue) ? $feedback_identifier->nodeValue : '';
+                    if (!empty($displayFeedback)) {
+                        foreach ($displayFeedback as $feedback) {
+                            $feedbackIdentifier = $feedback->getAttributeNode('linkrefid');
+                            $feedbackIdentifier = !empty($feedbackIdentifier->nodeValue) ? $feedbackIdentifier->nodeValue : '';
 
-                            if (!empty($feedback_identifier)) {
-                                $feedbacks_identifiers[] = $feedback_identifier;
+                            if (!empty($feedbackIdentifier)) {
+                                $feedbackIdentifiers[] = $feedbackIdentifier;
                             }
                         }
                     }
@@ -404,11 +391,11 @@ class Cc13Quiz extends Cc13Entities
         }
 
         $feedback = '';
-        $feedbacks_identifiers = empty($feedbacks_identifiers) ? '' : $feedbacks_identifiers;
+        $feedbackIdentifiers = empty($feedbackIdentifiers) ? '' : $feedbackIdentifiers;
 
-        if (!empty($feedbacks_identifiers)) {
-            foreach ($feedbacks_identifiers as $feedback_identifier) {
-                $feedbacks = $xpath->query('//xmlns:item[@ident="'.$item_identifier.'"]/xmlns:itemfeedback[@ident="'.$feedback_identifier.'"]/xmlns:flow_mat/xmlns:material/xmlns:mattext');
+        if (!empty($feedbackIdentifiers)) {
+            foreach ($feedbackIdentifiers as $feedbackIdentifier) {
+                $feedbacks = $xpath->query('//xmlns:item[@ident="'.$itemIdentifier.'"]/xmlns:itemfeedback[@ident="'.$feedbackIdentifier.'"]/xmlns:flow_mat/xmlns:material/xmlns:mattext');
                 $feedback .= !empty($feedbacks->item(0)->nodeValue) ? $feedbacks->item(0)->nodeValue.' ' : '';
             }
         }
@@ -416,16 +403,16 @@ class Cc13Quiz extends Cc13Entities
         return $feedback;
     }
 
-    private function getAnswersFib($question_identifier, $identifier, $assessment, &$lastAnswerId)
+    private function getAnswersFib($questionIdentifier, $identifier, $assessment, &$lastAnswerId)
     {
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
         $correctanswersfib = [];
         $incorrectanswersfib = [];
 
-        $responseItems = $xpath->query('//xmlns:item[@ident="'.$question_identifier.'"]/xmlns:resprocessing/xmlns:respcondition');
+        $responseItems = $xpath->query('//xmlns:item[@ident="'.$questionIdentifier.'"]/xmlns:resprocessing/xmlns:respcondition');
 
-        $correctrespcond = $xpath->query('//xmlns:item[@ident="'.$question_identifier.'"]/xmlns:resprocessing/xmlns:respcondition/xmlns:setvar[text()="100"]/..');
+        $correctrespcond = $xpath->query('//xmlns:item[@ident="'.$questionIdentifier.'"]/xmlns:resprocessing/xmlns:respcondition/xmlns:setvar[text()="100"]/..');
         $correctanswers = $xpath->query('xmlns:conditionvar/xmlns:varequal', $correctrespcond->item(0));
 
         // Correct answers.
@@ -460,27 +447,27 @@ class Cc13Quiz extends Cc13Entities
             }
             $answerTitle = !empty($varequal->item(0)->nodeValue) ? $varequal->item(0)->nodeValue : '';
 
-            $display_feedback = $xpath->query('xmlns:displayfeedback', $response_item);
+            $displayFeedback = $xpath->query('xmlns:displayfeedback', $response_item);
 
-            unset($feedbacks_identifiers);
+            unset($feedbackIdentifiers);
 
-            if (!empty($display_feedback)) {
-                foreach ($display_feedback as $feedback) {
-                    $feedback_identifier = $feedback->getAttributeNode('linkrefid');
-                    $feedback_identifier = !empty($feedback_identifier->nodeValue) ? $feedback_identifier->nodeValue : '';
+            if (!empty($displayFeedback)) {
+                foreach ($displayFeedback as $feedback) {
+                    $feedbackIdentifier = $feedback->getAttributeNode('linkrefid');
+                    $feedbackIdentifier = !empty($feedbackIdentifier->nodeValue) ? $feedbackIdentifier->nodeValue : '';
 
-                    if (!empty($feedback_identifier)) {
-                        $feedbacks_identifiers[] = $feedback_identifier;
+                    if (!empty($feedbackIdentifier)) {
+                        $feedbackIdentifiers[] = $feedbackIdentifier;
                     }
                 }
             }
 
             $feedback = '';
-            $feedbacks_identifiers = empty($feedbacks_identifiers) ? '' : $feedbacks_identifiers;
+            $feedbackIdentifiers = empty($feedbackIdentifiers) ? '' : $feedbackIdentifiers;
 
-            if (!empty($feedbacks_identifiers)) {
-                foreach ($feedbacks_identifiers as $feedback_identifier) {
-                    $feedbacks = $xpath->query('//xmlns:item[@ident="'.$question_identifier.'"]/xmlns:itemfeedback[@ident="'.$feedback_identifier.'"]/xmlns:flow_mat/xmlns:material/xmlns:mattext');
+            if (!empty($feedbackIdentifiers)) {
+                foreach ($feedbackIdentifiers as $feedbackIdentifier) {
+                    $feedbacks = $xpath->query('//xmlns:item[@ident="'.$questionIdentifier.'"]/xmlns:itemfeedback[@ident="'.$feedbackIdentifier.'"]/xmlns:flow_mat/xmlns:material/xmlns:mattext');
                     $feedback .= !empty($feedbacks->item(0)->nodeValue) ? $feedbacks->item(0)->nodeValue.' ' : '';
                 }
             }
@@ -500,19 +487,19 @@ class Cc13Quiz extends Cc13Entities
             }
         }
 
-        $answers_fib = array_merge($correctanswersfib, $incorrectanswersfib);
-        $answers_fib = empty($answers_fib) ? '' : $answers_fib;
+        $answersFib = array_merge($correctanswersfib, $incorrectanswersfib);
+        $answersFib = empty($answersFib) ? '' : $answersFib;
 
-        return $answers_fib;
+        return $answersFib;
     }
 
-    private function getAnswersPatternMatch($question_identifier, $identifier, $assessment, &$lastAnswerId)
+    private function getAnswersPatternMatch($questionIdentifier, $identifier, $assessment, &$lastAnswerId)
     {
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
-        $answers_fib = [];
+        $answersFib = [];
 
-        $responseItems = $xpath->query('//xmlns:item[@ident="'.$question_identifier.'"]/xmlns:resprocessing/xmlns:respcondition');
+        $responseItems = $xpath->query('//xmlns:item[@ident="'.$questionIdentifier.'"]/xmlns:resprocessing/xmlns:respcondition');
 
         foreach ($responseItems as $response_item) {
             $setvar = $xpath->query('xmlns:setvar', $response_item);
@@ -539,32 +526,32 @@ class Cc13Quiz extends Cc13Entities
                 $case = strtolower($case) == 'yes' ? 1 :
                             0;
 
-                $display_feedback = $xpath->query('xmlns:displayfeedback', $response_item);
+                $displayFeedback = $xpath->query('xmlns:displayfeedback', $response_item);
 
-                unset($feedbacks_identifiers);
+                unset($feedbackIdentifiers);
 
-                if (!empty($display_feedback)) {
-                    foreach ($display_feedback as $feedback) {
-                        $feedback_identifier = $feedback->getAttributeNode('linkrefid');
-                        $feedback_identifier = !empty($feedback_identifier->nodeValue) ? $feedback_identifier->nodeValue : '';
+                if (!empty($displayFeedback)) {
+                    foreach ($displayFeedback as $feedback) {
+                        $feedbackIdentifier = $feedback->getAttributeNode('linkrefid');
+                        $feedbackIdentifier = !empty($feedbackIdentifier->nodeValue) ? $feedbackIdentifier->nodeValue : '';
 
-                        if (!empty($feedback_identifier)) {
-                            $feedbacks_identifiers[] = $feedback_identifier;
+                        if (!empty($feedbackIdentifier)) {
+                            $feedbackIdentifiers[] = $feedbackIdentifier;
                         }
                     }
                 }
 
                 $feedback = '';
-                $feedbacks_identifiers = empty($feedbacks_identifiers) ? '' : $feedbacks_identifiers;
+                $feedbackIdentifiers = empty($feedbackIdentifiers) ? '' : $feedbackIdentifiers;
 
-                if (!empty($feedbacks_identifiers)) {
-                    foreach ($feedbacks_identifiers as $feedback_identifier) {
-                        $feedbacks = $xpath->query('//xmlns:item[@ident="'.$question_identifier.'"]/xmlns:itemfeedback[@ident="'.$feedback_identifier.'"]/xmlns:flow_mat/xmlns:material/xmlns:mattext');
+                if (!empty($feedbackIdentifiers)) {
+                    foreach ($feedbackIdentifiers as $feedbackIdentifier) {
+                        $feedbacks = $xpath->query('//xmlns:item[@ident="'.$questionIdentifier.'"]/xmlns:itemfeedback[@ident="'.$feedbackIdentifier.'"]/xmlns:flow_mat/xmlns:material/xmlns:mattext');
                         $feedback .= !empty($feedbacks->item(0)->nodeValue) ? $feedbacks->item(0)->nodeValue.' ' : '';
                     }
                 }
 
-                $answers_fib[] = ['id' => $lastAnswerId,
+                $answersFib[] = ['id' => $lastAnswerId,
                                        'title' => $answerTitle,
                                        'score' => $setvar,
                                        'feedback' => $feedback,
@@ -572,9 +559,9 @@ class Cc13Quiz extends Cc13Entities
             }
         }
 
-        $answers_fib = empty($answers_fib) ? '' : $answers_fib;
+        $answersFib = empty($answersFib) ? '' : $answersFib;
 
-        return $answers_fib;
+        return $answersFib;
     }
 
     private function getAnswers($identifier, $assessment, &$lastAnswerId)
@@ -583,33 +570,33 @@ class Cc13Quiz extends Cc13Entities
 
         $answers = [];
 
-        $question_cc_type = $this->getQuestionType($identifier, $assessment);
-        $question_cc_type = $question_cc_type['cc'];
-        $is_multiresponse = ($question_cc_type == CC_QUIZ_MULTIPLE_RESPONSE);
+        $questionCcType = $this->getQuestionType($identifier, $assessment);
+        $questionCcType = $questionCcType['cc'];
+        $isMultiresponse = ($questionCcType == CC_QUIZ_MULTIPLE_RESPONSE);
 
-        if ($question_cc_type == CC_QUIZ_MULTIPLE_CHOICE || $is_multiresponse || $question_cc_type == CC_QUIZ_TRUE_FALSE) {
-            $query_answers = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:response_lid/xmlns:render_choice/xmlns:response_label';
-            $query_answers_with_flow = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:flow/xmlns:response_lid/xmlns:render_choice/xmlns:response_label';
+        if ($questionCcType == CC_QUIZ_MULTIPLE_CHOICE || $isMultiresponse || $questionCcType == CC_QUIZ_TRUE_FALSE) {
+            $queryAnswers = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:response_lid/xmlns:render_choice/xmlns:response_label';
+            $queryAnswersWithFlow = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:flow/xmlns:response_lid/xmlns:render_choice/xmlns:response_label';
 
-            $query_indentifer = '@ident';
-            $query_title = 'xmlns:material/xmlns:mattext';
+            $queryIndentifer = '@ident';
+            $queryTitle = 'xmlns:material/xmlns:mattext';
         }
 
-        if ($question_cc_type == CC_QUIZ_ESSAY) {
-            $query_answers = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:response_str';
-            $query_answers_with_flow = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:flow/xmlns:response_str';
+        if ($questionCcType == CC_QUIZ_ESSAY) {
+            $queryAnswers = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:response_str';
+            $queryAnswersWithFlow = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:flow/xmlns:response_str';
 
-            $query_indentifer = '@ident';
-            $query_title = 'xmlns:render_fib';
+            $queryIndentifer = '@ident';
+            $queryTitle = 'xmlns:render_fib';
         }
 
-        if ($question_cc_type == CC_QUIZ_FIB || $question_cc_type == CC_QUIZ_PATTERN_MACHT) {
+        if ($questionCcType == CC_QUIZ_FIB || $questionCcType == CC_QUIZ_PATTERN_MACHT) {
             $xpathQuery = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:response_str/@ident';
             $xpathQueryWithFlow = '//xmlns:item[@ident="'.$identifier.'"]/xmlns:presentation/xmlns:flow/xmlns:response_str/@ident';
 
-            $count_response = $xpath->evaluate('count('.$xpathQueryWithFlow.')');
+            $countResponse = $xpath->evaluate('count('.$xpathQueryWithFlow.')');
 
-            if ($count_response == 0) {
+            if ($countResponse == 0) {
                 $answerIdentifier = $xpath->query($xpathQuery);
             } else {
                 $answerIdentifier = $xpath->query($xpathQueryWithFlow);
@@ -617,31 +604,31 @@ class Cc13Quiz extends Cc13Entities
 
             $answerIdentifier = !empty($answerIdentifier->item(0)->nodeValue) ? $answerIdentifier->item(0)->nodeValue : '';
 
-            if ($question_cc_type == CC_QUIZ_FIB) {
+            if ($questionCcType == CC_QUIZ_FIB) {
                 $answers = $this->getAnswersFib($identifier, $answerIdentifier, $assessment, $lastAnswerId);
             } else {
                 $answers = $this->getAnswersPatternMatch($identifier, $answerIdentifier, $assessment, $lastAnswerId);
             }
         } else {
-            $count_response = $xpath->evaluate('count('.$query_answers_with_flow.')');
+            $countResponse = $xpath->evaluate('count('.$queryAnswersWithFlow.')');
 
-            if ($count_response == 0) {
-                $responseItems = $xpath->query($query_answers);
+            if ($countResponse == 0) {
+                $responseItems = $xpath->query($queryAnswers);
             } else {
-                $responseItems = $xpath->query($query_answers_with_flow);
+                $responseItems = $xpath->query($queryAnswersWithFlow);
             }
 
             if (!empty($responseItems)) {
-                if ($is_multiresponse) {
-                    $correct_answer_score = 0;
+                if ($isMultiresponse) {
+                    $correctAnswerScore = 0;
                     //get the correct answers count
                     $canswers_query = "//xmlns:item[@ident='{$identifier}']//xmlns:setvar[@varname='SCORE'][.=100]/../xmlns:conditionvar//xmlns:varequal[@case='Yes'][not(parent::xmlns:not)]";
                     $canswers = $xpath->query($canswers_query);
                     if ($canswers->length > 0) {
-                        $correct_answer_score = round(1.0 / (float) $canswers->length, 7); //weird
-                        $correct_answers_ident = [];
+                        $correctAnswerScore = round(1.0 / (float) $canswers->length, 7); //weird
+                        $correctAanswersIdent = [];
                         foreach ($canswers as $cnode) {
-                            $correct_answers_ident[$cnode->nodeValue] = true;
+                            $correctAanswersIdent[$cnode->nodeValue] = true;
                         }
                     }
                 }
@@ -649,25 +636,25 @@ class Cc13Quiz extends Cc13Entities
                 foreach ($responseItems as $response_item) {
                     $lastAnswerId++;
 
-                    $answerIdentifier = $xpath->query($query_indentifer, $response_item);
+                    $answerIdentifier = $xpath->query($queryIndentifer, $response_item);
                     $answerIdentifier = !empty($answerIdentifier->item(0)->nodeValue) ? $answerIdentifier->item(0)->nodeValue : '';
 
-                    $answerTitle = $xpath->query($query_title, $response_item);
+                    $answerTitle = $xpath->query($queryTitle, $response_item);
                     $answerTitle = !empty($answerTitle->item(0)->nodeValue) ? $answerTitle->item(0)->nodeValue : '';
 
-                    $answer_feedback = $this->getFeedback($assessment, $answerIdentifier, $identifier, $question_cc_type);
+                    $answerFeedback = $this->getFeedback($assessment, $answerIdentifier, $identifier, $questionCcType);
 
                     $answer_score = $this->getScore($assessment, $answerIdentifier, $identifier);
 
-                    if ($is_multiresponse && isset($correct_answers_ident[$answerIdentifier])) {
-                        $answer_score = $correct_answer_score;
+                    if ($isMultiresponse && isset($correctAanswersIdent[$answerIdentifier])) {
+                        $answer_score = $correctAnswerScore;
                     }
 
                     $answers[] = ['id' => $lastAnswerId,
                                        'title' => $answerTitle,
                                        'score' => $answer_score,
                                        'identifier' => $answerIdentifier,
-                                       'feedback' => $answer_feedback, ];
+                                       'feedback' => $answerFeedback, ];
                 }
             }
         }
@@ -677,16 +664,16 @@ class Cc13Quiz extends Cc13Entities
         return $answers;
     }
 
-    private function getScore($assessment, $identifier, $question_identifier)
+    private function getScore($assessment, $identifier, $questionIdentifier)
     {
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
-        $resource_processing = $xpath->query('//xmlns:item[@ident="'.$question_identifier.'"]/xmlns:resprocessing/xmlns:respcondition');
+        $resourceProcessing = $xpath->query('//xmlns:item[@ident="'.$questionIdentifier.'"]/xmlns:resprocessing/xmlns:respcondition');
 
-        if (!empty($resource_processing)) {
-            foreach ($resource_processing as $response) {
-                $question_cc_type = $this->getQuestionType($question_identifier, $assessment);
-                $question_cc_type = $question_cc_type['cc'];
+        if (!empty($resourceProcessing)) {
+            foreach ($resourceProcessing as $response) {
+                $questionCcType = $this->getQuestionType($questionIdentifier, $assessment);
+                $questionCcType = $questionCcType['cc'];
 
                 $varequal = $xpath->query('xmlns:conditionvar/xmlns:varequal', $response);
                 $varequal = !empty($varequal->item(0)->nodeValue) ? $varequal->item(0)->nodeValue : '';
@@ -710,27 +697,27 @@ class Cc13Quiz extends Cc13Entities
         $metadata = $xpath->query('//xmlns:item[@ident="'.$identifier.'"]/xmlns:itemmetadata/xmlns:qtimetadata/xmlns:qtimetadatafield');
 
         foreach ($metadata as $field) {
-            $field_label = $xpath->query('xmlns:fieldlabel', $field);
-            $field_label = !empty($field_label->item(0)->nodeValue) ? $field_label->item(0)->nodeValue : '';
+            $fieldLabel = $xpath->query('xmlns:fieldlabel', $field);
+            $fieldLabel = !empty($fieldLabel->item(0)->nodeValue) ? $fieldLabel->item(0)->nodeValue : '';
 
-            if ($field_label == 'cc_profile') {
-                $field_entry = $xpath->query('xmlns:fieldentry', $field);
-                $type = !empty($field_entry->item(0)->nodeValue) ? $field_entry->item(0)->nodeValue : '';
+            if ($fieldLabel == 'cc_profile') {
+                $fieldEntry = $xpath->query('xmlns:fieldentry', $field);
+                $type = !empty($fieldEntry->item(0)->nodeValue) ? $fieldEntry->item(0)->nodeValue : '';
             }
         }
 
-        $return_type = [];
+        $returnType = [];
 
-        $return_type['qtype'] = '';
-        $return_type['cc'] = $type;
+        $returnType['qtype'] = '';
+        $returnType['cc'] = $type;
 
         if ($type == CC_QUIZ_MULTIPLE_CHOICE) {
-            $return_type['qtype'] = 'unique_answer';
+            $returnType['qtype'] = 'unique_answer';
         }
         if ($type == CC_QUIZ_MULTIPLE_RESPONSE) {
-            $return_type['qtype'] = 'multiple_answer';
+            $returnType['qtype'] = 'multiple_answer';
         }
 
-        return $return_type;
+        return $returnType;
     }
 }

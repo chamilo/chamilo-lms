@@ -7,8 +7,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
-//require_once 'autoload.php';
-
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_course_script(true);
@@ -52,24 +50,24 @@ if (Security::check_token('post') && ($action === 'course_select_form')) {
         if ($imsccFile !== false) {
             echo Display::return_message(get_lang('ImsccCreated'), 'confirm');
             echo '<br />';
-            /*echo Display::toolbarButton(
+            echo Display::toolbarButton(
                 get_lang('Download'),
                 api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$imsccFile.'&'.api_get_cidreq(),
                 'file-zip-o',
-                'primary',
-            );*/
-            echo Display::url(
+                'primary'
+            );
+            /*echo Display::url(
                 get_lang('Download'),
                 api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$imsccFile.'&'.api_get_cidreq(),
                 ['class' => 'btn btn-primary btn-large']
-            );
+            );*/
         }
     }
 } else {
     // Clear token
     Security::clear_token();
     $cb = new CourseBuilder('partial');
-    $tools_to_build = [
+    $toolsToBuild = [
         RESOURCE_DOCUMENT,
         RESOURCE_FORUMCATEGORY,
         RESOURCE_FORUM,
@@ -79,7 +77,7 @@ if (Security::check_token('post') && ($action === 'course_select_form')) {
         RESOURCE_LINK,
         RESOURCE_WIKI,
     ];
-    $course = $cb->build(0, null, false, $tools_to_build);
+    $course = $cb->build(0, null, false, $toolsToBuild);
     if ($course->has_resources()) {
         // Add token to Course select form
         $hiddenFields['sec_token'] = Security::get_token();

@@ -634,7 +634,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                                 '@ChamiloCore/Layout/document.html.twig',
                                 ['breadcrumb' => '', 'user_json' => $userJson]
                             );
-                            $content = str_replace('</html>', $js.'</html>', $content);
+                            // Insert inside the head tag.
+                            $content = str_replace('</head>', $js.'</head>', $content);
                         }
                     }
 

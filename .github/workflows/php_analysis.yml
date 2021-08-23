@@ -23,6 +23,10 @@ jobs:
                   extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
                   ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
 
+            - name: Composer validate
+              id: composer-cache
+              run: composer validate --strict
+
             - name: Get composer cache directory
               id: composer-cache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
@@ -34,9 +38,10 @@ jobs:
                   # Use composer.json for key, if composer.lock is not committed.
                   # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
-              run: composer install --prefer-dist --no-progress --optimize-autoloader
+              run: composer install --no-progress
 
             - name: Check Symfony requirements
               run: vendor/bin/requirements-checker

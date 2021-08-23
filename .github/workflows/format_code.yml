@@ -37,7 +37,7 @@ jobs:
                   restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
-              run: composer install --prefer-dist --no-progress --optimize-autoloader
+              run: composer install --no-progress
 
             - name: ecs (easy-coding-standard)
               id: analyse

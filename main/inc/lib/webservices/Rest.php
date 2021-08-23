@@ -79,6 +79,7 @@ class Rest extends WebService
     const UPDATE_CONDITION_ACCEPTED = 'update_condition_accepted';
     const LOGOUT = 'logout';
     const DELETE_USER = 'delete_user';
+    const GET_COUNT_NEW_MESSAGES = 'get_count_new_messages';
 
     /**
      * @var Session

@@ -37,35 +37,7 @@ switch ($action) {
         break;
     case 'get_count_message':
         $userId = api_get_user_id();
-        $invitations = [];
-        // Setting notifications
-        $count_unread_message = 0;
-        if (api_get_setting('allow_message_tool') === 'true') {
-            // get count unread message and total invitations
-            $count_unread_message = MessageManager::getCountNewMessagesFromDB($userId);
-        }
-
-        if (api_get_setting('allow_social_tool') === 'true') {
-            $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
-                $userId
-            );
-            $usergroup = new UserGroup();
-            $group_pending_invitations = $usergroup->get_groups_by_user(
-                $userId,
-                GROUP_USER_PERMISSION_PENDING_INVITATION,
-                false
-            );
-            if (!empty($group_pending_invitations)) {
-                $group_pending_invitations = count($group_pending_invitations);
-            } else {
-                $group_pending_invitations = 0;
-            }
-            $invitations = [
-                'ms_friends' => $number_of_new_messages_of_friend,
-                'ms_groups' => $group_pending_invitations,
-                'ms_inbox' => $count_unread_message,
-            ];
-        }
+        $invitations = MessageManager::getMessagesCountForUser($userId);
         header('Content-type:application/json');
         echo json_encode($invitations);
         break;

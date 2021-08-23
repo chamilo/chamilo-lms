@@ -457,10 +457,15 @@ try {
             $result = UserManager::delete_user($_REQUEST['user_id']);
             $restResponse->setData(['status' => $result]);
             break;
+        case Rest::LOGOUT:
             $restApi->logout();
             $restResponse->setData(['status' => true]);
             break;
-        case Rest::LOGOUT:
+        case Rest::GET_COUNT_NEW_MESSAGES:
+            $restResponse->setData(
+                MessageManager::getMessagesCountForUser($restApi->getUser()->getId())
+            );
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

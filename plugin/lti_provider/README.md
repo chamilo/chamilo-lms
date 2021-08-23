@@ -33,6 +33,7 @@ CREATE TABLE plugin_lti_provider_platform (
  auth_token_url varchar(255) NOT NULL,
  key_set_url varchar(255) NOT NULL,
  deployment_id varchar(255) NOT NULL,
+ tool_provider varchar(255) NULL,
  PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 

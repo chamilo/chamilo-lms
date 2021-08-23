@@ -66,7 +66,7 @@ class LtiProviderPlugin extends Plugin
             <label for="lti_provider_create_platform_kid" class="col-sm-2 control-label">'.$this->get_lang('ToolProvider').'</label>
             <div class="col-sm-8">
                 <select name="tool_provider">';
-        $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneTool').' --</option>';
+        $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneActivity').' --</option>';
         foreach ($courses as $course) {
             $courseInfo = api_get_course_info($course['code']);
             $optgroupLabel = "{$course['title']} : ".get_lang('Quizzes');
@@ -110,7 +110,7 @@ class LtiProviderPlugin extends Plugin
     /**
      * Get the tool provider.
      */
-    public function getToolProvider($issuer = null): string
+    public function getToolProvider($issuer): string
     {
         $toolProvider = '';
         $platform = Database::getManager()
@@ -122,6 +122,14 @@ class LtiProviderPlugin extends Plugin
         }
 
         return $toolProvider;
+    }
+
+    public function getToolProviderVars($issuer) {
+        $toolProvider = $this->getToolProvider($issuer);
+        list($courseCode, $tool) = explode('@@', $toolProvider);
+        list($toolName, $toolId) = explode('-', $tool);
+        $vars = ['courseCode' => $courseCode, 'toolName' => $toolName, 'toolId' => $toolId];
+        return $vars;
     }
 
     /**
@@ -272,6 +280,7 @@ class LtiProviderPlugin extends Plugin
                 auth_token_url varchar(255) NOT NULL,
                 key_set_url varchar(255) NOT NULL,
                 deployment_id varchar(255) NOT NULL,
+                tool_provider varchar(255) NULL,
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
             "CREATE TABLE plugin_lti_provider_platform_key (

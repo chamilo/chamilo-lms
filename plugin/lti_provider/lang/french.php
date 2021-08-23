@@ -26,3 +26,6 @@ $strings['Enabled'] = 'Activé';
 $strings['GenerateKeyPairInfo'] = 'Une nouvelle paire de clés privée et publique sera créée lors de l\'activation.';
 $strings['URLs'] = 'URLs Endpoints';
 $strings['PlatformConnectionAdded'] = 'La nouvelle connexion inter-plateforme a été ajoutée.';
+$strings['ToolProvider'] = 'Outil fournisseur';
+$strings['SelectOneActivity'] = 'Sélectionnez une activité';
+$strings['Quizzes'] = 'Quiz';

@@ -25,8 +25,7 @@ jobs:
 
             - name: Get composer cache directory
               id: composer-cache
-              run: |
-                echo "::set-output name=dir::$(composer config cache-files-dir)"
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             - name: Cache composer dependencies
               uses: actions/cache@v2
@@ -35,8 +34,6 @@ jobs:
                   # Use composer.json for key, if composer.lock is not committed.
                   # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-                  restore-keys: |
-                    ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
               run: composer install --prefer-dist --no-progress --optimize-autoloader

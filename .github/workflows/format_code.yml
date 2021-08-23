@@ -33,7 +33,7 @@ jobs:
                   path: ${{ steps.composer-cache.outputs.dir }}
                   # Use composer.json for key, if composer.lock is not committed.
                   # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
                   restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer

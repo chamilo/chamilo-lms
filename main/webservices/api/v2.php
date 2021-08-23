@@ -277,6 +277,19 @@ try {
             $data = $restApi->saveForumThread($threadInfo, $forumId);
             $restResponse->setData($data);
             break;
+        case Rest::SET_THREAD_NOTIFY:
+            $threadId = isset($_POST['thread']) ? (int) $_POST['thread'] : 0;
+
+            if (empty($threadId)) {
+                throw new Exception(get_lang('NoData'));
+            }
+
+            $restResponse->setData(
+                [
+                    'message' => $restApi->setThreadNotify($threadId),
+                ]
+            );
+            break;
 
         case Rest::CREATE_CAMPUS:
             $data = $restApi->createCampusURL($_POST);

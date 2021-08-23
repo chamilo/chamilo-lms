@@ -57,6 +57,7 @@ class Rest extends WebService
 
     const SAVE_FORUM_POST = 'save_forum_post';
     const SAVE_FORUM_THREAD = 'save_forum_thread';
+    const SET_THREAD_NOTIFY = 'set_thread_notify';
 
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
@@ -2488,6 +2489,28 @@ class Rest extends WebService
                 'sid' => $this->session ? $this->session->getId() : 0,
             ]
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function setThreadNotify(int $threadId): string
+    {
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        $result = set_notification(
+            'thread',
+            $threadId,
+            false,
+            api_get_user_info($this->user->getId()),
+            api_get_course_info($this->course->getId())
+        );
+
+        if (false === $result) {
+            throw new Exception(get_lang('NotAllowed'));
+        }
+
+        return $result;
     }
 
     /**

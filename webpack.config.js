@@ -25,6 +25,7 @@ Encore
     .addEntry('lp', './assets/js/lp.js')
     .addEntry('vue', './assets/vue/main.js')
     .addEntry('translatehtml', './assets/js/translatehtml.js')
+    .addEntry('document', './assets/js/document.js')
 
     .addStyleEntry('css/app', './assets/css/app.scss')
     //.addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')

@@ -112,7 +112,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PhpCsFixer\Fixer\Phpdoc\PhpdocTypesOrderFixer::class,
             PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationSpacesFixer::class,
             PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer::class,
-            WrapEncapsedVariableInCurlyBracesRector::class,
+            //WrapEncapsedVariableInCurlyBracesRector::class,
             ClassAttributesSeparationFixer::class,
             \PhpCsFixer\Fixer\FunctionNotation\FopenFlagsFixer::class,
             \Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer::class,
@@ -120,6 +120,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             \Symplify\CodingStandard\Fixer\ArrayNotation\StandaloneLineInMultilineArrayFixer::class,
             //UnusedVariableSniff::class . '.ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
             //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
+            \PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff::class.'.FoundInWhileCondition',
+            \PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff::class.'.Found',
         ]
     );
 };

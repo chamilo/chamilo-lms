@@ -381,25 +381,29 @@ class HTML_QuickForm_element extends HTML_Common
                     return false;
                 }
             }
+
             /*$replacedName = str_replace(
                 array('\\', '\'', ']', '['),
                 array('\\\\', '\\\'', '', "']['"),
                 $elementName
             );
             $myVar = "['$replacedName']";
-            $result =  eval("return (isset(\$values$myVar)) ? \$values$myVar : null;");*/
+            $result =  eval("return (isset(\$values$myVar)) ? \$values$myVar : null;");
+            //var_dump($result);
+            return $result;*/
 
             // $elementName = extra_statusocial[extra_statusocial] ;
-            preg_match('/\[(.*)\]/', $elementName, $matches);
+            preg_match('/(.*)\[(.*)\]/', $elementName, $matches);
 
             // Getting extra_statusocial
-            $elementKey = '';
-            if (isset($matches[1])) {
-                $elementKey = $matches[1];
+            $elementKey = $matches[1];
+            $secondElementKey = '';
+            if (isset($matches[2])) {
+                $secondElementKey = $matches[2];
             }
 
-            if (isset($values[$elementKey]) && isset($values[$elementKey][$elementKey])) {
-                return $values[$elementKey][$elementKey];
+            if (isset($values[$elementKey]) && isset($values[$elementKey][$secondElementKey])) {
+                return $values[$elementKey][$secondElementKey];
             }
         }
 

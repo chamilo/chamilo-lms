@@ -714,6 +714,8 @@ if ($userForm->validate()) {
         $em->flush();
     }
 
+    Display::addFlash(Display::return_message('Updated'));
+
     $superiorUserList = UserManager::getStudentBossList($userInfo['user_id']);
     if ($superiorUserList && false === $isPartial) {
         $url = api_get_path(WEB_PATH).'load_search.php?user_id='.$userInfo['user_id'];
@@ -743,7 +745,6 @@ if ($userForm->validate()) {
     }
     exit;
 }
-
 $userFormToString = $userForm->returnForm();
 
 $result = isset($_GET['result']);

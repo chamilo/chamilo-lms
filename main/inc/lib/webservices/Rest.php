@@ -2503,7 +2503,7 @@ class Rest extends WebService
             $threadId,
             false,
             api_get_user_info($this->user->getId()),
-            api_get_course_info($this->course->getId())
+            api_get_course_info($this->course->getCode())
         );
 
         if (false === $result) {

@@ -1,7 +1,12 @@
 /* For licensing terms, see /license.txt */
 
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.config && window.config['editor.translate_html'] && window.user && window.user.locale) {
+  if (
+      window.user && window.user.locale &&
+      window.config &&
+      window.config['editor.translate_html'] &&
+      'true' === window.config['editor.translate_html']
+  ) {
     const isoCode = window.user.locale;
     const translateElement = document.querySelector('.mce-translatehtml');
     if (translateElement) {

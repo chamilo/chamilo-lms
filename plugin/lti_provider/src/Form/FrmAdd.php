@@ -45,7 +45,8 @@ class FrmAdd extends FormValidator
         $this->addUrl('key_set_url', $plugin->get_lang('KeySetUrl'));
         $this->addText('client_id', $plugin->get_lang('ClientId'));
         $this->addText('deployment_id', $plugin->get_lang('DeploymentId'));
-        $this->addText('kid', $plugin->get_lang('KeyId'));
+        $this->addText('kid', $plugin->get_lang('KeyId'), false);
+        $this->addElement('html', $plugin->getQuizzesSelect());
 
         $this->addButtonCreate($plugin->get_lang('AddPlatform'));
         $this->applyFilter('__ALL__', 'trim');

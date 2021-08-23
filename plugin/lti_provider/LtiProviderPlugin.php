@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
 use Chamilo\PluginBundle\Entity\LtiProvider\PlatformKey;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\OptimisticLockException;
@@ -51,6 +52,38 @@ class LtiProviderPlugin extends Plugin
         parent::__construct($version, $author, $settings);
     }
 
+    public function getQuizzesSelect($issuer = null)
+    {
+        $courses = CourseManager::get_courses_list();
+        $toolProvider = $this->getToolProvider($issuer);
+        $htmlcontent = '<div class="form-group">
+            <label for="lti_provider_create_platform_kid" class="col-sm-2 control-label">'.$this->get_lang('ToolProvider').'</label>
+            <div class="col-sm-8">
+                <select name="tool_provider">';
+                    $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneTool').' --</option>';
+                    foreach ($courses as $course) {
+                        $courseInfo = api_get_course_info($course['code']);
+                        $optgroupLabel = "{$course['title']} : ".get_lang('Quizzes');
+                        $htmlcontent .= '<optgroup label="'.$optgroupLabel.'">';
+                        $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
+                            $courseInfo,
+                            0,
+                            $course['id'],
+                            false
+                        );
+                        foreach ($exerciseList as $key => $exercise) {
+                            $selectValue = "{$course['code']}@@quiz-{$exercise['iid']}";
+                            $htmlcontent .= '<option value="'.$selectValue.'" '.($toolProvider == $selectValue?' selected="selected"':'').'>'.Security::remove_XSS($exercise['title']).'</option>';
+                        }
+                        $htmlcontent .= '</optgroup>';
+                    }
+        $htmlcontent .= "</select>";
+        $htmlcontent .= '   </div>
+                    <div class="col-sm-2"></div>
+                    </div>';
+        return $htmlcontent;
+    }
+
     /**
      * Get the public key.
      */
@@ -66,6 +99,23 @@ class LtiProviderPlugin extends Plugin
         }
 
         return $publicKey;
+    }
+
+    /**
+     * Get the tool provider
+     */
+    public function getToolProvider($issuer = null): string
+    {
+        $toolProvider = '';
+        $platform = Database::getManager()
+            ->getRepository('ChamiloPluginBundle:LtiProvider\Platform')
+            ->findOneBy(['issuer' => $issuer]);
+
+        if ($platform) {
+            $toolProvider = $platform->getToolProvider();
+        }
+
+        return $toolProvider;
     }
 
     /**

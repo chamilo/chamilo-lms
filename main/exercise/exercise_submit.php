@@ -512,6 +512,14 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 }
 
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq().'&reminder='.$reminder;
+// It is a lti provider
+$ltiLaunchId = '';
+$ltiParams = '';
+if (isset($_REQUEST['lti_launch_id'])) {
+    $ltiLaunchId = Security::remove_XSS($_REQUEST['lti_launch_id']);
+    $ltiParams = '&lti_launch_id='.$ltiLaunchId;
+    $params .= $ltiParams;
+}
 if (2 === $reminder && empty($myRemindList)) {
     if ($debug) {
         error_log('6.2 calling the exercise_reminder.php');
@@ -838,13 +846,13 @@ if ($formSent && isset($_POST)) {
                         }
                     }
                 }
-                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id.$ltiParams");
                 exit;
             } else {
                 if ($debug) {
                     error_log('10. Redirecting to exercise_result.php');
                 }
-                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id.$ltiParams");
                 exit;
             }
         } else {
@@ -931,7 +939,7 @@ if ($question_count != 0) {
                         .api_get_cidreq()
                         ."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id="
                         .$learnpath_item_id
-                        ."&learnpath_item_view_id=$learnpath_item_view_id"
+                        ."&learnpath_item_view_id=$learnpath_item_view_id.$ltiParams"
                     );
                     exit;
                 }
@@ -1610,6 +1618,9 @@ echo '<form id="exercise_form" method="post" action="'.
      <input type="hidden" name="learnpath_id" value="'.$learnpath_id.'" />
      <input type="hidden" name="learnpath_item_id" value="'.$learnpath_item_id.'" />
      <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id.'" />';
+if (!empty($ltiLaunchId)) {
+    echo '<input type="hidden" name="lti_launch_id" value="'.$ltiLaunchId.'" />';
+}
 
 // Show list of questions
 $i = 1;

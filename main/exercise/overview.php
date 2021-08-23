@@ -65,6 +65,10 @@ $extra_params = '';
 if (isset($_GET['preview'])) {
     $extra_params = '&preview=1';
 }
+// It is a lti provider
+if (isset($_GET['lti_launch_id'])) {
+    $extra_params .= '&lti_launch_id='.Security::remove_XSS($_GET['lti_launch_id']);
+}
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
     api_get_cidreq().'&exerciseId='.$objExercise->iid.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 

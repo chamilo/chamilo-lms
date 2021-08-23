@@ -2513,6 +2513,28 @@ class Rest extends WebService
         return $result;
     }
 
+    public static function isAllowedByRequest(bool $inpersonate = false): bool
+    {
+        $username = $_GET['username'] ?? null;
+        $apiKey = $_GET['api_key'] ?? null;
+
+        if (empty($username) || empty($apiKey)) {
+            return false;
+        }
+
+        try {
+            $restApi = self::validate($username, $apiKey);
+        } catch (Exception $e) {
+            return false;
+        }
+
+        if ($inpersonate) {
+            Login::init_user($restApi->getUser()->getId(), true);
+        }
+
+        return (bool) $restApi;
+    }
+
     /**
      * @param array $additionalParams Optional
      *

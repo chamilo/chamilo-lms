@@ -40,24 +40,13 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 if (isset($_POST['currentFile']) && !empty($_POST['currentFile']) && empty($action)) {
     $action = 'replace';
 }
-$allowUseTool = false;
+$allowUseToolWithApiKey = false;
 
 if ($allowDownloadDocumentsByApiKey) {
-    try {
-        if ($action !== 'download') {
-            throw new Exception(get_lang('SelectAnAction'));
-        }
-
-        $username = isset($_GET['username']) ? Security::remove_XSS($_GET['username']) : null;
-        $apiKey = isset($_GET['api_key']) ? Security::remove_XSS($_GET['api_key']) : null;
-        $restApi = Rest::validate($username, $apiKey);
-        $allowUseTool = $restApi ? true : false;
-    } catch (Exception $e) {
-        $allowUseTool = false;
-    }
+    $allowUseToolWithApiKey = $action === 'download' && Rest::isAllowedByRequest();
 }
 
-if (!$allowUseTool) {
+if (!$allowUseToolWithApiKey) {
     api_protect_course_script(true);
     api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
 }

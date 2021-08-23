@@ -16,7 +16,8 @@ services:
             - ''
             - ''
             - ~
-            -   urls:
+            -
+                urls:
                     repository: Chamilo\CoreBundle\Repository\Node\AccessUrlRepository
                 courses:
                     repository: Chamilo\CoreBundle\Repository\Node\CourseRepository

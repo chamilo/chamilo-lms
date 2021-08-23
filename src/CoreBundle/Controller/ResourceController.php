@@ -633,6 +633,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                                <script>
                                 window.user = '.$user.'                                
                                </script> 
+                               <style src="/build/css/document.css"></style>
                                <script src="/build/runtime.js"></script>
                                <script src="/build/translatehtml.js"></script>';
                             $content = str_replace('</html>', $js.'</html>', $content);

@@ -628,14 +628,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
                         $user = $this->getUser();
                         if (null !== $user) {
-                            $user = json_encode(['locale' => $user->getLocale()]);
-                            $js = '
-                               <script>
-                                window.user = '.$user.'                                
-                               </script> 
-                               <style src="/build/css/document.css"></style>
-                               <script src="/build/runtime.js"></script>
-                               <script src="/build/translatehtml.js"></script>';
+                            // Overwrite user_json, otherwise it will be loaded by the TwigListener.php
+                            $userJson = json_encode(['locale' => $user->getLocale()]);
+                            $js = $this->renderView(
+                                '@ChamiloCore/Layout/document.html.twig',
+                                ['breadcrumb' => '', 'user_json' => $userJson]
+                            );
                             $content = str_replace('</html>', $js.'</html>', $content);
                         }
                     }

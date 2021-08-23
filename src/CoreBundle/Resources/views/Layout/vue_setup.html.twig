@@ -1,13 +1,4 @@
-<script>
-window.config = {{ config_json | raw }};
-window.user = {{ user_json | raw }};
-window.languages = {{ languages_json | raw }};
-{% if legacy_breadcrumb is defined %}
-window.breadcrumb = {{ legacy_breadcrumb | raw }};
-{% else %}
-window.breadcrumb = '';
-{% endif %}
-</script>
+{% include 'vue_js_setup.html.twig' %}
 
 <div id="app" data-flashes="{{ app.flashes()|json_encode }}">
 </div>

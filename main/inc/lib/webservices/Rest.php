@@ -19,16 +19,25 @@ class Rest extends WebService
     const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
 
     const GET_AUTH = 'authenticate';
+    const SAVE_GCM_ID = 'gcm_id';
+    const LOGOUT = 'logout';
+
     const GET_USER_MESSAGES = 'user_messages';
-    const GET_USER_COURSES = 'user_courses';
-    const GET_USER_SESSIONS = 'user_sessions';
-    const GET_USERS_SUBSCRIBED_TO_COURSE = 'get_users_subscribed_to_course';
     const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
+    const DELETE_USER_MESSAGE = 'delete_user_message';
     const GET_USER_MESSAGES_SENT = 'user_messages_sent';
+    const GET_COUNT_NEW_MESSAGES = 'get_count_new_messages';
+    const SET_MESSAGE_READ = 'set_message_read';
     const POST_USER_MESSAGE_READ = 'user_message_read';
     const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
-    const SAVE_GCM_ID = 'gcm_id';
+    const SAVE_USER_MESSAGE = 'save_user_message';
+    const GET_MESSAGE_USERS = 'message_users';
+
+    const GET_USER_COURSES = 'user_courses';
+    const GET_USER_SESSIONS = 'user_sessions';
+
     const GET_PROFILE = 'user_profile';
+
     const GET_COURSE_INFO = 'course_info';
     const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
     const GET_COURSE_DOCUMENTS = 'course_documents';
@@ -43,44 +52,49 @@ class Rest extends WebService
     const GET_COURSE_LEARNPATH = 'course_learnpath';
     const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     const GET_COURSE_LINKS = 'course_links';
-    const SAVE_FORUM_POST = 'save_forum_post';
-    const SAVE_USER_MESSAGE = 'save_user_message';
-    const GET_MESSAGE_USERS = 'message_users';
+
     const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
+
+    const SAVE_FORUM_POST = 'save_forum_post';
     const SAVE_FORUM_THREAD = 'save_forum_thread';
-    const SAVE_COURSE = 'save_course';
-    const SAVE_USER = 'save_user';
-    const SAVE_USER_JSON = 'save_user_json';
-    const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
-    const SUBSCRIBE_USER_TO_COURSE_PASSWORD = 'subscribe_user_to_course_password';
-    const UNSUBSCRIBE_USER_FROM_COURSE = 'unsubscribe_user_from_course';
-    const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
-    const DELETE_USER_MESSAGE = 'delete_user_message';
-    const SET_MESSAGE_READ = 'set_message_read';
+
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
     const DELETE_CAMPUS = 'delete_campus';
-    const SAVE_SESSION = 'save_session';
-    const UPDATE_SESSION = 'update_session';
+
     const GET_USERS = 'get_users';
+    const USERNAME_EXIST = 'username_exist';
+    const SAVE_USER = 'save_user';
+    const SAVE_USER_JSON = 'save_user_json';
+    const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
+    const DELETE_USER = 'delete_user';
+
     const GET_COURSES = 'get_courses';
     const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
+    const SAVE_COURSE = 'save_course';
+    const DELETE_COURSE = 'delete_course';
+
+    const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    const SAVE_SESSION = 'save_session';
+    const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
+    const UPDATE_SESSION = 'update_session';
+
+    const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
+    const SUBSCRIBE_USER_TO_COURSE_PASSWORD = 'subscribe_user_to_course_password';
+    const UNSUBSCRIBE_USER_FROM_COURSE = 'unsubscribe_user_from_course';
+    const GET_USERS_SUBSCRIBED_TO_COURSE = 'get_users_subscribed_to_course';
+
     const ADD_COURSES_SESSION = 'add_courses_session';
     const ADD_USERS_SESSION = 'add_users_session';
-    const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
     const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
-    const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
-    const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
-    const USERNAME_EXIST = 'username_exist';
+
     const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
+
     const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
-    const DELETE_COURSE = 'delete_course';
+
     const CHECK_CONDITIONAL_LOGIN = 'check_conditional_login';
     const GET_LEGAL_CONDITIONS = 'get_legal_conditions';
     const UPDATE_CONDITION_ACCEPTED = 'update_condition_accepted';
-    const LOGOUT = 'logout';
-    const DELETE_USER = 'delete_user';
-    const GET_COUNT_NEW_MESSAGES = 'get_count_new_messages';
 
     /**
      * @var Session

@@ -156,6 +156,11 @@ try {
             $thread = $restApi->getCourseForumThread($forumId, $threadId);
             $restResponse->setData($thread);
             break;
+        case Rest::GET_COURSE_LINKS:
+            $restResponse->setData(
+                $restApi->getCourseLinks()
+            );
+            break;
         case Rest::GET_PROFILE:
             $userInfo = $restApi->getUserProfile();
             $restResponse->setData($userInfo);

@@ -42,6 +42,7 @@ class Rest extends WebService
     const GET_COURSE_LEARNPATHS = 'course_learnpaths';
     const GET_COURSE_LEARNPATH = 'course_learnpath';
     const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
+    const GET_COURSE_LINKS = 'course_links';
     const SAVE_FORUM_POST = 'save_forum_post';
     const SAVE_USER_MESSAGE = 'save_user_message';
     const GET_MESSAGE_USERS = 'message_users';
@@ -846,6 +847,73 @@ class Rest extends WebService
         }
 
         return $thread;
+    }
+
+    public function getCourseLinks(): array
+    {
+        Event::event_access_tool(TOOL_LINK);
+
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $webCodePath = api_get_path(WEB_CODE_PATH);
+        $cidReq = api_get_cidreq();
+
+        $categories = array_merge(
+            [
+                [
+                    'iid' => 0,
+                    'c_id' => $courseId,
+                    'id' => 0,
+                    'category_title' => get_lang('NoCategory'),
+                    'description' => '',
+                    'display_order' => 0,
+                    'session_id' => $sessionId,
+                    'visibility' => 1,
+                ]
+            ],
+            Link::getLinkCategories($courseId, $sessionId)
+        );
+
+        $categories = array_filter(
+            $categories,
+            function (array $category) {
+                return $category['visibility'] != 0;
+            }
+        );
+
+        return array_map(
+            function (array $category) use ($webCodePath, $cidReq, $courseId, $sessionId) {
+                $links = array_filter(
+                    Link::getLinksPerCategory($category['iid'], $courseId, $sessionId),
+                    function (array $link) {
+                        return $link['visibility'] != 0;
+                    }
+                );
+
+                $links = array_map(
+                    function (array $link) use ($webCodePath, $cidReq) {
+                        return [
+                            'id' => (int) $link['id'],
+                            'title' => Security::remove_XSS($link['title']),
+                            'description' => Security::remove_XSS($link['description']),
+                            'visibility' => (int) $link['visibility'],
+                            'url' => $webCodePath."link/link_goto.php?$cidReq&link_id=".$link['id']
+                        ];
+                    },
+                    $links
+                );
+
+                return [
+                    'id' => (int) $category['iid'],
+                    'title' => Security::remove_XSS($category['category_title']),
+                    'description' => Security::remove_XSS($category['description']),
+                    'visibility' => (int) $category['visibility'],
+                    'links' => $links,
+                ];
+            },
+            $categories
+        );
     }
 
     /**

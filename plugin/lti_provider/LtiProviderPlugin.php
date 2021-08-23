@@ -52,6 +52,12 @@ class LtiProviderPlugin extends Plugin
         parent::__construct($version, $author, $settings);
     }
 
+    /**
+     * Get a selectbox with quizzes in courses , used for a tool provider.
+     *
+     * @param null $issuer
+     * @return string
+     */
     public function getQuizzesSelect($issuer = null)
     {
         $courses = CourseManager::get_courses_list();
@@ -60,23 +66,23 @@ class LtiProviderPlugin extends Plugin
             <label for="lti_provider_create_platform_kid" class="col-sm-2 control-label">'.$this->get_lang('ToolProvider').'</label>
             <div class="col-sm-8">
                 <select name="tool_provider">';
-                    $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneTool').' --</option>';
-                    foreach ($courses as $course) {
-                        $courseInfo = api_get_course_info($course['code']);
-                        $optgroupLabel = "{$course['title']} : ".get_lang('Quizzes');
-                        $htmlcontent .= '<optgroup label="'.$optgroupLabel.'">';
-                        $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
-                            $courseInfo,
-                            0,
-                            $course['id'],
-                            false
-                        );
-                        foreach ($exerciseList as $key => $exercise) {
-                            $selectValue = "{$course['code']}@@quiz-{$exercise['iid']}";
-                            $htmlcontent .= '<option value="'.$selectValue.'" '.($toolProvider == $selectValue?' selected="selected"':'').'>'.Security::remove_XSS($exercise['title']).'</option>';
-                        }
-                        $htmlcontent .= '</optgroup>';
-                    }
+        $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneTool').' --</option>';
+        foreach ($courses as $course) {
+            $courseInfo = api_get_course_info($course['code']);
+            $optgroupLabel = "{$course['title']} : ".get_lang('Quizzes');
+            $htmlcontent .= '<optgroup label="'.$optgroupLabel.'">';
+            $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
+                $courseInfo,
+                0,
+                $course['id'],
+                false
+            );
+            foreach ($exerciseList as $key => $exercise) {
+                $selectValue = "{$course['code']}@@quiz-{$exercise['iid']}";
+                $htmlcontent .= '<option value="'.$selectValue.'" '.($toolProvider == $selectValue?' selected="selected"':'').'>'.Security::remove_XSS($exercise['title']).'</option>';
+            }
+            $htmlcontent .= '</optgroup>';
+        }
         $htmlcontent .= "</select>";
         $htmlcontent .= '   </div>
                     <div class="col-sm-2"></div>
@@ -102,7 +108,7 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * Get the tool provider
+     * Get the tool provider.
      */
     public function getToolProvider($issuer = null): string
     {

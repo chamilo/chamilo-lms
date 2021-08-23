@@ -58,7 +58,8 @@ class LtiProvider
     /**
      * Verify if email user is in the platform to create it and login
      */
-    public function validateUser($launchData, $courseCode) {
+    public function validateUser($launchData, $courseCode)
+    {
 
         if (empty($launchData)) {
             return false;

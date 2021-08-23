@@ -44,7 +44,7 @@ if ($form->validate()) {
     $platform->setKeySetUrl($formValues['key_set_url']);
     $platform->setDeploymentId($formValues['deployment_id']);
     $platform->setKid($formValues['kid']);
-    $toolProvider = (isset($formValues['tool_provider'])?$formValues['tool_provider']:$_POST['tool_provider']);
+    $toolProvider = (isset($formValues['tool_provider']) ? $formValues['tool_provider'] : $_POST['tool_provider']);
     $platform->setToolProvider($toolProvider);
 
     $em->persist($platform);

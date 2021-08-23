@@ -885,7 +885,7 @@ class Rest extends WebService
                     'display_order' => 0,
                     'session_id' => $sessionId,
                     'visibility' => 1,
-                ]
+                ],
             ],
             Link::getLinkCategories($courseId, $sessionId)
         );
@@ -913,7 +913,7 @@ class Rest extends WebService
                             'title' => Security::remove_XSS($link['title']),
                             'description' => Security::remove_XSS($link['description']),
                             'visibility' => (int) $link['visibility'],
-                            'url' => $webCodePath."link/link_goto.php?$cidReq&link_id=".$link['id']
+                            'url' => $webCodePath."link/link_goto.php?$cidReq&link_id=".$link['id'],
                         ];
                     },
                     $links

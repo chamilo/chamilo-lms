@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcQuestionMetadata extends CcQuestionMetadataBase
 {
@@ -15,30 +15,30 @@ class CcQuestionMetadata extends CcQuestionMetadataBase
         if (!CcQtiProfiletype::valid($profile)) {
             throw new InvalidArgumentException('Invalid profile type!');
         }
-        $this->setSetting(CcQtiMetadata::cc_profile, $profile);
-        $this->setSetting(CcQtiMetadata::cc_question_category);
-        $this->setSetting(CcQtiMetadata::cc_weighting);
-        $this->setSetting(CcQtiMetadata::qmd_scoringpermitted);
-        $this->setSetting(CcQtiMetadata::qmd_computerscored);
+        $this->setSetting(CcQtiMetadata::CC_PROFILE, $profile);
+        $this->setSetting(CcQtiMetadata::CC_QUESTION_CATEGORY);
+        $this->setSetting(CcQtiMetadata::CC_WEIGHTING);
+        $this->setSetting(CcQtiMetadata::QMD_SCORINGPERMITTED);
+        $this->setSetting(CcQtiMetadata::QMD_COMPUTERSCORED);
     }
 
     public function setCategory($value)
     {
-        $this->setSetting(CcQtiMetadata::cc_question_category, $value);
+        $this->setSetting(CcQtiMetadata::CC_QUESTION_CATEGORY, $value);
     }
 
     public function setWeighting($value)
     {
-        $this->setSetting(CcQtiMetadata::cc_weighting, $value);
+        $this->setSetting(CcQtiMetadata::CC_WEIGHTING, $value);
     }
 
     public function enableScoringpermitted($value = true)
     {
-        $this->enableSettingYesno(CcQtiMetadata::qmd_scoringpermitted, $value);
+        $this->enableSettingYesno(CcQtiMetadata::QMD_SCORINGPERMITTED, $value);
     }
 
     public function enableComputerscored($value = true)
     {
-        $this->enableSettingYesno(CcQtiMetadata::qmd_computerscored, $value);
+        $this->enableSettingYesno(CcQtiMetadata::QMD_COMPUTERSCORED, $value);
     }
 }

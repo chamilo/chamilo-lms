@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentItemfeedbacktype extends CcQuestionMetadataBase
 {
@@ -10,8 +10,8 @@ class CcAssesmentItemfeedbacktype extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::ident, CcHelpers::uuidgen('I_'));
-        $this->setSetting(CcQtiTags::title);
+        $this->setSetting(CcQtiTags::IDENT, CcHelpers::uuidgen('I_'));
+        $this->setSetting(CcQtiTags::TITLE);
     }
 
     /**
@@ -19,7 +19,7 @@ class CcAssesmentItemfeedbacktype extends CcQuestionMetadataBase
      */
     public function setIdent($value)
     {
-        $this->setSetting(CcQtiTags::ident, $value);
+        $this->setSetting(CcQtiTags::IDENT, $value);
     }
 
     /**
@@ -27,7 +27,7 @@ class CcAssesmentItemfeedbacktype extends CcQuestionMetadataBase
      */
     public function setTitle($value)
     {
-        $this->setSetting(CcQtiTags::title, $value);
+        $this->setSetting(CcQtiTags::TITLE, $value);
     }
 
     public function setFlowMat(CcAssesmentFlowMattype $object)
@@ -52,7 +52,7 @@ class CcAssesmentItemfeedbacktype extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::itemfeedback);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::ITEMFEEDBACK);
         $this->generateAttributes($doc, $node, $namespace);
 
         if (!empty($this->flowMat) && empty($this->material)) {

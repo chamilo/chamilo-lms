@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentResprocessingtype extends CcQuestionMetadataBase
 {
@@ -18,8 +18,8 @@ class CcAssesmentResprocessingtype extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::resprocessing);
-        $outcomes = $doc->appendNewElementNs($node, $namespace, CcQtiTags::outcomes);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::RESPROCESSING);
+        $outcomes = $doc->appendNewElementNs($node, $namespace, CcQtiTags::OUTCOMES);
         if (!empty($this->decvar)) {
             $this->decvar->generate($doc, $outcomes, $namespace);
         }

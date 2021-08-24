@@ -1,11 +1,11 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_converter_resource.php under GNU/GPL license */
 
 class CcConverterResource extends CcConverters
 {
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
-        $this->ccType = CcVersion13::webcontent;
+        $this->ccType = CcVersion13::WEBCONTENT;
         $this->defaultfile = 'resource.xml';
         parent::__construct($item, $manifest, $rootpath, $path);
     }

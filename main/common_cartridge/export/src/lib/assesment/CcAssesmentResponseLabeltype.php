@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentResponseLabeltype extends CcQuestionMetadataBase
 {
@@ -9,41 +9,41 @@ class CcAssesmentResponseLabeltype extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::ident, CcHelpers::uuidgen('I_'));
-        $this->setSetting(CcQtiTags::labelrefid);
-        $this->setSetting(CcQtiTags::rshuffle);
-        $this->setSetting(CcQtiTags::match_group);
-        $this->setSetting(CcQtiTags::match_max);
+        $this->setSetting(CcQtiTags::IDENT, CcHelpers::uuidgen('I_'));
+        $this->setSetting(CcQtiTags::LABELREFID);
+        $this->setSetting(CcQtiTags::RSHUFFLE);
+        $this->setSetting(CcQtiTags::MATCH_GROUP);
+        $this->setSetting(CcQtiTags::MATCH_MAX);
     }
 
     public function setIdent($value)
     {
-        $this->setSetting(CcQtiTags::ident, $value);
+        $this->setSetting(CcQtiTags::IDENT, $value);
     }
 
     public function getIdent()
     {
-        return $this->getSetting(CcQtiTags::ident);
+        return $this->getSetting(CcQtiTags::IDENT);
     }
 
     public function setLabelrefid($value)
     {
-        $this->setSetting(CcQtiTags::labelrefid, $value);
+        $this->setSetting(CcQtiTags::LABELREFID, $value);
     }
 
     public function enableRshuffle($value = true)
     {
-        $this->enableSettingYesno(CcQtiTags::rshuffle, $value);
+        $this->enableSettingYesno(CcQtiTags::RSHUFFLE, $value);
     }
 
     public function setMatchGroup($value)
     {
-        $this->setSetting(CcQtiTags::match_group, $value);
+        $this->setSetting(CcQtiTags::MATCH_GROUP, $value);
     }
 
     public function setMatchMax($value)
     {
-        $this->setSetting(CcQtiTags::match_max, $value);
+        $this->setSetting(CcQtiTags::MATCH_MAX, $value);
     }
 
     public function setMaterial(CcAssesmentMaterial $object)
@@ -63,7 +63,7 @@ class CcAssesmentResponseLabeltype extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::response_label);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::RESPONSE_LABEL);
         $this->generateAttributes($doc, $node, $namespace);
 
         if (!empty($this->material)) {

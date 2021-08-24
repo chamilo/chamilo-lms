@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentQuestionMultichoiceMultiresponse extends CcAssesmentQuestionProcBase
 {
@@ -8,7 +8,7 @@ class CcAssesmentQuestionMultichoiceMultiresponse extends CcAssesmentQuestionPro
     public function __construct($quiz, $questions, $manifest, $section, $questionNode, $rootpath, $contextid, $outdir)
     {
         parent::__construct($quiz, $questions, $manifest, $section, $questionNode, $rootpath, $contextid, $outdir);
-        $this->qtype = CcQtiProfiletype::multiple_response;
+        $this->qtype = CcQtiProfiletype::MULTIPLE_RESPONSE;
 
         $correctAnswerNodes = [];
         $questionScore = 0;
@@ -34,7 +34,7 @@ class CcAssesmentQuestionMultichoiceMultiresponse extends CcAssesmentQuestionPro
         $qresponseChoice = new CcAssesmentRenderChoicetype();
         $qresponseLid->setRenderChoice($qresponseChoice);
         //Mark that question has more than one correct answer
-        $qresponseLid->setRcardinality(CcQtiValues::Multiple);
+        $qresponseLid->setRcardinality(CcQtiValues::MULTIPLE);
         //are we to shuffle the responses?
 
         $shuffleAnswers = $this->quiz['random_answers'] > 0;
@@ -54,7 +54,7 @@ class CcAssesmentQuestionMultichoiceMultiresponse extends CcAssesmentQuestionPro
 
             $qresponseLabel = CcAssesmentHelper::addAnswer($qresponseChoice,
                 $result[0],
-                CcQtiValues::htmltype);
+                CcQtiValues::HTMLTYPE);
 
             PkgResourceDependencies::instance()->add($result[1]);
 
@@ -71,7 +71,7 @@ class CcAssesmentQuestionMultichoiceMultiresponse extends CcAssesmentQuestionPro
 
                 CcAssesmentHelper::addFeedback($this->qitem,
                     $result[0],
-                    CcQtiValues::htmltype,
+                    CcQtiValues::HTMLTYPE,
                     $feedbackIdent);
 
                 PkgResourceDependencies::instance()->add($result[1]);
@@ -109,7 +109,7 @@ class CcAssesmentQuestionMultichoiceMultiresponse extends CcAssesmentQuestionPro
 
             CcAssesmentHelper::addFeedback($this->qitem,
                 $result[0],
-                CcQtiValues::htmltype,
+                CcQtiValues::HTMLTYPE,
                 $ident);
 
             PkgResourceDependencies::instance()->add($result[1]);
@@ -162,7 +162,7 @@ class CcAssesmentQuestionMultichoiceMultiresponse extends CcAssesmentQuestionPro
 
         $qdisplayfeedback = new CcAssignmentDisplayfeedbacktype();
         $qrespcondition->addDisplayfeedback($qdisplayfeedback);
-        $qdisplayfeedback->setFeedbacktype(CcQtiValues::Response);
+        $qdisplayfeedback->setFeedbacktype(CcQtiValues::RESPONSE);
         //TODO: this needs to be fixed
         reset($this->correctFeedbacks);
         $ident = key($this->correctFeedbacks);

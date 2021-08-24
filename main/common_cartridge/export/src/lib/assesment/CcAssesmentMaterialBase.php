@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 abstract class CcAssesmentMaterialBase extends CcQuestionMetadataBase
 {
@@ -26,7 +26,7 @@ abstract class CcAssesmentMaterialBase extends CcQuestionMetadataBase
 
     public function setLang($value)
     {
-        $this->setSettingWns(CcQtiTags::xml_lang, CcXmlNamespace::xml, $value);
+        $this->setSettingWns(CcQtiTags::XML_LANG, CcXmlNamespace::XML, $value);
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)

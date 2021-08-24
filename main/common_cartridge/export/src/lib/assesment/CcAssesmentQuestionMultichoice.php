@@ -1,12 +1,12 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentQuestionMultichoice extends CcAssesmentQuestionProcBase
 {
     public function __construct($quiz, $questions, $manifest, $section, $question, $rootpath, $contextid, $outdir)
     {
         parent::__construct($quiz, $questions, $manifest, $section, $question, $rootpath, $contextid, $outdir);
-        $this->qtype = CcQtiProfiletype::multiple_choice;
+        $this->qtype = CcQtiProfiletype::MULTIPLE_CHOICE;
 
         $correctAnswerNode = 0;
         $questionScore = 0;
@@ -36,7 +36,7 @@ class CcAssesmentQuestionMultichoice extends CcAssesmentQuestionProcBase
 
         //Mark that question has only one correct answer -
         //which applies for multiple choice and yes/no questions
-        $qresponseLid->setRcardinality(CcQtiValues::Single);
+        $qresponseLid->setRcardinality(CcQtiValues::SINGLE);
 
         //are we to shuffle the responses?
         $shuffleAnswers = $this->quiz['random_answers'] > 0;
@@ -58,7 +58,7 @@ class CcAssesmentQuestionMultichoice extends CcAssesmentQuestionProcBase
 
             $qresponseLabel = CcAssesmentHelper::addAnswer($qresponseChoice,
                 $result[0],
-                CcQtiValues::htmltype);
+                CcQtiValues::HTMLTYPE);
 
             PkgResourceDependencies::instance()->add($result[1]);
 
@@ -80,7 +80,7 @@ class CcAssesmentQuestionMultichoice extends CcAssesmentQuestionProcBase
 
                 CcAssesmentHelper::addFeedback($this->qitem,
                     $result[0],
-                    CcQtiValues::htmltype,
+                    CcQtiValues::HTMLTYPE,
                     $feedbackIdent);
 
                 PkgResourceDependencies::instance()->add($result[1]);
@@ -119,7 +119,7 @@ class CcAssesmentQuestionMultichoice extends CcAssesmentQuestionProcBase
                 $this->outdir);
             CcAssesmentHelper::addFeedback($this->qitem,
                 $result[0],
-                CcQtiValues::htmltype,
+                CcQtiValues::HTMLTYPE,
                 $ident);
             PkgResourceDependencies::instance()->add($result[1]);
             if ($ident == 'correct_fb') {
@@ -151,7 +151,7 @@ class CcAssesmentQuestionMultichoice extends CcAssesmentQuestionProcBase
             $qconditionvar->setOther($qother);
             $qdisplayfeedback = new CcAssignmentDisplayfeedbacktype();
             $qrespcondition->addDisplayfeedback($qdisplayfeedback);
-            $qdisplayfeedback->setFeedbacktype(CcQtiValues::Response);
+            $qdisplayfeedback->setFeedbacktype(CcQtiValues::RESPONSE);
             $qdisplayfeedback->setLinkrefid('general_fb');
         }
 
@@ -172,14 +172,14 @@ class CcAssesmentQuestionMultichoice extends CcAssesmentQuestionProcBase
         if (array_key_exists($this->correctAnswerIdent, $this->answerlist)) {
             $qdisplayfeedback = new CcAssignmentDisplayfeedbacktype();
             $qrespcondition->addDisplayfeedback($qdisplayfeedback);
-            $qdisplayfeedback->setFeedbacktype(CcQtiValues::Response);
+            $qdisplayfeedback->setFeedbacktype(CcQtiValues::RESPONSE);
             $qdisplayfeedback->setLinkrefid($this->answerlist[$this->correctAnswerIdent]);
         }
 
         foreach ($this->correctFeedbacks as $ident) {
             $qdisplayfeedback = new CcAssignmentDisplayfeedbacktype();
             $qrespcondition->addDisplayfeedback($qdisplayfeedback);
-            $qdisplayfeedback->setFeedbacktype(CcQtiValues::Response);
+            $qdisplayfeedback->setFeedbacktype(CcQtiValues::RESPONSE);
             $qdisplayfeedback->setLinkrefid($ident);
         }
 
@@ -202,13 +202,13 @@ class CcAssesmentQuestionMultichoice extends CcAssesmentQuestionProcBase
 
             $qdisplayfeedback = new CcAssignmentDisplayfeedbacktype();
             $qrespcondition->addDisplayfeedback($qdisplayfeedback);
-            $qdisplayfeedback->setFeedbacktype(CcQtiValues::Response);
+            $qdisplayfeedback->setFeedbacktype(CcQtiValues::RESPONSE);
             $qdisplayfeedback->setLinkrefid($refid);
 
             foreach ($this->incorrectFeedbacks as $ident) {
                 $qdisplayfeedback = new CcAssignmentDisplayfeedbacktype();
                 $qrespcondition->addDisplayfeedback($qdisplayfeedback);
-                $qdisplayfeedback->setFeedbacktype(CcQtiValues::Response);
+                $qdisplayfeedback->setFeedbacktype(CcQtiValues::RESPONSE);
                 $qdisplayfeedback->setLinkrefid($ident);
             }
         }

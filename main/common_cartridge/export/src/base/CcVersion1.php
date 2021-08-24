@@ -1,24 +1,24 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_version1.php under GNU/GPL license */
 
 /**
  * Version 1 class of Common Cartridge.
  */
 class CcVersion1 extends CcVersionBase
 {
-    const webcontent = 'webcontent';
-    const questionbank = 'imsqti_xmlv1p2/imscc_xmlv1p0/question-bank';
-    const assessment = 'imsqti_xmlv1p2/imscc_xmlv1p0/assessment';
-    const associatedcontent = 'associatedcontent/imscc_xmlv1p0/learning-application-resource';
-    const discussiontopic = 'imsdt_xmlv1p0';
-    const weblink = 'imswl_xmlv1p0';
+    const WEBCONTENT = 'webcontent';
+    const QUESTIONBANK = 'imsqti_xmlv1p2/imscc_xmlv1p0/question-bank';
+    const ASSESSMENT = 'imsqti_xmlv1p2/imscc_xmlv1p0/assessment';
+    const ASSOCIATEDCONTENT = 'associatedcontent/imscc_xmlv1p0/learning-application-resource';
+    const DISCUSSIONTOPIC = 'imsdt_xmlv1p0';
+    const WEBLINK = 'imswl_xmlv1p0';
 
-    public static $checker = [self::webcontent,
-                                   self::assessment,
-                                   self::associatedcontent,
-                                   self::discussiontopic,
-                                   self::questionbank,
-                                   self::weblink, ];
+    public static $checker = [self::WEBCONTENT,
+                                   self::ASSESSMENT,
+                                   self::ASSOCIATEDCONTENT,
+                                   self::DISCUSSIONTOPIC,
+                                   self::QUESTIONBANK,
+                                   self::WEBLINK, ];
 
     public function __construct()
     {

@@ -1,41 +1,41 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentMetadata extends CcQuestionMetadataBase
 {
     public function __construct()
     {
         //prepared default values
-        $this->setSetting(CcQtiMetadata::cc_profile, CcQtiValues::exam_profile);
-        $this->setSetting(CcQtiMetadata::qmd_assessmenttype, CcQtiValues::Examination);
-        $this->setSetting(CcQtiMetadata::qmd_scoretype, CcQtiValues::Percentage);
+        $this->setSetting(CcQtiMetadata::CC_PROFILE, CcQtiValues::EXAM_PROFILE);
+        $this->setSetting(CcQtiMetadata::QMD_ASSESSMENTTYPE, CcQtiValues::EXAMINATION);
+        $this->setSetting(CcQtiMetadata::QMD_SCORETYPE, CcQtiValues::PERCENTAGE);
         //optional empty values
-        $this->setSetting(CcQtiMetadata::qmd_feedbackpermitted);
-        $this->setSetting(CcQtiMetadata::qmd_hintspermitted);
-        $this->setSetting(CcQtiMetadata::qmd_solutionspermitted);
-        $this->setSetting(CcQtiMetadata::qmd_timelimit);
-        $this->setSetting(CcQtiMetadata::cc_allow_late_submission);
-        $this->setSetting(CcQtiMetadata::cc_maxattempts);
+        $this->setSetting(CcQtiMetadata::QMD_FEEDBACKPERMITTED);
+        $this->setSetting(CcQtiMetadata::QMD_HINTSPERMITTED);
+        $this->setSetting(CcQtiMetadata::QMD_SOLUTIONSPERMITTED);
+        $this->setSetting(CcQtiMetadata::QMD_TIMELIMIT);
+        $this->setSetting(CcQtiMetadata::CC_ALLOW_LATE_SUBMISSION);
+        $this->setSetting(CcQtiMetadata::CC_MAXATTEMPTS);
     }
 
     public function enableHints($value = true)
     {
-        $this->enableSettingYesno(CcQtiMetadata::qmd_hintspermitted, $value);
+        $this->enableSettingYesno(CcQtiMetadata::QMD_HINTSPERMITTED, $value);
     }
 
     public function enableSolutions($value = true)
     {
-        $this->enableSettingYesno(CcQtiMetadata::qmd_solutionspermitted, $value);
+        $this->enableSettingYesno(CcQtiMetadata::QMD_SOLUTIONSPERMITTED, $value);
     }
 
     public function enableLatesubmissions($value = true)
     {
-        $this->enableSettingYesno(CcQtiMetadata::cc_allow_late_submission, $value);
+        $this->enableSettingYesno(CcQtiMetadata::CC_ALLOW_LATE_SUBMISSION, $value);
     }
 
     public function enableFeedback($value = true)
     {
-        $this->enableSettingYesno(CcQtiMetadata::qmd_feedbackpermitted, $value);
+        $this->enableSettingYesno(CcQtiMetadata::QMD_FEEDBACKPERMITTED, $value);
     }
 
     public function setTimelimit($value)
@@ -45,16 +45,16 @@ class CcAssesmentMetadata extends CcQuestionMetadataBase
             throw new OutOfRangeException('Time limit value out of permitted range!');
         }
 
-        $this->setSetting(CcQtiMetadata::qmd_timelimit, $value);
+        $this->setSetting(CcQtiMetadata::QMD_TIMELIMIT, $value);
     }
 
     public function setMaxattempts($value)
     {
-        $valid_values = [CcQtiValues::Examination, CcQtiValues::unlimited, 1, 2, 3, 4, 5];
+        $valid_values = [CcQtiValues::EXAMINATION, CcQtiValues::UNLIMITED, 1, 2, 3, 4, 5];
         if (!in_array($value, $valid_values)) {
             throw new OutOfRangeException('Max attempts has invalid value');
         }
 
-        $this->setSetting(CcQtiMetadata::cc_maxattempts, $value);
+        $this->setSetting(CcQtiMetadata::CC_MAXATTEMPTS, $value);
     }
 }

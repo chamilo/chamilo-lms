@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_metadata_resource.php under GNU/GPL license */
 
 /**
  * Metadata Resource Educational Type.

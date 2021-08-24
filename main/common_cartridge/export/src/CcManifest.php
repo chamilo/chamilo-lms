@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_manifest.php under GNU/GPL license */
 
 class CcManifest extends XMLGenericDocument implements CcIManifest
 {
@@ -275,7 +275,6 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
 
     /**
      * TODO - implement this method - critical
-     * Enter description here ...
      */
     private function fillManifest()
     {

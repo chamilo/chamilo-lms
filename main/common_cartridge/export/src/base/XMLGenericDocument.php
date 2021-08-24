@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/xmlbase.php under GNU/GPL license */
 
 /**
  * Base XML class.
@@ -236,7 +236,7 @@ class XMLGenericDocument
     }
 
     /**
-     * Enter description here ...
+     * Get the nodes from a path
      *
      * @param string  $path
      * @param DOMNode $nd
@@ -256,7 +256,7 @@ class XMLGenericDocument
     }
 
     /**
-     * Enter description here ...
+     * Get a list of nodes from a path
      *
      * @param string  $path
      * @param DOMNode $node

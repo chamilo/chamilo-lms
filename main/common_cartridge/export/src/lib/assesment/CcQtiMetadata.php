@@ -1,22 +1,22 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 abstract class CcQtiMetadata
 {
     // Assessment.
-    const qmd_assessmenttype = 'qmd_assessmenttype';
-    const qmd_scoretype = 'qmd_scoretype';
-    const qmd_feedbackpermitted = 'qmd_feedbackpermitted';
-    const qmd_hintspermitted = 'qmd_hintspermitted';
-    const qmd_solutionspermitted = 'qmd_solutionspermitted';
-    const qmd_timelimit = 'qmd_timelimit';
-    const cc_allow_late_submission = 'cc_allow_late_submission';
-    const cc_maxattempts = 'cc_maxattempts';
-    const cc_profile = 'cc_profile';
+    const QMD_ASSESSMENTTYPE = 'qmd_assessmenttype';
+    const QMD_SCORETYPE = 'qmd_scoretype';
+    const QMD_FEEDBACKPERMITTED = 'qmd_feedbackpermitted';
+    const QMD_HINTSPERMITTED = 'qmd_hintspermitted';
+    const QMD_SOLUTIONSPERMITTED = 'qmd_solutionspermitted';
+    const QMD_TIMELIMIT = 'qmd_timelimit';
+    const CC_ALLOW_LATE_SUBMISSION = 'cc_allow_late_submission';
+    const CC_MAXATTEMPTS = 'cc_maxattempts';
+    const CC_PROFILE = 'cc_profile';
 
     // Items.
-    const cc_weighting = 'cc_weighting';
-    const qmd_scoringpermitted = 'qmd_scoringpermitted';
-    const qmd_computerscored = 'qmd_computerscored';
-    const cc_question_category = 'cc_question_category';
+    const CC_WEIGHTING = 'cc_weighting';
+    const QMD_SCORINGPERMITTED = 'qmd_scoringpermitted';
+    const QMD_COMPUTERSCORED = 'qmd_computerscored';
+    const CC_QUESTION_CATEGORY = 'cc_question_category';
 }

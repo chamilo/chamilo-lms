@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentRespconditiontype extends CcQuestionMetadataBase
 {
@@ -9,18 +9,18 @@ class CcAssesmentRespconditiontype extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::title);
-        $this->setSetting(CcQtiTags::continue_, CcQtiValues::No);
+        $this->setSetting(CcQtiTags::TITLE);
+        $this->setSetting(CcQtiTags::CONTINUE_, CcQtiValues::NO);
     }
 
     public function setTitle($value)
     {
-        $this->setSetting(CcQtiTags::title, $value);
+        $this->setSetting(CcQtiTags::TITLE, $value);
     }
 
     public function enableContinue($value = true)
     {
-        $this->enableSettingYesno(CcQtiTags::continue_, $value);
+        $this->enableSettingYesno(CcQtiTags::CONTINUE_, $value);
     }
 
     public function setConditionvar(CcAssignmentConditionvar $object)
@@ -40,7 +40,7 @@ class CcAssesmentRespconditiontype extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::respcondition);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::RESPCONDITION);
         $this->generateAttributes($doc, $node, $namespace);
 
         if (!empty($this->conditionvar)) {

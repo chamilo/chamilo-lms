@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcQuestionMetadataBase
 {
@@ -30,12 +30,12 @@ class CcQuestionMetadataBase
      */
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $qtimetadata = $doc->appendNewElementNs($item, $namespace, CcQtiTags::qtimetadata);
+        $qtimetadata = $doc->appendNewElementNs($item, $namespace, CcQtiTags::QTIMETADATA);
         foreach ($this->metadata as $label => $entry) {
             if (!is_null($entry)) {
-                $qtimetadatafield = $doc->appendNewElementNs($qtimetadata, $namespace, CcQtiTags::qtimetadatafield);
-                $doc->appendNewElementNs($qtimetadatafield, $namespace, CcQtiTags::fieldlabel, $label);
-                $doc->appendNewElementNs($qtimetadatafield, $namespace, CcQtiTags::fieldentry, $entry);
+                $qtimetadatafield = $doc->appendNewElementNs($qtimetadata, $namespace, CcQtiTags::QTIMETADATAFIELD);
+                $doc->appendNewElementNs($qtimetadatafield, $namespace, CcQtiTags::FIELDLABEL, $label);
+                $doc->appendNewElementNs($qtimetadatafield, $namespace, CcQtiTags::FIELDENTRY, $entry);
             }
         }
     }
@@ -80,7 +80,7 @@ class CcQuestionMetadataBase
      */
     protected function enableSettingYesno($setting, $value = true)
     {
-        $svalue = $value ? CcQtiValues::Yes : CcQtiValues::No;
+        $svalue = $value ? CcQtiValues::YES : CcQtiValues::NO;
         $this->setSetting($setting, $svalue);
     }
 }

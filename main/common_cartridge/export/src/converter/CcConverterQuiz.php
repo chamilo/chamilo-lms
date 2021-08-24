@@ -1,13 +1,13 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_converter_quiz.php under GNU/GPL license */
 
 class CcConverterQuiz extends CcConverters
 {
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
-        $this->ccType = CcVersion13::assessment;
+        $this->ccType = CcVersion13::ASSESSMENT;
         $this->defaultfile = 'quiz.xml';
-        $this->defaultname = Assesment13ResourceFile::deafultname;
+        $this->defaultname = Assesment13ResourceFile::DEAFULTNAME;
         parent::__construct($item, $manifest, $rootpath, $path);
     }
 
@@ -50,7 +50,7 @@ class CcConverterQuiz extends CcConverters
                                                     $contextid,
                                                     $outdir);
 
-        CcAssesmentHelper::addAssesmentDescription($rt, $result[0], CcQtiValues::htmltype);
+        CcAssesmentHelper::addAssesmentDescription($rt, $result[0], CcQtiValues::HTMLTYPE);
 
         // Section.
         $section = new CcAssesmentSection();

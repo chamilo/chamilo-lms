@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentQuestionProcBase
 {
@@ -89,7 +89,7 @@ class CcAssesmentQuestionProcBase
                 $this->contextid,
                 $this->outdir);
 
-            $qmattext->setContent($result[0], CcQtiValues::htmltype);
+            $qmattext->setContent($result[0], CcQtiValues::HTMLTYPE);
             $qmaterial->setMattext($qmattext);
             $qpresentation->setMaterial($qmaterial);
             $this->qpresentation = $qpresentation;
@@ -119,7 +119,7 @@ class CcAssesmentQuestionProcBase
 
         CcAssesmentHelper::addFeedback($this->qitem,
             $result[0],
-            CcQtiValues::htmltype,
+            CcQtiValues::HTMLTYPE,
             $name);
 
         PkgResourceDependencies::instance()->add($result[1]);
@@ -135,7 +135,7 @@ class CcAssesmentQuestionProcBase
         //according to the Common Cartridge 1.1 Profile: Implementation document
         //this should always be set to 0, 100 in case of question type that is not essay
         $qdecvar->setLimits(0, 100);
-        $qdecvar->setVartype(CcQtiValues::Decimal);
+        $qdecvar->setVartype(CcQtiValues::DECIMAL);
 
         $this->qresprocessing = $qresprocessing;
     }

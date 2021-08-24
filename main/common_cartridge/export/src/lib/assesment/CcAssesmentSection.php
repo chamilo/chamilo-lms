@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentSection extends CcQuestionMetadataBase
 {
@@ -10,24 +10,24 @@ class CcAssesmentSection extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::ident, CcHelpers::uuidgen('I_'));
-        $this->setSetting(CcQtiTags::title);
-        $this->setSettingWns(CcQtiTags::xml_lang, CcXmlNamespace::xml);
+        $this->setSetting(CcQtiTags::IDENT, CcHelpers::uuidgen('I_'));
+        $this->setSetting(CcQtiTags::TITLE);
+        $this->setSettingWns(CcQtiTags::XML_LANG, CcXmlNamespace::XML);
     }
 
     public function setIdent($value)
     {
-        $this->setSetting(CcQtiTags::ident, $value);
+        $this->setSetting(CcQtiTags::IDENT, $value);
     }
 
     public function setTitle($value)
     {
-        $this->setSetting(CcQtiTags::title, $value);
+        $this->setSetting(CcQtiTags::TITLE, $value);
     }
 
     public function setLang($value)
     {
-        $this->setSettingWns(CcQtiTags::xml_lang, CcXmlNamespace::xml, $value);
+        $this->setSettingWns(CcQtiTags::XML_LANG, CcXmlNamespace::XML, $value);
     }
 
     public function addItem(CcAssesmentSectionItem $object)
@@ -37,7 +37,7 @@ class CcAssesmentSection extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::section);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::SECTION);
         $this->generateAttributes($doc, $node, $namespace);
         if (!empty($this->items)) {
             foreach ($this->items as $item) {

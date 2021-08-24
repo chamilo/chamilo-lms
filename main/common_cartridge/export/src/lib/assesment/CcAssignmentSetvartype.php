@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssignmentSetvartype extends CcQuestionMetadataBase
 {
@@ -7,19 +7,19 @@ class CcAssignmentSetvartype extends CcQuestionMetadataBase
 
     public function __construct($tagvalue = 100)
     {
-        $this->setSetting(CcQtiTags::varname, CcQtiValues::SCORE);
-        $this->setSetting(CcQtiTags::action, CcQtiValues::Set);
+        $this->setSetting(CcQtiTags::VARNAME, CcQtiValues::SCORE);
+        $this->setSetting(CcQtiTags::ACTION, CcQtiValues::SET);
         $this->tagvalue = $tagvalue;
     }
 
     public function setVarname($value)
     {
-        $this->setSetting(CcQtiTags::varname, $value);
+        $this->setSetting(CcQtiTags::VARNAME, $value);
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::setvar, $this->tagvalue);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::SETVAR, $this->tagvalue);
         $this->generateAttributes($doc, $node, $namespace);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentPresentation extends CcQuestionMetadataBase
 {
@@ -10,34 +10,34 @@ class CcAssesmentPresentation extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::label);
-        $this->setSettingWns(CcQtiTags::xml_lang, CcXmlNamespace::xml);
-        $this->setSetting(CcQtiTags::x0);
-        $this->setSetting(CcQtiTags::y0);
-        $this->setSetting(CcQtiTags::width);
-        $this->setSetting(CcQtiTags::height);
+        $this->setSetting(CcQtiTags::LABEL);
+        $this->setSettingWns(CcQtiTags::XML_LANG, CcXmlNamespace::XML);
+        $this->setSetting(CcQtiTags::X0);
+        $this->setSetting(CcQtiTags::Y0);
+        $this->setSetting(CcQtiTags::WIDTH);
+        $this->setSetting(CcQtiTags::HEIGHT);
     }
 
     public function setLabel($value)
     {
-        $this->setSetting(CcQtiTags::label, $value);
+        $this->setSetting(CcQtiTags::LABEL, $value);
     }
 
     public function setLang($value)
     {
-        $this->setSettingWns(CcQtiTags::xml_lang, CcXmlNamespace::xml, $value);
+        $this->setSettingWns(CcQtiTags::XML_LANG, CcXmlNamespace::XML, $value);
     }
 
     public function setCoor($x = null, $y = null)
     {
-        $this->setSetting(CcQtiTags::x0, $x);
-        $this->setSetting(CcQtiTags::y0, $y);
+        $this->setSetting(CcQtiTags::X0, $x);
+        $this->setSetting(CcQtiTags::Y0, $y);
     }
 
     public function setSize($width = null, $height = null)
     {
-        $this->setSetting(CcQtiTags::width, $width);
-        $this->setSetting(CcQtiTags::height, $height);
+        $this->setSetting(CcQtiTags::WIDTH, $width);
+        $this->setSetting(CcQtiTags::HEIGHT, $height);
     }
 
     public function setFlow(CcAssesmentFlowtype $object)
@@ -62,7 +62,7 @@ class CcAssesmentPresentation extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::presentation);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::PRESENTATION);
         $this->generateAttributes($doc, $node, $namespace);
 
         if (!empty($this->flow)) {

@@ -1,14 +1,14 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 abstract class CcQtiProfiletype
 {
-    const multiple_choice = 'cc.multiple_choice.v0p1';
-    const multiple_response = 'cc.multiple_response.v0p1';
-    const true_false = 'cc.true_false.v0p1';
-    const field_entry = 'cc.fib.v0p1';
-    const pattern_match = 'cc.pattern_match.v0p1';
-    const essay = 'cc.essay.v0p1';
+    const MULTIPLE_CHOICE = 'cc.multiple_choice.v0p1';
+    const MULTIPLE_RESPONSE = 'cc.multiple_response.v0p1';
+    const TRUE_FALSE = 'cc.true_false.v0p1';
+    const FIELD_ENTRY = 'cc.fib.v0p1';
+    const PATTERN_MATCH = 'cc.pattern_match.v0p1';
+    const ESSAY = 'cc.essay.v0p1';
 
     /**
      * validates a profile value.
@@ -19,12 +19,12 @@ abstract class CcQtiProfiletype
      */
     public static function valid($value)
     {
-        static $verificationValues = [self::essay,
-            self::field_entry,
-            self::multiple_choice,
-            self::multiple_response,
-            self::pattern_match,
-            self::true_false,
+        static $verificationValues = [self::ESSAY,
+            self::FIELD_ENTRY,
+            self::MULTIPLE_CHOICE,
+            self::MULTIPLE_RESPONSE,
+            self::PATTERN_MATCH,
+            self::TRUE_FALSE,
         ];
 
         return in_array($value, $verificationValues);

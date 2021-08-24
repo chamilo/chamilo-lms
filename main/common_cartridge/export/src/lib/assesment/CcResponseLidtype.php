@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcResponseLidtype extends CcQuestionMetadataBase
 {
@@ -11,30 +11,30 @@ class CcResponseLidtype extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::rcardinality, CcQtiValues::Single);
-        $this->setSetting(CcQtiTags::rtiming);
-        $this->setSetting(CcQtiTags::ident, CcHelpers::uuidgen('I_'));
-        $this->tagname = CcQtiTags::response_lid;
+        $this->setSetting(CcQtiTags::RCARDINALITY, CcQtiValues::SINGLE);
+        $this->setSetting(CcQtiTags::RTIMING);
+        $this->setSetting(CcQtiTags::IDENT, CcHelpers::uuidgen('I_'));
+        $this->tagname = CcQtiTags::RESPONSE_LID;
     }
 
     public function setRcardinality($value)
     {
-        $this->setSetting(CcQtiTags::rcardinality, $value);
+        $this->setSetting(CcQtiTags::RCARDINALITY, $value);
     }
 
     public function enableRtiming($value = true)
     {
-        $this->enableSettingYesno(CcQtiTags::rtiming, $value);
+        $this->enableSettingYesno(CcQtiTags::RTIMING, $value);
     }
 
     public function setIdent($value)
     {
-        $this->setSetting(CcQtiTags::ident, $value);
+        $this->setSetting(CcQtiTags::IDENT, $value);
     }
 
     public function getIdent()
     {
-        return $this->getSetting(CcQtiTags::ident);
+        return $this->getSetting(CcQtiTags::IDENT);
     }
 
     public function setMaterialRef(CcAssesmentResponseMatref $object)

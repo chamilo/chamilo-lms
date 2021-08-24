@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssignmentConditionvarAndtype extends CcQuestionMetadataBase
 {
@@ -18,10 +18,10 @@ class CcAssignmentConditionvarAndtype extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::and_);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::AND_);
         if (!empty($this->nots)) {
             foreach ($this->nots as $notv) {
-                $not = $doc->appendNewElementNs($node, $namespace, CcQtiTags::not_);
+                $not = $doc->appendNewElementNs($node, $namespace, CcQtiTags::NOT_);
                 $notv->generate($doc, $not, $namespace);
             }
         }

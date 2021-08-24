@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentSectionItem extends CcAssesmentSection
 {
@@ -30,7 +30,7 @@ class CcAssesmentSectionItem extends CcAssesmentSection
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::item);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::ITEM);
         $this->generateAttributes($doc, $node, $namespace);
 
         if (!empty($this->itemmetadata)) {

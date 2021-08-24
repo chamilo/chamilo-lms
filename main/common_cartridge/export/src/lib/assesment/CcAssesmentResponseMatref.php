@@ -1,11 +1,11 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentResponseMatref extends CcAssesmentMatref
 {
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::material_ref);
-        $doc->appendNewAttributeNs($node, $namespace, CcQtiTags::linkrefid, $this->linkref);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::MATERIAL_REF);
+        $doc->appendNewAttributeNs($node, $namespace, CcQtiTags::LINKREFID, $this->linkref);
     }
 }

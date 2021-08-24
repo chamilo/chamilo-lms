@@ -1,11 +1,11 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentResponseStrtype extends CcResponseLidtype
 {
     public function __construct()
     {
         $rtt = parent::__construct();
-        $this->tagname = CcQtiTags::response_str;
+        $this->tagname = CcQtiTags::RESPONSE_STR;
     }
 }

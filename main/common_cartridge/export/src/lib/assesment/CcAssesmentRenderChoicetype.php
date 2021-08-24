@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentRenderChoicetype extends CcQuestionMetadataBase
 {
@@ -10,9 +10,9 @@ class CcAssesmentRenderChoicetype extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::shuffle, CcQtiValues::No);
-        $this->setSetting(CcQtiTags::minnumber);
-        $this->setSetting(CcQtiTags::maxnumber);
+        $this->setSetting(CcQtiTags::SHUFFLE, CcQtiValues::NO);
+        $this->setSetting(CcQtiTags::MINNUMBER);
+        $this->setSetting(CcQtiTags::MAXNUMBER);
     }
 
     public function add_material(CcAssesmentMaterial $object)
@@ -37,18 +37,18 @@ class CcAssesmentRenderChoicetype extends CcQuestionMetadataBase
 
     public function enableShuffle($value = true)
     {
-        $this->enableSettingYesno(CcQtiTags::shuffle, $value);
+        $this->enableSettingYesno(CcQtiTags::SHUFFLE, $value);
     }
 
     public function setLimits($min = null, $max = null)
     {
-        $this->setSetting(CcQtiTags::minnumber, $min);
-        $this->setSetting(CcQtiTags::maxnumber, $max);
+        $this->setSetting(CcQtiTags::MINNUMBER, $min);
+        $this->setSetting(CcQtiTags::MAXNUMBER, $max);
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::render_choice);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::RENDER_CHOICE);
         $this->generateAttributes($doc, $node, $namespace);
 
         if (!empty($this->materials)) {

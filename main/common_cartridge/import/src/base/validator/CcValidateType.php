@@ -1,24 +1,24 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/validator.php under GNU/GPL license */
 
 class CcValidateType
 {
-    const manifest_validator1 = 'cclibxml2validator.xsd';
-    const assesment_validator1 = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
-    const discussion_validator1 = '/domainProfile_6/imsdt_v1p0_localised.xsd';
-    const weblink_validator1 = '/domainProfile_5/imswl_v1p0_localised.xsd';
+    const MANIFEST_VALIDATOR1 = 'cclibxml2validator.xsd';
+    const ASSESMENT_VALIDATOR1 = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
+    const DISCUSSION_VALIDATOR1 = '/domainProfile_6/imsdt_v1p0_localised.xsd';
+    const WEBLINK_VALIDATOR1 = '/domainProfile_5/imswl_v1p0_localised.xsd';
 
-    const manifest_validator11 = 'cc11libxml2validator.xsd';
-    const blti_validator11 = 'imslticc_v1p0p1.xsd';
-    const assesment_validator11 = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd';
-    const discussion_validator11 = 'ccv1p1_imsdt_v1p1.xsd';
-    const weblink_validator11 = 'ccv1p1_imswl_v1p1.xsd';
+    const MANIFEST_VALIDATOR11 = 'cc11libxml2validator.xsd';
+    const BLTI_VALIDATOR11 = 'imslticc_v1p0p1.xsd';
+    const ASSESMENT_VALIDATOR11 = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd';
+    const DISCUSSION_VALIDATOR11 = 'ccv1p1_imsdt_v1p1.xsd';
+    const WEBLINK_VALIDATOR11 = 'ccv1p1_imswl_v1p1.xsd';
 
-    const manifest_validator13 = 'cc13libxml2validator.xsd';
-    const blti_validator13 = 'imslticc_v1p3.xsd';
-    const assesment_validator13 = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd';
-    const discussion_validator13 = 'ccv1p3_imsdt_v1p3.xsd';
-    const weblink_validator13 = 'ccv1p3_imswl_v1p3.xsd';
+    const MANIFEST_VALIDATOR13 = 'cc13libxml2validator.xsd';
+    const BLTI_VALIDATOR13 = 'imslticc_v1p3.xsd';
+    const ASSESMENT_VALIDATOR13 = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd';
+    const DISCUSSION_VALIDATOR13 = 'ccv1p3_imsdt_v1p3.xsd';
+    const WEBLINK_VALIDATOR13 = 'ccv1p3_imswl_v1p3.xsd';
 
     /**
      * @var string

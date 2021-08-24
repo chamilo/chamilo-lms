@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentFlowLabeltype extends CcQuestionMetadataBase
 {
@@ -8,12 +8,12 @@ class CcAssesmentFlowLabeltype extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::t_class);
+        $this->setSetting(CcQtiTags::T_CLASS);
     }
 
     public function setClass($value)
     {
-        $this->setSetting(CcQtiTags::t_class, $value);
+        $this->setSetting(CcQtiTags::T_CLASS, $value);
     }
 
     public function setFlowLabel(CcAssesmentFlowLabeltype $object)
@@ -28,7 +28,7 @@ class CcAssesmentFlowLabeltype extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::flow_label);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::FLOW_LABEL);
         $this->generateAttributes($doc, $node, $namespace);
 
         if (!empty($this->material)) {

@@ -1,9 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_forum.php under GNU/GPL license */
 
 class CcForum extends CcGeneralFile
 {
-    const deafultname = 'discussion.xml';
+    const DEAFULTNAME = 'discussion.xml';
     protected $rootns = 'dt';
     protected $rootname = 'topic';
     protected $ccnamespaces = ['dt' => 'http://www.imsglobal.org/xsd/imsccv1p3/imsdt_v1p3',

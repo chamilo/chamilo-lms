@@ -177,7 +177,7 @@ abstract class CcHelpers
                                         $values[7].$clean_filename,
                                         $rdir->dirname(false));
 
-            $res = $manifest->addResource($resource, null, CcVersion13::webcontent);
+            $res = $manifest->addResource($resource, null, CcVersion13::WEBCONTENT);
 
             PkgStaticResources::instance()->add($virtual,
                                                   $res[0],

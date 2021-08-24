@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/lib/validateurlsyntax.php under GNU/GPL license */
 
 /**
  *  BEGINNING OF validateUrlSyntax() function.

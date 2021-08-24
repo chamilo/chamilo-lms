@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssignmentConditionvar extends CcQuestionMetadataBase
 {
@@ -30,7 +30,7 @@ class CcAssignmentConditionvar extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::conditionvar);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::CONDITIONVAR);
 
         if (!empty($this->and)) {
             $this->and->generate($doc, $node, $namespace);

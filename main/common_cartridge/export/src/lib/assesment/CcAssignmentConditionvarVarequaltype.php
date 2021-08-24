@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssignmentConditionvarVarequaltype extends CcQuestionMetadataBase
 {
@@ -12,19 +12,19 @@ class CcAssignmentConditionvarVarequaltype extends CcQuestionMetadataBase
             throw new InvalidArgumentException('Must not pass null!');
         }
         $this->answerid = $value;
-        $this->setSetting(CcQtiTags::respident);
-        $this->setSetting(CcQtiTags::case_);
-        $this->tagname = CcQtiTags::varequal;
+        $this->setSetting(CcQtiTags::RESPIDENT);
+        $this->setSetting(CcQtiTags::CASE_);
+        $this->tagname = CcQtiTags::VAREQUAL;
     }
 
     public function setRespident($value)
     {
-        $this->setSetting(CcQtiTags::respident, $value);
+        $this->setSetting(CcQtiTags::RESPIDENT, $value);
     }
 
     public function enableCase($value = true)
     {
-        $this->enableSettingYesno(CcQtiTags::case_, $value);
+        $this->enableSettingYesno(CcQtiTags::CASE_, $value);
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)

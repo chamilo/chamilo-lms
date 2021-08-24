@@ -1,9 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_weblink.php under GNU/GPL license */
 
 class CcWebLink extends CcGeneralFile
 {
-    const deafultname = 'weblink.xml';
+    const DEAFULTNAME = 'weblink.xml';
 
     protected $rootns = 'wl';
     protected $rootname = 'webLink';

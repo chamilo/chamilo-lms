@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentItemfeedbackShintypeBase extends CcQuestionMetadataBase
 {
@@ -8,7 +8,7 @@ class CcAssesmentItemfeedbackShintypeBase extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::feedbackstyle, CcQtiValues::Complete);
+        $this->setSetting(CcQtiTags::FEEDBACKSTYLE, CcQtiValues::COMPLETE);
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)

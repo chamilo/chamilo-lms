@@ -1,12 +1,12 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class Assesment1ResourceFile extends CcGeneralFile
 {
-    const deafultname = 'assesment.xml';
+    const DEAFULTNAME = 'assesment.xml';
 
     protected $rootns = 'xmlns';
-    protected $rootname = CcQtiTags::questestinterop;
+    protected $rootname = CcQtiTags::QUESTESTINTEROP;
     protected $ccnamespaces = ['xmlns' => 'http://www.imsglobal.org/xsd/ims_qtiasiv1p2',
         'xsi' => 'http://www.w3.org/2001/XMLSchema-instance', ];
     protected $ccnsnames = ['xmlns' => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_4/ims_qtiasiv1p2_localised.xsd'];
@@ -45,9 +45,9 @@ class Assesment1ResourceFile extends CcGeneralFile
     {
         $rns = $this->ccnamespaces[$this->rootns];
         //root assesment element - required
-        $assessment = $this->appendNewElementNs($this->root, $rns, CcQtiTags::assessment);
-        $this->appendNewAttributeNs($assessment, $rns, CcQtiTags::ident, CcHelpers::uuidgen('QDB_'));
-        $this->appendNewAttributeNs($assessment, $rns, CcQtiTags::title, $this->assessmentTitle);
+        $assessment = $this->appendNewElementNs($this->root, $rns, CcQtiTags::ASSESSMENT);
+        $this->appendNewAttributeNs($assessment, $rns, CcQtiTags::IDENT, CcHelpers::uuidgen('QDB_'));
+        $this->appendNewAttributeNs($assessment, $rns, CcQtiTags::TITLE, $this->assessmentTitle);
 
         //metadata - optional
         if (!empty($this->metadata)) {

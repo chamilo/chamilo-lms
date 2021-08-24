@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentRenderFibtype extends CcQuestionMetadataBase
 {
@@ -10,56 +10,56 @@ class CcAssesmentRenderFibtype extends CcQuestionMetadataBase
 
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::encoding);
-        $this->setSetting(CcQtiTags::charset);
-        $this->setSetting(CcQtiTags::rows);
-        $this->setSetting(CcQtiTags::columns);
-        $this->setSetting(CcQtiTags::maxchars);
-        $this->setSetting(CcQtiTags::minnumber);
-        $this->setSetting(CcQtiTags::maxnumber);
-        $this->setSetting(CcQtiTags::prompt, CcQtiValues::Box);
-        $this->setSetting(CcQtiTags::fibtype, CcQtiValues::String);
+        $this->setSetting(CcQtiTags::ENCODING);
+        $this->setSetting(CcQtiTags::CHARSET);
+        $this->setSetting(CcQtiTags::ROWS);
+        $this->setSetting(CcQtiTags::COLUMNS);
+        $this->setSetting(CcQtiTags::MAXCHARS);
+        $this->setSetting(CcQtiTags::MINNUMBER);
+        $this->setSetting(CcQtiTags::MAXNUMBER);
+        $this->setSetting(CcQtiTags::PROMPT, CcQtiValues::BOX);
+        $this->setSetting(CcQtiTags::FIBTYPE, CcQtiValues::STRING);
     }
 
     public function setEncoding($value)
     {
-        $this->setSetting(CcQtiTags::encoding, $value);
+        $this->setSetting(CcQtiTags::ENCODING, $value);
     }
 
     public function setCharset($value)
     {
-        $this->setSetting(CcQtiTags::charset, $value);
+        $this->setSetting(CcQtiTags::CHARSET, $value);
     }
 
     public function setRows($value)
     {
-        $this->setSetting(CcQtiTags::rows, $value);
+        $this->setSetting(CcQtiTags::ROWS, $value);
     }
 
     public function setColumns($value)
     {
-        $this->setSetting(CcQtiTags::columns, $value);
+        $this->setSetting(CcQtiTags::COLUMNS, $value);
     }
 
     public function setMaxchars($value)
     {
-        $this->setSetting(CcQtiTags::columns, $value);
+        $this->setSetting(CcQtiTags::COLUMNS, $value);
     }
 
     public function setLimits($min = null, $max = null)
     {
-        $this->setSetting(CcQtiTags::minnumber, $min);
-        $this->setSetting(CcQtiTags::maxnumber, $max);
+        $this->setSetting(CcQtiTags::MINNUMBER, $min);
+        $this->setSetting(CcQtiTags::MAXNUMBER, $max);
     }
 
     public function setPrompt($value)
     {
-        $this->setSetting(CcQtiTags::prompt, $value);
+        $this->setSetting(CcQtiTags::PROMPT, $value);
     }
 
     public function setFibtype($value)
     {
-        $this->setSetting(CcQtiTags::fibtype, $value);
+        $this->setSetting(CcQtiTags::FIBTYPE, $value);
     }
 
     public function setMaterial(CcAssesmentMaterial $object)
@@ -84,7 +84,7 @@ class CcAssesmentRenderFibtype extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::render_fib);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::RENDER_FIB);
         $this->generateAttributes($doc, $node, $namespace);
 
         if (!empty($this->material) && empty($this->materialRef)) {

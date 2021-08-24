@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentPresentationMaterialBase extends CcQuestionMetadataBase
 {
@@ -12,7 +12,7 @@ class CcAssesmentPresentationMaterialBase extends CcQuestionMetadataBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::presentation_material);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::PRESENTATION_MATERIAL);
         if (!empty($this->flowmats)) {
             foreach ($this->flowmats as $flowMat) {
                 $flowMat->generate($doc, $node, $namespace);

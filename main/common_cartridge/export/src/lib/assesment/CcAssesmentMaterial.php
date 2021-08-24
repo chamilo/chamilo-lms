@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssesmentMaterial extends CcAssesmentMaterialBase
 {
@@ -7,14 +7,14 @@ class CcAssesmentMaterial extends CcAssesmentMaterialBase
 
     public function __construct($value = null)
     {
-        $this->setSetting(CcQtiTags::label);
-        $this->setSettingWns(CcQtiTags::xml_lang, CcXmlNamespace::xml);
-        $this->tagname = CcQtiTags::material;
+        $this->setSetting(CcQtiTags::LABEL);
+        $this->setSettingWns(CcQtiTags::XML_LANG, CcXmlNamespace::XML);
+        $this->tagname = CcQtiTags::MATERIAL;
     }
 
     public function setLabel($value)
     {
-        $this->setSetting(CcQtiTags::label, $value);
+        $this->setSetting(CcQtiTags::LABEL, $value);
     }
 
     public function setAltmaterial(CcAssesmentAltmaterial $object)

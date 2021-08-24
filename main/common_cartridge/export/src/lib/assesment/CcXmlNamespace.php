@@ -1,7 +1,7 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 abstract class CcXmlNamespace
 {
-    const xml = 'http://www.w3.org/XML/1998/namespace';
+    const XML = 'http://www.w3.org/XML/1998/namespace';
 }

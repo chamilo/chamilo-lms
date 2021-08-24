@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/gral_lib/ccdependencyparser.php under GNU/GPL license */
 
 /**
  * Converts \ Directory separator to the / more suitable for URL.
@@ -75,6 +75,13 @@ function stripUrl($path, $rootDir = '')
     return $result;
 }
 
+/**
+ * Get full path
+ *
+ * @param string $path
+ * @param string $dirsep
+ * @return false|string
+ */
 function fullPath($path, $dirsep = DIRECTORY_SEPARATOR)
 {
     $token = '$IMS-CC-FILEBASE$';
@@ -128,6 +135,14 @@ function isUrl($url)
     return $result;
 }
 
+/**
+ * Gets the dependency files of the $fname file
+ *
+ * @param string $manifestroot
+ * @param string $fname
+ * @param string $folder
+ * @param array $filenames
+ */
 function getDepFiles($manifestroot, $fname, $folder, &$filenames)
 {
     static $types = ['xhtml' => true, 'html' => true, 'htm' => true];
@@ -148,6 +163,15 @@ function getDepFiles($manifestroot, $fname, $folder, &$filenames)
     }
 }
 
+/**
+ * Gets the dependency of .html of the $fname file
+ *
+ * @param string $manifestroot
+ * @param string $fname
+ * @param string $filenames
+ * @param string $dcx
+ * @param string $folder
+ */
 function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder)
 {
     $dcx->resetXpath();

@@ -1,27 +1,27 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 class CcAssignmentDisplayfeedbacktype extends CcQuestionMetadataBase
 {
     public function __construct()
     {
-        $this->setSetting(CcQtiTags::feedbacktype);
-        $this->setSetting(CcQtiTags::linkrefid);
+        $this->setSetting(CcQtiTags::FEEDBACKTYPE);
+        $this->setSetting(CcQtiTags::LINKREFID);
     }
 
     public function setFeedbacktype($value)
     {
-        $this->setSetting(CcQtiTags::feedbacktype, $value);
+        $this->setSetting(CcQtiTags::FEEDBACKTYPE, $value);
     }
 
     public function setLinkrefid($value)
     {
-        $this->setSetting(CcQtiTags::linkrefid, $value);
+        $this->setSetting(CcQtiTags::LINKREFID, $value);
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
     {
-        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::displayfeedback);
+        $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::DISPLAYFEEDBACK);
         $this->generateAttributes($doc, $node, $namespace);
     }
 }

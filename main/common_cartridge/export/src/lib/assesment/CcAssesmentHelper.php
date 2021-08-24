@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_asssesment.php under GNU/GPL license */
 
 abstract class CcAssesmentHelper
 {
@@ -53,7 +53,7 @@ abstract class CcAssesmentHelper
         $qvarequal->setRespident($respident);
         $qdisplayfeedback = new CcAssignmentDisplayfeedbacktype();
         $qrespcondition->addDisplayfeedback($qdisplayfeedback);
-        $qdisplayfeedback->setFeedbacktype(CcQtiValues::Response);
+        $qdisplayfeedback->setFeedbacktype(CcQtiValues::RESPONSE);
         $qdisplayfeedback->setLinkrefid($feedbackRefid);
     }
 
@@ -90,7 +90,7 @@ abstract class CcAssesmentHelper
         $qconditionvar->setOther($qother);
         $qdisplayfeedback = new CcAssignmentDisplayfeedbacktype();
         $qrespcondition->addDisplayfeedback($qdisplayfeedback);
-        $qdisplayfeedback->setFeedbacktype(CcQtiValues::Response);
+        $qdisplayfeedback->setFeedbacktype(CcQtiValues::RESPONSE);
         $qdisplayfeedback->setLinkrefid($feedbackRefid);
     }
 

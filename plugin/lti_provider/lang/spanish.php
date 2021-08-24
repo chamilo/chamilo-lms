@@ -29,5 +29,5 @@ $strings['GenerateKeyPairInfo'] = 'Se creará un nuevo par de claves pública y 
 $strings['URLs'] = 'URL de puntos finales';
 $strings['PlatformConnectionAdded'] = 'Se agrega una conexión de plataforma.';
 $strings['ToolProvider'] = 'Herramienta del proveedor';
-$strings['SelectOneActivity'] = 'Selecccion una actividad';
+$strings['SelectOneActivity'] = 'Selecccione una actividad';
 $strings['Quizzes'] = 'Ejercicios';

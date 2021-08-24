@@ -1596,8 +1596,11 @@ function getWorkListTeacherQuery(
             parent_id = 0 AND
             post_group_id = $groupIid
             $whereCondition
-        ORDER BY `$column` $direction
-        LIMIT $start, $limit";
+        ORDER BY `$column` $direction";
+
+    if ($start != 0 && $limit != 0) {
+        $sql .= ' LIMIT $start, $limit';
+    }
 
     return Database::query($sql);
 }
@@ -1639,6 +1642,7 @@ function getWorkListTeacherData(
     while ($work = Database::fetch_array($result, 'ASSOC')) {
         $workId = $work['id'];
         $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
+        $work['ends_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['ends_on']);
 
         $countUniqueAttempts = getUniqueStudentAttemptsTotal($workId, $groupId, $courseId, $sessionId);
         $totalUsers = getStudentSubscribedToWork($workId, $courseId, $groupId, $sessionId, true);

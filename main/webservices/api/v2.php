@@ -228,6 +228,11 @@ try {
                 $restApi->getCourseLinks()
             );
             break;
+        case Rest::GET_COURSE_WORKS:
+            $restResponse->setData(
+                $restApi->getCourseWorks()
+            );
+            break;
 
         case Rest::SAVE_COURSE_NOTEBOOK:
             $title = !empty($_POST['title']) ? $_POST['title'] : null;

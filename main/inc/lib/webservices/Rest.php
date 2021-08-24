@@ -52,6 +52,7 @@ class Rest extends WebService
     const GET_COURSE_LEARNPATH = 'course_learnpath';
     const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     const GET_COURSE_LINKS = 'course_links';
+    const GET_COURSE_WORKS= 'course_works';
 
     const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
 
@@ -2511,6 +2512,77 @@ class Rest extends WebService
         }
 
         return $result;
+    }
+
+    public function getCourseWorks(): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $isAllowedToEdit = $this->user->getStatus() !== STUDENT;
+
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        $works = array_filter(
+            getWorkListTeacherData($courseId, $sessionId, 0, 0, 0, 'title', 'ASC', ''),
+            function (array $work) use ($isAllowedToEdit, $courseInfo, $courseId, $sessionId) {
+                if (!$isAllowedToEdit
+                    && !userIsSubscribedToWork($this->user->getId(), $work['id'], $courseId)
+                ) {
+                    return false;
+                }
+
+                $visibility = api_get_item_visibility($courseInfo, 'work', $work['id'], $sessionId);
+
+                if (!$isAllowedToEdit && $visibility != 1) {
+                    return false;
+                }
+
+                return true;
+            }
+        );
+
+        return array_map(
+            function (array $work) use ($isAllowedToEdit, $courseInfo, $courseId, $sessionId) {
+                $work['type'] = 'work.png';
+
+                if (!$isAllowedToEdit) {
+                    $workList = get_work_user_list(
+                        0,
+                        1000,
+                        null,
+                        null,
+                        $work['id'],
+                        ' AND u.id = '.$this->user->getId()
+                    );
+
+                    $count = getTotalWorkComment($workList, $courseInfo);
+                    $lastWork = getLastWorkStudentFromParentByUser($this->user->getId(), $work, $courseInfo);
+
+                    $work['feedback'] = ' '.Display::label('0 '.get_lang('Feedback'), 'warning');
+
+                    if (!empty($count)) {
+                        $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info');
+                    }
+
+                    $work['last_upload'] = '';
+
+                    if (!empty($lastWork)) {
+                        $work['last_upload'] = !empty($lastWork['qualification'])
+                            ? $lastWork['qualification_rounded'].' - '
+                            : '';
+                        $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
+                    }
+                }
+
+                return $work;
+            },
+            $works
+        );
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

@@ -246,6 +246,7 @@ class AppPlugin
             'kannelsms',
             'keycloak',
             'learning_calendar',
+            'lti_provider',
             'maintenancemode',
             'migrationmoodle',
             'mindmap',

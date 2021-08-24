@@ -207,6 +207,28 @@ switch ($action) {
         break;
 }
 
+function generateUnsubscribeForm(string $courseCode, string $secToken): string
+{
+    $alertMessage = api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES);
+
+    $form = new FormValidator(
+        'frm_unsubscribe',
+        'get',
+        api_get_path(WEB_CODE_PATH).'auth/courses.php',
+        '',
+        [
+            'onsubmit' => 'javascript: if (!confirm(\''.addslashes($alertMessage).'\')) return false;',
+        ],
+        FormValidator::LAYOUT_INLINE
+    );
+    $form->addHidden('action', 'unsubscribe');
+    $form->addHidden('sec_token', $secToken);
+    $form->addHidden('unsubscribe', $courseCode);
+    $form->addButton('unsub', get_lang('Unsubscribe'));
+
+    return $form->returnForm();
+}
+
 Display::display_header();
 
 $stok = Security::get_token();
@@ -309,8 +331,7 @@ if (!empty($user_course_categories)) {
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
                     echo $course['tutor'];
                 }
-                echo '</td><td valign="top">';
-                echo '<div style="float:left;width:110px;">';
+                echo '</td><td class="text-right">';
                 if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
                     $icon_title = get_lang('CourseDetails').' - '.$course['title'];
                     $url = api_get_path(
@@ -346,26 +367,12 @@ if (!empty($user_course_categories)) {
                 <?php
                 } else {
                     echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
-                } ?>
-              </div>
-              <div style="float:left; margin-right:10px;">
-                <?php
-                    if ($course['status'] != 1) {
-                        if ($course['unsubscr'] == 1) {
-                            ?>
-
-                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false">
-                    <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                    <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                     <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
-                    <?php echo get_lang('Unsubscribe'); ?>
-                    </button>
-                </form>
-              </div>
-                  <?php
-                        }
-                    }
+                }
+                if ($course['status'] != 1 && $course['unsubscr'] == 1) {
+                    echo generateUnsubscribeForm($course['code'], $stok);
+                }
                 $key++;
+                echo '</td></tr>';
             }
             echo '</table>';
         }
@@ -393,7 +400,6 @@ if (!empty($courses_without_category)) {
             echo $course['tutor'];
         }
         echo '</td><td class="text-right">';
-        echo '<div>';
         if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
             $icon_title = get_lang('CourseDetails').' - '.$course['title'];
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
@@ -434,31 +440,15 @@ if (!empty($courses_without_category)) {
             <?php
         } else {
             echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
-        } ?>
-                </div>
-                 <div style="margin-right:10px;">
-            <?php
-                if ($course['status'] != 1) {
-                    if ($course['unsubscr'] == 1) {
-                        ?>
-                <!-- changed link to submit to avoid action by the search tool indexer -->
-                <form action="<?php echo api_get_self(); ?>"
-                      method="post"
-                      onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">
-                    <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                    <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                    <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
-                        <?php echo get_lang('Unsubscribe'); ?>
-                    </button>
-                </form>
-                </div>
-              <?php
-                    }
-                } ?>
-            </td>
-            </tr>
-            <?php
-            $key++;
+        }
+        if ($course['status'] != 1) {
+            if ($course['unsubscr'] == 1) {
+                echo generateUnsubscribeForm($course['code'], $stok);
+            }
+        }
+        echo '</td></tr>';
+
+        $key++;
     }
 }
 ?>

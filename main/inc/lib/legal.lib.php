@@ -476,7 +476,7 @@ class LegalManager
                 $currentUserInfo['complete_name']
             );
             $contentEmail = sprintf(
-                get_lang('UserXSignedTheAgreementTheY'),
+                get_lang('UserXSignedTheAgreementTheDateY'),
                 $currentUserInfo['complete_name'],
                 api_get_local_time()
             );

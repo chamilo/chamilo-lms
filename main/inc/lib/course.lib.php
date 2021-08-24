@@ -618,86 +618,48 @@ class CourseManager
     }
 
     /**
-     * @param string $courseCode
-     * @param int    $status
-     *
-     * @return bool
+     * @throws Exception
      */
-    public static function autoSubscribeToCourse($courseCode, $status = STUDENT)
+    public static function processAutoSubscribeToCourse(string $courseCode, int $status = STUDENT)
     {
         if (api_is_anonymous()) {
-            return false;
+            throw new Exception(get_lang('NotAllowed'));
         }
 
         $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
 
         if (null === $course) {
-            return false;
+            throw new Exception(get_lang('NotAllowed'));
         }
 
         $visibility = (int) $course->getVisibility();
 
-        if (in_array($visibility, [
-                COURSE_VISIBILITY_CLOSED,
-                //COURSE_VISIBILITY_REGISTERED,
-                COURSE_VISIBILITY_HIDDEN,
-        ])) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('SubscribingNotAllowed'),
-                    'warning'
-                )
-            );
-
-            return false;
+        if (in_array($visibility, [COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_HIDDEN])) {
+            throw new Exception(get_lang('SubscribingNotAllowed'));
         }
 
         // Private course can allow auto subscription
         if (COURSE_VISIBILITY_REGISTERED === $visibility && false === $course->getSubscribe()) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('SubscribingNotAllowed'),
-                    'warning'
-                )
-            );
-
-            return false;
+            throw new Exception(get_lang('SubscribingNotAllowed'));
         }
 
         $userId = api_get_user_id();
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-            /**
-             * @var Chamilo\UserBundle\Entity\User
-             */
-            $user = UserManager::getRepository()->find($userId);
+            $user = api_get_user_entity($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions)) {
                 // user has no accessible session
                 if ($user->getStudentSessions()) {
                     // user has ancient or future student session(s) but not available now
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('CanNotSubscribeToCourseUserSessionExpired'),
-                            'warning'
-                        )
-                    );
-
-                    return false;
+                    throw new Exception(get_lang('CanNotSubscribeToCourseUserSessionExpired'));
                 }
                 // user has no session at all, create one starting now
                 $numberOfDays = api_get_configuration_value('user_s_session_duration') ?: 3 * 365;
                 try {
                     $duration = new DateInterval(sprintf('P%dD', $numberOfDays));
                 } catch (Exception $exception) {
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('WrongNumberOfDays').': '.$numberOfDays.': '.$exception->getMessage(),
-                            'warning'
-                        )
-                    );
-
-                    return false;
+                    throw new Exception(get_lang('WrongNumberOfDays').': '.$numberOfDays.': '.$exception->getMessage());
                 }
                 $endDate = new DateTime();
                 $endDate->add($duration);
@@ -715,14 +677,7 @@ class CourseManager
                 try {
                     Database::getManager()->flush();
                 } catch (\Doctrine\ORM\OptimisticLockException $exception) {
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('InternalDatabaseError').': '.$exception->getMessage(),
-                            'warning'
-                        )
-                    );
-
-                    return false;
+                    throw new Exception(get_lang('InternalDatabaseError').': '.$exception->getMessage());
                 }
                 $accessUrlRelSession = new \Chamilo\CoreBundle\Entity\AccessUrlRelSession();
                 $accessUrlRelSession->setAccessUrlId(api_get_current_access_url_id());
@@ -731,14 +686,7 @@ class CourseManager
                 try {
                     Database::getManager()->flush();
                 } catch (\Doctrine\ORM\OptimisticLockException $exception) {
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('InternalDatabaseError').': '.$exception->getMessage(),
-                            'warning'
-                        )
-                    );
-
-                    return false;
+                    throw new Exception(get_lang('InternalDatabaseError').': '.$exception->getMessage());
                 }
             } else {
                 // user has at least one accessible session, let's use it
@@ -750,22 +698,32 @@ class CourseManager
             try {
                 Database::getManager()->flush();
             } catch (\Doctrine\ORM\OptimisticLockException $exception) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('InternalDatabaseError').': '.$exception->getMessage(),
-                        'warning'
-                    )
-                );
-
-                return false;
+                throw new Exception(get_lang('InternalDatabaseError').': '.$exception->getMessage());
             }
             // subscribe user to course within this session
             SessionManager::subscribe_users_to_session_course([$userId], $session->getId(), $course->getCode());
-
-            return true;
         }
 
-        return self::subscribeUser($userId, $course->getCode(), $status, 0);
+        self::subscribeUser($userId, $course->getCode(), $status, 0);
+    }
+
+    /**
+     * @param string $courseCode
+     * @param int    $status
+     */
+    public static function autoSubscribeToCourse($courseCode, $status = STUDENT): bool
+    {
+        try {
+            self::processAutoSubscribeToCourse($courseCode, $status);
+        } catch (Exception $e) {
+            Display::addFlash(
+                Display::return_message($e->getMessage(), 'warning')
+            );
+
+            return false;
+        }
+
+        return true;
     }
 
     /**

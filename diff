@@ -1,0 +1,22 @@
+diff --git a/main/inc/lib/webservices/Rest.php b/main/inc/lib/webservices/Rest.php
+index 45408f9beccd6dd71d50654020d9a921cd4764a1..7fbacd658889ca10ce3393759fcdac3c13cbeb9b 100644
+--- a/main/inc/lib/webservices/Rest.php
++++ b/main/inc/lib/webservices/Rest.php
+@@ -885,7 +885,7 @@ class Rest extends WebService
+                     'display_order' => 0,
+                     'session_id' => $sessionId,
+                     'visibility' => 1,
+-                ]
++                ],
+             ],
+             Link::getLinkCategories($courseId, $sessionId)
+         );
+@@ -913,7 +913,7 @@ class Rest extends WebService
+                             'title' => Security::remove_XSS($link['title']),
+                             'description' => Security::remove_XSS($link['description']),
+                             'visibility' => (int) $link['visibility'],
+-                            'url' => $webCodePath."link/link_goto.php?$cidReq&link_id=".$link['id']
++                            'url' => $webCodePath."link/link_goto.php?$cidReq&link_id=".$link['id'],
+                         ];
+                     },
+                     $links

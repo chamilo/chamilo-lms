@@ -206,6 +206,7 @@ class ExerciseLib
                     break;
                 case UPLOAD_ANSWER:
                     global $exe_id;
+                    $answer = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
                     $path = '/upload_answer/'.$exe_id.'/'.$questionId.'/';
                     $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=upload_answer&curdirpath='.$path;
                     $multipleForm = new FormValidator(
@@ -231,6 +232,24 @@ class ExerciseLib
                             });
                         });
                     </script>';
+                    // Set default values
+                    if (!empty($answer)) {
+                        $userWebpath = UserManager::getUserPathById(api_get_user_id(), 'web').'my_files'.'/upload_answer/'.$exe_id.'/'.$questionId.'/';
+                        $filesNames = explode('|', $answer);
+                        $icon = Display::return_icon('file_txt.gif');
+                        $default = '';
+                        foreach ($filesNames as $fileName) {
+                            $fileName = Security::remove_XSS($fileName);
+                            $default .= '<a target="_blank" class="panel-image" href="'.$userWebpath.$fileName.'"><div class="row"><div class="col-sm-4">'.$icon.'</div><div class="col-sm-5 file_name">'.$fileName.'</div><input type="hidden" name="uploadChoice['.$questionId.'][]" value="'.$fileName.'"></div></a>';
+                        }
+                        $s .= '<script>
+                            $(function() {
+                                if ($("#files").length > 0) {
+                                  $("#files").html("'.addslashes($default).'");
+                                }
+                            });
+                        </script>';
+                    }
                     $s .= $multipleForm->returnForm();
                     break;
                 case ORAL_EXPRESSION:
@@ -973,23 +992,26 @@ class ExerciseLib
                             $exe_id = (int) $exe_id;
                             $trackAttempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
                             $sql = "SELECT answer FROM $trackAttempts
-                                    WHERE exe_id = $exe_id AND question_id= $questionId";
+                                    WHERE exe_id = $exe_id AND question_id = $questionId";
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
 
                             $answer = null;
                             if (isset($rowLastAttempt['answer'])) {
                                 $answer = $rowLastAttempt['answer'];
-                            }
-
-                            if (empty($answer)) {
-                                $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
-                                    1,
-                                    $nbrAnswers
-                                );
-                                $answer = $objAnswerTmp->selectAnswer(
-                                    $_SESSION['calculatedAnswerId'][$questionId]
-                                );
+                                $answerParts = explode(':::', $answer);
+                                if (isset($answerParts[1])) {
+                                    $answer = $answerParts[0];
+                                    $calculatedAnswerList[$questionId] = $answerParts[1];
+                                    Session::write('calculatedAnswerId', $calculatedAnswerList);
+                                }
+                            } else {
+                                $calculatedAnswerList = Session::read('calculatedAnswerId');
+                                if (!isset($calculatedAnswerList[$questionId])) {
+                                    $calculatedAnswerList[$questionId] = mt_rand(1, $nbrAnswers);
+                                    Session::write('calculatedAnswerId', $calculatedAnswerList);
+                                }
+                                $answer = $objAnswerTmp->selectAnswer($calculatedAnswerList[$questionId]);
                             }
                         }
 
@@ -1063,7 +1085,7 @@ class ExerciseLib
                             $answer = '';
                             $i = 0;
                             foreach ($studentAnswerList as $studentItem) {
-                                // Remove surronding brackets
+                                // Remove surrounding brackets
                                 $studentResponse = api_substr(
                                     $studentItem,
                                     1,

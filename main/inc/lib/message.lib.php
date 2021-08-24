@@ -3157,4 +3157,40 @@ class MessageManager
 
         return (int) $row['count'];
     }
+
+    public static function getMessagesCountForUser(int $userId): array
+    {
+        // Setting notifications
+        $countUnreadMessage = 0;
+
+        if (api_get_setting('allow_message_tool') === 'true') {
+            // get count unread message and total invitations
+            $countUnreadMessage = MessageManager::getCountNewMessagesFromDB($userId);
+        }
+
+        if (api_get_setting('allow_social_tool') === 'true') {
+            $numberOfNewMessagesOfFriend = SocialManager::get_message_number_invitation_by_user_id(
+                $userId
+            );
+            $usergroup = new UserGroup();
+            $groupPendingInvitations = $usergroup->get_groups_by_user(
+                $userId,
+                GROUP_USER_PERMISSION_PENDING_INVITATION
+            );
+
+            if (!empty($groupPendingInvitations)) {
+                $groupPendingInvitations = count($groupPendingInvitations);
+            } else {
+                $groupPendingInvitations = 0;
+            }
+
+            return [
+                'ms_friends' => $numberOfNewMessagesOfFriend,
+                'ms_groups' => $groupPendingInvitations,
+                'ms_inbox' => $countUnreadMessage,
+            ];
+        }
+
+        return [];
+    }
 }

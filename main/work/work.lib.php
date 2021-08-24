@@ -1603,6 +1603,65 @@ function getWorkListTeacherQuery(
 }
 
 /**
+ * @return int|array
+ */
+function getWorkListTeacherData(
+    $courseId,
+    $sessionId,
+    $groupId,
+    $start,
+    $limit,
+    $column,
+    $direction,
+    $whereCondition,
+    $getCount = false
+) {
+    $result = getWorkListTeacherQuery(
+        $courseId,
+        $sessionId,
+        $groupId,
+        $start,
+        $limit,
+        $column,
+        $direction,
+        $whereCondition,
+        $getCount
+    );
+
+    if ($getCount) {
+        $row = Database::fetch_array($result);
+
+        return (int) $row['count'];
+    }
+
+    $works = [];
+
+    while ($work = Database::fetch_array($result, 'ASSOC')) {
+        $workId = $work['id'];
+        $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
+
+        $countUniqueAttempts = getUniqueStudentAttemptsTotal($workId, $groupId, $courseId, $sessionId);
+        $totalUsers = getStudentSubscribedToWork($workId, $courseId, $groupId, $sessionId, true);
+
+        $work['count_unique_attempts'] = $countUniqueAttempts;
+        $work['amount'] = Display::label(
+            "$countUniqueAttempts/$totalUsers",
+            'success'
+        );
+
+        if (empty($work['title'])) {
+            $work['title'] = basename($work['url']);
+        }
+
+        $work['sent_date'] = api_get_local_time($work['sent_date']);
+
+        $works[] = $work;
+    }
+
+    return $works;
+}
+
+/**
  * @param int    $start
  * @param int    $limit
  * @param string $column
@@ -1642,14 +1701,13 @@ function getWorkListTeacher(
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
     $start = (int) $start;
     $limit = (int) $limit;
-    $works = [];
 
     // Get list from database
     if (!$is_allowed_to_edit) {
         return $getCount ? 0 : [];
     }
 
-    $result = getWorkListTeacherQuery(
+    $result = getWorkListTeacherData(
         $course_id,
         $session_id,
         $group_id,
@@ -1661,113 +1719,88 @@ function getWorkListTeacher(
         $getCount
     );
 
-    if ($getCount) {
-        $row = Database::fetch_array($result);
-
-        return (int) $row['count'];
+    if (is_int($result)) {
+        return $result;
     }
 
     $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
     $blockEdition = api_get_configuration_value('block_student_publication_edition');
-    while ($work = Database::fetch_array($result, 'ASSOC')) {
-        $workId = $work['id'];
-        $work['type'] = Display::return_icon('work.png');
-        $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
 
-        $countUniqueAttempts = getUniqueStudentAttemptsTotal(
-            $workId,
-            $group_id,
-            $course_id,
-            $session_id
-        );
+    return array_map(
+        function (array $work) use ($courseInfo, $session_id, $blockEdition, $url) {
+            $workId = $work['id'];
+            $work['type'] = Display::return_icon('work.png');
 
-        $totalUsers = getStudentSubscribedToWork(
-            $workId,
-            $course_id,
-            $group_id,
-            $session_id,
-            true
-        );
+            $visibility = api_get_item_visibility($courseInfo, 'work', $workId, $session_id);
 
-        $work['amount'] = Display::label(
-            $countUniqueAttempts.'/'.
-            $totalUsers,
-            'success'
-        );
+            if ($visibility == 1) {
+                $icon = 'visible.png';
+                $text = get_lang('Visible');
+                $action = 'invisible';
+                $class = '';
+            } else {
+                $icon = 'invisible.png';
+                $text = get_lang('Invisible');
+                $action = 'visible';
+                $class = 'muted';
+            }
 
-        $visibility = api_get_item_visibility($courseInfo, 'work', $workId, $session_id);
-
-        if ($visibility == 1) {
-            $icon = 'visible.png';
-            $text = get_lang('Visible');
-            $action = 'invisible';
-            $class = '';
-        } else {
-            $icon = 'invisible.png';
-            $text = get_lang('Invisible');
-            $action = 'visible';
-            $class = 'muted';
-        }
-
-        $visibilityLink = Display::url(
-            Display::return_icon($icon, $text),
-            api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action='.$action.'&'.api_get_cidreq()
-        );
-
-        if (empty($work['title'])) {
-            $work['title'] = basename($work['url']);
-        }
-        $work['title'] = Display::url($work['title'], $url.'&id='.$workId, ['class' => $class]);
-        $work['title'] .= ' '.Display::label(get_count_work($work['id']), 'success');
-        $work['sent_date'] = api_get_local_time($work['sent_date']);
-
-        if ($blockEdition && !api_is_platform_admin()) {
-            $editLink = '';
-        } else {
-            $editLink = Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
-                api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
+            $visibilityLink = Display::url(
+                Display::return_icon($icon, $text),
+                api_get_path(WEB_CODE_PATH)."work/work.php?id=$workId&action=$action&".api_get_cidreq()
             );
-        }
 
-        $correctionLink = Display::url(
-            Display::return_icon('upload_package.png', get_lang('UploadCorrections')),
-            api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId
-        ).PHP_EOL;
+            $work['title'] = Display::url($work['title'], $url.'&id='.$workId, ['class' => $class]);
+            $work['title'] .= ' '.Display::label(get_count_work($work['id']), 'success');
 
-        if ($countUniqueAttempts > 0) {
-            $downloadLink = Display::url(
-                Display::return_icon('save_pack.png', get_lang('Save')),
-                api_get_path(WEB_CODE_PATH).'work/downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq()
+            if ($blockEdition && !api_is_platform_admin()) {
+                $editLink = '';
+            } else {
+                $editLink = Display::url(
+                    Display::return_icon('edit.png', get_lang('Edit')),
+                    api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
+                );
+            }
+
+            $correctionLink = Display::url(
+                Display::return_icon('upload_package.png', get_lang('UploadCorrections')),
+                api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId
             );
-        } else {
-            $downloadLink = Display::url(
-                Display::return_icon('save_pack_na.png', get_lang('Save')),
-                '#'
-            );
-        }
-        // Remove Delete Work Button from action List
-        // Because removeXSS "removes" the onClick JS Event to do the action (See model.ajax.php - Line 1639)
-        // But still can use the another jqgrid button to remove works (trash icon)
-        //
-        // $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
-        // $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \'' . $deleteUrl . '\' ) " >' .
-        //     Display::return_icon(
-        //         'delete.png',
-        //         get_lang('Delete'),
-        //         [],
-        //         ICON_SIZE_SMALL
-        //     ) . '</a>';
 
-        if (!api_is_allowed_to_edit()) {
-            // $deleteLink = null;
-            $editLink = null;
-        }
-        $work['actions'] = $visibilityLink.$correctionLink.$downloadLink.$editLink;
-        $works[] = $work;
-    }
+            if ($work['count_unique_attempts'] > 0) {
+                $downloadLink = Display::url(
+                    Display::return_icon('save_pack.png', get_lang('Save')),
+                    api_get_path(WEB_CODE_PATH)."work/downloadfolder.inc.php?id=$workId&".api_get_cidreq()
+                );
+            } else {
+                $downloadLink = Display::url(
+                    Display::return_icon('save_pack_na.png', get_lang('Save')),
+                    '#'
+                );
+            }
+            // Remove Delete Work Button from action List
+            // Because removeXSS "removes" the onClick JS Event to do the action (See model.ajax.php - Line 1639)
+            // But still can use the another jqgrid button to remove works (trash icon)
+            //
+            // $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
+            // $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \'' . $deleteUrl . '\' ) " >' .
+            //     Display::return_icon(
+            //         'delete.png',
+            //         get_lang('Delete'),
+            //         [],
+            //         ICON_SIZE_SMALL
+            //     ) . '</a>';
 
-    return $works;
+            if (!api_is_allowed_to_edit()) {
+                // $deleteLink = null;
+                $editLink = null;
+            }
+            $work['actions'] = implode(PHP_EOL, [$visibilityLink, $correctionLink, $downloadLink, $editLink]);
+
+            return $work;
+        },
+        $result
+    );
 }
 
 /**

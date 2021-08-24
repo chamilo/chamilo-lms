@@ -627,7 +627,7 @@ class CourseHome
         ];
 
         if (isset($_FILES['icon']['size']) && 0 !== $_FILES['icon']['size']) {
-            $dir = self::getCustomSysIconPath();
+            /*$dir = self::getCustomSysIconPath();
 
             // Resize image if it is larger than 64px
             $temp = new Image($_FILES['icon']['tmp_name']);
@@ -659,7 +659,7 @@ class CourseHome
                 $temp->send_image($bwPath);
                 $iconName = $_FILES['icon']['name'];
                 $params['custom_icon'] = $iconName;
-            }
+            }*/
         }
 
         Database::update(

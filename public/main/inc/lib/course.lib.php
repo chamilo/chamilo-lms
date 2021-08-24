@@ -961,9 +961,6 @@ class CourseManager
         // Check in advance whether the user has already been registered on the platform.
         $sql = "SELECT status FROM ".$userTable." WHERE user_id = $userId ";
         if (0 == Database::num_rows(Database::query($sql))) {
-            if ($debug) {
-                error_log('The user has not been registered to the platform');
-            }
 
             return false; // The user has not been registered to the platform.
         }
@@ -975,10 +972,6 @@ class CourseManager
                     visible = $visible AND
                     c_id = $courseId";
         if (Database::num_rows(Database::query($sql)) > 0) {
-            if ($debug) {
-                error_log('The user has been already registered to the course visibility in the catalogue');
-            }
-
             return true; // The visibility of the user to the course in the catalogue does already exist.
         }
 

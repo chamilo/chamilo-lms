@@ -122,10 +122,6 @@ class Notification extends Model
                     $this->adminName,
                     $this->adminEmail
                 );
-                if ($this->debug) {
-                    error_log('Sending message to: '.$item_to_send['dest_mail']);
-                }
-
                 // Updating
                 $item_to_send['sent_at'] = api_get_utc_datetime();
                 $this->update($item_to_send);

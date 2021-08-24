@@ -969,8 +969,6 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
     }
 
-    error_log((string )$is_visible);
-
     if (!$is_visible) {
         api_not_allowed($print_headers);
 

@@ -64,6 +64,11 @@ class CourseRelUser
 {
     use UserTrait;
 
+    public const TEACHER = 1;
+    //public const SESSION_ADMIN = 3;
+    //public const DRH = 4;
+    public const STUDENT = 5;
+
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -135,7 +140,7 @@ class CourseRelUser
         $this->userCourseCat = 0;
         $this->sort = 0;
         $this->tutor = false;
-        $this->status = User::STUDENT;
+        $this->status = self::STUDENT;
         $this->relationType = 0;
     }
 

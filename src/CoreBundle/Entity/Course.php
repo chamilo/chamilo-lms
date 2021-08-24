@@ -503,7 +503,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function getTeachers()
     {
         $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq('status', User::COURSE_MANAGER));
+        $criteria->where(Criteria::expr()->eq('status', CourseRelUser::TEACHER));
 
         return $this->users->matching($criteria);
     }
@@ -514,7 +514,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function getStudents()
     {
         $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq('status', User::STUDENT));
+        $criteria->where(Criteria::expr()->eq('status', CourseRelUser::STUDENT));
 
         return $this->users->matching($criteria);
     }
@@ -591,14 +591,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function addTeacher(User $user): self
     {
-        $this->addUser($user, 0, 'Trainer', User::COURSE_MANAGER);
+        $this->addUser($user, 0, 'Trainer', CourseRelUser::TEACHER);
 
         return $this;
     }
 
     public function addStudent(User $user): self
     {
-        $this->addUser($user, 0, '', User::STUDENT);
+        $this->addUser($user, 0, '', CourseRelUser::STUDENT);
 
         return $this;
     }

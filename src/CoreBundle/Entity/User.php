@@ -93,12 +93,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public const USERNAME_MAX_LENGTH = 100;
     public const ROLE_DEFAULT = 'ROLE_USER';
 
-    public const COURSE_MANAGER = 1;
+    public const ANONYMOUS = 6;
+
+    /*public const COURSE_MANAGER = 1;
     public const TEACHER = 1;
     public const SESSION_ADMIN = 3;
     public const DRH = 4;
     public const STUDENT = 5;
-    public const ANONYMOUS = 6;
+    public const ANONYMOUS = 6;*/
 
     /**
      * @ORM\OneToOne(
@@ -805,7 +807,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->timezone = 'Europe\Paris';
         $this->authSource = 'platform';
 
-        $this->status = self::STUDENT;
+        $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));
         $this->active = true;
         $this->enabled = true;
@@ -1967,34 +1969,32 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getIconStatus(): string
     {
-        $status = $this->getStatus();
         $hasCertificates = $this->getGradeBookCertificates()->count() > 0;
         $urlImg = '/img/';
-        $iconStatus = '';
-        switch ($status) {
-            case self::STUDENT:
-                if ($hasCertificates) {
-                    $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
-                } else {
-                    $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
-                }
 
-                break;
-            case self::COURSE_MANAGER:
-                if ($this->isAdmin()) {
-                    $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
-                } else {
-                    $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
-                }
+        if ($this->isStudent()) {
+            $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
+            if ($hasCertificates) {
+                $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
+            }
 
-                break;
-            case STUDENT_BOSS:
-                $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
-
-                break;
+            return $iconStatus;
         }
 
-        return $iconStatus;
+        if ($this->isTeacher()) {
+            $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+            if ($this->isAdmin()) {
+                $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
+            }
+
+            return $iconStatus;
+        }
+
+        if ($this->isStudentBoss()) {
+            return $urlImg.'icons/svg/identifier_teacher.svg';
+        }
+
+        return '';
     }
 
     public function getStatus(): int
@@ -2027,6 +2027,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->gradeBookCertificates = $gradeBookCertificates;
 
         return $this;
+    }
+
+    public function isStudent(): bool
+    {
+        return $this->hasRole('ROLE_STUDENT');
+    }
+
+    public function isStudentBoss(): bool
+    {
+        return $this->hasRole('ROLE_STUDENT_BOSS');
+    }
+
+    public function isTeacher(): bool
+    {
+        return $this->hasRole('ROLE_TEACHER');
     }
 
     public function isAdmin(): bool

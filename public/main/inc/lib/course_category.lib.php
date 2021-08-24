@@ -425,8 +425,6 @@ class CourseCategory
                 $exportUrl = $mainUrl.'&id='.$categoryId.'&action=export';
 
                 $actions = [];
-                $criteria = Criteria::create();
-                $criteria->where(Criteria::expr()->eq('status', User::STUDENT));
 
                 $inUrl = $category->getUrls()->filter(
                     function ($entry) use ($urlId) {

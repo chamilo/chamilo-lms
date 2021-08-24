@@ -108,15 +108,24 @@
     <div class="version" aria-label="1.11.16">
         <a id="1.11.16"></a>
 
-        <h1>Chamilo 1.11.16 - Calci, ??/08/2021</h1>
+        <h1>Chamilo 1.11.16 - Calci, 25/08/2021</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.16 is a minor security and bug fix release on top of 1.11.14.</p>
         <h3>Release name</h3>
         <p><a href="https://fr.wikipedia.org/wiki/Calci">Calci</a> is a small, quiet and rustical municipality in the neighborhood of Pisa, Tuscany, Italy. A nice place to rest before visiting the city of Pisa, Calci, just as Chamilo 1.11.16 is a nice and quiet rest before 2.0 (with a few surprises), just looking at the building of one of human's great construction projects.
         </p>
         <h3>Security fixes</h3>
-        Many vulnerabilities (more than in any previous version) have been reported to us (see <a href="https://support.chamilo.org/projects/1/wiki/Security_issues">our security page</a>) and swiflty and safely fixed. Thanks to all white hat hackers for helping us out (see their nicknames on the page).
+        Many vulnerabilities (more than in any previous version) have been reported to us (see <a href="https://support.chamilo.org/projects/1/wiki/Security_issues">our security page</a>) and swiflty and safely fixed. Thanks to all white hat hackers for helping us out (see their nicknames on the page).<br />
+        We actively encourage all Chamilo administrators to update their system to this version as soon as possible.
         <ul aria-live="off">
+            <li>[2021-08-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/4f13a887aeca07bc2adae16552c1fca1d0bb560c">4f13a887</a>) Filter int user_id in is_my_shared_folder()</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/2c8c0ad950c57958fddaccf3116ada9a74c57eff">2c8c0ad9</a>) Documents: Disable create_paint.php save_pixlr.php (Deprecated)</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/03a80ae798644b942ecd15f603eb4b809e10553c">03a80ae7</a>) Add Security::remove_Xss</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/d2be86122e5bc9f86c7b05a350c49d27989bf099">d2be8612</a>) User edit: Only admin can change status to admin</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/d501af7f9db4d7185f4e44416679f7bda0352c66">d501af7f</a>) Fix queries: Add Database::escape_string + int casting</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c36bbc83312bb43197a02d0232d5dbba12ca529">4c36bbc8</a>) Add AcceptPathInfo Off in order to disable access to myfile.php/something</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/bb3e4b149dbc627e7055f739ceb9bcc86c28c0f3">bb3e4b14</a>) Settings: Clean value from upload_extensions_replace_by setting</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/e757c63ac8d154ada4bd3c1ebc9628dc1105537f">e757c63a</a>) Settings: Add $form->protect + redirect to the same page if token is not valid</li>
             <li>[2021-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/4ab26ce392ca0fa9403c68dcad3b5d8f368baf5a">4ab26ce3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3905">GH#3905</a>) Security: Set user manager AJAX code to not display user info to anonymous users</li>
             <li>[2021-08-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/c75b06adb816565e63f0738c028bd870c49b4de9">c75b06ad</a>) Social: Security token for chat and social wall</li>
             <li>[2021-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/140f58709926a5c5fea5e49f35be1acba433821d">140f5870</a>) Forum: add remove_xss</li>
@@ -222,6 +231,8 @@
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
         <ul aria-live="off">
+            <li>[2021-08-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/31dfbabd2d4238b1e7e6d9353d7b2af5969db1e5">31dfbabd</a> - <a href="https://task.beeznest.com/issues/18599">BT#18599</a>) Plugin: OnlyOffice: Add OnlyOffice plugin v1.1.1 (9da9fba3a2) from the OnlyOffice team</li>
+            <li>[2021-08-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/8832ddb09bddcb7e7a0c2f9b58ee77faa9ab8920">8832ddb0</a> - <a href="https://task.beeznest.com/issues/18258">BT#18258</a>) Exercise: Add "file upload" question type</li>
             <li>[2021-08-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/4d8435ab1833584b92a8730235c01a3ba6febfb2">4d8435ab</a>) Plugin: BuyCourses: Add discount coupons feature</li>
             <li>[2021-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/0b4406927a1fa114a946eb0afd0c15042e9e72be">0b440692</a>) Course settings: Use HTML editor instead of textarea in the course legal agreement.</li>
             <li>[2021-07-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/7f57b8fa848b87d5f5ab62b3bc6f3271896a0511">7f57b8fa</a>) Announcement: Add scheduled announcements for base courses</li>
@@ -304,6 +315,19 @@
         </ul>
         <h3>Improvements (minor features) and debug</h3>
         <ul aria-live="off">
+            <li>[2021-08-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/31fff3c89d1a527f0fea4ce0e2f679c58e32e2fa">31fff3c8</a> - <a href="https://task.beeznest.com/issues/18258">BT#18258</a>) Exercise: Add default values to upload image</li>
+            <li>[2021-08-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/e47ab476438baf3aa279c29812735b6b6a48b9f5">e47ab476</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3903">GH#3903</a>) Fix calculated question (answer with encoded values @@) + Fix change question after a F5</li>
+            <li>[2021-08-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/5bbfaa0ceb0e01544f797d29bad1c112eb2c6eba">5bbfaa0c</a>) Replace HTML Form with formvalidator</li>
+            <li>[2021-08-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/ab4bc19c10bdb627351208213eae045bd2e8afaf">ab4bc19c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3854">GH#3854</a>) Course: Fix unsubscribe user button doesn't work in home and sort courses pages</li>
+            <li>[2021-08-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/04d2f60b5149c96a8efbce4c2bb78f3bcd5315ca">04d2f60b</a>) Learnpath: SCORM: Prevent re-init suspenddata in get_local_suspend_data() on logout</li>
+            <li>[2021-08-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/fba50fe120c4b08394dd37c9e4ec6293bf8407a6">fba50fe1</a> - <a href="https://task.beeznest.com/issues/18997">BT#18997</a>) WYSIWYG: Improve upload when image file already exists, then rename new file</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ed552cd634d11770958fdaa73b71ec8aa701b2c">5ed552cd</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3946">GH#3946</a>) Admin: Questions bank: Add PDF export</li>
+            <li>[2021-08-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/315df6c5bfaf09b7c392c50d4e1eb3cb7c257e5d">315df6c5</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3945">GH#3945</a>) Admin: Questions bank: Fix all-courses filter</li>
+            <li>[2021-08-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/fa2a25373d98a2a9553a30fe174182b222d197f9">fa2a2537</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3945">GH#3945</a>) Admin: Questions bank: Add filters on creation course, level and question type</li>
+            <li>[2021-08-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/23787842c2013db318e82d6987469fc8b17df0f8">23787842</a> - <a href="https://task.beeznest.com/issues/18899">BT#18899</a>) Extra field: Fix search options</li>
+            <li>[2021-08-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/b5fb861cf2afd304df6af89b58c60bd515c9800e">b5fb861c</a> - <a href="https://task.beeznest.com/issues/18452">BT#18452</a>) Internal: Exercise: Reinstate getIid() and setIid() in CQuizQuestion entity as Twig uses getIid() to access the iid property (2/2)</li>
+            <li>[2021-08-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/8a6eabd171995b419af1b2b5e058186ce25947d0">8a6eabd1</a> - <a href="https://task.beeznest.com/issues/18452">BT#18452</a>) Internal: Exercise: Reinstate getIid() and setIid() in CQuizQuestion entity as Twig uses getIid() to access the iid property (1/2)</li>
+            <li>[2021-08-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/2f2ef2d711231706a065bdbefdbb8ff506aa0573">2f2ef2d7</a> - <a href="https://task.beeznest.com/issues/18452">BT#18452</a>) Gradebook: Fix use of quiz IID instead of ID in links to quiz</li>
             <li>[2021-08-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/18bd2a15a4d03254eafd174e7a103196ef8baf67">18bd2a15</a> - <a href="https://task.beeznest.com/issues/18720">BT#18720</a>) Career: Fix graph iframe</li>
             <li>[2021-08-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/4e43809b3708ff560f566e90bde8af5b74841be8">4e43809b</a> - <a href="https://task.beeznest.com/issues/18956">BT#18956</a>) Announcement: Improve queries and documentation in course_announcement.php</li>
             <li>[2021-08-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/6f1a04e43a5db25b0b74438ddd47404344713b3a">6f1a04e4</a>) Internal: Add TODO note about get_session_by_course() to restrict to non-expired sessions</li>
@@ -978,6 +1002,7 @@
             </ul>
         <h3>Stylesheets and theming</h3>
         <ul aria-live="off">
+            <li>[2021-08-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/b5fb53e9fca5c47cd5f6418b8947d9ab1c49a91d">b5fb53e9</a> - <a href="https://task.beeznest.com/issues/18258">BT#18258</a>) Exercise: Add icons for file upload question type</li>
             <li>[2021-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/c165bc5b588dff80e3285a51a78c95cd07b56da6">c165bc5b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3711">GH#3711</a>) Display: Fix course theme not picked up</li>
             <li>[2021-06-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/e8b9a79e58733e3bfa9ed002a6476c5243f87b0f">e8b9a79e</a> - <a href="https://task.beeznest.com/issues/18919">BT#18919</a>) Style: Fix responsive iframe for embedded YouTube videos</li>
             <li>[2021-06-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/3ee3598c6d0708ca38b720754fab206e45f85473">3ee3598c</a> - <a href="https://task.beeznest.com/issues/18759">BT#18759</a>) Display: Display login_top region in Not-Allowed-Login form</li>
@@ -992,15 +1017,25 @@
         </ul>
         <h3>Web services</h3>
         <ul aria-live="off">
-            <li>[2021-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/0b5947a48fabaaf425323a94f0f2d3b0c26ff569">0b5947a4</a> - <a href="https://task.beeznest.com/issues/18924">BT#18924</a>) Webservices: REST: Move function to Rest class + throw exceptions</li>
-            <li>[2021-06-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/25df2652fac77364826e90e94cbcf81ab965ebc0">25df2652</a>) Webservices: REST: Add update_session web service to update a session</li>
-            <li>[2021-05-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/59cdc5f0d96648789566922b0525920f40aa0586">59cdc5f0</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservices: REST: Add language in save_course</li>
-            <li>[2021-05-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/dfa2405455ddeec01ef9139898c26b75d01bf79d">dfa24054</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservices: REST: Allow status change</li>
-            <li>[2021-05-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/bb42741e35ab8e525965fc64cbebc6e434ed4d51">bb42741e</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservices: Fix GET_COURSES_FROM_EXTRA_FIELD</li>
-            <li>[2021-05-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/a203caa83572e76e7b44b34bd864f2c2eebc594a">a203caa8</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservices: Add get_users_subscribed_to_course webservice + Fix save_course with extra fields</li>
-            <li>[2021-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c6f9cdbb9f366e8c3c5fc6e201a41b3aabee4b5">4c6f9cdb</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservices: REST: Updates save_course: Add 'remove_campus_id_from_wanted_code save_user' and 'auth_source'</li>
+            <li>[2021-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/e37ea9b79f62c04ea4de4b6b64011e2d778ba156">e37ea9b7</a>) Webservice: Fix call to api_get_course_info</li>
+            <li>[2021-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/a933b77e3fde7d8d86de27535b34c56a4250c513">a933b77e</a>) Webservice: set notify in forum thread</li>
+            <li>[2021-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/1657fc6fec5e512fa7ba7ca0b52e93717162ac3d">1657fc6f</a>) Webservice: sort constants</li>
+            <li>[2021-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/ecfb4b518173b5249958403309bda5618344b949">ecfb4b51</a>) Webservice: get course links</li>
+            <li>[2021-08-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/a18d33ca5356875d139b82e1ff23611605fac4ef">a18d33ca</a>) Webservice: Add messages count</li>
+            <li>[2021-08-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/bbef37c04aa32153da118ab6c043d088f3d010ee">bbef37c0</a>) Webservice: allow subscribe to course with password</li>
+            <li>[2021-08-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/47505b96dcafb16d053efeaa54a11f7e0720f60a">47505b96</a> - <a href="https://task.beeznest.com/issues/19087">BT#19087</a>) Webservice: add delete_user Rest webservice</li>
+            <li>[2021-08-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/3dea2a6e0c8c7353bf02afab52da3234e1604f77">3dea2a6e</a>) Webservice: Add logout</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/480fa6de5a0444308652d5fd5705ec8e8376683e">480fa6de</a>) Webservice: Fix set c_id in $_SESSION</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/2cce6bfbd14870e8390751d13e65fe7fe9aa6779">2cce6bfb</a>) Webservice: Add conditional login + legal conditions</li>
+            <li>[2021-08-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/2fe2fce7b87cc66290186b53ed9ef83b3767e428">2fe2fce7</a>) Webservice: Add access logs to course and tools</li>            <li>[2021-06-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/0b5947a48fabaaf425323a94f0f2d3b0c26ff569">0b5947a4</a> - <a href="https://task.beeznest.com/issues/18924">BT#18924</a>) Webservices: REST: Move function to Rest class + throw exceptions</li>
+            <li>[2021-06-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/25df2652fac77364826e90e94cbcf81ab965ebc0">25df2652</a>) Webservice: REST: Add update_session web service to update a session</li>
+            <li>[2021-05-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/59cdc5f0d96648789566922b0525920f40aa0586">59cdc5f0</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservice: REST: Add language in save_course</li>
+            <li>[2021-05-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/dfa2405455ddeec01ef9139898c26b75d01bf79d">dfa24054</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservice: REST: Allow status change</li>
+            <li>[2021-05-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/bb42741e35ab8e525965fc64cbebc6e434ed4d51">bb42741e</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservice: Fix GET_COURSES_FROM_EXTRA_FIELD</li>
+            <li>[2021-05-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/a203caa83572e76e7b44b34bd864f2c2eebc594a">a203caa8</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservice: Add get_users_subscribed_to_course webservice + Fix save_course with extra fields</li>
+            <li>[2021-05-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c6f9cdbb9f366e8c3c5fc6e201a41b3aabee4b5">4c6f9cdb</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservice: REST: Updates save_course: Add 'remove_campus_id_from_wanted_code save_user' and 'auth_source'</li>
             <li>[2021-04-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/dac68b2bd4ba1ef0d8be7b84d6d95562544f7f95">dac68b2b</a> - <a href="https://task.beeznest.com/issues/18673">BT#18673</a>) Webservice: Add new webservices UNSUBSCRIBE_USER_TO_COURSE, GET_COURSES_FROM_EXTRA_FIELD, DELETE_COURSE</li>
-            <li>[2021-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/91455a233fcc1befe4ed71a78e89ecf3d8c598b0">91455a23</a> - <a href="https://task.beeznest.com/issues/18653">BT#18653</a>) Session: Add audit event when deleting/adding a user</li>
+            <li>[2021-04-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/91455a233fcc1befe4ed71a78e89ecf3d8c598b0">91455a23</a> - <a href="https://task.beeznest.com/issues/18653">BT#18653</a>) Webservice: Session: Add audit event when deleting/adding a user</li>
         </ul>
         <h3>Removals</h3>
         <ul aria-live="off">

@@ -56,6 +56,7 @@ class LtiProviderPlugin extends Plugin
      * Get a selectbox with quizzes in courses , used for a tool provider.
      *
      * @param null $issuer
+     *
      * @return string
      */
     public function getQuizzesSelect($issuer = null)
@@ -79,7 +80,7 @@ class LtiProviderPlugin extends Plugin
             );
             foreach ($exerciseList as $key => $exercise) {
                 $selectValue = "{$course['code']}@@quiz-{$exercise['iid']}";
-                $htmlcontent .= '<option value="'.$selectValue.'" '.($toolProvider == $selectValue?' selected="selected"':'').'>'.Security::remove_XSS($exercise['title']).'</option>';
+                $htmlcontent .= '<option value="'.$selectValue.'" '.($toolProvider == $selectValue ? ' selected="selected"' : '').'>'.Security::remove_XSS($exercise['title']).'</option>';
             }
             $htmlcontent .= '</optgroup>';
         }
@@ -87,6 +88,7 @@ class LtiProviderPlugin extends Plugin
         $htmlcontent .= '   </div>
                     <div class="col-sm-2"></div>
                     </div>';
+
         return $htmlcontent;
     }
 
@@ -130,6 +132,7 @@ class LtiProviderPlugin extends Plugin
         list($courseCode, $tool) = explode('@@', $toolProvider);
         list($toolName, $toolId) = explode('-', $tool);
         $vars = ['courseCode' => $courseCode, 'toolName' => $toolName, 'toolId' => $toolId];
+
         return $vars;
     }
 

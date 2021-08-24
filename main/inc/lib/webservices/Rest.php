@@ -52,7 +52,7 @@ class Rest extends WebService
     const GET_COURSE_LEARNPATH = 'course_learnpath';
     const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     const GET_COURSE_LINKS = 'course_links';
-    const GET_COURSE_WORKS= 'course_works';
+    const GET_COURSE_WORKS = 'course_works';
 
     const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
 
@@ -2549,7 +2549,7 @@ class Rest extends WebService
         );
 
         return array_map(
-            function (array $work) use ($isAllowedToEdit, $courseInfo, $courseId, $sessionId) {
+            function (array $work) use ($isAllowedToEdit, $courseInfo) {
                 $work['type'] = 'work.png';
 
                 if (!$isAllowedToEdit) {
@@ -2601,7 +2601,7 @@ class Rest extends WebService
         switch ($status) {
             case 1:
                 return makeVisible($workId, $courseInfo);
-            case 0;
+            case 0:
                 return makeInvisible($workId, $courseInfo);
             default:
                 throw new Exception(get_lang('ActionNotAllowed'));

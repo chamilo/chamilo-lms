@@ -15,8 +15,6 @@ abstract class CcConverters
     /**
      * ctor.
      *
-     * @param CcIItem $item
-     * @param CcIManifest $manifest
      * @param string $rootpath
      * @param string $path
      *
@@ -44,7 +42,7 @@ abstract class CcConverters
     /**
      * performs conversion.
      *
-     * @param string $outdir - root directory of common cartridge
+     * @param string $outdir    - root directory of common cartridge
      * @param object $objCourse
      *
      * @return bool

@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +13,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use ChamiloSession as Session;
 
 /**
- * Status of the document
+ * Status of the document.
  */
 const TrackerStatus_Editing = 1;
 const TrackerStatus_MustSave = 2;
@@ -35,15 +32,15 @@ $plugin = OnlyofficePlugin::create();
 
 if (isset($_GET["hash"]) && !empty($_GET["hash"])) {
     $callbackResponseArray = [];
-    @header( 'Content-Type: application/json; charset==utf-8');
-    @header( 'X-Robots-Tag: noindex' );
-    @header( 'X-Content-Type-Options: nosniff' );
+    @header('Content-Type: application/json; charset==utf-8');
+    @header('X-Robots-Tag: noindex');
+    @header('X-Content-Type-Options: nosniff');
 
-    list ($hashData, $error) = Crypt::ReadHash($_GET["hash"]);
+    list($hashData, $error) = Crypt::ReadHash($_GET["hash"]);
     if ($hashData === null) {
         $callbackResponseArray["status"] = "error";
         $callbackResponseArray["error"] = $error;
-        die(json_encode($callbackResponseArray));
+        exit(json_encode($callbackResponseArray));
     }
 
     $type = $hashData->type;
@@ -60,7 +57,7 @@ if (isset($_GET["hash"]) && !empty($_GET["hash"])) {
         $userInfo = api_get_user_info($userId);
     } else {
         $result["error"] = "User not found";
-        die (json_encode($result));
+        exit(json_encode($result));
     }
 
     if (api_is_anonymous()) {
@@ -76,22 +73,22 @@ if (isset($_GET["hash"]) && !empty($_GET["hash"])) {
         $userId = api_get_user_id();
     }
 
-    switch($type) {
+    switch ($type) {
         case "track":
             $callbackResponseArray = track();
-            die (json_encode($callbackResponseArray));
+            exit(json_encode($callbackResponseArray));
         case "download":
             $callbackResponseArray = download();
-            die (json_encode($callbackResponseArray));
+            exit(json_encode($callbackResponseArray));
         default:
             $callbackResponseArray["status"] = "error";
             $callbackResponseArray["error"] = "404 Method not found";
-            die(json_encode($callbackResponseArray));
+            exit(json_encode($callbackResponseArray));
     }
 }
 
 /**
- * Handle request from the document server with the document status information
+ * Handle request from the document server with the document status information.
  */
 function track(): array
 {
@@ -107,6 +104,7 @@ function track(): array
 
     if (($body_stream = file_get_contents("php://input")) === false) {
         $result["error"] = "Bad Request";
+
         return $result;
     }
 
@@ -114,27 +112,29 @@ function track(): array
 
     if ($data === null) {
         $result["error"] = "Bad Response";
+
         return $result;
     }
 
     if (!empty($plugin->get("jwt_secret"))) {
-
         if (!empty($data["token"])) {
             try {
-                $payload = \Firebase\JWT\JWT::decode($data["token"], $plugin->get("jwt_secret"), array("HS256"));
+                $payload = \Firebase\JWT\JWT::decode($data["token"], $plugin->get("jwt_secret"), ["HS256"]);
             } catch (\UnexpectedValueException $e) {
                 $result["status"] = "error";
                 $result["error"] = "403 Access denied";
+
                 return $result;
             }
         } else {
             $token = substr($_SERVER[AppConfig::JwtHeader()], strlen("Bearer "));
             try {
-                $decodeToken = \Firebase\JWT\JWT::decode($token, $plugin->get("jwt_secret"), array("HS256"));
+                $decodeToken = \Firebase\JWT\JWT::decode($token, $plugin->get("jwt_secret"), ["HS256"]);
                 $payload = $decodeToken->payload;
             } catch (\UnexpectedValueException $e) {
                 $result["status"] = "error";
                 $result["error"] = "403 Access denied";
+
                 return $result;
             }
         }
@@ -149,7 +149,6 @@ function track(): array
     switch ($status) {
         case TrackerStatus_MustSave:
         case TrackerStatus_Corrupted:
-
             $downloadUri = $data["url"];
 
             if (!empty($docId) && !empty($courseCode)) {
@@ -157,16 +156,18 @@ function track(): array
 
                 if ($docInfo === false) {
                     $result["error"] = "File not found";
+
                     return $result;
                 }
 
                 $filePath = $docInfo["absolute_path"];
             } else {
                 $result["error"] = "Bad Request";
+
                 return $result;
             }
 
-            list ($isAllowToEdit, $isMyDir, $isGroupAccess, $isReadonly) = getPermissions($docInfo, $userId, $courseCode, $groupId, $sessionId);
+            list($isAllowToEdit, $isMyDir, $isGroupAccess, $isReadonly) = getPermissions($docInfo, $userId, $courseCode, $groupId, $sessionId);
 
             if ($isReadonly) {
                 break;
@@ -201,19 +202,20 @@ function track(): array
                 }
             }
 
+            // no break
         case TrackerStatus_Editing:
         case TrackerStatus_Closed:
-
             $track_result = 0;
             break;
     }
 
     $result["error"] = $track_result;
+
     return $result;
 }
 
 /**
- * Downloading file by the document service
+ * Downloading file by the document service.
  */
 function download()
 {
@@ -228,11 +230,11 @@ function download()
     if (!empty($plugin->get("jwt_secret"))) {
         $token = substr($_SERVER[AppConfig::JwtHeader()], strlen("Bearer "));
         try {
-            $payload = \Firebase\JWT\JWT::decode($token, $plugin->get("jwt_secret"), array("HS256"));
-
+            $payload = \Firebase\JWT\JWT::decode($token, $plugin->get("jwt_secret"), ["HS256"]);
         } catch (\UnexpectedValueException $e) {
             $result["status"] = "error";
             $result["error"] = "403 Access denied";
+
             return $result;
         }
     }
@@ -242,23 +244,25 @@ function download()
 
         if ($docInfo === false) {
             $result["error"] = "File not found";
+
             return $result;
         }
 
         $filePath = $docInfo["absolute_path"];
     } else {
         $result["error"] = "File not found";
+
         return $result;
     }
 
     @header("Content-Type: application/octet-stream");
-    @header("Content-Disposition: attachment; filename=" . $docInfo["title"]);
+    @header("Content-Disposition: attachment; filename=".$docInfo["title"]);
 
     readfile($filePath);
 }
 
 /**
- * Method checks access rights to document and returns permissions
+ * Method checks access rights to document and returns permissions.
  */
 function getPermissions(array $docInfo, int $userId, string $courseCode, int $groupId = null, int $sessionId = null): array
 {

@@ -38,7 +38,6 @@ $score = Packback\Lti1p3\LtiGrade::new()
     ->setGradingProgress('FullyGraded')
     ->setUserId($launch->getLaunchData()['sub']);
 
-
 $scoreLineitem = Packback\Lti1p3\LtiLineitem::new()
     ->setTag('score')
     ->setScoreMaximum($weight)
@@ -46,7 +45,6 @@ $scoreLineitem = Packback\Lti1p3\LtiLineitem::new()
     ->setResourceId($launch->getLaunchData()['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
 
 $grades->putGrade($score, $scoreLineitem);
-
 
 $time = Packback\Lti1p3\LtiGrade::new()
     ->setScoreGiven($duration)

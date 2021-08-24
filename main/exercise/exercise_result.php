@@ -387,7 +387,6 @@ function showEmbeddableFinishButton()
                 $.get(url);
             });
         </script>';
-
     }
 
     return $js.PHP_EOL.$html;

@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 const USER_AGENT_MOBILE = "/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i";
@@ -25,19 +22,21 @@ $plugin = OnlyofficePlugin::create();
 
 $isEnable = $plugin->get("enable_onlyoffice_plugin") === 'true';
 if (!$isEnable) {
-    die ("Document server isn't enabled");
+    exit("Document server isn't enabled");
+
     return;
 }
 
 $documentServerUrl = $plugin->get("document_server_url");
 if (empty($documentServerUrl)) {
-    die ("Document server isn't configured");
+    exit("Document server isn't configured");
+
     return;
 }
 
 $config = [];
 
-$docApiUrl = $documentServerUrl . "/web-apps/apps/api/documents/api.js";
+$docApiUrl = $documentServerUrl."/web-apps/apps/api/documents/api.js";
 
 $docId = $_GET["docId"];
 $groupId = isset($_GET["groupId"]) && !empty($_GET["groupId"]) ? $_GET["groupId"] : null;
@@ -68,26 +67,26 @@ $config = [
         "fileType" => $extension,
         "key" => $key,
         "title" => $docInfo["title"],
-        "url" => $fileUrl
+        "url" => $fileUrl,
     ],
     "editorConfig" => [
         "lang" => $langInfo["isocode"],
         "region" => $langInfo["isocode"],
         "user" => [
             "id" => strval($userId),
-            "name" => $userInfo["username"]
+            "name" => $userInfo["username"],
         ],
         "customization" => [
             "goback" => [
                 "blank" => false,
                 "requestClose" => false,
                 "text" => get_lang("Back"),
-                "url" => Security::remove_XSS($_SERVER["HTTP_REFERER"])
+                "url" => Security::remove_XSS($_SERVER["HTTP_REFERER"]),
             ],
             "compactHeader" => true,
-            "toolbarNoTabs" => true
-        ]
-    ]
+            "toolbarNoTabs" => true,
+        ],
+    ],
 ];
 
 $userAgent = $_SERVER['HTTP_USER_AGENT'];
@@ -167,7 +166,7 @@ if (!empty($plugin->get("jwt_secret"))) {
 }
 
 /**
- * Return callback url
+ * Return callback url.
  */
 function getCallbackUrl(int $docId, int $userId, int $courseId, int $sessionId, int $groupId = null): string
 {
@@ -178,7 +177,7 @@ function getCallbackUrl(int $docId, int $userId, int $courseId, int $sessionId, 
         "courseId" => $courseId,
         "userId" => $userId,
         "docId" => $docId,
-        "sessionId" => $sessionId
+        "sessionId" => $sessionId,
     ];
 
     if (!empty($groupId)) {
@@ -187,7 +186,7 @@ function getCallbackUrl(int $docId, int $userId, int $courseId, int $sessionId, 
 
     $hashUrl = Crypt::GetHash($data);
 
-    return $url . api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/callback.php?hash=" . $hashUrl;
+    return $url.api_get_path(WEB_PLUGIN_PATH)."onlyoffice/callback.php?hash=".$hashUrl;
 }
 
 ?>
@@ -205,7 +204,7 @@ function getCallbackUrl(int $docId, int $userId, int $courseId, int $sessionId, 
         display: none;
     }
 </style>
-<script type="text/javascript" src=<?php echo $docApiUrl?>></script>
+<script type="text/javascript" src=<?php echo $docApiUrl; ?>></script>
 <script type="text/javascript">
     var onAppReady = function () {
         innerAlert("Document editor ready");
@@ -219,8 +218,8 @@ function getCallbackUrl(int $docId, int $userId, int $courseId, int $sessionId, 
                             '</div>' +
                           '</div>');
 
-        var config = <?php echo json_encode($config)?>;
-        var isMobileAgent = <?php echo json_encode($isMobileAgent)?>;
+        var config = <?php echo json_encode($config); ?>;
+        var isMobileAgent = <?php echo json_encode($isMobileAgent); ?>;
 
         config.events = {
             "onAppReady": onAppReady

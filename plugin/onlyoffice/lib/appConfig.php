@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +13,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
+require_once __DIR__."/../../../main/inc/global.inc.php";
 
-require_once __DIR__ . "/../../../main/inc/global.inc.php";
-
-class AppConfig {
-
+class AppConfig
+{
     /**
-     * The config key for the jwt header
+     * The config key for the jwt header.
      *
      * @var string
      */
     private const jwtHeader = "onlyoffice_jwt_header";
 
     /**
-     * Get the jwt header setting
+     * Get the jwt header setting.
      *
      * @return string
      */

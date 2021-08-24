@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 /**
@@ -35,13 +33,13 @@ class OnlyofficePlugin extends Plugin implements HookPluginInterface
             [
                 "enable_onlyoffice_plugin" => "boolean",
                 "document_server_url" => "text",
-                "jwt_secret" => "text"
+                "jwt_secret" => "text",
             ]
         );
     }
 
     /**
-     * Create OnlyofficePlugin object
+     * Create OnlyofficePlugin object.
      */
     public static function create(): OnlyofficePlugin
     {

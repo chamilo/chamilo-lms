@@ -274,7 +274,7 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
     }
 
     /**
-     * TODO - implement this method - critical
+     * TODO - implement this method - critical.
      */
     private function fillManifest()
     {

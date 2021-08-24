@@ -236,7 +236,7 @@ class XMLGenericDocument
     }
 
     /**
-     * Get the nodes from a path
+     * Get the nodes from a path.
      *
      * @param string  $path
      * @param DOMNode $nd
@@ -256,7 +256,7 @@ class XMLGenericDocument
     }
 
     /**
-     * Get a list of nodes from a path
+     * Get a list of nodes from a path.
      *
      * @param string  $path
      * @param DOMNode $node

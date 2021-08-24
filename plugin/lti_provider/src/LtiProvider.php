@@ -56,11 +56,10 @@ class LtiProvider
     }
 
     /**
-     * Verify if email user is in the platform to create it and login (true) or not (false)
+     * Verify if email user is in the platform to create it and login (true) or not (false).
      */
     public function validateUser(array $launchData, string $courseCode): bool
     {
-
         if (empty($launchData)) {
             return false;
         }
@@ -92,6 +91,7 @@ class LtiProvider
         }
 
         $login = UserManager::loginAsUser($userId, false);
+
         return $login;
     }
 }

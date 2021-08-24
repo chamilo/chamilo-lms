@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +13,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-
 class OnlyofficeItemViewObserver extends HookObserver implements HookDocumentItemViewObserverInterface
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -31,7 +28,7 @@ class OnlyofficeItemViewObserver extends HookObserver implements HookDocumentIte
     }
 
     /**
-     * Create a Onlyoffice view tools when the Chamilo loads document items
+     * Create a Onlyoffice view tools when the Chamilo loads document items.
      *
      * @param HookDocumentItemViewEventInterface $event - the hook event
      */

@@ -1,7 +1,6 @@
 <?php
 /**
  * @author ASENSIO SYSTEM SIA
- *
  */
 $strings["plugin_title"] = "ONLYOFFICE";
 $strings['plugin_comment'] = "ONLYOFFICE connector permite que você visualize, edite e colabore em documentos de texto, planilhas e apresentações dentro do Chamilo usando o ONLYOFFICE Docs.";

@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use ChamiloSession as Session;
@@ -26,7 +23,7 @@ $plugin = OnlyofficePlugin::create();
 $mapFileFormat = [
     "text" => $plugin->get_lang("document"),
     "spreadsheet" => $plugin->get_lang("spreadsheet"),
-    "presentation" => $plugin->get_lang("presentation")
+    "presentation" => $plugin->get_lang("presentation"),
 ];
 
 $userId = $_GET["userId"];
@@ -58,7 +55,7 @@ if (!($isAllowToEdit || $isMyDir || $groupRights)) {
 $form = new FormValidator(
     "doc_create",
     "post",
-    api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/create.php"
+    api_get_path(WEB_PLUGIN_PATH)."onlyoffice/create.php"
 );
 
 $form->addText("fileName", $plugin->get_lang("title"), true);
@@ -84,13 +81,13 @@ if ($form->validate()) {
 
     $fileType = $values["fileFormat"];
     $fileExt = FileUtility::getDocExt($fileType);
-    $fileTitle = $values["fileName"] . "." . $fileExt;
+    $fileTitle = $values["fileName"].".".$fileExt;
 
     $courseInfo = api_get_course_info_by_id($courseId);
     $courseCode = $courseInfo["code"];
 
     $fileNamePrefix = DocumentManager::getDocumentSuffix($courseInfo, $sessionId, $groupId);
-    $fileName = $values["fileName"] . $fileNamePrefix . "." . $fileExt;
+    $fileName = $values["fileName"].$fileNamePrefix.".".$fileExt;
 
     $groupInfo = GroupManager::get_group_properties($groupId);
 
@@ -106,16 +103,16 @@ if ($form->validate()) {
             $sessionId
         );
         $folderPath = $document_data["absolute_path"];
-        $fileRelatedPath = $fileRelatedPath . substr($document_data["absolute_path_from_document"], 10) . "/" . $fileName;
+        $fileRelatedPath = $fileRelatedPath.substr($document_data["absolute_path_from_document"], 10)."/".$fileName;
     } else {
-        $folderPath = api_get_path(SYS_COURSE_PATH) . api_get_course_path($courseCode) . "/document";
+        $folderPath = api_get_path(SYS_COURSE_PATH).api_get_course_path($courseCode)."/document";
         if (!empty($groupId)) {
-            $folderPath = $folderPath . "/" . $groupInfo["directory"];
-            $fileRelatedPath = $groupInfo["directory"] . "/";
+            $folderPath = $folderPath."/".$groupInfo["directory"];
+            $fileRelatedPath = $groupInfo["directory"]."/";
         }
-        $fileRelatedPath = $fileRelatedPath . $fileName;
+        $fileRelatedPath = $fileRelatedPath.$fileName;
     }
-    $filePath = $folderPath . "/" . $fileName;
+    $filePath = $folderPath."/".$fileName;
 
     if (file_exists($filePath)) {
         Display::addFlash(Display::return_message($plugin->get_lang("fileIsExist"), "error"));
@@ -156,10 +153,9 @@ if ($form->validate()) {
                 $sessionId
             );
 
-            header("Location: " . $goBackUrl);
+            header("Location: ".$goBackUrl);
             exit();
         }
-
     } else {
         Display::addFlash(
             Display::return_message(
@@ -172,7 +168,7 @@ if ($form->validate()) {
 
 display:
     $goBackUrl = $goBackUrl ?: Security::remove_XSS($_SERVER["HTTP_REFERER"]);
-    $actionsLeft = '<a href="'. $goBackUrl . '">' . Display::return_icon("back.png", get_lang("Back") . " " . get_lang("To") . " " . get_lang("DocumentsOverview"), "", ICON_SIZE_MEDIUM) . "</a>";
+    $actionsLeft = '<a href="'.$goBackUrl.'">'.Display::return_icon("back.png", get_lang("Back")." ".get_lang("To")." ".get_lang("DocumentsOverview"), "", ICON_SIZE_MEDIUM)."</a>";
 
     Display::display_header($plugin->get_lang("createNewDocument"));
     echo Display::toolbarAction("actions-documents", [$actionsLeft]);

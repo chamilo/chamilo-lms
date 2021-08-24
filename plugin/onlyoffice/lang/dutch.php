@@ -1,7 +1,6 @@
 <?php
 /**
  * @author ASENSIO SYSTEM SIA
- *
  */
 $strings["plugin_title"] = "ONLYOFFICE";
 $strings['plugin_comment'] = "ONLYOFFICE connector maakt het mogelijk om tekstdocumenten, spreadsheets en presentaties te bekijken, te bewerken en samen te werken binnen Chamilo met behulp van ONLYOFFICE Docs.";

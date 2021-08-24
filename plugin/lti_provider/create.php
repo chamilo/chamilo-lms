@@ -6,6 +6,7 @@ $cidReset = true;
 require_once __DIR__.'/../../main/inc/global.inc.php';
 use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
 use Chamilo\PluginBundle\LtiProvider\Form\FrmAdd;
+
 require_once __DIR__.'/LtiProviderPlugin.php';
 
 api_protect_admin_script();

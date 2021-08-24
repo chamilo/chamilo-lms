@@ -76,10 +76,11 @@ function stripUrl($path, $rootDir = '')
 }
 
 /**
- * Get full path
+ * Get full path.
  *
  * @param string $path
  * @param string $dirsep
+ *
  * @return false|string
  */
 function fullPath($path, $dirsep = DIRECTORY_SEPARATOR)
@@ -136,12 +137,12 @@ function isUrl($url)
 }
 
 /**
- * Gets the dependency files of the $fname file
+ * Gets the dependency files of the $fname file.
  *
  * @param string $manifestroot
  * @param string $fname
  * @param string $folder
- * @param array $filenames
+ * @param array  $filenames
  */
 function getDepFiles($manifestroot, $fname, $folder, &$filenames)
 {
@@ -164,7 +165,7 @@ function getDepFiles($manifestroot, $fname, $folder, &$filenames)
 }
 
 /**
- * Gets the dependency of .html of the $fname file
+ * Gets the dependency of .html of the $fname file.
  *
  * @param string $manifestroot
  * @param string $fname

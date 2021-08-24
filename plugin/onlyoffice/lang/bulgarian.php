@@ -1,7 +1,6 @@
 <?php
 /**
  * @author ASENSIO SYSTEM SIA
- *
  */
 $strings["plugin_title"] = "ONLYOFFICE";
 $strings['plugin_comment'] = "ONLYOFFICE конекторът ви позволява да преглеждате, редактирате и да си сътрудничите с текстови документи, таблици и презентациив рамките на Chamilo с помощта на ONLYOFFICE Docs.";

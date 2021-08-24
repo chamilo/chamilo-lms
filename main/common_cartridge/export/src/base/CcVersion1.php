@@ -223,8 +223,6 @@ class CcVersion1 extends CcVersionBase
     /**
      * Create a Resource (How to).
      *
-     * @param CcIResource $res
-     * @param DOMDocument $doc
      * @param object $xmlnode
      *
      * @return DOMNode
@@ -262,8 +260,6 @@ class CcVersion1 extends CcVersionBase
     /**
      * Create an Item Folder (How To).
      *
-     * @param CcIOrganization $org
-     * @param DOMDocument $doc
      * @param DOMElement $xmlnode
      */
     protected function createItemFolder(CcIOrganization &$org, DOMDocument &$doc, DOMElement &$xmlnode = null)
@@ -285,8 +281,6 @@ class CcVersion1 extends CcVersionBase
     /**
      * Create an Organization (How To).
      *
-     * @param CcIOrganization $org
-     * @param DOMDocument $doc
      * @param object $xmlnode
      *
      * @return DOMNode
@@ -306,8 +300,6 @@ class CcVersion1 extends CcVersionBase
     /**
      * Create Metadata For Manifest (How To).
      *
-     * @param CcIMetadataManifest $met
-     * @param DOMDocument $doc
      * @param object $xmlnode
      *
      * @return DOMNode
@@ -334,8 +326,6 @@ class CcVersion1 extends CcVersionBase
     /**
      * Create Metadata For Resource (How To).
      *
-     * @param CcIMetadataResource $met
-     * @param DOMDocument $doc
      * @param object $xmlnode
      *
      * @return DOMNode
@@ -353,8 +343,6 @@ class CcVersion1 extends CcVersionBase
     /**
      * Create Metadata For File (How To).
      *
-     * @param CcIMetadataFile $met
-     * @param DOMDocument $doc
      * @param object $xmlnode
      *
      * @return DOMNode
@@ -479,7 +467,6 @@ class CcVersion1 extends CcVersionBase
      * Create Lifecycle Metadata (How To).
      *
      * @param object $met
-     * @param DOMDocument $doc
      * @param object $met
      * @param object $xmlnode
      *

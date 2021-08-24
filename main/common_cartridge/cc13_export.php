@@ -3,7 +3,6 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'common_cartridge/export/src/lib/ccdependencyparser.php';
-use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
@@ -85,8 +84,6 @@ if (Security::check_token('post') && ($action === 'course_select_form')) {
     } else {
         echo Display::return_message(get_lang('NoResourcesToBackup'), 'warning');
     }
-
 }
-
 
 Display::display_footer();

@@ -949,36 +949,6 @@ class Template
         return implode(CourseManager::USER_SEPARATOR, $names);
     }
 
-    /*s
-     * Returns the teachers name for the current course
-     * Function to use in Twig templates
-     * @return string
-     */
-    public static function returnTeachersNames()
-    {
-        $em = Database::getManager();
-        $teachers = $em
-            ->createQuery('
-                SELECT u FROM ChamiloCoreBundle:User u
-                INNER JOIN ChamiloCoreBundle:CourseRelUser cu WITH u.id = cu.user
-                WHERE cu.status = :teacher_status AND cu.course = :course
-            ')
-            ->setParameters([
-                'teacher_status' => User::COURSE_MANAGER,
-                'course' => api_get_course_int_id(),
-            ])
-            ->getResult();
-
-        $names = [];
-
-        /** @var User $teacher */
-        foreach ($teachers as $teacher) {
-            $names[] = UserManager::formatUserFullName($teacher);
-        }
-
-        return implode(CourseManager::USER_SEPARATOR, $names);
-    }
-
     /**
      * @param int $code
      */

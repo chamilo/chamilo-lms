@@ -201,6 +201,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->description = '';
         $this->tms = new DateTime();
         $this->createdBy = 1;
         $this->courses = new ArrayCollection();

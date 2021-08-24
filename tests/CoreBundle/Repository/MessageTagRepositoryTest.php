@@ -13,9 +13,6 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
-/**
- * @covers \MessageTagRepository
- */
 class MessageTagRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;

@@ -14,9 +14,6 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Datetime;
 
-/**
- * @covers \Chamilo\CourseBundle\Repository\CCalendarEventRepository
- */
 class CCalendarEventRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;

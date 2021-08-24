@@ -10,9 +10,6 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
-/**
- * @covers \PersonalFileRepository
- */
 class PersonalFileRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;

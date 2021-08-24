@@ -11,14 +11,11 @@ use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * @covers \UsergroupRepository
- */
 class UsergroupRepositoryTest extends KernelTestCase
 {
     use ChamiloTestTrait;
 
-    public function testCount(): void
+    public function testCreate(): void
     {
         self::bootKernel();
         $repo = self::getContainer()->get(UsergroupRepository::class);

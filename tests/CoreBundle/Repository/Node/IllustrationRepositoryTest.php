@@ -10,9 +10,6 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-/**
- * @covers \IllustrationRepository
- */
 class IllustrationRepositoryTest extends WebTestCase
 {
     use ChamiloTestTrait;

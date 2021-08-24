@@ -16,9 +16,6 @@ use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
-/**
- * @covers \SessionRepository
- */
 class SessionRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;

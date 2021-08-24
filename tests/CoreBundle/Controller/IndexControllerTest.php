@@ -10,9 +10,6 @@ use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @covers \Chamilo\CoreBundle\Controller\IndexController
- */
 class IndexControllerTest extends WebTestCase
 {
     use ChamiloTestTrait;

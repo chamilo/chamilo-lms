@@ -19,9 +19,6 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Component\Messenger\Transport\InMemoryTransport;
 
-/**
- * @covers \MessageRepository
- */
 class MessageRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;

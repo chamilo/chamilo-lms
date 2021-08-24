@@ -12,9 +12,6 @@ use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
-/**
- * @covers \CourseRepository
- */
 class CourseRepositoryTest extends WebTestCase
 {
     use ChamiloTestTrait;

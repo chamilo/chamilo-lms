@@ -14,9 +14,6 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
-/**
- * @covers \Chamilo\CourseBundle\Repository\CDocumentRepository
- */
 class CDocumentRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;

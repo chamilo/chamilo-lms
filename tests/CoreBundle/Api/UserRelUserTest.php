@@ -12,9 +12,6 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
-/**
- * @covers \UserRelUser
- */
 class UserRelUserTest extends AbstractApiTest
 {
     use ChamiloTestTrait;

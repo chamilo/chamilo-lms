@@ -13,9 +13,6 @@ use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
-/**
- * @covers \SkillRepository
- */
 class SkillRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;

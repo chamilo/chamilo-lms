@@ -10,9 +10,6 @@ use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-/**
- * @covers \SysAnnouncementRepository
- */
 class SysAnnouncementRepositoryTest extends WebTestCase
 {
     use ChamiloTestTrait;

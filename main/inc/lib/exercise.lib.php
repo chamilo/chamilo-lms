@@ -239,6 +239,7 @@ class ExerciseLib
                         $icon = Display::return_icon('file_txt.gif');
                         $default = '';
                         foreach ($filesNames as $fileName) {
+                            $fileName = Security::remove_XSS($fileName);
                             $default .= '<a target="_blank" class="panel-image" href="'.$userWebpath.$fileName.'"><div class="row"><div class="col-sm-4">'.$icon.'</div><div class="col-sm-5 file_name">'.$fileName.'</div><input type="hidden" name="uploadChoice['.$questionId.'][]" value="'.$fileName.'"></div></a>';
                         }
                         $s .= '<script>

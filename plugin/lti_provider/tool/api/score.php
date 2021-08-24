@@ -16,12 +16,6 @@ if (!isset($_REQUEST['exeId'])) {
 
 $launchData = $launch->getLaunchData();
 
-$label = 'Score';
-$courseClient = $launchData['https://purl.imsglobal.org/spec/lti/claim/resource_link']['title'];
-if (!empty($courseClient)) {
-    $label = $courseClient;
-}
-
 $exeId = (int) $_REQUEST['exeId'];
 $trackInfo = Exercise::get_stat_track_exercise_info_by_exe_id($exeId);
 $score = $trackInfo['exe_result'];
@@ -42,7 +36,7 @@ $score = Packback\Lti1p3\LtiGrade::new()
 $scoreLineitem = Packback\Lti1p3\LtiLineitem::new()
     ->setTag('score')
     ->setScoreMaximum($weight)
-    ->setLabel($label)
+    ->setLabel('Score')
     ->setResourceId($launch->getLaunchData()['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
 
 $grades->putGrade($score, $scoreLineitem);

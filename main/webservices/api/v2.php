@@ -296,6 +296,23 @@ try {
             );
             break;
 
+        case Rest::PUT_WORK_STUDENT_ITEM_VISIBILITY:
+            if (!isset($_POST['status'], $_POST['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            if (!api_is_allowed_to_edit() && !api_is_coach()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $data = $restApi->putCourseWorkVisibility(
+                (int) $_POST['work'],
+                (int) $_POST['status']
+            );
+
+            $restResponse->setData(['status' => $data]);
+            break;
+
         case Rest::CREATE_CAMPUS:
             $data = $restApi->createCampusURL($_POST);
             $restResponse->setData($data);

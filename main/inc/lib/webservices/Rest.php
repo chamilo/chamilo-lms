@@ -60,6 +60,8 @@ class Rest extends WebService
     const SAVE_FORUM_THREAD = 'save_forum_thread';
     const SET_THREAD_NOTIFY = 'set_thread_notify';
 
+    const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
+
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
     const DELETE_CAMPUS = 'delete_campus';
@@ -2583,6 +2585,27 @@ class Rest extends WebService
             },
             $works
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function putCourseWorkVisibility(int $workId, int $status): bool
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        switch ($status) {
+            case 1:
+                return makeVisible($workId, $courseInfo);
+            case 0;
+                return makeInvisible($workId, $courseInfo);
+            default:
+                throw new Exception(get_lang('ActionNotAllowed'));
+        }
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

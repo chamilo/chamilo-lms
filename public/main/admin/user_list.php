@@ -41,10 +41,6 @@ if (isset($_GET['user_id']) && 'login_as' === $action) {
             Display::addFlash(Display::return_message($goTo, 'normal', false));
 
             api_location($url.'?_switch_user='.$oldUserInfo['username']);
-            /*Display::display_header(get_lang('User list'));
-            echo Display::return_message($message, 'normal', false);
-            echo Display::return_message($goTo, 'normal', false);
-            Display::display_footer();*/
             exit;
         } else {
             api_not_allowed(true);

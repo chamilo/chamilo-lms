@@ -620,7 +620,7 @@ if (isset($_POST['step2'])) {
         $container = $kernel->getContainer();
 
         Container::setContainer($container);
-        Container::setLegacyServices($container, false);
+        Container::setLegacyServices($container);
 
         $manager = $container->get('doctrine')->getManager();
 

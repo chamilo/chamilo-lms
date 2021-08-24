@@ -2081,7 +2081,7 @@ function installSchemas($container, $upgrade = false)
 function upgradeWithContainer($container)
 {
     Container::setContainer($container);
-    Container::setLegacyServices($container, false);
+    Container::setLegacyServices($container);
     error_log('setLegacyServices');
     $manager = Database::getManager();
 
@@ -2135,7 +2135,7 @@ function finishInstallationWithContainer(
 ) {
     error_log('finishInstallationWithContainer');
     Container::setContainer($container);
-    Container::setLegacyServices($container, false);
+    Container::setLegacyServices($container);
     error_log('setLegacyServices');
 
     //UserManager::setPasswordEncryption($encryptPassForm);

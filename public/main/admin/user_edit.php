@@ -439,11 +439,11 @@ if ($form->validate()) {
             $status = COURSEMANAGER;
         }
 
-        if ('true' == api_get_setting('login_is_email')) {
+        if ('true' === api_get_setting('login_is_email')) {
             $username = $email;
         }
 
-        $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
+        $template = $user['email_template_option'] ?? [];
 
         UserManager::update_user(
             $user_id,

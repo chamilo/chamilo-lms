@@ -969,6 +969,8 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
     }
 
+    error_log((string )$is_visible);
+
     if (!$is_visible) {
         api_not_allowed($print_headers);
 
@@ -2186,7 +2188,6 @@ function api_format_course_array(Course $course = null)
     $courseData['course_public_url'] = $webCourseHome;
     $courseData['about_url'] = $coursePath.$courseData['real_id'].'/about';
     $courseData['add_teachers_to_sessions_courses'] = $course->isAddTeachersToSessionsCourses();
-    $courseData['entity'] = $course;
 
     $image = Display::return_icon(
         'course.png',

@@ -6493,10 +6493,9 @@ class learnpath
      */
     public function get_documents($showInvisibleFiles = false)
     {
-        $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
         $documentTree = DocumentManager::get_document_preview(
-            $course_info,
+            api_get_course_entity(),
             $this->lp_id,
             null,
             $sessionId,

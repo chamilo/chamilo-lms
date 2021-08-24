@@ -32,10 +32,10 @@ switch ($action) {
         echo DocumentManager::displaySimpleQuota($courseQuota, $total);
         break;
     case 'document_preview':
-        $courseInfo = api_get_course_info_by_id($_REQUEST['course_id']);
-        if (!empty($courseInfo) && is_array($courseInfo)) {
+        $course = api_get_course_entity($_REQUEST['course_id']);
+        if (null !== $course) {
             echo DocumentManager::get_document_preview(
-                $courseInfo,
+                $course,
                 false,
                 '_blank',
                 $_REQUEST['session_id']

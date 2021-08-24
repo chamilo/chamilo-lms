@@ -33,8 +33,6 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-$courseInfo = api_get_course_info();
-
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('Assignments'),
@@ -80,7 +78,7 @@ if (empty($docId)) {
     }
 
     $documentTree = DocumentManager::get_document_preview(
-        $courseInfo,
+        api_get_course_entity(),
         false,
         null,
         api_get_session_id(),

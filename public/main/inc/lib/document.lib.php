@@ -1098,97 +1098,6 @@ class DocumentManager
     }
 
     /**
-     * Return true if user can see a file.
-     *
-     * @param   int     document id
-     * @param   array   course info
-     * @param   int
-     * @param   int
-     * @param bool
-     *
-     * @return bool
-     */
-    public static function is_visible_by_id(
-        $doc_id,
-        $course_info,
-        $sessionId,
-        $user_id,
-        $admins_can_see_everything = true,
-        $userIsSubscribed = null
-    ) {
-        $user_in_course = false;
-
-        //1. Checking the course array
-        if (empty($course_info)) {
-            $course_info = api_get_course_info();
-            if (empty($course_info)) {
-                return false;
-            }
-        }
-
-        $doc_id = (int) $doc_id;
-        $sessionId = (int) $sessionId;
-        // 2. Course and Session visibility are handle in local.inc.php/global.inc.php
-        // 3. Checking if user exist in course/session
-        if (0 == $sessionId) {
-            if (is_null($userIsSubscribed)) {
-                $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
-                    $user_id,
-                    $course_info['code']
-                );
-            }
-
-            if (true === $userIsSubscribed || api_is_platform_admin()) {
-                $user_in_course = true;
-            }
-
-            // Check if course is open then we can consider that the student is registered to the course
-            if (isset($course_info) &&
-                in_array(
-                    $course_info['visibility'],
-                    [COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD]
-                )
-            ) {
-                $user_in_course = true;
-            }
-        } else {
-            $user_status = SessionManager::get_user_status_in_course_session(
-                $user_id,
-                $course_info['real_id'],
-                $sessionId
-            );
-
-            if (in_array($user_status, ['0', '2', '6'])) {
-                //is true if is an student, course session teacher or coach
-                $user_in_course = true;
-            }
-
-            if (api_is_platform_admin()) {
-                $user_in_course = true;
-            }
-        }
-
-        $em = Database::getManager();
-
-        // 4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
-        if ($user_in_course) {
-            $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
-            /** @var CDocument $document */
-            $document = $repo->find($doc_id);
-            $link = $document->getFirstResourceLinkFromCourseSession($course_info['entity']);
-            if ($link && ResourceLink::VISIBILITY_PUBLISHED == $link->getVisibility()) {
-                return true;
-            }
-
-            return false;
-        } elseif ($admins_can_see_everything && api_is_platform_admin()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Allow attach a certificate to a course.
      *
      * @todo move to certificate.lib.php
@@ -2392,7 +2301,7 @@ class DocumentManager
     }
 
     /**
-     * @param array  $course_info
+     * @param Course $course
      * @param bool   $lp_id
      * @param string $target
      * @param int    $session_id
@@ -2409,7 +2318,7 @@ class DocumentManager
      * @return string
      */
     public static function get_document_preview(
-        $course_info,
+        $course,
         $lp_id = false,
         $target = '',
         $session_id = 0,
@@ -2423,7 +2332,7 @@ class DocumentManager
         $addAudioPreview = false,
         $filterByExtension = []
     ) {
-        if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
+        if (null === $course) {
             return '';
         }
 
@@ -2499,7 +2408,7 @@ class DocumentManager
             ->leftJoin('node.resourceFile', 'file')
             ->where('type = :type')
             ->andWhere('links.course = :course')
-            ->setParameters(['type' => $type, 'course' => $course_info['entity']])
+            ->setParameters(['type' => $type, 'course' => $course])
             ->orderBy('node.parent', 'ASC')
             ->addSelect('file')
         ;
@@ -2515,87 +2424,6 @@ class DocumentManager
         $query = $qb->getQuery();
 
         return $nodeRepository->buildTree($query->getArrayResult(), $options);
-    }
-
-    /**
-     * @param int   $doc_id
-     * @param array $courseInfo
-     * @param int   $sessionId
-     * @param int   $user_id
-     * @param int   $groupId               iid
-     * @param bool  $checkParentVisibility
-     *
-     * @return bool
-     */
-    public static function check_visibility_tree(
-        $doc_id,
-        $courseInfo,
-        $sessionId,
-        $user_id,
-        $groupId = 0,
-        $checkParentVisibility = true
-    ) {
-        if (empty($courseInfo)) {
-            return false;
-        }
-
-        $courseCode = $courseInfo['code'];
-
-        if (empty($courseCode)) {
-            return false;
-        }
-
-        $document_data = self::get_document_data_by_id(
-            $doc_id,
-            $courseCode,
-            null,
-            $sessionId
-        );
-
-        if (0 != $sessionId && !$document_data) {
-            $document_data = self::get_document_data_by_id(
-                $doc_id,
-                $courseCode,
-                null,
-                0
-            );
-        }
-
-        if (!empty($document_data)) {
-            // If admin or course teacher, allow anyway
-            if (api_is_platform_admin() || CourseManager::isCourseTeacher($user_id, $courseInfo['real_id'])) {
-                return true;
-            }
-
-            if (false == $document_data['parent_id'] || empty($document_data['parent_id'])) {
-                if (!empty($groupId)) {
-                    return true;
-                }
-                $visible = self::is_visible_by_id($doc_id, $courseInfo, $sessionId, $user_id);
-
-                return $visible;
-            } else {
-                $visible = self::is_visible_by_id($doc_id, $courseInfo, $sessionId, $user_id);
-
-                if (!$visible) {
-                    return false;
-                } else {
-                    if ($checkParentVisibility) {
-                        return self::check_visibility_tree(
-                            $document_data['parent_id'],
-                            $courseInfo,
-                            $sessionId,
-                            $user_id,
-                            $groupId
-                        );
-                    }
-
-                    return true;
-                }
-            }
-        } else {
-            return false;
-        }
     }
 
     /**

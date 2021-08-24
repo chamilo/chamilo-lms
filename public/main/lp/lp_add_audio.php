@@ -169,7 +169,7 @@ $form->addElement('hidden', 'id', $lp_item_id);
 $form->addButtonSave(get_lang('Save recorded audio'));
 
 $documentTree = DocumentManager::get_document_preview(
-    $courseInfo,
+    api_get_course_entity(),
     $lp->get_id(),
     null,
     api_get_session_id(),

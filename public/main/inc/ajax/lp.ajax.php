@@ -48,7 +48,6 @@ switch ($action) {
         echo json_encode($data);
         break;
     case 'get_documents':
-        $courseInfo = api_get_course_info();
         $folderId = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;
         if (empty($folderId)) {
             exit;
@@ -57,7 +56,7 @@ switch ($action) {
         $addMove = isset($_GET['add_move_button']) && 1 == $_GET['add_move_button'] ? true : false;
 
         echo DocumentManager::get_document_preview(
-            $courseInfo,
+            api_get_course_entity(),
             $lpId,
             null,
             api_get_session_id(),

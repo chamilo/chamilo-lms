@@ -345,8 +345,7 @@ if ($form->validate()) {
         $department_url = 'http://'.$department_url;
     }
 
-    /** @var \Chamilo\CoreBundle\Entity\Course $courseEntity */
-    $courseEntity = $courseInfo['entity'];
+    $courseEntity = api_get_course_entity($courseId);
     $courseEntity
         ->setCourseLanguage($course['course_language'])
         ->setTitle(str_replace('&amp;', '&', $course['title']))

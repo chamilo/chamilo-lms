@@ -898,7 +898,7 @@ foreach ($categories as $category) {
 
             $sessionImage = api_get_session_image(
                 $details['lp_session'],
-                $userInfo['status']
+                $user
             );
 
             $listData[] = [

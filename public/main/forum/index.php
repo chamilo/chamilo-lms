@@ -100,7 +100,7 @@ $nameTools = get_lang('Forums');
 $courseEntity = api_get_course_entity();
 $sessionId = api_get_session_id();
 $sessionEntity = api_get_session_entity($sessionId);
-$_user = api_get_user_info();
+$user = api_get_user_entity();
 $courseId = $courseEntity->getId();
 
 $hideNotifications = api_get_course_setting('hide_forum_notifications');
@@ -247,10 +247,8 @@ if (!empty($allCourseForums)) {
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 
 $languages = api_get_language_list_for_flag();
-$defaultUserLanguage = ucfirst(api_get_language_isocode());
-if (isset($_user['language']) && !empty($_user['language'])) {
-    $defaultUserLanguage = ucfirst($_user['language']);
-}
+$defaultUserLanguage = $user->getLocale();
+
 $extraFieldValues = new ExtraFieldValue('user');
 $value = $extraFieldValues->get_values_by_handler_and_field_variable(api_get_user_id(), 'langue_cible');
 
@@ -462,7 +460,7 @@ if (is_array($forumCategories)) {
                         // Validation when belongs to a session
                         $forumInfo['icon_session'] = api_get_session_image(
                             $forum->getSessionId(),
-                            $_user['status']
+                            $user
                         );
                         if ('0' != $forum->getForumOfGroup()) {
                             $forumOfGroup = $forum->getForumOfGroup();

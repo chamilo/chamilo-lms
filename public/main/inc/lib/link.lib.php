@@ -938,7 +938,7 @@ class Link extends Model
         if (!empty($links)) {
             $courseEntity = api_get_course_entity($courseId);
             $sessionEntity = api_get_session_entity($sessionId);
-            $_user = api_get_user_info();
+            $user = api_get_user_entity();
 
             $content .= '<div class="link list-group">';
             $i = 1;
@@ -963,10 +963,7 @@ class Link extends Model
                 $session_img = '';
                 $session = $resourceLink->getSession();
                 if ($session) {
-                    $session_img = api_get_session_image(
-                        $session->getId(),
-                        $_user['status']
-                    );
+                    $session_img = api_get_session_image($session->getId(), $user);
                 }
 
                 $toolbar = '';

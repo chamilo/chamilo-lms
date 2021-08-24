@@ -1339,6 +1339,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $iconStatus = '';
         $iconStatusMedium = '';
         $label = '';
+
         switch ($result['status']) {
             case STUDENT:
                 if ($result['has_certificates']) {
@@ -1696,7 +1697,7 @@ function api_get_lp_entity(int $id): ?CLp
 function api_get_user_entity(int $userId = 0): ?User
 {
     $userId = $userId ?: api_get_user_id();
-    $repo = UserManager::getRepository();
+    $repo = Container::getUserRepository();
 
     return $repo->find($userId);
 }
@@ -2348,43 +2349,6 @@ function api_check_password($password)
 }
 
 /**
- * Returns the status string corresponding to the status code.
- *
- * @author Noel Dieschburg
- *
- * @param the int status code
- *
- * @return string
- */
-function get_status_from_code($status_code)
-{
-    switch ($status_code) {
-        case STUDENT:
-            return get_lang('Student');
-        case COURSEMANAGER:
-            return get_lang('Teacher');
-        case SESSIONADMIN:
-            return get_lang('SessionsAdmin');
-        case DRH:
-            return get_lang('Drh');
-        case ANONYMOUS:
-            return get_lang('Anonymous');
-        case PLATFORM_ADMIN:
-            return get_lang('Administrator');
-        case SESSION_COURSE_COACH:
-            return get_lang('SessionCourseCoach');
-        case SESSION_GENERAL_COACH:
-            return get_lang('SessionGeneralCoach');
-        case COURSE_TUTOR:
-            return get_lang('CourseAssistant');
-        case STUDENT_BOSS:
-            return get_lang('StudentBoss');
-        case INVITEE:
-            return get_lang('Invitee');
-    }
-}
-
-/**
  * Gets the current Chamilo (not PHP/cookie) session ID.
  *
  * @return int O if no active session, the session ID otherwise
@@ -2564,11 +2528,11 @@ function api_get_session_visibility(
  *
  * @return string Session icon
  */
-function api_get_session_image($sessionId, $statusId)
+function api_get_session_image($sessionId, User $user)
 {
     $sessionId = (int) $sessionId;
     $image = '';
-    if (STUDENT != $statusId) {
+    if ($user->hasRole('ROLE_STUDENT')) {
         // Check whether is not a student
         if ($sessionId > 0) {
             $image = '&nbsp;&nbsp;'.Display::return_icon(
@@ -2803,18 +2767,22 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
         return false;
     }
 
-    $isAdmin = Session::read('is_platformAdmin');
+    ///$isAdmin = Session::read('is_platformAdmin');
+    $isAdmin = $currentUser->hasRole('ROLE_ADMIN');
+
     if ($isAdmin) {
         return true;
     }
-    $user = api_get_user_info();
 
-    return
-        isset($user['status']) &&
-        (
-            ($allowSessionAdmins && SESSIONADMIN == $user['status']) ||
-            ($allowDrh && DRH == $user['status'])
-        );
+    if ($allowSessionAdmins && $currentUser->hasRole('ROLE_SESSION_MANAGER')) {
+        return true;
+    }
+
+    if ($allowDrh && $currentUser->hasRole('ROLE_RRHH')) {
+        return true;
+    }
+
+    return false;
 }
 
 /**
@@ -6635,10 +6603,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
         $isDrh();
 }
 
-/**
- * @return bool
- */
-function api_is_allowed_in_course()
+function api_is_allowed_in_course(): bool
 {
     if (api_is_platform_admin()) {
         return true;

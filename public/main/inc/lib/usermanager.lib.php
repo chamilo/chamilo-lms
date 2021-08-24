@@ -1006,7 +1006,7 @@ class UserManager
         $userManager = self::getRepository();
         $user = api_get_user_entity($user_id);
 
-        if (empty($user)) {
+        if (null === $user) {
             return false;
         }
 
@@ -1163,7 +1163,7 @@ class UserManager
             }
 
             $creatorInfo = api_get_user_info($creator_id);
-            $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
+            $creatorEmail = $creatorInfo['email'] ?? '';
 
             api_mail_html(
                 $recipient_name,
@@ -4823,7 +4823,7 @@ class UserManager
             Database::query($sql);
         }
 
-        $user->addRole('ROLE_SUPER_ADMIN');
+        $user->addRole('ROLE_ADMIN');
         self::getRepository()->updateUser($user, true);
     }
 
@@ -4834,7 +4834,7 @@ class UserManager
             $table = Database::get_main_table(TABLE_MAIN_ADMIN);
             $sql = "DELETE FROM $table WHERE user_id = $userId";
             Database::query($sql);
-            $user->removeRole('ROLE_SUPER_ADMIN');
+            $user->removeRole('ROLE_ADMIN');
             self::getRepository()->updateUser($user, true);
         }
     }

@@ -171,7 +171,8 @@ class NotebookManager
     public static function display_notes()
     {
         $sessionId = api_get_session_id();
-        $_user = api_get_user_info();
+        $user = api_get_user_entity();
+
         if (!isset($_GET['direction'])) {
             $sort_direction = 'ASC';
             $link_sort_direction = 'DESC';
@@ -234,7 +235,7 @@ class NotebookManager
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // Validation when belongs to a session
-            $session_img = api_get_session_image($row['session_id'], $_user['status']);
+            $session_img = api_get_session_image($row['session_id'], $user);
             $updateValue = '';
             if ($row['update_date'] != $row['creation_date']) {
                 $updateValue = ', '.get_lang('Updated').': '.Display::dateToStringAgoAndLongDate($row['update_date']);

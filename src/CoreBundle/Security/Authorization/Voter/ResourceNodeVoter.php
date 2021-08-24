@@ -379,7 +379,7 @@ class ResourceNodeVoter extends Voter
         $currentStudentSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT);
         $currentTeacherSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
 
-        $superAdmin = new GenericRole('ROLE_SUPER_ADMIN');
+        //$superAdmin = new GenericRole('ROLE_SUPER_ADMIN');
         $admin = new GenericRole('ROLE_ADMIN');
 
         // Setting Simple ACL.
@@ -399,7 +399,7 @@ class ResourceNodeVoter extends Voter
             ->addRole($currentStudentGroup)
             ->addRole($currentTeacherGroup, self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
 
-            ->addRole($superAdmin)
+            //->addRole($superAdmin)
             ->addRole($admin)
         ;
 

@@ -607,7 +607,7 @@ if ($studentBossList) {
 }
 
 $em = Database::getManager();
-$userRepository = UserManager::getRepository();
+$userRepository = Container::getUserRepository();
 
 $hrmList = $userRepository->getAssignedHrmUserList($user->getId(), api_get_current_access_url_id());
 

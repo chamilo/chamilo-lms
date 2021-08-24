@@ -4,6 +4,7 @@
 
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
+use Doctrine\DBAL\Driver\Statement;
 
 /**
  *  @author Thomas, Hugues, Christophe - original version
@@ -1558,6 +1559,49 @@ function getAllWorkListStudent(
     return $works;
 }
 
+function getWorkListTeacherQuery(
+    $courseId,
+    $sessionId,
+    $groupId,
+    $start,
+    $limit,
+    $column,
+    $direction,
+    $whereCondition,
+    $getCount = false
+): ?Statement {
+    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+
+    $condition_session = api_get_session_condition($sessionId);
+    $groupIid = 0;
+    if ($groupId) {
+        $groupInfo = GroupManager::get_group_properties($groupId);
+        $groupIid = $groupInfo['iid'];
+    }
+    $groupIid = (int) $groupIid;
+
+    $select = $getCount
+        ? "count(w.id) as count"
+        : "w.*, a.expires_on, expires_on, ends_on, enable_qualification";
+
+    $sql = "SELECT $select
+        FROM $workTable w
+        LEFT JOIN $workTableAssignment a
+            ON (a.publication_id = w.id AND a.c_id = w.c_id)
+        WHERE
+            w.c_id = $courseId
+            $condition_session AND
+            active IN (0, 1) AND
+            parent_id = 0 AND
+            post_group_id = $groupIid
+            $whereCondition
+        ORDER BY `$column` $direction
+        LIMIT $start, $limit";
+
+    return Database::query($sql);
+}
+
 /**
  * @param int    $start
  * @param int    $limit
@@ -1577,9 +1621,6 @@ function getWorkListTeacher(
     $getCount = false,
     $courseInfoParam = []
 ) {
-    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-
     $courseInfo = api_get_course_info();
     $course_id = api_get_course_int_id();
     if (!empty($courseInfoParam)) {
@@ -1588,14 +1629,7 @@ function getWorkListTeacher(
     }
 
     $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
-    $groupIid = 0;
-    if ($group_id) {
-        $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
-    }
-    $groupIid = (int) $groupIid;
 
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
     if (!in_array($direction, ['asc', 'desc'])) {
@@ -1612,27 +1646,17 @@ function getWorkListTeacher(
 
     // Get list from database
     if ($is_allowed_to_edit) {
-        $active_condition = ' active IN (0, 1)';
-        if ($getCount) {
-            $select = " SELECT count(w.id) as count";
-        } else {
-            $select = " SELECT w.*, a.expires_on, expires_on, ends_on, enable_qualification ";
-        }
-        $sql = " $select
-                FROM $workTable w
-                LEFT JOIN $workTableAssignment a
-                ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                WHERE
-                    w.c_id = $course_id
-                    $condition_session AND
-                    $active_condition AND
-                    parent_id = 0 AND
-                    post_group_id = $groupIid
-                    $where_condition
-                ORDER BY `$column` $direction
-                LIMIT $start, $limit";
-
-        $result = Database::query($sql);
+        $result = getWorkListTeacherQuery(
+            $course_id,
+            $session_id,
+            $group_id,
+            $start,
+            $limit,
+            $column,
+            $direction,
+            $where_condition,
+            $getCount
+        );
 
         if ($getCount) {
             $row = Database::fetch_array($result);

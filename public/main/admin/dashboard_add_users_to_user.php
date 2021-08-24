@@ -35,16 +35,19 @@ $user_info = api_get_user_info($user_id);
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
 $userStatus = $user_info['status'];
-$firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
+
+$user = api_get_user_entity($user_id);
+$isSessionAdmin = api_is_session_admin($user);
+$firstLetterUser = $_POST['firstLetterUser'] ?? null;
 
 // setting the name of the tool
 $isAdmin = UserManager::is_admin($user_id);
 if ($isAdmin) {
     $userStatus = PLATFORM_ADMIN;
-    $tool_name = get_lang('AssignUsersToAdministrationistrator');
-} elseif (SESSIONADMIN == $user_info['status']) {
+    $tool_name = get_lang('Assign users to the platform administrator');
+} elseif ($isSessionAdmin) {
     $tool_name = get_lang('Assign users to sessions administrator');
-} elseif (STUDENT_BOSS == $user_info['status']) {
+} elseif (api_is_student_boss($user)) {
     $tool_name = get_lang('Assign users to superior');
 } else {
     $tool_name = get_lang('Assign users to Human Resources manager');
@@ -341,7 +344,7 @@ echo '</div>';
 echo Display::page_header(
     sprintf(
         get_lang('Assign users to %s'),
-        api_get_person_name($user_info['firstname'], $user_info['lastname'])
+        UserManager::formatUserFullName($user)
     ),
     null,
     'h3'
@@ -482,12 +485,12 @@ $result = Database::query($sql);
     <div class="col-md-4">
     <?php
     if (UserManager::is_admin($user_id)) {
-        echo get_lang('AssignedUsersListToAdministrationistrator');
+        echo get_lang('Users assigned to the platform administrator');
     } else {
-        if (SESSIONADMIN == $user_info['status']) {
+        if ($isSessionAdmin) {
             echo get_lang('Assign a users list to the sessions administrator');
         } else {
-            if (STUDENT_BOSS == $user_info['status']) {
+            if (api_is_student_boss($user)) {
                 echo get_lang('Users assigned to their superior');
             } else {
                 echo get_lang('List of users assigned to Human Resources manager');

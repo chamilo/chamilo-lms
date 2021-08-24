@@ -30,16 +30,18 @@ $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL
 
 // Initializing variables
 $user_id = isset($_GET['user']) ? (int) ($_GET['user']) : null;
-$user_info = api_get_user_info($user_id);
+
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
+$user = api_get_user_entity($user_id);
+$isSessionAdmin = api_is_session_admin($user);
 $ajax_search = false;
 
 // Setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-    $tool_name = get_lang('AssignSessionsToAdministrationistrator');
-} elseif (SESSIONADMIN == $user_info['status']) {
-    $tool_name = get_lang('assign sessions to sessions administrator');
+    $tool_name = get_lang('Assign sessions to platform administrator');
+} elseif ($isSessionAdmin) {
+    $tool_name = get_lang('Assign sessions to sessions administrator');
 } else {
     $tool_name = get_lang('Assign sessions to Human Resources manager');
 }
@@ -172,7 +174,7 @@ if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
 Display::display_header($tool_name);
 
 // Actions
-if (SESSIONADMIN != $user_info['status']) {
+if (!$isSessionAdmin) {
     $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
         Display::return_icon('add-user.png', get_lang('Assign users'), null, ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.
@@ -182,7 +184,7 @@ if (SESSIONADMIN != $user_info['status']) {
 }
 
 echo Display::page_header(
-    sprintf(get_lang('Assign sessions to %s'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
+    sprintf(get_lang('Assign sessions to %s'), UserManager::formatUserFullName($user)),
     null,
     'h3'
 );
@@ -281,8 +283,8 @@ $result = Database::query($sql);
             <h5>
                 <?php
                 if (UserManager::is_admin($user_id)) {
-                    echo get_lang('AssignedSessionsListToAdministrationistrator');
-                } elseif (SESSIONADMIN == $user_info['status']) {
+                    echo get_lang('Assigned sessions list to platform administrator');
+                } elseif ($isSessionAdmin) {
                     echo get_lang('Assigned sessions list to sessions administrator');
                 } else {
                     echo get_lang('List of sessions assigned to the Human Resources manager');

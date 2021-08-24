@@ -2817,31 +2817,6 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
 }
 
 /**
- * Returns the user's numeric status ID from the users table.
- *
- * @param int $user_id If none provided, will use current user
- *
- * @return int User's status (1 for teacher, 5 for student, etc)
- */
-function api_get_user_status($user_id = null)
-{
-    $user_id = (int) $user_id;
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
-    }
-    $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT status FROM $table WHERE id = $user_id ";
-    $result = Database::query($sql);
-    $status = null;
-    if (Database::num_rows($result)) {
-        $row = Database::fetch_array($result);
-        $status = $row['status'];
-    }
-
-    return $status;
-}
-
-/**
  * Checks whether current user is allowed to create courses.
  *
  * @return bool true if the user has course creation rights,
@@ -3008,16 +2983,55 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     return count($sessionIsCoach) > 0;
 }
 
+function api_user_has_role(string $role, ?User $user = null): bool
+{
+    if (null === $user) {
+        $user = api_get_current_user();
+    }
+
+    if (null === $user) {
+        return false;
+    }
+
+    return $user->hasRole($role);
+}
+
+function api_is_allowed_in_course(): bool
+{
+    if (api_is_platform_admin()) {
+        return true;
+    }
+
+    $user = api_get_current_user();
+    if ($user instanceof User) {
+        if ($user->hasRole('ROLE_CURRENT_COURSE_SESSION_STUDENT') ||
+            $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER') ||
+            $user->hasRole('ROLE_CURRENT_COURSE_STUDENT') ||
+            $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+        ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Checks whether current user is a student boss.
+ */
+function api_is_student_boss(?User $user = null): bool
+{
+    return api_user_has_role('ROLE_STUDENT_BOSS', $user);
+}
+
 /**
  * Checks whether the current user is a session administrator.
  *
  * @return bool True if current user is a course administrator
  */
-function api_is_session_admin()
+function api_is_session_admin(?User $user = null)
 {
-    $user = api_get_user_info();
-
-    return isset($user['status']) && SESSIONADMIN == $user['status'];
+    return api_user_has_role('ROLE_SESSION_MANAGER', $user);
 }
 
 /**
@@ -3027,9 +3041,7 @@ function api_is_session_admin()
  */
 function api_is_drh()
 {
-    $user = api_get_user_info();
-
-    return isset($user['status']) && DRH == $user['status'];
+    return api_user_has_role('ROLE_RRHH');
 }
 
 /**
@@ -3039,9 +3051,7 @@ function api_is_drh()
  */
 function api_is_student()
 {
-    $user = api_get_user_info();
-
-    return isset($user['status']) && STUDENT == $user['status'];
+    return api_user_has_role('ROLE_STUDENT');
 }
 
 /**
@@ -3051,9 +3061,7 @@ function api_is_student()
  */
 function api_is_teacher()
 {
-    $user = api_get_user_info();
-
-    return isset($user['status']) && COURSEMANAGER == $user['status'];
+    return api_user_has_role('ROLE_TEACHER');
 }
 
 /**
@@ -3063,9 +3071,7 @@ function api_is_teacher()
  */
 function api_is_invitee()
 {
-    $user = api_get_user_info();
-
-    return isset($user['status']) && INVITEE == $user['status'];
+    return api_user_has_role('ROLE_INVITEE');
 }
 
 /**
@@ -6604,26 +6610,6 @@ function api_can_login_as($loginAsUserId, $userId = null)
         $isDrh();
 }
 
-function api_is_allowed_in_course(): bool
-{
-    if (api_is_platform_admin()) {
-        return true;
-    }
-
-    $user = api_get_current_user();
-    if ($user instanceof User) {
-        if ($user->hasRole('ROLE_CURRENT_COURSE_SESSION_STUDENT') ||
-            $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER') ||
-            $user->hasRole('ROLE_CURRENT_COURSE_STUDENT') ||
-            $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
-        ) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 /**
  * Return true on https install.
  *
@@ -6858,25 +6844,6 @@ function api_register_campus($listCampus = true)
         $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
         Database::query($sql);
     }
-}
-
-function api_user_has_role(string $role): bool
-{
-    $currentUser = api_get_current_user();
-
-    if (null === $currentUser) {
-        return false;
-    }
-
-    return $currentUser->hasRole($role);
-}
-
-/**
- * Checks whether current user is a student boss.
- */
-function api_is_student_boss(): bool
-{
-    return api_user_has_role('ROLE_STUDENT_BOSS');
 }
 
 /**

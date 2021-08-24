@@ -9,9 +9,6 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
-/**
- * @covers \UserRepository
- */
 class UserRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
@@ -27,11 +24,38 @@ class UserRepositoryTest extends AbstractApiTest
     public function testCreateUser(): void
     {
         self::bootKernel();
-        $this->createUser('user', 'user');
+        $student = $this->createUser('student');
+        $userRepo = self::getContainer()->get(UserRepository::class);
 
-        $count = self::getContainer()->get(UserRepository::class)->count([]);
+        $count = $userRepo->count([]);
         // By default there are 2 users: admin + anon.
         $this->assertSame(3, $count);
+        $this->assertHasNoEntityViolations($student);
+
+        $this->assertSame(1, \count($student->getRoles()));
+        $this->assertTrue(\in_array('ROLE_USER', $student->getRoles(), true));
+
+        $student->addRole('ROLE_STUDENT');
+        $userRepo->update($student);
+
+        $this->assertSame(2, \count($student->getRoles()));
+
+        $student->addRole('ROLE_STUDENT');
+        $userRepo->update($student);
+
+        $this->assertSame(2, \count($student->getRoles()));
+
+        $student->removeRole('ROLE_STUDENT');
+        $userRepo->update($student);
+
+        $this->assertSame(1, \count($student->getRoles()));
+
+        $this->assertTrue($student->isAccountNonExpired());
+        $this->assertTrue($student->isAccountNonLocked());
+        $this->assertTrue($student->isActive());
+        $this->assertTrue($student->isEnabled());
+        $this->assertFalse($student->isAdmin());
+        $this->assertTrue($student->isCredentialsNonExpired());
     }
 
     public function testCreateUserWithApi(): void

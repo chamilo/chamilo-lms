@@ -20,9 +20,6 @@ class SessionRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    /**
-     * Create a session.
-     */
     public function testCreate(): void
     {
         self::bootKernel();

@@ -29,5 +29,13 @@ class UsergroupRepositoryTest extends KernelTestCase
         $this->assertHasNoEntityViolations($usergroup);
         $repo->create($usergroup);
         $this->assertSame(1, $repo->count([]));
+
+        $usergroup->setName('test2');
+        $repo->update($usergroup);
+
+        $this->assertSame(1, $repo->count([]));
+
+        $repo->delete($usergroup);
+        $this->assertSame(0, $repo->count([]));
     }
 }

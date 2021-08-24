@@ -11,9 +11,6 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * @covers \AccessUrlRepository
- */
 class AccessUrlRepositoryTest extends KernelTestCase
 {
     use ChamiloTestTrait;
@@ -36,5 +33,26 @@ class AccessUrlRepositoryTest extends KernelTestCase
         $hasUser = $accessUrl->hasUser($admin);
 
         $this->assertTrue($hasUser);
+    }
+
+    public function testCreateAccessUrl(): void
+    {
+        self::bootKernel();
+
+        $repo = self::getContainer()->get(AccessUrlRepository::class);
+
+        $admin = $this->getUser('admin');
+
+        $accessUrl = (new AccessUrl())
+            ->setUrl('https://example.org')
+            ->setActive(1)
+            ->setCreator($admin)
+        ;
+
+        $this->assertHasNoEntityViolations($accessUrl);
+        $repo->create($accessUrl);
+
+        $this->assertSame(2, $repo->count([]));
+        $this->assertSame(0, $accessUrl->getSettings()->count());
     }
 }

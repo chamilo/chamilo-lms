@@ -206,6 +206,7 @@ class ExerciseLib
                     break;
                 case UPLOAD_ANSWER:
                     global $exe_id;
+                    $answer = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
                     $path = '/upload_answer/'.$exe_id.'/'.$questionId.'/';
                     $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=upload_answer&curdirpath='.$path;
                     $multipleForm = new FormValidator(
@@ -231,6 +232,23 @@ class ExerciseLib
                             });
                         });
                     </script>';
+                    // Set default values
+                    if (!empty($answer)) {
+                        $userWebpath = UserManager::getUserPathById(api_get_user_id(), 'web').'my_files'.'/upload_answer/'.$exe_id.'/'.$questionId.'/';
+                        $filesNames = explode('|', $answer);
+                        $icon = Display::return_icon('file_txt.gif');
+                        $default = '';
+                        foreach ($filesNames as $fileName) {
+                            $default .= '<a target="_blank" class="panel-image" href="'.$userWebpath.$fileName.'"><div class="row"><div class="col-sm-4">'.$icon.'</div><div class="col-sm-5 file_name">'.$fileName.'</div><input type="hidden" name="uploadChoice['.$questionId.'][]" value="'.$fileName.'"></div></a>';
+                        }
+                        $s .= '<script>
+                            $(function() {
+                                if ($("#files").length > 0) {
+                                  $("#files").html("'.addslashes($default).'");
+                                }
+                            });
+                        </script>';
+                    }
                     $s .= $multipleForm->returnForm();
                     break;
                 case ORAL_EXPRESSION:

@@ -33,7 +33,7 @@ class LtiProvider
      *
      * @throws Lti1p3\OidcException
      */
-    public function login($request = null)
+    public function login(?array $request = null)
     {
         $launchUrl = Security::remove_XSS($request['target_link_uri']);
         LtiOidcLogin::new(new Lti13Database(), new Lti13Cache(), new Lti13Cookie())
@@ -56,9 +56,9 @@ class LtiProvider
     }
 
     /**
-     * Verify if email user is in the platform to create it and login
+     * Verify if email user is in the platform to create it and login (true) or not (false)
      */
-    public function validateUser($launchData, $courseCode)
+    public function validateUser(array $launchData, string $courseCode): bool
     {
 
         if (empty($launchData)) {

@@ -434,7 +434,7 @@ class ResourceNodeVoter extends Voter
 
         // Admin can do everything
         $acl->allow($admin);
-        $acl->allow($superAdmin);
+        //$acl->allow($superAdmin);
 
         //if ($token instanceof AnonymousToken) {
         if ($token instanceof NullToken) {

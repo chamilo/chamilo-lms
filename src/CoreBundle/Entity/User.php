@@ -1790,6 +1790,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->hasRole('ROLE_SUPER_ADMIN');
     }
 
+    public function setRoleFromStatus(int $status): void
+    {
+        $role = match ($status) {
+            COURSEMANAGER => 'ROLE_TEACHER',
+            STUDENT => 'ROLE_STUDENT',
+            DRH => 'ROLE_RRHH',
+            SESSIONADMIN => 'ROLE_SESSION_MANAGER',
+            STUDENT_BOSS => 'ROLE_STUDENT_BOSS',
+            INVITEE => 'ROLE_INVITEE',
+            default => 'ROLE_USER',
+        };
+
+        $this->addRole($role);
+    }
+
     public function hasRole(string $role): bool
     {
         return \in_array(strtoupper($role), $this->getRoles(), true);
@@ -1837,11 +1852,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         }
 
         return $this;
-    }
-
-    public function isUser(self $user = null): bool
-    {
-        return null !== $user && $this->getId() === $user->getId();
     }
 
     public function removeRole(string $role): self

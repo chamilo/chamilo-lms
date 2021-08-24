@@ -14,8 +14,6 @@ use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * Class UserManager.
- *
  * This library provides functions for user management.
  * Include/require it in your code to use its functionality.
  *
@@ -289,8 +287,10 @@ class UserManager
             $user->setExpirationDate($expirationDate);
         }
 
+        $user->setRoleFromStatus($status);
+
         // Add user to a group
-        $statusToGroup = [
+        /*$statusToGroup = [
             COURSEMANAGER => 'TEACHER',
             STUDENT => 'STUDENT',
             DRH => 'RRHH',
@@ -304,7 +304,7 @@ class UserManager
             if ($group) {
                 $user->addGroup($group);
             }
-        }
+        }*/
 
         $repo->updateUser($user, true);
 
@@ -1048,10 +1048,7 @@ class UserManager
 
         if (!empty($expiration_date)) {
             $expiration_date = api_get_utc_datetime($expiration_date);
-            $expiration_date = new \DateTime(
-                $expiration_date,
-                new DateTimeZone('UTC')
-            );
+            $expiration_date = new \DateTime($expiration_date, new DateTimeZone('UTC'));
         }
 
         $user
@@ -1075,28 +1072,19 @@ class UserManager
             $user->setPlainPassword($password);
         }
 
-        $statusToGroup = [
-            COURSEMANAGER => 'TEACHER',
-            STUDENT => 'STUDENT',
-            DRH => 'RRHH',
-            SESSIONADMIN => 'SESSION_ADMIN',
-            STUDENT_BOSS => 'STUDENT_BOSS',
-            INVITEE => 'INVITEE',
-        ];
-
-        $group = Container::$container->get(GroupRepository::class)->findOneBy(['code' => $statusToGroup[$status]]);
+        $user->setRoleFromStatus($status);
+        /*$group = Container::$container->get(GroupRepository::class)->findOneBy(['code' => $statusToGroup[$status]]);
         if ($group) {
             $user->addGroup($group);
-        }
+        }*/
 
         $userManager->updateUser($user, true);
         Event::addEvent(LOG_USER_UPDATE, LOG_USER_ID, $user_id);
 
         if (1 == $change_active) {
+            $event_title = LOG_USER_DISABLE;
             if (1 == $active) {
                 $event_title = LOG_USER_ENABLE;
-            } else {
-                $event_title = LOG_USER_DISABLE;
             }
             Event::addEvent($event_title, LOG_USER_ID, $user_id);
         }

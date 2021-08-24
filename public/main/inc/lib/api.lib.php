@@ -2532,7 +2532,7 @@ function api_get_session_image($sessionId, User $user)
 {
     $sessionId = (int) $sessionId;
     $image = '';
-    if ($user->hasRole('ROLE_STUDENT')) {
+    if (!$user->hasRole('ROLE_STUDENT')) {
         // Check whether is not a student
         if ($sessionId > 0) {
             $image = '&nbsp;&nbsp;'.Display::return_icon(
@@ -5341,40 +5341,41 @@ function api_is_global_platform_admin($user_id = null)
 
 /**
  * @param int  $admin_id_to_check
- * @param int  $my_user_id
+ * @param int  $userId
  * @param bool $allow_session_admin
  *
  * @return bool
  */
 function api_global_admin_can_edit_admin(
     $admin_id_to_check,
-    $my_user_id = null,
+    $userId = 0,
     $allow_session_admin = false
 ) {
-    if (empty($my_user_id)) {
-        $my_user_id = api_get_user_id();
+    if (empty($userId)) {
+        $userId = api_get_user_id();
     }
 
-    $iam_a_global_admin = api_is_global_platform_admin($my_user_id);
+    $iam_a_global_admin = api_is_global_platform_admin($userId);
     $user_is_global_admin = api_is_global_platform_admin($admin_id_to_check);
 
     if ($iam_a_global_admin) {
         // Global admin can edit everything
         return true;
-    } else {
-        // If i'm a simple admin
-        $is_platform_admin = api_is_platform_admin_by_id($my_user_id);
+    }
 
-        if ($allow_session_admin) {
-            $is_platform_admin = api_is_platform_admin_by_id($my_user_id) || (SESSIONADMIN == api_get_user_status($my_user_id));
-        }
+    // If i'm a simple admin
+    $is_platform_admin = api_is_platform_admin_by_id($userId);
 
-        if ($is_platform_admin) {
-            if ($user_is_global_admin) {
-                return false;
-            } else {
-                return true;
-            }
+    if ($allow_session_admin && !$is_platform_admin) {
+        $user = api_get_user_entity($userId);
+        $is_platform_admin = $user->hasRole('ROLE_SESSION_MANAGER');
+    }
+
+    if ($is_platform_admin) {
+        if ($user_is_global_admin) {
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -5383,14 +5384,14 @@ function api_global_admin_can_edit_admin(
 
 /**
  * @param int  $admin_id_to_check
- * @param int  $my_user_id
+ * @param int  $userId
  * @param bool $allow_session_admin
  *
  * @return bool|null
  */
-function api_protect_super_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false)
+function api_protect_super_admin($admin_id_to_check, $userId = null, $allow_session_admin = false)
 {
-    if (api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id, $allow_session_admin)) {
+    if (api_global_admin_can_edit_admin($admin_id_to_check, $userId, $allow_session_admin)) {
         return true;
     } else {
         api_not_allowed();
@@ -6859,18 +6860,23 @@ function api_register_campus($listCampus = true)
     }
 }
 
+function api_user_has_role(string $role): bool
+{
+    $currentUser = api_get_current_user();
+
+    if (null === $currentUser) {
+        return false;
+    }
+
+    return $currentUser->hasRole($role);
+}
+
 /**
  * Checks whether current user is a student boss.
- *
- * @global array $_user
- *
- * @return bool
  */
-function api_is_student_boss()
+function api_is_student_boss(): bool
 {
-    $_user = api_get_user_info();
-
-    return isset($_user['status']) && STUDENT_BOSS == $_user['status'];
+    return api_user_has_role('ROLE_STUDENT_BOSS');
 }
 
 /**

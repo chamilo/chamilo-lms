@@ -124,7 +124,8 @@ class LtiProviderPlugin extends Plugin
         return $toolProvider;
     }
 
-    public function getToolProviderVars($issuer) {
+    public function getToolProviderVars($issuer): array
+    {
         $toolProvider = $this->getToolProvider($issuer);
         list($courseCode, $tool) = explode('@@', $toolProvider);
         list($toolName, $toolId) = explode('-', $tool);

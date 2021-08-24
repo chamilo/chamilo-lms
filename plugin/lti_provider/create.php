@@ -1,12 +1,11 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
-use Chamilo\PluginBundle\LtiProvider\Form\FrmAdd;
-
 $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
+use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
+use Chamilo\PluginBundle\LtiProvider\Form\FrmAdd;
 require_once __DIR__.'/LtiProviderPlugin.php';
 
 api_protect_admin_script();
@@ -28,6 +27,8 @@ if ($form->validate()) {
     $platform->setKeySetUrl($formValues['key_set_url']);
     $platform->setDeploymentId($formValues['deployment_id']);
     $platform->setKid($formValues['kid']);
+    $toolProvider = (isset($formValues['tool_provider']) ? $formValues['tool_provider'] : $_POST['tool_provider']);
+    $platform->setToolProvider($toolProvider);
 
     $em->persist($platform);
     $em->flush();

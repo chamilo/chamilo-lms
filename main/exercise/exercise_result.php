@@ -377,5 +377,18 @@ function showEmbeddableFinishButton()
         ['class' => 'text-center']
     );
 
+    // We check if a tool provider
+    if (isset($_REQUEST['lti_launch_id'])) {
+        $ltiLaunchId = Security::remove_XSS($_REQUEST['lti_launch_id']);
+        global $exeId;
+        $js .= '<script>
+            $(function () {
+                var url = "'.api_get_path(WEB_PLUGIN_PATH).'lti_provider/tool/api/score.php?'.api_get_cidreq().'&launch_id='.$ltiLaunchId.'&exeId='.$exeId.'";
+                $.get(url);
+            });
+        </script>';
+
+    }
+
     return $js.PHP_EOL.$html;
 }

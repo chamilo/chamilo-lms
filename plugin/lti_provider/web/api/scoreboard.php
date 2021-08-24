@@ -2,7 +2,7 @@
 /* For license terms, see /license.txt */
 
 require_once __DIR__.'/../../../../main/inc/global.inc.php';
-require_once __DIR__ . '/../../src/LtiProvider.php';
+require_once __DIR__.'/../../src/LtiProvider.php';
 
 $launch = LtiProvider::create()->launch(true, $_REQUEST['launch_id']);
 

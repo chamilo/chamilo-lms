@@ -45,7 +45,8 @@ class FrmEdit extends FormValidator
         $this->addUrl('key_set_url', $plugin->get_lang('KeySetUrl'));
         $this->addText('client_id', $plugin->get_lang('ClientId'));
         $this->addText('deployment_id', $plugin->get_lang('DeploymentId'));
-        $this->addText('kid', $plugin->get_lang('KeyId'));
+        $this->addText('kid', $plugin->get_lang('KeyId'), false);
+        $this->addElement('html', $plugin->getQuizzesSelect($this->platform->getIssuer()));
 
         $this->addButtonCreate($plugin->get_lang('EditPlatform'));
         $this->addHidden('id', $this->platform->getId());
@@ -66,6 +67,7 @@ class FrmEdit extends FormValidator
         $defaults['client_id'] = $this->platform->getClientId();
         $defaults['deployment_id'] = $this->platform->getDeploymentId();
         $defaults['kid'] = $this->platform->getKid();
+        $defaults['tool_provider'] = $this->platform->getToolProvider();
 
         $this->setDefaults($defaults);
     }

@@ -17,7 +17,6 @@
                     <th>{{ 'PlatformName'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th>{{ 'ClientId'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-center">{{ 'DeploymentId'|get_plugin_lang('LtiProviderPlugin') }}</th>
-                    <th class="text-center">{{ 'KeyId'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-center">{{ 'URLs'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-right">{{ 'Actions'|get_lang }}</th>
                 </tr>
@@ -29,7 +28,6 @@
                     <td>{{ platform.getIssuer }}</td>
                     <td>{{ platform.getClientId }}</td>
                     <td>{{ platform.getDeploymentId }}</td>
-                    <td>{{ platform.getKid }}</td>
                     <td>
                         <p><strong>{{ 'AuthLoginUrl'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getAuthLoginUrl }}</p>
                         <p><strong>{{ 'AuthTokenUrl'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getAuthTokenUrl }}</p>

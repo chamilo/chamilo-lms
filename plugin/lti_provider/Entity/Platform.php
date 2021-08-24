@@ -65,6 +65,12 @@ class Platform
      * @ORM\Column(name="deployment_id", type="text")
      */
     private $deploymentId;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tool_provider", type="text")
+     */
+    private $toolProvider;
 
     /**
      * Get id.
@@ -85,9 +91,25 @@ class Platform
     }
 
     /**
+     * @return string
+     */
+    public function getToolProvider()
+    {
+        return $this->toolProvider;
+    }
+
+    /**
+     * @param string $toolProvider
+     */
+    public function setToolProvider(?string $toolProvider): void
+    {
+        $this->toolProvider = $toolProvider;
+    }
+
+    /**
      * Get key id.
      */
-    public function getKid(): string
+    public function getKid()
     {
         return $this->kid;
     }
@@ -105,7 +127,7 @@ class Platform
     /**
      * Get Issuer.
      */
-    public function getIssuer(): string
+    public function getIssuer()
     {
         return $this->issuer;
     }
@@ -123,7 +145,7 @@ class Platform
     /**
      * Get client ID.
      */
-    public function getClientId(): string
+    public function getClientId()
     {
         return $this->clientId;
     }
@@ -141,7 +163,7 @@ class Platform
     /**
      * Get auth login URL.
      */
-    public function getAuthLoginUrl(): string
+    public function getAuthLoginUrl()
     {
         return $this->authLoginUrl;
     }
@@ -159,7 +181,7 @@ class Platform
     /**
      * Get auth token URL.
      */
-    public function getAuthTokenUrl(): string
+    public function getAuthTokenUrl()
     {
         return $this->authTokenUrl;
     }
@@ -177,7 +199,7 @@ class Platform
     /**
      * Get key set URL.
      */
-    public function getKeySetUrl(): string
+    public function getKeySetUrl()
     {
         return $this->keySetUrl;
     }
@@ -195,7 +217,7 @@ class Platform
     /**
      * Get Deployment ID.
      */
-    public function getDeploymentId(): string
+    public function getDeploymentId()
     {
         return $this->deploymentId;
     }

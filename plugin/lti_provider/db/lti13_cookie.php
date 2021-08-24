@@ -7,6 +7,11 @@ class Lti13Cookie implements Lti1p3Cookie
 {
     public function getCookie($name)
     {
+
+        if (isset($_REQUEST['state']) && $name === 'lti1p3_'.$_REQUEST['state']) {
+            return $_REQUEST['state'];
+        }
+
         if (isset($_COOKIE[$name])) {
             return $_COOKIE[$name];
         }

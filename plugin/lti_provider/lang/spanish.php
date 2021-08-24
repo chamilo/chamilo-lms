@@ -28,3 +28,6 @@ $strings['Enabled'] = 'Habilitado';
 $strings['GenerateKeyPairInfo'] = 'Se creará un nuevo par de claves pública y privada cuando se habilite.';
 $strings['URLs'] = 'URL de puntos finales';
 $strings['PlatformConnectionAdded'] = 'Se agrega una conexión de plataforma.';
+$strings['ToolProvider'] = 'Herramienta del proveedor';
+$strings['SelectOneActivity'] = 'Selecccione una actividad';
+$strings['Quizzes'] = 'Ejercicios';

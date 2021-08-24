@@ -10,12 +10,30 @@ if (!$launch->hasAgs()) {
     throw new Exception("Don't have grades!");
 }
 
-$grades = $launch->getAgs();
+if (!isset($_REQUEST['exeId'])) {
+    throw new Exception("Any Exercise result");
+}
 
+$launchData = $launch->getLaunchData();
+
+$label = 'Score';
+$courseClient = $launchData['https://purl.imsglobal.org/spec/lti/claim/resource_link']['title'];
+if (!empty($courseClient)) {
+    $label = $courseClient;
+}
+
+$exeId = (int) $_REQUEST['exeId'];
+$trackInfo = Exercise::get_stat_track_exercise_info_by_exe_id($exeId);
+$score = $trackInfo['exe_result'];
+$weight = $trackInfo['exe_weighting'];
+$duration = $trackInfo['duration'];
+$timestamp = date(DateTime::ISO8601);
+
+$grades = $launch->getAgs();
 $score = Packback\Lti1p3\LtiGrade::new()
-    ->setScoreGiven($_REQUEST['score'])
-    ->setScoreMaximum(100)
-    ->setTimestamp(date(DateTime::ISO8601))
+    ->setScoreGiven($score)
+    ->setScoreMaximum($weight)
+    ->setTimestamp($timestamp)
     ->setActivityProgress('Completed')
     ->setGradingProgress('FullyGraded')
     ->setUserId($launch->getLaunchData()['sub']);
@@ -23,17 +41,17 @@ $score = Packback\Lti1p3\LtiGrade::new()
 
 $scoreLineitem = Packback\Lti1p3\LtiLineitem::new()
     ->setTag('score')
-    ->setScoreMaximum(100)
-    ->setLabel('Score')
+    ->setScoreMaximum($weight)
+    ->setLabel($label)
     ->setResourceId($launch->getLaunchData()['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
 
 $grades->putGrade($score, $scoreLineitem);
 
 
 $time = Packback\Lti1p3\LtiGrade::new()
-    ->setScoreGiven($_REQUEST['time'])
+    ->setScoreGiven($duration)
     ->setScoreMaximum(999)
-    ->setTimestamp(DateTime::ISO8601)
+    ->setTimestamp($timestamp)
     ->setActivityProgress('Completed')
     ->setGradingProgress('FullyGraded')
     ->setUserId($launch->getLaunchData()['sub']);

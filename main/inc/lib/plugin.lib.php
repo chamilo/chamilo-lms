@@ -253,6 +253,7 @@ class AppPlugin
             'notebookteacher',
             'oauth2',
             'olpc_peru_filter',
+            'onlyoffice',
             'openmeetings',
             'pausetraining',
             'pens',

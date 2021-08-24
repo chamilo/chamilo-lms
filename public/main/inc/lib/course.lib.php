@@ -961,7 +961,6 @@ class CourseManager
         // Check in advance whether the user has already been registered on the platform.
         $sql = "SELECT status FROM ".$userTable." WHERE user_id = $userId ";
         if (0 == Database::num_rows(Database::query($sql))) {
-
             return false; // The user has not been registered to the platform.
         }
 

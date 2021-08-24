@@ -245,29 +245,6 @@ class CourseRelUser
         return $this;
     }
 
-    /**
-     * Get relation_type list.
-     */
-    public static function getRelationTypeList(): array
-    {
-        return [
-            '0' => '',
-            COURSE_RELATION_TYPE_RRHH => 'drh',
-        ];
-    }
-
-    /**
-     * Get status list.
-     */
-    public static function getStatusList(): array
-    {
-        return [
-            User::COURSE_MANAGER => 'Teacher',
-            User::STUDENT => 'Student',
-            //User::DRH => 'DRH'
-        ];
-    }
-
     public function getProgress(): int
     {
         return $this->progress;

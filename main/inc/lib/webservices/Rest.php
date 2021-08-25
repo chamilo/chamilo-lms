@@ -69,6 +69,9 @@ class Rest extends WebService
     const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
     const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
     const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
+    const DOWNLOAD_WORK_FOLDER = 'download_work_folder';
+    const DOWNLOAD_WORK_COMMENT_ATTACHMENT = 'download_work_comment_attachment';
+    const DOWNLOAD_WORK = 'download_work';
 
     const VIEW_DOCUMENT_IN_FRAME = 'view_document_in_frame';
 
@@ -2957,6 +2960,39 @@ class Rest extends WebService
                     'gradebook' => 0,
                     'origin' => self::SERVICE_NAME,
                     'file' => Security::remove_XSS($path),
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function downloadWorkFolder(int $workId)
+    {
+        $cidReq = api_get_cidreq();
+        $url = api_get_path(WEB_CODE_PATH)."work/downloadfolder.inc.php?id=$workId&$cidReq";
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function downloadWorkCommentAttachment(int $commentId)
+    {
+        $cidReq = api_get_cidreq();
+        $url = api_get_path(WEB_CODE_PATH)."work/download_comment_file.php?comment_id=$commentId&$cidReq";
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function downloadWork(int $workId, bool $isCorrection = false)
+    {
+        $cidReq = api_get_cidreq();
+        $url = api_get_path(WEB_CODE_PATH)."work/download.php?$cidReq&"
+            .http_build_query(
+                [
+                    'id' => $workId,
+                    'correction' => $isCorrection ? 1 : null,
                 ]
             );
 

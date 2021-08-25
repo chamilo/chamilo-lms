@@ -402,6 +402,29 @@ try {
                 ]
             );
             break;
+        case Rest::DOWNLOAD_WORK_FOLDER:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $restApi->downloadWorkFolder((int) $_GET['work']);
+            break;
+        case Rest::DOWNLOAD_WORK_COMMENT_ATTACHMENT:
+            if (!isset($_GET['comment'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $restApi->downloadWorkCommentAttachment((int) $_GET['comment']);
+            break;
+        case Rest::DOWNLOAD_WORK:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $isCorrection = isset($_GET['correction']);
+
+            $restApi->downloadWork((int) $_GET['work'], $isCorrection);
+            break;
 
         case Rest::VIEW_DOCUMENT_IN_FRAME:
             $lpId = isset($_REQUEST['document']) ? (int) $_REQUEST['document'] : 0;

@@ -151,6 +151,11 @@ try {
             $data = $restApi->getMessageUsers($search);
             $restResponse->setData($data);
             break;
+        case Rest::VIEW_MESSAGE:
+            $messageId = isset($_GET['message']) ? (int) $_GET['message'] : 0;
+
+            $restApi->viewMessage($messageId);
+            break;
 
         case Rest::GET_USER_COURSES:
             $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;

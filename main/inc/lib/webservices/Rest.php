@@ -32,6 +32,7 @@ class Rest extends WebService
     const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
     const SAVE_USER_MESSAGE = 'save_user_message';
     const GET_MESSAGE_USERS = 'message_users';
+    const VIEW_MESSAGE = 'view_message';
 
     const GET_USER_COURSES = 'user_courses';
     const GET_USER_SESSIONS = 'user_sessions';
@@ -2920,6 +2921,14 @@ class Rest extends WebService
                     'origin' => self::SERVICE_NAME,
                 ]
             );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewMessage(int $messageId)
+    {
+        $url = api_get_path(WEB_CODE_PATH).'messages/view_message.php?'.http_build_query(['id' => $messageId]);
 
         header("Location: $url");
         exit;

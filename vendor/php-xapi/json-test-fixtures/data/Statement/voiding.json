@@ -1,0 +1,17 @@
+{
+  "id": "12345678-1234-5678-8234-567812345678",
+  "actor": {
+    "mbox": "mailto:conformancetest@tincanapi.com",
+    "objectType": "Agent"
+  },
+  "verb": {
+    "id": "http://adlnet.gov/expapi/verbs/voided",
+    "display": {
+      "en-US": "voided"
+    }
+  },
+  "object": {
+    "id": "e05aa883-acaf-40ad-bf54-02c8ce485fb0",
+    "objectType": "StatementRef"
+  }
+}

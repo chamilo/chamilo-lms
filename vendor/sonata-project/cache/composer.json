@@ -1,0 +1,57 @@
+{
+    "name": "sonata-project/cache",
+    "description": "Cache library",
+    "keywords": ["cache", "redis", "mongodb", "memcached"],
+    "homepage": "https://github.com/sonata-project/cache",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@gmail.com",
+            "homepage": "https://sonata-project.org/"
+        },
+        {
+            "name": "Sonata Community",
+            "homepage": "https://github.com/sonata-project/cache/contributors"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "psr/log": "^1.0"
+    },
+    "require-dev": {
+        "doctrine/orm": "^2.5",
+        "doctrine/phpcr-odm": "^1.4",
+        "jackalope/jackalope-doctrine-dbal": "^1.2",
+        "predis/predis": "^1.1",
+        "sllh/php-cs-fixer-styleci-bridge": "^2.1",
+        "symfony/phpunit-bridge": "^3.3"
+    },
+    "suggest": {
+        "doctrine/orm": "ORM support",
+        "doctrine/phpcr-odm": "PHPCR ODM support",
+        "ext-apc": "Caching with ext/apc",
+        "ext-memcached": "Caching with ext/memcached",
+        "predis/predis": "Install redis php"
+    },
+    "autoload": {
+        "psr-4": { "Sonata\\Cache\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Sonata\\Cache\\Tests\\": "tests/" }
+    },
+    "conflicts": {
+        "doctrine/orm": "<2.5",
+        "doctrine/phpcr-odm": "<1.4",
+        "predis/predis": "<1.1"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
+}

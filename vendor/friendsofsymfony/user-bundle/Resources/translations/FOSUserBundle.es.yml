@@ -1,0 +1,86 @@
+group:
+    edit:
+        submit: 'Actualizar grupo'
+    show:
+        name: 'Nombre de grupo'
+    new:
+        submit: 'Crear grupo'
+    flash:
+        updated: 'El grupo ha sido actualizado.'
+        created: 'El grupo ha sido creado.'
+        deleted: 'El grupo ha sido borrado.'
+security:
+    login:
+        username: 'Nombre de usuario'
+        password: Contraseña
+        remember_me: Recordar
+        submit: Entrar
+profile:
+    show:
+        username: 'Nombre de usuario'
+        email: Email
+    edit:
+        submit: 'Actualizar usuario'
+    flash:
+        updated: 'El perfil ha sido actualizado.'
+change_password:
+    submit: 'Cambiar contraseña'
+    flash:
+        success: 'La contraseña se ha cambiado con éxito.'
+registration:
+    check_email: 'Se ha enviado un correo electrónico a %email%. Contiene un enlace de activación al que debes acceder para activar tu cuenta.'
+    confirmed: 'Felicidades %username%, tu cuenta está ahora confirmada.'
+    back: 'Volver a la página original.'
+    submit: Registrar
+    flash:
+        user_created: 'El usuario se ha creado satisfactoriamente.'
+    email:
+        subject: '¡Bienvenido %username%!'
+        message: |
+            ¡Hola %username%!
+
+            Para completar la validación de tu cuenta, por favor visita %confirmationUrl%
+            
+            Este enlace sólo puede utilizarse una vez para validar tu cuenta.
+
+            Atentamente,
+            el Equipo.
+
+resetting:
+    check_email: |
+        Se ha enviado un correo electrónico a tu cuenta de correo. Contiene un enlace de activación al que debes acceder para restablecer tu contraseña.
+        Nota: Solo se puede solicitar una nueva contraseña cada %tokenLifetime% horas.
+
+        Si no recibes un correo electrónico, comprueba tu carpeta de correo no deseado o inténtalo de nuevo.
+
+    request:
+        username: 'Nombre de usuario o correo electrónico'
+        submit: 'Restablecer contraseña'
+    reset:
+        submit: 'Cambiar contraseña'
+    flash:
+        success: 'La contraseña se ha cambiado con éxito.'
+    email:
+        subject: 'Restablecer Contraseña'
+        message: |
+            ¡Hola %username%!
+
+            Para restablecer tu contraseña, por favor visita %confirmationUrl%
+
+            Atentamente,
+            el Equipo.
+
+layout:
+    logout: Salir
+    login: Entrar
+    register: Registrar
+    logged_in_as: 'Identificado como %username%'
+form:
+    group_name: 'Nombre de grupo'
+    username: 'Nombre de usuario'
+    email: Email
+    current_password: 'Contraseña actual'
+    password: Contraseña
+    password_confirmation: 'Repita la contraseña'
+    new_password: 'Nueva contraseña'
+    new_password_confirmation: 'Repita la contraseña'

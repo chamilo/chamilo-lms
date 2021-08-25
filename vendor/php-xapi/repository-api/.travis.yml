@@ -1,0 +1,22 @@
+
+language: php
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+matrix:
+  include:
+      - php: 5.6
+      - php: 7.0
+      - php: 7.1
+      - php: 7.2
+      - php: 7.3
+      - php: 7.4
+  fast_finish: true
+
+install:
+  - composer install
+
+script:
+  - find -name '*.php' -not -path './vendor/*' -name '*.php' | xargs -n1 php -l

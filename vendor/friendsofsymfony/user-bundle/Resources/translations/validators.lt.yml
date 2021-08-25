@@ -1,0 +1,28 @@
+fos_user:
+    username:
+        already_used: 'Naudotojo vardas jau užimtas.'
+        blank: 'Prašome įvesti naudotojo vardą.'
+        short: 'Naudotojo vardas per trumpas.'
+        long: 'Naudotojo vardas per ilgas.'
+    email:
+        already_used: 'El. paštas jau užimtas.'
+        blank: 'Prašome įvesti el. paštą.'
+        short: 'El. paštas pert rumpas.'
+        long: 'El. paštas per ilgas.'
+        invalid: 'El. paštas neteisingas.'
+    password:
+        blank: 'Prašome įvesti slaptažodį.'
+        short: 'Slaptažodis per trumpas.'
+        mismatch: 'Įvesti skirtingi slaptažodžiai.'
+    new_password:
+        blank: 'Prašome įvesti naują slaptažodį.'
+        short: 'Naujas slaptažodis per trumpas.'
+    current_password:
+        invalid: 'Neteisingai įvestas slaptažodis.'
+    group:
+        blank: 'Prašome įvesti pavadinimą.'
+        short: 'Pavadinimas per trumpas.'
+        long: 'Pavadinimas per trumpas.'
+fos_group:
+    name:
+        already_used: 'Šis pavadinimas jau naudojamas.'

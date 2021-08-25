@@ -1,0 +1,172 @@
+/*!
+ * CSS Simplex - v. 2.0
+ * 2015 - Alex Aragón (aragonc@beeznest.com)
+ * Licensed GPL
+ * Based on Bootstrap
+*/
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Lato Light'), local('Lato-Light'), url(fonts/Lato-Light.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+}
+
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  position: relative;
+}
+body {
+  margin: 0 0 60px;
+  font-family: 'Lato', sans-serif;
+  line-height: 1.72222;
+}
+body > main footer.footer {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+a{
+  color: #111111;
+}
+a:hover{
+  color: #34495E;
+  text-decoration: none;
+}
+.nav li a {
+padding: 15px 10px;
+}
+.navbar-default {
+background: #FBD232;
+border: none;
+}
+header{
+    background: url(images/background.png) #D3D3D3;
+}
+.navbar{
+    margin-bottom: 0;
+}
+#breadcrumb-bar{
+    padding-top: 10px;
+    background-color: #fff;
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #ededed;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #111;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+color: #FFFFFF;
+background: #111111;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu {
+  background: #FBD232;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+  color: #111111;
+  padding: 5px;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li{
+    border: none;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #ffffff;
+  background-color: #111111;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+color: #FFFFFF;
+background: #111111;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+color: #FFFFFF;
+background: #111111;
+}
+.navbar-default .navbar-toggle {
+  border-color: #111;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #111111;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #666;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #111;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #ededed;
+}
+.badge{
+    background-color: #222222;
+}
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ededed;
+    background-color: #6D0019;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ededed;
+    background-color: #0099c0;
+  }
+}
+.breadcrumb{
+  background: #F9F9F9;
+  color: #006A84;
+}
+.nav li a:hover{
+    background: transparent;
+}
+.panel-default .panel-heading{
+    background-color: #EBECF2;
+}
+.panel-default{
+    border-color: #F3F3F4;
+}
+footer.bgfooter{
+background: #111111;
+color: #FBD232;
+border-top: 5px solid #FBD232;
+}
+footer.bgfooter a{
+  color: #ffffff;
+}
+footer.bgfooter a:hover{
+  color: #CCC;
+}
+.menu-column .panel-heading{
+    text-transform: uppercase;
+    background-color: #FBD232;
+}
+.menu-column .panel-heading a{
+    font-weight: bold;
+}

@@ -1,0 +1,8 @@
+{
+  "objectType": "Group",
+  "account": {
+    "name": "test",
+    "homePage": "https://tincanapi.com"
+  },
+  "name": "test group"
+}

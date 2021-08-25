@@ -1,0 +1,44 @@
+{
+    "name":         "knplabs/gaufrette",
+    "type":         "library",
+    "description":  "PHP library that provides a filesystem abstraction layer",
+    "keywords":     ["file", "filesystem", "media", "abstraction"],
+    "homepage":     "http://knplabs.com",
+    "license":      "MIT",
+    "authors": [
+        {
+            "name": "KnpLabs Team",
+            "homepage": "http://knplabs.com"
+        },
+        {
+            "name":     "The contributors",
+            "homepage": "http://github.com/knplabs/Gaufrette/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "conflict": {
+        "microsoft/windowsazure": "<0.4.3"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^5.1 || ^6.2",
+        "phpunit/phpunit": "~7.5",
+        "mikey179/vfsstream": "v1.x-dev as 1.7.0"
+    },
+    "suggest": {
+        "knplabs/knp-gaufrette-bundle": "to use with Symfony",
+        "ext-fileinfo": "This extension is used to automatically detect the content-type of a file in the AwsS3, OpenCloud, AzureBlogStorage and GoogleCloudStorage adapters"
+    },
+    "autoload": {
+        "psr-0": { "Gaufrette": "src/" }
+    },
+    "autoload-dev": {
+        "psr-0": { "Gaufrette\\Functional": "tests/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.10.x-dev"
+        }
+    }
+}

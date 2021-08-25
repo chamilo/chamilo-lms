@@ -1,0 +1,17 @@
+{
+  "objectType": "SubStatement",
+  "actor": {
+    "openid": "http://openid.tincanapi.com",
+    "objectType": "Agent"
+  },
+  "verb": {
+    "id": "http://tincanapi.com/conformancetest/verbid",
+    "display": {
+      "en-US": "test"
+    }
+  },
+  "object": {
+    "id": "http://tincanapi.com/conformancetest/activityid",
+    "objectType": "Activity"
+  }
+}

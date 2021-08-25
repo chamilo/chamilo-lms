@@ -1,0 +1,17 @@
+{
+    "id": "12345678-1234-5678-8234-567812345678",
+    "actor" : {
+        "objectType": "Agent",
+        "mbox":"mailto:conformancetest@tincanapi.com"
+    },
+    "verb": {
+        "id": "http://tincanapi.com/conformancetest/verbid",
+        "display": {
+            "en-US": "test"
+        }
+    },
+    "object" : {
+        "objectType":"StatementRef",
+        "id":"8f87ccde-bb56-4c2e-ab83-44982ef22df0"
+    }
+}

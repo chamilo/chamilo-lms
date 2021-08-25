@@ -1,0 +1,17 @@
+{
+  "objectType": "SubStatement",
+  "actor": {
+    "openid": "http://group.openid.tincanapi.com",
+    "objectType": "Group"
+  },
+  "verb": {
+    "id": "http://tincanapi.com/conformancetest/verbid",
+    "display": {
+      "en-US": "test"
+    }
+  },
+  "object": {
+    "id": "http://tincanapi.com/conformancetest/activityid",
+    "objectType": "Activity"
+  }
+}

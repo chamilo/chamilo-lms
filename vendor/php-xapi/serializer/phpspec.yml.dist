@@ -1,0 +1,4 @@
+suites:
+  default:
+    namespace: Xabbuh\XApi\Serializer
+    psr4_prefix: Xabbuh\XApi\Serializer

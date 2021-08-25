@@ -1,0 +1,199 @@
+
+body {
+    font-size: 12px;
+    color: #000;
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", serif;
+}
+
+img {
+    border: none;
+}
+
+/* admin page tool list definitions */
+.tool_list dt {
+    font-weight: bold;
+}
+.tool_list dd {
+    margin: 0;
+    padding: 4px 0 0 10px;
+}
+
+label.left {
+    float: left;
+    width: 15em;
+    margin: 0 0 0.5em 0;
+}
+form br {
+    clear: both;
+}
+/* Fix for alignment problem in IE-Win browsers  */
+/*  Hide from IE5-mac. Only IE-win sees this. \*/
+* html .label {
+    margin-right: 10px;
+}
+* html .data {
+    height: 1%;
+    margin-left: 0;
+}
+/* End hide from IE5/mac */
+
+.radio, .checkbox {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+}
+
+.required {
+    color: #f00;
+    font-weight: bold;
+}
+
+.user_course_category {
+    background-color: #efefef;
+    border: 1px solid #666;
+    font-weight: bold;
+    color: #666;
+    list-style-type: none;
+    margin: 5px;
+    padding: 5px;
+}
+
+/* Styles for the Dokeos Config Settings of the platform admin section*/
+.sectiontitle {
+    background-color: #EFEFEF;
+    border: 1px solid #cccccc;
+    font-weight: bold;
+    color: #666666;
+    list-style-type: none;
+    margin: 5px;
+    padding: 5px;
+    font-size: 11px;
+}
+
+.sectioncomment {
+    color: #000000;
+    margin: 5px;
+    padding: 5px;
+    font-size: 11px;
+}
+
+/* New Announcements Tool */
+.announcements_datum {
+    font-size: 12px;
+    font-style: italic;
+    color: #666666;
+}
+
+table.table,
+table.table th,
+table.table td {
+    border: 1px solid #555;
+    border-collapse: collapse;
+}
+
+/* print table pdf */
+.data_table{
+    width: 100%;
+    padding: 0;
+    border: 1px solid #b5cae7;
+    border-spacing: 0;
+    margin: 0 0 18px;
+}
+
+.data_table td {
+    padding: 5px;
+    border-bottom: 1px solid #b5cae7;
+    border-right: 1px solid #b5cae7;
+    border-top: 1px solid #b5cae7;
+    text-align: left;
+    font-size: 12px;
+    color: #666666;
+}
+
+.data_table th, .data_table td {
+    line-height: 18px;
+    padding: 10px;
+}
+.data_table th {
+    padding: 8px 10px;
+    font-weight: bold;
+    background-color: #eef5fa;
+    border-bottom: 2px solid #b5cae7;
+    color: #4171b5;
+}
+.data_table th a {
+    color: #333;
+}
+.data_table_no_border {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-top: 8px;
+    text-align: left;
+    width: 100%;
+}
+.data_table_no_border td {
+    line-height: normal;
+    padding: 6px;
+    text-align: left;
+    vertical-align: middle;
+}
+.data_table tr.row_odd {
+    background-color: #F9F9F9;
+}
+
+.data-title .page-header{
+    color: #000;
+    font-weight: bold;
+    border-bottom: 1px solid #b5cae7;
+}
+.date-calendar .page-header{
+    color: #000;
+    font-weight: bold;
+    border-bottom: 1px solid #b5cae7;
+    border-top: 1px solid #b5cae7;
+    text-align: center;
+    background-color: #EDEDED;
+    padding-top: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.table_print{
+    width: 100%;
+    padding: 0;
+    border: 1px solid #CEE0CC;
+    border-spacing: 0;
+    margin: 0 0 18px;
+    background-color: #F3FFE6;
+}
+
+.table_print td {
+    padding: 5px;
+    border-bottom: 1px solid #CEE0CC;
+    border-right: 1px solid #CEE0CC;
+    border-top: 1px solid #CEE0CC;
+    text-align: left;
+    font-size: 12px;
+    color: #666666;
+}
+
+.table_print th, .table_print td {
+    line-height: 18px;
+    padding: 10px;
+}
+.table_print th {
+    padding: 8px 10px;
+    font-weight: bold;
+    background-color: #CEE0CC;
+    border-bottom: 2px solid #4F7849;
+    color: #4F7849;
+}
+
+.generated_date {
+    font-size: 10px;
+}

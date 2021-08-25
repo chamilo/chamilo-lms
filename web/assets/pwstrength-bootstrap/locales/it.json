@@ -1,0 +1,15 @@
+{
+  "wordLength": "La tua password è troppo corta",
+  "wordNotEmail": "Non usare la tua e-mail come password",
+  "wordSimilarToUsername": "La tua password non può contenere il tuo nome",
+  "wordTwoCharacterClasses": "Usa classi di caratteri diversi",
+  "wordRepetitions": "Troppe ripetizioni",
+  "wordSequences": "La tua password contiene sequenze",
+  "errorList": "Errori:",
+  "veryWeak": "Molto debole",
+  "weak": "Debole",
+  "normal": "Normale",
+  "medium": "Media",
+  "strong": "Forte",
+  "veryStrong": "Molto forte"
+}

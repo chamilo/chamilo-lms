@@ -1,0 +1,40 @@
+{
+  "iss": "https://ltiadvantagevalidator.imsglobal.org",
+  "sub": "39890",
+  "aud": "imstester_3dfad6d",
+  "exp": 1574779693,
+  "iat": 1574779393,
+  "nonce": "7964e46f-2f18-4b4c-96eb-ea5e84a77f3c",
+  "name": "Lauren Colleen Hutton",
+  "given_name": "Lauren",
+  "family_name": "Hutton",
+  "middle_name": "Colleen",
+  "email": "l.c.hutton@district1.com",
+  "locale": "en-US",
+  "https://purl.imsglobal.org/spec/lti/claim/target_link_uri": "http://localhost:8080/",
+  "https://purl.imsglobal.org/spec/lti/claim/deployment_id": "testdeploy",
+  "https://purl.imsglobal.org/spec/lti/claim/message_type": "LtiResourceLinkRequest",
+  "https://purl.imsglobal.org/spec/lti/claim/version": "1.3.0",
+  "https://purl.imsglobal.org/spec/lti/claim/roles": [
+    "http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"
+  ],
+  "https://purl.imsglobal.org/spec/lti/claim/resource_link": {
+    "id": "a7432159070d4c8b981b51dc1eb982db",
+    "title": "Introduction Assignment",
+    "description": "This is the introduction assignment"
+  },
+  "https://purl.imsglobal.org/spec/lti-nrps/claim/namesroleservice": {
+    "context_memberships_url": "https://ltiadvantagevalidator.imsglobal.org/ltitool/namesandroles.html?memberships=1880",
+    "service_versions": [
+      "2.0"
+    ]
+  },
+  "https://purl.imsglobal.org/spec/lti-ags/claim/endpoint": {
+    "scope": [
+      "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem",
+      "https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly",
+      "https://purl.imsglobal.org/spec/lti-ags/scope/score"
+    ],
+    "lineitems": "https://ltiadvantagevalidator.imsglobal.org/ltitool/rest/assignmentsgrades/1880/lineitems"
+  }
+}

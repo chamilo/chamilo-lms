@@ -1,0 +1,213 @@
+/*!
+ * CSS Silver Line - v. 2.0
+ * 2015 - Alex Aragón (aragonc@beeznest.com)
+ * Licensed GPL
+ * Based on Bootstrap
+*/
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Titillium Web'), local('TitilliumWeb-Regular'), url(fonts/TitilliumWeb-Regular.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Titillium WebSemiBold'), local('TitilliumWeb-SemiBold'), url(fonts/TitilliumWeb-SemiBold.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Titillium WebBold'), local('TitilliumWeb-Bold'), url(fonts/TitilliumWeb-Bold.woff2) format('woff2');
+}
+
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  position: relative;
+}
+body {
+  margin: 0 0 60px;
+  font-family: 'Titillium Web', sans-serif;
+  line-height: 1.72222;
+}
+body > main footer.footer {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+a{
+  color: #666666;
+}
+a:hover{
+  color: #62366F;
+  text-decoration: none;
+}
+
+.navbar-default {
+background: url(images/bg_menu.gif) repeat-x 0px -45px #D1D3D4;
+border: none;
+border-radius: 0;
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #ededed;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #53676C;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 10px;
+  font-size: 1.15em;
+  font-weight: bold;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+color: #53676C;
+background: #eeeeee;
+background: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc));
+background: -webkit-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+background: -o-linear-gradient(top, #eeeeee 0%,#cccccc 100%);
+background: -ms-linear-gradient(top, #eeeeee 0%,#cccccc 100%); 
+background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 );
+border-radius: 5px;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu {
+  background-color: #56696E;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #ededed;
+  background-color: #2E2E2E;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+color: #FFF;
+background: #6e7c84;
+background: -moz-linear-gradient(top, #6e7c84 0%, #53676c 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6e7c84), color-stop(100%,#53676c));
+background: -webkit-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: -o-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: -ms-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: linear-gradient(to bottom, #6e7c84 0%,#53676c 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6e7c84', endColorstr='#53676c',GradientType=0 );
+border-radius: 5px;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+color: #FFFFFF;
+background: #6e7c84;
+background: -moz-linear-gradient(top, #6e7c84 0%, #53676c 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6e7c84), color-stop(100%,#53676c));
+background: -webkit-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: -o-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: -ms-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: linear-gradient(to bottom, #6e7c84 0%,#53676c 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6e7c84', endColorstr='#53676c',GradientType=0 );
+}
+.navbar-default .navbar-toggle {
+  border-color: #666;
+  background-color: #53676C;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background: #53676C;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ffffff;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #ededed;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ededed;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ededed;
+    background-color: #0099c0;
+  }
+}
+.breadcrumb{
+  background: #F9F9F9;
+  color: #006A84;
+}
+.nav li a:hover{
+    background: transparent;
+}
+.panel-default .panel-heading{
+    background-color: #F9F9F9;
+}
+footer{
+background: #6e7c84;
+background: -moz-linear-gradient(top, #6e7c84 0%, #53676c 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6e7c84), color-stop(100%,#53676c));
+background: -webkit-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: -o-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: -ms-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: linear-gradient(to bottom, #6e7c84 0%,#53676c 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6e7c84', endColorstr='#53676c',GradientType=0 );
+color: #ccc;
+border: none;
+}
+footer a{
+  color: #EEE;
+}
+footer a:hover{
+  color: #EEE;
+  text-decoration: underline;
+}
+.menu-column .panel-default .panel-heading{
+background: #6e7c84;
+background: -moz-linear-gradient(top, #6e7c84 0%, #53676c 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6e7c84), color-stop(100%,#53676c));
+background: -webkit-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: -o-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: -ms-linear-gradient(top, #6e7c84 0%,#53676c 100%);
+background: linear-gradient(to bottom, #6e7c84 0%,#53676c 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6e7c84', endColorstr='#53676c',GradientType=0 );
+border-color: #444;
+}
+.menu-column .panel-default .panel-heading a{
+    color: #fff;
+}
+.menu-column .panel-default .panel-body{
+    background-color: #FFF;
+}
+#page-content .panel{
+    background: none;
+    border: 1px solid #D3D3D3;
+    box-shadow: none;
+}
+.navbar-nav .open .dropdown-menu .user-header,
+.navbar-nav .open .dropdown-menu .user-header a,
+.navbar-nav .open .dropdown-menu .user-body a{
+    color: #FFF;
+}
+.navbar-nav .dropdown .dropdown-toggle
+{
+    margin-top: 0;
+}

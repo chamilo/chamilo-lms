@@ -1,0 +1,46 @@
+{
+    "name": "php-xapi/symfony-serializer",
+    "type": "library",
+    "description": "transform Experience API model objects to JSON encoded strings and vice versa using the Symfony Serializer component",
+    "keywords": ["xAPI", "Experience API", "Tin Can API", "serializer", "Symfony"],
+    "homepage": "https://github.com/php-xapi/symfony-serializer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Flothmann",
+            "homepage": "https://github.com/xabbuh"
+        }
+    ],
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "php-xapi/exception": "^0.2.0",
+        "php-xapi/model": "^1.2 || ^2.1 || ^3.0",
+        "php-xapi/serializer": "^2.1.1",
+        "symfony/serializer": "^2.8 || ^3.4 || ^4.0"
+    },
+    "require-dev": {
+        "php-xapi/json-test-fixtures": "^2.0",
+        "php-xapi/test-fixtures": "^1.0",
+        "phpspec/phpspec": "~2.3"
+    },
+    "minimum-stability": "dev",
+    "provide": {
+        "php-xapi/serializer-implementation": "2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Xabbuh\\XApi\\Serializer\\Symfony\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "spec\\Xabbuh\\XApi\\Serializer\\Symfony\\": "spec/",
+            "Xabbuh\\XApi\\Serializer\\Symfony\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.1.x-dev"
+        }
+    }
+}

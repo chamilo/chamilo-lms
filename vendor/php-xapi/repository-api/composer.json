@@ -1,0 +1,33 @@
+{
+    "name": "php-xapi/repository-api",
+    "description": "abstract definition of an xAPI repository interface",
+    "keywords": ["xAPI", "Tin Can API", "Experience API", "storage", "database", "repository"],
+    "homepage": "https://github.com/php-xapi/repository-api",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Flothmann",
+            "homepage": "https://github.com/xabbuh"
+        }
+    ],
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "ramsey/uuid": "^2.8 || ^3.0",
+        "php-xapi/model": "^1.1 || ^2.0 || ^3.0",
+        "php-xapi/test-fixtures": "^1.0"
+    },
+    "minimum-stability": "dev",
+    "conflict": {
+        "xabbuh/xapi-storage-api": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "XApi\\Repository\\Api\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.4.x-dev"
+        }
+    }
+}

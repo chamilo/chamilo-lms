@@ -1,0 +1,28 @@
+fos_user:
+    username:
+        already_used: 'Brugernavnet er allerede i brug.'
+        blank: 'Indtast venligst et brugernavn.'
+        short: 'Brugernavnet er for kort.'
+        long: 'Brugernavnet er for langt.'
+    email:
+        already_used: 'E-mailadressen er allerede i brug.'
+        blank: 'Indtast venligst en e-mailadresse.'
+        short: 'E-mailadressen er for kort.'
+        long: 'E-mailadressen er for lang.'
+        invalid: 'E-mailadressen er ikke gyldig.'
+    password:
+        blank: 'Indtast venligst en adgangskode.'
+        short: 'Adgangskoden er for kort.'
+        mismatch: 'De valgte adgangskoder matcher ikke.'
+    new_password:
+        blank: 'Indtast venligst en ny adgangskode.'
+        short: 'Den nye adgangskode er for kort.'
+    current_password:
+        invalid: 'Den indtastede adgangskode er forkert.'
+    group:
+        blank: 'Indtast venligst et navn.'
+        short: 'Navnet er for kort.'
+        long: 'Navnet er for langt.'
+fos_group:
+    name:
+        already_used: 'Navnet er allerede i brug.'

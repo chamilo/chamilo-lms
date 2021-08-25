@@ -1,0 +1,91 @@
+group:
+    edit:
+        submit: 'Memperbaharui Grup'
+    show:
+        name: 'Nama Grup'
+    new:
+        submit: 'Buat Grup'
+    flash:
+        updated: 'Grup telah berhasil diperbaharui.'
+        created: 'Grup telah berhasil ditambahkan.'
+        deleted: 'Grup telah berhasil dihapus.'
+
+security:
+    login:
+        username: 'Nama Pengguna'
+        password: 'Kata sandi'
+        remember_me: 'Ingat saya'
+        submit: 'Masuk'
+
+profile:
+    show:
+        username: 'Nama Pengguna'
+        email: 'Surel'
+    edit:
+        submit: 'Perbaharui'
+    flash:
+        updated: 'Profil telah berhasil diperbaharui'
+
+change_password:
+    submit: 'Ubah kata sandi'
+    flash:
+        success: 'Kata sandi telah berhasil diubah.'
+
+registration:
+    check_email: 'Sebuah surel telah berhasil dikirimkan ke %email%. Anda harus mengklik tautan aktivasi di dalam surel tersebut untuk mengaktifkan akun anda.'
+    confirmed: 'Selamat %username%, akun anda telah berhasil diaktifkan.'
+    back: 'Kembali ke halaman sebelumnya.'
+    submit: Daftar
+    flash:
+        user_created: 'Pengguna telah berhasil ditambahkan.'
+    email:
+        subject: 'Selamat datang %username%!'
+        message: |
+            Hallo %username%!
+
+            Untuk menyelesaikan aktifasi akun anda, mohon kunjungi halaman berikut %confirmationUrl%
+
+            Tautan ini hanya bisa digunakan sekali untuk akun anda.
+
+            Hormat Kami,
+            Tim Website.
+
+resetting:
+    check_email: |
+        Sebuah surel telah dikirim. Anda harus mengklik tautan di dalam email tersebut agar dapat menata ulang kata sandi anda.
+        Catatan: Anda hanya bisa meminta kata sandi baru dalam %tokenLifetime% jam.
+
+        Apabila anda tidak menerima surel, cek spam atau ulangi kembali
+    request:
+        username: 'Nama pengguna atau alamat surel'
+        submit: 'Tata ulang kata sandi'
+    reset:
+        submit: 'Ubah kata sandi'
+    flash:
+        success: 'Kata sandi telah berhasil ditata ulang.'
+    email:
+        subject: 'Tata ulang kata sandi'
+        message: |
+            Halo %username%!
+
+            Untuk menata kata sandi anda mohon kunjungi halaman berikut %confirmationUrl%
+
+            Hormat Kami,
+            Tim Website.
+
+# Global strings
+layout:
+    logout: 'Keluar'
+    login: 'Masuk'
+    register: 'Pendaftaran'
+    logged_in_as: 'Masuk sebagai %username%'
+
+form:
+    group_name: 'Nama Grup'
+    username: 'Nama Pengguna'
+    email: 'Surel'
+    current_password: 'Kata sandi saat ini'
+    password: 'Kata sandi'
+    password_confirmation: 'Ulangi kata sandi'
+    new_password: 'Kata sandi Baru'
+    new_password_confirmation: 'Ulangi kata sandi baru'

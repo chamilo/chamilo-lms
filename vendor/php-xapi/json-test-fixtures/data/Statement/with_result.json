@@ -1,0 +1,23 @@
+{
+    "id": "12345678-1234-5678-8234-567812345678",
+    "actor": {
+        "mbox": "mailto:conformancetest@tincanapi.com",
+        "objectType": "Agent"
+    },
+    "verb": {
+        "id": "http://tincanapi.com/conformancetest/verbid",
+        "display": {
+            "en-US": "test"
+        }
+    },
+    "object": {
+        "id": "http://tincanapi.com/conformancetest/activityid",
+        "objectType": "Activity"
+    },
+    "result": {
+        "score": {
+            "scaled": 1
+        },
+        "duration": "PT2H"
+    }
+}

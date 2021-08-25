@@ -1,0 +1,8 @@
+{
+  "interactionType": "choice",
+  "choices": [
+    {
+      "id": "test"
+    }
+  ]
+}

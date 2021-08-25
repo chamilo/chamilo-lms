@@ -1,0 +1,17 @@
+{
+  "objectType": "SubStatement",
+  "actor": {
+    "mbox": "mailto:conformancetest@tincanapi.com",
+    "objectType": "Agent"
+  },
+  "verb": {
+    "id": "http://tincanapi.com/conformancetest/verbid",
+    "display": {
+      "en-US": "test"
+    }
+  },
+  "object": {
+    "mbox_sha1sum": "4e271041e78101311fb37284ef1a1d35c3f1db35",
+    "objectType": "Group"
+  }
+}

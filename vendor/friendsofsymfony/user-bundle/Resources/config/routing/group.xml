@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="fos_user_group_list" path="/list" methods="GET">
+        <default key="_controller">fos_user.group.controller:listAction</default>
+    </route>
+
+    <route id="fos_user_group_new" path="/new" methods="GET POST">
+        <default key="_controller">fos_user.group.controller:newAction</default>
+    </route>
+
+    <route id="fos_user_group_show" path="/{groupName}" methods="GET">
+        <default key="_controller">fos_user.group.controller:showAction</default>
+    </route>
+
+    <route id="fos_user_group_edit" path="/{groupName}/edit" methods="GET POST">
+        <default key="_controller">fos_user.group.controller:editAction</default>
+    </route>
+
+    <route id="fos_user_group_delete" path="/{groupName}/delete" methods="GET">
+        <default key="_controller">fos_user.group.controller:deleteAction</default>
+    </route>
+
+</routes>

@@ -1,0 +1,25 @@
+fos_user:
+    username:
+        already_used: 'Este utilizador já existe.'
+        blank: 'Por favor introduza o nome de utilizador.'
+        short: 'O nome de utilizador é muito curto.'
+        long: 'O nome de utilizador é muito longo.'
+    email:
+        already_used: 'Este email já está a ser usado.'
+        blank: 'Por favor introduza o email.'
+        short: 'Este email é muito curto.'
+        long: 'Este email é muito longo.'
+        invalid: 'Este email é inválido.'
+    password:
+        blank: 'Por favor introduza a senha.'
+        short: 'Esta senha é muito curta.'
+        mismatch: 'As senhas não correspondem.'
+    new_password:
+        blank: 'Por favor introduza a nova senha.'
+        short: 'A nova senha é muito curta.'
+    current_password:
+        invalid: 'A senha está incorreta.'
+    group:
+        blank: 'Por favor introduza o nome.'
+        short: 'O nome é muito curto.'
+        long: 'O nome é muito longo.'

@@ -1,0 +1,85 @@
+group:
+    edit:
+        submit: 'Grubu Güncelle'
+    show:
+        name: 'Grup Adı'
+    new:
+        submit: 'Grup Yarat'
+    flash:
+        updated: 'Grup Güncellendi.'
+        created: 'Grup Yaratıldı.'
+        deleted: 'Grup Silindi.'
+security:
+    login:
+        username: 'Kullanıcı adı'
+        password: Parola
+        remember_me: 'Beni hatırla'
+        submit: Giriş
+profile:
+    show:
+        username: 'Kullanıcı adı'
+        email: 'E-posta adresi'
+    edit:
+        submit: Güncelle
+    flash:
+        updated: 'Profil Güncellendi.'
+change_password:
+    submit: 'Parolayı Değiştir'
+    flash:
+        success: 'Parola değiştirildi.'
+registration:
+    check_email: 'E-posta adresinize hesabınızı aktive etmek için kullanacağınız aktivasyon linkini barındıran bir e-posta gönderildi.'
+    confirmed: 'Tebrikler %username%. Hesabınız şu anda aktifleştirildi.'
+    back: 'Asıl sayfaya geri dön.'
+    submit: 'Kayıt ol'
+    flash:
+        user_created: 'Kullanıcı başarıyla yaratıldı.'
+    email:
+        subject: 'Hoşgeldin %username%!'
+        message: |
+            Hoşgeldiniz %username%!
+
+            Hesabınızın aktivasyonunu tamamlamak için lütfen  %confirmationUrl%
+            adresini ziyaret ediniz.
+
+            Teşekkürler,
+            Web Takımı.
+
+resetting:
+    check_email: |
+        E-posta adresinize parolanızı sıfırlama adresi bulunan bir e-posta gönderildi.
+        Not: Yeni şifre talep etmek için %tokenLifetime% saat beklemelisiniz.
+        
+        E-posta gelmedi ise spam klasörünü kontrol edin veya tekrar deneyin.
+    request:
+        username: 'Kullanıcı adı ya da e-posta adresi'
+        submit: 'Parolayı sıfırla'
+    reset:
+        submit: 'Parolayı değiştir'
+    flash:
+        success: 'Parola başarıyla değiştirildi.'
+    email:
+        subject: 'Parola Yenileme'
+        message: |
+            Merhaba  %username%!
+
+            Parolanızı yenilemek için  %confirmationUrl%
+            adresini ziyaret ediniz.
+
+            Teşekkürler,
+            Web Takımı.
+
+layout:
+    logout: Çıkış
+    login: Giriş
+    register: 'Kayıt ol'
+    logged_in_as: '%username% olarak giriş yapıldı'
+form:
+    group_name: 'Grup adı'
+    username: 'Kullanıcı adı'
+    email: 'E-posta adresi'
+    current_password: 'Geçerli parola'
+    password: Parola
+    password_confirmation: Parola tekrar
+    new_password: 'Yeni parola'
+    new_password_confirmation: Yeni parola tekrar

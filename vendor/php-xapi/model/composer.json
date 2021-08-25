@@ -1,0 +1,42 @@
+{
+    "name": "php-xapi/model",
+    "type": "library",
+    "description": "Experience API model classes",
+    "keywords": ["xAPI", "Experience API", "Tin Can API", "models"],
+    "homepage": "https://github.com/php-xapi/model",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Flothmann",
+            "homepage": "https://github.com/xabbuh"
+        }
+    ],
+    "require": {
+        "php": "^7.1 || ^8.0",
+        "php-xapi/exception": "~0.1",
+        "ramsey/uuid": "^2.9 || ^3.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^5.0 || ^6.0 || ^7.0"
+    },
+    "conflict": {
+        "xabbuh/xapi-model": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Xabbuh\\XApi\\Model\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "spec\\Xabbuh\\XApi\\Model\\": "spec/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "1.x-dev": "1.2.x-dev",
+            "2.x-dev": "2.2.x-dev",
+            "3.x-dev": "3.2.x-dev"
+        }
+    }
+}

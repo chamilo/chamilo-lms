@@ -1,0 +1,8 @@
+{
+  "interactionType": "likert",
+  "scale": [
+    {
+      "id": "test"
+    }
+  ]
+}

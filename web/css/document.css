@@ -1,0 +1,61 @@
+/*
+Stylesheet for HTML documents created with CKEditor.
+
+This stylesheet must import editor_content.css file
+*/
+@import url(./editor_content.css);
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Open Sans Light'), local('OpenSans-Light'), url(themes/chamilo/fonts/OpenSans-Light.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans-Light.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans'), local('OpenSans'), url(themes/chamilo/fonts/OpenSans.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(themes/chamilo/fonts/OpenSans-Semibold.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans-Semibold.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url(themes/chamilo/fonts/OpenSans-Bold.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans-Bold.woff) format('woff');
+}
+
+body {
+    color: #666;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 30px;
+    padding: 1em;
+}
+
+blockquote {
+    background: #f9f9f9;
+    border-left: 8px solid #ccc;
+    display: inline-block;
+    font: 14px/20px italic Times, serif;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+blockquote:before {
+    color: #ccc;
+    content: open-quote;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+}
+
+blockquote p {
+    display: inline;
+}

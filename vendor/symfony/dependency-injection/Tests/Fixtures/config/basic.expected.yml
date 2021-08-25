@@ -1,0 +1,9 @@
+
+services:
+    service_container:
+        class: Symfony\Component\DependencyInjection\ContainerInterface
+        public: true
+        synthetic: true
+    App\BarService:
+        class: App\BarService
+        arguments: [!service { class: FooClass }]

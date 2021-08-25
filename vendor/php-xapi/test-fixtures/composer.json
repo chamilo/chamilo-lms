@@ -1,0 +1,32 @@
+{
+    "name": "php-xapi/test-fixtures",
+    "type": "library",
+    "description": "common test data fixtures for Experience API related packages",
+    "keywords": ["xAPI", "Experience API", "Tin Can API", "fixtures", "data fixtures", "test fixtures"],
+    "homepage": "https://github.com/php-xapi/test-fixtures",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Flothmann",
+            "homepage": "https://github.com/xabbuh"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "php-xapi/model": "^1.1 || ^2.0 || ^3.0",
+        "ramsey/uuid": "^2.9 || ^3.0"
+    },
+    "conflict": {
+        "xabbuh/xapi-data-fixtures": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Xabbuh\\XApi\\DataFixtures\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.1.x-dev"
+        }
+    }
+}

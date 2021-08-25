@@ -1,0 +1,58 @@
+{
+    "name": "php-xapi/client",
+    "type": "library",
+    "description": "client library for the Experience API (xAPI)",
+    "keywords": ["xAPI", "Experience API", "Tin Can API", "client"],
+    "homepage": "https://github.com/php-xapi/client",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Flothmann",
+            "homepage": "https://github.com/xabbuh"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "php-http/client-common": "^1.0 || ^2.0",
+        "php-http/client-implementation": "^1.0",
+        "php-http/httplug": "^1.0 || ^2.0",
+        "php-http/message": "^1.0",
+        "php-http/message-factory": "^1.0",
+        "php-xapi/exception": "^0.1 || ^0.2",
+        "php-xapi/model": "^1.0 || ^2.0 || ^3.0",
+        "php-xapi/serializer": "^2.0",
+        "php-xapi/serializer-implementation": "^2.0",
+        "php-xapi/symfony-serializer": "^2.0",
+        "psr/http-message": "^1.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^2.4",
+        "php-http/mock-client": "^1.2",
+        "php-xapi/test-fixtures": "^1.0",
+        "symfony/phpunit-bridge": "^5.2"
+    },
+    "minimum-stability": "dev",
+    "suggest": {
+        "php-http/discovery": "For automatic discovery of HTTP clients and request factories",
+        "xabbuh/oauth1-authentication": "For OAuth1 authentication support"
+    },
+    "conflict": {
+        "xabbuh/xapi-client": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Xabbuh\\XApi\\Client\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "spec\\Xabbuh\\XApi\\Client\\": "spec/",
+            "Xabbuh\\XApi\\Client\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.7.x-dev"
+        }
+    }
+}

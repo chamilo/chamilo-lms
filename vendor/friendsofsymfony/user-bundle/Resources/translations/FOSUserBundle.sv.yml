@@ -1,0 +1,81 @@
+group:
+    edit:
+        submit: 'Uppdatera gruppen'
+    show:
+        name: Gruppnamn
+    new:
+        submit: 'Skapa grupp'
+    flash:
+        updated: 'Gruppen har uppdaterats.'
+        created: 'Gruppen har skapats.'
+        deleted: 'Gruppen har tagits bort.'
+security:
+    login:
+        username: Användarnamn
+        password: Lösenord
+        remember_me: 'Kom ihåg mig'
+        submit: 'Logga in'
+profile:
+    show:
+        username: Användarnamn
+        email: Epost
+    edit:
+        submit: Uppdatera
+    flash:
+        updated: 'Profilen har uppdaterats.'
+change_password:
+    submit: 'Ändra lösenord'
+    flash:
+        success: 'Lösenordet har ändrats.'
+registration:
+    check_email: 'Ett meddelande har skickats till %email%. Det innehåller en länk som du måste klicka på för att aktivera ditt konto.'
+    confirmed: 'Grattis %username%, ditt konto är nu aktiverat.'
+    back: 'Tillbaka till den ursprungliga sidan.'
+    submit: Registrera
+    flash:
+        user_created: 'Användaren har skapats.'
+    email:
+        subject: 'Välkommen %username%!'
+        message: |
+            Hej %username%!
+
+            För att aktivera ditt konto - vänligen besök %confirmationUrl%
+
+            Länken kan endast användas en gång för att aktivera ditt konto.
+
+            Hälsningar,
+            Teamet.
+
+resetting:
+    check_email: 'Ett meddelande har skickats till %email%. Det innehåller en länk som du måste klicka på för att återställa ditt lösenord.'
+    request:
+        username: 'Användarnamn eller epost-adress'
+        submit: 'Återställ lösenord'
+    reset:
+        submit: 'Ändra lösenord'
+    flash:
+        success: 'Lösenordet har återställts.'
+    email:
+        subject: 'Återställ lösenord'
+        message: |
+            Hej %username%!
+
+            För att återställa ditt lösenord - vänligen besök %confirmationUrl%
+
+            Hälsningar,
+            Teamet.
+
+layout:
+    logout: 'Logga ut'
+    login: 'Logga in'
+    register: Registrera
+    logged_in_as: 'Inloggad som %username%'
+form:
+    group_name: Gruppnamn
+    username: Användarnamn
+    email: Epost
+    current_password: 'Nuvarande lösenord'
+    password: Lösenord
+    password_confirmation: Verifiering
+    new_password: 'Nytt lösenord'
+    new_password_confirmation: Verifiering

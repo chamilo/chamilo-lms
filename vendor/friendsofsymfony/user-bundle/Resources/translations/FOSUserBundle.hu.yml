@@ -1,0 +1,90 @@
+group:
+    edit:
+        submit: 'Csoport frissítése'
+    show:
+        name: 'Csoport név'
+    new:
+        submit: 'Csoport létrehozása'
+    flash:
+        updated: 'A csoport frissítve.'
+        created: 'A csoport létrehozva.'
+        deleted: 'A csoport törölve.'
+
+security:
+    login:
+        username: Felhasználónév
+        password: Jelszó
+        remember_me: Megjegyzés
+        submit: Belépés
+
+profile:
+    show:
+        username: Felhasználónév
+        email: E-mail
+    edit:
+        submit: Frissítés
+    flash:
+        updated: 'A profil frissítve.'
+
+change_password:
+    submit: 'Jelszó megváltoztazása'
+    flash:
+        success: 'A jelszó megváltoztatva.'
+
+registration:
+    check_email: 'A regisztrált fiók aktiválásához a megadott "%email%" címre küldött üzenetben lévő aktivációs linkre kell kattintani.'
+    confirmed: 'Gratulálunk %username%, a regisztrált fiók sikeresen aktiválásra került.'
+    back: 'Vissza az előző oldalra.'
+    submit: Regisztráció
+    flash:
+        user_created: 'A felhasználó sikeresen létrehozva.'
+    email:
+        subject: 'Üdvözöljük %username%!'
+        message: |
+            Hello %username%!
+
+            A regisztrált fiók a következő linkre kattintva aktiválható: %confirmationUrl%
+
+            A link csak egyszer használható, rákattintás után ismételt felhasználása nem lehetséges.
+
+            Üdvözlettel,
+            a Csapat.
+
+resetting:
+    check_email:  |
+        Elfelejtett jelszava lecseréléséhez, kérjük, kattintson az e-mailben található linkre.
+        Felhívjuk figyelmát rá, hogy a link érvényessége %tokenLifetime% óra múlva lejár.
+
+        Amennyiben nem találja az e-mailt a postafiókjában, ellenőrizze a levélszemét mappát vagy kérje újra a kiküldést!
+    request:
+        username: 'Felhasználónév vagy e-mail cím'
+        submit: 'Jelszó lecserélése'
+    reset:
+        submit: 'Jelszó megváltoztatása'
+    flash:
+        success: 'A jelszó sikeresen lecserélve.'
+    email:
+        subject: 'Jelszó lecserélése'
+        message: |
+            Hello %username%!
+
+            A jelszó a következő oldalon cserélhető le: %confirmationUrl%
+
+            Üdvözlettel,
+            a Csapat.
+
+layout:
+    logout: Kijelentkezés
+    login: Bejelentkezés
+    register: Regisztráció
+    logged_in_as: 'Belépve mint %username%'
+
+form:
+    group_name: 'Csoport név'
+    username: Felhasználónév
+    email: E-mail
+    current_password: 'Jelenlegi jelszó'
+    password: Jelszó
+    password_confirmation: 'Jelszó megerősítése'
+    new_password: 'Új jelszó'
+    new_password_confirmation: 'Új jelszó megerősítése'

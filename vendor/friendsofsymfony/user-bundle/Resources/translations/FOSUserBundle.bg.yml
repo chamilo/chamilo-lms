@@ -1,0 +1,92 @@
+group:
+    edit:
+        submit: 'Обнови група'
+    show:
+        name: 'Име на групата'
+    new:
+        submit: 'Нова група'
+    flash:
+        updated: 'Групата беше обновена успешно.'
+        created: 'Групата беше създадена успешно.'
+        deleted: 'Групата беше изтрита успешно.'
+        
+security:
+    login:
+        username: 'Потребителско име'
+        password: 'Парола'
+        remember_me: 'Запомни ме'
+        submit: 'Вход'
+        
+profile:
+    show:
+        username: 'Потребителско име'
+        email: Имейл
+    edit:
+        submit: 'Промени'
+    flash:
+        updated: 'Профилът беше успешно променен.'
+        
+change_password:
+    submit: 'Промени паролата'
+    flash:
+        success: 'Паролата беше успешно променена.'
+        
+registration:
+    check_email: |
+        Изпратихме писмо до %email%. То съдържа линк за активиране, който трябва да отворите, за да се активира профилът Ви.
+    confirmed: 'Честито, %username%, акаунтът е успешно активиран.'
+    back: 'Обратно към предишната страница.'
+    submit: 'Регистрация'
+    flash:
+        user_created: 'Потребителят беше успешно създаден.'
+    email:
+        subject: 'Добре дошли, %username%!'
+        message: |
+            Здравейте, %username%!
+
+            За да активирате своя профил, моля отворете %confirmationUrl%
+            
+            Това е еднократен линк за валидиране на акаунта Ви. 
+
+            Поздрави,
+            от екипа.
+
+resetting:
+    check_email: |
+        Изпратихме писмо с линк за активация на посочения имейл адрес: %email%.
+        Забележка: Заявка за нова парола може да направите в рамките на %tokenLifetime% час(а).
+        
+        Ако не откривате писмото проверете в папка СПАМ или опитайте отново.
+    request:
+        username: 'Потребителско име или имейл'
+        submit: 'Промени паролата'
+    reset:
+        submit: 'Промени паролата'
+    flash:
+        success: 'Паролата беше успешно променена.'
+    email:
+        subject: 'Забравена парола'
+        message: |
+            Здравейте, %username%!
+
+            За да промените своята парола, моля отворете %confirmationUrl%
+
+            Поздрави,
+            от екипа.
+
+# Global strings
+layout:
+    logout: 'Изход'
+    login: 'Вход'
+    register: 'Регистрация'
+    logged_in_as: 'Влязъл като %username%'
+    
+form:
+    group_name: 'Име на група'
+    username: 'Потребителско име'
+    email: 'Имейл'
+    current_password: 'Текуща парола'
+    password: 'Парола'
+    password_confirmation: 'Парола (отново)'
+    new_password: 'Нова парола'
+    new_password_confirmation: 'Нова парола (отново)'

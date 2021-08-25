@@ -1,0 +1,79 @@
+group:
+    edit:
+        submit: 'Oppdater gruppe'
+    show:
+        name: Gruppenavn
+    new:
+        submit: 'Opprett gruppe'
+    flash:
+        updated: 'Gruppen har blitt oppdatert'
+        created: 'Gruppen har blitt opprettet'
+        deleted: 'Gruppen har blitt slettet'
+security:
+    login:
+        username: Brukernavn
+        password: Passord
+        remember_me: 'Husk meg'
+        submit: 'Logg inn'
+profile:
+    show:
+        username: Brukernavn
+        email: Epost
+    edit:
+        submit: Oppdater
+    flash:
+        updated: 'Profilen har blitt oppdatert'
+change_password:
+    submit: 'Endre passord'
+    flash:
+        success: 'Passordet har blitt endret'
+registration:
+    check_email: 'En epost har blitt sendt til %email%. Den inneholder en aktiveringslenke du må klikke på for å aktivere kontoen din.'
+    confirmed: 'Gratulerer %username%, din konto er nå aktivert.'
+    back: 'Tilbake til den opprinnelige siden.'
+    submit: Registrer
+    flash:
+        user_created: 'Brukeren har blitt opprettet'
+    email:
+        subject: 'Velkommen %username%!'
+        message: |
+            Hallo %username%!
+
+            For å fullføre aktiveringen av din konto - vennligst besøk %confirmationUrl%
+
+            Med vennlig hilsen,
+            Teamet.
+
+resetting:
+#    check_email: 'En epost har blitt sendt til %email%. Den inneholder en lenke du må klikke på for å tilbakestille passordet.'
+    request:
+        username: 'Brukernavn eller epostadresse'
+        submit: 'Tilbakestill passord'
+    reset:
+        submit: 'Endre passord'
+    flash:
+        success: 'Passordet har blitt tilbakestilt'
+    email:
+        subject: 'Tilbakestill Passord'
+        message: |
+            Hallo %username%!
+
+            For å tilbakestille ditt passord - vennligst besøk %confirmationUrl%
+
+            Med vennlig hilsen,
+            Teamet.
+
+layout:
+    logout: 'Logg ut'
+    login: 'Logg inn'
+    register: Registrer
+    logged_in_as: 'Logget inn som %username%'
+form:
+    group_name: Gruppenavn
+    username: Brukernavn
+    email: Epost
+    current_password: 'Nåværende passord'
+    password: Passord
+    password_confirmation: Verifisering
+    new_password: 'Nytt passord'
+    new_password_confirmation: Verifisering

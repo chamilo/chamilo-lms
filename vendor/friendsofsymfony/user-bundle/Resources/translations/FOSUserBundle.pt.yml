@@ -1,0 +1,84 @@
+group:
+    edit:
+        submit: 'Atualizar Grupo'
+    show:
+        name: 'Nome do Grupo'
+    new:
+        submit: 'Criar Grupo'
+    flash:
+        updated: 'O grupo foi atualizado'
+        created: 'O grupo foi criado'
+        deleted: 'O grupo foi apagado'
+security:
+    login:
+        username: 'Utilizador'
+        password: 'Password'
+        remember_me: 'Lembrar-me'
+        submit: 'Entrar'
+profile:
+    show:
+        username: 'Utilizador'
+        email: 'Email'
+    edit:
+        submit: 'Atualizar conta'
+    flash:
+        updated: 'O perfil foi atualizado'
+change_password:
+    submit: 'Mudar a password'
+    flash:
+        success: 'A password foi alterada'
+registration:
+    check_email: 'Foi enviado um email para %email%. Este contém um link de ativação que terá de visitar para ativar a sua conta.'
+    confirmed: 'Parabéns %username%, a sua conta foi confirmada.'
+    back: 'Voltar para a página anterior.'
+    submit: 'Registar'
+    flash:
+        user_created: 'O utilizador foi criado com sucesso'
+    email:
+        subject: 'Bem-vindo(a) %username%!'
+        message: |
+            Olá %username%!
+
+            Para completar a validação da sua conta, por favor visite o seguinte link: %confirmationUrl%
+
+            Cumprimentos,
+            A equipa.
+
+resetting:
+    check_email: |
+        Foi enviado um email. Este contém um link que terá de visitar para recuperar a sua password.
+        Nota: Só poderá voltar a pedir para recuperar a sua password dentro de %tokenLifetime% horas.
+
+        Se não receber o email verifique a pasta de spam do seu cliente de email ou tente novamente.
+    request:
+        username: 'Utilizador ou endereço de email'
+        submit: 'Recuperar password'
+    reset:
+        submit: 'Alterar password'
+    flash:
+        success: 'A password foi recuperada com sucesso'
+    email:
+        subject: 'Recuperar password'
+        message: |
+            Olá %username%!
+
+            Para recuperar a password, por favor aceda a %confirmationUrl%
+
+            Cumprimentos,
+            A equipa.
+
+# Global strings
+layout:
+    logout: 'Sair'
+    login: 'Entrar'
+    register: 'Registar'
+    logged_in_as: 'Entrou como %username%'
+form:
+    group_name: 'Nome do Grupo'
+    username: 'Utilizador'
+    email: 'Email'
+    current_password: 'Password atual'
+    password: 'Password'
+    password_confirmation: 'Verificar password'
+    new_password: 'Nova password'
+    new_password_confirmation: 'Verificar a nova password'

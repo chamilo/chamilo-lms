@@ -1,0 +1,14 @@
+{
+  "name": "pretty-checkbox",
+  "homepage": "https://github.com/lokesh-coder/pretty-checkbox",
+  "version": "3.0.3",
+  "_release": "3.0.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.0.3",
+    "commit": "c225070a9bbc1ff416d624fd94858ae9c67656a1"
+  },
+  "_source": "https://github.com/lokesh-coder/pretty-checkbox.git",
+  "_target": "^3.0.3",
+  "_originalSource": "pretty-checkbox"
+}

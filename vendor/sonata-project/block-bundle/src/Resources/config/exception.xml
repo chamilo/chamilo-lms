@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="sonata.block.exception.strategy.manager.class">Sonata\BlockBundle\Exception\Strategy\StrategyManager</parameter>
+    </parameters>
+    <services>
+        <!-- exception strategy manager -->
+        <service id="sonata.block.exception.strategy.manager" class="%sonata.block.exception.strategy.manager.class%">
+            <argument type="service" id="service_container"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+        </service>
+        <!-- exception filters -->
+        <service id="sonata.block.exception.filter.keep_none" class="Sonata\BlockBundle\Exception\Filter\KeepNoneFilter" public="true"/>
+        <service id="sonata.block.exception.filter.keep_all" class="Sonata\BlockBundle\Exception\Filter\KeepAllFilter" public="true"/>
+        <service id="sonata.block.exception.filter.debug_only" class="Sonata\BlockBundle\Exception\Filter\DebugOnlyFilter" public="true">
+            <argument>%kernel.debug%</argument>
+        </service>
+        <service id="sonata.block.exception.filter.ignore_block_exception" class="Sonata\BlockBundle\Exception\Filter\IgnoreClassFilter" public="true">
+            <argument>Sonata\BlockBundle\Exception\BlockExceptionInterface</argument>
+        </service>
+        <!-- exception renderers -->
+        <service id="sonata.block.exception.renderer.inline" class="Sonata\BlockBundle\Exception\Renderer\InlineRenderer" public="true">
+            <argument type="service" id="sonata.templating"/>
+            <argument>@SonataBlock/Block/block_exception.html.twig</argument>
+        </service>
+        <service id="sonata.block.exception.renderer.inline_debug" class="Sonata\BlockBundle\Exception\Renderer\InlineDebugRenderer" public="true">
+            <argument type="service" id="sonata.templating"/>
+            <argument>@SonataBlock/Block/block_exception_debug.html.twig</argument>
+            <argument>%kernel.debug%</argument>
+            <argument>true</argument>
+        </service>
+        <service id="sonata.block.exception.renderer.throw" class="Sonata\BlockBundle\Exception\Renderer\MonkeyThrowRenderer" public="true"/>
+    </services>
+</container>

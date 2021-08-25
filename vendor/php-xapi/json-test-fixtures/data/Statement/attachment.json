@@ -1,0 +1,27 @@
+{
+  "actor": {
+    "mbox": "mailto:conformancetest@tincanapi.com",
+    "objectType": "Agent"
+  },
+  "verb": {
+    "id": "http://tincanapi.com/conformancetest/verbid",
+    "display": {
+      "en-US": "test"
+    }
+  },
+  "object": {
+    "id": "http://tincanapi.com/conformancetest/activityid",
+    "objectType": "Activity"
+  },
+  "attachments": [
+    {
+      "usageType": "http://id.tincanapi.com/attachment/supporting_media",
+      "display": {
+        "en-US": "Text attachment"
+      },
+      "contentType": "text/plain",
+      "length": 18,
+      "sha2": "bd1a58265d96a3d1981710dab8b1e1ed04a8d7557ea53ab0cf7b44c04fd01545"
+    }
+  ]
+}

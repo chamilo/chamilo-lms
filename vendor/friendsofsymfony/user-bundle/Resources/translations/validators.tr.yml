@@ -1,0 +1,28 @@
+fos_user:
+    username:
+        already_used: 'Kullanıcı adı zaten kullanılıyor.'
+        blank: 'Lütfen bir kullanıcı adı girin.'
+        short: 'Kullanıcı adı çok kısa.'
+        long: 'Kullanıcı adı çok uzun.'
+    email:
+        already_used: 'E-posta zaten kullanılıyor.'
+        blank: 'Lütfen bir e-posta girin.'
+        short: 'E-posta çok kısa.'
+        long: 'E-posta çok uzun.'
+        invalid: 'E-posta geçerli değil.'
+    password:
+        blank: 'Lütfen bir parola girin.'
+        short: 'Parola çok kısa.'
+        mismatch: 'Şifreler uyuşmuyor!.'
+    new_password:
+        blank: 'Lütfen yeni parolayı girin.'
+        short: 'Yeni parola çok kısa.'
+    current_password:
+        invalid: 'Girilen parola geçersiz.'
+    group:
+        blank: 'Lütfen bir isim girin.'
+        short: 'İsim çok kısa.'
+        long: 'İsim çok uzun.'
+fos_group:
+    name:
+        already_used: 'İsim zaten kullanılıyor..'

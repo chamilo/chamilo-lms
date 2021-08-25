@@ -1,0 +1,38 @@
+{
+    "name": "php-xapi/serializer",
+    "type": "library",
+    "description": "transform Experience API model objects to JSON strings and vice versa",
+    "keywords": ["xAPI", "Experience API", "Tin Can API", "serializer"],
+    "homepage": "https://github.com/php-xapi/serializer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Flothmann",
+            "homepage": "https://github.com/xabbuh"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "php-xapi/json-test-fixtures": "^2.0",
+        "php-xapi/model": "^1.1 || ^2.0 || ^3.0",
+        "php-xapi/test-fixtures": "^1.0.1"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^2.3"
+    },
+    "conflict": {
+        "xabbuh/xapi-serializer": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "spec\\Xabbuh\\XApi\\Serializer\\": "spec/",
+            "Xabbuh\\XApi\\Serializer\\": "src/",
+            "Xabbuh\\XApi\\Serializer\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "2.x-dev": "2.2.x-dev"
+        }
+    }
+}

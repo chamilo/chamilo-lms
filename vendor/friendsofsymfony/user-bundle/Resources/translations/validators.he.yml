@@ -1,0 +1,28 @@
+fos_user:
+    username:
+        already_used: 'שם המשתמש טפוס ע"ל משתמש אחר'
+        blank: 'יש להזין שם משתמש'
+        short: 'שם המשתמש קצר מדי'
+        long: 'שם המשתמש ארוך מדי'
+    email:
+        already_used: 'כתובת דואר אלקטרוני תפוסה'
+        blank: 'יש להזין כתובת דואר אלקטרוני'
+        short: 'כתובת הדוא"ל קצרה מדי'
+        long: 'כתובת הדוא"ל ארוכה מדי'
+        invalid: 'הדוא\"ל אינו תקין'
+    password:
+        blank: 'יש להזין סיסמה'
+        short: 'הסיסמה קצרה מדי'
+        mismatch: 'אין התאמה בין סיסמאות'
+    new_password:
+        blank: 'יש להזין סיסמה חדשה'
+        short: 'סיסמה החדשה קצרה מדי'
+    current_password:
+        invalid: 'הסיסמה שגויה'
+    group:
+        blank: 'יש להזין שם קבוצה'
+        short: 'שם קצר מדי'
+        long: 'שם ארוך מדי'
+fos_group:
+    name:
+        already_used: 'שם קבוצה בשימוש'

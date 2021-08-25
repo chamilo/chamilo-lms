@@ -1,0 +1,28 @@
+fos_user:
+    username:
+        already_used: 'A felhasználónév már foglalt.'
+        blank: 'A felhasználónév nem lehet üres.'
+        short: 'A felhasználónév túl rövid.'
+        long: 'A felhasználónév túl hosszú.'
+    email:
+        already_used: 'Az e-mail cím már használatban van.'
+        blank: 'Az e-mail cím nem lehet üres.'
+        short: 'Az e-mail cím túl rövid.'
+        long: 'Az e-mail cím túl hosszú.'
+        invalid: 'A megadott e-mail cím helytelen.'
+    password:
+        blank: 'A jelszó nem lehet üres.'
+        short: 'A jelszó túl rövid.'
+        mismatch: 'A megadott jelszavak nem egyeznek.'
+    new_password:
+        blank: 'Az új jelszó nem lehet üres.'
+        short: 'Az új jelszó túl rövid.'
+    current_password:
+        invalid: 'A megadott jelszó helytelen.'
+    group:
+        blank: 'A név nem lehet üres.'
+        short: 'A név túl rövid.'
+        long: 'A név túl hosszú.'
+fos_group:
+    name:
+        already_used: 'A név már foglalt.'

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="fr" datatype="plaintext" original="SonataBlockBundle.en.xliff">
+        <body>
+            <trans-unit id="sonata.block.container">
+                <source>sonata.block.container</source>
+                <target>Conteneur</target>
+            </trans-unit>
+            <trans-unit id="sonata.block.text">
+                <source>sonata.block.text</source>
+                <target>Texte</target>
+            </trans-unit>
+            <trans-unit id="sonata.block.rss">
+                <source>sonata.block.rss</source>
+                <target>Flux RSS</target>
+            </trans-unit>
+            <trans-unit id="sonata.block.menu">
+                <source>sonata.block.menu</source>
+                <target>Menu</target>
+            </trans-unit>
+            <trans-unit id="sonata.block.template">
+                <source>sonata.block.template</source>
+                <target>Vue Partielle</target>
+            </trans-unit>
+            <trans-unit id="form.label_template">
+                <source>form.label_template</source>
+                <target>Template</target>
+            </trans-unit>
+            <trans-unit id="form.label_content">
+                <source>form.label_content</source>
+                <target>Contenu</target>
+            </trans-unit>
+            <trans-unit id="form.label_url">
+                <source>form.label_url</source>
+                <target>URL</target>
+            </trans-unit>
+            <trans-unit id="form.label_title">
+                <source>form.label_title</source>
+                <target>Titre</target>
+            </trans-unit>
+            <trans-unit id="form.label_code">
+                <source>form.label_code</source>
+                <target>Code</target>
+            </trans-unit>
+            <trans-unit id="form.label_layout">
+                <source>form.label_layout</source>
+                <target>Layout</target>
+            </trans-unit>
+            <trans-unit id="form.label_class">
+                <source>form.label_class</source>
+                <target>Classe CSS</target>
+            </trans-unit>
+            <trans-unit id="form.label_cache_policy">
+                <source>form.label_cache_policy</source>
+                <target>Cache Policy</target>
+            </trans-unit>
+            <trans-unit id="form.label_safe_labels">
+                <source>form.label_safe_labels</source>
+                <target>Libellés sûrs</target>
+            </trans-unit>
+            <trans-unit id="form.label_current_class">
+                <source>form.label_current_class</source>
+                <target>Classe CSS de l'élément actuel du menu</target>
+            </trans-unit>
+            <trans-unit id="form.label_first_class">
+                <source>form.label_first_class</source>
+                <target>Classe CSS du premier élément du menu</target>
+            </trans-unit>
+            <trans-unit id="form.label_last_class">
+                <source>form.label_last_class</source>
+                <target>Classe CSS du dernier élément du menu</target>
+            </trans-unit>
+            <trans-unit id="form.label_menu_class">
+                <source>form.label_menu_class</source>
+                <target>Classe CSS du menu</target>
+            </trans-unit>
+            <trans-unit id="form.label_children_class">
+                <source>form.label_children_class</source>
+                <target>Classe CSS des sous-menus</target>
+            </trans-unit>
+            <trans-unit id="form.label_menu_template">
+                <source>form.label_menu_template</source>
+                <target>Template du menu</target>
+            </trans-unit>
+            <trans-unit id="form.label_translation_domain">
+                <source>form.label_translation_domain</source>
+                <target>Domaine de traduction</target>
+            </trans-unit>
+            <trans-unit id="form.label_icon">
+                <source>form.label_icon</source>
+                <target>Icône</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

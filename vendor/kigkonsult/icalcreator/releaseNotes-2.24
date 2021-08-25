@@ -1,0 +1,53 @@
+
+iCalcreator 2.24 releaseNotes
+
+This is a major release!
+
+The release includes (but not limited to)
+
+MAJOR rewrite (but same API)
+
+- require PHP >= 5.4
+- namespace 'kigkonsult\iCalcreator'
+- all calendar properties implemented as traits
+    with property declaration, create- and set-methods
+- class 'iCalUtilityFunctions' renamed 'util'
+- component, property, config key names etc
+    defined as public static properties in util
+- more common operations refactored into util classes
+- (component) method copy removed
+- all config assembled in an array
+    config FORMAT and NL removed (always using iCal 'CRLF')
+- old xCal (XML) output removed
+- new class timezoneHandler (method createTimezone etc)
+- new class iCalXML managing (rfc6321) XML
+- new class iCalvCard managing vCard export
+- new class vcalendarSortHandler managing comparison functions
+- updated autoloader and altered folder structure
+- improved performance
+
+Bug fixed and updates:
+
+util::size75()
+  no line break in CRLF
+  preserve opt. trailing CRLF
+vcalendar::selectComponents()
+  index typo
+  no 'split' when event end at midnight
+iCalXML::XMLgetProps()
+  X-prop parameter VALUE
+PHP 7
+  substr adapt
+vcalendar::sort()
+  reworked
+util::splitContent()
+  attribute split index
+vcalendar::getComponent()
+calendarComponent::getComponent()
+iCalBase::deleteComponent()
+  UID/component name spilt
+code refresh:
+  fixed typos and fcn arg. and return types
+utilRecur class
+timezoneHandler::createTimezone(), timezone mgnt
+vcalendar::newComponent() wrappers, ex. vcalendar::newVevent() etc

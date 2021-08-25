@@ -1,0 +1,7 @@
+Git information
+===============
+
+URL: https://github.com/unicode-org/icu.git
+Revision: 125e29d54990e74845e1546851b5afa3efab06ce
+Author: Peter Edberg
+Date: 2020-04-15T23:30:01-07:00

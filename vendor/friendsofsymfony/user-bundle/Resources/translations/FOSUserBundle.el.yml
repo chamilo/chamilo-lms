@@ -1,0 +1,82 @@
+group:
+    edit:
+        submit: 'Ενημέρωση ομάδας'
+    show:
+        name: 'Όνομα ομάδας'
+    new:
+        submit: 'Δημιουργία ομάδας'
+    flash:
+        updated: 'Η ομάδα ενημερώθηκε επιτυχώς'
+        created: 'Η ομάδα δημιουργήθηκε επιτυχώς'
+        deleted: 'Η ομάδα διαγράφηκε επιτυχώς'
+security:
+    login:
+        username: 'Όνομα Χρήστη'
+        password: 'Κωδικός Πρόσβασης'
+        remember_me: 'Να με θυμάσαι'
+        submit: Είσοδος
+profile:
+    show:
+        username: 'Όνομα Χρήστη'
+        email: Email
+    edit:
+        submit: Ενημέρωσε
+    flash:
+        updated: 'Το προφίλ ενημερώθηκε επιτυχώς'
+change_password:
+    submit: 'Αλλαγή κωδικού'
+    flash:
+        success: 'Ο κωδικός άλλαξε επιτυχώς'
+registration:
+    check_email: 'Ένα email στάλθηκε στο %email%. Περιέχει μία διεύθυνση ενεργοποίησης του λογαριασμού σας που πρέπει να κάνετε κλικ για να ενεργοποιηθεί.'
+    confirmed: 'Συγχαρητήρια %username%, ο λογαριασμός μόλις ενεργοποιήθηκε.'
+    back: 'Επιστροφή στην αρχική σελίδα.'
+    submit: Εγγραφή
+    flash:
+        user_created: 'Ο χρήστης δημιουργήθηκε επιτυχώς.'
+    email:
+        subject: 'Καλώς ήρθες %username%!'
+        message: |
+            Αγαπητέ %username%!
+
+            Για να ολοκληρώσετε την ενεργοποίηση του λογαριασμού σας - επισκεφθείτε %confirmationUrl%
+
+            Ευχαριστούμε πολύ.
+
+resetting:
+    check_email: |
+        Ένα email έχει αποσταλεί. Περιέχει ένα  σύνδεσμο ώστε να μπορέσετε να επαναφέρετε τον κωδικό σας.
+        Σημείωση: Μπορείτε να ζητήσε επαναφορά το πολύ μία φορά μέσα σε %tokenLifetime% hours.
+
+        Εάν δεν έχετε λάβει κάποιο email παρακαλώ ελένξτε τον φάκελο με την ανεπιθύμητη αλληλογραφία (spam) ή δοκιμάστε ξανά.
+
+    request:
+        username: 'Όνομα χρήστη ή διεύθυνση e-mail'
+        submit: 'Επαναφορά του κωδικού πρόσβασης'
+    reset:
+        submit: 'Αλλαγή κωδικού πρόσβασης'
+    flash:
+        success: 'Η επαναφορά του κωδικού πρόσβασης έγινε με επιτυχία'
+    email:
+        subject: 'Επαναφορά του κωδικού πρόσβασης'
+        message: |
+            Αγαπητέ %username%!
+
+            Για να επαναφέρετε τον κωδικό πρόσβασής σας - επισκεφθείτε %confirmationUrl%
+
+            Ευχαριστούμε πολυ.
+
+layout:
+    logout: Αποσύνδεση
+    login: Σύνδεση
+    register: Εγγραφή
+    logged_in_as: 'Έχετε συνδεθεί ως %username%'
+form:
+    group_name: 'Όνομα ομάδας'
+    username: 'Όνομα Χρήστη'
+    email: Email
+    current_password: 'Τρέχον κωδικός πρόσβασης'
+    password: 'Κωδικός πρόσβασης'
+    password_confirmation: Επαλήθευση
+    new_password: 'Νέος Κωδικός πρόσβασης'
+    new_password_confirmation: Επαλήθευση

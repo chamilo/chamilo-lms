@@ -1,0 +1,12 @@
+build.properties
+build/
+logs/
+reports/
+dist/
+tests/phpunit.xml
+vendor/
+composer.lock
+box.phar
+phpunit.xml
+/phpcs.xml
+/.phpcs-cache

@@ -1,0 +1,27 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Strict comparison using \\=\\=\\= between null and object will always evaluate to false\\.$#"
+			count: 1
+			path: src/Adapter/ORM/DoctrineORMAdapter.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between null and object will always evaluate to false\\.$#"
+			count: 1
+			path: src/Adapter/PHPCR/DoctrinePHPCRAdapter.php
+
+		-
+			message: "#^Call to an undefined method Doctrine\\\\Persistence\\\\ObjectManager\\:\\:getConnection\\(\\)\\.$#"
+			count: 1
+			path: src/Document/BaseDocumentManager.php
+
+		-
+			message: "#^Access to an undefined property Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:\\$table\\.$#"
+			count: 1
+			path: src/Model/BaseManager.php
+
+		-
+			message: "#^Return typehint of method Sonata\\\\Doctrine\\\\Model\\\\PageableManagerInterface\\:\\:getPager\\(\\) has invalid type Sonata\\\\DatagridBundle\\\\Pager\\\\PagerInterface\\.$#"
+			count: 1
+			path: src/Model/PageableManagerInterface.php
+

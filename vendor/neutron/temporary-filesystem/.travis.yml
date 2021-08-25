@@ -1,0 +1,49 @@
+language: php
+
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
+  - 7.3
+  - 7.4
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer
+
+matrix:
+  include:
+    - php: 5.6
+      env: COMPOSER_FLAGS="--prefer-lowest"
+           SYMFONY_VERSION=2.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.3.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.7.*
+    - php: 7.0
+      env: SYMFONY_VERSION=2.8.*@dev
+    - php: 7.0
+      env: SYMFONY_VERSION=3.0.*
+    - php: 7.0
+      env: SYMFONY_VERSION=3.0.*@dev
+    - php: 7.1
+      env: SYMFONY_VERSION=4.*
+    - php: 7.2
+      env: SYMFONY_VERSION=5.*
+    - php: 7.3
+      env: SYMFONY_VERSION=5.*
+    - php: 7.4
+      env: SYMFONY_VERSION=5.*
+
+before_install:
+  - composer self-update
+  - if [ "COMPOSER_FLAGS" == "--prefer-lowest" ]; then composer require "roave/security-advisories" dev-master --no-update; fi;
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+
+install: composer update --prefer-source $COMPOSER_FLAGS
+
+script:
+  - vendor/bin/simple-phpunit

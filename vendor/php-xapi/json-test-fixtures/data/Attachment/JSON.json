@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "usageType": "http://id.tincanapi.com/attachment/supporting_media",
+    "display": {
+      "en-US": "JSON attachment"
+    },
+    "contentType": "application/json",
+    "length": 60,
+    "sha2": "f4135c31e2710764604195dfe4e225884d8108467cc21670803e384b80df88ee"
+  },
+  "content": "{\"propertyA\":\"value1\",\"propertyB\":\"value2\",\"propertyC\":true}"
+}

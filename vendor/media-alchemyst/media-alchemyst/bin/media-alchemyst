@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use MediaAlchemyst\Console\Alchemyst;
+use Symfony\Component\Console\Application;
+
+
+$app = new Application("Media-Alchemyst");
+$app->add(new Alchemyst('transmute'));
+
+$app->run();

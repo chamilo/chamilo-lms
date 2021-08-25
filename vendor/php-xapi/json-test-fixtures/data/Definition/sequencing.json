@@ -1,0 +1,8 @@
+{
+  "interactionType": "sequencing",
+  "choices": [
+    {
+      "id": "test"
+    }
+  ]
+}

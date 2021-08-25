@@ -1,0 +1,28 @@
+fos_user:
+    username:
+        already_used: 'Tiu ĉi uzantnomo estas jam okupita.'
+        blank: 'Enmetu vian uzantnomo.'
+        short: 'La uzantnomo estas tro mallonga.'
+        long: 'La uzantnomo estas tro longa.'
+    email:
+        already_used: 'Tiu ĉi retpoŝtadreso jam estas registrita.'
+        blank: 'Enmetu validan retpoŝtan adreson.'
+        short: 'La retpoŝtadreso estas tro mallonga.'
+        long: 'La retpoŝtadreso estas tro longa.'
+        invalid: 'La retpoŝtadreso ne estas valida.'
+    password:
+        blank: 'Enmetu pasvorton.'
+        short: 'La pasvorto estas tro mallonga.'
+        mismatch: 'La pasvortoj ne samas.'
+    new_password:
+        blank: 'Bonvolu enmeti novan pasvorton.'
+        short: 'La nova pasvorto estas tro mallonga.'
+    current_password:
+        invalid: 'La pasvorto estas nevalida.'
+    group:
+        blank: 'Bonvolu enmeti grupnomon.'
+        short: 'La nomo estas tro mallonga.'
+        long: 'La nomo estas tro longa.'
+fos_group:
+    name:
+        already_used: 'La grupnomon estas jam okupita.'

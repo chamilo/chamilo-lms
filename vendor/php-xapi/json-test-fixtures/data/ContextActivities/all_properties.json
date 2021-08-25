@@ -1,0 +1,26 @@
+{
+  "category": [
+    {
+      "id": "http://tincanapi.com/conformancetest/activityid",
+      "objectType": "Activity"
+    }
+  ],
+  "parent": [
+    {
+      "id": "http://tincanapi.com/conformancetest/activityid",
+      "objectType": "Activity"
+    }
+  ],
+  "grouping": [
+    {
+      "id": "http://tincanapi.com/conformancetest/activityid",
+      "objectType": "Activity"
+    }
+  ],
+  "other": [
+    {
+      "id": "http://tincanapi.com/conformancetest/activityid",
+      "objectType": "Activity"
+    }
+  ]
+}

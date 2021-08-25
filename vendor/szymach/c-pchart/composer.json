@@ -1,0 +1,45 @@
+{
+    "name": "szymach/c-pchart",
+    "license": "GPL-3.0-only",
+    "type": "library",
+    "description": "Port of \"pChart\" library into PHP 5+",
+    "keywords": ["pchart", "pChart", "statistics", "charts", "CpChart", "c-pChart"],
+    "homepage": "https://github.com/szymach/c-pchart",
+    "authors": [
+        {
+            "name": "Jean-Damien Pogolotti",
+            "homepage": "http://www.pchart.net",
+            "role": "Creator of the original pChart library"
+        },
+        {
+            "name": "Piotr Szymaszek",
+            "homepage": "https://github.com/szymach",
+            "role": "Developer of the CpChart wrapper package"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "CpChart\\": "src/" },
+        "files": ["constants.php"]
+    },
+    "autoload-dev": {
+        "psr-4": { "CpChart\\Test\\": "tests/" }
+    },
+    "require": {
+        "php": ">=5.4",
+        "ext-gd": "*"
+    },
+    "require-dev" : {
+        "codeception/codeception": "^2.4",
+        "phpunit/phpunit": "^4.8|^7.1",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "config": {
+        "bin-dir": "vendor/bin"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.0.x-dev",
+            "2.0": "2.0.x-dev"
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "tag1": [
+        {
+            "class": "Full\\Qualified\\Class2",
+            "public": false,
+            "synthetic": true,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "file": "\/path\/to\/file",
+            "factory_service": "factory.service",
+            "factory_method": "get",
+            "autowire": false,
+            "autowiring_types": []
+        }
+    ],
+    "tag2": [
+        {
+            "class": "Full\\Qualified\\Class2",
+            "public": false,
+            "synthetic": true,
+            "lazy": false,
+            "shared": true,
+            "abstract": false,
+            "file": "\/path\/to\/file",
+            "factory_service": "factory.service",
+            "factory_method": "get",
+            "autowire": false,
+            "autowiring_types": []
+        }
+    ]
+}

@@ -1,0 +1,77 @@
+:root {
+    --primary-color: #486F88;
+    --success-color: #16D090;
+}
+
+body {
+    margin: 0;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+}
+.custompage .limiter {
+    width: 100%;
+    margin: 0 auto;
+}
+.custompage .container-login {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: #f2f2f2;
+}
+.custompage .wrap-login {
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px 45px;
+    box-shadow: 0 12px 26px rgba(16, 30, 115, 0.06);
+}
+.custompage .width-login {
+    width: 390px;
+}
+.custompage .width-register {
+    width: 690px;
+}
+.custompage h3.title, legend {
+    font-weight: 900;
+    font-size: 24px;
+    color: #486F88;
+    padding: 1rem 0;
+}
+.custompage label {
+    color: #486F88;
+    font-weight: 400;
+}
+.custompage .form-control,
+.custompage .bootstrap-select .dropdown-toggle.btn-default {
+    border: 2px solid #B3C8D7;
+}
+.custompage .last-password {
+    padding: 2.5rem 0;
+    text-align: center;
+}
+.btn-primary {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.btn-success {
+    color: #fff;
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.custompage .software-name {
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 1rem;
+    display: inline-block;
+    width: 100%;
+    font-size: 12px;
+}

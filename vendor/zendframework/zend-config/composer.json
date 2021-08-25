@@ -1,0 +1,71 @@
+{
+    "name": "zendframework/zend-config",
+    "description": "provides a nested object property based user interface for accessing this configuration data within application code",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf",
+        "zendframework",
+        "config"
+    ],
+    "support": {
+        "docs": "https://docs.zendframework.com/zend-config/",
+        "issues": "https://github.com/zendframework/zend-config/issues",
+        "source": "https://github.com/zendframework/zend-config",
+        "rss": "https://github.com/zendframework/zend-config/releases.atom",
+        "chat": "https://zendframework-slack.herokuapp.com",
+        "forum": "https://discourse.zendframework.com/c/questions/components"
+    },
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "ext-json": "*",
+        "zendframework/zend-stdlib": "^2.7.7 || ^3.1",
+        "psr/container": "^1.0"
+    },
+    "require-dev": {
+        "malukenho/docheader": "^0.1.6",
+        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+        "zendframework/zend-coding-standard": "~1.0.0",
+        "zendframework/zend-filter": "^2.7.2",
+        "zendframework/zend-i18n": "^2.7.4",
+        "zendframework/zend-servicemanager": "^2.7.8 || ^3.3"
+    },
+    "conflict": {
+        "container-interop/container-interop": "<1.2.0"
+    },
+    "suggest": {
+        "zendframework/zend-filter": "^2.7.2; install if you want to use the Filter processor",
+        "zendframework/zend-i18n": "^2.7.4; install if you want to use the Translator processor",
+        "zendframework/zend-servicemanager": "^2.7.8 || ^3.3; if you need an extensible plugin manager for use with the Config Factory"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zend\\Config\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Config\\": "test/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.3.x-dev",
+            "dev-develop": "3.4.x-dev"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@license-check",
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "license-check": "docheader check src/"
+    }
+}

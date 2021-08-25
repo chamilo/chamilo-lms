@@ -1,0 +1,52 @@
+name: 'CI'
+
+on:
+  - 'push'
+  - 'pull_request'
+
+jobs:
+  tests:
+    name: 'Tests'
+
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      matrix:
+        include:
+          - php-version: '7.1'
+            composer-options: '--prefer-stable'
+          - php-version: '7.2'
+            composer-options: '--prefer-lowest --prefer-stable'
+          - php-version: '7.3'
+            composer-options: '--prefer-stable'
+          - php-version: '7.4'
+            composer-options: '--prefer-stable'
+          - php-version: '8.0'
+            composer-options: '--prefer-stable'
+
+    steps:
+      - name: 'Check out'
+        uses: 'actions/checkout@v2'
+
+      - name: 'Set up PHP'
+        uses: 'shivammathur/setup-php@v2'
+        with:
+          php-version: '${{ matrix.php-version }}'
+          coverage: 'none'
+
+      - name: 'Get Composer cache directory'
+        id: 'composer-cache'
+        run: 'echo "::set-output name=cache-dir::$(composer config cache-files-dir)"'
+
+      - name: 'Cache dependencies'
+        uses: 'actions/cache@v2'
+        with:
+          path: '${{ steps.composer-cache.outputs.cache-dir }}'
+          key: "php-${{ matrix.php-version }}-composer-locked-${{ hashFiles('composer.lock') }}"
+          restore-keys: 'php-${{ matrix.php-version }}-composer-locked-'
+
+      - name: 'Install dependencies'
+        run: 'composer update --no-progress $COMPOSER_OPTIONS'
+
+      - name: 'Run PhpSpec'
+        run: 'vendor/bin/phpspec run'

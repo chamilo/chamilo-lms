@@ -1,0 +1,92 @@
+group:
+    edit:
+        submit: 'Aktualigi'
+    show:
+        name: 'Grupnomo'
+    new:
+        submit: 'Krei grupon'
+    flash:
+        updated: 'La grupo estas aktualigita.'
+        created: 'La grupo estas kreita.'
+        deleted: 'La grupo estas forigita.'
+
+security:
+    login:
+        username: Uzantnomo
+        password: Pasvorto
+        remember_me: 'Memoru min'
+        submit: 'Ensaluti'
+
+profile:
+    show:
+        username: Uzantnomo
+        email: Retpoŝtadreso
+    edit:
+        submit: Aktualigi
+    flash:
+        updated: 'La profilo estas aktualigita.'
+
+change_password:
+    submit: 'Ŝanĝi la pasvorton'
+    flash:
+        success: 'La pasvorto estas ŝanĝita'
+
+registration:
+    check_email: |
+        Por fini la registriĝon bonvolu alklaki la ligilon en la retpoŝtmesaĝo, kiun ni ĵus sendis al vi. Se vi ne ricevis la mesaĝon, kontrolu vian spam-dosierujon.
+    confirmed: 'Gratulon %username%, via konto estas aktiva.'
+    back: 'Reiri al la origina paĝo.'
+    submit: Registriĝi
+    flash:
+        user_created: 'La uzanto estis kreita.'
+    email:
+        subject: 'Bonvenon %username%!'
+        message: |
+            Saluton %username%!
+
+            Por kompletigi la aktivigadon de via konto - Bonvolu viziti %confirmationUrl%
+
+            Ĉi tiu ligilo povas validigi nur vian konton.
+
+            Amike,
+            la Teamo.
+
+resetting:
+    check_email: |
+        Ni sendis retpoŝtmesaĝon al vi. Ĝi enhavas ligilon, kiun vi devas alklaki por ŝanĝi vian pasvorton.
+        Rimarku: Vi nur povas uzi la ligilon dum %tokenLifetime% horoj.
+
+        Se vi ne ricevis la mesaĝon, kontrolu vian spam-dosierujon.
+    request:
+        username: 'Uzantnomo aŭ retpoŝtadreso'
+        submit: 'Ŝanĝi la Pasvorton'
+    reset:
+        submit: 'Ŝanĝi la Pasvorton'
+    flash:
+        success: 'La pasvorto estas sukcese ŝanĝita.'
+    email:
+        subject: 'Ŝanĝi la pasvorton'
+        message: |
+            Saluton %username%!
+
+            Por ŝanĝi la pasvorton - Bonvolu viziti %confirmationUrl%
+
+            Amike,
+            la Teamo.
+
+# Global strings
+layout:
+    logout: 'Elsaluti'
+    login: 'Ensaluti'
+    register: Registriĝi
+    logged_in_as: 'Ensalutita kiel %username%'
+
+form:
+    group_name: 'Grupnomo'
+    username: Uzantnomo
+    email: Retpoŝtadreso
+    current_password: 'Nuna pasvorto'
+    password: Pasvorto
+    password_confirmation: 'Retajpu pasvorton'
+    new_password: 'Nova pasvorto'
+    new_password_confirmation: 'Retajpu novan pasvorton'

@@ -1,0 +1,28 @@
+fos_user:
+    username:
+        already_used: 'Username già in uso.'
+        blank: 'Si prega di inserire un username.'
+        short: 'Username troppo breve.'
+        long: 'Username troppo lungo.'
+    email:
+        already_used: 'Email già in uso.'
+        blank: 'Si prega di inserire una email.'
+        short: 'Email troppo breve.'
+        long: 'Email troppo lunga.'
+        invalid: 'Email non valida.'
+    password:
+        blank: 'Si prega di inserire una password.'
+        short: 'Password troppo breve.'
+        mismatch: 'Le due password non coincidono.'
+    new_password:
+        blank: 'Si prega di inserire nuovamente la password.'
+        short: 'Nuova password troppo breve.'
+    current_password:
+        invalid: 'Password non valida.'
+    group:
+        blank: 'Si prega di inserire un nome.'
+        short: 'Nome troppo breve.'
+        long: 'Nome troppo lungo.'
+fos_group:
+    name:
+        already_used: 'Nome già in uso.'

@@ -1,0 +1,14 @@
+.env
+.DS_Store
+.idea
+.phpunit.result.cache
+
+build
+composer.lock
+composer.phar
+tests/_output/*
+tests/_support/_generated/*
+vendor
+
+# ignore the coverage folders
+**/coverage

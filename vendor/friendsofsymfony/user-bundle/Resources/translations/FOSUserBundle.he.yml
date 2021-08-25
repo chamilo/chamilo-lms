@@ -1,0 +1,89 @@
+group:
+    edit:
+        submit: 'עדכן קבוצה'
+    show:
+        name: 'שם קבוצה'
+    new:
+        submit: 'צור קבומה'
+    flash:
+        updated: 'הקבוצה עודכנה בהצלחה'
+        created: 'הקבוצה נוצרה בהצלחה'
+        deleted: 'הקבוצה נמחקה בהצלחה'
+security:
+    login:
+        username: 'שם משתמש'
+        password: סיסמה
+        remember_me: 'זכור אותי'
+        submit: התחבר
+profile:
+    show:
+        username: 'שם משתמש'
+        email: 'דוא"ל'
+    edit:
+        submit: עדכון
+    flash:
+        updated: 'הפרופיל עודכן בהצלחה'
+change_password:
+    submit: 'שינוי סיסמה'
+    flash:
+        success: 'הסיסמה שונתה בהצלחה.'
+registration:
+    check_email: 'הודעה בדוא"ל נשלחה ל-%email%. ההודעה מכילה קישור להפעלת חשבון משתמש שלך. יש ללחוץ על הקישור כדי להפעיל את החשבון.'
+    confirmed: 'ברוכים הבאים %username%, חשבון שלך הופעל.'
+    back: 'השב לדף הקודם.'
+    submit: הרשם
+    flash:
+        user_created: 'המשתמש נוצר בהצלחה'
+    email:
+        subject: 'שלום %username%!'
+        message: |
+            %username% שלום רב,
+
+            כדי לסיים הרשמתך יש ללחוץ על קישור זה:  %confirmationUrl%
+
+            זה קישור חד-פעמי לאמת סיסמתך.
+
+            בברכה,
+               הצוות.
+
+resetting:
+    check_email: |
+        הודעת דוא"ל נשלחה. ההודעה מכילה קישור לאיפוס סיסמה שלך.
+
+        ניתן לבקש איפוס סיסמה תוך %tokenLifetime% שעות.
+
+        יש לבדוק תיקיים דואר זבל במידע ולא הגיעה ההודעה.
+
+    request:
+        username: 'שם משתמש או דואר אלקטרוני'
+        submit: 'איפוס סיסמה'
+    reset:
+        submit: 'שינוי סיסמה'
+    flash:
+        success: 'הסיסמה אופסה בהצלחה'
+    email:
+        subject: 'איפוס סיסמה'
+        message: |
+            %username% שלום רב,
+
+            כדי לאפס סיסמה שלך יש ללחוץ %confirmationUrl%
+
+            בברכה,
+               הצוות.
+
+# Global strings
+layout:
+    logout: התנתק
+    login: כניסה
+    register: רישום
+    logged_in_as: 'שלום %username%'
+
+form:
+    group_name: 'שם קבוצה'
+    username: 'שם משתמש'
+    email: 'דוא\"ל'
+    current_password: 'סיסמה נוכחות'
+    password: סיסמה
+    password_confirmation: 'אימות סיסמה'
+    new_password: 'סיסמה חדשה'
+    new_password_confirmation: 'אימות סיסמה חדשה'

@@ -1,0 +1,96 @@
+{
+  "id": "12345678-1234-5678-8234-567812345678",
+  "actor": {
+    "mbox": "mailto:conformancetest@tincanapi.com",
+    "objectType": "Agent"
+  },
+  "verb": {
+    "id": "http://tincanapi.com/conformancetest/verbid",
+    "display": {
+      "en-US": "test"
+    }
+  },
+  "object": {
+    "id": "http://tincanapi.com/conformancetest/activityid",
+    "objectType": "Activity"
+  },
+  "result": {
+    "score": {
+      "scaled": 1
+    },
+    "success": true,
+    "completion": true,
+    "response": "test",
+    "duration": "PT2H",
+    "extensions": {
+      "http://id.tincanapi.com/extension/topic": "Conformance Testing"
+    }
+  },
+  "authority": {
+    "account": {
+      "name": "test",
+      "homePage": "https://tincanapi.com"
+    },
+    "objectType": "Agent"
+  },
+  "timestamp": "2013-05-18T05:32:34+00:00",
+  "stored": "2014-07-23T12:34:02-05:00",
+  "context": {
+    "registration": "16fd2706-8baf-433b-82eb-8c7fada847da",
+    "instructor": {
+      "mbox": "mailto:conformancetest@tincanapi.com",
+      "objectType": "Agent"
+    },
+    "team": {
+      "objectType": "Group",
+      "mbox": "mailto:conformancetest-group@tincanapi.com"
+    },
+    "contextActivities": {
+      "category": [
+        {
+          "id": "http://tincanapi.com/conformancetest/activityid",
+          "objectType": "Activity"
+        }
+      ],
+      "parent": [
+        {
+          "id": "http://tincanapi.com/conformancetest/activityid",
+          "objectType": "Activity"
+        }
+      ],
+      "grouping": [
+        {
+          "id": "http://tincanapi.com/conformancetest/activityid",
+          "objectType": "Activity"
+        }
+      ],
+      "other": [
+        {
+          "id": "http://tincanapi.com/conformancetest/activityid",
+          "objectType": "Activity"
+        }
+      ]
+    },
+    "revision": "test",
+    "platform": "test",
+    "language": "en-US",
+    "statement": {
+      "objectType": "StatementRef",
+      "id": "16fd2706-8baf-433b-82eb-8c7fada847da"
+    },
+    "extensions": {
+      "http://id.tincanapi.com/extension/topic": "Conformance Testing"
+    }
+  },
+  "attachments": [
+    {
+      "usageType": "http://id.tincanapi.com/attachment/supporting_media",
+      "display": {
+        "en-US": "Text attachment"
+      },
+      "contentType": "text/plain",
+      "length": 18,
+      "sha2": "bd1a58265d96a3d1981710dab8b1e1ed04a8d7557ea53ab0cf7b44c04fd01545"
+    }
+  ]
+}

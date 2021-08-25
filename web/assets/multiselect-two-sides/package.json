@@ -1,0 +1,37 @@
+{
+  "name": "multiselect-two-sides",
+  "version": "2.5.7",
+  "description": "jQuery multiselect plugin with two sides",
+  "main": "dist/js/multiselect.min.js",
+  "unpkg": "dist/js/multiselect.min.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jasmine",
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crlcu/multiselect.git"
+  },
+  "keywords": [
+    "multiselect"
+  ],
+  "author": "Adrian Crisan <adrian.crisan88@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/crlcu/multiselect/issues"
+  },
+  "homepage": "https://github.com/crlcu/multiselect#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-rename": "^2.0.0",
+    "gulp-strip-debug": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "standard-version": "^7.1.0"
+  },
+  "dependencies": {
+    "jquery": ">=1.7"
+  }
+}

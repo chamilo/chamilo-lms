@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="session.metadata.storage_key">_sf2_meta</parameter>
+    </parameters>
+
+    <services>
+        <service id="session" class="Symfony\Component\HttpFoundation\Session\Session">
+            <argument type="service" id="session.storage" />
+            <argument type="service" id="session.attribute_bag" />
+            <argument type="service" id="session.flash_bag" />
+        </service>
+
+        <service id="session.storage.metadata_bag" class="Symfony\Component\HttpFoundation\Session\Storage\MetadataBag" public="false">
+            <argument>%session.metadata.storage_key%</argument>
+            <argument>%session.metadata.update_threshold%</argument>
+        </service>
+
+        <service id="session.storage.native" class="Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage">
+            <argument>%session.storage.options%</argument>
+            <argument type="service" id="session.handler" />
+            <argument type="service" id="session.storage.metadata_bag" />
+        </service>
+
+        <service id="session.storage.php_bridge" class="Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage">
+            <argument type="service" id="session.handler" />
+            <argument type="service" id="session.storage.metadata_bag" />
+        </service>
+
+        <service id="session.flash_bag" class="Symfony\Component\HttpFoundation\Session\Flash\FlashBag" public="false" />
+
+        <service id="session.attribute_bag" class="Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag" public="false" />
+
+        <service id="session.storage.mock_file" class="Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage" public="false">
+            <argument>%kernel.cache_dir%/sessions</argument>
+            <argument>MOCKSESSID</argument>
+            <argument type="service" id="session.storage.metadata_bag" />
+        </service>
+
+        <service id="session.handler.native_file" class="Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler" public="false">
+            <argument>%session.save_path%</argument>
+        </service>
+
+        <service id="session.handler.write_check" class="Symfony\Component\HttpFoundation\Session\Storage\Handler\WriteCheckSessionHandler" public="false" />
+
+        <service id="session_listener" class="Symfony\Bundle\FrameworkBundle\EventListener\SessionListener">
+            <tag name="kernel.event_subscriber" />
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="session.save_listener" class="Symfony\Component\HttpKernel\EventListener\SaveSessionListener">
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <!-- for BC -->
+        <service id="session.storage.filesystem" alias="session.storage.mock_file" />
+    </services>
+</container>

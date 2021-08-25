@@ -1,0 +1,6 @@
+{
+  "http://id.tincanapi.com/extension/color": {
+    "model": "RGB",
+    "value": "#FFFFFF"
+  }
+}

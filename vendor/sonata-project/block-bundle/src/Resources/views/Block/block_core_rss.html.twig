@@ -1,0 +1,45 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+{% extends sonata_block.templates.block_base %}
+
+{% block block %}
+    <div class="panel panel-default {{ settings.class }}">
+        {% if settings.title is not empty %}
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    {% if settings.icon %}
+                        <i class="{{ settings.icon }}" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if settings.translation_domain %}
+                        {{ settings.title|trans({}, settings.translation_domain) }}
+                    {% else %}
+                        {{ settings.title }}
+                    {% endif %}
+                </h4>
+            </div>
+        {% endif %}
+
+        <div class="panel-body">
+            <div class="media">
+                {% for feed in feeds %}
+                    <div class="media-body">
+                        <h5 class="media-heading">
+                            <a href="{{ feed.link }}" rel="nofollow" title="{{ feed.title }}">{{ feed.title }}</a>
+                        </h5>
+                        {{ feed.description|raw }}
+                    </div>
+                {% else %}
+                    No feeds available.
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

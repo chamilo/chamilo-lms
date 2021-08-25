@@ -1,0 +1,43 @@
+{
+    "name": "php-xapi/repository-doctrine",
+    "description": "common classes for Doctrine based implementations of an xAPI repository",
+    "keywords": ["xAPI", "Tin Can API", "Experience API", "storage", "database", "repository", "document", "Doctrine"],
+    "homepage": "https://github.com/php-xapi/repository-doctrine/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Flothmann",
+            "homepage": "https://github.com/xabbuh"
+        }
+    ],
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "doctrine/common": "~2.4",
+        "php-xapi/model": "^1.2 || ^2.1 || ^3.0",
+        "php-xapi/repository-api": "^0.3 || ^0.4",
+        "ramsey/uuid": "^2.9 || ^3.0"
+    },
+    "require-dev": {
+        "php-xapi/test-fixtures": "^1.0",
+        "symfony/phpunit-bridge": "^3.4 || ^4.0"
+    },
+    "minimum-stability": "dev",
+    "conflict": {
+        "xabbuh/xapi-doctrine-storage": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "XApi\\Repository\\Doctrine\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "XApi\\Repository\\Doctrine\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.4.x-dev"
+        }
+    }
+}

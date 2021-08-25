@@ -1,0 +1,6 @@
+.phpcs-cache
+composer.phar
+composer.lock
+cache/*
+!cache/.gitkeep
+vendor

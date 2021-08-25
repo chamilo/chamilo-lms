@@ -1,0 +1,84 @@
+group:
+    edit:
+        submit: 'Upravit skupinu'
+    show:
+        name: 'Název skupiny'
+    new:
+        submit: 'Vytvořit skupinu'
+    flash:
+        updated: 'Skupina byla úspěšně aktualizována.'
+        created: 'Skupina byla úspěšně vytvořena.'
+        deleted: 'Skupina byla úspěšně vymazána.'
+security:
+    login:
+        username: 'Uživatelské jméno'
+        password: Heslo
+        remember_me: 'Zapamatovat si'
+        submit: 'Přihlásit se'
+profile:
+    show:
+        username: 'Uživatelské jméno'
+        email: E-mail
+    edit:
+        submit: Upravit
+    flash:
+        updated: 'Profil byl úspěšně aktualizován.'
+change_password:
+    submit: 'Nastavit nové heslo'
+    flash:
+        success: 'Nové heslo bylo úspěšně nastaveno.'
+registration:
+    check_email: 'Na adresu %email% byl zaslán aktivační e-mail. Obsahuje odkaz, na který je nutné kliknout pro aktivaci Vašeho účtu.'
+    confirmed: 'Gratulujeme, %username%, Váš účet je nyní aktivní.'
+    back: 'Návrat na předchozí stránku.'
+    submit: 'Registrovat se'
+    flash:
+        user_created: 'Váš účet byl úspěšně vytvořen.'
+    email:
+        subject: 'Vítejte, %username%!'
+        message: |
+            Dobrý den, %username%!
+
+            Pro dokončení Vaší registrace prosím klikněte na tento odkaz: %confirmationUrl%
+
+            S pozdravem,
+            realizační tým.
+
+resetting:
+    check_email: |
+        Byl Vám zaslán e-mail s návodem na nastavení nového hesla. E-mail obsahuje odkaz, na který je nutné kliknout pro nastavení nového hesla.
+        O nastavení nového hesla můžete žádat pouze každých %tokenLifetime% hodin.
+
+        Pokud jste e-mail neobdrželi, zkontrolujte prosím složku se spamem nebo zkuste obnovování hesla zopakovat.
+
+    request:
+        username: 'Uživatelské jméno nebo e-mail'
+        submit: 'Nastavit nové heslo'
+    reset:
+        submit: 'Změnit heslo'
+    flash:
+        success: 'Heslo bylo úspěšně změněno.'
+    email:
+        subject: 'Nastavení nového hesla'
+        message: |
+            Dobrý den, %username%!
+
+            Pro nastavení nového hesla prosím klikněte na tento odkaz: %confirmationUrl%
+
+            S pozdravem,
+            realizační tým.
+
+layout:
+    logout: 'Odhlásit se'
+    login: 'Přihlásit se'
+    register: 'Registrovat se'
+    logged_in_as: 'Přihlášený uživatel: %username%'
+form:
+    group_name: 'Název skupiny'
+    username: 'Uživatelské jméno'
+    email: E-mail
+    current_password: 'Současné heslo'
+    password: Heslo
+    password_confirmation: 'Potvrzení hesla'
+    new_password: 'Nové heslo'
+    new_password_confirmation: 'Potvrzení nového hesla'

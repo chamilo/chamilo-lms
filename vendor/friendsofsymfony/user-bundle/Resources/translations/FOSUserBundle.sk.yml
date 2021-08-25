@@ -1,0 +1,79 @@
+group:
+    edit:
+        submit: 'Upraviť skupinu'
+    show:
+        name: 'Názov skupiny'
+    new:
+        submit: 'Vytvoriť skupinu'
+    flash:
+        updated: 'Skupina bola úspešne zmenená.'
+        created: 'Skupina bola úspešne vytvorená.'
+        deleted: 'Skupina bola úspešne vymazaná.'
+security:
+    login:
+        username: 'Používateľské meno'
+        password: Heslo
+        remember_me: 'Zapamätať si'
+        submit: Prihlásenie
+profile:
+    show:
+        username: 'Používateľské meno'
+        email: Email
+    edit:
+        submit: Upraviť
+    flash:
+        updated: 'Profil bol úspešne zmenený.'
+change_password:
+    submit: 'Zmena hesla'
+    flash:
+        success: 'Heslo bolo úspešne zmenené.'
+registration:
+    check_email: 'Aktivačný email bol zaslaný na adresu %email%. V tele správy je aktivačný link, na ktorý treba kliknúť pre úspešné dokončenie registrácie.'
+    confirmed: 'Gratulujeme %username%, Vaše konto bolo aktivované.'
+    back: 'Návrat na predchádzajúcu stránku.'
+    submit: Registrácia
+    flash:
+        user_created: 'Vaše konto bolo úspešne vytvorené.'
+    email:
+        subject: 'Vitaj %username%!'
+        message: |
+            Ahoj %username%!
+
+            Pre ukončenie registrácie, prosím klikni na nasledovný link: %confirmationUrl%
+
+            S pozdravom,
+            Realizačný tím
+
+resetting:
+#    check_email: 'Postup pre zmenu hesla bol zaslaný na adresu %email%. Správa obsahuje link, na ktorú treba kliknúť pre úspešné dokončenie zmeny hesla.'
+    request:
+        username: 'Používateľské meno alebo emailová adresa'
+        submit: 'Obnova hesla'
+    reset:
+        submit: 'Zmeniť heslo'
+    flash:
+        success: 'Heslo bolo úspešne zmenené.'
+    email:
+        subject: 'Vynulovanie hesla'
+        message: |
+            Ahoj %username%!
+
+            Pre zmenu hesla, klikni prosím na nasledovný link: %confirmationUrl%
+
+            S pozdravom,
+            Realizačný tím
+
+layout:
+    logout: Odhlásenie
+    login: Prihlásenie
+    register: Registrácia
+    logged_in_as: 'Ste prihlásený ako %username%'
+form:
+    group_name: 'Názov skupiny'
+    username: 'Používateľské meno'
+    email: Email
+    current_password: 'Súčasné heslo'
+    password: Heslo
+    password_confirmation: 'Potvrdenie hesla'
+    new_password: 'Nové heslo'
+    new_password_confirmation: 'Potvrdenie hesla'

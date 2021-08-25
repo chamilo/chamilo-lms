@@ -1,0 +1,13 @@
+{
+  "interactionType": "matching",
+  "source": [
+    {
+      "id": "test"
+    }
+  ],
+  "target": [
+    {
+      "id": "test"
+    }
+  ]
+}

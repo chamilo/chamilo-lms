@@ -1,0 +1,4 @@
+suites:
+  default:
+    namespace: Xabbuh\XApi\Model
+    psr4_prefix: Xabbuh\XApi\Model

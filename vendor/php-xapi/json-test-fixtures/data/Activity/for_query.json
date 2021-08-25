@@ -1,0 +1,8 @@
+{
+  "id": "http://tincanapi.com/conformancetest/activityid/forQuery",
+  "definition": {
+    "name": {
+      "en-US": "for query"
+    }
+  }
+}

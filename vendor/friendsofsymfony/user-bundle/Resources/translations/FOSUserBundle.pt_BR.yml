@@ -1,0 +1,83 @@
+group:
+    edit:
+        submit: 'Atualizar Grupo'
+    show:
+        name: 'Nome do Grupo'
+    new:
+        submit: 'Criar Grupo'
+    flash:
+        updated: 'O grupo foi atualizado.'
+        created: 'O grupo foi criado.'
+        deleted: 'O grupo foi removido.'
+security:
+    login:
+        username: Usuário
+        password: Senha
+        remember_me: 'Permanecer conectado'
+        submit: Entrar
+profile:
+    show:
+        username: Usuário
+        email: Email
+    edit:
+        submit: Atualizar
+    flash:
+        updated: 'O perfil foi atualizado.'
+change_password:
+    submit: 'Alterar senha'
+    flash:
+        success: 'A senha foi alterada.'
+registration:
+    check_email: 'Um email foi enviado para o endereço %email%. Para ativar a sua conta, clique no link na mensagem.'
+    confirmed: 'Parabéns, %username%. A sua conta foi ativada.'
+    back: 'Retornar para a página de origem.'
+    submit: Registrar
+    flash:
+        user_created: 'O usuário foi criado com sucesso.'
+    email:
+        subject: 'Bem-vindo(a), %username%!'
+        message: |
+            Olá, %username%!
+
+            Para completar a validação da sua conta, clique no link: %confirmationUrl%
+
+            Atenciosamente,
+            a Equipe.
+
+resetting:
+    check_email: |
+            Um email foi enviado. Ele contem um link que deve ser acessado para resetar sua senha.
+            Nota: Você apenas poderá requisitar uma nova senha dentro de %tokenLifetime% horas.
+
+            Se você não receber sua senha, cheque sua pasta de spam ou tente novamente.
+    request:
+        username: 'Usuário ou email'
+        submit: 'Recuperar senha'
+    reset:
+        submit: 'Alterar senha'
+    flash:
+        success: 'A senha foi redefinida com sucesso.'
+    email:
+        subject: 'Redefinir senha'
+        message: |
+            Olá, %username%!
+
+            Para redefinir sua senha, clique no link: %confirmationUrl%
+
+            Atenciosamente,
+            a Equipe.
+
+layout:
+    logout: Sair
+    login: Entrar
+    register: Registrar
+    logged_in_as: 'Conectado como %username%'
+form:
+    group_name: 'Nome do Grupo'
+    username: Usuário
+    email: Email
+    current_password: 'Senha atual'
+    password: Senha
+    password_confirmation: 'Repita a senha'
+    new_password: 'Nova senha'
+    new_password_confirmation: 'Repita a nova senha'

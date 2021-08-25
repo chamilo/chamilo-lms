@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "usageType": "http://id.tincanapi.com/attachment/supporting_media",
+    "display": {
+      "en-US": "FileUrl Only attachment"
+    },
+    "contentType": "application/octet-stream",
+    "length": 65556,
+    "sha2": "d14f1580a2cebb6f8d4a8a2fc0d13c67f970e84f8d15677a93ae95c9080df899",
+    "fileUrl": "http://tincanapi.com/conformancetest/attachment/fileUrlOnly"
+  }
+}

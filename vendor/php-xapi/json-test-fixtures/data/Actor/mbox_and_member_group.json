@@ -1,0 +1,10 @@
+{
+  "objectType": "Group",
+  "mbox": "mailto:conformancetest-group@tincanapi.com",
+  "member": [
+    {
+      "mbox": "mailto:conformancetest@tincanapi.com",
+      "objectType": "Agent"
+    }
+  ]
+}

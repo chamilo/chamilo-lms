@@ -1,0 +1,47 @@
+{
+  "registration": "16fd2706-8baf-433b-82eb-8c7fada847da",
+  "instructor": {
+    "mbox": "mailto:conformancetest@tincanapi.com",
+    "objectType": "Agent"
+  },
+  "team": {
+    "objectType": "Group",
+    "mbox": "mailto:conformancetest-group@tincanapi.com"
+  },
+  "contextActivities": {
+    "category": [
+      {
+        "id": "http://tincanapi.com/conformancetest/activityid",
+        "objectType": "Activity"
+      }
+    ],
+    "parent": [
+      {
+        "id": "http://tincanapi.com/conformancetest/activityid",
+        "objectType": "Activity"
+      }
+    ],
+    "grouping": [
+      {
+        "id": "http://tincanapi.com/conformancetest/activityid",
+        "objectType": "Activity"
+      }
+    ],
+    "other": [
+      {
+        "id": "http://tincanapi.com/conformancetest/activityid",
+        "objectType": "Activity"
+      }
+    ]
+  },
+  "revision": "test",
+  "platform": "test",
+  "language": "en-US",
+  "statement": {
+    "objectType": "StatementRef",
+    "id": "16fd2706-8baf-433b-82eb-8c7fada847da"
+  },
+  "extensions": {
+    "http://id.tincanapi.com/extension/topic": "Conformance Testing"
+  }
+}

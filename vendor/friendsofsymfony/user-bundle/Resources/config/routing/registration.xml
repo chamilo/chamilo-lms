@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="fos_user_registration_register" path="/" methods="GET POST">
+        <default key="_controller">fos_user.registration.controller:registerAction</default>
+    </route>
+
+    <route id="fos_user_registration_check_email" path="/check-email" methods="GET">
+        <default key="_controller">fos_user.registration.controller:checkEmailAction</default>
+    </route>
+
+    <route id="fos_user_registration_confirm" path="/confirm/{token}" methods="GET">
+        <default key="_controller">fos_user.registration.controller:confirmAction</default>
+    </route>
+
+    <route id="fos_user_registration_confirmed" path="/confirmed" methods="GET">
+        <default key="_controller">fos_user.registration.controller:confirmedAction</default>
+    </route>
+
+</routes>

@@ -1,0 +1,10 @@
+{
+  "objectType": "Group",
+  "member": [
+    {
+      "mbox": "mailto:conformancetest@tincanapi.com",
+      "objectType": "Agent"
+    }
+  ],
+  "openid": "http://group.openid.tincanapi.com"
+}

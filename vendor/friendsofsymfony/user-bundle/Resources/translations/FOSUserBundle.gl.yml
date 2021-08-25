@@ -1,0 +1,94 @@
+# Group
+group:
+    edit:
+        submit: Actualizar grupo
+    show:
+        name: Nome do grupo
+    new:
+        submit: Crear grupo
+    flash:
+        updated: Actualizouse o grupo.
+        created: Creouse o grupo.
+        deleted: Borrouse o grupo.
+
+# Security
+security:
+    login:
+        username: Nome de usuario
+        password: Contrasinal
+        remember_me: Lembrar
+        submit: Entrar
+
+# Profile
+profile:
+    show:
+        username: Nome de usuario
+        email: Email
+    edit:
+        submit: Actualizar usuario
+    flash:
+        updated: Actualizouse o perfil.
+
+# Password change
+change_password:
+    submit: Cambiar contrasinal
+    flash:
+        success: O contrasinal cambiouse con éxito.
+
+# Registration
+registration:
+    check_email: Enviouse un email a %email%. Contén un enlace de activación que deberás premer para activala túa conta.
+    confirmed: Parabéns %username%, confirmouse a túa conta.
+    back: Volver á páxina orixinal.
+    submit: Rexistrar
+    flash:
+        user_created: Creouse o usuario satisfactoriamente.
+    email:
+        subject: Benvido %username%!
+        message: |
+            Hola %username%!
+
+            Para completala validación da túa conta - por favor visita %confirmationUrl%
+
+            Atentamente,
+            o Equipo.
+
+# Password resetting
+resetting:
+    password_already_requested: O contrasinal para este usuario solicitouse xa dentro das 24 horas.
+    check_email: Enviouse un email %email%. Contén un enlace de activación que deberás premer para restablecelo teu contrasinal.
+    request:
+        invalid_username: O usuario ou dirección de correo "%username%" non existe.
+        username: Nome de usuario
+        submit: Restablecer contrasinal
+    reset:
+        submit: Cambiar contrasinal
+    flash:
+        success: O contrasinal cambiaouse con éxito.
+    email:
+        subject: Benvido %username%!
+        message : |
+            Hola %username%!
+
+            Para restablecelo teu contrasinal - por favor visita %confirmationUrl%
+
+            Atentamente,
+            o Equipo.
+
+# Global strings
+layout:
+    logout: Saír
+    login: Entrar
+    register: Rexistrar
+    logged_in_as: Identificado como %username%
+
+# Form field labels
+form:
+    group_name: Nome de grupo
+    username: Nome de usuario
+    email: Email
+    current_password: Contrasinal actualizado
+    password: Contrasinal
+    password_confirmation: Repita o contrasinal
+    new_password: Novo contrasinal
+    new_password_confirmation: Repita o contrasinal

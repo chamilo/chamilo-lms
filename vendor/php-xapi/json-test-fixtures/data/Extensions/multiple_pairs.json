@@ -1,0 +1,8 @@
+{
+  "http://id.tincanapi.com/extension/topic": "Conformance Testing",
+  "http://id.tincanapi.com/extension/color": {
+    "model": "RGB",
+    "value": "#FFFFFF"
+  },
+  "http://id.tincanapi.com/extension/starting-position": 1
+}

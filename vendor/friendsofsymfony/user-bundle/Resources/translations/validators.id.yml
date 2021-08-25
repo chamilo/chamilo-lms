@@ -1,0 +1,28 @@
+fos_user:
+    username:
+        already_used: 'Nama pengguna telah digunakan.'
+        blank: 'Masukkan nama pengguna.'
+        short: 'Nama pengguna terlalu pendek.'
+        long: 'Nama pengguna terlalu panjang.'
+    email:
+        already_used: 'Surel telah digunakan.'
+        blank: 'Masukkan alamat surel.'
+        short: 'Alamat surel terlalu pendek.'
+        long: 'Alamat surel terlalu panjang.'
+        invalid: 'Alamat surel salah.'
+    password:
+        blank: 'Masukkan kata sandi.'
+        short: 'Kata sandi terlalu pendek.'
+        mismatch: 'kata sandi yang anda masukkan tidak sama.'
+    new_password:
+        blank: 'Masukkan kata sandi baru.'
+        short: 'Kata sandi baru anda terlalu pendek.'
+    current_password:
+        invalid: 'Kata sandi yang anda masukkan salah.'
+    group:
+        blank: 'Masukkan nama.'
+        short: 'Nama terlalu pendek.'
+        long: 'Nama terlalu panjang.'
+fos_group:
+    name:
+        already_used: 'Nama telah digunakan.'

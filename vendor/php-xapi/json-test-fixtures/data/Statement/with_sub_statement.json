@@ -1,0 +1,39 @@
+{
+    "id":"12345678-1234-5678-8234-567812345678",
+    "actor": {
+        "objectType": "Agent",
+        "mbox":"mailto:test@example.com"
+    },
+    "verb" : {
+        "id":"http://example.com/planned",
+        "display":{
+            "en-US":"planned"
+        }
+    },
+    "object": {
+        "objectType": "SubStatement",
+        "actor" : {
+            "objectType": "Agent",
+            "mbox":"mailto:test@example.com"
+        },
+        "verb" : {
+            "id":"http://example.com/visited",
+            "display":{
+                "en-US":"will visit"
+            }
+        },
+        "object": {
+            "id":"http://example.com/website",
+            "definition": {
+                "name" : {
+                    "en-US":"Some Awesome Website"
+                },
+                "description" : {
+                    "en-US":"The visited website"
+                },
+                "type":"http://example.com/definition-type"
+            },
+            "objectType":"Activity"
+        }
+    }
+}

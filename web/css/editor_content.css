@@ -1,0 +1,179 @@
+/*
+Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
+*/
+
+/* Hack for show Bootstrap alerts in CKEditor' style select */
+.cke_panel_listItem a > :first-child {
+    margin-bottom: 0;
+}
+
+.ck {
+    display: block;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-language-override: normal;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-synthesis: weight style;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+}
+
+.ck-article {
+    color: #E95839;
+    background: url(../../main/img/document/border-title.png) repeat-x 0 80%;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-bottom: 2%;
+    text-transform: uppercase;
+}
+
+.ck-article:before {
+    content: "\f15c";
+    font-family: FontAwesome;
+    font-weight: normal;
+    margin-right: 5px;
+}
+
+.ck-paragraph-box {
+    background-color: #F5EEE2;
+    line-height: 20px;
+    padding: 2% 3%;
+}
+
+.ck-title {
+    color: #000;
+    display: block;
+    font-weight: bold;
+}
+
+.ck-title2 {
+    color: #000;
+    font-weight: 500;
+    margin-top: 0;
+    padding-top: 0;
+    position: relative;
+}
+
+.ck-title2:after {
+    background-color: #E95839;
+    content: "";
+    display: block;
+    height: 2px;
+    margin: 10px 0 0;
+    width: 50px;
+}
+
+.ck-stand-out {
+    background-color: yellow;
+}
+
+.ck-style1 {
+    background: url(../../main/img/document/hr-1.png) repeat-x 0 0;
+    border: 0;
+    height: 6px;
+}
+
+.ck-style2 {
+    background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
+    border: 0;
+    height: 6px;
+}
+
+.ck-style3 {
+    border-top: 1px dashed #8c8b8b;
+}
+
+.ck-style3:after {
+    background: #FFF;
+    color: #8c8b8b;
+    content: '\002702';
+    display: inline-block;
+    font-size: 18px;
+    left: 40px;
+    padding: 0 3px;
+    position: relative;
+    top: -12px;
+}
+
+.img-va-baseline {
+    vertical-align: baseline;
+}
+
+.img-va-top {
+    vertical-align: top;
+}
+
+.img-va-bottom {
+    vertical-align: bottom;
+}
+
+.img-va-middle {
+    vertical-align: middle;
+}
+
+.img-va-super {
+    vertical-align: super;
+}
+
+.img-va-sub {
+    vertical-align: sub;
+}
+
+.img-va-text-top {
+    vertical-align: text-top;
+}
+
+.img-va-text-bottom {
+    vertical-align: text-bottom;
+}
+
+figure.image {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 1em;
+    padding: 5px;
+}
+
+.cke_widget_image.pull-right,
+img.pull-right,
+figure.image.pull-right {
+    margin-left: 1em;
+}
+
+.cke_widget_image.pull-left,
+img.pull-left,
+figure.image.pull-left {
+    margin-right: 1em;
+}
+
+.text-center .img-responsive {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cke_widget_image.pull-left figure.image,
+.cke_widget_image.pull-right figure.image,
+figure.image.pull-left,
+figure.image.pull-right {
+    display: block;
+}
+
+figure.image figcaption {
+    background-color: #f3f3f3;
+    border-radius: 0;
+    margin: 0;
+    padding-left: 5px;
+    padding-top: 0;
+    text-align: left;
+}
+
+.embed-responsive-9by16 {
+    padding-bottom: 177.77%;
+}
+.embed-responsive-3by4 {
+    padding-bottom: 133.33%;
+}

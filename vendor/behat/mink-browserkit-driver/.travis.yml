@@ -1,0 +1,41 @@
+language: php
+
+sudo: false
+
+php: [5.6, 7.0, 7.1, 7.2, 7.3]
+
+matrix:
+  include:
+    - php: 5.4
+      dist: trusty
+    - php: 5.5
+      dist: trusty
+    - php: 5.3
+      dist: precise
+    # Test against LTS versions
+    - php: 7.2
+      env: SYMFONY_VERSION='^2'
+    - php: 7.2
+      env: SYMFONY_VERSION='^3'
+    # Test against dev versions of dependencies
+    - php: 7.2
+      env: DEPENDENCIES='dev'
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+before_install:
+  - if [ "$DEPENDENCIES" = "dev" ]; then composer config minimum-stability dev; fi;
+  # Install symfony/error-handler on compatible PHP versions to avoid a deprecation warning of the old DebugClassLoader and ErrorHandler classes
+  - if [[ "$TRAVIS_PHP_VERSION" != 5.* && "$TRAVIS_PHP_VERSION" != 7.0 && "$SYMFONY_VERSION" = "" ]]; then composer require --no-update --dev symfony/error-handler "^4.4 || ^5.0"; fi;
+  - sh -c 'if [ "$SYMFONY_VERSION" != "" ]; then composer require -n --no-update symfony/lts=$SYMFONY_VERSION; fi;'
+
+install:
+  - composer install -n --prefer-dist
+
+script: vendor/bin/phpunit -v --coverage-clover=coverage.clover
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

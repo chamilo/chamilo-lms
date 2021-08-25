@@ -385,6 +385,12 @@
             des traductions modifiées avant la mise à jour. Les sous-langages nécessitent également
             un peu de travail manuel, mais la procédure de mise à jour n'y touchera pas directement.
             <br /><br />
+            <div><em>Important:</em> Si vous mettez à jour, vers 1.11.16, une plateforme installée avant 2016 (soit avant la version 1.11.0),
+                il vous sera nécessaire de télécharger <a href="https://raw.githubusercontent.com/chamilo/chamilo-lms/5e0fc76649a7377c12cd0220ad1c0eae3f5eeaeb/tests/scripts/fix_quiz_id_to_iid.php">ce script</a>,
+                de le déposer dans le répertoire main/inc/, de l'éditer pour retirer le <pre>exit;</pre> en ligne 15, puis de le charger dans votre navigateur
+                comme https://votresite.com/main/inc/fix_quiz_id_to_iid.php. Ce script réglera un problème d'incohérence des identifiants internes des exercices, questions
+                et réponses qui existait avant l'année 2016 (avant la version 1.11.0). Si votre système a été installé pour la première fois avec une version 1.11.0
+                ou supérieure, vous n'avez rien à faire.</div>
             <div class="text-muted"> NOTE: Pour les bases de données très lourdes de Chamilo,
                 certains de nos fournisseurs officiels ont dévelopé des procédures de
                 migration optimisées qui utilisent plus de mémoire mais exécutent les

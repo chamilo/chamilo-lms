@@ -389,7 +389,12 @@ date.timezone = 'America/New_York'
   Si había cambiado algun archivo de idioma directamente (en vez de usar el método recomendado: sub-idiomas),
   debería tomar una copia de backup de estos cambios antes de actualizar.
 </p>
-
+  <div><em>Important:</em> Si actualiza, hacia 1.11.16, una plataforma instalada antes del 2016 (es decir antes de la versión 1.11.0),
+    será necesario que descargue <a href="https://raw.githubusercontent.com/chamilo/chamilo-lms/5e0fc76649a7377c12cd0220ad1c0eae3f5eeaeb/tests/scripts/fix_quiz_id_to_iid.php">este script</a>,
+    que lo ponga en la carpeta main/inc/, que lo edite para eliminar el <pre>exit;</pre> en la línea 15, y luego que lo cargue en su navegador
+    como https://vuestrositio.com/main/inc/fix_quiz_id_to_iid.php. Este script arreglará un problema de inconsistencia de identificadores internos de
+    ejercicios, preguntas y respuestas que existía antes del año 2016 (antes de la versión 1.11.0). Si el sistema ha sidot instalado por primera
+    vez con una versión 1.11.0 o superior, no hay nada que hacer.</div>
 <div class="text-muted">
   NOTA: Para sistemas Chamilo con bases de datos muy pesadas, algunos de nuestros proveedores
   han desarrollado procedimientos usando más memoria pero acortando el tiempo necesario de la migración por hasta

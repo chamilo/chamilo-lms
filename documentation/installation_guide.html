@@ -331,12 +331,12 @@ As this is only a minor version change from previous 1.11.* versions of Chamilo,
       You can also delete the contents of this directory through the "Cleanup of cache and temporary files " option in the "System" box of the Administration page.</li>
   <li> you're done! No other upgrade procedure is required</li>
 </ul>
-    <em>Important:</em> If you are updating to 1.11.16 on a system that was initially installed before 2016 (before version 1.11.0),
+    <div><em>Important:</em> If you are updating to 1.11.16 on a system that was initially installed before 2016 (before version 1.11.0),
     you will need to download <a href="https://raw.githubusercontent.com/chamilo/chamilo-lms/5e0fc76649a7377c12cd0220ad1c0eae3f5eeaeb/tests/scripts/fix_quiz_id_to_iid.php">this file</a>,
     drop it in your main/inc/ directory, edit it, remove the <pre>exit;</pre> on line 15, then load it in your browser
     as https://yoursite.com/main/inc/fix_quiz_id_to_iid.php. This will fix an issue with inconsistent quiz, quiz
     questions and answers internal numbering that existed prior to year 2016 (version 1.11.0). If your system was initially
-    installed with version 1.11.0 or superior, you don't need to do anything.
+    installed with version 1.11.0 or superior, you don't need to do anything.</div>
 
 <h3>3.2 Upgrading from Chamilo 1.10.x</h3>
 <ul>

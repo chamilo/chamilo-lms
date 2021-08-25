@@ -60,7 +60,7 @@ echo Display::page_header($nameTools);
 
 <br>
 <div class="sectiontitle">
-    <?php Display::display_icon('copy.gif', get_lang('CommonCartridge13')); ?>&nbsp;&nbsp;
+    <?php Display::display_icon('copy.gif', get_lang('IMSCC13')); ?>&nbsp;&nbsp;
     <?php echo get_lang('CommonCartridge13'); ?>
 </div>
 <div class="sectioncomment">
@@ -69,13 +69,13 @@ echo Display::page_header($nameTools);
             <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>common_cartridge/cc13_export.php?<?php echo api_get_cidreq(); ?>">
             <?php echo get_lang('ExportCcVersion13'); ?></a>
             </a><br/>
-            <?php echo get_lang('ExportInfo'); ?>
+            <?php echo get_lang('ExportCcVersion13Info'); ?>
         </li>
         <li>
             <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>common_cartridge/cc13_import.php?<?php echo api_get_cidreq(); ?>">
             <?php echo get_lang('ImportCcVersion13'); ?></a>
             </a><br/>
-            <?php echo get_lang('ImportInfo'); ?>
+            <?php echo get_lang('ImportCcVersion13Info'); ?>
         </li>
     </ul>
 </div>

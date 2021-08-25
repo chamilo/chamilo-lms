@@ -60,7 +60,7 @@ class Rest extends WebService
     const SAVE_FORUM_POST = 'save_forum_post';
     const SAVE_FORUM_THREAD = 'save_forum_thread';
     const SET_THREAD_NOTIFY = 'set_thread_notify';
-    const DOWNLOAD_FORUM_ATTACHMENT= 'download_forum_attachment';
+    const DOWNLOAD_FORUM_ATTACHMENT = 'download_forum_attachment';
 
     const GET_WORK_LIST = 'get_work_list';
     const GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS = 'get_work_students_without_publications';
@@ -889,7 +889,7 @@ class Rest extends WebService
                     $postInfo['iid'],
                     0,
                     $this->course->getId()
-                )
+                ),
             ];
         }
 
@@ -2947,7 +2947,6 @@ class Rest extends WebService
 
     public function downloadForumPostAttachment(string $path)
     {
-
         $courseCode = $this->course->getCode();
         $sessionId = $this->session ? $this->session->getId() : 0;
 

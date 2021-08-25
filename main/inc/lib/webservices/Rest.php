@@ -179,6 +179,8 @@ class Rest extends WebService
      */
     public function setCourse($id)
     {
+        global $_course;
+
         if (!$id) {
             $this->course = null;
 
@@ -199,9 +201,12 @@ class Rest extends WebService
 
         $this->course = $course;
 
+        $courseInfo = api_get_course_info($course->getCode());
+        $_course = $courseInfo;
+
         ChamiloSession::write('_real_cid', $course->getId());
         ChamiloSession::write('_cid', $course->getCode());
-        ChamiloSession::write('_course', api_get_course_info($course->getCode()));
+        ChamiloSession::write('_course', $courseInfo);
     }
 
     /**

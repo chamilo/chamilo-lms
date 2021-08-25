@@ -151,6 +151,11 @@ try {
             $data = $restApi->getMessageUsers($search);
             $restResponse->setData($data);
             break;
+        case Rest::VIEW_MESSAGE:
+            $messageId = isset($_GET['message']) ? (int) $_GET['message'] : 0;
+
+            $restApi->viewMessage($messageId);
+            break;
 
         case Rest::GET_USER_COURSES:
             $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
@@ -295,6 +300,13 @@ try {
                 ]
             );
             break;
+        case Rest::DOWNLOAD_FORUM_ATTACHMENT:
+            if (empty($_GET['path'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $restApi->downloadForumPostAttachment($_GET['path']);
+            break;
 
         case Rest::GET_WORK_LIST:
             if (!isset($_GET['work'])) {
@@ -389,6 +401,29 @@ try {
                     'message' => $restApi->deleteWorkCorrections((int) $_POST['work']),
                 ]
             );
+            break;
+        case Rest::DOWNLOAD_WORK_FOLDER:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $restApi->downloadWorkFolder((int) $_GET['work']);
+            break;
+        case Rest::DOWNLOAD_WORK_COMMENT_ATTACHMENT:
+            if (!isset($_GET['comment'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $restApi->downloadWorkCommentAttachment((int) $_GET['comment']);
+            break;
+        case Rest::DOWNLOAD_WORK:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $isCorrection = isset($_GET['correction']);
+
+            $restApi->downloadWork((int) $_GET['work'], $isCorrection);
             break;
 
         case Rest::VIEW_DOCUMENT_IN_FRAME:

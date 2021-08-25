@@ -6420,6 +6420,8 @@ function getAttachedFiles(
     if ($result !== false && Database::num_rows($result) > 0) {
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             // name contains an URL to download attachment file and its filename
+            $json['filename'] = $row['filename'];
+            $json['path'] = $row['path'];
             $json['name'] = Display::url(
                 api_htmlentities($row['filename']),
                 api_get_path(WEB_CODE_PATH).'forum/download.php?file='.$row['path'].'&'.api_get_cidreq(),

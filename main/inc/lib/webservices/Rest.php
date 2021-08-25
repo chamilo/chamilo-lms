@@ -61,6 +61,7 @@ class Rest extends WebService
     const SET_THREAD_NOTIFY = 'set_thread_notify';
 
     const GET_WORK_LIST = 'get_work_list';
+    const GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS = 'get_work_students_without_publications';
     const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
     const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
     const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
@@ -2715,6 +2716,15 @@ class Rest extends WebService
             },
             $works
         );
+    }
+
+    public function getWorkStudentsWithoutPublications(int $workId): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        return get_list_users_without_publication($workId);
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

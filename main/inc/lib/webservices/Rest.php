@@ -60,6 +60,7 @@ class Rest extends WebService
     const SAVE_FORUM_THREAD = 'save_forum_thread';
     const SET_THREAD_NOTIFY = 'set_thread_notify';
 
+    const GET_WORK_LIST = 'get_work_list';
     const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
     const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
     const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
@@ -2651,6 +2652,69 @@ class Rest extends WebService
         }
 
         return get_lang('Deleted');
+    }
+
+    public function getWorkList(int $workId): array
+    {
+        $isAllowedToEdit = api_is_allowed_to_edit();
+
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $userId = $this->user->getId();
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $webPath = api_get_path(WEB_PATH);
+
+        $whereCondition = !$isAllowedToEdit ? " AND u.id = $userId" : '';
+
+        $works = get_work_user_list(
+            0,
+            0,
+            'title',
+            'asc',
+            $workId,
+            $whereCondition,
+            null,
+            false,
+            $courseId,
+            $sessionId
+        );
+
+        return array_map(
+            function (array $work) use ($courseInfo, $webPath) {
+                $itemId = $work['id'];
+                $count = getWorkCommentCount($itemId, $courseInfo);
+
+                $work['feedback'] = $count.' '.Display::returnFontAwesomeIcon('comments-o');
+                $work['feedback_clean'] = $count;
+
+                $workInfo = get_work_data_by_id($itemId);
+                $commentsTmp = getWorkComments($workInfo);
+                $comments = [];
+
+                foreach ($commentsTmp as $comment) {
+                    $comment['comment'] = str_replace('src="/', 'src="'.$webPath.'app/', $comment['comment']);
+                    $comments[] = $comment;
+                }
+
+                $work['comments'] = $comments;
+
+                if (empty($workInfo['qualificator_id'])) {
+                    $qualificator_id = Display::label(get_lang('NotRevised'), 'warning');
+                } else {
+                    $qualificator_id = Display::label(get_lang('Revised'), 'success');
+                }
+
+                $work['qualificator_id'] = $qualificator_id;
+
+                return $work;
+            },
+            $works
+        );
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

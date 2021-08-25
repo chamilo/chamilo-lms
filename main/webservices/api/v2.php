@@ -296,6 +296,15 @@ try {
             );
             break;
 
+        case Rest::GET_WORK_LIST:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $restResponse->setData(
+                $restApi->getWorkList((int) $_GET['work'])
+            );
+            break;
         case Rest::PUT_WORK_STUDENT_ITEM_VISIBILITY:
             if (!isset($_POST['status'], $_POST['work'])) {
                 throw new Exception(get_lang('ActionNotAllowed'));

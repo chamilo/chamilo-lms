@@ -18,6 +18,8 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $connection = $this->getEntityManager()->getConnection();
+
         $table = $schema->getTable('message');
         $this->addSql('ALTER TABLE message CHANGE parent_id parent_id BIGINT DEFAULT NULL');
 
@@ -43,16 +45,35 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE message SET parent_id = NULL WHERE parent_id = 0');
-        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM message)');
 
-        if (!$table->hasColumn('group_id')) {
-            $this->addSql('ALTER TABLE message CHANGE group_id group_id INT DEFAULT NULL');
+        $sql = 'SELECT id, parent_id FROM message WHERE parent_id IS NOT NULL';
+        $result = $connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
+        foreach($items as $item) {
+            $id = $item['id'];
+            $parentId = $item['parent_id'];
+            $sql = "SELECT id FROM message WHERE id = $parentId";
+            $result = $connection->executeQuery($sql);
+            $subItem = $result->fetchAllAssociative();
+            if (empty($subItem)) {
+                $sql = "DELETE FROM message WHERE id = $id";
+                $connection->executeQuery($sql);
+            }
         }
 
-        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_sender_id NOT IN (SELECT id FROM user))');
-        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user))');
+        //$this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM message)');
 
-        $this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
+        $this->addSql('ALTER TABLE message CHANGE group_id group_id INT DEFAULT NULL');
+        $this->addSql('UPDATE message SET group_id = NULL WHERE group_id = 0');
+
+        //$this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_sender_id NOT IN (SELECT id FROM user))');
+        //$this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user))');
+
+        // Replace user_sender_id = 0 with the admin.
+        $adminId = $this->getAdmin()->getId();
+        $this->addSql("UPDATE message SET user_sender_id = $adminId WHERE user_sender_id IS NOT NULL AND user_sender_id NOT IN (SELECT id FROM user) ");
+
+        //$this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
         $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)');
 
         if (!$table->hasForeignKey('FK_B6BD307FFE54D947')) {
@@ -87,9 +108,6 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql(
                 'ALTER TABLE message_rel_user_rel_tags ADD CONSTRAINT FK_B4B37A20962B5422 FOREIGN KEY (message_rel_user_id) REFERENCES message_rel_user (id) ON DELETE CASCADE'
             );
-            $this->addSql(
-                'ALTER TABLE message_rel_user_rel_tags ADD CONSTRAINT FK_B4B37A208DF5FE1E FOREIGN KEY (message_tag_id) REFERENCES message_tag (id) ON DELETE CASCADE '
-            );
             $this->addSql(' ALTER TABLE message_rel_user ADD receiver_type SMALLINT NOT NULL;');
         }
 
@@ -104,8 +122,14 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             foreach ($messages as $message) {
                 $messageId = $message['id'];
                 $receiverId = $message['user_receiver_id'];
-                $this->addSql("INSERT INTO message_rel_user (message_id, user_id) VALUES('$messageId', '$receiverId') ");
-                $this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
+
+                $result = $connection->executeQuery(" SELECT * FROM message_rel_user WHERE message_id = $messageId AND user_id = $receiverId");
+                $exists = $result->fetchAllAssociative();
+
+                if (empty($exists)) {
+                    $this->addSql("INSERT INTO message_rel_user (message_id, user_id, msg_read, starred) VALUES('$messageId', '$receiverId', 1, 0) ");
+                }
+                //$this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
             }
         }
 
@@ -195,8 +219,11 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE message_tag ADD CONSTRAINT FK_2ABC3D6FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE message_rel_tags ADD CONSTRAINT FK_D07232D6537A1329 FOREIGN KEY (message_id) REFERENCES message (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE message_rel_tags ADD CONSTRAINT FK_D07232D68DF5FE1E FOREIGN KEY (message_tag_id) REFERENCES message_tag (id) ON DELETE CASCADE');
-
             $this->addSql('CREATE UNIQUE INDEX user_tag ON message_tag (user_id, tag)');
+
+            $this->addSql(
+                'ALTER TABLE message_rel_user_rel_tags ADD CONSTRAINT FK_B4B37A208DF5FE1E FOREIGN KEY (message_tag_id) REFERENCES message_tag (id) ON DELETE CASCADE '
+            );
         }
     }
 

@@ -373,8 +373,10 @@ class ResourceNode
 
     public function setSlug(string $slug): self
     {
-        if (false !== strpos(self::PATH_SEPARATOR, $slug)) {
-            throw new InvalidArgumentException('Invalid character "'.self::PATH_SEPARATOR.'" in resource name.');
+        if (str_contains(self::PATH_SEPARATOR, $slug)) {
+            $message = 'Invalid character "'.self::PATH_SEPARATOR.'" in resource name';
+
+            throw new InvalidArgumentException($message);
         }
 
         $this->slug = $slug;

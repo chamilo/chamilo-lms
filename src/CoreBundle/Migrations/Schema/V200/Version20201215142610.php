@@ -67,7 +67,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             }
 
             if (null === $courseAdmin) {
-                $courseAdmin = $admin;
+                $courseAdmin = $this->getAdmin();
             }
 
             // Quiz
@@ -90,6 +90,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     $resource,
                     $course
                 );
+
                 if (false === $result) {
                     continue;
                 }

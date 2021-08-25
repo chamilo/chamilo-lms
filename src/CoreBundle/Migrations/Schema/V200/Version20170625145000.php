@@ -19,7 +19,14 @@ class Version20170625145000 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('c_calendar_event');
-        if (false === $table->hasColumn('resource_node_id')) {
+
+        // Delete empty events.
+        $this->addSql('DELETE FROM c_calendar_event WHERE title = "" AND content = ""');
+
+        // Update event with no title.
+        $this->addSql('UPDATE c_calendar_event SET title = "Event" WHERE title = "" AND content <> "" ');
+
+        if (!$table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_calendar_event ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_calendar_event ADD CONSTRAINT FK_A0622581EE3A445A FOREIGN KEY (parent_event_id) REFERENCES c_calendar_event (iid)'

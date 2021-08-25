@@ -29,15 +29,18 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE gradebook_result_log SET user_id = NULL WHERE user_id = 0');
         $this->addSql('ALTER TABLE gradebook_result_log CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql('DELETE FROM gradebook_result_log WHERE result_id NOT IN (SELECT id FROM gradebook_result) ');
 
-        if (false === $table->hasForeignKey('FK_C5C4CABB7A7B643')) {
+        if (!$table->hasForeignKey('FK_C5C4CABB7A7B643')) {
             $this->addSql(
                 'ALTER TABLE gradebook_result_log ADD CONSTRAINT FK_C5C4CABB7A7B643 FOREIGN KEY (result_id) REFERENCES gradebook_result (id) ON DELETE CASCADE;'
             );
             $this->addSql('CREATE INDEX IDX_C5C4CABB7A7B643 ON gradebook_result_log (result_id)');
         }
 
-        if (false === $table->hasForeignKey('FK_C5C4CABB456C5646')) {
+        $this->addSql('DELETE FROM gradebook_result_log WHERE evaluation_id NOT IN (SELECT id FROM gradebook_evaluation) ');
+
+        if (!$table->hasForeignKey('FK_C5C4CABB456C5646')) {
             $this->addSql(
                 'ALTER TABLE gradebook_result_log ADD CONSTRAINT FK_C5C4CABB456C5646 FOREIGN KEY (evaluation_id) REFERENCES gradebook_evaluation (id) ON DELETE CASCADE;'
             );
@@ -150,6 +153,8 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_ge_cat ON gradebook_evaluation (category_id)');
         }
 
+        $this->addSql('DELETE FROM gradebook_evaluation WHERE category_id NOT IN (SELECT id FROM gradebook_category) ');
+
         if (false === $table->hasForeignKey('FK_DDDED80412469DE2')) {
             $this->addSql('ALTER TABLE gradebook_evaluation ADD CONSTRAINT FK_DDDED80412469DE2 FOREIGN KEY (category_id) REFERENCES gradebook_category (id) ON DELETE CASCADE');
         }
@@ -229,6 +234,8 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE gradebook_link CHANGE category_id category_id INT DEFAULT NULL;');
         $this->addSql('UPDATE gradebook_link SET category_id = NULL WHERE category_id = 0');
 
+        $this->addSql('DELETE FROM gradebook_link WHERE category_id NOT IN (SELECT id FROM gradebook_category) ');
+
         if (false === $table->hasForeignKey('FK_4F0F595F12469DE2')) {
             $this->addSql('ALTER TABLE gradebook_link ADD CONSTRAINT FK_4F0F595F12469DE2 FOREIGN KEY (category_id) REFERENCES gradebook_category (id) ON DELETE CASCADE');
         }
@@ -239,27 +246,29 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_gb_uid_eid ON gradebook_result (user_id, evaluation_id);');
         }
 
-        if (false === $table->hasIndex('IDX_B88AEB67456C5646')) {
+        if (!$table->hasIndex('IDX_B88AEB67456C5646')) {
             $this->addSql('CREATE INDEX IDX_B88AEB67456C5646 ON gradebook_result (evaluation_id);');
         }
 
         $this->addSql('ALTER TABLE gradebook_result CHANGE evaluation_id evaluation_id INT DEFAULT NULL;');
         $this->addSql('UPDATE gradebook_result SET evaluation_id = NULL WHERE evaluation_id = 0');
 
-        if (false === $table->hasForeignKey('FK_B88AEB67456C5646')) {
+        $this->addSql('DELETE FROM gradebook_result WHERE evaluation_id NOT IN (SELECT id FROM gradebook_evaluation) ');
+
+        if (!$table->hasForeignKey('FK_B88AEB67456C5646')) {
             $this->addSql('ALTER TABLE gradebook_result ADD CONSTRAINT FK_B88AEB67456C5646 FOREIGN KEY (evaluation_id) REFERENCES gradebook_evaluation (id) ON DELETE CASCADE');
         }
 
         $this->addSql('ALTER TABLE gradebook_result CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('UPDATE gradebook_result SET user_id = NULL WHERE user_id = 0');
 
-        if (false === $table->hasForeignKey('FK_B88AEB67A76ED395')) {
+        if (!$table->hasForeignKey('FK_B88AEB67A76ED395')) {
             $this->addSql(
                 'ALTER TABLE gradebook_result ADD CONSTRAINT FK_B88AEB67A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
             );
         }
 
-        if (false === $table->hasIndex('IDX_B88AEB67A76ED395')) {
+        if (!$table->hasIndex('IDX_B88AEB67A76ED395')) {
             $this->addSql('CREATE INDEX IDX_B88AEB67A76ED395 ON gradebook_result (user_id)');
         }
 

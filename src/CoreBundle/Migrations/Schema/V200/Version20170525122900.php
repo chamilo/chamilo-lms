@@ -35,11 +35,11 @@ class Version20170525122900 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE resource_node ADD public TINYINT(1) NOT NULL');
         }
 
-        if (false === $schema->hasTable('resource_link')) {
+        if (!$schema->hasTable('resource_link')) {
             $this->addSql(
                 'CREATE TABLE resource_link (id BIGINT AUTO_INCREMENT NOT NULL, resource_node_id BIGINT DEFAULT NULL, session_id INT DEFAULT NULL, user_id INT DEFAULT NULL, c_id INT DEFAULT NULL, group_id INT DEFAULT NULL, usergroup_id INT DEFAULT NULL, visibility INT NOT NULL, start_visibility_at DATETIME DEFAULT NULL, end_visibility_at DATETIME DEFAULT NULL, INDEX IDX_398C394B1BAD783F (resource_node_id), INDEX IDX_398C394B613FECDF (session_id), INDEX IDX_398C394BA76ED395 (user_id), INDEX IDX_398C394B91D79BD3 (c_id), INDEX IDX_398C394BFE54D947 (group_id), INDEX IDX_398C394BD2112630 (usergroup_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
-            $this->addSql("ALTER TABLE resource_link ADD created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', ADD updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)");
+            $this->addSql("ALTER TABLE resource_link ADD created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', ADD updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)'");
         }
 
         if (false === $schema->hasTable('resource_comment')) {

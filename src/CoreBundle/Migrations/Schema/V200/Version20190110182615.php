@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\Kernel;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20190110182615 extends AbstractMigrationChamilo
@@ -19,12 +18,11 @@ class Version20190110182615 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-        $doctrine = $container->get('doctrine');
-
+        $this->addSql('UPDATE c_lp SET created_on = NOW() WHERE CAST(created_on AS CHAR(20)) = "0000-00-00 00:00:00"');
+        $this->addSql(
+            'UPDATE c_lp SET modified_on = NOW() WHERE CAST(modified_on AS CHAR(20)) = "0000-00-00 00:00:00"'
+        );
+        $this->addSql('UPDATE c_lp SET expired_on = NULL WHERE CAST(expired_on AS CHAR(20)) = "0000-00-00 00:00:00"');
         $this->addSql('ALTER TABLE c_lp CHANGE author author LONGTEXT NOT NULL');
 
         $table = $schema->getTable('c_lp');

@@ -52,7 +52,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_forum_forum SET forum_category = NULL WHERE forum_category NOT IN (SELECT iid FROM c_forum_category)');
 
         $table = $schema->getTable('c_forum_forum');
-        if (false === $table->hasForeignKey('FK_47A9C9921BF9426')) {
+        if (!$table->hasForeignKey('FK_47A9C9921BF9426')) {
             $this->addSql(
                 'ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C9921BF9426 FOREIGN KEY (forum_category) REFERENCES c_forum_category (iid) ON DELETE SET NULL'
             );

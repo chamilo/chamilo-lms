@@ -38,7 +38,7 @@ class Version20191206150000 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasForeignKey('FK_171DF9245DA1941')) {
-            $this->addSql('ALTER TABLE extra_field_values ADD CONSTRAINT FK_171DF9245DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id) DELETE ON CASCADE');
+            $this->addSql('ALTER TABLE extra_field_values ADD CONSTRAINT FK_171DF9245DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE CASCADE');
         }
 
         if (!$table->hasIndex('IDX_171DF9245DA1941')) {
@@ -68,6 +68,7 @@ class Version20191206150000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE extra_field_rel_tag ADD CONSTRAINT FK_F8817295443707B0 FOREIGN KEY (field_id) REFERENCES extra_field (id) ON DELETE CASCADE');
         }
 
+        $this->addSql('DELETE FROM extra_field_rel_tag WHERE tag_id NOT IN (SELECT id FROM tag)');
         if (!$table->hasForeignKey('FK_F8817295BAD26311')) {
             $this->addSql(
                 'ALTER TABLE extra_field_rel_tag ADD CONSTRAINT FK_F8817295BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE'

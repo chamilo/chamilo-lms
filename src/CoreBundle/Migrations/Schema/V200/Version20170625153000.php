@@ -52,14 +52,14 @@ class Version20170625153000 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_forum_forum');
-        if (false === $table->hasColumn('resource_node_id')) {
+        if (!$table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_forum_forum ADD resource_node_id BIGINT DEFAULT NULL, DROP forum_id');
             $this->addSql(
                 'ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C991BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
-            $this->addSql(
+            /*$this->addSql(
                 'ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C9921BF9426 FOREIGN KEY (forum_category) REFERENCES c_forum_category (iid) ON DELETE SET NULL'
-            );
+            );*/
             $this->addSql('CREATE UNIQUE INDEX UNIQ_47A9C991BAD783F ON c_forum_forum (resource_node_id)');
         }
 
@@ -78,9 +78,9 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_forum_forum ADD UNIQUE INDEX UNIQ_47A9C9968DFD1EF (lp_id)');
         }*/
 
-        if ($table->hasForeignKey('FK_47A9C9921BF9426')) {
+        /*if ($table->hasForeignKey('FK_47A9C9921BF9426')) {
             $this->addSql('ALTER TABLE c_forum_forum DROP FOREIGN KEY FK_47A9C9921BF9426');
-        }
+        }*/
 
         $table = $schema->getTable('c_forum_thread');
         if ($table->hasForeignKey('FK_5DA7884C29CCBAD0')) {

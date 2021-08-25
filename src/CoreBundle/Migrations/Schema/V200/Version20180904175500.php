@@ -18,6 +18,9 @@ class Version20180904175500 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $this->addSql(
+            'UPDATE track_e_exercises SET expired_time_control = NULL WHERE CAST(expired_time_control AS CHAR(20)) = "0000-00-00 00:00:00"'
+        );
         $this->addSql('DELETE FROM track_e_exercises WHERE exe_user_id = 0 OR exe_user_id IS NULL');
         $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_user_id exe_user_id INT NOT NULL');
 
@@ -109,7 +112,7 @@ class Version20180904175500 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM track_e_attempt WHERE user_id NOT IN (SELECT id FROM user)');
 
         $this->addSql('ALTER TABLE track_e_attempt CHANGE c_id c_id INT DEFAULT NULL');
-        $this->addSql('UPDATE track_e_attempt SET tms = NOW() WHERE tms = "" OR tms is NULL OR tms = 0');
+        $this->addSql('UPDATE track_e_attempt SET tms = NOW() WHERE tms IS NULL OR tms = 0');
         $this->addSql('ALTER TABLE track_e_attempt CHANGE tms tms DATETIME NOT NULL');
 
         if (false === $table->hasForeignKey('FK_F8C342C391D79BD3')) {

@@ -122,10 +122,6 @@ if ($form->validate()) {
         Display::addFlash(Display::return_message($plugin->get_lang("fileIsExist"), "error"));
         goto display;
     }
-    if (!Security::check_abs_path($folderPath, $folderPath)) {
-        Display::addFlash(Display::return_message(get_lang('SendFileError'), 'error'));
-        goto display;
-    }
 
     if ($fp = @fopen($filePath, "w")) {
         $content = file_get_contents($emptyTemplatePath);

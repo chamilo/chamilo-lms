@@ -63,6 +63,7 @@ class Rest extends WebService
     const GET_WORK_LIST = 'get_work_list';
     const GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS = 'get_work_students_without_publications';
     const GET_WORK_USERS = 'get_work_users';
+    const GET_WORK_STUDENT_LIST = 'get_work_student_list';
     const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
     const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
     const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
@@ -2791,6 +2792,70 @@ class Rest extends WebService
         }
 
         return $result;
+    }
+
+    public function getWorkStudentList(int $workId): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseId = $this->course->getId();
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $myFolderData = get_work_data_by_id($workId);
+
+        $workParents = [];
+
+        if (empty($myFolderData)) {
+            $workParents = getWorkList($workId, $myFolderData);
+        }
+
+        $workIdList = [];
+
+        if (!empty($workParents)) {
+            foreach ($workParents as $work) {
+                $workIdList[] = $work->id;
+            }
+        }
+
+        $userList = getWorkUserList(
+            $courseCode,
+            $sessionId,
+            0,
+            0,
+            null,
+            null,
+            null
+        );
+
+        return array_map(
+            function ($userId) use ($courseId, $sessionId, $workParents, $workIdList) {
+                $user = api_get_user_info($userId);
+
+                $userWorks = 0;
+
+                if (!empty($workIdList)) {
+                    $userWorks = getUniqueStudentAttempts(
+                        $workIdList,
+                        0,
+                        $courseId,
+                        $sessionId,
+                        $user['user_id']
+                    );
+                }
+
+                $works = $userWorks." / ".count($workParents);
+
+                return [
+                    'id' => $userId,
+                    'complete_name' => api_get_person_name($user['firstname'], $user['lastname']),
+                    'works' => $works,
+                ];
+            },
+            $userList
+        );
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

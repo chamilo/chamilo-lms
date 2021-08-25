@@ -318,6 +318,19 @@ try {
                 $restApi->getWorkStudentsWithoutPublications((int) $_GET['work'])
             );
             break;
+        case Rest::GET_WORK_USERS:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            if (!api_is_allowed_to_edit()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $restResponse->setData(
+                $restApi->getWorkUsers((int) $_GET['work'])
+            );
+            break;
         case Rest::PUT_WORK_STUDENT_ITEM_VISIBILITY:
             if (!isset($_POST['status'], $_POST['work'])) {
                 throw new Exception(get_lang('ActionNotAllowed'));

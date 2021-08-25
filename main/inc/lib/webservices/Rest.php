@@ -62,6 +62,7 @@ class Rest extends WebService
 
     const GET_WORK_LIST = 'get_work_list';
     const GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS = 'get_work_students_without_publications';
+    const GET_WORK_USERS = 'get_work_users';
     const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
     const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
     const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
@@ -2725,6 +2726,71 @@ class Rest extends WebService
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
         return get_list_users_without_publication($workId);
+    }
+
+    public function getWorkUsers(int $workId): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        $items = getAllUserToWork($workId, $courseId);
+        $usersAdded = [];
+        $result = [
+            'users_added' => [],
+            'users_to_add' => [],
+        ];
+
+        if (!empty($items)) {
+            foreach ($items as $data) {
+                $usersAdded[] = $data['user_id'];
+
+                $userInfo = api_get_user_info($data['user_id']);
+
+                $result['users_added'][] = [
+                    'user_id' => (int) $data['user_id'],
+                    'complete_name_with_username' => $userInfo['complete_name_with_username'],
+                ];
+            }
+        }
+
+        if (empty($sessionId)) {
+            $status = STUDENT;
+        } else {
+            $status = 0;
+        }
+
+        $userList = CourseManager::get_user_list_from_course_code(
+            $courseInfo['code'],
+            $sessionId,
+            null,
+            null,
+            $status
+        );
+
+        $userToAddList = [];
+        foreach ($userList as $user) {
+            if (!in_array($user['user_id'], $usersAdded)) {
+                $userToAddList[] = $user;
+            }
+        }
+
+        if (!empty($userToAddList)) {
+            foreach ($userToAddList as $user) {
+                $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
+
+                $result['users_to_add'][] = [
+                    'user_id' => (int) $user['user_id'],
+                    'complete_name_with_username' => $userName,
+                ];
+            }
+        }
+
+        return $result;
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

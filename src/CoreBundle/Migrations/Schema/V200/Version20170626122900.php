@@ -18,6 +18,8 @@ class Version20170626122900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $connection = $this->getEntityManager()->getConnection();
+
         $table = $schema->getTable('user');
 
         if ($table->hasIndex('idx_user_uid')) {
@@ -137,15 +139,20 @@ class Version20170626122900 extends AbstractMigrationChamilo
         $table = $schema->getTable('user_rel_course_vote');
         $this->addSql('ALTER TABLE user_rel_course_vote CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('DELETE FROM user_rel_course_vote WHERE user_id NOT IN (SELECT id FROM user)');
+
+        $this->addSql('ALTER TABLE user_rel_course_vote CHANGE c_id c_id INT DEFAULT NULL');
+        $this->addSql('DELETE FROM user_rel_course_vote WHERE c_id NOT IN (SELECT id FROM course)');
+
+        $this->addSql('UPDATE user_rel_course_vote SET session_id = null WHERE session_id = 0 ');
+        $this->addSql('ALTER TABLE user_rel_course_vote CHANGE session_id session_id INT DEFAULT NULL');
+
+        $this->addSql('ALTER TABLE user_rel_course_vote CHANGE url_id url_id INT DEFAULT NULL');
+
         if (!$table->hasForeignKey('FK_4038AA47A76ED395')) {
             $this->addSql(
                 'ALTER TABLE user_rel_course_vote ADD CONSTRAINT FK_4038AA47A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
             );
         }
-
-        $this->addSql('ALTER TABLE user_rel_course_vote CHANGE c_id c_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE user_rel_course_vote CHANGE session_id session_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE user_rel_course_vote CHANGE url_id url_id INT DEFAULT NULL');
 
         if (!$table->hasForeignKey('FK_4038AA4791D79BD3')) {
             $this->addSql(
@@ -190,29 +197,66 @@ class Version20170626122900 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('user_rel_user');
         $this->addSql('DELETE FROM user_rel_user WHERE user_id = 0 OR friend_user_id = 0');
-        $this->addSql('DELETE FROM user_rel_user WHERE user_id = IS NULL OR friend_user_id IS NULL');
+        $this->addSql('DELETE FROM user_rel_user WHERE user_id IS NULL OR friend_user_id IS NULL');
+        $this->addSql('DELETE FROM user_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM user_rel_user WHERE friend_user_id NOT IN (SELECT id FROM user)');
+
         $this->addSql('ALTER TABLE user_rel_user CHANGE user_id user_id INT NOT NULL, CHANGE friend_user_id friend_user_id INT NOT NULL');
 
         $this->addSql('ALTER TABLE user_rel_user CHANGE user_id user_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE user_rel_user CHANGE friend_user_id friend_user_id INT DEFAULT NULL');
-
         $this->addSql('ALTER TABLE user_rel_user CHANGE friend_user_id friend_user_id INT DEFAULT NULL');
 
         if ($table->hasColumn('last_edit')) {
             $this->addSql('UPDATE user_rel_user SET last_edit = NOW() WHERE last_edit IS NULL');
         }
 
+        // Remove duplicates.
+        $sql = 'SELECT max(id) id, user_id, friend_user_id, relation_type, count(*) as count 
+                FROM user_rel_user 
+                GROUP BY user_id, friend_user_id, relation_type 
+                HAVING count > 1';
+        $result = $connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
+
+        foreach ($items as $item) {
+            $userId = $item['user_id'];
+            $friendId = $item['friend_user_id'];
+            $relationType = $item['relation_type'];
+
+            $sql = "SELECT id 
+                    FROM user_rel_user
+                    WHERE user_id = $userId AND friend_user_id = $friendId AND relation_type = $relationType ";
+            $result = $connection->executeQuery($sql);
+            $subItems = $result->fetchAllAssociative();
+            $counter = 0;
+            foreach ($subItems as $subItem) {
+                $id = $subItem['id'];
+                if (0 === $counter) {
+                    $counter++;
+
+                    continue;
+                }
+                $sql = "DELETE FROM user_rel_user WHERE id = $id";
+                $this->addSql($sql);
+                $counter++;
+            }
+        }
+
+        $this->addSql(
+            'UPDATE user_rel_user SET last_edit = NOW() WHERE CAST(last_edit AS CHAR(20)) = "0000-00-00 00:00:00"'
+        );
+
         if (!$table->hasIndex('user_friend_relation')) {
             $this->addSql('CREATE UNIQUE INDEX user_friend_relation ON user_rel_user (user_id, friend_user_id, relation_type)');
         }
 
         if (!$table->hasColumn('created_at')) {
-            $this->addSql("ALTER TABLE user_rel_user ADD created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)");
+            $this->addSql("ALTER TABLE user_rel_user ADD created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '(DC2Type:datetime)' ");
             $this->addSql('UPDATE user_rel_user SET created_at = last_edit');
         }
 
         if (!$table->hasColumn('updated_at')) {
-            $this->addSql("ALTER TABLE user_rel_user ADD updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)");
+            $this->addSql("ALTER TABLE user_rel_user ADD updated_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '(DC2Type:datetime)' ");
             $this->addSql('UPDATE user_rel_user SET updated_at = last_edit');
         }
 

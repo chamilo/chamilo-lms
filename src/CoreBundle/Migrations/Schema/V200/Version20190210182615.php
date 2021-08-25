@@ -18,6 +18,8 @@ class Version20190210182615 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $connection = $this->getEntityManager()->getConnection();
+
         $table = $schema->getTable('session');
         if (false === $table->hasColumn('position')) {
             $this->addSql('ALTER TABLE session ADD COLUMN position INT DEFAULT 0 NOT NULL');
@@ -39,8 +41,8 @@ class Version20190210182615 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4EF87E278 FOREIGN KEY(session_admin_id) REFERENCES user(id);');
         }
 
-        $this->addSql('UPDATE session_category SET date_start = NULL WHERE date_start = "0000-00-00"');
-        $this->addSql('UPDATE session_category SET date_end = NULL WHERE date_end = "0000-00-00"');
+        $this->addSql('UPDATE session_category SET date_start = NULL WHERE CAST(date_start AS CHAR(11)) = "0000-00-00"');
+        $this->addSql('UPDATE session_category SET date_end = NULL WHERE CAST(date_end AS CHAR(11)) = "0000-00-00"');
 
         $table = $schema->getTable('session_rel_course_rel_user');
 
@@ -53,6 +55,39 @@ class Version20190210182615 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE session_rel_course_rel_user ADD CONSTRAINT FK_720167E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE');
         } else {
             $this->addSql('ALTER TABLE session_rel_course_rel_user ADD CONSTRAINT FK_720167E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE');
+        }
+
+        // Remove duplicates.
+        $sql = 'SELECT max(id) id, session_id, c_id, user_id, status, count(*) as count 
+                FROM session_rel_course_rel_user 
+                GROUP BY session_id, c_id, user_id, status
+                HAVING count > 1';
+        $result = $connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
+
+        foreach ($items as $item) {
+            $userId = $item['user_id'];
+            $sessionId = $item['session_id'];
+            $courseId = $item['c_id'];
+            $status = $item['status'];
+
+            $sql = "SELECT id 
+                    FROM session_rel_course_rel_user
+                    WHERE user_id = $userId AND session_id = $sessionId AND c_id = $courseId AND status = $status";
+            $result = $connection->executeQuery($sql);
+            $subItems = $result->fetchAllAssociative();
+            $counter = 0;
+            foreach ($subItems as $subItem) {
+                $id = $subItem['id'];
+                if (0 === $counter) {
+                    $counter++;
+
+                    continue;
+                }
+                $sql = "DELETE FROM session_rel_course_rel_user WHERE id = $id";
+                $this->addSql($sql);
+                $counter++;
+            }
         }
 
         if (!$table->hasIndex('course_session_unique')) {

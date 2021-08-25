@@ -300,6 +300,13 @@ try {
                 ]
             );
             break;
+        case Rest::DOWNLOAD_FORUM_ATTACHMENT:
+            if (empty($_GET['path'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $restApi->downloadForumPostAttachment($_GET['path']);
+            break;
 
         case Rest::GET_WORK_LIST:
             if (!isset($_GET['work'])) {

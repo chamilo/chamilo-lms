@@ -60,6 +60,7 @@ class Rest extends WebService
     const SAVE_FORUM_POST = 'save_forum_post';
     const SAVE_FORUM_THREAD = 'save_forum_thread';
     const SET_THREAD_NOTIFY = 'set_thread_notify';
+    const DOWNLOAD_FORUM_ATTACHMENT= 'download_forum_attachment';
 
     const GET_WORK_LIST = 'get_work_list';
     const GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS = 'get_work_students_without_publications';
@@ -879,6 +880,13 @@ class Rest extends WebService
                 'author' => api_get_person_name($postInfo['firstname'], $postInfo['lastname']),
                 'date' => api_convert_and_format_date($postInfo['post_date'], DATE_TIME_FORMAT_LONG_24H),
                 'parentId' => $postInfo['post_parent_id'],
+                'attachments' => getAttachedFiles(
+                    $forumId,
+                    $threadId,
+                    $postInfo['iid'],
+                    0,
+                    $this->course->getId()
+                )
             ];
         }
 
@@ -2929,6 +2937,28 @@ class Rest extends WebService
     public function viewMessage(int $messageId)
     {
         $url = api_get_path(WEB_CODE_PATH).'messages/view_message.php?'.http_build_query(['id' => $messageId]);
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function downloadForumPostAttachment(string $path)
+    {
+
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'forum/download.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                    'file' => Security::remove_XSS($path),
+                ]
+            );
 
         header("Location: $url");
         exit;

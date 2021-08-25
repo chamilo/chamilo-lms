@@ -61,11 +61,14 @@ class Version20180928172830 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_tool DROP custom_icon');
         }
 
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_tool ADD resource_node_id BIGINT DEFAULT NULL');
-            $this->addSql('UPDATE c_tool SET session_id = NULL WHERE session_id = 0');
+        $this->addSql('UPDATE c_tool SET session_id = NULL WHERE session_id = 0');
 
-            $this->addSql('UPDATE c_tool SET tool_id = (SELECT id FROM tool WHERE name = c_tool.name) WHERE tool_id IS NOT NULL');
+        // Delete c_tool not registered in tool. @todo migrate BBB/LP/mobidico plugins
+        $this->addSql('DELETE FROM c_tool WHERE name NOT IN (SELECT name FROM tool)');
+        $this->addSql('UPDATE c_tool SET tool_id = (SELECT id FROM tool WHERE name = c_tool.name) WHERE tool_id IS NOT NULL');
+
+        if (!$table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_tool ADD resource_node_id BIGINT DEFAULT NULL');
 
             // @todo remove/move LP/Link shortcuts.
             $this->addSql('DELETE FROM c_tool WHERE tool_id = 0 OR tool_id IS NULL');

@@ -62,6 +62,7 @@ class Rest extends WebService
 
     const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
     const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
+    const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
 
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
@@ -2629,6 +2630,27 @@ class Rest extends WebService
         }
 
         return get_lang('YouAreNotAllowedToDeleteThisDocument');
+    }
+
+    public function deleteWorkCorrections(int $workId): string
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        $result = get_work_user_list(null, null, null, null, $workId);
+
+        if ($result) {
+            foreach ($result as $item) {
+                $workInfo = get_work_data_by_id($item['id']);
+
+                deleteCorrection($courseInfo, $workInfo);
+            }
+        }
+
+        return get_lang('Deleted');
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

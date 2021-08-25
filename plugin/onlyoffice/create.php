@@ -72,6 +72,7 @@ $form->addHidden("sessionId", $sessionId);
 $form->addHidden("userId", $userId);
 $form->addHidden("folderId", $folderId);
 $form->addHidden("goBackUrl", Security::remove_XSS($_SERVER["HTTP_REFERER"]));
+$goBackUrl = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq();
 
 if ($form->validate()) {
     $values = $form->exportValues();

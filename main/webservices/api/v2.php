@@ -391,6 +391,19 @@ try {
             );
             break;
 
+        case Rest::VIEW_DOCUMENT_IN_FRAME:
+            $lpId = isset($_REQUEST['document']) ? (int) $_REQUEST['document'] : 0;
+            $restApi->viewDocumentInFrame($lpId);
+            break;
+
+        case Rest::VIEW_QUIZ_TOOL:
+            $restApi->viewQuizTool();
+            break;
+
+        case Rest::VIEW_SURVEY_TOOL:
+            $restApi->viewSurveyTool();
+            break;
+
         case Rest::CREATE_CAMPUS:
             $data = $restApi->createCampusURL($_POST);
             $restResponse->setData($data);

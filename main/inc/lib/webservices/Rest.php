@@ -68,6 +68,12 @@ class Rest extends WebService
     const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
     const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
 
+    const VIEW_DOCUMENT_IN_FRAME = 'view_document_in_frame';
+
+    const VIEW_QUIZ_TOOL = 'view_quiz_tool';
+
+    const VIEW_SURVEY_TOOL = 'view_survey_tool';
+
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
     const DELETE_CAMPUS = 'delete_campus';
@@ -2856,6 +2862,67 @@ class Rest extends WebService
             },
             $userList
         );
+    }
+
+    public function viewDocumentInFrame(int $documentId)
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'document/showinframes.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                    'id' => $documentId,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewQuizTool()
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewSurveyTool()
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

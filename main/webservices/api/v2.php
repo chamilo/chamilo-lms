@@ -296,6 +296,54 @@ try {
             );
             break;
 
+        case Rest::GET_WORK_LIST:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            $restResponse->setData(
+                $restApi->getWorkList((int) $_GET['work'])
+            );
+            break;
+        case Rest::GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            if (!api_is_allowed_to_edit(false, true)) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $restResponse->setData(
+                $restApi->getWorkStudentsWithoutPublications((int) $_GET['work'])
+            );
+            break;
+        case Rest::GET_WORK_USERS:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            if (!api_is_allowed_to_edit()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $restResponse->setData(
+                $restApi->getWorkUsers((int) $_GET['work'])
+            );
+            break;
+        case Rest::GET_WORK_STUDENT_LIST:
+            if (!isset($_GET['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            if (!api_is_allowed_to_edit()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $restResponse->setData(
+                $restApi->getWorkStudentList((int) $_GET['work'])
+            );
+            break;
         case Rest::PUT_WORK_STUDENT_ITEM_VISIBILITY:
             if (!isset($_POST['status'], $_POST['work'])) {
                 throw new Exception(get_lang('ActionNotAllowed'));
@@ -311,6 +359,49 @@ try {
             );
 
             $restResponse->setData(['status' => $data]);
+            break;
+        case Rest::DELETE_WORK_STUDENT_ITEM:
+            if (!isset($_POST['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            if (!api_is_allowed_to_edit() && !api_is_coach()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $restResponse->setData(
+                [
+                    'message' => $restApi->deleteWorkStudentItem((int) $_POST['work']),
+                ]
+            );
+            break;
+        case Rest::DELETE_WORK_CORRECTIONS:
+            if (!isset($_POST['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            if (!api_is_allowed_to_edit() && !api_is_coach()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $restResponse->setData(
+                [
+                    'message' => $restApi->deleteWorkCorrections((int) $_POST['work']),
+                ]
+            );
+            break;
+
+        case Rest::VIEW_DOCUMENT_IN_FRAME:
+            $lpId = isset($_REQUEST['document']) ? (int) $_REQUEST['document'] : 0;
+            $restApi->viewDocumentInFrame($lpId);
+            break;
+
+        case Rest::VIEW_QUIZ_TOOL:
+            $restApi->viewQuizTool();
+            break;
+
+        case Rest::VIEW_SURVEY_TOOL:
+            $restApi->viewSurveyTool();
             break;
 
         case Rest::CREATE_CAMPUS:

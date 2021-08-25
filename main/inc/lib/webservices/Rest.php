@@ -60,7 +60,19 @@ class Rest extends WebService
     const SAVE_FORUM_THREAD = 'save_forum_thread';
     const SET_THREAD_NOTIFY = 'set_thread_notify';
 
+    const GET_WORK_LIST = 'get_work_list';
+    const GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS = 'get_work_students_without_publications';
+    const GET_WORK_USERS = 'get_work_users';
+    const GET_WORK_STUDENT_LIST = 'get_work_student_list';
     const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
+    const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
+    const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
+
+    const VIEW_DOCUMENT_IN_FRAME = 'view_document_in_frame';
+
+    const VIEW_QUIZ_TOOL = 'view_quiz_tool';
+
+    const VIEW_SURVEY_TOOL = 'view_survey_tool';
 
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
@@ -178,6 +190,8 @@ class Rest extends WebService
      */
     public function setCourse($id)
     {
+        global $_course;
+
         if (!$id) {
             $this->course = null;
 
@@ -198,9 +212,12 @@ class Rest extends WebService
 
         $this->course = $course;
 
+        $courseInfo = api_get_course_info($course->getCode());
+        $_course = $courseInfo;
+
         ChamiloSession::write('_real_cid', $course->getId());
         ChamiloSession::write('_cid', $course->getCode());
-        ChamiloSession::write('_course', api_get_course_info($course->getCode()));
+        ChamiloSession::write('_course', $courseInfo);
     }
 
     /**
@@ -2606,6 +2623,306 @@ class Rest extends WebService
             default:
                 throw new Exception(get_lang('ActionNotAllowed'));
         }
+    }
+
+    public function deleteWorkStudentItem(int $workId): string
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        $fileDeleted = deleteWorkItem($workId, $courseInfo);
+
+        if ($fileDeleted) {
+            return get_lang('TheDocumentHasBeenDeleted');
+        }
+
+        return get_lang('YouAreNotAllowedToDeleteThisDocument');
+    }
+
+    public function deleteWorkCorrections(int $workId): string
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        $result = get_work_user_list(null, null, null, null, $workId);
+
+        if ($result) {
+            foreach ($result as $item) {
+                $workInfo = get_work_data_by_id($item['id']);
+
+                deleteCorrection($courseInfo, $workInfo);
+            }
+        }
+
+        return get_lang('Deleted');
+    }
+
+    public function getWorkList(int $workId): array
+    {
+        $isAllowedToEdit = api_is_allowed_to_edit();
+
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $userId = $this->user->getId();
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $webPath = api_get_path(WEB_PATH);
+
+        $whereCondition = !$isAllowedToEdit ? " AND u.id = $userId" : '';
+
+        $works = get_work_user_list(
+            0,
+            0,
+            'title',
+            'asc',
+            $workId,
+            $whereCondition,
+            null,
+            false,
+            $courseId,
+            $sessionId
+        );
+
+        return array_map(
+            function (array $work) use ($courseInfo, $webPath) {
+                $itemId = $work['id'];
+                $count = getWorkCommentCount($itemId, $courseInfo);
+
+                $work['feedback'] = $count.' '.Display::returnFontAwesomeIcon('comments-o');
+                $work['feedback_clean'] = $count;
+
+                $workInfo = get_work_data_by_id($itemId);
+                $commentsTmp = getWorkComments($workInfo);
+                $comments = [];
+
+                foreach ($commentsTmp as $comment) {
+                    $comment['comment'] = str_replace('src="/', 'src="'.$webPath.'app/', $comment['comment']);
+                    $comments[] = $comment;
+                }
+
+                $work['comments'] = $comments;
+
+                if (empty($workInfo['qualificator_id'])) {
+                    $qualificator_id = Display::label(get_lang('NotRevised'), 'warning');
+                } else {
+                    $qualificator_id = Display::label(get_lang('Revised'), 'success');
+                }
+
+                $work['qualificator_id'] = $qualificator_id;
+
+                return $work;
+            },
+            $works
+        );
+    }
+
+    public function getWorkStudentsWithoutPublications(int $workId): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        return get_list_users_without_publication($workId);
+    }
+
+    public function getWorkUsers(int $workId): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        $items = getAllUserToWork($workId, $courseId);
+        $usersAdded = [];
+        $result = [
+            'users_added' => [],
+            'users_to_add' => [],
+        ];
+
+        if (!empty($items)) {
+            foreach ($items as $data) {
+                $usersAdded[] = $data['user_id'];
+
+                $userInfo = api_get_user_info($data['user_id']);
+
+                $result['users_added'][] = [
+                    'user_id' => (int) $data['user_id'],
+                    'complete_name_with_username' => $userInfo['complete_name_with_username'],
+                ];
+            }
+        }
+
+        if (empty($sessionId)) {
+            $status = STUDENT;
+        } else {
+            $status = 0;
+        }
+
+        $userList = CourseManager::get_user_list_from_course_code(
+            $courseInfo['code'],
+            $sessionId,
+            null,
+            null,
+            $status
+        );
+
+        $userToAddList = [];
+        foreach ($userList as $user) {
+            if (!in_array($user['user_id'], $usersAdded)) {
+                $userToAddList[] = $user;
+            }
+        }
+
+        if (!empty($userToAddList)) {
+            foreach ($userToAddList as $user) {
+                $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
+
+                $result['users_to_add'][] = [
+                    'user_id' => (int) $user['user_id'],
+                    'complete_name_with_username' => $userName,
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    public function getWorkStudentList(int $workId): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseId = $this->course->getId();
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $myFolderData = get_work_data_by_id($workId);
+
+        $workParents = [];
+
+        if (empty($myFolderData)) {
+            $workParents = getWorkList($workId, $myFolderData);
+        }
+
+        $workIdList = [];
+
+        if (!empty($workParents)) {
+            foreach ($workParents as $work) {
+                $workIdList[] = $work->id;
+            }
+        }
+
+        $userList = getWorkUserList(
+            $courseCode,
+            $sessionId,
+            0,
+            0,
+            null,
+            null,
+            null
+        );
+
+        return array_map(
+            function ($userId) use ($courseId, $sessionId, $workParents, $workIdList) {
+                $user = api_get_user_info($userId);
+
+                $userWorks = 0;
+
+                if (!empty($workIdList)) {
+                    $userWorks = getUniqueStudentAttempts(
+                        $workIdList,
+                        0,
+                        $courseId,
+                        $sessionId,
+                        $user['user_id']
+                    );
+                }
+
+                $works = $userWorks." / ".count($workParents);
+
+                return [
+                    'id' => $userId,
+                    'complete_name' => api_get_person_name($user['firstname'], $user['lastname']),
+                    'works' => $works,
+                ];
+            },
+            $userList
+        );
+    }
+
+    public function viewDocumentInFrame(int $documentId)
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'document/showinframes.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                    'id' => $documentId,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewQuizTool()
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewSurveyTool()
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

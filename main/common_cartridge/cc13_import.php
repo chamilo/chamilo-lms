@@ -25,7 +25,7 @@ $interbreadcrumb[] = [
 ];
 
 $form = new FormValidator('cc_import', 'post', api_get_self().'?'.api_get_cidreq());
-$form->addFile('cc_file', get_lang('ImsccFile'));
+$form->addFile('cc_file', get_lang('IMSCCFile'));
 $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
@@ -59,14 +59,14 @@ if ($form->validate()) {
             $detected = Imscc13Import::detectFormat($filepath);
             if ($detected) {
                 Imscc13Import::execute($filepath);
-                Display::addFlash(Display::return_message(get_lang('CcFileImported'), 'normal', false));
+                Display::addFlash(Display::return_message(get_lang('IMSCCFileImported'), 'normal', false));
             }
         }
     }
 }
 
 $template = new Template(get_lang('ImportCcVersion13'));
-Display::addFlash(Display::return_message(get_lang('ImportCcInstructions'), 'normal', false));
+Display::addFlash(Display::return_message(get_lang('IMSCCImportInstructions'), 'normal', false));
 $template->assign('form', $form->returnForm());
 $templateName = $template->get_template('common_cartridge/import_cc.tpl');
 $content = $template->fetch($templateName);

@@ -47,7 +47,7 @@ if (Security::check_token('post') && ($action === 'course_select_form')) {
         $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
         $imsccFile = Cc13ExportConvert::export($course);
         if ($imsccFile !== false) {
-            echo Display::return_message(get_lang('ImsccCreated'), 'confirm');
+            echo Display::return_message(get_lang('IMSCCCreated'), 'confirm');
             echo '<br />';
             echo Display::toolbarButton(
                 get_lang('Download'),

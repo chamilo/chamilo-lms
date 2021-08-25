@@ -39,6 +39,7 @@ class WebService
             'uidReset' => true,
         ];
         ChamiloSession::write('_user', $_user);
+        ChamiloSession::write('is_allowed_in_course', true);
 
         Login::init_user($this->user->getId(), true);
     }

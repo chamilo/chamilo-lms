@@ -61,6 +61,7 @@ class Rest extends WebService
     const SET_THREAD_NOTIFY = 'set_thread_notify';
 
     const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
+    const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
 
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
@@ -2606,6 +2607,23 @@ class Rest extends WebService
             default:
                 throw new Exception(get_lang('ActionNotAllowed'));
         }
+    }
+
+    public function deleteWorkStudentItem(int $workId): string
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        $fileDeleted = deleteWorkItem($workId, $courseInfo);
+
+        if ($fileDeleted) {
+            return get_lang('TheDocumentHasBeenDeleted');
+        }
+
+        return get_lang('YouAreNotAllowedToDeleteThisDocument');
     }
 
     public static function isAllowedByRequest(bool $inpersonate = false): bool

@@ -312,6 +312,21 @@ try {
 
             $restResponse->setData(['status' => $data]);
             break;
+        case Rest::DELETE_WORK_STUDENT_ITEM:
+            if (!isset($_POST['work'])) {
+                throw new Exception(get_lang('ActionNotAllowed'));
+            }
+
+            if (!api_is_allowed_to_edit() && !api_is_coach()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $restResponse->setData(
+                [
+                    'message' => $restApi->deleteWorkStudentItem((int) $_POST['work']),
+                ]
+            );
+            break;
 
         case Rest::CREATE_CAMPUS:
             $data = $restApi->createCampusURL($_POST);

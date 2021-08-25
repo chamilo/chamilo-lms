@@ -138,3 +138,8 @@ The table below will help you to make the right choice.
 
 \** Support for all conditions and gradient. Adding/Editing capabilities are coming soon
 
+## Note on SSL
+
+As for all SSL to non-SSL communication, this plugin will not work fully if your 
+Chamilo portal works in HTTP and your OnlyOffice Document server works in HTTPS, or vice-versa.
+You will need to ensure the same protocol on both sides. 

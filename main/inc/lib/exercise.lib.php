@@ -215,8 +215,24 @@ class ExerciseLib
                         '#',
                         ['enctype' => 'multipart/form-data']
                     );
+                    $iconDelete = Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL);
                     $multipleForm->addMultipleUpload($url);
                     $s .= '<script>
+                        function setRemoveLinks() {
+                            var links = $("#files").children();
+                            links.each(function( index ) {
+                                var link = $(links[index]);
+                                var removeLink = $("<a>", {
+                                    html: "&nbsp;'.addslashes($iconDelete).'",
+                                    href: "#",
+                                    click: function(e) {
+                                      e.preventDefault();
+                                      link.remove();
+                                    }
+                                });
+                                link.find(".row").append(removeLink);
+                            });
+                        }
                         $(function() {
                             $("#input_file_upload").bind("fileuploaddone", function (e, data) {
                                 $.each(data.result.files, function (index, file) {
@@ -225,8 +241,18 @@ class ExerciseLib
                                             type: "hidden",
                                             name: "uploadChoice['.$questionId.'][]",
                                             value: file.name
-                                        })
+                                        });
                                         $(data.context.children()[index]).parent().append(input);
+                                        // set the remove link
+                                        var removeLink = $("<a>", {
+                                            html: "&nbsp;'.addslashes($iconDelete).'",
+                                            href: "#",
+                                            click: function(evt) {
+                                                evt.preventDefault();
+                                                $(data.context.children()[index]).parent().parent().remove();
+                                            }
+                                        });
+                                        $(data.context.children()[index]).parent().append(removeLink);
                                     }
                                 });
                             });
@@ -235,17 +261,21 @@ class ExerciseLib
                     // Set default values
                     if (!empty($answer)) {
                         $userWebpath = UserManager::getUserPathById(api_get_user_id(), 'web').'my_files'.'/upload_answer/'.$exe_id.'/'.$questionId.'/';
+                        $userSyspath = UserManager::getUserPathById(api_get_user_id(), 'system').'my_files'.'/upload_answer/'.$exe_id.'/'.$questionId.'/';
                         $filesNames = explode('|', $answer);
                         $icon = Display::return_icon('file_txt.gif');
                         $default = '';
                         foreach ($filesNames as $fileName) {
                             $fileName = Security::remove_XSS($fileName);
-                            $default .= '<a target="_blank" class="panel-image" href="'.$userWebpath.$fileName.'"><div class="row"><div class="col-sm-4">'.$icon.'</div><div class="col-sm-5 file_name">'.$fileName.'</div><input type="hidden" name="uploadChoice['.$questionId.'][]" value="'.$fileName.'"></div></a>';
+                            if (file_exists($userSyspath.$fileName)) {
+                                $default .= '<a target="_blank" class="panel-image" href="'.$userWebpath.$fileName.'"><div class="row"><div class="col-sm-4">'.$icon.'</div><div class="col-sm-5 file_name">'.$fileName.'</div><input type="hidden" name="uploadChoice['.$questionId.'][]" value="'.$fileName.'"><div class="col-sm-3"></div></div></a>';
+                            }
                         }
                         $s .= '<script>
                             $(function() {
                                 if ($("#files").length > 0) {
                                   $("#files").html("'.addslashes($default).'");
+                                  setRemoveLinks();
                                 }
                             });
                         </script>';

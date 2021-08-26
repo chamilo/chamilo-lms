@@ -226,13 +226,13 @@ class GroupManager
         $places = (int) $places;
 
         // Default values
-        $docState = self::TOOL_PRIVATE;
-        $calendarState = self::TOOL_PRIVATE;
-        $workState = self::TOOL_PRIVATE;
-        $anonuncementState = self::TOOL_PRIVATE;
-        $forumState = self::TOOL_PRIVATE;
-        $wikiState = self::TOOL_PRIVATE;
-        $chatState = self::TOOL_PRIVATE;
+        $docState = CGroup::TOOL_PRIVATE;
+        $calendarState = CGroup::TOOL_PRIVATE;
+        $workState = CGroup::TOOL_PRIVATE;
+        $anonuncementState = CGroup::TOOL_PRIVATE;
+        $forumState = CGroup::TOOL_PRIVATE;
+        $wikiState = CGroup::TOOL_PRIVATE;
+        $chatState = CGroup::TOOL_PRIVATE;
         $selfRegAllowed = 0;
         $selfUnregAllwoed = 0;
         $documentAccess = 0;
@@ -266,8 +266,7 @@ class GroupManager
             $category = Container::getGroupCategoryRepository()->find($category_id);
         }
 
-        $group = new CGroup();
-        $group
+        $group = (new CGroup())
             ->setName($name)
             ->setCategory($category)
             ->setMaxStudent($places)

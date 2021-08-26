@@ -31,10 +31,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }
  * )
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CGroupRepository")
  */
 class CGroup extends AbstractResource implements ResourceInterface
 {
+    public const TOOL_NOT_AVAILABLE = 0;
+    public const TOOL_PUBLIC = 1;
+    public const TOOL_PRIVATE = 2;
+    public const TOOL_PRIVATE_BETWEEN_USERS = 3;
+
     /**
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -70,6 +75,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="max_student", type="integer")
      */
+    #[Assert\NotBlank]
     protected int $maxStudent;
 
     /**
@@ -141,6 +147,21 @@ class CGroup extends AbstractResource implements ResourceInterface
         $this->status = true;
         $this->members = new ArrayCollection();
         $this->tutors = new ArrayCollection();
+
+        // Default values
+        $defaultVisibility = self::TOOL_PRIVATE;
+
+        $this->docState = $defaultVisibility;
+        $this->calendarState = $defaultVisibility;
+        $this->workState = $defaultVisibility;
+        $this->announcementsState = $defaultVisibility;
+        $this->forumState = $defaultVisibility;
+        $this->wikiState = $defaultVisibility;
+        $this->chatState = $defaultVisibility;
+        $this->documentAccess = $defaultVisibility;
+
+        $this->selfRegistrationAllowed = false;
+        $this->selfUnregistrationAllowed = false;
     }
 
     public function __toString(): string

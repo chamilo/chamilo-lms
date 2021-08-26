@@ -21,11 +21,11 @@ class ChamiloCoreExtension extends Extension
         );
 
         $loader->load('services.yml');
-        //$loader->load('admin.yml');
         $loader->load('tools.yml');
         $loader->load('settings.yml');
         $loader->load('repositories.yml');
         $loader->load('tool_settings.yml');
+        $loader->load('listeners.yml');
 
         $loader = new Loader\XmlFileLoader(
             $container,

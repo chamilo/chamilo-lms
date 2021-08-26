@@ -3,28 +3,26 @@ services:
         autowire: true
         public: true
 
-    chamilo_course.registry.settings_schema:
-        class: Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry
+    Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry:
         arguments:
             - Sylius\Bundle\SettingsBundle\Schema\SchemaInterface
             - 'CourseSettings'
 
     Chamilo\CourseBundle\Settings\SettingsCourseManager:
         arguments:
-            - '@chamilo_course.registry.settings_schema'
+            - 'Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry'
             - '@doctrine.orm.entity_manager'
-            - '@chamilo_course.repository.parameter'
+            - 'Chamilo\CourseBundle\Repository\CCourseSettingRepository'
             - '@event_dispatcher'
             - '@request_stack'
 
     Chamilo\CourseBundle\Manager\SettingsFormFactory:
         arguments:
-            - '@chamilo_course.registry.settings_schema'
+            - 'Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry'
             - '@form.factory'
         public: true
 
-    chamilo_course.repository.parameter:
-        class: Chamilo\CourseBundle\Repository\CCourseSettingRepository
+    Chamilo\CourseBundle\Repository\CCourseSettingRepository: ~
 
     Chamilo\CourseBundle\Repository\:
         resource: '../../Repository/'

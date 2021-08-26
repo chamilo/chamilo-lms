@@ -5,6 +5,7 @@ services:
         autoconfigure: true
 
     Vich\UploaderBundle\Storage\FlysystemStorage: ~
+
     Chamilo\CoreBundle\Repository\ResourceNodeRepository: ~
 
     # Classic entity repositories

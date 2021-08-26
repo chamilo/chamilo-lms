@@ -51,44 +51,20 @@ services:
 #        # implications!
 #        decoration_priority: -20
 
-    Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer: ~
-    Chamilo\CoreBundle\Component\Utils\NameConvention: ~
-    Chamilo\CoreBundle\Component\Utils\Glide:
-        arguments:
-            - {source: '@oneup_flysystem.resource_filesystem', cache: '@oneup_flysystem.resource_cache_filesystem'}
-            - '%glide_media_filters%'
-
-    Chamilo\CoreBundle\Component\Utils\GlideAsset:
-        arguments:
-            - {source: '@oneup_flysystem.asset_filesystem', cache: '@oneup_flysystem.asset_cache_filesystem'}
-            - '%glide_media_filters%'
-
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
 
     Vich\UploaderBundle\Naming\SubdirDirectoryNamer:
         public: true
 
-    Chamilo\CoreBundle\Controller\ResourceController:
-        arguments:
-            - '@Chamilo\CoreBundle\Repository\ResourceFactory'
-
     Symfony\Component\Mailer\Mailer:
         public: true
 
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 
-    chamilo_core.hook_factory:
-        class: 'Chamilo\CoreBundle\Hook\HookFactory'
-
-    Chamilo\CoreBundle\EventListener\HTTPExceptionListener:
-        tags:
-            - {name: kernel.event_listener, event: kernel.exception}
-
-    Chamilo\CoreBundle\EventListener\ExceptionListener:
-        arguments: ['@twig']
-        tags:
-            - {name: kernel.event_listener, event: kernel.exception}
+    # Locale listener
+    Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
+        arguments: ['%kernel.default_locale%', '@chamilo.settings.manager', '@parameter_bag']
 
 cocur_slugify:
     lowercase: true

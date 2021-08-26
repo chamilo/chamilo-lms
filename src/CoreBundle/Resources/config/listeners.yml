@@ -1,0 +1,131 @@
+# Settings parameters that will be used in the 'services' section
+services:
+    _defaults:
+        autowire: true
+        public: true
+        autoconfigure: true
+
+    # Event listeners
+    Chamilo\CoreBundle\EventListener\AssetListener:
+        arguments:
+            - '@Chamilo\CoreBundle\Repository\AssetRepository'
+        tags:
+            - {name: kernel.event_listener, event: vich_uploader.post_remove}
+
+    Chamilo\CoreBundle\EventListener\CourseListener:
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 6}
+            - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
+            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
+
+    # Sets the user access in a course listener
+    Chamilo\CoreBundle\EventListener\CourseAccessListener:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        calls:
+            - [setRequest, ['@request_stack']]
+        tags:
+            - {name: kernel.event_listener, event: chamilo_course.course.access, method: onCourseAccessEvent}
+
+    # Sets the user access in a course session listener
+    Chamilo\CoreBundle\EventListener\SessionAccessListener:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        calls:
+            - [setRequest, ['@request_stack']]
+        tags:
+            - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
+
+    # Setting user
+    Chamilo\CoreBundle\EventListener\LegacyListener:
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 7}
+            - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
+            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
+
+    # User locale listener
+#    Chamilo\CoreBundle\EventListener\UserLocaleListener:
+#        tags:
+#            - {name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin, priority: 15}
+
+    # Settings listener
+    Chamilo\CoreBundle\EventListener\SettingListener:
+        arguments: ['@service_container']
+        tags:
+            - {name: kernel.event_listener, event: sylius.settings.pre_save, method: onSettingPreSave}
+
+    Chamilo\CoreBundle\EventListener\TwigListener:
+        tags:
+            - {name: kernel.event_listener}
+
+    # Course upload listener
+    Chamilo\CoreBundle\EventListener\ResourceUploadListener:
+        arguments: ['@router']
+        tags:
+            - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}
+
+    # Auth listeners
+    Chamilo\CoreBundle\EventListener\LoginSuccessHandler:
+        arguments: ['@router', '@security.authorization_checker', '@chamilo.settings.manager']
+        tags:
+            - {name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin}
+
+    Chamilo\CoreBundle\EventListener\LogoutListener:
+        tags:
+            - name: kernel.event_listener
+              event: Symfony\Component\Security\Http\Event\LogoutEvent
+              dispatcher: security.event_dispatcher.main
+              priority: 20
+
+    Chamilo\CoreBundle\EventListener\HTTPExceptionListener:
+        tags:
+            - {name: kernel.event_listener, event: kernel.exception}
+
+    Chamilo\CoreBundle\EventListener\ExceptionListener:
+        arguments: ['@twig']
+        tags:
+            - {name: kernel.event_listener, event: kernel.exception}
+
+    # Entity listeners
+    Chamilo\CoreBundle\Entity\Listener\ResourceListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\SessionListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    # When the Course entity is created/updated
+    Chamilo\CoreBundle\Entity\Listener\CourseListener:
+        arguments: ['@Chamilo\CoreBundle\ToolChain', '@chamilo.settings.manager']
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    # When the User entity is created/updated        -
+    Chamilo\CoreBundle\Entity\Listener\UserListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\UserRelUserListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\MessageListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener:
+        arguments:
+            - '@chamilo.settings.manager'
+            - '@router'
+            - '@translator'
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}

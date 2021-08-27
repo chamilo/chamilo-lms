@@ -218,20 +218,16 @@ class ExerciseLib
                     $iconDelete = Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL);
                     $multipleForm->addMultipleUpload($url);
                     $s .= '<script>
-                        function setRemoveLinks() {
-                            var links = $("#files").children();
-                            links.each(function( index ) {
-                                var link = $(links[index]);
-                                var removeLink = $("<a>", {
-                                    html: "&nbsp;'.addslashes($iconDelete).'",
-                                    href: "#",
-                                    click: function(e) {
-                                      e.preventDefault();
-                                      link.remove();
-                                    }
-                                });
-                                link.find(".row").append(removeLink);
+                        function setRemoveLink(dataContext) {
+                            var removeLink = $("<a>", {
+                                html: "&nbsp;'.addslashes($iconDelete).'",
+                                href: "#",
+                                click: function(e) {
+                                  e.preventDefault();
+                                  dataContext.parent().remove();
+                                }
                             });
+                            dataContext.append(removeLink);
                         }
                         $(function() {
                             $("#input_file_upload").bind("fileuploaddone", function (e, data) {
@@ -244,15 +240,7 @@ class ExerciseLib
                                         });
                                         $(data.context.children()[index]).parent().append(input);
                                         // set the remove link
-                                        var removeLink = $("<a>", {
-                                            html: "&nbsp;'.addslashes($iconDelete).'",
-                                            href: "#",
-                                            click: function(evt) {
-                                                evt.preventDefault();
-                                                $(data.context.children()[index]).parent().parent().remove();
-                                            }
-                                        });
-                                        $(data.context.children()[index]).parent().append(removeLink);
+                                        setRemoveLink($(data.context.children()[index]).parent());
                                     }
                                 });
                             });
@@ -274,8 +262,12 @@ class ExerciseLib
                         $s .= '<script>
                             $(function() {
                                 if ($("#files").length > 0) {
-                                  $("#files").html("'.addslashes($default).'");
-                                  setRemoveLinks();
+                                    $("#files").html("'.addslashes($default).'");
+                                    var links = $("#files").children();
+                                    links.each(function(index) {
+                                        var dataContext = $(links[index]).find(".row");
+                                        setRemoveLink(dataContext);
+                                    });
                                 }
                             });
                         </script>';

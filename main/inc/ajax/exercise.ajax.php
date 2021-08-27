@@ -670,6 +670,14 @@ switch ($action) {
             if ($objQuestionTmp->type === UPLOAD_ANSWER) {
                 $my_choice = '';
                 if (!empty($uploadAnswerFileNames)) {
+                    // Clean user upload_answer folder
+                    $userUploadAnswerSyspath = UserManager::getUserPathById(api_get_user_id(), 'system').'my_files'.'/upload_answer/'.$exeId.'/'.$my_question_id.'/*';
+                    foreach(glob($userUploadAnswerSyspath) as $file) {
+                        $filename = basename($file);
+                        if (!in_array($filename, $uploadAnswerFileNames[$my_question_id])) {
+                            unlink($file);
+                        }
+                    }
                     $my_choice = implode('|', $uploadAnswerFileNames[$my_question_id]);
                 }
             }

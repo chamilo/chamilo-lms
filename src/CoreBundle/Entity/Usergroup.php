@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  *
  * @ORM\Table(name="usergroup")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\UsergroupRepository")
  */
 class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceWithAccessUrlInterface
 {

@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     normalizationContext={"groups"={"illustration:read"}}
  * )
  * @ORM\Table(name="illustration")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\IllustrationRepository")
  */
 class Illustration extends AbstractResource implements ResourceInterface
 {

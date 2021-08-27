@@ -29,9 +29,8 @@ class ResourceType
 
     /**
      * @ORM\Column()
-     *
-     * @Assert\NotBlank()
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**
@@ -74,10 +73,7 @@ class ResourceType
         return $this;
     }
 
-    /**
-     * @return Tool
-     */
-    public function getTool()
+    public function getTool(): Tool
     {
         return $this->tool;
     }
@@ -99,8 +95,6 @@ class ResourceType
 
     /**
      * @param ResourceNode[]|Collection $resourceNodes
-     *
-     * @return $this
      */
     public function setResourceNodes($resourceNodes): self
     {

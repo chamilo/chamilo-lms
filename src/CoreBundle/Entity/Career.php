@@ -61,6 +61,7 @@ class Career
     {
         $this->status = self::CAREER_STATUS_ACTIVE;
         $this->promotions = new ArrayCollection();
+        $this->description = '';
     }
 
     /**

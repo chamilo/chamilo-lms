@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="access_url")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\AccessUrlRepository")
  */
 class AccessUrl extends AbstractResource implements ResourceInterface
 {

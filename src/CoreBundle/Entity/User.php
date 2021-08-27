@@ -45,7 +45,7 @@ use UserManager;
  *     }
  * )
  * @UniqueEntity("username")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\UserRepository")
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserListener"})
  */
 #[ApiResource(

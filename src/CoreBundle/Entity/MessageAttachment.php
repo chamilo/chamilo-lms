@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * MessageAttachment.
  *
  * @ORM\Table(name="message_attachment")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository")
  */
 class MessageAttachment extends AbstractResource implements ResourceInterface
 {

@@ -40,7 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @UniqueEntity("code")
  * @UniqueEntity("visualCode")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\CourseRepository")
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
 #[ApiFilter(SearchFilter::class, properties: [

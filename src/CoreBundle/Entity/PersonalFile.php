@@ -96,7 +96,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  * @ORM\Table(name="personal_file")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\PersonalFileRepository")
  */
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',

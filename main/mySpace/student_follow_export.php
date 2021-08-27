@@ -74,7 +74,8 @@ function generateForm(int $studentId, array $coursesInSessions): FormValidator
         [],
         FormValidator::LAYOUT_BOX
     );
-
+    // Option to hide the column Time in lp tables
+    $form->addCheckBox('hide_connection_time', null, get_lang('HideConnectionTime'));
     foreach ($coursesInSessions as $sId => $courses) {
         if (empty($courses)) {
             continue;
@@ -126,15 +127,17 @@ function generateForm(int $studentId, array $coursesInSessions): FormValidator
     return $form;
 }
 
-function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $sessionId): string
+function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $sessionId, bool $hideConnectionTime = false): string
 {
     $student = api_get_user_entity($studentId);
-
+    $showTime = ($hideConnectionTime === false);
     $html = '';
 
     $columnHeaders = [];
     $columnHeaders['lp'] = get_lang('LearningPath');
-    $columnHeaders['time'] = get_lang('Time');
+    if ($showTime) {
+        $columnHeaders['time'] = get_lang('Time');
+    }
     $columnHeaders['best_score'] = get_lang('BestScore');
     $columnHeaders['latest_attempt_avg_score'] = get_lang('LatestAttemptAverageScore');
     $columnHeaders['progress'] = get_lang('Progress');
@@ -208,7 +211,7 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
                 $contentToExport[] = api_html_entity_decode(stripslashes($learnpath['lp_name']), ENT_QUOTES);
             }
 
-            if (in_array('time', $columnHeadersKeys)) {
+            if (in_array('time', $columnHeadersKeys) && $showTime) {
                 // Get time in lp
                 if (!empty($timeCourse)) {
                     $lpTime = $timeCourse[TOOL_LEARNPATH] ?? 0;
@@ -456,7 +459,7 @@ function generateHtmlForTasks(int $studentId, array $courseInfo, int $sessionId)
         .Export::convert_array_to_html($taskTable);
 }
 
-function generateHtmlForCourse(int $studentId, array $coursesInSessions, int $courseId, int $sessionId): ?string
+function generateHtmlForCourse(int $studentId, array $coursesInSessions, int $courseId, int $sessionId, bool $hideConnectionTime = false): ?string
 {
     if (empty($coursesInSessions[$sessionId]) || !in_array($courseId, $coursesInSessions[$sessionId])) {
         return null;
@@ -479,7 +482,7 @@ function generateHtmlForCourse(int $studentId, array $coursesInSessions, int $co
         $courseHtml[] = Display::page_header($courseInfo['title']);
     }
 
-    $courseHtml[] = generateHtmlForLearningPaths($studentId, $courseInfo, $sessionId);
+    $courseHtml[] = generateHtmlForLearningPaths($studentId, $courseInfo, $sessionId, $hideConnectionTime);
     $courseHtml[] = generateHtmlForQuizzes($studentId, $courseInfo, $sessionId);
     $courseHtml[] = generateHtmlForTasks($studentId, $courseInfo, $sessionId);
 
@@ -506,12 +509,12 @@ if ($form->validate()) {
     );
 
     $coursesInfo = [];
-
+    $hideConnectionTime = (bool) $values['hide_connection_time'];
     if (!empty($values['sc'])) {
         foreach ($values['sc'] as $courseKey) {
             [$sessionId, $courseId] = explode('_', $courseKey);
 
-            $coursesInfo[] = generateHtmlForCourse($studentInfo['id'], $coursesInSessions, $courseId, $sessionId);
+            $coursesInfo[] = generateHtmlForCourse($studentInfo['id'], $coursesInSessions, $courseId, $sessionId, $hideConnectionTime);
         }
     }
 

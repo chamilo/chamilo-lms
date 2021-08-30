@@ -83,7 +83,7 @@ function preventMultipleLogin($userId)
             $currentIp = Session::read('current_ip');
             $differentIp = false;
             if (!empty($currentIp) && api_get_real_ip() !== $currentIp) {
-                $isFirstLogin = null;
+                //$isFirstLogin = null;
                 $differentIp = true;
             }
 

@@ -37,7 +37,7 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
     }
 
     /**
-     * @param string $parameter Example: admin.administrator_name
+     * @param string $parameter Example: platform.theme
      */
     public function getSettingsParameter(string $parameter)
     {

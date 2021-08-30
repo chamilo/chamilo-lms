@@ -44,9 +44,7 @@ trait ResourceControllerTrait
 
     public function getRepository(string $tool, string $type): ResourceRepository
     {
-        $name = $this->getResourceRepositoryFactory()->getRepositoryService($tool, $type);
-
-        return $this->container->get($name);
+        return $this->getResourceRepositoryFactory()->getRepositoryService($tool, $type);
     }
 
     public function denyAccessUnlessValidResource(ResourceInterface $resource = null): void

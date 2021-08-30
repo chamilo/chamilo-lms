@@ -16,12 +16,10 @@ class AccessDeniedHandler implements AccessDeniedHandlerInterface
 {
     public function handle(Request $request, AccessDeniedException $accessDeniedException)
     {
-        error_log('AccessDeniedHandler');
         $data = [
-            'error' => 'aa',
+            'error' => 'AccessDeniedHandler',
         ];
 
         return new JsonResponse($data, Response::HTTP_FORBIDDEN, [], true);
-        //return new Response('403', 403);
     }
 }

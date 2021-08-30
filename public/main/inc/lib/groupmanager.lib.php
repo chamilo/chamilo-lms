@@ -266,6 +266,7 @@ class GroupManager
             $category = Container::getGroupCategoryRepository()->find($category_id);
         }
 
+        /** @var CGroup $group */
         $group = (new CGroup())
             ->setName($name)
             ->setCategory($category)
@@ -289,20 +290,6 @@ class GroupManager
         $lastId = $group->getIid();
 
         if ($lastId) {
-            /*$desired_dir_name = '/'.api_replace_dangerous_char($name).'_groupdocs';
-
-            $newFolderData = create_unexisting_directory(
-                $_course,
-                api_get_user_id(),
-                $session_id,
-                $lastId,
-                null,
-                null,
-                    $desired_dir_name,
-                $desired_dir_name,
-                1
-            );*/
-
             // create a forum if needed
             if ($forumState >= 0) {
                 $forumName = get_lang('Group forums');

@@ -27,7 +27,6 @@ use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
-use Chamilo\CourseBundle\Entity\CBlogPost;
 use Chamilo\CourseBundle\Entity\CDropboxFeedback;
 use Chamilo\CourseBundle\Entity\CDropboxFile;
 use Chamilo\CourseBundle\Entity\CDropboxPerson;
@@ -431,22 +430,6 @@ final class UserToJsonNormalizer
                 'Calendar id: '.$item->getAttendanceCalendar()->getIid(),
             ];
             $cAttendanceSheetList[] = implode(', ', $list);
-        }
-
-        // CBlogPost
-        $criteria = [
-            'authorId' => $userId,
-        ];
-        $result = $em->getRepository(CBlogPost::class)->findBy($criteria);
-        $cBlog = [];
-        /** @var CBlogPost $item */
-        foreach ($result as $item) {
-            $date = $item->getDateCreation()->format($dateFormat);
-            $list = [
-                'Title: '.$item->getTitle(),
-                'Date: '.$date,
-            ];
-            $cBlog[] = implode(', ', $list);
         }
 
         // CAttendanceResult

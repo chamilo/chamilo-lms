@@ -132,6 +132,7 @@ class ResourceNodeVoter extends Voter
         $user = $token->getUser();
         // Check if I'm the owner.
         $creator = $resourceNode->getCreator();
+
         if ($creator instanceof UserInterface &&
             $user instanceof UserInterface &&
             $user->getUserIdentifier() === $creator->getUserIdentifier()
@@ -233,7 +234,7 @@ class ResourceNodeVoter extends Voter
                 break;
             }*/
         }
-        //var_dump($linkFound, $link->getId(), $link->getVisibility()); exit;
+
         // No link was found.
         if (0 === $linkFound) {
             return false;
@@ -296,10 +297,6 @@ class ResourceNodeVoter extends Voter
             }
 
             if (!empty($groupId)) {
-                /*var_dump($groupId);
-                foreach ($user->getRoles() as $role) {
-                    var_dump($role);
-                }*/
                 if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
                     $resourceRight = new ResourceRight();
                     $resourceRight

@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
-use Chamilo\CourseBundle\Repository\CBlogRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
@@ -69,7 +68,6 @@ trait ControllerTrait
         $services[] = CAnnouncementRepository::class;
         $services[] = CAnnouncementAttachmentRepository::class;
         $services[] = CAttendanceRepository::class;
-        $services[] = CBlogRepository::class;
         $services[] = CCalendarEventAttachmentRepository::class;
         $services[] = CDocumentRepository::class;
         $services[] = CForumRepository::class;

@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Traits;
 
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Tool\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -86,6 +86,7 @@ trait NonResourceRepository
 
         return $this;
     }
+
     public function setRequestStack(RequestStack $requestStack): self
     {
         $this->requestStack = $requestStack;

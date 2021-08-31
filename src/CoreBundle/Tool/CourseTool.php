@@ -6,6 +6,34 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-class CourseTool extends AbstractTool
+use Chamilo\CourseBundle\Entity\CTool;
+
+class CourseTool extends AbstractTool implements ToolInterface
 {
+    public function getName(): string
+    {
+        return 'course_tool';
+    }
+
+    public function getLink(): string
+    {
+        return '/resources/course_tool/links';
+    }
+
+    public function getIcon(): string
+    {
+        return 'mdi-file-link';
+    }
+
+    public function getCategory(): string
+    {
+        return 'admin';
+    }
+
+    public function getResourceTypes(): ?array
+    {
+        return [
+            'links' => CTool::class,
+        ];
+    }
 }

@@ -6,6 +6,34 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-class CourseDescription extends AbstractTool
+use Chamilo\CourseBundle\Entity\CCourseDescription;
+
+class CourseDescription extends AbstractTool implements ToolInterface
 {
+    public function getName(): string
+    {
+        return 'course_description';
+    }
+
+    public function getLink(): string
+    {
+        return '/main/course_description/index.php';
+    }
+
+    public function getIcon(): string
+    {
+        return 'mdi-apple-safari';
+    }
+
+    public function getCategory(): string
+    {
+        return 'authoring';
+    }
+
+    public function getResourceTypes(): ?array
+    {
+        return [
+            'course_descriptions' => CCourseDescription::class,
+        ];
+    }
 }

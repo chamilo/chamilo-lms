@@ -6,6 +6,36 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-class Agenda extends AbstractTool
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
+
+class Agenda extends AbstractTool implements ToolInterface
 {
+    public function getName(): string
+    {
+        return 'agenda';
+    }
+
+    public function getIcon(): string
+    {
+        return 'mdi-certificate';
+    }
+
+    public function getLink(): string
+    {
+        return '/resources/ccalendarevent';
+    }
+
+    public function getCategory(): string
+    {
+        return 'authoring';
+    }
+
+    public function getResourceTypes(): ?array
+    {
+        return [
+            'events' => CCalendarEvent::class,
+            'event_attachments' => CCalendarEventAttachment::class,
+        ];
+    }
 }

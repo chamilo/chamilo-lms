@@ -6,6 +6,34 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-class Glossary extends AbstractTool
+use Chamilo\CourseBundle\Entity\CGlossary;
+
+class Glossary extends AbstractTool implements ToolInterface
 {
+    public function getName(): string
+    {
+        return 'glossary';
+    }
+
+    public function getLink(): string
+    {
+        return '/main/glossary/index.php';
+    }
+
+    public function getIcon(): string
+    {
+        return 'mdi-alphabetical';
+    }
+
+    public function getCategory(): string
+    {
+        return 'authoring';
+    }
+
+    public function getResourceTypes(): ?array
+    {
+        return [
+            'glossaries' => CGlossary::class,
+        ];
+    }
 }

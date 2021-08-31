@@ -6,6 +6,42 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-class Forum extends AbstractTool
+use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CForumAttachment;
+use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Repository\CForumPostRepository;
+
+class Forum extends AbstractTool implements ToolInterface
 {
+    public function getName(): string
+    {
+        return 'forum';
+    }
+
+    public function getCategory(): string
+    {
+        return 'authoring';
+    }
+
+    public function getLink(): string
+    {
+        return '/main/forum/index.php';
+    }
+
+    public function getIcon(): string
+    {
+        return 'mdi-comment-quote';
+    }
+
+    public function getResourceTypes(): ?array
+    {
+        return [
+            'forums' => CForum::class,
+            'forum_attachments' => CForumAttachment::class,
+            'forum_categories' => CForumCategory::class,
+            'forum_posts' => CForumPostRepository::class,
+            'forum_threads' => CForumThread::class,
+        ];
+    }
 }

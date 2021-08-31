@@ -6,6 +6,34 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-class CourseProgress extends AbstractTool
+use Chamilo\CourseBundle\Entity\CThematic;
+
+class CourseProgress extends AbstractTool implements ToolInterface
 {
+    public function getName(): string
+    {
+        return 'course_progress';
+    }
+
+    public function getIcon(): string
+    {
+        return 'mdi-file-tree';
+    }
+
+    public function getLink(): string
+    {
+        return '/main/course_progress/index.php';
+    }
+
+    public function getCategory(): string
+    {
+        return 'authoring';
+    }
+
+    public function getResourceTypes(): ?array
+    {
+        return [
+            'thematics' => CThematic::class,
+        ];
+    }
 }

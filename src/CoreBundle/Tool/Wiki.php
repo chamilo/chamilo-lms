@@ -6,6 +6,34 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-class Wiki extends AbstractTool
+use Chamilo\CourseBundle\Entity\CWiki;
+
+class Wiki extends AbstractTool implements ToolInterface
 {
+    public function getName(): string
+    {
+        return 'wiki';
+    }
+
+    public function getIcon(): string
+    {
+        return 'mdi-xml';
+    }
+
+    public function getLink(): string
+    {
+        return '/main/wiki/index.php';
+    }
+
+    public function getCategory(): string
+    {
+        return 'interaction';
+    }
+
+    public function getResourceTypes(): ?array
+    {
+        return [
+            'wikis' => CWiki::class,
+        ];
+    }
 }

@@ -4,9 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Doctrine\Common\Collections\Criteria;
 
 class CourseCategory
 {

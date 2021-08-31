@@ -20,6 +20,7 @@ class Link extends AbstractTool implements ToolInterface
     {
         return 'authoring';
     }
+
     public function getIcon(): string
     {
         return 'mdi-file-link';

@@ -20,22 +20,22 @@ class UsergroupRepositoryTest extends KernelTestCase
         self::bootKernel();
         $repo = self::getContainer()->get(UsergroupRepository::class);
 
-        $usergroup = (new Usergroup())
+        $group = (new Usergroup())
             ->setName('test')
             ->addAccessUrl($this->getAccessUrl())
             ->setCreator($this->getUser('admin'))
         ;
 
-        $this->assertHasNoEntityViolations($usergroup);
-        $repo->create($usergroup);
+        $this->assertHasNoEntityViolations($group);
+        $repo->create($group);
         $this->assertSame(1, $repo->count([]));
 
-        $usergroup->setName('test2');
-        $repo->update($usergroup);
+        $group->setName('test2');
+        $repo->update($group);
 
         $this->assertSame(1, $repo->count([]));
 
-        $repo->delete($usergroup);
+        $repo->delete($group);
         $this->assertSame(0, $repo->count([]));
     }
 }

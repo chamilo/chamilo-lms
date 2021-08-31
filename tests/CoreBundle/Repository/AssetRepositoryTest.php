@@ -19,7 +19,7 @@ class AssetRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = self::getContainer()->get('doctrine')->getManager();
+        $em = $this->getManager();
         $assetRepo = self::getContainer()->get(AssetRepository::class);
         $file = $this->getUploadedFile();
 
@@ -41,7 +41,7 @@ class AssetRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = self::getContainer()->get('doctrine')->getManager();
+        $em = $this->getManager();
         $assetRepo = self::getContainer()->get(AssetRepository::class);
         $file = $this->getUploadedFile();
 

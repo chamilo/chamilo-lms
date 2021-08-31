@@ -19,7 +19,6 @@ class SettingsManagerTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = self::getContainer()->get('doctrine')->getManager();
         $settingsManager = self::getContainer()->get(SettingsManager::class);
 
         $this->expectException(InvalidArgumentException::class);

@@ -19,7 +19,7 @@ class BranchSyncRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = self::getContainer()->get('doctrine')->getManager();
+        $em = $this->getManager();
         $repo = self::getContainer()->get(BranchSyncRepository::class);
 
         $item = (new BranchSync())

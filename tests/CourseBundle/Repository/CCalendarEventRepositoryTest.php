@@ -41,6 +41,48 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
     public function testCreatePersonalEvent(): void
     {
+        self::bootKernel();
+        $user = $this->createUser('test');
+        $resourceNodeId = $user->getResourceNode()->getId();
+
+        $em = $this->getManager();
+        $repo = self::getContainer()->get(CCalendarEventRepository::class);
+
+        // Current server local time (check your php.ini).
+        $start = new Datetime('2040-06-30 11:00');
+        $end = new Datetime('2040-06-30 15:00');
+
+        // 1. Add event.
+        $event = (new CCalendarEvent())
+            ->setTitle('hello')
+            ->setContent('content hello')
+            ->setStartDate($start)
+            ->setEndDate($end)
+            ->setCreator($user)
+            ->setParent($user)
+            ->setParentResourceNode($resourceNodeId)
+        ;
+        $this->assertHasNoEntityViolations($event);
+
+        $repo->create($event);
+
+        $token = $this->getUserToken(
+            [
+                'username' => 'test',
+                'password' => 'test',
+            ],
+            true
+        );
+
+        /*$this->createClientWithCredentials($token)->request(
+            'GET',
+            '/r/agenda/events/'.$event->getResourceNode()->getId().'/info'
+        );
+        $this->assertResponseIsSuccessful();*/
+    }
+
+    public function testCreatePersonalEventApi(): void
+    {
         $user = $this->createUser('test');
         $token = $this->getUserToken(
             [
@@ -55,7 +97,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $end = new Datetime('2040-06-30 15:00');
 
         // 1. Add event.
-        $this->createClientWithCredentials($token)->request(
+        $responseEvent = $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/c_calendar_events',
             [
@@ -285,10 +327,12 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
     {
         $course = $this->createCourse('Test');
 
-        $resourceLinkList = [[
-            'cid' => $course->getId(),
-            'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
-        ]];
+        $resourceLinkList = [
+            [
+                'cid' => $course->getId(),
+                'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+        ];
 
         $user = $this->createUser('test');
         $token = $this->getUserToken(

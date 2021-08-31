@@ -58,7 +58,7 @@ class CourseRepositoryTest extends WebTestCase
         $this->assertSame(1, $count);
 
         // Check tools.
-        $this->assertSame(23, \count($course->getTools()));
+        $this->assertSame(22, \count($course->getTools()));
 
         // Check resource links for each Tool
         foreach ($course->getTools() as $tool) {
@@ -177,6 +177,6 @@ class CourseRepositoryTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         // Create a user.
-        $student2 = $this->createUser('student2');
+        //$student2 = $this->createUser('student2');
     }
 }

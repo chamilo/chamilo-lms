@@ -28,7 +28,7 @@ class UserRepositoryTest extends AbstractApiTest
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         $count = $userRepo->count([]);
-        // By default there are 2 users: admin + anon.
+        // By default, there are 2 users: admin + anon.
         $this->assertSame(3, $count);
         $this->assertHasNoEntityViolations($student);
 
@@ -38,11 +38,15 @@ class UserRepositoryTest extends AbstractApiTest
         $student->addRole('ROLE_STUDENT');
         $userRepo->update($student);
 
+        $this->assertTrue($student->hasRole('ROLE_STUDENT'));
+        $this->assertTrue($student->isEqualTo($student));
+
         $this->assertSame(2, \count($student->getRoles()));
 
         $student->addRole('ROLE_STUDENT');
         $userRepo->update($student);
 
+        $this->assertTrue($student->isStudent());
         $this->assertSame(2, \count($student->getRoles()));
 
         $student->removeRole('ROLE_STUDENT');
@@ -55,7 +59,56 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertTrue($student->isActive());
         $this->assertTrue($student->isEnabled());
         $this->assertFalse($student->isAdmin());
+        $this->assertFalse($student->isStudentBoss());
+        $this->assertFalse($student->isSuperAdmin());
         $this->assertTrue($student->isCredentialsNonExpired());
+    }
+
+    public function testCreateAdmin(): void
+    {
+        self::bootKernel();
+        $admin = $this->createUser('admin2');
+        $userRepo = self::getContainer()->get(UserRepository::class);
+
+        $this->assertHasNoEntityViolations($admin);
+        $admin->addRole('ROLE_ADMIN');
+        $userRepo->update($admin);
+
+        $this->assertTrue($admin->isActive());
+        $this->assertTrue($admin->isEnabled());
+        $this->assertTrue($admin->isAdmin());
+        $this->assertFalse($admin->isStudentBoss());
+        $this->assertFalse($admin->isSuperAdmin());
+        $this->assertTrue($admin->isCredentialsNonExpired());
+    }
+
+    public function testCreateUserSkipResourceNode(): void
+    {
+        $manager = $this->getManager();
+        $userRepo = self::getContainer()->get(UserRepository::class);
+
+        $user = (new User())
+            ->setSkipResourceNode(true)
+            ->setLastname('Doe')
+            ->setFirstname('Joe')
+            ->setUsername('admin2')
+            ->setStatus(1)
+            ->setPlainPassword('admin2')
+            ->setEmail('admin@example.org')
+            ->setOfficialCode('ADMIN')
+            ->setCreatorId(1)
+            ->addUserAsAdmin()//->addGroup($group)
+        ;
+
+        $manager->persist($user);
+
+        $userRepo->updateUser($user);
+        $userRepo->addUserToResourceNode($user->getId(), $user->getId());
+        $manager->flush();
+
+        //$this->assertTrue($user->isAdmin());
+        //$this->assertTrue($user->isSuperAdmin());
+        $this->assertSame(3, $userRepo->count([]));
     }
 
     public function testCreateUserWithApi(): void

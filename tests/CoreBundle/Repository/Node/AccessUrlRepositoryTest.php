@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -18,10 +19,16 @@ class AccessUrlRepositoryTest extends KernelTestCase
     public function testCount(): void
     {
         self::bootKernel();
-        $count = self::getContainer()->get(AccessUrlRepository::class)->count([]);
+        $repo = self::getContainer()->get(AccessUrlRepository::class);
+        $count = $repo->count([]);
         // In a fresh installation, Chamilo has one default AccessUrl.
         // Added in AccessUrlFixtures.php
         $this->assertSame(1, $count);
+
+        $this->assertIsInt($repo->getFirstId());
+        $this->assertTrue($repo->getFirstId() > 0);
+
+        $this->assertInstanceOf(ResourceType::class, $repo->getResourceType());
     }
 
     public function testAdminInAccessUrl(): void

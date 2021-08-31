@@ -213,25 +213,24 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $id,
         $fileName = '',
         $description = ''
-    ): void {
-        if (!is_dir($filePath)) {
-            $class = \get_class($resource);
-            $documentPath = basename($filePath);
-            if (file_exists($filePath)) {
-                $mimeType = mime_content_type($filePath);
-                if (empty($fileName)) {
-                    $fileName = basename($documentPath);
-                }
-                $file = new UploadedFile($filePath, $fileName, $mimeType, null, true);
-                if ($file) {
-                    $repo->addFile($resource, $file);
-                } else {
-                    $this->warnIf(true, "Cannot migrate {$class} #{$id} path: {$documentPath} ");
-                }
-            } else {
-                $this->warnIf(true, "Cannot migrate {$class} #'.{$id}.' file not found: {$documentPath}");
-            }
+    ): bool {
+        $class = \get_class($resource);
+        $documentPath = basename($filePath);
+
+        if (is_dir($filePath) || (!is_dir($filePath) && !file_exists($filePath))) {
+            $this->warnIf(true, "Cannot migrate {$class} #'.{$id}.' file not found: {$documentPath}");
+
+            return false;
         }
+
+        $mimeType = mime_content_type($filePath);
+        if (empty($fileName)) {
+            $fileName = basename($documentPath);
+        }
+        $file = new UploadedFile($filePath, $fileName, $mimeType, null, true);
+        $repo->addFile($resource, $file);
+
+        return true;
     }
 
     public function fixItemProperty(

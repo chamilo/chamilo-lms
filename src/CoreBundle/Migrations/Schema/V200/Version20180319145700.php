@@ -93,9 +93,10 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_8A897DD1E27F6BF ON c_survey_answer (question_id);');
         }
 
-        if (!$table->hasIndex('IDX_8A897DDA7C41D6F')) {
+        // option_id is a long text
+        /*if (!$table->hasIndex('IDX_8A897DDA7C41D6F')) {
             $this->addSql('CREATE INDEX IDX_8A897DDA7C41D6F ON c_survey_answer (option_id);');
-        }
+        }*/
 
         /*if (!$survey->hasIndex('idx_survey_code')) {
             $this->addSql('CREATE INDEX idx_survey_code ON c_survey (code)');
@@ -108,7 +109,8 @@ class Version20180319145700 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_survey_invitation');
 
-        if (!$table->hasColumn('user_id')) {
+        // c_survey_invitation.user_id
+        /*if (!$table->hasColumn('user_id')) {
             $this->addSql('ALTER TABLE c_survey_invitation ADD user_id INT DEFAULT NULL');
             $this->addSql('DELETE FROM c_survey_invitation WHERE user NOT IN (SELECT id FROM user) ');
             $this->addSql('UPDATE c_survey_invitation SET user_id = user');
@@ -122,7 +124,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
 
         if (!$table->hasIndex('IDX_D0BC7C2A76ED395')) {
             $this->addSql('CREATE INDEX IDX_D0BC7C2A76ED395 ON c_survey_invitation (user_id)');
-        }
+        }*/
 
         if (!$table->hasColumn('answered_at')) {
             $this->addSql('ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;');
@@ -138,9 +140,14 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX idx_survey_inv_code ON c_survey_invitation;');
         }
 
+        $this->addSql('DELETE FROM c_survey_invitation WHERE c_id IS NULL OR c_id = 0 ');
+        $this->addSql('UPDATE c_survey_invitation SET session_id = NULL WHERE session_id = 0 ');
+        $this->addSql('UPDATE c_survey_invitation SET group_id = NULL WHERE group_id = 0 ');
+
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE c_id c_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE session_id session_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE group_id group_id INT DEFAULT NULL');
+
         $this->addSql('DELETE FROM c_survey_invitation WHERE session_id NOT IN (SELECT id FROM session)');
 
         if (!$table->hasForeignKey('FK_D0BC7C291D79BD3')) {

@@ -32,9 +32,6 @@ abstract class AbstractTool
     protected ?SchemaInterface $settings = null;
     protected array $resourceTypes = [];
 
-    abstract public function getCategory(): string;
-    abstract public function getLink(): string;
-
     /**
      * @var string
      *
@@ -44,6 +41,9 @@ abstract class AbstractTool
      *  11 global or course or both
      */
     protected string $scope;
+
+    abstract public function getCategory(): string;
+    abstract public function getLink(): string;
 
     /*public function __construct(
         string $name,

@@ -33,10 +33,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="cat_title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $catTitle;
 
     /**

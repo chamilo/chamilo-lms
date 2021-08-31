@@ -55,13 +55,13 @@ final class Version20201215160445 extends AbstractMigrationChamilo
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $admin = $this->getAdmin();
-
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
             $course = $courseRepo->find($courseId);
+
+            $admin = $this->getAdmin();
 
             // Categories.
             $sql = "SELECT * FROM c_forum_category WHERE c_id = {$courseId}
@@ -100,6 +100,8 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
+
+            $admin = $this->getAdmin();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
                 /** @var CForum $resource */
@@ -109,8 +111,13 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 }
 
                 $course = $courseRepo->find($courseId);
+
+                $parent = null;
                 $categoryId = $itemData['forum_category'];
-                $parent = $forumCategoryRepo->find($categoryId);
+                if (!empty($categoryId)) {
+                    $parent = $forumCategoryRepo->find($categoryId);
+                }
+
                 // Parent should not be null, because every forum must have a category, in this case use the course
                 // as parent.
                 if (null === $parent) {
@@ -146,6 +153,8 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
+            $admin = $this->getAdmin();
+
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
                 /** @var CForumThread $resource */
@@ -187,6 +196,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
+            $admin = $this->getAdmin();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
                 /** @var CForumPost $resource */
@@ -195,7 +205,12 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     continue;
                 }
 
+                if (empty(trim($resource->getPostTitle()))) {
+                    $resource->setPostTitle(sprintf('Post #%s', $resource->getIid()));
+                }
+
                 $threadId = $itemData['thread_id'];
+
                 if (empty($threadId)) {
                     continue;
                 }
@@ -206,7 +221,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 $thread = $forumThreadRepo->find($threadId);
 
                 $forum = $thread->getForum();
-                // For some reason the thread doens't have a forum, so we ignore the thread posts.
+                // For some reason the thread doesn't have a forum, so we ignore the thread posts.
                 if (null === $forum) {
                     continue;
                 }
@@ -236,6 +251,8 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
+
+            $forumPostRepo = $container->get(CForumPostRepository::class);
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
                 $postId = $itemData['post_id'];
@@ -248,10 +265,10 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                if (!empty($forumImage)) {
+                if (!empty($fileName) && !empty($path)) {
                     $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/forum/'.$path;
                     $this->addLegacyFileToResource($filePath, $forumPostRepo, $post, $id, $fileName);
-                    $em->persist($resource);
+                    $em->persist($post);
                     $em->flush();
                 }
             }

@@ -401,14 +401,15 @@ class Version20 extends AbstractMigrationChamilo
             'track_stored_values',
             'track_stored_values_stack',
             'course_module',
+            'c_resource',
+            'track_e_item_property',
         ];
+
         foreach ($dropTables as $table) {
             if ($schema->hasTable($table)) {
                 $schema->dropTable($table);
             }
         }
-        $this->addSql('DROP TABLE c_resource');
-        $this->addSql('DROP TABLE track_e_item_property');
     }
 
     public function down(Schema $schema): void

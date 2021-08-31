@@ -27,7 +27,7 @@ class Version20170525123900 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_4A6478171BAD783F ON usergroup (resource_node_id)');
         }
 
-        $table = $schema->getTable('usergroup');
+        $table = $schema->getTable('usergroup_rel_course');
 
         $this->addSql('ALTER TABLE usergroup_rel_course CHANGE usergroup_id usergroup_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE usergroup_rel_course CHANGE course_id course_id INT DEFAULT NULL');

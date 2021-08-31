@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\Tool;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Chamilo\CourseBundle\Repository\CForumPostRepository;
 
 class Forum extends AbstractTool implements ToolInterface
 {
@@ -40,7 +40,7 @@ class Forum extends AbstractTool implements ToolInterface
             'forums' => CForum::class,
             'forum_attachments' => CForumAttachment::class,
             'forum_categories' => CForumCategory::class,
-            'forum_posts' => CForumPostRepository::class,
+            'forum_posts' => CForumPost::class,
             'forum_threads' => CForumThread::class,
         ];
     }

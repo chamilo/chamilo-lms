@@ -111,6 +111,7 @@ class GradebookCategory
     /**
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
      */
+    #[Assert\NotBlank]
     protected float $weight;
 
     /**

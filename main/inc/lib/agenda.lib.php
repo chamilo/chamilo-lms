@@ -475,7 +475,7 @@ class Agenda
      *
      * @throws Exception
      *
-     * @return array
+     * @return array with local times
      */
     public function generateDatesByType($type, $startEvent, $endEvent, $repeatUntilDate)
     {
@@ -534,21 +534,24 @@ class Agenda
                 // Is saving time? Then fix UTC time to add time
                 $seconds = $startDateInLocal->getOffset();
                 $startDate->add(new DateInterval("PT".$seconds."S"));
-                $startDateFixed = $startDate->format('Y-m-d H:i:s');
-                $startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
-                $newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');
+                //$startDateFixed = $startDate->format('Y-m-d H:i:s');
+                /*$startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
+                $newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');*/
+                //$newStartDate = $startDate->setTimezone(new DateTimeZone($timeZone))->format('Y-m-d H:i:s');
             }
+            $newStartDate = $startDate->setTimezone(new DateTimeZone($timeZone))->format('Y-m-d H:i:s');
             $endDateInLocal = new DateTime($newEndDate, new DateTimeZone($timeZone));
 
             if ($endDateInLocal->format('I') == 0) {
                 // Is saving time? Then fix UTC time to add time
                 $seconds = $endDateInLocal->getOffset();
                 $endDate->add(new DateInterval("PT".$seconds."S"));
-                $endDateFixed = $endDate->format('Y-m-d H:i:s');
-                $endDateInLocalFixed = new DateTime($endDateFixed, new DateTimeZone($timeZone));
-                $newEndDate = $endDateInLocalFixed->format('Y-m-d H:i:s');
+                //$endDateFixed = $endDate->format('Y-m-d H:i:s');
+                //$endDateInLocalFixed = new DateTime($endDateFixed, new DateTimeZone($timeZone));
+                //$newEndDate = $endDateInLocalFixed->format('Y-m-d H:i:s');
             }
-            $list[] = ['start' => $newStartDate, 'end' => $newEndDate, 'i' => $startDateInLocal->format('I')];
+            $newEndDate = $endDate->setTimezone(new DateTimeZone($timeZone))->format('Y-m-d H:i:s');
+            $list[] = ['start' => $newStartDate, 'end' => $newEndDate];
             $counter++;
 
             // just in case stop if more than $loopMax
@@ -605,8 +608,10 @@ class Agenda
         $now = time();
 
         // The event has to repeat *in the future*. We don't allow repeated
-        // events in the past
-        if ($end > $now) {
+        // events in the past.
+        $endTimeStamp = api_strtotime($end, 'UTC');
+
+        if ($endTimeStamp < $now) {
             return false;
         }
 
@@ -618,7 +623,7 @@ class Agenda
 
         $type = Database::escape_string($type);
         $end = Database::escape_string($end);
-        $endTimeStamp = api_strtotime($end, 'UTC');
+
         $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
                 VALUES ($courseId, '$eventId', '$type', '$endTimeStamp')";
         Database::query($sql);
@@ -636,6 +641,7 @@ class Agenda
             // just before the part updating the date in local time so keep both synchronised
             $start = $dateInfo['start'];
             $end = $dateInfo['end'];
+
             $this->addEvent(
                 $start,
                 $end,

@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
@@ -2034,7 +2034,7 @@ function installTools($container, $manager, $upgrade = false)
     // Install course tools (table "tool")
     /** @var ToolChain $toolChain */
     $toolChain = $container->get(ToolChain::class);
-    $toolChain->createTools($manager);
+    $toolChain->createTools();
 }
 
 /**

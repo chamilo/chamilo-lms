@@ -12,7 +12,7 @@ services:
 
     Chamilo\CoreBundle\:
         resource: '../../*'
-        exclude: '../../{Repository,Tool,Admin,Block,Component,Composer,DependencyInjection,EventListener,Form,Framework,Menu,Migrations,Settings,ChamiloCoreBundle.php,Entity,Tests}'
+        exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity}'
         public: true
 
     Chamilo\CoreBundle\Controller\:
@@ -37,7 +37,6 @@ services:
         tags:
             - {name: form.type, alias: yes_no}
 
-    # html editor
     Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor:
         arguments: ['@translator', '@router']
 
@@ -67,3 +66,14 @@ services:
             - '@chamilo.settings.manager'
         tags:
             - {name: templating.helper, alias: chamilo_settings}
+
+
+    Chamilo\CoreBundle\Tool\ToolChain: ~
+
+    _instanceof:
+        Chamilo\CoreBundle\Tool\ToolInterface:
+            tags: ['chamilo_core.tool_handler']
+
+    Chamilo\CoreBundle\Tool\HandlerCollection:
+        arguments:
+            - !tagged_iterator chamilo_core.tool_handler

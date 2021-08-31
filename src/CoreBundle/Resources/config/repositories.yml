@@ -11,7 +11,7 @@ services:
     # Classic entity repositories
     Chamilo\CoreBundle\Repository\:
         resource: '../../Repository'
-        exclude: '../../Repository/{Node,ResourceRepository.php,BranchSyncRepository.php}'
+        exclude: '../../Repository/{Node,ResourceRepository.php}'
         tags: ['doctrine.repository_service']
 
     # Core repositories
@@ -21,7 +21,7 @@ services:
             - setAuthorizationChecker: ['@security.authorization_checker']
             - setRouter: ['@router']
             - setSlugify: ['@cocur_slugify']
-            - setToolChain: ['@Chamilo\CoreBundle\ToolChain']
+            - setToolChain: ['@Chamilo\CoreBundle\Tool\ToolChain']
             - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
             - setRequestStack: ['@request_stack']
         tags: ['doctrine.repository_service']
@@ -33,6 +33,6 @@ services:
             - setAuthorizationChecker: ['@security.authorization_checker']
             - setRouter: ['@router']
             - setSlugify: ['@cocur_slugify']
-            - setToolChain: ['@Chamilo\CoreBundle\ToolChain']
+            - setToolChain: ['@Chamilo\CoreBundle\Tool\ToolChain']
             - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
             - setRequestStack: ['@request_stack']

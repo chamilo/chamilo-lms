@@ -42,7 +42,7 @@ services:
     chamilo_core.settings.course:
         class: Chamilo\CoreBundle\Settings\CourseSettingsSchema
         calls:
-            - [setToolChain, ['@Chamilo\CoreBundle\ToolChain']]
+            - [setToolChain, ['@Chamilo\CoreBundle\Tool\ToolChain']]
 #            - [setRepository, ['@Chamilo\CoreBundle\Repository\Node\CourseRepository']]
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.course, namespace: course}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle;
+namespace Chamilo\CoreBundle\Tool;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceType;
@@ -12,10 +12,8 @@ use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -50,68 +48,45 @@ use Symfony\Component\Security\Core\Security;
  */
 class ToolChain
 {
-    /**
-     * @var AbstractTool[]|mixed[]
-     */
-    protected array $tools = [];
-    /**
-     * @var mixed[]
-     */
-    protected array $typeList = [];
-
     protected EntityManagerInterface $entityManager;
 
     protected SettingsManager $settingsManager;
 
     protected Security $security;
-    /**
-     * @var mixed[]
-     */
-    protected array $repoEntityList = [];
 
-    public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, Security $security)
+    protected HandlerCollection $handlerCollection;
+
+    /**
+     * @var string[]
+     */
+    private array $resourceTypeList = [];
+
+    public function __construct(EntityManagerInterface $entityManager, SettingsManager $settingsManager, Security $security, HandlerCollection $handlerCollection)
     {
-        $this->tools = [];
-        $this->typeList = [];
-        $this->repoEntityList = [];
         $this->entityManager = $entityManager;
         $this->settingsManager = $settingsManager;
         $this->security = $security;
-    }
-
-    public function addTool(AbstractTool $tool): void
-    {
-        $this->tools[$tool->getName()] = $tool;
-        if ($tool->getResourceTypes()) {
-            foreach ($tool->getResourceTypes() as $key => $type) {
-                $this->typeList[$type['repository']] = $key;
-            }
-        }
-    }
-
-    public function getTools(): array
-    {
-        return $this->tools;
+        $this->handlerCollection = $handlerCollection;
     }
 
     public function createTools(): void
     {
         $manager = $this->entityManager;
-        $tools = $this->getTools();
-        $repo = $manager->getRepository(Tool::class);
+        $tools = $this->handlerCollection->getCollection();
+        $toolRepo = $manager->getRepository(Tool::class);
 
-        /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
             $name = $tool->getName();
-            $toolFromDatabase = $repo->findOneBy([
+            $toolFromDatabase = $toolRepo->findOneBy([
                 'name' => $name,
             ]);
-            $toolEntity = new Tool();
 
             if (null !== $toolFromDatabase) {
                 $toolEntity = $toolFromDatabase;
             } else {
-                $toolEntity->setName($name);
+                $toolEntity = (new Tool())
+                    ->setName($name)
+                ;
                 if ($tool->isCourseTool()) {
                     $this->setToolPermissions($toolEntity);
                 }
@@ -119,18 +94,21 @@ class ToolChain
             }
 
             $types = $tool->getResourceTypes();
+
             if (!empty($types)) {
-                foreach (array_keys($types) as $name) {
-                    $resourceType = new ResourceType();
-                    $resourceType->setName($name);
+                foreach ($types as $key => $typeName) {
+                    $resourceType = (new ResourceType())
+                        ->setName($key)
+                    ;
+
                     if ($toolEntity->hasResourceType($resourceType)) {
                         continue;
                     }
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }
+                $manager->flush();
             }
-            $manager->flush();
         }
     }
 
@@ -154,7 +132,6 @@ class ToolChain
 
     public function addToolsInCourse(Course $course): Course
     {
-        $tools = $this->getTools();
         $manager = $this->entityManager;
         $toolVisibility = $this->settingsManager->getSetting('course.active_tools_on_create');
 
@@ -190,7 +167,8 @@ class ToolChain
 
         $toolRepo = $manager->getRepository(Tool::class);
 
-        /** @var AbstractTool $tool */
+        $tools = $this->handlerCollection->getCollection();
+
         foreach ($tools as $tool) {
             $visibility = \in_array($tool->getName(), $toolVisibility, true);
             $criteria = [
@@ -219,26 +197,48 @@ class ToolChain
         return $course;
     }
 
-    /**
-     * @return AbstractTool
-     */
-    public function getToolFromName(string $name)
+    public function getTools()
     {
-        $tools = $this->getTools();
-
-        if (\array_key_exists($name, $tools)) {
-            return $tools[$name];
-        }
-
-        throw new InvalidArgumentException(sprintf("The Tool '%s' doesn't exist.", $name));
+        return $this->handlerCollection->getCollection();
     }
 
-    public function getResourceTypeNameFromRepository(string $repo): string
+    public function getToolFromName(string $name): AbstractTool
     {
-        if (isset($this->typeList[$repo]) && !empty($this->typeList[$repo])) {
-            return $this->typeList[$repo];
+        return $this->handlerCollection->getHandler($name);
+    }
+
+    /*public function getToolFromEntity(string $entityClass): AbstractTool
+    {
+        return $this->handlerCollection->getHandler($entityClass);
+    }*/
+
+    public function getResourceTypeNameByEntity(string $entityClass): ?string
+    {
+        $name = $this->getResourceTypeList()[$entityClass] ?? null;
+
+        if (null === $name) {
+            return null;
         }
 
-        throw new InvalidArgumentException(sprintf("The Resource type '%s' doesn't exist.", $repo));
+        $name = explode('::', $name);
+
+        return $name[1];
+    }
+
+    public function getResourceTypeList(): array
+    {
+        $tools = $this->handlerCollection->getCollection();
+
+        foreach ($tools as $tool) {
+            $toolName = $tool->getName();
+            $typeList = $tool->getResourceTypes();
+            if (!empty($typeList)) {
+                foreach ($typeList as $name => $entityClass) {
+                    $this->resourceTypeList[$entityClass] = $toolName.'::'.$name;
+                }
+            }
+        }
+
+        return $this->resourceTypeList;
     }
 }

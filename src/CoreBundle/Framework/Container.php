@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Framework;
 
+use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
@@ -29,11 +30,10 @@ use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
-use Chamilo\CourseBundle\Repository\CBlogRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -111,10 +111,7 @@ class Container
         return false;
     }
 
-    /**
-     * @return string
-     */
-    public static function getEnvironment()
+    public static function getEnvironment(): string
     {
         return self::$container->get('kernel')->getEnvironment();
     }
@@ -167,7 +164,7 @@ class Container
      */
     public static function getHtmlEditor()
     {
-        return self::$container->get('chamilo_core.html_editor');
+        return self::$container->get(CkEditor::class);
     }
 
     /**
@@ -279,11 +276,6 @@ class Container
     public static function getAnnouncementAttachmentRepository(): CAnnouncementAttachmentRepository
     {
         return self::$container->get(CAnnouncementAttachmentRepository::class);
-    }
-
-    public static function getBlogRepository(): CBlogRepository
-    {
-        return self::$container->get(CBlogRepository::class);
     }
 
     public static function getCourseRepository(): CourseRepository

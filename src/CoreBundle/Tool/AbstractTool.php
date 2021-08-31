@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Tool;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-abstract class AbstractTool implements ToolInterface
+abstract class AbstractTool
 {
     /**
      * @Groups({"ctool:read"})
@@ -19,18 +19,18 @@ abstract class AbstractTool implements ToolInterface
     /**
      * @Groups({"ctool:read"})
      */
-    protected string $nameToShow;
+    protected string $nameToShow = '';
 
     /**
      * @Groups({"ctool:read"})
      */
-    protected string $icon;
-    protected string $category;
+    protected string $icon = '';
+    protected string $category = '';
     protected string $link;
     protected string $image;
     protected string $admin;
     protected ?SchemaInterface $settings = null;
-    protected ?array $resourceTypes;
+    protected array $resourceTypes = [];
 
     /**
      * @var string
@@ -42,7 +42,7 @@ abstract class AbstractTool implements ToolInterface
      */
     protected string $scope;
 
-    public function __construct(
+    /*public function __construct(
         string $name,
         string $category,
         string $link,
@@ -57,7 +57,7 @@ abstract class AbstractTool implements ToolInterface
         $this->settings = $settings;
         $this->resourceTypes = $resourceTypes;
         $this->icon = 'mdi-crop-square';
-    }
+    }*/
 
     public function isCourseTool(): bool
     {
@@ -74,15 +74,10 @@ abstract class AbstractTool implements ToolInterface
         return $this->name;
     }
 
-    public function getLink(): string
-    {
-        return $this->link ?: '';
-    }
-
-    public function getCategory(): string
+    /*public function getCategory(): string
     {
         return $this->category;
-    }
+    }*/
 
     public function getTarget(): string
     {
@@ -92,6 +87,26 @@ abstract class AbstractTool implements ToolInterface
     public function getImage(): string
     {
         return $this->image;
+    }
+
+    public function getEntityByResourceType(string $type): ?string
+    {
+        return $this->getResourceTypes()[$type] ?? null;
+    }
+
+    public function getTypeNameByEntity(string $entityClass): ?string
+    {
+        if (empty($this->getResourceTypes())) {
+            return null;
+        }
+
+        $list = array_flip($this->getResourceTypes());
+
+        if (isset($list[$entityClass])) {
+            return $list[$entityClass];
+        }
+
+        return null;
     }
 
     public function getResourceTypes(): ?array
@@ -106,7 +121,7 @@ abstract class AbstractTool implements ToolInterface
         return $this;
     }
 
-    public function getIcon(): string
+    /*public function getIcon(): string
     {
         return $this->icon;
     }
@@ -116,11 +131,12 @@ abstract class AbstractTool implements ToolInterface
         $this->icon = $icon;
 
         return $this;
-    }
+    }*/
 
     public function getNameToShow(): string
     {
-        return ucfirst(str_replace('_', ' ', $this->nameToShow));
+        return $this->getName();
+        //return ucfirst(str_replace('_', ' ', $this->nameToShow));
     }
 
     public function setNameToShow(string $nameToShow): self

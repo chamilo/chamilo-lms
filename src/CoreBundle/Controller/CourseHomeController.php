@@ -6,10 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Career;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Manager\SettingsFormFactory;
@@ -130,6 +129,7 @@ class CourseHomeController extends ToolBaseController
             if (!$isCourseTeacher && 'admin' === $toolModel->getCategory()) {
                 continue;
             }
+
             $tools[$toolModel->getCategory()][] = [
                 'ctool' => $item,
                 'tool' => $toolModel,

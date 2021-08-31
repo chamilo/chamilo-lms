@@ -19,7 +19,7 @@ use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -56,10 +56,9 @@ class ResourceListener
     /**
      * Only in creation.
      */
-    public function prePersist(AbstractResource $resource, LifecycleEventArgs $event): void
+    public function prePersist(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
     {
-        //error_log('Resource listener prePersist for obj: '.\get_class($resource));
-        $em = $event->getEntityManager();
+        $em = $eventArgs->getEntityManager();
         $request = $this->request;
 
         // 1. Set AccessUrl.
@@ -107,19 +106,17 @@ class ResourceListener
 
         // 3. Set ResourceType.
         // @todo use static table instead of Doctrine
-        $repo = $em->getRepository(ResourceType::class);
-        $entityClass = \get_class($event->getEntity());
-        $repoClass = str_replace('Entity', 'Repository', $entityClass).'Repository';
-        if (strpos($repoClass, 'CoreBundle')) {
-            $repoClass = str_replace('Entity', 'Repository\Node', $entityClass).'Repository';
-        }
-        $name = $this->toolChain->getResourceTypeNameFromRepository($repoClass);
-        $resourceType = $repo->findOneBy([
+        $resourceTypeRepo = $em->getRepository(ResourceType::class);
+        $entityClass = \get_class($eventArgs->getEntity());
+
+        $name = $this->toolChain->getResourceTypeNameByEntity($entityClass);
+
+        $resourceType = $resourceTypeRepo->findOneBy([
             'name' => $name,
         ]);
 
         if (null === $resourceType) {
-            throw new InvalidArgumentException(sprintf('ResourceType: %s not found', $name));
+            throw new InvalidArgumentException(sprintf('ResourceType: "%s" not found for entity "%s"', $name, $entityClass));
         }
 
         // 4. Set ResourceNode parent.
@@ -209,8 +206,10 @@ class ResourceListener
             ->setParent($parentNode)
         ;
         $resource->setResourceNode($resourceNode);
+
         // Update resourceNode title from Resource.
         $this->updateResourceName($resource);
+
         BaseResourceFileAction::setLinks($resource, $em);
 
         // Upload File was set in BaseResourceFileAction.php
@@ -245,16 +244,16 @@ class ResourceListener
     /**
      * When updating a Resource.
      */
-    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event): void
+    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
     {
         //error_log('Resource listener preUpdate');
-        //$this->setLinks($resource, $event->getEntityManager());
+        //$this->setLinks($resource, $eventArgs->getEntityManager());
     }
 
-    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $event): void
+    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
     {
         //error_log('resource listener postUpdate');
-        //$em = $event->getEntityManager();
+        //$em = $eventArgs->getEntityManager();
         //$this->updateResourceName($resource, $resource->getResourceName(), $em);
     }
 

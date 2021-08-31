@@ -6,10 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DependencyInjection\Compiler;
 
-use Chamilo\CoreBundle\ToolChain;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class ToolCompilerClass.
@@ -23,13 +21,13 @@ class ToolCompilerClass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if ($container->has(ToolChain::class)) {
+        /*if ($container->has(ToolChain::class)) {
             $definition = $container->findDefinition(ToolChain::class);
             $taggedServices = $container->findTaggedServiceIds('chamilo_core.tool');
             foreach (array_keys($taggedServices) as $id) {
                 $definition->addMethodCall('addTool', [new Reference($id)]);
             }
-        }
+        }*/
 
         /*$services = $container->findTaggedServiceIds('doctrine.repository_service');
         foreach ($services as $service => $attributes) {

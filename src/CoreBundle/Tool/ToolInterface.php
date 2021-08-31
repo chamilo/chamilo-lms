@@ -6,16 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-/**
- * Interface ToolInterface.
- */
 interface ToolInterface
 {
     public function getName(): string;
 
+    public function getCategory(): string;
+
     public function getLink(): string;
 
-    public function getTarget(): string;
-
-    public function getCategory(): string;
+    public function getIcon(): string;
 }

@@ -73,19 +73,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->templates;
     }
 
-    public function getClassName(): string
-    {
-        $class = static::class;
-        //Chamilo\CoreBundle\Repository\Node\IllustrationRepository
-        $class = str_replace('\\Repository\\', '\\Entity\\', $class);
-        $class = str_replace('Repository', '', $class);
-        if (!class_exists($class)) {
-            throw new Exception(sprintf('Repo: %s not found ', $class));
-        }
-
-        return $class;
-    }
-
     public function getCount(QueryBuilder $qb): int
     {
         $qb->select('count(resource)');
@@ -128,12 +115,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
             throw new Exception('Resource needs a resource node');
         }
 
+        $em = $this->getEntityManager();
+
         $resource->getResourceNode()->setUpdatedAt(new DateTime());
         $resource->getResourceNode()->setTitle($resource->getResourceName());
-        $this->getEntityManager()->persist($resource);
+        $em->persist($resource);
 
         if ($andFlush) {
-            $this->getEntityManager()->flush();
+            $em->flush();
         }
     }
 
@@ -277,20 +266,15 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $resourceFile;
     }
 
-    public function getResourceType(): ?ResourceType
+    public function getResourceType(): ResourceType
     {
-        $name = $this->getResourceTypeName();
+        $resourceTypeName = $this->toolChain->getResourceTypeNameByEntity($this->getClassName());
+
         $repo = $this->getEntityManager()->getRepository(ResourceType::class);
-        $this->resourceType = $repo->findOneBy([
-            'name' => $name,
+
+        return $repo->findOneBy([
+            'name' => $resourceTypeName,
         ]);
-
-        return $this->resourceType;
-    }
-
-    public function getResourceTypeName(): string
-    {
-        return $this->toolChain->getResourceTypeNameFromRepository(static::class);
     }
 
     public function addVisibilityQueryBuilder(QueryBuilder $qb = null): QueryBuilder
@@ -368,6 +352,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
         }
 
         return $qb;
+    }
+
+    public function getResourceTypeName(): string
+    {
+        return $this->toolChain->getResourceTypeNameByEntity($this->getClassName());
     }
 
     public function getResources(ResourceNode $parentNode = null): QueryBuilder
@@ -481,13 +470,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->addSelect('links')
             ->innerJoin('resource.resourceNode', 'node')
         //    ->innerJoin('node.creator', 'userCreator')
-            ->innerJoin('node.resourceLinks', 'links')
+            ->leftJoin('node.resourceLinks', 'links')
 //            ->leftJoin('node.resourceFile', 'file')
             ->where('node.id = :id')
             ->setParameters([
                 'id' => $resourceNodeId,
             ])
-            //->addSelect('node')
         ;
 
         return $qb->getQuery()->getOneOrNullResult();

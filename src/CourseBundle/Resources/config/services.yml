@@ -10,9 +10,9 @@ services:
 
     Chamilo\CourseBundle\Settings\SettingsCourseManager:
         arguments:
-            - 'Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry'
+            - '@Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry'
             - '@doctrine.orm.entity_manager'
-            - 'Chamilo\CourseBundle\Repository\CCourseSettingRepository'
+            - '@Chamilo\CourseBundle\Repository\CCourseSettingRepository'
             - '@event_dispatcher'
             - '@request_stack'
 
@@ -31,7 +31,7 @@ services:
             - setAuthorizationChecker: ['@security.authorization_checker']
             - setRouter: ['@router']
             - setSlugify: ['@cocur_slugify']
-            - setToolChain: ['@Chamilo\CoreBundle\ToolChain']
+            - setToolChain: ['@Chamilo\CoreBundle\Tool\ToolChain']
             - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
             - setRequestStack: ['@request_stack']
         exclude: '../../Repository/CCourseSettingRepository.php'

@@ -2386,6 +2386,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             $admin = new Admin();
             $admin->setUser($this);
             $this->setAdmin($admin);
+            $this->addRole('ROLE_ADMIN');
         }
 
         return $this;

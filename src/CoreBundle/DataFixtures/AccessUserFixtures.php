@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -35,7 +35,7 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
         $toolChain->createTools();
 
         // Defined in AccessGroupFixtures.php.
-        $group = $this->getReference('GROUP_ADMIN');
+        //$group = $this->getReference('GROUP_ADMIN');
 
         $admin = (new User())
             ->setSkipResourceNode(true)
@@ -49,8 +49,8 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
             ->setCreatorId(1)
             ->setTimezone($timezone)
             ->addUserAsAdmin()
-            ->addRole('ROLE_GLOBAL_ADMIN')
-            ->addGroup($group)
+            ->addRole('ROLE_GLOBAL_ADMIN') // Only for the first user
+            //->addGroup($group)
         ;
 
         $manager->persist($admin);

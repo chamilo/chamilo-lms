@@ -445,13 +445,13 @@ class CourseManager
         }*/
 
         // Unsubscribe user from all blogs in the course.
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER)."
+        /*$sql = "DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER)."
                 WHERE c_id = $course_id AND user_id IN ($user_ids)";
         Database::query($sql);
 
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER)."
                 WHERE c_id = $course_id AND user_id IN ($user_ids)";
-        Database::query($sql);
+        Database::query($sql);*/
 
         // Deleting users in forum_notification and mailqueue course tables
         $sql = "DELETE FROM  ".Database::get_course_table(TABLE_FORUM_NOTIFICATION)."

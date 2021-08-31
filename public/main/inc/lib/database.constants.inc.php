@@ -193,27 +193,6 @@ define('TABLE_LP_CATEGORY', 'lp_category');
 define('TABLE_LP_REL_USERGROUP', 'lp_rel_usergroup');
 define('TABLE_LP_CATEGORY_REL_USERGROUP', 'lp_category_rel_usergroup');
 
-// Smartblogs (Kevin Van Den Haute::kevin@develop-it.be)
-// Permission tables
-define('TABLE_PERMISSION_USER', 'permission_user');
-define('TABLE_PERMISSION_TASK', 'permission_task');
-define('TABLE_PERMISSION_GROUP', 'permission_group');
-// Role tables
-define('TABLE_ROLE', 'role');
-define('TABLE_ROLE_PERMISSION', 'role_permissions');
-define('TABLE_ROLE_USER', 'role_user');
-define('TABLE_ROLE_GROUP', 'role_group');
-// Blog tables
-define('TABLE_BLOGS', 'blog');
-define('TABLE_BLOGS_POSTS', 'blog_post');
-define('TABLE_BLOGS_COMMENTS', 'blog_comment');
-define('TABLE_BLOGS_REL_USER', 'blog_rel_user');
-define('TABLE_BLOGS_TASKS', 'blog_task');
-define('TABLE_BLOGS_TASKS_REL_USER', 'blog_task_rel_user');
-define('TABLE_BLOGS_RATING', 'blog_rating');
-define('TABLE_BLOGS_ATTACHMENT', 'blog_attachment');
-define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
-
 // Course settings table
 define('TABLE_COURSE_SETTING', 'course_setting');
 

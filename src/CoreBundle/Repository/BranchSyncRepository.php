@@ -7,13 +7,23 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Traits\Repository\ORM\NestedTreeRepositoryTrait;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class BranchSyncRepository extends NestedTreeRepository
+class BranchSyncRepository extends ServiceEntityRepository
 {
+    use NestedTreeRepositoryTrait;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, BranchSync::class);
+        $this->initializeTreeRepository($this->getEntityManager(), $this->getClassMetadata());
+    }
+
     /**
      * @return BranchSync[]|Collection
      */

@@ -1064,6 +1064,15 @@ class ImportCsv
                         $resetPassword //$reset_password = 0
                     );
 
+                    $table = Database::get_main_table(TABLE_MAIN_USER);
+                    $authSource = Database::escape_string($row['auth_source']);
+                    $sql = "UPDATE $table SET auth_source = '$authSource' WHERE id = ".$userInfo['user_id'];
+                    Database::query($sql);
+
+                    $this->logger->addInfo(
+                        "Students - #".$userInfo['user_id']." auth_source was changed from '".$userInfo['auth_source']."' to '".$row['auth_source']."' "
+                    );
+
                     if ($result) {
                         if ($row['username'] != $userInfo['username']) {
                             $this->logger->addInfo("Students - Username was changes from '".$userInfo['username']."' to '".$row['username']."' ");

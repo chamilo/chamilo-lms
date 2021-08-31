@@ -27,6 +27,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'configure_exercise_visibility_in_course' => 'false',
                     'exercise_invisible_in_session' => 'false',
                     'allow_edit_exercise_in_lp' => 'false',
+                    'exercise_hide_label' => 'false',
                 ]
             )
         ;
@@ -50,6 +51,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             ->add('exercise_max_ckeditors_in_page')
             ->add('configure_exercise_visibility_in_course', YesNoType::class)
             ->add('exercise_invisible_in_session', YesNoType::class)
+            ->add('exercise_hide_label', YesNoType::class)
         ;
     }
 }

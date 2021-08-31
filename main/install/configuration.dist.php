@@ -1987,6 +1987,9 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 // Enable image upload as file when doing a copy in the content or a drag and drop.
 //$_configuration['enable_uploadimage_editor'] = false;
 
+// Ckeditor settings.
+//$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true]];
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

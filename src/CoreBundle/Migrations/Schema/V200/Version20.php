@@ -25,9 +25,6 @@ class Version20 extends AbstractMigrationChamilo
     {
         $this->addSql('set sql_mode=""');
 
-        $container = $this->getContainer();
-        //$doctrine = $container->get('doctrine');
-
         // Basic checks.
         $this->abortIf(!$this->adminExist(), 'Admin not found in the system');
 

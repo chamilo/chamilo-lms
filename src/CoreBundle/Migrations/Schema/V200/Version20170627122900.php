@@ -319,6 +319,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'sso_authentication_protocol',
             'sso_force_redirect',
             'activate_email_template',
+            'sso_authentication_subclass'
         ];
 
         foreach ($settings as $setting) {

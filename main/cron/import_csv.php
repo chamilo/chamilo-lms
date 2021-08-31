@@ -798,6 +798,15 @@ class ImportCsv
                         0 //$reset_password = 0
                     );
 
+                    $table = Database::get_main_table(TABLE_MAIN_USER);
+                    $authSource = Database::escape_string($row['auth_source']);
+                    $sql = "UPDATE $table SET auth_source = '$authSource' WHERE id = ".$userInfo['user_id'];
+                    Database::query($sql);
+
+                    $this->logger->addInfo(
+                        'Teachers - #'.$userInfo['user_id']." auth_source was changed from '".$userInfo['auth_source']."' to '".$row['auth_source']."' "
+                    );
+
                     if ($result) {
                         foreach ($row as $key => $value) {
                             if (substr($key, 0, 6) == 'extra_') {

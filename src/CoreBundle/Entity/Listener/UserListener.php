@@ -29,41 +29,37 @@ class UserListener
      */
     public function prePersist(User $user, LifecycleEventArgs $args): void
     {
-        //error_log('User listener prePersist');
-        if ($user) {
-            $this->userRepository->updateCanonicalFields($user);
-            $this->userRepository->updatePassword($user);
+        $this->userRepository->updateCanonicalFields($user);
+        $this->userRepository->updatePassword($user);
 
-            if ($user->isSkipResourceNode()) {
-                return;
+        if ($user->isSkipResourceNode()) {
+            return;
+        }
+
+        if (!$user->hasResourceNode()) {
+            // Check if creator is set with $resource->setCreator()
+            $creator = $user->getResourceNodeCreator();
+
+            if (null === $creator) {
+                /** @var User|null $defaultCreator */
+                $defaultCreator = $this->security->getUser();
+                if (null !== $defaultCreator) {
+                    $creator = $defaultCreator;
+                }
             }
 
-            if (!$user->hasResourceNode()) {
-                // Check if creator is set with $resource->setCreator()
-                $creator = $user->getResourceNodeCreator();
-
-                if (null === $creator) {
-                    /** @var User|null $defaultCreator */
-                    $defaultCreator = $this->security->getUser();
-                    if (null !== $defaultCreator) {
-                        $creator = $defaultCreator;
-                    }
-                }
-
-                if (null === $creator) {
-                    throw new UserNotFoundException('User creator not found, use $resource->setCreator();');
-                }
-
-                $em = $args->getEntityManager();
-                $resourceNode = new ResourceNode();
-                $resourceNode
-                    ->setTitle($user->getUsername())
-                    ->setCreator($creator)
-                    ->setResourceType($this->userRepository->getResourceType())
-                ;
-                $em->persist($resourceNode);
-                $user->setResourceNode($resourceNode);
+            if (null === $creator) {
+                throw new UserNotFoundException('User creator not found, use $resource->setCreator();');
             }
+
+            $em = $args->getEntityManager();
+            $resourceNode = (new ResourceNode())
+                ->setTitle($user->getUsername())
+                ->setCreator($creator)
+                ->setResourceType($this->userRepository->getResourceType())
+            ;
+            $em->persist($resourceNode);
+            $user->setResourceNode($resourceNode);
         }
     }
 

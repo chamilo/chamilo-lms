@@ -443,8 +443,7 @@ abstract class AbstractResource
                     break;
                 }
             }
-            //$result = $links->matching($criteria)->count();
-            //var_dump($result);
+
             if ($found) {
                 return $link;
             }

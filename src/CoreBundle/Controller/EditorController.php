@@ -80,7 +80,6 @@ class EditorController extends BaseController
         $course = $this->getCourse();
         $session = $this->getCourseSession();
         $parent = $course->getResourceNode();
-
         $repository = $resourceFactory->getRepositoryService($tool, $type);
         $class = $repository->getRepository()->getClassName();
 
@@ -221,7 +220,6 @@ class EditorController extends BaseController
 
         $type = $request->get('type');
         $tool = $request->get('tool');
-        //$node = $request->get('nodeId');        var_dump($node);exit;
 
         $course = $this->getCourse();
         $nodeId = 0;

@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Exception;
 
@@ -54,13 +54,11 @@ class CourseListener
 
     public function postPersist(Course $course, LifecycleEventArgs $args): void
     {
-        if ($course) {
-            ///$this->checkLimit($repo, $course, $url);
-            $this->toolChain->addToolsInCourse($course);
+        ///$this->checkLimit($repo, $course, $url);
+        $this->toolChain->addToolsInCourse($course);
 
-            $args->getEntityManager()->persist($course);
-            $args->getEntityManager()->flush();
-        }
+        $args->getEntityManager()->persist($course);
+        $args->getEntityManager()->flush();
     }
 
     /**
@@ -71,11 +69,9 @@ class CourseListener
     public function preUpdate(Course $course, LifecycleEventArgs $args): void
     {
         //error_log('preUpdate');
-        if ($course) {
-            /*$url = $course->getCurrentUrl();
-            $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
-            $this->checkLimit($repo, $course, $url);*/
-        }
+        /*$url = $course->getCurrentUrl();
+        $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+        $this->checkLimit($repo, $course, $url);*/
     }
 
     /**
@@ -83,7 +79,7 @@ class CourseListener
      */
     protected function checkLimit(CourseRepository $repo, Course $course, AccessUrl $url): void
     {
-        $limit = $url->getLimitCourses();
+        //$limit = $url->getLimitCourses();
 
         /*if (!empty($limit)) {
             $count = $repo->getCountCoursesByUrl($url);

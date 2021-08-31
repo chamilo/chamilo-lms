@@ -153,8 +153,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $user = $this->find($userId);
         $creator = $this->find($creatorId);
 
-        $resourceNode = new ResourceNode();
-        $resourceNode
+        $resourceNode = (new ResourceNode())
             ->setTitle($user->getUsername())
             ->setCreator($creator)
             ->setResourceType($this->getResourceType())

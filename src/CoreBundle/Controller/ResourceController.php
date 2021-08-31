@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -48,26 +47,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     use ControllerTrait;
 
     private string $fileContentName = 'file_content';
-
-    /**
-     * @deprecated Use Vue
-     *
-     * @Route("/{tool}/{type}/{id}/new_folder", methods={"GET", "POST"}, name="chamilo_core_resource_new_folder")
-     */
-    /*public function newFolderAction(Request $request): Response
-    {
-        return $this->createResource($request, 'folder');
-    }*/
-
-    /**
-     * @deprecated Use Vue
-     *
-     * @Route("/{tool}/{type}/{id}/new", methods={"GET", "POST"}, name="chamilo_core_resource_new")
-     */
-    /*public function newAction(Request $request): Response
-    {
-        return $this->createResource($request, 'file');
-    }*/
 
     /**
      * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
@@ -226,19 +205,18 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated use Vue
-     *
-     * Shows a resource information
+     * Shows resource information.
      *
      * @Route("/{tool}/{type}/{id}/info", methods={"GET", "POST"}, name="chamilo_core_resource_info")
      */
-    /*public function infoAction(Request $request): Response
+    public function infoAction(Request $request): Response
     {
-        $nodeId = $request->get('id');
+        $nodeId = (int) $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         $resource = $repository->getResourceFromResourceNode($nodeId);
         $this->denyAccessUnlessValidResource($resource);
+
         $resourceNode = $resource->getResourceNode();
 
         $this->denyAccessUnlessGranted(
@@ -257,7 +235,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $params = [
             'resource' => $resource,
             'course' => $this->getCourse(),
-            //   'illustration' => $illustration,
             'tool' => $tool,
             'type' => $type,
             'comment_form' => $form->createView(),
@@ -267,7 +244,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $repository->getTemplates()->getFromAction(__FUNCTION__, $request->isXmlHttpRequest()),
             $params
         );
-    }*/
+    }
 
     /**
      * Preview a file. Mostly used when using a modal.
@@ -617,12 +594,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     );
                     $response->headers->set('Content-Disposition', $disposition);
                     $response->headers->set('Content-Type', 'text/html');
-
-                    /*$crawler = new Crawler();
-                    $crawler->addHtmlContent($content);
-                    var_dump($crawler->filter('head')->count());
-                    $head = $crawler->filter('head');
-                    var_dump($head->html());exit;*/
 
                     // @todo move into a function/class
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {

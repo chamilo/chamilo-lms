@@ -509,7 +509,7 @@ if ($form->validate()) {
     );
 
     $coursesInfo = [];
-    $hideConnectionTime = (bool) $values['hide_connection_time'];
+    $hideConnectionTime = isset($values['hide_connection_time']);
     if (!empty($values['sc'])) {
         foreach ($values['sc'] as $courseKey) {
             [$sessionId, $courseId] = explode('_', $courseKey);

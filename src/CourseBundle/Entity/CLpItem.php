@@ -34,17 +34,15 @@ class CLpItem
     protected ?int $iid = null;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="string", length=511, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="item_type", type="string", length=32, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $itemType;
 
     /**

@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="active", columns={"active"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CThematicRepository")
  */
 class CThematic extends AbstractResource implements ResourceInterface
 {

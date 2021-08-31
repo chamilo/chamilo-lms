@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * CNotebook.
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CNotebookRepository")
  * @ORM\Table(
  *     name="c_notebook"
  * )

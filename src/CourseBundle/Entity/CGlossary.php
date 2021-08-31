@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="c_glossary"
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CGlossaryRepository")
  */
 class CGlossary extends AbstractResource implements ResourceInterface
 {
@@ -29,9 +29,9 @@ class CGlossary extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**

@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CChatConversation.
  *
  * @ORM\Table(name="c_chat_conversation")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CChatConversationRepository")
  */
 class CChatConversation extends AbstractResource implements ResourceInterface
 {

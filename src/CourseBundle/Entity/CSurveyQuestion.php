@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     indexes={
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CSurveyQuestionRepository")
  */
 class CSurveyQuestion
 {

@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="session_id", columns={"session_id"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CWikiRepository")
  */
 class CWiki extends AbstractResource implements ResourceInterface
 {

@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CAnnouncementAttachment.
  *
  * @ORM\Table(name="c_announcement_attachment")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository")
  */
 class CAnnouncementAttachment extends AbstractResource implements ResourceInterface
 {

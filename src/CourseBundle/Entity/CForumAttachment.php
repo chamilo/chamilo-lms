@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *         @ORM\Index(name="course", columns={"c_id"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumAttachmentRepository")
  */
 class CForumAttachment extends AbstractResource implements ResourceInterface
 {

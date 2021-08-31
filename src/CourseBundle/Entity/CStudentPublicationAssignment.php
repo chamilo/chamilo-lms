@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     indexes={
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository")
  */
 class CStudentPublicationAssignment
 {

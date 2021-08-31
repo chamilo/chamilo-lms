@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     indexes={
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CGroupCategoryRepository")
  */
 class CGroupCategory extends AbstractResource implements ResourceInterface
 {
@@ -31,10 +31,9 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**

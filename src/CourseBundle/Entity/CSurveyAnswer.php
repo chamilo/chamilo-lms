@@ -9,8 +9,6 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurveyAnswer.
- *
  * @ORM\Table(
  *     name="c_survey_answer",
  *     indexes={

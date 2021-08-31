@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     indexes={
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository")
  */
 class CQuizQuestionCategory extends AbstractResource implements ResourceInterface
 {

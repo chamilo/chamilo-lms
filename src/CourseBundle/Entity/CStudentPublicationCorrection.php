@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="c_student_publication_correction"
  * )
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository")
  */
 class CStudentPublicationCorrection extends AbstractResource implements ResourceInterface
 {

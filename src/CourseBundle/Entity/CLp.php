@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *     name="c_lp"
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CLpRepository")
  */
 class CLp extends AbstractResource implements ResourceInterface
 {

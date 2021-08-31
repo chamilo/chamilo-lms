@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="idx_forum_post_visible", columns={"visible"}),
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumPostRepository")
  */
 class CForumPost extends AbstractResource implements ResourceInterface
 {
@@ -42,9 +42,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="post_title", type="string", length=250, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $postTitle;
 
     /**

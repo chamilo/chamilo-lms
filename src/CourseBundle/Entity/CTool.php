@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="session_id", columns={"session_id"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CToolRepository")
  */
 class CTool extends AbstractResource implements ResourceInterface
 {

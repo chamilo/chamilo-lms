@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     indexes={
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumCategoryRepository")
  */
 class CForumCategory extends AbstractResource implements ResourceInterface
 {

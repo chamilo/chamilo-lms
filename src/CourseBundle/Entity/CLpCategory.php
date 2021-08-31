@@ -34,9 +34,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected ?int $iid = null;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="text")
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**

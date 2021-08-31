@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     indexes={
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository")
  */
 class CStudentPublicationComment extends AbstractResource implements ResourceInterface
 {

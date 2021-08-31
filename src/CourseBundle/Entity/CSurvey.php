@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="idx_survey_code", columns={"code"})
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CSurveyRepository")
  */
 class CSurvey extends AbstractResource implements ResourceInterface
 {
@@ -39,12 +39,13 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="code", type="string", length=20, nullable=true)
      */
+    #[Assert\NotBlank]
     protected ?string $code = null;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
@@ -275,12 +276,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }

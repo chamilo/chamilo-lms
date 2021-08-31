@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="c_link")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CLinkRepository")
  */
 class CLink extends AbstractResource implements ResourceInterface
 {

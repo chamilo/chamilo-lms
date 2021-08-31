@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\Index(name="position", columns={"position"})
  *     }
  * )
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CQuizQuestionRepository")
  */
 class CQuizQuestion extends AbstractResource implements ResourceInterface
 {

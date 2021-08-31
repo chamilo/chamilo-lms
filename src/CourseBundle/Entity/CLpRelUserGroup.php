@@ -16,8 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * CLp.
- *
  * @ORM\Table(
  *     name="c_lp_rel_usergroup"
  * )

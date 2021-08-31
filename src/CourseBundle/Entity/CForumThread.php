@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     indexes={
  *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumThreadRepository")
  */
 class CForumThread extends AbstractResource implements ResourceInterface
 {
@@ -35,10 +35,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="thread_title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $threadTitle;
 
     /**

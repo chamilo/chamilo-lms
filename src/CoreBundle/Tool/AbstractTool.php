@@ -32,6 +32,9 @@ abstract class AbstractTool
     protected ?SchemaInterface $settings = null;
     protected array $resourceTypes = [];
 
+    abstract public function getCategory(): string;
+    abstract public function getLink(): string;
+
     /**
      * @var string
      *
@@ -73,11 +76,6 @@ abstract class AbstractTool
     {
         return $this->name;
     }
-
-    /*public function getCategory(): string
-    {
-        return $this->category;
-    }*/
 
     public function getTarget(): string
     {

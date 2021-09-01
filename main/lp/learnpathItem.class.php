@@ -2355,7 +2355,7 @@ class learnpathItem
                                             // 2. If is completed we check the results in the DB of the quiz.
                                             if ($returnstatus) {
                                                 $checkLastScoreAttempt = api_get_configuration_value('lp_prerequisite_use_last_attempt_only');
-                                                $orderBy = ($checkLastScoreAttempt?'ORDER BY exe_date DESC':'ORDER BY (exe_result/exe_weighting) DESC');
+                                                $orderBy = ($checkLastScoreAttempt ? 'ORDER BY exe_date DESC' : 'ORDER BY (exe_result/exe_weighting) DESC');
                                                 $sql = 'SELECT exe_result, exe_weighting
                                                         FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                         WHERE

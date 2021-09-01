@@ -14,7 +14,7 @@ if (!$isAllowedToEdit) {
 }
 
 $exerciseId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$exportXls = isset($_GET['export_xls']) && !empty($_GET['export_xls']) ? (int) $_GET['export_xls'] : 0;
+$exportXls = isset($_REQUEST['export_xls']) && !empty($_REQUEST['export_xls']) ? (int) $_REQUEST['export_xls'] : 0;
 $groups = $_REQUEST['groups'] ?? [];
 $users = $_REQUEST['users'] ?? [];
 
@@ -85,7 +85,7 @@ $form->addSelect(
     ]
 );
 
-$form->addButtonSearch(get_lang('Search'));
+$form->addButtonSearch(get_lang('Search'), 'searchSubmit');
 
 $formToString = $form->toHtml();
 
@@ -141,9 +141,6 @@ if ($form->validate()) {
             $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
         ];
         $orderedData[] = $ordered;
-        if ($exportXls) {
-            $tableXls[] = $ordered;
-        }
     }
 }
 
@@ -167,6 +164,27 @@ if ($exportXls) {
     Export::arrayToXls($tableXls, $fileName);
     exit;
 }
+$htmlHeadXtra[] = '<script>
+    $(function() {
+        $("#export-xls").bind("click", function(e) {
+            e.preventDefault();
+            var input = $("<input>", {
+                type: "hidden",
+                name: "export_xls",
+                value: "1"
+            });
+            $("#search_form").append(input);
+            $("#search_form").submit();
+        });
+        $("#search_form_searchSubmit").bind("click", function(e) {
+            e.preventDefault();
+            if ($("input[name=\"export_xls\"]").length > 0) {
+                $("input[name=\"export_xls\"]").remove();
+            }
+            $("#search_form").submit();
+        });
+    });
+</script>';
 
 Display::display_header($nameTools, get_lang('Exercise'));
 $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
@@ -179,7 +197,8 @@ $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_ci
     .'</a>';
 $actions .= Display::url(
     Display::return_icon('excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-    'question_stats.php?id='.$exerciseId.'&export_xls=1&'.api_get_cidreq()
+    '#',
+    ['id' => 'export-xls']
 );
 
 $actions = Display::div($actions, ['class' => 'actions']);

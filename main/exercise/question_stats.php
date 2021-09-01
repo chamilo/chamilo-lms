@@ -14,6 +14,7 @@ if (!$isAllowedToEdit) {
 }
 
 $exerciseId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$exportXls = isset($_GET['export_xls']) && !empty($_GET['export_xls']) ? (int) $_GET['export_xls'] : 0;
 $groups = $_REQUEST['groups'] ?? [];
 $users = $_REQUEST['users'] ?? [];
 
@@ -101,10 +102,12 @@ foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
     $column++;
 }
+if ($exportXls) {
+    $tableXls[] = $headers;
+}
 $row++;
 $scoreDisplay = new ScoreDisplay();
 $orderedData = [];
-
 if ($form->validate()) {
     $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, $groups, $users);
     foreach ($questions as $data) {
@@ -117,22 +120,30 @@ if ($form->validate()) {
             $groups,
             $users
         );
-        $orderedData[] = [
+        $ordered = [
             $data['question'],
             $data['count'].' / '.$total,
             $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
         ];
+        $orderedData[] = $ordered;
+        if ($exportXls) {
+            $tableXls[] = $ordered;
+        }
     }
 } else {
     $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId);
     foreach ($questions as $data) {
         $questionId = (int) $data['question_id'];
         $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $sessionId);
-        $orderedData[] = [
+        $ordered = [
             $data['question'],
             $data['count'].' / '.$total,
             $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
         ];
+        $orderedData[] = $ordered;
+        if ($exportXls) {
+            $tableXls[] = $ordered;
+        }
     }
 }
 
@@ -151,8 +162,29 @@ foreach ($headers as $header) {
     $table->set_header($column, $header, false);
     $column++;
 }
+if ($exportXls) {
+    $fileName = get_lang('QuestionStats').'_'.api_get_course_id().'_'.$exerciseId.'_'.api_get_local_time();
+    Export::arrayToXls($tableXls, $fileName);
+    exit;
+}
 
 Display::display_header($nameTools, get_lang('Exercise'));
+$actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
+    Display:: return_icon(
+        'back.png',
+        get_lang('GoBackToQuestionList'),
+        '',
+        ICON_SIZE_MEDIUM
+    )
+    .'</a>';
+$actions .= Display::url(
+    Display::return_icon('excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+    'question_stats.php?id='.$exerciseId.'&export_xls=1&'.api_get_cidreq()
+);
+
+$actions = Display::div($actions, ['class' => 'actions']);
+
+echo $actions;
 echo $formToString;
 echo $table->return_table();
 Display::display_footer();

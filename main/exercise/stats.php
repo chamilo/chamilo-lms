@@ -20,6 +20,7 @@ if (!$showPage) {
     api_not_allowed(true);
 }
 
+$exportXls = isset($_GET['export_xls']) && !empty($_GET['export_xls']) ? (int) $_GET['export_xls'] : 0;
 $exerciseId = isset($_GET['exerciseId']) && !empty($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
 $objExercise = new Exercise();
 $result = $objExercise->read($exerciseId);
@@ -77,12 +78,15 @@ if (!empty($questionList)) {
         if ($count_students) {
             $percentage = $count_users / $count_students * 100;
         }
-
-        $data[$question_id]['students_who_try_exercise'] = Display::bar_progress(
-            $percentage,
-            false,
-            $count_users.' / '.$count_students
-        );
+        if ($exportXls) {
+            $data[$question_id]['students_who_try_exercise'] = $count_users.' / '.$count_students.' ('.$percentage.'%)';
+        } else {
+            $data[$question_id]['students_who_try_exercise'] = Display::bar_progress(
+                $percentage,
+                false,
+                $count_users.' / '.$count_students
+            );
+        }
         $data[$question_id]['lowest_score'] = round($exerciseStats['min'], 2);
         $data[$question_id]['average_score'] = round($exerciseStats['average'], 2);
         $data[$question_id]['highest_score'] = round($exerciseStats['max'], 2);
@@ -97,15 +101,24 @@ foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
     $column++;
 }
+if ($exportXls) {
+    $tableXls1[] = $headers;
+}
 $row++;
 foreach ($data as $row_table) {
     $column = 0;
-    foreach ($row_table as $cell) {
+    foreach ($row_table as $key => $cell) {
         $table->setCellContents($row, $column, $cell);
         $table->updateCellAttributes($row, $column, 'align="center"');
+        if ($exportXls) {
+            $row_table[$key] = strip_tags($cell);
+        }
         $column++;
     }
     $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
+    if ($exportXls) {
+        $tableXls1[] = $row_table;
+    }
     $row++;
 }
 $content = $table->toHtml();
@@ -170,11 +183,15 @@ if (!empty($questionList)) {
                         if (!empty($count_students)) {
                             $percentage = $count / $count_students * 100;
                         }
-                        $data[$id]['attempts'] = Display::bar_progress(
-                            $percentage,
-                            false,
-                            $count.' / '.$count_students
-                        );
+                        if ($exportXls) {
+                            $data[$id]['attempts'] = $count.' / '.$count_students.' ('.$percentage.'%)';
+                        } else {
+                            $data[$id]['attempts'] = Display::bar_progress(
+                                $percentage,
+                                false,
+                                $count.' / '.$count_students
+                            );
+                        }
                         $id++;
                         $counter++;
                     }
@@ -210,11 +227,15 @@ if (!empty($questionList)) {
                         if (!empty($count_students)) {
                             $percentage = $count / $count_students * 100;
                         }
-                        $data[$id]['attempts'] = Display::bar_progress(
-                            $percentage,
-                            false,
-                            $count.' / '.$count_students
-                        );
+                        if ($exportXls) {
+                            $data[$id]['attempts'] = $count.' / '.$count_students.' ('.$percentage.'%)';
+                        } else {
+                            $data[$id]['attempts'] = Display::bar_progress(
+                                $percentage,
+                                false,
+                                $count.' / '.$count_students
+                            );
+                        }
                     }
                     break;
                 case HOT_SPOT:
@@ -237,11 +258,15 @@ if (!empty($questionList)) {
                     if (!empty($count_students)) {
                         $percentage = $count / $count_students * 100;
                     }
-                    $data[$id]['attempts'] = Display::bar_progress(
-                        $percentage,
-                        false,
-                        $count.' / '.$count_students
-                    );
+                    if ($exportXls) {
+                        $data[$id]['attempts'] = $count.' / '.$count_students.' ('.$percentage.'%)';
+                    } else {
+                        $data[$id]['attempts'] = Display::bar_progress(
+                            $percentage,
+                            false,
+                            $count.' / '.$count_students
+                        );
+                    }
                     break;
                 default:
                     if ($answer_id == 1) {
@@ -263,11 +288,15 @@ if (!empty($questionList)) {
                     if (!empty($count_students)) {
                         $percentage = $count / $count_students * 100;
                     }
-                    $data[$id]['attempts'] = Display::bar_progress(
-                        $percentage,
-                        false,
-                        $count.' / '.$count_students
-                    );
+                    if ($exportXls) {
+                        $data[$id]['attempts'] = $count.' / '.$count_students.' ('.$percentage.'%)';
+                    } else {
+                        $data[$id]['attempts'] = Display::bar_progress(
+                            $percentage,
+                            false,
+                            $count.' / '.$count_students
+                        );
+                    }
             }
             $id++;
         }
@@ -282,15 +311,25 @@ foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
     $column++;
 }
+if ($exportXls) {
+    $tableXls1[] = []; // it adds an empty line after the first table
+    $tableXls2[] = $headers;
+}
 $row++;
 foreach ($data as $row_table) {
     $column = 0;
-    foreach ($row_table as $cell) {
+    foreach ($row_table as $key => $cell) {
         $table->setCellContents($row, $column, $cell);
         $table->updateCellAttributes($row, $column, 'align="center"');
+        if ($exportXls) {
+            $row_table[$key] = strip_tags($cell);
+        }
         $column++;
     }
     $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
+    if ($exportXls) {
+        $tableXls2[] = $row_table;
+    }
     $row++;
 }
 $content .= $table->toHtml();
@@ -307,6 +346,12 @@ if ($exportPdf) {
     ];
 
     Export::export_html_to_pdf($content, $params);
+    exit;
+}
+if ($exportXls) {
+    $fileName = get_lang('Report').'_'.api_get_course_id().'_'.api_get_local_time();
+    $tableXls = array_merge($tableXls1, $tableXls2);
+    Export::arrayToXls($tableXls, $fileName);
     exit;
 }
 
@@ -332,6 +377,11 @@ $actions .= Display::url(
     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
     'stats.php?exerciseId='.$exerciseId.'&export_pdf=1&'.api_get_cidreq()
 );
+$actions .= Display::url(
+    Display::return_icon('excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+    'stats.php?exerciseId='.$exerciseId.'&export_xls=1&'.api_get_cidreq()
+);
+
 $actions = Display::div($actions, ['class' => 'actions']);
 $content = $actions.$content;
 $tpl->assign('content', $content);

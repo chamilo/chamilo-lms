@@ -69,14 +69,35 @@ class Version20180928172830 extends AbstractMigrationChamilo
 
         if (!$table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_tool ADD resource_node_id BIGINT DEFAULT NULL');
+        }
 
-            // @todo remove/move LP/Link shortcuts.
-            $this->addSql('DELETE FROM c_tool WHERE tool_id = 0 OR tool_id IS NULL');
+        // @todo remove/move LP/Link shortcuts.
+        $this->addSql('DELETE FROM c_tool WHERE tool_id = 0 OR tool_id IS NULL');
+        $this->addSql('UPDATE c_tool SET session_id = NULL WHERE session_id = 0 ');
 
-            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_84566580613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+        $this->addSql('DELETE FROM c_tool WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
+
+        if (!$table->hasForeignKey('FK_84566580613FECDF')) {
+            $this->addSql(
+                'ALTER TABLE c_tool ADD CONSTRAINT FK_84566580613FECDF FOREIGN KEY (session_id) REFERENCES session (id)'
+            );
+        }
+
+        if (!$table->hasForeignKey('FK_845665808F7B22CC')) {
             $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665808F7B22CC FOREIGN KEY (tool_id) REFERENCES tool (id)');
-            $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665801BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+        }
+
+        if (!$table->hasForeignKey('FK_845665801BAD783F')) {
+            $this->addSql(
+                'ALTER TABLE c_tool ADD CONSTRAINT FK_845665801BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasIndex('IDX_845665808F7B22CC')) {
             $this->addSql('CREATE INDEX IDX_845665808F7B22CC ON c_tool (tool_id)');
+        }
+
+        if (!$table->hasIndex('UNIQ_845665801BAD783F')) {
             $this->addSql('CREATE UNIQUE INDEX UNIQ_845665801BAD783F ON c_tool (resource_node_id)');
         }
     }

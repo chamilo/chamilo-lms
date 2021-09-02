@@ -140,15 +140,15 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX idx_survey_inv_code ON c_survey_invitation;');
         }
 
-        $this->addSql('DELETE FROM c_survey_invitation WHERE c_id IS NULL OR c_id = 0 ');
-        $this->addSql('UPDATE c_survey_invitation SET session_id = NULL WHERE session_id = 0 ');
-        $this->addSql('UPDATE c_survey_invitation SET group_id = NULL WHERE group_id = 0 ');
-
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE c_id c_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE session_id session_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE group_id group_id INT DEFAULT NULL');
 
-        $this->addSql('DELETE FROM c_survey_invitation WHERE session_id NOT IN (SELECT id FROM session)');
+        $this->addSql('DELETE FROM c_survey_invitation WHERE c_id IS NULL OR c_id = 0 ');
+        $this->addSql('UPDATE c_survey_invitation SET session_id = NULL WHERE session_id = 0 ');
+        $this->addSql('UPDATE c_survey_invitation SET group_id = NULL WHERE group_id = 0 ');
+
+        $this->addSql('DELETE FROM c_survey_invitation WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
 
         if (!$table->hasForeignKey('FK_D0BC7C291D79BD3')) {
             $this->addSql(

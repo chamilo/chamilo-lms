@@ -2757,6 +2757,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@videojs/http-streaming@npm:2.10.2":
+  version: 2.10.2
+  resolution: "@videojs/http-streaming@npm:2.10.2"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": 3.0.3
+    aes-decrypter: 3.1.2
+    global: ^4.4.0
+    m3u8-parser: 4.7.0
+    mpd-parser: 0.19.0
+    mux.js: 5.13.0
+    video.js: ^6 || ^7
+  peerDependencies:
+    video.js: ^6 || ^7
+  checksum: 869f5fa96aba741040a7de651506ac8e6946b4be836187140b9913d6fb79fe7a15822b4ae05e8787f6d997556170f1f6e70d1cd2bc170905ea7ceee51c9a9a86
+  languageName: node
+  linkType: hard
+
 "@videojs/vhs-utils@npm:3.0.3, @videojs/vhs-utils@npm:^3.0.0, @videojs/vhs-utils@npm:^3.0.2, @videojs/vhs-utils@npm:^3.0.3":
   version: 3.0.3
   resolution: "@videojs/vhs-utils@npm:3.0.3"
@@ -3842,6 +3860,13 @@ __metadata:
   dependencies:
     tslib: ^2.3.0
   checksum: b3eba519b7bbdfc6159ec46edc5afaf3a1024f4b7612eb6acfa949f5d57458f5bf1abadf32b1f2f425657d54e4e234894ceb3701cd0f6593ed61ac8d3a92a829
+  languageName: node
+  linkType: hard
+
+"@xmldom/xmldom@npm:^0.7.2":
+  version: 0.7.4
+  resolution: "@xmldom/xmldom@npm:0.7.4"
+  checksum: 584f26699121921823531133236283869da40439d8f190383c5eb045d22fa8a89fdba8f159d6004c088c7923b7f0177bd2175e23dcafc4551e63a42d7d17e722
   languageName: node
   linkType: hard
 
@@ -6521,13 +6546,13 @@ __metadata:
     pretty-bytes: ^5.6.0
     primeflex: ^3.0.1
     primeicons: ^4.1.0
-    primevue: ^3.6.4
+    primevue: ^3.7.0
     purgecss-webpack-plugin: 4.0.3
     pwstrength-bootstrap: 3.1.0
     qtip2: 3.0.3
     quasar: 2.0.4
     readmore-js: ^2.2.1
-    sass: ^1.38.0
+    sass: ^1.39.0
     sass-loader: ^12.1.0
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
@@ -6542,11 +6567,11 @@ __metadata:
     tinymce: ^5.9.1
     ts-loader: ^9.2.5
     typescript: ^4.3.5
-    video.js: ^7.15.0
+    video.js: ^7.15.4
     vue: 3.1.5
     vue-cli-plugin-quasar: 4.0.2
     vue-eslint-parser: 7.10.0
-    vue-flatpickr-component: ^9.0.4
+    vue-flatpickr-component: ^9.0.5
     vue-i18n: 9.1.7
     vue-loader: 16.4.1
     vue-multiselect: ^3.0.0-alpha.2
@@ -13895,6 +13920,20 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"mpd-parser@npm:0.19.0":
+  version: 0.19.0
+  resolution: "mpd-parser@npm:0.19.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": ^3.0.2
+    "@xmldom/xmldom": ^0.7.2
+    global: ^4.4.0
+  bin:
+    mpd-to-m3u8-json: bin/parse.js
+  checksum: 4e72ccc653121ad06a2a3b54a68ba2fe44fef9d9895bf8f17521fbdb8668c3b7720df9f5488b7dcaa748db64c306e3d7d9aa9c38fd6299711bdffd5c906ec9fc
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.0.0":
   version: 2.0.0
   resolution: "ms@npm:2.0.0"
@@ -13966,6 +14005,17 @@ fsevents@~2.3.2:
   bin:
     muxjs-transmux: bin/transmux.js
   checksum: 1ce5f90bd60aabb634f82dfdc4b552922271a64effd27882f26cfbd84da633a47e68269b02572284127f5162b91e3c0510ef63339e99c1d3f70e927ae8125858
+  languageName: node
+  linkType: hard
+
+"mux.js@npm:5.13.0":
+  version: 5.13.0
+  resolution: "mux.js@npm:5.13.0"
+  dependencies:
+    "@babel/runtime": ^7.11.2
+  bin:
+    muxjs-transmux: bin/transmux.js
+  checksum: b2283dfe44037381e7c5065fda38b21ca3e5a86d7e036d254c72a3b5115b4e14d354589396a60a52f1e28acd166b62b863d3ca932d073f648515155d0dcfa45f
   languageName: node
   linkType: hard
 
@@ -16388,10 +16438,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"primevue@npm:^3.6.4":
-  version: 3.6.4
-  resolution: "primevue@npm:3.6.4"
-  checksum: 85016b43fc6f2ffe96655d37b5ad3ad4b98812e33f0990e74fd7b58f3498cb6ab3d112cac7b4a848f45ad12d5b3ea6ff69855ff20523c403534947b85e700deb
+"primevue@npm:^3.7.0":
+  version: 3.7.0
+  resolution: "primevue@npm:3.7.0"
+  checksum: 0bb131ded6577225b4e80b0e79c7e31cf2ff1d50fe9b471de376dffc9d0c228253d3675ff633a08562ff883d1c26acfe99634bae3e1546516a7d3f3898c99583
   languageName: node
   linkType: hard
 
@@ -17591,14 +17641,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.38.0":
-  version: 1.38.0
-  resolution: "sass@npm:1.38.0"
+"sass@npm:^1.39.0":
+  version: 1.39.0
+  resolution: "sass@npm:1.39.0"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: ce6da83497f56daab29bc9ed316cbfd18111c1c0afa466912e8c7815c8f006620595b8d3c5db632e9f09366691c2d8fc5f8faa8eb9532ae3bd0364c2ae7c6a93
+  checksum: 278ef8bcbfb73f5ddf348eb50d67dcf0f7340d0d93b41b7ff7b0101e4b4b352d52b65c0aec018c6e811d390e944ffadefcdbb8b2e231114ed465a2a71962ac86
   languageName: node
   linkType: hard
 
@@ -20014,7 +20064,28 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"video.js@npm:7.15.0, video.js@npm:^6 || ^7, video.js@npm:^7.15.0":
+"video.js@npm:7.15.4, video.js@npm:^7.15.4":
+  version: 7.15.4
+  resolution: "video.js@npm:7.15.4"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/http-streaming": 2.10.2
+    "@videojs/vhs-utils": ^3.0.3
+    "@videojs/xhr": 2.6.0
+    aes-decrypter: 3.1.2
+    global: ^4.4.0
+    keycode: ^2.2.0
+    m3u8-parser: 4.7.0
+    mpd-parser: 0.19.0
+    mux.js: 5.13.0
+    safe-json-parse: 4.0.0
+    videojs-font: 3.2.0
+    videojs-vtt.js: ^0.15.3
+  checksum: 34ae424da6b04375284353f338a6dcef118af246db7c25c6db1e722fa03c2a1d8282723b485c620baa5f1d237446caa346e1b945a374560fdc05f3ab7bb97b59
+  languageName: node
+  linkType: hard
+
+"video.js@npm:^6 || ^7":
   version: 7.15.0
   resolution: "video.js@npm:7.15.0"
   dependencies:
@@ -20123,14 +20194,14 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue-flatpickr-component@npm:^9.0.4":
-  version: 9.0.4
-  resolution: "vue-flatpickr-component@npm:9.0.4"
+"vue-flatpickr-component@npm:^9.0.5":
+  version: 9.0.5
+  resolution: "vue-flatpickr-component@npm:9.0.5"
   dependencies:
     flatpickr: ^4.6.9
   peerDependencies:
     vue: ^3.0.0
-  checksum: 33fb5f71ed0c220008d691cf0e1396e40d992b246eaf4544618a0aa26feed6ae4bb0ac3cb49f6ff3f4c7dcafd486ac7d1c51d299a86465dc21d3362d58ae9c41
+  checksum: 8f4af856ed8588a0594e3c9bedbc01a74740ec380f4a92ac7698b29a4b78ad942a64ae1dacb4b94f7cf21bdefa7280f995a82bcb004fc47dfb3f37653ef7907a
   languageName: node
   linkType: hard
 

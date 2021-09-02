@@ -127,7 +127,7 @@ if ($frmActivity->validate()) {
         $toolLaunch
             ->setLrsUrl($values['lrs_url'])
             ->setLrsAuthUsername($values['lrs_auth_username'])
-            ->setLrsAuthUsername($values['lrs_auth_password']);
+            ->setLrsAuthPassword($values['lrs_auth_password']);
     }
 
     $em = Database::getManager();

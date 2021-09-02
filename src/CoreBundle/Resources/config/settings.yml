@@ -3,7 +3,6 @@ services:
         autowire: true
         public: true
 
-    # Platform settings
     chamilo_core.settings.admin:
         class: Chamilo\CoreBundle\Settings\AdminSettingsSchema
         tags:

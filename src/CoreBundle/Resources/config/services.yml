@@ -72,7 +72,6 @@ services:
         tags:
             - {name: templating.helper, alias: chamilo_settings}
 
-
     Chamilo\CoreBundle\Tool\ToolChain: ~
 
     _instanceof:

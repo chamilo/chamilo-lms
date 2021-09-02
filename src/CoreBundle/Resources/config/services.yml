@@ -15,6 +15,11 @@ services:
         exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity}'
         public: true
 
+    Doctrine\Migrations\Version\DbalMigrationFactory: ~
+    Chamilo\CoreBundle\Migrations\MigrationFactory:
+        decorates: Doctrine\Migrations\Version\DbalMigrationFactory
+        arguments: ['@Chamilo\CoreBundle\Migrations\MigrationFactory.inner', '@service_container']
+
     Chamilo\CoreBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']

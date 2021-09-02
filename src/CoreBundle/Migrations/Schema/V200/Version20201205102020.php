@@ -20,10 +20,15 @@ final class Version20201205102020 extends AbstractMigrationChamilo
     {
         $table = $schema->getTable('skill');
 
+        $this->addSql('UPDATE skill SET updated_at = NOW() WHERE CAST(updated_at AS CHAR(20)) = "0000-00-00 00:00:00"');
+
         if (!$table->hasColumn('asset_id')) {
             $this->addSql('ALTER TABLE skill ADD asset_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE skill ADD CONSTRAINT FK_5E3DE4775DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id)');
             $this->addSql('CREATE INDEX IDX_5E3DE4775DA1941 ON skill (asset_id)');
+        }
+
+        if (!$table->hasForeignKey('FK_5E3DE4775DA1941')) {
+            $this->addSql('ALTER TABLE skill ADD CONSTRAINT FK_5E3DE4775DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id)');
         }
 
         if (!$schema->hasTable('skill_rel_item_rel_user')) {

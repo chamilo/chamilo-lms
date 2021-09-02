@@ -58,7 +58,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
                 $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }
             $picturePath = $rootPath.'/app/upload/'.$path.'/'.$picture;
-            if (file_exists($picturePath) && !is_dir($picturePath)) {
+            if ($this->fileExists($picturePath)) {
                 $mimeType = mime_content_type($picturePath);
                 $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);
                 $illustrationRepo->addIllustration($userEntity, $userEntity, $file);
@@ -94,7 +94,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
                 $path = 'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }
             $picturePath = $rootPath.'/app/upload/'.$path.'/'.$picture;
-            if (file_exists($picturePath) && !is_dir($picturePath)) {
+            if ($this->fileExists($picturePath)) {
                 $mimeType = mime_content_type($picturePath);
                 $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);
                 $illustrationRepo->addIllustration($userGroup, $admin, $file);

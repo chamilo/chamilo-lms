@@ -38,7 +38,6 @@ final class Version20201212195112 extends AbstractMigrationChamilo
         $groupCategoryRepo = $container->get(CGroupCategoryRepository::class);
 
         $batchSize = self::BATCH_SIZE;
-        $admin = $this->getAdmin();
 
         // Migrating c_tool.
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');

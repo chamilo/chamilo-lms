@@ -47,7 +47,7 @@ class Version20210221082033 extends AbstractMigrationChamilo
                 $lp = $lpRepo->find($id);
                 if ($lp && !empty($path)) {
                     $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/learning_path/images/'.$path;
-                    if (file_exists($rootPath) && !is_dir($filePath)) {
+                    if ($this->fileExists($filePath)) {
                         $this->addLegacyFileToResource($filePath, $lpRepo, $lp, $lp->getIid(), $path);
                         $em->persist($lp);
                         $em->flush();

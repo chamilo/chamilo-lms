@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
-use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
@@ -38,11 +37,6 @@ final class Version20201218132719 extends AbstractMigrationChamilo
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
         $userRepo = $container->get(UserRepository::class);
-        /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-
-        $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
         /** @var Course $course */
@@ -60,6 +54,8 @@ final class Version20201218132719 extends AbstractMigrationChamilo
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
+
+                $admin = $this->getAdmin();
 
                 $result = $this->fixItemProperty(
                     'survey',

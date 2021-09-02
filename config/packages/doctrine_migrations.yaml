@@ -3,6 +3,9 @@ doctrine_migrations:
     migrations_paths:
         'Chamilo\CoreBundle\Migrations\Schema\V200': '%kernel.project_dir%/src/CoreBundle/Migrations/Schema/V200'
 
+    services:
+        'Doctrine\Migrations\Version\MigrationFactory': 'Chamilo\CoreBundle\Migrations\MigrationFactory'
+
     connection: default
 
     # Run all migrations in a transaction.

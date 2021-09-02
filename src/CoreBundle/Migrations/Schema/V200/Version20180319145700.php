@@ -102,17 +102,19 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_survey_code ON c_survey (code)');
         }*/
 
+        $table = $schema->getTable('c_survey_invitation');
+
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE reminder_date reminder_date DATETIME DEFAULT NULL');
         $this->addSql(
             'UPDATE c_survey_invitation SET reminder_date = NULL WHERE CAST(reminder_date AS CHAR(20)) = "0000-00-00 00:00:00"'
         );
 
-        $table = $schema->getTable('c_survey_invitation');
-
         // c_survey_invitation.user_id
-        /*if (!$table->hasColumn('user_id')) {
+        if (!$table->hasColumn('user_id')) {
             $this->addSql('ALTER TABLE c_survey_invitation ADD user_id INT DEFAULT NULL');
-            $this->addSql('DELETE FROM c_survey_invitation WHERE user NOT IN (SELECT id FROM user) ');
+
+            $this->addSql('ALTER TABLE c_survey_invitation CHANGE user user VARCHAR(255) DEFAULT NULL');
+            $this->addSql('UPDATE c_survey_invitation SET user = NULL WHERE user NOT IN (SELECT id FROM user)');
             $this->addSql('UPDATE c_survey_invitation SET user_id = user');
         }
 
@@ -124,7 +126,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
 
         if (!$table->hasIndex('IDX_D0BC7C2A76ED395')) {
             $this->addSql('CREATE INDEX IDX_D0BC7C2A76ED395 ON c_survey_invitation (user_id)');
-        }*/
+        }
 
         if (!$table->hasColumn('answered_at')) {
             $this->addSql('ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;');

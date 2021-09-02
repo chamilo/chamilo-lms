@@ -84,27 +84,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
      */
     public function getEntityManager()
     {
-        if (empty($this->manager)) {
-            //$params = $this->connection->getParams();
-            /*
-            $dbParams = [
-                'driver' => 'pdo_mysql',
-                'host' => $this->connection->getHost(),
-                'user' => $this->connection->getUsername(),
-                'password' => $this->connection->getPassword(),
-                'dbname' => $this->connection->getDatabase(),
-                'port' => $this->connection->getPort(),
-            ];*/
-            /*$database = new \Database();
-            $database->connect(
-                $params,
-                __DIR__.'/../../',
-                __DIR__.'/../../'
-            );
-            $this->manager = $database->getManager();*/
-        }
-
-        return $this->manager;
+        return $this->getContainer()->get('doctrine')->getManager();
     }
 
     /**
@@ -339,5 +319,10 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         }
 
         return true;
+    }
+
+    public function fileExists($filePath): bool
+    {
+        return file_exists($filePath) && !is_dir($filePath) && is_readable($filePath);
     }
 }

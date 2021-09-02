@@ -1935,9 +1935,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@symfony/webpack-encore@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@symfony/webpack-encore@npm:1.5.0"
+"@symfony/webpack-encore@npm:1.6.0":
+  version: 1.6.0
+  resolution: "@symfony/webpack-encore@npm:1.6.0"
   dependencies:
     "@babel/core": ^7.7.0
     "@babel/plugin-syntax-dynamic-import": ^7.0.0
@@ -1965,7 +1965,7 @@ __metadata:
     yargs-parser: ^20.2.4
   bin:
     encore: bin/encore.js
-  checksum: 0645d5055b3486457596d05da700d2904bb5804e157c380f042d5f95ffe8c87b6ee2c90d764db95365a76bef0d21ec219f77cb95edd468660b019e9e7e00ac95
+  checksum: bea5d03da2eb030ffbe3608c4edc41b2830104ec167170bc5d1c9fdfb65e5c544ec2f34fb4aaee0cd76d6eda25a62a5fab3fe0766f7dcb94c85c185e0e2a13ef
   languageName: node
   linkType: hard
 
@@ -6459,7 +6459,7 @@ __metadata:
     "@mdi/font": ^5.9.55
     "@popperjs/core": 2.9.3
     "@quasar/extras": ^1.10.12
-    "@symfony/webpack-encore": 1.5.0
+    "@symfony/webpack-encore": 1.6.0
     "@tailwindcss/forms": ^0.3.3
     "@tailwindcss/line-clamp": ^0.2.1
     "@tailwindcss/typography": ^0.4.1
@@ -6540,8 +6540,8 @@ __metadata:
     path: ^0.12.7
     popper.js: ^1.16.1
     postcss: ^8.3.6
-    postcss-loader: ^5.3.0
-    postcss-prefix-selector: ^1.10.0
+    postcss-loader: ^6.1.1
+    postcss-prefix-selector: ^1.12.0
     postcss-rtl: ^1.7.3
     pretty-bytes: ^5.6.0
     primeflex: ^3.0.1
@@ -15613,17 +15613,17 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"postcss-loader@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "postcss-loader@npm:5.3.0"
+"postcss-loader@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "postcss-loader@npm:6.1.1"
   dependencies:
     cosmiconfig: ^7.0.0
     klona: ^2.0.4
-    semver: ^7.3.4
+    semver: ^7.3.5
   peerDependencies:
     postcss: ^7.0.0 || ^8.0.1
     webpack: ^5.0.0
-  checksum: fd7a1a673b0e8f238392b3d449f2727767522febb2f60bfc9bb5cd4e373b07ba8df621f4e2fad92bf085765dcdea0f049497ae799ce1c9f1a592820275cc7e65
+  checksum: a166ecd835c62e2afc3d5f4fd77962f88e1319a6a5d84bd291167c43659cdfd4414bb332840577b464b8d8f69604b85c4ed26ac8695808c2ca336652706ed505
   languageName: node
   linkType: hard
 
@@ -16158,12 +16158,12 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"postcss-prefix-selector@npm:^1.10.0":
-  version: 1.10.0
-  resolution: "postcss-prefix-selector@npm:1.10.0"
+"postcss-prefix-selector@npm:^1.12.0":
+  version: 1.12.0
+  resolution: "postcss-prefix-selector@npm:1.12.0"
   dependencies:
-    postcss: ^8.2.10
-  checksum: 897af785352891cd66fc7e503de62cd47e96c5011d272a667eab675980f65b3bd1cdb898d2b7af636360dca904cff5548d96f3ac41c25099e1d11c81f775118b
+    postcss: ^8.3.6
+  checksum: 38fd083084f11a3dd0083df2153bbbd101700bf10ff7bdf25783e225591b4d7fe5276d435972fa6f3be2951213deb69bb9183abaf458497edd7078ce1f454104
   languageName: node
   linkType: hard
 
@@ -16328,7 +16328,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.1.10, postcss@npm:^8.1.6, postcss@npm:^8.2.1, postcss@npm:^8.2.10, postcss@npm:^8.2.15, postcss@npm:^8.2.9, postcss@npm:^8.3.6":
+"postcss@npm:^8.1.10, postcss@npm:^8.1.6, postcss@npm:^8.2.1, postcss@npm:^8.2.15, postcss@npm:^8.2.9, postcss@npm:^8.3.6":
   version: 8.3.6
   resolution: "postcss@npm:8.3.6"
   dependencies:

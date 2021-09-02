@@ -4,9 +4,16 @@
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
+use Symfony\Component\HttpFoundation\Response;
 use Xabbuh\XApi\Model\Statement;
+use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
+use Xabbuh\XApi\Serializer\Symfony\SerializerFactory;
+use XApi\LrsBundle\Controller\StatementGetController;
+use XApi\LrsBundle\Controller\StatementHeadController;
+use XApi\LrsBundle\Controller\StatementPostController;
 use XApi\LrsBundle\Controller\StatementPutController;
+use XApi\LrsBundle\Model\StatementsFilterFactory;
 use XApi\Repository\Doctrine\Mapping\Statement as StatementEntity;
 use XApi\Repository\Doctrine\Repository\StatementRepository;
 use XApiPlugin;
@@ -18,6 +25,48 @@ use XApiPlugin;
  */
 class StatementsController extends BaseController
 {
+    public function get(): Response
+    {
+        $pluginEm = XApiPlugin::getEntityManager();
+
+        $serializer = Serializer::createSerializer();
+        $factory = new SerializerFactory($serializer);
+
+        $getStatementController = new StatementGetController(
+            new StatementRepository(
+                $pluginEm->getRepository(StatementEntity::class)
+            ),
+            $factory->createStatementSerializer(),
+            $factory->createStatementResultSerializer(),
+            new StatementsFilterFactory(
+                new ActorSerializer($serializer)
+            )
+        );
+
+        return $getStatementController->getStatement($this->httpRequest);
+    }
+
+    public function head(): Response
+    {
+        $pluginEm = XApiPlugin::getEntityManager();
+
+        $serializer = Serializer::createSerializer();
+        $factory = new SerializerFactory($serializer);
+
+        $headStatementController = new StatementHeadController(
+            new StatementRepository(
+                $pluginEm->getRepository(StatementEntity::class)
+            ),
+            $factory->createStatementSerializer(),
+            $factory->createStatementResultSerializer(),
+            new StatementsFilterFactory(
+                new ActorSerializer($serializer)
+            )
+        );
+
+        return $headStatementController->getStatement($this->httpRequest);
+    }
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -38,15 +87,38 @@ class StatementsController extends BaseController
         return $putStatementController->putStatement($this->httpRequest, $statement);
     }
 
-    /**
-     * @param string $content
-     *
-     * @return \Xabbuh\XApi\Model\Statement
-     */
-    private function deserializeStatement($content)
+    public function post(): Response
     {
-        $serializer = Serializer::createSerializer();
+        $pluginEm = XApiPlugin::getEntityManager();
 
-        return $serializer->deserialize($content, Statement::class, 'json');
+        $postStatementController = new StatementPostController(
+            new StatementRepository(
+                $pluginEm->getRepository(StatementEntity::class)
+            )
+        );
+
+        $content = $this->httpRequest->getContent();
+
+        if (substr($content, 0, 1) !== '[') {
+            $content = "[$content]";
+        }
+
+        $statements = $this->deserializeStatements($content);
+
+        return $postStatementController->postStatements($this->httpRequest, $statements);
+    }
+
+    private function deserializeStatement(string $content = ''): Statement
+    {
+        $factory = new SerializerFactory(Serializer::createSerializer());
+
+        return $factory->createStatementSerializer()->deserializeStatement($content);
+    }
+
+    private function deserializeStatements(string $content = ''): array
+    {
+        $factory = new SerializerFactory(Serializer::createSerializer());
+
+        return $factory->createStatementSerializer()->deserializeStatements($content);
     }
 }

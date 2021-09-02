@@ -33,7 +33,7 @@ final class StatementRepository extends EntityRepository implements BaseStatemen
      */
     public function findStatements(array $criteria)
     {
-        return parent::findBy($criteria);
+        return $this->getQueryBuilder($criteria)->getQuery()->getResult();
     }
 
     /**
@@ -46,5 +46,24 @@ final class StatementRepository extends EntityRepository implements BaseStatemen
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    private function getQueryBuilder(array $criteria): \Doctrine\ORM\QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('statement');
+
+        if (!empty($criteria['verb'])) {
+            $qb->innerJoin('statement.verb', 'verb');
+            $qb->andWhere($qb->expr()->eq('verb.id', ':c_verb'));
+            $qb->setParameter('c_verb', $criteria['verb']);
+        }
+
+        $qb->setFirstResult($criteria['cursor']);
+
+        if (isset($criteria['limit'])) {
+            $qb->setMaxResults($criteria['limit']);
+        }
+
+        return $qb;
     }
 }

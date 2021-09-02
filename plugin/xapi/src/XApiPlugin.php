@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\XApi\ActivityProfile;
+use Chamilo\PluginBundle\Entity\XApi\ActivityState;
 use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
 use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
@@ -90,6 +92,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 'xapi_tool_launch',
                 'xapi_lrs_auth',
                 'xapi_cmi5_item',
+                'xapi_activity_state',
+                'xapi_activity_profile',
 
                 'xapi_attachment',
                 'xapi_object',
@@ -154,6 +158,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(
             [
+                $em->getClassMetadata(ActivityProfile::class),
+                $em->getClassMetadata(ActivityState::class),
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
                 $em->getClassMetadata(LrsAuth::class),
@@ -495,6 +501,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 $em->getClassMetadata(ToolLaunch::class),
                 $em->getClassMetadata(LrsAuth::class),
                 $em->getClassMetadata(Cmi5Item::class),
+                $em->getClassMetadata(ActivityState::class),
+                $em->getClassMetadata(ActivityProfile::class),
             ]
         );
 

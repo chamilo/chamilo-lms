@@ -22,6 +22,7 @@ jobs:
                   php-version: ${{ matrix.php-versions }}
                   extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
                   ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris
+                  coverage: pcov
 
             - name: Start mysql service
               run: |
@@ -60,4 +61,13 @@ jobs:
                   php bin/console --env=test doctrine:fixtures:load --no-interaction
 
             - name: Run PHPUnit tests
-              run: php bin/phpunit
+              run: php bin/phpunit  --coverage-clover coverage.xml
+
+            - name: Coverage
+              uses: codecov/codecov-action@v2
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+                  files: ./coverage.xml
+                  name: codecov-umbrella # optional
+                  fail_ci_if_error: false
+                  verbose: true

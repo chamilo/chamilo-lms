@@ -53,8 +53,9 @@ class ToolLaunchRepository extends EntityRepository
         }
 
         if ($filteredForStudent) {
-            $qb->leftJoin(CLpItem::class, 'lpi', Join::WITH, 'tl.id = lpi.path')
-                ->andWhere($qb->expr()->isNull('lpi.path'));
+            $qb->leftJoin(CLpItem::class, 'lpi', Join::WITH, 'tl.id = lpi.path AND tl.course = lpi.cId')
+                ->andWhere($qb->expr()->eq('lpi.itemType', ':item_type'))
+                ->setParameter('item_type', TOOL_XAPI);
         }
 
         $query = $qb->getQuery();

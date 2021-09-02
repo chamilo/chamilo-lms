@@ -14,7 +14,7 @@ if (!$isAllowedToEdit) {
 }
 
 $exerciseId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-
+$exportXls = isset($_GET['export_xls']) && !empty($_GET['export_xls']) ? (int) $_GET['export_xls'] : 0;
 if (empty($exerciseId)) {
     api_not_allowed(true);
 }
@@ -59,6 +59,9 @@ foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
     $column++;
 }
+if ($exportXls) {
+    $tableXls[] = $headers;
+}
 $row++;
 $scoreDisplay = new ScoreDisplay();
 
@@ -69,10 +72,32 @@ if (!empty($groups)) {
         $table->setCellContents($row, 0, $group['name']);
         $averageToDisplay = $scoreDisplay->display_score([$average, 1], SCORE_AVERAGE);
         $table->setCellContents($row, 1, $averageToDisplay);
+        if ($exportXls) {
+            $tableXls[] = [$group['name'], $averageToDisplay];
+        }
         $row++;
     }
 }
-
+if ($exportXls) {
+    $fileName = get_lang('ComparativeGroupReport').'_'.api_get_course_id().'_'.$exerciseId.'_'.api_get_local_time();
+    Export::arrayToXls($tableXls, $fileName);
+    exit;
+}
 Display::display_header($nameTools, get_lang('Exercise'));
+$actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
+    Display:: return_icon(
+        'back.png',
+        get_lang('GoBackToQuestionList'),
+        '',
+        ICON_SIZE_MEDIUM
+    )
+    .'</a>';
+$actions .= Display::url(
+    Display::return_icon('excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+    'comparative_group_report.php?id='.$exerciseId.'&export_xls=1&'.api_get_cidreq()
+);
+
+$actions = Display::div($actions, ['class' => 'actions']);
+echo $actions;
 echo $table->toHtml();
 Display::display_footer();

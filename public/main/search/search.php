@@ -272,7 +272,7 @@ $extra = $extraFieldSession->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseOne]');
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[filiere]');
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('dispo', get_lang('Disponibilite Avant'));
@@ -324,7 +324,7 @@ $extra = $extraField->addElements(
     $adminPermissions
 );
 
-$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseTwo]');
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[dispo]');
 $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addEndPanel();
 
@@ -362,7 +362,7 @@ $userForm->addRule(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseThree]');
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[dispo_pendant_stage]');
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('theme_obj', get_lang('Themes Objectifs'));
@@ -410,7 +410,7 @@ $extra = $extraFieldSession->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseFour]');
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[theme_obj]');
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('niveau_langue', get_lang('Niveau Langue'));
@@ -440,7 +440,7 @@ $extra = $extraFieldSession->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseFive]');
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[niveau_langue]');
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('obj_apprentissage', get_lang('Objectifs Apprentissage'));
@@ -464,7 +464,7 @@ $extra = $extraField->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseSix]');
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[obj_apprentissage]');
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('methode_travail', get_lang('Methode Travail'));
@@ -490,7 +490,7 @@ $extra = $extraField->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseSeven]');
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[methode_travail]');
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('environnement', get_lang('Mon Environnement De Travail'));
@@ -545,7 +545,7 @@ $extra = $extraField->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addHtml('<p class="text-info">'.get_lang('Mon Environnement De Travail Renvoi FAQ').'</p>');
-$userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
+$userForm->addButtonSave(get_lang('Save'), 'submit_partial[environnement]');
 $userForm->addEndPanel();
 
 $htmlHeadXtra[] = '<script>

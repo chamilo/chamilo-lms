@@ -1031,6 +1031,16 @@ EOT;
         $html = '
                 <script>
                  document.addEventListener("DOMContentLoaded", function() {
+                    const query = window.location.hash.replace("#", "#collapse_");
+                    if (query) {
+                        const selected = document.querySelector(query);
+                        if (selected) {
+                             if (selected.classList.contains("hidden")) {
+                                selected.classList.remove("hidden");
+                            } 
+                        }
+                    }
+                    
                     const button = document.querySelector("#card_'.$id.'");
                         button.addEventListener("click", (e) => {
                         let menu = document.querySelector("#collapse_'.$id.'");

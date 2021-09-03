@@ -319,7 +319,7 @@ if (($current_forum_category &&
         // new thread link
         if ((
             api_is_allowed_to_edit(false, true) &&
-            !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId)) ||
+            !(api_is_session_general_coach())) || //&& $forumEntity->getSessionId() != $sessionId
             (1 == $forumEntity->getAllowNewThreads() && isset($_user['user_id'])) ||
             (1 == $forumEntity->getAllowNewThreads() && !isset($_user['user_id']) && 1 == $forumEntity->getAllowAnonymous())
         ) {
@@ -460,7 +460,7 @@ foreach ($posts as $post) {
     if (($groupEntity && $tutorGroup) ||
         (1 == $forumEntity->getAllowEdit() && $posterId == $userId) ||
         (api_is_allowed_to_edit(false, true) &&
-        !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId))
+        !(api_is_session_general_coach())) //&& $forumEntity->getSessionId() != $sessionId
     ) {
         if (false == $locked && postIsEditableByStudent($forumEntity, $post)) {
             $editUrl = api_get_path(WEB_CODE_PATH).'forum/editpost.php?'.api_get_cidreq();
@@ -480,7 +480,7 @@ foreach ($posts as $post) {
 
     if (($groupEntity && $tutorGroup) ||
         api_is_allowed_to_edit(false, true) &&
-        !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId)
+        !(api_is_session_general_coach()) //&& $forumEntity->getSessionId() != $sessionId
     ) {
         if (false == $locked) {
             $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
@@ -514,8 +514,7 @@ foreach ($posts as $post) {
 
     if (api_is_allowed_to_edit(false, true) &&
         !(
-            api_is_session_general_coach() &&
-            $forumEntity->getSessionId() != $sessionId
+            api_is_session_general_coach() //&&            $forumEntity->getSessionId() != $sessionId
         )
     ) {
         $iconEdit .= return_visible_invisible_icon(
@@ -738,7 +737,7 @@ foreach ($posts as $post) {
             $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
             if ((1 == $forumEntity->getAllowEdit() && $post['user_id'] == $userId) ||
                 (api_is_allowed_to_edit(false, true) &&
-                !(api_is_session_general_coach() && $forumEntity->getSessionId() != $sessionId))
+                !(api_is_session_general_coach())) //&& $forumEntity->getSessionId() != $sessionId
             ) {
                 $post['post_attachments'] .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
                     .$attachment->getIid().'&forum='.$forumId.'&thread='.$threadId.'&post='.$post['post_id']

@@ -458,10 +458,11 @@ if (is_array($forumCategories)) {
                             }
                         }*/
                         // Validation when belongs to a session
-                        $forumInfo['icon_session'] = api_get_session_image(
+                        /*$forumInfo['icon_session'] = api_get_session_image(
                             $forum->getSessionId(),
                             $user
-                        );
+                        );*/
+                        $forumInfo['icon_session'] = '';
                         if ('0' != $forum->getForumOfGroup()) {
                             $forumOfGroup = $forum->getForumOfGroup();
                             $my_all_groups_forum_name = $all_groups[$forumOfGroup]['name'] ?? null;
@@ -553,9 +554,10 @@ if (is_array($forumCategories)) {
                             $forumInfo['last_post_text'] = Security::remove_XSS(cut($forum['last_post_text'], 140));
                         }*/
 
-                        if (api_is_allowed_to_edit(false, true)
+                        /*if (api_is_allowed_to_edit(false, true)
                             && !(0 == $forum->getSessionId() && 0 != $sessionId)
-                        ) {
+                        ) {*/
+                        if (api_is_allowed_to_edit(false, true)) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=edit_forum&content=forum&id='.$forumId.'">'
                                 .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)

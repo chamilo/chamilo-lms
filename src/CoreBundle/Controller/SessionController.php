@@ -176,12 +176,12 @@ class SessionController extends AbstractController
 
         $sessionDates = SessionManager::parseSessionDates($session, true);
 
+        $hasRequirements = false;
         /*$sessionRequirements = $sequenceResourceRepo->getRequirements(
             $session->getId(),
             SequenceResource::SESSION_TYPE
         );
 
-        $hasRequirements = false;
         foreach ($sessionRequirements as $sequence) {
             if (!empty($sequence['requirements'])) {
                 $hasRequirements = true;
@@ -221,7 +221,7 @@ class SessionController extends AbstractController
             'courses' => $courses,
             'essence' => $essence,
             'session_extra_fields' => $sessionValues->getAllValuesForAnItem($session->getId(), null, true),
-            //'has_requirements' => $hasRequirements,
+            'has_requirements' => $hasRequirements,
             //'sequences' => $sessionRequirements,
             'is_premium' => $sessionIsPremium,
             'show_tutor' => 'true' === api_get_setting('show_session_coach'),

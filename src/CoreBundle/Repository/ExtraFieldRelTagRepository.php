@@ -40,13 +40,11 @@ class ExtraFieldRelTagRepository extends ServiceEntityRepository
             ->innerJoin(
                 'ChamiloCoreBundle:Tag',
                 't',
-                Join::WITH,
-                'ft.tagId = t.id'
             )
             ->where(
                 $queryBuilder->expr()->andX(
                     $queryBuilder->expr()->eq('ft.itemId', $itemId),
-                    $queryBuilder->expr()->eq('ft.fieldId', $extraField->getId())
+                    $queryBuilder->expr()->eq('ft.field', $extraField->getId())
                 )
             )
         ;

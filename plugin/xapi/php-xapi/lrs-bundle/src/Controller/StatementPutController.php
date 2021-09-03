@@ -32,7 +32,7 @@ final class StatementPutController
         $this->repository = $repository;
     }
 
-    public function putStatement(Request $request, Statement $statement)
+    public function putStatement(Request $request, Statement $statement): Response
     {
         if (null === $statementId = $request->query->get('statementId')) {
             throw new BadRequestHttpException('Required statementId parameter is missing.');
@@ -55,6 +55,8 @@ final class StatementPutController
                 throw new ConflictHttpException('The new statement is not equal to an existing statement with the same id.');
             }
         } catch (NotFoundException $e) {
+            $statement = $statement->withId($id);
+
             $this->repository->storeStatement($statement, true);
         }
 

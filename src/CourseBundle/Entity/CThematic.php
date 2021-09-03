@@ -34,10 +34,9 @@ class CThematic extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
@@ -80,6 +79,7 @@ class CThematic extends AbstractResource implements ResourceInterface
         $this->plans = new ArrayCollection();
         $this->advances = new ArrayCollection();
         $this->active = true;
+        $this->displayOrder = 0;
     }
 
     public function __toString(): string

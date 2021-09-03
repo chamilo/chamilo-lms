@@ -261,9 +261,6 @@ class SurveyManager
                     $extraParams['form_fields'] = '';
                 }
                 $survey->setFormFields($extraParams['form_fields']);
-            } else {
-                $survey->setShowFormProfile(0);
-                $survey->setFormFields(0);
             }
 
             $extraParams['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : 0;

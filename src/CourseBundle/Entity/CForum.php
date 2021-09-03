@@ -123,11 +123,6 @@ class CForum extends AbstractResource implements ResourceInterface
     protected int $locked;
 
     /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected int $sessionId;
-
-    /**
      * @ORM\Column(name="forum_image", type="string", length=255, nullable=false)
      */
     protected string $forumImage;
@@ -430,23 +425,6 @@ class CForum extends AbstractResource implements ResourceInterface
     public function getLocked()
     {
         return $this->locked;
-    }
-
-    public function setSessionId(int $sessionId): self
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
     }
 
     public function setForumImage(string $forumImage): self

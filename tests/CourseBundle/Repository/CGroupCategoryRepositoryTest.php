@@ -19,7 +19,7 @@ class CGroupCategoryRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = self::getContainer()->get('doctrine')->getManager();
+        $em = $this->getManager();
         $repo = self::getContainer()->get(CGroupCategoryRepository::class);
 
         $course = $this->createCourse('new');

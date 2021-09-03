@@ -813,7 +813,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setModerated((bool) ($values['moderated']['moderated'] ?? false))
         ->setStartTime(!empty($values['start_time']) ? api_get_utc_datetime($values['start_time'], true, true) : null)
         ->setEndTime(!empty($values['end_time']) ? api_get_utc_datetime($values['end_time'], true, true) : null)
-        ->setSessionId($session_id)
         ->setLp($lp)
     ;
 

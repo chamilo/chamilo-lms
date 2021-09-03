@@ -6,12 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CourseBundle\Entity\CAttendance;
-use Chamilo\CourseBundle\Repository\CAttendanceRepository;
+use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Repository\CLinkRepository;
+use Chamilo\CourseBundle\Repository\CLpRepository;
+use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
-class CAttendanceRepositoryTest extends AbstractApiTest
+class CLinkRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
@@ -20,22 +24,23 @@ class CAttendanceRepositoryTest extends AbstractApiTest
         self::bootKernel();
 
         $em = $this->getManager();
-        $repo = self::getContainer()->get(CAttendanceRepository::class);
+        $repo = self::getContainer()->get(CLinkRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
-        $item = (new CAttendance())
-            ->setName('item')
-            ->setAttendanceWeight(100)
+        $item = (new CLink())
+            ->setUrl('https://chamilo.org')
+            ->setTitle('link')
             ->setParent($course)
             ->setCreator($teacher)
         ;
+
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);
         $em->flush();
 
-        $this->assertSame('item', (string) $item);
+        $this->assertSame('link', (string) $item);
         $this->assertSame(1, $repo->count([]));
     }
 }

@@ -121,6 +121,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="anonymous", type="string", length=10, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $anonymous;
 
     /**
@@ -227,6 +228,8 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->creationDate = new DateTime();
         $this->invited = 0;
         $this->answered = 0;
+        $this->anonymous = '0';
+        $this->formFields = '0';
         $this->subtitle = '';
         $this->inviteMail = '';
         $this->lang = '';
@@ -236,6 +239,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->oneQuestionPerPage = false;
         $this->surveyVersion = '';
         $this->surveyType = 0;
+        $this->showFormProfile = 0;
         $this->questions = new ArrayCollection();
         $this->children = new ArrayCollection();
         $this->invitations = new ArrayCollection();

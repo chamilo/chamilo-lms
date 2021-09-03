@@ -7435,8 +7435,6 @@ class Tracking
                         $data['post_group_id'] = (int) $data['post_group_id'];
                         $publication = new CStudentPublication();
                         $publication
-                            ->setUrl($new_url)
-                            ->setCId($course_id)
                             ->setTitle($data['title'])
                             ->setDescription($data['description'].' file moved')
                             ->setActive($data['active'])

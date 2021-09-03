@@ -36,9 +36,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
@@ -74,6 +74,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Assert\Choice(callback: 'getFileTypes')]
     protected string $filetype;
 
     /**
@@ -133,6 +135,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="weight", type="float", precision=6, scale=2, nullable=false)
      */
+    #[Assert\NotBlank]
     protected float $weight;
 
     /**
@@ -165,6 +168,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         $this->qualificatorId = 0;
         $this->qualification = 0;
         $this->assignment = null;
+        $this->postGroupId = 0;
+        $this->allowTextAssignment = 0;
+        $this->filetype = 'folder';
         $this->sentDate = new DateTime();
         $this->children = new ArrayCollection();
         $this->comments = new ArrayCollection();
@@ -173,6 +179,11 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function __toString(): string
     {
         return $this->getTitle();
+    }
+
+    public function getFileTypes(): array
+    {
+        return ['file', 'folder'];
     }
 
     /**

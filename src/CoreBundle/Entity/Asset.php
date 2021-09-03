@@ -42,17 +42,12 @@ class Asset
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(type="string", length=255)
      */
+    #[Assert\NotBlank]
     protected ?string $title = null;
 
     /**
-     * @todo use attributes
-     *
-     * @Assert\NotBlank()
-     *
      * @Assert\Choice({
      *     Asset::SCORM,
      *     Asset::WATERMARK,
@@ -64,6 +59,7 @@ class Asset
      *
      * @ORM\Column(type="string", length=255)
      */
+    #[Assert\NotBlank]
     protected ?string $category = null;
 
     /**

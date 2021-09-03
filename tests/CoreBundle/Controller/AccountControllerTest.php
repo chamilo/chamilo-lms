@@ -10,19 +10,11 @@ use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class IndexControllerTest extends WebTestCase
+class AccountControllerTest extends WebTestCase
 {
     use ChamiloTestTrait;
 
-    public function testIndex(): void
-    {
-        $client = static::createClient();
-        $client->request('GET', '/');
-
-        $this->assertResponseIsSuccessful();
-    }
-
-    public function testToggleStudentViewAction(): void
+    public function testEdit(): void
     {
         $client = static::createClient();
 
@@ -32,7 +24,7 @@ class IndexControllerTest extends WebTestCase
         // simulate $testUser being logged in
         $client->loginUser($admin);
 
-        $client->request('GET', '/toggle_student_view');
+        $client->request('GET', '/account/edit');
 
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }

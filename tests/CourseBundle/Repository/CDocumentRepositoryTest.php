@@ -44,14 +44,16 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('Test');
 
         // Create folder.
-        $resourceLinkList = [[
-            'cid' => $course->getId(),
-            'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
-        ]];
+        $resourceLinkList = [
+            [
+                'cid' => $course->getId(),
+                'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+        ];
 
         $folderName = 'folder1';
         $token = $this->getUserToken([]);
-        $this->createClientWithCredentials($token)->request(
+        $response = $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/documents',
             [
@@ -72,6 +74,27 @@ class CDocumentRepositoryTest extends AbstractApiTest
             '@type' => 'Documents',
             'title' => $folderName,
             'parentResourceNode' => $course->getResourceNode()->getId(),
+        ]);
+
+        // Update.
+        $id = $response->toArray()['@id'];
+
+        $this->createClientWithCredentials($token)->request(
+            'PUT',
+            $id,
+            [
+                'json' => [
+                    'title' => 'edited',
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/Documents',
+            '@type' => 'Documents',
+            'title' => 'edited',
         ]);
     }
 

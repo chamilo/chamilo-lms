@@ -19,7 +19,7 @@ class GroupRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = self::getContainer()->get('doctrine')->getManager();
+        $em = $this->getManager();
         $repo = self::getContainer()->get(GroupRepository::class);
         $defaultGroups = $repo->count([]);
         $item = (new Group('new_group'))

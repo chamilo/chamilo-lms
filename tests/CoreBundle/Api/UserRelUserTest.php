@@ -23,7 +23,7 @@ class UserRelUserTest extends AbstractApiTest
         $user = $this->createUser('user');
         $friend = $this->createUser('friend');
 
-        $em = self::getContainer()->get('doctrine')->getManager();
+        $em = $this->getManager();
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         $tokenTest = $this->getUserToken(

@@ -19,7 +19,7 @@ class SessionRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = self::getContainer()->get('doctrine')->getManager();
+        $em = $this->getManager();
         $repo = self::getContainer()->get(SessionRepository::class);
 
         $url = $this->getAccessUrl();

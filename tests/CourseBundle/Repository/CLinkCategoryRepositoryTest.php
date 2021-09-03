@@ -6,14 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
-use Chamilo\CourseBundle\Entity\CLp;
-use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
-use Chamilo\CourseBundle\Repository\CLinkRepository;
-use Chamilo\CourseBundle\Repository\CLpRepository;
-use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 

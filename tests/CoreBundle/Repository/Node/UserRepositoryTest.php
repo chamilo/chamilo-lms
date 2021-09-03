@@ -151,7 +151,7 @@ class UserRepositoryTest extends AbstractApiTest
     public function testAddFriendToUser(): void
     {
         self::bootKernel();
-        $em = self::getContainer()->get('doctrine')->getManager();
+        $em = $this->getManager();
 
         $user = $this->createUser('user', 'user');
         $friend = $this->createUser('friend', 'friend');

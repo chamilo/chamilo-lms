@@ -2278,6 +2278,10 @@ class CourseRestorer
      */
     public function restore_test_category($session_id, $respect_base_content, $destination_course_code)
     {
+	   if (!empty($session_id)) {
+            return false;
+	   }
+
         $destinationCourseId = $this->destination_course_info['real_id'];
         // Let's restore the categories
         $categoryOldVsNewList = []; // used to build the quiz_question_rel_category table

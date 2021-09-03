@@ -1350,7 +1350,8 @@ if (empty($details)) {
                     .http_build_query(
                         [
                             'action' => 'export_one_session_row',
-                            'export' => 'xls',
+			    'export' => 'xls',
+			    'student' => $student_id,
                             'session_to_export' => $sId,
                         ]
                     )

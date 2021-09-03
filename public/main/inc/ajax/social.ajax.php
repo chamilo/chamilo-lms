@@ -204,18 +204,6 @@ switch ($action) {
         }
         echo $html;
         break;
-        // Read the Url using OpenGraph and returns the hyperlinks content
-    case 'read_url_with_open_graph':
-        $url = isset($_POST['social_wall_new_msg_main']) ? $_POST['social_wall_new_msg_main'] : '';
-        $url = trim($url);
-        $html = '';
-        if (true == SocialManager::verifyUrl($url)) {
-            $html = Security::remove_XSS(
-                SocialManager::readContentWithOpenGraph($url)
-            );
-        }
-        echo $html;
-        break;
     case 'like_message':
         header('Content-Type: application/json');
 

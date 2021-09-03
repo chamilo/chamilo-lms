@@ -972,41 +972,6 @@ class SocialManager extends UserManager
     }
 
     /**
-     * get html data with OpenGrap passing the URL.
-     *
-     * @param $link url
-     *
-     * @return string data html
-     */
-    public static function readContentWithOpenGraph($link)
-    {
-        if (false === strpos($link, "://") && "/" != substr($link, 0, 1)) {
-            $link = "http://".$link;
-        }
-        $graph = OpenGraph::fetch($link);
-        $link = parse_url($link);
-        $host = $link['host'] ? strtoupper($link['host']) : $link['path'];
-        if (!$graph) {
-            return false;
-        }
-        $url = $graph->url;
-        $image = $graph->image;
-        $description = $graph->description;
-        $title = $graph->title;
-        $html = '<div class="thumbnail social-thumbnail">';
-        $html .= empty($image) ? '' : '<a target="_blank" href="'.$url.'">
-                <img class="img-responsive social-image" src="'.$image.'" /></a>';
-        $html .= '<div class="social-description">';
-        $html .= '<a target="_blank" href="'.$url.'"><h5 class="social-title"><b>'.$title.'</b></h5></a>';
-        $html .= empty($description) ? '' : '<span>'.$description.'</span>';
-        $html .= empty($host) ? '' : '<p>'.$host.'</p>';
-        $html .= '</div>';
-        $html .= '</div>';
-
-        return $html;
-    }
-
-    /**
      * verify if Url Exist - Using Curl.
      *
      * @param $uri url
@@ -1239,47 +1204,6 @@ class SocialManager extends UserManager
         }
 
         return $friendHtml;
-    }
-
-    /**
-     * @return string Get the JS code necessary for social wall to load open graph from URLs.
-     */
-    public static function getScriptToGetOpenGraph()
-    {
-        return '<script>
-            $(function() {
-                $("[name=\'social_wall_new_msg_main\']").on("paste", function(e) {
-                    $.ajax({
-                        contentType: "application/x-www-form-urlencoded",
-                        beforeSend: function() {
-                            $("[name=\'wall_post_button\']").prop( "disabled", true );
-                            $(".panel-preview").hide();
-                            $(".spinner").html("'
-                                .'<div class=\'text-center\'>'
-                                .'<em class=\'fa fa-spinner fa-pulse fa-1x\'></em>'
-                                .'<p>'.get_lang('Loading').' '.get_lang('Preview').'</p>'
-                                .'</div>'
-                            .'");
-                        },
-                        type: "POST",
-                        url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=read_url_with_open_graph",
-                        data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
-                        success: function(response) {
-                            $("[name=\'wall_post_button\']").prop("disabled", false);
-                            if (!response == false) {
-                                $(".spinner").html("");
-                                $(".panel-preview").show();
-                                $(".url_preview").html(response);
-                                $("[name=\'url_content\']").val(response);
-                                $(".url_preview img").addClass("img-responsive");
-                            } else {
-                                $(".spinner").html("");
-                            }
-                        }
-                    });
-                });
-            });
-        </script>';
     }
 
     /**

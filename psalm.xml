@@ -155,9 +155,7 @@
 
             <directory name="public/main/inc/lib/javascript" />
             <directory name="public/main/inc/lib/kses-0.2.2" />
-            <directory name="public/main/inc/lib/mimetex" />
             <directory name="public/main/inc/lib/nusoap" />
-            <directory name="public/main/inc/lib/opengraph" />
             <directory name="public/main/inc/lib/pear" />
             <directory name="public/main/inc/lib/ppt2png" />
             <directory name="public/main/inc/lib/search" />

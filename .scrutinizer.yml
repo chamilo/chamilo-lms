@@ -25,7 +25,6 @@ filter:
         - 'public/main/chat/emoji_strategy.php'
         - 'public/main/inc/lib/javascript/*'
         - 'public/main/inc/lib/kses-0.2.2/*'
-        - 'public/main/inc/lib/mimetex/*'
         - 'public/main/inc/lib/nusoap/*'
         - 'public/main/inc/lib/opengraph/*'
         - 'public/main/inc/lib/ppt2png/*'

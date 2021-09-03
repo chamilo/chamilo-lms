@@ -4,16 +4,15 @@
 {% autoescape false %}
     <div class="start-course">
         <div class="image-course">
-            <img src="{{ course.course_image_large }}" class="img-fluid"/>
+            <img src="{{ course }}" class="img-fluid"/>
         </div>
         <div class="description-course">
-            {% if course.categoryName %}
-                <h5>{{ course.categoryName }}</h5>
-            {% endif %}
-            <h2><a href="{{ course_url  }}">{{ course_title }}</a></h2>
-            {% if just_created == 1%}
-                <a role="button" href="{{ course_url }}" class="btn btn-primary btn-lg">{{ "Go to the course created"|trans }}</a>
-            {% endif %}
+
+            <h2><a href="">{{ course.title }}</a></h2>
+
+                <a role="button" href="{{ course.title }}" class="btn btn-primary btn-lg">
+                    {{ "Go to the course created"|trans }}</a>
+
         </div>
         <div class="start-info">
             <h3>{{ 'Things to do'|trans }}</h3>

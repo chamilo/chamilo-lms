@@ -49,6 +49,7 @@ class CourseHomeController extends ToolBaseController
     public function indexJsonAction(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain): Response
     {
         $course = $this->getCourse();
+
         if (null === $course) {
             throw $this->createAccessDeniedException();
         }
@@ -247,6 +248,10 @@ class CourseHomeController extends ToolBaseController
 
         $tool = $toolChain->getToolFromName($tool->getTool()->getName());
         $link = $tool->getLink();
+
+        if (null === $this->getCourse()) {
+            throw new NotFoundHttpException($this->trans('Course not found'));
+        }
 
         if (strpos($link, 'nodeId')) {
             $nodeId = (string) $this->getCourse()->getResourceNode()->getId();

@@ -46,6 +46,7 @@ class CourseVoter extends Voter
         if (!\in_array($attribute, $options, true)) {
             return false;
         }
+
         // only vote on Post objects inside this voter
         return $subject instanceof Course;
     }
@@ -54,12 +55,12 @@ class CourseVoter extends Voter
     {
         /** @var User $user */
         $user = $token->getUser();
-        // Anons can enter a course depending of the course visibility
+        // Anons can enter a course depending on the course visibility.
         /*if (!$user instanceof UserInterface) {
             return false;
         }*/
 
-        // Admins have access to everything
+        // Admins have access to everything.
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }

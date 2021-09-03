@@ -171,7 +171,9 @@ Libraries
 
 Get the token:
 
-`curl -k -X POST -H "Content-Type: application/json" https://example.com/api/authentication_token -d '{"username":"admin","password":"admin"}'`
+```
+curl -k -X POST -H "Content-Type: application/json" https://example.com/api/authentication_token -d '{"username":"admin","password":"admin"}'
+```
 
 The response should return something like:
 

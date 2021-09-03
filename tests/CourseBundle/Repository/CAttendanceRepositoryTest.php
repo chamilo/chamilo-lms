@@ -6,12 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CourseBundle\Entity\CLp;
-use Chamilo\CourseBundle\Repository\CLpRepository;
+use Chamilo\CourseBundle\Entity\CAttendance;
+use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
-class CLpRepositoryTest extends AbstractApiTest
+class CAttendanceRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
@@ -20,22 +20,22 @@ class CLpRepositoryTest extends AbstractApiTest
         self::bootKernel();
 
         $em = self::getContainer()->get('doctrine')->getManager();
-        $repo = self::getContainer()->get(CLpRepository::class);
+        $repo = self::getContainer()->get(CAttendanceRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
-        $item = (new CLp())
-            ->setName('lp')
+        $item = (new CAttendance())
+            ->setName('item')
+            ->setAttendanceWeight(100)
             ->setParent($course)
             ->setCreator($teacher)
-            ->setLpType(CLp::LP_TYPE)
         ;
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);
         $em->flush();
 
-        $this->assertSame('lp', (string) $item);
+        $this->assertSame('item', (string) $item);
         $this->assertSame(1, $repo->count([]));
     }
 }

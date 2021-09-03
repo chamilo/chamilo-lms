@@ -62,6 +62,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="attendance_weight", type="float", precision=6, scale=2, nullable=false)
      */
+    #[Assert\NotNull]
     protected float $attendanceWeight;
 
     /**
@@ -95,7 +96,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
 
     public function __toString(): string
     {
-        return (string) $this->getIid();
+        return $this->getName();
     }
 
     public function setName(string $name): self

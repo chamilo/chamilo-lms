@@ -1191,8 +1191,7 @@ class AnnouncementManager
                 );
             } else {
                 $repo = Container::getAnnouncementAttachmentRepository();
-                $attachment = new CAnnouncementAttachment();
-                $attachment
+                $attachment = (new CAnnouncementAttachment())
                     ->setFilename($file_name)
                     ->setPath(uniqid('announce_', true))
                     ->setComment($file_comment)

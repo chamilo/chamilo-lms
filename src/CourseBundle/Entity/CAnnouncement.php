@@ -30,10 +30,9 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
@@ -69,6 +68,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->content = '';
+        $this->displayOrder = 1;
         $this->attachments = new ArrayCollection();
     }
 

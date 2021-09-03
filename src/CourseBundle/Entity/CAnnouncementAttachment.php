@@ -51,6 +51,11 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
      */
     protected string $filename;
 
+    public function __construct()
+    {
+        $this->comment = '';
+    }
+
     public function __toString(): string
     {
         return $this->getFilename();

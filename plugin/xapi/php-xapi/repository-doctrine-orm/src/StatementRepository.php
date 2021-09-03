@@ -36,7 +36,7 @@ final class StatementRepository extends EntityRepository implements BaseStatemen
     {
         if (!empty($criteria['registration'])) {
             $context = $this->_em->getRepository(Context::class)->findOneBy([
-                'registration' => $criteria['registration']
+                'registration' => $criteria['registration'],
             ]);
 
             unset(

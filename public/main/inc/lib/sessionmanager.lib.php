@@ -483,7 +483,8 @@ class SessionManager
         $options = [],
         $getCount = false,
         $columns = [],
-        $listType = 'all'
+        $listType = 'all',
+        $extraFieldsToLoad = []
     ) {
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -506,10 +507,8 @@ class SessionManager
         ) {
             $where .= " AND s.id_coach = $userId ";
         }
-
         $extraFieldModel = new ExtraFieldModel('session');
         $conditions = $extraFieldModel->parseConditions($options);
-
         $sqlInjectJoins = $conditions['inject_joins'];
         $where .= $conditions['where'];
         $sqlInjectWhere = $conditions['inject_where'];
@@ -543,6 +542,11 @@ class SessionManager
                      $injectExtraFields
                      s.id
              ";
+
+            // ofaj fix
+            if (!empty($extraFieldsToLoad)) {
+                $select = "SELECT DISTINCT s.* ";
+            }
 
             if ($showCountUsers) {
                 $select .= ', count(su.user_id) users';
@@ -642,14 +646,12 @@ class SessionManager
         $query .= $order;
         $query .= $limit;
         $result = Database::query($query);
-
         $sessions = Database::store_result($result, 'ASSOC');
 
         if ('all' === $listType) {
             if ($getCount) {
                 return $sessions[0]['total_rows'];
             }
-
             return $sessions;
         }
 
@@ -683,9 +685,8 @@ class SessionManager
                 }
             }
         }
-
         $userId = api_get_user_id();
-        $sessions = self::getSessionsForAdmin($userId, $options, $getCount, $columns, $listType);
+        $sessions = self::getSessionsForAdmin($userId, $options, $getCount, $columns, $listType, $extraFieldsToLoad);
         if ($getCount) {
             return (int) $sessions;
         }

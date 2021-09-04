@@ -829,11 +829,13 @@ switch ($action) {
             case 'custom':
             case 'simple':
                 $count = SessionManager::getSessionsForAdmin(
+                    api_get_user_id(),
                     ['where' => $whereCondition, 'extra' => $extra_fields],
                     true,
                     [],
                     $extraFieldsToLoad,
-                    $language
+                    $listType,
+                    $extraFieldsToLoad
                 );
                 break;
             case 'active':
@@ -1930,10 +1932,6 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-        $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
-        $language = isset($_REQUEST['lang']) ? $_REQUEST['lang'] : '';
-        $order = isset($_REQUEST['order']) ? $_REQUEST['order'] : '';
-
         $sessionColumns = SessionManager::getGridColumns($listType);
         $columns = $sessionColumns['simple_column_name'];
 
@@ -1964,6 +1962,7 @@ switch ($action) {
             case 'custom':
             case 'simple':
                 $result = SessionManager::getSessionsForAdmin(
+                    api_get_user_id(),
                     [
                         'where' => $whereCondition,
                         'order' => "$sidx $sord, s.name",
@@ -1972,8 +1971,8 @@ switch ($action) {
                     ],
                     false,
                     $sessionColumns,
-                    $extraFieldsToLoad,
-                    $language,
+                    $listType,
+                    $extraFieldsToLoad
                 );
                 break;
             case 'active':
@@ -1988,7 +1987,7 @@ switch ($action) {
                     ],
                     false,
                     $sessionColumns,
-                    [],
+                    $extraFieldsToLoad,
                     $listType
                 );
                 break;

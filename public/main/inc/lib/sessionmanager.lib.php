@@ -507,8 +507,10 @@ class SessionManager
         ) {
             $where .= " AND s.id_coach = $userId ";
         }
+
         $extraFieldModel = new ExtraFieldModel('session');
         $conditions = $extraFieldModel->parseConditions($options);
+
         $sqlInjectJoins = $conditions['inject_joins'];
         $where .= $conditions['where'];
         $sqlInjectWhere = $conditions['inject_where'];
@@ -646,12 +648,14 @@ class SessionManager
         $query .= $order;
         $query .= $limit;
         $result = Database::query($query);
+
         $sessions = Database::store_result($result, 'ASSOC');
 
         if ('all' === $listType) {
             if ($getCount) {
                 return $sessions[0]['total_rows'];
             }
+
             return $sessions;
         }
 
@@ -685,6 +689,7 @@ class SessionManager
                 }
             }
         }
+
         $userId = api_get_user_id();
         $sessions = self::getSessionsForAdmin($userId, $options, $getCount, $columns, $listType, $extraFieldsToLoad);
         if ($getCount) {

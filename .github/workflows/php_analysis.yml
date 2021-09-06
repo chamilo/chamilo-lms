@@ -53,3 +53,6 @@ jobs:
             - name: PhpStan
               if: (${{ success() }} || ${{ steps.psalm.outcome }} == 'failure')
               run: vendor/bin/phpstan analyse
+
+            - name: Doctrine Schema Validator
+              run: php bin/console doctrine:schema:validate --skip-sync

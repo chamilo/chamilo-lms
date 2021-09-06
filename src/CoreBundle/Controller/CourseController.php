@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use CourseManager;
 use Doctrine\ORM\EntityRepository;
 use ExtraFieldValue;
@@ -60,7 +61,7 @@ class CourseController extends AbstractController
      *
      * @Entity("course", expr="repository.find(cid)")
      */
-    public function aboutAction(Course $course, IllustrationRepository $illustrationRepository): Response
+    public function aboutAction(Course $course, IllustrationRepository $illustrationRepository, CCourseDescriptionRepository $courseDescriptionRepository): Response
     {
         $courseId = $course->getId();
         $userId = $this->getUser()->getId();
@@ -71,19 +72,7 @@ class CourseController extends AbstractController
         /** @var ExtraFieldRelTagRepository $fieldTagsRepo */
         $fieldTagsRepo = $em->getRepository(ExtraFieldRelTag::class);
 
-        /** @var CCourseDescription[] $courseDescriptionTools */
-        $courseDescriptionTools = $em->getRepository(CCourseDescription::class)
-            ->findBy(
-                [
-                    'cId' => $course->getId(),
-                    'sessionId' => 0,
-                ],
-                [
-                    'id' => 'DESC',
-                    'descriptionType' => 'ASC',
-                ]
-            )
-        ;
+        $courseDescriptions = $courseDescriptionRepository->getResourcesByCourse($course)->getQuery()->getResult();
 
         $courseValues = new ExtraFieldValue('course');
 
@@ -116,7 +105,7 @@ class CourseController extends AbstractController
         $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = '';
         $courseMaterial = $courseResources = $courseAssessment = '';
         $courseCustom = [];
-        foreach ($courseDescriptionTools as $descriptionTool) {
+        foreach ($courseDescriptions as $descriptionTool) {
             switch ($descriptionTool->getDescriptionType()) {
                 case CCourseDescription::TYPE_DESCRIPTION:
                     $courseDescription = $descriptionTool->getContent();
@@ -180,6 +169,7 @@ class CourseController extends AbstractController
         }*/
 
         $image = Container::getIllustrationRepository()->getIllustrationUrl($course, 'course_picture_medium');
+
         $params = [
             'course' => $course,
             'description' => $courseDescription,
@@ -193,6 +183,9 @@ class CourseController extends AbstractController
                 true
             ),
             'subscription' => $subscriptionUser,
+            'url' => '',
+            'is_premium' => '',
+            'token' => '',
         ];
 
         $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';
@@ -204,6 +197,6 @@ class CourseController extends AbstractController
         $htmlHeadXtra[] = $metaInfo;
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
-        return $this->render('@ChamiloCore/Course/about.html.twig', [$params]);
+        return $this->render('@ChamiloCore/Course/about.html.twig', $params);
     }
 }

@@ -42,4 +42,19 @@ class CourseControllerTest extends WebTestCase
 
         $this->assertStringContainsString('new course', $client->getResponse()->getContent());
     }
+
+    public function testAboutAction(): void
+    {
+        $client = static::createClient();
+        $course = $this->createCourse('new course');
+        $admin = $this->getUser('admin');
+
+        // simulate $testUser being logged in
+        $client->loginUser($admin);
+
+        $client->request('GET', '/course/'.$course->getId().'/about');
+
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertStringContainsString('new course', $client->getResponse()->getContent());
+    }
 }

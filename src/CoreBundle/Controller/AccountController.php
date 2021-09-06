@@ -52,9 +52,7 @@ class AccountController extends BaseController
 
             $userRepository->updateUser($user);
             $this->addFlash('success', $this->trans('Updated'));
-            $url = $this->generateUrl('chamilo_core_account_home', [
-                'username' => $user->getUsername(),
-            ]);
+            $url = $this->generateUrl('chamilo_core_account_home');
 
             return new RedirectResponse($url);
         }

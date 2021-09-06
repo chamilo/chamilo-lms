@@ -91,18 +91,7 @@
                         <div class="card-body">
                             <h3 class="sub-title">{{ "CourseInformation"|trans }}</h3>
                             <div class="course-information">
-                                {% for topic in syllabus %}
-                                    {% if topic.content != '' %}
-                                        <div class="topics">
-                                            <h4 class="title-info">
-                                                <em class="fa fa-book"></em> {{ topic.title }}
-                                            </h4>
-                                            <div class="content-info">
-                                                {{ topic.content }}
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
+
                             </div>
                         </div>
                     </div>
@@ -114,16 +103,16 @@
                             {% if is_premium == false %}
                                 <h5>{{ 'CourseSubscription'|trans }}</h5>
                                 <div class="session-subscribe">
-                                    {% if _u.logged == 0 %}
+                                    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                                         {% if 'allow_registration'|api_get_setting != 'false' %}
                                             <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-success btn-block btn-lg">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|trans }}
                                             </a>
                                         {% endif %}
                                     {% elseif subscription %}
-                                        <a href="{{ _p.web }}courses/{{ course.code }}/index.php?sid=0" class="btn btn-lg btn-success btn-block">{{ 'CourseHomepage'|trans }}</a>
+                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?sid=0" class="btn btn-lg btn-success btn-block">{{ 'CourseHomepage'|trans }}</a>
                                     {% else %}
-                                        <a href="{{ _p.web }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}" class="btn btn-lg btn-success btn-block">{{ 'Subscribe'|trans }}</a>
+                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}" class="btn btn-lg btn-success btn-block">{{ 'Subscribe'|trans }}</a>
                                     {% endif %}
                                 </div>
                             {% else %}

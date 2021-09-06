@@ -27,5 +27,13 @@ class AccountControllerTest extends WebTestCase
         $client->request('GET', '/account/edit');
 
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+        $client->submitForm('Update profile', [
+            'profile[firstname]' => 'admin firstname',
+        ]);
+        $this->assertResponseRedirects('/account/home');
+
+        $client->request('GET', '/account/edit');
+        $this->assertStringContainsString('admin firstname', $client->getResponse()->getContent());
     }
 }

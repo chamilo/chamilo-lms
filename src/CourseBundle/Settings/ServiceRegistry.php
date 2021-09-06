@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CourseBundle\Manager;
+namespace Chamilo\CourseBundle\Settings;
 
 use Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry as SyliusServiceRegistry;
 

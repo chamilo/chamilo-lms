@@ -16,7 +16,7 @@ services:
             - '@event_dispatcher'
             - '@request_stack'
 
-    Chamilo\CourseBundle\Manager\SettingsFormFactory:
+    Chamilo\CourseBundle\Settings\SettingsFormFactory:
         arguments:
             - 'Sylius\Bundle\SettingsBundle\Registry\ServiceRegistry'
             - '@form.factory'

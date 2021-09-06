@@ -135,10 +135,21 @@ class CourseCategoryRepository extends ServiceEntityRepository
         $em->flush();
     }
 
+    public function deleteAsset(CourseCategory $category): void
+    {
+        $em = $this->getEntityManager();
+        if ($category->hasAsset()) {
+            $asset = $category->getAsset();
+            $em->remove($asset);
+            $em->flush();
+        }
+    }
+
     public function delete(CourseCategory $category): void
     {
         $em = $this->getEntityManager();
         $em->remove($category);
+        $this->deleteAsset($category);
         $em->flush();
     }
 

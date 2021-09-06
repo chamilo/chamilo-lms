@@ -203,27 +203,15 @@ class CourseCategory
         Database::query($sql);
     }
 
-    public static function delete($categoryId): bool
+    public static function edit($categoryId, $name, $canHaveCourses, $code, $description): ?CourseCategoryEntity
     {
         $repo = Container::getCourseCategoryRepository();
         $category = $repo->find($categoryId);
         if (null === $category) {
-            return false;
+            return null;
         }
 
-        $repo->delete($category);
-
-        return true;
-    }
-
-    public static function edit($categoryId, $name, $canHaveCourses, $code, $description): CourseCategoryEntity
-    {
-        $name = trim(Database::escape_string($name));
-        $canHaveCourses = Database::escape_string($canHaveCourses);
-
-        $repo = Container::getCourseCategoryRepository();
-        $category = $repo->find($categoryId);
-
+        $name = trim($name);
         $category
             ->setCode($name)
             ->setName($name)
@@ -837,26 +825,6 @@ class CourseCategory
         return $nameTools;
     }
 
-    public static function deleteImage(CourseCategoryEntity $category)
-    {
-        $assetId = $category->getImage();
-        if (empty($assetId)) {
-            return false;
-        }
-
-        $assetRepo = Container::getAssetRepository();
-        /** @var Asset $asset */
-        $asset = $assetRepo->find($assetId);
-        if (null !== $asset) {
-            $category->setImage('');
-            $assetRepo->delete($asset);
-            $repo = Container::getCourseCategoryRepository();
-            $repo->save($category);
-        }
-
-        return true;
-    }
-
     /**
      * Save image for a course category.
      *
@@ -865,19 +833,18 @@ class CourseCategory
     public static function saveImage(CourseCategoryEntity $category, $fileData, $crop = '')
     {
         if (isset($fileData['tmp_name']) && !empty($fileData['tmp_name'])) {
-            self::deleteImage($category);
+            $repo = Container::getCourseCategoryRepository();
+            $repo->deleteAsset($category);
 
-            $repo = Container::getAssetRepository();
-            $asset = new Asset();
-            $asset
+            $assetRepo = Container::getAssetRepository();
+            $asset = (new Asset())
                 ->setCategory(Asset::COURSE_CATEGORY)
                 ->setTitle($fileData['name'])
                 ->setCrop($crop)
             ;
-            $asset = $repo->createFromRequest($asset, $fileData);
+            $asset = $assetRepo->createFromRequest($asset, $fileData);
 
-            $category->setImage($asset->getId());
-            $repo = Container::getCourseCategoryRepository();
+            $category->setAsset($asset);
             $repo->save($category);
         }
     }

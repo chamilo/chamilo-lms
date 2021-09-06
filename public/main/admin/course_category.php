@@ -92,11 +92,11 @@ switch ($action) {
 
             // Delete Picture Category
             $deletePicture = $_POST['delete_picture'] ?? '';
-            var_dump($deletePicture);
-            if ($deletePicture) {
-                CourseCategory::deleteImage($categoryEntity);
+
+            if ($deletePicture && $categoryEntity) {
+                $categoryRepo->deleteAsset($categoryEntity);
             }
-exit;
+
             if (isset($_FILES['image']) && $categoryEntity) {
                 $crop = $_POST['picture_crop_result'] ?? '';
                 CourseCategory::saveImage($categoryEntity, $_FILES['image'], $crop);

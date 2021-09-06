@@ -6,8 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
+use Chamilo\Kernel;
 use Doctrine\DBAL\Schema\Schema;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Version20191101132000 extends AbstractMigrationChamilo
 {
@@ -81,8 +86,12 @@ class Version20191101132000 extends AbstractMigrationChamilo
         if (!$table->hasIndex('course_rel_user_c_id_user_id')) {
             $this->addSql('CREATE INDEX course_rel_user_c_id_user_id ON course_rel_user (id, c_id, user_id)');
         }
+
+        $table = $schema->getTable('course_category');
+
         //$this->addSql('ALTER TABLE course DROP category_code');
-        $connection = $this->getEntityManager()->getConnection();
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
         $sql = 'SELECT * FROM course_category';
         $result = $connection->executeQuery($sql);
         $all = $result->fetchAllAssociative();
@@ -102,15 +111,57 @@ class Version20191101132000 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE course_category CHANGE parent_id parent_id INT DEFAULT NULL;');
 
-        $table = $schema->getTable('course_category');
         if (false === $table->hasForeignKey('FK_AFF87497727ACA70')) {
             $this->addSql(
-                'ALTER TABLE course_category ADD CONSTRAINT FK_AFF87497727ACA70 FOREIGN KEY (parent_id) REFERENCES course_category (id) ON DELETE CASCADE'
+                'ALTER TABLE course_category ADD CONSTRAINT FK_AFF87497727ACA70 FOREIGN KEY (parent_id) REFERENCES course_category (id) ON DELETE SET NULL '
             );
         }
-        if (!$table->hasColumn('image')) {
-            $this->addSql('ALTER TABLE course_category ADD image VARCHAR(255) DEFAULT NULL');
+
+        if (!$table->hasColumn('asset_id')) {
+            $this->addSql('ALTER TABLE course_category ADD asset_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE course_category ADD CONSTRAINT FK_AFF874975DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id)');
+            $this->addSql('CREATE INDEX IDX_AFF874975DA1941 ON course_category (asset_id);');
         }
+
+        $container = $this->getContainer();
+
+        /** @var Kernel $kernel */
+        $kernel = $container->get('kernel');
+        $rootPath = $kernel->getProjectDir();
+
+        $repo = $container->get(CourseCategoryRepository::class);
+
+        if ($table->hasColumn('image')) {
+            foreach ($all as $category) {
+                if (!empty($category['image'])) {
+                    /** @var CourseCategory $categoryEntity */
+                    $categoryEntity = $repo->find($category['id']);
+
+                    if ($categoryEntity->hasAsset()) {
+                        continue;
+                    }
+
+                    $filePath = $rootPath.'/app/upload/course_category/'.$category['image'];
+                    if ($this->fileExists($filePath)) {
+                        $fileName = basename($filePath);
+                        $mimeType = mime_content_type($filePath);
+                        $file = new UploadedFile($filePath, $fileName, $mimeType, null, true);
+                        $asset = (new Asset())
+                            ->setCategory(Asset::COURSE_CATEGORY)
+                            ->setTitle($fileName)
+                            ->setFile($file)
+                        ;
+                        $em->persist($asset);
+                        $em->flush();
+                        $categoryEntity->setAsset($asset);
+
+                        $em->persist($categoryEntity);
+                        $em->flush();
+                    }
+                }
+            }
+        }
+
         if (!$table->hasColumn('description')) {
             $this->addSql('ALTER TABLE course_category ADD description LONGTEXT DEFAULT NULL');
         }

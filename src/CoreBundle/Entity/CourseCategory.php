@@ -57,17 +57,17 @@ class CourseCategory
     protected Collection $children;
 
     /**
-     * @Assert\NotBlank()
      * @Groups({"course_category:read", "course_category:write", "course:read"})
      * @ORM\Column(name="name", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**
-     * @Assert\NotBlank()
      * @Groups({"course_category:read", "course_category:write", "course:read"})
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $code;
 
     /**
@@ -97,9 +97,10 @@ class CourseCategory
     protected ?string $authCatChild = null;
 
     /**
-     * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", inversedBy="courseCategories", cascade={"remove"} )
+     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected ?string $image = null;
+    protected ?Asset $asset = null;
 
     /**
      * @Groups({"course_category:read", "course_category:write"})
@@ -265,18 +266,6 @@ class CourseCategory
         return $this->authCatChild;
     }
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -285,6 +274,23 @@ class CourseCategory
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getAsset(): ?Asset
+    {
+        return $this->asset;
+    }
+
+    public function hasAsset(): bool
+    {
+        return null !== $this->asset;
+    }
+
+    public function setAsset(?Asset $asset): self
+    {
+        $this->asset = $asset;
 
         return $this;
     }

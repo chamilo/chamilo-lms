@@ -82,7 +82,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
     public function testDelete(): void
     {
-        self::bootKernel();
+        $client = static::createClient();
 
         $em = $this->getManager();
 
@@ -115,9 +115,8 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
         $content = $assetRepo->getAssetContent($asset);
         $this->assertNotEmpty($content);
 
-        $client = static::createClient();
-        $client->request('GET', $url);
-        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $response = $client->request('GET', $url);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $this->assertSame(1, $assetRepo->count([]));
         $em->clear();

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -33,9 +32,9 @@ class Promotion
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**
@@ -44,7 +43,7 @@ class Promotion
     protected ?string $description = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career", inversedBy="promotions")
      * @ORM\JoinColumn(name="career_id", referencedColumnName="id")
      */
     protected Career $career;
@@ -66,7 +65,6 @@ class Promotion
     public function __construct()
     {
         $this->status = self::PROMOTION_STATUS_ACTIVE;
-        $this->sessions = new ArrayCollection();
     }
 
     /**

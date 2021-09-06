@@ -728,14 +728,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @var Collection<int, MessageTag>|MessageTag[]
+     * @ORM\OneToMany(
+     *      targetEntity="Chamilo\CoreBundle\Entity\MessageTag",
+     *      mappedBy="user",
+     *      cascade={"persist", "remove"},
+     *      orphanRemoval="true"
+     *)
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(
-        targetEntity: MessageTag::class,
-        mappedBy: 'user',
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
-    )]
     protected Collection $messageTags;
 
     /**
@@ -763,22 +763,24 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @var Collection<int, CSurveyInvitation>|CSurveyInvitation[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CSurveyInvitation",
+     *     mappedBy = "user",
+     *     cascade={"remove"}
+     * )
      */
-    #[ORM\OneToMany(
-        targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyInvitation',
-        mappedBy: 'user',
-        cascade: ['remove']
-    )]
     protected Collection $surveyInvitations;
 
     /**
      * @var Collection<int, TrackELogin>|TrackELogin[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="TrackELogin",
+     *     mappedBy = "user",
+     *     cascade={"remove"}
+     * )
      */
-    #[ORM\OneToMany(
-        targetEntity: 'TrackELogin',
-        mappedBy: 'user',
-        cascade: ['remove']
-    )]
     protected Collection $logins;
 
     /**

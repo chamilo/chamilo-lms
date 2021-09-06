@@ -33,9 +33,9 @@ class Career
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**

@@ -97,7 +97,7 @@ class CourseCategory
     protected ?string $authCatChild = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", inversedBy="courseCategories", cascade={"remove"} )
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"remove"} )
      * @ORM\JoinColumn(name="asset_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected ?Asset $asset = null;

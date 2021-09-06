@@ -65,6 +65,7 @@ function confirmation(name) {
 }
 </script>';
 
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tool_name = get_lang('ModifyUserInfo');
@@ -226,7 +227,13 @@ $group[] = $form->createElement(
     'password',
     'password',
     null,
-    ['onkeydown' => 'javascript: password_switch_radio_button();', 'autocomplete' => 'new-password']
+    [
+        'id' => 'password',
+        'autocomplete' => 'new-password',
+        'onkeydown' => 'javascript: password_switch_radio_button();',
+        'show_hide' => true,
+        //'required' => 'required'
+    ]
 );
 
 $form->addGroup($group, 'password', null, null, false);

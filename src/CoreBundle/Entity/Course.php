@@ -80,7 +80,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * The course code.
      *
-     * @Assert\NotBlank()
      * @Assert\Length(
      *     max = 40,
      *     maxMessage = "Code cannot be longer than {{ limit }} characters"
@@ -97,6 +96,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * )
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
+    #[Assert\NotBlank]
     protected string $code;
 
     /**
@@ -276,10 +276,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @var int Course visibility
      *
      * @Groups({"course:read", "course:write"})
-     * @Assert\NotBlank()
      *
      * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
+    #[Assert\NotBlank]
     protected int $visibility;
 
     /**

@@ -67,26 +67,26 @@ class ResourceNode
     protected ?int $id = null;
 
     /**
-     * @Assert\NotBlank()
      * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      * @Gedmo\TreePathSource
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(name="slug", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $slug;
 
     /**
      * @ORM\ManyToOne(targetEntity="ResourceType", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
+    #[Assert\NotNull]
     protected ResourceType $resourceType;
 
     /**
@@ -109,11 +109,11 @@ class ResourceNode
     protected ?ResourceFile $resourceFile = null;
 
     /**
-     * @Assert\Valid()
      * @Groups({"resource_node:read", "resource_node:write", "document:write"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
+    #[Assert\NotNull]
     protected User $creator;
 
     /**

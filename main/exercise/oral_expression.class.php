@@ -118,10 +118,12 @@ class OralExpression extends Question
             false
         );
 
+        var_dump($this);
+
         $recordAudioView->assign('directory', $directory);
         $recordAudioView->assign('user_id', $this->userId);
         $recordAudioView->assign('file_name', $this->fileName);
-        $recordAudioView->assign('question_id', $this->id);
+        $recordAudioView->assign('question_id', $this->iid);
 
         $template = $recordAudioView->get_template('exercise/oral_expression.tpl');
 
@@ -142,13 +144,13 @@ class OralExpression extends Question
         if ($loadFromDatabase) {
             $em = Database::getManager();
             //Load the real filename just if exists
-            if (isset($this->exeId, $this->userId, $this->id, $this->sessionId, $this->course['real_id'])) {
+            if (isset($this->exeId, $this->userId, $this->iid, $this->sessionId, $this->course['real_id'])) {
                 $result = $em
                     ->getRepository('ChamiloCoreBundle:TrackEAttempt')
                     ->findOneBy([
                         'exeId' => $this->exeId,
                         'userId' => $this->userId,
-                        'questionId' => $this->id,
+                        'questionId' => $this->iid,
                         'sessionId' => $this->sessionId,
                         'cId' => $this->course['real_id'],
                     ]);

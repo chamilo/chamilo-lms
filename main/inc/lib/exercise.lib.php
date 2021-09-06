@@ -297,7 +297,27 @@ class ExerciseLib
 
                         echo $objQuestionTmp->returnRecorder();
                     }
-
+                    $fileUrl = $objQuestionTmp->getFileUrl();
+                    if (isset($fileUrl)) {
+                        $s .= '
+                            <div class="col-sm-4 col-sm-offset-4">
+                                <div class="form-group text-center">
+                                    <audio src="'.$fileUrl.'" controls></audio>
+                                </div>
+                            </div>
+                        ';
+                    }
+                    $s .= '<script>
+                        // The buttons are blocked waiting for the audio file to be uploaded
+                        $(document).ajaxStart(function() {
+                            $("button").attr("disabled", true);
+                            $("button").attr("title", "'.get_lang('WaitingForTheAudioFileToBeUploaded').'");
+                        });
+                        $(document).ajaxComplete(function() {
+                            $("button").attr("disabled", false);
+                            $("button").removeAttr("title");
+                        });
+                    </script>';
                     $form = new FormValidator('free_choice_'.$questionId);
                     $config = ['ToolbarSet' => 'TestFreeAnswer'];
 

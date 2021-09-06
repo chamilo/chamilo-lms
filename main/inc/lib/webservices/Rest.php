@@ -2125,7 +2125,7 @@ class Rest extends WebService
                     $displayOrder = $itemSpec['display_order_id'];
                     $type = (array_key_exists('type', $itemSpec) ? $itemSpec['type'] : 'dir');
                     if (!array_key_exists('title', $itemSpec)) {
-                        throw new Exception(sprintf('type missing from item spec: %s', print_r($itemSpec, true)));
+                        throw new Exception(sprintf('title missing from item spec: %s', print_r($itemSpec, true)));
                     }
                     $title = $itemSpec['title'];
                     $item = (new CLpItem())
@@ -2135,8 +2135,12 @@ class Rest extends WebService
                         ->setTitle($title);
                     if (in_array($type, ['document', 'final_item', 'forum', 'link', 'quiz'])) {
                         if (!array_key_exists('name_to_find', $itemSpec)) {
-                            throw new Exception(sprintf('name_to_find missing from %s spec: %s', $type, print_r($itemSpec, true)));
-                        }
+                            if (!array_key_exists('id_to_find', $itemSpec)) {
+                                throw new Exception(sprintf('name_to_find and id_to_find missing from %s spec: %s', $type, print_r($itemSpec, true)));
+			    }
+			    //Implement search by item id only if name_to_find is not set #refs BT17453
+			    $item->setPath($itemSpec['id_to_find']);
+			}
                         $resource = $course->findResource($type, $itemSpec['name_to_find']);
                         $item->setPath('forum' === $type ? $resource->getForumId() : $resource->getId());
                     }

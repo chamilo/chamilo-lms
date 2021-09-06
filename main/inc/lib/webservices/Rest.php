@@ -2133,16 +2133,20 @@ class Rest extends WebService
                         ->setDisplayOrder($displayOrder)
                         ->setItemType($type)
                         ->setTitle($title);
-                    if (in_array($type, ['document', 'final_item', 'forum', 'link', 'quiz'])) {
+		    if (in_array($type, ['document', 'final_item', 'forum', 'link', 'quiz'])) {
+                        $isIdToFind = false;
                         if (!array_key_exists('name_to_find', $itemSpec)) {
                             if (!array_key_exists('id_to_find', $itemSpec)) {
                                 throw new Exception(sprintf('name_to_find and id_to_find missing from %s spec: %s', $type, print_r($itemSpec, true)));
-			    }
-			    //Implement search by item id only if name_to_find is not set #refs BT17453
-			    $item->setPath($itemSpec['id_to_find']);
-			}
-                        $resource = $course->findResource($type, $itemSpec['name_to_find']);
-                        $item->setPath('forum' === $type ? $resource->getForumId() : $resource->getId());
+                            }
+                            //Implement search by item id only if name_to_find is not set #refs BT17453
+                            $isIdToFind = true;
+                            $item->setPath($itemSpec['id_to_find']);
+                        }
+                        if (!$isIdToFind) {
+                            $resource = $course->findResource($type, $itemSpec['name_to_find']);
+                            $item->setPath('forum' === $type ? $resource->getForumId() : $resource->getId());
+                        }
                     }
                     if (array_key_exists($displayOrder, $parentDisplayOrders)) {
                         throw new Exception(sprintf('this item display order is not unique: %s', $displayOrder));

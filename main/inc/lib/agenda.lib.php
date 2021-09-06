@@ -528,31 +528,31 @@ class Agenda
                 break;
             }
 
-	    // @todo remove comment code
-	    // The code below was not adpating to saving light time but was doubling the difference with UTC time.
-	    // Might be necessary to adapt to update saving light time difference.
-/*            $startDateInLocal = new DateTime($newStartDate, new DateTimeZone($timeZone));
-            if ($startDateInLocal->format('I') == 0) {
-                // Is saving time? Then fix UTC time to add time
-                $seconds = $startDateInLocal->getOffset();
-                $startDate->add(new DateInterval("PT".$seconds."S"));
-                //$startDateFixed = $startDate->format('Y-m-d H:i:s');
-                //$startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
-                //$newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');
-                //$newStartDate = $startDate->setTimezone(new DateTimeZone($timeZone))->format('Y-m-d H:i:s');
-            }
+            // @todo remove comment code
+            // The code below was not adpating to saving light time but was doubling the difference with UTC time.
+            // Might be necessary to adapt to update saving light time difference.
+            /*            $startDateInLocal = new DateTime($newStartDate, new DateTimeZone($timeZone));
+                        if ($startDateInLocal->format('I') == 0) {
+                            // Is saving time? Then fix UTC time to add time
+                            $seconds = $startDateInLocal->getOffset();
+                            $startDate->add(new DateInterval("PT".$seconds."S"));
+                            //$startDateFixed = $startDate->format('Y-m-d H:i:s');
+                            //$startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
+                            //$newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');
+                            //$newStartDate = $startDate->setTimezone(new DateTimeZone($timeZone))->format('Y-m-d H:i:s');
+                        }
 
-            $endDateInLocal = new DateTime($newEndDate, new DateTimeZone($timeZone));
-            if ($endDateInLocal->format('I') == 0) {
-                // Is saving time? Then fix UTC time to add time
-                $seconds = $endDateInLocal->getOffset();
-                $endDate->add(new DateInterval("PT".$seconds."S"));
-                //$endDateFixed = $endDate->format('Y-m-d H:i:s');
-                //$endDateInLocalFixed = new DateTime($endDateFixed, new DateTimeZone($timeZone));
-                //$newEndDate = $endDateInLocalFixed->format('Y-m-d H:i:s');
-	    }
-*/
-	    $newStartDate = $startDate->setTimezone(new DateTimeZone($timeZone))->format('Y-m-d H:i:s');
+                        $endDateInLocal = new DateTime($newEndDate, new DateTimeZone($timeZone));
+                        if ($endDateInLocal->format('I') == 0) {
+                            // Is saving time? Then fix UTC time to add time
+                            $seconds = $endDateInLocal->getOffset();
+                            $endDate->add(new DateInterval("PT".$seconds."S"));
+                            //$endDateFixed = $endDate->format('Y-m-d H:i:s');
+                            //$endDateInLocalFixed = new DateTime($endDateFixed, new DateTimeZone($timeZone));
+                            //$newEndDate = $endDateInLocalFixed->format('Y-m-d H:i:s');
+                    }
+            */
+            $newStartDate = $startDate->setTimezone(new DateTimeZone($timeZone))->format('Y-m-d H:i:s');
             $newEndDate = $endDate->setTimezone(new DateTimeZone($timeZone))->format('Y-m-d H:i:s');
             $list[] = ['start' => $newStartDate, 'end' => $newEndDate];
             $counter++;

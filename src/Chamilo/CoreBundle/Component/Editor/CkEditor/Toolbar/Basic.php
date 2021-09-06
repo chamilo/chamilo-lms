@@ -158,6 +158,11 @@ class Basic extends Toolbar
 
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
 
+        $editorSettings = api_get_configuration_value('editor_settings');
+        if (!empty($editorSettings) && isset($editorSettings['config']) && !empty($editorSettings['config'])) {
+            $config = array_merge($config, $editorSettings['config']);
+        }
+
         parent::__construct($toolbar, $config, $prefix);
     }
 

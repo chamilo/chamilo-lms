@@ -12,6 +12,7 @@
 namespace XApi\Repository\ORM;
 
 use Doctrine\ORM\EntityRepository;
+use XApi\Repository\Doctrine\Mapping\Context;
 use XApi\Repository\Doctrine\Mapping\Statement;
 use XApi\Repository\Doctrine\Repository\Mapping\StatementRepository as BaseStatementRepository;
 
@@ -33,6 +34,25 @@ final class StatementRepository extends EntityRepository implements BaseStatemen
      */
     public function findStatements(array $criteria)
     {
+        if (!empty($criteria['registration'])) {
+            $context = $this->_em->getRepository(Context::class)->findOneBy([
+                'registration' => $criteria['registration'],
+            ]);
+
+            unset(
+                $criteria['registration']
+            );
+
+            $criteria['context'] = $context;
+        }
+
+        unset(
+            $criteria['related_activities'],
+            $criteria['related_agents'],
+            $criteria['ascending'],
+            $criteria['limit']
+        );
+
         return parent::findBy($criteria);
     }
 

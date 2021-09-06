@@ -21,8 +21,8 @@ abstract class BaseController
     /**
      * BaseController constructor.
      */
-    public function __construct()
+    public function __construct(Request $httpRequest)
     {
-        $this->httpRequest = Request::createFromGlobals();
+        $this->httpRequest = $httpRequest;
     }
 }

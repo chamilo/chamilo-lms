@@ -263,6 +263,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['lp_replace_http_to_https'] = false;
 // Fix embedded videos inside lps, adding an optional popup
 //$_configuration['lp_fix_embed_content'] = false;
+// Check the prerequisite in lp of a quiz to use only the last score in the attempts
+// $_configuration['lp_prerequisite_use_last_attempt_only'] = false;
 // Manage deleted files marked with "DELETED" (by course and only by allowed by admin)
 //$_configuration['document_manage_deleted_files'] = false;
 // Hide tabs in the main/session/index.php page
@@ -1986,6 +1988,9 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 
 // Enable image upload as file when doing a copy in the content or a drag and drop.
 //$_configuration['enable_uploadimage_editor'] = false;
+
+// Ckeditor settings.
+//$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true]];
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

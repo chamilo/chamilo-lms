@@ -126,7 +126,7 @@ class StudentFollowUpPlugin extends Plugin
             }
 
             // Student sessions.
-            $sessions = SessionManager::get_sessions_by_user($studentId, false, true);
+            $sessions = SessionManager::get_sessions_by_user($studentId, true, true);
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
                     $sessionId = $session['session_id'];

@@ -36,9 +36,9 @@ class GradebookLink
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $type;
 
     /**

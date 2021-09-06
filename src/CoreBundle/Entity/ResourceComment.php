@@ -57,10 +57,10 @@ class ResourceComment
 
     /**
      * @Groups({"comment:read"})
-     * @Assert\NotBlank()
      *
      * @ORM\Column(name="content", type="string", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $content;
 
     /**

@@ -35,9 +35,9 @@ class Illustration extends AbstractResource implements ResourceInterface
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     public function __construct()

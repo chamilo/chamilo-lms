@@ -25,9 +25,9 @@ class Room
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**

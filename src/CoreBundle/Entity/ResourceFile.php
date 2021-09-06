@@ -84,11 +84,11 @@ class ResourceFile
     protected ?int $id = null;
 
     /**
-     * @Assert\NotBlank()
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @ORM\Column(type="string", length=255)
      */
+    #[Assert\NotBlank]
     protected ?string $name = null;
 
     /**

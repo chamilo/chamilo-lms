@@ -27,15 +27,15 @@ class Group
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=true)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
+    #[Assert\NotBlank]
     protected string $code;
 
     /**

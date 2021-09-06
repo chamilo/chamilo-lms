@@ -62,10 +62,9 @@ class ExtraField
     protected int $fieldType;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="variable", type="string", length=255)
      */
+    #[Assert\NotBlank]
     protected string $variable;
 
     /**

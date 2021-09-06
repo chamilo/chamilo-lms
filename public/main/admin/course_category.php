@@ -13,6 +13,7 @@ $category = $_GET['category'] ?? null;
 $action = $_GET['action'] ?? null;
 $categoryId = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 $assetRepo = Container::getAssetRepository();
+$categoryRepo = Container::getCourseCategoryRepository();
 
 $urlId = api_get_current_access_url_id();
 $categoryInfo = [];
@@ -33,9 +34,10 @@ switch ($action) {
                 'warning'
             );
         }
-
-        CourseCategory::delete($categoryId);
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        if (!empty($categoryId)) {
+            $categoryRepo->delete($categoryRepo->find($categoryId));
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        }
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit;
         break;
@@ -90,10 +92,11 @@ switch ($action) {
 
             // Delete Picture Category
             $deletePicture = $_POST['delete_picture'] ?? '';
+            var_dump($deletePicture);
             if ($deletePicture) {
                 CourseCategory::deleteImage($categoryEntity);
             }
-
+exit;
             if (isset($_FILES['image']) && $categoryEntity) {
                 $crop = $_POST['picture_crop_result'] ?? '';
                 CourseCategory::saveImage($categoryEntity, $_FILES['image'], $crop);
@@ -175,10 +178,10 @@ if ('add' === $action || 'edit' === $action) {
         get_lang('Image'),
         ['id' => 'picture', 'class' => 'picture-form', 'accept' => 'image/*', 'crop_image' => true]
     );
-    if ('edit' === $action && !empty($categoryInfo['image'])) {
+    if ('edit' === $action && !empty($categoryInfo['asset_id'])) {
         $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
 
-        $asset = $assetRepo->find($categoryInfo['image']);
+        $asset = $assetRepo->find($categoryInfo['asset_id']);
         $image = $assetRepo->getAssetUrl($asset);
 
         $form->addLabel(get_lang('Image'), "<img src=$image />");

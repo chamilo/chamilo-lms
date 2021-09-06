@@ -37,9 +37,9 @@ class CourseRequest
     protected User $user;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $code;
 
     /**

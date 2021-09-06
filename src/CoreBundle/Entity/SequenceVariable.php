@@ -25,9 +25,9 @@ class SequenceVariable
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", nullable=true)
      */
+    #[Assert\NotBlank]
     protected ?string $name = null;
 
     /**

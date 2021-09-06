@@ -80,18 +80,18 @@ class Skill
 
     /**
      * @Groups({"skill:read", "skill:write"})
-     * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**
-     * @Assert\NotBlank()
      * @Groups({"skill:read", "skill:write"})
      *
      * @ORM\Column(name="short_code", type="string", length=100, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $shortCode;
 
     /**
@@ -389,10 +389,7 @@ class Skill
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasCourseAndSession(SkillRelCourse $searchItem)
+    public function hasCourseAndSession(SkillRelCourse $searchItem): bool
     {
         if (0 !== $this->getCourses()->count()) {
             $found = false;

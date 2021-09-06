@@ -360,7 +360,8 @@ function showEmbeddableFinishButton()
     $js = '<script>
         $(function () {
             $(\'.btn-close-quiz\').on(\'click\', function () {
-                window.parent.$(\'video:not(.skip), audio:not(.skip)\').get(0).play();
+                var playerId = window.frameElement.parentElement.parentElement.parentElement.id;
+                window.parent.mejs.players[playerId].play();
             });
         });
     </script>';

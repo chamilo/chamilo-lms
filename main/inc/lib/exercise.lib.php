@@ -302,7 +302,7 @@ class ExerciseLib
                         $s .= '
                             <div class="col-sm-4 col-sm-offset-4">
                                 <div class="form-group text-center">
-                                    <audio src="'.$fileUrl.'" controls></audio>
+                                    <audio src="'.$fileUrl.'" controls id="record-preview-'.$questionId.'-previous"></audio>
                                 </div>
                             </div>
                         ';

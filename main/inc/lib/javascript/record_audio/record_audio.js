@@ -197,6 +197,8 @@ window.RecordAudio = (function () {
                     saveAudio();
                 }
 
+                $(rtcInfo.plyrPreviewId + '-previous').parents('.form-group').remove();
+
                 tagAudio
                     .removeClass('hidden')
                     .addClass('show')

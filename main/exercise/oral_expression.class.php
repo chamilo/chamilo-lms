@@ -118,8 +118,6 @@ class OralExpression extends Question
             false
         );
 
-        var_dump($this);
-
         $recordAudioView->assign('directory', $directory);
         $recordAudioView->assign('user_id', $this->userId);
         $recordAudioView->assign('file_name', $this->fileName);

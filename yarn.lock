@@ -148,9 +148,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:^7.15.0":
-  version: 7.15.0
-  resolution: "@babel/eslint-parser@npm:7.15.0"
+"@babel/eslint-parser@npm:^7.15.4":
+  version: 7.15.4
+  resolution: "@babel/eslint-parser@npm:7.15.4"
   dependencies:
     eslint-scope: ^5.1.1
     eslint-visitor-keys: ^2.1.0
@@ -158,7 +158,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ">=7.5.0"
-  checksum: 381c0136578ee86596e9cea25011ec786051746d9ee1d951079b57e6e22781aa6d598f1312fecfe592fd5594c819d1ad23b3fe6c1fb88578daa40e4384789175
+  checksum: ef65f1d1b71fb1a99f409fc50ccbb98868e43bacd4cfc9468eded4b872cfebb4a174c01798ea8ad6a953a5e466fb0cd4da3d0314f9681b0729f7a126794b8a5c
   languageName: node
   linkType: hard
 
@@ -1820,10 +1820,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:2.9.3":
-  version: 2.9.3
-  resolution: "@popperjs/core@npm:2.9.3"
-  checksum: cf7381686820f04cb75aacef5373bac43b9b33eaea3387203650c3a89150dc407caf2e0c637184b2f82d83bba352a297d5a3569d1784158593a1e6e2a2af12a2
+"@popperjs/core@npm:2.10.1":
+  version: 2.10.1
+  resolution: "@popperjs/core@npm:2.10.1"
+  checksum: cdf655cd0574260142bfdde1f31d76e1d2d7fe89cf1958563cf2c15516e5cde469a1785cb2cb0ef502eed60a852aea4ede0df35d9f318c429455af0aa7b3bd05
   languageName: node
   linkType: hard
 
@@ -1935,9 +1935,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@symfony/webpack-encore@npm:1.6.0":
-  version: 1.6.0
-  resolution: "@symfony/webpack-encore@npm:1.6.0"
+"@symfony/webpack-encore@npm:1.6.1":
+  version: 1.6.1
+  resolution: "@symfony/webpack-encore@npm:1.6.1"
   dependencies:
     "@babel/core": ^7.7.0
     "@babel/plugin-syntax-dynamic-import": ^7.0.0
@@ -1961,11 +1961,11 @@ __metadata:
     tmp: ^0.2.1
     webpack: ^5.35
     webpack-cli: ^4
-    webpack-dev-server: ^4.0.0-beta.0
+    webpack-dev-server: ^4.0.0
     yargs-parser: ^20.2.4
   bin:
     encore: bin/encore.js
-  checksum: bea5d03da2eb030ffbe3608c4edc41b2830104ec167170bc5d1c9fdfb65e5c544ec2f34fb4aaee0cd76d6eda25a62a5fab3fe0766f7dcb94c85c185e0e2a13ef
+  checksum: 3d0ab32c4dc4fec25c40bb9cd74b108b674c1bd14c105cb16c51d0ace947192ba232df18d93a39d04aee737ac221ab61ceb10e9c6e12d04ddc6c5d4554f626a9
   languageName: node
   linkType: hard
 
@@ -4079,12 +4079,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alpinejs@npm:^3.2.4":
-  version: 3.2.4
-  resolution: "alpinejs@npm:3.2.4"
+"alpinejs@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "alpinejs@npm:3.3.1"
   dependencies:
     "@vue/reactivity": ^3.0.2
-  checksum: 569f133371e8b20c334171b640a1826c0f567f9e761f419128698264a6e6e80addbca3d38da7286f489185881b4af2e97638991f58e0f7fa2fb77c35ccb87135
+  checksum: c8e103461a65bb8e4a6546e5186842869ce41bbabc774c2c4cf5c6b4cbfae12aad6788d793ea277fbb9fdb2ce83f45f0024c5e1bb099a0a031c0e3b3a91bae95
   languageName: node
   linkType: hard
 
@@ -4765,9 +4765,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.3.3":
-  version: 10.3.3
-  resolution: "autoprefixer@npm:10.3.3"
+"autoprefixer@npm:^10.3.4":
+  version: 10.3.4
+  resolution: "autoprefixer@npm:10.3.4"
   dependencies:
     browserslist: ^4.16.8
     caniuse-lite: ^1.0.30001252
@@ -4779,7 +4779,7 @@ __metadata:
     postcss: ^8.1.0
   bin:
     autoprefixer: bin/autoprefixer
-  checksum: fe2095045c9ff0d18e39d2dc7202ecf9eda14b7a31244606fb266187c669b813309f627f0d337e2ec971ed4fbccbf14aaaa5ef1a0081a68dfbc75a895f0fa609
+  checksum: 00a9faf0ffef6d0bc19497787d31203de1742a99f7530f72140bedb5cff493e545953bf614015fa77487109e953b68858688f9a4b0d9314beb81cec453292c03
   languageName: node
   linkType: hard
 
@@ -4814,12 +4814,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.21.1":
-  version: 0.21.1
-  resolution: "axios@npm:0.21.1"
+"axios@npm:^0.21.3":
+  version: 0.21.3
+  resolution: "axios@npm:0.21.3"
   dependencies:
-    follow-redirects: ^1.10.0
-  checksum: 864fb7b5d077d236737f10adca53bf451a93f35a15271f56fba8da07265a02d26b7d881b935a6697dc6adb0549ea3e56d2eecb403edaa3bb78f6479901c10f69
+    follow-redirects: ^1.14.0
+  checksum: 3d231925b322899b00a4cf231ab470635bbb979e7f76985e929ab33da334e252955305932ad034fc80d9a6c73112bf64286bb4b5e7faecb04586dd2755093957
   languageName: node
   linkType: hard
 
@@ -6446,7 +6446,7 @@ __metadata:
   resolution: "chamilo@workspace:."
   dependencies:
     "@apollo/client": 3.4.7
-    "@babel/eslint-parser": ^7.15.0
+    "@babel/eslint-parser": ^7.15.4
     "@babel/plugin-transform-runtime": 7.15.0
     "@fancyapps/fancybox": ^3.5.7
     "@fullcalendar/core": ^5.9.0
@@ -6457,9 +6457,9 @@ __metadata:
     "@headlessui/vue": ^1.4.1
     "@heroicons/vue": ^1.0.4
     "@mdi/font": ^5.9.55
-    "@popperjs/core": 2.9.3
+    "@popperjs/core": 2.10.1
     "@quasar/extras": ^1.10.12
-    "@symfony/webpack-encore": 1.6.0
+    "@symfony/webpack-encore": 1.6.1
     "@tailwindcss/forms": ^0.3.3
     "@tailwindcss/line-clamp": ^0.2.1
     "@tailwindcss/typography": ^0.4.1
@@ -6484,9 +6484,9 @@ __metadata:
     "@vue/compiler-sfc": 3.1.5
     "@vuelidate/core": ^2.0.0-alpha.23
     "@vuelidate/validators": ^2.0.0-alpha.20
-    alpinejs: ^3.2.4
-    autoprefixer: ^10.3.3
-    axios: ^0.21.1
+    alpinejs: ^3.3.1
+    autoprefixer: ^10.3.4
+    axios: ^0.21.3
     babel-cli: 6.26.0
     babel-plugin-transform-builtin-extend: 1.1.2
     babel-polyfill: 6.26.0
@@ -6497,7 +6497,7 @@ __metadata:
     bootstrap-select: ^1.13.18
     chart.js: ^3.5.1
     copy-webpack-plugin: 9.0.1
-    core-js: 3.16.4
+    core-js: 3.17.2
     cropper: ^4.1.0
     datepair.js: ^0.4.17
     deepmerge: ^4.2.2
@@ -6513,7 +6513,7 @@ __metadata:
     free-jqgrid: "https://github.com/chamilo/jqGrid.git#bs4"
     full-icu: ^1.3.4
     glob-all: ^3.2.1
-    graphql: ^15.5.1
+    graphql: ^15.5.3
     graphql-tag: ^2.12.5
     highlight.js: ^11.2.0
     hljs: ^6.2.3
@@ -7349,10 +7349,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.16.4":
-  version: 3.16.4
-  resolution: "core-js@npm:3.16.4"
-  checksum: a85086b088ebeda5b0634a884e4a9540da1f46bc85ff2c45e284ff3383afdb30ea7ad00f74a9e14538c1004eb33dd2b0b945eff1c188a8fd33ca979dc4877855
+"core-js@npm:3.17.2":
+  version: 3.17.2
+  resolution: "core-js@npm:3.17.2"
+  checksum: 2780c712c316336c357b44124180c3e55fff67b9df9532b1326c691ed6ee45e02857c1620ab9414c6bd79588a351a95664f6c5ca34d0f6953498617136247ac2
   languageName: node
   linkType: hard
 
@@ -10003,13 +10003,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.10.0":
+"follow-redirects@npm:^1.0.0":
   version: 1.14.1
   resolution: "follow-redirects@npm:1.14.1"
   peerDependenciesMeta:
     debug:
       optional: true
   checksum: 761a18699688b19d66b3e9199ecaf9cd39ede953f3529299c7fca4190b27b855c17c491170977844d5db5e169ffc35ebae999bb0833e9c9c61988d19c20ae7ab
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.14.0":
+  version: 1.14.3
+  resolution: "follow-redirects@npm:1.14.3"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: 0467b0f5c0d2ccde2d0e684c9346127d746fe27c79af8065e78164f7f88ca78b4873ee12b02e3e1e8d6b6a60dbacba7b002b0e773d1171e4f3a37bdf8423a577
   languageName: node
   linkType: hard
 
@@ -10720,10 +10730,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"graphql@npm:^15.5.1":
-  version: 15.5.1
-  resolution: "graphql@npm:15.5.1"
-  checksum: 509cdc2fc072e7cd1b5a25cf3fe13838d41892b035434f02419c209608f89e323f5234ca7e2bde77e9371e629339cbd8435f1dbc8c250910e4e9ac0babfa6c64
+"graphql@npm:^15.5.3":
+  version: 15.5.3
+  resolution: "graphql@npm:15.5.3"
+  checksum: 2538efd61b5e1317cfaba796685412aa45f97504002af823a0d0682f8a60f4698343f8ba2793c83c276c76a6b14d8301e58b9f8ad7b61191c380d48e274e6b4d
   languageName: node
   linkType: hard
 
@@ -20621,13 +20631,14 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^4.0.0-beta.0":
-  version: 4.0.0-rc.0
-  resolution: "webpack-dev-server@npm:4.0.0-rc.0"
+"webpack-dev-server@npm:^4.0.0":
+  version: 4.1.0
+  resolution: "webpack-dev-server@npm:4.1.0"
   dependencies:
     ansi-html: ^0.0.7
     bonjour: ^3.5.0
     chokidar: ^3.5.1
+    colorette: ^1.2.2
     compression: ^1.7.4
     connect-history-api-fallback: ^1.6.0
     del: ^6.0.0
@@ -20637,8 +20648,6 @@ typescript@~4.1.5:
     http-proxy-middleware: ^2.0.0
     internal-ip: ^6.2.0
     ipaddr.js: ^2.0.1
-    is-absolute-url: ^3.0.3
-    killable: ^1.0.1
     open: ^8.0.9
     p-retry: ^4.5.0
     portfinder: ^1.0.28
@@ -20650,15 +20659,15 @@ typescript@~4.1.5:
     strip-ansi: ^7.0.0
     url: ^0.11.0
     webpack-dev-middleware: ^5.0.0
-    ws: ^7.5.3
+    ws: ^8.1.0
   peerDependencies:
-    webpack: ^4.0.0 || ^5.0.0
+    webpack: ^4.37.0 || ^5.0.0
   peerDependenciesMeta:
     webpack-cli:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 4c491ad5ae568c82b3587b3c0e14c26559039eb6ef24842d347c8a50a7f91cb07e919e5ec9b1b50048f78de5d5e478813b87509607dc83e023e12d012b994709
+  checksum: 691b9f2ca2a8e58cec2d18980c3585168bd443ab46f8c48449e04bd891eb76f46912cb33e33f6fcf3edb432778e754fb2e8a1a9810df980559c01111f5870f88
   languageName: node
   linkType: hard
 
@@ -20975,7 +20984,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"ws@npm:^5.2.0 || ^6.0.0 || ^7.0.0, ws@npm:^7.5.3":
+"ws@npm:^5.2.0 || ^6.0.0 || ^7.0.0":
   version: 7.5.3
   resolution: "ws@npm:7.5.3"
   peerDependencies:
@@ -20996,6 +21005,21 @@ typescript@~4.1.5:
   dependencies:
     async-limiter: ~1.0.0
   checksum: 00d406fb98114e6404c71f445e41818d9eb23644247a70be3f8da1f981c5f1db0f8ea191bee972fa5f5387c2ebd360268622871354be324acafaab43d7612362
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.1.0":
+  version: 8.2.1
+  resolution: "ws@npm:8.2.1"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ^5.0.2
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: b8309bc3d4b15a0b020b2ed19deb75f1d9d7280b4619861680273678003285936bd252c213ec4285b18a6562ea7327d61b235e82421fe2a76c567dc2cce249c1
   languageName: node
   linkType: hard
 

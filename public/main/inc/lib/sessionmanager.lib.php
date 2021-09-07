@@ -483,7 +483,8 @@ class SessionManager
         $options = [],
         $getCount = false,
         $columns = [],
-        $listType = 'all'
+        $listType = 'all',
+        $extraFieldsToLoad = []
     ) {
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -543,6 +544,11 @@ class SessionManager
                      $injectExtraFields
                      s.id
              ";
+
+            // ofaj fix
+            if (!empty($extraFieldsToLoad)) {
+                $select = "SELECT DISTINCT s.* ";
+            }
 
             if ($showCountUsers) {
                 $select .= ', count(su.user_id) users';
@@ -685,7 +691,7 @@ class SessionManager
         }
 
         $userId = api_get_user_id();
-        $sessions = self::getSessionsForAdmin($userId, $options, $getCount, $columns, $listType);
+        $sessions = self::getSessionsForAdmin($userId, $options, $getCount, $columns, $listType, $extraFieldsToLoad);
         if ($getCount) {
             return (int) $sessions;
         }

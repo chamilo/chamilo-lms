@@ -306,7 +306,7 @@ if (isset($_POST) && !empty($_POST)) {
     $searchChecked3 = null === $searchChecked3 ? 'checked' : $searchChecked3;
 }
 
-$form->addStartPanel('dispo_avant', get_lang('Disponibilite Avant'));
+$form->addStartPanel('dispo_avant', '<input type="checkbox" name="search_using_1" '.$searchChecked1.' />&nbsp;'.get_lang('Disponibilite Avant'));
 $form->addHtml('<p class="text-info">'.get_lang('Disponibilite Avant Explanation').'</p>');
 
 // Session fields
@@ -351,7 +351,7 @@ $extra = $extraFieldUser->addElements(
 
 $form->addEndPanel();
 
-$form->addStartPanel('theme_obj', get_lang('Themes Objectifs'));
+$form->addStartPanel('theme_obj', '<input type="checkbox" name="search_using_2" '.$searchChecked2.' />&nbsp;'.get_lang('Themes Objectifs'));
 $form->addHtml('<p class="text-info">'.get_lang('Themes Objectifs Explanation').'</p>');
 
 $showOnlyThisFields = [
@@ -409,7 +409,7 @@ $extra = $extraFieldUser->addElements(
 
 $form->addEndPanel();
 
-$form->addStartPanel('niveau_langue', get_lang('Niveau Langue'));
+$form->addStartPanel('niveau_langue', '<input type="checkbox" name="search_using_3" '.$searchChecked3.' />&nbsp;'.get_lang('Niveau Langue'));
 $form->addHtml('<p class="text-info">'.get_lang('Niveau Langue Explanation').'</p>');
 
 $showOnlyThisFields = [

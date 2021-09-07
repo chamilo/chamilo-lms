@@ -95,7 +95,6 @@
         "nelexa/zip": "^4.0",
         "nesbot/carbon": "^2.33",
         "oneup/flysystem-bundle": "~4.0",
-        "oneup/uploader-bundle": "~3.0",
         "pagerfanta/pagerfanta": "~3.1",
         "paragonie/random-lib": "~2.0",
         "php-ffmpeg/php-ffmpeg": "~0.14",

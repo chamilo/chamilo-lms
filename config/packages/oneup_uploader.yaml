@@ -1,9 +1,0 @@
-# Read the documentation: https://github.com/1up-lab/OneupUploaderBundle/blob/master/Resources/doc/index.md
-oneup_uploader:
-    mappings:
-        resource:
-            frontend: custom
-            storage:
-                type: flysystem
-                filesystem: oneup_flysystem.resource_filesystem
-            root_folder: true

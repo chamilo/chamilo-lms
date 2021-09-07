@@ -29,5 +29,11 @@ class ResourceFactoryTest extends WebTestCase
 
         $this->assertInstanceOf(ResourceRepository::class, $repository);
         $this->assertInstanceOf(CDocumentRepository::class, $repository);
+
+        $this->expectException(InvalidArgumentException::class);
+        $factory->getRepositoryService('document', 'xxx');
+
+        $this->expectException(InvalidArgumentException::class);
+        $factory->getRepositoryService('xxx', 'xxx');
     }
 }

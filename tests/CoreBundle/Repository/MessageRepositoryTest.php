@@ -552,4 +552,26 @@ class MessageRepositoryTest extends AbstractApiTest
         );
         $this->assertResponseStatusCodeSame(403);
     }
+
+    public function testGetMessageByUser(): void
+    {
+        $messageRepo = self::getContainer()->get(MessageRepository::class);
+
+        $admin = $this->getUser('admin');
+        $testUser = $this->createUser('test');
+
+        $message = (new Message())
+            ->setTitle('hello')
+            ->setContent('content')
+            ->setMsgType(Message::MESSAGE_TYPE_INBOX)
+            ->setSender($admin)
+            ->addReceiver($testUser)
+        ;
+
+        $this->assertHasNoEntityViolations($message);
+        $messageRepo->update($message);
+
+        $messages = $messageRepo->getMessageByUser($testUser, Message::MESSAGE_TYPE_INBOX);
+        $this->assertSame(1, \count($messages));
+    }
 }

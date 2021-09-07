@@ -21,7 +21,6 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         self::bootKernel();
 
         $em = $this->getManager();
-        //$repo = self::getContainer()->get(ExtraFieldValuesRepository::class);
 
         $field = (new ExtraField())
             ->setDisplayText('test')
@@ -42,5 +41,13 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($extraFieldValue);
         $em->persist($extraFieldValue);
         $em->flush();
+    }
+
+    public function testGetVisibleValues(): void
+    {
+        $repo = self::getContainer()->get(ExtraFieldValuesRepository::class);
+        $values = $repo->getVisibleValues(0, 0);
+
+        $this->assertSame(0, \count($values));
     }
 }

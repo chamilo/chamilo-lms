@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -103,10 +104,12 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('Test');
 
         $courseId = $course->getId();
-        $resourceLinkList = [[
-            'cid' => $course->getId(),
-            'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
-        ]];
+        $resourceLinkList = [
+            [
+                'cid' => $course->getId(),
+                'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+        ];
 
         $file = $this->getUploadedFile();
 
@@ -289,10 +292,12 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('Test');
 
         // Create folder.
-        $resourceLinkList = [[
-            'cid' => $course->getId(),
-            'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
-        ]];
+        $resourceLinkList = [
+            [
+                'cid' => $course->getId(),
+                'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+        ];
 
         $token = $this->getUserToken([]);
         // Creates a folder.
@@ -349,5 +354,85 @@ class CDocumentRepositoryTest extends AbstractApiTest
         ]);
 
         $this->assertMatchesRegularExpression('~'.$folderName.'~', $response->toArray()['resourceNode']['path']);
+    }
+
+    public function testCreateNodeForResource(): void
+    {
+        self::bootKernel();
+
+        $course = $this->createCourse('Test');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $admin = $this->getUser('admin');
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title')
+            ->setParent($course)
+        ;
+
+        $documentRepo->addResourceNode($document, $admin, $course);
+
+        $this->assertInstanceOf(ResourceNode::class, $document->getResourceNode());
+    }
+
+    public function testSetVisibility(): void
+    {
+        self::bootKernel();
+
+        $course = $this->createCourse('Test');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $admin = $this->getUser('admin');
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title')
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+
+        $documentRepo->setVisibilityPublished($document);
+        $link = $document->getFirstResourceLink();
+        $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $link->getVisibility());
+
+        $documentRepo->setVisibilityDraft($document);
+        $link = $document->getFirstResourceLink();
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $link->getVisibility());
+
+        $documentRepo->setVisibilityPending($document);
+        $link = $document->getFirstResourceLink();
+        $this->assertSame(ResourceLink::VISIBILITY_PENDING, $link->getVisibility());
+
+        $documentRepo->setVisibilityDeleted($document);
+        $link = $document->getFirstResourceLink();
+        $this->assertSame(ResourceLink::VISIBILITY_DELETED, $link->getVisibility());
+    }
+
+    public function testGetTotalSpaceByCourse(): void
+    {
+        self::bootKernel();
+        $course = $this->createCourse('Test');
+        $admin = $this->getUser('admin');
+        $em = $this->getManager();
+
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $total = $documentRepo->getTotalSpaceByCourse($course);
+        $this->assertSame(0, $total);
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title')
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $documentRepo->create($document);
+        $documentRepo->addFile($document, $this->getUploadedFile());
+        $em->flush();
+
+        $total = $documentRepo->getTotalSpaceByCourse($course);
+        $this->assertSame($this->getUploadedFile()->getSize(), $total);
     }
 }

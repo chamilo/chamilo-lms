@@ -31,4 +31,29 @@ class GroupRepositoryTest extends AbstractApiTest
 
         $this->assertSame($defaultGroups + 1, $repo->count([]));
     }
+
+    public function testGetAdmins(): void
+    {
+        $repo = self::getContainer()->get(GroupRepository::class);
+        $admins = $repo->getAdmins();
+        $this->assertSame(0, \count($admins));
+    }
+
+    public function testCreateDefaultGroups(): void
+    {
+        $repo = self::getContainer()->get(GroupRepository::class);
+        $groups = $repo->findAll();
+        $defaultCount = $repo->count([]);
+        $repo->createDefaultGroups();
+        $count = $repo->count([]);
+        $this->assertSame($defaultCount, $count);
+
+        foreach ($groups as $group) {
+            $repo->delete($group);
+        }
+
+        $repo->createDefaultGroups();
+        $count = $repo->count([]);
+        $this->assertSame($defaultCount, $count);
+    }
 }

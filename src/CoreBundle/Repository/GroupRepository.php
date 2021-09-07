@@ -20,8 +20,15 @@ class GroupRepository extends ServiceEntityRepository
         parent::__construct($registry, Group::class);
     }
 
+    public function delete(Group $group): void
+    {
+        $em = $this->getEntityManager();
+        $em->remove($group);
+        $em->flush();
+    }
+
     /**
-     * @return User[]|Collection
+     * @return User[]|Collection|array
      */
     public function getAdmins()
     {
@@ -29,10 +36,13 @@ class GroupRepository extends ServiceEntityRepository
             'name' => 'admins',
         ];
 
-        /** @var Group $group */
+        /** @var Group|null $group */
         $group = $this->findOneBy($criteria);
+        if (null !== $group) {
+            return $group->getUsers();
+        }
 
-        return $group->getUsers();
+        return [];
     }
 
     public function createDefaultGroups(AccessGroupFixtures $accessGroupFixtures = null): void
@@ -85,8 +95,7 @@ class GroupRepository extends ServiceEntityRepository
         foreach ($groups as $groupData) {
             $groupExists = $this->findOneBy(['code' => $groupData['code']]);
             if (null === $groupExists) {
-                $group = new Group($groupData['title']);
-                $group
+                $group = (new Group($groupData['title']))
                     ->setCode($groupData['code'])
                 ;
 

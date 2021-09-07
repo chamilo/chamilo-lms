@@ -138,7 +138,6 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $em = $this->getManager();
 
-        /** @var CourseCategoryRepository $repoCourseCategory */
         $repoCourseCategory = self::getContainer()->get(CourseCategoryRepository::class);
         $defaultCount = $repoCourseCategory->count([]);
 
@@ -171,5 +170,21 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $this->assertSame(0, $assetRepo->count([]));
         $this->assertSame($defaultCount + 1, $repoCourseCategory->count([]));
+    }
+
+    public function testFindAllInAccessUrl(): void
+    {
+        $repoCourseCategory = self::getContainer()->get(CourseCategoryRepository::class);
+        $urlId = $this->getAccessUrl()->getId();
+
+        $categories = $repoCourseCategory->findAllInAccessUrl($urlId);
+
+        $this->assertSame(3, \count($categories));
+
+        $categories = $repoCourseCategory->findAllInAccessUrl($urlId, false);
+        $this->assertSame(3, \count($categories));
+
+        $categories = $repoCourseCategory->findAllInAccessUrl($urlId, false, 99);
+        $this->assertSame(0, \count($categories));
     }
 }

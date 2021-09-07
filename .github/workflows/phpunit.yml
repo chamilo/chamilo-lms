@@ -61,13 +61,20 @@ jobs:
                   php bin/console --env=test doctrine:fixtures:load --no-interaction
 
             - name: Run PHPUnit tests
-              run: php bin/phpunit  --coverage-clover coverage.xml
+              run: php bin/phpunit  --coverage-clover clover.xml
 
             - name: Coverage
               uses: codecov/codecov-action@v2
               with:
                   token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-                  files: ./coverage.xml
+                  files: ./clover.xml
                   name: codecov-umbrella # optional
                   fail_ci_if_error: false
                   verbose: true
+
+            - name: Upload coverage results to Coveralls
+              env:
+                  COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  composer global require php-coveralls/php-coveralls
+                  php-coveralls --coverage_clover=build/logs/clover.xml -v

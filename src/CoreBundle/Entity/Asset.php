@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -52,6 +53,7 @@ class Asset
      *     Asset::SCORM,
      *     Asset::WATERMARK,
      *     Asset::EXTRA_FIELD,
+     *     Asset::COURSE_CATEGORY,
      *     Asset::SKILL,
      * },
      * message="Choose a valid category."
@@ -63,7 +65,6 @@ class Asset
     protected ?string $category = null;
 
     /**
-     * @Assert\NotNull()
      * @Vich\UploadableField(
      *     mapping="assets",
      *     fileNameProperty="title",
@@ -73,6 +74,7 @@ class Asset
      *     dimensions="dimensions"
      * )
      */
+    #[Assert\NotNull]
     protected File $file;
 
     /**

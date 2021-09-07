@@ -1946,7 +1946,6 @@ switch ($action) {
             }
         }
 
-
         $sidx = in_array($sidx, $columns) ? $sidx : 'name';
         switch ($listType) {
             case 'complete':

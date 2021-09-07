@@ -189,14 +189,6 @@ class CDocumentRepositoryTest extends AbstractApiTest
         // Test access with another user. He cannot see the file, no cid is pass as a parameter.
         $this->createUser('another');
 
-        $token = $this->getUserToken(
-            [
-                'username' => 'another',
-                'password' => 'another',
-            ],
-            true
-        );
-
         $client = $this->getClientWithGuiCredentials('another', 'another');
         $client->request(
             'GET',
@@ -207,14 +199,14 @@ class CDocumentRepositoryTest extends AbstractApiTest
         );
         $this->assertResponseStatusCodeSame(403); // Unauthorized
 
-        $this->createClientWithCredentials($token)->request('GET', '/api/documents', [
+        $client->request('GET', '/api/documents', [
             'query' => [
                 'loadNode' => 1,
                 'resourceNode.parent' => $course->getResourceNode()->getId(),
                 'cid' => $courseId,
             ],
         ]);
-        $this->assertResponseStatusCodeSame(403); // Unauthorized
+        $this->assertResponseStatusCodeSame(200);
 
         // Test access with another user. He CAN see the file, the cid is pass as a parameter
         // and the course is open to the world by default.
@@ -246,6 +238,15 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
+        $this->assertResponseStatusCodeSame(403);
+
+        $client->request('GET', '/api/documents', [
+            'query' => [
+                'loadNode' => 1,
+                'resourceNode.parent' => $course->getResourceNode()->getId(),
+                'cid' => $courseId,
+            ],
+        ]);
         $this->assertResponseStatusCodeSame(403);
 
         // Update course visibility to CLOSED

@@ -402,7 +402,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $qb->expr()->eq('scu.user', $user->getId())
             )
             ->andWhere(
-                $qb->expr()->eq('su.relationType', SESSION_RELATION_TYPE_RRHH)
+                $qb->expr()->eq('su.relationType', Session::DRH)
             )
         ;
 

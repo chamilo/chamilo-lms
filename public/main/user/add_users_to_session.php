@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -96,7 +98,7 @@ if ('true' === $allowTutors) {
                     $id_session = intval($id_session);
                     // check id_user from session_rel_user table
                     $sql = 'SELECT user_id FROM '.$tbl_session_rel_user.'
-                            WHERE session_id ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
+                            WHERE session_id ="'.$id_session.'" AND relation_type<>'.Session::DRH.' ';
                     $res = Database::query($sql);
                     $user_ids = [];
                     if (Database::num_rows($res) > 0) {
@@ -292,7 +294,7 @@ if ('true' === $allowTutors) {
                 INNER JOIN $tbl_session_rel_user
                 ON
                     $tbl_session_rel_user.user_id = u.id AND
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
+                    $tbl_session_rel_user.relation_type<>".Session::DRH." AND
                     $tbl_session_rel_user.session_id = ".intval($id_session)."
                 WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
@@ -305,7 +307,7 @@ if ('true' === $allowTutors) {
                         INNER JOIN $tbl_session_rel_user
                         ON
                             $tbl_session_rel_user.user_id = u.id AND
-                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
+                            $tbl_session_rel_user.relation_type<>".Session::DRH." AND
                             $tbl_session_rel_user.session_id = ".intval($id_session)."
                         INNER JOIN $tbl_user_rel_access_url url_user
                         ON (url_user.user_id=u.user_id)
@@ -379,7 +381,7 @@ if ('true' === $allowTutors) {
                     LEFT JOIN $tbl_session_rel_user
                     ON $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    $tbl_session_rel_user.relation_type<>".Session::DRH."
                     $where_filter AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
         } else {
@@ -388,7 +390,7 @@ if ('true' === $allowTutors) {
                     LEFT JOIN $tbl_session_rel_user
                     ON $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    $tbl_session_rel_user.relation_type<>".Session::DRH."
                     WHERE u.status <> ".DRH." AND u.status<>6
                     $order_clause";
         }
@@ -403,7 +405,7 @@ if ('true' === $allowTutors) {
                         ON
                             $tbl_session_rel_user.user_id = u.id AND
                             $tbl_session_rel_user.session_id = '$id_session' AND
-                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                            $tbl_session_rel_user.relation_type<>".Session::DRH."
                         INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
                         WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH." AND u.status<>6
                         $order_clause";
@@ -432,7 +434,7 @@ if ('true' === $allowTutors) {
                 ON
                     $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    $tbl_session_rel_user.relation_type<>".Session::DRH."
                 WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
         if (api_is_multiple_url_enabled()) {
@@ -445,7 +447,7 @@ if ('true' === $allowTutors) {
                         ON
                             $tbl_session_rel_user.user_id = u.id AND
                             $tbl_session_rel_user.session_id = '$id_session' AND
-                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                            $tbl_session_rel_user.relation_type<>".Session::DRH."
                         INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
                         WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";

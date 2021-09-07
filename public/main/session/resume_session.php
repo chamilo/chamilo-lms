@@ -337,7 +337,7 @@ if (!empty($sessionRelUsers)) {
         }*/
         $link = $reportingLink.$courseUserLink.$removeLink.$addUserToUrlLink.$editUrl;
         switch ($sessionRelUser->getRelationType()) {
-            case 1:
+            case Session::DRH:
                 $status = get_lang('Human Resources Manager');
                 $link = Display::url(
                     Display::return_icon('edit.png', get_lang('Edit')),

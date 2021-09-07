@@ -350,7 +350,6 @@ define('SESSION_RELATION_TYPE_COURSE_MANAGER', 1);
 
 // Relations type with Human resources manager
 define('COURSE_RELATION_TYPE_RRHH', 1);
-define('SESSION_RELATION_TYPE_RRHH', 1);
 
 // User image sizes
 define('USER_IMAGE_SIZE_ORIGINAL', 1);

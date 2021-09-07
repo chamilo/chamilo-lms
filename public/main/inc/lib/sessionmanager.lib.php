@@ -374,7 +374,7 @@ class SessionManager
             $where .= " AND (
                             s.session_admin_id = $user_id  OR
                             sru.user_id = '$user_id' AND
-                            sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                            sru.relation_type = '".Session::DRH."'
                             )
                       ";
 
@@ -2063,7 +2063,7 @@ class SessionManager
             $sql = "DELETE FROM $tbl_session_rel_user
                     WHERE
                       session_id = $sessionId AND
-                      relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                      relation_type <> ".Session::DRH;
             // Don't reset session_rel_user.registered_at of users that will be registered later anyways.
             if (!empty($userList)) {
                 $avoidDeleteThisUsers = " AND user_id NOT IN ('".implode("','", $userList)."')";
@@ -2382,7 +2382,7 @@ class SessionManager
                 WHERE
                     session_id = $session_id AND
                     user_id = $user_id AND
-                    relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                    relation_type <> ".Session::DRH;
         $result = Database::query($sql);
         $return = Database::affected_rows($result);
 
@@ -2508,7 +2508,7 @@ class SessionManager
                 FROM $tbl_session_rel_user
                 WHERE
                     session_id = $sessionId AND
-                    relation_type<>".SESSION_RELATION_TYPE_RRHH;
+                    relation_type<>".Session::DRH;
         $result = Database::query($sql);
         $user_list = Database::store_result($result);
 
@@ -3489,7 +3489,7 @@ class SessionManager
         $sql = "DELETE FROM $tbl_session_rel_user
                 WHERE
                     session_id = $sessionId AND
-                    relation_type =".SESSION_RELATION_TYPE_RRHH;
+                    relation_type =".Session::DRH;
         Database::query($sql);
 
         return true;
@@ -3543,12 +3543,12 @@ class SessionManager
                         ON (a.session_id = s.session_id)
                         WHERE
                             s.user_id = $userId AND
-                            relation_type = ".SESSION_RELATION_TYPE_RRHH." AND
+                            relation_type = ".Session::DRH." AND
                             access_url_id = ".api_get_current_access_url_id();
             } else {
                 $sql = "SELECT s.session_id
                         FROM $tbl_session_rel_user s
-                        WHERE user_id = $userId AND relation_type=".SESSION_RELATION_TYPE_RRHH;
+                        WHERE user_id = $userId AND relation_type=".Session::DRH;
             }
             $result = Database::query($sql);
 
@@ -3558,7 +3558,7 @@ class SessionManager
                             WHERE
                                 session_id = {$row['session_id']} AND
                                 user_id = $userId AND
-                                relation_type =".SESSION_RELATION_TYPE_RRHH;
+                                relation_type =".Session::DRH;
                     Database::query($sql);
                 }
             }
@@ -3573,14 +3573,14 @@ class SessionManager
                         WHERE
                             session_id = $session_id AND
                             user_id = $userId AND
-                            relation_type = '".SESSION_RELATION_TYPE_RRHH."'";
+                            relation_type = '".Session::DRH."'";
                 $result = Database::query($sql);
                 if (0 == Database::num_rows($result)) {
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type, registered_at)
                             VALUES (
                                 $session_id,
                                 $userId,
-                                '".SESSION_RELATION_TYPE_RRHH."',
+                                '".Session::DRH."',
                                 '".api_get_utc_datetime()."'
                             )";
                     Database::query($sql);
@@ -3599,7 +3599,7 @@ class SessionManager
      */
     public static function getDrhUsersInSession($sessionId)
     {
-        return self::get_users_by_session($sessionId, SESSION_RELATION_TYPE_RRHH);
+        return self::get_users_by_session($sessionId, Session::DRH);
     }
 
     /**
@@ -3625,7 +3625,7 @@ class SessionManager
                     WHERE
                         sru.user_id = '$userId' AND
                         sru.session_id = '$sessionId' AND
-                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
+                        sru.relation_type = '".Session::DRH."' AND
                         access_url_id = ".api_get_current_access_url_id()."
                     ";
         } else {
@@ -3635,7 +3635,7 @@ class SessionManager
                         sru.session_id = s.id AND
                         sru.user_id = '$userId' AND
                         sru.session_id = '$sessionId' AND
-                        sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                        sru.relation_type = '".Session::DRH."'
                     ";
         }
 
@@ -3771,7 +3771,7 @@ class SessionManager
                                  FROM
                                  $tbl_session_rel_user sru
                                  WHERE
-                                    sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
+                                    sru.relation_type = '".Session::DRH."' AND
                                     sru.user_id = $userId";
                 break;
             case COURSEMANAGER:
@@ -5129,7 +5129,7 @@ class SessionManager
 
                             // Delete session-user relation only for students
                             $sql = "DELETE FROM $tbl_session_user
-                                    WHERE session_id = '$session_id' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                                    WHERE session_id = '$session_id' AND relation_type <> ".Session::DRH;
                             Database::query($sql);
 
                             $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
@@ -5250,7 +5250,7 @@ class SessionManager
 
                             // Delete session-user relation only for students
                             $sql = "DELETE FROM $tbl_session_user
-                                    WHERE session_id = '$session_id' AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                                    WHERE session_id = '$session_id' AND relation_type <> ".Session::DRH;
                             Database::query($sql);
 
                             $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
@@ -6929,7 +6929,7 @@ class SessionManager
                 WHERE
                     session_id = $sessionId AND
                     user_id = $userId AND
-                    relation_type = ".SESSION_RELATION_TYPE_RRHH;
+                    relation_type = ".Session::DRH;
 
         $result = Database::fetch_assoc(Database::query($sql));
 
@@ -9301,7 +9301,7 @@ class SessionManager
             ")
             ->setParameters([
                 'course' => $course->getId(),
-                'relationType' => SESSION_RELATION_TYPE_RRHH,
+                'relationType' => Session::DRH,
                 'session' => $session->getId(),
                 'url' => $url,
             ])
@@ -9553,7 +9553,7 @@ class SessionManager
                 WHERE
                     sru.user_id = '$userId' AND
                     sru.session_id = '$sessionId' AND
-                    sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
+                    sru.relation_type = '".Session::DRH."' AND
                     access_url_id = ".api_get_current_access_url_id();
         } else {
             $sql = "SELECT s.id FROM $tblSession s
@@ -9561,7 +9561,7 @@ class SessionManager
                 WHERE
                     sru.user_id = '$userId' AND
                     sru.session_id = '$sessionId' AND
-                    sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'";
+                    sru.relation_type = '".Session::DRH."'";
         }
 
         $result = Database::query($sql);

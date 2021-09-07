@@ -32,8 +32,6 @@ use Doctrine\ORM\QueryBuilder;
 use Exception;
 use LogicException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Form\FormFactory;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
@@ -79,21 +77,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $qb->setMaxResults(1);
 
         return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-
-    /**
-     * @return FormInterface
-     */
-    public function getForm(FormFactory $formFactory, ResourceInterface $resource = null, array $options = [])
-    {
-        $formType = $this->getResourceFormType();
-
-        if (null === $resource) {
-            $className = $this->repository->getClassName();
-            $resource = new $className();
-        }
-
-        return $formFactory->create($formType, $resource, $options);
     }
 
     public function getResourceByResourceNode(ResourceNode $resourceNode): ?ResourceInterface
@@ -548,17 +531,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
         );
     }
 
-    /**
-     * @return bool
-     */
-    public function updateResourceFileContent(AbstractResource $resource, string $content)
+    public function updateResourceFileContent(AbstractResource $resource, string $content): bool
     {
-        error_log('updateResourceFileContent');
-
         $resourceNode = $resource->getResourceNode();
         if ($resourceNode->hasResourceFile()) {
             $resourceNode->setContent($content);
             $resourceNode->getResourceFile()->setSize(\strlen($content));
+
+            return true;
         }
 
         return false;
@@ -784,16 +764,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em->flush();
 
         return true;
-    }
-
-    public function saveUpload(UploadedFile $file): ResourceInterface
-    {
-        throw new Exception('Implement saveUpload');
-    }
-
-    public function getResourceFormType(): string
-    {
-        throw new Exception('Implement getResourceFormType');
     }
 
     protected function addTitleQueryBuilder(?string $title, QueryBuilder $qb = null): QueryBuilder

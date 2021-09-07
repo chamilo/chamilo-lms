@@ -14,15 +14,13 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Form\Resource\IllustrationType;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\UploadInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class IllustrationRepository extends ResourceRepository implements UploadInterface
+final class IllustrationRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -44,14 +42,6 @@ final class IllustrationRepository extends ResourceRepository implements UploadI
 
         return $qb;
     }*/
-
-    public function saveUpload(UploadedFile $file): ResourceInterface
-    {
-        $resource = new Illustration();
-        $resource->setName($file->getClientOriginalName());
-
-        return $resource;
-    }
 
     /**
      * @param ResourceInterface|User $resource
@@ -147,11 +137,6 @@ final class IllustrationRepository extends ResourceRepository implements UploadI
         }
 
         return $illustration;
-    }
-
-    public function getResourceFormType(): string
-    {
-        return IllustrationType::class;
     }
 
     private function getIllustrationUrlFromNode(ResourceNode $node, string $filter = ''): string

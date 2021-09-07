@@ -21,7 +21,5 @@ interface GridInterface
 
     public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void;
 
-    public function getResourceFormType(): string;
-
     public function getResourceSettings(): Settings;
 }

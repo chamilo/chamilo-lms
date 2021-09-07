@@ -7,11 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Form\Type\ResourceCommentType;
-use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
@@ -119,87 +117,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'resourceNode' => $resourceNode,
                 'labels' => $labels,
                 'data' => $data,
-            ]
-        );
-    }
-
-    /**
-     * @deprecated Use Vue
-     *
-     * @Route("/{tool}/{type}/{id}/edit", methods={"GET", "POST"})
-     */
-    public function editAction(Request $request, IllustrationRepository $illustrationRepo): Response
-    {
-        $resourceNodeId = $request->get('id');
-
-        $repository = $this->getRepositoryFromRequest($request);
-        $resource = $repository->getResourceFromResourceNode($resourceNodeId);
-        $this->denyAccessUnlessValidResource($resource);
-        $settings = $repository->getResourceSettings();
-        $resourceNode = $resource->getResourceNode();
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::EDIT,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $this->setBreadCrumb($request, $resourceNode);
-        $resourceNodeParentId = $resourceNode->getId();
-
-        $routeParams = $this->getResourceParams($request);
-        $routeParams['id'] = $resourceNodeParentId;
-
-        $form = $repository->getForm($this->container->get('form.factory'), $resource);
-
-        if ($resourceNode->hasEditableTextContent() && $settings->isAllowToSaveEditorToResourceFile()) {
-            /*$form->add(
-                $this->fileContentName,
-                CKEditorType::class,
-                [
-                    'mapped' => false,
-                    'config' => [
-                        'filebrowserImageBrowseRoute' => 'resources_filemanager',
-                        'filebrowserImageBrowseRouteParameters' => $routeParams,
-                    ],
-                ]
-            );
-            $content = $repository->getResourceNodeFileContent($resourceNode);
-            $form->get($this->fileContentName)->setData($content);*/
-        }
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var AbstractResource|ResourceInterface $newResource */
-            $newResource = $form->getData();
-
-            if ($form->has($this->fileContentName)) {
-                $data = $form->get($this->fileContentName)->getData();
-                $repository->updateResourceFileContent($newResource, $data);
-            }
-
-            $repository->updateNodeForResource($newResource);
-
-            if ($form->has('illustration')) {
-                $illustration = $form->get('illustration')->getData();
-                if ($illustration) {
-                    $illustrationRepo->addIllustration($newResource, $this->getUser(), $illustration);
-                }
-            }
-
-            $this->addFlash('success', $this->trans('Updated'));
-            $resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
-            $routeParams['id'] = $resourceNodeParentId;
-
-            return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
-        }
-
-        return $this->render(
-            $repository->getTemplates()->getFromAction(__FUNCTION__),
-            [
-                'form' => $form->createView(),
-                'parent' => $resourceNodeParentId,
             ]
         );
     }

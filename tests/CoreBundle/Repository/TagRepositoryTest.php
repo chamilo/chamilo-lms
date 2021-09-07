@@ -43,5 +43,9 @@ class TagRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame($defaultCount + 1, $repo->count([]));
+
+        $tags = $repo->findTagsByField('php', $extraField->getId());
+
+        $this->assertSame(1, \count($tags));
     }
 }

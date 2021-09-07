@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
+use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -70,8 +71,10 @@ class UserRepositoryTest extends AbstractApiTest
         $admin = $this->createUser('admin2');
         $userRepo = self::getContainer()->get(UserRepository::class);
 
+        $em = $this->getManager();
+
         $this->assertHasNoEntityViolations($admin);
-        $admin->addRole('ROLE_ADMIN');
+        $admin->addUserAsAdmin();
         $userRepo->update($admin);
 
         $this->assertTrue($admin->isActive());
@@ -80,11 +83,31 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertFalse($admin->isStudentBoss());
         $this->assertFalse($admin->isSuperAdmin());
         $this->assertTrue($admin->isCredentialsNonExpired());
+        $this->assertFalse($admin->getCredentialsExpired());
+        $this->assertFalse($admin->getLocked());
+
+        // Group.
+        $this->assertEmpty($admin->getGroupNames());
+        $this->assertFalse($admin->hasGroup('test'));
+
+        $group = (new Group('test'))
+            ->setCode('test')
+        ;
+        $em->persist($group);
+        $em->flush();
+
+        $admin->addGroup($group);
+        $userRepo->update($admin);
+        /** @var User $admin */
+        $admin = $userRepo->find($admin->getId());
+
+        $this->assertTrue($admin->hasGroup('test'));
+        $this->assertSame(2, \count($admin->getRoles()));
     }
 
     public function testCreateUserSkipResourceNode(): void
     {
-        $manager = $this->getManager();
+        $em = $this->getManager();
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         $user = (new User())
@@ -100,11 +123,11 @@ class UserRepositoryTest extends AbstractApiTest
             ->addUserAsAdmin()//->addGroup($group)
         ;
 
-        $manager->persist($user);
+        $em->persist($user);
 
         $userRepo->updateUser($user);
         $userRepo->addUserToResourceNode($user->getId(), $user->getId());
-        $manager->flush();
+        $em->flush();
 
         //$this->assertTrue($user->isAdmin());
         //$this->assertTrue($user->isSuperAdmin());

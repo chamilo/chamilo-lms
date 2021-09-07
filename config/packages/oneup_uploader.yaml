@@ -7,6 +7,3 @@ oneup_uploader:
                 type: flysystem
                 filesystem: oneup_flysystem.resource_filesystem
             root_folder: true
-            custom_frontend:
-                class: 'Chamilo\CoreBundle\Controller\ResourceUploadController'
-                name: upload

@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Form\Resource\CCourseDescriptionType;
 use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
@@ -65,10 +64,5 @@ final class CCourseDescriptionRepository extends ResourceRepository implements G
         if ($session) {
             $newResource->setSessionId($session->getId());
         }*/
-    }
-
-    public function getResourceFormType(): string
-    {
-        return CCourseDescriptionType::class;
     }
 }

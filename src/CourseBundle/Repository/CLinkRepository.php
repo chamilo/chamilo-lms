@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Form\Resource\CLinkType;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -39,10 +38,5 @@ final class CLinkRepository extends ResourceRepository
         ;
 
         //return $newResource;
-    }
-
-    public function getResourceFormType(): string
-    {
-        return CLinkType::class;
     }
 }

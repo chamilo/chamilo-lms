@@ -8,23 +8,19 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Form\Resource\CDocumentType;
 use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Repository\UploadInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class CDocumentRepository extends ResourceRepository implements GridInterface, UploadInterface
+final class CDocumentRepository extends ResourceRepository implements GridInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -50,18 +46,6 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         ;
 
         return $settings;
-    }
-
-    public function saveUpload(UploadedFile $file): ResourceInterface
-    {
-        $resource = new CDocument();
-        $resource
-            ->setFiletype('file')
-            //->setSize($file->getSize())
-            ->setTitle($file->getClientOriginalName())
-        ;
-
-        return $resource;
     }
 
     public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
@@ -132,11 +116,6 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         $this->addFileTypeQueryBuilder('file', $qb);
 
         return $this->getCount($qb);
-    }
-
-    public function getResourceFormType(): string
-    {
-        return CDocumentType::class;
     }
 
     protected function addFileTypeQueryBuilder(string $fileType, QueryBuilder $qb = null): QueryBuilder

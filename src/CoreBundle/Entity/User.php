@@ -2305,7 +2305,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getDRHSessions(): array
     {
-        return $this->getSessions(1);
+        return $this->getSessions(Session::DRH);
     }
 
     /**

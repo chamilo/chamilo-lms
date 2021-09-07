@@ -5,6 +5,9 @@
 /**
  *	@author Bart Mollet, Julio Montoya lot of fixes
  */
+
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -110,7 +113,7 @@ if ('true' === $allowTutors) {
             }
 
             if (!empty($_GET['user'])) {
-                $result = Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND session_id ='$id_session' AND user_id=".intval($_GET['user']));
+                $result = Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".Session::DRH." AND session_id ='$id_session' AND user_id=".intval($_GET['user']));
                 $nbr_affected_rows = Database::affected_rows($result);
                 Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
 
@@ -243,7 +246,7 @@ if ('true' === $allowTutors) {
                         srcru.user_id = sru.user_id AND
                         srcru.session_id = sru.session_id AND
                         srcru.c_id = '".Database::escape_string($course['id'])."'AND
-                        sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
+                        sru.relation_type<>".Session::DRH." AND
                         srcru.session_id = '".intval($id_session)."'";
 
             $rs = Database::query($sql);
@@ -317,7 +320,7 @@ if ('true' === $allowTutors) {
             $sql = "SELECT u.id as user_id, lastname, firstname, username, access_url_id
                     FROM $tbl_user u
                     INNER JOIN $tbl_session_rel_user su
-                    ON u.id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    ON u.id = su.user_id AND su.relation_type<>".Session::DRH."
                     LEFT OUTER JOIN $table_access_url_user uu ON (uu.user_id = u.id)
                     WHERE su.session_id = $id_session AND (access_url_id = $url_id OR access_url_id is null )
                     $order_clause";
@@ -325,7 +328,7 @@ if ('true' === $allowTutors) {
             $sql = "SELECT u.id as user_id, lastname, firstname, username
                     FROM $tbl_user u
                     INNER JOIN $tbl_session_rel_user su
-                    ON u.id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    ON u.id = su.user_id AND su.relation_type<>".Session::DRH."
                     AND su.session_id = ".$id_session.$order_clause;
         }
 

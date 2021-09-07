@@ -72,7 +72,7 @@ class SessionRelUser
      */
     public array $relationTypeList = [
         0 => 'student',
-        1 => 'drh',
+        Session::DRH => 'drh',
     ];
 
     /**

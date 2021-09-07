@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -113,7 +115,7 @@ function search_users($needle, $type)
                 // check id_user from session_rel_user table
                 $sql = "
                     SELECT user_id FROM $tbl_session_rel_user
-                    WHERE session_id = $id_session AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                    WHERE session_id = $id_session AND relation_type <> ".Session::DRH;
                 $res = Database::query($sql);
                 $user_ids = [];
                 if (Database::num_rows($res) > 0) {
@@ -369,7 +371,7 @@ if ($ajax_search) {
         FROM $tbl_user u
         INNER JOIN $tbl_session_rel_user su
             ON su.user_id = u.id
-            AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+            AND su.relation_type <> ".Session::DRH."
             AND su.session_id = ".intval($id_session)."
         WHERE u.status<>".DRH."
             AND u.status <> 6
@@ -385,7 +387,7 @@ if ($ajax_search) {
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user su
                     ON su.user_id = u.id
-                    AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    AND su.relation_type <> ".Session::DRH."
                     AND su.session_id = ".intval($id_session)."
                 INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id = u.id)
                 WHERE access_url_id = $access_url_id
@@ -487,7 +489,7 @@ if ($ajax_search) {
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.relation_type <> ".Session::DRH."
             $where_filter
                 AND u.status <> ".DRH."
                 AND u.status <> 6
@@ -500,7 +502,7 @@ if ($ajax_search) {
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.relation_type <> ".Session::DRH."
             WHERE u.status <> ".DRH." AND u.status <> 6
             $order_clause
         ";
@@ -515,7 +517,7 @@ if ($ajax_search) {
                 LEFT JOIN $tbl_session_rel_user su
                     ON su.user_id = u.id
                     AND su.session_id = $id_session
-                    AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    AND su.relation_type <> ".Session::DRH."
                 INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
                 WHERE access_url_id = $access_url_id $where_filter
@@ -548,7 +550,7 @@ if ($ajax_search) {
         LEFT JOIN $tbl_session_rel_user
         ON $tbl_session_rel_user.user_id = u.id
             AND $tbl_session_rel_user.session_id = $id_session
-            AND $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+            AND $tbl_session_rel_user.relation_type <> ".Session::DRH."
         WHERE u.status <> ".DRH." AND u.status <> 6 $order_clause
     ";
 
@@ -562,7 +564,7 @@ if ($ajax_search) {
                 LEFT JOIN $tbl_session_rel_user
                     ON $tbl_session_rel_user.user_id = u.id
                     AND $tbl_session_rel_user.session_id = $id_session
-                    AND $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    AND $tbl_session_rel_user.relation_type <> ".Session::DRH."
                 INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id = u.id)
                 WHERE access_url_id = $access_url_id
                     AND u.status <> ".DRH."

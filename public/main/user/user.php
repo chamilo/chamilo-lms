@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -440,7 +441,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $sql = "SELECT user.id as user_id
 					FROM $tbl_user user
 					INNER JOIN $tbl_session_rel_user reluser
-					ON user.id = reluser.user_id AND reluser.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+					ON user.id = reluser.user_id AND reluser.relation_type <> ".Session::DRH."
 					INNER JOIN $tbl_session_rel_course rel_course
 					ON rel_course.session_id = reluser.session_id
 					WHERE

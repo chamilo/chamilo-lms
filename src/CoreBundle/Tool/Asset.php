@@ -22,7 +22,7 @@ class Asset extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '';
+        return '/';
     }
 
     public function getIcon(): string

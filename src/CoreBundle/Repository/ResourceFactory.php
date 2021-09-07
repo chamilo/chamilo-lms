@@ -27,7 +27,7 @@ class ResourceFactory
     {
         $tool = $this->toolChain->getToolFromName($toolName);
 
-        if (!$tool instanceof AbstractTool) {
+        if (!($tool instanceof AbstractTool)) {
             throw new InvalidArgumentException(sprintf('Tool %s not found', $toolName));
         }
 

@@ -62,12 +62,6 @@ services:
         tags:
             - {name: kernel.event_listener}
 
-    # Course upload listener
-    Chamilo\CoreBundle\EventListener\ResourceUploadListener:
-        arguments: ['@router']
-        tags:
-            - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}
-
     # Auth listeners
     Chamilo\CoreBundle\EventListener\LoginSuccessHandler:
         arguments: ['@router', '@security.authorization_checker', '@chamilo.settings.manager']

@@ -346,13 +346,6 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
         }
-        //exit;
-        //var_dump($allowAnonsToSee);
-        /*foreach ($rights as $right) {
-            var_dump($right->getRole());
-        }*/
-
-        //exit;
 
         // Asked mask
         $mask = new MaskBuilder();
@@ -439,13 +432,11 @@ class ResourceNodeVoter extends Voter
         }
 
         foreach ($user->getRoles() as $role) {
-            //var_dump($role, $acl->isAllowed($role, $linkId, $askedMask));
             if ($acl->isAllowed($role, $linkId, $askedMask)) {
                 return true;
             }
         }
 
-        //dump('not allowed to '.$attribute);
         return false;
     }
 }

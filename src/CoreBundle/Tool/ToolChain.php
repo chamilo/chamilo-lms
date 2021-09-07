@@ -114,14 +114,12 @@ class ToolChain
 
     public function setToolPermissions(Tool $tool): void
     {
-        $toolResourceRight = new ToolResourceRight();
-        $toolResourceRight
+        $toolResourceRight = (new ToolResourceRight())
             ->setRole('ROLE_TEACHER')
             ->setMask(ResourceNodeVoter::getEditorMask())
         ;
 
-        $toolResourceRightReader = new ToolResourceRight();
-        $toolResourceRightReader
+        $toolResourceRightReader = (new ToolResourceRight())
             ->setRole('ROLE_STUDENT')
             ->setMask(ResourceNodeVoter::getReaderMask())
         ;

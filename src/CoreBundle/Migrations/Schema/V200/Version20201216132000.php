@@ -77,10 +77,6 @@ final class Version20201216132000 extends AbstractMigrationChamilo
                 $orderList[] = $object;
             }
 
-            /*echo '<pre>';
-            var_dump($lpId, $lpItems);
-            echo '</pre>';
-            error_log('save new order');*/
             learnpath::sortItemByOrderList($rootItem, $orderList, true);
             if (($counter % $batchSize) === 0) {
                 $em->flush();

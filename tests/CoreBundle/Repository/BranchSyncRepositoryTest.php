@@ -33,4 +33,22 @@ class BranchSyncRepositoryTest extends AbstractApiTest
         // By default there's a root branch.
         $this->assertSame(2, $repo->count([]));
     }
+
+    public function testSearchByKeyword(): void
+    {
+        $repo = self::getContainer()->get(BranchSyncRepository::class);
+
+        $em = $this->getManager();
+        $item = (new BranchSync())
+            ->setBranchName('Branch')
+            ->setAdminName('Julio')
+        ;
+        $this->assertHasNoEntityViolations($item);
+        $em->persist($item);
+        $em->flush();
+
+        $items = $repo->searchByKeyword('Branch');
+
+        $this->assertSame(1, \count($items));
+    }
 }

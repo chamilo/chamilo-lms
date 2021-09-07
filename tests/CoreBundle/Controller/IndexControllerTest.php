@@ -36,4 +36,26 @@ class IndexControllerTest extends WebTestCase
 
         $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
+
+    public function testLogout(): void
+    {
+        $client = static::createClient();
+        $response = $client->request('GET', '/');
+        $defaultUrl = $response->getUri();
+
+        // retrieve the admin
+        $admin = $this->getUser('admin');
+
+        // simulate $testUser being logged in
+        $client->loginUser($admin);
+
+        $client->request('GET', '/account/home');
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+        $client->request('GET', '/logout');
+        $this->assertResponseRedirects($defaultUrl);
+
+        $client->request('GET', '/main/admin/index.php');
+        $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $client->getResponse()->getStatusCode());
+    }
 }

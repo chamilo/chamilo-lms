@@ -49,6 +49,7 @@ class AccessUrlRepositoryTest extends KernelTestCase
         $repo = self::getContainer()->get(AccessUrlRepository::class);
 
         $admin = $this->getUser('admin');
+        $user = $this->createUser('test');
 
         $accessUrl = (new AccessUrl())
             ->setUrl('https://example.org')
@@ -59,6 +60,16 @@ class AccessUrlRepositoryTest extends KernelTestCase
         $this->assertHasNoEntityViolations($accessUrl);
         $repo->create($accessUrl);
 
+        $accessUrl->addUser($user);
+        $repo->update($accessUrl);
+
+        /** @var AccessUrl $accessUrl */
+        $accessUrl = $repo->find($accessUrl->getId());
+
+        $this->assertTrue($accessUrl->hasUser($user));
+        $this->assertSame($accessUrl->getId(), $accessUrl->getResourceIdentifier());
+
+        $this->assertSame(null, $accessUrl->getLimitCourses());
         $this->assertSame(2, $repo->count([]));
         $this->assertSame(0, $accessUrl->getSettings()->count());
     }

@@ -77,4 +77,5 @@ jobs:
                   COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   composer global require php-coveralls/php-coveralls
-                  sudo php-coveralls --coverage_clover=clover.xml -v
+                  mkdir build/logs
+                  php-coveralls --coverage_clover=clover.xml -v

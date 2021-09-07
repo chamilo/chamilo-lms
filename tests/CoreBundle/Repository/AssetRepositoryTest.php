@@ -87,16 +87,17 @@ class AssetRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $url = $assetRepo->getAssetUrl($asset);
+        $this->assertNotEmpty($url);
 
         $client = static::createClient();
         $response = $client->request('GET', $url);
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
-
         $this->assertResponseIsSuccessful();
 
+        $asset = $assetRepo->find($asset->getId());
         $assetRepo->delete($asset);
 
-        /*$client->request('GET', $url);
-        $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());*/
+        $response = $client->request('GET', $url);
+        $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
     }
 }

@@ -71,9 +71,3 @@ jobs:
                   name: codecov-umbrella # optional
                   fail_ci_if_error: false
                   verbose: true
-
-            - name: Coveralls GitHub Action
-              uses: coverallsapp/github-action@1.1.3
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-

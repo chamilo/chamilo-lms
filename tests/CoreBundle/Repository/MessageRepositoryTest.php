@@ -47,6 +47,9 @@ class MessageRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($message);
         $messageRepo->update($message);
 
+        $transport = $this->getContainer()->get('messenger.transport.sync_priority_high');
+        $this->assertCount(1, $transport->getSent());
+
         // 1. Message exists in the inbox.
         $count = $messageRepo->count(['msgType' => Message::MESSAGE_TYPE_INBOX]);
         $this->assertSame(1, $count);

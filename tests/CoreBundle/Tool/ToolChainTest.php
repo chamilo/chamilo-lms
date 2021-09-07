@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\Tool\GlobalTool;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -57,6 +58,23 @@ class ToolChainTest extends AbstractApiTest
 
         $type = $toolChain->getResourceTypeNameByEntity(PersonalFile::class);
         $this->assertSame($typeName, $type);
+
+        $type = $toolChain->getResourceTypeNameByEntity('test');
+        $this->assertNull($type);
+    }
+
+    public function testSetToolPermissions(): void
+    {
+        self::bootKernel();
+
+        $toolChain = self::getContainer()->get(ToolChain::class);
+
+        $em = $this->getManager();
+        $toolRepo = $em->getRepository(Tool::class);
+        $agendaTool = $toolRepo->findOneBy(['name' => 'agenda']);
+        $this->assertNotNull($agendaTool);
+
+        $toolChain->setToolPermissions($agendaTool);
     }
 
     public function testGetTools(): void
@@ -65,9 +83,35 @@ class ToolChainTest extends AbstractApiTest
 
         $toolChain = self::getContainer()->get(ToolChain::class);
 
-        $count = $toolChain->getTools();
+        $tools = $toolChain->getTools();
 
-        $this->assertTrue(\count($count) > 0);
+        foreach ($tools as $tool) {
+            $name = $tool->getName();
+            $this->assertNotEmpty($name);
+
+            $link = $tool->getLink();
+            $this->assertNotEmpty($link, sprintf('Link for tool %s is empty', $name));
+
+            $types = $tool->getResourceTypes();
+            //$icon = $tool->getIcon();
+            //$this->assertNotEmpty($icon, sprintf("Icons for tool %s doesnt exists", $name));
+            //$em = $this->getManager();
+            /*if (!empty($types)) {
+                foreach ($types as $entityName) {
+                    $repo = $em->getRepository($entityName);
+                    //var_dump($repo->getClassName());
+                    $msg = sprintf(
+                        'Error in tool %s, entity: %s repo: %s not instance of ResourceRepository',
+                        $name,
+                        $entityName,
+                        \get_class($repo)
+                    );
+                    $this->assertInstanceOf(ResourceRepository::class, $repo, $msg);
+                }
+            }*/
+        }
+
+        $this->assertTrue(\count($tools) > 0);
     }
 
     public function testCreateTools(): void

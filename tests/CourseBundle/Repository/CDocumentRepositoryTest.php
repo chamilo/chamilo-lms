@@ -19,8 +19,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testGetDocumentsAsAdmin(): void
+    public function testGetDocuments(): void
     {
+        // Test as admin.
         $token = $this->getUserToken([]);
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/documents');
         $this->assertResponseIsSuccessful();
@@ -38,6 +39,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $this->assertCount(0, $response->toArray()['hydra:member']);
         $this->assertMatchesResourceCollectionJsonSchema(CDocument::class);
+
+        // Test as user
     }
 
     public function testCreateFolder(): void
@@ -185,6 +188,15 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         // Test access with another user. He cannot see the file, no cid is pass as a parameter.
         $this->createUser('another');
+
+        $token = $this->getUserToken(
+            [
+                'username' => 'another',
+                'password' => 'another',
+            ],
+            true
+        );
+
         $client = $this->getClientWithGuiCredentials('another', 'another');
         $client->request(
             'GET',
@@ -193,6 +205,15 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 'headers' => ['Content-Type' => 'application/json'],
             ]
         );
+        $this->assertResponseStatusCodeSame(403); // Unauthorized
+
+        $this->createClientWithCredentials($token)->request('GET', '/api/documents', [
+            'query' => [
+                'loadNode' => 1,
+                'resourceNode.parent' => $course->getResourceNode()->getId(),
+                'cid' => $courseId,
+            ],
+        ]);
         $this->assertResponseStatusCodeSame(403); // Unauthorized
 
         // Test access with another user. He CAN see the file, the cid is pass as a parameter
@@ -366,13 +387,14 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $document = (new CDocument())
             ->setFiletype('file')
-            ->setTitle('title')
+            ->setTitle('title 123')
             ->setParent($course)
         ;
 
         $documentRepo->addResourceNode($document, $admin, $course);
 
         $this->assertInstanceOf(ResourceNode::class, $document->getResourceNode());
+        $this->assertSame('title 123', (string) $document);
     }
 
     public function testSetVisibility(): void

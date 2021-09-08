@@ -1745,10 +1745,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdi/font@npm:^5.9.55":
-  version: 5.9.55
-  resolution: "@mdi/font@npm:5.9.55"
-  checksum: 6f1880b19bba583580abb23b2187fc31793efb3778f4bef304dcc61b571696e7b53dc4582e9393d033962f0b487b6f7b815208353cd236148fdc8f07d96fbd5c
+"@mdi/font@npm:^6.1.95":
+  version: 6.1.95
+  resolution: "@mdi/font@npm:6.1.95"
+  checksum: b35aa8697f87449a605a41e44369da949bcd7bd6135584724d44fc6624a2de31a5f7da0bcef2a396d059bcf4035d4af9f08d3b01c3d82eab21d0144a7148d18a
   languageName: node
   linkType: hard
 
@@ -4079,12 +4079,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alpinejs@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "alpinejs@npm:3.3.1"
+"alpinejs@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "alpinejs@npm:3.3.2"
   dependencies:
     "@vue/reactivity": ^3.0.2
-  checksum: c8e103461a65bb8e4a6546e5186842869ce41bbabc774c2c4cf5c6b4cbfae12aad6788d793ea277fbb9fdb2ce83f45f0024c5e1bb099a0a031c0e3b3a91bae95
+  checksum: c3e56dd542d9c0f2d36d3f99b98b0570ba56bbd2268cfc0e647ea602108b120d8aa98c0f5f6969906ee117f2717c4755a056a89cdd778d9d4a50d9cacc20d0df
   languageName: node
   linkType: hard
 
@@ -4814,12 +4814,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.21.3":
-  version: 0.21.3
-  resolution: "axios@npm:0.21.3"
+"axios@npm:^0.21.4":
+  version: 0.21.4
+  resolution: "axios@npm:0.21.4"
   dependencies:
     follow-redirects: ^1.14.0
-  checksum: 3d231925b322899b00a4cf231ab470635bbb979e7f76985e929ab33da334e252955305932ad034fc80d9a6c73112bf64286bb4b5e7faecb04586dd2755093957
+  checksum: e6d42b269b599d36eb13be0671c237781f32e6ae72be824297c55a3e1ce63b22ba4f46bad5ab28da7d3bae50a72637d55c792cf803be1cf9de6a8bcd6d0dcc1a
   languageName: node
   linkType: hard
 
@@ -6456,7 +6456,7 @@ __metadata:
     "@fullcalendar/vue3": ^5.9.0
     "@headlessui/vue": ^1.4.1
     "@heroicons/vue": ^1.0.4
-    "@mdi/font": ^5.9.55
+    "@mdi/font": ^6.1.95
     "@popperjs/core": 2.10.1
     "@quasar/extras": ^1.10.12
     "@symfony/webpack-encore": 1.6.1
@@ -6484,9 +6484,9 @@ __metadata:
     "@vue/compiler-sfc": 3.1.5
     "@vuelidate/core": ^2.0.0-alpha.23
     "@vuelidate/validators": ^2.0.0-alpha.20
-    alpinejs: ^3.3.1
+    alpinejs: ^3.3.2
     autoprefixer: ^10.3.4
-    axios: ^0.21.3
+    axios: ^0.21.4
     babel-cli: 6.26.0
     babel-plugin-transform-builtin-extend: 1.1.2
     babel-polyfill: 6.26.0
@@ -6530,7 +6530,7 @@ __metadata:
     litepicker: ^2.0.11
     luxon: ^1.28.0
     mathjax: ^2.7.9
-    mediaelement: ^4.2.16
+    mediaelement: ^4.2.17
     mediaelement-plugins: "https://github.com/chamilo/mediaelement-plugins"
     mini-css-extract-plugin: ^1.6.2
     multiselect-two-sides: ^2.5.7
@@ -6546,7 +6546,7 @@ __metadata:
     pretty-bytes: ^5.6.0
     primeflex: ^3.0.1
     primeicons: ^4.1.0
-    primevue: ^3.7.0
+    primevue: ^3.7.1
     purgecss-webpack-plugin: 4.0.3
     pwstrength-bootstrap: 3.1.0
     qtip2: 3.0.3
@@ -6557,14 +6557,14 @@ __metadata:
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
-    sweetalert2: ^11.1.4
-    tailwindcss: ^2.2.9
+    sweetalert2: ^11.1.5
+    tailwindcss: ^2.2.12
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
     textcomplete: ^0.18.2
     timeago: ^1.6.7
     timepicker: ^1.13.18
-    tinymce: ^5.9.1
+    tinymce: ^5.9.2
     ts-loader: ^9.2.5
     typescript: ^4.3.5
     video.js: ^7.15.4
@@ -13407,12 +13407,21 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mediaelement@npm:^4.0.7, mediaelement@npm:^4.2.16":
+"mediaelement@npm:^4.0.7":
   version: 4.2.16
   resolution: "mediaelement@npm:4.2.16"
   dependencies:
     global: ^4.3.1
   checksum: 002f18208a7a760a99ac25ca4ced67699e5dbc6eb8700859745e27c1247010dbecdb2773db833c901c59b239b1f9758f23fccf68eb8a5d729f91f771fee1349a
+  languageName: node
+  linkType: hard
+
+"mediaelement@npm:^4.2.17":
+  version: 4.2.17
+  resolution: "mediaelement@npm:4.2.17"
+  dependencies:
+    global: ^4.3.1
+  checksum: ec35bfd167965af9f5ce0c71c1d326055a314e632f218f57f97e979208d9445144874219083a3ced7e47609b9379de9ea4b631f453df1681f29259c82c5b956f
   languageName: node
   linkType: hard
 
@@ -16448,10 +16457,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"primevue@npm:^3.7.0":
-  version: 3.7.0
-  resolution: "primevue@npm:3.7.0"
-  checksum: 0bb131ded6577225b4e80b0e79c7e31cf2ff1d50fe9b471de376dffc9d0c228253d3675ff633a08562ff883d1c26acfe99634bae3e1546516a7d3f3898c99583
+"primevue@npm:^3.7.1":
+  version: 3.7.1
+  resolution: "primevue@npm:3.7.1"
+  checksum: f901062865d0e2d348cd5fe33a9620db633b3bf2ef35286f083add1b81eaeb1d59bbb47591f661687ec2ce022feae253b38c7462911b901c8093f5cd8b0879eb
   languageName: node
   linkType: hard
 
@@ -18880,10 +18889,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^11.1.4":
-  version: 11.1.4
-  resolution: "sweetalert2@npm:11.1.4"
-  checksum: c21d8150fa9dd18eb9987e81676378954374b1244fa6d8d7091adc3ecd9f2357084c73ebc72b604bab83f14230996ad69611047302e1f9264770b2a59cfc9010
+"sweetalert2@npm:^11.1.5":
+  version: 11.1.5
+  resolution: "sweetalert2@npm:11.1.5"
+  checksum: f47acfb06329995efe28290531600b0704982b87e67d57d7d0860c2a3c22e94bc1659340d0230a6fff214d1b34ad7537406e946dce824b4a8fd61ad3d6112cf0
   languageName: node
   linkType: hard
 
@@ -18915,9 +18924,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^2.2.9":
-  version: 2.2.9
-  resolution: "tailwindcss@npm:2.2.9"
+"tailwindcss@npm:^2.2.12":
+  version: 2.2.12
+  resolution: "tailwindcss@npm:2.2.12"
   dependencies:
     arg: ^5.0.1
     bytes: ^3.0.0
@@ -18932,6 +18941,7 @@ fsevents@~2.3.2:
     fs-extra: ^10.0.0
     glob-parent: ^6.0.1
     html-tags: ^3.1.0
+    is-color-stop: ^1.1.0
     is-glob: ^4.0.1
     lodash: ^4.17.21
     lodash.topath: ^4.5.2
@@ -18956,7 +18966,7 @@ fsevents@~2.3.2:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: 841c0fd86191d9098babbd284cd34c3bcfbe0abde4f121b32867138f058a6f961d27c367622829870e884624601b7ef075b0f406563547ac3a0a4c2033fdb6f4
+  checksum: ab7e43ccf1017a61d2f36a612b9c6bbb1c7765aacc894644afa2a9018045a6f6520b06b4aeac01498a7b1d72f1a54521c878a9003740703206283d51d20f9b0b
   languageName: node
   linkType: hard
 
@@ -19286,10 +19296,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"tinymce@npm:^5.9.1":
-  version: 5.9.1
-  resolution: "tinymce@npm:5.9.1"
-  checksum: af984b012b30477d30366d92b693b468dcaf34e1fa696daecfb05cda0c1cb51378ca339608c1a273fff1d4adb5fc2ece4a591edda9e3e52713ac51136b5d087d
+"tinymce@npm:^5.9.2":
+  version: 5.9.2
+  resolution: "tinymce@npm:5.9.2"
+  checksum: c427cff680d466a70e6c0b99862c8f5e27b634700adf2a7547cf4922c00c91e99cb00a919d97eb461c8b619a3a4d3c91bb98a3219b653a4725e81e6353fc09d8
   languageName: node
   linkType: hard
 

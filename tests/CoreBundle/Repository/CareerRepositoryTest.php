@@ -19,7 +19,7 @@ class CareerRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CareerRepository::class);
 
         $item = (new Career())

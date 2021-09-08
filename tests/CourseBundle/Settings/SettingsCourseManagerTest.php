@@ -19,7 +19,7 @@ class SettingsCourseManagerTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $settingsManager = self::getContainer()->get(SettingsCourseManager::class);
 
         $this->expectException(InvalidArgumentException::class);

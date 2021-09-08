@@ -21,7 +21,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(ResourceNodeRepository::class);
 
         $repoType = $em->getRepository(ResourceType::class);
@@ -49,7 +49,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
 
     public function testGetResourceNodeFileContent(): void
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(ResourceNodeRepository::class);
 
         $repoType = $em->getRepository(ResourceType::class);

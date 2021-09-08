@@ -19,7 +19,7 @@ class BranchSyncRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(BranchSyncRepository::class);
 
         $item = (new BranchSync())
@@ -38,7 +38,7 @@ class BranchSyncRepositoryTest extends AbstractApiTest
     {
         $repo = self::getContainer()->get(BranchSyncRepository::class);
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $item = (new BranchSync())
             ->setBranchName('Branch')
             ->setAdminName('Julio')

@@ -19,7 +19,7 @@ class LanguageRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(LanguageRepository::class);
         $defaultCount = $repo->count([]);
         $item = (new Language())

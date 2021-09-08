@@ -221,7 +221,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
     public function testGetSessionRelUser(): void
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $sessionRepo = self::getContainer()->get(SessionRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
         $userRepo = self::getContainer()->get(UserRepository::class);

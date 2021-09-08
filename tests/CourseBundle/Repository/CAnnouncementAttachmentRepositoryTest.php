@@ -21,7 +21,7 @@ class CAnnouncementAttachmentRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CAnnouncementRepository::class);
         $repoAttachment = self::getContainer()->get(CAnnouncementAttachmentRepository::class);
 

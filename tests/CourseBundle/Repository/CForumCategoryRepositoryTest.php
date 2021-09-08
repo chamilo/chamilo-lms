@@ -19,7 +19,7 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CForumCategoryRepository::class);
 
         $course = $this->createCourse('new');

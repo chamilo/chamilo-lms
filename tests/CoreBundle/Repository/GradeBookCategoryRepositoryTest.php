@@ -19,7 +19,7 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(GradeBookCategoryRepository::class);
 
         $course = $this->createCourse('new');

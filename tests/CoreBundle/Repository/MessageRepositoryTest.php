@@ -27,7 +27,7 @@ class MessageRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $messageRepo = self::getContainer()->get(MessageRepository::class);
         $userRepo = self::getContainer()->get(UserRepository::class);
@@ -76,7 +76,7 @@ class MessageRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
         $messageRepo = self::getContainer()->get(MessageRepository::class);
@@ -161,7 +161,7 @@ class MessageRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $messageAttachmentRepo = self::getContainer()->get(MessageAttachmentRepository::class);
         $messageRepo = self::getContainer()->get(MessageRepository::class);
@@ -202,7 +202,7 @@ class MessageRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $messageAttachmentRepo = self::getContainer()->get(MessageAttachmentRepository::class);
         $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
@@ -276,7 +276,7 @@ class MessageRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $messageRepo = self::getContainer()->get(MessageRepository::class);
         $userRepo = self::getContainer()->get(UserRepository::class);

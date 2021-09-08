@@ -19,7 +19,7 @@ class ExtraFieldRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(ExtraFieldRepository::class);
 
         $defaultCount = $repo->count([]);

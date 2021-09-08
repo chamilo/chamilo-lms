@@ -20,7 +20,7 @@ class PromotionRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(PromotionRepository::class);
         $defaultCount = $repo->count([]);
 

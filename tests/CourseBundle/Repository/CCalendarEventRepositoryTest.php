@@ -45,7 +45,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $user = $this->createUser('test');
         $resourceNodeId = $user->getResourceNode()->getId();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CCalendarEventRepository::class);
 
         // Current server local time (check your php.ini).

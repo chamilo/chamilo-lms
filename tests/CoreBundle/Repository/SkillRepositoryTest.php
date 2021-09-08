@@ -61,7 +61,7 @@ class SkillRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $skillRepo = self::getContainer()->get(SkillRepository::class);
         $assetRepo = self::getContainer()->get(AssetRepository::class);
@@ -102,7 +102,7 @@ class SkillRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $skillRepo = self::getContainer()->get(SkillRepository::class);
         $assetRepo = self::getContainer()->get(AssetRepository::class);

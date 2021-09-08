@@ -19,7 +19,7 @@ class CThematicRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CThematicRepository::class);
 
         $course = $this->createCourse('new');

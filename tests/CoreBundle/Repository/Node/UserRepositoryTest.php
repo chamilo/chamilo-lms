@@ -71,7 +71,7 @@ class UserRepositoryTest extends AbstractApiTest
         $admin = $this->createUser('admin2');
         $userRepo = self::getContainer()->get(UserRepository::class);
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $this->assertHasNoEntityViolations($admin);
         $admin->addUserAsAdmin();
@@ -107,7 +107,7 @@ class UserRepositoryTest extends AbstractApiTest
 
     public function testCreateUserSkipResourceNode(): void
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         $user = (new User())
@@ -174,7 +174,7 @@ class UserRepositoryTest extends AbstractApiTest
     public function testAddFriendToUser(): void
     {
         self::bootKernel();
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $user = $this->createUser('user', 'user');
         $friend = $this->createUser('friend', 'friend');

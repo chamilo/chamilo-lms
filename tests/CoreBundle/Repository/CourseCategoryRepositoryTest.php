@@ -22,7 +22,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CourseCategoryRepository::class);
         $defaultCount = $repo->count([]);
 
@@ -43,7 +43,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         /** @var CourseCategoryRepository $repoCourseCategory */
         $repoCourseCategory = self::getContainer()->get(CourseCategoryRepository::class);
@@ -84,7 +84,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
     {
         $client = static::createClient();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         /** @var CourseCategoryRepository $repoCourseCategory */
         $repoCourseCategory = self::getContainer()->get(CourseCategoryRepository::class);
@@ -136,7 +136,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $repoCourseCategory = self::getContainer()->get(CourseCategoryRepository::class);
         $defaultCount = $repoCourseCategory->count([]);

@@ -19,7 +19,7 @@ class SequenceRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(SequenceRepository::class);
 
         $item = (new Sequence())

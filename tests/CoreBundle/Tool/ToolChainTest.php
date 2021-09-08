@@ -69,7 +69,7 @@ class ToolChainTest extends AbstractApiTest
 
         $toolChain = self::getContainer()->get(ToolChain::class);
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $toolRepo = $em->getRepository(Tool::class);
         $agendaTool = $toolRepo->findOneBy(['name' => 'agenda']);
         $this->assertNotNull($agendaTool);
@@ -95,7 +95,7 @@ class ToolChainTest extends AbstractApiTest
             $types = $tool->getResourceTypes();
             //$icon = $tool->getIcon();
             //$this->assertNotEmpty($icon, sprintf("Icons for tool %s doesnt exists", $name));
-            //$em = $this->getManager();
+            //$em = $this->getEntityManager();
             /*if (!empty($types)) {
                 foreach ($types as $entityName) {
                     $repo = $em->getRepository($entityName);
@@ -127,7 +127,7 @@ class ToolChainTest extends AbstractApiTest
 
         $this->assertSame($countBefore, \count($tools));
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         // Delete BranchSync
         $branchRepo = $em->getRepository(BranchSync::class);

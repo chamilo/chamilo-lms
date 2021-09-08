@@ -191,8 +191,7 @@ abstract class AbstractResource
 
     public function addGroupLink(Course $course, Session $session = null, CGroup $group = null)
     {
-        $resourceLink = new ResourceLink();
-        $resourceLink
+        $resourceLink = (new ResourceLink())
             ->setCourse($course)
             ->setSession($session)
             ->setGroup($group)

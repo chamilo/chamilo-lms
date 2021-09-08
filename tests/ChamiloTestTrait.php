@@ -138,7 +138,7 @@ trait ChamiloTestTrait
         return $localTime->setTimezone(new \DateTimeZone('UTC'))->format('c');
     }
 
-    public function getManager(): EntityManager
+    public function getEntityManager(): EntityManager
     {
         return self::getContainer()->get('doctrine')->getManager();
     }

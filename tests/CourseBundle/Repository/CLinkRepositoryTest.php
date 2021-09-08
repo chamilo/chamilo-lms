@@ -19,7 +19,7 @@ class CLinkRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CLinkRepository::class);
 
         $course = $this->createCourse('new');

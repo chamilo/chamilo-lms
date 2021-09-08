@@ -20,7 +20,7 @@ class AssetRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $assetRepo = self::getContainer()->get(AssetRepository::class);
         $file = $this->getUploadedFile();
 
@@ -42,7 +42,7 @@ class AssetRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         /** @var AssetRepository $assetRepo */
         $assetRepo = self::getContainer()->get(AssetRepository::class);
         $file = $this->getUploadedFile();
@@ -71,7 +71,7 @@ class AssetRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         /** @var AssetRepository $assetRepo */
         $assetRepo = self::getContainer()->get(AssetRepository::class);
 

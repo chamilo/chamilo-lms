@@ -22,7 +22,7 @@ class AssetControllerTest extends WebTestCase
         $file = $this->getUploadedFile();
         /** @var AssetRepository $assetRepo */
         $assetRepo = self::getContainer()->get(AssetRepository::class);
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         // Create asset.
         $asset = (new Asset())

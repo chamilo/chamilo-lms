@@ -20,7 +20,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $field = (new ExtraField())
             ->setDisplayText('test')

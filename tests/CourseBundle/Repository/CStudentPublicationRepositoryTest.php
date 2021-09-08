@@ -19,7 +19,7 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
 
         $course = $this->createCourse('new');

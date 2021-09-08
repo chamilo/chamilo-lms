@@ -2256,7 +2256,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getStudentSessions(): array
     {
-        return $this->getSessions(0);
+        return $this->getSessions(Session::STUDENT);
     }
 
     /**
@@ -2315,7 +2315,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @return Session[]
      */
-    public function getCurrentlyAccessibleSessions(int $relationType = 0): array
+    public function getCurrentlyAccessibleSessions(int $relationType = Session::STUDENT): array
     {
         $sessions = [];
         foreach ($this->getSessions($relationType) as $session) {

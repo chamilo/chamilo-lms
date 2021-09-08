@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * Responses to AJAX calls.
@@ -87,7 +88,7 @@ switch ($action) {
                             ON (su.user_id = au.user_id)
                             WHERE
                                 access_url_id = $urlId AND
-                                su.relation_type = 0 AND
+                                su.relation_type = ".Session::STUDENT." AND
                                 su.registered_at >= '$start' AND
                                 su.registered_at <= '$end' AND
                                 su.session_id = '$sessionId' ";

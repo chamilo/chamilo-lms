@@ -3561,7 +3561,7 @@ class Tracking
                     INNER JOIN $tbl_session_user sru
                     ON (srcru.user_id = sru.user_id AND srcru.session_id = sru.session_id)
                     WHERE
-                        sru.relation_type <> ".SessionEntity::DRH." AND
+                        sru.relation_type = ".SessionEntity::STUDENT." AND
                         srcru.c_id = '$courseId' AND
                         srcru.session_id = '$sessionId'";
 

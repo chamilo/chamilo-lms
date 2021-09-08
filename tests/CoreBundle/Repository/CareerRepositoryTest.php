@@ -22,13 +22,17 @@ class CareerRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CareerRepository::class);
 
-        $item = (new Career())
+        $career = (new Career())
             ->setName('Julio')
+            ->setDescription('test')
+            ->setStatus(1)
         ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
+        $this->assertHasNoEntityViolations($career);
+        $em->persist($career);
         $em->flush();
 
         $this->assertSame(1, $repo->count([]));
+        $this->assertSame('Julio', $career->getName());
+        $this->assertNotNull( $career->getId());
     }
 }

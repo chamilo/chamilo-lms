@@ -9,8 +9,10 @@ namespace Chamilo\Tests\CourseBundle\Repository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -385,17 +387,158 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
         $admin = $this->getUser('admin');
+        $em = $this->getEntityManager();
 
         $document = (new CDocument())
             ->setFiletype('file')
             ->setTitle('title 123')
             ->setParent($course)
         ;
-
         $documentRepo->addResourceNode($document, $admin, $course);
+        $em->flush();
 
         $this->assertInstanceOf(ResourceNode::class, $document->getResourceNode());
         $this->assertSame('title 123', (string) $document);
+    }
+
+    public function testCreateDocumentWithLinks(): void
+    {
+        self::bootKernel();
+
+        $course = $this->createCourse('Test');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $admin = $this->getUser('admin');
+        $em = $this->getEntityManager();
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title 123')
+            ->setParent($course)
+            ->addCourseLink($course)
+        ;
+        $documentRepo->addResourceNode($document, $admin, $course);
+        $em->flush();
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+
+        $count = $document->getResourceNode()->getResourceLinks()->count();
+        $this->assertSame(1, $count);
+
+        $link = $document->getFirstResourceLink();
+        $this->assertInstanceOf(ResourceLink::class, $link);
+        $this->assertSame($link->getVisibility(), ResourceLink::VISIBILITY_PUBLISHED);
+        $this->assertSame($link->getCourse(), $course);
+        $this->assertSame($link->getGroup(), null);
+        $this->assertSame($link->getUser(), null);
+        $this->assertSame($link->getUserGroup(), null);
+
+        $teacher = $this->createUser('teacher');
+
+        $session = (new Session())
+            ->setName('session 1')
+            ->setGeneralCoach($teacher)
+            ->addAccessUrl($this->getAccessUrl())
+        ;
+        $em->persist($session);
+        $em->flush();
+
+        $group = (new CGroup())
+            ->setName('Group')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->setMaxStudent(100)
+        ;
+        $em->persist($group);
+        $em->flush();
+
+        $document->addGroupLink($course, $group, $session);
+        $documentRepo->update($document);
+
+        $document->addGroupLink($course, $group);
+        $documentRepo->update($document);
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+        $count = $document->getResourceNode()->getResourceLinks()->count();
+        $this->assertSame(2, $count);
+
+        $link = $document->getFirstResourceLink();
+        $this->assertInstanceOf(ResourceLink::class, $link);
+
+        $firstLink = $document->getResourceNode()->getResourceLinks()[0];
+        $secondLink = $document->getResourceNode()->getResourceLinks()[1];
+
+        $this->assertInstanceOf(ResourceLink::class, $firstLink);
+        $this->assertInstanceOf(ResourceLink::class, $secondLink);
+
+        $this->assertSame($firstLink->getCourse(), $course);
+        $this->assertSame($firstLink->getGroup(), null);
+        $this->assertSame($firstLink->getSession(), null);
+        $this->assertSame($firstLink->getUser(), null);
+
+        $this->assertSame($secondLink->getCourse(), $course);
+        $this->assertSame($secondLink->getGroup(), $group);
+        $this->assertSame($secondLink->getSession(), $session);
+        $this->assertSame($secondLink->getUser(), null);
+
+        $user = $this->createUser('test2');
+        $document->addResourceToUserList([$user]);
+        $em->flush();
+
+        $thirdLink = $document->getResourceNode()->getResourceLinks()[2];
+
+        $this->assertInstanceOf(ResourceLink::class, $thirdLink);
+        $this->assertSame($thirdLink->getUser(), $user);
+        $this->assertSame($thirdLink->getSession(), null);
+        $this->assertSame($thirdLink->getGroup(), null);
+
+        $group2 = (new CGroup())
+            ->setName('Group2')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->setMaxStudent(100)
+        ;
+        $em->persist($group2);
+        $em->flush();
+
+        $document->addResourceToGroupList([$group2], $course);
+        $em->flush();
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+
+        $fourthLink = $document->getResourceNode()->getResourceLinks()[3];
+        $this->assertInstanceOf(ResourceLink::class, $fourthLink);
+        $this->assertSame($fourthLink->getUser(), null);
+        $this->assertSame($fourthLink->getSession(), null);
+        $this->assertSame($fourthLink->getGroup(), $group2);
+
+        $this->assertTrue($document->isVisible($course));
+        $this->assertTrue($document->isVisible($course, $session));
+
+        $link = $document->getFirstResourceLinkFromCourseSession($course, $session);
+
+        $this->assertInstanceOf(ResourceLink::class, $link);
+        $this->assertSame($secondLink, $link);
+
+        $usersAndGroups = $document->getUsersAndGroupSubscribedToResource();
+        $this->assertFalse($usersAndGroups['everyone']);
+        $this->assertSame(1, \count($usersAndGroups['users']));
+        $this->assertSame(2, \count($usersAndGroups['groups']));
+    }
+
+    public function testSeparateUsersGroups(): void
+    {
+        $usersAndGroupsSeparated = CDocument::separateUsersGroups(['USER:1']);
+
+        $this->assertSame(1, \count($usersAndGroupsSeparated['users']));
+        $this->assertSame(0, \count($usersAndGroupsSeparated['groups']));
+
+        $usersAndGroupsSeparated = CDocument::separateUsersGroups(['USER:1', 'GROUP:1']);
+
+        $this->assertSame(1, \count($usersAndGroupsSeparated['users']));
+        $this->assertSame(1, \count($usersAndGroupsSeparated['groups']));
     }
 
     public function testSetVisibility(): void
@@ -438,7 +581,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         self::bootKernel();
         $course = $this->createCourse('Test');
         $admin = $this->getUser('admin');
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
         $total = $documentRepo->getTotalSpaceByCourse($course);

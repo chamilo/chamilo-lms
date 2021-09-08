@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
+use Chamilo\CoreBundle\Entity\Illustration;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -55,5 +56,21 @@ class IllustrationRepositoryTest extends WebTestCase
             $url
         );
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testCreateIllustration(): void
+    {
+        $repo = self::getContainer()->get(IllustrationRepository::class);
+        $user = $this->createUser('test');
+
+        $illustration = (new Illustration())
+            ->setName('test')
+            ->setCreator($user)
+            ->setParent($user)
+        ;
+        $repo->addResourceNode($illustration, $user, $user);
+        $repo->update($illustration);
+
+        $this->assertSame('test', (string) $illustration);
     }
 }

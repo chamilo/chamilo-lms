@@ -42,10 +42,15 @@ class MessageRepositoryTest extends AbstractApiTest
             ->setMsgType(Message::MESSAGE_TYPE_INBOX)
             ->setSender($admin)
             ->addReceiver($testUser)
+            ->setSendDate(new \DateTime())
+            ->setVotes(0)
+            ->setGroup(null)
         ;
 
         $this->assertHasNoEntityViolations($message);
         $messageRepo->update($message);
+
+        $this->assertTrue($message->hasReceiver($testUser));
 
         $transport = $this->getContainer()->get('messenger.transport.sync_priority_high');
         $this->assertCount(1, $transport->getSent());

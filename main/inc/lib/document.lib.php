@@ -3613,7 +3613,7 @@ class DocumentManager
             </script>";
         } else {
             // For LPs
-            $url = $lpAjaxUrl.'?a=get_documents&lp_id='.$lp_id.'&'.api_get_cidreq();
+            $url = $lpAjaxUrl.'?a=get_documents&lp_id='.(int) $lp_id.'&'.api_get_cidreq();
         }
 
         if (!empty($overwrite_url)) {
@@ -7018,7 +7018,8 @@ class DocumentManager
         // Show the "image name" not the filename of the image.
         if ($lp_id) {
             // LP URL
-            $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&file='.$documentId.'&lp_id='.$lp_id;
+            $url = api_get_path(WEB_CODE_PATH).
+                'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&file='.$documentId.'&lp_id='.(int) $lp_id;
         } else {
             // Direct document URL
             $url = $web_code_path.'document/document.php?cidReq='.$courseInfo['code'].'&id_session='.$session_id.'&id='.$documentId;

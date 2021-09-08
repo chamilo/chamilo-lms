@@ -7,8 +7,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
 
-$type = $_REQUEST['type'];
-$src = Security::remove_XSS($_REQUEST['source']);
+$type = $_REQUEST['type'] ?? '';
+$src = $_REQUEST['source'] ?? '';
 if (empty($type) || empty($src)) {
     api_not_allowed();
 }
@@ -37,24 +37,27 @@ switch ($type) {
         );
         break;
     case 'youtube':
-        $src = '//www.youtube.com/embed/'.$src;
+        $src = "src ='//www.youtube.com/embed/$src'";
+        $src = Security::remove_XSS($src);
+
         $iframe .= '<div id="content" style="width: 700px ;margin-left:auto; margin-right:auto;"><br />';
-        $iframe .= '<iframe class="youtube-player" type="text/html" width="640" height="385" src="'.$src.'" frameborder="0"></iframe>';
+        $iframe .= '<iframe class="youtube-player" type="text/html" width="640" height="385" '.$src.' frameborder="0"></iframe>';
         $iframe .= '</div>';
         break;
     case 'vimeo':
-        $src = '//player.vimeo.com/video/'.$src;
+        $src = "src ='//player.vimeo.com/video/$src'";
+        $src = Security::remove_XSS($src);
         $iframe .= '<div id="content" style="width: 700px ;margin-left:auto; margin-right:auto;"><br />';
-        $iframe .= '<iframe src="'.$src.'" width="640" height="385" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+        $iframe .= '<iframe '.$src.' width="640" height="385" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
         $iframe .= '</div>';
         break;
     case 'nonhttps':
         $icon = '&nbsp;<em class="icon-external-link icon-2x"></em>';
-        $iframe = Display::return_message(
+        $iframe = Security::remove_XSS(Display::return_message(
             Display::url($src.$icon, $src, ['class' => 'btn', 'target' => '_blank']),
             'normal',
             false
-        );
+        ));
         break;
 }
 

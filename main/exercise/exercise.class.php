@@ -1991,6 +1991,7 @@ class Exercise
         }
 
         $form->addHeader($form_title);
+        $form->protect();
 
         // Title.
         if (api_get_configuration_value('save_titles_as_html')) {
@@ -9401,28 +9402,16 @@ class Exercise
                             $title = $cut_title;
                         }
 
-                        /*$count_exercise_not_validated = (int) Event::count_exercise_result_not_validated(
-                            $my_exercise_id,
-                            $courseId,
-                            $sessionId
-                        );*/
-                        $move = null;
-                        $class_tip = '';
-                        /*if (!empty($count_exercise_not_validated)) {
-                            $results_text = $count_exercise_not_validated == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
-                            $title .= '<span class="exercise_tooltip" style="display: none;">'.$count_exercise_not_validated.' '.$results_text.' </span>';
-                        }*/
                         $overviewUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php';
-                        $url = $move.
+                        $url = Security::remove_XSS(
                             '<a
                                 '.$alt_title.'
-                                class="'.$class_tip.'"
                                 id="tooltip_'.$row['iid'].'"
                                 href="'.$overviewUrl.'?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['iid'].'"
                             >
                              '.Display::return_icon('quiz.png', $row['title']).'
                              '.$title.'
-                             </a>'.PHP_EOL;
+                             </a>');
 
                         if (ExerciseLib::isQuizEmbeddable($row)) {
                             $embeddableIcon = Display::return_icon('om_integration.png', get_lang('ThisQuizCanBeEmbeddable'));

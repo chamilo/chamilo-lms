@@ -2063,7 +2063,7 @@ class SessionManager
             $sql = "DELETE FROM $tbl_session_rel_user
                     WHERE
                       session_id = $sessionId AND
-                      relation_type <> ".Session::DRH;
+                      relation_type = ".Session::STUDENT;
             // Don't reset session_rel_user.registered_at of users that will be registered later anyways.
             if (!empty($userList)) {
                 $avoidDeleteThisUsers = " AND user_id NOT IN ('".implode("','", $userList)."')";
@@ -2087,7 +2087,7 @@ class SessionManager
             if (false === $isUserSubscribed) {
                 $enreg_user = (int) $enreg_user;
                 $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
-                        VALUES (0, $sessionId, $enreg_user, '".api_get_utc_datetime()."')";
+                        VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."')";
                 Database::query($sql);
                 Event::addEvent(
                     LOG_SESSION_ADD_USER,
@@ -2382,7 +2382,7 @@ class SessionManager
                 WHERE
                     session_id = $session_id AND
                     user_id = $user_id AND
-                    relation_type <> ".Session::DRH;
+                    relation_type = ".Session::STUDENT;
         $result = Database::query($sql);
         $return = Database::affected_rows($result);
 
@@ -2508,7 +2508,7 @@ class SessionManager
                 FROM $tbl_session_rel_user
                 WHERE
                     session_id = $sessionId AND
-                    relation_type<>".Session::DRH;
+                    relation_type = ".Session::STUDENT;
         $result = Database::query($sql);
         $user_list = Database::store_result($result);
 
@@ -5129,7 +5129,7 @@ class SessionManager
 
                             // Delete session-user relation only for students
                             $sql = "DELETE FROM $tbl_session_user
-                                    WHERE session_id = '$session_id' AND relation_type <> ".Session::DRH;
+                                    WHERE session_id = '$session_id' AND relation_type = ".Session::STUDENT;
                             Database::query($sql);
 
                             $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
@@ -5250,7 +5250,7 @@ class SessionManager
 
                             // Delete session-user relation only for students
                             $sql = "DELETE FROM $tbl_session_user
-                                    WHERE session_id = '$session_id' AND relation_type <> ".Session::DRH;
+                                    WHERE session_id = '$session_id' AND relation_type = ".Session::STUDENT;
                             Database::query($sql);
 
                             $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
@@ -6897,7 +6897,7 @@ class SessionManager
                 WHERE
                     session_id = $sessionId AND
                     user_id = $userId AND
-                    relation_type = 0";
+                    relation_type = ".Session::STUDENT;
 
         $result = Database::fetch_assoc(Database::query($sql));
 
@@ -7626,7 +7626,7 @@ class SessionManager
                 ON s.id = sru.id_session
                 WHERE
                     (sru.id_user IN (".implode(', ', $userIdList).")
-                    AND sru.relation_type = 0
+                    AND sru.relation_type = ".Session::STUDENT."
                 )";
 
         if (api_is_multiple_url_enabled()) {
@@ -7642,7 +7642,7 @@ class SessionManager
                             srau.access_url_id = $accessUrlId
                             AND (
                                 sru.id_user IN (".implode(', ', $userIdList).")
-                                AND sru.relation_type = 0
+                                AND sru.relation_type = ".Session::STUDENT."
                             )";
             }
         }

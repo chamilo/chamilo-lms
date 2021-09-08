@@ -2856,7 +2856,7 @@ class UserManager
                 ON (s.id = su.session_id)
                 WHERE (
                     su.user_id = $user_id AND
-                    su.relation_type <> ".SessionEntity::DRH."
+                    su.relation_type = ".SessionEntity::STUDENT."
                 )
                 $coachCourseConditions
                 ORDER BY access_start_date, access_end_date, name

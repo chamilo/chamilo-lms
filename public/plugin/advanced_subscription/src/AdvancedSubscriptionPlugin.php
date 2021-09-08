@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Hook\HookAdminBlock;
 use Chamilo\CoreBundle\Hook\HookNotificationContent;
@@ -222,7 +223,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             Database::get_main_table(TABLE_MAIN_SESSION).' s ON s.id = su.session_id';
         $whereSessionParams = 'su.relation_type = ? AND s.access_start_date >= ? AND su.user_id = ?';
         $whereSessionParamsValues = [
-            0,
+            Session::STUDENT,
             $newYearDate->format('Y-m-d'),
             $userId,
         ];
@@ -1515,7 +1516,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             WHERE
                 sf.extra_field_type = $extraFieldType AND
                 sf.variable = 'is_induction_session' AND
-                su.relation_type = 0 AND
+                su.relation_type = ".Session::STUDENT." AND
                 su.user_id = ".(int) $userId;
 
         $result = Database::query($sql);

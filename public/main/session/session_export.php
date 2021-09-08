@@ -125,7 +125,7 @@ if (isset($_POST['formSent'])) {
                     INNER JOIN $tbl_session_user
                     ON
                         $tbl_user.user_id = $tbl_session_user.user_id AND
-                        $tbl_session_user.relation_type<>".Session::DRH." AND
+                        $tbl_session_user.relation_type = ".Session::STUDENT." AND
                         $tbl_session_user.session_id = '".$row['id']."'";
 
             $rsUsers = Database::query($sql);
@@ -186,7 +186,7 @@ if (isset($_POST['formSent'])) {
                         ON
                             scu.user_id = su.user_id AND
                             scu.session_id = su.session_id AND
-                            su.relation_type<>".Session::DRH."
+                            su.relation_type = ".Session::STUDENT."
                         INNER JOIN $tbl_user u
                         ON
                             scu.user_id = u.id AND

@@ -16,6 +16,11 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
+            - name: Setup node
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install nodejs npm
+
             - name: Setup PHP, with composer and extensions
               uses: shivammathur/setup-php@v2
               with:
@@ -43,6 +48,15 @@ jobs:
 
             - name: Install dependencies with composer
               run: composer install --no-progress
+
+            - name: Install assets
+              run: php bin/console assets:install
+
+            - name: Install Yarn
+              run: |
+                  sudo npm install -g yarn
+                  yarn set version 2.4.2
+                  yarn --version
 
             - name: Check PHP settings
               run: |

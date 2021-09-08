@@ -20,11 +20,13 @@ class SettingsControllerTest extends WebTestCase
         // retrieve the admin
         $admin = $this->getUser('admin');
 
-        // simulate $testUser being logged in
         $client->loginUser($admin);
 
         $client->request('GET', '/admin/settings/admin');
-        $this->assertStringContainsString('Administrator email', $client->getResponse()->getContent());
+        $this->assertResponseIsSuccessful();
+
+        $this->assertSelectorTextContains('#sectionMainContent', 'Administrator email');
+        //$this->assertStringContainsString('Administrator email', $client->getResponse()->getContent());
     }
 
     public function testSearchSettingAction(): void
@@ -37,6 +39,7 @@ class SettingsControllerTest extends WebTestCase
         $client->loginUser($admin);
 
         $client->request('GET', '/admin/settings/admin');
+        $this->assertResponseIsSuccessful();
 
         $client->submitForm('Search', [
             'search[keyword]' => 'allow_message_tool',
@@ -59,12 +62,14 @@ class SettingsControllerTest extends WebTestCase
         $client->loginUser($admin);
 
         $client->request('GET', '/admin/settings/platform');
+        $this->assertResponseIsSuccessful();
 
         $client->submitForm('Save settings', [
             'form[institution]' => 'Chamilo modified 123',
         ]);
 
         $client->request('GET', '/admin/settings/platform');
+        $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('Chamilo modified 123', $client->getResponse()->getContent());
     }
 }

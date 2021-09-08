@@ -101,6 +101,9 @@ class SettingsManager implements SettingsManagerInterface
         }
     }
 
+    /**
+     * @return array|AbstractSettingsSchema[]
+     */
     public function getSchemas(): array
     {
         return $this->schemaRegistry->all();

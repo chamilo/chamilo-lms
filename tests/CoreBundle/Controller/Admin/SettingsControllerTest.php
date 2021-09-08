@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Controller\Admin;
 
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -71,5 +72,25 @@ class SettingsControllerTest extends WebTestCase
         $client->request('GET', '/admin/settings/platform');
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('Chamilo modified 123', $client->getResponse()->getContent());
+    }
+
+    public function testListSettings(): void
+    {
+        $client = static::createClient();
+
+        $settingsManager = $this->getContainer()->get(SettingsManager::class);
+
+        // retrieve the admin
+        $admin = $this->getUser('admin');
+
+        // simulate $testUser being logged in
+        $client->loginUser($admin);
+
+        $schemas = $settingsManager->getSchemas();
+        foreach ($schemas as $name => $schema) {
+            $category = $settingsManager->convertServiceToNameSpace($name);
+            $client->request('GET', '/admin/settings/'.$category);
+            $this->assertResponseIsSuccessful();
+        }
     }
 }

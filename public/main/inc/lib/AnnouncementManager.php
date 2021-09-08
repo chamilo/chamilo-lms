@@ -683,7 +683,7 @@ class AnnouncementManager
                 foreach ($send_to['groups'] as $group) {
                     $group = api_get_group_entity($group);
                     if ($group) {
-                        $announcement->addGroupLink($course, $session, $group);
+                        $announcement->addGroupLink($course, $group, $session);
                     }
                 }
             }
@@ -884,7 +884,7 @@ class AnnouncementManager
             // storing the selected groups
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $groupId) {
-                    $announcement->addGroupLink($course, $session, api_get_group_entity($groupId));
+                    $announcement->addGroupLink($course, api_get_group_entity($groupId), $session);
                 }
             }
 

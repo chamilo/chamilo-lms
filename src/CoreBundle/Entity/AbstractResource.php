@@ -189,7 +189,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function addGroupLink(Course $course, Session $session = null, CGroup $group = null)
+    public function addGroupLink(Course $course, CGroup $group, Session $session = null)
     {
         $resourceLink = (new ResourceLink())
             ->setCourse($course)
@@ -290,7 +290,7 @@ abstract class AbstractResource
         Session $session = null,
     ) {
         foreach ($groupList as $group) {
-            $this->addGroupLink($course, $session, $group);
+            $this->addGroupLink($course, $group, $session);
         }
 
         return $this;
@@ -508,29 +508,29 @@ abstract class AbstractResource
      */
     public static function separateUsersGroups(array $to): array
     {
-        $send_to = ['groups' => [], 'users' => []];
+        $sendTo = ['groups' => [], 'users' => []];
 
-        foreach ($to as $to_item) {
-            if (empty($to_item)) {
+        foreach ($to as $toItem) {
+            if (empty($toItem)) {
                 continue;
             }
 
-            $parts = explode(':', $to_item);
+            $parts = explode(':', $toItem);
             $type = $parts[0] ?? '';
             $id = $parts[1] ?? '';
 
             switch ($type) {
                 case 'GROUP':
-                    $send_to['groups'][] = (int) $id;
+                    $sendTo['groups'][] = (int) $id;
 
                     break;
                 case 'USER':
-                    $send_to['users'][] = (int) $id;
+                    $sendTo['users'][] = (int) $id;
 
                     break;
             }
         }
 
-        return $send_to;
+        return $sendTo;
     }
 }

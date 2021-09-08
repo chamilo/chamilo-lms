@@ -322,7 +322,7 @@ if ($formUsers->validate()) {
 
         foreach ($groups as $groupId) {
             $group = api_get_group_entity($groupId);
-            $category->addGroupLink($group);
+            $category->addGroupLink($course, $group);
         }
 
         $em->persist($category);

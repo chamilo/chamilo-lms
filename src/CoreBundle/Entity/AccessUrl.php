@@ -197,6 +197,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
+    #[Assert\Email]
     protected ?string $email = null;
 
     public function __construct()

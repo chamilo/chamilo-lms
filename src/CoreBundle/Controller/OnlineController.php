@@ -11,11 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class IndexController
- * author Julio Montoya <gugli100@gmail.com>.
- *
- * @Route("/online")
+ * @author Julio Montoya <gugli100@gmail.com>.
  */
+#[Route('/online')]
 class OnlineController extends BaseController
 {
     /**

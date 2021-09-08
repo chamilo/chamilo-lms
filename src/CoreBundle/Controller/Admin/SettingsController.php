@@ -25,11 +25,8 @@ class SettingsController extends BaseController
 {
     use ControllerTrait;
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     *
-     * @Route("/settings", name="admin_settings")
-     */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/settings', name: 'admin_settings')]
     public function indexAction(): Response
     {
         $manager = $this->getSettingsManager();
@@ -45,11 +42,9 @@ class SettingsController extends BaseController
 
     /**
      * Edit configuration with given namespace.
-     *
-     * @IsGranted("ROLE_ADMIN")
-     *
-     * @Route("/settings/search_settings", name="chamilo_platform_settings_search")
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/settings/search_settings', name: 'chamilo_platform_settings_search')]
     public function searchSettingAction(Request $request): Response
     {
         $manager = $this->getSettingsManager();
@@ -107,11 +102,9 @@ class SettingsController extends BaseController
 
     /**
      * Edit configuration with given namespace.
-     *
-     * @IsGranted("ROLE_ADMIN")
-     *
-     * @Route("/settings/{namespace}", name="chamilo_platform_settings")
      */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/settings/{namespace}', name: 'chamilo_platform_settings')]
     public function updateSettingAction(Request $request, string $namespace): Response
     {
         $manager = $this->getSettingsManager();
@@ -195,7 +188,9 @@ class SettingsController extends BaseController
     /**
      * Sync settings from classes with the database.
      */
-    public function syncSettings(Request $request): void
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/settings_sync', name: 'admin_settings')]
+    public function syncSettings(Request $request): Response
     {
         $manager = $this->getSettingsManager();
         // @todo improve get the current url entity
@@ -203,6 +198,8 @@ class SettingsController extends BaseController
         $url = $this->getDoctrine()->getRepository(AccessUrl::class)->find($urlId);
         $manager->setUrl($url);
         $manager->installSchemas($url);
+
+        return new Response('Updated');
     }
 
     /**

@@ -13,8 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class IndexController
- * author Julio Montoya <gugli100@gmail.com>.
+ * @author Julio Montoya <gugli100@gmail.com>.
  */
 class NewsController extends BaseController
 {

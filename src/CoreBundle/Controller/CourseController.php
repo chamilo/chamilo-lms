@@ -23,11 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use UserManager;
 
-/**
- * Class CourseController.
- *
- * @Route("/course")
- */
+#[Route('/course')]
 class CourseController extends AbstractController
 {
     /**

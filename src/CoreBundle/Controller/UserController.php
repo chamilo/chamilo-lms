@@ -14,10 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @Route("/user")
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
+#[Route('/user')]
 class UserController extends AbstractController
 {
     /**

@@ -32,12 +32,9 @@ use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
 /**
- * Class ResourceController.
- *
- * @Route("/r")
- *
  * @author Julio Montoya <gugli100@gmail.com>.
  */
+#[Route('/r')]
 class ResourceController extends AbstractResourceController implements CourseControllerInterface
 {
     use CourseControllerTrait;

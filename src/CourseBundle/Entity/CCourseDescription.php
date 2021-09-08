@@ -36,10 +36,9 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank
-     *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
+    #[Assert\NotBlank]
     protected ?string $title = null;
 
     /**

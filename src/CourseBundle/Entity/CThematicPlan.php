@@ -32,10 +32,9 @@ class CThematicPlan //extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**

@@ -68,10 +68,9 @@ class CSurveyQuestion
     protected Collection $answers;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="survey_question", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $surveyQuestion;
 
     /**

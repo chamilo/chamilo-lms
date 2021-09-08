@@ -37,10 +37,9 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**

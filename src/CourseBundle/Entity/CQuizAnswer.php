@@ -30,10 +30,10 @@ class CQuizAnswer
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="CQuizQuestion", inversedBy="answers", cascade={"persist"})
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
+    #[Assert\NotBlank]
     protected CQuizQuestion $question;
 
     /**

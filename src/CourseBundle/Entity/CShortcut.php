@@ -29,10 +29,9 @@ class CShortcut extends AbstractResource implements ResourceInterface
     /**
      * @Groups({"cshortcut:read"})
      *
-     * @Assert\NotBlank
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**

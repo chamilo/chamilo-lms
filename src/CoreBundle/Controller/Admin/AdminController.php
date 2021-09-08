@@ -9,13 +9,10 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Display;
 use FormValidator;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class Administrator.
- *
  * @Route("/admin")
  */
 class AdminController extends BaseController
@@ -25,12 +22,8 @@ class AdminController extends BaseController
      *
      * @return Response
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        // Already filter by the router
-        /*if (!$security->isGranted('ROLE_ADMIN')) {
-            $this->abort(403, 'Access denied');
-        }*/
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->loadAdminMenu();
         }

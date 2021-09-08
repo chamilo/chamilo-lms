@@ -33,6 +33,6 @@ class CareerRepositoryTest extends AbstractApiTest
 
         $this->assertSame(1, $repo->count([]));
         $this->assertSame('Julio', $career->getName());
-        $this->assertNotNull( $career->getId());
+        $this->assertNotNull($career->getId());
     }
 }

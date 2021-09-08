@@ -464,7 +464,7 @@ class SettingsManager implements SettingsManagerInterface
     public function getParametersFromKeywordOrderedByCategory($keyword)
     {
         $query = $this->repository->createQueryBuilder('s')
-            ->where('s.variable LIKE :keyword')
+            ->where('s.variable LIKE :keyword OR s.title LIKE :keyword')
             ->setParameter('keyword', "%{$keyword}%")
         ;
         $parametersFromDb = $query->getQuery()->getResult();

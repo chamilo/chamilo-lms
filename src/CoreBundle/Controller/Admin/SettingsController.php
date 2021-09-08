@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -212,7 +212,7 @@ class SettingsController extends BaseController
     {
         $builder = $this->container->get('form.factory')->createNamedBuilder('search');
         $builder->add('keyword', TextType::class);
-        $builder->add('search', ButtonType::class);
+        $builder->add('search', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']]);
 
         return $builder->getForm();
     }

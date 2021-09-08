@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 use Symfony\Component\Messenger\Transport\InMemoryTransport;
 
 class MessageRepositoryTest extends AbstractApiTest
@@ -42,7 +43,7 @@ class MessageRepositoryTest extends AbstractApiTest
             ->setMsgType(Message::MESSAGE_TYPE_INBOX)
             ->setSender($admin)
             ->addReceiver($testUser)
-            ->setSendDate(new \DateTime())
+            ->setSendDate(new DateTime())
             ->setVotes(0)
             ->setGroup(null)
         ;

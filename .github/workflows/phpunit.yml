@@ -60,8 +60,7 @@ jobs:
 
             - name: Install JS dependencies
               run: |
-                  yarn install
-                  yarn run encore production
+                  sudo chmod -R 777 var public
 
             - name: Check PHP settings
               run: |

@@ -3763,7 +3763,7 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
+            ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 
@@ -3834,7 +3834,7 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
+            ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
             $courseConditionWhere = ' AND cu.status = 0 ';
         }
 
@@ -3919,7 +3919,7 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = a.c_id AND cu.user_id = exe_user_id";
+            ON (cu.c_id = a.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
             $courseConditionWhere = ' AND cu.status = 0 ';
         }
 

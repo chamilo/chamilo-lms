@@ -58,6 +58,11 @@ jobs:
                   yarn set version 2.4.2
                   yarn --version
 
+            - name: Install JS dependencies
+              run: |
+                  yarn install
+                  yarn run encore production
+
             - name: Check PHP settings
               run: |
                   php -ini

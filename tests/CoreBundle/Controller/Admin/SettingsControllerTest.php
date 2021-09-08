@@ -93,4 +93,20 @@ class SettingsControllerTest extends WebTestCase
             $this->assertResponseIsSuccessful();
         }
     }
+
+    public function testSyncSettings(): void
+    {
+        $client = static::createClient();
+
+        //$settingsManager = $this->getContainer()->get(SettingsManager::class);
+
+        // retrieve the admin
+        $admin = $this->getUser('admin');
+
+        // simulate $testUser being logged in
+        $client->loginUser($admin);
+
+        $client->request('GET', '/admin/settings_sync');
+        $this->assertResponseIsSuccessful();
+    }
 }

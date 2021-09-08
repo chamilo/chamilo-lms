@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Controller;
 
+use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,9 +49,26 @@ class CourseControllerTest extends WebTestCase
         $client = static::createClient();
         $course = $this->createCourse('new course');
         $admin = $this->getUser('admin');
+        $teacher = $this->createUser('teacher');
 
         // simulate $testUser being logged in
         $client->loginUser($admin);
+
+        $course->addTeacher($teacher);
+        $em = $this->getEntityManager();
+
+        $item = (new CCourseDescription())
+            ->setTitle('title')
+            ->setContent('content')
+            ->setDescriptionType(1)
+            ->setProgress(100)
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $em->persist($item);
+        $em->persist($course);
+        $em->flush();
 
         $client->request('GET', '/course/'.$course->getId().'/about');
 

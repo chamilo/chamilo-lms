@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
@@ -526,7 +527,7 @@ class MySpace
                         MAX(login_date) as login_date
                         FROM $tbl_user u, $tbl_session_course_user scu, $tbl_track_login
                         WHERE
-                            scu.user_id = u.id AND scu.status=2 AND login_user_id=u.id
+                            scu.user_id = u.id AND scu.status=".SessionEntity::COURSE_COACH." AND login_user_id=u.id
                         GROUP BY user_id ";
 
         if (api_is_multiple_url_enabled()) {
@@ -545,7 +546,7 @@ class MySpace
                                 $tbl_session_rel_access_url session_rel_url
                                 WHERE
                                     scu.user_id = u.id AND
-                                    scu.status = 2 AND
+                                    scu.status = ".SessionEntity::COURSE_COACH." AND
                                     login_user_id = u.id AND
                                     access_url_id = $access_url_id AND
                                     session_rel_url.session_id = scu.session_id
@@ -2518,7 +2519,7 @@ class MySpace
                         WHERE
                             c_id = '$courseId' AND
                             session_id = '$session_id' AND
-                            status<>2";
+                            status = ".SessionEntity::STUDENT;
             }
             $rs = Database::query($sql);
             $users = [];

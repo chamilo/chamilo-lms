@@ -820,7 +820,7 @@ class SessionManager
             $sessionCond = '';
         }
 
-        $where = " WHERE c_id = '%s' AND s.status <> 2 $sessionCond";
+        $where = " WHERE c_id = '%s' AND s.status = ".Session::STUDENT." $sessionCond";
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -941,7 +941,7 @@ class SessionManager
 
         $course = api_get_course_info_by_id($courseId);
 
-        $where = " WHERE c_id = '%s' AND s.status <> 2 AND session_id = %s";
+        $where = " WHERE c_id = '%s' AND s.status = ".Session::STUDENT." AND session_id = %s";
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -1054,7 +1054,7 @@ class SessionManager
         $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $course = api_get_course_info_by_id($courseId);
-        $where = " WHERE c_id = '%s' AND s.status <> 2 ";
+        $where = " WHERE c_id = '%s' AND s.status = ".Session::STUDENT;
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -1943,7 +1943,7 @@ class SessionManager
         }
 
         $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
-                WHERE session_id = $sessionId AND status = 0";
+                WHERE session_id = $sessionId AND status = ".Session::STUDENT;
         $result = Database::query($sql);
         $existingUsers = [];
         while ($row = Database::fetch_array($result)) {
@@ -2024,8 +2024,7 @@ class SessionManager
                         WHERE
                             session_id = $sessionId AND
                             c_id = $courseId AND
-                            status = 0
-                        ";
+                            status = ".Session::STUDENT;
                 $result = Database::query($sql);
                 $existingUsers = [];
                 while ($row = Database::fetch_array($result)) {
@@ -2272,7 +2271,7 @@ class SessionManager
                     WHERE
                         session_id = $sessionId AND
                         c_id = $courseId AND
-                        status <> 2";
+                        status = ".Session::STUDENT;
             $result = Database::query($sql);
             [$userCount] = Database::fetch_array($result);
 
@@ -3414,7 +3413,7 @@ class SessionManager
                 // record so the user is NOT a coach for this course anymore
                 // and then exit
                 $sql = "UPDATE $tblSessionRelCourseRelUser
-                        SET status = 0
+                        SET status = ".Session::STUDENT."
                         WHERE
                             session_id = $sessionId AND
                             c_id = $courseId AND
@@ -3448,7 +3447,7 @@ class SessionManager
 
         // Then update or insert.
         if (Database::num_rows($rs_check) > 0) {
-            $sql = "UPDATE $tblSessionRelCourseRelUser SET status = 2
+            $sql = "UPDATE $tblSessionRelCourseRelUser SET status = ".Session::COURSE_COACH."
                     WHERE
                         session_id = $sessionId AND
                         c_id = $courseId AND
@@ -3778,7 +3777,7 @@ class SessionManager
                 $courseSessionQuery = "
                     SELECT scu.session_id as id
                     FROM $tbl_session_rel_course_rel_user scu
-                    WHERE (scu.status = 2 AND scu.user_id = $userId)";
+                    WHERE (scu.status = ".Session::COURSE_COACH." AND scu.user_id = $userId)";
 
                 $whereConditions = " OR (s.id_coach = $userId) ";
                 break;
@@ -5138,17 +5137,17 @@ class SessionManager
                             // Delete session-course-user relationships students and coaches.
                             if ($updateCourseCoaches) {
                                 $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status in ('0', '2')";
+                                        WHERE session_id = '$session_id' AND status in (".Session::STUDENT.", ".Session::COURSE_COACH.")";
                                 Database::query($sql);
                             } else {
                                 // Delete session-course-user relation ships *only* for students.
                                 $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status <> 2";
+                                        WHERE session_id = '$session_id' AND status =".Session::STUDENT;
                                 Database::query($sql);
                             }
                             if ($deleteOnlyCourseCoaches) {
                                 $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status in ('2')";
+                                        WHERE session_id = '$session_id' AND status = ".Session::COURSE_COACH;
                                 Database::query($sql);
                             }
                         }
@@ -5259,18 +5258,18 @@ class SessionManager
                             // Delete session-course-user relationships students and coaches.
                             if ($updateCourseCoaches) {
                                 $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status in ('0', '2')";
+                                        WHERE session_id = '$session_id' AND status in (".Session::STUDENT.", ".Session::COURSE_COACH.")";
                                 Database::query($sql);
                             } else {
                                 // Delete session-course-user relation ships *only* for students.
                                 $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status <> 2";
+                                        WHERE session_id = '$session_id' AND status = ".Session::STUDENT;
                                 Database::query($sql);
                             }
 
                             if ($deleteOnlyCourseCoaches) {
                                 $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status in ('2')";
+                                        WHERE session_id = '$session_id' AND status = ".Session::COURSE_COACH;
                                 Database::query($sql);
                             }
                         } else {
@@ -5799,7 +5798,7 @@ class SessionManager
                 WHERE
                     session_id = '$sessionId' AND
                     c_id = '$courseId' AND
-                    status = 2";
+                    status = ".Session::COURSE_COACH;
         $result = Database::query($sql);
 
         $coaches = [];
@@ -5854,7 +5853,7 @@ class SessionManager
 
         $sql = "SELECT DISTINCT user_id
                 FROM $table
-                WHERE session_id = '$sessionId' AND status = 2";
+                WHERE session_id = '$sessionId' AND status = ".Session::COURSE_COACH;
         $result = Database::query($sql);
 
         $coaches = [];
@@ -7085,7 +7084,7 @@ class SessionManager
 
         return $repo->findBy([
             'user' => $coachId,
-            'status' => SessionRelCourseRelUser::STATUS_COURSE_COACH,
+            'status' => Session::COURSE_COACH,
         ]);
     }
 
@@ -7377,7 +7376,7 @@ class SessionManager
                         FROM $courseTable c
                         INNER JOIN $sessionCourseUserTable scu ON c.id = scu.c_id
                         INNER JOIN $userTable u ON scu.user_id = u.id
-                        WHERE scu.status = 2 AND scu.session_id IN $sessionIdsString
+                        WHERE scu.status = ".Session::COURSE_COACH." AND scu.session_id IN $sessionIdsString
                         ORDER BY scu.session_id ASC ";
                 $res = Database::query($sql);
                 $sessionCourseList = Database::store_result($res, 'ASSOC');
@@ -9060,7 +9059,7 @@ class SessionManager
                 ON c.id = srcru.c_id
                 WHERE
                     srcru.user_id = $userId AND
-                    srcru.status = 2";
+                    srcru.status = ".Session::COURSE_COACH;
 
         $res = Database::query($sql);
 

@@ -3533,7 +3533,7 @@ class Tracking
         // At first, courses where $coach_id is coach of the course //
         $sql = 'SELECT session_id, c_id
                 FROM '.$tbl_session_course_user.'
-                WHERE user_id='.$coach_id.' AND status=2';
+                WHERE user_id='.$coach_id.' AND status = '.SessionEntity::COURSE_COACH;
 
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -3545,7 +3545,7 @@ class Tracking
                         ON (scu.session_id=sru.session_id)
                         WHERE
                             scu.user_id='.$coach_id.' AND
-                            scu.status=2 AND
+                            scu.status = '.SessionEntity::COURSE_COACH.' AND
                             sru.access_url_id = '.$access_url_id;
             }
         }
@@ -3630,7 +3630,7 @@ class Tracking
 
         // At first, courses where $coach_id is coach of the course
         $sql = 'SELECT 1 FROM '.$tbl_session_course_user.'
-                WHERE user_id='.$coach_id.' AND status=2';
+                WHERE user_id='.$coach_id.' AND status = '.SessionEntity::COURSE_COACH;
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;
@@ -3679,7 +3679,7 @@ class Tracking
                 FROM '.$tbl_session_course_user.' sc
                 INNER JOIN '.$tbl_course.' c
                 ON (c.id = sc.c_id)
-                WHERE user_id = '.$coach_id.' AND status = 2';
+                WHERE sc.user_id = '.$coach_id.' AND sc.status = '.SessionEntity::COURSE_COACH;
 
         if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
@@ -3692,7 +3692,7 @@ class Tracking
                         ON (c.id = cru.c_id)
                         WHERE
                             scu.user_id='.$coach_id.' AND
-                            scu.status=2 AND
+                            scu.status = '.SessionEntity::COURSE_COACH.' AND
                             cru.access_url_id = '.$access_url_id;
             }
         }
@@ -3855,7 +3855,7 @@ class Tracking
                 ON
                     s.id = session_course_user.session_id AND
                     session_course_user.user_id = $coach_id AND
-                    session_course_user.status = 2
+                    session_course_user.status = ".SessionEntity::COURSE_COACH."
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (s.id = session_rel_url.session_id)
                 $sqlInjectJoins

@@ -137,10 +137,10 @@ class SessionRepository extends ServiceEntityRepository
                 ;
 
                 break;
-            case Session::COACH:
+            case Session::COURSE_COACH:
                 if ($user->hasRole('ROLE_TEACHER')) {
                     $session->addUserInCourse(
-                        Session::COACH,
+                        Session::COURSE_COACH,
                         $user,
                         $course
                     );

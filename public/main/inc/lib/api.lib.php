@@ -346,7 +346,6 @@ define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
 
 // Relations type with Course manager
 define('COURSE_RELATION_TYPE_COURSE_MANAGER', 1);
-define('SESSION_RELATION_TYPE_COURSE_MANAGER', 1);
 
 // Relations type with Human resources manager
 define('COURSE_RELATION_TYPE_RRHH', 1);
@@ -2904,7 +2903,7 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
             WHERE
                 session_rc_ru.user_id = '".$user_id."'  AND
                 session_rc_ru.c_id = '$courseId' AND
-                session_rc_ru.status = 2 AND
+                session_rc_ru.status = ".SessionEntity::COURSE_COACH." AND
                 session_rc_ru.session_id = '$session_id'";
     $result = Database::query($sql);
 
@@ -2953,7 +2952,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
                 ON session_rc_ru.session_id = s.id AND session_rc_ru.user_id = '".$userId."'
                 WHERE
                     session_rc_ru.c_id = '$courseId' AND
-                    session_rc_ru.status = 2 AND
+                    session_rc_ru.status =".SessionEntity::COURSE_COACH." AND
                     session_rc_ru.session_id = '$session_id'";
         $result = Database::query($sql);
         $sessionIsCoach = Database::store_result($result);

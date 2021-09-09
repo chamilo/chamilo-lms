@@ -2827,7 +2827,7 @@ class UserManager
             $sessionListFromCourseCoach = [];
             $sql = " SELECT DISTINCT session_id
                     FROM $tbl_session_course_user
-                    WHERE user_id = $user_id AND status = 2 ";
+                    WHERE user_id = $user_id AND status = ".SessionEntity::COURSE_COACH;
 
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
@@ -2920,7 +2920,7 @@ class UserManager
                         ON user.id = session_course_user.user_id OR session.id_coach = user.id
                     WHERE
                         session_course_user.session_id = $session_id AND (
-                            (session_course_user.user_id = $user_id AND session_course_user.status = 2)
+                            (session_course_user.user_id = $user_id AND session_course_user.status = ".SessionEntity::COURSE_COACH.")
                             OR session.id_coach = $user_id
                         )
                     ORDER BY i";
@@ -2953,7 +2953,7 @@ class UserManager
                 access_end_date,
                 session.id as session_id,
                 session.name as session_name,
-                IF((session_course_user.user_id = 3 AND session_course_user.status=2),'2', '5')
+                IF((session_course_user.user_id = 3 AND session_course_user.status = ".SessionEntity::COURSE_COACH."),'2', '5')
             FROM $tbl_session_course_user as session_course_user
             INNER JOIN $tbl_course AS course
             ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
@@ -3065,7 +3065,7 @@ class UserManager
                     WHERE
                       s.id = $session_id AND
                       (
-                        (scu.user_id = $user_id AND scu.status = 2) OR
+                        (scu.user_id = $user_id AND scu.status = ".SessionEntity::COURSE_COACH.") OR
                         s.id_coach = $user_id
                       )
                     $where_access_url
@@ -4295,7 +4295,7 @@ class UserManager
                 ";
 
                 $sessionConditionsTeacher = " AND
-                    (scu.status = 2 AND scu.user_id = '$userId')
+                    (scu.status = ".SessionEntity::COURSE_COACH." AND scu.user_id = '$userId')
                 ";
 
                 if ($checkSessionVisibility) {
@@ -4640,7 +4640,7 @@ class UserManager
                     ON sru.user_id=u.id
                     WHERE
                         sru.c_id="'.$courseId.'" AND
-                        sru.status=2';
+                        sru.status = '.SessionEntity::COURSE_COACH;
             $rs = Database::query($sql);
             $row = Database::fetch_array($rs);
 
@@ -4758,7 +4758,7 @@ class UserManager
                   session_id = $session_id AND
                   c_id = $courseId AND
                   user_id = $user_id AND
-                  status = 2 ";
+                  status = ".SessionEntity::COURSE_COACH;
         $res = Database::query($sql);
 
         if (Database::num_rows($res) > 0) {

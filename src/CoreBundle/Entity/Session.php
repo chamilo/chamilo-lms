@@ -75,7 +75,7 @@ class Session implements ResourceWithAccessUrlInterface
 
     public const STUDENT = 0;
     public const DRH = 1;
-    public const COACH = 2;
+    public const COURSE_COACH = 2;
 
     /**
      * @Groups({"session:read", "session_rel_user:read"})
@@ -497,7 +497,7 @@ class Session implements ResourceWithAccessUrlInterface
             return false;
         }
 
-        return $this->hasUserInCourse($user, $course, self::COACH);
+        return $this->hasUserInCourse($user, $course, self::COURSE_COACH);
     }
 
     public function getUserInCourse(User $user, Course $course, ?int $status = null): Collection

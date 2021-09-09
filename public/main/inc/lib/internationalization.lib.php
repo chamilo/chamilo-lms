@@ -855,6 +855,12 @@ function api_utf8_encode($string, $from_encoding = 'UTF-8')
  */
 function api_utf8_decode($string, $to_encoding = null)
 {
+    if (!is_string($string)) {
+        $string = (string) $string;
+    }
+    if (!isset($to_encoding)) {
+        $to_encoding = api_detect_encoding($string);
+    }
     return mb_convert_encoding($string, $to_encoding, 'UTF-8');
 }
 

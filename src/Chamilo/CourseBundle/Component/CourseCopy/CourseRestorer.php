@@ -2026,10 +2026,15 @@ class CourseRestorer
 
             $new_id = Database::insert($table_que, $params);
 
-            if ($new_id && $idColumn) {
-                $sql = "UPDATE $table_que SET id = iid WHERE iid = $new_id";
-                Database::query($sql);
+            if ($new_id) {
+                // If the ID column is still present, update it, otherwise just
+                // continue
+                if ($idColumn) {
+                    $sql = "UPDATE $table_que SET id = iid WHERE iid = $new_id";
+                    Database::query($sql);
+                }
             } else {
+                // If no IID was generated, stop right there and return 0
                 return 0;
             }
 

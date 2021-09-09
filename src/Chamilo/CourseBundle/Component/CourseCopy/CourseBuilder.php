@@ -951,7 +951,7 @@ class CourseBuilder
                         );
                         $question->addPicture($this);
                         $sql = "SELECT * FROM $table_ans
-                                WHERE question_id = {$obj->id}";
+                                WHERE question_id = {$obj->iid}";
                         $db_result2 = Database::query($sql);
                         if (Database::num_rows($db_result2)) {
                             while ($obj2 = Database::fetch_object($db_result2)) {
@@ -1042,7 +1042,7 @@ class CourseBuilder
                 );
                 $question->addPicture($this);
 
-                $sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
+                $sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->iid;
                 $db_result2 = Database::query($sql);
                 while ($obj2 = Database::fetch_object($db_result2)) {
                     $question->add_answer(

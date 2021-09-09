@@ -36,7 +36,7 @@ class AssetControllerTest extends WebTestCase
         $url = $assetRepo->getAssetUrl($asset);
 
         $client->request('GET', $url);
-        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
 
         $client->request('GET', $url.'not-existed');
         $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $client->getResponse()->getStatusCode());

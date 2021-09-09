@@ -9,7 +9,6 @@ namespace Chamilo\Tests\CoreBundle\Controller;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class CourseControllerTest extends WebTestCase
 {
@@ -38,9 +37,7 @@ class CourseControllerTest extends WebTestCase
         $client->loginUser($admin);
 
         $client->request('GET', '/course/'.$course->getId().'/welcome');
-
-        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-
+        $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('new course', $client->getResponse()->getContent());
     }
 
@@ -57,22 +54,24 @@ class CourseControllerTest extends WebTestCase
         $course->addTeacher($teacher);
         $em = $this->getEntityManager();
 
-        $item = (new CCourseDescription())
-            ->setTitle('title')
-            ->setContent('content')
-            ->setDescriptionType(1)
-            ->setProgress(100)
-            ->setParent($course)
-            ->setCreator($teacher)
-            ->addCourseLink($course)
-        ;
-        $em->persist($item);
+        $types = CCourseDescription::getTypes();
+        foreach ($types as $type) {
+            $item = (new CCourseDescription())
+                ->setTitle('title')
+                ->setContent('content')
+                ->setDescriptionType($type)
+                ->setProgress(100)
+                ->setParent($course)
+                ->setCreator($teacher)
+                ->addCourseLink($course)
+            ;
+            $em->persist($item);
+        }
         $em->persist($course);
         $em->flush();
 
         $client->request('GET', '/course/'.$course->getId().'/about');
-
-        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('new course', $client->getResponse()->getContent());
     }
 }

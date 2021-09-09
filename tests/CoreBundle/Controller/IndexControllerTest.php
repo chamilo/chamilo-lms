@@ -33,8 +33,7 @@ class IndexControllerTest extends WebTestCase
         $client->loginUser($admin);
 
         $client->request('GET', '/toggle_student_view');
-
-        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
     }
 
     public function testLogout(): void
@@ -50,7 +49,7 @@ class IndexControllerTest extends WebTestCase
         $client->loginUser($admin);
 
         $client->request('GET', '/account/home');
-        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
 
         $client->request('GET', '/logout');
         $this->assertResponseRedirects($defaultUrl);

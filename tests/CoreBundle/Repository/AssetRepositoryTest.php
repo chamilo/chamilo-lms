@@ -90,8 +90,7 @@ class AssetRepositoryTest extends AbstractApiTest
         $this->assertNotEmpty($url);
 
         $client = static::createClient();
-        $response = $client->request('GET', $url);
-        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $client->request('GET', $url);
         $this->assertResponseIsSuccessful();
 
         $asset = $assetRepo->find($asset->getId());

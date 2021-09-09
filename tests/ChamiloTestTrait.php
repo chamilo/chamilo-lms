@@ -54,17 +54,24 @@ trait ChamiloTestTrait
         /** @var UserRepository $repo */
         $repo = static::getContainer()->get(UserRepository::class);
 
-        // retrieve user
         return $repo->findByUsername($username);
     }
 
-    public function createCourse($title): ?Course
+    public function getCourse($courseId): ?Course
     {
-        $repo = self::getContainer()->get(CourseRepository::class);
+        $repo = static::getContainer()->get(CourseRepository::class);
+
+        return $repo->find($courseId);
+    }
+
+    public function createCourse(string $title): ?Course
+    {
+        $repo = static::getContainer()->get(CourseRepository::class);
         $course = (new Course())
             ->setTitle($title)
             ->addAccessUrl($this->getAccessUrl())
             ->setCreator($this->getUser('admin'))
+            ->setVisibility(Course::OPEN_PLATFORM)
         ;
 
         $repo->create($course);
@@ -72,9 +79,9 @@ trait ChamiloTestTrait
         return $course;
     }
 
-    public function createSession($title): ?Session
+    public function createSession(string $title): ?Session
     {
-        $repo = self::getContainer()->get(SessionRepository::class);
+        $repo = static::getContainer()->get(SessionRepository::class);
 
         $session = (new Session())
             ->setName($title)
@@ -140,6 +147,6 @@ trait ChamiloTestTrait
 
     public function getEntityManager(): EntityManager
     {
-        return self::getContainer()->get('doctrine')->getManager();
+        return static::getContainer()->get('doctrine')->getManager();
     }
 }

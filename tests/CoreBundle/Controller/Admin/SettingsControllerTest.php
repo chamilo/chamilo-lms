@@ -17,10 +17,7 @@ class SettingsControllerTest extends WebTestCase
     public function testIndex(): void
     {
         $client = static::createClient();
-
-        // retrieve the admin
         $admin = $this->getUser('admin');
-
         $client->loginUser($admin);
 
         $client->request('GET', '/admin/settings/admin');
@@ -34,7 +31,6 @@ class SettingsControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        // retrieve the admin
         $admin = $this->getUser('admin');
 
         $client->loginUser($admin);

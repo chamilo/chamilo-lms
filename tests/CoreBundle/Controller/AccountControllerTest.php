@@ -8,7 +8,6 @@ namespace Chamilo\Tests\CoreBundle\Controller;
 
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class AccountControllerTest extends WebTestCase
 {
@@ -25,8 +24,7 @@ class AccountControllerTest extends WebTestCase
         $client->loginUser($admin);
 
         $client->request('GET', '/account/edit');
-
-        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
 
         $client->submitForm('Update profile', [
             'profile[firstname]' => 'admin firstname',

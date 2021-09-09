@@ -49,6 +49,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="description_type", type="integer", nullable=false)
      */
+    #[Assert\Choice(callback: 'getTypes')]
     protected int $descriptionType;
 
     /**
@@ -66,6 +67,20 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     public function __toString(): string
     {
         return $this->getTitle();
+    }
+
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_DESCRIPTION,
+            self::TYPE_OBJECTIVES,
+            self::TYPE_TOPICS,
+            self::TYPE_METHODOLOGY,
+            self::TYPE_COURSE_MATERIAL,
+            self::TYPE_RESOURCES,
+            self::TYPE_ASSESSMENT,
+            self::TYPE_CUSTOM,
+        ];
     }
 
     public function setTitle(string $title): self

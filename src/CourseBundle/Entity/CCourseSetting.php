@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CCourseSetting.
+ * Course settings.
  *
  * @ORM\Table(
  *     name="c_course_setting",
@@ -32,13 +32,13 @@ class CCourseSetting
     /**
      * @ORM\Column(name="c_id", type="integer")
      */
+    #[Assert\NotBlank]
     protected int $cId;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="variable", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $variable;
 
     /**
@@ -64,6 +64,7 @@ class CCourseSetting
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected ?string $title = null;
 
     /**
@@ -83,12 +84,7 @@ class CCourseSetting
         return $this;
     }
 
-    /**
-     * Get variable.
-     *
-     * @return string
-     */
-    public function getVariable()
+    public function getVariable(): string
     {
         return $this->variable;
     }

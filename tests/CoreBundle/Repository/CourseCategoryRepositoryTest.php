@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Symfony\Component\HttpFoundation\Response;
 
 class CourseCategoryRepositoryTest extends AbstractApiTest
 {
@@ -116,7 +115,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
         $this->assertNotEmpty($content);
 
         $response = $client->request('GET', $url);
-        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertResponseIsSuccessful();
 
         $this->assertSame(1, $assetRepo->count([]));
         $em->clear();

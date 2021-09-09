@@ -8,7 +8,6 @@ namespace Chamilo\Tests\CoreBundle\Controller\Admin;
 
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class AdminControllerTest extends WebTestCase
 {
@@ -25,6 +24,6 @@ class AdminControllerTest extends WebTestCase
         $client->loginUser($admin);
 
         $client->request('GET', '/admin/settings/platform');
-        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertResponseIsSuccessful();
     }
 }

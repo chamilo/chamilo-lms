@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Repository\AssetRepository;
@@ -185,5 +186,38 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $categories = $repoCourseCategory->findAllInAccessUrl($urlId, false, 99);
         $this->assertSame(0, \count($categories));
+    }
+
+    public function testGetCategoriesByCourseIdAndAccessUrlId(): void
+    {
+        $repoCourseCategory = self::getContainer()->get(CourseCategoryRepository::class);
+        $urlId = $this->getAccessUrl()->getId();
+        $course = $this->createCourse('new');
+
+        $em = $this->getEntityManager();
+
+        $category = (new CourseCategory())
+            ->setCode('Course cat')
+            ->setName('Course cat')
+        ;
+        $em->persist($category);
+
+        $urlRelCategory = (new AccessUrlRelCourseCategory())
+            ->setUrl($this->getAccessUrl())
+            ->setCourseCategory($category)
+        ;
+
+        $em->persist($urlRelCategory);
+        $em->flush();
+
+        $course->addCategory($category);
+        $em->persist($course);
+        $em->flush();
+
+        $categories = $repoCourseCategory->getCategoriesByCourseIdAndAccessUrlId($urlId, $course->getId());
+        $this->assertSame(1, \count($categories));
+
+        $categories = $repoCourseCategory->getCategoriesByCourseIdAndAccessUrlId($urlId, $course->getId(), true);
+        $this->assertSame(1, \count($categories));
     }
 }

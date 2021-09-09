@@ -340,13 +340,15 @@ class CDocumentRepositoryTest extends AbstractApiTest
         );
 
         $this->assertResponseIsSuccessful();
+        $this->assertMatchesRegularExpression('~'.$folderName.'~', $response->toArray()['resourceNode']['path']);
+
         $data = json_decode($response->getContent());
         $resourceNodeId = $data->resourceNode->id;
 
         $file = $this->getUploadedFile();
 
         $token = $this->getUserToken([]);
-        $this->createClientWithCredentials($token)->request(
+        $response = $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/documents',
             [
@@ -377,7 +379,17 @@ class CDocumentRepositoryTest extends AbstractApiTest
             'filetype' => 'file',
         ]);
 
-        $this->assertMatchesRegularExpression('~'.$folderName.'~', $response->toArray()['resourceNode']['path']);
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $document = $documentRepo->find($response->toArray()['iid']);
+        $this->assertInstanceOf(CDocument::class, $document);
+        $parent = $documentRepo->getParent($document);
+        $this->assertInstanceOf(CDocument::class, $parent);
+
+        $size = $documentRepo->getFolderSize($parent->getResourceNode(), $course);
+        $this->assertSame($file->getSize(), $size);
+
+        $docs = $documentRepo->findDocumentsByAuthor($this->getUser('admin')->getId());
+        $this->assertSame(0, \count($docs));
     }
 
     public function testCreateNodeForResource(): void
@@ -399,6 +411,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $this->assertInstanceOf(ResourceNode::class, $document->getResourceNode());
         $this->assertSame('title 123', (string) $document);
+
+        $this->assertNull($documentRepo->getParent($document));
     }
 
     public function testCreateDocumentWithLinks(): void

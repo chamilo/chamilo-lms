@@ -67,9 +67,8 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         $resourceParent = $document->getResourceNode()->getParent();
 
         if (null !== $resourceParent) {
-            $resourceParentId = $resourceParent->getId();
             $criteria = [
-                'resourceNode' => $resourceParentId,
+                'resourceNode' => $resourceParent->getId(),
             ];
 
             return $this->findOneBy($criteria);
@@ -88,12 +87,10 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
      */
     public function findDocumentsByAuthor(int $userId)
     {
-        $repo = $this->repository;
-
-        $qb = $repo->createQueryBuilder('d');
+        $qb = $this->createQueryBuilder('d');
         $query = $qb
             ->innerJoin('d.resourceNode', 'node')
-            ->innerJoin('r.resourceLinks', 'l')
+            ->innerJoin('node.resourceLinks', 'l')
             ->where('l.user = :user')
             ->andWhere('l.visibility <> :visibility')
             ->setParameters([

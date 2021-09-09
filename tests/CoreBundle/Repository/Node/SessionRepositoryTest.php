@@ -170,7 +170,6 @@ class SessionRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('course title');
         $session = $this->createSession('test session');
 
-        /** @var SessionRepository $courseRepo */
         $sessionRepo = self::getContainer()->get(SessionRepository::class);
 
         $session->addCourse($course);
@@ -245,6 +244,8 @@ class SessionRepositoryTest extends AbstractApiTest
 
         // 3. Add student to session - course - course
         $course = $courseRepo->find($course->getId());
+
+        /** @var User $user */
         $user = $userRepo->find($user->getId());
         /** @var Session $session */
         $session = $sessionRepo->find($session->getId());
@@ -258,6 +259,7 @@ class SessionRepositoryTest extends AbstractApiTest
         /** @var User $user */
         $user = $userRepo->find($user->getId());
         $session = $sessionRepo->find($session->getId());
+        $this->assertSame(1, \count($user->getStudentSessions()));
 
         $sessions = $user->getSessions($studentStatus);
         $this->assertSame(1, \count($sessions));

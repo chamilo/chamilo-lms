@@ -8,7 +8,9 @@ namespace Chamilo\Tests\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -386,5 +388,33 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             '@type' => 'hydra:Collection',
             'hydra:totalItems' => 1,
         ]);
+    }
+
+    public function testCreateFromAnnouncement(): void
+    {
+        self::bootKernel();
+
+        $course = $this->createCourse('new');
+        $teacher = $this->createUser('teacher');
+
+        $calendarRepo = self::getContainer()->get(CCalendarEventRepository::class);
+        $repo = self::getContainer()->get(CAnnouncementRepository::class);
+
+        $announcement = (new CAnnouncement())
+            ->setTitle('item')
+            ->setParent($course)
+            ->setCreator($teacher)
+        ;
+        $repo->create($announcement);
+
+        $event = $calendarRepo->createFromAnnouncement(
+            $announcement,
+            new Datetime('now'),
+            new DateTime('now +30 days'),
+            ['everyone'],
+            $course,
+        );
+
+        $this->assertNotNull($event);
     }
 }

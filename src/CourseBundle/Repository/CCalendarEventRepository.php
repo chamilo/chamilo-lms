@@ -39,6 +39,7 @@ final class CCalendarEventRepository extends ResourceRepository
             ->setEndDate($endDate)
             ->setContent($announcement->getContent())
             ->setParent($course)
+            ->setCreator($announcement->getCreator())
         ;
 
         $em = $this->getEntityManager();

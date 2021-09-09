@@ -66,9 +66,17 @@ services:
 
     Chamilo\CoreBundle\Repository\AssetRepository: ~
 
+    Chamilo\CoreBundle\Settings\SettingsManager:
+        arguments:
+            - '@sylius.registry.settings_schema'
+            - '@doctrine.orm.entity_manager'
+            - '@chamilo_settings.repository'
+            - '@event_dispatcher'
+            - '@request_stack'
+
     Chamilo\CoreBundle\Twig\SettingsHelper:
         arguments:
-            - '@chamilo.settings.manager'
+            - '@Chamilo\CoreBundle\Settings\SettingsManager'
         tags:
             - {name: templating.helper, alias: chamilo_settings}
 

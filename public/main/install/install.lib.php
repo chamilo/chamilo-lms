@@ -2044,7 +2044,7 @@ function installTools($container, $manager, $upgrade = false)
 function installSchemas($container, $upgrade = false)
 {
     error_log('installSchemas');
-    $settingsManager = $container->get('chamilo.settings.manager');
+    $settingsManager = $container->get(Chamilo\CoreBundle\Settings\SettingsManager::class);
 
     $urlRepo = $container->get(AccessUrlRepository::class);
     $accessUrl = $urlRepo->find(1);

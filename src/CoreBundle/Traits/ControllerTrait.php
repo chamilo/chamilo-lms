@@ -48,9 +48,9 @@ trait ControllerTrait
         $services = AbstractController::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
         $services['glide'] = Glide::class;
-        $services['chamilo.settings.manager'] = SettingsManager::class;
         $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
 
+        $services[] = SettingsManager::class;
         $services[] = MessageAttachmentRepository::class;
         $services[] = ResourceFactory::class;
         $services[] = ResourceNodeRepository::class;
@@ -131,7 +131,7 @@ trait ControllerTrait
      */
     protected function getSettingsManager()
     {
-        return $this->container->get('chamilo.settings.manager');
+        return $this->container->get(SettingsManager::class);
     }
 
     protected function getSettingsFormFactory()

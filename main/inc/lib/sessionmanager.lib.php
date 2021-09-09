@@ -5092,7 +5092,7 @@ class SessionManager
                         if ($i > 1) {
                             $suffix = ' - '.$i;
                         }
-                        $sql = 'SELECT 1 FROM '.$tbl_session.'
+                        $sql = 'SELECT id FROM '.$tbl_session.'
                                 WHERE name="'.Database::escape_string($session_name).$suffix.'"';
                         $rs = Database::query($sql);
                         if (Database::result($rs, 0, 0)) {

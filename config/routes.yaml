@@ -7,7 +7,7 @@ authentication_token:
 
 legacy_main:
     path: /main/{name}
-    defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}
+    defaults: {_controller: 'Chamilo\CoreBundle\Controller\IndexController::classic'}
     requirements:
         name: .+
 

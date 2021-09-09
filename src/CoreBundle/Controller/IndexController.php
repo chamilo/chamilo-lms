@@ -55,4 +55,29 @@ class IndexController extends BaseController
 
         return new Response($content);
     }
+
+    /**
+     * Use only in PHPUnit tests.
+     */
+    public function classic($name): Response
+    {
+        if (1 !== (int) $_ENV['APP_DEBUG']) {
+            exit;
+        }
+
+        $rootDir = $this->getParameter('kernel.project_dir');
+
+        $mainPath = $rootDir.'/public/main/';
+        $fileToLoad = $mainPath.$name;
+
+        ob_start();
+        require_once $fileToLoad;
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        return $this->render(
+            '@ChamiloCore/Layout/layout_one_col.html.twig',
+            ['content' => $content]
+        );
+    }
 }

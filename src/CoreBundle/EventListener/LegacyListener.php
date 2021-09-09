@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -28,11 +29,13 @@ class LegacyListener
 
     private Environment $twig;
     private TokenStorageInterface $tokenStorage;
+    private UserRepository $userRepository;
 
-    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage)
+    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UserRepository $userRepository)
     {
         $this->twig = $twig;
         $this->tokenStorage = $tokenStorage;
+        $this->userRepository = $userRepository;
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -73,7 +76,6 @@ class LegacyListener
 
         $twig = $this->twig;
         $token = $this->tokenStorage->getToken();
-
         $userObject = null;
         if (null !== $token) {
             /** @var User $userObject */
@@ -83,15 +85,12 @@ class LegacyListener
         $userInfo = [];
         $isAdmin = false;
         $allowedCreateCourse = false;
-        $userStatus = null;
         if ($userObject instanceof UserInterface) {
             $userInfo = api_get_user_info_from_entity($userObject);
-            if ($userInfo) {
-                $userStatus = $userObject->getStatus();
-                $isAdmin = $userInfo['is_admin'];
-            }
-            $allowedCreateCourse = 1 === $userStatus;
+            $isAdmin = $userObject->isAdmin();
+            $allowedCreateCourse = $userObject->isTeacher();
         }
+        // @todo remove _user/is_platformAdmin/is_allowedCreateCourse
         $session->set('_user', $userInfo);
         $session->set('is_platformAdmin', $isAdmin);
         $session->set('is_allowedCreateCourse', $allowedCreateCourse);
@@ -130,7 +129,7 @@ class LegacyListener
 
         // We set cid_reset = true if we enter inside a main/admin url
         // CourseListener check this variable and deletes the course session
-        if (false !== strpos((string) $request->get('name'), 'admin/')) {
+        if (str_contains((string) $request->get('name'), 'admin/')) {
             $session->set('cid_reset', true);
         } else {
             $session->set('cid_reset', false);

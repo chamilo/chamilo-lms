@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
+// Use when running PHPUnit tests.
+if (isset($fileToLoad)) {
+    return;
+}
+
 /**
  * All legacy Chamilo scripts should include this important file.
  */

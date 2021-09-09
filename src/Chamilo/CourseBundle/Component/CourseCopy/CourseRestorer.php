@@ -1842,7 +1842,7 @@ class CourseRestorer
             // Check if the "id" column still exists
             $idColumn = true;
             $columns = Database::listTableColumns($table_qui);
-            if (!in_array('id', $columns)) {
+            if (!in_array('id', array_keys($columns))) {
                 $idColumn = false;
             }
 

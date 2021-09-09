@@ -129,6 +129,11 @@ class SettingsCourseManager extends SettingsManager
         return 'chamilo_course.settings.'.$category;
     }
 
+    public function convertServiceToNameSpace(string $category): string
+    {
+        return str_replace('chamilo_course.settings.', '', $category);
+    }
+
     /**
      * Load parameter from database.
      */

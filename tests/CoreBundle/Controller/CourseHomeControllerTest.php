@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -142,5 +143,24 @@ class CourseHomeControllerTest extends WebTestCase
         $client->submitForm('Save settings', [
             'form[enabled]' => '0',
         ]);
+    }
+
+    public function testListSettings(): void
+    {
+        $client = static::createClient();
+
+        $course = $this->createCourse('new');
+        $admin = $this->getUser('admin');
+
+        $courseSettingsManager = $this->getContainer()->get(SettingsCourseManager::class);
+
+        $client->loginUser($admin);
+        $schemas = $courseSettingsManager->getSchemas();
+
+        foreach ($schemas as $name => $schema) {
+            $category = $courseSettingsManager->convertServiceToNameSpace($name);
+            $client->request('GET', '/course/'.$course->getId().'/settings/'.$category);
+            $this->assertResponseIsSuccessful();
+        }
     }
 }

@@ -260,7 +260,7 @@ if ('true' === $allowTutors) {
                         session_rcru.user_id = user.id AND
                         session_rcru.session_id = '".intval($id_session)."' AND
                         session_rcru.c_id ='".Database::escape_string($course['id'])."' AND
-                        session_rcru.status=2";
+                        session_rcru.status = ".Session::COURSE_COACH;
             $rs = Database::query($sql);
 
             $coachs = [];

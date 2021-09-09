@@ -5,6 +5,9 @@
 /**
  * Implements the edition of course-session settings.
  */
+
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -57,7 +60,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     // get all tutor by course_code in the session
     $sql = "SELECT user_id
 	        FROM $tbl_session_rel_course_rel_user
-	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2";
+	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = ".Session::COURSE_COACH;
     $rs_coaches = Database::query($sql);
 
     $coaches_course_session = [];
@@ -99,7 +102,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	        WHERE
                 session_id = '$id_session' AND
                 c_id = '".$courseId."' AND
-                status = 2 ";
+                status = ".Session::COURSE_COACH;
     $rs = Database::query($sql);
 
     if (Database::num_rows($rs) > 0) {

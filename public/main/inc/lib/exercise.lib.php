@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -3629,7 +3630,7 @@ EOT;
                         e.exe_user_id = sc.user_id AND
                         e.c_id = sc.c_id AND
                         e.session_id = sc.session_id AND
-                        sc.status = 0
+                        sc.status = ".SessionEntity::STUDENT."
                 )";
             }
             $sql .= $courseCondition;
@@ -3764,7 +3765,7 @@ EOT;
             $courseCondition = "
             INNER JOIN $courseUserSession cu
             ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
-            $courseConditionWhere = " AND cu.status = 0 ";
+            $courseConditionWhere = " AND cu.status = ".SessionEntity::STUDENT;
         }
 
         $sql = "SELECT DISTINCT exe_user_id
@@ -3835,7 +3836,7 @@ EOT;
             $courseCondition = "
             INNER JOIN $courseUserSession cu
             ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
-            $courseConditionWhere = ' AND cu.status = 0 ';
+            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
         $sql = "SELECT DISTINCT exe_user_id
@@ -3920,7 +3921,7 @@ EOT;
             $courseCondition = "
             INNER JOIN $courseUserSession cu
             ON (cu.c_id = a.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
-            $courseConditionWhere = ' AND cu.status = 0 ';
+            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
         $sql = "SELECT $select_condition

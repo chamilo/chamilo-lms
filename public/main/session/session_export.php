@@ -160,7 +160,7 @@ if (isset($_POST['formSent'])) {
                         WHERE
                             scu.c_id = '{$rowCourses['c_id']}' AND
                             scu.session_id = '".$row['id']."' AND
-                            scu.status = 2 ";
+                            scu.status = ".Session::COURSE_COACH;
 
                 $rs_coachs = Database::query($sql);
                 $coachs = [];

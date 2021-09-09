@@ -306,7 +306,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $qb->expr()->andX(
                     $qb->expr()->eq('scu.session', $session->getId()),
                     $qb->expr()->eq('scu.course', $course->getId()),
-                    $qb->expr()->eq('scu.status', SessionRelCourseRelUser::STATUS_COURSE_COACH)
+                    $qb->expr()->eq('scu.status', Session::COURSE_COACH)
                 )
             )
         ;

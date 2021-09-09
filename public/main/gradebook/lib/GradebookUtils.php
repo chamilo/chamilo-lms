@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 /**
  * Class GradebookUtils.
  */
@@ -1159,7 +1161,7 @@ class GradebookUtils
                     INNER JOIN $tbl_user as user
                     ON (scru.user_id = user.id)
                     WHERE
-                        scru.status = 0 AND
+                        scru.status = ".Session::STUDENT." AND
                         scru.c_id='$courseId' AND
                         session_id ='$current_session'
                     $order_clause

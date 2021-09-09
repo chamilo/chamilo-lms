@@ -52,7 +52,7 @@ if ($session) {
         $course = $sessionCourse->getCourse();
         $coursesInfo[$course->getId()] = $course->getCode();
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('status', Session::COACH)
+            Criteria::expr()->eq('status', Session::COURSE_COACH)
         );
         $userCourseSubscriptions = $session
             ->getUserCourseSubscriptions()

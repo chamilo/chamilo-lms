@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -1499,7 +1500,7 @@ function get_thread_users_details($thread_id)
                 WHERE
                     p.poster_id = user.id AND
                     user.id = session_rel_user_rel_course.user_id AND
-                    session_rel_user_rel_course.status<>'2' AND
+                    session_rel_user_rel_course.status = ".SessionEntity::STUDENT." AND
                     session_rel_user_rel_course.user_id NOT IN ($user_to_avoid) AND
                     p.thread_id = ".(int) $thread_id.' AND
                     session_id = '.api_get_session_id()." AND
@@ -1560,7 +1561,7 @@ function get_thread_users_qualify($thread_id)
                 WHERE poster_id = user.id
                     AND post.poster_id = qualify.user_id
                     AND user.id = scu.user_id
-                    AND scu.status<>'2'
+                    AND scu.status = ".SessionEntity::STUDENT."
                     AND scu.user_id NOT IN ($user_to_avoid)
                     AND qualify.thread_id = ".(int) $thread_id.'
                     AND post.thread_id = '.(int) $thread_id."
@@ -1643,7 +1644,7 @@ function get_thread_users_not_qualify($thread_id)
                 WHERE poster_id = user.id
                     AND user.id NOT IN (".$cad.")
                     AND user.id = session_rel_user_rel_course.user_id
-                    AND session_rel_user_rel_course.status<>'2'
+                    AND session_rel_user_rel_course.status = ".SessionEntity::STUDENT."
                     AND session_rel_user_rel_course.user_id NOT IN ($user_to_avoid)
                     AND post.thread_id = ".(int) $thread_id.'
                     AND session_id = '.api_get_session_id()."

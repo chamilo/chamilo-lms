@@ -243,9 +243,9 @@ if (isset($_GET['action'])) {
 
                 // only users no coaches/teachers
                 if (COURSEMANAGER == $type) {
-                    $sql .= " AND session_course_user.status = 2 ";
+                    $sql .= " AND session_course_user.status = ".Session::COURSE_COACH;
                 } else {
-                    $sql .= " AND session_course_user.status = 0 ";
+                    $sql .= " AND session_course_user.status = .".Session::STUDENT;
                 }
                 $sql .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
 

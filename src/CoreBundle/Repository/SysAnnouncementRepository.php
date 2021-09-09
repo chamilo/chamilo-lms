@@ -118,7 +118,7 @@ class SysAnnouncementRepository extends ServiceEntityRepository
                             // Check course coach
                             //$coaches = \SessionManager::getCoachesBySession($sessionId);
                             if ($this->security->isGranted('ROLE_TEACHER') &&
-                                $session->getSessionRelCourseByUser($user, Session::COACH)->count() > 0
+                                $session->getSessionRelCourseByUser($user, Session::COURSE_COACH)->count() > 0
                             ) {
                                 $show = true;
 

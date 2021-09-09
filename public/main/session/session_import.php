@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -355,7 +357,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                                 user_id='$coach_id',
                                                 c_id = '$courseId',
                                                 session_id = '$session_id',
-                                                status = 2 ";
+                                                status = ".Session::COURSE_COACH;
                                         $rs_coachs = Database::query($sql);
                                     } else {
                                         $error_message .= get_lang('This user doesn\'t exist').' : '.$coach_id.'<br />';

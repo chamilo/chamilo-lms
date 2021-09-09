@@ -437,7 +437,7 @@ if ($ajax_search) {
     // Filter the user list in all courses in the session
     foreach ($sessionUserInfo as $sessionUser) {
         // filter students in session
-        if (0 != $sessionUser['status_in_session']) {
+        if (Session::STUDENT != $sessionUser['status_in_session']) {
             continue;
         }
 

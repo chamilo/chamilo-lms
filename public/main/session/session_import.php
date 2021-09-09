@@ -175,7 +175,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         $username = trim(api_utf8_decode($courseNode->CourseTeacher));
                         $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
                         $rs = Database::query($sql);
-                        list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
+                        [$user_id, $lastname, $firstname] = Database::fetch_array($rs);
 
                         $params['teachers'] = $user_id;
                         CourseManager::create_course($params);
@@ -210,7 +210,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         $date_start = trim(api_utf8_decode($node_session->DateStart));
 
                         if (!empty($date_start)) {
-                            list($year_start, $month_start, $day_start) = explode('/', $date_start);
+                            [$year_start, $month_start, $day_start] = explode('/', $date_start);
                             if (empty($year_start) || empty($month_start) || empty($day_start)) {
                                 $error_message .= get_lang('Wrong date format (yyyy-mm-dd)').' : '.$date_start.'<br />';
                                 break;
@@ -220,7 +220,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
                             $date_end = trim(api_utf8_decode($node_session->DateEnd));
                             if (!empty($date_start)) {
-                                list($year_end, $month_end, $day_end) = explode('/', $date_end);
+                                [$year_end, $month_end, $day_end] = explode('/', $date_end);
                                 if (empty($year_end) || empty($month_end) || empty($day_end)) {
                                     $error_message .= get_lang('Error').' : '.$date_end.'<br />';
                                     break;
@@ -295,7 +295,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     WHERE name = '$session_name'";
                                 $rs_session = Database::query($sql_session);
                                 $session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
-                                list($session_id) = Database::fetch_array($session_id);
+                                [$session_id] = Database::fetch_array($session_id);
                                 Database::query("DELETE FROM $tbl_session_user WHERE session_id ='$session_id'");
                                 Database::query("DELETE FROM $tbl_session_course WHERE session_id='$session_id'");
                                 Database::query("DELETE FROM $tbl_session_course_user WHERE session_id='$session_id'");

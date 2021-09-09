@@ -67,12 +67,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this->comment;
     }
 
-    /**
-     * Set filename.
-     *
-     * @return CCalendarEventAttachment
-     */
-    public function setFilename(string $filename)
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 
@@ -102,9 +97,6 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this->event;
     }
 
-    /**
-     * @return CCalendarEventAttachment
-     */
     public function setEvent(CCalendarEvent $event): self
     {
         $this->event = $event;

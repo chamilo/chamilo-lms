@@ -22,6 +22,5 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
         yield ['/'];
         yield ['/login'];
         yield ['/main/auth/lostPassword.php'];
-
     }
 }

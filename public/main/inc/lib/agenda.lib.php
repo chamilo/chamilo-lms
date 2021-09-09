@@ -2422,8 +2422,7 @@ class Agenda
             // user's file name
             $fileName = $file->getClientOriginalName();
             $em = Database::getManager();
-            $attachment = new CCalendarEventAttachment();
-            $attachment
+            $attachment = (new CCalendarEventAttachment())
                 ->setFilename($fileName)
                 ->setComment($comment)
                 ->setEvent($event)
@@ -2432,7 +2431,8 @@ class Agenda
                     api_get_course_entity(),
                     api_get_session_entity(),
                     api_get_group_entity()
-                );
+                )
+            ;
 
             $repo = Container::getCalendarEventAttachmentRepository();
             $em->persist($attachment);

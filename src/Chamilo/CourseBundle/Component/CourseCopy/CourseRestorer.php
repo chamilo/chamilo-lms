@@ -1940,7 +1940,7 @@ class CourseRestorer
                         Database::query($sql);
                     }
                 } else {
-                    // $id = -1 identifies the fictionary test for collecting
+                    // $id = -1 identifies the fictional test for collecting
                     // orphan questions. We do not store it in the database.
                     $new_id = -1;
                 }

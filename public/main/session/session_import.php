@@ -175,9 +175,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         $username = trim(api_utf8_decode($courseNode->CourseTeacher));
                         $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
                         $rs = Database::query($sql);
-                        [$user_id, $lastname, $firstname] = Database::fetch_array($rs);
+                        [$userId, $lastname, $firstname] = Database::fetch_array($rs);
 
-                        $params['teachers'] = $user_id;
+                        $params['teachers'] = $userId;
                         CourseManager::create_course($params);
                     }
                 }
@@ -210,12 +210,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         $date_start = trim(api_utf8_decode($node_session->DateStart));
 
                         if (!empty($date_start)) {
-                            [$year_start, $month_start, $day_start] = explode('/', $date_start);
-                            if (empty($year_start) || empty($month_start) || empty($day_start)) {
+                            [$yearStart, $monthStart, $dayStart] = explode('/', $date_start);
+                            if (empty($yearStart) || empty($monthStart) || empty($dayStart)) {
                                 $error_message .= get_lang('Wrong date format (yyyy-mm-dd)').' : '.$date_start.'<br />';
                                 break;
                             } else {
-                                $time_start = mktime(0, 0, 0, $month_start, $day_start, $year_start);
+                                $time_start = mktime(0, 0, 0, (int) $monthStart, (int) $dayStart, (int) $yearStart);
                             }
 
                             $date_end = trim(api_utf8_decode($node_session->DateEnd));

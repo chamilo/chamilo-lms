@@ -42,9 +42,9 @@ class SettingsCurrent
     protected AccessUrl $url;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="variable", type="string", length=190, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $variable;
 
     /**
@@ -70,6 +70,7 @@ class SettingsCurrent
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
@@ -90,16 +91,15 @@ class SettingsCurrent
     /**
      * @ORM\Column(name="access_url_changeable", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $accessUrlChangeable;
 
     /**
      * @ORM\Column(name="access_url_locked", type="integer", nullable=false, options={"default":0 })
      */
+    #[Assert\NotBlank]
     protected int $accessUrlLocked = 0;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->accessUrlLocked = 0;
@@ -112,12 +112,7 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get variable.
-     *
-     * @return string
-     */
-    public function getVariable()
+    public function getVariable(): string
     {
         return $this->variable;
     }
@@ -163,12 +158,7 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get category.
-     *
-     * @return string
-     */
-    public function getCategory()
+    public function getCategory(): ?string
     {
         return $this->category;
     }
@@ -282,12 +272,7 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get accessUrlLocked.
-     *
-     * @return int
-     */
-    public function getAccessUrlLocked()
+    public function getAccessUrlLocked(): int
     {
         return $this->accessUrlLocked;
     }

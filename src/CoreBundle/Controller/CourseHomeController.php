@@ -33,12 +33,9 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use UnserializeApi;
 
 /**
- * Class CourseHomeController.
- *
  * @author Julio Montoya <gugli100@gmail.com>
- *
- * @Route("/course")
  */
+#[Route('/course')]
 class CourseHomeController extends ToolBaseController
 {
     /**
@@ -68,7 +65,7 @@ class CourseHomeController extends ToolBaseController
         $courseId = $course->getId();
         $sessionId = $this->getSessionId();
 
-        if ($user && INVITEE === $user->getStatus()) {
+        if ($user && $user->hasRole('ROLE_INVITEE')) {
             $isInASession = $sessionId > 0;
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
@@ -294,8 +291,10 @@ class CourseHomeController extends ToolBaseController
      *
      * @Entity("course", expr="repository.find(cid)")
      */
-    public function updateSettingsAction(Request $request, Course $course, string $namespace, SettingsCourseManager $manager, SettingsFormFactory $formFactory): Response
+    public function updateSettings(Request $request, Course $course, string $namespace, SettingsCourseManager $manager, SettingsFormFactory $formFactory): Response
     {
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $settings = $manager->load($namespace);
 

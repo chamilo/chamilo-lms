@@ -237,7 +237,7 @@ class Container
 
     public static function getSettingsManager(): SettingsManager
     {
-        return self::$container->get('chamilo.settings.manager');
+        return self::$container->get(SettingsManager::class);
     }
 
     public static function getCourseSettingsManager(): SettingsCourseManager

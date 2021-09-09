@@ -48,12 +48,13 @@ trait ControllerTrait
         $services = AbstractController::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
         $services['glide'] = Glide::class;
-        $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
+        //$services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
 
         $services[] = SettingsManager::class;
         $services[] = MessageAttachmentRepository::class;
         $services[] = ResourceFactory::class;
         $services[] = ResourceNodeRepository::class;
+        $services[] = SettingsFormFactory::class;
 
         /*
             The following classes are needed in order to load the resources files when using the /r/ path
@@ -81,16 +82,12 @@ trait ControllerTrait
         $services[] = CStudentPublicationCommentRepository::class;
         $services[] = CStudentPublicationCorrectionRepository::class;
         $services[] = ExternalToolRepository::class;
-
         $services[] = IllustrationRepository::class;
 
         return $services;
     }
 
-    /**
-     * @return Request|null
-     */
-    public function getRequest()
+    public function getRequest(): ?Request
     {
         return $this->container->get('request_stack')->getCurrentRequest();
     }
@@ -126,16 +123,13 @@ trait ControllerTrait
         return $this->container->get('doctrine')->getRepository(AccessUrl::class)->find($urlId);
     }
 
-    /**
-     * @return SettingsManager
-     */
-    protected function getSettingsManager()
+    protected function getSettingsManager(): SettingsManager
     {
         return $this->container->get(SettingsManager::class);
     }
 
     protected function getSettingsFormFactory()
     {
-        return $this->container->get('chamilo_settings.form_factory.settings');
+        return $this->container->get(SettingsFormFactory::class);
     }
 }

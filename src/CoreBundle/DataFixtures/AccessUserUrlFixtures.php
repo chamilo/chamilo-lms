@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -60,7 +61,7 @@ class AccessUserUrlFixtures extends Fixture implements ContainerAwareInterface
 
         $this->addReference(AccessUserFixtures::ACCESS_URL_REFERENCE, $accessUrl);
 
-        $settingsManager = $container->get('chamilo.settings.manager');
+        $settingsManager = $container->get(SettingsManager::class);
         $settingsManager->installSchemas($accessUrl);
 
         $manager->flush();

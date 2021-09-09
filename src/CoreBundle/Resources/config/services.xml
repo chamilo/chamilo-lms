@@ -3,20 +3,7 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
-    <parameters>
-        <parameter key="chamilo_settings.settings.manager.class">Chamilo\CoreBundle\Settings\SettingsManager</parameter>
-        <parameter key="chamilo_settings.repository.parameter.entity.class">Chamilo\CoreBundle\Entity\SettingsCurrent</parameter>
-        <parameter key="chamilo_settings.twig.extension.settings.class">Chamilo\CoreBundle\Twig\SettingsExtension</parameter>
-        <parameter key="chamilo_settings.templating.helper.settings.class">Chamilo\CoreBundle\Twig\SettingsHelper</parameter>
-    </parameters>
-
     <services>
-        <service id="chamilo_settings.repository" class="Doctrine\ORM\EntityRepository">
-            <factory service="doctrine.orm.entity_manager" method="getRepository" />
-            <argument>%chamilo_settings.repository.parameter.entity.class%</argument>
-        </service>
-
         <service id="chamilo_settings.form_factory.settings" public="true" class="Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory">
             <argument type="service" id="sylius.registry.settings_schema" />
             <argument type="service" id="form.factory" />

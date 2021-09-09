@@ -70,7 +70,7 @@ services:
         arguments:
             - '@sylius.registry.settings_schema'
             - '@doctrine.orm.entity_manager'
-            - '@chamilo_settings.repository'
+            - '@Chamilo\CoreBundle\Repository\SettingsCurrentRepository'
             - '@event_dispatcher'
             - '@request_stack'
 

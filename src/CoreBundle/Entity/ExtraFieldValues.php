@@ -11,8 +11,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class ExtraFieldValues.
- *
  * @ORM\Table(
  *     name="extra_field_values",
  *     indexes={

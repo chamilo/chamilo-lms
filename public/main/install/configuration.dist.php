@@ -47,43 +47,6 @@ $_configuration[1]['hosting_limit_active_courses'] = 0;
 // Check main/cron/hosting_total_size_limit.php for how to use this limit.
 $_configuration['hosting_total_size_limit'] = 0;
 
-/**
- * Content Delivery Network (CDN) settings. Only use if you need a separate
- * server to serve your static data. If you don't know what a CDN is, you
- * don't need it. These settings are for simple Origin Pull CDNs and are
- * experimental. Enable only if you really know what you're doing.
- * This might conflict with multiple-access urls.
- * Please note that recent browsers forbid the loading of resources from
- * a different portal URL then where they are, due to CORS rules.
- * To allow for CDN usage with different URLs, you need to specifically
- * allow CORS Access-Control-Allow-Origin for your main Chamilo URL.
- * This has to be done at the web server level, because Chamilo's PHP code
- * doesn't change HTTP headers of all files served from the Chamilo directory.
- * To do that on Apache, use
- *   Header set Access-Control-Allow-Origin "http(s)://main-chamilo-url"
- * in Nginx:
- *   add_header 'Access-Control-Allow-Origin' 'http(s)://main-chamilo-url';.
- */
-// Set the following setting to true to start using the CDN
-$_configuration['cdn_enable'] = false;
-// The following setting will be ignored if the previous one is set to false
-$_configuration['cdn'] = [
-    // You can define several CDNs and split them by extensions
-    // Replace the following by your full CDN URL, which should point to
-    // your Chamilo's root directory. DO NOT INCLUDE a final slash! (won't work)
-    'http://cdn.chamilo.org' => [
-        '.css',
-        '.js',
-        '.jpg',
-        '.jpeg',
-        '.png',
-        '.gif',
-        '.avi',
-        '.flv',
-    ],
-    // copy the line above and modify following your needs
-];
-
 // Security word for password recovery
 $_configuration['security_key'] = '{SECURITY_KEY}';
 // Activation for multi-url access
@@ -158,9 +121,6 @@ $_configuration['deny_delete_users'] = false;
 // to reflect their packaging method. The default value is 'chamilo'. This will
 // be reflected on the https://version.chamilo.org/stats page in the future.
 //$_configuration['packager'] = 'chamilo';
-
-// List of driver to plugin in ckeditor
-//$_configuration['editor_driver_list'] = ['PersonalDriver', 'CourseDriver'];
 
 // Hide header and footer in certificate pdf
 //$_configuration['hide_header_footer_in_certificate'] = false;
@@ -283,7 +243,6 @@ $_configuration['agenda_colors'] = [
     'student_publication' => '#FF8C00'
 ];
 */
-// ------
 //
 // Save some tool titles with HTML editor
 // $_configuration['save_titles_as_html'] = false;
@@ -409,12 +368,8 @@ VALUES (12, 13, 'is_mandatory', 'IsMandatory', 1, 1, NOW());
 //$_configuration['survey_additional_teacher_modify_actions'] = [];
 // Allow show answers in anonymous surveys
 //$_configuration['survey_anonymous_show_answered'] = false;
-// ------
 
-// Allow career diagram, requires a DB change:
-//UPDATE extra_field_values SET created_at = NULL WHERE CAST(created_at AS CHAR(20)) = '0000-00-00 00:00:00';
-//UPDATE extra_field_values SET updated_at = NULL WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00';
-//ALTER TABLE extra_field_values modify column value longtext null;
+// Allow career diagram
 //$_configuration['allow_career_diagram'] = false;
 // Allow scheduled emails to session users.
 // sudo mkdir app/upload/scheduled_announcement

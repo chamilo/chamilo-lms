@@ -6,9 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CWiki;
-use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;

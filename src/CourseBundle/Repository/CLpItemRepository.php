@@ -24,6 +24,12 @@ final class CLpItemRepository extends ServiceEntityRepository
         $this->initializeTreeRepository($this->getEntityManager(), $this->getClassMetadata());
     }
 
+    public function create(CLpItem $item): void
+    {
+        $this->getEntityManager()->persist($item);
+        $this->getEntityManager()->flush();
+    }
+
     public function getRootItem(int $lpId): ?CLpItem
     {
         return $this->findOneBy([

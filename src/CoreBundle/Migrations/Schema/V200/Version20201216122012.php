@@ -120,8 +120,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $rootItem = new CLpItem();
-                $rootItem
+                $rootItem = (new CLpItem())
                     ->setTitle('root')
                     ->setPath('root')
                     ->setLp($resource)

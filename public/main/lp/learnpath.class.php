@@ -449,8 +449,7 @@ class learnpath
             $title = $exercise->get_formated_title();
         }
 
-        $lpItem = new CLpItem();
-        $lpItem
+        $lpItem = (new CLpItem())
             ->setTitle($title)
             ->setDescription($description)
             ->setPath($id)
@@ -630,6 +629,8 @@ class learnpath
                     $category = Container::getLpCategoryRepository()->find($categoryId);
                 }
 
+                $lpRepo = Container::getLpRepository();
+
                 $lp = (new CLp())
                     ->setLpType($type)
                     ->setName($name)
@@ -641,24 +642,7 @@ class learnpath
                     ->setParent($courseEntity)
                     ->addCourseLink($courseEntity, $sessionEntity)
                 ;
-
-                $em = Database::getManager();
-                $em->persist($lp);
-                $em->flush();
-                $lpId = $lp->getIid();
-
-                if ($lpId) {
-                    // Creates first root item, so all items will be parent of this item.
-                    $lpItem = (new CLpItem())
-                        ->setTitle('root')
-                        ->setPath('root')
-                        ->setLp($lp)
-                        ->setItemType('root')
-                    ;
-                    $em = Database::getManager();
-                    $em->persist($lpItem);
-                    $em->flush();
-                }
+                $lpRepo->createLp($lp);
 
                 break;
         }
@@ -5780,9 +5764,10 @@ class learnpath
         $action = 'add_item';
         $item_type = 'dir';
 
-        $lpItem = new CLpItem();
-        $lpItem->setTitle('');
-        $lpItem->setItemType('dir');
+        $lpItem = (new CLpItem())
+            ->setTitle('')
+            ->setItemType('dir')
+        ;
 
         $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
 
@@ -6577,9 +6562,10 @@ class learnpath
         $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
         $form->addMultipleUpload($url);
 
-        $lpItem = new CLpItem();
-        $lpItem->setTitle('');
-        $lpItem->setItemType(TOOL_DOCUMENT);
+        $lpItem = (new CLpItem())
+            ->setTitle('')
+            ->setItemType(TOOL_DOCUMENT)
+        ;
         $new = $this->displayDocumentForm('add', $lpItem);
 
         /*$lpItem = new CLpItem();

@@ -19,23 +19,23 @@ class CLpRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CLpRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
-        $item = (new CLp())
+        $lp = (new CLp())
             ->setName('lp')
             ->setParent($course)
             ->setCreator($teacher)
             ->setLpType(CLp::LP_TYPE)
         ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
-        $em->flush();
+        $this->assertHasNoEntityViolations($lp);
+        $repo->createLp($lp);
 
-        $this->assertSame('lp', (string) $item);
+        $this->assertNotNull($lp->getResourceNode());
+        $this->assertSame(1, $lp->getItems()->count());
+        $this->assertSame('lp', (string) $lp);
         $this->assertSame(1, $repo->count([]));
     }
 }

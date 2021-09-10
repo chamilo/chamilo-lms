@@ -12,8 +12,10 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Routing\RouterInterface;
 
 final class CLpRepository extends ResourceRepository implements ResourceWithLinkInterface
@@ -21,6 +23,22 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CLp::class);
+    }
+
+    public function createLp(CLp $lp): void
+    {
+        if (null !== $lp->getResourceNode()) {
+            throw new Exception('Lp should not have a resource node during creation');
+        }
+
+        $lpItem = (new CLpItem())
+            ->setTitle('root')
+            ->setPath('root')
+            ->setLp($lp)
+            ->setItemType('root')
+        ;
+        $lp->getItems()->add($lpItem);
+        $this->create($lp);
     }
 
     public function findAllByCourse(

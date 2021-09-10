@@ -6,13 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -20,20 +18,11 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 
-final class CCourseDescriptionRepository extends ResourceRepository implements GridInterface
+final class CCourseDescriptionRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CCourseDescription::class);
-    }
-
-    public function getResourceSettings(): Settings
-    {
-        $settings = parent::getResourceSettings();
-
-        $settings->setAllowResourceCreation(true);
-
-        return $settings;
     }
 
     public function getTemplates(): Template

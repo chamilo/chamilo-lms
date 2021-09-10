@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository\Node;
 
-use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -29,20 +28,6 @@ final class MessageAttachmentRepository extends ResourceRepository
     {
         return $this->getResourcesByCreator($user, $parentNode);
     }*/
-
-    public function getResourceSettings(): Settings
-    {
-        $settings = parent::getResourceSettings();
-
-        $settings
-            ->setAllowNodeCreation(true)
-            //->setAllowResourceCreation(true)
-            ->setAllowResourceUpload(true)
-            ->setAllowResourceEdit(false)
-        ;
-
-        return $settings;
-    }
 
     public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
     {

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -26,15 +25,6 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceWi
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CGlossary::class);
-    }
-
-    public function getResourceSettings(): Settings
-    {
-        $settings = parent::getResourceSettings();
-
-        $settings->setAllowResourceCreation(true);
-
-        return $settings;
     }
 
     public function getTemplates(): Template

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\AbstractResource;
@@ -36,34 +35,21 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
 /**
- * Extends EntityRepository is needed to process settings.
+ * Extends Resource EntityRepository.
  */
 abstract class ResourceRepository extends ServiceEntityRepository
 {
     use NonResourceRepository;
     use RepositoryQueryBuilderTrait;
 
-    protected Settings $settings;
     protected Template $templates;
     protected ?ResourceType $resourceType = null;
-
-    public function setSettings(Settings $settings): self
-    {
-        $this->settings = $settings;
-
-        return $this;
-    }
 
     public function setTemplates(Template $templates): self
     {
         $this->templates = $templates;
 
         return $this;
-    }
-
-    public function getResourceSettings(): Settings
-    {
-        return $this->settings;
     }
 
     public function getTemplates(): Template

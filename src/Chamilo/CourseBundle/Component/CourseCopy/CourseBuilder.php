@@ -933,7 +933,7 @@ class CourseBuilder
                     }
 
                     // Avoid adding the same question twice
-                    if (!isset($this->course->resources[$obj->id])) {
+                    if (!isset($this->course->resources[$obj->iid])) {
                         // find the question category
                         // @todo : need to be adapted for multi category questions in 1.10
                         $question_category_id = TestCategory::getCategoryForQuestion($obj->iid, $courseId);

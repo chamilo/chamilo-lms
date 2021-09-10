@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -60,29 +61,6 @@ if (isset($_REQUEST['tool'])) {
 
 Event::event_access_tool(TOOL_UPLOAD);
 
-function get_zip_files_in_garbage()
-{
-    $list = [];
-    $dh = opendir(api_get_path(SYS_ARCHIVE_PATH));
-    if (false === $dh) {
-        //ignore
-    } else {
-        while ($entry = readdir($dh)) {
-            if ('.' == substr($entry, 0, 1)) {
-                /* ignore files starting with . */
-            } else {
-                if (preg_match('/^.*\.zip$/i', $entry)) {
-                    $list[] = $entry;
-                }
-            }
-        }
-        natcasesort($list);
-        closedir($dh);
-    }
-
-    return $list;
-}
-
 /**
  * Just display the form needed to upload a SCORM and give its settings.
  */
@@ -94,15 +72,57 @@ $interbreadcrumb[] = [
 
 Display::display_header($nameTools, 'Path');
 
-require_once '../lp/content_makers.inc.php';
+$content_origins = [
+    //'--'.get_lang('Generic SCORM').'--',
+    //'--'.get_lang('Other').'--',
+    'Accent',
+    'Accenture',
+    'ADLNet',
+    'Articulate',
+    'ATutor',
+    'Blackboard',
+    'Calfat',
+    'Captivate',
+    'Chamilo',
+    'Chamilo 2',
+    'Claroline',
+    'Commest',
+    'Coursebuilder',
+    'Docent',
+    'Dokeos',
+    'Dreamweaver',
+    'Easyquiz',
+    'e-doceo',
+    'ENI Editions',
+    'Explio',
+    'Flash',
+    'HTML',
+    'HotPotatoes',
+    'Hyperoffice',
+    'Ingenatic',
+    'Instruxion',
+    'iProgress',
+    'Lectora',
+    'Microsoft',
+    'Onlineformapro',
+    'Opikanoba',
+    'Plantyn',
+    'Saba',
+    'Skillsoft',
+    'Speechi',
+    'Thomson-NETg',
+    'U&I Learning',
+    'Udutu',
+    'WebCT',
+];
 
-echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('Back to learning paths'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+echo Display::toolbarAction('lp', [
+    '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'">'.
+    Display::return_icon('back.png', get_lang('Back to learning paths'), '', ICON_SIZE_MEDIUM).'</a>',
+]);
 
 $form = new FormValidator(
-    '',
+    'upload',
     'POST',
     api_get_path(WEB_CODE_PATH).'upload/upload.php?'.api_get_cidreq(),
     '',
@@ -118,9 +138,6 @@ $form->addElement('hidden', 'tool', $my_tool);
 $form->addElement('file', 'user_file', get_lang('SCORM or AICC file to upload'));
 $form->addProgress();
 $form->addRule('user_file', get_lang('Required field'), 'required');
-
-unset($content_origins[0]);
-unset($content_origins[1]);
 
 if ('true' == api_get_setting('search_enabled')) {
     $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));

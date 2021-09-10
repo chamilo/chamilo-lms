@@ -605,7 +605,6 @@ class learnpath
                 break;
         }
 
-        $lpItemRepo = Database::getManager()->getRepository(CLpItem::class);
         $sessionEntity = api_get_session_entity();
         $courseEntity = api_get_course_entity($courseInfo['real_id']);
         $lp = null;
@@ -631,8 +630,7 @@ class learnpath
                     $category = Container::getLpCategoryRepository()->find($categoryId);
                 }
 
-                $lp = new CLp();
-                $lp
+                $lp = (new CLp())
                     ->setLpType($type)
                     ->setName($name)
                     ->setDescription($description)
@@ -651,12 +649,12 @@ class learnpath
 
                 if ($lpId) {
                     // Creates first root item, so all items will be parent of this item.
-                    $lpItem = new CLpItem();
-                    $lpItem
+                    $lpItem = (new CLpItem())
                         ->setTitle('root')
                         ->setPath('root')
                         ->setLp($lp)
-                        ->setItemType('root');
+                        ->setItemType('root')
+                    ;
                     $em = Database::getManager();
                     $em->persist($lpItem);
                     $em->flush();
@@ -2575,7 +2573,13 @@ class learnpath
         $lpItemRepo = Container::getLpItemRepository();
         if (empty($parent)) {
             $rootItem = $lpItemRepo->getRootItem($lp->getIid());
-            $parent = $rootItem->getIid();
+            if (null !== $rootItem) {
+                $parent = $rootItem->getIid();
+            }
+        }
+
+        if (empty($parent)) {
+            return [];
         }
 
         $criteria = new Criteria();

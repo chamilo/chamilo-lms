@@ -845,7 +845,7 @@ function api_utf8_encode($string, $from_encoding = 'UTF-8')
  * Converts a given string from UTF-8 encoding to a specified encoding.
  *
  * @param string $string      the string being converted
- * @param string $to_encoding (optional)    The encoding that $string is being converted to.
+ * @param string $toEncoding (optional)    The encoding that $string is being converted to.
  *                            If it is omitted, the platform character set is assumed.
  *
  * @return string Returns the converted string.
@@ -853,9 +853,13 @@ function api_utf8_encode($string, $from_encoding = 'UTF-8')
  *
  * @see http://php.net/manual/en/function.utf8-decode
  */
-function api_utf8_decode($string, $to_encoding = null)
+function api_utf8_decode($string, $toEncoding = null)
 {
-    return mb_convert_encoding($string, $to_encoding, 'UTF-8');
+    if (null === $toEncoding) {
+        return $string;
+    }
+
+    return mb_convert_encoding($string, $toEncoding, 'UTF-8');
 }
 
 /**

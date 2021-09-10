@@ -330,8 +330,8 @@ class scorm extends learnpath
         $courseId = $courseInfo['real_id'];
 
         // Get table names.
-        $new_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+        $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
         $userMaxScore = (int) $userMaxScore;
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
 
@@ -344,18 +344,18 @@ class scorm extends learnpath
             // -for learnpath
             // -for items
             // -for views?
-            $get_max = "SELECT MAX(display_order) FROM $new_lp WHERE c_id = $courseId ";
+            /*$get_max = "SELECT MAX(display_order) FROM $lpTable WHERE c_id = $courseId ";
             $res_max = Database::query($get_max);
             $dsp = 1;
             if (Database::num_rows($res_max) > 0) {
                 $row = Database::fetch_array($res_max);
                 $dsp = $row[0] + 1;
-            }
+            }*/
+            $dsp = 1;
 
             $courseEntity = api_get_course_entity($courseInfo['real_id']);
             $myname = api_utf8_decode($oOrganization->get_name());
-            $lp = new CLp();
-            $lp
+            $lp = (new CLp())
                 ->setLpType(CLp::SCORM_TYPE)
                 ->setName($myname)
                 ->setRef($oOrganization->get_ref())
@@ -461,7 +461,7 @@ class scorm extends learnpath
                 $item_id = $lpItem->getIid();
                 if ($item_id) {
                     // Now update previous item to change next_item_id.
-                    $upd = "UPDATE $new_lp_item SET next_item_id = $item_id
+                    $upd = "UPDATE $lpItemTable SET next_item_id = $item_id
                             WHERE iid = $previous";
                     Database::query($upd);
                     // Update previous item id.
@@ -696,8 +696,7 @@ class scorm extends learnpath
             $uploadFile = $request->files->get('user_file');
         }
         $em = Database::getManager();
-        $asset = new Asset();
-        $asset
+        $asset = (new Asset())
             ->setCategory(Asset::SCORM)
             ->setTitle($zipFileName)
             ->setFile($uploadFile)

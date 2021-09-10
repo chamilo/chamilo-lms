@@ -38,15 +38,15 @@ class CNotebook extends AbstractResource implements ResourceInterface
     protected User $user;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="description", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $description;
 
     /**

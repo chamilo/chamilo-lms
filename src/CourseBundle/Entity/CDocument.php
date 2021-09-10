@@ -176,10 +176,10 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank
      * @Groups({"document:read", "document:write", "document:browse"})
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**

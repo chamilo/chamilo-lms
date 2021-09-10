@@ -36,17 +36,17 @@ class CQuizRelQuestion
     protected int $questionOrder;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="CQuizQuestion", inversedBy="relQuizzes", cascade={"persist"})
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
+    #[Assert\NotBlank]
     protected CQuizQuestion $question;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="CQuiz", inversedBy="questions", cascade={"persist"})
      * @ORM\JoinColumn(name="quiz_id", referencedColumnName="iid", onDelete="CASCADE")
      */
+    #[Assert\NotBlank]
     protected CQuiz $quiz;
 
     public function setQuestionOrder(int $questionOrder): self

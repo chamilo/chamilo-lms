@@ -40,9 +40,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**

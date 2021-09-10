@@ -25,15 +25,15 @@ class CLink extends AbstractResource implements ResourceInterface
     protected ?int $iid = null;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="url", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $url;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**

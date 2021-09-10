@@ -39,10 +39,10 @@ class CQuizQuestionOption
     protected int $position;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="CQuizQuestion", cascade={"persist"}, inversedBy="options")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
+    #[Assert\NotBlank]
     protected CQuizQuestion $question;
 
     public function setName(string $name): self

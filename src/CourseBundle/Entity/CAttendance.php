@@ -34,9 +34,9 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank
      * @ORM\Column(name="name", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**

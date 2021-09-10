@@ -35,10 +35,9 @@ class CForum extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @Assert\NotBlank
-     *
      * @ORM\Column(name="forum_title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $forumTitle;
 
     /**

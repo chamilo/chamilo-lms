@@ -37,9 +37,9 @@ class CQuizAnswer
     protected CQuizQuestion $question;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="answer", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $answer;
 
     /**

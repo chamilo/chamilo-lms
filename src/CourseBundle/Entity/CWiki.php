@@ -53,17 +53,15 @@ class CWiki extends AbstractResource implements ResourceInterface
     protected string $reflink;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $content;
 
     /**

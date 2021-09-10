@@ -35,9 +35,9 @@ class CCalendarEventRepeat
     protected CCalendarEvent $event;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
      */
+    #[Assert\NotBlank]
     protected ?string $calType = null;
 
     /**

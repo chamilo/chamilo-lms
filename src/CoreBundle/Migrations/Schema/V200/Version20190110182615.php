@@ -35,7 +35,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('asset_id')) {
-            $this->addSql('ALTER TABLE c_lp ADD asset_id INT DEFAULT NULL;');
+            $this->addSql("ALTER TABLE c_lp ADD asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)' ");
             $this->addSql(
                 'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB5DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id);'
             );

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,11 +29,10 @@ class Illustration extends AbstractResource implements ResourceInterface
     use TimestampableEntity;
 
     /**
-     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Column(name="id", type="uuid")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected int $id;
+    protected Uuid $id;
 
     /**
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
@@ -42,6 +42,7 @@ class Illustration extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->name = 'illustration';
     }
 
@@ -50,7 +51,7 @@ class Illustration extends AbstractResource implements ResourceInterface
         return $this->getName();
     }
 
-    public function getId(): int
+    public function getId(): Uuid
     {
         return $this->id;
     }

@@ -14,6 +14,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -36,10 +37,9 @@ class Asset
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
+     * @ORM\Column(type="uuid")
      */
-    protected int $id;
+    protected Uuid $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -127,6 +127,7 @@ class Asset
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->metadata = [];
         $this->dimensions = [];
         $this->size = 0;
@@ -139,10 +140,7 @@ class Asset
         return $this->getOriginalName();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): Uuid
     {
         return $this->id;
     }

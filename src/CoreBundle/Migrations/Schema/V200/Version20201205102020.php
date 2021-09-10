@@ -23,7 +23,7 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         $this->addSql('UPDATE skill SET updated_at = NOW() WHERE CAST(updated_at AS CHAR(20)) = "0000-00-00 00:00:00"');
 
         if (!$table->hasColumn('asset_id')) {
-            $this->addSql('ALTER TABLE skill ADD asset_id INT DEFAULT NULL');
+            $this->addSql("ALTER TABLE skill ADD asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)'");
             $this->addSql('CREATE INDEX IDX_5E3DE4775DA1941 ON skill (asset_id)');
         }
 

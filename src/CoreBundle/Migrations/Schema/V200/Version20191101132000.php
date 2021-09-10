@@ -118,7 +118,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('asset_id')) {
-            $this->addSql('ALTER TABLE course_category ADD asset_id INT DEFAULT NULL');
+            $this->addSql("ALTER TABLE course_category ADD asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)'");
             $this->addSql('ALTER TABLE course_category ADD CONSTRAINT FK_AFF874975DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id)');
             $this->addSql('CREATE INDEX IDX_AFF874975DA1941 ON course_category (asset_id);');
         }

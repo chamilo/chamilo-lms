@@ -38,7 +38,7 @@ class Version20191206150000 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('asset_id')) {
-            $this->addSql('ALTER TABLE extra_field_values ADD asset_id INT DEFAULT NULL');
+            $this->addSql("ALTER TABLE extra_field_values ADD asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)'");
         }
 
         if (!$table->hasForeignKey('FK_171DF9245DA1941')) {

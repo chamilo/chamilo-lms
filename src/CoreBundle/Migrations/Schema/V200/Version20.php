@@ -40,7 +40,7 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         if (false === $schema->hasTable('asset')) {
-            $this->addSql("CREATE TABLE asset (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, category VARCHAR(255) NOT NULL, compressed TINYINT(1) NOT NULL, mime_type LONGTEXT DEFAULT NULL, original_name LONGTEXT DEFAULT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT '(DC2Type:simple_array)', size INT NOT NULL, crop VARCHAR(255) DEFAULT NULL, metadata LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)', description LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
+            $this->addSql("CREATE TABLE asset (id BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)', title VARCHAR(255) NOT NULL, category VARCHAR(255) NOT NULL, compressed TINYINT(1) NOT NULL, mime_type LONGTEXT DEFAULT NULL, original_name LONGTEXT DEFAULT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT '(DC2Type:simple_array)', size INT NOT NULL, crop VARCHAR(255) DEFAULT NULL, metadata LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)', description LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
         }
 
         $this->addSql('DELETE FROM track_e_attempt WHERE exe_id IS NULL');

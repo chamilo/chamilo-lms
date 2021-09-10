@@ -29,6 +29,10 @@ class Version20191206150000 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('extra_field_values');
 
+        $this->addSql("UPDATE extra_field_values SET created_at = NOW() WHERE CAST(created_at AS CHAR(20)) = '0000-00-00 00:00:00'");
+        $this->addSql("UPDATE extra_field_values SET updated_at = NOW() WHERE CAST(updated_at AS CHAR(20)) = '0000-00-00 00:00:00'");
+        $this->addSql('ALTER TABLE extra_field_values MODIFY COLUMN value LONGTEXT NULL');
+
         if (!$table->hasIndex('idx_efv_item')) {
             $this->addSql('CREATE INDEX idx_efv_item ON extra_field_values (item_id)');
         }

@@ -257,7 +257,7 @@ Feature: Exercise tool
 #  Scenario: Import exercise to test questions categories
 #    Given I am on "/main/exercise/upload_exercise.php?cid=1"
 #    And I should see "Import quiz from Excel"
-#    And I attach the file "/tests/behat/uploadable_files/exercise.xls" to "user_upload_quiz"
+#    And I attach the file "/tests/fixtures/exercise.xls" to "user_upload_quiz"
 #    When I press "Upload"
 #    And wait for the page to be loaded
 #    Then I should see "Exercise for Behat test"

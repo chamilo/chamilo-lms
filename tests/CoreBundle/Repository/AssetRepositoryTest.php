@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Symfony\Component\HttpFoundation\Response;
 
 class AssetRepositoryTest extends AbstractApiTest
 {
@@ -38,41 +37,84 @@ class AssetRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $assetRepo->count([]));
     }
 
-    public function testAssetWatermark(): void
+    public function testCreateWatermark(): void
     {
-        self::bootKernel();
-
-        $em = $this->getEntityManager();
-        /** @var AssetRepository $assetRepo */
-        $assetRepo = self::getContainer()->get(AssetRepository::class);
+        $client = static::createClient();
         $file = $this->getUploadedFile();
+
+        $assetRepo = self::getContainer()->get(AssetRepository::class);
 
         // Create asset.
         $asset = (new Asset())
             ->setTitle('test')
             ->setCategory(Asset::WATERMARK)
+            ->setCrop('100,100,100,100')
             ->setFile($file)
         ;
-        $em->persist($asset);
-        $em->flush();
+        $this->assertHasNoEntityViolations($asset);
+        $assetRepo->update($asset);
+
+        $folder = $assetRepo->getFolder($asset);
+        $this->assertSame('/watermark/'.$asset->getFile()->getFilename().'/', $folder);
+
+        $url = $assetRepo->getAssetUrl($asset);
+        $client->request('GET', $url);
+        $this->assertResponseIsSuccessful();
+
+        $asset = (new Asset())
+            ->setTitle('test2')
+            ->setCategory(Asset::WATERMARK)
+            ->setCrop('100,100,100,100')
+        ;
+        $assetRepo->createFromString($asset, 'text/html', 'hello');
+        $this->assertHasNoEntityViolations($asset);
+
+        $asset = (new Asset())
+            ->setTitle('test3')
+            ->setCategory(Asset::WATERMARK)
+        ;
+
+        $file = [
+            'tmp_name' => $this->getUploadedFile()->getRealPath(),
+            'name' => $this->getUploadedFile()->getFilename(),
+            'type' => $this->getUploadedFile()->getMimeType(),
+            'size' => $this->getUploadedFile()->getSize(),
+            'error' => UPLOAD_ERR_OK,
+        ];
+
+        $assetRepo->createFromRequest($asset, $file);
+        $this->assertHasNoEntityViolations($asset);
+    }
+
+    public function testUnZipFile(): void
+    {
+        $client = static::createClient();
+        $assetRepo = self::getContainer()->get(AssetRepository::class);
+        $this->assertSame(0, $assetRepo->count([]));
+        $file = $this->getUploadedZipFile();
+
+        $asset = (new Asset())
+            ->setTitle('test')
+            ->setCategory(Asset::SCORM)
+            ->setFile($file)
+            ->setCompressed(true)
+        ;
+        $assetRepo->update($asset);
+
+        $this->assertHasNoEntityViolations($asset);
+
+        $assetRepo->unZipFile($asset);
 
         $url = $assetRepo->getAssetUrl($asset);
 
-        // Check Asset URL.
-        $this->assertNotEmpty($url);
-
-        $client = static::createClient();
-        $client->request('GET', $url);
-
+        $client->request('GET', $url.'/logo.png');
         $this->assertResponseIsSuccessful();
     }
 
-    public function testAssetDelete(): void
+    public function testDelete(): void
     {
         self::bootKernel();
 
-        $em = $this->getEntityManager();
-        /** @var AssetRepository $assetRepo */
         $assetRepo = self::getContainer()->get(AssetRepository::class);
 
         $file = $this->getUploadedFile();
@@ -83,20 +125,11 @@ class AssetRepositoryTest extends AbstractApiTest
             ->setCategory(Asset::WATERMARK)
             ->setFile($file)
         ;
-        $em->persist($asset);
-        $em->flush();
-
-        $url = $assetRepo->getAssetUrl($asset);
-        $this->assertNotEmpty($url);
-
-        $client = static::createClient();
-        $client->request('GET', $url);
-        $this->assertResponseIsSuccessful();
+        $assetRepo->update($asset);
 
         $asset = $assetRepo->find($asset->getId());
         $assetRepo->delete($asset);
 
-        $response = $client->request('GET', $url);
-        $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        $this->assertSame(0, $assetRepo->count([]));
     }
 }

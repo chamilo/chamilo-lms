@@ -60,8 +60,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $this->setBreadCrumb($request, $resourceNode);
-
         $course = $this->getCourse();
         $totalSize = 0;
         if (null !== $course) {
@@ -139,7 +137,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans(sprintf('Unauthorised access to resource #%s', $nodeId))
         );
 
-        $this->setBreadCrumb($request, $resourceNode);
+        //$this->setBreadCrumb($request, $resourceNode);
 
         $tool = $request->get('tool');
         $type = $request->get('type');

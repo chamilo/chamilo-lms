@@ -27,7 +27,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         @ORM\UniqueConstraint(name="name", columns={"name"})
  *     },
  *     indexes={
- *         @ORM\Index(name="idx_id_coach", columns={"id_coach"}),
  *         @ORM\Index(name="idx_id_session_admin_id", columns={"session_admin_id"})
  *     }
  * )
@@ -76,6 +75,7 @@ class Session implements ResourceWithAccessUrlInterface
     public const STUDENT = 0;
     public const DRH = 1;
     public const COURSE_COACH = 2;
+    public const SESSION_COACH = 3;
 
     /**
      * @Groups({"session:read", "session_rel_user:read"})
@@ -742,11 +742,44 @@ class Session implements ResourceWithAccessUrlInterface
         return $this->generalCoach;
     }
 
-    public function setGeneralCoach(User $coach): self
+    public function getGeneralCoaches(): Collection
     {
-        $this->generalCoach = $coach;
+        return $this
+            ->getGeneralCoachesSubscriptions()
+            ->map(function (SessionRelUser $subscription) {
+                return $subscription->getUser();
+            })
+        ;
+    }
 
-        return $this;
+    public function getGeneralCoachesSubscriptions(): Collection
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', self::SESSION_COACH)
+            )
+        ;
+
+        return $this->users->matching($criteria);
+    }
+
+    public function hasUserAsGeneralCoach(User $user): bool
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', self::SESSION_COACH)
+            )
+            ->andWhere(
+                Criteria::expr()->eq('user', $user)
+            )
+        ;
+
+        return $this->users->matching($criteria)->count() > 0;
+    }
+
+    public function addGeneralCoach(User $coach): self
+    {
+        return $this->addUserInSession(self::SESSION_COACH, $coach);
     }
 
     public function getCategory(): ?SessionCategory

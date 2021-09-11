@@ -12,7 +12,11 @@
     </tr>
     <tr>
         <td>{{ 'General coach' | get_lang}} :</td>
-        <td>{{ session.generalCoach | user_complete_name_with_link }}</td>
+        <td>
+            {% for coach in session.generalCoaches %}
+                {{ coach | user_complete_name_with_link }}<br>
+            {% endfor %}
+        </td>
     </tr>
     {% if session.category  %}
     <tr>

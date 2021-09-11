@@ -61,7 +61,7 @@ class SessionManager
 
         $result = [
             'id' => $session->getId(),
-            'id_coach' => $session->getGeneralCoach() ? $session->getGeneralCoach()->getId() : null,
+            'id_coach' => null, //$session->getGeneralCoach() ? $session->getGeneralCoach()->getId() : null,
             'session_category_id' => $session->getCategory() ? $session->getCategory()->getId() : null,
             'name' => $session->getName(),
             'description' => $session->getDescription(),
@@ -73,24 +73,12 @@ class SessionManager
             'session_admin_id' => $session->getSessionAdmin()->getId(),
             'visibility' => $session->getVisibility(),
             'promotion_id' => $session->getPromotion() ? $session->getPromotion()->getId() : 0,
-            'display_start_date' => $session->getDisplayStartDate()
-                ? $session->getDisplayStartDate()->format('Y-m-d H:i:s')
-                : null,
-            'display_end_date' => $session->getDisplayEndDate()
-                ? $session->getDisplayEndDate()->format('Y-m-d H:i:s')
-                : null,
-            'access_start_date' => $session->getAccessStartDate()
-                ? $session->getAccessStartDate()->format('Y-m-d H:i:s')
-                : null,
-            'access_end_date' => $session->getAccessEndDate()
-                ? $session->getAccessEndDate()->format('Y-m-d H:i:s')
-                : null,
-            'coach_access_start_date' => $session->getCoachAccessStartDate()
-                ? $session->getCoachAccessStartDate()->format('Y-m-d H:i:s')
-                : null,
-            'coach_access_end_date' => $session->getCoachAccessEndDate()
-                ? $session->getCoachAccessEndDate()->format('Y-m-d H:i:s')
-                : null,
+            'display_start_date' => $session->getDisplayStartDate()?->format('Y-m-d H:i:s'),
+            'display_end_date' => $session->getDisplayEndDate()?->format('Y-m-d H:i:s'),
+            'access_start_date' => $session->getAccessStartDate()?->format('Y-m-d H:i:s'),
+            'access_end_date' => $session->getAccessEndDate()?->format('Y-m-d H:i:s'),
+            'coach_access_start_date' => $session->getCoachAccessStartDate()?->format('Y-m-d H:i:s'),
+            'coach_access_end_date' => $session->getCoachAccessEndDate()?->format('Y-m-d H:i:s'),
             'send_subscription_notification' => $session->getSendSubscriptionNotification(),
         ];
 
@@ -135,7 +123,7 @@ class SessionManager
      * @param string $displayEndDate               (YYYY-MM-DD hh:mm:ss)
      * @param string $coachStartDate               (YYYY-MM-DD hh:mm:ss)
      * @param string $coachEndDate                 (YYYY-MM-DD hh:mm:ss)
-     * @param mixed  $coachId                      If int, this is the session coach id,
+     * @param array  $coachesId                      If int, this is the session coach id,
      *                                             if string, the coach ID will be looked for from the user table
      * @param int    $sessionCategoryId            ID of the session category in which this session is registered
      * @param int    $visibility                   Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
@@ -162,7 +150,7 @@ class SessionManager
         $displayEndDate,
         $coachStartDate,
         $coachEndDate,
-        $coachId,
+        $coachesId,
         $sessionCategoryId,
         $visibility = 1,
         $fixSessionNameIfExists = false,
@@ -249,13 +237,16 @@ class SessionManager
                 $session = new Session();
                 $session
                     ->setName($name)
-                    ->setGeneralCoach(api_get_user_entity($coachId))
                     ->setSessionAdmin(api_get_user_entity($sessionAdminId))
                     ->setVisibility($visibility)
                     ->setDescription($description)
                     ->setShowDescription(1 === $showDescription)
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
                 ;
+
+                foreach ($coachesId as $coachId) {
+                    $session->addGeneralCoach(api_get_user_entity($coachId));
+                }
 
                 $startDate = $startDate ? api_get_utc_datetime($startDate, true, true) : null;
                 $endDate = $endDate ? api_get_utc_datetime($endDate, true, true) : null;
@@ -1578,7 +1569,7 @@ class SessionManager
      * @param string $displayEndDate
      * @param string $coachStartDate
      * @param string $coachEndDate
-     * @param int    $coachId
+     * @param array  $coachesId
      * @param int    $sessionCategoryId
      * @param int    $visibility
      * @param string $description
@@ -1600,7 +1591,7 @@ class SessionManager
         $displayEndDate,
         $coachStartDate,
         $coachEndDate,
-        $coachId,
+        $coachesId,
         $sessionCategoryId,
         $visibility,
         $description = null,
@@ -1613,7 +1604,7 @@ class SessionManager
     ) {
         $id = (int) $id;
         $status = (int) $status;
-        $coachId = (int) $coachId;
+        $coachesId = array_map(fn($id) => (int) $id, $coachesId);
         $sessionCategoryId = (int) $sessionCategoryId;
         $visibility = (int) $visibility;
         $duration = (int) $duration;
@@ -1626,7 +1617,7 @@ class SessionManager
             );
 
             return false;
-        } elseif (empty($coachId)) {
+        } elseif (empty($coachesId)) {
             Display::addFlash(
                 Display::return_message(get_lang('You must select a coach'), 'warning')
             );
@@ -1684,8 +1675,11 @@ class SessionManager
                     ->setDisplayEndDate(null)
                     ->setCoachAccessStartDate(null)
                     ->setCoachAccessEndDate(null)
-                    ->setGeneralCoach(api_get_user_entity($coachId))
                 ;
+
+                foreach ($coachesId as $coachId) {
+                    $sessionEntity->addGeneralCoach(api_get_user_entity($coachId));
+                }
 
                 if (!empty($sessionAdminId)) {
                     $sessionEntity->setSessionAdmin(api_get_user_entity($sessionAdminId));
@@ -7701,22 +7695,11 @@ class SessionManager
     }
 
     /**
-     * @param array $sessionInfo Optional
-     *
-     * @return array
+     * @throws Exception
      */
-    public static function setForm(FormValidator $form, array $sessionInfo = [])
+    public static function setForm(FormValidator $form, Session $session = null): array
     {
-        $sessionId = 0;
-        $coachInfo = [];
-
-        if (!empty($sessionInfo)) {
-            $sessionId = (int) $sessionInfo['id'];
-            $coachInfo = api_get_user_info($sessionInfo['id_coach']);
-        }
-
         $categoriesList = self::get_all_session_category();
-        $userInfo = api_get_user_info();
 
         $categoriesOptions = [
             '0' => get_lang('none'),
@@ -7740,19 +7723,22 @@ class SessionManager
         $form->addRule('name', get_lang('Session name already exists'), 'callback', 'check_session_name');
 
         if (!api_is_platform_admin() && api_is_teacher()) {
-            $form->addSelect(
+            $form->addSelectFromCollection(
                 'coach_username',
                 get_lang('Coach name'),
-                [api_get_user_id() => $userInfo['complete_name']],
+                [api_get_user_entity()],
                 [
                     'id' => 'coach_username',
                     'style' => 'width:370px;',
-                ]
+                    'multiple' => true,
+                ],
+                false,
+                'getFullname'
             );
         } else {
             $sql = "SELECT COUNT(1) FROM $tbl_user WHERE status = 1";
             $rs = Database::query($sql);
-            $countUsers = (int) Database::result($rs, 0, 0);
+            $countUsers = (int) Database::result($rs, 0, '0');
 
             if ($countUsers < 50) {
                 $orderClause = 'ORDER BY ';
@@ -7793,17 +7779,27 @@ class SessionManager
                     [
                         'id' => 'coach_username',
                         'style' => 'width:370px;',
+                        'multiple' => true,
                     ]
                 );
             } else {
+                $coaches = [];
+
+                if ($session) {
+                    foreach ($session->getGeneralCoaches() as $coach) {
+                        $coaches[$coach->getId()] = $coach->getFullName();
+                    }
+                }
+
                 $form->addSelectAjax(
                     'coach_username',
                     get_lang('Coach name'),
-                    $coachInfo ? [$coachInfo['id'] => $coachInfo['complete_name_with_username']] : [],
+                    $coaches,
                     [
                         'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_general_coach',
                         'width' => '100%',
                         'id' => 'coach_username',
+                        'multiple' => true,
                     ]
                 );
             }
@@ -7815,7 +7811,7 @@ class SessionManager
         $form->addButtonAdvancedSettings('advanced_params');
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-        if (empty($sessionId)) {
+        if (null === $session) {
             $form->addSelectAjax(
                 'session_template',
                 get_lang('Session template'),
@@ -7988,7 +7984,7 @@ class SessionManager
 
         // Extra fields
         $extra_field = new ExtraFieldModel('session');
-        $extra = $extra_field->addElements($form, $sessionId);
+        $extra = $extra_field->addElements($form, $session ? $session->getId() : 0);
 
         $form->addElement('html', '</div>');
 

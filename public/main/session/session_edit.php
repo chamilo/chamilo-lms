@@ -2,87 +2,23 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\User;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-$formSent = 0;
-
-// Database Table Definitions
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 $id = (int) $_GET['id'];
 
 $session = api_get_session_entity($id);
 SessionManager::protectSession($session);
-$sessionInfo = SessionManager::fetch($id);
-
-// Sets to local time to show it correctly when you edit a session
-if (!empty($sessionInfo['display_start_date'])) {
-    $sessionInfo['display_start_date'] = api_get_local_time($sessionInfo['display_start_date']);
-}
-if (!empty($sessionInfo['display_end_date'])) {
-    $sessionInfo['display_end_date'] = api_get_local_time($sessionInfo['display_end_date']);
-}
-
-if (!empty($sessionInfo['access_start_date'])) {
-    $sessionInfo['access_start_date'] = api_get_local_time($sessionInfo['access_start_date']);
-}
-
-if (!empty($sessionInfo['access_end_date'])) {
-    $sessionInfo['access_end_date'] = api_get_local_time($sessionInfo['access_end_date']);
-}
-
-if (!empty($sessionInfo['coach_access_start_date'])) {
-    $sessionInfo['coach_access_start_date'] = api_get_local_time($sessionInfo['coach_access_start_date']);
-}
-
-if (!empty($sessionInfo['coach_access_end_date'])) {
-    $sessionInfo['coach_access_end_date'] = api_get_local_time($sessionInfo['coach_access_end_date']);
-}
 
 $tool_name = get_lang('Edit this session');
 
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = ['url' => 'resume_session.php?id_session='.$id, 'name' => get_lang('Session overview')];
-
-if (isset($_POST['formSent']) && $_POST['formSent']) {
-    $formSent = 1;
-}
-
-$order_clause = 'ORDER BY ';
-$order_clause .= api_sort_by_first_name() ? 'firstname, lastname, username' : 'lastname, firstname, username';
-
-$sql = "SELECT id as user_id,lastname,firstname,username
-        FROM $tbl_user
-        WHERE status='1'".$order_clause;
-
-if (api_is_multiple_url_enabled()) {
-    $table_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $access_url_id = api_get_current_access_url_id();
-    if (-1 != $access_url_id) {
-        $sql = "SELECT DISTINCT u.id as user_id,lastname,firstname,username
-                FROM $tbl_user u
-                INNER JOIN $table_access_url_rel_user url_rel_user
-                ON (url_rel_user.user_id = u.id)
-                WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
-    }
-}
-
-$result = Database::query($sql);
-$coaches = Database::store_result($result);
-$thisYear = date('Y');
-
-$coachesOption = [
-    '' => '----- '.get_lang('none').' -----',
-];
-
-foreach ($coaches as $coach) {
-    $personName = api_get_person_name($coach['firstname'], $coach['lastname']);
-    $coachesOption[$coach['user_id']] = "$personName ({$coach['username']})";
-}
 
 $categoriesList = SessionManager::get_all_session_category();
 
@@ -104,8 +40,7 @@ $formAction .= http_build_query([
 
 $form = new FormValidator('edit_session', 'post', $formAction);
 $form->addElement('header', $tool_name);
-$result = SessionManager::setForm($form, $sessionInfo);
-
+$result = SessionManager::setForm($form, $session);
 $htmlHeadXtra[] = '
 <script>
 $(function() {
@@ -115,11 +50,28 @@ $(function() {
 
 $form->addButtonUpdate(get_lang('Edit this session'));
 
-$formDefaults = $sessionInfo;
-
-$formDefaults['coach_username'] = $sessionInfo['id_coach'];
-$formDefaults['session_category'] = $sessionInfo['session_category_id'];
-$formDefaults['session_visibility'] = $sessionInfo['visibility'];
+$formDefaults = [
+    'id' => $session->getId(),
+    'session_category' => $session->getCategory()?->getId(),
+    'name' => $session->getName(),
+    'description' => $session->getDescription(),
+    'show_description' => $session->getShowDescription(),
+    'duration' => $session->getDuration(),
+    'session_visibility' => $session->getVisibility(),
+    'display_start_date' => $session->getDisplayStartDate() ? api_get_local_time($session->getDisplayStartDate()) : null,
+    'display_end_date' => $session->getDisplayEndDate() ? api_get_local_time($session->getDisplayEndDate()) : null,
+    'access_start_date' => $session->getAccessStartDate() ? api_get_local_time($session->getAccessStartDate()) : null,
+    'access_end_date' => $session->getAccessEndDate() ? api_get_local_time($session->getAccessEndDate()) : null,
+    'coach_access_start_date' => $session->getCoachAccessStartDate() ? api_get_local_time($session->getCoachAccessStartDate()) : null,
+    'coach_access_end_date' => $session->getCoachAccessEndDate() ? api_get_local_time($session->getCoachAccessEndDate()) : null,
+    'send_subscription_notification' => $session->getSendSubscriptionNotification(),
+    'coach_username' => array_map(
+        function (User $user) {
+            return $user->getId();
+        },
+        $session->getGeneralCoaches()->getValues()
+    ),
+];
 
 $form->setDefaults($formDefaults);
 
@@ -133,7 +85,7 @@ if ($form->validate()) {
     $displayEndDate = $params['display_end_date'];
     $coachStartDate = $params['coach_access_start_date'];
     $coachEndDate = $params['coach_access_end_date'];
-    $coach_username = intval($params['coach_username']);
+    $coach_username = $params['coach_username'];
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
@@ -194,7 +146,7 @@ $form->display();
 <script>
 $(function() {
 <?php
-    if (!empty($sessionInfo['duration'])) {
+    if ($session->getDuration() > 0) {
         echo 'accessSwitcher(0);';
     } else {
         echo 'accessSwitcher(1);';

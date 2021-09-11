@@ -39,7 +39,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $session = (new Session())
             ->setName('session 1')
-            ->setGeneralCoach($coach)
+            ->addGeneralCoach($coach)
             ->addAccessUrl($url)
             ->setCategory($category)
 

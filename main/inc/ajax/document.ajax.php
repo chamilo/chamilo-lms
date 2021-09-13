@@ -76,7 +76,7 @@ switch ($action) {
             exit;
         }
 
-        $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
+        $directoryParentId = isset($_POST['directory_parent_id']) ? (int) $_POST['directory_parent_id'] : 0;
         $currentDirectory = '';
         if (empty($directoryParentId)) {
             $currentDirectory = isset($_REQUEST['curdirpath']) ? $_REQUEST['curdirpath'] : '';
@@ -86,7 +86,9 @@ switch ($action) {
                 $currentDirectory = $documentData['path'];
             }
         }
-
+        if (empty($currentDirectory)) {
+            $currentDirectory = DIRECTORY_SEPARATOR;
+        }
         $ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : '';
         $unzip = isset($_POST['unzip']) ? 1 : 0;
 

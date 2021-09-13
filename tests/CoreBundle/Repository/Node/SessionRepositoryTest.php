@@ -202,7 +202,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         /** @var Session $session */
         $session = $sessionRepo->find($session->getId());
-        $this->assertSame(1, $session->getUsers()->count());
+        $this->assertSame(2, $session->getUsers()->count());
 
         // Add the user again!
         $this->createClientWithCredentials($token)->request(
@@ -267,14 +267,14 @@ class SessionRepositoryTest extends AbstractApiTest
         $hasUser = $session->hasUserInCourse($user, $course, $studentStatus);
         $this->assertTrue($hasUser);
 
-        $this->assertSame(1, $session->getUsers()->count());
+        $this->assertSame(2, $session->getUsers()->count());
 
         // 4. Delete user
         $userRepo->delete($user);
 
         /** @var Session $session */
         $session = $sessionRepo->find($session->getId());
-        $this->assertSame(0, $session->getUsers()->count());
+        $this->assertSame(1, $session->getUsers()->count());
         $this->assertSame(0, $session->getSessionRelCourseRelUsers()->count());
     }
 }

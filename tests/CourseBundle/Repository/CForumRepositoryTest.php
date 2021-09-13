@@ -37,4 +37,27 @@ class CForumRepositoryTest extends AbstractApiTest
         $this->assertSame('forum', (string) $item);
         $this->assertSame(1, $repo->count([]));
     }
+
+    public function testDelete(): void
+    {
+        self::bootKernel();
+
+        $repo = self::getContainer()->get(CForumRepository::class);
+
+        $course = $this->createCourse('new');
+        $teacher = $this->createUser('teacher');
+
+        $forum = (new CForum())
+            ->setForumTitle('forum')
+            ->setParent($course)
+            ->setCreator($teacher)
+        ;
+        $repo->create($forum);
+
+        $this->assertSame(1, $repo->count([]));
+
+        $repo->delete($forum);
+
+        $this->assertSame(0, $repo->count([]));
+    }
 }

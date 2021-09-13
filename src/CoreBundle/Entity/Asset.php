@@ -169,10 +169,7 @@ class Asset
         return str_contains($mimeType, 'video');
     }
 
-    /**
-     * @return string
-     */
-    public function getCrop()
+    public function getCrop(): ?string
     {
         return $this->crop;
     }

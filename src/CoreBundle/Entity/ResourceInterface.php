@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Symfony\Component\Uid\Uuid;
+
 interface ResourceInterface
 {
     public function __toString(): string;
@@ -13,7 +15,7 @@ interface ResourceInterface
     /**
      * Returns the resource id identifier. Example for CDocument it will be the value of the field iid.
      */
-    public function getResourceIdentifier(): int;
+    public function getResourceIdentifier(): int|Uuid;
 
     /**
      * Returns the resource name. Example for CDocument it will be the field "title".
@@ -25,8 +27,4 @@ interface ResourceInterface
     public function getResourceNode(): ?ResourceNode;
 
     public function setResourceNode(ResourceNode $resourceNode);
-
-    //public function setParent(AbstractResource $parent);
-
-    //public function addCourseLink(Course $course, Session $session = null, CGroup $group = null, int $visibility);
 }

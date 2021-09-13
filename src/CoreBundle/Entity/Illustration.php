@@ -68,7 +68,7 @@ class Illustration extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): Uuid
     {
         return $this->getId();
     }

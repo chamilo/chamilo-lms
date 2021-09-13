@@ -229,19 +229,20 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         }
 
                         // Default visibility
-                        $visibilityAfterExpirationPerSession = 1;
+                        $visibilityAfterExpirationPerSession = SESSION_VISIBLE_READ_ONLY;
 
                         if (isset($node_session->VisibilityAfterExpiration)) {
                             $visibility = trim(api_utf8_decode($node_session->VisibilityAfterExpiration));
                             switch ($visibility) {
-                                case 'read_only':
-                                    $visibilityAfterExpirationPerSession = SESSION_VISIBLE_READ_ONLY;
-                                    break;
                                 case 'accessible':
                                     $visibilityAfterExpirationPerSession = SESSION_VISIBLE;
                                     break;
                                 case 'not_accessible':
                                     $visibilityAfterExpirationPerSession = SESSION_INVISIBLE;
+                                    break;
+                                case 'read_only':
+                                default:
+                                    $visibilityAfterExpirationPerSession = SESSION_VISIBLE_READ_ONLY;
                                     break;
                             }
                         }

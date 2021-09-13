@@ -107,7 +107,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $data[] = $totalSize - $used;
 
         return $this->render(
-            $repository->getTemplates()->getFromAction(__FUNCTION__),
+            '@ChamiloCore/Resource/disk_space.html.twig',
             [
                 'resourceNode' => $resourceNode,
                 'labels' => $labels,
@@ -153,7 +153,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         ];
 
         return $this->render(
-            $repository->getTemplates()->getFromAction(__FUNCTION__, $request->isXmlHttpRequest()),
+            '@ChamiloCore/Resource/info.html.twig',
             $params
         );
     }

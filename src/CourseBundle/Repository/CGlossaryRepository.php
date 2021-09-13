@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -25,17 +24,6 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceWi
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CGlossary::class);
-    }
-
-    public function getTemplates(): Template
-    {
-        $templates = parent::getTemplates();
-
-        $templates
-            ->setViewResource('@ChamiloCore/Resource/glossary/view_resource.html.twig')
-        ;
-
-        return $templates;
     }
 
     /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder

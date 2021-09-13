@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -22,18 +21,6 @@ final class CCourseDescriptionRepository extends ResourceRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CCourseDescription::class);
-    }
-
-    public function getTemplates(): Template
-    {
-        $templates = parent::getTemplates();
-
-        $templates
-            ->setViewResource('@ChamiloCore/Resource/course_description/view_resource.html.twig')
-            ->setIndex('@ChamiloCore/Resource/course_description/index.html.twig')
-        ;
-
-        return $templates;
     }
 
     /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder

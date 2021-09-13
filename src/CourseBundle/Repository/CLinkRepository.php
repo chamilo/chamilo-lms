@@ -15,7 +15,6 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLink;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Form\FormInterface;
 
 final class CLinkRepository extends ResourceRepository
 {
@@ -23,9 +22,4 @@ final class CLinkRepository extends ResourceRepository
     {
         parent::__construct($registry, CLink::class);
     }
-
-    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
-    {
-        return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }*/
 }

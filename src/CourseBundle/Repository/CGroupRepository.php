@@ -36,15 +36,6 @@ final class CGroupRepository extends ResourceRepository
         return $qb;
     }
 
-    public function findOneByCode(string $code): ?CGroup
-    {
-        return $this->findOneBy(
-            [
-                'code' => $code,
-            ]
-        );
-    }
-
     public function findOneByTitle(string $name): ?CGroup
     {
         return $this->findOneBy(

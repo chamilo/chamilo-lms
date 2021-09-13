@@ -588,6 +588,10 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $documentRepo->setVisibilityDeleted($document);
         $link = $document->getFirstResourceLink();
         $this->assertSame(ResourceLink::VISIBILITY_DELETED, $link->getVisibility());
+
+        $documentRepo->softDelete($document);
+        $link = $document->getFirstResourceLink();
+        $this->assertSame(ResourceLink::VISIBILITY_DELETED, $link->getVisibility());
     }
 
     public function testGetTotalSpaceByCourse(): void
@@ -614,5 +618,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $total = $documentRepo->getTotalSpaceByCourse($course);
         $this->assertSame($this->getUploadedFile()->getSize(), $total);
+
+        $documentRepo->delete($document);
+
+        $this->assertSame(0, $documentRepo->count([]));
     }
 }

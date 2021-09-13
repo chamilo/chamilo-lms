@@ -81,26 +81,31 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="thread_date", type="datetime", nullable=false)
      */
+    #[Assert\NotBlank]
     protected DateTime $threadDate;
 
     /**
      * @ORM\Column(name="thread_replies", type="integer", nullable=false, options={"unsigned":true, "default":0})
      */
+    #[Assert\NotBlank]
     protected int $threadReplies;
 
     /**
      * @ORM\Column(name="thread_views", type="integer", nullable=false, options={"unsigned":true, "default":0})
      */
+    #[Assert\NotBlank]
     protected int $threadViews;
 
     /**
      * @ORM\Column(name="thread_sticky", type="boolean", nullable=false)
      */
+    #[Assert\NotBlank]
     protected bool $threadSticky;
 
     /**
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $locked;
 
     /**
@@ -132,6 +137,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     {
         $this->posts = new ArrayCollection();
         $this->qualifications = new ArrayCollection();
+        $this->threadDate = new DateTime();
         $this->threadPeerQualify = false;
         $this->threadReplies = 0;
         $this->threadViews = 0;
@@ -172,6 +178,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
 
     public function setForum(CForum $forum = null): self
     {
+        if (null !== $forum) {
+            $forum->getThreads()->add($this);
+        }
         $this->forum = $forum;
 
         return $this;

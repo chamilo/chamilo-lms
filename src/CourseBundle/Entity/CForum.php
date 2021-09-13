@@ -243,6 +243,9 @@ class CForum extends AbstractResource implements ResourceInterface
 
     public function setForumCategory(CForumCategory $forumCategory = null): self
     {
+        if (null !== $forumCategory) {
+            $forumCategory->getForums()->add($this);
+        }
         $this->forumCategory = $forumCategory;
 
         return $this;

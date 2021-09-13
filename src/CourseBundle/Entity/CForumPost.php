@@ -55,6 +55,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="post_date", type="datetime", nullable=false)
      */
+    #[Assert\NotBlank]
     protected DateTime $postDate;
 
     /**
@@ -65,6 +66,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="visible", type="boolean", nullable=false)
      */
+    #[Assert\NotBlank]
     protected bool $visible;
 
     /**
@@ -73,7 +75,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected ?int $status = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts", )
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
     protected ?CForumThread $thread = null;
@@ -88,6 +90,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
      */
+    #[Assert\NotBlank]
     protected ?User $user = null;
 
     /**
@@ -114,6 +117,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->postDate = new DateTime();
         $this->visible = false;
         $this->attachments = new ArrayCollection();
         $this->children = new ArrayCollection();
@@ -150,6 +154,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     public function setThread(CForumThread $thread = null): self
     {
+        if (null !== $thread) {
+            $thread->getPosts()->add($this);
+        }
         $this->thread = $thread;
 
         return $this;
@@ -253,6 +260,8 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     public function setForum(?CForum $forum): self
     {
+        $forum->getPosts()->add($this);
+
         $this->forum = $forum;
 
         return $this;

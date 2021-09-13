@@ -2471,13 +2471,19 @@ function saveThread(
             WHERE
                 iid = '".$thread->getIid()."'";
     Database::query($sql);
-    $message = get_lang('The new thread has been added');
+
+    $message = '';
+    if ($showMessage) {
+        Display::addFlash(Display::return_message(get_lang('The new thread has been added'), 'success', false));
+    }
 
     // Overwrite default message.
     if ($forum->isModerated() &&
         !api_is_allowed_to_edit(null, true)
     ) {
-        $message = get_lang('Your message has to be approved before people can view it.');
+        if ($showMessage) {
+            Display::addFlash(Display::return_message(get_lang('Your message has to be approved before people can view it.'), 'success', false));
+        }
     }
 
     add_forum_attachment_file(
@@ -2510,8 +2516,7 @@ function saveThread(
     send_notification_mails(
         $forum,
         $thread,
-        $reply_info,
-        $courseInfo['code']
+        $reply_info
     );
 
     Session::erase('formelements');

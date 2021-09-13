@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
@@ -42,20 +41,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     use NonResourceRepository;
     use RepositoryQueryBuilderTrait;
 
-    protected Template $templates;
     protected ?ResourceType $resourceType = null;
-
-    public function setTemplates(Template $templates): self
-    {
-        $this->templates = $templates;
-
-        return $this;
-    }
-
-    public function getTemplates(): Template
-    {
-        return $this->templates;
-    }
 
     public function getCount(QueryBuilder $qb): int
     {
@@ -452,18 +438,20 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function delete(ResourceInterface $resource): void
     {
+        $em = $this->getEntityManager();
         $children = $resource->getResourceNode()->getChildren();
         foreach ($children as $child) {
             if ($child->hasResourceFile()) {
-                $this->getEntityManager()->remove($child->getResourceFile());
+                $em->remove($child->getResourceFile());
             }
             $resourceNode = $this->getResourceFromResourceNode($child->getId());
             if (null !== $resourceNode) {
                 $this->delete($resourceNode);
             }
         }
-        $this->getEntityManager()->remove($resource);
-        $this->getEntityManager()->flush();
+
+        $em->remove($resource);
+        $em->flush();
     }
 
     /**

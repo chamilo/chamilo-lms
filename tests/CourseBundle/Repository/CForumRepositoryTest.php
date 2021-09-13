@@ -19,7 +19,6 @@ class CForumRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CForumRepository::class);
 
         $course = $this->createCourse('new');
@@ -31,8 +30,7 @@ class CForumRepositoryTest extends AbstractApiTest
             ->setCreator($teacher)
         ;
         $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
-        $em->flush();
+        $repo->create($item);
 
         $this->assertSame('forum', (string) $item);
         $this->assertSame(1, $repo->count([]));

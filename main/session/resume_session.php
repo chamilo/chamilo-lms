@@ -79,13 +79,16 @@ switch ($action) {
         $idChecked = isset($_GET['idChecked']) ? $_GET['idChecked'] : null;
         if (is_array($idChecked)) {
             $usersToDelete = [];
-            foreach ($idChecked as $courseCode) {
-                // forcing the escape_string
-                $courseInfo = api_get_course_info($courseCode);
-                SessionManager::unsubscribe_course_from_session(
-                    $sessionId,
-                    $courseInfo['real_id']
-                );
+            $check = Security::check_token('get');
+            if ($check) {
+                foreach ($idChecked as $courseCode) {
+                    // forcing the escape_string
+                    $courseInfo = api_get_course_info($courseCode);
+                    SessionManager::unsubscribe_course_from_session(
+                        $sessionId,
+                        $courseInfo['real_id']
+                    );
+                }
             }
         }
 
@@ -104,10 +107,14 @@ switch ($action) {
         }
 
         if (!empty($_GET['user'])) {
-            SessionManager::unsubscribe_user_from_session(
-                $sessionId,
-                $_GET['user']
-            );
+            $check = Security::check_token('get');
+            if ($check) {
+                SessionManager::unsubscribe_user_from_session(
+                    $sessionId,
+                    $_GET['user']
+                );
+            }
+            Security::clear_token();
         }
 
         Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -156,6 +163,7 @@ if ($session->getNbrCourses() === 0) {
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
 } else {
+    $secToken = Security::get_token();
     $count = 0;
     $courseItem = '';
     //$courses = $sessionRepository->getCoursesOrderedByPosition($session);
@@ -296,7 +304,7 @@ if ($session->getNbrCourses() === 0) {
         );
         $courseItem .= Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
-            api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$course->getCode()}",
+            api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$course->getCode()}&sec_token=".Security::getTokenFromSession(),
             [
                 'onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;",
             ]
@@ -367,7 +375,7 @@ if (!empty($userList)) {
 
         $removeLink = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
-            api_get_self().'?id_session='.$sessionId.'&action=delete&user='.$user['user_id'],
+            api_get_self().'?id_session='.$sessionId.'&action=delete&user='.$user['user_id'].'&sec_token='.Security::getTokenFromSession(),
             ['onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;"]
         );
 

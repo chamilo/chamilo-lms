@@ -37,7 +37,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame(1, $repo->count([]));
-        $this->assertNotNull( $repo->findOneByTitle('Group'));
+        $this->assertNotNull($repo->findOneByTitle('Group'));
     }
 
     public function testFindAllByCourse(): void

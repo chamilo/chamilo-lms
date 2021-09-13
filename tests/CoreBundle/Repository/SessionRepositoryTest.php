@@ -67,7 +67,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertFalse($session->isCurrentlyAccessible());
 
         $user = $this->createUser('test');
-        $this->assertFalse($session->isUserGeneralCoach($user));
+        $this->assertFalse($session->hasUserAsGeneralCoach($user));
 
         $this->assertIsArray(Session::getStatusList());
     }

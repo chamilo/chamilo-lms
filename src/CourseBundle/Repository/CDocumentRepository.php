@@ -30,20 +30,6 @@ final class CDocumentRepository extends ResourceRepository
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }*/
 
-    public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
-    {
-        $newResource = $form->getData();
-        $newResource
-            //->setCourse($course)
-            //->setSession($session)
-            ->setFiletype($fileType)
-            //->setTitle($title) // already added in $form->getData()
-            ->setReadonly(false)
-        ;
-
-        //return $newResource;
-    }
-
     public function getParent(CDocument $document): ?CDocument
     {
         $resourceParent = $document->getResourceNode()->getParent();

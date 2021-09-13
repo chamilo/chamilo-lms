@@ -28,15 +28,4 @@ final class CLinkRepository extends ResourceRepository
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }*/
-
-    public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
-    {
-        /** @var CLink $newResource */
-        $newResource = $form->getData();
-        $newResource
-            ->setDisplayOrder(0)
-        ;
-
-        //return $newResource;
-    }
 }

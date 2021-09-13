@@ -115,8 +115,6 @@ abstract class AbstractResource
 
     abstract public function setResourceName(string $name);
 
-    //abstract public function setResourceProperties(FormInterface $form, $course, $session, $fileType);
-
     /**
      * @return ResourceLink[]
      */

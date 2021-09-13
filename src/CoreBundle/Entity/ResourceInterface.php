@@ -15,7 +15,7 @@ interface ResourceInterface
     /**
      * Returns the resource id identifier. Example for CDocument it will be the value of the field iid.
      */
-    public function getResourceIdentifier(): int|Uuid;
+    public function getResourceIdentifier(): int | Uuid;
 
     /**
      * Returns the resource name. Example for CDocument it will be the field "title".

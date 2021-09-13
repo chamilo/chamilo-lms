@@ -41,17 +41,4 @@ final class CCourseDescriptionRepository extends ResourceRepository
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }*/
-
-    public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
-    {
-        //return $form->getData();
-
-        /*$newResource
-            ->setCId($course->getId())
-        ;
-
-        if ($session) {
-            $newResource->setSessionId($session->getId());
-        }*/
-    }
 }

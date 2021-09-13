@@ -28,14 +28,4 @@ final class PersonalFileRepository extends ResourceRepository
     {
         return $this->getResourcesByCreator($user, $parentNode);
     }*/
-
-    public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
-    {
-        //return $form->getData();
-
-        //->setCourse($course)
-            //->setSession($session)
-            //->setFiletype($fileType)
-            //->setTitle($title) // already added in $form->getData()
-    }
 }

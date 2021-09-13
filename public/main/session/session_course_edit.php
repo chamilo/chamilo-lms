@@ -15,7 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $session = api_get_session_entity($sessionId);
 SessionManager::protectSession($session);
-$course_code = $_GET['course_code'];
+$courseCode = $_GET['course_code'];
 $course_info = api_get_course_info($_REQUEST['course_code']);
 
 if (empty($course_info)) {
@@ -150,7 +150,7 @@ Display::page_subheader2($tool_name);
 $form = new FormValidator(
     'form',
     'post',
-    api_get_self().'?id_session='.$sessionId.'&course_code='.$course_code.'&page='.Security::remove_XSS($_GET['page'])
+    api_get_self().'?id_session='.$sessionId.'&course_code='.$courseCode.'&page='.Security::remove_XSS($_GET['page'])
 );
 
 $options = [];

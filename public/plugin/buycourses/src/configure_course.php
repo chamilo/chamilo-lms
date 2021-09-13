@@ -4,10 +4,6 @@
 /**
  * Configuration script for the Buy Courses plugin.
  */
-
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
-
 $cidReset = true;
 
 require_once '../config.php';

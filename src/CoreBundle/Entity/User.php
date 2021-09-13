@@ -729,13 +729,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var Collection<int, MessageTag>|MessageTag[]
      * @ORM\OneToMany(
-     *      targetEntity="Chamilo\CoreBundle\Entity\MessageTag",
-     *      mappedBy="user",
-     *      cascade={"persist", "remove"},
-     *      orphanRemoval="true"
-     *)
+     *     targetEntity="Chamilo\CoreBundle\Entity\MessageTag",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval="true"
+     * )
      */
-    #[Assert\Valid]
     protected Collection $messageTags;
 
     /**
@@ -2450,6 +2449,24 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setLogins(Collection $logins): self
     {
         $this->logins = $logins;
+
+        return $this;
+    }
+
+    /**
+     * @return MessageTag[]|Collection
+     */
+    public function getMessageTags()
+    {
+        return $this->messageTags;
+    }
+
+    /**
+     * @param MessageTag[]|Collection $messageTags
+     */
+    public function setMessageTags($messageTags): self
+    {
+        $this->messageTags = $messageTags;
 
         return $this;
     }

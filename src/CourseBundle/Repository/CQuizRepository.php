@@ -78,18 +78,18 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         $qb
-            ->andWhere("(
+            ->andWhere('(
                 (
-                    resource.startTime <> '' AND
+                    resource.startTime IS NOT NULL AND
                     resource.startTime < :date AND
-                    resource.endTime <> '' AND
+                    resource.endTime IS NOT NULL AND
                     resource.endTime > :date
                 )  OR
-                (resource.startTime <> '' AND resource.startTime < :date AND resource.endTime IS NULL) OR
-                (resource.startTime IS NULL AND resource.endTime <> '' AND resource.endTime > :date) OR
+                (resource.startTime IS NOT NULL AND resource.startTime < :date AND resource.endTime IS NULL) OR
+                (resource.startTime IS NULL AND resource.endTime IS NOT NULL AND resource.endTime > :date) OR
                 (resource.startTime IS NULL AND resource.endTime IS NULL)
                 )
-            ")
+            ')
             ->setParameter('date', $dateTime)
         ;
 

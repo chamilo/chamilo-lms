@@ -36,5 +36,8 @@ class CLpCategoryRepositoryTest extends AbstractApiTest
 
         $this->assertSame('cat', (string) $item);
         $this->assertSame(1, $repo->count([]));
+
+        $link = $repo->getLink($item, $this->getContainer()->get('router'));
+        $this->assertSame('/main/lp/lp_controller.php?id='.$item->getIid().'&action=view_category', $link);
     }
 }

@@ -37,21 +37,4 @@ final class CLpItemRepository extends ServiceEntityRepository
             'lp' => $lpId,
         ]);
     }
-
-    /**
-     * @return CLpItem[]
-     */
-    public function getTree(int $lpId)
-    {
-        $qb = $this->createQueryBuilder('i');
-        $qb
-            ->andWhere('lp = :lp AND path = :path')
-            ->setParameters([
-                'lp' => $lpId,
-                'path' => 'root',
-            ])
-        ;
-
-        return $qb->getQuery()->getResult('tree');
-    }
 }

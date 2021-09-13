@@ -51,22 +51,18 @@ class DateRangePicker extends HTML_QuickForm_text
         );
     }
 
-    /**
-     * @param array $dateRange
-     *
-     * @return array
-     */
-    public function parseDateRange($dateRange)
+    public function parseDateRange(array $dateRange): array
     {
         $dateRange = Security::remove_XSS($dateRange);
         $dates = explode('/', $dateRange);
         $dates = array_map('trim', $dates);
-        $start = isset($dates[0]) ? $dates[0] : '';
-        $end = isset($dates[1]) ? $dates[1] : '';
+        $start = $dates[0] ?? '';
+        $end = $dates[1] ?? '';
 
         $pattern = 'yyyy-MM-dd HH:mm';
         if ('false' === $this->getAttribute('timePicker') &&
-            false === strpos($this->getAttribute('format'), 'HH:mm')) {
+            !str_contains($this->getAttribute('format'), 'HH:mm')
+        ) {
             $pattern = 'yyyy-MM-dd';
         }
 

@@ -3437,7 +3437,7 @@ class learnpath
         CLpCategory $category,
         User $user,
         Course $course,
-        Session $session = null
+        \Chamilo\CoreBundle\Entity\Session $session = null
     ) {
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 

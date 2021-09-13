@@ -1609,6 +1609,7 @@ if (empty($details)) {
         }
 
         $userEntity = api_get_user_entity(api_get_user_id());
+        $session = api_get_session_entity();
 
         /** @var CLpCategory $item */
         foreach ($categories as $item) {

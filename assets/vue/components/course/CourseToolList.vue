@@ -37,6 +37,14 @@
               size="lg"
           />
         </button>
+
+        <a
+            v-if="isCurrentTeacher"
+            :href="goToSettingCourseTool(course, tool)"
+        >  <v-icon
+            icon="mdi-cog" size="lg"
+        />
+        </a>
       </div>
     </div>
   </div>
@@ -56,6 +64,10 @@ export default {
       required: true
     },
     changeVisibility: {
+      type: Function,
+      required: false
+    },
+    goToSettingCourseTool: {
       type: Function,
       required: false
     },

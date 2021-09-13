@@ -9,7 +9,7 @@
         <div class="flex flex-row" v-if="isCurrentTeacher && course">
           <a class="btn btn-info mr-2 text-xs">
             <v-icon icon="mdi-eye" class="pr-2" />
-            See as student
+            {{ $t('See as student') }}
           </a>
 
           <div class="relative">
@@ -41,7 +41,7 @@
                     class=""
                     v-for="tool in tools.admin"
                 >
-                  <q-item-section> {{ tool.ctool.nameToTranslate }}</q-item-section>
+                  <q-item-section>{{ tool.ctool.nameToTranslate }}</q-item-section>
                 </q-item>
               </q-list>
             </div>
@@ -63,22 +63,21 @@
         </div>
 
         <div class="mt-2 font-bold">
-          You don't have course content
+          {{ $t('You don\'t have course content') }}
         </div>
         <div>
-          Add a course introduction to display to your students.
+          {{ $t('Add a course introduction to display to your students.') }}
         </div>
         <a class="mt-2 btn btn-info">
           <v-icon>mdi-plus</v-icon>
-          Course introduction
+          {{ $t('Course introduction') }}
         </a>
       </div>
     </div>
 
-
     <div v-if="isCurrentTeacher && course" class="flex justify-between border-b-2 border-gray-200">
       <div class="text-h6 font-bold">
-        Tools
+        {{ $t('Tools') }}
       </div>
       <!--      <div>-->
       <!--        <v-icon>-->
@@ -97,6 +96,7 @@
           :tool="tool"
           :go-to-course-tool="goToCourseTool"
           :change-visibility="changeVisibility"
+          :go-to-setting-course-tool="goToSettingCourseTool"
       />
 
       <CourseToolList
@@ -105,6 +105,7 @@
           :tool="tool"
           :go-to-course-tool="goToCourseTool"
           :change-visibility="changeVisibility"
+          :go-to-setting-course-tool="goToSettingCourseTool"
       />
 
       <ShortCutList
@@ -146,6 +147,7 @@ export default {
       dropdownOpen: false,
       goToCourseTool,
       changeVisibility,
+      goToSettingCourseTool,
       goToShortCut
     });
     const route = useRoute()
@@ -159,6 +161,12 @@ export default {
     }).catch(function (error) {
       console.log(error);
     });
+
+    function goToSettingCourseTool(course, tool) {
+      let url = '/course/' + courseId + '/settings/' + tool.tool.name + '?sid=' + sessionId;
+
+      return url;
+    }
 
     function goToCourseTool(course, tool) {
       let url = '/course/' + courseId + '/tool/' + tool.tool.name + '?sid=' + sessionId;

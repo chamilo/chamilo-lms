@@ -201,15 +201,6 @@ class Session implements ResourceWithAccessUrlInterface
     protected ?User $sessionAdmin = null;
 
     /**
-     * @Assert\NotBlank
-     * @Groups({"session:read", "session:write"})
-     *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsAsGeneralCoach")
-     * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
-     */
-    protected User $generalCoach;
-
-    /**
      * @Groups({"session:read", "session:write"})
      * @ORM\Column(name="visibility", type="integer")
      */

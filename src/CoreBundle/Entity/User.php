@@ -397,13 +397,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $portals;
 
     /**
-     * @var Collection<int, Session>|Session[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
-     */
-    protected Collection $sessionsAsGeneralCoach;
-
-    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="creator")
      *
      * @var Collection<int, ResourceNode>|ResourceNode[]
@@ -825,7 +818,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->gradeBookCertificates = new ArrayCollection();
         $this->courseGroupsAsMember = new ArrayCollection();
         $this->courseGroupsAsTutor = new ArrayCollection();
-        $this->sessionsAsGeneralCoach = new ArrayCollection();
         $this->resourceNodes = new ArrayCollection();
         $this->sessionRelCourseRelUsers = new ArrayCollection();
         $this->achievedSkills = new ArrayCollection();
@@ -1690,19 +1682,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->portals = $value;
     }
 
-    public function getSessionsAsGeneralCoach(): Collection
+    public function getSessionsAsGeneralCoach(): array
     {
-        return $this->sessionsAsGeneralCoach;
-    }
-
-    /**
-     * @param Collection<int, Session>|Session[] $value
-     */
-    public function setSessionsAsGeneralCoach(Collection $value): self
-    {
-        $this->sessionsAsGeneralCoach = $value;
-
-        return $this;
+        return $this->getSessions(Session::SESSION_COACH);
     }
 
     public function getCommentedUserSkills(): Collection

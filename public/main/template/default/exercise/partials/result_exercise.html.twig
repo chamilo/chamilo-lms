@@ -27,27 +27,30 @@
                         <div class="group-data">
                             <div class="list-data username">
                                 <span class="item">{{ 'Username'|get_lang }}</span>
-                                <i class="fa fa-fw fa-user" aria-hidden="true"></i> {{ data.username }}
+                                {{ 'account' | mdi_icon }} {{ data.username }}
                             </div>
 
                             {% if data.start_date %}
                                 <div class="list-data start-date">
                                     <span class="item">{{ 'StartDate'|get_lang }}</span>
-                                    <i class="fa fa-fw fa-calendar" aria-hidden="true"></i> {{ data.start_date }}
+                                    {{ 'calendar' | mdi_icon }}
+                                    {{ data.start_date }}
                                 </div>
                             {% endif %}
 
                             {% if data.duration %}
                                 <div class="list-data duration">
                                     <span class="item">{{ 'Duration'|get_lang }}</span>
-                                    <i class="fa fa-fw fa-clock-o" aria-hidden="true"></i> {{ data.duration }}
+                                    {{ 'alarm' | mdi_icon }}
+                                    {{ data.duration }}
                                 </div>
                             {% endif %}
 
                             {% if data.ip %}
                                 <div class="list-data ip">
                                     <span class="item">{{ 'IP'|get_lang }}</span>
-                                    <i class="fa fa-fw fa-laptop" aria-hidden="true"></i> {{ data.ip }}
+                                    {{ 'laptop' | mdi_icon }}
+                                    {{ data.ip }}
                                 </div>
                             {% endif %}
 

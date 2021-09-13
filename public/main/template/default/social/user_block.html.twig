@@ -13,7 +13,7 @@
                                title="{{ "Edit"|get_lang }}"
                                href="{{ url('index') }}main/admin/user_edit.php?user_id={{ user.id }}"
                             >
-                                <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                                {{ 'pencil' | mdi_icon }}
                             </a>
                         </div>
                     {% endif %}

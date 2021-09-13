@@ -844,9 +844,9 @@ function api_utf8_encode($string, $from_encoding = 'UTF-8')
 /**
  * Converts a given string from UTF-8 encoding to a specified encoding.
  *
- * @param string $string      the string being converted
+ * @param string $string     the string being converted
  * @param string $toEncoding (optional)    The encoding that $string is being converted to.
- *                            If it is omitted, the platform character set is assumed.
+ *                           If it is omitted, the platform character set is assumed.
  *
  * @return string Returns the converted string.
  *                This function is aimed at replacing the function utf8_decode() for human-language strings.

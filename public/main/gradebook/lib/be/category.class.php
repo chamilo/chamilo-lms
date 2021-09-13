@@ -2070,7 +2070,7 @@ class Category implements GradebookItem
                     'badge_link' => Display::toolbarButton(
                         get_lang('Export badges'),
                         api_get_path(WEB_CODE_PATH)."gradebook/get_badges.php?user=$user_id",
-                        'external-link'
+                        'open-in-new'
                     ),
                 ];
             }
@@ -2159,7 +2159,7 @@ class Category implements GradebookItem
                 $html['badge_link'] = Display::toolbarButton(
                     get_lang('Export badges'),
                     api_get_path(WEB_CODE_PATH)."gradebook/get_badges.php?user=$user_id",
-                    'external-link'
+                    'open-in-new'
                 );
             }
 
@@ -2409,7 +2409,7 @@ class Category implements GradebookItem
         $downloadLink = Display::toolbarButton(
             get_lang('Download certificate in PDF'),
             $certificate['pdf_url'],
-            'file-pdf-o'
+            'file-pdf-box'
         );
         $viewLink = $certificate['certificate_link'];
 

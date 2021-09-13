@@ -472,7 +472,7 @@ foreach ($posts as $post) {
             $editButton = Display::toolbarButton(
                 get_lang('Edit'),
                 $editUrl,
-                'pencil-alt',
+                'pencil',
                 'default'
             );
         }
@@ -642,7 +642,7 @@ foreach ($posts as $post) {
                         'post' => $post['post_id'],
                         'action' => 'quote',
                     ]),
-                    'quote-left',
+                    'comment-quote',
                     'success',
                     ['id' => "quote-post-{$post['post_id']}"]
                 );

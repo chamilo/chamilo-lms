@@ -222,7 +222,7 @@ switch ($action) {
             // Display form
             $form = new FormValidator('thematic_add', 'POST', 'index.php?action=thematic_add&'.api_get_cidreq());
             if ('thematic_edit' === $action) {
-                $form->addElement('header', '', get_lang('Edit thematic section'));
+                $form->addHeader(get_lang('Edit thematic section'));
             }
 
             $form->addHidden('sec_token', $token);
@@ -524,7 +524,7 @@ switch ($action) {
         $last_done_thematic_advance = null;
         if ($thematicEntity) {
             $thematic_data[$thematicId] = $thematicEntity;
-            $data['total_average_of_advances'] = $thematicManager->get_average_of_advances_by_thematic($thematicId);
+            $data['total_average_of_advances'] = $thematicManager->get_average_of_advances_by_thematic($thematicEntity);
         } else {
             $thematic_data = $thematicManager->getThematicList($course, $session);
             //$max_thematic_item = $thematicManager->get_max_thematic_item($course, $session);

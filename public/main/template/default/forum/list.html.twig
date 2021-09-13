@@ -113,7 +113,7 @@
                                     </h3>
                                     {% if subitem.last_poster_id is not empty %}
                                         <div class="forum-date">
-                                            <i class="fa fa-comments" aria-hidden="true"></i>
+                                            {{ 'comment' | mdi_icon }}
                                             {{ subitem.last_poster_date }}
                                             « {{ subitem.last_post_title }} »
                                             {{ "By"|trans }}

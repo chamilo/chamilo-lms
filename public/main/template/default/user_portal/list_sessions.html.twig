@@ -18,7 +18,7 @@
                 <div class="float-right">
                     <a class="btn btn-outline-secondary btn-sm" title="{{ "Edit"|get_lang }}"
                        href="{{ url('legacy_main', { 'name' : 'session/resume_session.php', 'id_session' : row.id }) }}">
-                        <i class="fas fa-pencil-alt"></i>
+                        {{ 'pencil' | mdi_icon }}
                     </a>
                 </div>
             {% endif %}

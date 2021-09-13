@@ -153,7 +153,7 @@ if ('embeddable' !== $origin) {
             'learnpath_item_id' => $learnpath_item_id,
             'learnpath_item_view_id' => $learnpath_item_view_id,
         ]),
-        'far fa-edit',
+        'pencil',
         'info'
     );
 }

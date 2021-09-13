@@ -22,7 +22,8 @@
             <div class="col-md-2">
                 <div class="state">
                     <div class="stat-text">
-                        <i class="fa fa-clock-o" aria-hidden="true"></i> {{ data.time_spent }}
+                        {{ 'alarm' | mdi_icon }}
+                        {{ data.time_spent }}
                     </div>
                     <div class="stat-heading">
                         {{ 'TimeSpentInTheCourse'|get_lang }}
@@ -64,28 +65,36 @@
                         <span title="{{ 'TotalNumberOfMessages'|get_lang }}">{{ 'TotalNumberOfMessages'|get_lang }}</span>
                     </dt>
                     <dd>
-                        <span class="text-color"><i class="fa fa-comments" aria-hidden="true"></i></span>
+                        <span class="text-color">
+                            {{ 'comment' | mdi_icon }}
+                        </span>
                         <span class="text-color">{{ data.number_message }}</span>
                     </dd>
                     <dt>
                         <span title="{{ 'TotalNumberOfAssignments'|get_lang }}">{{ 'TotalNumberOfAssignments'|get_lang }}</span>
                     </dt>
                     <dd>
-                        <span class="text-color"><i class="fas fa-pencil-alt" aria-hidden="true"></i></span>
+                        <span class="text-color">
+                             {{ 'pencil' | mdi_icon }}
+                        </span>
                         <span class="text-color">{{ data.number_assignments }}</span>
                     </dd>
                     <dt>
                         <span title="{{ 'TotalExercisesAnswered'|get_lang }}">{{ 'TotalExercisesAnswered'|get_lang }}</span>
                     </dt>
                     <dd>
-                        <span class="text-color"><i class="fa fa-file-text" aria-hidden="true"></i></span>
+                        <span class="text-color">
+                            {{ 'file' | mdi_icon }}
+                        </span>
                         <span class="text-color">{{ data.questions_answered }}</span>
                     </dd>
                     <dt>
                         <span title="{{ 'LatestLogin'|get_lang }}">{{ 'LatestLogin'|get_lang }}</span>
                     </dt>
                     <dd>
-                        <span class="text-color"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                        <span class="text-color">
+                            {{ 'alarm' | mdi_icon }}
+                        </span>
                         <span class="text-color">{{ data.last_login }}</span>
                     </dd>
                 </dl>

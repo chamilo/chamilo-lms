@@ -7,12 +7,12 @@
                     <div class="float-right">
                         <div class="btn-group" role="group">
                             <a href="{{ item.edit }}" class="btn btn-light btn-sm">
-                                <i class="fas fa-pencil-alt"></i>
+                                {{ 'pencil' | mdi_icon }}
                             </a>
                             <a
                                 title="{{ 'Confirm if you want to delete'|trans }}" href="{{ item.delete }}"
                                 class="btn btn-light btn-sm delete-swal">
-                                <i class="far fa-trash-alt"></i>
+                                {{ 'delete' | mdi_icon }}
                             </a>
                         </div>
                     </div>

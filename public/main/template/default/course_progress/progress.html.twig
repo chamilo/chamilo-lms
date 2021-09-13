@@ -88,7 +88,7 @@
                                             <a title="{{ 'Edit thematic section' | trans }}"
                                                href="index.php?{{ course_url_params }}&origin=thematic_details&action=thematic_plan_list&thematic_id={{ item.iid }}&width=700&height=500"
                                                class="btn btn-outline-secondary btn-sm">
-                                                <i class="fas fa-pencil-alt"></i>
+                                                {{ 'pencil' | mdi_icon }}
                                             </a>
                                         </div>
                                     {% endif %}
@@ -112,7 +112,7 @@
                                         <a title="{{ 'New thematic advance' | trans }}"
                                            href="index.php?{{ course_url_params }}&action=thematic_advance_add&thematic_id={{ item.iid }}"
                                            class="btn btn-outline-secondary btn-sm">
-                                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                            {{ 'plus-circle' | mdi_icon }}
                                         </a>
                                     </div>
                                 {% endif %}
@@ -134,13 +134,13 @@
                                                                 <a class="btn btn-default btn-sm"
                                                                    href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
                                                                    title="{{ 'Edit' |trans }}">
-                                                                    <i class="fa fa-pen" aria-hidden="true"></i>
+                                                                    {{ 'pencil' | mdi_icon }}
                                                                 </a>
                                                                 <a class="btn btn-default btn-sm"
                                                                    onclick="javascript:if(!confirm('{{ 'Are you sure to delete' | trans }}')) return false;"
                                                                    href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
                                                                    title="{{ 'Delete' |trans }}">
-                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                    {{ 'delete' | mdi_icon }}
                                                                 </a>
                                                             </div>
                                                         </div>

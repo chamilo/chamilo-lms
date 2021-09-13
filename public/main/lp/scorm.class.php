@@ -473,7 +473,7 @@ class scorm extends learnpath
         $lpToCheck = null,
         $allowHtaccess = false
     ) {
-        $this->debug= 100;
+        $this->debug = 100;
         if ($this->debug) {
             error_log(
                 'In scorm::import_package('.print_r($zipFileInfo, true).',"'.$currentDir.'") method'

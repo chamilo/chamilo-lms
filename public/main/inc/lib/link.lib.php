@@ -994,7 +994,7 @@ class Link extends Model
                         $toolbar .= Display::toolbarButton(
                             '',
                             $url,
-                            'pencil-alt',
+                            'pencil',
                             'secondary btn-sm',
                             [
                                 'title' => $title,
@@ -1027,7 +1027,7 @@ class Link extends Model
                             $toolbar .= Display::toolbarButton(
                                 '',
                                 $urlVisibility,
-                                'eye-slash',
+                                'eye-off',
                                 'secondary btn-sm',
                                 [
                                     'title' => $title,
@@ -1070,7 +1070,7 @@ class Link extends Model
                         $toolbar .= Display::toolbarButton(
                             '',
                             $url,
-                            'trash',
+                            'delete',
                             'secondary btn-sm',
                             [
                                 'onclick' => $event,

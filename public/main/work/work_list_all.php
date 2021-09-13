@@ -231,7 +231,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     */
     $url = api_get_path(WEB_CODE_PATH).
         'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
-    $actionsLeft .= Display::toolbarButton(get_lang('Delete all corrections'), $url, 'trash', 'danger');
+    $actionsLeft .= Display::toolbarButton(get_lang('Delete all corrections'), $url, 'delete', 'danger');
 }
 
 echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);

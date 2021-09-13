@@ -2377,9 +2377,10 @@ class Display
         if (!empty($type)) {
             $buttonClass = "btn btn-$type";
         }
-        $icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
+        //$icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
+        $icon = self::getMdiIcon($icon);
         $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
-        $attributes['title'] = isset($attributes['title']) ? $attributes['title'] : $text;
+        $attributes['title'] = $attributes['title'] ?? $text;
 
         if (!$includeText) {
             $text = '<span class="sr-only">'.$text.'</span>';

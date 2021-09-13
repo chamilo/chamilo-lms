@@ -7,7 +7,9 @@
                 <figcaption class="caption">
                     <p class="name-badge text-center">{{ skill_info.name }}</p>
                     {% if skill_info.short_code %}
-                        <p class="code-badge text-center"><i class="fa fa-shield"></i> {{ skill_info.short_code }}</p>
+                        <p class="code-badge text-center">
+                            {{ 'shield' | mdi_icon }}
+                            {{ skill_info.short_code }}</p>
                     {% endif %}
                 </figcaption>
             </figure>

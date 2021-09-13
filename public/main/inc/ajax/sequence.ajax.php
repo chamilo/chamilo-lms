@@ -101,7 +101,7 @@ switch ($action) {
             $linkDelete = Display::toolbarButton(
                 get_lang('Delete'),
                 '#',
-                'trash',
+                'delete',
                 'default',
                 [
                     'class' => 'delete_vertex btn btn-block btn-xs',

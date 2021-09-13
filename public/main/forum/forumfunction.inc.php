@@ -6139,7 +6139,7 @@ function getPostStatus(CForum $forum, array $row, bool $addWrapper = true): stri
                 break;
             case CForumPost::STATUS_WAITING_MODERATION:
                 $label = get_lang('Waiting for moderation');
-                $icon = 'warning';
+                $icon = 'alert';
                 $buttonType = 'warning';
 
                 break;

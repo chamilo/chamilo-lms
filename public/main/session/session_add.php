@@ -367,7 +367,7 @@ if ($form->validate()) {
         $coachStartDate = $displayStartDate;
     }
     $coachEndDate = $params['coach_access_end_date'];
-    $coach_username = $params['coach_username'];
+    $coachUsername = $params['coach_username'];
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
@@ -420,7 +420,7 @@ if ($form->validate()) {
         $displayEndDate,
         $coachStartDate,
         $coachEndDate,
-        $coach_username,
+        $coachUsername,
         $id_session_category,
         $id_visibility,
         false,

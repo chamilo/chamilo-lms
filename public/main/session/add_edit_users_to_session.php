@@ -344,7 +344,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 }
 
-$session_info = SessionManager::fetch($sessionId);
+$sessionInfo = SessionManager::fetch($sessionId);
 Display::display_header($tool_name);
 
 $nosessionUsersList = $sessionUsersList = [];
@@ -629,7 +629,7 @@ $newLinks .= Display::url(
         } ?>" <?php if ($ajax_search) {
             echo ' onsubmit="valide();"';
         } ?>>
-        <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
+        <?php echo '<legend>'.$tool_name.' ('.$sessionInfo['name'].') </legend>'; ?>
         <?php
         if ('multiple' == $add_type) {
             if (is_array($extra_field_list)) {

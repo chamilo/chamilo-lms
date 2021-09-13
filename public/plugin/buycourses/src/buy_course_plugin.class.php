@@ -610,7 +610,7 @@ class BuyCoursesPlugin extends Plugin
             }
 
             $sessionData = $this->getSessionInfo($session->getId());
-            $sessionData['coaches'] = $session->getGeneralCoaches()->map(fn (User $coach) => $coach->getFullname());
+            $sessionData['coaches'] = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getFullname());
             $sessionData['enrolled'] = $this->getUserStatusForSession(
                 api_get_user_id(),
                 $session

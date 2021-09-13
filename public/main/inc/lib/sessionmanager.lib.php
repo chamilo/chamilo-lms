@@ -1985,8 +1985,8 @@ class SessionManager
                 $tplContent->assign('complete_name', stripslashes($user_info['complete_name']));
                 $tplContent->assign('session_name', $session->getName());
                 $tplContent->assign(
-                    'session_coach',
-                    UserManager::formatUserFullName($session->getGeneralCoach())
+                    'session_coaches',
+                    $session->getGeneralCoaches()->map(fn(User $coach) => UserManager::formatUserFullName($coach))
                 );
                 $layoutContent = $tplContent->get_template(
                     'mail/content_subscription_to_session_confirmation.tpl'
@@ -9708,13 +9708,13 @@ class SessionManager
             return false;
         }
 
-        $userId = api_get_user_id();
+        $user = api_get_user_entity();
 
         if (api_is_session_admin() &&
             'true' !== api_get_setting('allow_session_admins_to_manage_all_sessions')
         ) {
 
-            if ($userId === $session->getSessionAdmin()->getId()) {
+            if ($user->getId() === $session->getSessionAdmin()->getId()) {
                 return true;
             }
         }
@@ -9722,7 +9722,7 @@ class SessionManager
         if (api_is_teacher() &&
             'true' === api_get_setting('allow_teachers_to_create_sessions')
         ) {
-            if ($userId === $session->getGeneralCoach()->getId())  {
+            if ($session->hasUserAsGeneralCoach($user))  {
                 return true;
             }
         }

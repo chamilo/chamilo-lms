@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -1632,10 +1633,6 @@ class CoursesAndSessionsCatalog
                 $catName = $cat->getName();
             }
 
-            $generalCoach = $session->getGeneralCoach();
-            $coachId = $generalCoach ? $generalCoach->getId() : 0;
-            $coachName = $generalCoach ? UserManager::formatUserFullName($session->getGeneralCoach()) : '';
-
             $actions = null;
             if (api_is_platform_admin()) {
                 $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session->getId();
@@ -1650,15 +1647,16 @@ class CoursesAndSessionsCatalog
                 'image' => isset($imageField['value']) ? $imageField['value'] : null,
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
-                'coach_id' => $coachId,
-                'coach_url' => $generalCoach
-                    ? api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId
-                    : '',
-                'coach_name' => $coachName,
-                'coach_avatar' => UserManager::getUserPicture(
-                    $coachId,
-                    USER_IMAGE_SIZE_SMALL
-                ),
+                'coaches' => $session->getGeneralCoaches()
+                    ->map(
+                        fn(User $coach) => [
+                            'id' => $coach->getId(),
+                            'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'
+                                .http_build_query(['a' => 'get_user_popup', 'user_id' => $coach->getId()]),
+                            'name' => $coach->getFullname(),
+                            'avatar' => UserManager::getUserPicture($coach->getId(), USER_IMAGE_SIZE_SMALL),
+                        ]
+                    ),
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent(
                     $session->getId(),
                     $userId

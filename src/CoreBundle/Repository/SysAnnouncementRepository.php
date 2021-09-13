@@ -107,7 +107,7 @@ class SysAnnouncementRepository extends ServiceEntityRepository
                             }
 
                             if ($this->security->isGranted('ROLE_TEACHER') &&
-                                $session->isUserGeneralCoach($user)
+                                $session->hasUserAsGeneralCoach($user)
                                 //SessionManager::user_is_general_coach($userId, $sessionId)
                             ) {
                                 $show = true;

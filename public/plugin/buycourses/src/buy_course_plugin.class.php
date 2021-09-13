@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -591,7 +592,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $sessionCatalog = [];
-        // loop through all sessions
+        /** @var Session $session */
         foreach ($sessions as $session) {
             $sessionCourses = $session->getCourses();
 
@@ -609,7 +610,7 @@ class BuyCoursesPlugin extends Plugin
             }
 
             $sessionData = $this->getSessionInfo($session->getId());
-            $sessionData['coach'] = $session->getGeneralCoach()->getCompleteName();
+            $sessionData['coaches'] = $session->getGeneralCoaches()->map(fn (User $coach) => $coach->getFullname());
             $sessionData['enrolled'] = $this->getUserStatusForSession(
                 api_get_user_id(),
                 $session

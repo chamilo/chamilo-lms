@@ -737,11 +737,6 @@ class Session implements ResourceWithAccessUrlInterface
         return $this->coachAccessEndDate;
     }
 
-    public function getGeneralCoach(): User
-    {
-        return $this->generalCoach;
-    }
-
     public function getGeneralCoaches(): Collection
     {
         return $this
@@ -1129,13 +1124,6 @@ class Session implements ResourceWithAccessUrlInterface
     public function getResourceLinks()
     {
         return $this->resourceLinks;
-    }
-
-    public function isUserGeneralCoach(User $user): bool
-    {
-        $generalCoach = $this->getGeneralCoach();
-
-        return $generalCoach instanceof User && $user->getId() === $generalCoach->getId();
     }
 
     /**

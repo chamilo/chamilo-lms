@@ -430,11 +430,8 @@ class CourseChatUtils
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $date_now = date('Y-m-d');
         $isMaster = (bool) api_is_course_admin();
-        //$basepath_chat = '/chat_files';
-        //$document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         if ($this->groupId) {
             $group_info = GroupManager:: get_group_properties($this->groupId);
-            //$basepath_chat = $group_info['directory'].'/chat_files';
         }
 
         //$chat_path = $document_path.$basepath_chat.'/';

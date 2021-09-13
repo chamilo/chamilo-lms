@@ -49,7 +49,7 @@ if (!$isBoss &&
 
 if ('user_course' === $origin) {
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
+        'url' => api_get_course_url($courseInfo['real_id']),
         'name' => $courseInfo['name'],
     ];
     $interbreadcrumb[] = [

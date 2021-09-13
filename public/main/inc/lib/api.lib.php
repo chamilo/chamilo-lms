@@ -2164,7 +2164,6 @@ function api_format_course_array(Course $course = null)
     $courseData['code'] = $courseData['sysCode'] = $course->getCode();
     $courseData['name'] = $courseData['title'] = $course->getTitle();
     $courseData['official_code'] = $courseData['visual_code'] = $course->getVisualCode();
-    //$courseData['path'] = $courseData['directory'] = $course->getDirectory(); // Use as key in path.
     $courseData['creation_date'] = $course->getCreationDate()->format('Y-m-d H:i:s');
     $courseData['titular'] = $course->getTutorName();
     $courseData['language'] = $courseData['course_language'] = $course->getCourseLanguage();

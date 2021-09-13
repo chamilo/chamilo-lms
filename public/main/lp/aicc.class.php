@@ -606,8 +606,6 @@ class aicc extends learnpath
         $LPname = $row['path'];
         $list = explode('/', $LPname);
         $LPnamesafe = $list[0];
-        //$zipfoldername = '/tmp';
-        //$zipfoldername = '../../courses/'.$_course['directory'].'/temp/'.$LPnamesafe;
         $zipfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/temp/'.$LPnamesafe;
         $scormfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/'.$LPnamesafe;
         $zipfilename = $zipfoldername.'/'.$LPnamesafe.'.zip';

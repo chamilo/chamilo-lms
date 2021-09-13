@@ -2823,12 +2823,6 @@ class DocumentManager
         $comment = null;
         $title = get_lang('Default certificate');
         $fileName = api_replace_dangerous_char($title);
-        //$filePath = api_get_path(SYS_COURSE_PATH)."{$courseData['directory']}/document$dir";
-        /*if (!is_dir($filePath)) {
-            mkdir($filePath, api_get_permissions_for_new_directories());
-        }*/
-
-        //$fileFullPath = "$filePath/$fileName.html";
         $fileType = 'file';
         $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
 

@@ -40,10 +40,6 @@ if (null === $document) {
 }
 
 $documentText = $documentRepo->getResourceFileContent($document);
-/*$documentPathInfo = pathinfo($document->getPath());
-$coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'];
-$documentPath = '/document'.$document->getPath();
-$documentText = file_get_contents($coursePath.$documentPath);*/
 $documentText = api_remove_tags_with_space($documentText);
 
 $wordsInfo = preg_split('/ |\n/', $documentText, -1, PREG_SPLIT_OFFSET_CAPTURE);

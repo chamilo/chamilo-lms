@@ -4100,12 +4100,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alpinejs@npm:^3.3.2":
-  version: 3.3.2
-  resolution: "alpinejs@npm:3.3.2"
+"alpinejs@npm:^3.3.3":
+  version: 3.3.3
+  resolution: "alpinejs@npm:3.3.3"
   dependencies:
     "@vue/reactivity": ^3.0.2
-  checksum: c3e56dd542d9c0f2d36d3f99b98b0570ba56bbd2268cfc0e647ea602108b120d8aa98c0f5f6969906ee117f2717c4755a056a89cdd778d9d4a50d9cacc20d0df
+  checksum: c80212eaba2cc100be12d394b561dd8f1a004a40b1ebf14ab61e08b86626cb1ba9b19a6f0d140e22d529ee3bb75df7974f6f1dd41f2f5ba5de0155e19bb4338f
   languageName: node
   linkType: hard
 
@@ -6512,7 +6512,7 @@ __metadata:
     "@vue/compiler-sfc": 3.2.11
     "@vuelidate/core": ^2.0.0-alpha.23
     "@vuelidate/validators": ^2.0.0-alpha.20
-    alpinejs: ^3.3.2
+    alpinejs: ^3.3.3
     autoprefixer: ^10.3.4
     axios: ^0.21.4
     babel-cli: 6.26.0
@@ -6586,7 +6586,7 @@ __metadata:
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
     sweetalert2: ^11.1.5
-    tailwindcss: ^2.2.14
+    tailwindcss: ^2.2.15
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
     textcomplete: ^0.18.2
@@ -18969,9 +18969,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^2.2.14":
-  version: 2.2.14
-  resolution: "tailwindcss@npm:2.2.14"
+"tailwindcss@npm:^2.2.15":
+  version: 2.2.15
+  resolution: "tailwindcss@npm:2.2.15"
   dependencies:
     arg: ^5.0.1
     bytes: ^3.0.0
@@ -19011,7 +19011,7 @@ fsevents@~2.3.2:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: 4f176fadda359ec698dfb0c7fbbeb883c18004cb0c3d51aefa49c75f9d38e31df1603030941a3caa7afefcc2319c01de187c47c0b8879d3f2d26e9a0aed5a7c2
+  checksum: 471dc81b678cc9b887890e062d6a1fe43436703d6837fb7a8ba6b870c694d4ea16ac26f6409cb8c4429fd6ddec3d1fc0f2af5b3fdd0f1f916be4e704d4875ff8
   languageName: node
   linkType: hard
 

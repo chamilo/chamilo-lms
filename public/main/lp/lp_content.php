@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
 /**
@@ -52,7 +53,7 @@ if ($dir) {
     $src = 'blank.php';
 } else {
     switch ($lpType) {
-        case 1:
+        case CLp::LP_TYPE:
             $learnPath->stop_previous_item();
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
             if (true === $prerequisiteCheck) {
@@ -76,7 +77,7 @@ if ($dir) {
             }
             $src = 'blank.php?'.api_get_cidreq().'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             break;
-        case 2:
+        case CLp::SCORM_TYPE:
             $learnPath->stop_previous_item();
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
 
@@ -87,7 +88,7 @@ if ($dir) {
                 $src = 'blank.php?'.api_get_cidreq().'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             }
             break;
-        case 3:
+        case CLp::AICC_TYPE:
             // save old if asset
             $learnPath->stop_previous_item(); // save status manually if asset
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
@@ -97,8 +98,6 @@ if ($dir) {
             } else {
                 $src = 'blank.php';
             }
-            break;
-        case 4:
             break;
     }
 }

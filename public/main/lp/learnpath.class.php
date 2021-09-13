@@ -121,7 +121,7 @@ class learnpath
         $this->encoding = api_get_system_encoding();
         $lp_id = 0;
         if (null !== $entity) {
-            $lp_id = (int) $entity->getIid();
+            $lp_id = $entity->getIid();
         }
         $course_info = empty($course_info) ? api_get_course_info() : $course_info;
         $course_id = (int) $course_info['real_id'];
@@ -130,7 +130,7 @@ class learnpath
         if (empty($lp_id) || empty($course_id)) {
             $this->error = "Parameter is empty: LpId:'$lp_id', courseId: '$lp_id'";
         } else {
-            $this->entity = $entity;
+            //$this->entity = $entity;
             $this->lp_id = $lp_id;
             $this->type = $entity->getLpType();
             $this->name = stripslashes($entity->getName());
@@ -158,7 +158,7 @@ class learnpath
 
             if ($entity->hasAsset()) {
                 $asset = $entity->getAsset();
-                $this->scormUrl = Container::getAssetRepository()->getAssetUrl($asset).'/';
+                $this->scormUrl = Container::getAssetRepository()->getAssetUrl($asset).'/'.$entity->getPath().'/';
             }
 
             $this->accumulateScormTime = $entity->getAccumulateWorkTime();
@@ -235,7 +235,7 @@ class learnpath
                         'displayOrder' => Criteria::ASC,
                     ]
                 );
-            $items = $this->entity->getItems()->matching($criteria);
+            $items = $entity->getItems()->matching($criteria);
             $lp_item_id_list = [];
             foreach ($items as $item) {
                 $itemId = $item->getIid();
@@ -309,7 +309,6 @@ class learnpath
                     while ($row = Database:: fetch_array($res)) {
                         $status_list[$row['lp_item_id']] = $row['status'];
                     }
-                    //echo '<pre>';                    var_dump($this->items);                    echo '</pre>';
                     foreach ($lp_item_id_list as $item_id) {
                         if (isset($status_list[$item_id])) {
                             $status = $status_list[$item_id];
@@ -354,7 +353,7 @@ class learnpath
                 }
             }
 
-            $this->ordered_items = self::get_flat_ordered_items_list($this->entity, null);
+            $this->ordered_items = self::get_flat_ordered_items_list($entity, null);
             $this->max_ordered_items = 0;
             foreach ($this->ordered_items as $index => $dummy) {
                 if ($index > $this->max_ordered_items && !empty($dummy)) {
@@ -453,7 +452,7 @@ class learnpath
             ->setTitle($title)
             ->setDescription($description)
             ->setPath($id)
-            ->setLp($this->entity)
+            ->setLp(api_get_lp_entity($this->get_id()))
             ->setItemType($type)
             ->setMaxScore($max_score)
             ->setMaxTimeAllowed($max_time_allowed)
@@ -4671,7 +4670,7 @@ class learnpath
         return $return;
     }
 
-    public function getBuildTree($noWrapper = false, $dropElement = false)
+    public function getBuildTree($noWrapper = false, $dropElement = false): string
     {
         $mainUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
 
@@ -4778,7 +4777,7 @@ class learnpath
                 );
                 $url = $mainUrl.'&view=build&id='.$itemId.'&lp_id='.$lpId;
 
-                $preRequisitiesIcon = Display::url(
+                $preRequisitesIcon = Display::url(
                     Display::return_icon(
                         'accept.png',
                         get_lang('Prerequisites'),
@@ -4841,7 +4840,7 @@ class learnpath
                     'div',
                     "<div class=\"btn-group btn-group-sm\">
                                 $editIcon
-                                $preRequisitiesIcon
+                                $preRequisitesIcon
                                 $orderIcons
                                 $deleteIcon
                                </div>",
@@ -4859,6 +4858,7 @@ class learnpath
                     ;
             },
         ];
+
         $tree = $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
 
         if (empty($tree) && $dropElement) {
@@ -6439,7 +6439,8 @@ class learnpath
     public function display_lp_prerequisites_list(FormValidator $form)
     {
         $lp_id = $this->lp_id;
-        $prerequisiteId = $this->entity->getPrerequisite();
+        $lp = api_get_lp_entity($lp_id);
+        $prerequisiteId = $lp->getPrerequisite();
 
         $repo = Container::getLpRepository();
         $qb = $repo->findAllByCourse(api_get_course_entity(), api_get_session_entity());

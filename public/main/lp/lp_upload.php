@@ -90,7 +90,7 @@ if (isset($_POST) && $is_error) {
             );
             if (!empty($scorm->manifestToString)) {
                 $scorm->parse_manifest();
-                $lp = $scorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
+                $lp = $scorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score']);
                 if ($lp) {
                     $lp
                         ->setContentLocal($proximity)
@@ -172,8 +172,8 @@ if (isset($_POST) && $is_error) {
             $entity = $oScorm->getEntity();
             $manifest = $oScorm->import_local_package($s, $current_dir);
             if (!empty($manifest)) {
-                $oScorm->parse_manifest($manifest);
-                $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
+                $oScorm->parse_manifest();
+                $oScorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score']);
                 Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
 

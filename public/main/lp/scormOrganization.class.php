@@ -1,13 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Container for the scormOrganization class.
  *
  * @author    Yannick Warnier <ywarnier@beeznest.org>
- */
 
-/**
  * Class defining the <organization> tag in an imsmanifest.xml file.
  */
 class scormOrganization
@@ -15,6 +14,7 @@ class scormOrganization
     public $identifier = '';
     public $structure = '';
     public $title = '';
+    /** @var array|scormItem[] */
     public $items = [];
     public $metadata;
 
@@ -26,7 +26,7 @@ class scormOrganization
      * @param    string    Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param    mixed    Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
-    public function __construct($type = 'manifest', &$element, $scorm_charset = 'UTF-8')
+    public function __construct($type = 'manifest', &$element = null)
     {
         if (isset($element)) {
             // Parsing using PHP5 DOMXML methods.
@@ -91,7 +91,6 @@ class scormOrganization
                         }
                     }
             }
-            // End parsing using PHP5 DOMXML methods.
         }
     }
 

@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\Asset;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use League\Flysystem\FilesystemOperator;
 use PhpZip\ZipFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -44,29 +45,41 @@ class AssetRepository extends ServiceEntityRepository
         return $this->filesystem;
     }
 
-    public function unZipFile(Asset $asset, ZipFile $zipFile): void
+    public function unZipFile(Asset $asset, string $addFolder = ''): void
     {
         $folder = '/'.$asset->getCategory().'/'.$asset->getTitle();
 
+        if (!empty($addFolder)) {
+            $folder .= '/'.$addFolder;
+        }
+
         $fs = $this->getFileSystem();
+        $file = $this->getStorage()->resolveUri($asset);
 
-        if ($fs->fileExists($folder)) {
-            $list = $zipFile->getEntries();
-            foreach ($list as $item) {
-                $name = $item->getName();
-                if ($fs->fileExists($folder.'/'.$name)) {
-                    continue;
-                }
+        if (!$fs->fileExists($file)) {
+            throw new Exception('file not found');
+        }
 
-                if ($item->isDirectory()) {
-                    $fs->createDirectory($folder.'/'.$name);
+        $stream = $fs->readStream($file);
+        $zipFile = new ZipFile();
+        $zipFile->openFromStream($stream);
 
-                    continue;
-                }
-
-                $content = $zipFile->getEntryContents($name);
-                $fs->write($folder.'/'.$name, $content);
+        $list = $zipFile->getEntries();
+        foreach ($list as $item) {
+            $name = $item->getName();
+            error_log('final: '.$folder.'/'.$name);
+            if ($fs->fileExists($folder.'/'.$name)) {
+                continue;
             }
+
+            if ($item->isDirectory()) {
+                $fs->createDirectory($folder.'/'.$name);
+
+                continue;
+            }
+
+            $content = $zipFile->getEntryContents($name);
+            $fs->write($folder.'/'.$name, $content);
         }
     }
 
@@ -79,11 +92,11 @@ class AssetRepository extends ServiceEntityRepository
         $fs = $this->getFileSystem();
         $file = $this->getStorage()->resolveUri($asset);
 
-        if ($fs->fileExists($file)) {
-            return $this->getFileSystem()->read($file);
+        if (!$fs->fileExists($file)) {
+            return '';
         }
 
-        return '';
+        return $this->getFileSystem()->read($file);
     }
 
     public function getFolder(Asset $asset): ?string

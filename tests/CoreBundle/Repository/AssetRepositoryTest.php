@@ -111,6 +111,31 @@ class AssetRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
     }
 
+    public function testUnZipFileSubFolder(): void
+    {
+        $client = static::createClient();
+        $assetRepo = self::getContainer()->get(AssetRepository::class);
+        $this->assertSame(0, $assetRepo->count([]));
+        $file = $this->getUploadedZipFile();
+
+        $asset = (new Asset())
+            ->setTitle('my file')
+            ->setCategory(Asset::SCORM)
+            ->setFile($file)
+            ->setCompressed(true)
+        ;
+        $assetRepo->update($asset);
+
+        $this->assertHasNoEntityViolations($asset);
+        $subDir = 'test/test';
+
+        $assetRepo->unZipFile($asset, $subDir);
+        $url = $assetRepo->getAssetUrl($asset);
+
+        $client->request('GET', $url.'/'.$subDir.'/logo.png');
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testDelete(): void
     {
         self::bootKernel();

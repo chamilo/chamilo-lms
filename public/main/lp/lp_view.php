@@ -244,6 +244,7 @@ if (!isset($src)) {
             $oLP->stop_previous_item(); // save status manually if asset
             $htmlHeadXtra[] = '<script src="scorm_api.php"></script>';
             $preReqCheck = $oLP->prerequisites_match($lp_item_id);
+
             if (true === $preReqCheck) {
                 $src = $oLP->get_link('http', $lp_item_id, $get_toc_list);
                 $oLP->start_current_item(); // starts time counter manually if asset

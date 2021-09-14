@@ -77,6 +77,7 @@ switch ($action) {
     case 'delete':
         // Delete course from session.
         $idChecked = isset($_GET['idChecked']) ? $_GET['idChecked'] : null;
+        $message = get_lang('TokenExpiredActionAlreadyRealized');
         if (is_array($idChecked)) {
             $usersToDelete = [];
             $check = Security::check_token('get');
@@ -89,6 +90,7 @@ switch ($action) {
                         $courseInfo['real_id']
                     );
                 }
+                $message = get_lang('Updated');
             }
         }
 
@@ -104,6 +106,7 @@ switch ($action) {
                 "UPDATE $tbl_session
                 SET nbr_classes = nbr_classes - $nbr_affected_rows
                 WHERE id = $sessionId");
+            $message = get_lang('Updated');
         }
 
         if (!empty($_GET['user'])) {
@@ -113,11 +116,12 @@ switch ($action) {
                     $sessionId,
                     $_GET['user']
                 );
+                $message = get_lang('Updated');
             }
             Security::clear_token();
         }
 
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message($message));
         break;
 }
 

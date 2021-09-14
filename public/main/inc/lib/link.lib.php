@@ -313,8 +313,7 @@ class Link extends Model
         $courseEntity = api_get_course_entity($course_id);
         $sessionEntity = api_get_session_entity($session_id);
 
-        $category = new CLinkCategory();
-        $category
+        $category = (new CLinkCategory())
             ->setCategoryTitle($category_title)
             ->setDescription($description)
          //   ->setDisplayOrder($order)
@@ -939,10 +938,14 @@ class Link extends Model
             $courseEntity = api_get_course_entity($courseId);
             $sessionEntity = api_get_session_entity($sessionId);
             $user = api_get_user_entity();
-
-            $content .= '<div class="link list-group">';
             $i = 1;
             $linksAdded = [];
+            $iconLink = Display::return_icon(
+                'url.png',
+                get_lang('Link'),
+                null,
+                ICON_SIZE_SMALL
+            );
             foreach ($links as $link) {
                 $linkId = $link->getIid();
                 $resourceLink = $link->getFirstResourceLink();
@@ -1092,20 +1095,14 @@ class Link extends Model
                 }
 
                 if ($showLink) {
-                    $iconLink = Display::return_icon(
-                        'url.png',
-                        get_lang('Link'),
-                        null,
-                        ICON_SIZE_SMALL
-                    );
                     $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$linkId.'&link_url='.urlencode($link->getUrl());
-                    $content .= '<div class="list-group-item">';
+                    $actions = '';
                     if ($showActionLinks) {
-                        $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
+                        $actions .= $toolbar;
                     }
-                    $content .= '<h4 class="list-group-item-heading">';
-                    $content .= $iconLink;
-                    $content .= Display::tag(
+
+                    $title = $iconLink;
+                    $title .= Display::tag(
                         'a',
                         Security::remove_XSS($link->getTitle()),
                         [
@@ -1114,15 +1111,12 @@ class Link extends Model
                             'class' => $titleClass,
                         ]
                     );
-                    $content .= $link_validator;
-                    $content .= $session_img;
-                    $content .= '</h4>';
-                    $content .= '<p class="list-group-item-text">'.$link->getDescription().'</p>';
-                    $content .= '</div>';
+                    $title .= $link_validator;
+                    $title .= $session_img;
+                    $content .= Display::panel(null, $title, null, null, null, null, null, $actions);
                 }
                 $i++;
             }
-            $content .= '</div>';
         }
 
         return $content;

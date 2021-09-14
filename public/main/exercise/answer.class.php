@@ -642,14 +642,15 @@ class Answer
         $quizAnswer = $em->find(CQuizAnswer::class, $iid);
         if ($quizAnswer) {
             $quizAnswer
-                ->setAnswer($answer)
-                ->setComment($comment)
+                ->setAnswer((string) $answer)
+                ->setComment((string) $comment)
                 ->setCorrect((int) $correct)
                 ->setPonderation($weighting)
                 ->setPosition($position)
                 ->setDestination($destination)
                 ->setHotspotCoordinates($hotSpotCoordinates)
-                ->setHotspotType($hotSpotType);
+                ->setHotspotType($hotSpotType)
+            ;
 
             $em->persist($quizAnswer);
             $em->flush();

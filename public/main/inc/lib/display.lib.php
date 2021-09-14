@@ -79,14 +79,6 @@ class Display
         self::$legacyTemplate = '@ChamiloCore/Layout/no_layout.html.twig';
 
         return true;
-
-        global $show_learnpath, $tool_name;
-        self::$global_template = new Template(
-            $tool_name,
-            false,
-            false,
-            $show_learnpath
-        );
     }
 
     /**
@@ -156,25 +148,6 @@ class Display
     public static function display_reduced_footer()
     {
         return self::display_footer();
-
-        $contents = ob_get_contents();
-        if (ob_get_length()) {
-            ob_end_clean();
-        }
-        $tpl = '@ChamiloCore/Layout/no_layout.html.twig';
-        if (!empty(self::$legacyTemplate)) {
-            $tpl = self::$legacyTemplate;
-        }
-        $response = new Response();
-        $params['content'] = $contents;
-        global $interbreadcrumb, $htmlHeadXtra;
-        $params['legacy_javascript'] = $htmlHeadXtra;
-        $params['legacy_breadcrumb'] = $interbreadcrumb;
-
-        $content = Container::getTwig()->render($tpl, $params);
-        $response->setContent($content);
-        $response->send();
-        exit;
     }
 
     /**
@@ -602,48 +575,6 @@ class Display
     }
 
     /**
-     * Returns an mailto icon hyperlink.
-     *
-     * @param string  e-mail
-     * @param string  icon source file from the icon lib
-     * @param int  icon size from icon lib
-     * @param string  optional, class from stylesheet
-     *
-     * @return string encrypted mailto hyperlink
-     */
-    public static function icon_mailto_link(
-        $email,
-        $icon_file = "mail.png",
-        $icon_size = 22,
-        $style_class = ''
-    ) {
-        // "mailto:" already present?
-        if ('mailto:' != substr($email, 0, 7)) {
-            $email = 'mailto:'.$email;
-        }
-        // Class (stylesheet) defined?
-        if ('' != $style_class) {
-            $style_class = ' class="'.$style_class.'"';
-        }
-        // Encrypt email
-        $hmail = '';
-        for ($i = 0; $i < strlen($email); $i++) {
-            $hmail .= '&#'.ord($email[
-            $i]).';';
-        }
-        // icon html code
-        $icon_html_source = self::return_icon(
-            $icon_file,
-            $hmail,
-            '',
-            $icon_size
-        );
-        // Return encrypted mailto hyperlink
-
-        return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link">'.$icon_html_source.'</a>';
-    }
-
-    /**
      * Prints an <option>-list with all letters (A-Z).
      *
      * @todo This is English language specific implementation.
@@ -689,23 +620,6 @@ class Display
         }
 
         return $result;
-    }
-
-    /**
-     * This public function displays an icon.
-     *
-     * @param string   The filename of the file (in the main/img/ folder
-     * @param string   The alt text (probably a language variable)
-     * @param array    additional attributes (for instance height, width, onclick, ...)
-     * @param int  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
-     */
-    public static function display_icon(
-        $image,
-        $alt_text = '',
-        $additional_attributes = [],
-        $size = null
-    ) {
-        echo self::return_icon($image, $alt_text, $additional_attributes, $size);
     }
 
     /**
@@ -1488,27 +1402,6 @@ class Display
     }
 
     /**
-     * Returns the "what's new" icon notifications.
-     *
-     * The general logic of this function is to track the last time the user
-     * entered the course and compare to what has changed inside this course
-     * since then, based on the item_property table inside this course. Note that,
-     * if the user never entered the course before, he will not see notification
-     * icons. This function takes session ID into account (if any) and only shows
-     * the corresponding notifications.
-     *
-     * @param array $courseInfo Course information array, containing at least elements 'db' and 'k'
-     * @param bool  $loadAjax
-     *
-     * @return string The HTML link to be shown next to the course
-     */
-    public static function show_notification($courseInfo, $loadAjax = true)
-    {
-        // @todo
-        return '';
-    }
-
-    /**
      * Get the session box details as an array.
      *
      * @todo check session visibility.
@@ -1676,13 +1569,6 @@ class Display
         return self::page_header($title, $second_title);
     }
 
-    public static function page_subheader_and_translate($title, $second_title = null)
-    {
-        $title = get_lang($title);
-
-        return self::page_subheader($title, $second_title);
-    }
-
     public static function page_subheader($title, $second_title = null, $size = 'h3', $attributes = [])
     {
         if (!empty($second_title)) {
@@ -1704,14 +1590,9 @@ class Display
         return self::page_header($title, $second_title, 'h5');
     }
 
-    /**
-     * @param array $list
-     *
-     * @return string|null
-     */
-    public static function description($list)
+    public static function description(array $list): string
     {
-        $html = null;
+        $html = '';
         if (!empty($list)) {
             $html = '<dl class="dl-horizontal">';
             foreach ($list as $item) {
@@ -1798,10 +1679,10 @@ class Display
      *
      * @return string
      */
-    public static function badge_group($badge_list)
+    public static function badgeGroup($list)
     {
         $html = '<div class="badge-group">';
-        foreach ($badge_list as $badge) {
+        foreach ($list as $badge) {
             $html .= $badge;
         }
         $html .= '</div>';
@@ -1860,16 +1741,6 @@ class Display
         }
         $links = '';
         foreach ($items as $value) {
-            /*$class = '';
-            if (isset($value['active']) && $value['active']) {
-                $class = 'class ="active"';
-            }
-
-            if (basename($_SERVER['REQUEST_URI']) == basename($value['url'])) {
-                $class = 'class ="active"';
-            }
-            $html .= "<li $class >";*/
-
             $attributes = $value['url_attributes'] ?? [];
             $links .= self::url($value['content'], $value['url'], $attributes);
         }
@@ -1895,47 +1766,6 @@ class Display
             $text,
             ['class' => 'boot-tooltip', 'title' => strip_tags($tip)]
         );
-    }
-
-    /**
-     * @param array  $items
-     * @param string $type
-     * @param null   $id
-     *
-     * @return string|null
-     */
-    public static function generate_accordion($items, $type = 'jquery', $id = null)
-    {
-        $html = null;
-        if (!empty($items)) {
-            if (empty($id)) {
-                $id = api_get_unique_id();
-            }
-            if ('jquery' == $type) {
-                $html = '<div class="accordion_jquery" id="'.$id.'">'; //using jquery
-            } else {
-                $html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
-            }
-
-            $count = 1;
-            foreach ($items as $item) {
-                $html .= '<div class="accordion-my-group">';
-                $html .= '<div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
-                            '.$item['title'].'
-                            </a>
-                          </div>';
-
-                $html .= '<div id="collapse'.$count.'" class="accordion-body">';
-                $html .= '<div class="accordion-my-inner">
-                            '.$item['content'].'
-                            </div>
-                          </div>';
-            }
-            $html .= '</div>';
-        }
-
-        return $html;
     }
 
     /**
@@ -2318,11 +2148,6 @@ class Display
             $headerStyle = 'style = "color: white; background-color: '.$customColor.'" ';
         }
 
-        if (!empty($rightAction)) {
-            $rightAction = '<span class="float-right">'.$rightAction.'</span>';
-        }
-
-        $title = !empty($title) ? '<h5 class="card-title">'.$title.' '.$rightAction.'</h5>'.$extra : '';
         $footer = !empty($footer) ? '<p class="card-text"><small class="text-muted">'.$footer.'</small></p>' : '';
         $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($type, $typeList) ? 'default' : $type;
@@ -2332,12 +2157,20 @@ class Display
         }
         $cardBody = $title.' '.self::contentPanel($content).' '.$footer;
 
-        $panel = Display::tag('div', $cardBody, ['id' => 'card-'.$id, 'class' => 'card-body']);
-
-        return '
-            <div '.$id.' class="card">
-                '.$panel.'
-            </div>'
+        return "
+            <div $id class=card>
+                <div class='flex justify-between items-center py-2'>
+                    <div class='relative mt-1 flex'>
+                        $title
+                    </div>
+                    <div>
+                        $rightAction
+                    </div>
+                </div>
+                
+                $content
+                $footer
+            </div>"
         ;
     }
 
@@ -2409,7 +2242,7 @@ class Display
         return $html;
     }
 
-    public static function getMdiIcon($name)
+    public static function getMdiIcon(string $name): string
     {
         return '<i class="mdi-'.$name.' mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>';
     }
@@ -2484,8 +2317,7 @@ class Display
         $fullClickable = false
     ) {
         if (!empty($idAccordion)) {
-            $headerClass = '';
-            $headerClass .= $fullClickable ? 'center-block ' : '';
+            $headerClass = $fullClickable ? 'center-block ' : '';
             $headerClass .= $open ? '' : 'collapsed';
             $contentClass = 'panel-collapse collapse ';
             $contentClass .= $open ? 'in' : '';
@@ -2609,92 +2441,6 @@ HTML;
     }
 
     /**
-     * @param string $frameName
-     *
-     * @return string
-     */
-    public static function getFrameReadyBlock($frameName)
-    {
-        $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
-        $videoFeatures = [
-            'playpause',
-            'current',
-            'progress',
-            'duration',
-            'tracks',
-            'volume',
-            'fullscreen',
-            'vrview',
-            'markersrolls',
-        ];
-        $features = api_get_configuration_value('video_features');
-        $videoPluginsJS = [];
-        $videoPluginCSS = [];
-        if (!empty($features) && isset($features['features'])) {
-            foreach ($features['features'] as $feature) {
-                if ('vrview' === $feature) {
-                    continue;
-                }
-                $defaultFeatures[] = $feature;
-                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.js";
-                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.css";
-            }
-        }
-
-        $videoPluginFiles = '';
-        foreach ($videoPluginsJS as $file) {
-            $videoPluginFiles .= '{type: "script", src: "'.$webPublicPath.'assets/'.$file.'"},';
-        }
-
-        $videoPluginCssFiles = '';
-        foreach ($videoPluginCSS as $file) {
-            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
-        }
-
-        $translateHtml = '';
-        $translate = 'true' === api_get_setting('editor.translate_html');
-        if ($translate) {
-            $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
-        }
-
-        $lpJs = api_get_path(WEB_PUBLIC_PATH).'build/lp.js';
-        // {type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
-        // {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
-        // {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
-        $videoFeatures = implode("','", $videoFeatures);
-        $frameReady = '
-        $.frameReady(function() {
-             $(function () {
-                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
-                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",
-                    features: [\''.$videoFeatures.'\'],
-                    success: function(mediaElement, originalNode, instance) {
-                        '.ChamiloApi::getQuizMarkersRollsJS().'
-                    },
-                    vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
-                });
-            });
-        },
-        "'.$frameName.'",
-        [
-            {type:"script", src:"'.$lpJs.'", deps: [
-
-            {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-
-            {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/mediaelement-and-player.min.js",
-                deps: [
-                {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/vrview/vrview.js"},
-                '.$videoPluginFiles.'
-            ]},
-            '.$translateHtml.'
-            ]},
-            '.$videoPluginCssFiles.'
-        ]);';
-
-        return $frameReady;
-    }
-
-    /**
      * @param string $image
      * @param int    $size
      *
@@ -2767,7 +2513,7 @@ HTML;
         return $content;
     }
 
-    public static function prose($contents)
+    public static function prose(string $contents): string
     {
         return "
             <div class=''>

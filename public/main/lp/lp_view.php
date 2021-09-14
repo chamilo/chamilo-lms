@@ -36,9 +36,8 @@ $course = api_get_course_entity($course_id);
 $session = api_get_session_entity($sessionId);
 $lpRepo = Container::getLpRepository();
 
-/** @var learnpath $lp */
+/** @var learnpath $oLP */
 $oLP = Session::read('oLP');
-/** @var CLp $lp */
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_platform_admin()) {
     if (!api_is_allowed_to_edit(null, true, false, false) &&
@@ -60,28 +59,26 @@ if (false === $visibility &&
 $lp_item_id = $oLP->get_current_item_id();
 $lpType = $lp->getLpType();
 
-if (!$is_allowed_to_edit) {
+if (!api_is_allowed_to_edit(null, true)) {
     $category = $lp->getCategory();
     $em = Database::getManager();
     if ($category) {
         $block = false;
-        if ($category) {
-            $user = UserManager::getRepository()->find($user_id);
-            $users = $category->getUsers();
-            if (!empty($users) && $users->count() > 0) {
-                if ($user && !$category->hasUserAdded($user)) {
-                    $block = true;
-                }
+        $user = UserManager::getRepository()->find($user_id);
+        $users = $category->getUsers();
+        if (!empty($users) && $users->count() > 0) {
+            if ($user && !$category->hasUserAdded($user)) {
+                $block = true;
             }
+        }
 
-            $isVisible = learnpath::categoryIsVisibleForStudent($category, $user, $course, $session);
-            if ($isVisible) {
-                $block = false;
-            }
+        $isVisible = learnpath::categoryIsVisibleForStudent($category, $user, $course, $session);
+        if ($isVisible) {
+            $block = false;
+        }
 
-            if ($block) {
-                api_not_allowed(true);
-            }
+        if ($block) {
+            api_not_allowed(true);
         }
     }
 }

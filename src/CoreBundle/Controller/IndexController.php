@@ -61,7 +61,7 @@ class IndexController extends BaseController
      */
     public function classic($name): Response
     {
-        if (1 !== (int) $_ENV['APP_DEBUG']) {
+        if ('test' !== ($_SERVER['APP_ENV'] ?? '')) {
             exit;
         }
 

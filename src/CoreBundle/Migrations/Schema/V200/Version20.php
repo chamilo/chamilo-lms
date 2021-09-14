@@ -435,7 +435,7 @@ class Version20 extends AbstractMigrationChamilo
             'c_lp_category' => ['c_id'],
             'c_lp_item' => ['c_id'],
             'c_lp_item_view' => ['c_id', 'session_id'],
-           // 'c_lp_iv_interaction' => ['c_id'],
+            // 'c_lp_iv_interaction' => ['c_id'],
             //'c_lp_iv_objective' => ['c_id'],
             'c_notebook' => ['c_id', 'session_id'],
             'c_quiz' => ['c_id', 'session_id'],

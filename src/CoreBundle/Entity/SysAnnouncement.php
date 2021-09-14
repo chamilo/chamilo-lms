@@ -36,47 +36,15 @@ class SysAnnouncement
     protected DateTime $dateEnd;
 
     /**
-     * @ORM\Column(name="visible_teacher", type="boolean", nullable=false)
-     */
-    protected bool $visibleTeacher;
-
-    /**
-     * @ORM\Column(name="visible_student", type="boolean", nullable=false)
-     */
-    protected bool $visibleStudent;
-
-    /**
-     * @ORM\Column(name="visible_guest", type="boolean", nullable=false)
-     */
-    protected bool $visibleGuest;
-
-    /**
-     * @ORM\Column(name="visible_drh", type="boolean", nullable=false)
-     */
-    protected bool $visibleDrh;
-
-    /**
-     * @ORM\Column(name="visible_session_admin", type="boolean", nullable=false)
-     */
-    protected bool $visibleSessionAdmin;
-
-    /**
-     * @ORM\Column(name="visible_boss", type="boolean", nullable=false)
-     */
-    protected bool $visibleBoss;
-
-    /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $title;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $content;
 
     /**
@@ -114,12 +82,6 @@ class SysAnnouncement
     public function __construct()
     {
         $this->roles = [];
-        $this->visibleBoss = false;
-        $this->visibleDrh = false;
-        $this->visibleGuest = false;
-        $this->visibleSessionAdmin = false;
-        $this->visibleStudent = false;
-        $this->visibleTeacher = false;
     }
 
     /**
@@ -152,57 +114,6 @@ class SysAnnouncement
     public function setDateEnd(DateTime $dateEnd): self
     {
         $this->dateEnd = $dateEnd;
-
-        return $this;
-    }
-
-    /**
-     * Get visibleTeacher.
-     *
-     * @return bool
-     */
-    public function getVisibleTeacher()
-    {
-        return $this->visibleTeacher;
-    }
-
-    public function setVisibleTeacher(bool $visibleTeacher): self
-    {
-        $this->visibleTeacher = $visibleTeacher;
-
-        return $this;
-    }
-
-    /**
-     * Get visibleStudent.
-     *
-     * @return bool
-     */
-    public function getVisibleStudent()
-    {
-        return $this->visibleStudent;
-    }
-
-    public function setVisibleStudent(bool $visibleStudent): self
-    {
-        $this->visibleStudent = $visibleStudent;
-
-        return $this;
-    }
-
-    /**
-     * Get visibleGuest.
-     *
-     * @return bool
-     */
-    public function getVisibleGuest()
-    {
-        return $this->visibleGuest;
-    }
-
-    public function setVisibleGuest(bool $visibleGuest): self
-    {
-        $this->visibleGuest = $visibleGuest;
 
         return $this;
     }
@@ -266,42 +177,6 @@ class SysAnnouncement
     public function getId()
     {
         return $this->id;
-    }
-
-    public function isVisibleDrh(): bool
-    {
-        return $this->visibleDrh;
-    }
-
-    public function setVisibleDrh(bool $visibleDrh): self
-    {
-        $this->visibleDrh = $visibleDrh;
-
-        return $this;
-    }
-
-    public function isVisibleSessionAdmin(): bool
-    {
-        return $this->visibleSessionAdmin;
-    }
-
-    public function setVisibleSessionAdmin(bool $visibleSessionAdmin): self
-    {
-        $this->visibleSessionAdmin = $visibleSessionAdmin;
-
-        return $this;
-    }
-
-    public function isVisibleBoss(): bool
-    {
-        return $this->visibleBoss;
-    }
-
-    public function setVisibleBoss(bool $visibleBoss): self
-    {
-        $this->visibleBoss = $visibleBoss;
-
-        return $this;
     }
 
     public function getUrl(): AccessUrl

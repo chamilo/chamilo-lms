@@ -308,7 +308,7 @@ if ($action_todo) {
         $form->addHidden('action', 'edit');
     }
     $form->addElement('checkbox', 'send_email_test', null, get_lang('Send an email to myself for testing purposes.'));
-    $form->addButtonSend($text, 'submit');
+    $form->addButtonSend($text);
     $form->setDefaults($values);
 
     if ($form->validate()) {
@@ -420,7 +420,6 @@ if ($action_todo) {
 }
 
 if ($show_announcement_list) {
-    var_dump(api_get_url_entity()->getId());
     $criteria = ['url' => api_get_url_entity()];
     $announcements = $repo->findBy($criteria);
     $announcement_data = [];

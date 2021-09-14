@@ -51,7 +51,7 @@ class DateRangePicker extends HTML_QuickForm_text
         );
     }
 
-    public function parseDateRange(array $dateRange): array
+    public function parseDateRange(string $dateRange): array
     {
         $dateRange = Security::remove_XSS($dateRange);
         $dates = explode('/', $dateRange);
@@ -140,7 +140,7 @@ class DateRangePicker extends HTML_QuickForm_text
     {
         $js = null;
         $id = $this->getAttribute('id');
-        $dateRange = $this->getAttribute('value');
+        $dateRange = (string) $this->getAttribute('value');
 
         $defaultDates = null;
         if (!empty($dateRange)) {

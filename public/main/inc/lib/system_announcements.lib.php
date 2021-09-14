@@ -336,12 +336,11 @@ class SystemAnnouncementManager
         $promotionId = 0
     ) {
         $sysRepo = Container::getSysAnnouncementRepository();
-        /** @var SysAnnouncement $announcement */
+        /** @var SysAnnouncement|null $announcement */
         $announcement = $sysRepo->find($id);
         if (null === $announcement) {
             return false;
         }
-
         $a_dateS = explode(' ', $date_start);
         $a_arraySD = explode('-', $a_dateS[0]);
         $a_arraySH = explode(':', $a_dateS[1]);

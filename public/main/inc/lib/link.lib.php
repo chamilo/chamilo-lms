@@ -322,11 +322,10 @@ class Link extends Model
         ;
 
         $repo->create($category);
-        $linkId = $category->getIid();
 
         Display::addFlash(Display::return_message(get_lang('Category added')));
 
-        return $linkId;
+        return $category;
     }
 
     public static function deleteCategory($id)

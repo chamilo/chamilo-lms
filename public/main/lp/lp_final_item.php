@@ -69,7 +69,8 @@ $badgeLink = '';
 $finalItemTemplate = '';
 
 // Check prerequisites and total completion of the learning path
-$lp = new Learnpath($courseCode, $lpId, $userId);
+$lpEntity = api_get_lp_entity($lpId);
+$lp = new Learnpath($lpEntity, [], $userId);
 $count = $lp->getTotalItemsCountWithoutDirs();
 $completed = $lp->get_complete_items_count(true);
 $currentItemId = $lp->get_current_item_id();
@@ -204,14 +205,9 @@ function generateLPFinalItemTemplate(
     $downloadCertificateLink = '',
     $badgeLink = ''
 ) {
-    $documentInfo = DocumentManager::get_document_data_by_id(
-        $lpItemId,
-        $courseCode,
-        true,
-        $sessionId
-    );
+    $document = Container::getDocumentRepository()->find($lpItemId);
+    $finalItemTemplate = Container::getDocumentRepository()->getResourceFileContent($document);
 
-    $finalItemTemplate = file_get_contents($documentInfo['absolute_path']);
     $finalItemTemplate = str_replace('((certificate))', $downloadCertificateLink, $finalItemTemplate);
     $finalItemTemplate = str_replace('((skill))', $badgeLink, $finalItemTemplate);
 

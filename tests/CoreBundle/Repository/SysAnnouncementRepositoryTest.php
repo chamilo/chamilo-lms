@@ -69,6 +69,6 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $repo = self::getContainer()->get(SysAnnouncementRepository::class);
         $user = $this->getUser('admin');
         $items = $repo->getAnnouncements($user, $this->getAccessUrl(), 'en');
-        $this->assertSame(1, count($items));
+        $this->assertSame(1, \count($items));
     }
 }

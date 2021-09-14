@@ -27,7 +27,7 @@ final class Version20201010224040 extends AbstractMigrationChamilo
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $sql = "SELECT * FROM sys_announcement";
+        $sql = 'SELECT * FROM sys_announcement';
         $result = $connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 

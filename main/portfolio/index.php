@@ -19,16 +19,53 @@ if (false === api_get_configuration_value('allow_portfolio_tool')) {
     api_not_allowed(true);
 }
 
+$httpRequest = HttpRequest::createFromGlobals();
+$action = $httpRequest->query->get('action', 'list');
+
+// It validates the management of categories will be only for admins
+if (in_array($action , ['list_categories', 'add_category', 'edit_category']) && !api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
+// It includes the user language for translations
+$checkUserLanguage = true;
+if ($checkUserLanguage) {
+    global $_user;
+    $langPath = api_get_path(SYS_LANG_PATH).$_user['language'].'/trad4all.inc.php';
+    if (file_exists($langPath)) {
+        require_once $langPath;
+    }
+}
+
 $controller = new \PortfolioController();
 
 $em = Database::getManager();
-$httpRequest = HttpRequest::createFromGlobals();
-
-$action = $httpRequest->query->get('action', 'list');
 
 $htmlHeadXtra[] = api_get_js('portfolio.js');
 
 switch ($action) {
+    case 'translate_category':
+        $id = $httpRequest->query->getInt('id');
+        $languageId = $httpRequest->query->getInt('sub_language');
+
+        /** @var PortfolioCategory $category */
+        $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
+
+        if (empty($category)) {
+            break;
+        }
+
+        $languages = $em
+            ->getRepository('ChamiloCoreBundle:Language')
+            ->findAllPlatformSubLanguages();
+
+        $controller->translateCategory($category, $languages, $languageId);
+
+        return;
+    case 'list_categories':
+        $controller->listCategories();
+
+        return;
     case 'add_category':
         $controller->addCategory();
 

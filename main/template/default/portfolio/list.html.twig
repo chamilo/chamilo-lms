@@ -18,6 +18,37 @@
     {% endif %}
 
     <div class="{{ course ? 'col-md-9' : 'col-xs-12'  }}">
+        {% if (categories) %}
+            <div class="btn-group" data-toggle="buttons">
+                {% for category in categories %}
+                    <label class="btn btn-default category-filters {{ category_id == category.id ? "active" : "" }}">
+                        <input type="radio" value="{{ category.id }}" {{ category_id == category.id ? "checked" : "" }}>
+                        {{ category.title }}
+                    </label>
+                {% endfor %}
+                <label class="btn btn-default category-filters {{ category_id == category.id ? "active" : "" }}">
+                    <input type="radio" value="0" {{ category_id == 0 ? "checked" : "" }}> {{ 'All'|get_lang }}
+                </label>
+            </div>
+            {% if (subcategories) %}
+                <br />
+                <div class="btn-block">
+                    {% for subcategory in subcategories %}
+                        <label class="btn btn-default">
+                            {% set checked = '' %}
+                            {% if (subcategory_ids == 'all') %}
+                                {% set checked = 'checked' %}
+                            {% else %}
+                                {% if subcategory.id in subcategory_ids %}
+                                    {% set checked = 'checked' %}
+                                {% endif %}
+                            {% endif %}
+                            <input type="checkbox" value="{{ subcategory.id }}" {{ checked }} class="subcategory-filters" />&nbsp;{{ subcategory.title }}
+                        </label>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
         {% if _u.id != user.id %}
             <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
         {% endif %}
@@ -99,3 +130,6 @@
         {% endif %}
     });
 </script>
+{% if (js_script) %}
+    {{ js_script }}
+{% endif %}

@@ -63,6 +63,13 @@ class PortfolioCategory
     protected $isVisible = true;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="parent_id", type="integer")
+     */
+    protected $parentId = 0;
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", mappedBy="category")
@@ -200,6 +207,26 @@ class PortfolioCategory
 
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * @param int $parentId
+     */
+    public function setParentId(int $parentId)
+    {
+        $this->parentId = $parentId;
+
+        return $this;
+    }
+
+
 
     /**
      * Get items.

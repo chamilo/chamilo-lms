@@ -57,6 +57,188 @@ class PortfolioController
     }
 
     /**
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function translateCategory($category, $languages, $languageId)
+    {
+        global $interbreadcrumb;
+
+        $originalName = $category->getTitle();
+        $variableLanguage = '$'.$this->getLanguageVariable($originalName);
+
+        $translateUrl = api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_portfolio_category';
+        $form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
+        $form->addHeader(get_lang('AddWordForTheSubLanguage'));
+        $form->addText('variable_language', get_lang('LanguageVariable'), false);
+        $form->addText('original_name', get_lang('OriginalName'), false);
+
+        $languagesOptions = [0 => get_lang('None')];
+        foreach ($languages as $language) {
+            $languagesOptions[$language->getId()] = $language->getOriginalName();
+        }
+
+        $form->addSelect(
+            'sub_language',
+            [get_lang('SubLanguage'), get_lang('OnlyActiveSubLanguagesAreListed')],
+            $languagesOptions
+        );
+
+        if ($languageId) {
+            $languageInfo = api_get_language_info($languageId);
+            $form->addText(
+                'new_language',
+                [get_lang('Translation'), get_lang('IfThisTranslationExistsThisWillReplaceTheTerm')]
+            );
+
+            $form->addHidden('category_id', $category->getId());
+            $form->addHidden('id', $languageInfo['parent_id']);
+            $form->addHidden('sub', $languageInfo['id']);
+            $form->addHidden('sub_language_id', $languageInfo['id']);
+            $form->addHidden('redirect', true);
+            $form->addButtonSave(get_lang('Save'));
+        }
+
+        $form->setDefaults([
+            'variable_language' => $variableLanguage,
+            'original_name' => $originalName,
+            'sub_language' => $languageId,
+        ]);
+        $form->addRule('sub_language', get_lang('Required'), 'required');
+        $form->freeze(['variable_language', 'original_name']);
+
+        $interbreadcrumb[] = [
+            'name' => get_lang('Portfolio'),
+            'url' => $this->baseUrl,
+        ];
+        $interbreadcrumb[] = [
+            'name' => get_lang('Categories'),
+            'url' => $this->baseUrl.'action=list_categories&parent_id='.$category->getParentId(),
+        ];
+        $interbreadcrumb[] = [
+            'name' => Security::remove_XSS($category->getTitle()),
+            'url' => $this->baseUrl.'action=edit_category&id='.$category->getId(),
+        ];
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.'action=edit_category&id='.$category->getId()
+        );
+
+        $js = '<script>
+            $(function() {
+              $("select[name=\'sub_language\']").on("change", function () {
+                    location.href += "&sub_language=" + this.value;
+                });
+            });
+        </script>';
+        $content = $form->returnForm();
+
+        $this->renderView($content.$js, get_lang('TranslateCategory'), $actions);
+    }
+
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function listCategories()
+    {
+        global $interbreadcrumb;
+
+        $parentId = isset($_REQUEST['parent_id']) ? (int) $_REQUEST['parent_id'] : 0;
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+        $headers = [
+            get_lang('Title'),
+            get_lang('Description'),
+        ];
+        if ($parentId === 0) {
+            $headers[] = get_lang('SubCategories');
+        }
+        $headers[] = get_lang('Actions');
+
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->setHeaderContents(0, $column, $header);
+            $column++;
+        }
+        $currentUserId = api_get_user_id();
+        $row = 1;
+        $categories = $this->getCategoriesForIndex(null, $parentId);
+
+        foreach ($categories as $category) {
+            $column = 0;
+            $subcategories = $this->getCategoriesForIndex(null, $category->getId());
+            $linkSubCategories = $category->getTitle();
+            if (count($subcategories) > 0) {
+                $linkSubCategories = Display::url(
+                    $category->getTitle(),
+                    $this->baseUrl.'action=list_categories&parent_id='.$category->getId()
+                );
+            }
+            $table->setCellContents($row, $column++, $linkSubCategories);
+            $table->setCellContents($row, $column++, strip_tags($category->getDescription()));
+            if ($parentId === 0) {
+                $table->setCellContents($row, $column++, count($subcategories));
+            }
+
+            // Actions
+            $links = null;
+            // Edit action
+            $url = $this->baseUrl.'action=edit_category&id='.$category->getId();
+            $links .= Display::url(Display::return_icon('edit.png', get_lang('Edit')), $url).'&nbsp;';
+            // Visible action : if active
+            if ($category->isVisible() != 0) {
+                $url = $this->baseUrl.'action=hide_category&id='.$category->getId();
+                $links .= Display::url(Display::return_icon('visible.png', get_lang('Hide')), $url).'&nbsp;';
+            } else { // else if not active
+                $url = $this->baseUrl.'action=show_category&id='.$category->getId();
+                $links .= Display::url(Display::return_icon('invisible.png', get_lang('Show')), $url).'&nbsp;';
+            }
+            // Delete action
+            $url = $this->baseUrl.'action=delete_category&id='.$category->getId();
+            $links .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), $url, ['onclick' => 'javascript:if(!confirm(\''.get_lang('AreYouSureToDeleteJS').'\')) return false;']);
+
+            $table->setCellContents($row, $column++, $links);
+            $row++;
+        }
+
+        $interbreadcrumb[] = [
+            'name' => get_lang('Portfolio'),
+            'url' => $this->baseUrl,
+        ];
+        if ($parentId > 0) {
+            $interbreadcrumb[] = [
+                'name' => get_lang('Categories'),
+                'url' => $this->baseUrl.'action=list_categories',
+            ];
+        }
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.($parentId > 0 ? 'action=list_categories' : '')
+        );
+        if ($currentUserId == $this->owner->getId() && $parentId === 0) {
+            $actions[] = Display::url(
+                Display::return_icon('new_folder.png', get_lang('AddCategory'), [], ICON_SIZE_MEDIUM),
+                $this->baseUrl.'action=add_category'
+            );
+        }
+        $content = $table->toHtml();
+
+        $pageTitle = get_lang('Categories');
+        if ($parentId > 0) {
+            $em = Database::getManager();
+            $parentCategory = $em->find('ChamiloCoreBundle:PortfolioCategory', $parentId);
+            $pageTitle = $parentCategory->getTitle().' : '.get_lang('SubCategories');
+        }
+
+        $this->renderView($content, $pageTitle, $actions);
+    }
+
+    /**
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -78,6 +260,18 @@ class PortfolioController
         }
 
         $form->addHtmlEditor('description', get_lang('Description'), false, false, ['ToolbarSet' => 'Minimal']);
+
+        $parentSelect = $form->addSelect(
+            'parent_id',
+            get_lang('ParentCategory')
+        );
+        $parentSelect->addOption(get_lang('Level0'), 0);
+        $currentUserId = api_get_user_id();
+        $categories = $this->getCategoriesForIndex(null, 0);
+        foreach ($categories as $category) {
+            $parentSelect->addOption($category->getTitle(), $category->getId());
+        }
+
         $form->addButtonCreate(get_lang('Create'));
 
         if ($form->validate()) {
@@ -87,6 +281,7 @@ class PortfolioController
             $category
                 ->setTitle($values['title'])
                 ->setDescription($values['description'])
+                ->setParentId($values['parent_id'])
                 ->setUser($this->owner);
 
             $this->em->persist($category);
@@ -96,7 +291,7 @@ class PortfolioController
                 Display::return_message(get_lang('CategoryAdded'), 'success')
             );
 
-            header("Location: {$this->baseUrl}");
+            header("Location: {$this->baseUrl}action=list_categories");
             exit;
         }
 
@@ -104,11 +299,15 @@ class PortfolioController
             'name' => get_lang('Portfolio'),
             'url' => $this->baseUrl,
         ];
+        $interbreadcrumb[] = [
+            'name' => get_lang('Categories'),
+            'url' => $this->baseUrl.'action=list_categories',
+        ];
 
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-            $this->baseUrl
+            $this->baseUrl.'action=list_categories'
         );
 
         $content = $form->returnForm();
@@ -142,7 +341,12 @@ class PortfolioController
         if (api_get_configuration_value('save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
-            $form->addText('title', get_lang('Title'));
+            $translateUrl = $this->baseUrl.'action=translate_category&id='.$category->getId();
+            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+            $form->addText(
+                'title',
+                [get_lang('Title'), $translateButton]
+            );
             $form->applyFilter('title', 'trim');
         }
 
@@ -169,7 +373,7 @@ class PortfolioController
                 Display::return_message(get_lang('Updated'), 'success')
             );
 
-            header("Location: $this->baseUrl");
+            header("Location: {$this->baseUrl}action=list_categories&parent_id=".$category->getParentId());
             exit;
         }
 
@@ -177,11 +381,24 @@ class PortfolioController
             'name' => get_lang('Portfolio'),
             'url' => $this->baseUrl,
         ];
+        $interbreadcrumb[] = [
+            'name' => get_lang('Categories'),
+            'url' => $this->baseUrl.'action=list_categories',
+        ];
+        if ($category->getParentId() > 0) {
+            $em = Database::getManager();
+            $parentCategory = $em->find('ChamiloCoreBundle:PortfolioCategory', $category->getParentId());
+            $pageTitle = $parentCategory->getTitle().' : '.get_lang('SubCategories');
+            $interbreadcrumb[] = [
+                'name' => Security::remove_XSS($pageTitle),
+                'url' => $this->baseUrl.'action=list_categories&parent_id='.$category->getParentId(),
+            ];
+        }
 
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-            $this->baseUrl
+            $this->baseUrl.'action=list_categories&parent_id='.$category->getParentId()
         );
 
         $content = $form->returnForm();
@@ -208,7 +425,7 @@ class PortfolioController
             Display::return_message(get_lang('VisibilityChanged'), 'success')
         );
 
-        header("Location: $this->baseUrl");
+        header("Location: {$this->baseUrl}action=list_categories");
         exit;
     }
 
@@ -229,7 +446,7 @@ class PortfolioController
             Display::return_message(get_lang('CategoryDeleted'), 'success')
         );
 
-        header("Location: $this->baseUrl");
+        header("Location: {$this->baseUrl}action=list_categories");
         exit;
     }
 
@@ -243,10 +460,6 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
-        $categories = $this->em
-            ->getRepository('ChamiloCoreBundle:PortfolioCategory')
-            ->findBy(['user' => $this->owner]);
-
         $form = new FormValidator('add_portfolio', 'post', $this->baseUrl.'action=add_item');
 
         if (api_get_configuration_value('save_titles_as_html')) {
@@ -255,15 +468,29 @@ class PortfolioController
             $form->addText('title', get_lang('Title'));
             $form->applyFilter('title', 'trim');
         }
+        $editorConfig = [
+            'ToolbarSet' => 'NotebookStudent',
+            'Width' => '100%',
+            'Height' => '400',
+            'cols-size' => [2, 10, 0],
+        ];
+        $form->addHtmlEditor('content', get_lang('Content'), true, false, $editorConfig);
 
-        $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
-        $form->addSelectFromCollection(
+        $categoriesSelect = $form->addSelect(
             'category',
-            [get_lang('Category'), get_lang('PortfolioCategoryFieldHelp')],
-            $categories,
-            [],
-            true
+            [get_lang('Category'), get_lang('PortfolioCategoryFieldHelp')]
         );
+        $categoriesSelect->addOption(get_lang('SelectACategory'), 0);
+        $parentCategories = $this->getCategoriesForIndex(null, 0);
+        foreach ($parentCategories as $parentCategory) {
+            $categoriesSelect->addOption($parentCategory->getTitle(), $parentCategory->getId());
+            $subCategories =  $this->getCategoriesForIndex(null, $parentCategory->getId());
+            if (count($subCategories) > 0) {
+                foreach ($subCategories as $subCategory) {
+                    $categoriesSelect->addOption(' &mdash; '.$subCategory->getTitle(), $subCategory->getId());
+                }
+            }
+        }
 
         $extraField = new ExtraField('portfolio');
         $extra = $extraField->addElements($form);
@@ -360,11 +587,46 @@ class PortfolioController
             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
             $this->baseUrl
         );
+        $actions[] = '<a id="hide_bar_template" href="#" role="button">'.
+            Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).
+            Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
 
-        $content = $form->returnForm();
+        $js = '<script>
+            $(function() {
+                $(".scrollbar-light").scrollbar();
+                $(".scroll-wrapper").css("height", "550px");
+                expandColumnToogle("#hide_bar_template", {
+                    selector: "#template_col",
+                    width: 3
+                }, {
+                    selector: "#doc_form",
+                    width: 9
+                });
+                CKEDITOR.on("instanceReady", function (e) {
+                    showTemplates();
+                });
+                $(window).on("load", function () {
+                    $("input[name=\'title\']").focus();
+                });
+                '.$extra['jquery_ready_content'].'
+            });
+        </script>';
+        $content = '<div class="page-create">
+            <div class="row" style="overflow:hidden">
+            <div id="template_col" class="col-md-3">
+                <div class="panel panel-default">
+                <div class="panel-body">
+                    <div id="frmModel" class="items-templates scrollbar-light"></div>
+                </div>
+                </div>
+            </div>
+            <div id="doc_form" class="col-md-9">
+                '.$form->returnForm().'
+            </div>
+          </div></div>';
 
         $this->renderView(
-            $content."<script> $(function() { {$extra['jquery_ready_content']} }); </script>",
+            $content.$js,
             get_lang('AddPortfolioItem'),
             $actions
         );
@@ -418,8 +680,13 @@ class PortfolioController
                 );
             }
         }
-
-        $form->addHtmlEditor('content', get_lang('Content'), true, false, ['ToolbarSet' => 'NotebookStudent']);
+        $editorConfig = [
+            'ToolbarSet' => 'NotebookStudent',
+            'Width' => '100%',
+            'Height' => '400',
+            'cols-size' => [2, 10, 0],
+        ];
+        $form->addHtmlEditor('content', get_lang('Content'), true, false, $editorConfig);
         $form->addSelectFromCollection(
             'category',
             [get_lang('Category'), get_lang('PortfolioCategoryFieldHelp')],
@@ -492,10 +759,46 @@ class PortfolioController
             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
             $this->baseUrl
         );
-        $content = $form->returnForm();
+        $actions[] = '<a id="hide_bar_template" href="#" role="button">'.
+            Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).
+            Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
+
+        $js = '<script>
+            $(function() {
+                $(".scrollbar-light").scrollbar();
+                $(".scroll-wrapper").css("height", "550px");
+                expandColumnToogle("#hide_bar_template", {
+                    selector: "#template_col",
+                    width: 3
+                }, {
+                    selector: "#doc_form",
+                    width: 9
+                });
+                CKEDITOR.on("instanceReady", function (e) {
+                    showTemplates();
+                });
+                $(window).on("load", function () {
+                    $("input[name=\'title\']").focus();
+                });
+                '.$extra['jquery_ready_content'].'
+            });
+        </script>';
+        $content = '<div class="page-create">
+            <div class="row" style="overflow:hidden">
+            <div id="template_col" class="col-md-3">
+                <div class="panel panel-default">
+                <div class="panel-body">
+                    <div id="frmModel" class="items-templates scrollbar-light"></div>
+                </div>
+                </div>
+            </div>
+            <div id="doc_form" class="col-md-9">
+                '.$form->returnForm().'
+            </div>
+          </div></div>';
 
         $this->renderView(
-            $content."<script> $(function() { {$extra['jquery_ready_content']} }); </script>",
+            $content.$js,
             get_lang('EditPortfolioItem'),
             $actions
         );
@@ -568,51 +871,115 @@ class PortfolioController
 
         $actions = [];
 
-        if ($currentUserId == $this->owner->getId()) {
+        if (api_is_platform_admin()) {
             $actions[] = Display::url(
                 Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
                 $this->baseUrl.'action=add_item'
             );
             $actions[] = Display::url(
                 Display::return_icon('folder.png', get_lang('AddCategory'), [], ICON_SIZE_MEDIUM),
-                $this->baseUrl.'action=add_category'
+                $this->baseUrl.'action=list_categories'
             );
             $actions[] = Display::url(
                 Display::return_icon('waiting_list.png', get_lang('PortfolioDetails'), [], ICON_SIZE_MEDIUM),
                 $this->baseUrl.'action=details'
             );
         } else {
-            $actions[] = Display::url(
-                Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-                $this->baseUrl
-            );
+            if ($currentUserId == $this->owner->getId()) {
+                $actions[] = Display::url(
+                    Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+                    $this->baseUrl.'action=add_item'
+                );
+                $actions[] = Display::url(
+                    Display::return_icon('waiting_list.png', get_lang('PortfolioDetails'), [], ICON_SIZE_MEDIUM),
+                    $this->baseUrl.'action=details'
+                );
+            } else {
+                $actions[] = Display::url(
+                    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                    $this->baseUrl
+                );
+            }
         }
 
         $frmStudentList = null;
         $frmTagList = null;
 
         $categories = [];
-
+        $portfolio = [];
         if ($this->course) {
             $frmTagList = $this->createFormTagFilter($listByUser);
             $frmStudentList = $this->createFormStudentFilter($listByUser);
             $frmStudentList->setDefaults(['user' => $this->owner->getId()]);
+            // it translates the category title with the current user language
+            $categories = $this->getCategoriesForIndex(null, 0);
+            if (count($categories) > 0) {
+                foreach ($categories as &$category) {
+                    $translated = $this->translateDisplayName($category->getTitle());
+                    $category->setTitle($translated);
+                }
+            }
         } else {
-            $categories = $this->getCategoriesForIndex($currentUserId);
+            // it displays the list in Network Social for the current user
+            $portfolio = $this->getCategoriesForIndex();
         }
 
         $items = $this->getItemsForIndex($listByUser, $frmTagList);
+        // it gets and translate the sub-categories
+        $categoryId = $httpRequest->query->getInt('categoryId');
+        $subCategoryIdsReq = isset($_REQUEST['subCategoryIds']) ? Security::remove_XSS($_REQUEST['subCategoryIds']) : '';
+        $subCategoryIds = $subCategoryIdsReq;
+        if ('all' !== $subCategoryIdsReq) {
+            $subCategoryIds = !empty($subCategoryIdsReq) ? explode(',', $subCategoryIdsReq) : [];
+        }
+        $subcategories = [];
+        if ($categoryId > 0) {
+            $subcategories = $this->getCategoriesForIndex(null, $categoryId);
+            if (count($subcategories) > 0) {
+                foreach ($subcategories as &$subcategory) {
+                    $translated = $this->translateDisplayName($subcategory->getTitle());
+                    $subcategory->setTitle($translated);
+                }
+            }
+        }
 
         $template = new Template(null, false, false, false, false, false, false);
         $template->assign('user', $this->owner);
         $template->assign('course', $this->course);
         $template->assign('session', $this->session);
-        $template->assign('portfolio', $categories);
+        $template->assign('portfolio', $portfolio);
+        $template->assign('categories', $categories);
         $template->assign('uncategorized_items', $items);
         $template->assign('frm_student_list', $this->course ? $frmStudentList->returnForm() : '');
         $template->assign('frm_tag_list', $this->course ? $frmTagList->returnForm() : '');
+        $template->assign('category_id', $categoryId);
+        $template->assign('subcategories', $subcategories);
+        $template->assign('subcategory_ids', $subCategoryIds);
 
+        $js = '<script>
+            $(function() {
+                $(".category-filters").bind("click", function() {
+                    var categoryId = parseInt($(this).find("input[type=\'radio\']").val());
+                    $("input[name=\'categoryId\']").val(categoryId);
+                    $("input[name=\'subCategoryIds\']").val("all");
+                    $("#frm_tag_list_submit").trigger("click");
+                });
+                $(".subcategory-filters").bind("click", function() {
+                    var checkedVals = $(".subcategory-filters:checkbox:checked").map(function() {
+                        return this.value;
+                    }).get();
+                    $("input[name=\'subCategoryIds\']").val(checkedVals.join(","));
+                    $("#frm_tag_list_submit").trigger("click");
+                });
+            });
+        </script>';
+        $template->assign('js_script', $js);
         $layout = $template->get_template('portfolio/list.html.twig');
+
+        Display::addFlash(
+            Display::return_message(get_lang('PortfolioPostAddHelp'), 'info', false)
+        );
+
         $content = $template->fetch($layout);
 
         $this->renderView($content, get_lang('Portfolio'), $actions);
@@ -2033,6 +2400,8 @@ class PortfolioController
             $frmTagList->addHidden('gidReq', 0);
             $frmTagList->addHidden('gradebook', 0);
             $frmTagList->addHidden('origin', '');
+            $frmTagList->addHidden('categoryId', 0);
+            $frmTagList->addHidden('subCategoryIds', '');
 
             if ($listByUser) {
                 $frmTagList->addHidden('user', $this->owner->getId());
@@ -2098,15 +2467,18 @@ class PortfolioController
         return $frmStudentList;
     }
 
-    private function getCategoriesForIndex(int $currentUserId): array
+    private function getCategoriesForIndex(?int $currentUserId = null, ?int $parentId = null): array
     {
         $categoriesCriteria = [];
-        $categoriesCriteria['user'] = $this->owner;
-
-        if ($currentUserId !== $this->owner->getId()) {
+        if (isset($currentUserId)) {
+            $categoriesCriteria['user'] = $this->owner;
+        }
+        if (!api_is_platform_admin() && $currentUserId !== $this->owner->getId()) {
             $categoriesCriteria['isVisible'] = true;
         }
-
+        if (isset($parentId)) {
+            $categoriesCriteria['parentId'] = $parentId;
+        }
         return $this->em
             ->getRepository(PortfolioCategory::class)
             ->findBy($categoriesCriteria);
@@ -2159,6 +2531,36 @@ class PortfolioController
                     );
 
                     $queryBuilder->setParameter('text', '%'.$values['text'].'%');
+                }
+
+                // Filters by category level 0
+                $searchCategories = [];
+                if (!empty($values['categoryId'])) {
+                    $searchCategories[] = $values['categoryId'];
+                    $subCategories = $this->getCategoriesForIndex(null, $values['categoryId']);
+                    if (count($subCategories) > 0) {
+                        foreach ($subCategories as $subCategory) {
+                            $searchCategories[] = $subCategory->getId();
+                        }
+                    }
+                    $queryBuilder->andWhere('pi.category IN('.implode(',', $searchCategories).')');
+                }
+
+                // Filters by sub-category, don't show the selected values
+                $diff = [];
+                if (!empty($values['subCategoryIds']) && !('all' === $values['subCategoryIds'])) {
+                    $subCategoryIds = explode(',', $values['subCategoryIds']);
+                    $diff = array_diff($searchCategories, $subCategoryIds);
+                } else {
+                    if (trim($values['subCategoryIds']) === '') {
+                        $diff = $searchCategories;
+                    }
+                }
+                if (!empty($diff)) {
+                    unset($diff[0]);
+                    if (!empty($diff)) {
+                        $queryBuilder->andWhere('pi.category NOT IN('.implode(',', $diff).')');
+                    }
                 }
             }
 
@@ -2514,5 +2916,33 @@ class PortfolioController
         );
 
         return $doc->saveHTML();
+    }
+
+    /**
+     * It parsers a title for a variable in lang
+     *
+     * @param $defaultDisplayText
+     * @return string
+     */
+    private function getLanguageVariable($defaultDisplayText)
+    {
+        $variableLanguage = api_replace_dangerous_char(strtolower($defaultDisplayText));
+        $variableLanguage = str_replace('-', '_', $variableLanguage);
+        $variableLanguage = api_underscore_to_camel_case($variableLanguage);
+
+        return $variableLanguage;
+    }
+
+    /**
+     * It translates the text as parameter
+     *
+     * @param $defaultDisplayText
+     * @return mixed
+     */
+    private function translateDisplayName($defaultDisplayText)
+    {
+        $variableLanguage = $this->getLanguageVariable($defaultDisplayText);
+
+        return isset($GLOBALS[$variableLanguage]) ? $GLOBALS[$variableLanguage] : $defaultDisplayText;
     }
 }

@@ -161,8 +161,8 @@ class CkEditor extends Editor
     public function simpleFormatTemplates()
     {
         $templates = $this->getEmptyTemplate();
-
-        if (api_is_allowed_to_edit(false, true)) {
+        // The templates are visible for all users in the course
+        if (api_is_allowed_to_edit(false, true) || api_is_allowed_in_course()) {
             $platformTemplates = $this->getPlatformTemplates();
             $templates = array_merge($templates, $platformTemplates);
         }
@@ -208,8 +208,25 @@ class CkEditor extends Editor
      */
     private function getPlatformTemplates()
     {
-        $entityManager = \Database::getManager();
-        $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
+        if (true === api_get_configuration_value('template_activate_language_filter')) {
+            global $language_interface;
+
+            $courseInfo = api_get_course_info();
+            if (isset($courseInfo['language'])) {
+                $language = $courseInfo['language'];
+            } else {
+                $language = $language_interface;
+            }
+
+            $entityManager = \Database::getManager();
+            $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findBy([
+                'language' => $language,
+            ]);
+        } else {
+            $entityManager = \Database::getManager();
+            $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
+        }
+
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
         $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
         $replace = [

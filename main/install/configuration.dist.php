@@ -450,6 +450,7 @@ ALTER TABLE c_tool CHANGE name name LONGTEXT NOT NULL;
 -- Only with allow_portfolio_tool enabled
 ALTER TABLE portfolio CHANGE title title LONGTEXT NOT NULL;
 ALTER TABLE portfolio_category CHANGE title title LONGTEXT NOT NULL;
+ALTER TABLE portfolio_category ADD parent_id INT(11) NOT NULL DEFAULT 0;
 
 New changes:
 
@@ -1131,6 +1132,10 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
   system int not null default 0 -- whether it can be deleted or not (system = 1 means it's initially from Chamilo, any other template can be created/deleted/edited, but the ones with system=1 cannot)
 );*/
 // $_configuration['mail_template_system'] = false;
+
+// Enable filter by language for system and courses templates
+//ALTER TABLE system_template ADD language VARCHAR(40) NOT NULL DEFAULT 'english';	
+// $_configuration['template_activate_language_filter'] = false;
 
 // Students can only upload one publication
 // $_configuration['allow_only_one_student_publication_per_user'] = false;

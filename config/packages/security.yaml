@@ -4,8 +4,27 @@ security:
     enable_authenticator_manager: true
 
     password_hashers:
+        legacy_md5:
+            algorithm: md5
+            encode_as_base64: false
+            iterations: 1
+
+        legacy_sha1:
+            algorithm: sha1
+            encode_as_base64: false
+            iterations: 1
+
+        legacy_bcrypt:
+            algorithm: bcrypt
+            encode_as_base64: false
+            cost: 4
+
         Chamilo\CoreBundle\Entity\User:
             algorithm: auto
+            migrate_from:
+                - bcrypt
+                - legacy_sha1
+                - legacy_bcrypt
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:

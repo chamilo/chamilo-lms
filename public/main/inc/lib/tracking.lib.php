@@ -2085,7 +2085,7 @@ class Tracking
                                 $url = api_get_path(WEB_CODE_PATH).
                                     'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
                                 $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
-                                  '.Display::return_icon('messagebox_warning.gif').'
+                                  '.Display::getMdiIcon('alert').'
                                  </a>';
                             }
 
@@ -2801,6 +2801,12 @@ class Tracking
         }
 
         // Compose a filter based on optional session id
+        $sessionId = null;
+        if (null !== $session) {
+            $sessionId = $session->getId();
+        }
+        $sessionCondition = api_get_session_condition($sessionId);
+
         //$sessionId = (int) $sessionId;
         /*if (count($lp_ids) > 0) {
             $condition_session = " AND session_id = $sessionId ";
@@ -3009,8 +3015,8 @@ class Tracking
                                     orig_lp_item_id = $item_id AND
                                     $lpItemCondition AND
                                     c_id = $courseId AND
-                                    session_id = $sessionId AND
                                     status = ''
+                                    $sessionCondition
                                 ORDER BY $order
                                 LIMIT 1";
 

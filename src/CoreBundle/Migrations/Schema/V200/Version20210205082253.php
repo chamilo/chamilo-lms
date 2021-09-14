@@ -31,7 +31,6 @@ final class Version20210205082253 extends AbstractMigrationChamilo
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $userRepo = $container->get(UserRepository::class);
         $illustrationRepo = $container->get(IllustrationRepository::class);
 
         // Adding users to the resource node tree.

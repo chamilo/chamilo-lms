@@ -709,27 +709,6 @@ switch ($action) {
 
         echo json_encode($response);
         break;
-    case 'get_notification':
-        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
-        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
-        $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
-        if (empty($courseId)) {
-            break;
-        }
-        require_once __DIR__.'/../global.inc.php';
-
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $courseInfo['id_session'] = $sessionId;
-        $courseInfo['status'] = $status;
-        $id = 'notification_'.$courseId.'_'.$sessionId.'_'.$status;
-
-        $notificationId = Session::read($id);
-        if ($notificationId) {
-            echo Display::show_notification($courseInfo, false);
-            Session::erase($notificationId);
-        }
-
-        break;
     default:
         echo '';
 }

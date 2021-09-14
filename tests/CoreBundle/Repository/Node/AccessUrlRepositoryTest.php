@@ -77,9 +77,17 @@ class AccessUrlRepositoryTest extends KernelTestCase
         /** @var AccessUrl $accessUrl */
         $accessUrl = $repo->find($accessUrl->getId());
 
+        $this->assertSame(1, $accessUrl->getLft());
+        $this->assertSame(2, $accessUrl->getRgt());
+        $this->assertSame(0, $accessUrl->getLvl());
+
         $this->assertTrue($accessUrl->hasUser($user));
         $this->assertSame($accessUrl->getId(), $accessUrl->getResourceIdentifier());
 
+        $this->assertSame('test', $accessUrl->getDescription());
+        $this->assertSame('https://example.org', (string) $accessUrl);
+        $this->assertSame('test@example.com', $accessUrl->getEmail());
+        $this->assertSame(1000, $accessUrl->getLimitDiskSpace());
         $this->assertSame(1000, $accessUrl->getLimitCourses());
         $this->assertSame(2, $repo->count([]));
         $this->assertSame(0, $accessUrl->getSettings()->count());

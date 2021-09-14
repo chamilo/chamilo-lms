@@ -37,6 +37,36 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
         // On a fresh installation there are already 3 categories.
         // See the src/CoreBundle/DataFixtures/CourseCategoryFixtures.php
         $this->assertSame($defaultCount + 1, $repo->count([]));
+
+        $this->assertSame('Course cat', $item->getCode());
+        $this->assertSame('Course cat (Course cat)', (string) $item);
+    }
+
+    public function testCreateWithParent(): void
+    {
+        self::bootKernel();
+
+        $em = $this->getEntityManager();
+        $repo = self::getContainer()->get(CourseCategoryRepository::class);
+        $defaultCount = $repo->count([]);
+
+        $item = (new CourseCategory())
+            ->setCode('Course cat')
+            ->setName('Course cat')
+        ;
+        $em->persist($item);
+        $em->flush();
+
+        $sub = (new CourseCategory())
+            ->setCode('Sub cat')
+            ->setName('Sub cat')
+            ->setParent($item)
+        ;
+        $em->persist($sub);
+        $em->flush();
+
+        $this->assertNotNull($sub->getParent());
+        $this->assertSame($defaultCount + 2, $repo->count([]));
     }
 
     public function testCreateWithAsset(): void

@@ -111,7 +111,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE course_category CHANGE parent_id parent_id INT DEFAULT NULL;');
 
-        if (false === $table->hasForeignKey('FK_AFF87497727ACA70')) {
+        if (!$table->hasForeignKey('FK_AFF87497727ACA70')) {
             $this->addSql(
                 'ALTER TABLE course_category ADD CONSTRAINT FK_AFF87497727ACA70 FOREIGN KEY (parent_id) REFERENCES course_category (id) ON DELETE SET NULL '
             );

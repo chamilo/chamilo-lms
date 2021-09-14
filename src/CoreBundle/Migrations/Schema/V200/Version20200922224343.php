@@ -41,6 +41,14 @@ final class Version20200922224343 extends AbstractMigrationChamilo
                 $this->addSql('ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id)  ON DELETE CASCADE');
             }
         }
+
+        if (!$table->hasIndex('IDX_E4A3EAD4139DF194')) {
+            $this->addSql(' CREATE INDEX IDX_E4A3EAD4139DF194 ON sys_announcement (promotion_id);');
+        }
+
+        if (!$table->hasIndex('IDX_E4A3EAD4B58CDA09')) {
+            $this->addSql(' CREATE INDEX IDX_E4A3EAD4B58CDA09 ON sys_announcement (career_id);');
+        }
     }
 
     public function down(Schema $schema): void

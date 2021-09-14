@@ -28,12 +28,6 @@ class Version20 extends AbstractMigrationChamilo
         // Basic checks.
         $this->abortIf(!$this->adminExist(), 'Admin not found in the system');
 
-        //$em = $doctrine->getManager();
-        /** @var Connection $connection */
-        /*$connection = $em->getConnection();
-        $sql = "SELECT * FROM c_quiz WHERE iid <> id";
-        $result = $connection->executeQuery($sql);*/
-
         $table = $schema->getTable('user');
         if (false === $table->hasColumn('uuid')) {
             $this->addSql("ALTER TABLE user ADD uuid BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)'");

@@ -204,14 +204,14 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                         </td>
                         <td>
                             <a href="session_category_edit.php?&id=<?php echo $enreg['id']; ?>">
-                                <?php Display::display_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL); ?>
+                                <?php echo Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL); ?>
                             </a>
                             <a href="<?php echo api_get_self(
                             ); ?>?sort=<?php echo $sort; ?>&action=delete_off_session&idChecked=<?php echo $enreg['id']; ?>"
                                onclick="if(!confirm('<?php echo get_lang(
                                    'Please confirm your choice'
                                ); ?>')) return false;">
-                                <?php Display::display_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL); ?>
+                                <?php echo Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL); ?>
                             </a>
                         </td>
                     </tr>

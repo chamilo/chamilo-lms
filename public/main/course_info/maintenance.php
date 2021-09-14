@@ -23,7 +23,7 @@ echo Display::page_header($nameTools);
 ?>
 
 <div class="sectiontitle">
-    <?php Display::display_icon('save_import.gif', get_lang('Backup and import and import')); ?>&nbsp;&nbsp;
+    <?php echo Display::return_icon('save_import.gif', get_lang('Backup and import and import')); ?>&nbsp;&nbsp;
     <?php echo get_lang('Backup and import and import'); ?>
 </div>
 <div class="sectioncomment">
@@ -50,7 +50,7 @@ echo Display::page_header($nameTools);
 </div>
 
 <div class="sectiontitle">
-    <?php Display::display_icon('copy.gif', get_lang('Copy course')); ?>&nbsp;&nbsp;
+    <?php echo Display::return_icon('copy.gif', get_lang('Copy course')); ?>&nbsp;&nbsp;
     <a href="../coursecopy/copy_course.php?<?php echo api_get_cidreq(); ?>">
         <?php echo get_lang('Copy course'); ?></a>
 </div>
@@ -58,7 +58,7 @@ echo Display::page_header($nameTools);
 </div>
 
 <div class="sectiontitle">
-    <?php Display::display_icon('tool_delete.gif', get_lang('Empty this course')); ?>&nbsp;&nbsp;
+    <?php echo Display::return_icon('delete.png', get_lang('Empty this course')); ?>&nbsp;&nbsp;
     <a href="../coursecopy/recycle_course.php?<?php echo api_get_cidreq(); ?>">
         <?php echo get_lang('Empty this course'); ?>
     </a>
@@ -66,7 +66,7 @@ echo Display::page_header($nameTools);
 <div class="sectioncomment"><?php echo get_lang('This tool empties the course. It removes documents, forums, links. And allows you to select what parts you want to remove or decide to remove the whole.'); ?></div>
 
 <div class="sectiontitle">
-    <?php Display::display_icon('delete.gif', get_lang('Completely delete this course')); ?>&nbsp;&nbsp;
+    <?php echo Display::return_icon('delete.png', get_lang('Completely delete this course')); ?>&nbsp;&nbsp;
     <a href="../course_info/delete_course.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('Completely delete this course'); ?>
     </a>
 </div>

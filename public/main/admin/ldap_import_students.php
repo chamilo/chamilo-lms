@@ -51,7 +51,7 @@ $course = $_POST['course'];
 if (empty($annee) && empty($course)) {
     Display::display_header($tool_name);
     echo '<div style="align:center">';
-    Display::display_icon('group.gif', get_lang('Select a filter to find a matching string at the end of the OU attribute'));
+    echo Display::return_icon('group.gif', get_lang('Select a filter to find a matching string at the end of the OU attribute'));
     echo get_lang('Select a filter to find a matching string at the end of the OU attribute');
     //echo '<em>'.get_lang('In order to do this, you must enter the year, the component and the component's step').'</em><br />';
     ///echo get_lang('Follow each of these steps, step by step').'<br />';

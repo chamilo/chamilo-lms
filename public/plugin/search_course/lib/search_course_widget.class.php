@@ -231,7 +231,7 @@ EOT;
             echo '<tr><td><b><a href="'.$href.'">'."$title</a></b><br/>$details</td><td>";
             if (!api_is_anonymous()) {
                 if ($course['registration_code']) {
-                    Display::display_icon(
+                    echo Display::return_icon(
                         'passwordprotected.png',
                         '',
                         ['style' => 'float:left;']

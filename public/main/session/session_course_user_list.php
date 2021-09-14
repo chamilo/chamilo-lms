@@ -209,14 +209,14 @@ echo Display::page_header($tool_name);
                     ?>
                             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>"
                                onclick="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
-                                <?php Display::display_icon('delete.png', get_lang('Delete')); ?>
+                                <?php echo Display::return_icon('delete.png', get_lang('Delete')); ?>
                             </a>
                         <?php
                 } else {
                     ?>
                             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=add&idChecked[]=<?php echo $enreg['user_id']; ?>"
                                onclick="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
-                                <?php Display::display_icon('add.png', get_lang('Add'), [], ICON_SIZE_SMALL); ?>
+                                <?php echo Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_SMALL); ?>
                             </a>
                         <?php
                 } ?>

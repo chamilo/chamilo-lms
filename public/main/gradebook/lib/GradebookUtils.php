@@ -1129,7 +1129,7 @@ class GradebookUtils
             $badges[] = Display::badge($value, $class);
         }
 
-        return Display::badge_group($badges);
+        return Display::badgeGroup($badges);
     }
 
     /**

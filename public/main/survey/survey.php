@@ -343,7 +343,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
                 api_get_cidreq().'&action=moveup&survey_id='.$survey_id.'&question_id='.$questionId.'">'.
                 Display::return_icon('up.png', get_lang('Move up')).'</a>';
         } else {
-            Display::display_icon('up_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
+            echo Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
         }
         if ($question_counter < $question_counter_max) {
             echo '<a
@@ -351,7 +351,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
                 'survey/survey.php?'.api_get_cidreq().'&action=movedown&survey_id='.$survey_id.'&question_id='.$questionId.'">'.
                 Display::return_icon('down.png', get_lang('Move down')).'</a>';
         } else {
-            Display::display_icon('down_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
+            echo Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
         }
     }
     echo '	</td>';

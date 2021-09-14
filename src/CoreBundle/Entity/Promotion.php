@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -51,11 +52,16 @@ class Promotion
     /**
      * @var Collection|Session[]
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="promotion", cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Session", mappedBy="promotion", cascade={"persist"})
      */
     protected Collection $sessions;
+
+    /**
+     * @var Collection|SysAnnouncement[]
+     *
+     * @ORM\OneToMany(targetEntity="SysAnnouncement", mappedBy="promotion", cascade={"persist"})
+     */
+    protected Collection $announcements;
 
     /**
      * @ORM\Column(name="status", type="integer", nullable=false)
@@ -65,6 +71,8 @@ class Promotion
     public function __construct()
     {
         $this->status = self::PROMOTION_STATUS_ACTIVE;
+        $this->announcements = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
     }
 
     /**
@@ -84,12 +92,7 @@ class Promotion
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -151,6 +154,24 @@ class Promotion
     public function setSessions(Collection $sessions): self
     {
         $this->sessions = $sessions;
+
+        return $this;
+    }
+
+    /**
+     * @return SysAnnouncement[]|Collection
+     */
+    public function getAnnouncements()
+    {
+        return $this->announcements;
+    }
+
+    /**
+     * @param SysAnnouncement[]|Collection $announcements
+     */
+    public function setAnnouncements($announcements): self
+    {
+        $this->announcements = $announcements;
 
         return $this;
     }

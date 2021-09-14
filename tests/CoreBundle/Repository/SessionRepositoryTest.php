@@ -44,8 +44,9 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $this->assertSame(1, $repo->count([]));
 
+        $this->assertSame('session 1', (string) $session);
         $this->assertSame(0, \count($session->getAllUsersFromCourse(0)));
-
+        $this->assertSame(100, $session->getDuration());
         $this->assertTrue($session->isActiveForStudent());
 
         $this->assertTrue($session->isActiveForCoach());

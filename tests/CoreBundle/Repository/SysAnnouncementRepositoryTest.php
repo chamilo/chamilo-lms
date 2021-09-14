@@ -47,7 +47,28 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         ;
         $em->persist($sysAnnouncement);
         $em->flush();
-        $count = $repo->count([]);
-        $this->assertSame(2, $count);
+
+        $repo->update($sysAnnouncement);
+
+        $this->assertSame(2, $repo->count([]));
+
+        $repo->delete($sysAnnouncement->getId());
+        $this->assertSame(1, $repo->count([]));
+    }
+
+    public function testGetVisibilityList(): void
+    {
+        self::bootKernel();
+        $repo = self::getContainer()->get(SysAnnouncementRepository::class);
+        $this->assertIsArray($repo->getVisibilityList());
+    }
+
+    public function testGetAnnouncements(): void
+    {
+        self::bootKernel();
+        $repo = self::getContainer()->get(SysAnnouncementRepository::class);
+        $user = $this->getUser('admin');
+        $items = $repo->getAnnouncements($user, $this->getAccessUrl(), 'en');
+        $this->assertSame(1, count($items));
     }
 }

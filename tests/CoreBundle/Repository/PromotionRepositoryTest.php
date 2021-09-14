@@ -30,15 +30,18 @@ class PromotionRepositoryTest extends AbstractApiTest
         $em->persist($career);
         $em->flush();
 
-        $item = (new Promotion())
+        $promotion = (new Promotion())
             ->setName('2000')
             ->setDescription('Promotion of 2000')
             ->setCareer($career)
             ->setStatus(1)
         ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
+        $this->assertHasNoEntityViolations($promotion);
+        $em->persist($promotion);
         $em->flush();
+
+        $this->assertSame(0, $promotion->getAnnouncements()->count());
+        $this->assertSame(0, $promotion->getSessions()->count());
 
         $this->assertSame($defaultCount + 1, $repo->count([]));
     }

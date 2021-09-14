@@ -312,7 +312,7 @@ class Session implements ResourceWithAccessUrlInterface
         return $this->getName();
     }
 
-    public function getDuration(): int
+    public function getDuration(): ?int
     {
         return $this->duration;
     }

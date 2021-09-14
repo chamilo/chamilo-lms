@@ -74,7 +74,7 @@ class SysAnnouncement
     protected ?Career $career = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Promotion")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Promotion", inversedBy="announcements")
      * @ORM\JoinColumn(name="promotion_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ?Promotion $promotion = null;

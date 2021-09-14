@@ -37,7 +37,7 @@ $visibleList = $repo->getVisibilityList();
 
 $tool_name = null;
 if (empty($_GET['lang'])) {
-    $_GET['lang'] = isset($_SESSION['user_language_choice']) ? $_SESSION['user_language_choice'] : null;
+    $_GET['lang'] = $_SESSION['user_language_choice'] ?? null;
 }
 
 if (!empty($action)) {
@@ -420,6 +420,7 @@ if ($action_todo) {
 }
 
 if ($show_announcement_list) {
+    var_dump(api_get_url_entity()->getId());
     $criteria = ['url' => api_get_url_entity()];
     $announcements = $repo->findBy($criteria);
     $announcement_data = [];

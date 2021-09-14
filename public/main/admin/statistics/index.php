@@ -12,7 +12,7 @@ api_protect_admin_script();
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
-$report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
+$report = $_REQUEST['report'] ?? '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
 
@@ -854,7 +854,6 @@ switch ($report) {
                 $item[] = $certificate ? get_lang('Yes') : get_lang('No');
                 $item[] = $birthDate;
                 $data[] = $item;
-                $row++;
             }
 
             if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {

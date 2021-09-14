@@ -22,7 +22,7 @@ if (isset($_GET['action']) && in_array($_GET['action'], ['add', 'edit', 'delete'
     $action = $_GET['action'];
 }
 
-$id = isset($_GET['id']) ? $_GET['id'] : '';
+$id = $_GET['id'] ?? '';
 
 $item = null;
 if (!empty($id)) {

@@ -232,6 +232,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+
     $session = Database::get_main_table(TABLE_MAIN_SESSION);
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
@@ -246,19 +247,17 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
                 c.title AS col1,
                 c.code AS col2,
                 c.course_language AS col3,
-                course_category.code AS col4,
-                c.subscribe AS col5,
-                c.unsubscribe AS col6,
-                c.code AS col7,
-                c.visibility AS col8,
-                c.directory as col9,
+                c.subscribe AS col4,
+                c.unsubscribe AS col5,
+                c.code AS col6,
+                c.visibility AS col7,
+                c.directory as col8,
                 c.visual_code
             FROM $course_table c
             INNER JOIN $session_rel_course r
             ON c.id = r.c_id
             INNER JOIN $session s
             ON r.session_id = s.id
-            LEFT JOIN $tblCourseCategory ON c.category_id = course_category.id
             ";
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {

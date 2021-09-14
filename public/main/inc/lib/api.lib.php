@@ -2764,8 +2764,7 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
         return false;
     }
 
-    ///$isAdmin = Session::read('is_platformAdmin');
-    $isAdmin = $currentUser->hasRole('ROLE_ADMIN');
+    $isAdmin = $currentUser->hasRole('ROLE_ADMIN') || $currentUser->hasRole('ROLE_SUPER_ADMIN');
 
     if ($isAdmin) {
         return true;

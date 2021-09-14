@@ -57,7 +57,6 @@ class PortfolioController
     }
 
     /**
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -484,7 +483,7 @@ class PortfolioController
         $parentCategories = $this->getCategoriesForIndex(null, 0);
         foreach ($parentCategories as $parentCategory) {
             $categoriesSelect->addOption($parentCategory->getTitle(), $parentCategory->getId());
-            $subCategories =  $this->getCategoriesForIndex(null, $parentCategory->getId());
+            $subCategories = $this->getCategoriesForIndex(null, $parentCategory->getId());
             if (count($subCategories) > 0) {
                 foreach ($subCategories as $subCategory) {
                     $categoriesSelect->addOption(' &mdash; '.$subCategory->getTitle(), $subCategory->getId());
@@ -2919,7 +2918,7 @@ class PortfolioController
     }
 
     /**
-     * It parsers a title for a variable in lang
+     * It parsers a title for a variable in lang.
      *
      * @param $defaultDisplayText
      * @return string
@@ -2934,7 +2933,7 @@ class PortfolioController
     }
 
     /**
-     * It translates the text as parameter
+     * It translates the text as parameter.
      *
      * @param $defaultDisplayText
      * @return mixed

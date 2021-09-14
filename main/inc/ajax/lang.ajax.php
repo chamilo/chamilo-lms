@@ -17,9 +17,7 @@ switch ($action) {
         echo api_get_language_translate_html();
         break;
     case 'translate_portfolio_category':
-
         if (isset($_REQUEST['new_language']) && isset($_REQUEST['variable_language']) && isset($_REQUEST['category_id'])) {
-
             $newLanguage = Security::remove_XSS($_REQUEST['new_language']);
             $langVariable = Security::remove_XSS($_REQUEST['variable_language']);
             $categoryId = (int) $_REQUEST['category_id'];

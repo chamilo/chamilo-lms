@@ -217,7 +217,11 @@ class PortfolioCategory
     }
 
     /**
+     * Set parent id
+     *
      * @param int $parentId
+     *
+     * @return PortfolioCategory
      */
     public function setParentId(int $parentId)
     {

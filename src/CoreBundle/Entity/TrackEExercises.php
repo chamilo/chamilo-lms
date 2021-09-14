@@ -35,10 +35,9 @@ class TrackEExercises
     protected int $exeUserId;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
+    #[Assert\NotBlank]
     protected DateTime $exeDate;
 
     /**
@@ -47,9 +46,9 @@ class TrackEExercises
     protected int $cId;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="exe_exo_id", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $exeExoId;
 
     /**

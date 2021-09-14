@@ -48,10 +48,10 @@ class SessionCategory
     protected Collection $sessions;
 
     /**
-     * @Assert\NotBlank
      * @Groups({"session_category:read", "session_category:write"})
      * @ORM\Column(name="name", type="string", length=100, nullable=false, unique=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**

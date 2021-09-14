@@ -68,13 +68,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * The course title.
-     *
-     * @Assert\NotBlank(message="A Course requires a title")
-     *
      * @Groups({"course:read", "course:write", "course_rel_user:read", "session_rel_course_rel_user:read", "session_rel_user:read"})
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
+    #[Assert\NotBlank(message: 'A Course requires a title')]
     protected ?string $title = null;
 
     /**

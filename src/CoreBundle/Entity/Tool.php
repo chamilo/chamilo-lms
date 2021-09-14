@@ -30,10 +30,9 @@ class Tool
 
     /**
      * @Groups({"tool:read"})
-     *
-     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", nullable=false, unique=true)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**

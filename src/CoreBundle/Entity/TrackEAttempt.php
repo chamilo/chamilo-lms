@@ -41,25 +41,22 @@ class TrackEAttempt
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="exe_id", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $exeId;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackEAttempts")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    #[Assert\NotBlank]
     protected User $user;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected ?int $questionId = null;
 
     /**

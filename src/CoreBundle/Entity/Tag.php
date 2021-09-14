@@ -23,9 +23,9 @@ class Tag
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="tag", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $tag;
 
     /**

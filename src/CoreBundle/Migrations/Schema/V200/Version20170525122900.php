@@ -41,15 +41,15 @@ class Version20170525122900 extends AbstractMigrationChamilo
             );
         }
 
-        if (false === $schema->hasTable('resource_comment')) {
+        if (!$schema->hasTable('resource_comment')) {
             $this->addSql(
                 'CREATE TABLE resource_comment (id BIGINT AUTO_INCREMENT NOT NULL, resource_node_id BIGINT DEFAULT NULL, author_id INT DEFAULT NULL, parent_id BIGINT DEFAULT NULL, content VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, root INT DEFAULT NULL, lvl INT NOT NULL, lft INT NOT NULL, rgt INT NOT NULL, INDEX IDX_C9D4B5841BAD783F (resource_node_id), INDEX IDX_C9D4B584F675F31B (author_id), INDEX IDX_C9D4B584727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
             $this->addSql(
-                'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B5841BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE SET NULL'
+                'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B5841BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
             $this->addSql(
-                'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B584F675F31B FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE SET NULL'
+                'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B584F675F31B FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE CASCADE'
             );
             $this->addSql(
                 'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B584727ACA70 FOREIGN KEY (parent_id) REFERENCES resource_comment (id) ON DELETE CASCADE'

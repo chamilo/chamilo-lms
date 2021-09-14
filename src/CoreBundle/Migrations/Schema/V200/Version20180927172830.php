@@ -66,6 +66,10 @@ class Version20180927172830 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C9968DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid)');
         }
 
+        if (!$table->hasIndex('UNIQ_47A9C9968DFD1EF')) {
+            $this->addSql('ALTER TABLE c_forum_forum ADD UNIQUE INDEX UNIQ_47A9C9968DFD1EF (lp_id);');
+        }
+
         if (false === $table->hasIndex('IDX_47A9C9921BF9426')) {
             $this->addSql('CREATE INDEX IDX_47A9C9921BF9426 ON c_forum_forum (forum_category)');
         }

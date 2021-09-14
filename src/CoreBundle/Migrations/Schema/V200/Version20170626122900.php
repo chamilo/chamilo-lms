@@ -202,10 +202,8 @@ class Version20170626122900 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM user_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
         $this->addSql('DELETE FROM user_rel_user WHERE friend_user_id NOT IN (SELECT id FROM user)');
 
-        $this->addSql('ALTER TABLE user_rel_user CHANGE user_id user_id INT NOT NULL, CHANGE friend_user_id friend_user_id INT NOT NULL');
-
-        $this->addSql('ALTER TABLE user_rel_user CHANGE user_id user_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE user_rel_user CHANGE friend_user_id friend_user_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE user_rel_user CHANGE friend_user_id friend_user_id INT NOT NULL');
+        $this->addSql('ALTER TABLE user_rel_user CHANGE user_id user_id INT NOT NULL');
 
         if ($table->hasColumn('last_edit')) {
             $this->addSql('UPDATE user_rel_user SET last_edit = NOW() WHERE last_edit IS NULL');
@@ -252,12 +250,12 @@ class Version20170626122900 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('created_at')) {
-            $this->addSql("ALTER TABLE user_rel_user ADD created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '(DC2Type:datetime)' ");
+            $this->addSql("ALTER TABLE user_rel_user ADD created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)' ");
             $this->addSql('UPDATE user_rel_user SET created_at = last_edit');
         }
 
         if (!$table->hasColumn('updated_at')) {
-            $this->addSql("ALTER TABLE user_rel_user ADD updated_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '(DC2Type:datetime)' ");
+            $this->addSql("ALTER TABLE user_rel_user ADD updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)' ");
             $this->addSql('UPDATE user_rel_user SET updated_at = last_edit');
         }
 

@@ -33,9 +33,8 @@ class Version20170627122900 extends AbstractMigrationChamilo
         $this->addSql(
             'ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) NOT NULL, CHANGE subkey subkey VARCHAR(190) DEFAULT NULL, CHANGE selected_value selected_value LONGTEXT DEFAULT NULL;'
         );
-        $this->addSql(
-            'ALTER TABLE settings_options CHANGE variable variable VARCHAR(190) DEFAULT NULL, CHANGE value value VARCHAR(190) DEFAULT NULL'
-        );
+
+        $this->addSql('ALTER TABLE settings_options CHANGE value value VARCHAR(190) DEFAULT NULL');
 
         $connection = $this->getEntityManager()->getConnection();
 

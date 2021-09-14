@@ -123,7 +123,6 @@ class Version20170904145500 extends AbstractMigrationChamilo
                 'ALTER TABLE c_quiz ADD prevent_backwards INT DEFAULT 0 NOT NULL'
             );
         }
-        $this->addSql('ALTER TABLE c_quiz CHANGE type type INT NOT NULL');
 
         if ($table->hasForeignKey('FK_B7A1C35FB48D66')) {
             $this->addSql(
@@ -170,6 +169,8 @@ class Version20170904145500 extends AbstractMigrationChamilo
         if ($table->hasIndex('course')) {
             $this->addSql('DROP INDEX course ON c_quiz_question');
         }
+
+        $this->addSql('ALTER TABLE c_quiz_question CHANGE type type INT NOT NULL;');
 
         // c_quiz_question_category.
         $table = $schema->getTable('c_quiz_question_category');
@@ -282,7 +283,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_quiz_question_rel_category');
         }
 
-        if (false === $table->hasForeignKey('FK_A468585C12469DE2')) {
+        if (!$table->hasForeignKey('FK_A468585C12469DE2')) {
             if ($table->hasPrimaryKey()) {
                 $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY');
                 $this->addSql('ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (category_id, question_id)');

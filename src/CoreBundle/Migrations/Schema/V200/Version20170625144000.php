@@ -20,6 +20,8 @@ class Version20170625144000 extends AbstractMigrationChamilo
     {
         $table = $schema->getTable('c_student_publication');
 
+        $this->addSql('ALTER TABLE c_student_publication CHANGE title title VARCHAR(255) NOT NULL');
+
         $this->addSql('UPDATE c_student_publication SET user_id = NULL WHERE user_id = 0');
         $this->addSql('ALTER TABLE c_student_publication CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_student_publication CHANGE parent_id parent_id INT DEFAULT NULL');

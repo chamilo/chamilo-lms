@@ -113,13 +113,13 @@ class Version20191101132000 extends AbstractMigrationChamilo
 
         if (!$table->hasForeignKey('FK_AFF87497727ACA70')) {
             $this->addSql(
-                'ALTER TABLE course_category ADD CONSTRAINT FK_AFF87497727ACA70 FOREIGN KEY (parent_id) REFERENCES course_category (id) ON DELETE SET NULL '
+                'ALTER TABLE course_category ADD CONSTRAINT FK_AFF87497727ACA70 FOREIGN KEY (parent_id) REFERENCES course_category (id) ON DELETE CASCADE'
             );
         }
 
         if (!$table->hasColumn('asset_id')) {
             $this->addSql("ALTER TABLE course_category ADD asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)'");
-            $this->addSql('ALTER TABLE course_category ADD CONSTRAINT FK_AFF874975DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id)');
+            $this->addSql('ALTER TABLE course_category ADD CONSTRAINT FK_AFF874975DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE SET NULL');
             $this->addSql('CREATE INDEX IDX_AFF874975DA1941 ON course_category (asset_id);');
         }
 

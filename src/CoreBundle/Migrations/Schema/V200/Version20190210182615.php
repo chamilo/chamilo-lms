@@ -28,16 +28,18 @@ class Version20190210182615 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE session SET promotion_id = NULL WHERE promotion_id = 0');
-        if (false === $table->hasForeignKey('FK_D044D5D4139DF194')) {
+        if (!$table->hasForeignKey('FK_D044D5D4139DF194')) {
             $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id) ON DELETE CASCADE');
             $this->addSql('CREATE INDEX IDX_D044D5D4139DF194 ON session (promotion_id);');
         }
 
-        if (false === $table->hasColumn('status')) {
+        if (!$table->hasColumn('status')) {
             $this->addSql('ALTER TABLE session ADD COLUMN status INT NOT NULL');
+        } else {
+            $this->addSql('ALTER TABLE session CHANGE status status INT NOT NULL');
         }
 
-        if (false === $table->hasForeignKey('FK_D044D5D4EF87E278')) {
+        if (!$table->hasForeignKey('FK_D044D5D4EF87E278')) {
             $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4EF87E278 FOREIGN KEY(session_admin_id) REFERENCES user(id);');
         }
 

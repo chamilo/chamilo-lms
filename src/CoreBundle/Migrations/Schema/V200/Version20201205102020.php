@@ -93,16 +93,19 @@ final class Version20201205102020 extends AbstractMigrationChamilo
                 'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id) ON DELETE CASCADE'
             );
         }
+
         if (!$table->hasForeignKey('FK_79D3D95A591CC992')) {
             $this->addSql(
                 'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A591CC992 FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE'
             );
         }
+
         if (!$table->hasForeignKey('FK_79D3D95A613FECDF')) {
             $this->addSql(
                 'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE'
             );
         }
+
         if (!$table->hasForeignKey('FK_79D3D95AA76ED395')) {
             $this->addSql(
                 'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95AA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
@@ -155,6 +158,27 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         }
         if (!$table->hasIndex('IDX_4AC0B45EAD3ED51C')) {
             $this->addSql('CREATE INDEX IDX_4AC0B45EAD3ED51C ON skill_rel_gradebook (gradebook_id)');
+        }
+
+        $table = $schema->getTable('skill_rel_skill');
+
+        $this->addSql('ALTER TABLE skill_rel_skill CHANGE skill_id skill_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE skill_rel_skill CHANGE parent_id parent_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_DA77E5A65585C142')) {
+            $this->addSql('ALTER TABLE skill_rel_skill ADD CONSTRAINT FK_DA77E5A65585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);');
+        }
+
+        if (!$table->hasForeignKey('FK_DA77E5A6727ACA70')) {
+            $this->addSql('ALTER TABLE skill_rel_skill ADD CONSTRAINT FK_DA77E5A6727ACA70 FOREIGN KEY (parent_id) REFERENCES skill (id) ON DELETE SET NULL;');
+        }
+
+        if (!$table->hasIndex('IDX_DA77E5A65585C142')) {
+            $this->addSql('CREATE INDEX IDX_DA77E5A65585C142 ON skill_rel_skill (skill_id);');
+        }
+
+        if (!$table->hasIndex('IDX_DA77E5A6727ACA70')) {
+            $this->addSql('CREATE INDEX IDX_DA77E5A6727ACA70 ON skill_rel_skill (parent_id);');
         }
     }
 }

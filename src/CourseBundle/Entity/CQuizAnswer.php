@@ -210,12 +210,7 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get destination.
-     *
-     * @return string
-     */
-    public function getDestination()
+    public function getDestination(): ?string
     {
         return $this->destination;
     }

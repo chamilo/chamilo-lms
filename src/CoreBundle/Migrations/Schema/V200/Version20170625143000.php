@@ -150,6 +150,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_319D6C9C1BAD783F ON c_link_category (resource_node_id)');
         }
+
         if ($table->hasIndex('session_id')) {
             $this->addSql('DROP INDEX session_id ON c_link_category');
         }

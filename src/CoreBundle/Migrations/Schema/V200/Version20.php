@@ -400,6 +400,76 @@ class Version20 extends AbstractMigrationChamilo
                 $schema->dropTable($table);
             }
         }
+
+        // Disable c_id and session_id.
+        $tables = [
+            'c_announcement' => ['c_id', 'session_id'],
+            'c_announcement_attachment' => ['c_id'],
+            'c_attendance' => ['c_id', 'session_id'],
+            'c_attendance_calendar' => ['c_id'],
+            'c_attendance_calendar_rel_group' => ['c_id', 'group_id'],
+            'c_attendance_result' => ['c_id'],
+            'c_attendance_sheet' => ['c_id'],
+            'c_calendar_event' => ['c_id', 'session_id'],
+            'c_calendar_event_attachment' => ['c_id'],
+            'c_calendar_event_repeat' => ['c_id'],
+            'c_calendar_event_repeat_not' => ['c_id'],
+            'c_course_description' => ['c_id', 'session_id'],
+            'c_document' => ['c_id', 'session_id'],
+            'c_forum_attachment' => ['c_id'],
+            'c_forum_category' => ['c_id', 'session_id'],
+            'c_forum_forum' => ['c_id', 'session_id'],
+            'c_forum_notification' => ['c_id'],
+            'c_forum_post' => ['c_id'],
+            'c_forum_thread' => ['c_id', 'session_id'],
+            'c_forum_thread_qualify' => ['c_id', 'session_id'],
+            'c_forum_thread_qualify_log' => ['c_id', 'session_id'],
+            'c_glossary' => ['c_id', 'session_id'],
+            'c_group_category' => ['c_id'],
+            'c_group_info' => ['c_id', 'session_id'],
+            //'c_group_rel_tutor' => ['c_id'],
+            'c_link' => ['c_id', 'session_id'],
+            'c_link_category' => ['c_id', 'session_id'],
+
+            'c_lp' => ['c_id', 'session_id'],
+            'c_lp_category' => ['c_id'],
+            'c_lp_item' => ['c_id'],
+            'c_lp_item_view' => ['c_id', 'session_id'],
+           // 'c_lp_iv_interaction' => ['c_id'],
+            //'c_lp_iv_objective' => ['c_id'],
+            'c_notebook' => ['c_id', 'session_id'],
+            'c_quiz' => ['c_id', 'session_id'],
+            'c_quiz_answer' => ['c_id'],
+            'c_quiz_question' => ['c_id'],
+            'c_quiz_question_category' => ['c_id'],
+            'c_quiz_question_option' => ['c_id'],
+            'c_quiz_question_rel_category' => ['c_id'],
+            'c_quiz_rel_category' => ['c_id'],
+            'c_quiz_rel_question' => ['c_id'],
+            'c_student_publication' => ['c_id', 'session_id'],
+            'c_student_publication_assignment' => ['c_id'],
+            'c_student_publication_comment' => ['c_id'],
+            'c_student_publication_rel_document' => ['c_id'],
+            'c_student_publication_rel_user' => ['c_id'],
+            'c_survey' => ['c_id', 'session_id'],
+            'c_survey_answer' => ['c_id'],
+            'c_survey_group' => ['c_id'],
+            'c_survey_invitation' => ['c_id', 'session_id', 'group_id'],
+            'c_survey_question' => ['c_id'],
+            'c_survey_question_option' => ['c_id'],
+            'c_thematic' => ['c_id', 'session_id'],
+            'c_thematic_advance' => ['c_id'],
+            'c_thematic_plan' => ['c_id'],
+            'c_tool' => ['c_id', 'session_id'],
+            'c_tool_intro' => ['c_id', 'session_id'],
+            'c_wiki' => ['c_id', 'session_id'],
+        ];
+
+        foreach ($tables as $table => $fields) {
+            foreach ($fields as $field) {
+                $this->addSql("ALTER TABLE $table CHANGE $field $field INT DEFAULT NULL");
+            }
+        }
     }
 
     public function down(Schema $schema): void

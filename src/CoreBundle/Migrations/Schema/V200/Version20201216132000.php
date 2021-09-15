@@ -62,7 +62,6 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             $lpItems = $resultItems->fetchAllAssociative();
 
             if (empty($lpItems)) {
-
                 continue;
             }
 

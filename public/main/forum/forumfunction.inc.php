@@ -3691,7 +3691,8 @@ function store_move_post($values)
         $forumId = $post->getForum()->getIid();
         $threadId = $post->getThread()->getIid();
 
-        $thread = (new CForumThread())
+        $thread = new CForumThread();
+        $thread
             ->setThreadTitle($post->getPostTitle())
             ->setForum($post->getForum())
             ->setUser($post->getUser())

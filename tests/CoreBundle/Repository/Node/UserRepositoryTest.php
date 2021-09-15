@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 
 class UserRepositoryTest extends AbstractApiTest
 {
@@ -111,17 +112,32 @@ class UserRepositoryTest extends AbstractApiTest
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         $user = (new User())
-            ->setSkipResourceNode(true)
             ->setLastname('Doe')
             ->setFirstname('Joe')
             ->setUsername('admin2')
             ->setStatus(1)
+            ->setActive(true)
+            ->setDateOfBirth(new DateTime())
+            ->setBiography('bio')
+            ->setExpired(false)
+            ->setTeach('teach')
+            ->setApiToken('tok')
+            ->setAuthSource('auth')
+            ->setProductions('prod')
+            ->setCompetences('comp')
+            ->setDiplomas('diploma')
+            ->setOpenarea('open')
+            ->setGender('m')
+            ->setTheme('chamilo')
             ->setPlainPassword('admin2')
             ->setEmail('admin@example.org')
             ->setOfficialCode('ADMIN')
             ->setCreatorId(1)
+            ->setSkipResourceNode(true)
             ->addUserAsAdmin()//->addGroup($group)
         ;
+
+        $user->setRoleFromStatus(COURSEMANAGER);
 
         $em->persist($user);
 
@@ -129,9 +145,14 @@ class UserRepositoryTest extends AbstractApiTest
         $userRepo->addUserToResourceNode($user->getId(), $user->getId());
         $em->flush();
 
-        //$this->assertTrue($user->isAdmin());
-        //$this->assertTrue($user->isSuperAdmin());
         $this->assertSame(3, $userRepo->count([]));
+        $this->assertSame(3, \count($user->getRoles()));
+
+        $this->assertSame('Joe Doe', $user->getCompleteNameWithClasses());
+        $this->assertSame('Joe Doe', $user->getFullname());
+
+        $this->assertSame(0, \count($user->getCurrentlyAccessibleSessions()));
+        $this->assertSame('/img/icons/svg/identifier_admin.svg', $user->getIconStatus());
     }
 
     public function testCreateUserWithApi(): void

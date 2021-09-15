@@ -139,6 +139,8 @@ class Skill
         $this->issuedSkills = new ArrayCollection();
         $this->items = new ArrayCollection();
         $this->courses = new ArrayCollection();
+        $this->gradeBookCategories = new ArrayCollection();
+        $this->skills = new ArrayCollection();
         $this->icon = '';
         $this->description = '';
         $this->status = self::STATUS_ENABLED;
@@ -368,6 +370,46 @@ class Skill
     public function setCourses(ArrayCollection $courses): self
     {
         $this->courses = $courses;
+
+        return $this;
+    }
+
+    /**
+     * @return SkillRelSkill[]|Collection
+     */
+    public function getSkills()
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @param SkillRelSkill[]|Collection $skills
+     *
+     * @return Skill
+     */
+    public function setSkills($skills): self
+    {
+        $this->skills = $skills;
+
+        return $this;
+    }
+
+    /**
+     * @return SkillRelGradebook[]|Collection
+     */
+    public function getGradeBookCategories()
+    {
+        return $this->gradeBookCategories;
+    }
+
+    /**
+     * @param SkillRelGradebook[]|Collection $gradeBookCategories
+     *
+     * @return Skill
+     */
+    public function setGradeBookCategories($gradeBookCategories): self
+    {
+        $this->gradeBookCategories = $gradeBookCategories;
 
         return $this;
     }

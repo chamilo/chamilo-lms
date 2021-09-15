@@ -28,14 +28,23 @@ class SkillRepositoryTest extends AbstractApiTest
         $skill = (new Skill())
             ->setName('php')
             ->setShortCode('php')
+            ->setDescription('desc')
+            ->setStatus(Skill::STATUS_ENABLED)
+            ->setCriteria('criteria')
+            ->setIcon('icon')
             ->setAccessUrlId($accessUrl->getId())
         ;
 
         $this->assertHasNoEntityViolations($skill);
         $skillRepo->update($skill);
 
-        // By default, there's 1 root skill + this newwly skill created.
+        // By default, there's 1 root skill + this newly skill created.
         $this->assertSame(2, $skillRepo->count([]));
+        $this->assertSame(0, $skill->getItems()->count());
+        $this->assertSame(0, $skill->getCourses()->count());
+        $this->assertSame(0, $skill->getIssuedSkills()->count());
+        $this->assertSame(0, $skill->getGradeBookCategories()->count());
+        $this->assertSame(0, $skill->getSkills()->count());
     }
 
     public function testDeleteSkill(): void

@@ -37,6 +37,8 @@ class CQuizRepositoryTest extends AbstractApiTest
         $this->assertSame('exercise', (string) $item);
         $this->assertSame(1, $repo->count([]));
 
+        $this->assertSame(0, $item->getQuestionsCategories()->count());
+
         $repo->updateNodeForResource($item);
 
         $link = $repo->getLink($item, $this->getContainer()->get('router'));

@@ -62,6 +62,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
         // One receiver in MessageRelUser.
         $this->assertSame(1, $messageRelUserRepo->count([]));
+        $this->assertSame(0, $message->getVotes());
         $this->assertSame(1, $message->getReceivers()->count());
 
         // Check if message was schedule to be sent.
@@ -195,6 +196,8 @@ class MessageRepositoryTest extends AbstractApiTest
             ->setParent($message->getSender())
             ->setCreator($message->getSender())
         ;
+        $message->addAttachment($attachment);
+
         $em->persist($attachment);
         $messageAttachmentRepo->addFile($attachment, $file);
         $em->flush();

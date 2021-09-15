@@ -22,16 +22,20 @@ class LanguageRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(LanguageRepository::class);
         $defaultCount = $repo->count([]);
-        $item = (new Language())
+        $language = (new Language())
             ->setAvailable(true)
             ->setOriginalName('language')
             ->setEnglishName('language')
             ->setIsocode('lan')
         ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
+        $this->assertHasNoEntityViolations($language);
+        $em->persist($language);
         $em->flush();
 
+        $this->assertSame('language', $language->getOriginalName());
+        $this->assertSame('language', $language->getEnglishName());
+        $this->assertSame('lan', $language->getIsocode());
+        $this->assertIsInt($language->getId());
         $this->assertSame($defaultCount + 1, $repo->count([]));
     }
 }

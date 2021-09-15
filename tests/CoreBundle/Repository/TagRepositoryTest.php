@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Entity\UserRelTag;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -40,6 +41,15 @@ class TagRepositoryTest extends AbstractApiTest
         ;
         $this->assertHasNoEntityViolations($tag);
         $em->persist($tag);
+
+        $user = $this->createUser('test');
+
+        $userRelTag = (new UserRelTag())
+            ->setUser($user)
+            ->setTag($tag)
+        ;
+        $em->persist($userRelTag);
+
         $em->flush();
 
         $this->assertSame($defaultCount + 1, $repo->count([]));

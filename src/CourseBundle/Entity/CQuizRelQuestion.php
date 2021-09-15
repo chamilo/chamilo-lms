@@ -56,6 +56,18 @@ class CQuizRelQuestion
         return $this;
     }
 
+    public function getQuestion(): CQuizQuestion
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(CQuizQuestion $question): self
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
     /**
      * Get questionOrder.
      *
@@ -71,8 +83,10 @@ class CQuizRelQuestion
         return $this->quiz;
     }
 
-    public function getQuestion(): CQuizQuestion
+    public function setQuiz(CQuiz $quiz): self
     {
-        return $this->question;
+        $this->quiz = $quiz;
+
+        return $this;
     }
 }

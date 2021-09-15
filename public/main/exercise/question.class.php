@@ -591,8 +591,7 @@ abstract class Question
             $position = $this->position;
             //$exerciseEntity = $exerciseRepo->find($exerciseId);
 
-            $question = new CQuizQuestion();
-            $question
+            $question = (new CQuizQuestion())
                 ->setQuestion($this->question)
                 ->setDescription($this->description)
                 ->setPonderation($this->weighting)
@@ -1054,8 +1053,7 @@ abstract class Question
         $em = Database::getManager();
         $courseEntity = api_get_course_entity($course_id);
 
-        $question = new CQuizQuestion();
-        $question
+        $question = (new CQuizQuestion())
             ->setQuestion($questionText)
             ->setDescription($description)
             ->setPonderation($this->weighting)

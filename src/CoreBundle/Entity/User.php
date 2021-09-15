@@ -1057,22 +1057,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getLps(): void
-    {
-        //return $this->lps;
-        /*$criteria = Criteria::create()
-            ->where(Criteria::expr()->eq("id", "666"))
-            //->orderBy(array("username" => "ASC"))
-            //->setFirstResult(0)
-            //->setMaxResults(20)
-        ;
-        $lps = $this->lps->matching($criteria);*/
-        /*return $this->lps->filter(
-            function($entry) use ($idsToFilter) {
-                return $entry->getId() == 1;
-        });*/
-    }
-
     /**
      * Returns the list of classes for the user.
      */

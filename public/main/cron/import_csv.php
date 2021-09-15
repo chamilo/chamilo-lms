@@ -2150,7 +2150,7 @@ class ImportCsv
                             $dateEnd,
                             $coachBefore,
                             $coachAfter,
-                            $coachId,
+                            [$coachId],
                             $categoryId,
                             $visibility
                         );

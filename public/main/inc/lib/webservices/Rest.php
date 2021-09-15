@@ -1192,7 +1192,7 @@ class Rest extends WebService
             $displayEndDate,
             null,
             null,
-            $coach_username,
+            [$coach_username],
             null,
             1,
             false,
@@ -1630,6 +1630,7 @@ class Rest extends WebService
         }
 
         $modelSession = SessionManager::fetch($modelSessionId);
+        $generalCoachesId = SessionManager::getGeneralCoachesIdForSession($modelSessionId);
 
         $modelSession['accessUrlId'] = 1;
         if (api_is_multiple_url_enabled()) {
@@ -1646,7 +1647,7 @@ class Rest extends WebService
             $endDate,
             $startDate,
             $endDate,
-            $modelSession['id_coach'],
+            $generalCoachesId,
             $modelSession['session_category_id'],
             $modelSession['visibility'],
             false,

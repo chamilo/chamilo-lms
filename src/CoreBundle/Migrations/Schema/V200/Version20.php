@@ -410,6 +410,7 @@ class Version20 extends AbstractMigrationChamilo
             'c_attendance_calendar_rel_group' => ['c_id', 'group_id'],
             'c_attendance_result' => ['c_id'],
             'c_attendance_sheet' => ['c_id'],
+            'c_attendance_sheet_log' => ['c_id'],
             'c_calendar_event' => ['c_id', 'session_id'],
             'c_calendar_event_attachment' => ['c_id'],
             'c_calendar_event_repeat' => ['c_id'],

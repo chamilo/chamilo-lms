@@ -247,7 +247,10 @@ if (!empty($allCourseForums)) {
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 
 $languages = api_get_language_list_for_flag();
-$defaultUserLanguage = $user->getLocale();
+$defaultUserLanguage = 'en';
+if (null !== $user) {
+    $defaultUserLanguage = $user->getLocale();
+}
 
 $extraFieldValues = new ExtraFieldValue('user');
 $value = $extraFieldValues->get_values_by_handler_and_field_variable(api_get_user_id(), 'langue_cible');

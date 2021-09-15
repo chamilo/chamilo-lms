@@ -1732,6 +1732,7 @@ class GradebookUtils
         $imgSrcLoading = api_get_path(WEB_LIBRARY_JS_PATH).'loading.gif';
         $imgSrcPdf = Display::return_icon('pdf.png', '', [], ICON_SIZE_MEDIUM, false, true);
 
+        $urlDownload = api_get_path(WEB_CODE_PATH).'gradebook/gradebook_display_certificate.php?'.api_get_cidreq().'&action=download_all_certificates&catId='.$categoryId;
         return "<script>
             $(function () {
                 var \$btnExport = $('$buttonSelector'),
@@ -1742,7 +1743,7 @@ class GradebookUtils
                         \$btnExport.find('img').prop('src', '$imgSrcPdf');
                         window.clearInterval(interval);
                         window.removeEventListener('beforeunload', onbeforeunloadListener);
-                        window.location.href = response;
+                        window.location.href = '".$urlDownload."';
                     }
                 }
 

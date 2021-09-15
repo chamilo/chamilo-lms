@@ -2999,9 +2999,11 @@ function newThread(CForum $forum, $form_values = '', $showPreview = true)
             $newThread = saveThread($forum, $values);
             if ($newThread) {
                 SkillModel::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $newThread->getIid());
-                $postId = $newThread->getThreadLastPost();
+                $post = $newThread->getThreadLastPost();
 
-                if ($postId) {
+                if ($post) {
+                    $postId = $post->getIid();
+
                     if (isset($values['give_revision']) && 1 == $values['give_revision']) {
                         $extraFieldValues = new ExtraFieldValue('forum_post');
                         $revisionLanguage = isset($values['extra_revision_language']) ? $values['extra_revision_language'] : '';
@@ -3021,7 +3023,7 @@ function newThread(CForum $forum, $form_values = '', $showPreview = true)
                     $extraFieldValues = new ExtraFieldValue('forum_post');
                     $params = [
                         'item_id' => $postId,
-                        'extra_ask_for_revision' => isset($values['extra_ask_for_revision']) ? $values['extra_ask_for_revision'] : '',
+                        'extra_ask_for_revision' => $values['extra_ask_for_revision'] ?? '',
                     ];
                     $extraFieldValues->saveFieldValues(
                         $params,

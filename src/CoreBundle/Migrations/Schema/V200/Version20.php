@@ -467,7 +467,6 @@ class Version20 extends AbstractMigrationChamilo
             // core tables
 
             'message' => ['user_receiver_id'],
-
         ];
 
         foreach ($tables as $tableName => $fields) {

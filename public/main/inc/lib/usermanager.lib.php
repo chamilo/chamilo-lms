@@ -699,7 +699,7 @@ class UserManager
             WHERE user_id = $user_id AND relation_type = ". SessionEntity::SESSION_COACH;
         Database::query($sql);
 
-        $sql = "UPDATE $table_session SET id_coach = $currentUserId
+        $sql = "UPDATE $table_session SET session_admin_id = $currentUserId
                 WHERE session_admin_id = '".$user_id."'";
         Database::query($sql);
 

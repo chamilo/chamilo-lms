@@ -417,14 +417,14 @@ class Version20 extends AbstractMigrationChamilo
             'c_course_description' => ['c_id', 'session_id'],
             'c_document' => ['c_id', 'session_id'],
             'c_forum_attachment' => ['c_id'],
-            'c_forum_category' => ['c_id', 'session_id'],
-            'c_forum_forum' => ['c_id', 'session_id'],
+            'c_forum_category' => ['c_id', 'session_id', 'cat_id'],
+            'c_forum_forum' => ['c_id', 'session_id', 'post_id'],
             'c_forum_notification' => ['c_id'],
             'c_forum_post' => ['c_id'],
             'c_forum_thread' => ['c_id', 'session_id'],
             'c_forum_thread_qualify' => ['c_id', 'session_id'],
             'c_forum_thread_qualify_log' => ['c_id', 'session_id'],
-            'c_glossary' => ['c_id', 'session_id'],
+            'c_glossary' => ['c_id', 'session_id', 'glossary_id'],
             'c_group_category' => ['c_id'],
             'c_group_info' => ['c_id', 'session_id'],
             //'c_group_rel_tutor' => ['c_id'],
@@ -463,6 +463,11 @@ class Version20 extends AbstractMigrationChamilo
             'c_tool' => ['c_id', 'session_id'],
             'c_tool_intro' => ['c_id', 'session_id'],
             'c_wiki' => ['c_id', 'session_id'],
+
+            // core tables
+
+            'message' => ['user_receiver_id'],
+
         ];
 
         foreach ($tables as $tableName => $fields) {

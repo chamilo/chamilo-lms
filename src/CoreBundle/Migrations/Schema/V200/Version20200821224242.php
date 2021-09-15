@@ -23,17 +23,8 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $table = $schema->getTable('message');
         $this->addSql('ALTER TABLE message CHANGE parent_id parent_id BIGINT DEFAULT NULL');
 
-        if (!$table->hasColumn('msg_read')) {
-            $this->addSql('ALTER TABLE message ADD msg_read TINYINT(1) NOT NULL');
-
-            $this->addSql('UPDATE message SET msg_read = 1 WHERE msg_status = 1');
-            $this->addSql('UPDATE message SET msg_read = 0 WHERE msg_status = 0');
-            $this->addSql('UPDATE message SET msg_status = 1 WHERE msg_status = 0');
+        if ($table->hasColumn('msg_status')) {
             $this->addSql('ALTER TABLE message CHANGE msg_status msg_type SMALLINT NOT NULL');
-        }
-
-        if (!$table->hasColumn('starred')) {
-            $this->addSql('ALTER TABLE message ADD starred TINYINT(1) NOT NULL');
         }
 
         if (!$table->hasColumn('status')) {

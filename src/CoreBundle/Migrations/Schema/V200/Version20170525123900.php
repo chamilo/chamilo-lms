@@ -97,6 +97,25 @@ class Version20170525123900 extends AbstractMigrationChamilo
         if (!$table->hasIndex('IDX_70122432613FECDF')) {
             $this->addSql('CREATE INDEX IDX_70122432613FECDF ON usergroup_rel_session (session_id)');
         }
+
+        $table = $schema->getTable('usergroup_rel_user');
+
+        $this->addSql('ALTER TABLE usergroup_rel_user CHANGE usergroup_id usergroup_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE usergroup_rel_user CHANGE user_id user_id INT DEFAULT NULL');
+
+        if ($table->hasForeignKey('FK_739515A9A76ED395')) {
+            $this->addSql('ALTER TABLE usergroup_rel_user DROP FOREIGN KEY FK_739515A9A76ED395');
+        }
+        $this->addSql(
+            'ALTER TABLE usergroup_rel_user ADD CONSTRAINT FK_739515A9A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;'
+        );
+
+        if (!$table->hasForeignKey('FK_739515A9D2112630')) {
+            $this->addSql('ALTER TABLE usergroup_rel_user DROP FOREIGN KEY FK_739515A9D2112630');
+        }
+        $this->addSql(
+            'ALTER TABLE usergroup_rel_user ADD CONSTRAINT FK_739515A9D2112630 FOREIGN KEY (usergroup_id) REFERENCES usergroup (id) ON DELETE CASCADE;'
+        );
     }
 
     public function down(Schema $schema): void

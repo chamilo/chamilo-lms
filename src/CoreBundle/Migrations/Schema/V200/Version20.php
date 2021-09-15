@@ -465,9 +465,12 @@ class Version20 extends AbstractMigrationChamilo
             'c_wiki' => ['c_id', 'session_id'],
         ];
 
-        foreach ($tables as $table => $fields) {
+        foreach ($tables as $tableName => $fields) {
+            $table = $schema->getTable($tableName);
             foreach ($fields as $field) {
-                $this->addSql("ALTER TABLE $table CHANGE $field $field INT DEFAULT NULL");
+                if ($table->hasColumn($field)) {
+                    $this->addSql("ALTER TABLE $tableName CHANGE $field $field INT DEFAULT NULL");
+                }
             }
         }
     }

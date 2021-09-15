@@ -40,4 +40,39 @@ class CCourseDescriptionRepositoryTest extends AbstractApiTest
         $this->assertSame('title', (string) $item);
         $this->assertSame(1, $repo->count([]));
     }
+
+    public function testGetDescriptions(): void
+    {
+        self::bootKernel();
+
+        $repo = self::getContainer()->get(CCourseDescriptionRepository::class);
+        $em = $this->getEntityManager();
+
+        $course = $this->createCourse('Test');
+        $session = $this->createSession('Test Session');
+
+        $admin = $this->getUser('admin');
+
+        $item = (new CCourseDescription())
+            ->setTitle('title')
+            ->setContent('content')
+            ->setDescriptionType(CCourseDescription::TYPE_DESCRIPTION)
+            ->setProgress(100)
+            ->setCreator($admin)
+            ->setParent($course)
+            ->addCourseLink($course)
+        ;
+        $this->assertHasNoEntityViolations($item);
+
+        $em->persist($item);
+        $em->flush();
+
+        $descriptionsInCourse = $repo->findByTypeInCourse(CCourseDescription::TYPE_DESCRIPTION, $course);
+
+        $this->assertSame(1, count($descriptionsInCourse));
+
+        $descriptionsInSession = $repo->findByTypeInCourse(CCourseDescription::TYPE_DESCRIPTION, $course, $session);
+
+        $this->assertSame(1, count($descriptionsInSession));
+    }
 }

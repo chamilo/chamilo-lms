@@ -96,33 +96,25 @@ class CourseDescription
         $courseId = null,
         $session_id = null
     ) {
-        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $courseId = (int) $courseId;
+        $result = Container::getCourseDescriptionRepository()->findByTypeInCourse(
+            (int) $description_type,
+            api_get_course_entity($courseId),
+            api_get_session_entity($session_id),
+            api_get_group_entity()
+        );
 
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
+        if (empty($result)) {
+            return [];
         }
 
-        if (!isset($session_id)) {
-            $session_id = $this->session_id;
-        }
-        $condition_session = api_get_session_condition($session_id);
-        $description_type = (int) $description_type;
+        $description = $result[0];
 
-        $sql = "SELECT * FROM $table
-		        WHERE
-		            description_type = '$description_type'
-		             ";
-        $rs = Database::query($sql);
-        $data = [];
-        if ($description = Database::fetch_array($rs)) {
-            $data['description_title'] = $description['title'];
-            $data['description_content'] = $description['content'];
-            $data['progress'] = $description['progress'];
-            $data['iid'] = $description['iid'];
-        }
-
-        return $data;
+        return [
+            'description_title' => $description->getTitle(),
+            'description_content' => $description->getContent(),
+            'progress' => $description->getProgress(),
+            'iid' => $description->getIid(),
+        ];
     }
 
     /**
@@ -134,28 +126,15 @@ class CourseDescription
      */
     public function get_data_by_id($id, $course_code = '', $session_id = null)
     {
-        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $course_id = api_get_course_int_id();
-        $id = (int) $id;
+        $description = Container::getCourseDescriptionRepository()->find($id);
 
-        if (!isset($session_id)) {
-            $session_id = $this->session_id;
-        }
-        $condition_session = api_get_session_condition($session_id);
-        if (!empty($course_code)) {
-            $course_info = api_get_course_info($course_code);
-            $course_id = $course_info['real_id'];
-        }
-
-        $sql = "SELECT * FROM $table
-		        WHERE  iid='$id'  ";
-        $rs = Database::query($sql);
         $data = [];
-        if ($description = Database::fetch_array($rs)) {
-            $data['description_type'] = $description['description_type'];
-            $data['description_title'] = $description['title'];
-            $data['description_content'] = $description['content'];
-            $data['progress'] = $description['progress'];
+
+        if ($description) {
+            $data['description_type'] = $description->getDescriptionType();
+            $data['description_title'] = $description->getTitle();
+            $data['description_content'] = $description->getContent();
+            $data['progress'] = $description->getProgress();
         }
 
         return $data;

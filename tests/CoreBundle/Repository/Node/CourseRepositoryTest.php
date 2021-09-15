@@ -53,13 +53,16 @@ class CourseRepositoryTest extends WebTestCase
             ->setCreator($this->getUser('admin'))
             ->addAccessUrl($this->getAccessUrl())
             ->setCourseLanguage('en')
-            ->setDescription('')
+            ->setDescription('desc')
+            ->setShowScore(0)
             ->addCategory($category)
         ;
         $courseRepo->create($course);
 
         /** @var Course $course */
         $course = $courseRepo->find($course->getId());
+        $this->assertSame('test julio', $course->getName());
+        $this->assertSame('test julio (TESTJULIO)', $course->getTitleAndCode());
         $this->assertSame('TESTJULIO', $course->getCode());
         $this->assertSame(1, $course->getCategories()->count());
         $this->assertNotNull($course->getLastVisit());

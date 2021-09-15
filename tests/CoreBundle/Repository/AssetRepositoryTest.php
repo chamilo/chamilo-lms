@@ -26,6 +26,7 @@ class AssetRepositoryTest extends AbstractApiTest
         // Create asset.
         $asset = (new Asset())
             ->setTitle('test')
+            ->setDescription('desc')
             ->setCategory(Asset::WATERMARK)
             ->setFile($file)
         ;
@@ -33,8 +34,18 @@ class AssetRepositoryTest extends AbstractApiTest
         $em->persist($asset);
         $em->flush();
 
-        // 1 asset
         $this->assertSame(1, $assetRepo->count([]));
+
+        $this->assertSame(Asset::WATERMARK.'/'.$asset->getOriginalName(), $asset->getFolder());
+        $this->assertTrue($asset->isImage());
+        $this->assertFalse($asset->isVideo());
+        $this->assertSame($file->getSize(), $asset->getSize());
+        $this->assertSame(24, $asset->getWidth());
+        $this->assertSame(24, $asset->getHeight());
+        $this->assertSame([], $asset->getMetadata());
+        $this->assertFalse($asset->getCompressed());
+
+        $this->assertSame($file->getFilename(), (string) $asset);
     }
 
     public function testCreateWatermark(): void

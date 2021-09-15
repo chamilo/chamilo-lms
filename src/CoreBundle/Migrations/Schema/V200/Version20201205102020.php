@@ -165,6 +165,8 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE skill_rel_skill CHANGE skill_id skill_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE skill_rel_skill CHANGE parent_id parent_id INT DEFAULT NULL');
 
+        $this->addSql('UPDATE skill_rel_skill SET parent_id = NULL WHERE parent_id = 0');
+
         if (!$table->hasForeignKey('FK_DA77E5A65585C142')) {
             $this->addSql('ALTER TABLE skill_rel_skill ADD CONSTRAINT FK_DA77E5A65585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);');
         }

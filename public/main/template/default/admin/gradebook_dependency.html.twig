@@ -39,7 +39,7 @@
                     {% for course in courses %}
                         <td>
                             {% if user.result_dependencies[course.code] %}
-                                <img src="{{ 'check-circle.png'|icon(22) }}"/>
+                                <img src="{{ 'check-circle'|mdi_icon(22) }}"/>
                             {% endif %}
                         </td>
                     {% endfor %}
@@ -58,9 +58,9 @@
 
                     <td>
                         {% if user.final_result %}
-                            <img src="{{ 'check-circle.png'|icon(22) }}"/>
+                            <img src="{{ 'check-circle'|mdi_icon(22) }}"/>
                         {% else %}
-                            <img src="{{ 'warning.png'|icon(22) }}"/>
+                            <img src="{{ 'alert'|mdi_icon(22) }}"/>
                         {% endif %}
                     </td>
                 </tr>

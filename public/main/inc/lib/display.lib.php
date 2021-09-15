@@ -2452,18 +2452,6 @@ HTML;
     }
 
     /**
-     * @param string $image
-     * @param int    $size
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
-    {
-        return self::return_icon($image, $name, [], $size);
-    }
-
-    /**
      * @param $id
      *
      * @return array|mixed

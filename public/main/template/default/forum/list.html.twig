@@ -51,7 +51,7 @@
             {% if fold_forum_categories %}
                 {% set panel_icon %}
                     <a href="{{ item.url }}" title="{{ item.title }}">
-                        <span class="open">{{ 'forum_blue.png'|img(32) }}</span>
+                        <span class="open">{{ 'forum_blue.png'|icon(32) }}</span>
                     </a>
                 {% endset %}
 
@@ -64,7 +64,7 @@
             {% else %}
                 {% set panel_title %}
                     <a href="{{ item.url }}" title="{{ item.title }}" class="flex flex-row gap-2">
-                        <span class="open">{{ 'forum_blue.png'|img(32) }}</span>
+                        <span class="open">{{ 'forum_blue.png'|icon(32) }}</span>
                         {{ item.title }}{{ item.icon_session }}
                     </a>
                     {% for category_language_item in category_language_array %}
@@ -91,9 +91,9 @@
                                                 <img src="{{ subitem.forum_image }}" width="48px">
                                             {% else %}
                                                 {% if subitem.forum_of_group == 0 %}
-                                                    {{ 'forum_group.png'|img(48) }}
+                                                    {{ 'forum_group.png'|icon(48) }}
                                                 {% else %}
-                                                    {{ 'forum.png'|img(48) }}
+                                                    {{ 'forum.png'|icon(48) }}
                                                 {% endif %}
                                             {% endif %}
                                         </a>
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="w-4/5 flex flex-row justify-between">
                                     <h3 class="text-lg flex flex-row">
-                                        {{ 'forum_yellow.png'|img(32) }}
+                                        {{ 'forum_yellow.png'|icon(32) }}
                                         <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
 {#                                            {% if subitem.forum_of_group != 0 %}#}
 {#                                                <a class="forum-goto" href="../group/group_space.php?cid={{ course.id }}&sid={{ session.id }}&gid={{ subitem.forum_of_group }}">#}

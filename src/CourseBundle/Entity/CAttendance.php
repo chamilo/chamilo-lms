@@ -47,6 +47,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $active;
 
     /**
@@ -142,7 +143,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getAttendanceQualifyTitle(): string
+    public function getAttendanceQualifyTitle(): ?string
     {
         return $this->attendanceQualifyTitle;
     }

@@ -57,14 +57,20 @@ $form = new FormValidator(
 );
 
 $form->addElement('header', get_lang('Upload corrections'));
-$form->addHtml(Display::return_message(
-    sprintf(
-        get_lang('Upload correctionsExplanationWithDownloadLinkX'),
-        $downloadLink
-    ),
-    'normal',
-    false
-));
+$form->addHtml(
+    Display::return_message(
+        sprintf(
+            get_lang(
+                "First you have to download the corrections <a href='%s'> here </a>.
+After that you have to unzip that file and edit the files as you wanted without changing the file names.
+Then create a zip file with those modified files and upload it in this form."
+            ),
+            $downloadLink
+        ),
+        'normal',
+        false
+    )
+);
 $form->addElement('file', 'file', get_lang('Upload a document'));
 $form->addProgress();
 $form->addRule('file', get_lang('Required field'), 'required');

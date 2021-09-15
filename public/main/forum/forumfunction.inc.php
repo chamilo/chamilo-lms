@@ -167,6 +167,7 @@ function handleForum($url)
                 break;
             case 'delete_forum':
                 if ($resource) {
+                    $resource = Container::getForumRepository()->find($id);
                     $repo->delete($resource);
                     Display::addFlash(Display::return_message(get_lang('Forum deleted'), 'confirmation', false));
                 }

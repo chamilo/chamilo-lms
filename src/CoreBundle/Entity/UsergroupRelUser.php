@@ -8,10 +8,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class UsergroupRelUser.
- *
  * @ORM\Table(
  *     name="usergroup_rel_user",
  *     indexes={
@@ -34,19 +33,20 @@ class UsergroupRelUser
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="classes", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Usergroup $usergroup;
 
     /**
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $relationType;
 
     /**

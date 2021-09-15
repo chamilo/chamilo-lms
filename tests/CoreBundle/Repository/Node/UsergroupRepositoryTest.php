@@ -111,6 +111,7 @@ class UsergroupRepositoryTest extends KernelTestCase
         $userGroupRelUser = (new UsergroupRelUser())
             ->setUser($testUser)
             ->setUsergroup($group)
+            ->setRelationType(1)
         ;
         $em->persist($userGroupRelUser);
 
@@ -130,6 +131,9 @@ class UsergroupRepositoryTest extends KernelTestCase
         $this->assertSame(1, $group->getUsers()->count());
 
         $repo->delete($group);
+
+        $this->assertNotNull($this->getUser('teacher'));
+        $this->assertNotNull($this->getCourse($course->getId()));
         $this->assertSame(0, $repo->count([]));
     }
 }

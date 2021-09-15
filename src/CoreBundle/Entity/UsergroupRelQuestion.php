@@ -10,8 +10,6 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UsergroupRelQuestion.
- *
  * @ORM\Table(name="usergroup_rel_question")
  * @ORM\Entity
  */

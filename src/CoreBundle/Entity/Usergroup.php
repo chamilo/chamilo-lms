@@ -39,10 +39,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?int $id = null;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**
@@ -51,9 +50,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?string $description = null;
 
     /**
-     * @Assert\NotNull()
      * @ORM\Column(name="group_type", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $groupType;
 
     /**
@@ -67,10 +66,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?string $url = null;
 
     /**
-     * @Assert\NotNull()
-     *
      * @ORM\Column(name="visibility", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $visibility;
 
     /**
@@ -79,9 +77,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?string $authorId = null;
 
     /**
-     * @Assert\NotNull()
      * @ORM\Column(name="allow_members_leave_group", type="integer")
      */
+    #[Assert\NotBlank]
     protected int $allowMembersToLeaveGroup;
 
     /**

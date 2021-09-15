@@ -350,7 +350,7 @@ $form->addButtonNext(get_lang('Next step'));
 
 if (!$formSent) {
     $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
-    $formDefaults['coach_username'] = api_get_user_id();
+    $formDefaults['coach_username'] = [api_get_user_id()];
 }
 
 $form->setDefaults($formDefaults);

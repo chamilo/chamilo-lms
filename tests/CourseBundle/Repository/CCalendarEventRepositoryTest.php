@@ -416,5 +416,25 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         );
 
         $this->assertNotNull($event);
+
+        $announcement2 = (new CAnnouncement())
+            ->setTitle('item2')
+            ->setParent($course)
+            ->setCreator($teacher)
+        ;
+        $repo->create($announcement2);
+
+        $student = $this->createUser('student');
+        $group = $this->createGroup('group', $course);
+
+        $event = $calendarRepo->createFromAnnouncement(
+            $announcement2,
+            new Datetime('now'),
+            new DateTime('now +30 days'),
+            ['USER:'.$student->getId(), 'GROUP:'.$group->getIid()],
+            $course,
+        );
+
+        $this->assertNotNull($event);
     }
 }

@@ -7314,11 +7314,8 @@ class Tracking
                             $created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
                             $created_dir = '/'.$created_dir;
                             $now = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
-                            //Creating directory
-                            $publication = new CStudentPublication();
-                            $publication
-                                //->setUrl($created_dir)
-                                //->setCId($course_id)
+                            // Creating directory
+                            $publication = (new CStudentPublication())
                                 ->setTitle($parent_data['title'])
                                 ->setDescription(
                                     $parent_data['description']."folder_moved_from_session_id_$origin_session_id"
@@ -7400,8 +7397,7 @@ class Tracking
                         $data['sent_date'] = new DateTime($data['sent_date'], new DateTimeZone('UTC'));
 
                         $data['post_group_id'] = (int) $data['post_group_id'];
-                        $publication = new CStudentPublication();
-                        $publication
+                        $publication = (new CStudentPublication())
                             ->setTitle($data['title'])
                             ->setDescription($data['description'].' file moved')
                             ->setActive($data['active'])

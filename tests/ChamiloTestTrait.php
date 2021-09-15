@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -45,25 +46,6 @@ trait ChamiloTestTrait
 
         return $user;
     }
-
-    /**
-     * Finds a user registered in the test DB, added by the DataFixtures classes.
-     */
-    public function getUser(string $username): ?User
-    {
-        /** @var UserRepository $repo */
-        $repo = static::getContainer()->get(UserRepository::class);
-
-        return $repo->findByUsername($username);
-    }
-
-    public function getCourse($courseId): ?Course
-    {
-        $repo = static::getContainer()->get(CourseRepository::class);
-
-        return $repo->find($courseId);
-    }
-
     public function createCourse(string $title): ?Course
     {
         $repo = static::getContainer()->get(CourseRepository::class);
@@ -91,6 +73,40 @@ trait ChamiloTestTrait
         $repo->update($session);
 
         return $session;
+    }
+
+    public function createGroup(string $title, Course $course): ?CGroup
+    {
+        $em = $this->getEntityManager();
+
+        $group = (new CGroup())
+            ->setName($title)
+            ->setParent($course)
+            ->setCreator($this->getUser('admin'))
+            ->setMaxStudent(100)
+        ;
+        $em->persist($group);
+        $em->flush();
+
+        return $group;
+    }
+
+    /**
+     * Finds a user registered in the test DB, added by the DataFixtures classes.
+     */
+    public function getUser(string $username): ?User
+    {
+        /** @var UserRepository $repo */
+        $repo = static::getContainer()->get(UserRepository::class);
+
+        return $repo->findByUsername($username);
+    }
+
+    public function getCourse($courseId): ?Course
+    {
+        $repo = static::getContainer()->get(CourseRepository::class);
+
+        return $repo->find($courseId);
     }
 
     public function getAccessUrl(string $url = ''): ?AccessUrl

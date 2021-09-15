@@ -61,5 +61,6 @@ class CQuizQuestionRepositoryTest extends AbstractApiTest
 
         $this->assertSame(1, $exercise->getQuestions()->count());
         $this->assertSame(1, $repo->count([]));
+        $this->assertSame('', $repo->getHotSpotImageUrl($question));
     }
 }

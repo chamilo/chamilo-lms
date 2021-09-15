@@ -162,6 +162,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     {
         $this->description = '';
         $this->documentId = 0;
+        $this->active = 1;
         $this->hasProperties = 0;
         $this->containsFile = 0;
         $this->publicationParent = null;

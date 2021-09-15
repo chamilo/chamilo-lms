@@ -4782,8 +4782,7 @@ function processWorkForm(
         $parentResource = $repo->find($workInfo['iid']);
         $user = api_get_user_entity($userId);
 
-        $studentPublication = new CStudentPublication();
-        $studentPublication
+        $studentPublication = (new CStudentPublication())
             ->setFiletype('file')
             ->setTitle($title)
             ->setDescription($description)

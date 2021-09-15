@@ -439,6 +439,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $count = $document->getResourceNode()->getResourceLinks()->count();
         $this->assertSame(1, $count);
 
+        $count = $documentRepo->countUserDocuments($admin, $course);
+        $this->assertSame(1, $count);
+
         $link = $document->getFirstResourceLink();
         $this->assertInstanceOf(ResourceLink::class, $link);
         $this->assertSame($link->getVisibility(), ResourceLink::VISIBILITY_PUBLISHED);

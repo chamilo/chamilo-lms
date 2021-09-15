@@ -86,8 +86,8 @@ final class CDocumentRepository extends ResourceRepository
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         $qb
-            ->andWhere('resource.fileType :type')
-            ->setParameter('type', $fileType)
+            ->andWhere('resource.filetype = :filetype')
+            ->setParameter('filetype', $fileType)
         ;
 
         return $qb;

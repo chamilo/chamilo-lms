@@ -8866,8 +8866,6 @@ class learnpath
         if ($flush) {
             $em->flush();
         }
-        //$em->flush();
-        //var_dump($lpItemRepo->verify());
 
         return true;
     }

@@ -157,8 +157,6 @@ $form_count = 0;
 $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
 $formContent = handleForum($url);
 
-//get_whats_new();
-$whatsnew_post_info = Session::read('whatsnew_post_info');
 Event::event_access_tool(TOOL_FORUM);
 
 $logInfo = [
@@ -400,23 +398,6 @@ if (is_array($forumCategories)) {
             foreach ($forumsInCategory as $forum) {
                 $forumId = $forum->getIid();
 
-                // Here we clean the whatnew_post_info array a little bit because to display the icon we
-                // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
-                /*if ($forum) {
-                    if (!empty($whatsnew_post_info)) {
-                        if (isset($whatsnew_post_info[$forum['forum_id']]) &&
-                            is_array($whatsnew_post_info[$forum['forum_id']])
-                        ) {
-                            foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array) {
-                                if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id])) {
-                                    unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
-                                    unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
-                                }
-                            }
-                        }
-                    }
-                }*/
-
                 // Note: This can be speed up if we transform the $allCourseForums
                 // to an array that uses the forum_category as the key.
                 if (true) {
@@ -443,9 +424,6 @@ if (is_array($forumCategories)) {
 
                     if ($show_forum) {
                         $form_count++;
-                        /*$mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']])
-                            ? $whatsnew_post_info[$forum['forum_id']]
-                            : null;*/
                         $forumInfo['id'] = $forumId;
                         $forumInfo['forum_of_group'] = $forum->getForumOfGroup();
                         $forumInfo['title'] = $forum->getForumTitle();

@@ -106,7 +106,6 @@ $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
 
 $current_forum_category = $forumEntity->getForumCategory();
-$whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -283,8 +282,7 @@ if (!api_is_allowed_to_edit(false, true) &&
 ) {
     api_not_allowed();
 }
-// this increases the number of times the thread has been viewed
-increase_thread_view($threadId);
+$repoThread->increaseView($threadEntity);
 
 if ('learnpath' === $origin) {
     $template = new Template('', false, false, true, true, false);
@@ -395,45 +393,9 @@ foreach ($posts as $post) {
         $username = sprintf(get_lang('Login: %s'), $post['username']);
     }
 
-    /*$name = $post['complete_name'];
-    if (empty($posterId)) {
-        $name = $post['poster_name'];
-    }*/
-
     $post['user_data'] = '';
     $post['author'] = $postEntity->getUser();
     $posterId = $postEntity->getUser()->getId();
-
-    /*if ('learnpath' !== $origin) {
-        if ($allowUserImageForum) {
-            $post['user_data'] = '<div class="thumbnail">'.
-                display_user_image($posterId, $name, $origin).'</div>';
-        }
-
-        $post['user_data'] .= Display::tag(
-            'h4',
-            display_user_link($posterId, $name, $origin, $username),
-            ['class' => 'title-username']
-        );
-
-        $_user = api_get_user_info($posterId);
-        $iconStatus = $_user['icon_status'];
-        $post['user_data'] .= '<div class="user-type text-center">'.$iconStatus.'</div>';
-    } else {
-        if ($allowUserImageForum) {
-            $post['user_data'] .= '<div class="thumbnail">'.
-                display_user_image($posterId, $name, $origin).'</div>';
-        }
-
-        $post['user_data'] .= Display::tag(
-            'p',
-            $name,
-            [
-                'title' => api_htmlentities($username, ENT_QUOTES),
-                'class' => 'lead',
-            ]
-        );
-    }*/
 
     if ('learnpath' !== $origin) {
         $post['post_date_to_display'] = Display::tag(
@@ -682,23 +644,6 @@ foreach ($posts as $post) {
         $post['user_data'] .= $closedPost;
     }
 
-    // note: this can be removed here because it will be displayed in the tree
-    /*if (isset($whatsnew_post_info[$forumId][$threadId][$post['post_id']]) &&
-        !empty($whatsnew_post_info[$forumId][$threadId][$post['post_id']]) &&
-        !empty($whatsnew_post_info[$forumId][$post['thread_id']])
-    ) {
-        $post_image = Display::return_icon('forumpostnew.gif');
-    } else {
-        $post_image = Display::return_icon('forumpost.gif');
-    }
-
-    if ('1' == $post['post_notification'] && $post['poster_id'] == $userId) {
-        $post_image .= Display::return_icon(
-            'forumnotification.gif',
-            get_lang('You will be notified')
-        );
-    }*/
-
     $post['current'] = false;
     if (isset($_GET['post_id']) && $_GET['post_id'] == $post['post_id']) {
         $post['current'] = true;
@@ -750,10 +695,6 @@ foreach ($posts as $post) {
 
     $post['post_buttons'] = "$askForRevision $editButton $reportButton $buttonReply $buttonQuote $waitingValidation";
     $postList[] = $post;
-
-    // The post has been displayed => it can be removed from the what's new array
-    //unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
-    //unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
     $count++;
 }
 

@@ -33,6 +33,14 @@ class CForumThreadRepository extends ResourceRepository
         return $qb;
     }
 
+    public function increaseView(CForumThread $thread): void
+    {
+        $thread->setThreadViews($thread->getThreadViews() + 1);
+        $em = $this->getEntityManager();
+        $em->persist($thread);
+        $em->flush();
+    }
+
     public function delete(ResourceInterface $resource): void
     {
         /** @var CForumThread $resource */

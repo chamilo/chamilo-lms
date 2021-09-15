@@ -214,7 +214,7 @@ $actions = [
     search_link(),
 ];
 
-$threadData = getThreadInfo($threadId, $courseId);
+$threadData = getThreadInfo($threadId);
 $gradeThisThread = empty($_POST) && ($threadData && ($threadData['threadQualifyMax'] > 0 || $threadData['threadWeight'] > 0));
 
 $form = new FormValidator(

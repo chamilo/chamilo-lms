@@ -3969,45 +3969,6 @@ class Tracking
         $count = $qb->getQuery()->getSingleScalarResult();
 
         return $count;
-
-        // get the information of the course
-        $a_course = api_get_course_info($course_code);
-        if (!empty($a_course)) {
-            // table definition
-            $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-            $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-            $courseId = $a_course['real_id'];
-            if (is_array($student_id)) {
-                $studentList = array_map('intval', $student_id);
-                $condition_user = " AND ip.insert_user_id IN ('".implode(',', $studentList)."') ";
-            } else {
-                $student_id = (int) $student_id;
-                $condition_user = " AND ip.insert_user_id = '$student_id' ";
-            }
-
-            $condition_session = null;
-            if (isset($sessionId)) {
-                $sessionId = (int) $sessionId;
-                $condition_session = " AND pub.session_id = $sessionId ";
-            }
-
-            $sql = "SELECT count(ip.tool) AS count
-                    FROM $tbl_item_property ip
-                    INNER JOIN $tbl_document pub
-                    ON (ip.ref = pub.iid AND ip.c_id = pub.c_id)
-                    WHERE
-                        ip.c_id  = $courseId AND
-                        pub.c_id  = $courseId AND
-                        pub.filetype ='file' AND
-                        ip.tool = 'document'
-                        $condition_user $condition_session ";
-            $rs = Database::query($sql);
-            $row = Database::fetch_array($rs, 'ASSOC');
-
-            return $row['count'];
-        }
-
-        return null;
     }
 
     /**

@@ -12,14 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * GradebookResult.
- *
  * @ORM\Table(name="gradebook_result",
  *     indexes={
  *         @ORM\Index(name="idx_gb_uid_eid", columns={"user_id", "evaluation_id"}),
- *     })
- *
- *     @ORM\Entity
+ *     }
+ * )
+ * @ORM\Entity
  */
 class GradebookResult
 {

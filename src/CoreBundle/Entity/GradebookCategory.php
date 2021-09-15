@@ -116,6 +116,7 @@ class GradebookCategory
     /**
      * @ORM\Column(name="visible", type="boolean", nullable=false)
      */
+    #[Assert\NotBlank]
     protected bool $visible;
 
     /**
@@ -131,6 +132,7 @@ class GradebookCategory
     /**
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected ?int $locked;
 
     /**
@@ -141,6 +143,7 @@ class GradebookCategory
     /**
      * @ORM\Column(name="generate_certificates", type="boolean", nullable=false)
      */
+    #[Assert\NotBlank]
     protected bool $generateCertificates;
 
     /**
@@ -199,12 +202,7 @@ class GradebookCategory
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

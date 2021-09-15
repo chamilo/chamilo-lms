@@ -50,4 +50,40 @@ class GradebookComment
     {
         $this->comment = '';
     }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getGradeBook(): GradebookCategory
+    {
+        return $this->gradeBook;
+    }
+
+    public function setGradeBook(GradebookCategory $gradeBook): self
+    {
+        $this->gradeBook = $gradeBook;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
 }

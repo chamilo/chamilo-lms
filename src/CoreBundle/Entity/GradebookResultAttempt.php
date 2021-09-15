@@ -10,8 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * GradebookResultAttempt.
- *
  * @ORM\Table(name="gradebook_result_attempt")
  * @ORM\Entity
  */

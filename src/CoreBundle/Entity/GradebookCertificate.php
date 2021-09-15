@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Table(
@@ -48,6 +49,7 @@ class GradebookCertificate
     protected float $scoreCertificate;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected DateTime $createdAt;
@@ -131,6 +133,30 @@ class GradebookCertificate
     public function setDownloadedAt(DateTime $downloadedAt): self
     {
         $this->downloadedAt = $downloadedAt;
+
+        return $this;
+    }
+
+    public function getCategory(): GradebookCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(GradebookCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

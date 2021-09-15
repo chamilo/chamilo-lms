@@ -7,8 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\GradebookComment;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\GradebookResult;
+use Chamilo\CoreBundle\Entity\GradebookResultAttempt;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -31,6 +35,7 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
             ->setCourse($course)
             ->setWeight(100.00)
             ->setVisible(true)
+            ->setGenerateCertificates(true)
         ;
         $this->assertHasNoEntityViolations($category);
 
@@ -65,7 +70,46 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame(1, $category->getEvaluations()->count());
-        $this->assertSame(1, $category->getEvaluations()->count());
+        $this->assertSame(1, $category->getLinks()->count());
         $this->assertSame(1, $repo->count([]));
+
+        $user = $this->createUser('test');
+
+        $certificate = (new GradebookCertificate())
+            ->setUser($user)
+            ->setScoreCertificate(100.00)
+            ->setCategory($category)
+        ;
+        $em->persist($certificate);
+        $em->flush();
+
+        $comment = (new GradebookComment())
+            ->setUser($user)
+            ->setGradeBook($category)
+            ->setComment('comment')
+        ;
+        $em->persist($comment);
+        $em->flush();
+
+        $result = (new GradebookResult())
+            ->setUser($user)
+            ->setEvaluation($evaluation)
+            ->setScore(100.00)
+        ;
+        $em->persist($result);
+        $em->flush();
+
+        $resultAttempt = (new GradebookResultAttempt())
+            ->setResult($result)
+            ->setComment('comment')
+            ->setScore(100.00)
+        ;
+        $em->persist($resultAttempt);
+        $em->flush();
+
+        $em->remove($category);
+        $em->flush();
+
+        $this->assertSame(0, $repo->count([]));
     }
 }

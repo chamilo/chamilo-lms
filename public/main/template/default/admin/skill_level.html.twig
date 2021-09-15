@@ -20,13 +20,13 @@
                 <a
                     href="{{ url('legacy_main', {'name' : 'admin/skill_level.php'}) }}?action=edit&id={{ item.id }}"
                 >
-                    <img src="{{ 'edit.png'|icon(22) }}" />
+                    {{ 'pencil'|mdi_icon(22) }}
                 </a>
 
                 <a
                     href="{{ url('legacy_main', {'name' : 'admin/skill_level.php'}) }}?action=delete&id={{ item.id }}"
                 >
-                    <img src="{{ 'delete.png'|icon(22) }}" />
+                    {{ 'delete'|mdi_icon(22) }}
                 </a>
             </td>
         </tr>

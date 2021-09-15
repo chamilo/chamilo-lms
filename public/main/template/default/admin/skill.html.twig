@@ -30,7 +30,7 @@
         <a
             href="{{ url('legacy_main', {'name' : 'admin/skill.php'}) ~ '?action=edit&id='  ~  item.id}}"
         >
-            <img src="{{ 'edit.png'|icon(22) }}" />
+            {{ 'pencil'|mdi_icon(22) }}
         </a>
     </h4>
     {{ item.profile }}

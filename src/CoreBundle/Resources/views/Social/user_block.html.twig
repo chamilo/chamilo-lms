@@ -84,7 +84,7 @@
                             {% if user.email %}
                                 <li class="item">
                                     <a href="{{ url('index') }}main/messages/new_message.php">
-                                        {{ "sn-message.png"|img(22, "Email" | get_lang) }}
+                                        {{ "sn-message.png"|icon(22, "Email" | get_lang) }}
                                         <div class="email-overflow">{{ user.email }}</div>
                                     </a>
                                 </li>
@@ -93,7 +93,7 @@
                             {% if vcard_user_link %}
                                 <li class="item">
                                     <a href="{{ vcard_user_link }}">
-                                        {{ "vcard.png"|img(22, "BusinessCard" | get_lang) }}
+                                        {{ "vcard.png"|icon(22, "BusinessCard" | get_lang) }}
                                         {{ "BusinessCard" | get_lang }}
                                     </a>
                                 </li>

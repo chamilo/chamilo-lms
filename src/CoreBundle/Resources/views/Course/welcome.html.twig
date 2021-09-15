@@ -22,7 +22,7 @@
         <div class="grid-start">
             <div class="items-tools">
                 <div class="item">
-                    {{ 'tool_info.png' | img(64, 'Add course description'|trans ) }}
+                    {{ 'tool_info.png' | icon(64, 'Add course description'|trans ) }}
                     <div class="caption">
                         <a href="{{ url('legacy_main', { 'name' : 'course_description/index.php', 'cid': course.id}) }}" class="btn btn-outline-primary">
                             <em class="fa fa-info-circle"></em> {{'Add course description'|trans}}
@@ -32,7 +32,7 @@
             </div>
             <div class="items-tools">
                 <div class="item">
-                    {{ 'tool_folder_document.png' | img(64, 'Upload a document'|trans ) }}
+                    {{ 'tool_folder_document.png' | icon(64, 'Upload a document'|trans ) }}
                     <div class="caption">
                         <a href="{{ url('legacy_main', { 'name' : 'document/document.php', 'cid': course.id}) }} " class="btn btn-outline-primary">
                             <em class="fa fa-paper-plane"></em> {{'Upload a document'|trans}}
@@ -42,7 +42,7 @@
             </div>
             <div class="items-tools">
                 <div class="item">
-                    {{ 'tool_forum.png' | img(64, 'Add forum'|trans ) }}
+                    {{ 'tool_forum.png' | icon(64, 'Add forum'|trans ) }}
                     <div class="caption">
                         <a href="{{ url('legacy_main', { 'name' : 'forum/index.php', 'cid': course.id}) }}" class="btn btn-outline-primary">
                             <em class="fa fa-users"></em> {{ 'Add forum'|trans }}
@@ -53,7 +53,7 @@
             {% if ("allow_user_course_subscription_by_course_admin" | api_get_setting) == 'true' or is_granted('ROLE_ADMIN') %}
                 <div class="items-tools">
                     <div class="item">
-                        {{ 'tool_members.png' | img(64, 'Subscribe user to course'|trans ) }}
+                        {{ 'tool_members.png' | icon(64, 'Subscribe user to course'|trans ) }}
                         <div class="caption">
                             <a href="{{ url('legacy_main', { 'name' : 'user/subscribe_user.php', 'cid': course.id}) }}" class="btn btn-outline-primary">
                                 <em class="fa fa-user-plus"></em> {{ 'Subscribe user to course'|trans }}
@@ -64,7 +64,7 @@
             {% endif %}
             <div class="items-tools">
                 <div class="item">
-                    {{ 'tool_reference.png' | img(64, 'Course settings'|trans ) }}
+                    {{ 'tool_reference.png' | icon(64, 'Course settings'|trans ) }}
                     <div class="caption">
                         <a href="{{ url('legacy_main', { 'name' : 'course_info/infocours.php', 'cid': course.id}) }}" class="btn btn-outline-primary">
                             <em class="fa fa-users"></em> {{ 'Change settings'|trans }}

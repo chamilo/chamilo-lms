@@ -67,7 +67,6 @@ class AssetRepository extends ServiceEntityRepository
         $list = $zipFile->getEntries();
         foreach ($list as $item) {
             $name = $item->getName();
-            error_log('final: '.$folder.'/'.$name);
             if ($fs->fileExists($folder.'/'.$name)) {
                 continue;
             }

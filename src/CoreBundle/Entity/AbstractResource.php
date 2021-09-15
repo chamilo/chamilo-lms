@@ -238,12 +238,12 @@ abstract class AbstractResource
             );
 
             if ($exists) {
-                error_log('Link already exist for user: '.$user->getUsername().', skipping');
+                //error_log('Link already exist for user: '.$user->getUsername().', skipping');
 
                 return $this;
             }
 
-            error_log('New link can be added for user: '.$user->getUsername());
+            //error_log('New link can be added for user: '.$user->getUsername());
             $resourceNode->addResourceLink($resourceLink);
         } else {
             $this->addLink($resourceLink);

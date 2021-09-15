@@ -636,12 +636,13 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
         $course = api_get_course_entity($course_id);
         $session = api_get_session_entity($session_id);
 
-        $category = (new CForumCategory())
+        $category = new CForumCategory();
+        $category
             ->setCatTitle($clean_cat_title)
             ->setCatComment($values['forum_category_comment'] ?? '')
             ->setCatOrder($new_max)
-            ->setParent($course)
             ->addCourseLink($course, $session)
+            ->setParent($course)
         ;
         $repo->create($category);
 
@@ -1882,7 +1883,8 @@ function saveThread(
     $session = api_get_session_entity($sessionId);
 
     // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
-    $thread = (new CForumThread())
+    $thread = new CForumThread();
+    $thread
         ->setThreadTitle($clean_post_title)
         ->setForum($forum)
         ->setUser($user)
@@ -1939,7 +1941,8 @@ function saveThread(
     Event::registerLog($logInfo);
 
     // We now store the content in the table_post table.
-    $post = (new CForumPost())
+    $post = new CForumPost();
+    $post
         ->setPostTitle($clean_post_title)
         ->setPostText($values['post_text'])
         ->setThread($thread)

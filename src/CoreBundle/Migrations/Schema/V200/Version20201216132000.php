@@ -52,8 +52,6 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             $rootItem = $lpItemRepo->getRootItem($lpId);
 
             if (null === $rootItem) {
-                error_log('no root item');
-
                 continue;
             }
 
@@ -64,7 +62,6 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             $lpItems = $resultItems->fetchAllAssociative();
 
             if (empty($lpItems)) {
-                error_log('no items');
 
                 continue;
             }

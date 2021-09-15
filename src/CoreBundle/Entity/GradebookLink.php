@@ -14,8 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * GradebookLink.
- *
  * @ORM\Table(name="gradebook_link",
  *     indexes={
  *         @ORM\Index(name="idx_gl_cat", columns={"category_id"}),
@@ -44,6 +42,7 @@ class GradebookLink
     /**
      * @ORM\Column(name="ref_id", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $refId;
 
     /**
@@ -78,11 +77,13 @@ class GradebookLink
     /**
      * @ORM\Column(name="visible", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $visible;
 
     /**
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $locked;
 
     /**
@@ -108,6 +109,7 @@ class GradebookLink
     public function __construct()
     {
         $this->locked = 0;
+        $this->visible = 1;
     }
 
     public function setType(int $type): self

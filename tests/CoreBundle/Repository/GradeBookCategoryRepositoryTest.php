@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -24,16 +26,46 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
 
         $course = $this->createCourse('new');
 
-        $item = (new GradebookCategory())
+        $category = (new GradebookCategory())
             ->setName('cat1')
             ->setCourse($course)
             ->setWeight(100.00)
             ->setVisible(true)
         ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
+        $this->assertHasNoEntityViolations($category);
+
+        $evaluation = (new GradebookEvaluation())
+            ->setName('eva')
+            ->setCategory($category)
+            ->setCourse($course)
+            ->setWeight(100.00)
+            ->setVisible(1)
+            ->setWeight(50.00)
+            ->setType('evaluation')
+            ->setMax(100.00)
+        ;
+        $this->assertHasNoEntityViolations($evaluation);
+
+        $link = (new GradebookLink())
+            ->setRefId(1)
+            ->setCategory($category)
+            ->setCourse($course)
+            ->setWeight(100.00)
+            ->setVisible(1)
+            ->setWeight(50.00)
+            ->setType(1)
+        ;
+        $this->assertHasNoEntityViolations($link);
+
+        $category->getLinks()->add($link);
+        $category->getEvaluations()->add($evaluation);
+
+        $em->persist($evaluation);
+        $em->persist($category);
         $em->flush();
 
+        $this->assertSame(1, $category->getEvaluations()->count());
+        $this->assertSame(1, $category->getEvaluations()->count());
         $this->assertSame(1, $repo->count([]));
     }
 }

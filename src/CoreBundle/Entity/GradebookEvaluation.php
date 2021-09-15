@@ -11,10 +11,9 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * GradebookEvaluation.
- *
  * @ORM\Table(name="gradebook_evaluation",
  *     indexes={
  *         @ORM\Index(name="idx_ge_cat", columns={"category_id"}),
@@ -36,6 +35,7 @@ class GradebookEvaluation
     /**
      * @ORM\Column(name="name", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**
@@ -70,26 +70,31 @@ class GradebookEvaluation
     /**
      * @ORM\Column(name="weight", type="float", precision=10, scale=0, nullable=false)
      */
+    #[Assert\NotBlank]
     protected float $weight;
 
     /**
      * @ORM\Column(name="max", type="float", precision=10, scale=0, nullable=false)
      */
+    #[Assert\NotBlank]
     protected float $max;
 
     /**
      * @ORM\Column(name="visible", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $visible;
 
     /**
      * @ORM\Column(name="type", type="string", length=40, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $type;
 
     /**
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $locked;
 
     /**
@@ -115,6 +120,7 @@ class GradebookEvaluation
     public function __construct()
     {
         $this->locked = 0;
+        $this->visible = 1;
     }
 
     public function setName(string $name): self

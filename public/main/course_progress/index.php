@@ -1200,7 +1200,7 @@ switch ($action) {
                 $startDate = $values['start_date_by_attendance'];
             }
 
-            $advanceId = isset($values['thematic_advance_id']) ? $values['thematic_advance_id'] : null;
+            $advanceId = $values['thematic_advance_id'] ?? null;
             $advance = null;
             if (!empty($advanceId)) {
                 $advance = Container::getThematicAdvanceRepository()->find($advanceId);

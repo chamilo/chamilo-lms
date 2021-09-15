@@ -544,7 +544,7 @@ class Thematic
      */
     public function thematicAdvanceSave(
         CThematic $thematic,
-        CAttendance $attendance,
+        CAttendance $attendance = null,
         CThematicAdvance $advance = null,
         $content,
         $start_date,
@@ -554,15 +554,17 @@ class Thematic
         $duration = (int) $duration;
 
         if (null === $advance) {
-            $advance = new CThematicAdvance();
-            $advance
+            $advance = (new CThematicAdvance())
                 ->setContent($content)
                 ->setThematic($thematic)
-                ->setAttendance($attendance)
+                //->setAttendance($attendance)
                 ->setStartDate(api_get_utc_datetime($start_date, true, true))
                 ->setDuration($duration)
             ;
 
+            if ($attendance) {
+                $advance->setAttendance($attendance);
+            }
             //$courseEntity = api_get_course_entity();
             /*$advance
                 ->setParent($courseEntity)

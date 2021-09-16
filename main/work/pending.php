@@ -288,10 +288,10 @@ $(function() {
         { width:500 } // search options
     );
 
-    $("select[name=\'course\']").on('change', function () {
+    $("select[name=\'course\']").bind('change', function () {
         $("#search-works").val(0);
-        $("#pending_submit").trigger("click");
-        $("#pending_submit").attr("disabled", true);
+        $("#pending_pendingSubmit").trigger("click");
+        $("#pending_pendingSubmit").attr("disabled", true);
     });
 });
 </script>

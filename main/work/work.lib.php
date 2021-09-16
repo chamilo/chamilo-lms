@@ -2938,7 +2938,7 @@ function getAllWork(
             } else {
                 $parent = get_work_data_by_id($work['parent_id'], $courseId);
             }
-            $work['work_name'] = $parent['title'];
+            $work['work_name'] = isset($parent['title']) ? $parent['title'] : '';
 
             // Actions.
             $action = '';
@@ -6540,7 +6540,7 @@ function exportPendingWorksToExcel($values) {
     $status = $values['status'] ?? 0;
     $whereCondition = '';
     if (!empty($values['work_parent_ids'])) {
-        $whereCondition = ' parent_id IN('.Security::remove_XSS($_REQUEST['work_parent_ids']).')';
+        $whereCondition = ' parent_id IN('.implode(',', $values['work_parent_ids']).')';
     }
     $allWork = getAllWork(
         null,

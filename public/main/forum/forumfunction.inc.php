@@ -1494,8 +1494,9 @@ function get_thread_users_details($thread_id)
     $session = api_get_session_entity();
 
     if ($session) {
-        $coachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
-        $coachesId[] = $session->getSessionAdmin()->getId();
+        $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
+        $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
+        $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
         $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, thread_id
@@ -1558,8 +1559,9 @@ function get_thread_users_qualify($thread_id)
     $session = api_get_session_entity();
 
     if ($session) {
-        $coachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
-        $coachesId[] = $session->getSessionAdmin()->getId();
+        $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
+        $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
+        $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
         $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
@@ -1644,8 +1646,9 @@ function get_thread_users_not_qualify($thread_id)
     $session = api_get_session_entity();
 
     if ($session) {
-        $coachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
-        $coachesId[] = $session->getSessionAdmin()->getId();
+        $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
+        $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
+        $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
         $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, post.thread_id

@@ -231,7 +231,7 @@ class SessionVoter extends Voter
 
         if ($this->security->isGranted('ROLE_SESSION_MANAGER') &&
             'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions') &&
-            $session->getSessionAdmin()->getId() !== $user->getId()
+            !$session->hasUserAsSessionAdmin($user)
         ) {
             return false;
         }

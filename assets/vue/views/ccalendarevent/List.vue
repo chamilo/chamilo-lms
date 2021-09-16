@@ -144,6 +144,10 @@ export default {
     }
 
     async function getSessions({startStr, endStr}) {
+      if ('true' !== window.config['agenda.personal_calendar_show_sessions_occupation']) {
+        return [];
+      }
+
       const sessions = await axios.get(ENTRYPOINT + `users/${currentUser.value['id']}/sessions_rel_users`, {
         params: {
           'displayStartDate[after]': startStr,

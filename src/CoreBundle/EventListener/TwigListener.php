@@ -65,6 +65,8 @@ class TwigListener
 
             'editor.enabled_mathjax',
             'editor.translate_html',
+
+            'agenda.personal_calendar_show_sessions_occupation',
         ];
 
         // @todo get variables in 1 query.

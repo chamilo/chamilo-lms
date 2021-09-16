@@ -24,6 +24,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                     // ??
                     //'number_of_upcoming_events' => '0',
                     'default_calendar_view' => 'month',
+                    'personal_calendar_show_sessions_occupation' => 'false',
                 ]
             )
         ;
@@ -55,6 +56,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
+            ->add('personal_calendar_show_sessions_occupation', YesNoType::class)
         ;
     }
 }

@@ -6518,11 +6518,12 @@ function workGetExtraFieldData($workId)
 }
 
 /**
- * Export the pending works to excel
+ * Export the pending works to excel.
  *
  * @params $values
  */
-function exportPendingWorksToExcel($values) {
+function exportPendingWorksToExcel($values)
+{
     $headers = [
         get_lang('Course'),
         get_lang('WorkName'),
@@ -6572,5 +6573,6 @@ function exportPendingWorksToExcel($values) {
 
     $fileName = get_lang('StudentPublicationToCorrect').'_'.api_get_local_time();
     Export::arrayToXls($tableXls, $fileName);
+
     return true;
 }

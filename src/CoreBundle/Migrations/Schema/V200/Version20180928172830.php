@@ -24,9 +24,12 @@ class Version20180928172830 extends AbstractMigrationChamilo
                 'ALTER TABLE c_tool ADD CONSTRAINT FK_8456658091D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)'
             );
         }
+        $this->addSql('ALTER TABLE c_tool CHANGE link link VARCHAR(255) DEFAULT NULL;');
         $this->addSql('UPDATE c_tool SET name = "blog" WHERE name = "blog_management" ');
         $this->addSql('UPDATE c_tool SET name = "agenda" WHERE name = "calendar_event" ');
         $this->addSql('UPDATE c_tool SET name = "member" WHERE link = "user/user.php" ');
+        $this->addSql('UPDATE c_tool SET name = "course_description/index.php" WHERE link = "course_description/" ');
+
 
         //$this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
         //$this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');

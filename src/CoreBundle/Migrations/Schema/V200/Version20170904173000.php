@@ -93,6 +93,8 @@ class Version20170904173000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_group_category');
         }
 
+        $this->addSql('ALTER TABLE c_group_category CHANGE display_order display_order INT DEFAULT NULL');
+
         if (!$table->hasColumn('document_access')) {
             $this->addSql('ALTER TABLE c_group_category ADD document_access INT DEFAULT 0 NOT NULL;');
         }

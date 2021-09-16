@@ -565,6 +565,9 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $courseId = $_REQUEST['course'] ?? 0;
         $status = $_REQUEST['status'] ?? 0;
+        if (isset($_REQUEST['work_parent_ids'])) {
+            $whereCondition = ' parent_id IN('.Security::remove_XSS($_REQUEST['work_parent_ids']).')';
+        }
         $count = getAllWork(
             null,
             null,
@@ -1471,12 +1474,14 @@ switch ($action) {
             'qualification',
             'sent_date',
             'qualificator_id',
+            'qualificator_fullname',
+            'date_of_qualification',
             'correction',
         ];
         $columns = array_merge($columns, $plagiarismColumns);
         $columns[] = 'actions';
 
-        $sidx = in_array($sidx, $columns) ? $sidx : 'work_name';
+        $sidx = in_array($sidx, $columns) || in_array($sidx, ['firstname', 'lastname']) ? $sidx : 'work_name';
 
         $result = getAllWork(
             $start,

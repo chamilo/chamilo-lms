@@ -2594,7 +2594,8 @@ function getAllWork(
     $whereCondition = '',
     $getCount = false,
     $courseId = 0,
-    $status = 0
+    $status = 0,
+    $onlyParents = false
 ) {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -2713,6 +2714,7 @@ function getAllWork(
                     url_correction,
                     title_correction,
                     work.c_id,
+                    work.date_of_qualification,
                     work.session_id ';
     }
 
@@ -2727,13 +2729,16 @@ function getAllWork(
                 break;
         }
     }
-
+    $filterParents = 'work.parent_id <> 0';
+    if ($onlyParents) {
+        $filterParents = 'work.parent_id = 0';
+    }
     $sql = " $select
             FROM $work_table work
             INNER JOIN $user_table u
             ON (work.user_id = u.id)
             WHERE
-                work.parent_id <> 0 AND
+                $filterParents AND
                 work.active IN (1, 0)
                 $whereCondition AND
                 ($courseQueryToString)
@@ -3065,6 +3070,13 @@ function getAllWork(
                 $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=delete&item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
             }*/
+            // Qualificator fullname and date of qualification
+            $work['qualificator_fullname'] = '';
+            if ($work['qualificator_id'] > 0) {
+                $qualificatorAuthor = api_get_user_info($work['qualificator_id']);
+                $work['qualificator_fullname'] = api_get_person_name($qualificatorAuthor['firstname'], $qualificatorAuthor['lastname']);
+                $work['date_of_qualification'] = api_convert_and_format_date($work['date_of_qualification'], DATE_TIME_FORMAT_SHORT);
+            }
             // Status.
             if (empty($work['qualificator_id'])) {
                 $qualificator_id = Display::label(get_lang('NotRevised'), 'warning');
@@ -6503,4 +6515,62 @@ function workGetExtraFieldData($workId)
     }
 
     return $result;
+}
+
+/**
+ * Export the pending works to excel
+ *
+ * @params $values
+ */
+function exportPendingWorksToExcel($values) {
+    $headers = [
+        get_lang('Course'),
+        get_lang('WorkName'),
+        get_lang('FullUserName'),
+        get_lang('Title'),
+        get_lang('Score'),
+        get_lang('Date'),
+        get_lang('Status'),
+        get_lang('Qualificator'),
+        get_lang('DateOfQualilfication'),
+    ];
+    $tableXls[] = $headers;
+
+    $courseId = $values['course'] ?? 0;
+    $status = $values['status'] ?? 0;
+    $whereCondition = '';
+    if (!empty($values['work_parent_ids'])) {
+        $whereCondition = ' parent_id IN('.Security::remove_XSS($_REQUEST['work_parent_ids']).')';
+    }
+    $allWork = getAllWork(
+        null,
+        null,
+        null,
+        null,
+        $whereCondition,
+        false,
+        $courseId,
+        $status
+    );
+    if (!empty($allWork)) {
+        foreach ($allWork  as $work) {
+            $score = $work['qualification_score'].'/'.$work['weight'];
+            $data = [
+                $work['course'],
+                $work['work_name'],
+                strip_tags($work['fullname']),
+                strip_tags($work['title']),
+                $score,
+                strip_tags($work['sent_date']),
+                strip_tags($work['qualificator_id']),
+                $work['qualificator_fullname'],
+                $work['date_of_qualification'],
+            ];
+            $tableXls[] = $data;
+        }
+    }
+
+    $fileName = get_lang('StudentPublicationToCorrect').'_'.api_get_local_time();
+    Export::arrayToXls($tableXls, $fileName);
+    return true;
 }

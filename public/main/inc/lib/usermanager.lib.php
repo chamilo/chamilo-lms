@@ -696,7 +696,7 @@ class UserManager
         $currentUserId = api_get_user_id();
         $sql = "UPDATE session_rel_user
             SET user_id = $currentUserId
-            WHERE user_id = $user_id AND relation_type = ". SessionEntity::SESSION_COACH;
+            WHERE user_id = $user_id AND relation_type = ".SessionEntity::SESSION_COACH;
         Database::query($sql);
 
         $sql = "UPDATE session_rel_user

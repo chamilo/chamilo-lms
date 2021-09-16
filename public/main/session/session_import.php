@@ -262,8 +262,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     access_start_date = '$date_start',
                                     access_end_date = '$date_end',
                                     visibility = '$visibility',
-                                    session_category_id = '$session_category_id',
-                                    session_admin_id=".intval($_user['user_id']);
+                                    session_category_id = '$session_category_id'";
                             $rs_session = Database::query($sql_session);
                             $session_id = Database::insert_id();
                             Database::insert(
@@ -273,6 +272,16 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     'duration' => 0,
                                     'registered_at' => api_get_utc_datetime(),
                                     'user_id' => $coach_id,
+                                    'session_id' => $session_id,
+                                ]
+                            );
+                            Database::insert(
+                                $tbl_session_user,
+                                [
+                                    'relation_type' => Session::SESSION_ADMIN,
+                                    'duration' => 0,
+                                    'registered_at' => api_get_utc_datetime(),
+                                    'user_id' => (int) $_user['user_id'],
                                     'session_id' => $session_id,
                                 ]
                             );
@@ -287,8 +296,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         access_start_date = '$date_start',
                                         access_end_date = '$date_end',
                                         visibility = '$visibility',
-                                        session_category_id = '$session_category_id',
-                                        session_admin_id=".intval($_user['user_id']);
+                                        session_category_id = '$session_category_id'";
                                 $rs_session = Database::query($sql_session);
                                 $session_id = Database::insert_id();
                                 Database::insert(
@@ -298,6 +306,16 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         'duration' => 0,
                                         'registered_at' => api_get_utc_datetime(),
                                         'user_id' => $coach_id,
+                                        'session_id' => $session_id,
+                                    ]
+                                );
+                                Database::insert(
+                                    $tbl_session_user,
+                                    [
+                                        'relation_type' => Session::SESSION_ADMIN,
+                                        'duration' => 0,
+                                        'registered_at' => api_get_utc_datetime(),
+                                        'user_id' => (int) $_user['user_id'],
                                         'session_id' => $session_id,
                                     ]
                                 );

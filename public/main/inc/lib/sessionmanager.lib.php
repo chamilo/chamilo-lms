@@ -5025,7 +5025,6 @@ class SessionManager
                         'coach_access_start_date' => $coachAccessStartDate,
                         'coach_access_end_date' => $coachAccessEndDate,
                         'visibility' => $visibilityAfterExpirationPerSession,
-                        'session_admin_id' => $defaultUserId,
                     ];
 
                     if (!empty($extraParams)) {
@@ -5041,6 +5040,16 @@ class SessionManager
                                 'duration' => 0,
                                 'registered_at' => api_get_utc_datetime(),
                                 'user_id' => $coach_id,
+                                'session_id' => $session_id,
+                            ]
+                        );
+                        Database::insert(
+                            $tbl_session_user,
+                            [
+                                'relation_type' => Session::SESSION_COACH,
+                                'duration' => 0,
+                                'registered_at' => api_get_utc_datetime(),
+                                'user_id' => $defaultUserId,
                                 'session_id' => $session_id,
                             ]
                         );
@@ -5094,7 +5103,6 @@ class SessionManager
                             'coach_access_start_date' => $coachAccessStartDate,
                             'coach_access_end_date' => $coachAccessEndDate,
                             'visibility' => $visibilityAfterExpirationPerSession,
-                            'session_admin_id' => $defaultUserId,
                         ];
 
                         if (!empty($extraParams)) {
@@ -5110,6 +5118,16 @@ class SessionManager
                                     'duration' => 0,
                                     'registered_at' => api_get_utc_datetime(),
                                     'user_id' => $coach_id,
+                                    'session_id' => $session_id,
+                                ]
+                            );
+                            Database::insert(
+                                $tbl_session_user,
+                                [
+                                    'relation_type' => Session::SESSION_COACH,
+                                    'duration' => 0,
+                                    'registered_at' => api_get_utc_datetime(),
+                                    'user_id' => $defaultUserId,
                                     'session_id' => $session_id,
                                 ]
                             );
@@ -9857,5 +9875,15 @@ class SessionManager
             ->getGeneralCoaches()
             ->map(fn(User $user) => $user->getFullname())
             ->getValues();
+    }
+
+    public static function sessionHasSessionAdmin(int $sessionId, int $userId): bool
+    {
+        $adminIds = api_get_session_entity($sessionId)
+            ->getSessionAdmins()
+            ->map(fn(User $user) => $user->getId())
+            ->getValues();
+
+        return in_array($userId, $adminIds);
     }
 }

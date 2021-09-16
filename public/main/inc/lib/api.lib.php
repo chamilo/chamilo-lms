@@ -4831,10 +4831,12 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $sql = "SELECT s.session_admin_id, sru.user_id AS session_coach_id
+        $sql = "SELECT sru_2.user_id AS session_admin_id, sru_1.user_id AS session_coach_id
             FROM $tbl_session AS s
-            LEFT JOIN $tblSessionRelUser sru
-                ON (sru.session_id = s.id AND sru.relation_type = ".SessionEntity::SESSION_COACH.")
+            INNER JOIN $tblSessionRelUser sru_1
+                ON (sru_1.session_id = s.id AND sru_1.relation_type = ".SessionEntity::SESSION_COACH.")
+            INNER JOIN $tblSessionRelUser sru_2
+                ON (sru_2.session_id = s.id AND sru_2.relation_type = ".SessionEntity::SESSION_ADMIN.")
             INNER JOIN $tbl_session_course src
                 ON (src.session_id = s.id AND src.c_id = $courseId)";
 

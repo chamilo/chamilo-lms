@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Career;
+use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\SysAnnouncement;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -66,9 +68,40 @@ class SysAnnouncementRepositoryTest extends WebTestCase
     public function testGetAnnouncements(): void
     {
         self::bootKernel();
+
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(SysAnnouncementRepository::class);
         $user = $this->getUser('admin');
-        $items = $repo->getAnnouncements($user, $this->getAccessUrl(), 'en');
+        $items = $repo->getAnnouncements($user, $this->getAccessUrl(), '');
+        $this->assertSame(1, \count($items));
+
+        $career = (new Career())
+            ->setName('Doctor')
+        ;
+        $em->persist($career);
+        $promotion = (new Promotion())
+            ->setName('2000')
+            ->setDescription('Promotion of 2000')
+            ->setCareer($career)
+            ->setStatus(1)
+        ;
+        $em->persist($promotion);
+        $em->flush();
+
+        $sysAnnouncement = (new SysAnnouncement())
+            ->setTitle('Welcome to Chamilo!')
+            ->setContent('content')
+            ->setUrl($this->getAccessUrl())
+            ->setDateStart(new DateTime())
+            ->setDateEnd(new DateTime('now +30 days'))
+            ->setCareer($career)
+            ->addRole('ROLE_ANONYMOUS')
+            ->addRole('ROLE_USER') // connected users
+        ;
+        $em->persist($sysAnnouncement);
+        $em->flush();
+
+        $items = $repo->getAnnouncements($user, $this->getAccessUrl(), '');
         $this->assertSame(1, \count($items));
     }
 }

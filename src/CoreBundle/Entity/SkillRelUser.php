@@ -12,10 +12,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SkillRelUser.
- *
  * @ORM\Table(
  *     name="skill_rel_user",
  *     indexes={
@@ -95,11 +94,13 @@ class SkillRelUser
     /**
      * @ORM\Column(name="assigned_by", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $assignedBy;
 
     /**
      * @ORM\Column(name="argumentation", type="text")
      */
+    #[Assert\NotBlank]
     protected string $argumentation;
 
     /**
@@ -115,12 +116,7 @@ class SkillRelUser
         $this->acquiredSkillAt = new DateTime();
     }
 
-    /**
-     * Set skill.
-     *
-     * @return SkillRelUser
-     */
-    public function setSkill(Skill $skill)
+    public function setSkill(Skill $skill): self
     {
         $this->skill = $skill;
 
@@ -137,12 +133,7 @@ class SkillRelUser
         return $this->skill;
     }
 
-    /**
-     * Set course.
-     *
-     * @return SkillRelUser
-     */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
@@ -159,12 +150,7 @@ class SkillRelUser
         return $this->course;
     }
 
-    /**
-     * Set session.
-     *
-     * @return SkillRelUser
-     */
-    public function setSession(Session $session)
+    public function setSession(Session $session): self
     {
         $this->session = $session;
 
@@ -181,12 +167,7 @@ class SkillRelUser
         return $this->session;
     }
 
-    /**
-     * Set acquiredSkillAt.
-     *
-     * @return SkillRelUser
-     */
-    public function setAcquiredSkillAt(DateTime $acquiredSkillAt)
+    public function setAcquiredSkillAt(DateTime $acquiredSkillAt): self
     {
         $this->acquiredSkillAt = $acquiredSkillAt;
 
@@ -203,12 +184,7 @@ class SkillRelUser
         return $this->acquiredSkillAt;
     }
 
-    /**
-     * Set assignedBy.
-     *
-     * @return SkillRelUser
-     */
-    public function setAssignedBy(int $assignedBy)
+    public function setAssignedBy(int $assignedBy): self
     {
         $this->assignedBy = $assignedBy;
 
@@ -235,12 +211,7 @@ class SkillRelUser
         return $this->id;
     }
 
-    /**
-     * Set acquiredLevel.
-     *
-     * @return SkillRelUser
-     */
-    public function setAcquiredLevel(Level $acquiredLevel)
+    public function setAcquiredLevel(Level $acquiredLevel): self
     {
         $this->acquiredLevel = $acquiredLevel;
 
@@ -257,12 +228,7 @@ class SkillRelUser
         return $this->acquiredLevel;
     }
 
-    /**
-     * Set argumentationAuthorId.
-     *
-     * @return SkillRelUser
-     */
-    public function setArgumentationAuthorId(int $argumentationAuthorId)
+    public function setArgumentationAuthorId(int $argumentationAuthorId): self
     {
         $this->argumentationAuthorId = $argumentationAuthorId;
 
@@ -279,12 +245,7 @@ class SkillRelUser
         return $this->argumentationAuthorId;
     }
 
-    /**
-     * Set argumentation.
-     *
-     * @return SkillRelUser
-     */
-    public function setArgumentation(string $argumentation)
+    public function setArgumentation(string $argumentation): self
     {
         $this->argumentation = $argumentation;
 

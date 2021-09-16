@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="skill_rel_skill")
@@ -36,11 +37,13 @@ class SkillRelSkill
     /**
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $relationType;
 
     /**
      * @ORM\Column(name="level", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $level;
 
     public function getParent(): ?Skill

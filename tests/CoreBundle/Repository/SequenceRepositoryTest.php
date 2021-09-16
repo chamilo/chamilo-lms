@@ -22,14 +22,17 @@ class SequenceRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(SequenceRepository::class);
 
-        $item = (new Sequence())
-            ->setName('session 1')
+        $sequence = (new Sequence())
+            ->setName('Sequence 1')
             ->setGraph('')
         ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
+        $this->assertHasNoEntityViolations($sequence);
+        $em->persist($sequence);
         $em->flush();
 
+        $this->assertFalse($sequence->hasGraph());
+        $this->assertSame('Sequence 1', (string) $sequence);
+        $this->assertFalse($sequence->getUnSerializeGraph());
         $this->assertSame(1, $repo->count([]));
     }
 }

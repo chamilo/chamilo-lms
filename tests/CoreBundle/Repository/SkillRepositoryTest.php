@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -45,6 +46,48 @@ class SkillRepositoryTest extends AbstractApiTest
         $this->assertSame(0, $skill->getIssuedSkills()->count());
         $this->assertSame(0, $skill->getGradeBookCategories()->count());
         $this->assertSame(0, $skill->getSkills()->count());
+    }
+
+    public function testGetLastByUser(): void
+    {
+        self::bootKernel();
+
+        $skillRepo = self::getContainer()->get(SkillRepository::class);
+
+        $accessUrl = $this->getAccessUrl();
+
+        $skill = (new Skill())
+            ->setName('php')
+            ->setShortCode('php')
+            ->setDescription('desc')
+            ->setStatus(Skill::STATUS_ENABLED)
+            ->setCriteria('criteria')
+            ->setIcon('icon')
+            ->setAccessUrlId($accessUrl->getId())
+        ;
+        $skillRepo->update($skill);
+
+        $course = $this->createCourse('new');
+        $session = $this->createSession('new');
+        $user = $this->createUser('test');
+
+        $em = $this->getEntityManager();
+
+        $skillRelUser = (new SkillRelUser())
+            ->setSkill($skill)
+            ->setCourse($course)
+            ->setSession($session)
+            ->setUser($user)
+            ->setArgumentation('argumentation')
+            ->setAssignedBy(1)
+            ->setArgumentationAuthorId(1)
+        ;
+        $this->assertHasNoEntityViolations($skillRelUser);
+        $em->persist($skillRelUser);
+        $em->flush();
+
+        $skill = $skillRepo->getLastByUser($user, $course, $session);
+        $this->assertNotNull($skill);
     }
 
     public function testDeleteSkill(): void

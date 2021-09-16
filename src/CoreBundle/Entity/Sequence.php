@@ -11,8 +11,6 @@ use Fhaculty\Graph\Graph;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * Class Sequence.
- *
  * @ORM\Table(name="sequence")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SequenceRepository")
  */
@@ -58,9 +56,6 @@ class Sequence
         return $this->name;
     }
 
-    /**
-     * @return Sequence
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -83,10 +78,7 @@ class Sequence
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasGraph()
+    public function hasGraph(): bool
     {
         return !empty($this->graph);
     }

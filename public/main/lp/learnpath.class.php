@@ -7854,30 +7854,6 @@ class learnpath
     }
 
     /**
-     * Create a forum for this learning path.
-     *
-     * @return int The forum ID if was created. Otherwise return false
-     */
-    public function createForum(CForumCategory $forumCategory)
-    {
-        return store_forum(
-            [
-                'lp_id' => $this->lp_id,
-                'forum_title' => $this->name,
-                'forum_comment' => null,
-                'forum_category' => $forumCategory->getIid(),
-                'students_can_edit_group' => ['students_can_edit' => 0],
-                'allow_new_threads_group' => ['allow_new_threads' => 0],
-                'default_view_type_group' => ['default_view_type' => 'flat'],
-                'group_forum' => 0,
-                'public_private_group_forum_group' => ['public_private_group_forum' => 'public'],
-            ],
-            [],
-            true
-        );
-    }
-
-    /**
      * Get the LP Final Item form.
      *
      * @throws Exception
@@ -8437,32 +8413,8 @@ class learnpath
             );
         }
 
-        /*if (!empty($itemList['thread'])) {
-            $postList = [];
-            foreach ($itemList['thread'] as $postId) {
-                $post = get_post_information($postId);
-                if ($post) {
-                    if (!isset($itemList['forum'])) {
-                        $itemList['forum'] = [];
-                    }
-                    $itemList['forum'][] = $post['forum_id'];
-                    $postList[] = $postId;
-                }
-            }
-
-            if (!empty($postList)) {
-                $courseBuilder->build_forum_posts(
-                    $this->get_course_int_id(),
-                    null,
-                    null,
-                    $postList
-                );
-            }
-        }*/
-
         if (!empty($itemList['thread'])) {
             $threadList = [];
-            $em = Database::getManager();
             $repo = Container::getForumThreadRepository();
             foreach ($itemList['thread'] as $threadId) {
                 /** @var CForumThread $thread */

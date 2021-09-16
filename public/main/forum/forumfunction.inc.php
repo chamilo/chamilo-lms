@@ -686,7 +686,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $courseId = $courseInfo['real_id'];
     $session_id = api_get_session_id();
-    $table_forums = Database::get_course_table(TABLE_FORUM);
 
     // Find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
     if (null === $values['forum_category']) {
@@ -5190,29 +5189,6 @@ function getAttachmentIdsByPostId($postId, $courseId = 0)
     }
 
     return $array;
-}
-
-/**
- * Check if the forum category exists looking for its title.
- *
- * @param string $title     The forum category title
- * @param int    $courseId  The course ID
- * @param int    $sessionId Optional. The session ID
- *
- * @return bool
- */
-function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
-{
-    $repo = Container::getForumCategoryRepository();
-    $course = api_get_course_entity($courseId);
-    $session = api_get_session_entity($sessionId);
-
-    return $repo->findCourseResourceByTitle(
-        $title,
-        $course->getResourceNode(),
-        $course,
-        $session
-    );
 }
 
 function getPostStatus(CForum $forum, array $row, bool $addWrapper = true): string

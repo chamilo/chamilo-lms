@@ -105,9 +105,6 @@ if (!empty($lpItemId)) {
 if ($lpId) {
     /** @var CLp $lp */
     $lp = $lpRepo->find($lpId);
-    if ($debug > 0) {
-        error_log(' oLP is not object, has changed or refresh been asked, getting new');
-    }
     // Regenerate a new lp object? Not always as some pages don't need the object (like upload?)
     if ($lp) {
         $logInfo = [
@@ -1064,60 +1061,6 @@ switch ($action) {
         $oLP->set_seriousgame_mode();
         require 'lp_list.php';
         break;
-    case 'create_forum':
-        if (!isset($_GET['id'])) {
-            break;
-        }
-
-        $selectedItem = null;
-        /** @var learnpathItem $selectedItem */
-        foreach ($oLP->items as $item) {
-            if ($item->db_id == $_GET['id']) {
-                $selectedItem = $item;
-            }
-        }
-
-        if (!empty($selectedItem)) {
-            $forumThread = $selectedItem->getForumThread($oLP->course_int_id, $oLP->lp_session_id);
-
-            if (empty($forumThread)) {
-                $forumCategory = getForumCategoryByTitle(
-                    get_lang('Learning paths'),
-                    $oLP->course_int_id,
-                    $oLP->lp_session_id
-                );
-
-                if (null === $forumCategory) {
-                    $forumCategory = store_forumcategory(
-                        [
-                            'lp_id' => 0,
-                            'forum_category_title' => get_lang('Learning paths'),
-                            'forum_category_comment' => null,
-                        ],
-                        [],
-                        false
-                    );
-                }
-
-                if ($forumCategory) {
-                    $forum = $lp->getForum();
-                    if ($forum) {
-                        $selectedItem->createForumThread($forum);
-                    } else {
-                        $oLP->createForum($forumCategory);
-                    }
-                }
-            }
-        }
-
-        header('Location:'.api_get_self().'?'.http_build_query([
-            'action' => 'add_item',
-            'type' => 'step',
-            'lp_id' => $oLP->lp_id,
-        ]));
-        exit;
-
-        break;
     case 'report':
         require 'lp_report.php';
         break;
@@ -1135,15 +1078,18 @@ switch ($action) {
         }
 
         if (!empty($selectedItem)) {
-            $forumThread = $selectedItem->getForumThread(
-                $oLP->course_int_id,
-                $oLP->lp_session_id
-            );
+            $lpItemRepo = Container::getLpItemRepository();
+            $forumThreadRepo = Container::getForumThreadRepository();
+            /** @var CLpItem $lpItem */
+            $lpItem = $lpItemRepo->find($_GET['id']);
+            if ($lpItem) {
+                $title = $lpItem->getTitle().' '.$lpItem->getIid();
+                $thread = $forumThreadRepo->getForumThread($title, $course);
 
-            if (!empty($forumThread)) {
-                $dissociated = $selectedItem->dissociateForumThread($forumThread['iid']);
+                if (!empty($thread)) {
+                    $thread->setItem(null);
+                    $forumThreadRepo->update($thread);
 
-                if ($dissociated) {
                     Display::addFlash(
                         Display::return_message(get_lang('Dissociate forum'), 'success')
                     );

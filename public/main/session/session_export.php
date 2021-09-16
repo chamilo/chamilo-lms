@@ -40,38 +40,43 @@ if (isset($_POST['formSent'])) {
     if (empty($session_id)) {
         $sql = "SELECT
                     s.id,
-                    name,
-                    id_coach,
-                    username,
-                    access_start_date,
-                    access_end_date,
-                    visibility,
-                    session_category_id
+                    s.name,
+                    u.username,
+                    s.access_start_date,
+                    s.access_end_date,
+                    s.visibility,
+                    s.session_category_id
                 FROM $tblSession s
-                INNER JOIN $tblUser
-                ON $tblUser.user_id = s.id_coach
-                ORDER BY id";
+                INNER JOIN $tblSessionRelUser sru
+                    ON (s.id = sru.session_id AND sru.relation_type = ".Session::SESSION_COACH.")
+                INNER JOIN $tblUser u
+                ON u.id = sru.user_id
+                ORDER BY s.id";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = "SELECT s.id, name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id
+                $sql = "SELECT s.id, s.name,u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
                     FROM $tblSession s
                     INNER JOIN $tbl_session_rel_access_url as session_rel_url
                     ON (s.id= session_rel_url.session_id)
-                    INNER JOIN $tblUser u ON (u.user_id = s.id_coach)
-                    WHERE access_url_id = $access_url_id
-                    ORDER BY id";
+                    INNER JOIN $tblSessionRelUser sru
+                        ON (s.id = sru.session_id AND sru.relation_type = ".Session::SESSION_COACH.")
+                    INNER JOIN $tblUser u ON (u.id = sru.user_id)
+                    WHERE session_rel_url.access_url_id = $access_url_id
+                    ORDER BY s.id";
             }
         }
 
         $result = Database::query($sql);
     } else {
-        $sql = "SELECT s.id,name,username,access_start_date,access_end_date,visibility,session_category_id
+        $sql = "SELECT s.id,s.name,u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
                 FROM $tblSession s
-                INNER JOIN $tblUser
-                    ON $tblUser.user_id = s.id_coach
+                INNER JOIN $tblSessionRelUser sru
+                    ON (s.id = sru.session_id AND sru.relation_type = ".Session::SESSION_COACH.")
+                INNER JOIN $tblUser u
+                    ON u.id = sru.user_id
                 WHERE s.id='$session_id'";
         $result = Database::query($sql);
     }

@@ -7,6 +7,9 @@ use Chamilo\CoreBundle\Framework\Container;
 /**
  * This tool show global Statistics on general platform events.
  */
+
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
@@ -386,6 +389,7 @@ switch ($report) {
 
             // User count
             $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
+            $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
             $sql = "SELECT * FROM $tableSession
                     WHERE
                         (display_start_date BETWEEN '$start' AND '$end' OR
@@ -405,10 +409,12 @@ switch ($report) {
             $content .= Display::page_subheader2(get_lang('GeneralStats'));
             // Coach
             // Coach
-            $sql = "SELECT count(DISTINCT(id_coach)) count FROM $tableSession
+            $sql = "SELECT COUNT(DISTINCT(sru.user_id)) count FROM $tableSession s
+                INNER JOIN $tableSessionRelUser sru ON s.id = sru.session_id
                     WHERE
-                        (display_start_date BETWEEN '$start' AND '$end' OR
-                        display_end_date BETWEEN '$start' AND '$end')
+                        (s.display_start_date BETWEEN '$start' AND '$end' OR
+                        s.display_end_date BETWEEN '$start' AND '$end')
+                    AND sru.relation_type = ".Session::SESSION_COACH."
                         $statusCondition
                      ";
             $result = Database::query($sql);

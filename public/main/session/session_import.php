@@ -259,7 +259,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             // Creating the session.
                             $sql_session = "INSERT IGNORE INTO $tbl_session SET
                                     name = '".Database::escape_string($session_name)."',
-                                    id_coach = '$coach_id',
                                     access_start_date = '$date_start',
                                     access_end_date = '$date_end',
                                     visibility = '$visibility',
@@ -267,6 +266,16 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     session_admin_id=".intval($_user['user_id']);
                             $rs_session = Database::query($sql_session);
                             $session_id = Database::insert_id();
+                            Database::insert(
+                                $tbl_session_user,
+                                [
+                                    'relation_type' => Session::SESSION_COACH,
+                                    'duration' => 0,
+                                    'registered_at' => api_get_utc_datetime(),
+                                    'user_id' => $coach_id,
+                                    'session_id' => $session_id,
+                                ]
+                            );
                             $session_counter++;
                         } else {
                             // Update the session if it is needed.
@@ -275,7 +284,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 // Creating the session.
                                 $sql_session = "INSERT IGNORE INTO $tbl_session SET
                                         name = '".Database::escape_string($session_name)."',
-                                        id_coach = '$coach_id',
                                         access_start_date = '$date_start',
                                         access_end_date = '$date_end',
                                         visibility = '$visibility',
@@ -283,11 +291,20 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         session_admin_id=".intval($_user['user_id']);
                                 $rs_session = Database::query($sql_session);
                                 $session_id = Database::insert_id();
+                                Database::insert(
+                                    $tbl_session_user,
+                                    [
+                                        'relation_type' => Session::SESSION_COACH,
+                                        'duration' => 0,
+                                        'registered_at' => api_get_utc_datetime(),
+                                        'user_id' => $coach_id,
+                                        'session_id' => $session_id,
+                                    ]
+                                );
                                 $session_counter++;
                             } else {
                                 // if the session already exists - update it.
                                 $sql_session = "UPDATE $tbl_session SET
-                                        id_coach = '$coach_id',
                                         access_start_date = '$date_start',
                                         access_end_date = '$date_end',
                                         visibility = '$visibility',
@@ -299,6 +316,16 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 Database::query("DELETE FROM $tbl_session_user WHERE session_id ='$session_id'");
                                 Database::query("DELETE FROM $tbl_session_course WHERE session_id='$session_id'");
                                 Database::query("DELETE FROM $tbl_session_course_user WHERE session_id='$session_id'");
+                                Database::insert(
+                                    $tbl_session_user,
+                                    [
+                                        'relation_type' => Session::SESSION_COACH,
+                                        'duration' => 0,
+                                        'registered_at' => api_get_utc_datetime(),
+                                        'user_id' => $coach_id,
+                                        'session_id' => $session_id,
+                                    ]
+                                );
                             }
                         }
 

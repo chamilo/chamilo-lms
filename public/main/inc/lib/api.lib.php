@@ -2860,7 +2860,7 @@ function api_is_course_admin()
 
 /**
  * Checks whether the current user is a course coach
- * Based on the presence of user in session.id_coach (session general coach).
+ * Based on the presence of user in session_rel_user.relation_type (as session general coach, value 3).
  *
  * @return bool True if current user is a course coach
  */
@@ -2943,6 +2943,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
 
     $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
     $sessionIsCoach = [];
 
     if (!empty($courseId)) {
@@ -2959,10 +2960,11 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     }
 
     if (!empty($session_id)) {
-        $sql = "SELECT DISTINCT id, name, access_start_date, access_end_date
-                FROM $session_table
-                WHERE session.id_coach = $userId AND id = $session_id
-                ORDER BY access_start_date, access_end_date, name";
+        $sql = "SELECT DISTINCT s.id
+            FROM $session_table AS s
+            INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
+            WHERE sru.user_id = $userId AND s.id = $session_id AND sru.relation_type = ".SessionEntity::SESSION_COACH
+            ." ORDER BY s.access_start_date, s.access_end_date, s.name";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
             $sessionIsCoach = array_merge(
@@ -4826,24 +4828,25 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         // Is it the session coach or the session admin?
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $sql = "SELECT
-                    session.id_coach, session_admin_id, session.id
-                FROM
-                    $tbl_session as session
-                INNER JOIN $tbl_session_course
-                    ON session_rel_course.session_id = session.id
-                    AND session_rel_course.c_id = '$courseId'
-                LIMIT 1";
+        $sql = "SELECT s.session_admin_id, sru.user_id AS session_coach_id
+            FROM $tbl_session AS s
+            LEFT JOIN $tblSessionRelUser sru
+                ON (sru.session_id = s.id AND sru.relation_type = ".SessionEntity::SESSION_COACH.")
+            INNER JOIN $tbl_session_course src
+                ON (src.session_id = s.id AND src.c_id = $courseId)";
 
         $result = Database::query($sql);
         $row = Database::store_result($result);
+        $sessionAdminsId = array_column($row, 'session_admin_id');
+        $sessionCoachesId = array_column($row, 'session_coach_id');
 
-        if ($row[0]['id_coach'] == $userid) {
+        if (in_array($userid, $sessionCoachesId)) {
             $is_courseMember = true;
             $is_courseAdmin = false;
-        } elseif ($row[0]['session_admin_id'] == $userid) {
+        } elseif (in_array($userid, $sessionAdminsId)) {
             $is_courseMember = false;
             $is_courseAdmin = false;
         } else {

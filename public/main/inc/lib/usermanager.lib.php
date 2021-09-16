@@ -692,10 +692,11 @@ class UserManager
         $sql = "DELETE FROM $table_session_course_user WHERE user_id = '".$user_id."'";
         Database::query($sql);
 
-        // If the user was added as a id_coach then set the current admin as coach see BT#
+        // If the user was added as a general coach then set the current admin as general coach see BT#
         $currentUserId = api_get_user_id();
-        $sql = "UPDATE $table_session SET id_coach = $currentUserId
-                WHERE id_coach = '".$user_id."'";
+        $sql = "UPDATE session_rel_user
+            SET user_id = $currentUserId
+            WHERE user_id = $user_id AND relation_type = ". SessionEntity::SESSION_COACH;
         Database::query($sql);
 
         $sql = "UPDATE $table_session SET id_coach = $currentUserId
@@ -2871,13 +2872,14 @@ class UserManager
         }
 
         $sql = "SELECT DISTINCT
-                id, name, access_start_date, access_end_date
+                s.id, s.name, s.access_start_date, s.access_end_date
                 FROM $tbl_session s
+                INNER JOIN $tbl_session_user sru ON sru.session_id = s.id
                 WHERE (
-                    id_coach = $user_id
+                    sru.user_id = $user_id AND sru.relation_type = ".SessionEntity::SESSION_COACH."
                 )
                 $coachCourseConditions
-                ORDER BY access_start_date, access_end_date, name";
+                ORDER BY s.access_start_date, s.access_end_date, s.name";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -3108,8 +3110,9 @@ class UserManager
             }
         } else {
             //check if user is general coach for this session
-            $sessionInfo = api_get_session_info($session_id);
-            if ($sessionInfo['id_coach'] == $user_id) {
+            $session = api_get_session_entity($session_id);
+            $user = api_get_user_entity($user_id);
+            if ($session && $session->hasUserAsGeneralCoach($user)) {
                 $courseList = SessionManager::get_course_list_by_session_id($session_id);
                 if (!empty($courseList)) {
                     foreach ($courseList as $course) {

@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -57,6 +59,51 @@ class CLpRepositoryTest extends AbstractApiTest
 
         $link = $repo->getLink($lp, $this->getContainer()->get('router'));
         $this->assertSame('/main/lp/lp_controller.php?lp_id='.$lp->getIid().'&action=view', $link);
+    }
+
+    public function testCreateWithForum(): void
+    {
+        self::bootKernel();
+
+        $lpRepo = self::getContainer()->get(CLpRepository::class);
+        $forumRepo = self::getContainer()->get(CForumRepository::class);
+
+        $course = $this->createCourse('new');
+        $course2 = $this->createCourse('new2');
+        $teacher = $this->createUser('teacher');
+
+        $forum = (new CForum())
+            ->setForumTitle('forum')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $forumRepo->create($forum);
+
+        $forum2 = (new CForum())
+            ->setForumTitle('forum2')
+            ->setParent($course2)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $forumRepo->create($forum2);
+
+        $lp = (new CLp())
+            ->setName('lp')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->setLpType(CLp::LP_TYPE)
+            ->addCourseLink($course)
+        ;
+        $lp->getForums()->add($forum);
+        $lp->getForums()->add($forum2);
+
+        $lpRepo->createLp($lp);
+
+        $this->assertSame(2, $lp->getForums()->count());
+
+        $forum = $lpRepo->findForumByCourse($lp, $course);
+        $this->assertNotNull($forum);
     }
 
     public function testFindAllByCourse(): void

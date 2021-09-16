@@ -28,20 +28,22 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $category = (new CForumCategory())
-            ->setCatTitle('cat')
+            ->setCatTitle('cat 1')
             ->setParent($course)
             ->setCreator($teacher)
+            ->addCourseLink($course)
         ;
         $this->assertHasNoEntityViolations($category);
         $categoryRepo->create($category);
 
-        $this->assertSame('cat', (string) $category);
+        $this->assertSame('cat 1', (string) $category);
 
         $forum = (new CForum())
             ->setForumTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
             ->setForumCategory($category)
+            ->addCourseLink($course)
         ;
         $forumRepo->create($forum);
 
@@ -50,6 +52,8 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $category->getForums()->count());
         $this->assertSame(1, $categoryRepo->count([]));
         $this->assertSame(1, $forumRepo->count([]));
+
+        $this->assertNotNull($categoryRepo->getForumCategoryByTitle('cat 1', $course));
 
         $categoryRepo->delete($category);
 

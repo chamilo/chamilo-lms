@@ -48,6 +48,7 @@ class CLpItem
     /**
      * @ORM\Column(name="ref", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $ref;
 
     /**
@@ -205,12 +206,7 @@ class CLpItem
         return $this;
     }
 
-    /**
-     * Get itemType.
-     *
-     * @return string
-     */
-    public function getItemType()
+    public function getItemType(): string
     {
         return $this->itemType;
     }
@@ -222,12 +218,7 @@ class CLpItem
         return $this;
     }
 
-    /**
-     * Get ref.
-     *
-     * @return string
-     */
-    public function getRef()
+    public function getRef(): string
     {
         return $this->ref;
     }
@@ -239,12 +230,7 @@ class CLpItem
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }

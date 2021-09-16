@@ -23,6 +23,19 @@ class CForumCategoryRepository extends ResourceRepository
         parent::__construct($registry, CForumCategory::class);
     }
 
+    public function getForumCategoryByTitle(string $title, Course $course, Session $session = null): ?CForumCategory
+    {
+        /** @var CForumCategory|null $result */
+        $result = $this->findCourseResourceByTitle(
+            $title,
+            $course->getResourceNode(),
+            $course,
+            $session
+        );
+
+        return $result;
+    }
+
     /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);

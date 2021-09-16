@@ -21,6 +21,17 @@ class CForumThreadRepository extends ResourceRepository
         parent::__construct($registry, CForumThread::class);
     }
 
+    public function getForumThread(string $title, Course $course, Session $session = null): ?CForumThread
+    {
+        $qb = $this->getResourcesByCourse($course, $session);
+        $qb
+            ->andWhere('resource.threadTitle = :title')
+            ->setParameter('title', $title)
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     public function findAllByCourse(
         Course $course,
         Session $session = null,

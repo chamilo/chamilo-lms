@@ -207,9 +207,11 @@ class CLp extends AbstractResource implements ResourceInterface
     protected Collection $items;
 
     /**
+     * @var Collection|CForum[]
+     *
      * @ORM\OneToMany(targetEntity="CForum", mappedBy="lp", cascade={"persist", "remove"})
      */
-    protected ?CForum $forum = null;
+    protected Collection $forums;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist", "remove"})
@@ -247,6 +249,7 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->useMaxScore = 1;
         $this->theme = '';
         $this->items = new ArrayCollection();
+        $this->forums = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -757,19 +760,22 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getForum(): ?CForum
+    /**
+     * @return ArrayCollection|Collection|CForum[]
+     */
+    public function getForums()
     {
-        return $this->forum;
+        return $this->forums;
     }
 
-    public function hasForum(): bool
+    /**
+     * @param ArrayCollection|Collection $forums
+     *
+     * @return CLp
+     */
+    public function setForums($forums): self
     {
-        return null !== $this->forum;
-    }
-
-    public function setForum(CForum $forum): self
-    {
-        $this->forum = $forum;
+        $this->forums = $forums;
 
         return $this;
     }

@@ -51,6 +51,7 @@ class CLpItemRepositoryTest extends AbstractApiTest
 
         $this->assertSame(1, $lp->getItems()->count());
         $this->assertSame('lp', (string) $lp);
+        $this->assertNotEmpty((string) $lpItem);
         $this->assertSame(1, $lpRepo->count([]));
         $this->assertSame(2, $lpItemRepo->count([]));
     }

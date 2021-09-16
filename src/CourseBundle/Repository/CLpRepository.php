@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Doctrine\ORM\QueryBuilder;
@@ -39,6 +40,24 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         ;
         $lp->getItems()->add($lpItem);
         $this->create($lp);
+    }
+
+    public function findForumByCourse(CLp $lp, Course $course, Session $session = null): ?CForum
+    {
+        $forums = $lp->getForums();
+        $result = null;
+        foreach ($forums as $forum) {
+            $links = $forum->getResourceNode()->getResourceLinks();
+            foreach ($links as $link) {
+                if ($link->getCourse() === $course && $link->getSession() === $session) {
+                    $result = $forum;
+
+                    break 2;
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function findAllByCourse(

@@ -224,7 +224,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourceType(): ResourceType
     {
         $resourceTypeName = $this->toolChain->getResourceTypeNameByEntity($this->getClassName());
-
         $repo = $this->getEntityManager()->getRepository(ResourceType::class);
 
         return $repo->findOneBy([

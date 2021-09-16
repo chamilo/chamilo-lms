@@ -30,6 +30,7 @@ class CForumThreadRepositoryTest extends AbstractApiTest
             ->setForumTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
+            ->addCourseLink($course)
         ;
         $forumRepo->create($forum);
 
@@ -38,6 +39,7 @@ class CForumThreadRepositoryTest extends AbstractApiTest
             ->setForum($forum)
             ->setParent($course)
             ->setCreator($teacher)
+            ->addCourseLink($course)
         ;
         $threadRepo->create($thread);
 
@@ -49,9 +51,10 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $forumRepo->count([]));
         $this->assertSame(1, $forum->getThreads()->count());
 
+        $this->assertNull($threadRepo->getForumThread('title', $course));
+
         $this->assertSame(0, $thread->getThreadViews());
         $threadRepo->increaseView($thread);
-
         $this->assertSame(1, $thread->getThreadViews());
 
         $forumRepo->delete($forum);

@@ -145,7 +145,10 @@ class CourseHome
             $session_category = $rows_session_category['name'];
         }
 
-        $coachInfo = api_get_user_info($sessionInfo['id_coach']);
+        $sessionCoachName = implode(
+            ' - ',
+            SessionManager::getGeneralCoachesNamesForSession($id_session)
+        );
 
         $output = '';
         if (!empty($session_category)) {
@@ -156,7 +159,7 @@ class CourseHome
         $msgDate = $dateInfo['access'];
         $output .= '<tr>
                     <td style="width:50%">'.get_lang('Session name').': '.'<b>'.$sessionInfo['name'].'</b></td>
-                    <td>'.get_lang('General coach').': '.'<b>'.$coachInfo['complete_name'].'</b></td></tr>';
+                    <td>'.get_lang('General coach').': '.'<b>'.$sessionCoachName.'</b></td></tr>';
         $output .= '<tr>
                         <td>'.get_lang('Identifier of session').': '.
                             Display::return_icon('star.png', ' ', ['align' => 'absmiddle']).'

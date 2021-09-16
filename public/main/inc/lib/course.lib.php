@@ -1194,8 +1194,10 @@ class CourseManager
             return true;
         }
 
-        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
-              " WHERE id = $session_id AND id_coach = $userId";
+        $sql = "SELECT s.id FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." s
+            INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." sru
+                ON (sru.session_id = s.id AND sru.relation_type = ".SessionEntity::SESSION_COACH.")
+            WHERE sru.user_id = $userId AND s.id = $session_id";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
@@ -1804,12 +1806,9 @@ class CourseManager
         }
 
         if ($addGeneralCoach) {
-            $table = Database::get_main_table(TABLE_MAIN_SESSION);
-            // We get the session coach.
-            $sql = "SELECT id_coach FROM $table WHERE id = $session_id";
-            $rs = Database::query($sql);
-            $session_id_coach = Database::result($rs, 0, 'id_coach');
-            if (is_int($session_id_coach)) {
+            $generalCoachesId = SessionManager::getGeneralCoachesIdForSession($session_id);
+
+            foreach ($generalCoachesId as $session_id_coach) {
                 $userInfo = api_get_user_info($session_id_coach);
                 if ($userInfo) {
                     $users[$session_id_coach] = $userInfo;
@@ -4054,11 +4053,10 @@ class CourseManager
         $session_category_id = null;
         $active = false;
         if (!empty($session_id)) {
-            $sessionCoachName = '';
-            if (!empty($sessionInfo['id_coach'])) {
-                $coachInfo = api_get_user_info($sessionInfo['id_coach']);
-                $sessionCoachName = $coachInfo['complete_name'];
-            }
+            $sessionCoachName = implode(
+                ' - ',
+                SessionManager::getGeneralCoachesNamesForSession($session_id)
+            );
 
             $session_category_id = self::get_session_category_id_by_session_id($course_info['id_session']);
 

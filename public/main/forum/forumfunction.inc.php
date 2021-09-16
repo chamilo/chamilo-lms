@@ -1491,9 +1491,12 @@ function get_thread_users_details($thread_id)
         $orderby = 'ORDER BY user.lastname, user.firstname';
     }
 
-    if (api_get_session_id()) {
-        $session_info = api_get_session_info(api_get_session_id());
-        $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
+    $session = api_get_session_entity();
+
+    if ($session) {
+        $coachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
+        $coachesId[] = $session->getSessionAdmin()->getId();
+        $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, thread_id
                 FROM $t_posts p, $t_users user, $t_session_rel_user session_rel_user_rel_course
@@ -1552,9 +1555,12 @@ function get_thread_users_qualify($thread_id)
         $orderby = 'ORDER BY user.lastname, user.firstname';
     }
 
-    if ($sessionId) {
-        $session_info = api_get_session_info($sessionId);
-        $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
+    $session = api_get_session_entity();
+
+    if ($session) {
+        $coachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
+        $coachesId[] = $session->getSessionAdmin()->getId();
+        $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
                 FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify qualify
@@ -1635,9 +1641,12 @@ function get_thread_users_not_qualify($thread_id)
         $cad = substr($cad, 0, strlen($cad) - 1);
     }
 
-    if (api_get_session_id()) {
-        $session_info = api_get_session_info(api_get_session_id());
-        $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
+    $session = api_get_session_entity();
+
+    if ($session) {
+        $coachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
+        $coachesId[] = $session->getSessionAdmin()->getId();
+        $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, post.thread_id
                 FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course

@@ -3673,6 +3673,7 @@ class Tracking
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         // At first, courses where $coach_id is coach of the course.
         $sql = 'SELECT DISTINCT c.code
@@ -3708,29 +3709,35 @@ class Tracking
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = 'SELECT DISTINCT course.code
-                FROM '.$tbl_session_course.' as session_course
-                INNER JOIN '.$tbl_session.' as session
-                    ON session.id = session_course.session_id
-                    AND session.id_coach = '.$coach_id.'
-                INNER JOIN '.$tbl_course.' as course
-                    ON course.id = session_course.c_id';
+        $sql = "'SELECT DISTINCT course.code
+                FROM $tbl_session_course as session_course
+                INNER JOIN $tbl_session as session
+                    ON (session.id = session_course.session_id)
+                INNER JOIN $tblSessionRelUser session_user
+                    ON (session.id = session_user.session_id
+                    AND session_user.user_id = $coach_id
+                    AND session_user.relation_type = ".SessionEntity::SESSION_COACH.")
+                INNER JOIN $tbl_course as course
+                    ON course.id = session_course.c_id'";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = 'SELECT DISTINCT c.code
-                    FROM '.$tbl_session_course.' as session_course
-                    INNER JOIN '.$tbl_course.' c
+                $sql = "'SELECT DISTINCT c.code
+                    FROM $tbl_session_course as session_course
+                    INNER JOIN $tbl_course c
                     ON (c.id = session_course.c_id)
-                    INNER JOIN '.$tbl_session.' as session
+                    INNER JOIN $tbl_session as session
                     ON session.id = session_course.session_id
-                        AND session.id_coach = '.$coach_id.'
-                    INNER JOIN '.$tbl_course.' as course
+                    INNER JOIN $tblSessionRelUser session_user
+                        ON (session.id = session_user.session_id
+                        AND session_user.user_id = $coach_id
+                        AND session_user.relation_type = ".SessionEntity::SESSION_COACH.")
+                    INNER JOIN $tbl_course as course
                         ON course.id = session_course.c_id
-                     INNER JOIN '.$tbl_course_rel_access_url.' course_rel_url
-                    ON (course_rel_url.c_id = c.id)';
+                     INNER JOIN $tbl_course_rel_access_url course_rel_url
+                    ON (course_rel_url.c_id = c.id)'";
             }
         }
 
@@ -8136,13 +8143,14 @@ class TrackingCourseLog
                     $recorset = Database::query($sql);
                 }
             } else {
-                $sql = "SELECT session.id, session.name, user.username
-                          FROM $table_tool tool, $table_session session, $table_user user
+                $sql = "SELECT session.id s.id, s.name u.username
+                          FROM c_tool t, session s, user u, session_rel_user sru
                           WHERE
-                              tool.c_id = $course_id AND
-                              tool.session_id = session.id AND
-                              session.id_coach = user.user_id AND
-                              tool.$id = $ref";
+                              t.c_id = $course_id AND
+                              t.session_id = s.id AND
+                              sru.session_id = s.id AND
+                              sru.user_id = u.id AND
+                              t.$id = $ref";
                 $recorset = Database::query($sql);
             }
 

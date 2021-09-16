@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -77,15 +79,16 @@ if ($form->validate()) {
     $second = DateTime::createFromFormat('Y-m-d', $endDate);
     $numberOfWeeks = floor($first->diff($second)->days / 7);
 
-    $sql = " SELECT id_coach, name, id as session_id, display_start_date, display_end_date
-             FROM session
-             WHERE display_start_date BETWEEN '$startDate' AND '$endDate'
-             ORDER BY id_coach";
+    $sql = "SELECT sru.user_id, s.name, s.id as session_id, s.display_start_date, s.display_end_date
+            FROM session
+            LEFT JOIN session_rel_user sru ON (sru.session_id = s.id AND sru.relation_type = ". Session::SESSION_COACH.")
+            WHERE s.display_start_date BETWEEN '$startDate' AND '$endDate'
+            ORDER BY sru.user_id";
     $result = Database::query($sql);
 
     $coachList = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
-        $coachId = $row['id_coach'];
+        $coachId = $row['user_id'];
         if (!isset($coachList[$coachId])) {
             $userInfo = api_get_user_info($coachId);
             $coachList[$coachId]['complete_name'] = $userInfo['complete_name'];

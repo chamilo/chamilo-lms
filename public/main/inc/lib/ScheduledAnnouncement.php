@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+
 /**
  * Config setting:
  * $_configuration['allow_scheduled_announcements'] = true;.
@@ -300,21 +303,23 @@ class ScheduledAnnouncement extends Model
                 if (!empty($result['date']) && $result['date'] < $now) {
                     $sessionId = $result['session_id'];
                     $sessionInfo = api_get_session_info($sessionId);
+                    $session = api_get_session_entity($sessionId);
                     if (empty($sessionInfo)) {
                         continue;
                     }
                     $users = SessionManager::get_users_by_session(
                         $sessionId,
-                        0,
+                        Session::STUDENT,
                         false,
                         $urlId
                     );
+                    $generalCoaches = $session->getGeneralCoaches();
 
-                    $coachId = $sessionInfo['id_coach'];
-
-                    if (empty($users) || empty($coachId)) {
+                    if (empty($users) || 0 === $generalCoaches->count()) {
                         continue;
                     }
+
+                    $coachId = $generalCoaches->first()->getId();
 
                     $coachList = [];
                     if ($users) {
@@ -379,21 +384,19 @@ class ScheduledAnnouncement extends Model
                                 true
                             );
 
-                            $generalCoach = '';
-                            $generalCoachEmail = '';
-                            if (!empty($sessionInfo['id_coach'])) {
-                                $coachInfo = api_get_user_info($sessionInfo['id_coach']);
-                                if (!empty($coachInfo)) {
-                                    $generalCoach = $coachInfo['complete_name'];
-                                    $generalCoachEmail = $coachInfo['email'];
-                                }
+                            $generalCoachName = [];
+                            $generalCoachEmail = [];
+                            /** @var User $generalCoach */
+                            foreach ($generalCoaches as $generalCoach) {
+                                $generalCoachName[] = $generalCoach->getFullname();
+                                $generalCoachEmail[] = $generalCoach->getEmail();
                             }
 
                             $tags = [
                                 '((session_name))' => $sessionInfo['name'],
                                 '((session_start_date))' => $startTime,
-                                '((general_coach))' => $generalCoach,
-                                '((general_coach_email))' => $generalCoachEmail,
+                                '((general_coach))' => implode(' - ', $generalCoachName),
+                                '((general_coach_email))' => implode(' - ', $generalCoachEmail),
                                 '((session_end_date))' => $endTime,
                                 '((user_complete_name))' => $userInfo['complete_name'],
                                 '((user_firstname))' => $userInfo['firstname'],

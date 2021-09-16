@@ -25,9 +25,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     name="session",
  *     uniqueConstraints={
  *         @ORM\UniqueConstraint(name="name", columns={"name"})
- *     },
- *     indexes={
- *         @ORM\Index(name="idx_id_session_admin_id", columns={"session_admin_id"})
  *     }
  * )
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\SessionListener"})
@@ -76,6 +73,7 @@ class Session implements ResourceWithAccessUrlInterface
     public const DRH = 1;
     public const COURSE_COACH = 2;
     public const SESSION_COACH = 3;
+    public const SESSION_ADMIN = 4;
 
     /**
      * @Groups({"session:read", "session_rel_user:read"})
@@ -192,13 +190,6 @@ class Session implements ResourceWithAccessUrlInterface
      * @ORM\Column(name="nbr_classes", type="integer", nullable=false, unique=false)
      */
     protected int $nbrClasses;
-
-    /**
-     * @Groups({"session:read", "session:write"})
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="session_admin_id", referencedColumnName="id", nullable=true)
-     */
-    protected ?User $sessionAdmin = null;
 
     /**
      * @Groups({"session:read", "session:write"})
@@ -1089,16 +1080,44 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    public function getSessionAdmin(): ?User
+    public function getSessionAdmins(): Collection
     {
-        return $this->sessionAdmin;
+        return $this
+            ->getGeneralAdminsSubscriptions()
+            ->map(function (SessionRelUser $subscription) {
+                return $subscription->getUser();
+            })
+        ;
     }
 
-    public function setSessionAdmin(User $sessionAdmin): self
+    public function getGeneralAdminsSubscriptions(): Collection
     {
-        $this->sessionAdmin = $sessionAdmin;
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', self::SESSION_ADMIN)
+            )
+        ;
 
-        return $this;
+        return $this->users->matching($criteria);
+    }
+
+    public function hasUserAsSessionAdmin(User $user): bool
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', self::SESSION_ADMIN)
+            )
+            ->andWhere(
+                Criteria::expr()->eq('user', $user)
+            )
+        ;
+
+        return $this->users->matching($criteria)->count() > 0;
+    }
+
+    public function addSessionAdmin(User $sessionAdmin): self
+    {
+        return $this->addUserInSession(self::SESSION_ADMIN, $sessionAdmin);
     }
 
     /**

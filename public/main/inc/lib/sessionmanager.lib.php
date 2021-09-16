@@ -69,7 +69,6 @@ class SessionManager
             'nbr_courses' => $session->getNbrCourses(),
             'nbr_users' => $session->getNbrUsers(),
             'nbr_classes' => $session->getNbrClasses(),
-            'session_admin_id' => $session->getSessionAdmin()->getId(),
             'visibility' => $session->getVisibility(),
             'promotion_id' => $session->getPromotion() ? $session->getPromotion()->getId() : 0,
             'display_start_date' => $session->getDisplayStartDate()?->format('Y-m-d H:i:s'),
@@ -236,7 +235,7 @@ class SessionManager
                 $session = new Session();
                 $session
                     ->setName($name)
-                    ->setSessionAdmin(api_get_user_entity($sessionAdminId))
+                    ->addSessionAdmin(api_get_user_entity($sessionAdminId))
                     ->setVisibility($visibility)
                     ->setDescription($description)
                     ->setShowDescription(1 === $showDescription)
@@ -1681,7 +1680,7 @@ class SessionManager
                 }
 
                 if (!empty($sessionAdminId)) {
-                    $sessionEntity->setSessionAdmin(api_get_user_entity($sessionAdminId));
+                    $sessionEntity->addSessionAdmin(api_get_user_entity($sessionAdminId));
                 }
 
                 if (!empty($startDate)) {
@@ -1772,6 +1771,7 @@ class SessionManager
         $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
         $em = Database::getManager();
         $userId = api_get_user_id();
+        $user = api_get_user_entity();
 
         $repo = Container::getSequenceResourceRepository();
         $sequenceResource = $repo->findRequirementForResource(
@@ -1796,8 +1796,7 @@ class SessionManager
         }
 
         if (self::allowed($sessionEntity) && !$from_ws) {
-            $sessionAdminId = $sessionEntity->getSessionAdmin()->getId();
-            if ($sessionAdminId != $userId && !api_is_platform_admin()) {
+            if (!$sessionEntity->hasUserAsSessionAdmin($user) && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }
         }
@@ -9728,7 +9727,7 @@ class SessionManager
             'true' !== api_get_setting('allow_session_admins_to_manage_all_sessions')
         ) {
 
-            if ($user->getId() === $session->getSessionAdmin()->getId()) {
+            if ($session->hasUserAsSessionAdmin($user)) {
                 return true;
             }
         }

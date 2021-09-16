@@ -22,8 +22,9 @@ $id_user = intval($_GET['id_user']);
 $em = Database::getManager();
 $session = api_get_session_entity($id_session);
 $user = api_get_user_entity($id_user);
+$currentUser = api_get_user_entity();
 
-if (!api_is_platform_admin() && $session->getSessionAdmin()->getId() != api_get_user_id()) {
+if (!api_is_platform_admin() && !$session->hasUserAsSessionAdmin($currentUser)) {
     api_not_allowed(true);
 }
 

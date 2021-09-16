@@ -645,7 +645,7 @@ class CourseManager
                 $session->setDisplayEndDate($endDate);
                 $session->setSendSubscriptionNotification(false);
                 $adminId = api_get_configuration_value('session_automatic_creation_user_id') ?: 1;
-                $session->setSessionAdmin(api_get_user_entity($adminId));
+                $session->addSessionAdmin(api_get_user_entity($adminId));
                 $session->addUserInSession(0, $user);
                 Database::getManager()->persist($session);
                 try {

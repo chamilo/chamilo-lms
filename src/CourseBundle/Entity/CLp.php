@@ -207,7 +207,7 @@ class CLp extends AbstractResource implements ResourceInterface
     protected Collection $items;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CForum", mappedBy="lp")
+     * @ORM\OneToMany(targetEntity="CForum", mappedBy="lp", cascade={"persist", "remove"})
      */
     protected ?CForum $forum = null;
 

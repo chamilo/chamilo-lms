@@ -74,6 +74,10 @@ class Version20170625153000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_forum_forum CHANGE lp_id lp_id INT DEFAULT NULL');
         $this->addSql('UPDATE c_forum_forum SET lp_id = NULL WHERE lp_id = 0');
 
+        if ($table->hasIndex('IDX_47A9C9968DFD1EF')) {
+            $this->addSql('CREATE INDEX IDX_47A9C9968DFD1EF ON c_forum_forum (lp_id);');
+        }
+
         /*if (false === $table->hasIndex('UNIQ_47A9C9968DFD1EF')) {
             $this->addSql('ALTER TABLE c_forum_forum ADD UNIQUE INDEX UNIQ_47A9C9968DFD1EF (lp_id)');
         }*/
@@ -88,7 +92,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE c_forum_thread CHANGE lp_item_id lp_item_id INT DEFAULT NULL');
-        if ($table->hasForeignKey('FK_5DA7884CDBF72317')) {
+        if (!$table->hasForeignKey('FK_5DA7884CDBF72317')) {
             $this->addSql(
                 'ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884CDBF72317 FOREIGN KEY (lp_item_id) REFERENCES c_lp_item (iid) ON DELETE CASCADE'
             );

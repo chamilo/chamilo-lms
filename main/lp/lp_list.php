@@ -891,12 +891,6 @@ foreach ($categories as $item) {
                     Display::return_icon('cd.png', get_lang('ExportShort')),
                     api_get_self()."?$cidReq&action=export&lp_id=$id"
                 );
-            } elseif ($details['lp_type'] == 2) {
-                $dsp_disk = Display::url(
-                    Display::return_icon('cd.png', get_lang('ExportShort')),
-                    api_get_self()."?$cidReq&action=export&lp_id=$id&export_name="
-                    .api_replace_dangerous_char($name).'.zip'
-                );
             } else {
                 $dsp_disk = Display::return_icon(
                     'cd_na.png',

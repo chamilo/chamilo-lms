@@ -3966,7 +3966,7 @@ class CourseManager
         if ($isAdmin ||
             COURSEMANAGER === $userInCourseStatus ||
             $is_coach ||
-            $user_id == $sessionInfo['session_admin_id']
+            SessionManager::sessionHasSessionAdmin($session_id, $user_id)
         ) {
             $params['completed'] = true;
             $params['requirements'] = '';

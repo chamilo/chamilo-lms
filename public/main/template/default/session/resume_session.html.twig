@@ -8,7 +8,11 @@
 <table id="session-properties" class="table table-bordered">
     <tr>
         <td>{{ 'Created by'|get_lang }}</td>
-        <td>{{ session.sessionAdmin | user_complete_name_with_link }}</td>
+        <td>
+            {% for session_admin in session.sessionAdmins %}
+                {{ session_admin | user_complete_name_with_link }}<br>
+            {% endfor %}
+        </td>
     </tr>
     <tr>
         <td>{{ 'General coach' | get_lang}} :</td>

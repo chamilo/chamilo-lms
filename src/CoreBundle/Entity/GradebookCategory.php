@@ -116,7 +116,7 @@ class GradebookCategory
     /**
      * @ORM\Column(name="visible", type="boolean", nullable=false)
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     protected bool $visible;
 
     /**
@@ -143,7 +143,7 @@ class GradebookCategory
     /**
      * @ORM\Column(name="generate_certificates", type="boolean", nullable=false)
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     protected bool $generateCertificates;
 
     /**

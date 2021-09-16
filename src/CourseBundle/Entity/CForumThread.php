@@ -99,7 +99,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="thread_sticky", type="boolean", nullable=false)
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     protected bool $threadSticky;
 
     /**

@@ -134,6 +134,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="all_day", type="boolean", nullable=false)
      */
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Assert\NotNull]
     protected bool $allDay;
 
     /**
@@ -163,9 +164,10 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     protected Collection $attachments;
 
     /**
-     * @ORM\Column(name="collective", type="boolean", options={"default": false}, nullable=false)
+     * @ORM\Column(name="collective", type="boolean", nullable=false)
      */
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Assert\NotNull]
     protected bool $collective = false;
 
     public function __construct()

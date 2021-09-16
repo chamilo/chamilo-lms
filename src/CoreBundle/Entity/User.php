@@ -247,7 +247,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="enabled", type="boolean")
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     protected bool $enabled;
 
     /**

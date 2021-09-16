@@ -66,7 +66,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="visible", type="boolean", nullable=false)
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     protected bool $visible;
 
     /**

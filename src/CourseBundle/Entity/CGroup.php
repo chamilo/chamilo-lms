@@ -58,7 +58,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="status", type="boolean", nullable=false)
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     protected bool $status;
 
     /**

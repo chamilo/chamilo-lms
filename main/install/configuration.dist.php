@@ -1992,6 +1992,9 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 // Ckeditor settings.
 //$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true]];
 
+// Configuration setting to force a cron process on all campus on a multisite enviroment
+//$_configuration['multiple_urls_cron_apply_to_all'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

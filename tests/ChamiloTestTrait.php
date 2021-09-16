@@ -134,6 +134,17 @@ trait ChamiloTestTrait
         $this->assertEquals(0, $errors->count(), implode(', ', $message));
     }
 
+    public function getUploadedFileArray(): array
+    {
+        return [
+            'tmp_name' => $this->getUploadedFile()->getRealPath(),
+            'name' => $this->getUploadedFile()->getFilename(),
+            'type' => $this->getUploadedFile()->getMimeType(),
+            'size' => $this->getUploadedFile()->getSize(),
+            'error' => UPLOAD_ERR_OK,
+        ];
+    }
+
     public function getUploadedFile(): UploadedFile
     {
         $path = $this->getContainer()->get('kernel')->getProjectDir();

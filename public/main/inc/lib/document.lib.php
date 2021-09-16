@@ -3421,20 +3421,13 @@ This folder contains all sessions that have been opened in the chat. Although th
             return $document;
         }
 
-//        $criteria = ['path' => $path, 'course' => $courseEntity];
-//        $document = $documentRepo->findOneBy($criteria);
-//
-//        // Document already exists
-//        if ($document) {
-//            return false;
-//        }
-
         // is updated using the title
         $document = (new CDocument())
             ->setFiletype($fileType)
             ->setTitle($title)
             ->setComment($comment)
             ->setReadonly(1 === $readonly)
+            ->setCreator(api_get_user_entity())
             ->setParent($parentResource)
             ->addCourseLink($courseEntity, $session, $group)
         ;

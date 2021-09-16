@@ -16,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use Symfony\Component\HttpFoundation\Request;
 
 class CDocumentRepositoryTest extends AbstractApiTest
 {
@@ -392,7 +393,101 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertSame(0, \count($docs));
     }
 
-    public function testCreateNodeForResource(): void
+    public function testAddFileFromString(): void
+    {
+        self::bootKernel();
+
+        $course = $this->createCourse('Test');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $admin = $this->getUser('admin');
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title 123')
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+
+        $this->assertInstanceOf(ResourceNode::class, $document->getResourceNode());
+        $this->assertNull($documentRepo->getParent($document));
+        $this->assertFalse($document->hasUploadFile());
+        $this->assertSame(1, $documentRepo->count([]));
+
+        $documentRepo->addFileFromString($document, 'test', 'text/html', 'my file', true);
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+        $this->assertTrue($document->getResourceNode()->hasResourceFile());
+    }
+
+    public function testAddFileFromPath(): void
+    {
+        self::bootKernel();
+
+        $course = $this->createCourse('Test');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $admin = $this->getUser('admin');
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title 123')
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+
+        $this->assertSame(1, $documentRepo->count([]));
+
+        $path = $this->getUploadedFile()->getRealPath();
+        $resourceFile = $documentRepo->addFileFromPath($document, 'logo.png', $path, true);
+
+        $this->assertNotNull($resourceFile);
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+        $this->assertTrue($document->getResourceNode()->hasResourceFile());
+    }
+
+    public function testAddFileFromFileRequest(): void
+    {
+        self::bootKernel();
+
+        $course = $this->createCourse('Test');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $admin = $this->getUser('admin');
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title 123')
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+
+        $this->assertSame(1, $documentRepo->count([]));
+
+        $file = $this->getUploadedFileArray();
+
+        $request = new Request([], [], [], [], ['upload_file' => $file]);
+        $this->getContainer()->get('request_stack')->push($request);
+
+        $resourceFile = $documentRepo->addFileFromFileRequest($document, 'upload_file');
+
+        $this->assertNotNull($resourceFile);
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+        $this->assertTrue($document->getResourceNode()->hasResourceFile());
+    }
+
+    public function testCreateWithAddResourceNode(): void
     {
         self::bootKernel();
 
@@ -411,8 +506,11 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $this->assertInstanceOf(ResourceNode::class, $document->getResourceNode());
         $this->assertSame('title 123', (string) $document);
-
         $this->assertNull($documentRepo->getParent($document));
+
+        $documentRepo->hardDelete($document);
+
+        $this->assertSame(0, $documentRepo->count([]));
     }
 
     public function testCreateDocumentWithLinks(): void

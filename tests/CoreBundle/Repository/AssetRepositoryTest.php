@@ -85,14 +85,7 @@ class AssetRepositoryTest extends AbstractApiTest
             ->setCategory(Asset::WATERMARK)
         ;
 
-        $file = [
-            'tmp_name' => $this->getUploadedFile()->getRealPath(),
-            'name' => $this->getUploadedFile()->getFilename(),
-            'type' => $this->getUploadedFile()->getMimeType(),
-            'size' => $this->getUploadedFile()->getSize(),
-            'error' => UPLOAD_ERR_OK,
-        ];
-
+        $file = $this->getUploadedFileArray();
         $assetRepo->createFromRequest($asset, $file);
         $this->assertHasNoEntityViolations($asset);
     }

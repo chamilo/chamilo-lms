@@ -26,6 +26,22 @@ class CLpRepositoryTest extends AbstractApiTest
 
         $lp = (new CLp())
             ->setName('lp')
+            ->setDescription('desc')
+            ->setTheme('chamilo')
+            ->setAccumulateScormTime(100)
+            ->setAccumulateWorkTime(100)
+            ->setAuthor('author')
+            ->setContentMaker('maker')
+            ->setContentLocal('local')
+            ->setForceCommit(false)
+            ->setUseMaxScore(100)
+            ->setSubscribeUsers(1)
+            ->setJsLib('lib')
+            ->setHideTocFrame(true)
+            ->setRef('ref')
+            ->setPath('path')
+            ->setAutolaunch(0)
+            ->setCategory(null)
             ->setParent($course)
             ->setCreator($teacher)
             ->setLpType(CLp::LP_TYPE)
@@ -35,6 +51,7 @@ class CLpRepositoryTest extends AbstractApiTest
 
         $this->assertNotNull($lp->getResourceNode());
         $this->assertSame(1, $lp->getItems()->count());
+        $this->assertFalse($lp->hasCategory());
         $this->assertSame('lp', (string) $lp);
         $this->assertSame(1, $repo->count([]));
 

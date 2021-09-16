@@ -36,7 +36,6 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         $categoryRepo->create($category);
 
         $this->assertSame('cat', (string) $category);
-        $this->assertSame(1, $categoryRepo->count([]));
 
         $forum = (new CForum())
             ->setForumTitle('forum')
@@ -49,5 +48,12 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         /** @var CForumCategory $category */
         $category = $categoryRepo->find($category->getIid());
         $this->assertSame(1, $category->getForums()->count());
+        $this->assertSame(1, $categoryRepo->count([]));
+        $this->assertSame(1, $forumRepo->count([]));
+
+        $categoryRepo->delete($category);
+
+        $this->assertSame(0, $categoryRepo->count([]));
+        $this->assertSame(1, $forumRepo->count([]));
     }
 }

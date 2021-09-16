@@ -137,7 +137,7 @@ if ('add' === $action) {
             ];
             $interbreadcrumb[] = [
                 'url' => '#',
-                'name' => get_lang('Add a forumCategory'),
+                'name' => get_lang('Add forum category'),
             ];
 
             break;
@@ -162,7 +162,7 @@ Event::event_access_tool(TOOL_FORUM);
 $logInfo = [
     'tool' => TOOL_FORUM,
     'action' => !empty($action) ? $action : 'list-category',
-    'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
+    'action_details' => $_GET['content'] ?? '',
 ];
 Event::registerLog($logInfo);
 

@@ -641,8 +641,8 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             ->setCatTitle($clean_cat_title)
             ->setCatComment($values['forum_category_comment'] ?? '')
             ->setCatOrder($new_max)
-            ->addCourseLink($course, $session)
             ->setParent($course)
+            ->addCourseLink($course, $session)
         ;
         $repo->create($category);
 
@@ -810,63 +810,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         if (isset($values['group_forum']) && false) {
             $forumData = get_forums($values['forum_id']);
             $currentGroupId = $forumData['forum_of_group'];
-            if ($currentGroupId != $values['group_forum']) {
-                $threads = get_threads($values['forum_id']);
-                $toGroupId = 'NULL';
-                if (!empty($values['group_forum'])) {
-                    $toGroupId = $values['group_forum'];
-                }
-                //$tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-                foreach ($threads as $thread) {
-                    /*$sql = "UPDATE $tableItemProperty
-                            SET to_group_id = $toGroupId
-                            WHERE
-                                tool = '".TOOL_FORUM_THREAD."' AND
-                                ref = ".$thread['thread_id'].' AND
-                                c_id = '.$courseId;
-                    Database::query($sql);
-
-                    $posts = getPosts(
-                        $forumData,
-                        $thread['thread_id']
-                    );*/
-
-                    /*foreach ($posts as $post) {
-                        $postId = $post['post_id'];
-                        $attachMentList = getAllAttachment($postId);
-                        if (!empty($attachMentList)) {
-                            foreach ($attachMentList as $attachMent) {
-                                $sql = "UPDATE $tableItemProperty
-                                        SET to_group_id = $toGroupId
-                                        WHERE
-                                            tool = '".TOOL_FORUM_ATTACH."' AND
-                                            ref = ".$attachMent['iid'].' AND
-                                            c_id = '.$courseId;
-                                Database::query($sql);
-                            }
-                        }
-
-                        $sql = "UPDATE $tableItemProperty
-                                SET to_group_id = $toGroupId
-                                WHERE
-                                    tool = '".TOOL_FORUM_POST."' AND
-                                    ref = $postId AND
-                                    c_id = $courseId";
-                        Database::query($sql);
-                    }*/
-                }
-            }
         }
-
-        /*
-        api_item_property_update(
-            $courseInfo,
-            TOOL_FORUM,
-            Database::escape_string($values['forum_id']),
-            'ForumUpdated',
-            api_get_user_id(),
-            $groupInfo
-        );*/
 
         $return_message = get_lang('The forum has been modified');
         $forumId = $forum->getIid();

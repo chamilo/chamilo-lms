@@ -107,7 +107,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
         }
 
         // Move id_coach to session_rel_user
-        $result = $connection->executeQuery("SELECT id, session_admin_id, id_coach FROM session");
+        $result = $connection->executeQuery('SELECT id, session_admin_id, id_coach FROM session');
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
@@ -125,12 +125,12 @@ class Version20190210182615 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4D1DC2CFC');
-        $this->addSql("DROP INDEX idx_id_coach ON session");
-        $this->addSql("ALTER TABLE session DROP COLUMN id_coach");
+        $this->addSql('DROP INDEX idx_id_coach ON session');
+        $this->addSql('ALTER TABLE session DROP COLUMN id_coach');
 
         $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4EF87E278');
-        $this->addSql("DROP INDEX idx_id_session_admin_id ON session");
-        $this->addSql("ALTER TABLE session DROP COLUMN session_admin_id");
+        $this->addSql('DROP INDEX idx_id_session_admin_id ON session');
+        $this->addSql('ALTER TABLE session DROP COLUMN session_admin_id');
     }
 
     public function down(Schema $schema): void

@@ -184,7 +184,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_survey_question');
         }
 
-        if (false === $table->hasColumn('is_required')) {
+        if (!$table->hasColumn('is_required')) {
             $table
                 ->addColumn('is_required', Types::BOOLEAN)
                 ->setDefault(false)
@@ -196,11 +196,11 @@ class Version20180319145700 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_survey_question CHANGE survey_id survey_id INT DEFAULT NULL;');
 
-        if ($table->hasForeignKey('FK_92F05EE7B3FE509D')) {
+        if (!$table->hasForeignKey('FK_92F05EE7B3FE509D')) {
             $this->addSql('ALTER TABLE c_survey_question ADD CONSTRAINT FK_92F05EE7B3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid) ON DELETE CASCADE');
         }
 
-        if ($table->hasIndex('IDX_92F05EE7B3FE509D')) {
+        if (!$table->hasIndex('IDX_92F05EE7B3FE509D')) {
             $this->addSql('CREATE INDEX IDX_92F05EE7B3FE509D ON c_survey_question (survey_id);');
         }
 
@@ -208,13 +208,13 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX idx_survey_q_qid ON c_survey_question;');
         }
 
-        if (false === $table->hasColumn('parent_id')) {
+        if (!$table->hasColumn('parent_id')) {
             $this->addSql('ALTER TABLE c_survey_question ADD parent_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_survey_question ADD CONSTRAINT FK_92F05EE7727ACA70 FOREIGN KEY (parent_id) REFERENCES c_survey_question (iid) ON DELETE SET NULL');
             $this->addSql('CREATE INDEX IDX_92F05EE7727ACA70 ON c_survey_question (parent_id);');
         }
 
-        if (false === $table->hasColumn('parent_option_id')) {
+        if (!$table->hasColumn('parent_option_id')) {
             $this->addSql('ALTER TABLE c_survey_question ADD parent_option_id INT DEFAULT NULL;');
             $this->addSql('ALTER TABLE c_survey_question ADD CONSTRAINT FK_92F05EE7568F3281 FOREIGN KEY (parent_option_id) REFERENCES c_survey_question_option (iid)');
             $this->addSql('CREATE INDEX IDX_92F05EE7568F3281 ON c_survey_question (parent_option_id);');

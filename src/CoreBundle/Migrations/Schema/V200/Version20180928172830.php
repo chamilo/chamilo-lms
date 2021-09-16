@@ -30,7 +30,6 @@ class Version20180928172830 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_tool SET name = "member" WHERE link = "user/user.php" ');
         $this->addSql('UPDATE c_tool SET name = "course_description/index.php" WHERE link = "course_description/" ');
 
-
         //$this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
         //$this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');
         //$this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');

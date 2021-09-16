@@ -63,7 +63,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM c_forum_forum WHERE lp_id IS NOT NULL AND lp_id NOT IN (SELECT id FROM c_lp)');
 
         if (!$table->hasForeignKey('FK_47A9C9968DFD1EF')) {
-            $this->addSql('ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C9968DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid)');
+            $this->addSql('ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C9968DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid) ON DELETE SET NULL');
         }
 
         /*if (!$table->hasIndex('UNIQ_47A9C9968DFD1EF')) {

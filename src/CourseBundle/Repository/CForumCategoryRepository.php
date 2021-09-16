@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -23,17 +24,14 @@ class CForumCategoryRepository extends ResourceRepository
         parent::__construct($registry, CForumCategory::class);
     }
 
-    public function getForumCategoryByTitle(string $title, Course $course, Session $session = null): ?CForumCategory
+    public function getForumCategoryByTitle(string $title, Course $course, Session $session = null): ?ResourceInterface
     {
-        /** @var CForumCategory|null $result */
-        $result = $this->findCourseResourceByTitle(
+        return $this->findCourseResourceByTitle(
             $title,
             $course->getResourceNode(),
             $course,
             $session
         );
-
-        return $result;
     }
 
     /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder

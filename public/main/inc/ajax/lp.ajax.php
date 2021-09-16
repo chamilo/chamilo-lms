@@ -231,6 +231,7 @@ switch ($action) {
         $forum = $lpRepo->findForumByCourse($lp, $course);
 
         if (null === $forum) {
+            /** @var CForumCategory|null $forumCategory */
             $forumCategory = $forumCategoryRepo->getForumCategoryByTitle(
                 get_lang('Learning paths'),
                 $course,
@@ -238,13 +239,13 @@ switch ($action) {
             );
 
             if (null === $forumCategory) {
-                $category = new CForumCategory();
-                $category
+                $forumCategory = new CForumCategory();
+                $forumCategory
                     ->setCatTitle(get_lang('Learning paths'))
                     ->setParent($course)
                     ->addCourseLink($course, $session)
                 ;
-                $forumCategoryRepo->create($category);
+                $forumCategoryRepo->create($forumCategory);
             }
 
             $forum = new CForum();

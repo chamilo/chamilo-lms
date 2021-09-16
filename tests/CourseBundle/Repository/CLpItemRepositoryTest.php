@@ -43,6 +43,7 @@ class CLpItemRepositoryTest extends AbstractApiTest
         $lpItem = (new CLpItem())
             ->setDescription('lp')
             ->setTitle('lp item')
+            ->setRef('ref')
             ->setLp($lp)
             ->setItemType('document')
         ;

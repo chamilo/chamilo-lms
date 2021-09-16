@@ -137,7 +137,7 @@ class CForum extends AbstractResource implements ResourceInterface
     protected ?DateTime $endTime = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="forum", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="forums", cascade={"remove"})
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
     protected ?CLp $lp = null;

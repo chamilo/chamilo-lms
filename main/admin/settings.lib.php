@@ -397,7 +397,7 @@ function handleStylesheets()
     $form = new FormValidator(
         'stylesheet_upload',
         'post',
-        api_get_path().'admin/settings.php?category=Stylesheets#tabs-3'
+        api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Stylesheets#tabs-3'
     );
     $form->protect();
     $form->addElement(

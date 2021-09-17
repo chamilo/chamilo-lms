@@ -145,16 +145,11 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE language DROP dokeos_folder;');
         }
 
-        // Update language to ISO
-        $this->addSql('UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language)');
-        $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
-        $this->addSql("UPDATE settings_current SET selected_value = (SELECT isocode FROM language WHERE english_name = selected_value) WHERE variable = 'platformLanguage'");
-
-        $this->addSql('UPDATE language SET english_name = "No name" WHERE english_name IS NULL');
-        $this->addSql('ALTER TABLE language CHANGE english_name english_name VARCHAR(255) NOT NULL');
-
+        // Update language to ISO.
         $this->addSql('UPDATE language SET isocode = "en" WHERE isocode IS NULL');
         $this->addSql('ALTER TABLE language CHANGE isocode isocode VARCHAR(10) NOT NULL');
+        $this->addSql('UPDATE language SET english_name = "english" WHERE english_name IS NULL');
+        $this->addSql('ALTER TABLE language CHANGE english_name english_name VARCHAR(255) NOT NULL');
 
         $languages = LanguageFixtures::getLanguages();
         $languages = array_column($languages, 'isocode', 'english_name');
@@ -172,6 +167,16 @@ class Version20 extends AbstractMigrationChamilo
                 $this->addSql("UPDATE language SET isocode = '$newIso' WHERE id = $id");
             }
         }
+
+        $this->addSql("UPDATE language SET isocode = 'fr_FR' WHERE isocode = 'fr' ");
+        $this->addSql("UPDATE language SET isocode = 'pl_PL' WHERE isocode = 'pl' ");
+
+        $this->addSql("UPDATE sys_announcement SET lang = 'english' WHERE lang IS NULL OR lang = '' ");
+        $this->addSql("UPDATE course SET course_language = 'english' WHERE course_language IS NULL OR course_language = '' ");
+
+        $this->addSql('UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language)');
+        $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
+        $this->addSql("UPDATE settings_current SET selected_value = (SELECT isocode FROM language WHERE english_name = selected_value) WHERE variable = 'platformLanguage'");
 
         $table = $schema->getTable('fos_group');
         if (false === $table->hasColumn('name')) {
@@ -200,11 +205,11 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_33548A73A76ED395 ON course_request (user_id);');
         }
 
-        if (false === $table->hasColumn('directory')) {
+        if ($table->hasColumn('directory')) {
             $this->addSql('ALTER TABLE course_request DROP directory');
         }
 
-        if (false === $table->hasColumn('db_name')) {
+        if ($table->hasColumn('db_name')) {
             $this->addSql('ALTER TABLE course_request DROP db_name');
         }
 

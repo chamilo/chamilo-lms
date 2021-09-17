@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
@@ -154,6 +155,23 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE language SET isocode = "en" WHERE isocode IS NULL');
         $this->addSql('ALTER TABLE language CHANGE isocode isocode VARCHAR(10) NOT NULL');
+
+        $languages = LanguageFixtures::getLanguages();
+        $languages = array_column($languages, 'isocode', 'english_name');
+
+        $sql = 'SELECT * FROM language';
+        $connection = $this->getEntityManager()->getConnection();
+        $result = $connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
+
+        foreach ($items as $item) {
+            $id = $item['id'];
+            $englishName = $item['english_name'];
+            if (isset($languages[$englishName])) {
+                $newIso = $languages[$englishName];
+                $this->addSql("UPDATE language SET isocode = '$newIso' WHERE id = $id");
+            }
+        }
 
         $table = $schema->getTable('fos_group');
         if (false === $table->hasColumn('name')) {

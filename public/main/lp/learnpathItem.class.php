@@ -320,7 +320,6 @@ class learnpathItem
     {
         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $courseId = $this->courseId;
 
         $sql = "DELETE FROM $lp_item_view
                 WHERE lp_item_id = ".$this->db_id;
@@ -580,8 +579,6 @@ class learnpathItem
             // If the user is an invitee, we consider there's no interaction
             return 0;
         }
-        $courseId = $this->courseId;
-
         if ($checkdb) {
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $sql = "SELECT iid FROM $tbl
@@ -623,7 +620,7 @@ class learnpathItem
     {
         $return = '';
         if ($checkdb) {
-            $this->load_interactions(true);
+            $this->load_interactions();
         }
         foreach ($this->interactions as $id => $in) {
             $return .= "[

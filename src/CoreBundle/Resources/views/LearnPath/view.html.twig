@@ -68,7 +68,7 @@
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <b>
-                                            {{ "ProgressSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                            {{ "Progress"|trans|format(lp_accumulate_work_time) }}
                                         </b>
                                     </div>
                                     <div class="col-xs-8">
@@ -80,7 +80,7 @@
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <b>
-                                            {{ "TimeSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                            {{ "Time spent in the learning path"|trans|format(lp_accumulate_work_time) }}
                                         </b>
                                     </div>
                                     <div class="col-xs-8">
@@ -124,7 +124,7 @@
                                             {% endif %}
                                         </div>
                                         <div class="col-xs-6 text-right">
-                                            {{ "XPoints"|get_lang|format(gamification_points) }}
+                                            {{ "%s points"|trans|format(gamification_points) }}
                                         </div>
                                     </div>
                                     <div class="row">
@@ -158,17 +158,17 @@
                     <div id="navTabBar" class="nav-tabs-bar">
                         <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                             <li role="presentation" class="active">
-                                <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}"
+                                <a href="#lp-view-content" title="{{ 'Lesson'|trans }}"
                                    aria-controls="lp-view-content" role="tab" data-toggle="tab">
                                     <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span>
-                                    <span class="sr-only">{{ 'Lesson'|get_lang }}</span>
+                                    <span class="sr-only">{{ 'Lesson'|trans }}</span>
                                 </a>
                             </li>
                             <li role="presentation">
-                                <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}"
+                                <a href="#lp-view-forum" title="{{ 'Forum'|trans }}"
                                    aria-controls="lp-view-forum" role="tab" data-toggle="tab">
                                     <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span>
-                                    <span class="sr-only">{{ 'Forum'|get_lang }}</span>
+                                    <span class="sr-only">{{ 'Forum'|trans }}</span>
                                 </a>
                             </li>
                         </ul>
@@ -256,9 +256,9 @@
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
                 var className = $('#lp-view-expand-toggle span.fa').attr('class');
                 if (className == 'fa fa-expand') {
-                    $(this).attr('title', '{{ "Expand" | get_lang }}');
+                    $(this).attr('title', '{{ "Expand" | trans }}');
                 } else {
-                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                    $(this).attr('title', '{{ "Collapse" | trans }}');
                 }
 
                 if($('#navTabBar').is(':hidden')) {
@@ -276,9 +276,9 @@
 
                 var className = $('#lp-view-expand-toggle span.fa').attr('class');
                 if (className == 'fa fa-expand') {
-                    $(this).attr('title', '{{ "Expand" | get_lang }}');
+                    $(this).attr('title', '{{ "Expand" | trans }}');
                 } else {
-                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                    $(this).attr('title', '{{ "Collapse" | trans }}');
                 }
             });
             {% endif %}

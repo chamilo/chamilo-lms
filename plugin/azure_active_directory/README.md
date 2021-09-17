@@ -7,8 +7,9 @@ An option allows you to automatically provision/create users in Chamilo from the
 in Chamilo yet.
 
 This plugin adds two extra fields for users:
-- `organisationemail`, the email registered in Azure Active Directory for each user (under _Email_ in the _Contact info_ section).
-- `azure_id`, to save the internal ID for each user in Azure (which is also the prefix before the _@_ sign in the _User Principal Name_).
+
+* `organisationemail`, the email registered in Azure Active Directory for each user (under _Email_ in the _Contact info_ section).
+* `azure_id`, to save the internal ID for each user in Azure (which is also the prefix before the _@_ sign in the _User Principal Name_).
 
 ### Prerequisites
 This plugin will *not* work if you do not use HTTPS. 

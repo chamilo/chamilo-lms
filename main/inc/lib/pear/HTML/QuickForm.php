@@ -278,7 +278,7 @@ class HTML_QuickForm extends HTML_Common
         $token = Security::get_existing_token();
         if (null === $token) {
             $token = Security::get_token();
-|        }
+        }
         $this->addHidden('protect_token', $token);
         $this->setToken($token);
     }

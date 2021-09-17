@@ -26,7 +26,21 @@ class CDocumentRepositoryTest extends AbstractApiTest
     {
         // Test as admin.
         $token = $this->getUserToken([]);
-        $response = $this->createClientWithCredentials($token)->request('GET', '/api/documents');
+        $this->createClientWithCredentials($token)->request('GET', '/api/documents');
+        $this->assertResponseStatusCodeSame(403);
+
+        $course = $this->createCourse('test');
+        $response = $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/documents',
+            [
+                'query' => [
+                    'cid' => $course->getId(),
+                    'resourceNode.parent' => $course->getResourceNode()->getId(),
+                ],
+            ]
+        );
+
         $this->assertResponseIsSuccessful();
 
         // Asserts that the returned content type is JSON-LD (the default)

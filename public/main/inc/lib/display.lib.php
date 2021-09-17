@@ -1730,15 +1730,12 @@ class Display
         return $html;
     }
 
-    /**
-     * @param array  $items
-     * @param string $class
-     */
-    public static function actions($items, $class = 'new_actions'): string
+    public static function actions(array $items): string
     {
         if (empty($items)) {
             return '';
         }
+
         $links = '';
         foreach ($items as $value) {
             $attributes = $value['url_attributes'] ?? [];
@@ -2167,7 +2164,7 @@ class Display
                         $rightAction
                     </div>
                 </div>
-                
+
                 $content
                 $footer
             </div>"

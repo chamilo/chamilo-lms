@@ -6532,8 +6532,8 @@ function exportPendingWorksToExcel($values)
         get_lang('Score'),
         get_lang('Date'),
         get_lang('Status'),
-        get_lang('Qualificator'),
-        get_lang('DateOfQualilfication'),
+        get_lang('Corrector'),
+        get_lang('CorrectionDate'),
     ];
     $tableXls[] = $headers;
 

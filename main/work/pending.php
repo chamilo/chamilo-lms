@@ -63,8 +63,8 @@ $columns = [
     get_lang('Score'),
     get_lang('Date'),
     get_lang('Status'),
-    get_lang('Qualificator'),
-    get_lang('DateOfQualilfication'),
+    get_lang('Corrector'),
+    get_lang('CorrectionDate'),
     get_lang('UploadCorrection'),
 ];
 $columns = array_merge($columns, $plagiarismListJqgridColumn);

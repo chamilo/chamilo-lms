@@ -139,6 +139,8 @@ try {
 
     //TODO add user update management for groups
 
+    //TODO add support if user exists in another URL but is validated in this one, add the user to access_url_rel_user
+
     if (empty($userInfo)) {
         throw new Exception('User '.$userId.' not found.');
     }

@@ -15,11 +15,12 @@ This plugin will *not* work if you do not use HTTPS.
 Make sure your portal is in HTTPS before you configure this plugin.
 
 ### To configure Azure Active Directory
-* Create and configure an application in your Azure panel (Azure Active Directory -> Applications registration -> New registration))
-* In the _Authentication_ section, set an _Reply URL_ with `https://{CHAMILO_URL}/plugin/azure_active_directory/src/callback.php`.
-* In the _Front-channel logout URL_, use `https://{CHAMILO_URL}/index.php?logout=logout`
+* Create and configure an application in your Azure panel (Azure Active Directory -> Applications registration -> New registration)).
+* In the _Authentication_ section, set an _Reply URL_ (or _Redirect URIs_) of `https://{CHAMILO_URL}/plugin/azure_active_directory/src/callback.php`.
+* In the _Front-channel logout URL_, use `https://{CHAMILO_URL}/index.php?logout=logout`.
+* Leave the rest of the _Authentication_ section unchanged.
 * In _Certificates & secrets_, create a secret string (or application password). Keep the _Value_ field at hand. If you don't copy it somewhere at this point, it will later be hidden, so take a copy, seriously!
-* Make sure you actually have users
+* Make sure you actually have users.
 
 ### To configure this plugin
 * _Enable_: You can enable the plugin once everything is configured correctly. Disabling it will return to the normal Chamilo login procedure.

@@ -1135,7 +1135,7 @@ class UserManager
                 WHERE id_coach = '".$user_id."'";
         Database::query($sql);
 
-        $sql = "UPDATE $table_session SET id_coach = $currentUserId
+        $sql = "UPDATE $table_session SET session_admin_id = $currentUserId
                 WHERE session_admin_id = '".$user_id."'";
         Database::query($sql);
 

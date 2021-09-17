@@ -146,8 +146,9 @@ class Version20170626122900 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE user_rel_course_vote CHANGE c_id c_id INT DEFAULT NULL');
         $this->addSql('DELETE FROM user_rel_course_vote WHERE c_id NOT IN (SELECT id FROM course)');
 
-        $this->addSql('UPDATE user_rel_course_vote SET session_id = NULL WHERE session_id = 0 ');
         $this->addSql('ALTER TABLE user_rel_course_vote CHANGE session_id session_id INT DEFAULT NULL');
+        $this->addSql('UPDATE user_rel_course_vote SET session_id = NULL WHERE session_id = 0 ');
+
         $this->addSql('DELETE FROM user_rel_course_vote WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
 
         $this->addSql('ALTER TABLE user_rel_course_vote CHANGE url_id url_id INT DEFAULT NULL');
@@ -253,12 +254,12 @@ class Version20170626122900 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('created_at')) {
-            $this->addSql("ALTER TABLE user_rel_user ADD created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)' ");
+            $this->addSql("ALTER TABLE user_rel_user ADD created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '(DC2Type:datetime)' ");
             $this->addSql('UPDATE user_rel_user SET created_at = last_edit');
         }
 
         if (!$table->hasColumn('updated_at')) {
-            $this->addSql("ALTER TABLE user_rel_user ADD updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)' ");
+            $this->addSql("ALTER TABLE user_rel_user ADD updated_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '(DC2Type:datetime)' ");
             $this->addSql('UPDATE user_rel_user SET updated_at = last_edit');
         }
 

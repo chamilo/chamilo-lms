@@ -161,30 +161,31 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
                 $course = $courseRepo->find($courseId);
-                /** @var CQuizQuestion $resource */
-                $resource = $quizQuestionRepo->find($id);
+                /** @var CQuizQuestion $question */
+                $question = $quizQuestionRepo->find($id);
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
 
-                $resource->setParent($course);
+                $question->setParent($course);
                 //$resourceNode = $quizQuestionRepo->addResourceNode($resource, $courseAdmin, $course);
-                $resource->addCourseLink($course, null, null, ResourceLink::VISIBILITY_PUBLISHED);
+                $question->addCourseLink($course);
                 //$em->persist($resourceNode);
-                $em->persist($resource);
+                $em->persist($question);
+                $em->flush();
 
-                $pictureId = $resource->getPicture();
+                $pictureId = $question->getPicture();
                 if (!empty($pictureId)) {
                     /** @var CDocument $document */
                     $document = $documentRepo->find($pictureId);
                     if ($document && $document->hasResourceNode() && $document->getResourceNode()->hasResourceFile()) {
                         $resourceFile = $document->getResourceNode()->getResourceFile();
-                        $resource->getResourceNode()->setResourceFile($resourceFile);
+                        $question->getResourceNode()->setResourceFile($resourceFile);
                         //$em->persist($resourceNode);
                     }
                 }
 
-                $em->persist($resource);
+                $em->persist($question);
                 $em->flush();
             }
             $em->flush();

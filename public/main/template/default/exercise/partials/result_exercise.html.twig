@@ -26,13 +26,13 @@
                     <div class="col-md-9">
                         <div class="group-data">
                             <div class="list-data username">
-                                <span class="item">{{ 'Username'|get_lang }}</span>
+                                <span class="item">{{ 'Username'|trans }}</span>
                                 {{ 'account' | mdi_icon }} {{ data.username }}
                             </div>
 
                             {% if data.start_date %}
                                 <div class="list-data start-date">
-                                    <span class="item">{{ 'StartDate'|get_lang }}</span>
+                                    <span class="item">{{ 'Start date'|trans }}</span>
                                     {{ 'calendar' | mdi_icon }}
                                     {{ data.start_date }}
                                 </div>
@@ -40,7 +40,7 @@
 
                             {% if data.duration %}
                                 <div class="list-data duration">
-                                    <span class="item">{{ 'Duration'|get_lang }}</span>
+                                    <span class="item">{{ 'Duration'|trans }}</span>
                                     {{ 'alarm' | mdi_icon }}
                                     {{ data.duration }}
                                 </div>
@@ -48,7 +48,7 @@
 
                             {% if data.ip %}
                                 <div class="list-data ip">
-                                    <span class="item">{{ 'IP'|get_lang }}</span>
+                                    <span class="item">{{ 'IP'|trans }}</span>
                                     {{ 'laptop' | mdi_icon }}
                                     {{ data.ip }}
                                 </div>
@@ -68,7 +68,8 @@
                                 <div class="list-data">
                                     <span class="item"></span>
                                     <a href="{{ export_url }}" class="btn btn-default">
-                                        <img src="{{ 'export_pdf.png'|icon(32) }}" /> {{ 'ExportResponseReport'| get_lang }}
+                                        <img src="{{ 'export_pdf.png'|icon(32) }}" />
+                                        {{ 'Export response report'| trans }}
                                     </a>
                                 </div>
                             {% endif %}
@@ -77,11 +78,11 @@
                         <div id="quiz_saved_answers_container">
                             {% if data.number_of_answers_saved != data.number_of_answers %}
                                 <span class="label label-warning">
-                            <strong>{{ '%d / %d answers saved.'|get_lang|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
+                            <strong>{{ '%d / %d answers saved.'|trans|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
                         </span>
                             {% else %}
                                 <span class="label label-success">
-                            <strong>{{ '%d / %d answers saved.'|get_lang|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
+                            <strong>{{ '%d / %d answers saved.'|trans|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
                         </span>
                             {% endif %}
 
@@ -97,11 +98,13 @@
                                                         name="quiz_confirm_saved_answers_check"
                                                         {% if not enable_form %}disabled{% endif %} {% if data.track_confirmation.confirmed %}checked{% endif %}
                                                     >
-                                                    {{ 'QuizConfirmSavedAnswers'|get_lang }}
+                                                    {{ 'I accept the number of saved responses in this section.'|trans }}
                                                 </label>
                                             </div>
                                             {% if enable_form %}
-                                                <span class="help-block">{{ 'QuizConfirmSavedAnswersHelp'|get_lang }}</span>
+                                                <span class="help-block">
+                                                    {{ 'If you are not satisfied, do not check the acceptance box and consult the course manager or the platform administrator.'|trans }}
+                                                </span>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -110,7 +113,7 @@
                                             <div class="col-sm-12">
                                                 <input type="hidden" name="tc_id" value="{{ data.track_confirmation.id }}">
                                                 <button type="submit" class="btn btn-primary" disabled>
-                                                    <span class="fa fa-save fa-fw" aria-hidden="true"></span> {{ 'Save'|get_lang }}
+                                                    <span class="fa fa-save fa-fw" aria-hidden="true"></span> {{ 'Save'|trans }}
                                                 </button>
                                             </div>
                                         </div>

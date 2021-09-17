@@ -47,12 +47,12 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
             return;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        /*if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
-        }
+        }*/
 
         if (null === $user = $this->security->getUser()) {
-            return;
+            throw new AccessDeniedException('Access Denied.');
         }
 
         $request = $this->requestStack->getCurrentRequest();
@@ -100,6 +100,15 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
             $queryBuilder
                 ->andWhere('links.session = :session')
                 ->setParameter('session', $sessionId)
+            ;
+        }
+
+        if (empty($groupId)) {
+            $queryBuilder->andWhere('links.group IS NULL');
+        } else {
+            $queryBuilder
+                ->andWhere('links.group = :group')
+                ->setParameter('group', $groupId)
             ;
         }
 

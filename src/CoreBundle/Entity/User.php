@@ -199,7 +199,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @Groups({"user:read", "user:write", "user_json:read"})
-     * @ORM\Column(name="locale", type="string", length=8)
+     * @ORM\Column(name="locale", type="string", length=10)
      */
     protected string $locale;
 

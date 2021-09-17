@@ -88,10 +88,13 @@ class Version20170626122900 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('gender')) {
             $this->addSql('ALTER TABLE user ADD gender VARCHAR(1) DEFAULT NULL');
         }
+
         if (false === $table->hasColumn('locale')) {
-            $this->addSql('ALTER TABLE user ADD locale VARCHAR(8) NOT NULL');
+            $this->addSql('ALTER TABLE user ADD locale VARCHAR(10) NOT NULL');
+            $this->addSql('UPDATE user SET language = "english" WHERE language IS NULL OR language = "" ');
             $this->addSql('UPDATE user SET locale = (SELECT isocode FROM language WHERE english_name = language)');
         }
+
         if (false === $table->hasColumn('timezone')) {
             $this->addSql('ALTER TABLE user ADD timezone VARCHAR(64) NOT NULL');
         }
@@ -210,9 +213,9 @@ class Version20170626122900 extends AbstractMigrationChamilo
         }
 
         // Remove duplicates.
-        $sql = 'SELECT max(id) id, user_id, friend_user_id, relation_type, count(*) as count 
-                FROM user_rel_user 
-                GROUP BY user_id, friend_user_id, relation_type 
+        $sql = 'SELECT max(id) id, user_id, friend_user_id, relation_type, count(*) as count
+                FROM user_rel_user
+                GROUP BY user_id, friend_user_id, relation_type
                 HAVING count > 1';
         $result = $connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
@@ -222,7 +225,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
             $friendId = $item['friend_user_id'];
             $relationType = $item['relation_type'];
 
-            $sql = "SELECT id 
+            $sql = "SELECT id
                     FROM user_rel_user
                     WHERE user_id = $userId AND friend_user_id = $friendId AND relation_type = $relationType ";
             $result = $connection->executeQuery($sql);

@@ -238,7 +238,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $items = $result->fetchAllAssociative();
         }
 
-        // For some reason the resource doesnt have a c_item_property value.
+        // For some reason the resource doesn't have a c_item_property value.
         if (empty($items)) {
             return false;
         }

@@ -96,7 +96,6 @@ class ResourceNodeVoter extends Voter
         /*if (!$user instanceof UserInterface) {
             return false;
         }*/
-
         /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
         $resourceTypeName = $resourceNode->getResourceType()->getName();
@@ -318,8 +317,7 @@ class ResourceNodeVoter extends Voter
 
             if (!empty($sessionId)) {
                 if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
+                    $resourceRight = (new ResourceRight())
                         ->setMask($editorMask)
                         ->setRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)
                     ;
@@ -327,8 +325,7 @@ class ResourceNodeVoter extends Voter
                 }
 
                 if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
+                    $resourceRight = (new ResourceRight())
                         ->setMask($readerMask)
                         ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
                     ;
@@ -338,8 +335,7 @@ class ResourceNodeVoter extends Voter
 
             if (empty($rights) && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
                 // Give just read access.
-                $resourceRight = new ResourceRight();
-                $resourceRight
+                $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole('ROLE_USER')
                 ;

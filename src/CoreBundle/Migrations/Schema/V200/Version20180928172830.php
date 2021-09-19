@@ -34,10 +34,10 @@ class Version20180928172830 extends AbstractMigrationChamilo
         //$this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');
         //$this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');
 
-        if (false === $table->hasColumn('tool_id')) {
+        if (!$table->hasColumn('tool_id')) {
             $this->addSql('ALTER TABLE c_tool ADD tool_id INT NOT NULL');
         }
-        if (false === $table->hasColumn('position')) {
+        if (!$table->hasColumn('position')) {
             $this->addSql('ALTER TABLE c_tool ADD position INT NOT NULL');
         }
 
@@ -75,8 +75,6 @@ class Version20180928172830 extends AbstractMigrationChamilo
 
         // @todo remove/move LP/Link shortcuts.
         $this->addSql('DELETE FROM c_tool WHERE tool_id = 0 OR tool_id IS NULL');
-        $this->addSql('UPDATE c_tool SET session_id = NULL WHERE session_id = 0 ');
-
         $this->addSql('DELETE FROM c_tool WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
 
         if (!$table->hasForeignKey('FK_84566580613FECDF')) {

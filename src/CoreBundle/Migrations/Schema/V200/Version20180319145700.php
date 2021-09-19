@@ -114,8 +114,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_survey_invitation ADD user_id INT DEFAULT NULL');
 
             $this->addSql('ALTER TABLE c_survey_invitation CHANGE user user VARCHAR(255) DEFAULT NULL');
-            $this->addSql('UPDATE c_survey_invitation SET user = NULL WHERE user NOT IN (SELECT id FROM user)');
-            $this->addSql('UPDATE c_survey_invitation SET user_id = user');
+            $this->addSql('UPDATE c_survey_invitation SET user_id = user WHERE user IN (SELECT id FROM user)');
         }
 
         if (!$table->hasForeignKey('FK_D0BC7C2A76ED395')) {

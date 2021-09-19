@@ -110,9 +110,10 @@ class Version20170525123900 extends AbstractMigrationChamilo
             'ALTER TABLE usergroup_rel_user ADD CONSTRAINT FK_739515A9A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;'
         );
 
-        if (!$table->hasForeignKey('FK_739515A9D2112630')) {
+        if ($table->hasForeignKey('FK_739515A9D2112630')) {
             $this->addSql('ALTER TABLE usergroup_rel_user DROP FOREIGN KEY FK_739515A9D2112630');
         }
+
         $this->addSql(
             'ALTER TABLE usergroup_rel_user ADD CONSTRAINT FK_739515A9D2112630 FOREIGN KEY (usergroup_id) REFERENCES usergroup (id) ON DELETE CASCADE;'
         );

@@ -26,7 +26,21 @@ class CDocumentRepositoryTest extends AbstractApiTest
     {
         // Test as admin.
         $token = $this->getUserToken([]);
-        $response = $this->createClientWithCredentials($token)->request('GET', '/api/documents');
+        $this->createClientWithCredentials($token)->request('GET', '/api/documents');
+        $this->assertResponseStatusCodeSame(403);
+
+        $course = $this->createCourse('test');
+        $response = $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/documents',
+            [
+                'query' => [
+                    'cid' => $course->getId(),
+                    'resourceNode.parent' => $course->getResourceNode()->getId(),
+                ],
+            ]
+        );
+
         $this->assertResponseIsSuccessful();
 
         // Asserts that the returned content type is JSON-LD (the default)
@@ -42,18 +56,17 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $this->assertCount(0, $response->toArray()['hydra:member']);
         $this->assertMatchesResourceCollectionJsonSchema(CDocument::class);
-
-        // Test as user
     }
 
     public function testCreateFolder(): void
     {
         $course = $this->createCourse('Test');
+        $courseId = $course->getId();
 
         // Create folder.
         $resourceLinkList = [
             [
-                'cid' => $course->getId(),
+                'cid' => $courseId,
                 'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
             ],
         ];
@@ -103,6 +116,55 @@ class CDocumentRepositoryTest extends AbstractApiTest
             '@type' => 'Documents',
             'title' => 'edited',
         ]);
+
+        // Test access.
+        $data = json_decode($response->getContent());
+        $documentId = $data->iid;
+
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/documents/'.$documentId,
+            [
+                'query' => [
+                    'getFile' => true,
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+
+        $this->createUser('test');
+
+        $testToken = $this->getUserToken(
+            [
+                'username' => 'test',
+                'password' => 'test',
+            ],
+            true
+        );
+
+        $this->createClientWithCredentials($testToken)->request(
+            'GET',
+            '/api/documents/'.$documentId,
+            [
+                'query' => [
+                    'cid' => $courseId,
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+
+        $this->createClientWithCredentials($testToken)->request(
+            'GET',
+            '/api/documents/'.$documentId,
+            [
+                'query' => [
+                    'cid' => 'abc',
+                    'sid' => 'abc',
+                    'gip' => 'abc',
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
     }
 
     public function testUploadFile(): void

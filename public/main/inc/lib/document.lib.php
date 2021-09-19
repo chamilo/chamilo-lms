@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -2318,7 +2319,7 @@ class DocumentManager
      * @return string
      */
     public static function get_document_preview(
-        $course,
+        Course $course,
         $lp_id = false,
         $target = '',
         $session_id = 0,
@@ -2332,10 +2333,6 @@ class DocumentManager
         $addAudioPreview = false,
         $filterByExtension = []
     ) {
-        if (null === $course) {
-            return '';
-        }
-
         $repo = Container::getDocumentRepository();
         $nodeRepository = $repo->getResourceNodeRepository();
         $move = get_lang('Move');
@@ -2412,6 +2409,16 @@ class DocumentManager
             ->orderBy('node.parent', 'ASC')
             ->addSelect('file')
         ;
+
+        $sessionId = api_get_session_id();
+        if (empty($sessionId)) {
+            $qb->andWhere('links.session IS NULL');
+        } else {
+            $qb
+                ->andWhere('links.session = :session')
+                ->setParameter('session', $sessionId)
+            ;
+        }
 
         if (!empty($filterByExtension)) {
             $orX = $qb->expr()->orX();

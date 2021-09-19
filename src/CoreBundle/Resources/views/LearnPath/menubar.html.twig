@@ -12,10 +12,10 @@
     <nav id="btn-menu-float" class="c-menu-{{ menu_location }}">
         <div class="circle {{ show_toolbar_by_default == 1 ? 'open' : '' }}">
             {% if show_left_column == 1 %}
-                {% set label = "Collapse" | get_lang %}
+                {% set label = "Collapse" | trans %}
                 {% set icon_expand = "fa-compress" %}
                 {% if lp_mode == 'embedframe' %}
-                    {% set label = "Expand" | get_lang %}
+                    {% set label = "Expand" | trans %}
                     {% set icon_expand = "fa-collapse" %}
                 {% endif %}
                 <a href="#"
@@ -29,7 +29,7 @@
                 </a>
             {% endif %}
             <a id="home-course"
-               title="{{ 'Home'|get_lang }}"
+               title="{{ 'Home'|trans }}"
                href="{{ button_home_url }}"
                class="icon-toolbar" target="_self"
                onclick="javascript: window.parent.API.save_asset();">
@@ -37,6 +37,6 @@
             </a>
             {{ navigation_bar }}
         </div>
-        <a title="{{ 'Options'|get_lang }}" class="menu-button fa fa-bars icons" href="#"></a>
+        <a title="{{ 'Options'|trans }}" class="menu-button fa fa-bars icons" href="#"></a>
     </nav>
 {% endautoescape %}

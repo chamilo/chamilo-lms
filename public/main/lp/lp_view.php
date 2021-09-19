@@ -35,7 +35,6 @@ $user_id = api_get_user_id();
 $course = api_get_course_entity($course_id);
 $session = api_get_session_entity($sessionId);
 $lpRepo = Container::getLpRepository();
-
 /** @var learnpath $oLP */
 $oLP = Session::read('oLP');
 // Check if the learning path is visible for student - (LP requisites)
@@ -64,7 +63,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     $em = Database::getManager();
     if ($category) {
         $block = false;
-        $user = UserManager::getRepository()->find($user_id);
+        $user = api_get_user_entity($user_id);
         $users = $category->getUsers();
         if (!empty($users) && $users->count() > 0) {
             if ($user && !$category->hasUserAdded($user)) {
@@ -362,7 +361,6 @@ if (Database::num_rows($res_media) > 0) {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
 
-//global $interbreadcrumb;
 if ($is_allowed_to_edit) {
     $interbreadcrumb[] = [
         'url' => api_get_self().'?action=list&isStudentView=false&'.api_get_cidreq(true, true, 'course'),
@@ -421,18 +419,18 @@ if ($oLP->current == $oLP->get_last()) {
     );
 
     if (!empty($categories)) {
-        $gradebookEvaluations = $categories[0]->get_evaluations();
+        $evaluations = $categories[0]->get_evaluations();
         $gradebookLinks = $categories[0]->get_links();
 
-        if (0 === count($gradebookEvaluations) &&
+        if (0 === count($evaluations) &&
             1 === count($gradebookLinks) &&
             LINK_LEARNPATH == $gradebookLinks[0]->get_type() &&
             $gradebookLinks[0]->get_ref_id() == $oLP->lp_id
         ) {
-            $gradebookMinScore = $categories[0]->getCertificateMinScore();
+            $minScore = $categories[0]->getCertificateMinScore();
             $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
             $categoryEntity = Container::getGradeBookCategoryRepository()->find($categories[0]->get_id());
-            if ($userScore[0] >= $gradebookMinScore) {
+            if ($userScore[0] >= $minScore) {
                 Category::generateUserCertificate($categoryEntity, $user_id);
             }
         }
@@ -471,11 +469,11 @@ $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
-$template->assign('show_left_column', 0 == $lp->getHideTocFrame());
+$template->assign('show_left_column', !$lp->getHideTocFrame());
 
 $showMenu = 0;
 $settings = api_get_configuration_value('lp_view_settings');
-$display = isset($settings['display']) ? $settings['display'] : false;
+$display = $settings['display'] ?? false;
 $navigationInTheMiddle = false;
 if (!empty($display)) {
     $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
@@ -494,7 +492,7 @@ $template->assign('lp_author', $lp->getAuthor());
 
 $lpMinTime = '';
 if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
-    // Calulate minimum and accumulated time
+    // Calculate minimum and accumulated time
     $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
     $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
     // Minimum connection percentage
@@ -548,7 +546,7 @@ $template->assign('lp_title_scorm', $lp->getName());
 $template->assign('data_panel', null);
 //echo '<pre>';var_dump($oLP->get_toc(), array_column($oLP->get_toc(), 'status_class', 'id'));
 $template->assign('status_list', array_column($oLP->get_toc(), 'status_class', 'id'));
-$template->assign('data_list', $oLP->getListArrayToc($get_toc_list));
+$template->assign('data_list', $oLP->getListArrayToc());
 //var_dump($oLP->getListArrayToc($get_toc_list));
 
 $template->assign('lp_id', $lp->getIid());

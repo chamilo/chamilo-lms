@@ -105,7 +105,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 $admin = $this->getAdmin();
                 $tool->setParent($course);
                 $toolRepo->addResourceNode($tool, $admin, $course);
-                $newVisibility = 1 === $toolData['visibility'] ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_PENDING;
+                $newVisibility = 1 === (int) $toolData['visibility'] ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_PENDING;
                 $tool->addCourseLink($course, $session, null, $newVisibility);
                 $em->persist($tool);
                 if (($counter % $batchSize) === 0) {

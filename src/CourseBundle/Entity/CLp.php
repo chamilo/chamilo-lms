@@ -117,11 +117,13 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="theme", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $theme;
 
     /**
      * @ORM\Column(name="author", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $author;
 
     /**
@@ -509,12 +511,7 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get theme.
-     *
-     * @return string
-     */
-    public function getTheme()
+    public function getTheme(): string
     {
         return $this->theme;
     }
@@ -526,12 +523,7 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get author.
-     *
-     * @return string
-     */
-    public function getAuthor()
+    public function getAuthor(): string
     {
         return $this->author;
     }
@@ -560,12 +552,7 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get hideTocFrame.
-     *
-     * @return bool
-     */
-    public function getHideTocFrame()
+    public function getHideTocFrame(): bool
     {
         return $this->hideTocFrame;
     }

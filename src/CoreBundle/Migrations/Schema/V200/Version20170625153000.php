@@ -92,6 +92,10 @@ class Version20170625153000 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE c_forum_thread CHANGE lp_item_id lp_item_id INT DEFAULT NULL');
+
+        $this->addSql('UPDATE c_forum_thread SET lp_item_id = NULL WHERE lp_item_id = 0');
+        $this->addSql('UPDATE c_forum_thread SET lp_item_id = NULL WHERE lp_item_id IS NOT NULL AND lp_item_id NOT IN (select iid from c_lp_item ) ');
+
         if (!$table->hasForeignKey('FK_5DA7884CDBF72317')) {
             $this->addSql(
                 'ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884CDBF72317 FOREIGN KEY (lp_item_id) REFERENCES c_lp_item (iid) ON DELETE CASCADE'

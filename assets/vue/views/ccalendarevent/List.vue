@@ -64,7 +64,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn color="primary" flat :label="$t('Go to session')" :to="`/sessions/${sessionAsEvent.id}/about`" />
+          <q-btn color="primary" flat :label="$t('Go to session')" type="a" :href="`/sessions/${sessionAsEvent.id}/about`" />
         </q-card-actions>
       </q-card>
     </q-dialog>

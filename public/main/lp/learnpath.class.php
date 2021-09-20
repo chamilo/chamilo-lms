@@ -242,7 +242,7 @@ class learnpath
                 $lp_item_id_list[] = $itemId;
 
                 switch ($this->type) {
-                    case 3: //aicc
+                    case CLp::AICC_TYPE:
                         $oItem = new aiccItem('db', $itemId, $course_id);
                         if (is_object($oItem)) {
                             $oItem->set_lp_view($this->lp_view_id, $course_id);
@@ -252,7 +252,7 @@ class learnpath
                             $this->refs_list[$oItem->ref] = $itemId;
                         }
                         break;
-                    case 2:
+                    case CLp::SCORM_TYPE:
                         $oItem = new scormItem('db', $itemId);
                         if (is_object($oItem)) {
                             $oItem->set_lp_view($this->lp_view_id, $course_id);
@@ -262,7 +262,7 @@ class learnpath
                             $this->refs_list[$oItem->ref] = $itemId;
                         }
                         break;
-                    case 1:
+                    case CLp::LP_TYPE:
                     default:
                         $oItem = new learnpathItem(null, $item);
                         if (is_object($oItem)) {
@@ -309,9 +309,11 @@ class learnpath
                     while ($row = Database:: fetch_array($res)) {
                         $status_list[$row['lp_item_id']] = $row['status'];
                     }
+
                     foreach ($lp_item_id_list as $item_id) {
                         if (isset($status_list[$item_id])) {
                             $status = $status_list[$item_id];
+
                             if (is_object($this->items[$item_id])) {
                                 $this->items[$item_id]->set_status($status);
                                 if (empty($status)) {
@@ -2368,10 +2370,8 @@ class learnpath
     /**
      * Generate and return the table of contents for this learnpath. The (flat) table returned can be
      * used by get_html_toc() to be ready to display.
-     *
-     * @return array TOC as a table with 4 elements per row: title, link, status and level
      */
-    public function get_toc()
+    public function get_toc(): array
     {
         $toc = [];
         foreach ($this->ordered_items as $item_id) {
@@ -2379,8 +2379,8 @@ class learnpath
             $toc[] = [
                 'id' => $item_id,
                 'title' => $this->items[$item_id]->get_title(),
-                'status' => $this->items[$item_id]->get_status(),
-                'status_class' => self::getStatusCSSClassName($this->items[$item_id]->get_status()),
+                'status' => $this->items[$item_id]->get_status(false),
+                'status_class' => self::getStatusCSSClassName($this->items[$item_id]->get_status(false)),
                 'level' => $this->items[$item_id]->get_level(),
                 'type' => $this->items[$item_id]->get_type(),
                 'description' => $this->items[$item_id]->get_description(),

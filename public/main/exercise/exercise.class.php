@@ -8796,12 +8796,6 @@ class Exercise
             $qb->andWhere($qb->expr()->isNull('resource.exerciseCategory'));
         }
 
-        /*$editAccess = Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
-        return Container::$container->get('twig')->render(
-            '@ChamiloCore/Resource/grid.html.twig',
-            ['grid' => $grid]
-        );*/
-
         $allowDelete = self::allowAction('delete');
         $allowClean = self::allowAction('clean_results');
 
@@ -8839,7 +8833,7 @@ class Exercise
             [],
             $column,
             self::PAGINATION_ITEMS_PER_PAGE,
-            'exercises_cat_'.$categoryId
+            'exercises_cat_'.$categoryId.'_'.api_get_course_int_id().'_'.api_get_session_id()
         );
 
         $limit = $table->per_page;
@@ -9889,7 +9883,6 @@ class Exercise
 
         $sql = "SELECT iid FROM $TBL_LP_ITEM_VIEW
                 WHERE
-                    c_id = $course_id AND
                     lp_item_id = $safe_item_id AND
                     lp_view_id = $viewId
                 ORDER BY iid DESC
@@ -9918,13 +9911,13 @@ class Exercise
 
             $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
                         status = '$status',
-                        score = $score,
-                        total_time = $duration
+                        score = '$score',
+                        total_time = '$duration'
                     WHERE iid = $lp_item_view_id";
             Database::query($sql);
 
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET
-                        orig_lp_item_view_id = $lp_item_view_id
+                        orig_lp_item_view_id = '$lp_item_view_id'
                     WHERE exe_id = ".$safe_exe_id;
             Database::query($sql);
         }

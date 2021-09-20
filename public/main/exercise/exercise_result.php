@@ -46,9 +46,6 @@ if (empty($objExercise)) {
     api_not_allowed(true);
 }
 
-//$js = '<script>'.api_get_language_translate_html().'</script>';
-//$htmlHeadXtra[] = $js;
-
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
@@ -63,21 +60,10 @@ $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Tests'),
 ];
-if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
-    //$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
-}
 
-//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 if (api_get_configuration_value('quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
-}
-
-if (!empty($objExercise->getResultAccess())) {
-    /*$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
-    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
-    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
-    $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');*/
 }
 
 $showHeader = false;
@@ -112,10 +98,9 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     );
 }
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
-$learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['orig_lp_id'] : 0;
-$learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
-$learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
-    ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
+$learnpath_id = $exercise_stat_info['orig_lp_id'] ?? 0;
+$learnpath_item_id = $exercise_stat_info['orig_lp_item_id'] ?? 0;
+$learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'] ?? 0;
 
 $logInfo = [
     'tool' => TOOL_QUIZ,

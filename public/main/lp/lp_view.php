@@ -544,7 +544,7 @@ $template->assign('lp_title_scorm', $lp->getName());
 } else {*/
 
 $template->assign('data_panel', null);
-//echo '<pre>';var_dump($oLP->get_toc(), array_column($oLP->get_toc(), 'status_class', 'id'));
+//echo '<pre>';var_dump($oLP->get_toc(), array_column($oLP->get_toc(), 'status_class', 'id'));exit;
 $template->assign('status_list', array_column($oLP->get_toc(), 'status_class', 'id'));
 $template->assign('data_list', $oLP->getListArrayToc());
 //var_dump($oLP->getListArrayToc($get_toc_list));
@@ -569,6 +569,7 @@ $template->displayTemplate('@ChamiloCore/LearnPath/view.html.twig');
 //$_setting['show_navigation_menu'] = $save_setting;
 
 //Session::write('oLP', $lp);
+Session::write('oLP', $oLP);
 
 if ($debug) {
     error_log(' ------- end lp_view.php ------');

@@ -8860,6 +8860,13 @@ class Exercise
             $qb->setParameter('keyword', $keyword);
         }
 
+        // Only for administrators
+        if ($is_allowedToEdit) {
+            $qb->andWhere($qb->expr()->neq('resource.active', -1));
+        } else {
+            $qb->andWhere($qb->expr()->eq('resource.active', 1));
+        }
+
         $qb->setFirstResult($from);
         $qb->setMaxResults($limit);
 
@@ -8874,14 +8881,8 @@ class Exercise
             $filterByAttemptCondition = ' AND e.max_attempt = '.$filterByAttempt;
         }
 
-        // Only for administrators
-        if ($is_allowedToEdit) {
-            $qb->andWhere($qb->expr()->neq('resource.active', -1));
-        } else {
-            $qb->andWhere($qb->expr()->eq('resource.active', 1));
-        }
-
         $exerciseList = $qb->getQuery()->getResult();
+
         $total = $repo->getCount($qb);
 
         $webPath = api_get_path(WEB_CODE_PATH);

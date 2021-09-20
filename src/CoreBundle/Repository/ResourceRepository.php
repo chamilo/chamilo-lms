@@ -45,8 +45,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getCount(QueryBuilder $qb): int
     {
-        $qb->select('count(resource)');
-        $qb->setMaxResults(1);
+        $qb
+            ->select('count(resource)')
+            ->setMaxResults(1)
+            ->setFirstResult(null)
+        ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }

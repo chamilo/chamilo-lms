@@ -237,8 +237,7 @@ export default {
     returnToEditor(item) {
       const url = item.contentUrl;
 
-      // Tiny mce
-      console.log(url);
+      // Tiny mce.
       window.parent.postMessage({
         url: url
       }, '*');

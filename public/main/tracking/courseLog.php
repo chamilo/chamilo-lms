@@ -871,8 +871,8 @@ if (!empty($groupList)) {
                         $best = 0;
                         if (!empty($results)) {
                             foreach ($results as $result) {
-                                if (!empty($result['exe_weighting'])) {
-                                    $score = $result['exe_result'] / $result['exe_weighting'];
+                                if (!empty($result['max_score'])) {
+                                    $score = $result['score'] / $result['max_score  '];
                                     if ($score > $best) {
                                         $best = $score;
                                     }
@@ -968,8 +968,8 @@ if (!empty($groupList)) {
                 $best = 0;
                 if (!empty($results)) {
                     foreach ($results as $result) {
-                        if (!empty($result['exe_weighting'])) {
-                            $score = $result['exe_result'] / $result['exe_weighting'];
+                        if (!empty($result['max_score'])) {
+                            $score = $result['score'] / $result['max_score'];
                             if ($score > $best) {
                                 $best = $score;
                             }

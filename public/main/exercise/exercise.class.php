@@ -8697,12 +8697,12 @@ class Exercise
             }
 
             if (!isset($students[$data['exe_user_id']])) {
-                if (0 != $data['exe_weighting']) {
-                    $students[$data['exe_user_id']] = $data['exe_result'];
-                    if ($data['exe_result'] > $bestResult) {
-                        $bestResult = $data['exe_result'];
+                if (0 != $data['max_score']) {
+                    $students[$data['exe_user_id']] = $data['score'];
+                    if ($data['score'] > $bestResult) {
+                        $bestResult = $data['score'];
                     }
-                    $sumResult += $data['exe_result'];
+                    $sumResult += $data['score'];
                 }
             }
         }
@@ -9404,8 +9404,8 @@ class Exercise
                                     $row_track = Database:: fetch_array($qryres);
                                     $attempt_text = get_lang('Latest attempt').' : ';
                                     $attempt_text .= ExerciseLib::show_score(
-                                        $row_track['exe_result'],
-                                        $row_track['exe_weighting']
+                                        $row_track['score'],
+                                        $row_track['max_score']
                                     );
                                 } else {
                                     //No attempts
@@ -9868,7 +9868,7 @@ class Exercise
         $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
 
-        $sql = "SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
+        $sql = "SELECT start_date, exe_date, score, max_score, exe_exo_id, exe_duration
                 FROM $TBL_TRACK_EXERCICES
                 WHERE exe_id = $safe_exe_id AND exe_user_id = $userId";
         $res = Database::query($sql);
@@ -9879,20 +9879,20 @@ class Exercise
         }
 
         $duration = (int) $row_dates['exe_duration'];
-        $score = (float) $row_dates['exe_result'];
-        $max_score = (float) $row_dates['exe_weighting'];
+        $score = (float) $row_dates['score'];
+        $max_score = (float) $row_dates['max_score'];
 
         $sql = "UPDATE $TBL_LP_ITEM SET
                     max_score = '$max_score'
                 WHERE iid = $safe_item_id";
         Database::query($sql);
 
-        $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
+        $sql = "SELECT iid FROM $TBL_LP_ITEM_VIEW
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = $safe_item_id AND
                     lp_view_id = $viewId
-                ORDER BY id DESC
+                ORDER BY iid DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
 
@@ -10429,11 +10429,11 @@ class Exercise
 
         $resultPercentage = 0;
 
-        if (isset($attempt['exe_result']) && isset($attempt['exe_weighting'])) {
-            $weight = (int) $attempt['exe_weighting'];
+        if (isset($attempt['score']) && isset($attempt['max_score'])) {
+            $weight = (int) $attempt['max_score'];
             $weight = (0 == $weight) ? 1 : $weight;
             $resultPercentage = float_format(
-                ($attempt['exe_result'] / $weight) * 100,
+                ($attempt['score'] / $weight) * 100,
                 1
             );
         }

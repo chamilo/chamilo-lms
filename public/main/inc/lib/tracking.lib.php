@@ -7588,8 +7588,8 @@ class Tracking
                         // Process data.
                         $array = [
                             'exe_date' => get_lang('Date'),
-                            'exe_result' => get_lang('Score'),
-                            'exe_weighting' => get_lang('Weighting'),
+                            'score' => get_lang('Score'),
+                            'max_score' => get_lang('Weighting'),
                         ];
                         foreach ($item as $key => $value) {
                             if (in_array($key, array_keys($array))) {
@@ -7714,8 +7714,8 @@ class Tracking
 
             if (!empty($bestScoreData)) {
                 $quizData[5] = ExerciseLib::show_score(
-                    $bestScoreData['exe_result'],
-                    $bestScoreData['exe_weighting']
+                    $bestScoreData['score'],
+                    $bestScoreData['max_score']
                 );
             }
 
@@ -7728,8 +7728,8 @@ class Tracking
 
             if (!empty($exerciseAttempt)) {
                 // Always getting the BEST attempt
-                $score = $exerciseAttempt['exe_result'];
-                $weighting = $exerciseAttempt['exe_weighting'];
+                $score = $exerciseAttempt['score'];
+                $weighting = $exerciseAttempt['max_score'];
                 $exeId = $exerciseAttempt['exe_id'];
 
                 $latestAttemptUrl = $webCodePath.'exercise/result.php?'
@@ -8817,7 +8817,7 @@ class TrackingCourseLog
 
                     $best = null;
                     if ($bestExerciseResult) {
-                        $best = $bestExerciseResult['exe_result'] / $bestExerciseResult['exe_weighting'];
+                        $best = $bestExerciseResult['score'] / $bestExerciseResult['max_score'];
                         $best = round($best, 2) * 100;
                         $best .= '%';
                     }

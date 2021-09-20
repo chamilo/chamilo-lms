@@ -5623,17 +5623,17 @@ EOT;
         switch ($type) {
             case 'correct_student':
                 $selectCount = 'count(DISTINCT te.exe_user_id)';
-                $scoreCondition = ' AND exe_result = exe_weighting ';
+                $scoreCondition = ' AND score = max_score ';
                 break;
             case 'wrong_student':
                 $selectCount = 'count(DISTINCT te.exe_user_id)';
-                $scoreCondition = ' AND  exe_result != exe_weighting ';
+                $scoreCondition = ' AND score != max_score ';
                 break;
             case 'correct':
-                $scoreCondition = ' AND exe_result = exe_weighting ';
+                $scoreCondition = ' AND score = max_score ';
                 break;
             case 'wrong':
-                $scoreCondition = ' AND exe_result != exe_weighting ';
+                $scoreCondition = ' AND score != max_score ';
                 break;
         }
 

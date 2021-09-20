@@ -21,6 +21,10 @@ import 'select2/dist/css/select2.min.css';
 
 // Gets HTML content from tinymce
 window.getContentFromEditor = function (id) {
+  if (typeof tinymce == "undefined") {
+    return false;
+  }
+
   let content = '';
   if (tinymce.get(id)) {
     content = tinymce.get(id).getContent();

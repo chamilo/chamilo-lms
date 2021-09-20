@@ -139,7 +139,7 @@ if ($allowCategory) {
 }
 
 $categoryTest = new CLpCategory();
-$categoryTest->setName(get_lang('WithOutCategory'));
+$categoryTest->setName(get_lang('Without category'));
 $categoryTest->setPosition(0);
 $categories = [$categoryTest];
 

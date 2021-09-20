@@ -225,7 +225,7 @@ class Answer
         $questionId = (int) $this->questionId;
 
         $sql = "SELECT type FROM $TBL_QUIZ
-                WHERE c_id = {$this->course_id} AND id = $questionId";
+                WHERE c_id = {$this->course_id} AND iid = $questionId";
         $result_question = Database::query($sql);
         $questionType = Database::fetch_array($result_question);
 

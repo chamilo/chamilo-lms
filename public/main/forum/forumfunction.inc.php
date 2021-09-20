@@ -35,7 +35,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @todo convert into a class
  */
-
 function handleForum($url)
 {
     $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;

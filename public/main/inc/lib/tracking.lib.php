@@ -367,7 +367,7 @@ class Tracking
                 $time_for_total = 0;
                 $attemptResult = 0;
 
-                if ($allowNewTracking && $timeCourse) {
+                if ($timeCourse) {
                     if (isset($timeCourse['learnpath_detailed']) &&
                         isset($timeCourse['learnpath_detailed'][$lp_id]) &&
                         isset($timeCourse['learnpath_detailed'][$lp_id][$my_item_id])
@@ -459,7 +459,7 @@ class Tracking
                         $extend_attempt_link = '';
                         $extend_this_attempt = 0;
 
-                        if ($allowNewTracking && $timeCourse) {
+                        if ($timeCourse) {
                             //$attemptResult = 0;
                             if (isset($timeCourse['learnpath_detailed']) &&
                                 isset($timeCourse['learnpath_detailed'][$lp_id]) &&
@@ -524,7 +524,7 @@ class Tracking
                             }
                             $time_for_total = $lpTime;
 
-                            if ($allowNewTracking) {
+                            if ($timeCourse) {
                                 $time_for_total = (int) $attemptResult;
                                 $attemptTime = (int) $attemptResult;
                             }

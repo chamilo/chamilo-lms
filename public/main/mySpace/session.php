@@ -92,11 +92,11 @@ switch ($action) {
                 $column = 0;
                 $row = 0;
                 $headers = [
-                    get_lang('TimeSpent'),
-                    get_lang('NumberOfVisits'),
-                    get_lang('GlobalProgress'),
-                    get_lang('FirstLogin'),
-                    get_lang('LastConnexionDate'),
+                    get_lang('Time spent'),
+                    get_lang('Number of visits'),
+                    get_lang('Global progress'),
+                    get_lang('First connection'),
+                    get_lang('Last connexion date'),
                 ];
                 foreach ($headers as $header) {
                     $table->setHeaderContents($row, $column, $header);
@@ -109,7 +109,7 @@ switch ($action) {
                 $table->setCellContents(1, 4, $last);
                 $timeSpentContent = $table->toHtml();
             } else {
-                $pdfTitle = get_lang('CertificateOfAchievement');
+                $pdfTitle = get_lang('Certificate of achievement');
             }
 
             $courseTable = '';
@@ -117,8 +117,8 @@ switch ($action) {
                 $courseTable .= '<table class="table table-hover table-striped data_table">';
                 $courseTable .= '<thead>';
                 $courseTable .= '<tr>
-                    <th>'.get_lang('FormationUnit').'</th>
-                    <th>'.get_lang('ConnectionTime').'</th>
+                    <th>'.get_lang('Formation unit').'</th>
+                    <th>'.get_lang('Connection time').'</th>
                     <th>'.get_lang('Progress').'</th>';
 
                 if ('attendance' === $type) {

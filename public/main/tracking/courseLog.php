@@ -536,7 +536,7 @@ if ($nbStudents > 0) {
 
 $html .= Display::page_subheader2(get_lang('Learners list'));
 
-$bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
+$bestScoreLabel = get_lang('Score').' - '.get_lang('Only best attempts');
 if ($nbStudents > 0) {
     $mainForm = new FormValidator(
         'filter',
@@ -545,7 +545,7 @@ if ($nbStudents > 0) {
     );
     $mainForm->addButtonAdvancedSettings(
         'advanced_search',
-        [get_lang('AdvancedSearch')]
+        [get_lang('Advanced search')]
     );
     $mainForm->addHtml('<div id="advanced_search_options" style="display:none;">');
     $mainForm->addHtml($formClass->returnForm());
@@ -630,62 +630,62 @@ if ($nbStudents > 0) {
     $headerCounter = 0;
     $headers = [];
     // tab of header texts
-    $table->set_header($headerCounter++, get_lang('OfficialCode'), true);
-    $headers['official_code'] = get_lang('OfficialCode');
+    $table->set_header($headerCounter++, get_lang('Code'), true);
+    $headers['official_code'] = get_lang('Code');
     if ($sortByFirstName) {
-        $table->set_header($headerCounter++, get_lang('FirstName'), true);
-        $table->set_header($headerCounter++, get_lang('LastName'), true);
-        $headers['firstname'] = get_lang('FirstName');
-        $headers['lastname'] = get_lang('LastName');
+        $table->set_header($headerCounter++, get_lang('First name'), true);
+        $table->set_header($headerCounter++, get_lang('Last name'), true);
+        $headers['firstname'] = get_lang('First name');
+        $headers['lastname'] = get_lang('Last name');
     } else {
-        $table->set_header($headerCounter++, get_lang('LastName'), true);
-        $table->set_header($headerCounter++, get_lang('FirstName'), true);
-        $headers['lastname'] = get_lang('LastName');
-        $headers['firstname'] = get_lang('FirstName');
+        $table->set_header($headerCounter++, get_lang('Last name'), true);
+        $table->set_header($headerCounter++, get_lang('First name'), true);
+        $headers['lastname'] = get_lang('Last name');
+        $headers['firstname'] = get_lang('First name');
     }
     $table->set_header($headerCounter++, get_lang('Login'), false);
     $headers['login'] = get_lang('Login');
 
     $table->set_header(
         $headerCounter++,
-        get_lang('TrainingTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), [], ICON_SIZE_TINY),
+        get_lang('Time').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('Time spent in the course'), [], ICON_SIZE_TINY),
         false
     );
-    $headers['training_time'] = get_lang('TrainingTime');
+    $headers['training_time'] = get_lang('Time');
     $table->set_header(
         $headerCounter++,
-        get_lang('CourseProgress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), [], ICON_SIZE_TINY),
+        get_lang('Progress').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('Average progress in courses'), [], ICON_SIZE_TINY),
         false
     );
-    $headers['course_progress'] = get_lang('CourseProgress');
+    $headers['course_progress'] = get_lang('Course progress');
 
     $table->set_header(
         $headerCounter++,
-        get_lang('ExerciseProgress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), [], ICON_SIZE_TINY),
+        get_lang('Exercise progress').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('Progress of exercises taken by the student'), [], ICON_SIZE_TINY),
         false
     );
-    $headers['exercise_progress'] = get_lang('ExerciseProgress');
+    $headers['exercise_progress'] = get_lang('Exercise progress');
     $table->set_header(
         $headerCounter++,
-        get_lang('ExerciseAverage').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), [], ICON_SIZE_TINY),
+        get_lang('Exercise average').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('Average of best grades of each exercise attempt'), [], ICON_SIZE_TINY),
         false
     );
-    $headers['exercise_average'] = get_lang('ExerciseAverage');
+    $headers['exercise_average'] = get_lang('Exercise average');
     $table->set_header(
         $headerCounter++,
         get_lang('Score').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), [], ICON_SIZE_TINY),
+        Display::return_icon('info3.gif', get_lang('Average of tests in Learning Paths'), [], ICON_SIZE_TINY),
         false
     );
     $headers['score'] = get_lang('Score');
     $table->set_header(
         $headerCounter++,
         $bestScoreLabel.'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), [], ICON_SIZE_TINY),
+        Display::return_icon('info3.gif', get_lang('Average of tests in Learning Paths'), [], ICON_SIZE_TINY),
         false
     );
     $headers['score_best'] = $bestScoreLabel;
@@ -711,8 +711,8 @@ if ($nbStudents > 0) {
         }
     }
 
-    $table->set_header($headerCounter++, get_lang('Student_publication'), false);
-    $headers['student_publication'] = get_lang('Student_publication');
+    $table->set_header($headerCounter++, get_lang('Assignments'), false);
+    $headers['student_publication'] = get_lang('Assignment');
     $table->set_header($headerCounter++, get_lang('Messages'), false);
     $headers['messages'] = get_lang('Messages');
     $table->set_header($headerCounter++, get_lang('Classes'));
@@ -722,13 +722,13 @@ if ($nbStudents > 0) {
         $table->set_header($headerCounter++, get_lang('Survey'), false);
         $headers['survey'] = get_lang('Survey');
     } else {
-        $table->set_header($headerCounter++, get_lang('RegisteredDate'), false);
-        $headers['registered_at'] = get_lang('RegisteredDate');
+        $table->set_header($headerCounter++, get_lang('Registered date'), false);
+        $headers['registered_at'] = get_lang('Registered date');
     }
-    $table->set_header($headerCounter++, get_lang('FirstLoginInCourse'), false);
-    $headers['first_login'] = get_lang('FirstLoginInCourse');
-    $table->set_header($headerCounter++, get_lang('LatestLoginInCourse'), false);
-    $headers['latest_login'] = get_lang('LatestLoginInCourse');
+    $table->set_header($headerCounter++, get_lang('First access to course'), false);
+    $headers['first_login'] = get_lang('First access to course');
+    $table->set_header($headerCounter++, get_lang('Latest access in course'), false);
+    $headers['latest_login'] = get_lang('Latest access in course');
     $counter = $headerCounter;
     if ('true' === api_get_setting('show_email_addresses')) {
         $table->set_header($counter, get_lang('Email'), false);
@@ -789,10 +789,10 @@ echo Display::panel($html, $titleSession);
 $groupTable = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
 $column = 0;
 $groupTable->setHeaderContents(0, $column++, get_lang('Name'));
-$groupTable->setHeaderContents(0, $column++, get_lang('TrainingTime'));
-$groupTable->setHeaderContents(0, $column++, get_lang('AverageTrainingTime'));
-$groupTable->setHeaderContents(0, $column++, get_lang('CourseProgress'));
-$groupTable->setHeaderContents(0, $column++, get_lang('ExerciseAverage'));
+$groupTable->setHeaderContents(0, $column++, get_lang('Time'));
+$groupTable->setHeaderContents(0, $column++, get_lang('Average time in the course'));
+$groupTable->setHeaderContents(0, $column++, get_lang('Course progress'));
+$groupTable->setHeaderContents(0, $column++, get_lang('Exercise average'));
 
 /*$exerciseList = ExerciseLib::get_all_exercises(
     $courseInfo,

@@ -1543,10 +1543,10 @@ if (empty($details)) {
             ),
         'progress' => get_lang('Progress').
             Display::return_icon('info3.gif', get_lang('LPProgressScore'), ['align' => 'absmiddle', 'hspace' => '3px']),
-        'last_connection' => get_lang('LastConnexion').
+        'last_connection' => get_lang('Latest login').
             Display::return_icon(
                 'info3.gif',
-                get_lang('LastTimeTheCourseWasUsed'),
+                get_lang('Last time learner entered the course'),
                 ['align' => 'absmiddle', 'hspace' => '3px']
             ),
     ];

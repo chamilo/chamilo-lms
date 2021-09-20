@@ -1,5 +1,6 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
+{% autoescape false %}
 <div class="details">
     <div class="row">
         <div class="col-md-4">
@@ -10,7 +11,7 @@
                 {{ display.card_widget('First login in platform'|get_lang, params.first_connection, 'calendar') }}
                 {{ display.card_widget('Latest login in platform'|get_lang, params.last_connection, 'calendar') }}
                 {% if params.legal is defined %}
-                    {{ display.card_widget('Legal accepted'|get_lang, params.legal.datetime, 'gavel', user.legal.icon) }}
+                    {{ display.card_widget('Legal accepted'|get_lang, params.legal.datetime, 'gavel', params.legal.icon) }}
                 {% endif %}
             </div>
             {% if social_tool %}
@@ -26,3 +27,4 @@
         </div>
     </div>
 </div>
+{% endautoescape %}

@@ -94,6 +94,7 @@
 {% endmacro %}
 
 {% macro card_widget(name, content, icon, extra) %}
+    {% autoescape false %}
     <div class="card card-first-date">
         <div class="card-body">
             <div class="stat-widget-five">
@@ -116,6 +117,7 @@
             </div>
         </div>
     </div>
+    {% endautoescape %}
 {% endmacro %}
 
 {% macro reporting_user_details(user) %}

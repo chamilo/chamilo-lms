@@ -39,6 +39,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use UnserializeApi;
+use UserManager;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -359,7 +360,7 @@ class CourseController extends ToolBaseController
         foreach ($courseTeachers as $teacherSubscription) {
             $teacher = $teacherSubscription->getUser();
             $userData = [
-                'complete_name' => \UserManager::formatUserFullName($teacher),
+                'complete_name' => UserManager::formatUserFullName($teacher),
                 'image' => $illustrationRepository->getIllustrationUrl($teacher),
                 'diploma' => $teacher->getDiplomas(),
                 'openarea' => $teacher->getOpenarea(),

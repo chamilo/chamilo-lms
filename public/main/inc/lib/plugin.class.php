@@ -337,14 +337,14 @@ class Plugin
     {
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
-            if ($setting['variable'] == $this->get_name().'_'.$name) {
-                $unserialized = UnserializeApi::unserialize('not_allowed_classes', $setting['selected_value'], true);
+            if ($setting['variable'] === $this->get_name().'_'.$name) {
+                /*$unserialized = UnserializeApi::unserialize('not_allowed_classes', $setting['selected_value'], true);
 
                 if (!empty($setting['selected_value']) &&
                     false !== $unserialized
                 ) {
                     $setting['selected_value'] = $unserialized;
-                }
+                }*/
 
                 return $setting['selected_value'];
             }

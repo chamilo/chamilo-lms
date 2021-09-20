@@ -103,12 +103,3 @@ jobs:
                   name: codecov-umbrella # optional
                   fail_ci_if_error: false
                   verbose: true
-
-            - name: Upload coverage results to Coveralls
-              env:
-                  COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  composer global require php-coveralls/php-coveralls
-                  sudo mkdir -p build/logs
-                  sudo chmod -R 777 build
-                  php-coveralls --coverage_clover=clover.xml -v

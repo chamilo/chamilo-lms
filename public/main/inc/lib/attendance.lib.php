@@ -2176,18 +2176,11 @@ class Attendance
         DateTime $endDate = null,
         $orderDesc = false
     ) {
-        // Lang variables
         $presentString = get_lang('Present');
-        //$absentString = get_lang('Absent');
         $absentString = '-';
-        // Lang variables
         $attendanceLib = new Attendance();
         $data = [];
-        $courses = CourseManager::get_courses_list_by_user_id(
-            $studentId,
-            false,
-            false
-        );
+        $courses = CourseManager::get_courses_list_by_user_id($studentId);
         /* Get course with (in_category) and without (not_category) category */
         $i = 0;
         foreach ($courses as $courseItem) {
@@ -2260,8 +2253,6 @@ class Attendance
             $courses['not_category'][$i]['attendanceSheet'] = $temp;
         }
 
-        /* Sessions */
-        $studentId = (int) $studentId;
         $sql = "SELECT session_id, c_id FROM session_rel_course_rel_user
                 WHERE user_id = $studentId";
 

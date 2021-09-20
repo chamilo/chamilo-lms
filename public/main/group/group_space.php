@@ -151,8 +151,8 @@ if (api_is_allowed_to_edit(false, true) ||
 
     if (GroupManager::TOOL_NOT_AVAILABLE != $groupEntity->getDocState()) {
         $params = [
-            'toolName' =>'document',
-            'cid' => $courseId
+            'toolName' => 'document',
+            'cid' => $courseId,
         ];
         $url = Container::getRouter()->generate('chamilo_core_course_redirect_tool', $params).'?'.api_get_cidreq();
         $actions_array[] = [
@@ -167,8 +167,8 @@ if (api_is_allowed_to_edit(false, true) ||
             $groupFilter = "&type=course&user_id=GROUP:$group_id";
         }
         $params = [
-            'toolName' =>'agenda',
-            'cid' => $courseId
+            'toolName' => 'agenda',
+            'cid' => $courseId,
         ];
         $url = Container::getRouter()->generate('chamilo_core_course_redirect_tool', $params).'?'.api_get_cidreq();
         // Link to a group-specific part of agenda

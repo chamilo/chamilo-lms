@@ -2163,7 +2163,6 @@ class Attendance
     /**
      * Return all course for a student between dates and order by key date (Y-m-d).
      *
-     * @param int       $studentId
      * @param \DateTime $startDate
      * @param \DateTime $endDate
      * @param bool      $orderDesc

@@ -132,12 +132,12 @@ class ThematicController
                             continue;
                         }
 
-                        switch ($item[0]) {
+                        switch ($item['type']) {
                             case 'title':
                                 $thematic->set_thematic_attributes(
                                     null,
-                                    $item[1],
-                                    $item[2],
+                                    $item['data1'],
+                                    $item['data2'],
                                     api_get_session_id()
                                 );
                                 $current_thematic = $thematic->thematic_save();
@@ -146,8 +146,8 @@ class ThematicController
                             case 'plan':
                                 $thematic->set_thematic_plan_attributes(
                                     $current_thematic,
-                                    $item[1],
-                                    $item[2],
+                                    $item['data1'],
+                                    $item['data2'],
                                     $description_type
                                 );
                                 $thematic->thematic_plan_save();
@@ -158,9 +158,9 @@ class ThematicController
                                     null,
                                     $current_thematic,
                                     0,
-                                    $item[3],
-                                    $item[1],
-                                    $item[2]
+                                    $item['data3'],
+                                    $item['data1'],
+                                    $item['data2']
                                 );
                                 $thematic->thematic_advance_save();
                                 break;

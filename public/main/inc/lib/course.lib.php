@@ -2850,7 +2850,6 @@ class CourseManager
 
             if ($loadSpecialCourses) {
                 $specialCourseList = self::get_special_course_list();
-
                 if (!empty($specialCourseList)) {
                     $specialCourseToString = '"'.implode('","', $specialCourseList).'"';
                     $withSpecialCourses = ' AND course.id IN ('.$specialCourseToString.')';
@@ -2860,12 +2859,10 @@ class CourseManager
                 if (!empty($withSpecialCourses)) {
                     $sql = "SELECT DISTINCT (course.code),
                             course.id as real_id,
-                            course_category.code AS category,
                             course.title
                             FROM $tbl_course_user course_rel_user
                             LEFT JOIN $tbl_course course
                             ON course.id = course_rel_user.c_id
-                            LEFT JOIN $tblCourseCategory ON course_category.id = course.category_id
                             INNER JOIN $tableCourseUrl url
                             ON (course.id = url.c_id)
                             WHERE url.access_url_id = $urlId

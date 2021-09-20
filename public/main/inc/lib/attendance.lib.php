@@ -2171,7 +2171,7 @@ class Attendance
      * @return array
      */
     public function getCoursesWithAttendance(
-        $studentId = 0,
+        int $studentId,
         DateTime $startDate = null,
         DateTime $endDate = null,
         $orderDesc = false
@@ -2192,7 +2192,7 @@ class Attendance
         $i = 0;
         foreach ($courses as $courseItem) {
             $i++;
-            $courseId = $courseItem['course_id'];
+            $courseId = $courseItem['real_id'];
 
             /* Get all attendance by courses*/
             $attendanceList = $attendanceLib->getAttendanceList(api_get_course_entity($courseId));

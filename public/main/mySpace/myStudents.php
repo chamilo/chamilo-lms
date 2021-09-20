@@ -1042,7 +1042,7 @@ if (isset($_GET['action']) && 'all_attendance' === $_GET['action']) {
     $form->addDateTimePicker(
         'startDate',
         [
-            get_lang('ExeStartTime'),
+            get_lang('Start date'),
         ],
         [
             'form_name' => 'attendance_calendar_edit',
@@ -1052,7 +1052,7 @@ if (isset($_GET['action']) && 'all_attendance' === $_GET['action']) {
     $form->addDateTimePicker(
         'endDate',
         [
-            get_lang('ExeEndTime'),
+            get_lang('End date'),
         ],
         [
             'form_name' => 'attendance_calendar_edit',
@@ -1068,15 +1068,15 @@ if (isset($_GET['action']) && 'all_attendance' === $_GET['action']) {
     $data = $attendance->getCoursesWithAttendance($studentId, $startDate, $endDate);
 
     // 'attendance from %s to %s'
-    $title = sprintf(get_lang('AttendanceFromXToY'), $startDateText, $endDateText);
+    $title = sprintf(get_lang('Attendance from %s to %s'), $startDateText, $endDateText);
     echo '
     <h3>'.$title.'</h3>
     <div class="">
     <table class="table table-striped table-hover table-responsive">
         <thead>
             <tr>
-                <th>'.get_lang('DateExo').'</th>
-                <th>'.get_lang('Training').'</th>
+                <th>'.get_lang('Date').'</th>
+                <th>'.get_lang('Course').'</th>
                 <th>'.get_lang('Present').'</th>
             </tr>
         </thead>
@@ -1100,7 +1100,7 @@ if (isset($_GET['action']) && 'all_attendance' === $_GET['action']) {
                 <td>'.$date.'</td>
                 <td>'
                     .'<a
-                    title="'.get_lang('GoAttendance').'"
+                    title="'.get_lang('Go to attendances').'"
                     href="'.api_get_path(WEB_CODE_PATH).
                     'attendance/index.php?cid='.$attendanceWork['courseId'].'&sid='.$sId.'&student_id='.$studentId.'">'
                     .$attendanceWork['courseTitle']." $printSession ".'
@@ -1199,9 +1199,9 @@ if (!empty($userGroups)) {
             <th>';
     echo get_lang('Classes');
     echo '</th>
-                    </tr>
-                    </thead>
-                    <tbody>';
+            </tr>
+            </thead>
+            <tbody>';
     foreach ($userGroups as $class) {
         echo '<tr><td>'.$class.'</td></tr>';
     }

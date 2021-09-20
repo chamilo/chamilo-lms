@@ -125,7 +125,10 @@ class CourseController extends ToolBaseController
 
         /** @var CTool $item */
         foreach ($result as $item) {
-            if ('course_tool' === $item->getName()) {
+            if ('course_tool' === $item->getName() ||
+                'chat' === $item->getName() ||
+                'notebook' === $item->getName()
+            ) {
                 continue;
             }
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());

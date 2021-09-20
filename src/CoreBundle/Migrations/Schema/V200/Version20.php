@@ -444,7 +444,7 @@ class Version20 extends AbstractMigrationChamilo
             'c_forum_category' => ['c_id', 'session_id', 'cat_id'],
             'c_forum_forum' => ['c_id', 'session_id', 'post_id'],
             'c_forum_notification' => ['c_id'],
-            'c_forum_post' => ['c_id'],
+            'c_forum_post' => ['c_id', 'post_id'],
             'c_forum_thread' => ['c_id', 'session_id'],
             'c_forum_thread_qualify' => ['c_id', 'session_id'],
             'c_forum_thread_qualify_log' => ['c_id', 'session_id'],

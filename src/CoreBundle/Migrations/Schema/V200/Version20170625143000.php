@@ -134,7 +134,9 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_link');
         }
 
+        $this->addSql('ALTER TABLE c_link CHANGE on_homepage on_homepage VARCHAR(10) DEFAULT NULL');
         $this->addSql('UPDATE c_link SET category_id = NULL WHERE category_id = 0');
+
         if (false === $table->hasForeignKey('FK_9209C2A012469DE2')) {
             $this->addSql(
                 'ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A012469DE2 FOREIGN KEY (category_id) REFERENCES c_link_category (iid)'

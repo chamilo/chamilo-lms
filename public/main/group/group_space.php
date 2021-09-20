@@ -19,6 +19,7 @@ api_protect_course_script(true, false, 'group');
 
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
+$courseId = api_get_course_int_id();
 $groupEntity = null;
 if (!empty($group_id)) {
     $groupEntity = api_get_group_entity($group_id);
@@ -149,9 +150,13 @@ if (api_is_allowed_to_edit(false, true) ||
     }
 
     if (GroupManager::TOOL_NOT_AVAILABLE != $groupEntity->getDocState()) {
-        // Link to the documents area of this group
+        $params = [
+            'toolName' =>'document',
+            'cid' => $courseId
+        ];
+        $url = Container::getRouter()->generate('chamilo_core_course_redirect_tool', $params).'?'.api_get_cidreq();
         $actions_array[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
+            'url' => $url,
             'content' => Display::return_icon('folder.png', get_lang('Documents'), [], 32),
         ];
     }
@@ -161,9 +166,14 @@ if (api_is_allowed_to_edit(false, true) ||
         if (!empty($group_id)) {
             $groupFilter = "&type=course&user_id=GROUP:$group_id";
         }
+        $params = [
+            'toolName' =>'agenda',
+            'cid' => $courseId
+        ];
+        $url = Container::getRouter()->generate('chamilo_core_course_redirect_tool', $params).'?'.api_get_cidreq();
         // Link to a group-specific part of agenda
         $actions_array[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().$groupFilter,
+            'url' => $url,
             'content' => Display::return_icon('agenda.png', get_lang('Agenda'), [], 32),
         ];
     }
@@ -185,16 +195,16 @@ if (api_is_allowed_to_edit(false, true) ||
 
     if (GroupManager::TOOL_NOT_AVAILABLE != $groupEntity->getWikiState()) {
         // Link to the wiki area of this group
-        $actions_array[] = [
+        /*$actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).
                 'wiki/index.php?'.api_get_cidreq().'&action=show&title=index&sid='.api_get_session_id().'&group_id='.$groupEntity->getIid(),
             'content' => Display::return_icon('wiki.png', get_lang('Wiki'), [], 32),
-        ];
+        ];*/
     }
 
     if (GroupManager::TOOL_NOT_AVAILABLE != $groupEntity->getChatState()) {
         // Link to the chat area of this group
-        if (api_get_course_setting('allow_open_chat_window')) {
+        /*if (api_get_course_setting('allow_open_chat_window')) {
             $actions_array[] = [
                 'url' => 'javascript: void(0);',
                 'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
@@ -207,7 +217,7 @@ if (api_is_allowed_to_edit(false, true) ||
                 'url' => api_get_path(WEB_CODE_PATH).'chat/chat.php?'.api_get_cidreq().'&gid='.$groupEntity->getIid(),
                 'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
             ];
-        }
+        }*/
     }
 
     $enabled = api_get_plugin_setting('bbb', 'tool_enable');

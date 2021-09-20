@@ -27,7 +27,8 @@ final class CCourseDescriptionRepository extends ResourceRepository
             ->innerJoin('d.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->where('d.descriptionType = :type')
-            ->setParameter('type', $type);
+            ->setParameter('type', $type)
+        ;
 
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
 

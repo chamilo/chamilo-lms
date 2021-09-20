@@ -69,10 +69,10 @@ class CCourseDescriptionRepositoryTest extends AbstractApiTest
 
         $descriptionsInCourse = $repo->findByTypeInCourse(CCourseDescription::TYPE_DESCRIPTION, $course);
 
-        $this->assertSame(1, count($descriptionsInCourse));
+        $this->assertSame(1, \count($descriptionsInCourse));
 
         $descriptionsInSession = $repo->findByTypeInCourse(CCourseDescription::TYPE_DESCRIPTION, $course, $session);
 
-        $this->assertSame(1, count($descriptionsInSession));
+        $this->assertSame(1, \count($descriptionsInSession));
     }
 }

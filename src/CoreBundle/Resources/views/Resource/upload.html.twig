@@ -75,7 +75,7 @@
               // Update file name with new one from Chamilo
               $(data.context.children()[index]).parent().find('.file_name').html(file.name);
               var message = $('<div class=\"col-sm-3\">').html(
-                  $('<span class=\"message-image-success\"/>').text('{{ 'File upload succeeded!' | trans }}')
+                  $('<span class=\"alert alert-success\"/>').text('{{ 'File upload succeeded!' | trans }}')
                 );
               $(data.context.children()[index]).parent().append(message);
           });

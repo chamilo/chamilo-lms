@@ -1037,10 +1037,10 @@ EOT;
                         if (selected) {
                              if (selected.classList.contains("hidden")) {
                                 selected.classList.remove("hidden");
-                            } 
+                            }
                         }
                     }
-                    
+
                     const button = document.querySelector("#card_'.$id.'");
                         button.addEventListener("click", (e) => {
                         let menu = document.querySelector("#collapse_'.$id.'");
@@ -1052,23 +1052,23 @@ EOT;
                     });
                 });
                 </script>
-                <div class="mt-4 rounded-lg">    
-                    <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$id.'">   
+                <div class="mt-4 rounded-lg">
+                    <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$id.'">
                         <h5>
-                            <a role="button" 
-                                class="'.(($open) ? 'collapse' : ' ').'"  
-                                data-toggle="collapse" 
-                                data-target="#collapse_'.$id.'" 
-                                aria-expanded="true" 
+                            <a role="button"
+                                class="'.(($open) ? 'collapse' : ' ').'"
+                                data-toggle="collapse"
+                                data-target="#collapse_'.$id.'"
+                                aria-expanded="true"
                                 aria-controls="collapse_'.$id.'"
                             >
                                 '.$title.'
                             </a>
                         </h5>
                     </div>
-                    <div 
-                        id="collapse_'.$id.'" 
-                        class="px-4 border border-gray-50 bg-white hidden collapse '.(($open) ? 'show' : ' ').'" 
+                    <div
+                        id="collapse_'.$id.'"
+                        class="px-4 border border-gray-50 bg-white hidden collapse '.(($open) ? 'show' : ' ').'"
                         aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">
                     <div id="collapse_contant_'.$id.'"  class="card-body ">';
 
@@ -1919,7 +1919,7 @@ EOT;
                     // Update file name with new one from Chamilo
                     $(data.context.children()[index]).parent().find('.file_name').html(file.name);
                     var message = $('<div class=\"col-sm-3\">').html(
-                        $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('File upload succeeded!'))."')
+                        $('<span class=\"alert alert-success\"/>').text('".addslashes(get_lang('File upload succeeded!'))."')
                     );
                     $(data.context.children()[index]).parent().append(message);
                 });

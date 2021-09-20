@@ -38,11 +38,8 @@ use UnserializeApi;
 #[Route('/course')]
 class CourseHomeController extends ToolBaseController
 {
-    /**
-     * @Route("/{cid}/home.json", name="chamilo_core_course_home_json")
-     *
-     * @Entity("course", expr="repository.find(cid)")
-     */
+    #[Route('/{cid}/home.json', name: 'chamilo_core_course_home_json')]
+    #[Entity('course', expr: 'repository.find(cid)')]
     public function indexJsonAction(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain): Response
     {
         $course = $this->getCourse();
@@ -229,9 +226,8 @@ class CourseHomeController extends ToolBaseController
 
     /**
      * Redirects the page to a tool, following the tools.yml settings.
-     *
-     * @Route("/{cid}/tool/{toolName}", name="chamilo_core_course_redirect_tool")
      */
+    #[Route('/{cid}/tool/{toolName}', name: 'chamilo_core_course_redirect_tool')]
     public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
     {
         /** @var CTool|null $tool */
@@ -286,11 +282,9 @@ class CourseHomeController extends ToolBaseController
 
     /**
      * Edit configuration with given namespace.
-     *
-     * @Route("/{cid}/settings/{namespace}", name="chamilo_core_course_settings")
-     *
-     * @Entity("course", expr="repository.find(cid)")
      */
+    #[Route('/{cid}/settings/{namespace}', name: 'chamilo_core_course_settings')]
+    #[Entity('course', expr: 'repository.find(cid)')]
     public function updateSettings(Request $request, Course $course, string $namespace, SettingsCourseManager $manager, SettingsFormFactory $formFactory): Response
     {
         $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);

@@ -13,27 +13,26 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use CourseManager;
 use Doctrine\ORM\EntityRepository;
 use ExtraFieldValue;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use UserManager;
 
-#[Route('/course')]
+#[Route('/courses')]
 class CourseController extends AbstractController
 {
     /**
      * Redirects legacy /courses/ABC/index.php to /courses/1/ (where 1 is the course id) see CourseHomeController.
-     *
-     * @Route("/{courseCode}/index.php", name="chamilo_core_course_home_redirect")
-     *
-     * @Entity("course", expr="repository.findOneByCode(courseCode)")
      */
-    public function homeRedirectAction(Course $course): Response
+    #[Route('/{code}/index.php', name: 'chamilo_core_course_home_redirect')]
+    public function homeRedirect(Course $course): Response
     {
         return $this->redirectToRoute('chamilo_core_course_home', [
             'cid' => $course->getId(),
@@ -41,23 +40,44 @@ class CourseController extends AbstractController
     }
 
     /**
-     * @Route("/{cid}/welcome", name="chamilo_core_course_welcome")
-     *
-     * @Entity("course", expr="repository.find(cid)")
+     * Redirects legacy /courses/ABC/document/images/file.jpg.
      */
-    public function welcomeAction(Course $course): Response
+    #[Route('/{code}/document/{path}', name: 'chamilo_core_course_document_redirect', requirements: ['path' => '.*'])]
+    public function documentRedirect(Course $course, string $path, CDocumentRepository $documentRepository): Response
+    {
+        $pathList = explode('/', $path);
+
+        /** @var CDocument|null $document */
+        $document = null;
+        $parent = $course;
+        foreach ($pathList as $part) {
+            $document = $documentRepository->findCourseResourceByTitle($part, $parent->getResourceNode(), $course);
+            if (null !== $document) {
+                $parent = $document;
+            }
+        }
+
+        if (null !== $document && $document->getResourceNode()->hasResourceFile()) {
+            return $this->redirectToRoute('chamilo_core_resource_view', [
+                'tool' => 'document',
+                'type' => 'file',
+                'id' => $document->getResourceNode()->getId(),
+            ]);
+        }
+
+        throw new AccessDeniedException('File not found');
+    }
+
+    #[Route('/{id}/welcome', name: 'chamilo_core_course_welcome')]
+    public function welcome(Course $course): Response
     {
         return $this->render('@ChamiloCore/Course/welcome.html.twig', [
             'course' => $course,
         ]);
     }
 
-    /**
-     * @Route("/{cid}/about", name="chamilo_core_course_about")
-     *
-     * @Entity("course", expr="repository.find(cid)")
-     */
-    public function aboutAction(Course $course, IllustrationRepository $illustrationRepository, CCourseDescriptionRepository $courseDescriptionRepository): Response
+    #[Route('/{id}/about', name: 'chamilo_core_course_about')]
+    public function about(Course $course, IllustrationRepository $illustrationRepository, CCourseDescriptionRepository $courseDescriptionRepository): Response
     {
         $courseId = $course->getId();
         $userId = $this->getUser()->getId();

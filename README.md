@@ -25,21 +25,39 @@ We assume you already have:
 
 ### Software stack install (Ubuntu)
 
-On a fresh Ubuntu, you can prepare your server by issuing an apt command like the following:
+You will need PHP8+ and NodeJS v14+ to run Chamilo 2.
+On a fresh Ubuntu 21.04, you can prepare your server by issuing an apt command like the following with sudo (or as root, but not recommended for security reasons):
 
 ~~~~
-apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath php-soap git unzip npm
+sudo apt update
+sudo apt -y upgrade
+sudo apt -y install software-properties-common
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath php-soap git unzip
+cd ~
+curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install nodejs
+sudo npm install -f yarn
+cd ~
+# follow the instructions at https://getcomposer.org/download/
+sudo mv composer.phar /usr/local/bin/composer
+# optionally, you might want this:
+sudo apt install libapache2-mod-xsendfile
+sudo a2enmode rewrite ssl headers expires
+sudo systemctl restart apache2
 ~~~~
 
-Note: you might need to use more up-to-date versions of nodejs (at least v14) and yarn. 
-These second part of these instructions may help: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04-fr
-
-Otherwise, you can use the following directly:
+When your system is all set, you can use the following:
 
 ~~~~
+cd /var/www
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
 composer install
+# not recommended to do this as the root user!
+# when asked whether you want to execute the recipes for some of the components, you can safely say no.
 
 yarn set version 2.4.2
 yarn install

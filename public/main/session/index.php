@@ -99,13 +99,13 @@ if (!empty($courseList)) {
         if (api_is_platform_admin()) {
             $course_data['title'] = Display::url(
                 $course_data['title'],
-                api_get_course_url($course_data['code'], $session_id)
+                api_get_course_url($course_data['real_id'], $session_id)
             );
         } else {
             if (in_array($course_data['real_id'], $user_course_list) || api_is_anonymous()) {
                 $course_data['title'] = Display::url(
                     $course_data['title'],
-                    api_get_course_url($course_data['code'], $session_id)
+                    api_get_course_url($course_data['real_id'], $session_id)
                 );
             } else {
                 continue;

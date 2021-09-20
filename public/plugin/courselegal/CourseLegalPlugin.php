@@ -253,7 +253,7 @@ class CourseLegalPlugin extends Plugin
             $students = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionId);
         }
 
-        $url = api_get_course_url($courseCode, $sessionId);
+        $url = api_get_course_url($courseId, $sessionId);
         $url = Display::url($url, $url);
 
         $subject = $this->get_lang('AgreementUpdated');

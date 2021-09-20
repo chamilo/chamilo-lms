@@ -572,7 +572,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $table->set_header(3, get_lang('Language'), false, 'width="70px"');
     $table->set_header(4, get_lang('Categories'));
     $table->set_header(5, get_lang('Registr. allowed'), true, 'width="60px"');
-    $table->set_header(6, get_lang('UnsubscribeAllowed'), false, 'width="50px"');
+    $table->set_header(6, get_lang('Unreg. allowed'), false, 'width="50px"');
     $table->set_header(
         7,
         get_lang('Action'),

@@ -32,7 +32,7 @@
                     {{ display.card_widget('Latest login in platform'|trans, user_extra.last_connection, 'calendar') }}
 
                     {% if user_extra.legal %}
-                        {{ display.card_widget('Legal accepted'|trans, user_extra.legal.datetime, 'gavel', user.legal.icon) }}
+                        {{ display.card_widget('Legal accepted'|trans, user_extra.legal.datetime, 'gavel', user_extra.legal.icon) }}
                     {% endif %}
                 </div>
             </div>

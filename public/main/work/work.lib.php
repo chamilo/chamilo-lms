@@ -3105,7 +3105,7 @@ function sendEmailToDrhOnHomeworkCreation($workId, $courseId, $sessionId = 0)
             $bodyView->assign('hrm_name', $hrmName);
             $bodyView->assign('student', $studentInfo);
             $bodyView->assign('course', $courseInfo);
-            $bodyView->assign('course_link', api_get_course_url($courseInfo['code'], $sessionId));
+            $bodyView->assign('course_link', api_get_course_url($courseInfo['real_id'], $sessionId));
             $bodyView->assign('work', $workInfo);
 
             $bodyTemplate = $bodyView->get_template('mail/new_work_alert_hrm.tpl');

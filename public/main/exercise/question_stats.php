@@ -24,6 +24,7 @@ if (empty($exerciseId)) {
 $sessionId = api_get_session_id();
 $exercise = new Exercise();
 $result = $exercise->read($exerciseId);
+$course = api_get_course_entity();
 
 if (empty($result)) {
     api_not_allowed(true);
@@ -44,13 +45,12 @@ $interbreadcrumb[] = [
     'name' => get_lang('StudentScore'),
 ];
 $courseId = api_get_course_int_id();
-$courseInfo = api_get_course_info();
 
 $form = new FormValidator('search_form', 'GET', api_get_self().'?id='.$exerciseId.'&'.api_get_cidreq());
 $form->addCourseHiddenParams();
 $form->addHidden('id', $exerciseId);
 
-$courseGroups = GroupManager::get_group_list(null, $courseInfo);
+$courseGroups = GroupManager::get_group_list(null, $course);
 
 if (!empty($courseGroups)) {
     $courseGroups = array_column($courseGroups, 'name', 'iid');
@@ -64,7 +64,7 @@ if (!empty($courseGroups)) {
     );
 }
 
-$courseUsers = CourseManager::get_user_list_from_course_code($courseInfo['code']);
+$courseUsers = CourseManager::get_user_list_from_course_code($course->getCode());
 if (!empty($courseUsers)) {
     array_walk(
         $courseUsers,

@@ -108,7 +108,7 @@ class GroupManager
      */
     public static function get_group_list(
         $categoryId = null,
-        $course = null,
+        Course $course = null,
         $status = null,
         $sessionId = 0,
         $getCount = false,
@@ -2801,14 +2801,9 @@ class GroupManager
         return $content;
     }
 
-    /**
-     * @param string $keyword
-     *
-     * @return string
-     */
-    public static function getOverview(Course $course, $keyword = '')
+    public static function getOverview(Course $course, string $keyword = ''): string
     {
-        $content = null;
+        $content = '';
         $categories = self::get_categories();
         $url = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
         if (!empty($categories)) {
@@ -2844,12 +2839,7 @@ class GroupManager
         return $content;
     }
 
-    /**
-     * Returns the search form.
-     *
-     * @return string
-     */
-    public static function getSearchForm()
+    public static function getSearchForm(): string
     {
         $url = api_get_path(WEB_CODE_PATH).'group/group_overview.php?'.api_get_cidreq();
         $form = new FormValidator(

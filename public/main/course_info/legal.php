@@ -75,7 +75,7 @@ $form->addButtonSave(get_lang('Accept'));
 
 $variable = 'accept_legal_'.$user_id.'_'.$course_info['real_id'].'_'.$session_id;
 
-$url = api_get_course_url($course_code, $session_id);
+$url = api_get_course_url($course_info['real_id'], $session_id);
 
 if ($form->validate()) {
     $accept_legal = $form->exportValue('accept_legal');

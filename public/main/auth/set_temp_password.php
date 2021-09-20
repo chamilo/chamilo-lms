@@ -40,7 +40,7 @@ if ($form->validate()) {
     $formValues = $form->exportValues();
     if (sha1($formValues['course_password']) === $courseInfo['registration_code']) {
         Session::write('course_password_'.$courseInfo['real_id'], true);
-        header('Location: '.api_get_course_url($courseInfo['code'], $sessionId).
+        header('Location: '.api_get_course_url($courseInfo['real_id'], $sessionId).
         '&action=subscribe&sec_token='.Security::get_existing_token());
         exit;
     } else {

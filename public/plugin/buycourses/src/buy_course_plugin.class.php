@@ -2801,7 +2801,7 @@ class BuyCoursesPlugin extends Plugin
         switch ($saleInfo['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
                 $courseInfo = api_get_course_info_by_id($saleInfo['product_id']);
-                $url = api_get_course_url($courseInfo['code']);
+                $url = api_get_course_url($courseInfo['real_id']);
                 break;
             case self::PRODUCT_TYPE_SESSION:
                 $sessionId = (int) $saleInfo['product_id'];

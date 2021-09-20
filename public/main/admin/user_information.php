@@ -296,7 +296,7 @@ if (count($sessions) > 0) {
             $courseId = $sessionRelCourse->getCourse()->getId();
             $courseCode = $sessionRelCourse->getCourse()->getCode();
 
-            $courseUrl = api_get_course_url($courseCode);
+            $courseUrl = api_get_course_url($courseId, $sessionId);
 
             $sessionStatus = SessionManager::get_user_status_in_course_session(
                 $userId,
@@ -320,7 +320,7 @@ if (count($sessions) > 0) {
             );
             $tools .= '&nbsp;<a href="course_information.php?code='.$courseCode.'&id_session='.$sessionId.'">'.
                 Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
-                '<a href="'.$courseUrl.'?id_session='.$sessionId.'">'.
+                '<a href="'.$courseUrl.'">'.
                 Display::return_icon('course_home.png', get_lang('Course home')).'</a>';
 
             /*if (!empty($my_course['status']) && STUDENT == $my_course['status']) {
@@ -346,7 +346,7 @@ if (count($sessions) > 0) {
             $row = [
                 Display::url(
                     $courseCode,
-                    $courseUrl.'?id_session='.$sessionId
+                    $courseUrl
                 ),
                 $course->getTitle(),
                 $status,
@@ -357,16 +357,6 @@ if (count($sessions) > 0) {
 
             $csvContent[] = array_map('strip_tags', $row);
             $data[] = $row;
-
-            /*$result = Tracking::getToolInformation(
-                $userId,
-                $courseInfo,
-                $sessionId
-            );
-            if (!empty($result['html'])) {
-                $courseToolInformationTotal .= $result['html'];
-                $csvContent = array_merge($csvContent, $result['array']);
-            }*/
         }
 
         $dates = SessionManager::parseSessionDates($session);
@@ -432,7 +422,7 @@ if (count($courseRelUserList) > 0) {
         $courseCode = $course->getCode();
         $courseToolInformation = null;
 
-        $courseUrl = api_get_course_url($courseCode);
+        $courseUrl = api_get_course_url($courseId);
         $tools = Display::url(
             Display::return_icon('statistics.png', get_lang('Statistics')),
             api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session=0&course='.$courseCode

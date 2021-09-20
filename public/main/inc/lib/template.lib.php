@@ -1230,7 +1230,7 @@ class Template
                     // @TODO: support right-to-left in title
                     $socialMeta .= '<meta property="og:title" content="'.$course->getTitle().' - '.$metaTitle.'" />'."\n";
                     $socialMeta .= '<meta property="twitter:title" content="'.$course->getTitle().' - '.$metaTitle.'" />'."\n";
-                    $socialMeta .= '<meta property="og:url" content="'.api_get_course_url($course->getCode()).'" />'."\n";
+                    $socialMeta .= '<meta property="og:url" content="'.api_get_course_url($course->getId()).'" />'."\n";
 
                     $metaDescription = api_get_setting('meta_description');
                     if (!empty($course->getDescription())) {

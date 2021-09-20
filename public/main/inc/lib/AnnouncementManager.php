@@ -108,7 +108,7 @@ class AnnouncementManager
         }
 
         $data['course_title'] = $courseInfo['name'];
-        $courseLink = api_get_course_url($courseCode, $sessionId);
+        $courseLink = api_get_course_url($courseInfo['real_id'], $sessionId);
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $data['teachers'] = $teacherList;
 

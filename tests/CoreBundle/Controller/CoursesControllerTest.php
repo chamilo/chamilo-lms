@@ -23,6 +23,6 @@ class CoursesControllerTest extends WebTestCase
         $client->loginUser($admin);
 
         $client->request('GET', '/courses/'.$course->getCode().'/index.php');
-        $this->assertResponseRedirects('/courses/'.$course->getId().'/home');
+        $this->assertResponseRedirects('/course/'.$course->getId().'/home');
     }
 }

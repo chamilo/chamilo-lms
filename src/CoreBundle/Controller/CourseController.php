@@ -359,7 +359,7 @@ class CourseController extends ToolBaseController
         foreach ($courseTeachers as $teacherSubscription) {
             $teacher = $teacherSubscription->getUser();
             $userData = [
-                'complete_name' => UserManager::formatUserFullName($teacher),
+                'complete_name' => \UserManager::formatUserFullName($teacher),
                 'image' => $illustrationRepository->getIllustrationUrl($teacher),
                 'diploma' => $teacher->getDiplomas(),
                 'openarea' => $teacher->getOpenarea(),

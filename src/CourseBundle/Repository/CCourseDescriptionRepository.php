@@ -22,15 +22,10 @@ final class CCourseDescriptionRepository extends ResourceRepository
 
     public function findByTypeInCourse(int $type, Course $course, Session $session = null, CGroup $group = null)
     {
-        $qb = $this->createQueryBuilder('d');
-        $qb
-            ->innerJoin('d.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->where('d.descriptionType = :type')
+        $qb = $this->getResourcesByCourse($course, $session, $group)
+            ->where('resource.descriptionType = :type')
             ->setParameter('type', $type)
         ;
-
-        $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
 
         $query = $qb->getQuery();
 

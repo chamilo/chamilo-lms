@@ -685,7 +685,7 @@ class MySpace
 
     public static function sort_users($a, $b)
     {
-        $tracking = Session::read('tracking_column');
+        $tracking = Session::read('tracking_column', 0);
 
         return api_strcmp(
             trim(api_strtolower($a[$tracking])),
@@ -695,7 +695,7 @@ class MySpace
 
     public static function rsort_users($a, $b)
     {
-        $tracking = Session::read('tracking_column');
+        $tracking = Session::read('tracking_column', 0);
 
         return api_strcmp(
             trim(api_strtolower($b[$tracking])),

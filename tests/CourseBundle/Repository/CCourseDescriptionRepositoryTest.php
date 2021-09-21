@@ -38,7 +38,7 @@ class CCourseDescriptionRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame('title', (string) $item);
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame(5, $repo->count([]));
     }
 
     public function testGetDescriptions(): void

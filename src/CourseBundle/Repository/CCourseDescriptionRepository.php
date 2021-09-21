@@ -23,8 +23,8 @@ final class CCourseDescriptionRepository extends ResourceRepository
     public function findByTypeInCourse(int $type, Course $course, Session $session = null, CGroup $group = null)
     {
         $qb = $this->getResourcesByCourse($course, $session, $group)
-            ->where('resource.descriptionType = :type')
-            ->setParameter('type', $type)
+            ->andWhere('resource.descriptionType = :description_type')
+            ->setParameter('description_type', $type)
         ;
 
         $query = $qb->getQuery();

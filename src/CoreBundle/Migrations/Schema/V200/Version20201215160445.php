@@ -264,9 +264,10 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 $path = $itemData['path'];
                 $fileName = $itemData['filename'];
 
-                /** @var CForumPost $resource */
+                /** @var CForumPost|null $post */
                 $post = $forumPostRepo->find($postId);
-                if (null === $post) {
+
+                if (null === $post || !$post->hasResourceNode()) {
                     continue;
                 }
 

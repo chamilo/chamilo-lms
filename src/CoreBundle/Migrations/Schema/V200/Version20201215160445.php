@@ -133,10 +133,15 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     $parent
                 );
 
+                $em->persist($resource);
+                $em->flush();
+
                 $forumImage = $itemData['forum_image'];
                 if (!empty($forumImage)) {
                     $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/forum/images/'.$forumImage;
-                    $this->addLegacyFileToResource($filePath, $forumRepo, $resource, $id, $forumImage);
+                    if ($this->fileExists($filePath)) {
+                        $this->addLegacyFileToResource($filePath, $forumRepo, $resource, $id, $forumImage);
+                    }
                 }
 
                 if (false === $result) {
@@ -255,7 +260,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             $forumPostRepo = $container->get(CForumPostRepository::class);
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
-                $postId = $itemData['post_id'];
+                $postId = (int) $itemData['post_id'];
                 $path = $itemData['path'];
                 $fileName = $itemData['filename'];
 
@@ -267,9 +272,11 @@ final class Version20201215160445 extends AbstractMigrationChamilo
 
                 if (!empty($fileName) && !empty($path)) {
                     $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/forum/'.$path;
-                    $this->addLegacyFileToResource($filePath, $forumPostRepo, $post, $id, $fileName);
-                    $em->persist($post);
-                    $em->flush();
+                    if ($this->fileExists($filePath)) {
+                        $this->addLegacyFileToResource($filePath, $forumPostRepo, $post, $id, $fileName);
+                        $em->persist($post);
+                        $em->flush();
+                    }
                 }
             }
             $em->flush();

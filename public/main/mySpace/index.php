@@ -316,7 +316,7 @@ if (false === $skipData) {
     if (!empty($students)) {
         // Students
         $studentIds = array_values($students);
-        $progress = Tracking::get_avg_student_progress($studentIds);
+        $progress = 0; //Tracking::get_avg_student_progress($studentIds);
         // @todo fix stats
         //$countAssignments = Tracking::count_student_assignments($studentIds);
         $countAssignments = 0;

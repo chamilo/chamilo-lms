@@ -151,8 +151,6 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             $em->flush();
             $em->clear();
 
-            //$courseAdmin = $userRepo->find($courseAdmin->getId());
-
             $sql = "SELECT * FROM c_quiz_question WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
@@ -166,21 +164,24 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     continue;
                 }
 
+                $courseAdmin = $userRepo->find($courseAdmin->getId());
                 $question->setParent($course);
-                //$resourceNode = $quizQuestionRepo->addResourceNode($resource, $courseAdmin, $course);
+                $resourceNode = $quizQuestionRepo->addResourceNode($question, $courseAdmin, $course);
                 $question->addCourseLink($course);
-                //$em->persist($resourceNode);
+                $em->persist($resourceNode);
                 $em->persist($question);
                 $em->flush();
 
+                /** @var CQuizQuestion $question */
+                $question = $quizQuestionRepo->find($id);
                 $pictureId = $question->getPicture();
                 if (!empty($pictureId)) {
                     /** @var CDocument $document */
                     $document = $documentRepo->find($pictureId);
                     if ($document && $document->hasResourceNode() && $document->getResourceNode()->hasResourceFile()) {
                         $resourceFile = $document->getResourceNode()->getResourceFile();
-                        $question->getResourceNode()->setResourceFile($resourceFile);
-                        //$em->persist($resourceNode);
+                        $contents = $documentRepo->getResourceFileContent($document);
+                        $quizQuestionRepo->addFileFromString($question, $resourceFile->getOriginalName(), $resourceFile->getMimeType(), $contents);
                     }
                 }
 

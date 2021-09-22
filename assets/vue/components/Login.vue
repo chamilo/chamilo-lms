@@ -13,7 +13,8 @@
         <input id="password" v-model="password" name="password" type="password" autocomplete="current-password"
                required=""
                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-               placeholder="Password"/>
+               placeholder="Password"
+        />
       </div>
     </div>
 
@@ -22,20 +23,19 @@
         <input id="remember_me" name="remember_me" type="checkbox"
                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"/>
         <label for="remember_me" class="ml-2 block text-sm text-gray-900">
-          Remember me
+          {{ $t('Remember me') }}
         </label>
       </div>
 
       <div class="text-sm">
         <a href="/main/auth/lostPassword.php" id="forgot" class="font-medium text-blue-600 hover:text-blue-500">
-          Forgot your password?
+          {{ $t('Forgot your password?') }}
         </a>
       </div>
     </div>
 
     <div>
       <!--          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"-->
-
       <button
           type="submit"
           class="btn btn-primary group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium text-white"
@@ -51,15 +51,13 @@
               class="h-5 w-5 text-blue-500 group-hover:text-blue-400" aria-hidden="true"
           />
           </span>
-        Sign in
+          {{ $t('Sign in') }}
       </button>
     </div>
   </form>
-
 </template>
 
 <script>
-
 import {mapGetters, useStore} from 'vuex';
 import { LockClosedIcon } from '@heroicons/vue/solid'
 import useState from "../hooks/useState";
@@ -83,7 +81,6 @@ export default {
 
     let redirect = route.query.redirect;
     if (store.getters["security/isAuthenticated"]) {
-      console.log(redirect);
       if (typeof redirect !== "undefined") {
         router.push({path: redirect});
       } else {
@@ -99,7 +96,6 @@ export default {
     }
 
     async function performLogin() {
-      console.log('performLogin');
       let payload = {login: login.value, password: password.value};
       let redirect = route.query.redirect;
       await store.dispatch("security/login", payload);

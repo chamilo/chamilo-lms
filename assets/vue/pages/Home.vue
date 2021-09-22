@@ -24,15 +24,11 @@ import {ENTRYPOINT} from "../config/entrypoint";
 export default {
   name: "Home",
   setup() {
-    const router = useRouter();
-    const store = useStore();
     const state = reactive({
       announcements: [],
     });
 
     axios.get('/news/list').then(response => {
-      console.log(response.data);
-      console.log(response);
       if (Array.isArray(response.data)) {
         state.announcements = response.data;
       }

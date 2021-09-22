@@ -1,20 +1,23 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
 {% set content %}
-    <div class="summary-course" id="summary-{{ data.id }}">
+    <div class="summary-course" id="summary-{{ course.id }}">
         <div class="row">
             <div class="col-md-2">
                 <div class="course">
-                    <h4 class="title">{{ data.title }}</h4>
+                    <h4 class="title">{{ course.title }}</h4>
                     <div class="image">
-                        <img src="{{ data.image_small }}" class="img-responsive"/>
+                        <img class="media-object" src="{{ course | illustration }}" alt="{{ course.title }}">
                     </div>
                     <div class="info">
-                        {% if data.course_code %}
-                            <p><strong>{{ 'WantedCourseCode'|get_lang }}</strong><br>{{ data.course_code }}</p>
+                        {% if course.code %}
+                            <p><strong>{{ 'Wanted course code'|get_lang }}</strong><br>{{ course.code }}</p>
                         {% endif %}
-                        {% if data.category %}
-                            <p><strong>{{ 'CourseFaculty'|get_lang }}</strong><br>{{ data.category }}</p>
+
+                        {% if course.categories %}
+                            {% for category in course.categories %}
+                                <p><strong>{{ 'Category'|get_lang }}</strong><br>{{ category.name }}</p>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </div>
@@ -26,7 +29,7 @@
                         {{ data.time_spent }}
                     </div>
                     <div class="stat-heading">
-                        {{ 'TimeSpentInTheCourse'|get_lang }}
+                        {{ 'Time spent in the course'|get_lang }}
                     </div>
                 </div>
                 <div class="state">
@@ -34,35 +37,37 @@
                         {{ data.total_score }}
                     </div>
                     <div class="stat-heading">
-                        {{ 'TotalExercisesScoreObtained'|get_lang }}
+                        {{ 'Total score obtained for tests'|get_lang }}
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="list-donut">
                     <div class="easy-donut">
-                        <div class="easypiechart-blue easypiechart" title="{{ 'Progress'|get_lang }}"  data-percent="{{ data.avg_progress }}">
+                        <div class="easypiechart-blue easypiechart"
+                             title="{{ 'Progress'|get_lang }}"
+                             data-percent="{{ data.avg_progress }}">
                             <span class="percent">{{ data.avg_progress }}%</span>
                         </div>
                         <div class="easypiechart-legend">
-                            {{ 'AvgStudentsProgress'|get_lang }}
+                            {{ 'Progress'|get_lang }}
                         </div>
                     </div>
                     <div class="easy-donut">
-                        <div class="easypiechart-red easypiechart" title="{{ 'Progress'|get_lang }}"  data-percent="{{ data.avg_score }}">
+                        <div class="easypiechart-red easypiechart"
+                             title="{{ 'Progress'|get_lang }}"  data-percent="{{ data.avg_score }}">
                             <span class="percent">{{ data.avg_score }}%</span>
                         </div>
                         <div class="easypiechart-legend">
-                            {{ 'AvgCourseScore'|get_lang }}
+                            {{ 'Average score in learning paths'|get_lang }}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-
                 <dl class="dl-horizontal list-info">
                     <dt>
-                        <span title="{{ 'TotalNumberOfMessages'|get_lang }}">{{ 'TotalNumberOfMessages'|get_lang }}</span>
+                        <span title="{{ 'Total number of messages'|get_lang }}">{{ 'Total number of messages'|get_lang }}</span>
                     </dt>
                     <dd>
                         <span class="text-color">
@@ -71,7 +76,8 @@
                         <span class="text-color">{{ data.number_message }}</span>
                     </dd>
                     <dt>
-                        <span title="{{ 'TotalNumberOfAssignments'|get_lang }}">{{ 'TotalNumberOfAssignments'|get_lang }}</span>
+                        <span title="{{ 'Total number of assignments'|get_lang }}">
+                            {{ 'Total number of assignments'|get_lang }}</span>
                     </dt>
                     <dd>
                         <span class="text-color">
@@ -80,7 +86,8 @@
                         <span class="text-color">{{ data.number_assignments }}</span>
                     </dd>
                     <dt>
-                        <span title="{{ 'TotalExercisesAnswered'|get_lang }}">{{ 'TotalExercisesAnswered'|get_lang }}</span>
+                        <span title="{{ 'Number of tests answered'|get_lang }}">
+                            {{ 'Number of tests answered'|get_lang }}</span>
                     </dt>
                     <dd>
                         <span class="text-color">
@@ -89,7 +96,8 @@
                         <span class="text-color">{{ data.questions_answered }}</span>
                     </dd>
                     <dt>
-                        <span title="{{ 'LatestLogin'|get_lang }}">{{ 'LatestLogin'|get_lang }}</span>
+                        <span title="{{ 'Latest login'|get_lang }}">
+                            {{ 'Latest login'|get_lang }}</span>
                     </dt>
                     <dd>
                         <span class="text-color">

@@ -74,7 +74,7 @@ if (empty($courseId)) {
             }
             $form->addSelect('exercise_id', get_lang('Tests'), $options);
         } else {
-            $form->addLabel(get_lang('Tests'), Display::return_message(get_lang('NoTests')));
+            $form->addLabel(get_lang('Tests'), Display::return_message(get_lang('No tests')));
         }
     } else {
         Display::addFlash(Display::return_message(get_lang('This course doesn\'t exist'), 'warning'));

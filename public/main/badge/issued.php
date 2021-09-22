@@ -204,12 +204,14 @@ if ($showLevels && $allowToEdit) {
 
     if ($formAcquiredLevel->validate() && $allowComment) {
         $values = $formAcquiredLevel->exportValues();
-        $level = $skillLevelRepo->find($values['acquired_level']);
-        $skillRelUser->setAcquiredLevel($level);
-
-        $entityManager->persist($skillRelUser);
-        $entityManager->flush();
-        Display::addFlash(Display::return_message(get_lang('Saved')));
+        $level = null;
+        if (isset($values['acquired_level'])) {
+            $level = $skillLevelRepo->find($values['acquired_level']);
+            $skillRelUser->setAcquiredLevel($level);
+            $entityManager->persist($skillRelUser);
+            $entityManager->flush();
+            Display::addFlash(Display::return_message(get_lang('Saved')));
+        }
 
         header('Location: '.SkillRelUserModel::getIssueUrl($skillRelUser));
         exit;

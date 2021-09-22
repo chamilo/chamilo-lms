@@ -1567,7 +1567,7 @@ class MySpace
             );
             $progress_tmp = Tracking::get_avg_student_progress(
                 $userId,
-                $courseCode,
+                $course,
                 [],
                 null,
                 true
@@ -1587,8 +1587,9 @@ class MySpace
                 $score += $score_tmp[0];
                 $nb_score_lp += $score_tmp[1];
             }
-            $nb_messages += Container::getForumPostRepository($user, $course);
-            $nb_assignments += Container::getStudentPublicationRepository($user, $course);
+
+            //$nb_messages += Container::getForumPostRepository($user, $course);
+            //$nb_assignments += Container::getStudentPublicationRepository($user, $course);
 
             $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
                 $userId,
@@ -1644,13 +1645,6 @@ class MySpace
         }
 
         $data = [
-            'course_code' => $courseCode,
-            'id' => $courseId,
-            //'image' => $courseInfo['course_image_large'],
-            //'image_small' => $courseInfo['course_image'],
-            'title' => $course->getTitle(),
-            //'url' => $courseInfo['course_public_url'],
-            //'category' => $courseInfo['categoryName'],
             'time_spent' => api_time_to_hms($time_spent),
             'avg_progress' => $avg_progress,
             'avg_score' => $avg_score,
@@ -1662,7 +1656,8 @@ class MySpace
         ];
 
         $tpl->assign('data', $data);
-        $layout = $tpl->get_template('my_space/partials/tracking_course_overview.tpl');
+        $tpl->assign('course', $course);
+        $layout = $tpl->get_template('my_space/partials/tracking_course_overview.html.twig');
 
         return $tpl->fetch($layout);
     }
@@ -2419,14 +2414,15 @@ class MySpace
         $csv_content[] = $csv_row;
 
         // the other lines (the data)
-        foreach ($user_data as $key => $user) {
+        foreach ($user_data as  $user) {
             // getting all the courses of the user
             $sql = "SELECT * FROM $tbl_course_user
                     WHERE user_id = '".intval($user[4])."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
             $result = Database::query($sql);
             while ($row = Database::fetch_row($result)) {
-                $courseInfo = api_get_course_info($row['course_code']);
-                $courseId = $courseInfo['real_id'];
+                $course = api_get_course_entity($row['c_id']);
+                $courseId = $course->getId();
+                $courseCode = $course->getCode();
 
                 $csv_row = [];
                 // user official code
@@ -2450,15 +2446,15 @@ class MySpace
                 // time spent in the course
                 $csv_row[] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user[4], $courseId));
                 // student progress in course
-                $csv_row[] = round(Tracking::get_avg_student_progress($user[4], $row[0]), 2);
+                $csv_row[] = round(Tracking::get_avg_student_progress($user[4], $course), 2);
                 // student score
-                $csv_row[] = round(Tracking::get_avg_student_score($user[4], $row[0]), 2);
+                $csv_row[] = round(Tracking::get_avg_student_score($user[4], $course), 2);
                 // student tes score
-                $csv_row[] = round(Tracking::get_avg_student_exercise_score($user[4], $row[0]), 2);
+                $csv_row[] = round(Tracking::get_avg_student_exercise_score($user[4], $courseCode), 2);
                 // student messages
-                $csv_row[] = Tracking::count_student_messages($user[4], $row[0]);
+                //$csv_row[] = Tracking::count_student_messages($user[4], $row[0]);
                 // student assignments
-                $csv_row[] = Tracking::count_student_assignments($user[4], $row[0]);
+                //$csv_row[] = Tracking::count_student_assignments($user[4], $row[0]);
                 // student exercises results
                 $exercises_results = self::exercises_results($user[4], $row[0]);
                 $csv_row[] = $exercises_results['score_obtained'];

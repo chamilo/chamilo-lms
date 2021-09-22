@@ -6,10 +6,6 @@
     >
 <!--      <q-breadcrumbs-el v-for ="item in items" :label="item.text" :to="item.href" />-->
       <q-breadcrumbs-el v-for="item in items" :label="item.text" :to="item.href" />
-
-
-<!--      <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" :to="link.url" clickable>-->
-
     </q-breadcrumbs>
   </div>
 </template>
@@ -118,10 +114,8 @@ export default {
             });
           }
         }
-
         console.log('BREADCRUMB');
-      console.log(items);
-
+        console.log(items);
       }
 
       return items;

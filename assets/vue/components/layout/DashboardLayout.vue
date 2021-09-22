@@ -37,17 +37,17 @@
                  icon="person"
                  :to="'/account/home'"
           >
-            <q-tooltip>Profile</q-tooltip>
+            <q-tooltip>{{ $t('Profile') }}</q-tooltip>
           </q-btn>
 
           <q-btn v-if="isAuthenticated" round dense flat color="grey-8"
                  icon="inbox"
                  :to="'/resources/messages'"
           >
-            <q-badge color="red" text-color="white" floating>
-              2
-            </q-badge>
-            <q-tooltip>Inbox</q-tooltip>
+<!--            <q-badge color="red" text-color="white" floating>-->
+<!--              2-->
+<!--            </q-badge>-->
+            <q-tooltip>{{ $t('Inbox') }}</q-tooltip>
           </q-btn>
 
 <!--          <q-btn-->
@@ -58,12 +58,12 @@
 <!--          </q-btn>-->
 
 
-          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="notifications">
-            <q-badge color="red" text-color="white" floating>
-              2
-            </q-badge>
-            <q-tooltip>Notifications</q-tooltip>
-          </q-btn>
+<!--          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="notifications">-->
+<!--            <q-badge color="red" text-color="white" floating>-->
+<!--              2-->
+<!--            </q-badge>-->
+<!--            <q-tooltip>Notifications</q-tooltip>-->
+<!--          </q-btn>-->
 
           <q-btn v-if="!isAuthenticated"
                  :to="{ name: 'Login'}"
@@ -93,7 +93,7 @@
               <q-list dense>
                 <q-item class="GL__menu-link-signed-in">
                   <q-item-section>
-                    <div>Signed in as <strong>{{ currentUser.username }}</strong></div>
+                    <div>{{ $t('Signed in as') }} <strong>{{ currentUser.username }}</strong></div>
                   </q-item-section>
                 </q-item>
                 <!--                <q-separator />-->
@@ -115,11 +115,11 @@
 <!--                  </q-item-section>-->
 <!--                </q-item>-->
                 <q-item href="/account/edit" tag="a"  class="">
-                  <q-item-section>Settings</q-item-section>
+                  <q-item-section>{{ $t('Settings') }}</q-item-section>
                 </q-item>
                 <q-item href="/logout" tag="a" clickable class="">
                   <q-item-section>
-                    Sign out
+                    {{ $t('Signed out') }}
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -190,7 +190,7 @@
             <div class="flex flex-center q-gutter-xs">
               <a
                   class="GNL__drawer-footer-link"
-                 href="javascript:void(0)"
+                  href="javascript:void(0)"
               >
                 {{ config['platform.site_name'] }}
                 {{ config['platform.institution'] }}
@@ -207,7 +207,7 @@
       <q-page
           class="q-layout-padding"
       >
-        <Breadcrumb v-if="this.showBreadcrumb" :legacy="this.breadcrumb"/>
+        <Breadcrumb v-if="showBreadcrumb" :legacy="this.breadcrumb"/>
         <router-view />
         <slot></slot>
       </q-page>
@@ -227,6 +227,12 @@ export default {
   components: {
     Breadcrumb
   },
+  props: {
+    showBreadcrumb: {
+      type: Boolean,
+      default: true,
+    },
+  },
   setup (props) {
     const { isSidebarOpen, isSettingsPanelOpen, isSearchPanelOpen, isNotificationsPanelOpen } = useState();
     const rightDrawerOpen = ref(false);
@@ -239,7 +245,6 @@ export default {
 
     return {
       config,
-      //currentUser,
       showBreadcrumb,
       isSettingsPanelOpen,
       isSearchPanelOpen,

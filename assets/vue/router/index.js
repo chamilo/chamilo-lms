@@ -32,7 +32,6 @@ const router = createRouter({
             path: '/',
             name: 'Index',
             component: Index,
-            props: { showBreadcrumb: false },
             meta: {
                 requiresAuth: false,
             }
@@ -41,7 +40,6 @@ const router = createRouter({
             path: '/home',
             name: 'Home',
             component: Home,
-            props: { showBreadcrumb: false },
             meta: {
                 requiresAuth: true
             }
@@ -51,7 +49,8 @@ const router = createRouter({
             name: 'Login',
             component: Login,
             meta: {
-                layout: 'Empty'
+                layout: 'Empty',
+                showBreadcrumb: false
             }
         },
         {

@@ -1,6 +1,6 @@
 export default {
   path: '/resources/document/:node/',
-  meta: { requiresAuth: true },
+  meta: { requiresAuth: true, showBreadcrumb: true },
   name: 'documents',
   component: () => import('../components/documents/Layout.vue'),
   redirect: { name: 'DocumentsList' },
@@ -47,7 +47,8 @@ export default {
       path: 'manager',
       component: () => import('../views/documents/DocumentForHtmlEditor.vue'),
       meta: {
-        layout: 'Empty'
+        layout: 'Empty',
+        showBreadcrumb: false
       }
     },
   ]

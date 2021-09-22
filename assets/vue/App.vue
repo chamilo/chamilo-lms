@@ -1,5 +1,5 @@
 <template>
-  <component :is="layout">
+  <component :is="layout" :show-breadcrumb="showBreadcrumb">
     <slot />
     <div
         id="legacy_content"
@@ -12,7 +12,7 @@
 import {mapGetters} from 'vuex';
 import NotificationMixin from './mixins/NotificationMixin';
 import axios from "axios";
-import { computed, watch, provide } from 'vue';
+import { computed, watch, provide, ref } from 'vue';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter, useRoute } from 'vue-router'
 
@@ -46,15 +46,14 @@ const apolloClient = new ApolloClient({
 
 export default {
   name: "App",
-  components: {
-  },
   setup () {
     const { currentRoute } = useRouter();
+    const route = useRoute();
+    const showBreadcrumb = ref(true);
+
     const layout = computed(
         () => `${currentRoute.value.meta.layout || defaultLayout}Layout`
     );
-    const route = useRoute();
-
     provide(DefaultApolloClient, apolloClient)
 
     watch(
@@ -62,15 +61,17 @@ export default {
         async meta => {
           try {
             const component = `${meta.layout}.vue`;
-            layout.value = component?.default || defaultLayout
+            layout.value = component?.default || defaultLayout;
+            showBreadcrumb.value = meta.showBreadcrumb;
           } catch (e) {
             layout.value = defaultLayout
           }
         },
         {immediate: true}
-    )
+    );
 
     return {
+      showBreadcrumb,
       layout
     }
   },
@@ -81,8 +82,6 @@ export default {
   }),
   watch: {
     $route() {
-      //console.log('App.vue watch $route');
-      //console.log(this.$route.name);
       this.legacyContent = '';
 
       // This code below will handle the legacy content to be loaded.

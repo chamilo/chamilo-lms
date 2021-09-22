@@ -9,7 +9,6 @@
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
-
         </div>
       </q-toolbar>
     </q-header>
@@ -23,7 +22,7 @@
               <div class="max-w-sm">
                 <div>
                   <h2 class="text-center text-3xl font-extrabold text-gray-900">
-                    Sign in
+                    {{ $t('Sign in') }}
                   </h2>
                 </div>
 
@@ -38,7 +37,6 @@
             </div>
           </div>
         </div>
-
       </q-page>
     </q-page-container>
   </q-layout>
@@ -50,9 +48,6 @@ export default {
   components: {
     Login
   },
-  name: "Index",
-  data: () => ({
-    showBreadcrumb : false
-  })
+  name: "Index"
 }
 </script>

@@ -6,6 +6,7 @@
   />
 
   <VueMultiselect
+      v-if="showShareWithUser"
       v-model="selectedUsers"
       :internal-search="false"
       :loading="isLoading"
@@ -15,7 +16,7 @@
       label="username"
       limit="3"
       limit-text="3"
-      placeholder="Share with User"
+      :placeholder="$t('Share with User')"
       track-by="id"
       @select="addUser"
       @search-change="asyncFind"
@@ -61,6 +62,11 @@ export default {
       type: String,
       required: true,
       default: 'user'
+    },
+    showShareWithUser: {
+      type: Boolean,
+      required: true,
+      default: true
     }
   },
   setup(props) {
@@ -68,6 +74,11 @@ export default {
     const selectedUsers = ref([]);
     const isLoading = ref(false);
     const store = useStore();
+
+    const { showShareWithUser } = toRefs(props);
+
+    console.log(showShareWithUser.value);
+
 
     function addUser(userResult) {
       if (isEmpty(props.item.resourceLinkListFromEntity)) {
@@ -192,7 +203,7 @@ export default {
       }
     }
 
-    return {v$: useVuelidate(), users, selectedUsers, asyncFind, addUser, isLoading};
+    return {v$: useVuelidate(), users, selectedUsers, asyncFind, addUser, isLoading, showShareWithUser};
   },
   computed: {
     ...mapGetters({

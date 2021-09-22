@@ -10,10 +10,9 @@
           :values="item"
           :errors="violations"
       >
-
-        <EditLinks :item="item" links-type="users" />
-
+        <EditLinks :item="item" links-type="users" :show-share-with-user="false" />
       </DocumentsForm>
+
       <Loading :visible="isLoading || deleteLoading" />
     </div>
 </template>

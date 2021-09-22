@@ -28,19 +28,16 @@ switch ($action) {
         break;
     case 'order':
         api_protect_admin_script();
-        $allowOrder = api_get_configuration_value('session_list_order');
-        if ($allowOrder) {
-            $order = isset($_GET['order']) ? $_GET['order'] : [];
-            $order = json_decode($order);
-            if (!empty($order)) {
-                $table = Database::get_main_table(TABLE_MAIN_SESSION);
-                foreach ($order as $data) {
-                    if (isset($data->order) && isset($data->id)) {
-                        $orderId = (int) $data->order;
-                        $sessionId = (int) $data->id;
-                        $sql = "UPDATE $table SET position = $orderId WHERE id = $sessionId ";
-                        Database::query($sql);
-                    }
+        $order = isset($_GET['order']) ? $_GET['order'] : [];
+        $order = json_decode($order);
+        if (!empty($order)) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION);
+            foreach ($order as $data) {
+                if (isset($data->order) && isset($data->id)) {
+                    $orderId = (int) $data->order;
+                    $sessionId = (int) $data->id;
+                    $sql = "UPDATE $table SET position = $orderId WHERE id = $sessionId ";
+                    Database::query($sql);
                 }
             }
         }

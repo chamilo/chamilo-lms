@@ -515,7 +515,7 @@ class SessionManager
         $where .= $conditions['where'];
         $sqlInjectWhere = $conditions['inject_where'];
         $injectExtraFields = $conditions['inject_extra_fields'];
-        $order = $conditions['order'];
+        $order = empty($conditions['order']) ? ' ORDER BY position ASC' : $conditions['order'];
         $limit = $conditions['limit'];
 
         $isMakingOrder = false;
@@ -637,12 +637,6 @@ class SessionManager
 
         if ($showCountUsers) {
             $query .= ' GROUP by s.id';
-        }
-
-        $allowOrder = api_get_configuration_value('session_list_order');
-
-        if ($allowOrder) {
-            $order = ' ORDER BY position ASC';
         }
 
         $query .= $order;

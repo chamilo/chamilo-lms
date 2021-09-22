@@ -2498,12 +2498,6 @@ class UserManager
             return [];
         }
 
-        $allowOrder = api_get_configuration_value('session_list_order');
-        $position = '';
-        if ($allowOrder) {
-            $position = ', s.position AS position ';
-        }
-
         // Get the list of sessions per user
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
@@ -2526,7 +2520,7 @@ class UserManager
                 s.coachAccessStartDate AS coach_access_start_date,
                 s.coachAccessEndDate AS coach_access_end_date,
                 CASE WHEN s.accessEndDate IS NULL THEN 1 ELSE 0 END HIDDEN _isFieldNull
-                $position
+                , s.position AS position
             ";
         }
 
@@ -2554,7 +2548,7 @@ class UserManager
         }
 
         // Order by position
-        if ($allowOrder) {
+        if (api_get_configuration_value('session_list_order')) {
             $order = 'ORDER BY s.position';
         }
 

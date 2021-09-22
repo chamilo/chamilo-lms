@@ -640,10 +640,7 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Add user extra fields in report: main/mySpace/exercise_category_report.php
 //$_configuration['exercise_category_report_user_extra_fields'] = ['fields' => ['skype', 'rssfeeds']];
 
-// Order sessions
-// Requires DB change: ALTER TABLE session ADD COLUMN position INT DEFAULT 0;
-// Requires edit Entity Session: src/Chamilo/CoreBundle/Entity/Session.php uncomment "position" variable.
-// Requires uncomment the position get and set
+// Order sessions by position in user session list (UserManager::get_sessions_by_category)
 //$_configuration['session_list_order'] = false;
 
 // Show skills as a hierarchical table

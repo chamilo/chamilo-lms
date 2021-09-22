@@ -461,7 +461,6 @@ $extraParams = [
 ];*/
 
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
-$allowOrder = api_get_configuration_value('session_list_order');
 $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
 ?>

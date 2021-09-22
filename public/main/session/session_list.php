@@ -161,7 +161,6 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 }';
 
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
-$allowOrder = api_get_configuration_value('session_list_order');
 $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
 ?>
@@ -280,8 +279,6 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             original_cols = grid.jqGrid('getGridParam', 'colModel');
 
-            <?php if ($allowOrder) {
-                ?>
             options = {
                 update: function (e, ui) {
                     var rowNum = jQuery("#sessions").getGridParam('rowNum');
@@ -302,8 +299,6 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             // Sortable rows
             grid.jqGrid('sortableRows', options);
-            <?php
-            } ?>
 
             grid.jqGrid('navGrid','#sessions_pager',
                 {edit:false,add:false,del:false},

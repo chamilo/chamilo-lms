@@ -82,9 +82,7 @@ if ($exportCSV) {
 }
 
 Display::display_header($nameTools);
-echo '<div class="actions">';
 echo MySpace::getTopMenu();
-echo '</div>';
 echo MySpace::getAdminActions();
 
 switch ($display) {

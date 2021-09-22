@@ -143,11 +143,8 @@ class MySpace
             Display::return_icon('quiz.png', get_lang('Exam tracking'), [], 32),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
-        $menu = '';
-        foreach ($menuItems as $item) {
-            $menu .= $item;
-        }
-        $menu .= '<br />';
+
+        $menu = Display::toolbarAction('myspace', $menuItems);
 
         return $menu;
     }

@@ -5398,6 +5398,8 @@ class Tracking
     public static function show_course_detail($userId, $courseId, $sessionId = 0, $showDiagram = false)
     {
         $html = '';
+        $courseId = (int) $courseId;
+
         if (empty($courseId)) {
             return '';
         }
@@ -5412,10 +5414,10 @@ class Tracking
         $html .= '<a name="course_session_data"></a>';
         $html .= Display::page_subheader($course->getTitle());
 
-        if ($showDiagram && !empty($session_id)) {
-            $visibility = api_get_session_visibility($session_id);
+        if ($showDiagram && !empty($sessionId)) {
+            $visibility = api_get_session_visibility($sessionId);
             if (SESSION_AVAILABLE === $visibility) {
-                $html .= Display::page_subheader2($course_info['title']);
+                $html .= Display::page_subheader2($course->getTitle());
             }
         }
 
@@ -5493,7 +5495,7 @@ class Tracking
 
                 $html .= '<tr class="row_even">';
                 $url = api_get_path(WEB_CODE_PATH).
-                    "exercise/overview.php?cid={$courseId}&sid=$session_id&exerciseId={$exercices['id']}";
+                    "exercise/overview.php?cid={$courseId}&sid=$sessionId&exerciseId={$exercices['id']}";
 
                 if (true == $visible_return['value']) {
                     $exercices['title'] = Display::url(
@@ -5512,8 +5514,8 @@ class Tracking
                     //For graphics
                     $best_exercise_stats = Event::get_best_exercise_results_by_user(
                         $exercices['id'],
-                        $course_info['real_id'],
-                        $session_id
+                        $courseId,
+                        $sessionId
                     );
 
                     $to_graph_exercise_result[$exercices['id']] = [
@@ -5528,8 +5530,8 @@ class Tracking
                     // Getting best results
                     $best_score_data = ExerciseLib::get_best_attempt_in_course(
                         $exercices['id'],
-                        $course_info['real_id'],
-                        $session_id
+                        $courseId,
+                        $sessionId
                     );
 
                     $best_score = '';
@@ -5544,8 +5546,8 @@ class Tracking
                         $exercise_stat = ExerciseLib::get_best_attempt_by_user(
                             api_get_user_id(),
                             $exercices['id'],
-                            $course_info['real_id'],
-                            $session_id
+                            $courseId,
+                            $sessionId
                         );
                         if (!empty($exercise_stat)) {
                             // Always getting the BEST attempt
@@ -5554,7 +5556,7 @@ class Tracking
                             $exe_id = $exercise_stat['exe_id'];
 
                             $latest_attempt_url .= api_get_path(WEB_CODE_PATH).
-                                'exercise/result.php?id='.$exe_id.'&cid='.$course_info['real_id'].'&show_headers=1&sid='.$session_id;
+                                'exercise/result.php?id='.$exe_id.'&cid='.$courseId.'&show_headers=1&sid='.$sessionId;
                             $percentage_score_result = Display::url(
                                 ExerciseLib::show_score($score, $weighting),
                                 $latest_attempt_url
@@ -5571,8 +5573,8 @@ class Tracking
                                 $my_score,
                                 $exe_id,
                                 $exercices['id'],
-                                $course_info['code'],
-                                $session_id,
+                                $courseCode,
+                                $sessionId,
                                 $user_list
                             );
 
@@ -5664,8 +5666,8 @@ class Tracking
 
         $list = new LearnpathList(
             api_get_user_id(),
-            $course_info,
-            $session_id,
+            ['real_id' => $courseId],
+            $sessionId,
             'lp.publicatedOn ASC',
             true,
             null,
@@ -5681,36 +5683,36 @@ class Tracking
                 }
 
                 $progress = self::get_avg_student_progress(
-                    $user_id,
+                    $userId,
                     $course,
                     [$lp_id],
-                    $session_id
+                    $session
                 );
                 $last_connection_in_lp = self::get_last_connection_time_in_lp(
-                    $user_id,
+                    $userId,
                     $course,
                     $lp_id,
-                    $session_id
+                    $sessionId
                 );
 
                 $time_spent_in_lp = self::get_time_spent_in_lp(
-                    $user_id,
+                    $userId,
                     $course,
                     [$lp_id],
-                    $session_id
+                    $sessionId
                 );
                 $percentage_score = self::get_avg_student_score(
-                    $user_id,
+                    $userId,
                     $course,
                     [$lp_id],
-                    $session_id
+                    $session
                 );
 
                 $bestScore = self::get_avg_student_score(
-                    $user_id,
+                    $userId,
                     $course,
                     [$lp_id],
-                    $session_id,
+                    $session,
                     false,
                     false,
                     true
@@ -5741,7 +5743,7 @@ class Tracking
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).
-                    "lp/lp_controller.php?cid={$course_info['real_id']}&sid=$session_id&lp_id=$lp_id&action=view";
+                    "lp/lp_controller.php?cid={$courseId}&sid=$sessionId&lp_id=$lp_id&action=view";
                 $html .= '<tr class="row_even">';
 
                 if (in_array('lp', $columnHeadersKeys)) {
@@ -5794,7 +5796,7 @@ class Tracking
         }
         $html .= '</tbody></table></div>';
 
-        $html .= self::displayUserSkills($user_id, $course_info['id'], $session_id);
+        $html .= self::displayUserSkills($userId, $courseId, $sessionId);
 
         return $html;
     }

@@ -3367,48 +3367,9 @@ class learnpath
             return true;
         }
 
-        $groups = GroupManager::getAllGroupPerUserSubscription($user->getId());
-        $em = Database::getManager();
+        //$groups = GroupManager::getAllGroupPerUserSubscription($user->getId());
 
-        /** @var ItemPropertyRepository $itemRepo */
-        $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
-
-        /** @var CourseRepository $courseRepo */
-        $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
-        $session = null;
-        if (!empty($sessionId)) {
-            $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-        }
-
-        $course = $courseRepo->find($courseId);
-
-        if (0 != $courseId) {
-            // Subscribed groups to a LP
-            $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
-                    TOOL_LEARNPATH_CATEGORY,
-                    $category->getId(),
-                    $course,
-                    $session
-                );
-        }
-
-        if (!empty($subscribedGroupsInLp)) {
-            $noGroupSubscribed = false;
-            if (!empty($groups)) {
-                $groups = array_column($groups, 'iid');
-                /** @var CItemProperty $item */
-                foreach ($subscribedGroupsInLp as $item) {
-                    if ($item->getGroup() &&
-                        in_array($item->getGroup()->getId(), $groups)
-                    ) {
-                        return true;
-                    }
-                }
-            }
-        }
-        $response = $noGroupSubscribed && $noUserSubscribed;
-
-        return $response;
+        return $noGroupSubscribed && $noUserSubscribed;
     }
 
     /**

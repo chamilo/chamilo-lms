@@ -489,7 +489,7 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
     }*/
 
     $exerciseStatsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-    $courseId = api_get_course_int_id($courseInfo['code']);
+    $courseId = $courseInfo['real_id'];
 
     if (empty($sessionId)) {
         $students = CourseManager::get_student_list_from_course_code(

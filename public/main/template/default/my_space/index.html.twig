@@ -17,7 +17,7 @@
                 <div class="content">
                     <div class="card-title">
                         <a href="{{ url('legacy_main', {'name' : 'mySpace/student.php'}) }}">
-                            {{ 'FollowedStudents' | trans }}
+                            {{ 'Followed students' | trans }}
                         </a>
                     </div>
                     <div class="row">
@@ -40,7 +40,7 @@
                 <div class="content">
                     <div class="card-title">
                         <a href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}?status={{ studentboss }}">
-                            {{ 'FollowedStudentBosses' | trans }}
+                            {{ 'Followed student bosses' | trans }}
                         </a>
                     </div>
                     <div class="row">
@@ -51,7 +51,6 @@
                         </div>
                         <div class="col-xs-7">
                             <div class="numbers">
-
                                 <h2>{{ studentbosses }}</h2>
                             </div>
                         </div>
@@ -64,7 +63,7 @@
                 <div class="content">
                     <div class="card-title">
                         <a href="{{ url('legacy_main', {'name' : 'mySpace/teachers.php'}) }}">
-                            {{ 'FollowedTeachers' | trans }}
+                            {{ 'Followed teachers' | trans }}
                         </a>
                     </div>
                     <div class="row">
@@ -88,7 +87,7 @@
                 <div class="content">
                     <div class="card-title">
                         <a href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}?status={{ drh }}">
-                            {{ 'FollowedHumanResources' | trans }}
+                            {{ 'Followed HR directors' | trans }}
                         </a>
                     </div>
                     <div class="row">
@@ -119,7 +118,7 @@
                         </div>
                         <div class="easypiechart-link">
                             <a class="btn btn-default" href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}">
-                                {{ 'FollowedUsers' | trans }}
+                                {{ 'Followed users' | trans }}
                             </a>
                         </div>
                     </div>
@@ -142,7 +141,7 @@
                             <a class="btn btn-default"
                                href="{{ url('legacy_main', {'name' : 'mySpace/course.php'}) }}"
                             >
-                                {{ 'AssignedCourses' | trans }}
+                                {{ 'Assigned courses' | trans }}
                             </a>
                         </div>
                     </div>
@@ -163,7 +162,7 @@
                             <a class="btn btn-default"
                                href="{{ url('legacy_main', {'name' : 'mySpace/course.php?follow'}) }}"
                             >
-                                {{ 'FollowedCourses' | trans }}
+                                {{ 'Followed courses' | trans }}
                             </a>
                         </div>
                     </div>
@@ -184,7 +183,7 @@
                             <a class="btn btn-default"
                                href="{{ url('legacy_main', {'name' : 'mySpace/session.php'}) }}"
                             >
-                                {{ 'FollowedSessions' | trans }}
+                                {{ 'Followed sessions' | trans }}
                             </a>
                         </div>
                     </div>
@@ -217,7 +216,7 @@
                         </div>
                     </div>
                 </div>
-                <p>{{ 'AverageCoursePerStudent' | trans }}</p>
+                <p>{{ 'Average number of courses to which my learners are subscribed' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -229,7 +228,7 @@
                         </div>
                     </div>
                 </div>
-                <p>{{ 'InactivesStudents' | trans }}</p>
+                <p>{{ 'Learners not connected for a week or more' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -241,7 +240,7 @@
                         </div>
                     </div>
                 </div>
-                <p>{{ 'AverageTimeSpentOnThePlatform' | trans }}</p>
+                <p>{{ 'Time spent on portal' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -253,7 +252,7 @@
                         </div>
                     </div>
                 </div>
-                <p>{{ 'AverageProgressInLearnpath' | trans }}</p>
+                <p>{{ 'Progress in courses' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -266,7 +265,7 @@
 
                     </div>
                 </div>
-                <p>{{ 'AvgCourseScore' | trans }}</p>
+                <p>{{ 'Average score in learning paths' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -279,7 +278,7 @@
 
                     </div>
                 </div>
-                <p> {{ 'AveragePostsInForum' | trans }}</p>
+                <p> {{ 'Posts in forum' | trans }}</p>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
@@ -289,10 +288,9 @@
                         <div class="item-report-number">
                             {{ report.AverageAssignments }}
                         </div>
-
                     </div>
                 </div>
-                <p> {{ 'AverageAssignments' | trans }}</p>
+                <p> {{ 'Average assignments per learner' | trans }}</p>
             </div>
         </div>
     </div>

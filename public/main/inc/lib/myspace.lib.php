@@ -55,23 +55,23 @@ class MySpace
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/survey_report.php',
-                'content' => get_lang('SurveysReport'),
+                'content' => get_lang('Surveys report'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/tc_report.php',
-                'content' => get_lang('TCReport'),
+                'content' => get_lang("Student's superior follow up"),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/ti_report.php',
-                'content' => get_lang('TIReport'),
+                'content' => get_lang('General Coaches planning'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global.php',
-                'content' => get_lang('QuestionStats'),
+                'content' => get_lang('Question stats'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global_detail.php',
-                'content' => get_lang('QuestionStatsDetailedReport'),
+                'content' => get_lang('Detailed questions stats'),
             ],
         ];
 
@@ -81,7 +81,7 @@ class MySpace
             $actions[] =
                 [
                     'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=company',
-                    'content' => get_lang('UserByEntityReport'),
+                    'content' => get_lang('User by organization'),
                 ];
         }
         $field = new ExtraField('lp');
@@ -90,7 +90,7 @@ class MySpace
             $actions[] =
                 [
                     'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPath',
-                    'content' => get_lang('LpByAuthor'),
+                    'content' => get_lang('Learning path by author'),
                 ];
         }
         $field = new ExtraField('lp_item');
@@ -99,11 +99,11 @@ class MySpace
             $actions[] =
                 [
                     'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPathByItem',
-                    'content' => get_lang('LearningPathItemByAuthor'),
+                    'content' => get_lang('LP item by author'),
                 ];
         }
 
-        return Display::actions($actions, null);
+        return Display::actions($actions);
     }
 
     /**
@@ -318,7 +318,7 @@ class MySpace
             $courseId = $course->getId();
             $courseCode = $course->getCode();
 
-            $avg_score = Tracking::get_avg_student_score($userId, $courseCode);
+            $avg_score = Tracking::get_avg_student_score($userId, $course);
             if (is_numeric($avg_score)) {
                 $avg_score = round($avg_score, 2);
             } else {
@@ -1761,7 +1761,7 @@ class MySpace
                 $nb_progress_lp += $progress_tmp[1];
                 $score_tmp = Tracking::get_avg_student_score(
                     $userId,
-                    $courseCode,
+                    $course,
                     [],
                     null,
                     true
@@ -1954,7 +1954,6 @@ class MySpace
     public static function session_tracking_filter($session_id, $url_params, $row)
     {
         $sessionId = $row[0];
-        $url = api_get_url_entity();
         $session = api_get_session_entity($sessionId);
         // the table header
         $return = '<table
@@ -2003,7 +2002,7 @@ class MySpace
                 );
                 $progress += $progress_tmp[0];
                 $nb_progress_lp += $progress_tmp[1];
-                $score_tmp = Tracking::get_avg_student_score($row_user->user_id, $courseCode, [], $session_id, true);
+                $score_tmp = Tracking::get_avg_student_score($row_user->user_id, $course, [], $session_id, true);
                 if (is_array($score_tmp)) {
                     $score += $score_tmp[0];
                     $nb_score_lp += $score_tmp[1];
@@ -2135,7 +2134,7 @@ class MySpace
         $csv_content[] = $csv_row;
 
         // the other lines (the data)
-        foreach ($session_data as $key => $session) {
+        foreach ($session_data as $session) {
             $session_id = $session[0];
             $session_title = $session[1];
 
@@ -2147,7 +2146,8 @@ class MySpace
             $result = Database::query($sql);
             while ($row = Database::fetch_object($result)) {
                 $courseId = $row->c_id;
-                $courseInfo = api_get_course_info_by_id($courseId);
+                $courseInfo = ['real_id' => $courseId];
+                $course = api_get_course_entity($courseId);
                 $csv_row = [];
                 $csv_row[] = $session_title;
                 $csv_row[] = $row->title;
@@ -2183,7 +2183,7 @@ class MySpace
                     $nb_progress_lp += $progress_tmp[1];
                     $score_tmp = Tracking::get_avg_student_score(
                         $row_user->user_id,
-                        $row->code,
+                        $course,
                         [],
                         $session_id,
                         true

@@ -109,24 +109,24 @@ switch ($display) {
         break;
     case 'accessoverview':
         $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
-        if (0 == $courseId && $_POST['course_id']) {
+        if (0 == $courseId && isset($_POST['course_id']) && $_POST['course_id']) {
             $courseId = (int) $_POST['course_id'];
             $_GET['course_id'] = $courseId;
         }
         $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
-        if (0 == $sessionId && $_POST['session_id']) {
+        if (0 == $sessionId && isset($_POST['session_id']) && $_POST['session_id']) {
             $sessionId = (int) $_POST['session_id'];
             $_GET['session_id'] = $sessionId;
         }
         $studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
-        if (0 == $studentId && $_POST['student_id']) {
+        if (0 == $studentId && isset($_POST['student_id']) &&  $_POST['student_id']) {
             $studentId = (int) $_POST['student_id'];
             $_GET['student_id'] = $studentId;
         }
-        $perPage = isset($_GET['tracking_access_overview_per_page']) ? $_GET['tracking_access_overview_per_page'] : 20;
+        $perPage = $_GET['tracking_access_overview_per_page'] ?? 20;
 
-        $dates = isset($_GET['date']) ? $_GET['date'] : null;
-        if (null == $dates && $_POST['date']) {
+        $dates = $_GET['date'] ?? null;
+        if (null == $dates && isset($_POST['date']) && $_POST['date']) {
             $dates = $_POST['date'];
             $_GET['date'] = $dates;
         }

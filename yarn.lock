@@ -148,9 +148,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:^7.15.4":
-  version: 7.15.4
-  resolution: "@babel/eslint-parser@npm:7.15.4"
+"@babel/eslint-parser@npm:^7.15.7":
+  version: 7.15.7
+  resolution: "@babel/eslint-parser@npm:7.15.7"
   dependencies:
     eslint-scope: ^5.1.1
     eslint-visitor-keys: ^2.1.0
@@ -158,7 +158,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ">=7.5.0"
-  checksum: ef65f1d1b71fb1a99f409fc50ccbb98868e43bacd4cfc9468eded4b872cfebb4a174c01798ea8ad6a953a5e466fb0cd4da3d0314f9681b0729f7a126794b8a5c
+  checksum: e2f18e6c70efec1a7370b3d2b23ba413a6301c10e89fd37231ddde2df744d90b7e1548dd1073e5078c9165a307654228d856d664447efad9ab55fd8dcb6879a7
   languageName: node
   linkType: hard
 
@@ -2754,9 +2754,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@videojs/http-streaming@npm:2.10.2":
-  version: 2.10.2
-  resolution: "@videojs/http-streaming@npm:2.10.2"
+"@videojs/http-streaming@npm:2.10.3":
+  version: 2.10.3
+  resolution: "@videojs/http-streaming@npm:2.10.3"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@videojs/vhs-utils": 3.0.3
@@ -2768,7 +2768,7 @@ __metadata:
     video.js: ^6 || ^7
   peerDependencies:
     video.js: ^6 || ^7
-  checksum: 869f5fa96aba741040a7de651506ac8e6946b4be836187140b9913d6fb79fe7a15822b4ae05e8787f6d997556170f1f6e70d1cd2bc170905ea7ceee51c9a9a86
+  checksum: c8cf09110e85779401c63105a0aa6049ed54c1ce8db1be0fa6cea6213e44dade37a49d6fed8bd40a536a4200b115f42e3ed4dd4f5312e656948dc5a80487915e
   languageName: node
   linkType: hard
 
@@ -6485,7 +6485,7 @@ __metadata:
   resolution: "chamilo@workspace:."
   dependencies:
     "@apollo/client": 3.4.7
-    "@babel/eslint-parser": ^7.15.4
+    "@babel/eslint-parser": ^7.15.7
     "@babel/plugin-transform-runtime": 7.15.0
     "@fancyapps/fancybox": ^3.5.7
     "@fullcalendar/core": ^5.9.0
@@ -6545,7 +6545,7 @@ __metadata:
     easy-pie-chart: ^2.1.7
     easytimer.js: ^1.3.2
     eslint: ^7.32.0
-    eslint-plugin-vue: 7.17.0
+    eslint-plugin-vue: 7.18.0
     file-loader: ^6.2.0
     filemanager-webpack-plugin: ^5.0.0
     flag-icon-css: ^3.5.0
@@ -6565,11 +6565,11 @@ __metadata:
     js-cookie: ^2.2.1
     jspdf: ^2.4.0
     jsplumb: ^2.15.6
-    linkifyjs: 3.0.0-beta.3
+    linkifyjs: 3.0.1
     litepicker: ^2.0.11
     luxon: ^1.28.0
     mathjax: ^2.7.9
-    mediaelement: ^4.2.17
+    mediaelement: ^5.0.0
     mediaelement-plugins: "https://github.com/chamilo/mediaelement-plugins"
     mini-css-extract-plugin: ^1.6.2
     multiselect-two-sides: ^2.5.7
@@ -6591,7 +6591,7 @@ __metadata:
     qtip2: 3.0.3
     quasar: 2.1.0
     readmore-js: ^2.2.1
-    sass: ^1.42.0
+    sass: ^1.42.1
     sass-loader: ^12.1.0
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
@@ -6606,7 +6606,7 @@ __metadata:
     tinymce: ^5.9.2
     ts-loader: ^9.2.6
     typescript: ^4.3.5
-    video.js: ^7.15.4
+    video.js: ^7.15.5
     vue: 3.2.11
     vue-cli-plugin-quasar: 4.0.2
     vue-eslint-parser: 7.11.0
@@ -9047,9 +9047,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:7.17.0":
-  version: 7.17.0
-  resolution: "eslint-plugin-vue@npm:7.17.0"
+"eslint-plugin-vue@npm:7.18.0":
+  version: 7.18.0
+  resolution: "eslint-plugin-vue@npm:7.18.0"
   dependencies:
     eslint-utils: ^2.1.0
     natural-compare: ^1.4.0
@@ -9057,7 +9057,7 @@ __metadata:
     vue-eslint-parser: ^7.10.0
   peerDependencies:
     eslint: ^6.2.0 || ^7.0.0 || ^8.0.0-0
-  checksum: 410eeac2290bc4a459f9c064c6dfe34b16a5524c9b89d0014c2271118bf724786065ccd3ae4e099e679411c44133d133854fb04c061007b3353ee16cad3d10b0
+  checksum: bc902b7b66b0d7735b9a03eff8f0b4191da94df426072100071f1e00814ac7f36e32e6337b935e5234a5a9fdbac276fe598423a76d1e53e351977e0276f7324b
   languageName: node
   linkType: hard
 
@@ -12903,14 +12903,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"linkifyjs@npm:3.0.0-beta.3":
-  version: 3.0.0-beta.3
-  resolution: "linkifyjs@npm:3.0.0-beta.3"
-  peerDependencies:
-    jquery: ">= 1.11.0"
-    react: ">= 0.14.0"
-    react-dom: ">= 0.14.0"
-  checksum: 00ced7fab518538b04e70c6b6dc1871dfd2a951e35657d256b04e3b12419b38b77dce48f76f08a71806158d80b9fa21e0ea1b0f1e1943b2de2f5c7a8b356407c
+"linkifyjs@npm:3.0.1":
+  version: 3.0.1
+  resolution: "linkifyjs@npm:3.0.1"
+  checksum: 88c271824940313b0a609e729b1dbb78eb4d075c1f609f367f855484ccba46cbb0d6756173e8849019d4936e678d7e277bff9ae2c1520fb42642ba81dae3962e
   languageName: node
   linkType: hard
 
@@ -13427,12 +13423,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mediaelement@npm:^4.2.17":
-  version: 4.2.17
-  resolution: "mediaelement@npm:4.2.17"
+"mediaelement@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "mediaelement@npm:5.0.0"
   dependencies:
     global: ^4.3.1
-  checksum: ec35bfd167965af9f5ce0c71c1d326055a314e632f218f57f97e979208d9445144874219083a3ced7e47609b9379de9ea4b631f453df1681f29259c82c5b956f
+    svg4everybody: ^2.1.9
+  checksum: c4f59ecbc3ea37210c7c304bb9c3fbdfe3ba72782cd3d547cc5dfe45bb32e7a0ebf8acf5cc8665c0a2b5e79673c90adf82ca388bbfe7dfa3c851861d57a877b9
   languageName: node
   linkType: hard
 
@@ -17666,14 +17663,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.42.0":
-  version: 1.42.0
-  resolution: "sass@npm:1.42.0"
+"sass@npm:^1.42.1":
+  version: 1.42.1
+  resolution: "sass@npm:1.42.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: 7b52bb44eef89102f5f1be5ac9a46a989d2bed7bcd527bc631357470b617efcf4a01994a55bb7cee246f0f1408a71e7da0e847575ca13bd605574037d8f82bcd
+  checksum: 6e05f4e0c9c62ce63a5fb032b0da713b0a529d2158a37cbe7f0dacf37f70cfec10b4d0e5a2240740b5bb3ca87096a8896cf5977b2bee796db7b156d84e4b93fb
   languageName: node
   linkType: hard
 
@@ -18845,6 +18842,13 @@ fsevents@~2.3.2:
   version: 1.0.0
   resolution: "svg-tags@npm:1.0.0"
   checksum: 8f19e7b2b53e78b746675ff0782b7fd2c3a00e589b8017adaadc1b91b85dfa4a874c8c67bed4e88e61b6a42c7abf392d158cc3184320b9b5cbdbf26711b7b643
+  languageName: node
+  linkType: hard
+
+"svg4everybody@npm:^2.1.9":
+  version: 2.1.9
+  resolution: "svg4everybody@npm:2.1.9"
+  checksum: 9bc51c0beae6ba06d8f08897693f9e102e24f8d740339a77ca59b072cb5c0f6339fb4d3548b22789c1677fd861f36a412faa63f949f5759ce2a733089e896556
   languageName: node
   linkType: hard
 
@@ -20083,12 +20087,12 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"video.js@npm:7.15.4, video.js@npm:^7.15.4":
-  version: 7.15.4
-  resolution: "video.js@npm:7.15.4"
+"video.js@npm:7.15.5, video.js@npm:^7.15.5":
+  version: 7.15.5
+  resolution: "video.js@npm:7.15.5"
   dependencies:
     "@babel/runtime": ^7.12.5
-    "@videojs/http-streaming": 2.10.2
+    "@videojs/http-streaming": 2.10.3
     "@videojs/vhs-utils": ^3.0.3
     "@videojs/xhr": 2.6.0
     aes-decrypter: 3.1.2
@@ -20100,7 +20104,7 @@ typescript@~4.1.5:
     safe-json-parse: 4.0.0
     videojs-font: 3.2.0
     videojs-vtt.js: ^0.15.3
-  checksum: 34ae424da6b04375284353f338a6dcef118af246db7c25c6db1e722fa03c2a1d8282723b485c620baa5f1d237446caa346e1b945a374560fdc05f3ab7bb97b59
+  checksum: 5f3ca979b21cd40c8f658c7c90d22a653e376c19639b59a10b37665c5d186477e3167f91064be26dd8ebfeadf12b8516f668f4d61553a7d517bdf71d29e64268
   languageName: node
   linkType: hard
 

@@ -332,7 +332,6 @@ if (api_is_platform_admin()) {
     $searchForm->addButtonSearch(get_lang('Search'));
     $blocks['platform']['search_form'] = $searchForm->returnForm();
 
-    //$url = Container::getRouter()->generate('chamilo_platform_settings', ['namespace' => 'platform']);
     $url = api_get_path(WEB_PUBLIC_PATH).'admin/settings/platform';
     $items = [];
     $items[] = ['url' => $url, 'label' => get_lang('Configuration settings')];

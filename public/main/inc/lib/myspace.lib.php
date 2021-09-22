@@ -2414,7 +2414,7 @@ class MySpace
         $csv_content[] = $csv_row;
 
         // the other lines (the data)
-        foreach ($user_data as  $user) {
+        foreach ($user_data as $user) {
             // getting all the courses of the user
             $sql = "SELECT * FROM $tbl_course_user
                     WHERE user_id = '".intval($user[4])."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";

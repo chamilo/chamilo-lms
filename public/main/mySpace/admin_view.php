@@ -119,7 +119,7 @@ switch ($display) {
             $_GET['session_id'] = $sessionId;
         }
         $studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
-        if (0 == $studentId && isset($_POST['student_id']) &&  $_POST['student_id']) {
+        if (0 == $studentId && isset($_POST['student_id']) && $_POST['student_id']) {
             $studentId = (int) $_POST['student_id'];
             $_GET['student_id'] = $studentId;
         }

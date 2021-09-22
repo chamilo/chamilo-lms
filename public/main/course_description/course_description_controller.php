@@ -175,7 +175,7 @@ class CourseDescriptionController
                     $course_description->set_title($title);
                     $course_description->set_progress($progress);
                     $course_description->set_content($content);
-                    $course_description->insert(api_get_course_int_id());
+                    $course_description->insert();
                 }
 
                 Display::addFlash(
@@ -332,7 +332,7 @@ class CourseDescriptionController
                     $course_description->set_description_type($description_type);
                     $course_description->set_title($title);
                     $course_description->set_content($content);
-                    $course_description->insert(api_get_course_int_id());
+                    $course_description->insert();
                 }
 
                 Display::addFlash(
@@ -350,7 +350,6 @@ class CourseDescriptionController
                 'POST',
                 'index.php?action=add&'.api_get_cidreq()
             );
-            //$form->addElement('header', $header);
             $form->addElement('hidden', 'description_type', ADD_BLOCK);
             if (api_get_configuration_value('save_titles_as_html')) {
                 $form->addHtmlEditor(
@@ -378,7 +377,6 @@ class CourseDescriptionController
             $form->addButtonCreate(get_lang('Save'));
 
             $tpl = new Template(get_lang('Description'));
-            //$tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);
             $tpl->assign('actions', $actions);
             $tpl->assign('session_id', $session_id);
             $tpl->assign('content', $form->returnForm());

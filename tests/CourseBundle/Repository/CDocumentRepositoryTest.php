@@ -466,6 +466,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $document = (new CDocument())
             ->setFiletype('file')
             ->setTitle('title 123')
+            ->setTemplate(false)
+            ->setReadonly(false)
             ->setParent($course)
             ->setCreator($admin)
             ->addCourseLink($course)
@@ -476,6 +478,10 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertInstanceOf(ResourceNode::class, $document->getResourceNode());
         $this->assertNull($documentRepo->getParent($document));
         $this->assertFalse($document->hasUploadFile());
+        $this->assertFalse($document->isTemplate());
+        $this->assertFalse($document->getReadonly());
+
+        $this->assertSame($document->getIid(), $document->getResourceIdentifier());
         $this->assertSame(1, $documentRepo->count([]));
 
         $documentRepo->addFileFromString($document, 'test', 'text/html', 'my file', true);

@@ -100,6 +100,9 @@ class CQuizRepositoryTest extends AbstractApiTest
         $found = $repo->getResourceByCreatorFromTitle('exercise', $teacher, $course->getResourceNode());
         $this->assertNotNull($found);
 
+        $items = $repo->getResourcesByCourseOnly($course, $course->getResourceNode())->getQuery()->getResult();
+        $this->assertTrue(\count($items) > 0);
+
         $qb = $repo->getResourcesByCreator($teacher, $course->getResourceNode());
         $this->assertSame(1, \count($qb->getQuery()->getResult()));
 

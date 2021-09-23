@@ -302,9 +302,10 @@ if ($showReporting) {
             ICON_SIZE_TINY
         );
 
-        $html .= '<ul class="session-list">';
         $urlWebCode = api_get_path(WEB_CODE_PATH);
         $isAdmin = api_is_platform_admin();
+        $table = new HTML_Table(['class' => 'table']);
+        $row = 0;
         foreach ($sessionList as $session) {
             if (!$isAdmin) {
                 // Check session visibility
@@ -319,10 +320,13 @@ if ($showReporting) {
                     continue;
                 }
             }
-            $url = $urlWebCode.'mySpace/course.php?sid='.$session['id'].'&cid='.$courseId;
-            $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
+            $url = $urlWebCode.'mySpace/course.php?session_id='.$session['id'].'&cid='.$courseId;
+            $table->setCellContents($row++, 0, $icon.' '.Display::url($session['name'], $url));
         }
-        $html .= '</ul>';
+
+        if ($row > 1) {
+            $html .= $table->toHtml();
+        }
     }
 }
 

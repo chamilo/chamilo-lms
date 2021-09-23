@@ -318,7 +318,7 @@ if (count($sessions) > 0) {
                 Display::return_icon('statistics.png', get_lang('Statistics')),
                 api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session='.$sessionId.'&course='.$courseCode
             );
-            $tools .= '&nbsp;<a href="course_information.php?code='.$courseCode.'&id_session='.$sessionId.'">'.
+            $tools .= '&nbsp;<a href="course_information.php?id='.$courseId.'&id_session='.$sessionId.'">'.
                 Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
                 '<a href="'.$courseUrl.'">'.
                 Display::return_icon('course_home.png', get_lang('Course home')).'</a>';
@@ -427,7 +427,7 @@ if (count($courseRelUserList) > 0) {
             Display::return_icon('statistics.png', get_lang('Statistics')),
             api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&id_session=0&course='.$courseCode
         );
-        $tools .= '&nbsp;<a href="course_information.php?code='.$courseCode.'">'.
+        $tools .= '&nbsp;<a href="course_information.php?id='.$courseId.'">'.
             Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
             '<a href="'.$courseUrl.'">'.
             Display::return_icon('course_home.png', get_lang('Course home')).'</a>'.

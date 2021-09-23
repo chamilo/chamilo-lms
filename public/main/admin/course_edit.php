@@ -446,7 +446,7 @@ $actions .= Display::url(
 );
 $actions .= Display::url(
     Display::return_icon('info2.png', get_lang('Information')),
-    api_get_path(WEB_CODE_PATH)."admin/course_information.php?code=$courseCode"
+    api_get_path(WEB_CODE_PATH)."admin/course_information.php?id=$courseId"
 );
 
 echo Display::toolbarAction('toolbar', [$actions]);

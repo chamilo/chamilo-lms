@@ -172,7 +172,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('info2.png', get_lang('Information')),
-            "course_information.php?code=$courseCode"
+            "course_information.php?id=$courseId"
         );
         $actions[] = Display::url(
             Display::return_icon('course_home.png', get_lang('Course home')),

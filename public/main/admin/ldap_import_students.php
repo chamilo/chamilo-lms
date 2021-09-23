@@ -136,11 +136,11 @@ if (empty($annee) && empty($course)) {
         }
     }
     if (!empty($_POST['course'])) {
+        $courseInfo = api_get_course_info($_POST['course']);
         foreach ($UserList as $user_id) {
-            $courseInfo = api_get_course_info($_POST['course']);
             CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
         }
-        header('Location: course_information.php?code='.Security::remove_XSS($_POST['course']));
+        header('Location: course_information.php?id='.$courseInfo['real_id']);
         exit;
     } else {
         $message = get_lang('No user added');

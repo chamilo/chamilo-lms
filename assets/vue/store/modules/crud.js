@@ -203,12 +203,8 @@ export default function makeCrudModule({
       loadWithQuery: ({ commit }, params= {}) => {
         if (!service) throw new Error('No service specified!');
 
-        console.log('crud loadWithQuery');
         const id = params['id'];
         delete params['id'];
-
-        /*console.log(id, 'id');
-        console.log(commit, 'commit');*/
 
         if (isEmpty(id)) {
           throw new Error('Incorrect id');

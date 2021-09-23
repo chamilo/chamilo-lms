@@ -7,12 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
+use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Traits\ShowCourseResourcesInSessionTrait;
@@ -32,12 +34,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *             "security" = "is_granted('EDIT', object.resourceNode)",
  *             "validation_groups"={"media_object_create", "document:write"},
  *         },
+ *         "put_toggle_visibility" = {
+ *             "method" = "PUT",
+ *             "path"="/documents/{iid}/toggle_visibility",
+ *             "controller"=UpdateVisibilityDocument::class,
+ *         },
  *         "get" = {
  *             "security" = "is_granted('VIEW', object.resourceNode)",
  *         },
  *         "delete" = {
  *             "security" = "is_granted('DELETE', object.resourceNode)",
  *         },
+ *
  *     },
  *     collectionOperations={
  *         "post"={
@@ -135,20 +143,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  * )
  *
- * //resourceNode.resourceLinks.course can be used but instead cid/sid/gid is used
- *
- * @ApiFilter(
- *     OrderFilter::class,
- *     properties={
- *         "id",
- *         "filetype",
- *         "resourceNode.title",
- *         "resourceNode.createdAt",
- *         "resourceNode.resourceFile.size",
- *         "resourceNode.updatedAt"
- *     }
- * )
- *
  * @ORM\Table(
  *     name="c_document",
  *     indexes={
@@ -163,36 +157,46 @@ use Symfony\Component\Validator\Constraints as Assert;
     'title' => 'partial',
     'resourceNode.parent' => 'exact',
 ])]
+//resourceNode.resourceLinks.course can be used but instead cid/sid/gid is used
+#[ApiFilter(OrderFilter::class, properties: [
+    'iid',
+    'filetype',
+    'resourceNode.title',
+    'resourceNode.createdAt',
+    'resourceNode.resourceFile.size',
+    'resourceNode.updatedAt',
+])]
 class CDocument extends AbstractResource implements ResourceInterface
 {
     use ShowCourseResourcesInSessionTrait;
 
     /**
-     * @Groups({"document:read"})
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
+    #[ApiProperty(identifier: true)]
+    #[Groups(['document:read'])]
     protected int $iid;
 
     /**
-     * @Groups({"document:read", "document:write", "document:browse"})
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Groups(['document:read', 'document:write', 'document:browse'])]
     #[Assert\NotBlank]
     protected string $title;
 
     /**
-     * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
+    #[Groups(['document:read', 'document:write'])]
     protected ?string $comment;
 
     /**
-     * @Groups({"document:read", "document:write"})
      * @Assert\Choice({"folder", "file"}, message="Choose a valid filetype.")
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
+    #[Groups(['document:read', 'document:write'])]
     protected string $filetype;
 
     /**

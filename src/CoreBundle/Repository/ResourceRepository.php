@@ -551,19 +551,34 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 
+    public function toggleVisibilityPublishedDraft(AbstractResource $resource): void
+    {
+        $firstLink = $resource->getFirstResourceLink();
+
+        if (ResourceLink::VISIBILITY_PUBLISHED === $firstLink->getVisibility()) {
+            $this->setVisibilityDraft($resource);
+
+            return;
+        }
+
+        if (ResourceLink::VISIBILITY_DRAFT === $firstLink->getVisibility()) {
+            $this->setVisibilityPublished($resource);
+        }
+    }
+
     public function setVisibilityPublished(AbstractResource $resource): void
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
     }
 
-    public function setVisibilityDeleted(AbstractResource $resource): void
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
-    }
-
     public function setVisibilityDraft(AbstractResource $resource): void
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);
+    }
+
+    public function setVisibilityDeleted(AbstractResource $resource): void
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 
     public function setVisibilityPending(AbstractResource $resource): void
@@ -805,9 +820,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 $link->setVisibility($visibility);
                 if (ResourceLink::VISIBILITY_DRAFT === $visibility) {
                     $editorMask = ResourceNodeVoter::getEditorMask();
-                    //$rights = [];
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
+                    $resourceRight = (new ResourceRight())
                         ->setMask($editorMask)
                         ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
                         ->setResourceLink($link)

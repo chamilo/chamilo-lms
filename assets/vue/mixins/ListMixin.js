@@ -5,6 +5,8 @@ import toInteger from 'lodash/toInteger';
 
 import { formatDateTime } from '../utils/dates';
 import NotificationMixin from './NotificationMixin';
+import {ENTRYPOINT} from "../config/entrypoint";
+import axios from "axios";
 
 export default {
   mixins: [NotificationMixin],
@@ -31,7 +33,6 @@ export default {
   },
   watch: {
     $route() {
-      console.log('watch listmixin');
       // react to route changes...
       this.resetList = true;
       let nodeId = this.$route.params['node'];
@@ -89,7 +90,6 @@ export default {
         params[`resourceNode.parent`] = this.$route.params.node;
       }
 
-      console.log(params);
       this.resetList = true;
       this.getPage(params).then(() => {
         this.pagination.sortBy = sortBy;
@@ -203,20 +203,16 @@ export default {
       this.filters['loadNode'] = 0;
       delete this.filters['resourceNode.parent'];
       this.resetList = true;
-
       this.$router.push({ name: `${this.$options.servicePrefix}Shared` , query: folderParams});
     },
 
     showHandler(item) {
       console.log('listmixin showHandler');
       let folderParams = this.$route.query;
-      console.log(folderParams, 'folderParams');
-      console.log(this.$route.params, 'params');
       console.log(item);
       if (item) {
         folderParams['id'] = item['@id'];
       }
-      console.log(folderParams);
 
       this.$router.push({
         name: `${this.$options.servicePrefix}Show`,
@@ -238,8 +234,19 @@ export default {
         query: folderParams,
       });
     },
+    changeVisibilityHandler(item, slotProps) {
+      let folderParams = this.$route.query;
+      folderParams['id'] = item['@id'];
+      axios
+          .put(item['@id'] + '/toggle_visibility', {
+          })
+          .then(response => {
+            let data = response.data;
+            item['resourceLinkListFromEntity'] = data['resourceLinkListFromEntity'];
+          })
+      ;
+    },
     editHandler(item) {
-      console.log('editHandler');
       let folderParams = this.$route.query;
       folderParams['id'] = item['@id'];
 
@@ -255,7 +262,8 @@ export default {
         folderParams['getFile'] = true;
         if (item.resourceNode.resourceFile &&
             item.resourceNode.resourceFile.mimeType &&
-            'text/html' === item.resourceNode.resourceFile.mimeType) {
+            'text/html' === item.resourceNode.resourceFile.mimeType
+        ) {
           //folderParams['getFile'] = true;
         }
 
@@ -267,8 +275,6 @@ export default {
       }
     },
     deleteHandler(item) {
-      console.log('deleteHandler');
-      console.log(item);
       this.pagination.page = 1;
       this.deleteItem(item).then(() =>
           this.onRequest({pagination: this.pagination})

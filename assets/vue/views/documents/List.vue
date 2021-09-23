@@ -187,8 +187,15 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
+          <Button icon="fa fa-info-circle" class="btn btn-primary" @click="showHandler(slotProps.data)" />
+
+          <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-primary" @click="changeVisibilityHandler(slotProps.data, slotProps)">
+            <v-icon v-if="slotProps.data.resourceLinkListFromEntity[0].visibility == 2" icon="mdi-eye"/>
+            <v-icon v-if="slotProps.data.resourceLinkListFromEntity[0].visibility == 0" icon="mdi-eye-off"/>
+          </Button>
+
           <Button v-if="isAuthenticated && isCurrentTeacher" icon="pi pi-pencil" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)" />
+
           <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" >
             <v-icon icon="mdi-delete"/>
           </Button>
@@ -297,22 +304,14 @@ import ActionCell from '../../components/ActionCell.vue';
 //import Toolbar from '../../components/Toolbar.vue';
 import ResourceFileIcon from '../../components/documents/ResourceFileIcon.vue';
 import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
-
-import { useRoute } from 'vue-router'
 import DataFilter from '../../components/DataFilter';
 import DocumentsFilterForm from '../../components/documents/Filter';
-import { ref, reactive, onMounted, computed } from 'vue';
-import { useStore } from 'vuex';
-import isEmpty from 'lodash/isEmpty';
-import moment from "moment";
-import toInteger from "lodash/toInteger";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
 
 export default {
   name: 'DocumentsList',
   servicePrefix: 'Documents',
   components: {
-    //8Toolbar,
     ActionCell,
     ResourceFileIcon,
     ResourceFileLink,
@@ -324,12 +323,12 @@ export default {
     return {
       sortBy: 'title',
       sortDesc: false,
-      columnsQua: [
-        {align: 'left', name: 'resourceNode.title', label: this.$i18n.t('Title'), field: 'resourceNode.title', sortable: true},
-        {align: 'left', name: 'resourceNode.updatedAt', label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', sortable: true},
-        {name: 'resourceNode.resourceFile.size', label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', sortable: true},
-        {name: 'action', label: this.$i18n.t('Actions'), field: 'action', sortable: false}
-      ],
+      // columnsQua: [
+      //   {align: 'left', name: 'resourceNode.title', label: this.$i18n.t('Title'), field: 'resourceNode.title', sortable: true},
+      //   {align: 'left', name: 'resourceNode.updatedAt', label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', sortable: true},
+      //   {name: 'resourceNode.resourceFile.size', label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', sortable: true},
+      //   {name: 'action', label: this.$i18n.t('Actions'), field: 'action', sortable: false}
+      // ],
       columns: [
         { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
         { label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true},
@@ -351,12 +350,11 @@ export default {
     };
   },
   created() {
-    console.log('created - vue/views/documents/List.vue');
+    //console.log('created - vue/views/documents/List.vue');
     this.filters['loadNode'] = 1;
   },
   mounted() {
     this.filters['loadNode'] = 1;
-    console.log('mounted - vue/views/documents/List.vue');
     this.onUpdateOptions(this.options);
 
     // Detect when scrolled to bottom.
@@ -461,7 +459,6 @@ export default {
           this.createWithFormData(this.item);
           this.showMessage('Saved');
         }
-
         this.itemDialog = false;
         this.item = {};
       }

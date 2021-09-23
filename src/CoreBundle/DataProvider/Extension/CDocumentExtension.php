@@ -84,10 +84,14 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
         ;
 
-        $queryBuilder
-            ->andWhere('links.visibility != :visibilityDraft')
-            ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
-        ;
+        $isAllowedToSeeDraft = $this->security->isGranted(['ROLE_ADMIN', 'ROLE_CURRENT_COURSE_TEACHER']);
+
+        if ($isAllowedToSeeDraft) {
+            $queryBuilder
+                ->andWhere('links.visibility != :visibilityDraft')
+                ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
+            ;
+        }
 
         $queryBuilder
             ->andWhere('links.course = :course')

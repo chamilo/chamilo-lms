@@ -374,6 +374,81 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(403);
     }
 
+    public function testChangeVisibility(): void
+    {
+        $course = $this->createCourse('Test');
+        $courseId = $course->getId();
+        $resourceLinkList = [
+            [
+                'cid' => $course->getId(),
+                'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+        ];
+
+        $file = $this->getUploadedFile();
+        $token = $this->getUserToken([]);
+
+        // Upload file.
+        $response = $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/documents',
+            [
+                'headers' => [
+                    'Content-Type' => 'multipart/form-data',
+                ],
+                'extra' => [
+                    'files' => [
+                        'uploadFile' => $file,
+                    ],
+                ],
+                'json' => [
+                    'filetype' => 'file',
+                    'size' => $file->getSize(),
+                    'parentResourceNodeId' => $course->getResourceNode()->getId(),
+                    'resourceLinkList' => $resourceLinkList,
+                ],
+            ]
+        );
+
+        // Check uploaded file.
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+
+        // Get document iid
+        $data = json_decode($response->getContent());
+        $documentId = $data->iid;
+
+        // Test access to file with admin. Use getFile param in order to get more info (resource link) of the document.
+        $this->createClientWithCredentials($token)->request(
+            'PUT',
+            '/api/documents/'.$documentId.'',
+            [
+                'query' => [
+                    'getFile' => true,
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/Documents',
+                '@type' => 'Documents',
+                'title' => $file->getFilename(),
+                'filetype' => 'file',
+                'resourceLinkListFromEntity' => [
+                    [
+                        'session' => null,
+                        'course' => [
+                            '@id' => '/api/courses/'.$courseId,
+                        ],
+                        'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+                    ],
+                ],
+            ]
+        );
+    }
+
     public function testUploadFileInSideASubFolder(): void
     {
         $course = $this->createCourse('Test');
@@ -747,6 +822,14 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $link->getVisibility());
 
         $documentRepo->setVisibilityDraft($document);
+        $link = $document->getFirstResourceLink();
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $link->getVisibility());
+
+        $documentRepo->toggleVisibilityPublishedDraft($document);
+        $link = $document->getFirstResourceLink();
+        $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $link->getVisibility());
+
+        $documentRepo->toggleVisibilityPublishedDraft($document);
         $link = $document->getFirstResourceLink();
         $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $link->getVisibility());
 

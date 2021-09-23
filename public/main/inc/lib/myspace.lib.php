@@ -427,7 +427,7 @@ class MySpace
         $tpl = new Template('', false, false, false, false, false, false);
         $tpl->assign('table', $tableContent);
         $templateName = $tpl->get_template('my_space/user_summary.tpl');
-        $tpl->display($templateName);
+        echo $tpl->fetch($templateName);
     }
 
     /**
@@ -471,7 +471,7 @@ class MySpace
         }
         $table = new SortableTable(
             'tracking_list_coaches_myspace',
-            ['MySpace', 'count_coaches'],
+            null,
             null,
             ($is_western_name_order xor $sort_by_first_name) ? 1 : 0
         );
@@ -668,16 +668,6 @@ class MySpace
             $table->addRow($row, 'align="right"');
         }
         $table->display();
-    }
-
-    /**
-     * @return mixed
-     */
-    public static function count_coaches()
-    {
-        global $total_no_coaches;
-
-        return $total_no_coaches;
     }
 
     public static function sort_users($a, $b)

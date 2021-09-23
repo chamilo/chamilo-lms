@@ -13,8 +13,8 @@
     />
 
     <v-icon
-        v-else-if="'application/pdf' == file.mimeType"
-        icon="mdi-file-pdf"
+        v-else-if="'application/pdf' === file.mimeType"
+        icon="mdi-file-pdf-box"
         medium
     />
 

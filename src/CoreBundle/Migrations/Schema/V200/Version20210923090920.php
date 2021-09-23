@@ -34,6 +34,9 @@ final class Version20210923090920 extends AbstractMigrationChamilo
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $directory = $course->getDirectory();
+            if (empty($directory)) {
+                continue;
+            }
             $picturePath = $rootPath.'/app/courses/'.$directory.'/course-pic.png';
             $admin = $this->getAdmin();
 
@@ -49,6 +52,8 @@ final class Version20210923090920 extends AbstractMigrationChamilo
                     $admin,
                     $uploadFile
                 );
+                $em->persist($course);
+                $em->flush();
             }
         }
     }

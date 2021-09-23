@@ -102,6 +102,7 @@ $content_origins = [
     'Ingenatic',
     'Instruxion',
     'iProgress',
+    'Kumullus',
     'Lectora',
     'Microsoft',
     'Onlineformapro',

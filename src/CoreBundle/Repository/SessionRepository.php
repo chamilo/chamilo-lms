@@ -43,9 +43,9 @@ class SessionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return SessionRelUser[]
+     * @return array<SessionRelUser>
      */
-    public function getUsersByAccessUrl(Session $session, AccessUrl $url)
+    public function getUsersByAccessUrl(Session $session, AccessUrl $url, array $onlyTypes = []): array
     {
         if (0 === $session->getUsers()->count()) {
             return [];
@@ -53,6 +53,12 @@ class SessionRepository extends ServiceEntityRepository
 
         $qb = $this->addSessionRelUserFilterByUrl($session, $url);
         $qb->orderBy('sru.relationType');
+
+        if ($onlyTypes) {
+            $qb->andWhere(
+                $qb->expr()->in('sru.relationType', $onlyTypes)
+            );
+        }
 
         return $qb->getQuery()->getResult();
     }

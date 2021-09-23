@@ -482,21 +482,6 @@ class SessionManager
 
         $userId = (int) $userId;
 
-        if (!api_is_platform_admin()) {
-            if (api_is_session_admin() &&
-                'false' === api_get_setting('allow_session_admins_to_manage_all_sessions')
-            ) {
-                $where .= " AND s.session_admin_id = $userId ";
-            }
-        }
-
-        if (!api_is_platform_admin() &&
-            api_is_teacher() &&
-            'true' === api_get_setting('allow_teachers_to_create_sessions')
-        ) {
-            $where .= " AND s.id_coach = $userId ";
-        }
-
         $extraFieldModel = new ExtraFieldModel('session');
         $conditions = $extraFieldModel->parseConditions($options);
 
@@ -517,6 +502,7 @@ class SessionManager
                 foreach ($columns['column_model'] as $column) {
                     if ('users' == $column['name']) {
                         $showCountUsers = true;
+                        break;
                     }
                 }
             }
@@ -537,10 +523,6 @@ class SessionManager
             // ofaj fix
             if (!empty($extraFieldsToLoad)) {
                 $select = "SELECT DISTINCT s.* ";
-            }
-
-            if ($showCountUsers) {
-                $select .= ', count(su.user_id) users';
             }
 
             if (api_get_configuration_value('allow_session_status')) {
@@ -567,9 +549,28 @@ class SessionManager
             }
         }
 
-        if ($showCountUsers) {
-            $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-            $sqlInjectJoins .= " LEFT JOIN $tblSessionRelUser su ON (su.session_id = s.id)";
+        $allowSessionAdminsToManageAllSessions = !api_is_platform_admin()
+            && api_is_session_admin()
+            && 'false' === api_get_setting('allow_session_admins_to_manage_all_sessions');
+
+        $allowTeachersToCreateSessions = !api_is_platform_admin()
+            && api_is_teacher()
+            && 'true' === api_get_setting('allow_teachers_to_create_sessions');
+
+        if ($allowSessionAdminsToManageAllSessions || $allowTeachersToCreateSessions) {
+            $sqlInjectJoins .= " INNER JOIN session_rel_user sru ON sru.session_id = s.id ";
+
+            $relationTypeList = [];
+
+            if ($allowSessionAdminsToManageAllSessions) {
+                $relationTypeList[] = Session::SESSION_ADMIN;
+            }
+
+            if ($allowTeachersToCreateSessions) {
+                $relationTypeList[] = Session::SESSION_COACH;
+            }
+
+            $where .= " AND (sru.user_id = $userId AND sru.relation_type IN(".implode(',', $relationTypeList)."))";
         }
 
         $query = "$select FROM $tblSession s $sqlInjectJoins $where $sqlInjectWhere";
@@ -624,15 +625,19 @@ class SessionManager
                 break;
         }
 
-        if ($showCountUsers) {
-            $query .= ' GROUP by s.id';
-        }
-
         $query .= $order;
         $query .= $limit;
         $result = Database::query($query);
 
         $sessions = Database::store_result($result, 'ASSOC');
+
+        if ($showCountUsers && !$getCount) {
+            foreach ($sessions as &$session) {
+                $result = Database::query("SELECT COUNT(1) AS nbr
+                    FROM session_rel_user WHERE session_id = {$session['id']} AND relation_type = ".Session::STUDENT);
+                $session['users'] = Database::fetch_assoc($result)['nbr'];
+            }
+        }
 
         if ('all' === $listType) {
             if ($getCount) {

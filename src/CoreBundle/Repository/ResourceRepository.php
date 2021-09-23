@@ -779,8 +779,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
         }
 
         $qb
-            ->andWhere('node.slug = :slug')
-            ->setParameter('slug', $slug)
+            ->andWhere('node.slug = :slug OR node.slug LIKE :slug2')
+            ->setParameter('slug', $slug) // normal slug = title
+            ->setParameter('slug2', $slug.'%-%') // slug with a counter  = title-1
         ;
 
         return $qb;

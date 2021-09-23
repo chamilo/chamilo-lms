@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +30,7 @@ class CoursesController extends AbstractController
     }
 
     /**
-     * Redirects legacy /courses/ABC/document/images/file.jpg.
+     * Redirects legacy /courses/ABC/document/images/file.jpg to the /r/document/file/123/view URL.
      */
     #[Route('/{code}/document/{path}', name: 'chamilo_core_course_document_redirect', requirements: ['path' => '.*'])]
     public function documentRedirect(Course $course, string $path, CDocumentRepository $documentRepository): Response
@@ -39,8 +40,9 @@ class CoursesController extends AbstractController
         /** @var CDocument|null $document */
         $document = null;
         $parent = $course;
-        foreach ($pathList as $part) {
-            $document = $documentRepository->findCourseResourceByTitle($part, $parent->getResourceNode(), $course);
+        foreach ($pathList as $pathPart) {
+            $pathPart = Urlizer::urlize($pathPart);
+            $document = $documentRepository->findCourseResourceBySlug($pathPart, $parent->getResourceNode(), $course);
             if (null !== $document) {
                 $parent = $document;
             }

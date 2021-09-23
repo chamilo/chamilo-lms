@@ -517,7 +517,7 @@ class MySpace
         $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $sqlCoachs = "SELECT DISTINCT
                         scu.user_id as id_coach,
@@ -563,9 +563,10 @@ class MySpace
             $global_coaches[$coach['user_id']] = $coach;
         }
 
-        $sql_session_coach = "SELECT session.id_coach, u.id as user_id, lastname, firstname, MAX(login_date) as login_date
-                                FROM $tbl_user u , $tbl_sessions as session, $tbl_track_login
-                                WHERE id_coach = u.id AND login_user_id = u.id
+        $sql_session_coach = "SELECT u.id AS user_id, u.lastname, u.firstname, MAX(tel.login_date) AS login_date
+                                FROM $tbl_user u
+                                INNER JOIN $tbl_track_login tel ON tel.login_user_id = u.id
+                                INNER JOIN $tblSessionRelUser sru ON (u.id = sru.user_id AND sru.relation_type = 3)
                                 GROUP BY u.id
                                 ORDER BY login_date $tracking_direction";
 
@@ -573,14 +574,13 @@ class MySpace
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql_session_coach = "SELECT session.id_coach, u.id as user_id, lastname, firstname, MAX(login_date) as login_date
-					FROM $tbl_user u , $tbl_sessions as session, $tbl_track_login , $tbl_session_rel_access_url as session_rel_url
-					WHERE
-					    id_coach = u.id AND
-					    login_user_id = u.id  AND
-					    access_url_id = $access_url_id AND
-					    session_rel_url.session_id = session.id
-					GROUP BY  u.id
+                $sql_session_coach = "SELECT u.id AS user_id, u.lastname, u.firstname, MAX(tel.login_date) AS login_date
+                    FROM $tbl_user u
+                    INNER JOIN $tbl_track_login  tel ON tel.login_user_id = u.id
+                    INNER JOIN $tblSessionRelUser sru ON (u.id = sru.user_id AND sru.relation_type = 3)
+                    INNER JOIN $tbl_session_rel_access_url aurs ON sru.session_id = aurs.session_id
+                    WHERE aurs.access_url_id = $access_url_id
+                    GROUP BY u.id
 					ORDER BY login_date $tracking_direction";
             }
         }

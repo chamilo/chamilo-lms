@@ -17,8 +17,6 @@ class UpdateDocumentFileAction extends BaseResourceFileAction
     {
         $this->handleUpdateRequest($document, $repo, $request, $em);
 
-        //$document->setComment($comment);
-
         return $document;
     }
 }

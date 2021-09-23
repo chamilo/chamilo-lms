@@ -1321,7 +1321,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function getDefaultIllustration(int $size): string
     {
-        return '/img/icons/32/course.png';
+        return '/img/session_default.png';
     }
 
     public function getResourceIdentifier(): int

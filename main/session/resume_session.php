@@ -77,15 +77,20 @@ switch ($action) {
     case 'delete':
         // Delete course from session.
         $idChecked = isset($_GET['idChecked']) ? $_GET['idChecked'] : null;
+        $message = get_lang('TokenExpiredActionAlreadyRealized');
         if (is_array($idChecked)) {
             $usersToDelete = [];
-            foreach ($idChecked as $courseCode) {
-                // forcing the escape_string
-                $courseInfo = api_get_course_info($courseCode);
-                SessionManager::unsubscribe_course_from_session(
-                    $sessionId,
-                    $courseInfo['real_id']
-                );
+            $check = Security::check_token('get');
+            if ($check) {
+                foreach ($idChecked as $courseCode) {
+                    // forcing the escape_string
+                    $courseInfo = api_get_course_info($courseCode);
+                    SessionManager::unsubscribe_course_from_session(
+                        $sessionId,
+                        $courseInfo['real_id']
+                    );
+                }
+                $message = get_lang('Updated');
             }
         }
 
@@ -101,16 +106,22 @@ switch ($action) {
                 "UPDATE $tbl_session
                 SET nbr_classes = nbr_classes - $nbr_affected_rows
                 WHERE id = $sessionId");
+            $message = get_lang('Updated');
         }
 
         if (!empty($_GET['user'])) {
-            SessionManager::unsubscribe_user_from_session(
-                $sessionId,
-                $_GET['user']
-            );
+            $check = Security::check_token('get');
+            if ($check) {
+                SessionManager::unsubscribe_user_from_session(
+                    $sessionId,
+                    $_GET['user']
+                );
+                $message = get_lang('Updated');
+            }
+            Security::clear_token();
         }
 
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message($message));
         break;
 }
 
@@ -156,6 +167,7 @@ if ($session->getNbrCourses() === 0) {
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
 } else {
+    $secToken = Security::get_token();
     $count = 0;
     $courseItem = '';
     //$courses = $sessionRepository->getCoursesOrderedByPosition($session);
@@ -296,7 +308,7 @@ if ($session->getNbrCourses() === 0) {
         );
         $courseItem .= Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
-            api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$course->getCode()}",
+            api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$course->getCode()}&sec_token=".Security::getTokenFromSession(),
             [
                 'onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;",
             ]
@@ -367,7 +379,7 @@ if (!empty($userList)) {
 
         $removeLink = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
-            api_get_self().'?id_session='.$sessionId.'&action=delete&user='.$user['user_id'],
+            api_get_self().'?id_session='.$sessionId.'&action=delete&user='.$user['user_id'].'&sec_token='.Security::getTokenFromSession(),
             ['onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;"]
         );
 

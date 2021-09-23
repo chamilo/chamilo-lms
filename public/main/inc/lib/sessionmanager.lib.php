@@ -3691,7 +3691,7 @@ class SessionManager
      * @param string $description
      * @param array  $options
      *
-     * @return array sessions
+     * @return array|string sessions
      */
     public static function getSessionsFollowedByUser(
         $userId,
@@ -3708,8 +3708,6 @@ class SessionManager
     ) {
         // Database Table Definitions
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
         $extraFieldModel = new ExtraFieldModel('session');
@@ -3724,6 +3722,7 @@ class SessionManager
         }
 
         $userId = (int) $userId;
+        $user = api_get_user_entity($userId);
 
         $select = ' SELECT DISTINCT * '.$injectExtraFields;
         if ($getCount) {
@@ -3744,37 +3743,37 @@ class SessionManager
         }
 
         $whereConditions = null;
-        $sessionCourseConditions = null;
-        $sessionConditions = null;
-        $sessionQuery = '';
-        $courseSessionQuery = null;
+
         switch ($status) {
             case DRH:
-                $sessionQuery = "SELECT sru.session_id
-                                 FROM
-                                 $tbl_session_rel_user sru
-                                 WHERE
-                                    sru.relation_type = '".Session::DRH."' AND
-                                    sru.user_id = $userId";
+                $sessionsQuery = array_map(
+                    fn(Session $session) => $session->getId(),
+                    $user->getDRHSessions()
+                );
                 break;
             case COURSEMANAGER:
-                $courseSessionQuery = "
-                    SELECT scu.session_id as id
-                    FROM $tbl_session_rel_course_rel_user scu
-                    WHERE (scu.status = ".Session::COURSE_COACH." AND scu.user_id = $userId)";
+                $coachSessions = array_map(
+                    fn(Session $session) => $session->getId(),
+                    $user->getSessionsByStatusInCourseSubscription(Session::COURSE_COACH)->getValues()
+                );
+                $adminSessions = array_map(
+                    fn(Session $session) => $session->getId(),
+                    $user->getSessionsAsAdmin()
+                );
 
-                $whereConditions = " OR (s.id_coach = $userId) ";
+                $sessionsQuery = array_merge($coachSessions, $adminSessions);
                 break;
             case SESSIONADMIN:
-                $sessionQuery = '';
-                $sqlInjectJoins .= " AND s.session_admin_id = $userId ";
+                $sessionsQuery = array_map(
+                    fn(Session $session) => $session->getId(),
+                    $user->getSessionsAsAdmin()
+                );
                 break;
             default:
-                $sessionQuery = "SELECT sru.session_id
-                                 FROM
-                                 $tbl_session_rel_user sru
-                                 WHERE
-                                    sru.user_id = $userId";
+                $sessionsQuery = array_map(
+                    fn(Session $session) => $session->getId(),
+                    $user->getStudentSessions()
+                );
                 break;
         }
 
@@ -3789,11 +3788,7 @@ class SessionManager
         }
 
         $whereConditions .= $keywordCondition;
-        $subQuery = $sessionQuery.$courseSessionQuery;
-
-        if (!empty($subQuery)) {
-            $subQuery = " AND s.id IN ($subQuery)";
-        }
+        $subQuery = !empty($sessionsQuery) ? (' AND s.id IN ('.implode(',', $sessionsQuery).')') : '';
 
         $sql = " $select
                 FROM $tbl_session s

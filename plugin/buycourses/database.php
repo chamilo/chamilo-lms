@@ -297,6 +297,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES)) {
     $servicesTable->addColumn('video_url', Types::STRING);
     $servicesTable->addColumn('image', Types::STRING);
     $servicesTable->addColumn('service_information', Types::TEXT);
+    $servicesTable->addColumn('tax_perc', Types::INTEGER);
     $servicesTable->setPrimaryKey(['id']);
 }
 

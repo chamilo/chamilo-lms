@@ -1687,6 +1687,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->getSessions(Session::SESSION_COACH);
     }
 
+    public function getSessionsAsAdmin(): array
+    {
+        return $this->getSessions(Session::SESSION_ADMIN);
+    }
+
     public function getCommentedUserSkills(): Collection
     {
         return $this->commentedUserSkills;
@@ -2357,6 +2362,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         }
 
         return $this;
+    }
+
+    public function getSessionsByStatusInCourseSubscription(int $status): Collection
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('status', $status)
+        );
+
+        return $this
+            ->getSessionRelCourseRelUsers()
+            ->matching($criteria)
+            ->map(fn(SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession());
     }
 
     /**

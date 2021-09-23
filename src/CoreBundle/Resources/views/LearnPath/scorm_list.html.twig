@@ -12,10 +12,13 @@
 
         {% set itemLevel = 'level_' ~ (item.lvl - 1) %}
         {% set itemStatusClass = status_list[item.iid] %}
-
+        {% set accordionClass = '' %}
+        {% if item.itemType == 'dir' %}
+            {% set accordionClass = 'accordion' %}
+        {% endif %}
         <div
             id="toc_{{ item.iid }}"
-            class=" scorm_item_normal {{ itemStatusClass }} {{ itemClass }} item-{{ item.itemType }}"
+            class=" scorm_item_normal {{ itemStatusClass }} {{ itemClass }} item-{{ item.itemType }} {{ accordionClass }}"
         >
             {% if item.itemType == 'dir' %}
                 <div
@@ -44,9 +47,11 @@
 
         {% if item.itemType == 'dir' %}
             {% if item.__children|length %}
+                <div class="item-children">
                 {% for child in item.__children %}
                     {{ self.processItem(child, lp_current_item_id, status_list) }}
                 {% endfor %}
+                </div>
             {% endif %}
         {% endif %}
     {% endmacro %}

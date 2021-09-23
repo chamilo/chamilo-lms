@@ -3709,7 +3709,7 @@ class Tracking
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = "'SELECT DISTINCT course.code
+        $sql = "SELECT DISTINCT course.code
                 FROM $tbl_session_course as session_course
                 INNER JOIN $tbl_session as session
                     ON (session.id = session_course.session_id)
@@ -3718,13 +3718,13 @@ class Tracking
                     AND session_user.user_id = $coach_id
                     AND session_user.relation_type = ".SessionEntity::SESSION_COACH.")
                 INNER JOIN $tbl_course as course
-                    ON course.id = session_course.c_id'";
+                    ON course.id = session_course.c_id";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = "'SELECT DISTINCT c.code
+                $sql = "SELECT DISTINCT c.code
                     FROM $tbl_session_course as session_course
                     INNER JOIN $tbl_course c
                     ON (c.id = session_course.c_id)
@@ -3737,7 +3737,7 @@ class Tracking
                     INNER JOIN $tbl_course as course
                         ON course.id = session_course.c_id
                      INNER JOIN $tbl_course_rel_access_url course_rel_url
-                    ON (course_rel_url.c_id = c.id)'";
+                    ON (course_rel_url.c_id = c.id)";
             }
         }
 

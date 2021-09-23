@@ -15,12 +15,28 @@ class MigrationTest extends KernelTestCase
 {
     use ChamiloTestTrait;
 
-    public function testMigrations(): void
+    public function testMigrationsStatus(): void
     {
         $kernel = static::createKernel();
         $application = new Application($kernel);
 
         $command = $application->find('doctrine:migrations:status');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            // pass arguments to the helper
+            '--no-interaction',
+        ]);
+
+        $output = $commandTester->getDisplay();
+        $this->assertStringContainsString('Chamilo\CoreBundle\Migrations\Schema\V200', $output);
+    }
+
+    public function testMigrationsList(): void
+    {
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
+
+        $command = $application->find('doctrine:migrations:list');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             // pass arguments to the helper

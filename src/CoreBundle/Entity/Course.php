@@ -626,7 +626,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * Get directory.
+     * Get directory, needed in migrations.
      *
      * @return string
      */

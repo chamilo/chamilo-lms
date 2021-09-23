@@ -52,8 +52,6 @@ class MessageRepository extends ServiceEntityRepository
         $qb = $this->getOrCreateQueryBuilder($qb, 'm');
         $qb
             ->join('m.receivers', 'r')
-        ;
-        $qb
             ->andWhere('r.receiver = :user')
             ->setParameter('user', $user)
         ;

@@ -81,7 +81,15 @@ class CQuizRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $exercise = (new CQuiz())
-            ->setTitle('exercise')
+            ->setTitle('exercise 1')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $repo->create($exercise);
+
+        $exercise = (new CQuiz())
+            ->setTitle('exercise 1')
             ->setParent($course)
             ->setCreator($teacher)
             ->addCourseLink($course)
@@ -89,30 +97,37 @@ class CQuizRepositoryTest extends AbstractApiTest
         $repo->create($exercise);
 
         $qb = $repo->findAllByCourse($course);
-        $this->assertSame(1, \count($qb->getQuery()->getResult()));
+        $this->assertSame(2, \count($qb->getQuery()->getResult()));
 
-        $found = $repo->findCourseResourceByTitle('exercise', $course->getResourceNode(), $course);
+        $found = $repo->findCourseResourceByTitle('exercise 1', $course->getResourceNode(), $course);
         $this->assertNotNull($found);
 
-        $foundList = $repo->findCourseResourcesByTitle('exercise', $course->getResourceNode(), $course);
-        $this->assertSame(1, \count($foundList));
-
-        $found = $repo->getResourceByCreatorFromTitle('exercise', $teacher, $course->getResourceNode());
+        $found = $repo->findCourseResourceBySlug('exercise-1', $course->getResourceNode(), $course);
         $this->assertNotNull($found);
+
+        $found = $repo->findCourseResourceBySlug('exercise-1', $course->getResourceNode(), $course);
+        $this->assertNotNull($found);
+
+        $found = $repo->getResourceByCreatorFromTitle('exercise 1', $teacher, $course->getResourceNode());
+        $this->assertNotNull($found);
+
+        $node = $repo->getResourceFromResourceNode($exercise->getResourceNode()->getId());
+        $this->assertNotNull($node);
+
+        // Find resources.
+        $foundList = $repo->findCourseResourcesByTitle('exercise 1', $course->getResourceNode(), $course);
+        $this->assertSame(2, \count($foundList));
 
         $items = $repo->getResourcesByCourseOnly($course, $course->getResourceNode())->getQuery()->getResult();
         $this->assertTrue(\count($items) > 0);
 
         $qb = $repo->getResourcesByCreator($teacher, $course->getResourceNode());
-        $this->assertSame(1, \count($qb->getQuery()->getResult()));
+        $this->assertSame(2, \count($qb->getQuery()->getResult()));
 
         $qb = $repo->getResourcesByCourseLinkedToUser($teacher, $course);
-        $this->assertSame(1, \count($qb->getQuery()->getResult()));
+        $this->assertSame(2, \count($qb->getQuery()->getResult()));
 
         $qb = $repo->getResourcesByLinkedUser($teacher, $course->getResourceNode());
         $this->assertSame(0, \count($qb->getQuery()->getResult()));
-
-        $node = $repo->getResourceFromResourceNode($exercise->getResourceNode()->getId());
-        $this->assertNotNull($node);
     }
 }

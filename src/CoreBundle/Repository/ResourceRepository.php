@@ -137,6 +137,20 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    public function findCourseResourceBySlug(
+        string $title,
+        ResourceNode $parentNode,
+        Course $course,
+        Session $session = null,
+        CGroup $group = null
+    ): ?ResourceInterface {
+        $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
+        $this->addSlugQueryBuilder($title, $qb);
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     /**
      * @return ResourceInterface[]
      */
@@ -755,6 +769,21 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em->flush();
 
         return true;
+    }
+
+    protected function addSlugQueryBuilder(?string $slug, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+        if (null === $slug) {
+            return $qb;
+        }
+
+        $qb
+            ->andWhere('node.slug = :slug')
+            ->setParameter('slug', $slug)
+        ;
+
+        return $qb;
     }
 
     protected function addTitleQueryBuilder(?string $title, QueryBuilder $qb = null): QueryBuilder

@@ -18,12 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * User subscriptions to a session course.
  *
- * @ApiResource(
- *     normalizationContext={
- *         "groups"={"session_rel_course_rel_user:read", "user:read"},
- *         "enable_max_depth"=true
- *     }
- * )
  * @ORM\Table(
  *     name="session_rel_course_rel_user",
  *     uniqueConstraints={
@@ -37,6 +31,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['user:read', 'session_rel_course_rel_user:read'],
+        'enable_max_depth' => true,
+    ],
+)]
 #[ApiFilter(SearchFilter::class, properties: [
     'user' => 'exact',
     'session' => 'exact',

@@ -16,14 +16,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
- *     normalizationContext={"groups"={"skill:read"}}
- * )
- *
  * @ORM\Table(name="skill")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SkillRepository")
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN')",
+    ],
+    normalizationContext: [
+        'groups' => ['skill:read'],
+    ],
+)]
 class Skill
 {
     public const STATUS_DISABLED = 0;

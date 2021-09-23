@@ -10,19 +10,18 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Illustration.
- *
- * @ApiResource(
- *     normalizationContext={"groups"={"illustration:read"}}
- * )
  * @ORM\Table(name="illustration")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\IllustrationRepository")
  */
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['illustration:read'],
+    ],
+)]
 class Illustration extends AbstractResource implements ResourceInterface
 {
     use PersonalResourceTrait;

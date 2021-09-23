@@ -16,14 +16,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Classes and social groups.
  *
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
- *     normalizationContext={"groups"={"usergroup:read"}}
- * )
- *
  * @ORM\Table(name="usergroup")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\UsergroupRepository")
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN')",
+    ],
+    normalizationContext: [
+        'groups' => ['usergroup:read'],
+    ],
+)]
 class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceWithAccessUrlInterface
 {
     use TimestampableEntity;

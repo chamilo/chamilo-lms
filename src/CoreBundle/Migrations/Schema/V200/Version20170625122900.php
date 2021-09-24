@@ -20,10 +20,9 @@ class Version20170625122900 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         // Install tools.
-        $em = $this->getEntityManager();
         $container = $this->getContainer();
         $toolChain = $container->get(ToolChain::class);
-        $toolChain->createTools($em);
+        $toolChain->createTools();
 
         $table = $schema->getTable('c_document');
         if (false === $table->hasColumn('resource_node_id')) {
@@ -48,7 +47,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_document CHANGE size size INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL');
 
-        // Folders with c_document.path = / should be remove.
+        // Folders with c_document.path = / should be removed.
         $this->addSql('DELETE FROM c_document WHERE filetype="folder" AND path = "/"');
 
         if (false === $table->hasIndex('idx_cdoc_type')) {
@@ -59,7 +58,6 @@ class Version20170625122900 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_document');
         }
 
-        //$this->addSql('ALTER TABLE c_document CHANGE path path VARCHAR(255) DEFAULT NULL;');
         $table = $schema->getTable('c_announcement');
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_announcement ADD resource_node_id BIGINT DEFAULT NULL;');

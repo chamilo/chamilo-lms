@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Responses to AJAX calls.

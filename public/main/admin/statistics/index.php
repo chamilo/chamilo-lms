@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Framework\Container;
 /**
  * This tool show global Statistics on general platform events.
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';

@@ -37,14 +37,15 @@ final class Version20210923090920 extends AbstractMigrationChamilo
             if (empty($directory)) {
                 continue;
             }
-            $picturePath = $rootPath.'/app/courses/'.$directory.'/course-pic.png';
-            $admin = $this->getAdmin();
 
             if ($illustrationRepo->hasIllustration($course)) {
                 continue;
             }
 
+            $picturePath = $rootPath.'/app/courses/'.$directory.'/course-pic.png';
+
             if ($this->fileExists($picturePath)) {
+                $admin = $this->getAdmin();
                 $mimeType = mime_content_type($picturePath);
                 $uploadFile = new UploadedFile($picturePath, 'course-pic', $mimeType, null, true);
                 $illustrationRepo->addIllustration(

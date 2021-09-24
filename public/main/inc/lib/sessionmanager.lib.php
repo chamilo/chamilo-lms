@@ -6037,7 +6037,12 @@ class SessionManager
                 break;
             case 'teacher':
             case 'session_admin':
-                $sessionConditions = " AND s.id_coach = $userId ";
+                $generalCoachedSessions = array_map(
+                    fn(Session $session) => $session->getId(),
+                    api_get_user_entity($userId)->getSessionsAsGeneralCoach()
+                );
+
+                $sessionConditions = " AND s.IN (".implode(',', $generalCoachedSessions).") ";
                 $userConditionsFromDrh = '';
                 break;
         }

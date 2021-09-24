@@ -20,10 +20,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
- * @Vich\Uploadable
- *
  * @ORM\Table(name="asset")
  */
+#[Vich\Uploadable]
 class Asset
 {
     use TimestampableEntity;
@@ -63,16 +62,14 @@ class Asset
     #[Assert\NotBlank]
     protected ?string $category = null;
 
-    /**
-     * @Vich\UploadableField(
-     *     mapping="assets",
-     *     fileNameProperty="title",
-     *     size="size",
-     *     mimeType="mimeType",
-     *     originalName="originalName",
-     *     dimensions="dimensions"
-     * )
-     */
+    #[Vich\UploadableField(
+        mapping: 'assets',
+        fileNameProperty: 'title',
+        size: 'size',
+        mimeType: 'mimeType',
+        originalName: 'originalName',
+        dimensions: 'dimensions'
+    )]
     #[Assert\NotNull]
     protected File $file;
 

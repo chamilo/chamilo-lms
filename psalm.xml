@@ -148,6 +148,7 @@
 
         <ignoreFiles>
             <directory name="vendor/*"/>
+
             <directory name="src/CoreBundle/Component/Editor"/>
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>
@@ -182,10 +183,10 @@
             <file name="public/main/exercise/admin.php"/>
             <file name="public/main/survey/survey_list.php"/>
 
+            <file name="src/CoreBundle/Component/Utils/AssetDirectoryNamer.php"/>
             <file name="src/CoreBundle/Controller/EditorController.php"/>
             <file name="src/CoreBundle/Controller/ResourceController.php"/>
             <file name="src/CoreBundle/Traits/Repository/ORM/TreeRepositoryTrait.php"/>
-
         </ignoreFiles>
     </projectFiles>
 

@@ -51,8 +51,8 @@ class Statistics
         $categoryCondition = '';
 
         if (!empty($categoryCode)) {
-            $categoryJoin = " LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id ";
-            $categoryCondition = " course_category.code = '".Database::escape_string($categoryCode)."' ";
+            //$categoryJoin = " LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id ";
+            //$categoryCondition = " course_category.code = '".Database::escape_string($categoryCode)."' ";
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -413,26 +413,6 @@ class Statistics
         }
 
         return $activities;
-    }
-
-    /**
-     * Get all course categories.
-     *
-     * @return array All course categories (code => name)
-     */
-    public static function getCourseCategories()
-    {
-        $categoryTable = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT code, name
-                FROM $categoryTable
-                ORDER BY tree_pos";
-        $res = Database::query($sql);
-        $categories = [];
-        while ($category = Database::fetch_object($res)) {
-            $categories[$category->code] = $category->name;
-        }
-
-        return $categories;
     }
 
     /**

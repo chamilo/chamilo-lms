@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Responses to AJAX calls.
@@ -170,12 +171,13 @@ switch ($action) {
             $statsName = 'Tools';
             $all = Statistics::getToolsStats();
         } elseif ('courses' == $action) {
+            $courseCategoryRepo = Container::getCourseCategoryRepository();
+            $categories = $courseCategoryRepo->findAll();
             $statsName = 'CountCours';
-            $course_categories = Statistics::getCourseCategories();
             // total amount of courses
             $all = [];
-            foreach ($course_categories as $code => $name) {
-                $all[$name] = Statistics::countCourses($code);
+            foreach ($categories as $category) {
+                $all[$category->getName()] = $category->getCourses()->count();
             }
         } elseif ('courses_by_language' == $action) {
             $statsName = 'CountCourseByLanguage';
@@ -194,11 +196,14 @@ switch ($action) {
             ];
         } elseif ('users_teachers' == $action) {
             $statsName = 'Teachers';
-            $course_categories = Statistics::getCourseCategories();
+            $courseCategoryRepo = Container::getCourseCategoryRepository();
+            $categories = $courseCategoryRepo->findAll();
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [];
-            foreach ($course_categories as $code => $name) {
-                $name = str_replace(get_lang('Department'), "", $name);
+            foreach ($categories as $category) {
+                $code = $category->getCode();
+                $name = $category->getName();
+                $name = str_replace(get_lang('Department'), '', $name);
                 $all[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
             }
             // use slightly different colors than previous chart
@@ -208,11 +213,14 @@ switch ($action) {
             }
         } elseif ('users_students' == $action) {
             $statsName = 'Students';
-            $course_categories = Statistics::getCourseCategories();
+            $courseCategoryRepo = Container::getCourseCategoryRepository();
+            $categories = $courseCategoryRepo->findAll();
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [];
-            foreach ($course_categories as $code => $name) {
-                $name = str_replace(get_lang('Department'), "", $name);
+            foreach ($categories as $category) {
+                $code = $category->getCode();
+                $name = $category->getName();
+                $name = str_replace(get_lang('Department'), '', $name);
                 $all[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);
             }
             // use slightly different colors than previous chart

@@ -5,6 +5,9 @@
 /**
  * This tool show global Statistics on general platform events.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
@@ -130,7 +133,7 @@ in_array(
             $form = new FormValidator('users_active', 'get', api_get_self().'?report=users_active');
             $form->addDateRangePicker(
                 'daterange',
-                get_lang('DateRange'),
+                get_lang('Date range'),
                 true,
                 ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
             );
@@ -162,14 +165,14 @@ in_array(
                 cutoutPercentage: 25
                 ';
 
-            $reportName1 = get_lang('UsersCreatedInTheSelectedPeriod');
-            $reportName2 = get_lang('UsersByStatus');
-            $reportName3 = get_lang('UsersByLanguage');
-            $reportName4 = get_lang('UsersByTargetLanguage');
-            $reportName5 = get_lang('UsersByCareer');
-            $reportName6 = get_lang('UsersByContract');
-            $reportName7 = get_lang('UsersByCertificate');
-            $reportName8 = get_lang('UsersByAge');
+            $reportName1 = get_lang('Users created in the selected period');
+            $reportName2 = get_lang('Users by status');
+            $reportName3 = get_lang('Users per language');
+            $reportName4 = get_lang('Users by target language');
+            $reportName5 = get_lang('Users by career');
+            $reportName6 = get_lang('Users by contract');
+            $reportName7 = get_lang('Users by certificate');
+            $reportName8 = get_lang('Users by age');
 
             //$url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
@@ -329,10 +332,10 @@ if (isset($_GET['export'])) {
 $tool_name = get_lang('Statistics');
 $tools = [
     get_lang('Courses') => [
-        'report=courses' => get_lang('CountCours'),
-        'report=tools' => get_lang('PlatformToolAccess'),
-        'report=courselastvisit' => get_lang('LastAccess'),
-        'report=coursebylanguage' => get_lang('CountCourseByLanguage'),
+        'report=courses' => get_lang('Courses'),
+        'report=tools' => get_lang('Tools access'),
+        'report=courselastvisit' => get_lang('Latest access'),
+        'report=coursebylanguage' => get_lang('Number of courses by language'),
     ],
     get_lang('Users') => [
         'report=users' => get_lang('CountUsers'),
@@ -342,7 +345,7 @@ $tools = [
         'report=logins&amp;type=hour' => get_lang('Logins').' ('.get_lang('PeriodHour').')',
         'report=pictures' => get_lang('CountUsers').' ('.get_lang('UserPicture').')',
         'report=logins_by_date' => get_lang('LoginsByDate'),
-        'report=no_login_users' => get_lang('StatsUsersDidNotLoginInLastPeriods'),
+        'report=no_login_users' => get_lang('Not logged in for some time'),
         'report=zombies' => get_lang('Zombies'),
         'report=users_active' => get_lang('UserStats'),
         'report=users_online' => get_lang('UsersOnline'),
@@ -361,7 +364,6 @@ $tools = [
     ],
 ];
 
-$course_categories = Statistics::getCourseCategories();
 $content = '';
 
 switch ($report) {
@@ -685,13 +687,15 @@ switch ($report) {
 
         break;
     case 'courses':
+        $courseCategoryRepo = Container::getCourseCategoryRepository();
+        $categories = $courseCategoryRepo->findAll();
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         // total amount of courses
-        foreach ($course_categories as $code => $name) {
-            $courses[$name] = Statistics::countCourses($code);
+        foreach ($categories as $category) {
+            $courses[$category->getName()] = $category->getCourses()->count();
         }
         // courses for each course category
-        $content .= Statistics::printStats(get_lang('CountCours'), $courses);
+        $content .= Statistics::printStats(get_lang('Courses'), $courses);
         break;
     case 'tools':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';

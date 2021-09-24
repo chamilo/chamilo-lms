@@ -8057,6 +8057,7 @@ class TrackingCourseLog
         $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $column = (int) $column;
         $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
@@ -8144,7 +8145,7 @@ class TrackingCourseLog
                 }
             } else {
                 $sql = "SELECT session.id s.id, s.name u.username
-                          FROM c_tool t, session s, user u, session_rel_user sru
+                          FROM c_tool t, session s, user u, $tblSessionRelUser sru
                           WHERE
                               t.c_id = $course_id AND
                               t.session_id = s.id AND

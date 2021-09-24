@@ -476,6 +476,7 @@ class SessionManager
     ) {
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $where = 'WHERE 1 = 1 ';
 
@@ -557,7 +558,7 @@ class SessionManager
             && 'true' === api_get_setting('allow_teachers_to_create_sessions');
 
         if ($allowSessionAdminsToManageAllSessions || $allowTeachersToCreateSessions) {
-            $sqlInjectJoins .= " INNER JOIN session_rel_user sru ON sru.session_id = s.id ";
+            $sqlInjectJoins .= " INNER JOIN $tblSessionRelUser sru ON sru.session_id = s.id ";
 
             $relationTypeList = [];
 
@@ -4214,7 +4215,7 @@ class SessionManager
     }
 
     /**
-     * The general coach (session_rel_user.relation_type = 3).
+     * The general coach (session_rel_user.relation_type = Session::SESSION_COACH).
      *
      * @param int  $user_id         user id
      * @param bool $asPlatformAdmin The user is platform admin, return everything

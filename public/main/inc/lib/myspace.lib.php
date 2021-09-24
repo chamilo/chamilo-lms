@@ -566,7 +566,7 @@ class MySpace
         $sql_session_coach = "SELECT u.id AS user_id, u.lastname, u.firstname, MAX(tel.login_date) AS login_date
                                 FROM $tbl_user u
                                 INNER JOIN $tbl_track_login tel ON tel.login_user_id = u.id
-                                INNER JOIN $tblSessionRelUser sru ON (u.id = sru.user_id AND sru.relation_type = 3)
+                                INNER JOIN $tblSessionRelUser sru ON (u.id = sru.user_id AND sru.relation_type = ".SessionEntity::SESSION_COACH.")
                                 GROUP BY u.id
                                 ORDER BY login_date $tracking_direction";
 
@@ -577,7 +577,7 @@ class MySpace
                 $sql_session_coach = "SELECT u.id AS user_id, u.lastname, u.firstname, MAX(tel.login_date) AS login_date
                     FROM $tbl_user u
                     INNER JOIN $tbl_track_login  tel ON tel.login_user_id = u.id
-                    INNER JOIN $tblSessionRelUser sru ON (u.id = sru.user_id AND sru.relation_type = 3)
+                    INNER JOIN $tblSessionRelUser sru ON (u.id = sru.user_id AND sru.relation_type = ".SessionEntity::SESSION_COACH.")
                     INNER JOIN $tbl_session_rel_access_url aurs ON sru.session_id = aurs.session_id
                     WHERE aurs.access_url_id = $access_url_id
                     GROUP BY u.id

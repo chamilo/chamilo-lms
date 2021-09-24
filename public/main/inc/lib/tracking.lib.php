@@ -3779,7 +3779,10 @@ class Tracking
     ) {
         // table definition
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+
         $coach_id = (int) $coach_id;
 
         $select = ' SELECT * FROM ';
@@ -3810,7 +3813,6 @@ class Tracking
         $sqlInjectWhere = $conditions['inject_where'];
         $injectExtraFields = $conditions['inject_extra_fields'];
 
-        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = api_get_current_access_url_id();
 
         $orderBy = '';
@@ -3835,8 +3837,9 @@ class Tracking
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (s.id = session_rel_url.session_id)
                 $sqlInjectJoins
+                INNER JOIN $tblSessionRelUser sru ON s.id = sru.sesson_id
                 WHERE
-                    id_coach = $coach_id AND
+                    (sru.user_id = $coach_id AND sru.relation_type = ".SessionEntity::SESSION_COACH.") AND
                     access_url_id = $access_url_id
                     $keywordCondition
                     $extraFieldsConditions

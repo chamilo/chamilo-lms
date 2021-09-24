@@ -1909,10 +1909,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@quasar/extras@npm:^1.11.0":
-  version: 1.11.0
-  resolution: "@quasar/extras@npm:1.11.0"
-  checksum: 9b9a0d1941bc19767d6d35ffe04081e6b43e51defec11e0316c740ef00b0ad709540f93e58120f2e8cff7b2764c3b49a74f0724355872975fdd6e66cc0bd825e
+"@quasar/extras@npm:^1.11.1":
+  version: 1.11.1
+  resolution: "@quasar/extras@npm:1.11.1"
+  checksum: e5bd96b29a684bf8234838b5b446c2b1b4d320e0d4f8ff80d95534304aadec5d9cd1a7f6a2da739efb5a2248c6b139b3ea31fdf8f47729b172173d3a2ea52a71
   languageName: node
   linkType: hard
 
@@ -4111,12 +4111,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alpinejs@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "alpinejs@npm:3.4.0"
+"alpinejs@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "alpinejs@npm:3.4.1"
   dependencies:
     "@vue/reactivity": ~3.1.1
-  checksum: 9be0ca4021f544c08de7fe6878025e4f83177856b38ec6b1112a28a1d80591d22622bbcf7f62212f6ebe43b53a381b0658e205e834c9d6fc5da3c359617aa63c
+  checksum: c53fd8a58b82667a837601d2ca0c9b23bf940455060ca5d440d34fdc477d1527e6d4e39b9112b5a4ca5e1c8e92a8000bd9ce9c851db4861990f7651219a6e436
   languageName: node
   linkType: hard
 
@@ -6497,7 +6497,7 @@ __metadata:
     "@heroicons/vue": ^1.0.4
     "@mdi/font": ^6.1.95
     "@popperjs/core": 2.10.1
-    "@quasar/extras": ^1.11.0
+    "@quasar/extras": ^1.11.1
     "@symfony/webpack-encore": 1.6.1
     "@tailwindcss/forms": ^0.3.3
     "@tailwindcss/line-clamp": ^0.2.1
@@ -6523,7 +6523,7 @@ __metadata:
     "@vue/compiler-sfc": 3.2.13
     "@vuelidate/core": ^2.0.0-alpha.23
     "@vuelidate/validators": ^2.0.0-alpha.20
-    alpinejs: ^3.4.0
+    alpinejs: ^3.4.1
     autoprefixer: ^10.3.5
     axios: ^0.21.4
     babel-cli: 6.26.0
@@ -6596,7 +6596,7 @@ __metadata:
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
-    sweetalert2: ^11.1.6
+    sweetalert2: ^11.1.7
     tailwindcss: ^2.2.15
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
@@ -6606,7 +6606,7 @@ __metadata:
     tinymce: ^5.9.2
     ts-loader: ^9.2.6
     typescript: ^4.3.5
-    video.js: ^7.15.5
+    video.js: ^7.15.6
     vue: 3.2.11
     vue-cli-plugin-quasar: 4.0.2
     vue-eslint-parser: 7.11.0
@@ -18892,10 +18892,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^11.1.6":
-  version: 11.1.6
-  resolution: "sweetalert2@npm:11.1.6"
-  checksum: 3ccc37e0bd89fd2467956d1adde88961b183c932cf5bd4a1237bbd7a2fed5b31e7ad9ff6ea85e93ad1a467f61d0e4648726eb69a5df7bcdfd952e5f99fbcdd72
+"sweetalert2@npm:^11.1.7":
+  version: 11.1.7
+  resolution: "sweetalert2@npm:11.1.7"
+  checksum: 78ea316596991e8dcf0e8eedb6101a6e252c03f2b001ba95ea1a299e1abe8c95bda42ee48e1fe96e5478fd23fd25694d8f65ea45e9e3879fb8081bb154b1c78f
   languageName: node
   linkType: hard
 
@@ -20087,9 +20087,9 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"video.js@npm:7.15.5, video.js@npm:^7.15.5":
-  version: 7.15.5
-  resolution: "video.js@npm:7.15.5"
+"video.js@npm:7.15.6, video.js@npm:^7.15.6":
+  version: 7.15.6
+  resolution: "video.js@npm:7.15.6"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@videojs/http-streaming": 2.10.3
@@ -20104,7 +20104,7 @@ typescript@~4.1.5:
     safe-json-parse: 4.0.0
     videojs-font: 3.2.0
     videojs-vtt.js: ^0.15.3
-  checksum: 5f3ca979b21cd40c8f658c7c90d22a653e376c19639b59a10b37665c5d186477e3167f91064be26dd8ebfeadf12b8516f668f4d61553a7d517bdf71d29e64268
+  checksum: 7a9cddc731b8ff2f7d80cf1cb615ba43acb655f8729e2a6802b6b838a42bae9300a672bbec3904bbe866ca28ea0108018715808e2ebd680e2aca45119ae94991
   languageName: node
   linkType: hard
 

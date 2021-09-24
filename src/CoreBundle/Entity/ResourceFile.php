@@ -61,12 +61,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *         "get"
  *     }
  * )
+ * @Vich\Uploadable
  * @ApiFilter(OrderFilter::class, properties={"id", "name", "size", "updatedAt"})
  * @ORM\Entity
- *
  * @ORM\Table(name="resource_file")
  */
-#[Vich\Uploadable]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',
@@ -116,14 +115,24 @@ class ResourceFile
      */
     protected ?int $size = 0;
 
-    #[Vich\UploadableField(
-        mapping: 'resources',
-        fileNameProperty: 'name',
-        size: 'size',
-        mimeType: 'mimeType',
-        originalName: 'originalName',
-        dimensions: 'dimensions'
-    )]
+    /**
+     * @Vich\UploadableField(
+     *     mapping="resources",
+     *     fileNameProperty="name",
+     *     size="size",
+     *     mimeType="mimeType",
+     *     originalName="originalName",
+     *     dimensions="dimensions"
+     * )
+     */
+//    #[Vich\UploadableField(
+//        mapping: 'resources',
+//        fileNameProperty: 'name',
+//        size: 'size',
+//        mimeType: 'mimeType',
+//        originalName: 'originalName',
+//        dimensions: 'dimensions'
+//    )]
     protected ?File $file = null;
 
     /**

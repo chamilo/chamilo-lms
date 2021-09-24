@@ -142,7 +142,7 @@
         "twig/inky-extra": "^3.3",
         "twig/intl-extra": "^3.0",
         "twig/twig": "^3.0",
-        "vich/uploader-bundle": "dev-master",
+        "vich/uploader-bundle": "^1.18.0",
         "webit/eval-math": "^1.0",
         "webonyx/graphql-php": "^14.8"
     },

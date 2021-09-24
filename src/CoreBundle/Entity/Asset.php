@@ -19,10 +19,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
+ * @Vich\Uploadable
  * @ORM\Entity
  * @ORM\Table(name="asset")
  */
-#[Vich\Uploadable]
 class Asset
 {
     use TimestampableEntity;
@@ -62,14 +62,24 @@ class Asset
     #[Assert\NotBlank]
     protected ?string $category = null;
 
-    #[Vich\UploadableField(
-        mapping: 'assets',
-        fileNameProperty: 'title',
-        size: 'size',
-        mimeType: 'mimeType',
-        originalName: 'originalName',
-        dimensions: 'dimensions'
-    )]
+    /**
+     * @Vich\UploadableField(
+     *     mapping="assets",
+     *     fileNameProperty="title",
+     *     size="size",
+     *     mimeType="mimeType",
+     *     originalName="originalName",
+     *     dimensions="dimensions"
+     * )
+     */
+//    #[Vich\UploadableField(
+//        mapping: 'assets',
+//        fileNameProperty: 'title',
+//        size: 'size',
+//        mimeType: 'mimeType',
+//        originalName: 'originalName',
+//        dimensions: 'dimensions'
+//    )]
     #[Assert\NotNull]
     protected File $file;
 

@@ -8048,14 +8048,17 @@ class SessionManager
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tbl_session_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $where = 'WHERE 1 = 1 ';
-        $user_id = api_get_user_id();
 
         if (api_is_session_admin() &&
             'false' == api_get_setting('allow_session_admins_to_see_all_sessions')
         ) {
-            $where .= " WHERE s.session_admin_id = $user_id ";
+            $user_id = api_get_user_id();
+            $where .= ' AND (sru.relation_type = '.Session::SESSION_ADMIN." AND sru.user_id = $user_id) ";
+        } else {
+            $where .= ' AND sru.relation_type = '.Session::SESSION_COACH.' ';
         }
 
         $extraFieldTables = '';
@@ -8103,8 +8106,9 @@ class SessionManager
                        FROM $extraFieldTables $tbl_session s
                        LEFT JOIN  $tbl_session_category sc
                        ON s.session_category_id = sc.id
+                       INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
                        INNER JOIN $tbl_user u
-                       ON s.id_coach = u.id
+                       ON sru.user_id = u.id
                        INNER JOIN $sessionCourseUserTable scu
                        ON s.id = scu.session_id
                        INNER JOIN $courseTable c
@@ -8120,8 +8124,9 @@ class SessionManager
                                FROM $tbl_session s
                                LEFT JOIN  $tbl_session_category sc
                                ON s.session_category_id = sc.id
+                               INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
                                INNER JOIN $tbl_user u
-                               ON s.id_coach = u.id
+                               ON sru.user_id = u.id
                                INNER JOIN $table_access_url_rel_session ar
                                ON ar.session_id = s.id $where ";
             }

@@ -4586,28 +4586,6 @@ class SessionManager
     }
 
     /**
-     * @param int $user_id
-     * @param int $session_id
-     *
-     * @return bool
-     */
-    public static function user_is_general_coach($user_id, $session_id)
-    {
-        $session_id = (int) $session_id;
-        $user_id = (int) $user_id;
-        $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "SELECT DISTINCT id
-	         	FROM $table
-	         	WHERE session.id_coach = '".$user_id."' AND id = '$session_id'";
-        $result = Database::query($sql);
-        if ($result && Database::num_rows($result)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Get the number of sessions.
      *
      * @param int $access_url_id ID of the URL we want to filter on (optional)

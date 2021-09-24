@@ -138,7 +138,6 @@
         <file name="public/main/inc/lib/text.lib.php"/>
         <file name="public/main/inc/lib/thematic.lib.php"/>
         <file name="public/main/inc/lib/TicketManager.php"/>
-        <file name="public/main/inc/lib/timeline.lib.php"/>
         <file name="public/main/inc/lib/UnserializeApi.php"/>
 <!--        <file name="public/main/inc/lib/tracking.lib.php"/>-->
         <file name="public/main/inc/lib/urlmanager.lib.php"/>

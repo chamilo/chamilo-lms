@@ -2653,7 +2653,7 @@ class UserManager
                     }
                 } else {
                     // Current user portal
-                    $isGeneralCoach = SessionManager::user_is_general_coach($user_id, $row['id']);
+                    $isGeneralCoach = api_get_session_entity($row['id'])->hasUserAsGeneralCoach(api_get_user_entity($user_id));
                     $isCoachOfCourse = in_array($user_id, $coachList);
 
                     if (api_is_platform_admin() || $isGeneralCoach || $isCoachOfCourse) {

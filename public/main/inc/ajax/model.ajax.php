@@ -55,7 +55,6 @@ if (!in_array(
             'get_work_user_list_others',
             'get_work_user_list_all',
             'get_work_pending_list',
-            'get_timelines',
             'get_user_skill_ranking',
             'get_usergroups',
             'get_usergroups_teacher',
@@ -922,10 +921,6 @@ switch ($action) {
         $field_id = $_REQUEST['field_id'];
         $obj = new ExtraFieldOption($type);
         $count = $obj->get_count_by_field_id($field_id);
-        break;
-    case 'get_timelines':
-        $obj = new Timeline();
-        $count = $obj->get_count();
         break;
     case 'get_gradebooks':
         $obj = new Gradebook();
@@ -2202,51 +2197,6 @@ switch ($action) {
                 'limit' => "$start , $limit",
             ]
         );
-        break;
-    case 'get_timelines':
-        $columns = ['headline', 'actions'];
-
-        if (!in_array($sidx, $columns)) {
-            $sidx = 'headline';
-        }
-        $sidx = in_array($sidx, $columns) ? $sidx : 'headline';
-        $course_id = api_get_course_int_id();
-        $result = Database::select(
-            '*',
-            $obj->table,
-            [
-                'where' => [
-                    'parent_id = ? AND c_id = ?' => ['0', $course_id],
-                ],
-                'order' => "$sidx $sord",
-                'LIMIT' => "$start , $limit",
-            ]
-        );
-        $new_result = [];
-        foreach ($result as $item) {
-            if (!$item['status']) {
-                $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
-            }
-            $item['headline'] = Display::url(
-                $item['headline'],
-                api_get_path(WEB_CODE_PATH).'timeline/view.php?id='.$item['id']
-            );
-            $item['actions'] = Display::url(
-                Display::return_icon('add.png', get_lang('Add items')),
-                api_get_path(WEB_CODE_PATH).'timeline/?action=add_item&parent_id='.$item['id']
-            );
-            $item['actions'] .= Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
-                api_get_path(WEB_CODE_PATH).'timeline/?action=edit&id='.$item['id']
-            );
-            $item['actions'] .= Display::url(
-                Display::return_icon('delete.png', get_lang('Delete')),
-                api_get_path(WEB_CODE_PATH).'timeline/?action=delete&id='.$item['id']
-            );
-
-            $new_result[] = $item;
-        }
-        $result = $new_result;
         break;
     case 'get_gradebooks':
         $columns = ['name', 'certificates', 'skills', 'actions', 'has_certificates'];

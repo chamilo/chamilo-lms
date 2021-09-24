@@ -2,13 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-
+use Chamilo\CoreBundle\Entity\Session;
 /**
  * This tool show global Statistics on general platform events.
  */
 
-use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 

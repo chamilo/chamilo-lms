@@ -8134,13 +8134,13 @@ class TrackingCourseLog
                     $row_thematic = Database::fetch_array($rs_thematic);
                     $thematic_id = $row_thematic['thematic_id'];
 
-                    $sql = "SELECT session.id, session.name, user.username
-                            FROM $tbl_thematic t, $table_session session, $table_user user
-                            WHERE
-                              t.c_id = $course_id AND
-                              t.session_id = session.id AND
-                              session.id_coach = user.user_id AND
-                              t.id = $thematic_id";
+                    $sql = "SELECT s.id, s.name, u.name
+                        FROM $tbl_thematic t
+                        INNER JOIN $tblSessionRelUser sru ON t.session_id = sru.session_id
+                        INNER JOIN $table_session s ON sru.session_id = s.id
+                        INNER JOIN $table_user u ON sru.user_id = u.id
+                        WHERE t.c_id = $course_id and t.id = $thematic_id
+                            AND sru.relation_type = ".SessionEntity::SESSION_COACH;
                     $recorset = Database::query($sql);
                 }
             } else {

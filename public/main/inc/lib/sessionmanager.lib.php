@@ -361,9 +361,8 @@ class SessionManager
             'false' == api_get_setting('allow_session_admins_to_manage_all_sessions')
         ) {
             $where .= " AND (
-                            s.session_admin_id = $user_id  OR
                             sru.user_id = '$user_id' AND
-                            sru.relation_type = '".Session::DRH."'
+                            sru.relation_type IN ('".Session::DRH.", ".Session::SESSION_ADMIN."')
                             )
                       ";
 
@@ -8717,19 +8716,22 @@ class SessionManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tbl_session_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tbl_session_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
 
         $where = 'WHERE 1 = 1 ';
-        $user_id = api_get_user_id();
 
         if (!api_is_platform_admin()) {
             if (api_is_session_admin() &&
                 'false' == api_get_setting('allow_session_admins_to_manage_all_sessions')
             ) {
-                $where .= " AND s.session_admin_id = $user_id ";
+                $user_id = api_get_user_id();
+                $where .= ' AND (sru.relation_type = '.Session::SESSION_ADMIN." AND sru.user_id = $user_id) ";
+            } else {
+                $where .= ' AND sru.relation_type = '.Session::SESSION_COACH.' ';
             }
         }
 
@@ -8843,8 +8845,9 @@ class SessionManager
                     ON (src.c_id = c.id)
                     LEFT JOIN $tbl_session_category sc
                     ON (s.session_category_id = sc.id)
+                    INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
                     INNER JOIN $tbl_user u
-                    ON (s.id_coach = u.id)
+                    ON sru.user_id = u.id
                     $where
                     $limit
         ";
@@ -8865,8 +8868,9 @@ class SessionManager
                     ON (src.c_id = c.id)
                     LEFT JOIN $tbl_session_category sc
                     ON (s.session_category_id = sc.id)
+                    INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
                     INNER JOIN $tbl_user u
-                    ON (s.id_coach = u.id)
+                    ON sru.user_id = u.id
                     INNER JOIN $table_access_url_rel_session ar
                     ON (ar.session_id = s.id AND ar.access_url_id = $access_url_id)
                     $where

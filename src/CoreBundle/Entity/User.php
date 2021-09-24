@@ -2373,7 +2373,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this
             ->getSessionRelCourseRelUsers()
             ->matching($criteria)
-            ->map(fn(SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession());
+            ->map(fn (SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession())
+        ;
     }
 
     /**

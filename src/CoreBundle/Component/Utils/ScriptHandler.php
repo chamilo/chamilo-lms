@@ -272,7 +272,7 @@ class ScriptHandler
         }
 
         // Loop through the folder.
-        $dir = getdir($dirname);
+        $dir = \getdir($dirname);
         // A sanity check.
         $is_object_dir = \is_object($dir);
         if ($is_object_dir) {

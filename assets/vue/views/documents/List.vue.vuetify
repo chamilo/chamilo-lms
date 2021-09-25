@@ -4,6 +4,7 @@
       :handle-add="addHandler"
       :handle-add-document="addDocumentHandler"
       :handle-upload-document="uploadDocumentHandler"
+      :handle-download-document="downloadDocumentHandler"
     />
     <b-container fluid>
       <b-row>

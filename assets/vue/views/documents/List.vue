@@ -3,6 +3,7 @@
 <!--     :handle-add="addHandler"-->
 <!--     :handle-add-document="addDocumentHandler"-->
 <!--     :handle-upload-document="uploadDocumentHandler"-->
+<!--     :handle-download-document="downloadDocumentHandler"-->
 <!--     :filters="filters"-->
 <!--     :on-send-filter="onSendFilter"-->
 <!--     :reset-filter="resetFilter"-->
@@ -92,13 +93,31 @@
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2" >
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
-        <Button label="New folder" icon="fa fa-folder-plus" class="btn btn-primary" @click="openNew" />
+        <Button label="New folder" class="btn btn-primary" @click="openNew">
+          <v-icon icon="mdi-folder-plus"/>
+          {{ $t('New folder') }}
+        </Button>
 
         <!--         <Button label="New folder" icon="pi pi-plus" class="p-button-success p-mr-2" @click="addHandler()" />-->
         <!--         <Button label="New document" icon="pi pi-plus" class="p-button-sm p-button-primary p-mr-2" @click="addDocumentHandler()" />-->
-        <Button label="New document" icon="fa fa-file-alt" class="btn btn-primary" @click="addDocumentHandler()" />
-        <Button label="Upload" icon="fa fa-file-upload" class="btn btn-primary" @click="uploadDocumentHandler()" />
-        <Button label="Delete" icon="mdi-delete" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" />
+        <Button label="{{ $t('New document') }}" class="btn btn-primary" @click="addDocumentHandler()" >
+          <v-icon icon="mdi-file-plus"/>
+          {{ $t('New document') }}
+        </Button>
+        <Button label="{{ $t('Upload') }}" class="btn btn-primary" @click="uploadDocumentHandler()">
+          <v-icon icon="mdi-file-upload"/>
+          {{ $t('Upload') }}
+        </Button>
+        <!--
+        <Button label="{{ $t('Download') }}" class="btn btn-primary" @click="downloadDocumentHandler()" :disabled="!selectedItems || !selectedItems.length">
+          <v-icon icon="mdi-file-download"/>
+          {{ $t('Download') }}
+        </Button>
+        -->
+        <Button label="{{ $t('Delete selected') }}" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length">
+          <v-icon icon="mdi-delete"/>
+          {{ $t('Delete selected') }}
+        </Button>
       </div>
     </div>
 

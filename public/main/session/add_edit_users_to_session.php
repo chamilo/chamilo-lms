@@ -37,7 +37,7 @@ $tblUser = Database::get_main_table(TABLE_MAIN_USER);
 $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 // setting the name of the tool
-$tool_name = get_lang('Subscribe users to this session');
+$toolName = get_lang('Subscribe users to this session');
 $add_type = 'unique';
 if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
@@ -345,7 +345,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 }
 
 $sessionInfo = SessionManager::fetch($sessionId);
-Display::display_header($tool_name);
+Display::display_header($toolName);
 
 $nosessionUsersList = $sessionUsersList = [];
 $where_filter = null;
@@ -629,7 +629,7 @@ $newLinks .= Display::url(
         } ?>" <?php if ($ajax_search) {
             echo ' onsubmit="valide();"';
         } ?>>
-        <?php echo '<legend>'.$tool_name.' ('.$sessionInfo['name'].') </legend>'; ?>
+        <?php echo '<legend>'.$toolName.' ('.$sessionInfo['name'].') </legend>'; ?>
         <?php
         if ('multiple' == $add_type) {
             if (is_array($extra_field_list)) {

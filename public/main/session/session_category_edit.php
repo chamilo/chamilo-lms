@@ -9,8 +9,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
-$_user = api_get_user_info();
-$_user['user_id'] = (int) $_user['user_id'];
+$userInfo = api_get_user_info();
+$userInfo['user_id'] = (int) $userInfo['user_id'];
 $id = (int) $_GET['id'];
 $formSent = 0;
 $errorMsg = '';
@@ -44,7 +44,7 @@ if ($infos['date_end']) {
     list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
 }
 
-if (!api_is_platform_admin() && !SessionManager::sessionHasSessionAdmin($id, $_user['user_id']) && !api_is_session_admin()) {
+if (!api_is_platform_admin() && !SessionManager::sessionHasSessionAdmin($id, $userInfo['user_id']) && !api_is_session_admin()) {
     api_not_allowed(true);
 }
 

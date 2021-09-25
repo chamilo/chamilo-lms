@@ -275,11 +275,9 @@ class HTML_QuickForm extends HTML_Common
 
     public function protect()
     {
-        $token = $this->getSubmitValue('protect_token');
+        $token = Security::get_existing_token();
         if (null === $token) {
             $token = Security::get_token();
-        } else {
-            $token = Security::get_existing_token();
         }
         $this->addHidden('protect_token', $token);
         $this->setToken($token);

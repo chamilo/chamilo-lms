@@ -2529,19 +2529,23 @@ class UserManager
             ";
         }
 
-        $dql = "SELECT $dqlSelect
-                FROM ChamiloCoreBundle:Session AS s
-                LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
-                INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
-                LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc ";
-
         // A single OR operation on scu.user = :user OR s.generalCoach = :user
         // is awfully inefficient for large sets of data (1m25s for 58K
         // sessions, BT#14115) but executing a similar query twice and grouping
         // the results afterwards in PHP takes about 1/1000th of the time
         // (0.1s + 0.0s) for the same set of data, so we do it this way...
-        $dqlStudent = $dql." WHERE scu.user = :user AND url.url = :url ";
-        $dqlCoach = $dql." WHERE s.generalCoach = :user AND url.url = :url ";
+        $dqlStudent = "SELECT $dqlSelect
+            FROM ChamiloCoreBundle:Session AS s
+            LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
+            INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
+            LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
+            WHERE scu.user = :user AND url.url = :url ";
+        $dqlCoach = "SELECT $dqlSelect
+            FROM ChamiloCoreBundle:Session AS s
+            INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
+            LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
+            INNER JOIN ChamiloCoreBundle:SessionRelUser AS su WITH su.session = s
+            WHERE (su.user = :user AND su.relationType = ".SessionEntity::SESSION_COACH.") AND url.url = :url ";
 
         // Default order
         $order = 'ORDER BY sc.name, s.name';

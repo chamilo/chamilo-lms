@@ -146,11 +146,7 @@ $form->display();
 <script>
 $(function() {
 <?php
-    if ($session->getDuration() > 0) {
-        echo 'accessSwitcher(0);';
-    } else {
-        echo 'accessSwitcher(1);';
-    }
+echo $session->getDuration() > 0 ? 'accessSwitcher(0);' : 'accessSwitcher(1);';
 ?>
 });
 

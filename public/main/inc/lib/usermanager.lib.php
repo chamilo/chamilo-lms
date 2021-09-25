@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\NameConvention;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\User;
@@ -2777,7 +2779,6 @@ class UserManager
         $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         $user_id = (int) $user_id;
 
@@ -2785,11 +2786,18 @@ class UserManager
             return [];
         }
 
+        $sessionRepo = Container::getSessionRepository();
+
+        $user = api_get_user_entity($user_id);
+        $url = null;
+        $formattedUserName = Container::$container->get(NameConvention::class)->getPersonName($user);
+
         // We filter the courses from the URL
         $join_access_url = $where_access_url = '';
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
+                $url = api_get_url_entity($access_url_id);
                 $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.c_id = course.id";
                 $where_access_url = " AND access_url_id = $access_url_id ";
@@ -2895,40 +2903,48 @@ class UserManager
             foreach ($sessions as $enreg) {
                 $session_id = $enreg['id'];
                 $session_visibility = api_get_session_visibility($session_id);
+                $session = api_get_session_entity($session_id);
 
                 if (SESSION_INVISIBLE == $session_visibility) {
                     continue;
                 }
 
+                $coursesAsGeneralCoach = $sessionRepo->getSessionCoursesByStatusInUserSubscription(
+                    $user,
+                    $session,
+                    SessionEntity::SESSION_COACH,
+                    $url
+                );
+                $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSuscription(
+                    $user,
+                    $session,
+                    SessionEntity::COURSE_COACH,
+                    $url
+                );
+
                 // This query is horribly slow when more than a few thousand
                 // users and just a few sessions to which they are subscribed
-                $sql = "SELECT DISTINCT
-                        course.code code,
-                        course.title i,
-                        ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t,
-                        email, course.course_language l,
-                        1 sort,
-                        course_category.code user_course_cat,
-                        access_start_date,
-                        access_end_date,
-                        session.id as session_id,
-                        session.name as session_name
-                    FROM $tbl_session_course_user as session_course_user
-                    INNER JOIN $tbl_course AS course
-                        ON course.id = session_course_user.c_id
-                    LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id
-                    INNER JOIN $tbl_session as session
-                        ON session.id = session_course_user.session_id
-                    LEFT JOIN $tbl_user as user
-                        ON user.id = session_course_user.user_id OR session.id_coach = user.id
-                    WHERE
-                        session_course_user.session_id = $session_id AND (
-                            (session_course_user.user_id = $user_id AND session_course_user.status = ".SessionEntity::COURSE_COACH.")
-                            OR session.id_coach = $user_id
-                        )
-                    ORDER BY i";
-                $course_list_sql_result = Database::query($sql);
-                while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
+                $coursesInSession = array_map(
+                    function (SessionRelCourse $courseInSession) {
+                        $course = $courseInSession->getCourse();
+
+                        return [
+                            'code' => $course->getCode(),
+                            'i' => $course->getTitle(),
+                            'l' => $course->getCourseLanguage(),
+                            'sort' => 1,
+                        ];
+                    },
+                    array_merge($coursesAsGeneralCoach, $coursesAsCourseCoach)
+                );
+
+                foreach ($coursesInSession as $result_row) {
+                    $result_row['t'] = $formattedUserName;
+                    $result_row['email'] = $user->getEmail();
+                    $result_row['access_start_date'] = $session->getAccessStartDate()?->format('Y-m-d H:i:s');
+                    $result_row['access_end_date'] = $session->getAccessEndDate()?->format('Y-m-d H:i:s');
+                    $result_row['session_id'] = $session->getId();
+                    $result_row['session_name'] = $session->getName();
                     $result_row['course_info'] = api_get_course_info($result_row['code']);
                     $key = $result_row['session_id'].' - '.$result_row['code'];
                     $personal_course_list[$key] = $result_row;
@@ -2951,7 +2967,6 @@ class UserManager
                 email,
                 course.course_language l,
                 1 sort,
-                course_category.code user_course_cat,
                 access_start_date,
                 access_end_date,
                 session.id as session_id,
@@ -2960,7 +2975,6 @@ class UserManager
             FROM $tbl_session_course_user as session_course_user
             INNER JOIN $tbl_course AS course
             ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
-            LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id
             INNER JOIN $tbl_session as session
             ON session_course_user.session_id = session.id
             LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id
@@ -2991,18 +3005,25 @@ class UserManager
     public static function get_courses_list_by_session($user_id, $session_id)
     {
         // Database Table Definitions
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         $user_id = (int) $user_id;
         $session_id = (int) $session_id;
+
+        $sessionRepo = Container::getSessionRepository();
+
+        $user = api_get_user_entity($user_id);
+        $session = api_get_session_entity($session_id);
+        $url = null;
+
         // We filter the courses from the URL
         $join_access_url = $where_access_url = '';
         if (api_get_multiple_access_url()) {
             $urlId = api_get_current_access_url_id();
             if (-1 != $urlId) {
+                $url = api_get_url_entity($urlId);
                 $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
                 $join_access_url = " ,  $tbl_url_session url_rel_session ";
                 $where_access_url = " AND access_url_id = $urlId AND url_rel_session.session_id = $session_id ";
@@ -3050,43 +3071,45 @@ class UserManager
         }
 
         if (api_is_allowed_to_create_course()) {
-            $sql = "SELECT DISTINCT
-                        c.title,
-                        c.visibility,
-                        c.id as real_id,
-                        c.code as course_code,
-                        sc.position,
-                        c.unsubscribe
-                    FROM $tbl_session_course_user as scu
-                    INNER JOIN $tbl_session as s
-                    ON (scu.session_id = s.id)
-                    INNER JOIN $tbl_session_course sc
-                    ON (scu.session_id = sc.session_id AND scu.c_id = sc.c_id)
-                    INNER JOIN $tableCourse as c
-                    ON (scu.c_id = c.id)
-                    $join_access_url
-                    WHERE
-                      s.id = $session_id AND
-                      (
-                        (scu.user_id = $user_id AND scu.status = ".SessionEntity::COURSE_COACH.") OR
-                        s.id_coach = $user_id
-                      )
-                    $where_access_url
-                    ORDER BY sc.position ASC";
-            $result = Database::query($sql);
+            $coursesAsGeneralCoach = $sessionRepo->getSessionCoursesByStatusInUserSubscription(
+                $user,
+                $session,
+                SessionEntity::SESSION_COACH,
+                $url
+            );
+            $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSuscription(
+                $user,
+                $session,
+                SessionEntity::COURSE_COACH,
+                $url
+            );
 
-            if (Database::num_rows($result) > 0) {
-                while ($result_row = Database::fetch_array($result, 'ASSOC')) {
-                    $result_row['status'] = 2;
-                    if (!in_array($result_row['real_id'], $courses)) {
-                        $position = $result_row['position'];
-                        if (!isset($myCourseList[$position])) {
-                            $myCourseList[$position] = $result_row;
-                        } else {
-                            $myCourseList[] = $result_row;
-                        }
-                        $courses[] = $result_row['real_id'];
+            $coursesInSession = array_map(
+                function (SessionRelCourse $courseInSession) {
+                    $course = $courseInSession->getCourse();
+
+                    return [
+                        'title' => $course->getTitle(),
+                        'visibility' => $course->getVisibility(),
+                        'real_id' => $course->getId(),
+                        'course_code' => $course->getCode(),
+                        'position' => $courseInSession->getPosition(),
+                        'unsubscribe' => $course->getUnsubscribe(),
+                    ];
+                },
+                array_merge($coursesAsGeneralCoach, $coursesAsCourseCoach)
+            );
+
+            foreach ($coursesInSession as $result_row) {
+                $result_row['status'] = 2;
+                if (!in_array($result_row['real_id'], $courses)) {
+                    $position = $result_row['position'];
+                    if (!isset($myCourseList[$position])) {
+                        $myCourseList[$position] = $result_row;
+                    } else {
+                        $myCourseList[] = $result_row;
                     }
+                    $courses[] = $result_row['real_id'];
                 }
             }
         }
@@ -3111,8 +3134,6 @@ class UserManager
             }
         } else {
             //check if user is general coach for this session
-            $session = api_get_session_entity($session_id);
-            $user = api_get_user_entity($user_id);
             if ($session && $session->hasUserAsGeneralCoach($user)) {
                 $courseList = SessionManager::get_course_list_by_session_id($session_id);
                 if (!empty($courseList)) {

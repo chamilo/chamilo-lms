@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
 
-$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
+$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : null;
 
 api_block_anonymous_users();
 
@@ -155,7 +155,7 @@ if ($showImportIcon) {
 function get_count_courses()
 {
     $userId = api_get_user_id();
-    $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
+    $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : null;
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
     $drhLoaded = false;
 
@@ -220,7 +220,7 @@ function get_count_courses()
 function get_courses($from, $limit, $column, $direction)
 {
     $userId = api_get_user_id();
-    $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+    $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
     $follow = isset($_GET['follow']) ? true : false;
     $drhLoaded = false;
@@ -347,11 +347,15 @@ function get_courses($from, $limit, $column, $direction)
                 $data['title'],
                 $courseInfo['course_public_url'].'?id_session='.$sessionId
             );
-
-            $attendanceLink = Display::url(
-                Display::return_icon('attendance_list.png', get_lang('Attendance'), [], ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH).'attendance/index.php?cid='.$courseId.'&sid='.$sessionId.'&action=calendar_logins'
-            );
+            $attendance = new Attendance();
+            $result = $attendance->getAttendanceBaseInLogin(false, true);
+            $attendanceLink = '';
+            if (false !== $result) {
+                $attendanceLink = Display::url(
+                    Display::return_icon('attendance_list.png', get_lang('Attendance'), [], ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'attendance/index.php?cid='.$courseId.'&sid='.$sessionId.'&action=calendar_logins'
+                );
+            }
 
             $courseList[] = [
                 $title,
@@ -393,7 +397,7 @@ $table->set_header(9, get_lang('Details'), false);
 $form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/course.php');
 $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addButtonSearch(get_lang('Search'));
-$form->addElement('hidden', 'session_id', $sessionId);
+$form->addElement('hidden', 'sid', $sessionId);
 
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 

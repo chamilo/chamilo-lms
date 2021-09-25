@@ -3110,7 +3110,8 @@ class Attendance
         if ($exportToPdf) {
             $result = $this->exportAttendanceLogin($startDate, $endDate);
             if (empty($result)) {
-                api_not_allowed(true, get_lang('No data available'));
+                return false;
+                //api_not_allowed(true, get_lang('No data available'));
             }
         }
 

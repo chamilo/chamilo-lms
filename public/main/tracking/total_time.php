@@ -148,10 +148,10 @@ $actionsLeft .= Display::url(
     'course_log_tools.php?'.api_get_cidreq()
 );
 
-$actionsLeft .= Display::url(
+/*$actionsLeft .= Display::url(
     Display::return_icon('tools.png', get_lang('ResourcesReporting'), [], ICON_SIZE_MEDIUM),
     'course_log_resources.php?'.api_get_cidreq()
-);
+);*/
 $actionsLeft .= Display::url(
     Display::return_icon('quiz.png', get_lang('ExamReporting'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
@@ -261,7 +261,7 @@ if (api_is_platform_admin(true) ||
 
         $html .= '<ul class="session-list">';
         foreach ($sessionList as $session) {
-            $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='
+            $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?sid='
                 .$session['id'].'&cidReq='.$courseInfo['code'];
             $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
         }

@@ -228,7 +228,7 @@ $form_search = new FormValidator(
 $renderer = $form_search->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span>');
 $form_search->addHidden('from', Security::remove_XSS($from));
-$form_search->addHidden('session_id', $sessionId);
+$form_search->addHidden('sessionId', $sessionId);
 $form_search->addHidden('sid', $sessionId);
 $form_search->addHidden('cid', $courseId);
 $form_search->addElement('text', 'user_keyword');
@@ -313,18 +313,16 @@ if ($showReporting) {
                 if (SESSION_INVISIBLE == $visibility) {
                     continue;
                 }
-
                 // Check if is coach
                 $isCoach = api_is_coach($session['id'], $courseId);
                 if (!$isCoach) {
                     continue;
                 }
             }
-            $url = $urlWebCode.'mySpace/course.php?session_id='.$session['id'].'&cid='.$courseId;
+            $url = $urlWebCode.'mySpace/course.php?sid='.$session['id'].'&cid='.$courseId;
             $table->setCellContents($row++, 0, $icon.' '.Display::url($session['name'], $url));
         }
-
-        if ($row > 1) {
+        if ($row > 0) {
             $html .= $table->toHtml();
         }
     }
@@ -628,7 +626,7 @@ if ($nbStudents > 0) {
     }
 
     $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
-    $parameters['id_session'] = $sessionId;
+    $parameters['sid'] = $sessionId;
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $headerCounter = 0;
@@ -758,13 +756,13 @@ if ($nbStudents > 0) {
         }
     }
     $parameters['cidReq'] = $courseCode;
-    $parameters['id_session'] = $sessionId;
+    $parameters['sid'] = $sessionId;
     $table->set_additional_parameters($parameters);
     // display buttons to un hide hidden columns
     $html .= '<div id="unhideButtons" class="btn-toolbar">';
     $index = 0;
     $getLangDisplayColumn = get_lang('Show column');
-    foreach ($headers as $header) {
+    /*foreach ($headers as $header) {
         $html .= Display::toolbarButton(
             $header,
             '#',
@@ -777,7 +775,7 @@ if ($nbStudents > 0) {
             ]
         );
         $index++;
-    }
+    }*/
     $html .= '</div>';
 
     $html .= '<div id="reporting_table">';

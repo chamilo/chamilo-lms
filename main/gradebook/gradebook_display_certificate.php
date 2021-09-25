@@ -159,6 +159,19 @@ switch ($action) {
         header('Location: '.$url);
         exit;
         break;
+    case 'download_all_certificates':
+        $courseCode = api_get_course_id();
+        $sessionId = api_get_session_id();
+        $categoryId = (int) $_GET['catId'];
+        $date = api_get_utc_datetime(null, false, true);
+        $pdfName = 'certs_'.$courseCode.'_'.$sessionId.'_'.$categoryId.'_'.$date->format('Y-m-d');
+        $finalFile = api_get_path(SYS_ARCHIVE_PATH)."$pdfName.pdf";
+
+        $result = DocumentManager::file_send_for_download($finalFile, true);
+        if (false === $result) {
+            api_not_allowed(true);
+        }
+        break;
 }
 
 $interbreadcrumb[] = [

@@ -4294,10 +4294,6 @@ class UserManager
                     relation_type = '".UserRelUser::USER_RELATION_TYPE_RRHH."'
                 ";
 
-                $sessionConditionsCoach .= " AND
-                    (s.id_coach = '$userId')
-                ";
-
                 $sessionConditionsTeacher = " AND
                     (scu.status = ".SessionEntity::COURSE_COACH." AND scu.user_id = '$userId')
                 ";
@@ -4333,8 +4329,10 @@ class UserManager
                                     SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
                                     $tbl_session_rel_access_url session_rel_access_rel_user
                                     ON session_rel_access_rel_user.session_id = s.id
+                                    INNER JOIN $tbl_session_rel_user sru ON s.id = sru.session_id
                                     WHERE access_url_id = ".$urlId."
-                                    $sessionConditionsCoach
+                                        AND (sru.relation_type = ".SessionEntity::SESSION_COACH."
+                                        AND sru.user_id = $userId)
                                 ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s
                                     INNER JOIN $tbl_session_rel_access_url url

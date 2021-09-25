@@ -33,6 +33,7 @@ $interbreadcrumb[] = [
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $itemId = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
+$exportXls = isset($_REQUEST['export_xls']) && !empty($_REQUEST['export_xls']) ? (int) $_REQUEST['export_xls'] : 0;
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-upload']);
 
 $plagiarismListJqgridColumn = [];
@@ -62,6 +63,8 @@ $columns = [
     get_lang('Score'),
     get_lang('Date'),
     get_lang('Status'),
+    get_lang('Corrector'),
+    get_lang('CorrectionDate'),
     get_lang('UploadCorrection'),
 ];
 $columns = array_merge($columns, $plagiarismListJqgridColumn);
@@ -90,6 +93,7 @@ $column_model = [
         'width' => '30',
         'align' => 'left',
         'search' => 'true',
+        'sortable' => 'true',
     ],
     [
         'name' => 'title',
@@ -118,6 +122,20 @@ $column_model = [
     [
         'name' => 'qualificator_id',
         'index' => 'qualificator_id',
+        'width' => '20',
+        'align' => 'left',
+        'search' => 'true',
+    ],
+    [
+        'name' => 'qualificator_fullname',
+        'index' => 'qualificator_fullname',
+        'width' => '20',
+        'align' => 'left',
+        'search' => 'true',
+    ],
+    [
+        'name' => 'date_of_qualification',
+        'index' => 'date_of_qualification',
         'width' => '20',
         'align' => 'left',
         'search' => 'true',
@@ -164,16 +182,46 @@ $hideUrl = $workUrl.'&a=hide_student_work';*/
 $courses = CourseManager::get_courses_list_by_user_id($userId, false, false, false);
 $content = '';
 if (!empty($courses)) {
-    $form = new FormValidator('pending', 'GET');
+    $form = new FormValidator('pending', 'POST');
     $courses = array_column($courses, 'title', 'real_id');
-    $form->addSelect('course', get_lang('Course'), $courses, ['placeholder' => get_lang('All')]);
+    $selectCourse = $form->addSelect('course', get_lang('Course'), $courses, ['placeholder' => get_lang('All')]);
+    $courseId = 0;
+    if (isset($_REQUEST['course'])) {
+        $courseId = (int) $_REQUEST['course'];
+        $selectCourse->setSelected($courseId);
+    }
     $status = [
         1 => get_lang('All'),
         2 => get_lang('NotRevised'),
         3 => get_lang('Revised'),
     ];
     $form->addSelect('status', get_lang('Status'), $status);
-    $form->addButtonSearch(get_lang('Search'));
+    $allWork = getAllWork(
+        null,
+        null,
+        null,
+        null,
+        '',
+        false,
+        $courseId,
+        0,
+        true
+    );
+    $selectWork = $form->addSelect(
+        'work_parent_ids',
+        get_lang('Works'),
+        [],
+        ['placeholder' => get_lang('SelectAnOption'), 'id' => 'search-works', 'multiple' => true]
+    );
+    if (count($allWork) > 0) {
+        foreach ($allWork as $work) {
+            $selectWork->addOption(
+                $work['title'],
+                $work['id']
+            );
+        }
+    }
+    $form->addButtonSearch(get_lang('Search'), 'pendingSubmit');
     $content .= $form->returnForm();
     $tableWork = Display::grid_html('results');
     $content .= Display::panel($tableWork);
@@ -189,10 +237,38 @@ if (!empty($courses)) {
         if (!empty($status)) {
             $url .= '&status='.(int) $status;
         }
+        if (!empty($values['work_parent_ids'])) {
+            $url .= '&work_parent_ids='.Security::remove_XSS(implode(',', $values['work_parent_ids']));
+        }
+        if ($exportXls) {
+            exportPendingWorksToExcel($values);
+        }
     }
 } else {
     $content .= Display::return_message(get_lang('NoCoursesForThisUser'), 'warning');
 }
+
+$htmlHeadXtra[] = '<script>
+    $(function() {
+        $("#export-xls").bind("click", function(e) {
+            e.preventDefault();
+            var input = $("<input>", {
+                type: "hidden",
+                name: "export_xls",
+                value: "1"
+            });
+            $("#pending").append(input);
+            $("#pending").submit();
+        });
+        $("#pending_pendingSubmit").bind("click", function(e) {
+            e.preventDefault();
+            if ($("input[name=\"export_xls\"]").length > 0) {
+                $("input[name=\"export_xls\"]").remove();
+            }
+            $("#pending").submit();
+        });
+    });
+</script>';
 
 Display::display_header(get_lang('StudentPublications'));
 ?>
@@ -211,10 +287,23 @@ $(function() {
         { reloadAfterSubmit:false, url: "<?php echo $deleteUrl; ?>" }, // del options
         { width:500 } // search options
     );
+
+    $("select[name=\'course\']").bind('change', function () {
+        $("#search-works").val(0);
+        $("#pending_pendingSubmit").trigger("click");
+        $("#pending_pendingSubmit").attr("disabled", true);
+    });
 });
 </script>
 <?php
+$actions = '';
+$actions .= Display::url(
+    Display::return_icon('excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+    '#',
+    ['id' => 'export-xls']
+);
 
+echo Display::div($actions, ['class' => 'actions']);
 echo Display::page_header(get_lang('StudentPublicationToCorrect'));
 echo Display::return_message(get_lang('StudentPublicationCorrectionWarning'), 'warning');
 echo $content;

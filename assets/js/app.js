@@ -162,34 +162,19 @@ $(function () {
       self = $(this);
 
     $.when(loadModalContent).done(function (modalContent) {
-      var modalDialog = $('#global-modal').find('.modal-dialog'),
-        modalSize = self.data('size') || get_url_params(contentUrl, 'modal_size'),
-        modalWidth = self.data('width') || get_url_params(contentUrl, 'width'),
-        modalTitle = self.data('title') || ' ';
-
-      modalDialog.removeClass('modal-lg modal-sm').css('width', '');
-
-      if (modalSize && modalSize.length != 0) {
-        switch (modalSize) {
-        case 'lg':
-          modalDialog.addClass('modal-lg');
-          break;
-        case 'sm':
-          modalDialog.addClass('modal-sm');
-          break;
-        }
-      } else if (modalWidth) {
-        modalDialog.css('width', modalWidth + 'px');
-      }
-
+      var modalTitle = self.data('title') || ' ';
       $('#global-modal').find('.modal-title').text(modalTitle);
       $('#global-modal').find('.modal-body').html(modalContent);
-      $('#global-modal').modal('show');
+      toggleModal('global-modal');
     });
   });
 
   $('#global-modal').on('hidden.bs.modal', function () {
     $(".embed-responsive").find('iframe').remove();
+  });
+
+  $('#close-global-model').on('click', function () {
+    toggleModal('global-modal');
   });
 
   // Expands an image modal
@@ -581,6 +566,14 @@ function copyTextToClipBoard(elementId)
 
   /* Copy the text inside the text field */
   document.execCommand('copy');
+}
+
+function toggleModal(modalID)
+{
+  document.getElementById(modalID).classList.toggle("hidden");
+  document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+  document.getElementById(modalID).classList.toggle("flex");
+  document.getElementById(modalID + "-backdrop").classList.toggle("flex");
 }
 
 // Expose functions to be use inside chamilo.

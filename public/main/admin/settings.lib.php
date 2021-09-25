@@ -181,9 +181,9 @@ function handlePlugins()
             $pluginRow .= '<td>';
             // Checkbox
             if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked" class="border rounded">';
             } else {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" class="border rounded">';
             }
             $pluginRow .= '</td><td>';
             $pluginRow .= '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
@@ -252,6 +252,26 @@ function handlePlugins()
     echo get_lang('Enable the selected plugins').'</button>';
     echo '</div>';
     echo '</form>';
+    echo '<div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="global-modal">
+    <!--content-->
+    <div class="relative w-auto my-6 mx-auto max-w-3xl">
+        <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+            <!--header-->
+            <div class="flex items-start justify-between p-5 border-b border-solid border-gray-200 rounded-t">
+                <h3 class="text-3xl font-semibold modal-title" id="global-modal-title"></h3>
+            </div>
+            <!--body-->
+            <div class="relative p-6 flex-auto modal-body" id="global-modal-body"></div>
+            <!--footer-->
+            <div class="flex items-center justify-end p-6 border-t border-solid border-gray-200 rounded-b">
+                <button id="close-global-model" class="text-purple-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                  '.get_lang('Close').'
+                </button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="global-modal-backdrop"></div>';
 }
 
 /**

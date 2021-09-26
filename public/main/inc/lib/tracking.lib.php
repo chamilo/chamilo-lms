@@ -3975,66 +3975,32 @@ class Tracking
     /**
      * This function counts the number of post by course.
      *
-     * @param string $course_code
+     * @param string $courseId
      * @param int    $sessionId   (optional), if is null(default) it'll return results including sessions,
      *                            0 = session is not filtered
      * @param int    $groupId
      *
      * @return int The number of post by course
      */
-    public static function count_number_of_posts_by_course($course_code, $sessionId = null, $groupId = 0)
+    public static function count_number_of_posts_by_course($courseId, $sessionId = null, $groupId = 0)
     {
-        $courseInfo = api_get_course_info($course_code);
-        if (!empty($courseInfo)) {
-            $tbl_posts = Database::get_course_table(TABLE_FORUM_POST);
-            $tbl_forums = Database::get_course_table(TABLE_FORUM);
+        $repo = Container::getForumPostRepository();
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity($groupId);
+        $qb = $repo->getResourcesByCourse($course, $session, $group);
 
-            $condition_session = '';
-            if (isset($sessionId)) {
-                $sessionId = (int) $sessionId;
-                $condition_session = api_get_session_condition(
-                    $sessionId,
-                    true,
-                    false,
-                    'f.session_id'
-                );
-            }
+        $qb->select('count(resource)');
+        $count = $qb->getQuery()->getSingleScalarResult();
 
-            $courseId = $courseInfo['real_id'];
-            $groupId = (int) $groupId;
-            if (!empty($groupId)) {
-                $groupCondition = " i.to_group_id = $groupId ";
-            } else {
-                $groupCondition = ' (i.to_group_id = 0 OR i.to_group_id IS NULL) ';
-            }
-
-            $item = Database::get_course_table(TABLE_ITEM_PROPERTY);
-            $sql = "SELECT count(*) FROM $tbl_posts p
-                    INNER JOIN $tbl_forums f
-                    ON f.forum_id = p.forum_id AND p.c_id = f.c_id
-                    INNER JOIN $item i
-                    ON (tool = '".TOOL_FORUM."' AND f.c_id = i.c_id AND f.iid = i.ref)
-                    WHERE
-                        p.c_id = $courseId AND
-                        f.c_id = $courseId AND
-                        $groupCondition
-                        $condition_session
-                    ";
-            $result = Database::query($sql);
-            $row = Database::fetch_row($result);
-            $count = $row[0];
-
-            return $count;
-        }
-
-        return 0;
+        return $count;
     }
 
     /**
      * This function counts the number of threads by course.
      *
-     * @param      string     Course code
-     * @param    int        Session id (optional),
+     * @param int Course id
+     * @param int Session id (optional),
      * if param $sessionId is null(default) it'll return results including
      * sessions, 0 = session is not filtered
      * @param int $groupId
@@ -4042,67 +4008,27 @@ class Tracking
      * @return int The number of threads by course
      */
     public static function count_number_of_threads_by_course(
-        $course_code,
+        $courseId,
         $sessionId = null,
         $groupId = 0
     ) {
-        $course_info = api_get_course_info($course_code);
-        if (empty($course_info)) {
-            return null;
-        }
+        $repo = Container::getForumThreadRepository();
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity($groupId);
+        $qb = $repo->getResourcesByCourse($course, $session, $group);
 
-        $courseId = $course_info['real_id'];
-        $tbl_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-        $tbl_forums = Database::get_course_table(TABLE_FORUM);
+        $qb->select('count(resource)');
+        $count = $qb->getQuery()->getSingleScalarResult();
 
-        $condition_session = '';
-        if (isset($sessionId)) {
-            $sessionId = (int) $sessionId;
-            $condition_session = ' AND f.session_id = '.$sessionId;
-        }
-
-        $groupId = (int) $groupId;
-
-        if (!empty($groupId)) {
-            $groupCondition = " i.to_group_id = $groupId ";
-        } else {
-            $groupCondition = " (i.to_group_id = 0 OR i.to_group_id IS NULL) ";
-        }
-
-        $item = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $sql = "SELECT count(*)
-                FROM $tbl_threads t
-                INNER JOIN $tbl_forums f
-                ON f.iid = t.forum_id AND f.c_id = t.c_id
-                INNER JOIN $item i
-                ON (
-                    tool = '".TOOL_FORUM_THREAD."' AND
-                    f.c_id = i.c_id AND
-                    t.iid = i.ref
-                )
-                WHERE
-                    t.c_id = $courseId AND
-                    f.c_id = $courseId AND
-                    $groupCondition
-                    $condition_session
-                ";
-
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_row($result);
-            $count = $row[0];
-
-            return $count;
-        }
-
-        return 0;
+        return $count;
     }
 
     /**
      * This function counts the number of forums by course.
      *
-     * @param      string     Course code
-     * @param    int        Session id (optional),
+     * @param int     Course id
+     * @param int     Session id (optional),
      * if param $sessionId is null(default) it'll return results
      * including sessions, 0 = session is not filtered
      * @param int $groupId
@@ -4110,50 +4036,20 @@ class Tracking
      * @return int The number of forums by course
      */
     public static function count_number_of_forums_by_course(
-        $course_code,
+        $courseId,
         $sessionId = null,
         $groupId = 0
     ) {
-        $course_info = api_get_course_info($course_code);
-        if (empty($course_info)) {
-            return null;
-        }
-        $courseId = $course_info['real_id'];
+        $repo = Container::getForumRepository();
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity($groupId);
 
-        $condition_session = '';
-        if (isset($sessionId)) {
-            $sessionId = (int) $sessionId;
-            $condition_session = ' AND f.session_id = '.$sessionId;
-        }
+        $qb = $repo->getResourcesByCourse($course, $session, $group);
+        $qb->select('count(resource)');
+        $count = $qb->getQuery()->getSingleScalarResult();
 
-        $groupId = (int) $groupId;
-        if (!empty($groupId)) {
-            $groupCondition = " i.to_group_id = $groupId ";
-        } else {
-            $groupCondition = " (i.to_group_id = 0 OR i.to_group_id IS NULL) ";
-        }
-
-        $tbl_forums = Database::get_course_table(TABLE_FORUM);
-        $item = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-        $sql = "SELECT count(*)
-                FROM $tbl_forums f
-                INNER JOIN $item i
-                ON f.c_id = i.c_id AND f.iid = i.ref AND tool = '".TOOL_FORUM."'
-                WHERE
-                    f.c_id = $courseId AND
-                    $groupCondition
-                    $condition_session
-                ";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_row($result);
-            $count = $row[0];
-
-            return $count;
-        }
-
-        return 0;
+        return $count;
     }
 
     /**
@@ -4542,14 +4438,13 @@ class Tracking
         $condition_session = '';
         if (isset($session_id)) {
             $session_id = intval($session_id);
-            $condition_session = ' AND cl.session_id = '.$session_id;
+            $condition_session = ' AND sl.links_session_id = '.$session_id;
         }
 
         $sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title) as count_visits
                 FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
                 WHERE
-                    cl.c_id = $courseId AND
-                    sl.links_link_id = cl.id AND
+                    sl.links_link_id = cl.iid AND
                     sl.c_id = $courseId
                     $condition_session
                 GROUP BY cl.title, cl.url
@@ -8459,16 +8354,16 @@ class TrackingCourseLog
                 $users = implode(',', $new_user_array);
                 $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
                 // Selecting only the necessary information NOT ALL the user list
-                $sql = "SELECT user.user_id, v.value
+                $sql = "SELECT user.id as user_id, v.value
                         FROM $table_user user
                         INNER JOIN $table_user_field_values v
-                        ON (user.user_id = v.item_id)
+                        ON (user.id = v.item_id)
                         INNER JOIN $extraField f
                         ON (f.id = v.field_id)
                         WHERE
                             f.extra_field_type = $extraFieldType AND
                             v.field_id=".intval($field_id)." AND
-                            user.user_id IN ($users)";
+                            user.id IN ($users)";
 
                 $result = Database::query($sql);
                 while ($row = Database::fetch_array($result)) {
@@ -8575,7 +8470,7 @@ class TrackingCourseLog
         $conditions = [],
         $options = []
     ) {
-        global $user_ids, $export_csv, $session_id;
+        global $user_ids, $export_csv, $sessionId;
         $includeInvitedUsers = $conditions['include_invited_users']; // include the invited users
         $getCount = isset($conditions['get_count']) ? $conditions['get_count'] : false;
 
@@ -8691,12 +8586,12 @@ class TrackingCourseLog
             false,
             3
         );*/
-        $session = api_get_session_entity($session_id);
+        $session = api_get_session_entity($sessionId);
         $repo = Container::getQuizRepository();
         $qb = $repo->findAllByCourse($course, $session, null, 2);
         $exercises = $qb->getQuery()->getResult();
 
-        if (empty($session_id)) {
+        if (empty($sessionId)) {
             $survey_user_list = [];
             // @todo
             //$surveyList = SurveyManager::get_surveys($courseCode, $session_id);
@@ -8718,7 +8613,7 @@ class TrackingCourseLog
         }
 
         $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cid='.$courseId.
-            '&origin=tracking_course&sid='.$session_id;
+            '&origin=tracking_course&sid='.$sessionId;
 
         $sortByFirstName = api_sort_by_first_name();
         Session::write('user_id_list', []);
@@ -8746,7 +8641,7 @@ class TrackingCourseLog
                 Tracking::get_time_spent_on_the_course(
                     $user['user_id'],
                     $courseId,
-                    $session_id
+                    $sessionId
                 )
             );
 
@@ -8783,7 +8678,7 @@ class TrackingCourseLog
                 $exercises,
                 $user['user_id'],
                 $courseId,
-                $session_id
+                $sessionId
             );
 
             $user['exercise_progress'] = $total_user_exercise;
@@ -8792,7 +8687,7 @@ class TrackingCourseLog
                 $exercises,
                 $user['user_id'],
                 $courseId,
-                $session_id
+                $sessionId
             );
 
             $user['exercise_average_best_attempt'] = $total_user_exercise;
@@ -8816,7 +8711,7 @@ class TrackingCourseLog
                         $user['user_id'],
                         $exercise->iId,
                         $courseId,
-                        $session_id,
+                        $sessionId,
                         false
                     );
 
@@ -8842,14 +8737,14 @@ class TrackingCourseLog
             $user['first_connection'] = Tracking::get_first_connection_date_on_the_course(
                 $user['user_id'],
                 $courseId,
-                $session_id,
+                $sessionId,
                 false === $export_csv
             );
 
             $user['last_connection'] = Tracking::get_last_connection_date_on_the_course(
                 $user['user_id'],
                 ['real_id' => $course->getId()],
-                $session_id,
+                $sessionId,
                 false === $export_csv
             );
 
@@ -8866,7 +8761,7 @@ class TrackingCourseLog
                 }
             }
 
-            if (empty($session_id)) {
+            if (empty($sessionId)) {
                 $user['survey'] = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0).' / '.$total_surveys;
             }
 
@@ -8904,10 +8799,10 @@ class TrackingCourseLog
             $userGroupManager = new UserGroupModel();
             $user_row['classes'] = $userGroupManager->getLabelsFromNameList($user['user_id'], Usergroup::NORMAL_CLASS);
 
-            if (empty($session_id)) {
+            if (empty($sessionId)) {
                 $user_row['survey'] = $user['survey'];
             } else {
-                $userSession = SessionManager::getUserSession($user['user_id'], $session_id);
+                $userSession = SessionManager::getUserSession($user['user_id'], $sessionId);
                 $user_row['registered_at'] = '';
                 if ($userSession) {
                     $user_row['registered_at'] = api_get_local_time($userSession['registered_at']);
@@ -8945,7 +8840,7 @@ class TrackingCourseLog
             $user_row['link'] = $user['link'];
 
             if ($export_csv) {
-                if (empty($session_id)) {
+                if (empty($sessionId)) {
                     unset($user_row['classes']);
                     unset($user_row['link']);
                 } else {
@@ -8987,7 +8882,7 @@ class TrackingCourseLog
         $direction,
         $params = []
     ) {
-        global $user_ids, $course_code, $export_csv, $csv_content, $session_id;
+        global $user_ids, $course_code, $export_csv, $sessionId;
         $includeInvitedUsers = false;
         $courseId = $params['cid'];
         $sessionId = $params['sid'];
@@ -9053,7 +8948,7 @@ class TrackingCourseLog
             $totalCourseTime = Tracking::get_time_spent_on_the_course(
                 $user['user_id'],
                 $courseId,
-                $session_id
+                $sessionId
             );
 
             $user['time'] = api_time_to_hms($totalCourseTime);
@@ -9061,7 +8956,7 @@ class TrackingCourseLog
                 $user['user_id'],
                 $course,
                 [],
-                $session_id
+                $sessionId
             );
 
             $user['total_lp_time'] = $totalLpTime;
@@ -9074,19 +8969,19 @@ class TrackingCourseLog
             $user['first_connection'] = Tracking::get_first_connection_date_on_the_course(
                 $user['user_id'],
                 $courseId,
-                $session_id
+                $sessionId
             );
             $user['last_connection'] = Tracking::get_last_connection_date_on_the_course(
                 $user['user_id'],
                 $courseInfo,
-                $session_id,
+                $sessionId,
                 false === $export_csv
             );
 
             $user['link'] = '
                 <center>
                  <a
-                    href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&cid='.$courseId.'&origin=tracking_course&sid='.$session_id.'">
+                    href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&cid='.$courseId.'&origin=tracking_course&sid='.$sessionId.'">
                     '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
                  </a>
                 </center>';
@@ -9127,11 +9022,11 @@ class TrackingCourseLog
             Display::return_icon('group.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
             'course_log_groups.php?'.api_get_cidreq()
         );
-
-        $resourcesLink = Display::url(
+        $resourcesLink = '';
+        /*$resourcesLink = Display::url(
             Display::return_icon('tools.png', get_lang('Report on resource'), [], ICON_SIZE_MEDIUM),
             'course_log_resources.php?'.api_get_cidreq(true, false)
-        );
+        );*/
 
         $courseLink = Display::url(
             Display::return_icon('course.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
@@ -9155,10 +9050,14 @@ class TrackingCourseLog
 
         $attendanceLink = '';
         if (!empty($sessionId)) {
-            $attendanceLink = Display::url(
-                Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
-            );
+            $attendance = new Attendance();
+            $result = $attendance->getAttendanceBaseInLogin(false, true);
+            if (false !== $result) {
+                $attendanceLink = Display::url(
+                    Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
+                );
+            }
         }
 
         switch ($current) {

@@ -3559,6 +3559,13 @@ function api_get_language_id($language)
     if (empty($language)) {
         return null;
     }
+
+    // We check the language by iscocode
+    $langInfo = api_get_language_from_iso($language);
+    if (!empty($langInfo->getId())) {
+        return $langInfo->getId();
+    }
+
     $language = Database::escape_string($language);
     $sql = "SELECT id FROM $tbl_language
             WHERE english_name = '$language' LIMIT 1";

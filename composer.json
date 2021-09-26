@@ -70,6 +70,7 @@
         "endroid/qr-code": "~4.2",
         "essence/essence": "~3.0",
         "ezyang/htmlpurifier": "~4.13",
+        "firebase/php-jwt": "^5.4",
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "graphp/algorithms": "~0.8",
         "graphp/graphviz": "~0.2",

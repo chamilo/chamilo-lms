@@ -87,6 +87,12 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      */
     public function toHtml()
     {
+        $extraClass = " border border-gray-200 text-gray-700 rounded leading-tight";
+        if (isset($this->_attributes['class'])) {
+            $this->_attributes['class'] .= $extraClass;
+        } else {
+            $this->_attributes['class'] = $extraClass;
+        }
         if (0 == strlen($this->_text)) {
             $label = '';
         } elseif ($this->isFrozen()) {

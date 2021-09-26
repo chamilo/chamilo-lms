@@ -3974,7 +3974,7 @@ class Tracking
     /**
      * This function counts the number of post by course.
      *
-     * @param string $course_code
+     * @param string $courseId
      * @param int    $sessionId   (optional), if is null(default) it'll return results including sessions,
      *                            0 = session is not filtered
      * @param int    $groupId
@@ -3983,11 +3983,11 @@ class Tracking
      */
     public static function count_number_of_posts_by_course($courseId, $sessionId = null, $groupId = 0)
     {
-
         $repo = Container::getForumPostRepository();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
-        $qb = $repo->getResourcesByCourse($course, $session);
+        $group = api_get_group_entity($groupId);
+        $qb = $repo->getResourcesByCourse($course, $session, $group);
 
         $qb->select('count(resource)');
         $count = $qb->getQuery()->getSingleScalarResult();
@@ -3998,8 +3998,8 @@ class Tracking
     /**
      * This function counts the number of threads by course.
      *
-     * @param      string     Course code
-     * @param    int        Session id (optional),
+     * @param int Course id
+     * @param int Session id (optional),
      * if param $sessionId is null(default) it'll return results including
      * sessions, 0 = session is not filtered
      * @param int $groupId
@@ -4014,7 +4014,8 @@ class Tracking
         $repo = Container::getForumThreadRepository();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
-        $qb = $repo->getResourcesByCourse($course, $session);
+        $group = api_get_group_entity($groupId);
+        $qb = $repo->getResourcesByCourse($course, $session, $group);
 
         $qb->select('count(resource)');
         $count = $qb->getQuery()->getSingleScalarResult();
@@ -4025,8 +4026,8 @@ class Tracking
     /**
      * This function counts the number of forums by course.
      *
-     * @param      string     Course code
-     * @param    int        Session id (optional),
+     * @param int     Course id
+     * @param int     Session id (optional),
      * if param $sessionId is null(default) it'll return results
      * including sessions, 0 = session is not filtered
      * @param int $groupId
@@ -4041,8 +4042,9 @@ class Tracking
         $repo = Container::getForumRepository();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity($groupId);
 
-        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb = $repo->getResourcesByCourse($course, $session, $group);
         $qb->select('count(resource)');
         $count = $qb->getQuery()->getSingleScalarResult();
 
@@ -8877,7 +8879,7 @@ class TrackingCourseLog
         $direction,
         $params = []
     ) {
-        global $user_ids, $course_code, $export_csv, $csv_content, $sessionId;
+        global $user_ids, $course_code, $export_csv, $sessionId;
         $includeInvitedUsers = false;
         $courseId = $params['cid'];
         $sessionId = $params['sid'];

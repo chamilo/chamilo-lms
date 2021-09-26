@@ -206,14 +206,18 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button icon="fa fa-info-circle" class="btn btn-primary" @click="showHandler(slotProps.data)" />
+          <Button class="btn btn-primary" @click="showHandler(slotProps.data)">
+            <v-icon icon="mdi-information"/>
+          </Button>
 
           <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-primary" @click="changeVisibilityHandler(slotProps.data, slotProps)">
             <v-icon v-if="slotProps.data.resourceLinkListFromEntity[0].visibility == 2" icon="mdi-eye"/>
             <v-icon v-if="slotProps.data.resourceLinkListFromEntity[0].visibility == 0" icon="mdi-eye-off"/>
           </Button>
 
-          <Button v-if="isAuthenticated && isCurrentTeacher" icon="pi pi-pencil" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)">
+            <v-icon icon="mdi-pencil"/>
+          </Button>
 
           <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" >
             <v-icon icon="mdi-delete"/>

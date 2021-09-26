@@ -162,9 +162,15 @@ $(function () {
       self = $(this);
 
     $.when(loadModalContent).done(function (modalContent) {
-      var modalTitle = self.data('title') || ' ';
-      $('#global-modal').find('.modal-title').text(modalTitle);
-      $('#global-modal').find('.modal-body').html(modalContent);
+      var modalTitle = self.data('title') || ' ',
+        globalModalTitle = $('#global-modal').find('#global-modal-title'),
+        globalModalBody = $('#global-modal').find('#global-modal-body');
+
+      globalModalTitle.text(modalTitle);
+      globalModalBody.html(modalContent);
+
+      globalModalBody.css({'max-height' : "500px", "overflow" : "auto"});
+
       toggleModal('global-modal');
     });
   });

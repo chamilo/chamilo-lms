@@ -149,14 +149,16 @@ function handlePlugins()
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
     echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'">';
-    echo '<table class="table table-hover table-striped table-bordered">';
+    echo '<table class="table table-hover table-striped table-bordered table-fixed">';
+    echo '<thead class="bg-gray-50">';
     echo '<tr>';
-    echo '<th width="20px">';
+    echo '<th width="20px" class="px-6 py-2 uppercase font-normal leading-normal mt-0 mb-2 text-gray-500">';
     echo get_lang('Action');
-    echo '</th><th>';
+    echo '</th><th class="px-6 py-2 uppercase font-normal leading-normal mt-0 mb-2 text-gray-500">';
     echo get_lang('Description');
     echo '</th>';
     echo '</tr>';
+    echo '</thead>';
 
     /*$plugin_list = array();
     $my_plugin_list = $plugin_obj->get_plugin_regions();
@@ -174,23 +176,23 @@ function handlePlugins()
             $pluginRow = '';
 
             if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= '<tr class="row_selected">';
+                $pluginRow .= '<tr class="row_selected whitespace-nowrap">';
             } else {
-                $pluginRow .= '<tr>';
+                $pluginRow .= '<tr class="whitespace-nowrap">';
             }
-            $pluginRow .= '<td>';
+            $pluginRow .= '<td class="px-6 py-4 text-sm text-gray-500">';
             // Checkbox
             if (in_array($pluginName, $installed_plugins)) {
                 $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked" class="border rounded">';
             } else {
                 $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" class="border rounded">';
             }
-            $pluginRow .= '</td><td>';
-            $pluginRow .= '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
+            $pluginRow .= '</td><td class="px-6 py-4 text-sm text-gray-500">';
+            $pluginRow .= '<h3 class="text-3xl font-normal leading-normal mt-0 mb-2">'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h3>';
             $pluginRow .= '<p>'.$plugin_info['comment'].'</p>';
             $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
 
-            $pluginRow .= '<div class="btn-group btn-group-sm">';
+            $pluginRow .= '<div class="btn-group btn-group-sm mt-4">';
             if (in_array($pluginName, $installed_plugins)) {
                 $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
@@ -209,7 +211,7 @@ function handlePlugins()
                     "<em class='fa fa-file-text-o'></em> readme.txt",
                     api_get_path(WEB_PLUGIN_PATH).$pluginName."/readme.txt",
                     [
-                        'class' => 'btn btn-primary ajax',
+                        'class' => 'btn btn-blue ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
                         '_target' => '_blank',
@@ -223,7 +225,7 @@ function handlePlugins()
                     "<em class='fa fa-file-text-o'></em> README.md",
                     api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$pluginName,
                     [
-                        'class' => 'btn btn-primary ajax',
+                        'class' => 'btn btn-blue ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
                         '_target' => '_blank',
@@ -241,9 +243,10 @@ function handlePlugins()
             }
         }
     }
-
+    echo '<tbody class="bg-white">';
     echo $installed;
     echo $notInstalled;
+    echo '</tbody>';
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';
@@ -252,26 +255,6 @@ function handlePlugins()
     echo get_lang('Enable the selected plugins').'</button>';
     echo '</div>';
     echo '</form>';
-    echo '<div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="global-modal">
-    <!--content-->
-    <div class="relative w-auto my-6 mx-auto max-w-3xl">
-        <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-            <!--header-->
-            <div class="flex items-start justify-between p-5 border-b border-solid border-gray-200 rounded-t">
-                <h3 class="text-3xl font-semibold modal-title" id="global-modal-title"></h3>
-            </div>
-            <!--body-->
-            <div class="relative p-6 flex-auto modal-body" id="global-modal-body"></div>
-            <!--footer-->
-            <div class="flex items-center justify-end p-6 border-t border-solid border-gray-200 rounded-b">
-                <button id="close-global-model" class="text-purple-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                  '.get_lang('Close').'
-                </button>
-            </div>
-        </div>
-      </div>
-    </div>
-    <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="global-modal-backdrop"></div>';
 }
 
 /**

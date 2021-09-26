@@ -494,17 +494,23 @@ class BigBlueButtonBN
 					'messageKey' => $xml->messageKey->__toString(),
 					'message' => $xml->message->__toString()
 				);
+                $formats = array();
 
 				foreach ($xml->recordings->recording as $r) {
-					$result[] = array(
+                    foreach ($r->playback->format as $format) {
+                        $formats[] = $format;
+                    }
+
+                    $result[] = array(
 						'recordId' => $r->recordID->__toString(),
 						'meetingId' => $r->meetingID->__toString(),
 						'name' => $r->name->__toString(),
 						'published' => $r->published->__toString(),
 						'startTime' => $r->startTime->__toString(),
 						'endTime' => $r->endTime->__toString(),
-						'playbackFormatType' => $r->playback->format->type->__toString(),
-						'playbackFormatUrl' => $r->playback->format->url->__toString(),
+                        'playbackFormat' => $formats,
+                        'playbackFormatType' => $r->playback->format->type->__toString(),
+                        'playbackFormatUrl' => $r->playback->format->url->__toString(),
 						'playbackFormatLength' => $r->playback->format->length->__toString(),
 						'metadataTitle' => $r->metadata->title->__toString(),
 						'metadataSubject' => $r->metadata->subject->__toString(),
@@ -559,7 +565,12 @@ class BigBlueButtonBN
 				);
 				$result['records'] = [];
 				if (!empty($xml->recordings->recording)) {
-					foreach ($xml->recordings->recording as $r) {
+                    $formats = array();
+
+                    foreach ($xml->recordings->recording as $r) {
+                        foreach ($r->playback->format as $format) {
+                            $formats[] = $format;
+                        }
 						$result['records'][] = array(
 							'recordId' => $r->recordID->__toString(),
 							'meetingId' => $r->meetingID->__toString(),
@@ -567,7 +578,8 @@ class BigBlueButtonBN
 							'published' => $r->published->__toString(),
 							'startTime' => $r->startTime->__toString(),
 							'endTime' => $r->endTime->__toString(),
-							'playbackFormatType' => $r->playback->format->type->__toString(),
+                            'playbackFormat' => $formats,
+                            'playbackFormatType' => $r->playback->format->type->__toString(),
 							'playbackFormatUrl' => $r->playback->format->url->__toString(),
 							'playbackFormatLength' => $r->playback->format->length->__toString(),
 							'metadataTitle' => $r->metadata->title->__toString(),

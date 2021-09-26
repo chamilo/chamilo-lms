@@ -258,6 +258,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         /** @var User $user */
         $user = $userRepo->find($user->getId());
+        /** @var Session $session */
         $session = $sessionRepo->find($session->getId());
         $this->assertSame(1, \count($user->getStudentSessions()));
 
@@ -266,6 +267,8 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $hasUser = $session->hasUserInCourse($user, $course, $studentStatus);
         $this->assertTrue($hasUser);
+        $this->assertTrue($session->hasStudentInCourse($user, $course));
+        $this->assertTrue($session->hasStudentInCourseList($user));
 
         $this->assertSame(2, $session->getUsers()->count());
 

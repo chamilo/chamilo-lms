@@ -58,7 +58,7 @@
   }
 
   .btn-primary {
-    @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-indigo-500;
+    @apply text-white bg-ch-primary hover:bg-ch-primary focus:ring-indigo-500;
   }
 
   .btn-warning {

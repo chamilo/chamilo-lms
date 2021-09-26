@@ -17,7 +17,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -34,7 +34,7 @@ $insertedInCourse = [];
 $error_message = '';
 $warn = null;
 $updatesession = null;
-$_user = api_get_user_info();
+$userInfo = api_get_user_info();
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (isset($_FILES['import_file']['tmp_name']) &&
@@ -195,15 +195,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         );
 
                         if (!empty($coach)) {
-                            $coach_id = UserManager::get_user_id_from_username($coach);
-                            if (false === $coach_id) {
+                            $coachId = UserManager::get_user_id_from_username($coach);
+                            if (false === $coachId) {
                                 $error_message .= get_lang('This user doesn\'t exist').' : '.$coach.'<br />';
                                 // Forcing the coach id if user does not exist.
-                                $coach_id = api_get_user_id();
+                                $coachId = api_get_user_id();
                             }
                         } else {
                             // Forcing the coach id.
-                            $coach_id = api_get_user_id();
+                            $coachId = api_get_user_id();
                         }
 
                         // Just in case - encoding conversion.
@@ -218,23 +218,23 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $time_start = mktime(0, 0, 0, (int) $monthStart, (int) $dayStart, (int) $yearStart);
                             }
 
-                            $date_end = trim(api_utf8_decode($node_session->DateEnd));
+                            $dateEnd = trim(api_utf8_decode($node_session->DateEnd));
                             if (!empty($date_start)) {
-                                [$year_end, $month_end, $day_end] = explode('/', $date_end);
-                                if (empty($year_end) || empty($month_end) || empty($day_end)) {
-                                    $error_message .= get_lang('Error').' : '.$date_end.'<br />';
+                                [$yearEnd, $monthEnd, $dayEnd] = explode('/', $dateEnd);
+                                if (empty($yearEnd) || empty($monthEnd) || empty($dayEnd)) {
+                                    $error_message .= get_lang('Error').' : '.$dateEnd.'<br />';
                                     break;
                                 } else {
-                                    $time_end = mktime(0, 0, 0, $month_end, $day_end, $year_end);
+                                    $time_end = mktime(0, 0, 0, $monthEnd, $dayEnd, $yearEnd);
                                 }
                             }
                             if ($time_end - $time_start < 0) {
-                                $error_message .= get_lang('The first date should be before the end date').' : '.$date_end.'<br />';
+                                $error_message .= get_lang('The first date should be before the end date').' : '.$dateEnd.'<br />';
                             }
                         }
 
                         $visibility = trim(api_utf8_decode($node_session->Visibility));
-                        $session_category_id = trim(api_utf8_decode($node_session->SessionCategory));
+                        $sessionCategoryId = trim(api_utf8_decode($node_session->SessionCategory));
 
                         if (!$updatesession) {
                             // Always create a session.
@@ -260,29 +260,29 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             $sql_session = "INSERT IGNORE INTO $tbl_session SET
                                     name = '".Database::escape_string($session_name)."',
                                     access_start_date = '$date_start',
-                                    access_end_date = '$date_end',
+                                    access_end_date = '$dateEnd',
                                     visibility = '$visibility',
-                                    session_category_id = '$session_category_id'";
+                                    session_category_id = '$sessionCategoryId'";
                             $rs_session = Database::query($sql_session);
-                            $session_id = Database::insert_id();
+                            $sessionId = Database::insert_id();
                             Database::insert(
-                                $tbl_session_user,
+                                $tblSessionUser,
                                 [
                                     'relation_type' => Session::SESSION_COACH,
                                     'duration' => 0,
                                     'registered_at' => api_get_utc_datetime(),
-                                    'user_id' => $coach_id,
-                                    'session_id' => $session_id,
+                                    'user_id' => $coachId,
+                                    'session_id' => $sessionId,
                                 ]
                             );
                             Database::insert(
-                                $tbl_session_user,
+                                $tblSessionUser,
                                 [
                                     'relation_type' => Session::SESSION_ADMIN,
                                     'duration' => 0,
                                     'registered_at' => api_get_utc_datetime(),
-                                    'user_id' => (int) $_user['user_id'],
-                                    'session_id' => $session_id,
+                                    'user_id' => (int) $userInfo['user_id'],
+                                    'session_id' => $sessionId,
                                 ]
                             );
                             $session_counter++;
@@ -294,29 +294,29 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $sql_session = "INSERT IGNORE INTO $tbl_session SET
                                         name = '".Database::escape_string($session_name)."',
                                         access_start_date = '$date_start',
-                                        access_end_date = '$date_end',
+                                        access_end_date = '$dateEnd',
                                         visibility = '$visibility',
-                                        session_category_id = '$session_category_id'";
+                                        session_category_id = '$sessionCategoryId'";
                                 $rs_session = Database::query($sql_session);
-                                $session_id = Database::insert_id();
+                                $sessionId = Database::insert_id();
                                 Database::insert(
-                                    $tbl_session_user,
+                                    $tblSessionUser,
                                     [
                                         'relation_type' => Session::SESSION_COACH,
                                         'duration' => 0,
                                         'registered_at' => api_get_utc_datetime(),
-                                        'user_id' => $coach_id,
-                                        'session_id' => $session_id,
+                                        'user_id' => $coachId,
+                                        'session_id' => $sessionId,
                                     ]
                                 );
                                 Database::insert(
-                                    $tbl_session_user,
+                                    $tblSessionUser,
                                     [
                                         'relation_type' => Session::SESSION_ADMIN,
                                         'duration' => 0,
                                         'registered_at' => api_get_utc_datetime(),
-                                        'user_id' => (int) $_user['user_id'],
-                                        'session_id' => $session_id,
+                                        'user_id' => (int) $userInfo['user_id'],
+                                        'session_id' => $sessionId,
                                     ]
                                 );
                                 $session_counter++;
@@ -324,24 +324,24 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 // if the session already exists - update it.
                                 $sql_session = "UPDATE $tbl_session SET
                                         access_start_date = '$date_start',
-                                        access_end_date = '$date_end',
+                                        access_end_date = '$dateEnd',
                                         visibility = '$visibility',
-                                        session_category_id = '$session_category_id'
+                                        session_category_id = '$sessionCategoryId'
                                     WHERE name = '$session_name'";
                                 $rs_session = Database::query($sql_session);
-                                $session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
-                                [$session_id] = Database::fetch_array($session_id);
-                                Database::query("DELETE FROM $tbl_session_user WHERE session_id ='$session_id'");
-                                Database::query("DELETE FROM $tbl_session_course WHERE session_id='$session_id'");
-                                Database::query("DELETE FROM $tbl_session_course_user WHERE session_id='$session_id'");
+                                $sessionId = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
+                                [$sessionId] = Database::fetch_array($sessionId);
+                                Database::query("DELETE FROM $tblSessionUser WHERE session_id ='$sessionId'");
+                                Database::query("DELETE FROM $tbl_session_course WHERE session_id='$sessionId'");
+                                Database::query("DELETE FROM $tbl_session_course_user WHERE session_id='$sessionId'");
                                 Database::insert(
-                                    $tbl_session_user,
+                                    $tblSessionUser,
                                     [
                                         'relation_type' => Session::SESSION_COACH,
                                         'duration' => 0,
                                         'registered_at' => api_get_utc_datetime(),
-                                        'user_id' => $coach_id,
-                                        'session_id' => $session_id,
+                                        'user_id' => $coachId,
+                                        'session_id' => $sessionId,
                                     ]
                                 );
                             }
@@ -350,10 +350,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         // Associate the session with access_url.
                         if (api_is_multiple_url_enabled()) {
                             $access_url_id = api_get_current_access_url_id();
-                            UrlManager::add_session_to_url($session_id, $access_url_id);
+                            UrlManager::add_session_to_url($sessionId, $access_url_id);
                         } else {
                             // We fill by default the access_url_rel_session table.
-                            UrlManager::add_session_to_url($session_id, 1);
+                            UrlManager::add_session_to_url($sessionId, 1);
                         }
 
                         // Adding users to the new session.
@@ -361,9 +361,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             $username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
                             $user_id = UserManager::get_user_id_from_username($username);
                             if (false !== $user_id) {
-                                $sql = "INSERT IGNORE INTO $tbl_session_user SET
+                                $sql = "INSERT IGNORE INTO $tblSessionUser SET
                                         user_id ='$user_id',
-                                        session_id = '$session_id',
+                                        session_id = '$sessionId',
                                         registered_at = '".api_get_utc_datetime()."'";
                                 $rs_user = Database::query($sql);
                                 $user_counter++;
@@ -380,32 +380,32 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $courseId = $course_info['real_id'];
 
                                 $session_course_relation = SessionManager::relation_session_course_exist(
-                                    $session_id,
+                                    $sessionId,
                                     $courseId
                                 );
                                 if (!$session_course_relation) {
                                     $sql_course = "INSERT INTO $tbl_session_course SET
                                             c_id = $courseId,
-                                            session_id = $session_id";
+                                            session_id = $sessionId";
                                     $rs_course = Database::query($sql_course);
-                                    SessionManager::installCourse($session_id, $courseId);
+                                    SessionManager::installCourse($sessionId, $courseId);
                                 }
 
                                 $course_coaches = explode(',', $node_course->Coach);
 
                                 // Adding coachs to session course user
                                 foreach ($course_coaches as $course_coach) {
-                                    //$coach_id = UserManager::purify_username(api_utf8_decode($course_coach), $purification_option_for_usernames);
-                                    $coach_id = UserManager::get_user_id_from_username($course_coach);
-                                    if (false !== $coach_id) {
+                                    //$coachId = UserManager::purify_username(api_utf8_decode($course_coach), $purification_option_for_usernames);
+                                    $coachId = UserManager::get_user_id_from_username($course_coach);
+                                    if (false !== $coachId) {
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-                                                user_id='$coach_id',
+                                                user_id='$coachId',
                                                 c_id = '$courseId',
-                                                session_id = '$session_id',
+                                                session_id = '$sessionId',
                                                 status = ".Session::COURSE_COACH;
                                         $rs_coachs = Database::query($sql);
                                     } else {
-                                        $error_message .= get_lang('This user doesn\'t exist').' : '.$coach_id.'<br />';
+                                        $error_message .= get_lang('This user doesn\'t exist').' : '.$coachId.'<br />';
                                     }
                                 }
 
@@ -417,9 +417,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     $user_id = UserManager::get_user_id_from_username($username);
                                     if (false !== $user_id) {
                                         // Adding to session_rel_user table.
-                                        $sql = "INSERT IGNORE INTO $tbl_session_user SET
+                                        $sql = "INSERT IGNORE INTO $tblSessionUser SET
                                                 user_id ='$user_id',
-                                                session_id = '$session_id',
+                                                session_id = '$sessionId',
                                                 registered_at = '".api_get_utc_datetime()."'";
                                         $rs_user = Database::query($sql);
                                         $user_counter++;
@@ -427,7 +427,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                 user_id = '$user_id',
                                                 c_id = '$courseId',
-                                                session_id = '$session_id'";
+                                                session_id = '$sessionId'";
                                         $rs_users = Database::query($sql);
                                         $users_in_course_counter++;
                                     } else {
@@ -439,7 +439,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $insertedInCourse[$course_code] = $course_info['title'];
                             }
                         }
-                        Database::query("UPDATE $tbl_session SET nbr_users='$user_counter', nbr_courses='$course_counter' WHERE id='$session_id'");
+                        Database::query("UPDATE $tbl_session SET nbr_users='$user_counter', nbr_courses='$course_counter' WHERE id='$sessionId'");
                     }
                 }
                 if (empty($root->Users->User) && empty($root->Courses->Course) && empty($root->Session)) {
@@ -488,10 +488,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         }
         if (1 == $session_counter) {
             if ('csv' === $file_type) {
-                $session_id = current($sessionList);
+                $sessionId = current($sessionList);
             }
             Display::addFlash(Display::return_message($warn));
-            header('Location: resume_session.php?id_session='.$session_id);
+            header('Location: resume_session.php?id_session='.$sessionId);
             exit;
         } else {
             Display::addFlash(Display::return_message(get_lang('File imported').' '.$error_message));

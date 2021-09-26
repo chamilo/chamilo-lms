@@ -278,7 +278,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertSame(0, $session->getSessionRelCourseRelUsers()->count());
     }
 
-    public function testGeneralCoachesInSession()
+    public function testGeneralCoachesInSession(): void
     {
         self::bootKernel();
 
@@ -296,7 +296,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertTrue($session->hasUserAsGeneralCoach($coach1));
     }
 
-    public function testAdminInSession()
+    public function testAdminInSession(): void
     {
         self::bootKernel();
 

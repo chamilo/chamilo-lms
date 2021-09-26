@@ -1135,7 +1135,8 @@ class ImportCsv
                             $teacher = current($teachers);
                             $teacherId = $teacher['user_id'];
                         } else {
-                            $teacherId = $sessionInfo['id_coach'];
+                            $generalCoachesId = SessionManager::getGeneralCoachesIdForSession($sessionId);
+                            $teacherId = $generalCoachesId[0] ?? 0;
                         }
                     }
                 } else {
@@ -2150,7 +2151,7 @@ class ImportCsv
                             $dateEnd,
                             $coachBefore,
                             $coachAfter,
-                            $coachId,
+                            [$coachId],
                             $categoryId,
                             $visibility
                         );

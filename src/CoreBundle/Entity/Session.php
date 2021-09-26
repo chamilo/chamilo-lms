@@ -25,10 +25,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     name="session",
  *     uniqueConstraints={
  *         @ORM\UniqueConstraint(name="name", columns={"name"})
- *     },
- *     indexes={
- *         @ORM\Index(name="idx_id_coach", columns={"id_coach"}),
- *         @ORM\Index(name="idx_id_session_admin_id", columns={"session_admin_id"})
  *     }
  * )
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\SessionListener"})
@@ -75,7 +71,9 @@ class Session implements ResourceWithAccessUrlInterface
 
     public const STUDENT = 0;
     public const DRH = 1;
-    public const COACH = 2;
+    public const COURSE_COACH = 2;
+    public const SESSION_COACH = 3;
+    public const SESSION_ADMIN = 4;
 
     /**
      * @Groups({"session:read", "session_rel_user:read"})
@@ -192,22 +190,6 @@ class Session implements ResourceWithAccessUrlInterface
      * @ORM\Column(name="nbr_classes", type="integer", nullable=false, unique=false)
      */
     protected int $nbrClasses;
-
-    /**
-     * @Groups({"session:read", "session:write"})
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="session_admin_id", referencedColumnName="id", nullable=true)
-     */
-    protected ?User $sessionAdmin = null;
-
-    /**
-     * @Assert\NotBlank
-     * @Groups({"session:read", "session:write"})
-     *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsAsGeneralCoach")
-     * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
-     */
-    protected User $generalCoach;
 
     /**
      * @Groups({"session:read", "session:write"})
@@ -497,7 +479,7 @@ class Session implements ResourceWithAccessUrlInterface
             return false;
         }
 
-        return $this->hasUserInCourse($user, $course, self::COACH);
+        return $this->hasUserInCourse($user, $course, self::COURSE_COACH);
     }
 
     public function getUserInCourse(User $user, Course $course, ?int $status = null): Collection
@@ -737,16 +719,44 @@ class Session implements ResourceWithAccessUrlInterface
         return $this->coachAccessEndDate;
     }
 
-    public function getGeneralCoach(): User
+    public function getGeneralCoaches(): Collection
     {
-        return $this->generalCoach;
+        return $this
+            ->getGeneralCoachesSubscriptions()
+            ->map(function (SessionRelUser $subscription) {
+                return $subscription->getUser();
+            })
+        ;
     }
 
-    public function setGeneralCoach(User $coach): self
+    public function getGeneralCoachesSubscriptions(): Collection
     {
-        $this->generalCoach = $coach;
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', self::SESSION_COACH)
+            )
+        ;
 
-        return $this;
+        return $this->users->matching($criteria);
+    }
+
+    public function hasUserAsGeneralCoach(User $user): bool
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', self::SESSION_COACH)
+            )
+            ->andWhere(
+                Criteria::expr()->eq('user', $user)
+            )
+        ;
+
+        return $this->users->matching($criteria)->count() > 0;
+    }
+
+    public function addGeneralCoach(User $coach): self
+    {
+        return $this->addUserInSession(self::SESSION_COACH, $coach);
     }
 
     public function getCategory(): ?SessionCategory
@@ -1070,16 +1080,44 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    public function getSessionAdmin(): ?User
+    public function getSessionAdmins(): Collection
     {
-        return $this->sessionAdmin;
+        return $this
+            ->getGeneralAdminsSubscriptions()
+            ->map(function (SessionRelUser $subscription) {
+                return $subscription->getUser();
+            })
+        ;
     }
 
-    public function setSessionAdmin(User $sessionAdmin): self
+    public function getGeneralAdminsSubscriptions(): Collection
     {
-        $this->sessionAdmin = $sessionAdmin;
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', self::SESSION_ADMIN)
+            )
+        ;
 
-        return $this;
+        return $this->users->matching($criteria);
+    }
+
+    public function hasUserAsSessionAdmin(User $user): bool
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', self::SESSION_ADMIN)
+            )
+            ->andWhere(
+                Criteria::expr()->eq('user', $user)
+            )
+        ;
+
+        return $this->users->matching($criteria)->count() > 0;
+    }
+
+    public function addSessionAdmin(User $sessionAdmin): self
+    {
+        return $this->addUserInSession(self::SESSION_ADMIN, $sessionAdmin);
     }
 
     /**
@@ -1096,13 +1134,6 @@ class Session implements ResourceWithAccessUrlInterface
     public function getResourceLinks()
     {
         return $this->resourceLinks;
-    }
-
-    public function isUserGeneralCoach(User $user): bool
-    {
-        $generalCoach = $this->getGeneralCoach();
-
-        return $generalCoach instanceof User && $user->getId() === $generalCoach->getId();
     }
 
     /**

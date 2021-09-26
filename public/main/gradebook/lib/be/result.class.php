@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 /**
  * Defines a gradebook Result object.
  *
@@ -110,7 +112,7 @@ class Result
                     $sql = 'SELECT c_id, user_id as user_id, status
                             FROM '.$tbl_session_rel_course_user.'
 							WHERE
-							    status= 0 AND
+							    status= '.Session::STUDENT.' AND
 							    c_id = "'.api_get_course_int_id().'" AND
 							    session_id = '.$sessionId;
                 } else {

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -87,7 +88,7 @@ switch ($action) {
                             ON (su.user_id = au.user_id)
                             WHERE
                                 access_url_id = $urlId AND
-                                su.relation_type = 0 AND
+                                su.relation_type = ".Session::STUDENT." AND
                                 su.registered_at >= '$start' AND
                                 su.registered_at <= '$end' AND
                                 su.session_id = '$sessionId' ";

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -1490,16 +1491,20 @@ function get_thread_users_details($thread_id)
         $orderby = 'ORDER BY user.lastname, user.firstname';
     }
 
-    if (api_get_session_id()) {
-        $session_info = api_get_session_info(api_get_session_id());
-        $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
+    $session = api_get_session_entity();
+
+    if ($session) {
+        $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
+        $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
+        $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
+        $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, thread_id
                 FROM $t_posts p, $t_users user, $t_session_rel_user session_rel_user_rel_course
                 WHERE
                     p.poster_id = user.id AND
                     user.id = session_rel_user_rel_course.user_id AND
-                    session_rel_user_rel_course.status<>'2' AND
+                    session_rel_user_rel_course.status = ".SessionEntity::STUDENT." AND
                     session_rel_user_rel_course.user_id NOT IN ($user_to_avoid) AND
                     p.thread_id = ".(int) $thread_id.' AND
                     session_id = '.api_get_session_id()." AND
@@ -1551,16 +1556,20 @@ function get_thread_users_qualify($thread_id)
         $orderby = 'ORDER BY user.lastname, user.firstname';
     }
 
-    if ($sessionId) {
-        $session_info = api_get_session_info($sessionId);
-        $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
+    $session = api_get_session_entity();
+
+    if ($session) {
+        $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
+        $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
+        $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
+        $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
                 FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify qualify
                 WHERE poster_id = user.id
                     AND post.poster_id = qualify.user_id
                     AND user.id = scu.user_id
-                    AND scu.status<>'2'
+                    AND scu.status = ".SessionEntity::STUDENT."
                     AND scu.user_id NOT IN ($user_to_avoid)
                     AND qualify.thread_id = ".(int) $thread_id.'
                     AND post.thread_id = '.(int) $thread_id."
@@ -1634,16 +1643,20 @@ function get_thread_users_not_qualify($thread_id)
         $cad = substr($cad, 0, strlen($cad) - 1);
     }
 
-    if (api_get_session_id()) {
-        $session_info = api_get_session_info(api_get_session_id());
-        $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
+    $session = api_get_session_entity();
+
+    if ($session) {
+        $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
+        $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
+        $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
+        $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, post.thread_id
                 FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course
                 WHERE poster_id = user.id
                     AND user.id NOT IN (".$cad.")
                     AND user.id = session_rel_user_rel_course.user_id
-                    AND session_rel_user_rel_course.status<>'2'
+                    AND session_rel_user_rel_course.status = ".SessionEntity::STUDENT."
                     AND session_rel_user_rel_course.user_id NOT IN ($user_to_avoid)
                     AND post.thread_id = ".(int) $thread_id.'
                     AND session_id = '.api_get_session_id()."

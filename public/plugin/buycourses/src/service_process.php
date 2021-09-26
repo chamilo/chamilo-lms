@@ -127,7 +127,7 @@ if ($typeUser) {
         $sessions[$userSubscription->getSession()->getId()] = $userSubscription->getSession()->getName();
     }
 
-    $sessionsAsGeneralCoach = $user->getSessionAsGeneralCoach();
+    $sessionsAsGeneralCoach = $user->getSessionsAsGeneralCoach();
     /** @var Session $sessionAsGeneralCoach */
     foreach ($sessionsAsGeneralCoach as $sessionAsGeneralCoach) {
         $sessions[$sessionAsGeneralCoach->getId()] = $sessionAsGeneralCoach->getName();

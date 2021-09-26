@@ -1413,19 +1413,18 @@ class Display
     public static function getSessionTitleBox($session_id)
     {
         $session_info = api_get_session_info($session_id);
-        $coachInfo = [];
-        if (!empty($session_info['id_coach'])) {
-            $coachInfo = api_get_user_info($session_info['id_coach']);
-        }
+        $generalCoachesNames = implode(
+            ' - ',
+            SessionManager::getGeneralCoachesNamesForSession($session_id)
+        );
 
         $session = [];
         $session['category_id'] = $session_info['session_category_id'];
         $session['title'] = $session_info['name'];
-        $session['coach_id'] = $session['id_coach'] = $session_info['id_coach'];
         $session['dates'] = '';
         $session['coach'] = '';
-        if ('true' === api_get_setting('show_session_coach') && isset($coachInfo['complete_name'])) {
-            $session['coach'] = get_lang('General coach').': '.$coachInfo['complete_name'];
+        if ('true' === api_get_setting('show_session_coach') && $generalCoachesNames) {
+            $session['coach'] = get_lang('General coach').': '.$generalCoachesNames;
         }
         $active = false;
         if (('0000-00-00 00:00:00' === $session_info['access_end_date'] &&
@@ -1442,9 +1441,6 @@ class Display
         } else {
             $dates = SessionManager::parseSessionDates($session_info, true);
             $session['dates'] = $dates['access'];
-            if ('true' === api_get_setting('show_session_coach') && isset($coachInfo['complete_name'])) {
-                $session['coach'] = $coachInfo['complete_name'];
-            }
             //$active = $date_start <= $now && $date_end >= $now;
         }
         $session['active'] = $active;

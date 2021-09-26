@@ -161,7 +161,7 @@ if (0 === $session->getNbrCourses()) {
 
         // Get coaches of the courses in session
         $namesOfCoaches = [];
-        $coachSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::COACH);
+        $coachSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::COURSE_COACH);
 
         if ($coachSubscriptions) {
             /** @var SessionRelCourseRelUser $subscription */
@@ -281,7 +281,8 @@ $url .= Display::url(
 );
 
 $userListToShow = Display::page_subheader(get_lang('User list').Display::toolbarAction('users', [$url]));
-$sessionRelUsers = Container::getSessionRepository()->getUsersByAccessUrl($session, api_get_url_entity());
+$sessionRelUsers = Container::getSessionRepository()
+    ->getUsersByAccessUrl($session, api_get_url_entity(), [Session::STUDENT, Session::DRH]);
 
 if (!empty($sessionRelUsers)) {
     $table = new HTML_Table(['class' => 'table table-bordered', 'id' => 'session-user-list']);
@@ -337,7 +338,7 @@ if (!empty($sessionRelUsers)) {
         }*/
         $link = $reportingLink.$courseUserLink.$removeLink.$addUserToUrlLink.$editUrl;
         switch ($sessionRelUser->getRelationType()) {
-            case 1:
+            case Session::DRH:
                 $status = get_lang('Human Resources Manager');
                 $link = Display::url(
                     Display::return_icon('edit.png', get_lang('Edit')),

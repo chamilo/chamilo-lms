@@ -67,7 +67,7 @@ trait ChamiloTestTrait
 
         $session = (new Session())
             ->setName($title)
-            ->setGeneralCoach($this->getUser('admin'))
+            ->addGeneralCoach($this->getUser('admin'))
             ->addAccessUrl($this->getAccessUrl())
         ;
         $repo->update($session);

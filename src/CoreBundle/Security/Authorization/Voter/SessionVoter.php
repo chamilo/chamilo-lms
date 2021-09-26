@@ -84,7 +84,7 @@ class SessionVoter extends Voter
 
         switch ($attribute) {
             case self::VIEW:
-                $userIsGeneralCoach = $session->isUserGeneralCoach($user);
+                $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
                 $userIsCourseCoach = $currentCourse && $session->hasCoachInCourseWithStatus($user, $currentCourse);
                 $userIsStudent = $currentCourse
                     ? $session->hasUserInCourse($user, $currentCourse, Session::STUDENT)
@@ -231,14 +231,14 @@ class SessionVoter extends Voter
 
         if ($this->security->isGranted('ROLE_SESSION_MANAGER') &&
             'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions') &&
-            $session->getSessionAdmin()->getId() !== $user->getId()
+            !$session->hasUserAsSessionAdmin($user)
         ) {
             return false;
         }
 
         if ($this->security->isGranted('ROLE_ADMIN') &&
             'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions') &&
-            $session->getGeneralCoach()->getId() !== $user->getId()
+            !$session->hasUserAsGeneralCoach($user)
         ) {
             return false;
         }

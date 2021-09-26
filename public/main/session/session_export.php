@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -17,13 +19,13 @@ $formSent = 0;
 $errorMsg = '';
 
 // Database Table Definitions
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tblUser = Database::get_main_table(TABLE_MAIN_USER);
+$tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+$tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+$tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $archivePath = api_get_path(SYS_ARCHIVE_PATH);
 $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
@@ -38,38 +40,43 @@ if (isset($_POST['formSent'])) {
     if (empty($session_id)) {
         $sql = "SELECT
                     s.id,
-                    name,
-                    id_coach,
-                    username,
-                    access_start_date,
-                    access_end_date,
-                    visibility,
-                    session_category_id
-                FROM $tbl_session s
-                INNER JOIN $tbl_user
-                ON $tbl_user.user_id = s.id_coach
-                ORDER BY id";
+                    s.name,
+                    u.username,
+                    s.access_start_date,
+                    s.access_end_date,
+                    s.visibility,
+                    s.session_category_id
+                FROM $tblSession s
+                INNER JOIN $tblSessionRelUser sru
+                    ON (s.id = sru.session_id AND sru.relation_type = ".Session::SESSION_COACH.")
+                INNER JOIN $tblUser u
+                ON u.id = sru.user_id
+                ORDER BY s.id";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = "SELECT s.id, name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id
-                    FROM $tbl_session s
+                $sql = "SELECT s.id, s.name,u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
+                    FROM $tblSession s
                     INNER JOIN $tbl_session_rel_access_url as session_rel_url
                     ON (s.id= session_rel_url.session_id)
-                    INNER JOIN $tbl_user u ON (u.user_id = s.id_coach)
-                    WHERE access_url_id = $access_url_id
-                    ORDER BY id";
+                    INNER JOIN $tblSessionRelUser sru
+                        ON (s.id = sru.session_id AND sru.relation_type = ".Session::SESSION_COACH.")
+                    INNER JOIN $tblUser u ON (u.id = sru.user_id)
+                    WHERE session_rel_url.access_url_id = $access_url_id
+                    ORDER BY s.id";
             }
         }
 
         $result = Database::query($sql);
     } else {
-        $sql = "SELECT s.id,name,username,access_start_date,access_end_date,visibility,session_category_id
-                FROM $tbl_session s
-                INNER JOIN $tbl_user
-                    ON $tbl_user.user_id = s.id_coach
+        $sql = "SELECT s.id,s.name,u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
+                FROM $tblSession s
+                INNER JOIN $tblSessionRelUser sru
+                    ON (s.id = sru.session_id AND sru.relation_type = ".Session::SESSION_COACH.")
+                INNER JOIN $tblUser u
+                    ON u.id = sru.user_id
                 WHERE s.id='$session_id'";
         $result = Database::query($sql);
     }
@@ -118,13 +125,13 @@ if (isset($_POST['formSent'])) {
             $row['visibility'] = str_replace(';', ',', $row['visibility']);
             $row['session_category'] = str_replace(';', ',', $row['session_category_id']);
             // users
-            $sql = "SELECT DISTINCT $tbl_user.username
-                    FROM $tbl_user
-                    INNER JOIN $tbl_session_user
+            $sql = "SELECT DISTINCT $tblUser.username
+                    FROM $tblUser
+                    INNER JOIN $tblSessionRelUser
                     ON
-                        $tbl_user.user_id = $tbl_session_user.user_id AND
-                        $tbl_session_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
-                        $tbl_session_user.session_id = '".$row['id']."'";
+                        $tblUser.user_id = $tblSessionRelUser.user_id AND
+                        $tblSessionRelUser.relation_type = ".Session::STUDENT." AND
+                        $tblSessionRelUser.session_id = '".$row['id']."'";
 
             $rsUsers = Database::query($sql);
             $users = '';
@@ -142,8 +149,8 @@ if (isset($_POST['formSent'])) {
 
             // Courses
             $sql = "SELECT DISTINCT c.code, sc.id, c_id
-                    FROM $tbl_course c
-                    INNER JOIN $tbl_session_course_user sc
+                    FROM $tblCourse c
+                    INNER JOIN $tblSessionRelCourseRelUser sc
                     ON c.id = sc.c_id AND sc.session_id = '".$row['id']."'";
 
             $rsCourses = Database::query($sql);
@@ -152,13 +159,13 @@ if (isset($_POST['formSent'])) {
             while ($rowCourses = Database::fetch_array($rsCourses)) {
                 // get coachs from a course
                 $sql = "SELECT u.username
-                        FROM $tbl_session_course_user scu
-                        INNER JOIN $tbl_user u
+                        FROM $tblSessionRelCourseRelUser scu
+                        INNER JOIN $tblUser u
                         ON u.id = scu.user_id
                         WHERE
                             scu.c_id = '{$rowCourses['c_id']}' AND
                             scu.session_id = '".$row['id']."' AND
-                            scu.status = 2 ";
+                            scu.status = ".Session::COURSE_COACH;
 
                 $rs_coachs = Database::query($sql);
                 $coachs = [];
@@ -179,13 +186,13 @@ if (isset($_POST['formSent'])) {
 
                 // rel user courses
                 $sql = "SELECT DISTINCT u.username
-                        FROM $tbl_session_course_user scu
-                        INNER JOIN $tbl_session_user su
+                        FROM $tblSessionRelCourseRelUser scu
+                        INNER JOIN $tblSessionRelUser su
                         ON
                             scu.user_id = su.user_id AND
                             scu.session_id = su.session_id AND
-                            su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                        INNER JOIN $tbl_user u
+                            su.relation_type = ".Session::STUDENT."
+                        INNER JOIN $tblUser u
                         ON
                             scu.user_id = u.id AND
                             scu.c_id='".$rowCourses['c_id']."' AND
@@ -270,13 +277,13 @@ if (isset($_POST['formSent'])) {
 Display::display_header($tool_name);
 
 //select of sessions
-$sql = "SELECT id, name FROM $tbl_session ORDER BY name";
+$sql = "SELECT id, name FROM $tblSession ORDER BY name";
 
 if (api_is_multiple_url_enabled()) {
     $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $access_url_id = api_get_current_access_url_id();
     if (-1 != $access_url_id) {
-        $sql = "SELECT s.id, name FROM $tbl_session s
+        $sql = "SELECT s.id, name FROM $tblSession s
                 INNER JOIN $tbl_session_rel_access_url as session_rel_url
                 ON (s.id = session_rel_url.session_id)
                 WHERE access_url_id = $access_url_id

@@ -39,7 +39,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $session = (new Session())
             ->setName('session 1')
-            ->setGeneralCoach($coach)
+            ->addGeneralCoach($coach)
             ->addAccessUrl($url)
             ->setCategory($category)
 
@@ -67,7 +67,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertFalse($session->isCurrentlyAccessible());
 
         $user = $this->createUser('test');
-        $this->assertFalse($session->isUserGeneralCoach($user));
+        $this->assertFalse($session->hasUserAsGeneralCoach($user));
 
         $this->assertIsArray(Session::getStatusList());
     }

@@ -3523,31 +3523,31 @@ class Tracking
      */
     public static function get_student_followed_by_coach($coach_id)
     {
-        $coach_id = intval($coach_id);
+        $coach_id = (int) $coach_id;
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
+        $accessUrlEnabled = api_is_multiple_url_enabled();
+        $access_url_id = $accessUrlEnabled ? api_get_current_access_url_id() : -1;
+
         $students = [];
         // At first, courses where $coach_id is coach of the course //
         $sql = 'SELECT session_id, c_id
                 FROM '.$tbl_session_course_user.'
-                WHERE user_id='.$coach_id.' AND status=2';
+                WHERE user_id='.$coach_id.' AND status = '.SessionEntity::COURSE_COACH;
 
-        if (api_is_multiple_url_enabled()) {
-            $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $sql = 'SELECT scu.session_id, scu.c_id
-                        FROM '.$tbl_session_course_user.' scu
-                        INNER JOIN '.$tbl_session_rel_access_url.'  sru
-                        ON (scu.session_id=sru.session_id)
-                        WHERE
-                            scu.user_id='.$coach_id.' AND
-                            scu.status=2 AND
-                            sru.access_url_id = '.$access_url_id;
-            }
+        if (-1 != $access_url_id) {
+            $sql = 'SELECT scu.session_id, scu.c_id
+                    FROM '.$tbl_session_course_user.' scu
+                    INNER JOIN '.$tbl_session_rel_access_url.'  sru
+                    ON (scu.session_id=sru.session_id)
+                    WHERE
+                        scu.user_id='.$coach_id.' AND
+                        scu.status = '.SessionEntity::COURSE_COACH.' AND
+                        sru.access_url_id = '.$access_url_id;
         }
 
         $result = Database::query($sql);
@@ -3561,7 +3561,7 @@ class Tracking
                     INNER JOIN $tbl_session_user sru
                     ON (srcru.user_id = sru.user_id AND srcru.session_id = sru.session_id)
                     WHERE
-                        sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
+                        sru.relation_type = ".SessionEntity::STUDENT." AND
                         srcru.c_id = '$courseId' AND
                         srcru.session_id = '$sessionId'";
 
@@ -3572,35 +3572,26 @@ class Tracking
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = 'SELECT session_course_user.user_id
-                FROM '.$tbl_session_course_user.' as session_course_user
-                INNER JOIN '.$tbl_session_user.' sru
-                ON session_course_user.user_id = sru.user_id AND session_course_user.session_id = sru.session_id
-                INNER JOIN '.$tbl_session_course.' as session_course
-                ON session_course.c_id = session_course_user.c_id
-                AND session_course_user.session_id = session_course.session_id
-                INNER JOIN '.$tbl_session.' as session
-                ON session.id = session_course.session_id
-                AND session.id_coach = '.$coach_id;
-        if (api_is_multiple_url_enabled()) {
-            $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $sql = 'SELECT session_course_user.user_id
-                        FROM '.$tbl_session_course_user.' as session_course_user
-                        INNER JOIN '.$tbl_session_user.' sru
-                        ON session_course_user.user_id = sru.user_id AND
-                           session_course_user.session_id = sru.session_id
-                        INNER JOIN '.$tbl_session_course.' as session_course
-                        ON session_course.c_id = session_course_user.c_id AND
-                        session_course_user.session_id = session_course.session_id
-                        INNER JOIN '.$tbl_session.' as session
-                        ON session.id = session_course.session_id AND
-                        session.id_coach = '.$coach_id.'
-                        INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
-                        ON session.id = session_rel_url.session_id
-                        WHERE access_url_id = '.$access_url_id;
-            }
+        $sql = "SELECT srcru.user_id
+            FROM $tbl_session_course_user srcru
+            INNER JOIN $tbl_session_course src ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
+            INNER JOIN $tbl_session s ON srcru.session_id = s.id AND src.session_id = s.id
+            INNER JOIN $tbl_session_user sru on s.id = sru.session_id
+            WHERE srcru.status = ".SessionEntity::STUDENT."
+                AND sru.relation_type = ".SessionEntity::SESSION_COACH."
+                AND sru.user_id = $coach_id";
+
+        if (-1 != $access_url_id) {
+            $sql = "SELECT srcru.user_id
+                FROM $tbl_session_course_user srcru
+                INNER JOIN $tbl_session_course src ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
+                INNER JOIN $tbl_session s ON srcru.session_id = s.id AND src.session_id = s.id
+                INNER JOIN $tbl_session_user sru on s.id = sru.session_id
+                INNER JOIN $tbl_session_rel_access_url aurs on s.id = aurs.session_id
+                WHERE srcru.status = ".SessionEntity::STUDENT."
+                    AND sru.relation_type = ".SessionEntity::SESSION_COACH."
+                    AND sru.user_id = $coach_id
+                    AND aurs.access_url_id = $access_url_id";
         }
 
         $result = Database::query($sql);
@@ -3626,25 +3617,25 @@ class Tracking
 
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         // At first, courses where $coach_id is coach of the course
         $sql = 'SELECT 1 FROM '.$tbl_session_course_user.'
-                WHERE user_id='.$coach_id.' AND status=2';
+                WHERE user_id='.$coach_id.' AND status = '.SessionEntity::COURSE_COACH;
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = 'SELECT session_course_user.user_id
-                FROM '.$tbl_session_course_user.' as session_course_user
-                INNER JOIN '.$tbl_session_course.' as session_course
-                ON session_course.c_id = session_course_user.c_id
-                INNER JOIN '.$tbl_session.' as session
-                ON session.id = session_course.session_id
-                AND session.id_coach = '.$coach_id.'
-                WHERE user_id = '.$student_id;
+        $sql = "SELECT srcru.user_id
+            FROM $tbl_session_course_user srcru
+            INNER JOIN $tbl_session_course src ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
+            INNER JOIN $tbl_session s ON srcru.session_id = s.id AND src.session_id = s.id
+            INNER JOIN $tblSessionRelUser sru on s.id = sru.session_id
+            WHERE (srcru.status = ".SessionEntity::STUDENT." AND srcru.user_id = $student_id)
+                AND (sru.relation_type = ".SessionEntity::SESSION_COACH." AND sru.user_id = $coach_id)";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;
@@ -3673,13 +3664,14 @@ class Tracking
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         // At first, courses where $coach_id is coach of the course.
         $sql = 'SELECT DISTINCT c.code
                 FROM '.$tbl_session_course_user.' sc
                 INNER JOIN '.$tbl_course.' c
                 ON (c.id = sc.c_id)
-                WHERE user_id = '.$coach_id.' AND status = 2';
+                WHERE sc.user_id = '.$coach_id.' AND sc.status = '.SessionEntity::COURSE_COACH;
 
         if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
@@ -3692,7 +3684,7 @@ class Tracking
                         ON (c.id = cru.c_id)
                         WHERE
                             scu.user_id='.$coach_id.' AND
-                            scu.status=2 AND
+                            scu.status = '.SessionEntity::COURSE_COACH.' AND
                             cru.access_url_id = '.$access_url_id;
             }
         }
@@ -3708,29 +3700,35 @@ class Tracking
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = 'SELECT DISTINCT course.code
-                FROM '.$tbl_session_course.' as session_course
-                INNER JOIN '.$tbl_session.' as session
-                    ON session.id = session_course.session_id
-                    AND session.id_coach = '.$coach_id.'
-                INNER JOIN '.$tbl_course.' as course
-                    ON course.id = session_course.c_id';
+        $sql = "SELECT DISTINCT course.code
+                FROM $tbl_session_course as session_course
+                INNER JOIN $tbl_session as session
+                    ON (session.id = session_course.session_id)
+                INNER JOIN $tblSessionRelUser session_user
+                    ON (session.id = session_user.session_id
+                    AND session_user.user_id = $coach_id
+                    AND session_user.relation_type = ".SessionEntity::SESSION_COACH.")
+                INNER JOIN $tbl_course as course
+                    ON course.id = session_course.c_id";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = 'SELECT DISTINCT c.code
-                    FROM '.$tbl_session_course.' as session_course
-                    INNER JOIN '.$tbl_course.' c
+                $sql = "SELECT DISTINCT c.code
+                    FROM $tbl_session_course as session_course
+                    INNER JOIN $tbl_course c
                     ON (c.id = session_course.c_id)
-                    INNER JOIN '.$tbl_session.' as session
+                    INNER JOIN $tbl_session as session
                     ON session.id = session_course.session_id
-                        AND session.id_coach = '.$coach_id.'
-                    INNER JOIN '.$tbl_course.' as course
+                    INNER JOIN $tblSessionRelUser session_user
+                        ON (session.id = session_user.session_id
+                        AND session_user.user_id = $coach_id
+                        AND session_user.relation_type = ".SessionEntity::SESSION_COACH.")
+                    INNER JOIN $tbl_course as course
                         ON course.id = session_course.c_id
-                     INNER JOIN '.$tbl_course_rel_access_url.' course_rel_url
-                    ON (course_rel_url.c_id = c.id)';
+                     INNER JOIN $tbl_course_rel_access_url course_rel_url
+                    ON (course_rel_url.c_id = c.id)";
             }
         }
 
@@ -3781,7 +3779,10 @@ class Tracking
     ) {
         // table definition
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+
         $coach_id = (int) $coach_id;
 
         $select = ' SELECT * FROM ';
@@ -3812,7 +3813,6 @@ class Tracking
         $sqlInjectWhere = $conditions['inject_where'];
         $injectExtraFields = $conditions['inject_extra_fields'];
 
-        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = api_get_current_access_url_id();
 
         $orderBy = '';
@@ -3837,8 +3837,9 @@ class Tracking
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (s.id = session_rel_url.session_id)
                 $sqlInjectJoins
+                INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
                 WHERE
-                    id_coach = $coach_id AND
+                    (sru.user_id = $coach_id AND sru.relation_type = ".SessionEntity::SESSION_COACH.") AND
                     access_url_id = $access_url_id
                     $keywordCondition
                     $extraFieldsConditions
@@ -3855,7 +3856,7 @@ class Tracking
                 ON
                     s.id = session_course_user.session_id AND
                     session_course_user.user_id = $coach_id AND
-                    session_course_user.status = 2
+                    session_course_user.status = ".SessionEntity::COURSE_COACH."
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (s.id = session_rel_url.session_id)
                 $sqlInjectJoins
@@ -6878,7 +6879,7 @@ class Tracking
     {
         return
             api_is_platform_admin(true, true) ||
-            SessionManager::user_is_general_coach(api_get_user_id(), $sessionId) ||
+            api_get_session_entity($sessionId)->hasUserAsGeneralCoach(api_get_user_entity()) ||
             api_is_allowed_to_create_course() ||
             api_is_course_tutor() ||
             api_is_course_admin();
@@ -8050,6 +8051,7 @@ class TrackingCourseLog
         $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $column = (int) $column;
         $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
@@ -8126,23 +8128,24 @@ class TrackingCourseLog
                     $row_thematic = Database::fetch_array($rs_thematic);
                     $thematic_id = $row_thematic['thematic_id'];
 
-                    $sql = "SELECT session.id, session.name, user.username
-                            FROM $tbl_thematic t, $table_session session, $table_user user
-                            WHERE
-                              t.c_id = $course_id AND
-                              t.session_id = session.id AND
-                              session.id_coach = user.user_id AND
-                              t.id = $thematic_id";
+                    $sql = "SELECT s.id, s.name, u.name
+                        FROM $tbl_thematic t
+                        INNER JOIN $tblSessionRelUser sru ON t.session_id = sru.session_id
+                        INNER JOIN $table_session s ON sru.session_id = s.id
+                        INNER JOIN $table_user u ON sru.user_id = u.id
+                        WHERE t.c_id = $course_id and t.id = $thematic_id
+                            AND sru.relation_type = ".SessionEntity::SESSION_COACH;
                     $recorset = Database::query($sql);
                 }
             } else {
-                $sql = "SELECT session.id, session.name, user.username
-                          FROM $table_tool tool, $table_session session, $table_user user
+                $sql = "SELECT session.id s.id, s.name u.username
+                          FROM c_tool t, session s, user u, $tblSessionRelUser sru
                           WHERE
-                              tool.c_id = $course_id AND
-                              tool.session_id = session.id AND
-                              session.id_coach = user.user_id AND
-                              tool.$id = $ref";
+                              t.c_id = $course_id AND
+                              t.session_id = s.id AND
+                              sru.session_id = s.id AND
+                              sru.user_id = u.id AND
+                              t.$id = $ref";
                 $recorset = Database::query($sql);
             }
 

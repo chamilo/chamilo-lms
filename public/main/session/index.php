@@ -40,22 +40,21 @@ Session::erase('objExercise');
 Session::erase('duration_time_previous');
 Session::erase('duration_time');
 
-$userId = api_get_user_id();
-$session_info = SessionManager::fetch($session_id);
+$user = api_get_user_entity();
+$session = api_get_session_entity($session_id);
 $session_list = SessionManager::get_sessions_by_general_coach(api_get_user_id());
 $courseList = SessionManager::get_course_list_by_session_id($session_id);
-$userIsGeneralCoach = SessionManager::user_is_general_coach($userId, $session_id);
 
 $user_course_list = [];
 $exerciseListPerCourse = [];
 
 foreach ($courseList as $course) {
     $status = SessionManager::get_user_status_in_course_session(
-        $userId,
+        $user->getId(),
         $course['real_id'],
         $session_id
     );
-    if (false !== $status || api_is_platform_admin() || $userIsGeneralCoach) {
+    if (false !== $status || api_is_platform_admin() || $session->hasUserAsGeneralCoach($user)) {
         $user_course_list[] = $course['real_id'];
     }
 
@@ -190,7 +189,6 @@ if (false == api_is_coach_of_course_in_session($session_id)) {
 }
 
 $entityManager = Database::getManager();
-$session = api_get_session_entity($session_id);
 $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
 
 if (2 == $sessionTitleLink && 1 === $session->getNbrCourses()) {
@@ -277,7 +275,7 @@ if (!empty($courseList)) {
                 }
 
                 $exerciseResultInfo = Event::getExerciseResultsByUser(
-                    $userId,
+                    $user->getId(),
                     $exerciseId,
                     $courseId,
                     $session_id
@@ -371,21 +369,10 @@ if (!empty($new_exercises)) {
     $my_real_array = array_merge($new_exercises, $my_real_array);
 }
 
-$start = $end = $start_only = $end_only = '';
-
-if (!empty($session_info['access_start_date'])) {
-    $start = api_convert_and_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
-    $start_only = get_lang('From').' '.$session_info['access_start_date'];
-}
-if (!empty($session_info['access_start_date'])) {
-    $end = api_convert_and_format_date($session_info['access_end_date'], DATE_FORMAT_SHORT);
-    $end_only = get_lang('Until').' '.$session_info['access_end_date'];
-}
-
-if (!empty($start) && !empty($end)) {
-    $dates = Display::tag('i', sprintf(get_lang('From %s to %s'), $start, $end));
+if ($session->getDuration() > 0) {
+    $dates = sprintf(get_lang("%s days"), $session->getDuration());
 } else {
-    $dates = Display::tag('i', $start_only.' '.$end_only);
+    $dates = SessionManager::parseSessionDates($session)['access'];
 }
 
 $editLink = '';
@@ -396,16 +383,16 @@ if (api_is_platform_admin()) {
     );
 }
 
-echo Display::tag('h1', $session_info['name'].$editLink);
-echo $dates.'<br />';
+echo Display::tag('h1', $session->getName().$editLink);
+echo Display::tag('i', $dates);
 $allow = 'true' === api_get_setting('show_session_description');
 
-if (1 == $session_info['show_description'] && $allow) {
+if ($session->getShowDescription() && $allow) {
     ?>
     <div class="home-course-intro">
         <div class="page-course">
             <div class="page-course-intro">
-                <p><?php echo $session_info['description']; ?></p>
+                <p><?php echo $session->getDescription(); ?></p>
             </div>
         </div>
     </div>

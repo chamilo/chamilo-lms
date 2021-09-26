@@ -88,7 +88,9 @@
                                                 <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}">{{ session.name }}</a>
                                             </h4>
                                             {% if 'show_session_coach'|api_get_setting == 'true' %}
-                                                <p><em class="fa fa-user fa-fw"></em> {{ session.coach }}</p>
+                                                {% for coach in session.coaches %}
+                                                    <p><em class="fa fa-user fa-fw"></em> {{ coach }}</p>
+                                                {% endfor %}
                                             {% endif %}
                                             <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
                                             <p class="text-right">

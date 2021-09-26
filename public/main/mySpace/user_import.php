@@ -30,10 +30,9 @@ if ('true' === api_get_setting('add_users_by_coach')) {
     if (!api_is_platform_admin()) {
         if (isset($_REQUEST['id_session'])) {
             $id_session = intval($_REQUEST['id_session']);
-            $sql = 'SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
-                    WHERE id='.$id_session;
-            $rs = Database::query($sql);
-            if (Database::result($rs, 0, 0) != api_get_user_id()) {
+            $session = api_get_session_entity($id_session);
+            $user = api_get_user_entity();
+            if (!$session->hasUserAsGeneralCoach($user)) {
                 api_not_allowed(true);
             }
         } else {

@@ -60,7 +60,7 @@ class GetSessionFromExtraFieldTest extends V2TestCase
             '2019-08-31 00:00',
             '2019-01-01 00:00',
             '2019-08-31 00:00',
-            null,
+            [],
             null
         );
         $secondSessionId = SessionManager::create_session(
@@ -71,7 +71,7 @@ class GetSessionFromExtraFieldTest extends V2TestCase
             '2019-12-31 00:00',
             '2019-09-01 00:00',
             '2019-12-31 00:00',
-            null,
+            [],
             null
         );
 

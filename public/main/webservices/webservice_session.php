@@ -427,7 +427,7 @@ class WSSession extends WS
             $end_date,
             $coachStartDate,
             $coachEndDate,
-            $user_id,
+            [$user_id],
             0,
             $visibility
         );

@@ -105,6 +105,32 @@ class Version20190210182615 extends AbstractMigrationChamilo
         if (!$table->hasIndex('session_user_unique')) {
             $this->addSql('CREATE UNIQUE INDEX session_user_unique ON session_rel_user (session_id, user_id, relation_type);');
         }
+
+        // Move id_coach to session_rel_user
+        $result = $connection->executeQuery('SELECT id, session_admin_id, id_coach FROM session');
+        $items = $result->fetchAllAssociative();
+
+        foreach ($items as $item) {
+            $coachId = $item['id_coach'];
+            $adminId = $item['session_admin_id'];
+            $sessionId = $item['id'];
+
+            if (!empty($coachId)) {
+                $this->addSql("INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES (3, 0, NOW(), $coachId, $sessionId)");
+            }
+
+            if (!empty($adminId)) {
+                $this->addSql("INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES (4, 0, NOW(), $adminId, $sessionId)");
+            }
+        }
+
+        $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4D1DC2CFC');
+        $this->addSql('DROP INDEX idx_id_coach ON session');
+        $this->addSql('ALTER TABLE session DROP COLUMN id_coach');
+
+        $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4EF87E278');
+        $this->addSql('DROP INDEX idx_id_session_admin_id ON session');
+        $this->addSql('ALTER TABLE session DROP COLUMN session_admin_id');
     }
 
     public function down(Schema $schema): void

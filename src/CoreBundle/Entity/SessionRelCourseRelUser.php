@@ -47,14 +47,12 @@ class SessionRelCourseRelUser
 {
     use UserTrait;
 
-    public const STATUS_STUDENT = 0;
-    public const STATUS_COURSE_COACH = 2;
     /**
      * @var string[]
      */
     public array $statusList = [
-        0 => 'student',
-        2 => 'course_coach',
+        Session::STUDENT => 'student',
+        Session::COURSE_COACH => 'course_coach',
     ];
 
     /**
@@ -117,7 +115,7 @@ class SessionRelCourseRelUser
         $this->progress = 0;
         $this->visibility = 1;
         $this->legalAgreement = 0;
-        $this->status = self::STATUS_STUDENT;
+        $this->status = Session::STUDENT;
     }
 
     public function getSession(): Session

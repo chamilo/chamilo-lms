@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -3622,12 +3623,14 @@ EOT;
                         AND relation_type <> 2
                 )";
             } else {
+                $sessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                 $courseCondition = "
-            INNER JOIN $courseUser c
+            INNER JOIN $sessionRelCourse sc
             ON (
-                        e.exe_user_id = c.user_id AND
-                        e.c_id = c.c_id AND
-                        c.status = 0
+                        e.exe_user_id = sc.user_id AND
+                        e.c_id = sc.c_id AND
+                        e.session_id = sc.session_id AND
+                        sc.status = ".SessionEntity::STUDENT."
                 )";
             }
             $sql .= $courseCondition;
@@ -3761,8 +3764,8 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = " AND cu.status = 0 ";
+            ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            $courseConditionWhere = " AND cu.status = ".SessionEntity::STUDENT;
         }
 
         $sql = "SELECT DISTINCT exe_user_id
@@ -3832,8 +3835,8 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = ' AND cu.status = 0 ';
+            ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
         $sql = "SELECT DISTINCT exe_user_id
@@ -3917,8 +3920,8 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = a.c_id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = ' AND cu.status = 0 ';
+            ON (cu.c_id = a.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
         $sql = "SELECT $select_condition

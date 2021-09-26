@@ -494,14 +494,14 @@ class BigBlueButtonBN
 					'messageKey' => $xml->messageKey->__toString(),
 					'message' => $xml->message->__toString()
 				);
-              $formats = array();
+				$formats = array();
 
-              foreach ($xml->recordings->recording as $r) {
-                  foreach ($r->playback->format as $format) {
-                      $formats[] = $format;
-                  }
+				foreach ($xml->recordings->recording as $r) {
+					foreach ($r->playback->format as $format) {
+						$formats[] = $format;
+					}
 
-                    $result[] = array(
+					$result[] = array(
 						'recordId' => $r->recordID->__toString(),
 						'meetingId' => $r->meetingID->__toString(),
 						'name' => $r->name->__toString(),

@@ -46,7 +46,7 @@ class BBBPlugin extends Plugin
     {
         parent::__construct(
             '2.10',
-            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz',
+            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz, Ghazi Triki, Adnen Manssouri',
             [
                 'tool_enable' => 'boolean',
                 'host' => 'text',
@@ -313,10 +313,6 @@ class BBBPlugin extends Plugin
             );
             if (!empty($extraFieldInfo)) {
                 $extraField->delete($extraFieldInfo['id']);
-            }
-
-            if ($sm->tablesExist('plugin_bbb_meeting_format')) {
-                Database::query('DROP TABLE IF EXISTS plugin_bbb_meeting_format');
             }
 
             $sql = "DELETE FROM $t_options WHERE variable = 'bbb_plugin'";

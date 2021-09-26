@@ -83,19 +83,19 @@
                         <span class="label label-info">{{ 'MeetingClosed'|get_plugin_lang('BBBPlugin') }}</span>
                     {% endif %}
                 </td>
-	            <td>
-	                {% if meeting.show_links.record  %}
-		                {# Record list #}
-		                {% for link in meeting.show_links %}
-			                {% if link is not iterable  %}
-			                {{ link }}
-			                {% endif %}
-		                {% endfor %}
-		                {% else %}
-		                	{{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}
-	                {% endif %}
+                <td>
+                    {% if meeting.show_links.record  %}
+                        {# Record list #}
+                        {% for link in meeting.show_links %}
+                            {% if link is not iterable  %}
+                            {{ link }}
+                            {% endif %}
+                        {% endfor %}
+                        {% else %}
+                            {{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}
+                    {% endif %}
 
-	            </td>
+                </td>
                 {% if allow_to_edit %}
                     <td>
                     {% if meeting.status == 1 %}

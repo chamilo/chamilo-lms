@@ -565,9 +565,9 @@ class BigBlueButtonBN
 				);
 				$result['records'] = [];
 				if (!empty($xml->recordings->recording)) {
-                    $formats = array();
+					$formats = array();
 
-                    foreach ($xml->recordings->recording as $r) {
+					foreach ($xml->recordings->recording as $r) {
 						foreach ($r->playback->format as $format) {
 							$formats[] = $format;
 						}

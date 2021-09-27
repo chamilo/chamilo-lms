@@ -1249,7 +1249,6 @@ class Event
                 );
                 $repo->delete($track);
             }
-
         }
     }
 

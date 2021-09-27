@@ -3,3 +3,4 @@ ignore:
   - "src/CoreBundle/ChamiloCoreBundle.php"
   - "src/CourseBundle/ChamiloCourseBundle.php"
   - "src/CourseBundle/Component"
+  - "src/LtiBundle"

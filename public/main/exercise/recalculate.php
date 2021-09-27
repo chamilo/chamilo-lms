@@ -22,7 +22,7 @@ $studentId = (int) $_REQUEST['user'];
 $exerciseId = (int) $_REQUEST['exercise'];
 $exeId = (int) $_REQUEST['id'];
 
-/** @var TrackEExercise $trackedExercise */
+/** @var TrackExercise $trackedExercise */
 $trackedExercise = ExerciseLib::recalculateResult(
     $_REQUEST['id'],
     $_REQUEST['user'],

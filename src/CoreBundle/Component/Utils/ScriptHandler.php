@@ -34,15 +34,6 @@ class ScriptHandler
      */
     public static function deleteOldFilesFrom19x(): void
     {
-        $paths = self::getFoldersToDelete();
-
-        foreach ($paths as $path) {
-            $path = __DIR__.'/../../../..'.$path;
-            if (is_dir($path) && is_writable($path)) {
-                self::rmdirr($path);
-            }
-        }
-
         $files = self::getFilesToDelete();
 
         foreach ($files as $file) {
@@ -51,63 +42,6 @@ class ScriptHandler
                 unlink($file);
             }
         }
-    }
-
-    public static function getFoldersToDelete(): array
-    {
-        return [
-            '/app/Resources/public/assets/bootstrap/docs',
-            '/app/Resources/public/assets/bootstrap/nuget',
-            '/app/Resources/public/assets/bootstrap/grunt',
-            '/app/Resources/public/assets/bootstrap/test-infra',
-            '/archive/',
-            '/main/announcements/resources',
-            '/main/conference/',
-            '/main/course_notice/',
-            '/main/metadata/',
-            '/main/exercice/export/qti',
-            '/main/glossary/resources',
-            '/main/link/resources',
-            '/main/notebook/resources',
-            '/main/reservation/',
-            '/main/inc/lib/symfony/',
-            '/main/inc/entity/',
-            '/main/inc/lib/phpdocx/',
-            '/main/inc/lib/phpqrcode/',
-            '/main/inc/lib/ezpdf',
-            '/main/inc/lib/javascript/bootstrap',
-            '/main/inc/lib/javascript/bxslider',
-            '/main/inc/lib/javascript/fullcalendar',
-            '/main/inc/lib/javascript/jquery-ui',
-            '/main/inc/lib/fckeditor',
-            '/main/inc/lib/mpdf/',
-            '/main/inc/lib/nanogong/',
-            '/main/inc/lib/phpseclib/',
-            '/main/inc/lib/phpmailer/',
-            '/main/inc/lib/symfony/',
-            '/main/inc/lib/system/media/renderer',
-            '/main/inc/lib/system/io',
-            '/main/inc/lib/system/net',
-            '/main/inc/lib/system/text/',
-            '/main/inc/lib/system/portfolio/',
-            '/main/inc/lib/icalcreator/',
-            '/main/inc/lib/getid3/',
-            '/main/inc/lib/tools/',
-            '/main/inc/lib/pchart/',
-            '/main/inc/lib/pclzip/',
-            '/main/inc/lib/htmlpurifier',
-            '/main/pear/excelreader/',
-            '/main/resourcelinker',
-            '/main/newscorm',
-            '/main/exercice',
-            '/plugin/ticket',
-            '/plugin/skype',
-            '/vendor/pclzip',
-            '/web/assets/bootstrap/grunt',
-            '/web/assets/bootstrap/nuget',
-            '/web/assets/bootstrap/docs',
-            '/web/assets/bootstrap/test-infra',
-        ];
     }
 
     public static function getFilesToDelete(): array
@@ -207,104 +141,14 @@ class ScriptHandler
             '/main/tracking/toolaccess_details.php',
             '/main/tracking/course_access_details.php',
             '/src/DataFixtures/AppFixtures.php',
-            '/src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',
-            '/src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
-            '/src/Chamilo/CoreBundle/Entity/GroupRelUser.php',
-            '/src/Chamilo/CoreBundle/Entity/Groups.php',
-            '/src/Chamilo/UserBundle/Entity/Repository/UserRepository.php',
-            '/app/Resources/public/assets/bootstrap/Gemfile',
-            '/app/Resources/public/assets/bootstrap/Gemfile.lock',
-            '/app/Resources/public/assets/bootstrap/Gruntfile.js',
-            '/app/Resources/public/assets/bootstrap/package.js',
-            '/app/Resources/public/assets/bootstrap/package.json',
             '/web/assets/bootstrap/Gemfile',
             '/web/assets/bootstrap/Gemfile.lock',
             '/web/assets/bootstrap/Gruntfile.js',
             '/web/assets/bootstrap/package.js',
             '/web/assets/bootstrap/package.json',
             '/src/CourseBundle/Entity/CQuizQuestionRelCategory.php',
+            '/src/CoreBundle/Entity/TrackEExercises.php',
             '/main/inc/lib/tablesort.lib.php',
         ];
-    }
-
-    /**
-     * Update the basis css files.
-     * Avoid use the ScriptHandler::dumpCssFiles.
-     */
-    public static function updateCss(): void
-    {
-        $appCss = __DIR__.'/../../../../app/Resources/public/css/';
-        $newPath = __DIR__.'/../../../../web/css/';
-        $cssFiles = [
-            'base.css',
-            'chat.css',
-            'document.css',
-            'editor_content.css',
-            'markdown.css',
-            'print.css',
-            'responsive.css',
-            'scorm.css',
-        ];
-
-        $fs = new Filesystem();
-
-        foreach ($cssFiles as $file) {
-            $fs->copy($appCss.$file, $newPath.$file, true);
-        }
-    }
-
-    /**
-     * Copied from chamilo rmdirr function.
-     *
-     * @return bool
-     */
-    private static function rmdirr(string $dirname, bool $delete_only_content_in_folder = false, bool $strict = false)
-    {
-        $res = true;
-
-        // A sanity check.
-        if (!file_exists($dirname)) {
-            return false;
-        }
-        // Simple delete for a file.
-        if (is_file($dirname) || is_link($dirname)) {
-            return unlink($dirname);
-        }
-
-        // Loop through the folder.
-        $dir = getdir($dirname);
-        // A sanity check.
-        $is_object_dir = \is_object($dir);
-        if ($is_object_dir) {
-            while (false !== $entry = $dir->read()) {
-                // Skip pointers.
-                if ('.' === $entry || '..' === $entry) {
-                    continue;
-                }
-
-                // Recurse.
-                if ($strict) {
-                    $result = self::rmdirr(sprintf('%s/%s', $dirname, $entry));
-                    if (!$result) {
-                        $res = false;
-
-                        break;
-                    }
-                } else {
-                    self::rmdirr(sprintf('%s/%s', $dirname, $entry));
-                }
-            }
-        }
-
-        // Clean up.
-        if ($is_object_dir) {
-            $dir->close();
-        }
-
-        if (!$delete_only_content_in_folder) {
-            $res = rmdir($dirname);
-        }
-
-        return $res;
     }
 }

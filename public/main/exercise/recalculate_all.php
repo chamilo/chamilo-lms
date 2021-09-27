@@ -41,7 +41,7 @@ $result = ExerciseLib::get_exam_results_data(
 );
 
 foreach ($result as $track) {
-    /** @var TrackEExercise $trackedExercise */
+    /** @var TrackExercise $trackedExercise */
     $trackedExercise = ExerciseLib::recalculateResult(
         $track['id'],
         $track['user_id'],

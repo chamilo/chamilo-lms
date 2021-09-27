@@ -12,15 +12,15 @@
           <v-icon
               icon="mdi-book-open-page-variant"
               size="72px"
-              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-green-600"
+              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-dark"
           />
         </div>
 
         <div class="mt-2 font-bold">
-          You don't have any courses yet.
+          You don't have any course yet.
         </div>
         <div>
-          Lorem ipsum
+          Go to "Explore" to find a topic of interest, or wait for someone to subscribe you.
         </div>
       </div>
     </div>

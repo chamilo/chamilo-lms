@@ -27,6 +27,20 @@ class CQuizRepositoryTest extends AbstractApiTest
 
         $item = (new CQuiz())
             ->setTitle('exercise')
+            ->setDescription('desc')
+            ->setActive(1)
+            ->setType(1)
+            ->setAutoLaunch(false)
+            ->setFeedbackType(1)
+            ->setMaxAttempt(10)
+            ->setShowPreviousButton(true)
+            ->setResultsDisabled(0)
+            ->setReviewAnswers(0)
+            ->setPropagateNeg(0)
+            ->setPageResultConfiguration([])
+            ->setHideQuestionTitle(true)
+            ->setAccessCondition('')
+            ->setTextWhenFinished('text when finished')
             ->setParent($course)
             ->setCreator($teacher)
         ;
@@ -38,6 +52,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $repo->count([]));
 
         $this->assertSame(0, $item->getQuestionsCategories()->count());
+        $this->assertSame(0, $item->getMaxScore());
 
         $repo->updateNodeForResource($item);
 

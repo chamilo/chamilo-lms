@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Traits\ShowCourseResourcesInSessionTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -689,13 +688,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->pageResultConfiguration = $pageResultConfiguration;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PostPersist()
-     */
-    public function postPersist(LifecycleEventArgs $args): void
-    {
     }
 
     /**

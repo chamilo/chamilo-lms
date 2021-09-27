@@ -209,11 +209,8 @@ function api_get_timezone()
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_utc_datetime(
-    $time = null,
-    $returnNullIfInvalidDate = false,
-    $returnObj = false
-) {
+function api_get_utc_datetime($time = null, $returnNullIfInvalidDate = false, $returnObj = false)
+{
     if (is_null($time) || empty($time) || '0000-00-00 00:00:00' === $time) {
         if ($returnNullIfInvalidDate) {
             return null;

@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackExercise;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -67,10 +67,10 @@ switch ($action) {
         $onlyUpdateValue = 10;
 
         $em = Database::getManager();
-        /** @var TrackEExercises $attempt */
-        $attempt = $em->getRepository(TrackEExercises::class)->find($exeId);
+        /** @var TrackExercise $attempt */
+        $attempt = $em->getRepository(TrackExercise::class)->find($exeId);
 
-        if (empty($attempt)) {
+        if (null === $attempt) {
             if ($debug) {
                 error_log("Attempt #$exeId doesn't exists.");
             }
@@ -80,7 +80,7 @@ switch ($action) {
         $nowObject = api_get_utc_datetime(null, false, true);
         $now = $nowObject->getTimestamp();
         $exerciseId = $attempt->getExeExoId();
-        $userId = $attempt->getExeUserId();
+        $userId = $attempt->getUser()->getId();
 
         if ($userId != $currentUserId) {
             if ($debug) {

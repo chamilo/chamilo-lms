@@ -545,16 +545,17 @@ function processStudentList($filter_score, $global, Cquiz $exercise, $courseInfo
     $export_array = [];
 
     $exerciseId = $exercise->getIid();
-
+    $sessionCondition = api_get_session_condition($sessionId);
     foreach ($students as $student) {
         $studentId = isset($student['user_id']) ? $student['user_id'] : $student['id_user'];
-        $sql = "SELECT COUNT(ex.exe_id) as count
-                FROM $exerciseStatsTable AS ex
+        $studentId = (int) $studentId;
+        $sql = "SELECT COUNT(exe_id) as count
+                FROM $exerciseStatsTable
                 WHERE
-                    ex.c_id = $courseId AND
-                    ex.exe_exo_id = ".$exerciseId." AND
+                    c_id = $courseId AND
+                    exe_exo_id = $exerciseId AND
                     exe_user_id= $studentId AND
-                    session_id = $sessionId
+                    $sessionCondition
                 ";
         $result = Database::query($sql);
         $attempts = Database::fetch_array($result);

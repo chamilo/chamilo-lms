@@ -896,7 +896,6 @@ class FillBlanks extends Question
                 LEFT JOIN '.$tblTrackEExercise.' tee
                 ON
                     tee.exe_id = tea.exe_id AND
-                    tea.c_id = '.$courseId.' AND
                     exe_exo_id = '.$testId.'
                WHERE
                     tee.c_id = '.$courseId.' AND

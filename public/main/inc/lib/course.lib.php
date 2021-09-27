@@ -2402,10 +2402,6 @@ class CourseManager
             // Delete the course from the stats tables
             $sql = "DELETE FROM $table_stats_hotpots WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_attempt WHERE c_id = $courseId";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_exercises WHERE c_id = $courseId";
-            Database::query($sql);
             $sql = "DELETE FROM $table_stats_access WHERE c_id = $courseId";
             Database::query($sql);
             $sql = "DELETE FROM $table_stats_lastaccess WHERE c_id = $courseId";

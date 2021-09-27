@@ -5542,14 +5542,14 @@ SQL;
             }
 
             $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE exe_user_id = $userId";
+            $sql = "UPDATE $table SET user_ip = '$substitute' WHERE exe_user_id = $userId";
             $res = Database::query($sql);
             if (false === $res && $debug > 0) {
                 error_log("Could not anonymize IP address for user $userId ($sql)");
             }
 
             $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-            $sql = "UPDATE $table set user_ip = '$substitute' WHERE login_user_id = $userId";
+            $sql = "UPDATE $table SET user_ip = '$substitute' WHERE login_user_id = $userId";
             $res = Database::query($sql);
             if (false === $res && $debug > 0) {
                 error_log("Could not anonymize IP address for user $userId ($sql)");

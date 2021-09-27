@@ -279,9 +279,8 @@ class CalculatedAnswer extends Question
             $table,
             [
                 'where' => [
-                    'question_id = ? AND c_id = ?' => [
-                        $this->id,
-                        $this->course['real_id'],
+                    'question_id = ?' => [
+                        $this->id
                     ],
                 ],
             ]

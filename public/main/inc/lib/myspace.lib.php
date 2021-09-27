@@ -2288,17 +2288,15 @@ class MySpace
         $user_id = (int) $user_id;
         $courseId = api_get_course_int_id($course_code);
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
+        $sessionCondition = api_get_session_condition($session_id);
         $sql = "SELECT score, max_score
                 FROM $table
                 WHERE
                     c_id = $courseId AND
-                    exe_user_id = $user_id";
+                    exe_user_id = $user_id
+                    $sessionCondition
+                    ";
 
-        $session_id = (int) $session_id;
-        if (!empty($session_id)) {
-            $sql .= " AND session_id = '".$session_id."' ";
-        }
         $result = Database::query($sql);
         $score_obtained = 0;
         $score_possible = 0;

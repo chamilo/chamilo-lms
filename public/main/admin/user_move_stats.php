@@ -141,9 +141,9 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 //1. track_e_exercises
                 //ORIGINAL COURSE
-
+                $sessionCondition = api_get_session_condition($origin_session_id);
                 $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                        WHERE c_id = $course_id AND  session_id = $origin_session_id AND exe_user_id = $user_id ";
+                        WHERE c_id = $course_id AND exe_user_id = $user_id  $sessionCondition";
                 $res = Database::query($sql);
                 $list = [];
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -168,11 +168,13 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 // DESTINY COURSE
                 if (!$update_database) {
+                    $sessionCondition = api_get_session_condition($new_session_id);
                     $sql = "SELECT * FROM $TABLETRACK_EXERCICES
                             WHERE
                                 c_id = $course_id AND
-                                session_id = $new_session_id AND
-                                exe_user_id = $user_id ";
+                                exe_user_id = $user_id
+                                $sessionCondition
+                            ";
                     $res = Database::query($sql);
                     $list = [];
                     while ($row = Database::fetch_array($res, 'ASSOC')) {

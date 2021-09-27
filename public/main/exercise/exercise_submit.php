@@ -398,7 +398,7 @@ if (empty($exercise_stat_info)) {
             error_log('5.2. $expected_time '.$expected_time);
         }
 
-        $clock_expired_time = api_get_utc_datetime($expected_time);
+        $clock_expired_time = api_get_utc_datetime($expected_time, false, true);
         if ($debug) {
             error_log('5.3. $expected_time '.$clock_expired_time);
         }

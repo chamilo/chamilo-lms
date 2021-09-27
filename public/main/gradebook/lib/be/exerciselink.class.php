@@ -99,12 +99,15 @@ class ExerciseLink extends AbstractLink
         $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $sessionId = $this->get_session_id();
         $course_id = api_get_course_int_id($this->get_course_code());
+        $sessionCondition = api_get_session_condition($sessionId);
+
         $sql = "SELECT count(exe_id) AS number
                 FROM $tbl_stats
                 WHERE
-                    session_id = $sessionId AND
                     c_id = $course_id AND
-                    exe_exo_id = ".$this->get_ref_id();
+                    exe_exo_id = ".$this->get_ref_id()."
+                    $sessionCondition
+                    ";
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -206,14 +209,15 @@ class ExerciseLink extends AbstractLink
 
         if (!$this->is_hp) {
             if (false == $exercise->exercise_was_added_in_lp) {
+                $sessionCondition = api_get_session_condition($sessionId);
                 $sql = "SELECT * FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
                             orig_lp_id = 0 AND
                             orig_lp_item_id = 0 AND
                             status <> 'incomplete' AND
-                            session_id = $sessionId AND
                             c_id = $courseId
+                            $sessionCondition
                         ";
             } else {
                 $lpCondition = null;

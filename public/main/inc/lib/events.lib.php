@@ -453,7 +453,6 @@ class Event
                exe_exo_id = $exoId,
                score = '$score',
                max_score = '$weighting',
-               session_id = $sessionId,
                orig_lp_id = $learnpathId,
                orig_lp_item_id = $learnpathItemId,
                orig_lp_item_view_id = $learnpathItemViewId,
@@ -578,8 +577,6 @@ class Event
             'question_id' => $question_id,
             'answer' => $answer,
             'marks' => $score,
-            'c_id' => $course_id,
-            'session_id' => $session_id,
             'position' => $position,
             'tms' => $now,
             'filename' => !empty($fileName) ? basename($fileName) : $fileName,
@@ -590,8 +587,6 @@ class Event
         // Check if attempt exists.
         $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
                 WHERE
-                    c_id = $course_id AND
-                    session_id = $session_id AND
                     exe_id = $exe_id AND
                     user_id = $user_id AND
                     question_id = $question_id AND
@@ -954,7 +949,7 @@ class Event
         $lp_item_view_id = (int) $lp_item_view_id;
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
-
+        $sessionCondition = api_get_session_condition($sessionId);
         $sql = "SELECT count(*) as count
                 FROM $table
                 WHERE
@@ -964,8 +959,8 @@ class Event
                     orig_lp_id = $lp_id AND
                     orig_lp_item_id = $lp_item_id AND
                     orig_lp_item_view_id = $lp_item_view_id AND
-                    c_id = $courseId AND
-                    session_id = $sessionId";
+                    c_id = $courseId
+                    $sessionCondition";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -994,6 +989,7 @@ class Event
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
+        $sessionCondition = api_get_session_condition($sessionId);
         $sql = "SELECT exe_id
                 FROM $table
                 WHERE
@@ -1003,8 +999,8 @@ class Event
                     orig_lp_id = $lp_id AND
                     orig_lp_item_id = $lp_item_id AND
                     orig_lp_item_view_id = $lp_item_view_id AND
-                    c_id = $courseId AND
-                    session_id = $sessionId
+                    c_id = $courseId
+                    $sessionCondition
                 ORDER by exe_id
                 ";
 
@@ -1046,7 +1042,7 @@ class Event
         //$lp_item_view_id = (int) $lp_item_view_id;
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
-
+        $sessionCondition = api_get_session_condition($sessionId);
         $sql = "SELECT count(*) as count
                 FROM $stat_table
                 WHERE
@@ -1055,8 +1051,9 @@ class Event
                     status 				!= 'incomplete' AND
                     orig_lp_id 			= $lp_id AND
                     orig_lp_item_id 	= $lp_item_id AND
-                    c_id = $courseId AND
-                    session_id = $sessionId";
+                    c_id = $courseId
+                    $sessionCondition
+                    ";
 
         $query = Database::query($sql);
         if (Database::num_rows($query) > 0) {
@@ -1223,13 +1220,15 @@ class Event
 
         if (!empty($user_id) && !empty($exercise_id) && !empty($course_id)) {
             $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sessionCondition = api_get_session_condition($session_id);
             $sql = "DELETE FROM $table
                     WHERE
                         exe_user_id = $user_id AND
                         exe_exo_id = $exercise_id AND
                         c_id = $course_id AND
-                        session_id = $session_id AND
-                        status = 'incomplete' ";
+                        status = 'incomplete'
+                        $sessionCondition
+                        ";
             Database::query($sql);
             self::addEvent(
                 LOG_EXERCISE_RESULT_DELETE,
@@ -1270,15 +1269,16 @@ class Event
             $user_id = (int) $user_id;
             $user_condition = "AND exe_user_id = $user_id ";
         }
+        $sessionCondition = api_get_session_condition($session_id);
         $sql = "SELECT * FROM $TABLETRACK_EXERCICES
                 WHERE
                     status = ''  AND
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
-                    session_id = $session_id  AND
                     orig_lp_id =0 AND
                     orig_lp_item_id = 0
                     $user_condition
+                    $sessionCondition
                 ORDER BY exe_id";
         $res = Database::query($sql);
         $list = [];
@@ -1319,12 +1319,13 @@ class Event
         if ($get_count) {
             $select = 'count(*) as count';
         }
+        $sessionCondition = api_get_session_condition($session_id);
         $sql = "SELECT $select FROM $table_track_exercises
                 WHERE   status = ''  AND
                         c_id = $courseId AND
-                        session_id = $session_id  AND
                         orig_lp_id = 0 AND
                         orig_lp_item_id = 0
+                        $sessionCondition
                 ORDER BY exe_id";
         $res = Database::query($sql);
         if ($get_count) {
@@ -1361,14 +1362,15 @@ class Event
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
 
+        $sessionCondition = api_get_session_condition($session_id);
         $sql = "SELECT * FROM $table_track_exercises
                 WHERE
                     status = '' AND
                     exe_user_id = $user_id AND
                     c_id = $courseId AND
-                    session_id = $session_id AND
                     orig_lp_id = 0 AND
                     orig_lp_item_id = 0
+                    $sessionCondition
                 ORDER by exe_id";
 
         $res = Database::query($sql);
@@ -1469,17 +1471,18 @@ class Event
             $order = 'asc';
         }
 
+        $sessionCondition = api_get_session_condition($session_id);
+
         $sql = "SELECT * FROM $table_track_exercises
                 WHERE
                     status 			= '' AND
                     exe_user_id 	= $user_id AND
                     c_id 	        = $courseId AND
                     exe_exo_id 		= $exercise_id AND
-                    session_id 		= $session_id AND
                     orig_lp_id 		= $lp_id AND
                     orig_lp_item_id = $lp_item_id
+                    $sessionCondition
                 ORDER by exe_id $order ";
-
         $res = Database::query($sql);
         $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -1527,16 +1530,16 @@ class Event
         $exercise_id = (int) $exercise_id;
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
-
+        $sessionCondition = api_get_session_condition($origin_session_id);
         $sql = "SELECT count(*) as count
                 FROM $table
                 WHERE status = ''  AND
                     exe_user_id = $user_id AND
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
-                    session_id = $session_id AND
                     orig_lp_id =0 AND
                     orig_lp_item_id = 0
+                    $sessionCondition
                 ORDER BY exe_id";
         $res = Database::query($sql);
         $result = 0;
@@ -1572,15 +1575,16 @@ class Event
         $courseId = (int) $courseId;
         $exercise_id = (int) $exercise_id;
         $session_id = (int) $session_id;
-
+        $sessionCondition = api_get_session_condition($session_id);
         $sql = "SELECT * FROM $table_track_exercises
                 WHERE
                     status = '' AND
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
-                    session_id = $session_id AND
                     orig_lp_id = 0 AND
-                    orig_lp_item_id = 0";
+                    orig_lp_item_id = 0
+                    $sessionCondition
+                ";
 
         if (!empty($userId)) {
             $userId = (int) $userId;
@@ -1642,13 +1646,14 @@ class Event
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
 
+        $sessionCondition = api_get_session_condition($session_id);
         $sql = "SELECT * FROM $table
                 WHERE
                     status = ''  AND
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
-                    session_id = $session_id  AND
                     exe_user_id = $user_id
+                    $sessionCondition
                 ";
 
         if ($skipLpResults) {
@@ -1699,6 +1704,8 @@ class Event
         $session_id = (int) $session_id;
         $exercise_id = (int) $exercise_id;
 
+        $sessionCondition = api_get_session_condition($session_id);
+
         $sql = "SELECT count(e.exe_id) as count
                 FROM $table_track_exercises e
                 LEFT JOIN $table_track_attempt a
@@ -1706,11 +1713,11 @@ class Event
                 WHERE
                     exe_exo_id = $exercise_id AND
                     c_id = $courseId AND
-                    e.session_id = $session_id  AND
                     orig_lp_id = 0 AND
                     marks IS NULL AND
                     status = '' AND
                     orig_lp_item_id = 0
+                    $sessionCondition
                 ORDER BY e.exe_id";
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
@@ -1737,15 +1744,17 @@ class Event
         $courseId = (int) $courseId;
         $exercise_id = (int) $exercise_id;
         $session_id = (int) $session_id;
+        $sessionCondition = api_get_session_condition($session_id);
 
         $sql = "SELECT * FROM $table_track_exercises
                 WHERE
                     status = '' AND
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
-                    session_id = $session_id AND
                     orig_lp_id !=0 AND
-                    orig_lp_item_id != 0";
+                    orig_lp_item_id != 0
+                    $sessionCondition
+                    ";
 
         $res = Database::query($sql);
         $list = [];
@@ -1887,16 +1896,12 @@ class Event
 
         $exeId = (int) $exeId;
         $user_id = (int) $user_id;
-        $courseId = (int) $courseId;
-        $session_id = (int) $session_id;
         $question_id = (int) $question_id;
 
         $sql = "DELETE FROM $table
                 WHERE
                     exe_id = $exeId AND
                     user_id = $user_id AND
-                    c_id = $courseId AND
-                    session_id = $session_id AND
                     question_id = $question_id ";
         Database::query($sql);
 

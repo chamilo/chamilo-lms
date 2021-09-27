@@ -152,7 +152,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        $eTrack = $em->find('ChamiloCoreBundle:TrackEExercises', $trackId);
+        $eTrack = $em->find('ChamiloCoreBundle:TrackExercise', $trackId);
 
         $qTracks = $em
             ->createQuery(
@@ -164,7 +164,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                     'id' => $eTrack->getExeId(),
                     'course' => $eTrack->getCId(),
                     'session' => $eTrack->getSessionId(),
-                    'user' => $eTrack->getExeUserId(),
+                    'user' => $eTrack->getUser()->getId(),
                 ]
             )
             ->getResult();

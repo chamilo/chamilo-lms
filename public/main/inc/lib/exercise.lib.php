@@ -4,7 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
@@ -1955,6 +1955,10 @@ HOTSPOT;
         if (!$showSessionField) {
             $session_id_and = " AND te.session_id = $sessionId ";
             $sessionCondition = " AND ttte.session_id = $sessionId";
+            if (empty($sessionId)) {
+                $session_id_and = " AND te.session_id IS NULL ";
+                $sessionCondition = " AND ttte.session_id IS NULL ";
+            }
         }
 
         $exercise_where = '';
@@ -3608,43 +3612,41 @@ EOT;
         $courseId = api_get_course_int_id($course_code);
 
         $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
-    		FROM $track_exercises e
-    		";
+                FROM $track_exercises e ";
+        $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
         if (true == $onlyStudent) {
             $courseCondition = '';
             if (empty($session_id)) {
                 $courseCondition = "
-            INNER JOIN $courseUser c
-            ON (
-                        e.exe_user_id = c.user_id AND
-                        e.c_id = c.c_id AND
-                        c.status = ".STUDENT."
-                        AND relation_type <> 2
+                INNER JOIN $courseUser c
+                ON (
+                    e.exe_user_id = c.user_id AND
+                    e.c_id = c.c_id AND
+                    c.status = ".STUDENT." AND
+                    relation_type <> 2
                 )";
             } else {
                 $courseCondition = "
-            INNER JOIN $courseUser c
-            ON (
+                    INNER JOIN $courseUser c
+                    ON (
                         e.exe_user_id = c.user_id AND
                         e.c_id = c.c_id AND
                         c.status = 0
-                )";
+                    )";
             }
             $sql .= $courseCondition;
         }
         $sql .= "
     		INNER JOIN $track_attempt a
     		ON (
-    		    a.exe_id = e.exe_id AND
-    		    e.c_id = a.c_id AND
-    		    e.session_id  = a.session_id
+    		    a.exe_id = e.exe_id
             )
     		WHERE
     		    exe_exo_id 	= $exercise_id AND
                 a.c_id = $courseId AND
-                e.session_id = $session_id AND
                 question_id = $question_id AND
                 e.status = ''
+                $sessionCondition
             LIMIT 1";
         $result = Database::query($sql);
         $return = [];
@@ -3765,25 +3767,24 @@ EOT;
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 
+        $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
         $sql = "SELECT DISTINCT exe_user_id
-    		FROM $track_exercises e
-    		INNER JOIN $track_attempt a
-    		ON (
-    		    a.exe_id = e.exe_id AND
-    		    e.c_id = a.c_id AND
-    		    e.session_id  = a.session_id
-            )
-            INNER JOIN $courseTable c
-            ON (c.id = a.c_id)
-    		$courseCondition
-    		WHERE
-    		    exe_exo_id = $exercise_id AND
-                a.c_id = $courseId AND
-                e.session_id = $session_id AND
-                question_id = $question_id AND
-                answer <> '0' AND
-                e.status = ''
-                $courseConditionWhere
+                FROM $track_exercises e
+                INNER JOIN $track_attempt a
+                ON (
+                    a.exe_id = e.exe_id
+                )
+                INNER JOIN $courseTable c
+                ON (c.id = e.c_id)
+                $courseCondition
+                WHERE
+                    exe_exo_id = $exercise_id AND
+                    e.c_id = $courseId AND
+                    question_id = $question_id AND
+                    answer <> '0' AND
+                    e.status = ''
+                    $courseConditionWhere
+                    $sessionCondition
             ";
         $result = Database::query($sql);
         $return = 0;
@@ -3836,22 +3837,23 @@ EOT;
             $courseConditionWhere = ' AND cu.status = 0 ';
         }
 
+        $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
         $sql = "SELECT DISTINCT exe_user_id
-    		FROM $track_exercises e
-    		INNER JOIN $track_hotspot a
-    		ON (a.hotspot_exe_id = e.exe_id)
-    		INNER JOIN $courseTable c
-    		ON (a.c_id = c.id)
-    		$courseCondition
-    		WHERE
-    		    exe_exo_id              = $exercise_id AND
-                a.c_id 	= $courseId AND
-                e.session_id            = $session_id AND
-                hotspot_answer_id       = $answer_id AND
-                hotspot_question_id     = $question_id AND
-                hotspot_correct         =  1 AND
-                e.status                = ''
-                $courseConditionWhere
+                FROM $track_exercises e
+                INNER JOIN $track_hotspot a
+                ON (a.hotspot_exe_id = e.exe_id)
+                INNER JOIN $courseTable c
+                ON (a.c_id = c.id)
+                $courseCondition
+                WHERE
+                    exe_exo_id              = $exercise_id AND
+                    a.c_id 	= $courseId AND
+                    hotspot_answer_id       = $answer_id AND
+                    hotspot_question_id     = $question_id AND
+                    hotspot_correct         =  1 AND
+                    e.status                = ''
+                    $courseConditionWhere
+                    $sessionCondition
             ";
 
         $result = Database::query($sql);
@@ -3921,25 +3923,24 @@ EOT;
             $courseConditionWhere = ' AND cu.status = 0 ';
         }
 
+        $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
         $sql = "SELECT $select_condition
-    		FROM $track_exercises e
-    		INNER JOIN $track_attempt a
-    		ON (
-    		    a.exe_id = e.exe_id AND
-    		    e.c_id = a.c_id AND
-    		    e.session_id  = a.session_id
-            )
-            INNER JOIN $courseTable c
-            ON c.id = a.c_id
-    		$courseCondition
-    		WHERE
-    		    exe_exo_id = $exercise_id AND
-                a.c_id = $courseId AND
-                e.session_id = $session_id AND
-                $answer_condition
-                question_id = $question_id AND
-                e.status = ''
-                $courseConditionWhere
+                FROM $track_exercises e
+                INNER JOIN $track_attempt a
+                ON (
+                    a.exe_id = e.exe_id
+                )
+                INNER JOIN $courseTable c
+                ON c.id = a.c_id
+                $courseCondition
+                WHERE
+                    exe_exo_id = $exercise_id AND
+                    e.c_id = $courseId AND
+                    $answer_condition
+                    question_id = $question_id AND
+                    e.status = ''
+                    $courseConditionWhere
+                    $sessionCondition
             ";
         $result = Database::query($sql);
         $return = 0;
@@ -4102,43 +4103,6 @@ EOT;
         }
 
         return $good_answer;
-    }
-
-    /**
-     * @param int    $exercise_id
-     * @param string $course_code
-     * @param int    $session_id
-     *
-     * @return int
-     */
-    public static function get_number_students_finish_exercise(
-        $exercise_id,
-        $course_code,
-        $session_id
-    ) {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-        $exercise_id = (int) $exercise_id;
-        $course_code = Database::escape_string($course_code);
-        $session_id = (int) $session_id;
-
-        $sql = "SELECT DISTINCT exe_user_id
-                FROM $track_exercises e
-                INNER JOIN $track_attempt a
-                ON (a.exe_id = e.exe_id)
-                WHERE
-                    exe_exo_id 	 = $exercise_id AND
-                    course_code  = '$course_code' AND
-                    e.session_id = $session_id AND
-                    status = ''";
-        $result = Database::query($sql);
-        $return = 0;
-        if ($result) {
-            $return = Database::num_rows($result);
-        }
-
-        return $return;
     }
 
     /**
@@ -4906,7 +4870,7 @@ EOT;
     {
         $em = Database::getManager();
 
-        $dql = 'SELECT DISTINCT te.exeUserId FROM ChamiloCoreBundle:TrackEExercises te WHERE te.exeExoId = :id AND te.cId = :cId';
+        $dql = 'SELECT DISTINCT te.exeUserId FROM ChamiloCoreBundle:TrackExercise te WHERE te.exeExoId = :id AND te.course = :cId';
         $dql .= api_get_session_condition($sessionId, true, false, 'te.sessionId');
 
         $result = $em
@@ -5264,13 +5228,15 @@ EOT;
      * @param int $courseId
      * @param int $sessionId
      *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
      * @return int
      */
     public static function countAnsweredQuestionsByUserAfterTime(DateTime $time, $userId, $courseId, $sessionId)
     {
         $em = Database::getManager();
+
+        if (empty($sessionId)) {
+            $sessionId = null;
+        }
 
         $time = api_get_utc_datetime($time->format('Y-m-d H:i:s'), false, true);
 
@@ -5450,7 +5416,7 @@ EOT;
      * @param int $exerciseId Exercise ID
      * @param int $courseId   Optional. Coure ID.
      *
-     * @return TrackEExercises|null
+     * @return TrackExercise|null
      */
     public static function recalculateResult($exeId, $userId, $exerciseId, $courseId = 0)
     {
@@ -5459,14 +5425,14 @@ EOT;
         }
 
         $em = Database::getManager();
-        /** @var TrackEExercises $trackedExercise */
-        $trackedExercise = $em->getRepository(TrackEExercises::class)->find($exeId);
+        /** @var TrackExercise $trackedExercise */
+        $trackedExercise = $em->getRepository(TrackExercise::class)->find($exeId);
 
         if (empty($trackedExercise)) {
             return null;
         }
 
-        if ($trackedExercise->getExeUserId() != $userId ||
+        if ($trackedExercise->getUser()->getId() != $userId ||
             $trackedExercise->getExeExoId() != $exerciseId
         ) {
             return null;
@@ -5552,9 +5518,9 @@ EOT;
         $sql = "SELECT count(te.exe_id) total
             FROM $attemptTable t
             INNER JOIN $trackTable te
-            ON (te.c_id = t.c_id AND t.exe_id = te.exe_id)
+            ON (t.exe_id = te.exe_id)
             WHERE
-                t.c_id = $courseId AND
+                te.c_id = $courseId AND
                 exe_exo_id = $exerciseId AND
                 t.question_id = $questionId AND
                 status != 'incomplete'
@@ -5591,7 +5557,7 @@ EOT;
                 INNER JOIN $trackTable te
                 ON (t.exe_id = te.exe_id)
                 WHERE
-                    t.c_id = $courseId AND
+                    te.c_id = $courseId AND
                     t.marks != q.ponderation AND
                     exe_exo_id = $exerciseId AND
                     status != 'incomplete'
@@ -6031,8 +5997,8 @@ EOT;
         $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblTrackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        Database::query("DELETE FROM $tblTrackExercises WHERE exe_id = $exeId");
         Database::query("DELETE FROM $tblTrackAttempt WHERE exe_id = $exeId");
+        Database::query("DELETE FROM $tblTrackExercises WHERE exe_id = $exeId");
 
         Event::addEvent(
             LOG_EXERCISE_ATTEMPT_DELETE,

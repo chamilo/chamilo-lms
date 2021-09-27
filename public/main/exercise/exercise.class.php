@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CoreBundle\Entity\TrackExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -2887,7 +2888,6 @@ class Exercise
 
         // if we want to delete attempts before date $cleanResultBeforeDate
         // $cleanResultBeforeDate must be a valid UTC-0 date yyyy-mm-dd
-
         if (!empty($cleanResultBeforeDate)) {
             $cleanResultBeforeDate = Database::escape_string($cleanResultBeforeDate);
             if (api_is_valid_date($cleanResultBeforeDate)) {
@@ -2897,13 +2897,14 @@ class Exercise
             }
         }
 
+        $sessionCondition = api_get_session_condition($sessionId);
         $sql = "SELECT exe_id
-            FROM $table_track_e_exercises
-            WHERE
-                c_id = ".api_get_course_int_id().' AND
-                exe_exo_id = '.$this->getId().' AND
-                session_id = '.$sessionId.' '.
-            $sql_where;
+                FROM $table_track_e_exercises
+                WHERE
+                    c_id = ".api_get_course_int_id().' AND
+                    exe_exo_id = '.$this->getId()."
+                    $sessionCondition
+                    $sql_where";
 
         $result = Database::query($sql);
         $exe_list = Database::store_result($result);
@@ -3030,25 +3031,21 @@ class Exercise
         $status = 'incomplete'
     ) {
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        if (empty($lp_id)) {
-            $lp_id = 0;
-        }
-        if (empty($lp_item_id)) {
-            $lp_item_id = 0;
-        }
-        if (empty($lp_item_view_id)) {
-            $lp_item_view_id = 0;
-        }
-        $condition = ' WHERE exe_exo_id 	= '."'".$this->getId()."'".' AND
-					   exe_user_id 			= '."'".api_get_user_id()."'".' AND
-					   c_id                 = '.api_get_course_int_id().' AND
-					   status 				= '."'".Database::escape_string($status)."'".' AND
-					   orig_lp_id 			= '."'".$lp_id."'".' AND
-					   orig_lp_item_id 		= '."'".$lp_item_id."'".' AND
-                       orig_lp_item_view_id = '."'".$lp_item_view_id."'".' AND
-					   session_id 			= '."'".api_get_session_id()."' LIMIT 1"; //Adding limit 1 just in case
+        $lp_id = (int) $lp_id;
+        $lp_item_id = (int) $lp_item_id;
+        $lp_item_view_id = (int) $lp_item_view_id;
 
-        $sql_track = 'SELECT * FROM '.$track_exercises.$condition;
+        $sessionCondition = api_get_session_condition(api_get_session_id());
+        $condition = " WHERE exe_exo_id 	= ".$this->getId()." AND
+					   exe_user_id 			= '".api_get_user_id()."' AND
+					   c_id                 = ".api_get_course_int_id()." AND
+					   status 				= '".Database::escape_string($status)."' AND
+					   orig_lp_id 			= $lp_id AND
+					   orig_lp_item_id 		= $lp_item_id AND
+                       orig_lp_item_view_id =  $lp_item_view_id
+					   ";
+
+        $sql_track = " SELECT * FROM  $track_exercises $condition $sessionCondition LIMIT 1 ";
 
         $result = Database::query($sql_track);
         $new_array = [];
@@ -3073,14 +3070,13 @@ class Exercise
      * @return int
      */
     public function save_stat_track_exercise_info(
-        $clock_expired_time = 0,
+        $clock_expired_time,
         $safe_lp_id = 0,
         $safe_lp_item_id = 0,
         $safe_lp_item_view_id = 0,
         $questionList = [],
         $weight = 0
     ) {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $safe_lp_id = (int) $safe_lp_id;
         $safe_lp_item_id = (int) $safe_lp_item_id;
         $safe_lp_item_view_id = (int) $safe_lp_item_view_id;
@@ -3090,29 +3086,25 @@ class Exercise
         }
 
         $questionList = array_map('intval', $questionList);
+        $em = Database::getManager();
 
-        $params = [
-            'exe_exo_id' => $this->getId(),
-            'exe_user_id' => api_get_user_id(),
-            'c_id' => api_get_course_int_id(),
-            'status' => 'incomplete',
-            'session_id' => api_get_session_id(),
-            'data_tracking' => implode(',', $questionList),
-            'start_date' => api_get_utc_datetime(),
-            'orig_lp_id' => $safe_lp_id,
-            'orig_lp_item_id' => $safe_lp_item_id,
-            'orig_lp_item_view_id' => $safe_lp_item_view_id,
-            'max_score' => $weight,
-            'user_ip' => Database::escape_string(api_get_real_ip()),
-            'exe_date' => api_get_utc_datetime(),
-            'score' => 0,
-            'steps_counter' => 0,
-            'exe_duration' => 0,
-            'expired_time_control' => $clock_expired_time,
-            'questions_to_check' => '',
-        ];
+        $trackExercise = (new TrackExercise())
+            ->setSession(api_get_session_entity())
+            ->setCourse(api_get_course_entity())
+            ->setMaxScore($weight)
+            ->setDataTracking(implode(',', $questionList))
+            ->setUser(api_get_user_entity())
+            ->setUserIp(api_get_real_ip())
+            ->setOrigLpId($safe_lp_id)
+            ->setOrigLpItemId($safe_lp_item_id)
+            ->setOrigLpItemViewId($safe_lp_item_view_id)
+            ->setExpiredTimeControl($clock_expired_time)
+            ->setExeExoId($this->getId())
+        ;
+        $em->persist($trackExercise);
+        $em->flush();
 
-        return Database::insert($track_exercises, $params);
+        return $trackExercise->getExeId();
     }
 
     /**
@@ -8653,6 +8645,7 @@ class Exercise
             $studentIdList = array_column($studentList, 'user_id');
         }
 
+        $sessionCondition = api_get_session_condition($sessionId);
         if (false == $this->exercise_was_added_in_lp) {
             $sql = "SELECT * FROM $tblStats
                         WHERE
@@ -8660,8 +8653,8 @@ class Exercise
                             orig_lp_id = 0 AND
                             orig_lp_item_id = 0 AND
                             status <> 'incomplete' AND
-                            session_id = $sessionId AND
                             c_id = $courseId
+                            $sessionCondition
                         ";
         } else {
             $lpId = null;
@@ -9359,6 +9352,7 @@ class Exercise
                         $currentRow['title'] = $exercise->getUnformattedTitle();
                     }
 
+                    $sessionCondition = api_get_session_condition(api_get_session_id());
                     // Don't remove this marker: note-query-exe-results
                     $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
                             WHERE
@@ -9367,8 +9361,8 @@ class Exercise
                                 c_id = ".api_get_course_int_id()." AND
                                 status <> 'incomplete' AND
                                 orig_lp_id = 0 AND
-                                orig_lp_item_id = 0 AND
-                                session_id =  '".api_get_session_id()."'
+                                orig_lp_item_id = 0
+                                $sessionCondition
                             ORDER BY exe_id DESC";
 
                     $qryres = Database::query($sql);

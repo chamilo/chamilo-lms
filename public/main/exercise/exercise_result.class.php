@@ -55,7 +55,9 @@ class ExerciseResult
         $course_id = api_get_course_int_id();
         $user_id = (int) $user_id;
         $sessionId = api_get_session_id();
-        $session_id_and = ' AND te.session_id = '.$sessionId.' ';
+
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
+        $session_id_and = $sessionCondition;
         $exercise_id = (int) $exercise_id;
 
         if (!empty($exercise_id)) {

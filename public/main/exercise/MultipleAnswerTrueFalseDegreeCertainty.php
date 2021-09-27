@@ -1192,9 +1192,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         $tblExeAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $cId = api_get_course_int_id();
         $sql = "SELECT * FROM $tblExeAttempt
-                WHERE c_id = $cId AND exe_id = $exeId $and";
+                WHERE exe_id = $exeId $and";
 
         $res = Database::query($sql);
         while ($data = Database::fetch_assoc($res)) {

@@ -1984,14 +1984,14 @@ if (empty($details)) {
                 echo '</td>';
                 echo '<td>'.$count_attempts.'</td>';
                 echo '<td>';
-
+                $sessionCondition = api_get_session_condition($sessionId);
                 $sql = 'SELECT exe_id FROM '.$tbl_stats_exercices.'
-                         WHERE
+                        WHERE
                             exe_exo_id = "'.$exercise_id.'" AND
                             exe_user_id ="'.$studentId.'" AND
                             c_id = '.$courseId.' AND
-                            session_id = "'.$sessionId.'" AND
                             status = ""
+                            '.$sessionCondition.'
                         ORDER BY exe_date DESC
                         LIMIT 1';
                 $result_last_attempt = Database::query($sql);

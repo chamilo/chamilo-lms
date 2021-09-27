@@ -750,6 +750,7 @@ class Tracking
                     }
 
                     $title = $row['mytitle'];
+                    $sessionCondition = api_get_session_condition($sessionId);
                     // Selecting the exe_id from stats attempts tables in order to look the max score value.
                     $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
                             WHERE
@@ -758,8 +759,8 @@ class Tracking
                                 orig_lp_id = "'.$lp_id.'" AND
                                 orig_lp_item_id = "'.$row['myid'].'" AND
                                 c_id = '.$courseId.' AND
-                                status <> "incomplete" AND
-                                session_id = '.$sessionId.'
+                                status <> "incomplete"
+                                '.$sessionCondition.'
                              ORDER BY exe_date DESC
                              LIMIT 1';
 
@@ -2311,9 +2312,8 @@ class Tracking
             $session = null;
             if (isset($sessionId)) {
                 $session = api_get_session_entity($course_info['real_id']);
-                $sessionId = (int) $sessionId;
-                $condition_session = " AND session_id = $sessionId ";
             }
+            $sessionCondition = api_get_session_condition($sessionId);
 
             $condition_active = '';
             if (1 == $active_filter) {
@@ -2380,7 +2380,7 @@ class Tracking
                             $condition_user AND
                             status = '' AND
                             c_id = {$course_info['real_id']}
-                            $condition_session
+                            $sessionCondition
                             $condition_into_lp
                         ORDER BY exe_date DESC";
 
@@ -2470,15 +2470,16 @@ class Tracking
         $lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
         $tbl_stats_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-        $sql = "SELECT COUNT(ex.exe_id) as essais
-                FROM $tbl_stats_exercises AS ex
+        $sessionCondition = api_get_session_condition($sessionId);
+        $sql = "SELECT COUNT(exe_id) as essais
+                FROM $tbl_stats_exercises
                 WHERE
-                    ex.c_id = $courseId AND
-                    ex.exe_exo_id = $exercise_id AND
+                    c_id = $courseId AND
+                    exe_exo_id = $exercise_id AND
                     status = '' AND
                     exe_user_id= $student_id AND
-                    session_id = $sessionId ";
+                    $sessionCondition
+                    ";
 
         if (1 == $find_all_lp) {
             $sql .= "AND (orig_lp_id = $lp_id OR orig_lp_id = 0)
@@ -2524,15 +2525,17 @@ class Tracking
             $exerciseIdList[] = $exercise->getIid();
         }
         $exercise_list_imploded = implode("' ,'", $exerciseIdList);
-
-        $sql = "SELECT COUNT(DISTINCT ex.exe_exo_id)
-                FROM $tbl_stats_exercises AS ex
+        $sessionCondition = api_get_session_condition($sessionId);
+        $sql = "SELECT COUNT(DISTINCT exe_exo_id)
+                FROM $tbl_stats_exercises
                 WHERE
-                    ex.c_id = $courseId AND
-                    ex.session_id  = $sessionId AND
-                    ex.exe_user_id = $user_id AND
-                    ex.status = '' AND
-                    ex.exe_exo_id IN ('$exercise_list_imploded') ";
+                    c_id = $courseId AND
+                    session_id  = $sessionId AND
+                    exe_user_id = $user_id AND
+                    status = '' AND
+                    exe_exo_id IN ('$exercise_list_imploded')
+                    $sessionCondition
+                    ";
 
         $rs = Database::query($sql);
         $count = 0;
@@ -3049,8 +3052,7 @@ class Tracking
                                             INNER JOIN $tbl_quiz_questions AS q
                                             ON (q.iid = at.question_id)
                                             WHERE
-                                                exe_id ='$id_last_attempt' AND
-                                                at.c_id = $courseId
+                                                exe_id ='$id_last_attempt'
                                         )
                                         AS t";
 
@@ -3322,7 +3324,7 @@ class Tracking
                             $row = Database::fetch_array($resultRow);
                             $totalTimeInLpItemView = $row['mytime'];
                             $lpItemViewId = $row['iid'];
-
+                            $sessionCondition = api_get_session_condition($sessionId);
                             $sql = 'SELECT SUM(exe_duration) exe_duration
                                     FROM '.$trackExercises.'
                                     WHERE
@@ -3331,8 +3333,8 @@ class Tracking
                                         orig_lp_id = "'.$lp_id.'" AND
                                         orig_lp_item_id = "'.$row['myid'].'" AND
                                         c_id = '.$courseId.' AND
-                                        status <> "incomplete" AND
-                                        session_id = '.$sessionId.'
+                                        status <> "incomplete"
+                                        '.$sessionCondition.'
                                      ORDER BY exe_date DESC ';
 
                             $sumScoreResult = Database::query($sql);
@@ -7010,8 +7012,9 @@ class Tracking
 
         //1. track_e_exercises
         //ORIGINAL COURSE
+        $sessionCondition = api_get_session_condition($origin_session_id);
         $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                WHERE c_id = $course_id AND  session_id = $origin_session_id AND exe_user_id = $user_id ";
+                WHERE c_id = $course_id AND exe_user_id = $user_id  $sessionCondition";
         $res = Database::query($sql);
         $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -7026,8 +7029,8 @@ class Tracking
                     $sql = "UPDATE $TABLETRACK_EXERCICES SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
                     Database::query($sql);
 
-                    $sql = "UPDATE $TBL_TRACK_ATTEMPT SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
-                    Database::query($sql);
+                    //$sql = "UPDATE $TBL_TRACK_ATTEMPT SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
+                    //Database::query($sql);
 
                     $sql = "UPDATE $attemptRecording SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
                     Database::query($sql);

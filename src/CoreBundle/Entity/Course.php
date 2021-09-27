@@ -198,13 +198,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected Collection $trackEHotspots;
 
     /**
-     * @var Collection|TrackEAttempt[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="course", cascade={"persist", "remove"})
-     */
-    protected Collection $trackEAttempts;
-
-    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SearchEngineRef", mappedBy="course", cascade={"persist", "remove"})
      *
      * @var SearchEngineRef[]|Collection
@@ -400,7 +393,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->gradebookEvaluations = new ArrayCollection();
         $this->gradebookLinks = new ArrayCollection();
         $this->trackEHotspots = new ArrayCollection();
-        $this->trackEAttempts = new ArrayCollection();
+
         $this->searchEngineRefs = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->activateLegal = 0;
@@ -1249,24 +1242,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function setTrackEHotspots(Collection $trackEHotspots): self
     {
         $this->trackEHotspots = $trackEHotspots;
-
-        return $this;
-    }
-
-    /**
-     * @return TrackEAttempt[]|Collection
-     */
-    public function getTrackEAttempts()
-    {
-        return $this->trackEAttempts;
-    }
-
-    /**
-     * @param TrackEAttempt[]|Collection $trackEAttempts
-     */
-    public function setTrackEAttempts(Collection $trackEAttempts): self
-    {
-        $this->trackEAttempts = $trackEAttempts;
 
         return $this;
     }

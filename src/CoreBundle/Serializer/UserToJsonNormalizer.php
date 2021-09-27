@@ -16,11 +16,11 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEDownloads;
-use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CoreBundle\Entity\TrackELastaccess;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\TrackEUploads;
+use Chamilo\CoreBundle\Entity\TrackExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
@@ -136,9 +136,9 @@ final class UserToJsonNormalizer
         $criteria = [
             'exeUserId' => $userId,
         ];
-        $result = $em->getRepository(TrackEExercises::class)->findBy($criteria);
+        $result = $em->getRepository(TrackExercise::class)->findBy($criteria);
         $trackEExercises = [];
-        /** @var TrackEExercises $item */
+        /** @var TrackExercise $item */
         foreach ($result as $item) {
             $date = $item->getExeDate()->format($dateFormat);
             $list = [
@@ -161,10 +161,8 @@ final class UserToJsonNormalizer
         foreach ($result as $item) {
             $date = $item->getTms()->format($dateFormat);
             $list = [
-                'Attempt #'.$item->getExeId(),
-                'Course # '.$item->getCourse()->getCode(),
+                'Attempt #'.$item->getTrackExercise()->getExeId(),
                 //'Answer: '.$item->getAnswer(),
-                'Session #'.$item->getSessionId(),
                 //'Marks: '.$item->getMarks(),
                 'Position: '.$item->getPosition(),
                 'Date: '.$date,

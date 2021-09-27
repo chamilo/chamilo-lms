@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * })
  * @ORM\Entity
  */
-class TrackEExercises
+class TrackExercise
 {
     /**
      * @ORM\Column(name="exe_id", type="integer")
@@ -30,20 +32,29 @@ class TrackEExercises
     protected int $exeId;
 
     /**
-     * @ORM\Column(name="exe_user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="id", nullable=false)
      */
-    protected int $exeUserId;
+    #[Assert\NotBlank]
+    protected User $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     */
+    protected Course $course;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     */
+    protected ?Session $session = null;
 
     /**
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
      */
     #[Assert\NotBlank]
     protected DateTime $exeDate;
-
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
-    protected int $cId;
 
     /**
      * @ORM\Column(name="exe_exo_id", type="integer", nullable=false)
@@ -54,26 +65,31 @@ class TrackEExercises
     /**
      * @ORM\Column(name="score", type="float", precision=6, scale=2, nullable=false)
      */
+    #[Assert\NotNull]
     protected float $score;
 
     /**
      * @ORM\Column(name="max_score", type="float", precision=6, scale=2, nullable=false)
      */
+    #[Assert\NotNull]
     protected float $maxScore;
 
     /**
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $userIp;
 
     /**
      * @ORM\Column(name="status", type="string", length=20, nullable=false)
      */
+    #[Assert\NotNull]
     protected string $status;
 
     /**
      * @ORM\Column(name="data_tracking", type="text", nullable=false)
      */
+    #[Assert\NotNull]
     protected string $dataTracking;
 
     /**
@@ -85,11 +101,6 @@ class TrackEExercises
      * @ORM\Column(name="steps_counter", type="smallint", nullable=false)
      */
     protected int $stepsCounter;
-
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected int $sessionId;
 
     /**
      * @ORM\Column(name="orig_lp_id", type="integer", nullable=false)
@@ -119,6 +130,7 @@ class TrackEExercises
     /**
      * @ORM\Column(name="questions_to_check", type="text", nullable=false)
      */
+    #[Assert\NotNull]
     protected string $questionsToCheck;
 
     /**
@@ -126,39 +138,28 @@ class TrackEExercises
      */
     protected ?string $blockedCategories;
 
+    /**
+     * @var Collection|TrackEAttempt[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="trackExercise", cascade={"persist"})
+     */
+    protected Collection $attempts;
+
     public function __construct()
     {
+        $this->attempts = new ArrayCollection();
+        $this->questionsToCheck = '';
         $this->blockedCategories = '';
+        $this->dataTracking = '';
+        $this->exeDuration = 0;
+        $this->score = 0;
+        $this->status = 'incomplete';
+        $this->stepsCounter = 0;
+        $this->exeDate = new DateTime();
+        $this->startDate = new DateTime();
     }
 
-    /**
-     * Set exeUserId.
-     *
-     * @return TrackEExercises
-     */
-    public function setExeUserId(int $exeUserId)
-    {
-        $this->exeUserId = $exeUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get exeUserId.
-     *
-     * @return int
-     */
-    public function getExeUserId()
-    {
-        return $this->exeUserId;
-    }
-
-    /**
-     * Set exeDate.
-     *
-     * @return TrackEExercises
-     */
-    public function setExeDate(DateTime $exeDate)
+    public function setExeDate(DateTime $exeDate): self
     {
         $this->exeDate = $exeDate;
 
@@ -175,34 +176,7 @@ class TrackEExercises
         return $this->exeDate;
     }
 
-    /**
-     * Set cId.
-     *
-     * @return TrackEExercises
-     */
-    public function setCId(int $cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * Set exeExoId.
-     *
-     * @return TrackEExercises
-     */
-    public function setExeExoId(int $exeExoId)
+    public function setExeExoId(int $exeExoId): self
     {
         $this->exeExoId = $exeExoId;
 
@@ -214,12 +188,7 @@ class TrackEExercises
         return $this->exeExoId;
     }
 
-    /**
-     * Set userIp.
-     *
-     * @return TrackEExercises
-     */
-    public function setUserIp(string $userIp)
+    public function setUserIp(string $userIp): self
     {
         $this->userIp = $userIp;
 
@@ -236,12 +205,7 @@ class TrackEExercises
         return $this->userIp;
     }
 
-    /**
-     * Set status.
-     *
-     * @return TrackEExercises
-     */
-    public function setStatus(string $status)
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -258,12 +222,7 @@ class TrackEExercises
         return $this->status;
     }
 
-    /**
-     * Set dataTracking.
-     *
-     * @return TrackEExercises
-     */
-    public function setDataTracking(string $dataTracking)
+    public function setDataTracking(string $dataTracking): self
     {
         $this->dataTracking = $dataTracking;
 
@@ -280,12 +239,7 @@ class TrackEExercises
         return $this->dataTracking;
     }
 
-    /**
-     * Set startDate.
-     *
-     * @return TrackEExercises
-     */
-    public function setStartDate(DateTime $startDate)
+    public function setStartDate(DateTime $startDate): self
     {
         $this->startDate = $startDate;
 
@@ -302,12 +256,7 @@ class TrackEExercises
         return $this->startDate;
     }
 
-    /**
-     * Set stepsCounter.
-     *
-     * @return TrackEExercises
-     */
-    public function setStepsCounter(int $stepsCounter)
+    public function setStepsCounter(int $stepsCounter): self
     {
         $this->stepsCounter = $stepsCounter;
 
@@ -324,34 +273,7 @@ class TrackEExercises
         return $this->stepsCounter;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return TrackEExercises
-     */
-    public function setSessionId(int $sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set origLpId.
-     *
-     * @return TrackEExercises
-     */
-    public function setOrigLpId(int $origLpId)
+    public function setOrigLpId(int $origLpId): self
     {
         $this->origLpId = $origLpId;
 
@@ -368,12 +290,7 @@ class TrackEExercises
         return $this->origLpId;
     }
 
-    /**
-     * Set origLpItemId.
-     *
-     * @return TrackEExercises
-     */
-    public function setOrigLpItemId(int $origLpItemId)
+    public function setOrigLpItemId(int $origLpItemId): self
     {
         $this->origLpItemId = $origLpItemId;
 
@@ -390,12 +307,7 @@ class TrackEExercises
         return $this->origLpItemId;
     }
 
-    /**
-     * Set exeDuration.
-     *
-     * @return TrackEExercises
-     */
-    public function setExeDuration(int $exeDuration)
+    public function setExeDuration(int $exeDuration): self
     {
         $this->exeDuration = $exeDuration;
 
@@ -412,34 +324,19 @@ class TrackEExercises
         return $this->exeDuration;
     }
 
-    /**
-     * Set expiredTimeControl.
-     *
-     * @return TrackEExercises
-     */
-    public function setExpiredTimeControl(DateTime $expiredTimeControl)
+    public function setExpiredTimeControl(?DateTime $expiredTimeControl): self
     {
         $this->expiredTimeControl = $expiredTimeControl;
 
         return $this;
     }
 
-    /**
-     * Get expiredTimeControl.
-     *
-     * @return DateTime
-     */
-    public function getExpiredTimeControl()
+    public function getExpiredTimeControl(): ?DateTime
     {
         return $this->expiredTimeControl;
     }
 
-    /**
-     * Set origLpItemViewId.
-     *
-     * @return TrackEExercises
-     */
-    public function setOrigLpItemViewId(int $origLpItemViewId)
+    public function setOrigLpItemViewId(int $origLpItemViewId): self
     {
         $this->origLpItemViewId = $origLpItemViewId;
 
@@ -456,12 +353,7 @@ class TrackEExercises
         return $this->origLpItemViewId;
     }
 
-    /**
-     * Set questionsToCheck.
-     *
-     * @return TrackEExercises
-     */
-    public function setQuestionsToCheck(string $questionsToCheck)
+    public function setQuestionsToCheck(string $questionsToCheck): self
     {
         $this->questionsToCheck = $questionsToCheck;
 
@@ -508,6 +400,60 @@ class TrackEExercises
     public function setMaxScore(float $maxScore): self
     {
         $this->maxScore = $maxScore;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCourse(): Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(Course $course): self
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    /**
+     * @return TrackEAttempt[]|Collection
+     */
+    public function getAttempts()
+    {
+        return $this->attempts;
+    }
+
+    /**
+     * @param TrackEAttempt[]|Collection $attempts
+     */
+    public function setAttempts($attempts): self
+    {
+        $this->attempts = $attempts;
+
+        return $this;
+    }
+
+    public function getSession(): ?Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(?Session $session): self
+    {
+        $this->session = $session;
 
         return $this;
     }

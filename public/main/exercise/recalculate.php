@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CoreBundle\Entity\TrackExercise;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -22,7 +22,7 @@ $studentId = (int) $_REQUEST['user'];
 $exerciseId = (int) $_REQUEST['exercise'];
 $exeId = (int) $_REQUEST['id'];
 
-/** @var TrackEExercises $trackedExercise */
+/** @var TrackEExercise $trackedExercise */
 $trackedExercise = ExerciseLib::recalculateResult(
     $_REQUEST['id'],
     $_REQUEST['user'],

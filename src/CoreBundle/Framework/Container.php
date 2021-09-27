@@ -28,6 +28,7 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
+use Chamilo\CoreBundle\Repository\TrackExerciseRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -69,6 +70,7 @@ use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\LtiBundle\Repository\ExternalToolRepository;
+use Chamilo\Tests\CoreBundle\Repository\TrackEExerciseRepositoryTest;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -536,6 +538,11 @@ class Container
     public static function getThematicAdvanceRepository(): CThematicAdvanceRepository
     {
         return self::$container->get(CThematicAdvanceRepository::class);
+    }
+
+    public static function getTrackExerciseRepository(): TrackExerciseRepository
+    {
+        return self::$container->get(TrackExerciseRepository::class);
     }
 
     public static function getWikiRepository(): CWikiRepository

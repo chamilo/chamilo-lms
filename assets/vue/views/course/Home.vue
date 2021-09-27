@@ -163,19 +163,15 @@ export default {
     });
 
     function goToSettingCourseTool(course, tool) {
-      let url = '/course/' + courseId + '/settings/' + tool.tool.name + '?sid=' + sessionId;
-
-      return url;
+      return '/course/' + courseId + '/settings/' + tool.tool.name + '?sid=' + sessionId;
     }
 
     function goToCourseTool(course, tool) {
-      let url = '/course/' + courseId + '/tool/' + tool.tool.name + '?sid=' + sessionId;
-
-      return url;
+      return '/course/' + courseId + '/tool/' + tool.tool.name + '?sid=' + sessionId;
     }
 
     function goToShortCut(shortcut) {
-      var url = new URLSearchParams('?');
+      var url = new URLSearchParams('?')
       //let url = new URL(shortcut.url);
       url.append('cid', courseId);
       url.append('sid', sessionId);

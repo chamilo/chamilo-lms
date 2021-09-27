@@ -57,7 +57,7 @@
           <v-icon
               icon="mdi-book-open-page-variant"
               size="72px"
-              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-green-600"
+              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light"
           />
 
         </div>
@@ -163,19 +163,15 @@ export default {
     });
 
     function goToSettingCourseTool(course, tool) {
-      let url = '/course/' + courseId + '/settings/' + tool.tool.name + '?sid=' + sessionId;
-
-      return url;
+      return '/course/' + courseId + '/settings/' + tool.tool.name + '?sid=' + sessionId;
     }
 
     function goToCourseTool(course, tool) {
-      let url = '/course/' + courseId + '/tool/' + tool.tool.name + '?sid=' + sessionId;
-
-      return url;
+      return '/course/' + courseId + '/tool/' + tool.tool.name + '?sid=' + sessionId;
     }
 
     function goToShortCut(shortcut) {
-      var url = new URLSearchParams('?');
+      var url = new URLSearchParams('?')
       //let url = new URL(shortcut.url);
       url.append('cid', courseId);
       url.append('sid', sessionId);

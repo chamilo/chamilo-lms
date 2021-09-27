@@ -58,7 +58,7 @@
   }
 
   .btn-primary {
-    @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-indigo-500;
+    @apply text-white bg-ch-primary hover:bg-ch-primary-dark focus:ring-ch-primary-dark;
   }
 
   .btn-warning {
@@ -70,7 +70,7 @@
   }
 
   .btn-danger {
-    @apply text-white bg-red-700 hover:bg-red-800;
+    @apply text-white bg-ch-error hover:bg-ch-error-dark;
   }
 
   // Buttons with icons.

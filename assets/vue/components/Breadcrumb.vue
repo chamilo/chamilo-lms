@@ -1,5 +1,5 @@
 <template>
-  <div class="q-card p-4">
+  <div class="q-card p-4" style="margin-bottom: 0.5rem">
     <q-breadcrumbs
         active-color="primary"
         large

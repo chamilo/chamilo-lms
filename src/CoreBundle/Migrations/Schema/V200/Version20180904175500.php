@@ -24,22 +24,23 @@ class Version20180904175500 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM track_e_exercises WHERE exe_user_id = 0 OR exe_user_id IS NULL');
         $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_user_id exe_user_id INT NOT NULL');
 
-        $this->addSql('UPDATE track_e_exercises SET session_id = 0 WHERE session_id IS NULL');
+        $this->addSql('UPDATE track_e_exercises SET session_id = NULL WHERE session_id = 0');
+
+        $this->addSql('DELETE FROM track_e_exercises WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
         $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT NOT NULL');
 
         if (!$schema->hasTable('attempt_file')) {
             $this->addSql("CREATE TABLE attempt_file (id BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)', attempt_id INT DEFAULT NULL, asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)', comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_4F22BDF0B191BE6B (attempt_id), INDEX IDX_4F22BDF05DA1941 (asset_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
-            $this->addSql("ALTER TABLE attempt_file ADD CONSTRAINT FK_4F22BDF0B191BE6B FOREIGN KEY (attempt_id) REFERENCES track_e_attempt (id) ON DELETE CASCADE;");
-            $this->addSql("ALTER TABLE attempt_file ADD CONSTRAINT FK_4F22BDF05DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE CASCADE;");
+            $this->addSql('ALTER TABLE attempt_file ADD CONSTRAINT FK_4F22BDF0B191BE6B FOREIGN KEY (attempt_id) REFERENCES track_e_attempt (id) ON DELETE CASCADE;');
+            $this->addSql('ALTER TABLE attempt_file ADD CONSTRAINT FK_4F22BDF05DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE CASCADE;');
         }
 
         if (!$schema->hasTable('attempt_feedback')) {
             $this->addSql("CREATE TABLE attempt_feedback (id BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)', attempt_id INT DEFAULT NULL, user_id INT DEFAULT NULL, asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)', comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_BA30B2FEB191BE6B (attempt_id), INDEX IDX_BA30B2FEA76ED395 (user_id), INDEX IDX_BA30B2FE5DA1941 (asset_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
-            $this->addSql("ALTER TABLE attempt_feedback ADD CONSTRAINT FK_BA30B2FEB191BE6B FOREIGN KEY (attempt_id) REFERENCES track_e_attempt (id) ON DELETE CASCADE;");
-            $this->addSql("ALTER TABLE attempt_feedback ADD CONSTRAINT FK_BA30B2FEA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;");
-            $this->addSql("ALTER TABLE attempt_feedback ADD CONSTRAINT FK_BA30B2FE5DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE CASCADE;");
+            $this->addSql('ALTER TABLE attempt_feedback ADD CONSTRAINT FK_BA30B2FEB191BE6B FOREIGN KEY (attempt_id) REFERENCES track_e_attempt (id) ON DELETE CASCADE;');
+            $this->addSql('ALTER TABLE attempt_feedback ADD CONSTRAINT FK_BA30B2FEA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;');
+            $this->addSql('ALTER TABLE attempt_feedback ADD CONSTRAINT FK_BA30B2FE5DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE CASCADE;');
         }
-
 
         $table = $schema->getTable('track_e_login');
         if (!$table->hasIndex('idx_track_e_login_date')) {

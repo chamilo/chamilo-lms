@@ -47,6 +47,48 @@ class AttemptFile
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->comment = '';
+    }
+
+    public function getId(): Uuid
+    {
+        return $this->id;
+    }
+
+    public function getAttempt(): TrackEAttempt
+    {
+        return $this->attempt;
+    }
+
+    public function setAttempt(TrackEAttempt $attempt): self
+    {
+        $this->attempt = $attempt;
+
+        return $this;
+    }
+
+    public function getAsset(): ?Asset
+    {
+        return $this->asset;
+    }
+
+    public function setAsset(?Asset $asset): self
+    {
+        $this->asset = $asset;
+
+        return $this;
+    }
+
+    public function getComment(): string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 }

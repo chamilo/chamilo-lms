@@ -16,4 +16,10 @@ class TrackExerciseRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, TrackExercise::class);
     }
+
+    public function delete(TrackExercise $track): void
+    {
+        $this->getEntityManager()->remove($track);
+        $this->getEntityManager()->flush();
+    }
 }

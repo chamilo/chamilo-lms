@@ -33,6 +33,8 @@ class Asset
     public const EXTRA_FIELD = 'ef';
     public const COURSE_CATEGORY = 'course_category';
     public const SKILL = 'skill';
+    public const EXERCISE_ATTEMPT = 'exercise_attempt';
+    public const EXERCISE_FEEDBACK = 'exercise_feedback';
 
     /**
      * @ORM\Id

@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AnnouncementRelGroup.
- *
  * @ORM\Table(name="announcement_rel_group")
  * @ORM\Entity
  */

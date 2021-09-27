@@ -35,13 +35,14 @@ class TrackExercise
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="id", nullable=false)
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
+    #[Assert\NotNull]
     protected Course $course;
 
     /**
@@ -100,6 +101,7 @@ class TrackExercise
     /**
      * @ORM\Column(name="steps_counter", type="smallint", nullable=false)
      */
+    #[Assert\NotNull]
     protected int $stepsCounter;
 
     /**
@@ -115,6 +117,7 @@ class TrackExercise
     /**
      * @ORM\Column(name="exe_duration", type="integer", nullable=false)
      */
+    #[Assert\NotNull]
     protected int $exeDuration;
 
     /**
@@ -442,6 +445,16 @@ class TrackExercise
     public function setAttempts($attempts): self
     {
         $this->attempts = $attempts;
+
+        return $this;
+    }
+
+    public function addAttempt(TrackEAttempt $attempt): self
+    {
+        if (!$this->attempts->contains($attempt)) {
+            $this->attempts[] = $attempt;
+            $attempt->setTrackExercise($this);
+        }
 
         return $this;
     }

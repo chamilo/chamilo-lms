@@ -42,13 +42,14 @@ class TrackEAttempt
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackExercise", inversedBy="attempts")
      * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id", nullable=false)
      */
+    #[Assert\NotNull]
     protected TrackExercise $trackExercise;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackEAttempts")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
     protected User $user;
 
     /**
@@ -98,19 +99,19 @@ class TrackEAttempt
      *
      * @ORM\OneToMany(targetEntity="AttemptFile", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
      */
-    protected Collection $files;
+    protected Collection $attemptFiles;
 
     /**
      * @var Collection|AttemptFeedback[]
      *
      * @ORM\OneToMany(targetEntity="AttemptFeedback", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
      */
-    protected Collection $feedbacks;
+    protected Collection $attemptFeedbacks;
 
     public function __construct()
     {
-        $this->files = new ArrayCollection();
-        $this->feedbacks = new ArrayCollection();
+        $this->attemptFiles = new ArrayCollection();
+        $this->attemptFeedbacks = new ArrayCollection();
         $this->teacherComment = '';
         $this->secondsSpent = 0;
     }
@@ -261,42 +262,6 @@ class TrackEAttempt
         return $this;
     }
 
-    /**
-     * @return AttemptFile[]|Collection
-     */
-    public function getFiles()
-    {
-        return $this->files;
-    }
-
-    /**
-     * @param AttemptFile[]|Collection $files
-     */
-    public function setFiles($files): self
-    {
-        $this->files = $files;
-
-        return $this;
-    }
-
-    /**
-     * @return AttemptFeedback[]|Collection
-     */
-    public function getFeedbacks()
-    {
-        return $this->feedbacks;
-    }
-
-    /**
-     * @param AttemptFeedback[]|Collection $feedbacks
-     */
-    public function setFeedbacks($feedbacks): self
-    {
-        $this->feedbacks = $feedbacks;
-
-        return $this;
-    }
-
     public function getTrackExercise(): TrackExercise
     {
         return $this->trackExercise;
@@ -304,7 +269,6 @@ class TrackEAttempt
 
     public function setTrackExercise(TrackExercise $trackExercise): self
     {
-        $trackExercise->getAttempts()->add($this);
         $this->trackExercise = $trackExercise;
 
         return $this;
@@ -318,6 +282,62 @@ class TrackEAttempt
     public function setSecondsSpent(int $secondsSpent): self
     {
         $this->secondsSpent = $secondsSpent;
+
+        return $this;
+    }
+
+    /**
+     * @return AttemptFile[]|Collection
+     */
+    public function getAttemptFiles()
+    {
+        return $this->attemptFiles;
+    }
+
+    /**
+     * @param AttemptFile[]|Collection $attemptFiles
+     */
+    public function setAttemptFiles($attemptFiles): self
+    {
+        $this->attemptFiles = $attemptFiles;
+
+        return $this;
+    }
+
+    /**
+     * @return AttemptFeedback[]|Collection
+     */
+    public function getAttemptFeedbacks()
+    {
+        return $this->attemptFeedbacks;
+    }
+
+    /**
+     * @param AttemptFeedback[]|Collection $attemptFeedbacks
+     */
+    public function setAttemptFeedbacks($attemptFeedbacks): self
+    {
+        $this->attemptFeedbacks = $attemptFeedbacks;
+
+        return $this;
+    }
+
+    public function addAttemptFeedback(AttemptFeedback $attemptFeedback): self
+    {
+        if (!$this->attemptFeedbacks->contains($attemptFeedback)) {
+            $this->attemptFeedbacks[] = $attemptFeedback;
+            $attemptFeedback->setAttempt($this);
+        }
+
+        return $this;
+    }
+
+    public function addAttemptFile(AttemptFile $attemptFile): self
+    {
+        if (!$this->attemptFiles->contains($attemptFile)) {
+            $this->attemptFiles[] = $attemptFile;
+            $attemptFile->setAttempt($this);
+        }
 
         return $this;
     }

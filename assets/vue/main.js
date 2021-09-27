@@ -183,7 +183,6 @@ import Button from 'primevue/button';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';
 
-import 'primevue/resources/themes/mdc-light-indigo/theme.css';
 import 'primevue/resources/primevue.min.css';
 // import 'primeflex/primeflex.css';
 import "primeicons/primeicons.css";

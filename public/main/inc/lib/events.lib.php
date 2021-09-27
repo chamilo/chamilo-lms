@@ -7,7 +7,9 @@ use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
+use Chamilo\CoreBundle\Entity\TrackExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -1221,7 +1223,7 @@ class Event
         if (!empty($user_id) && !empty($exercise_id) && !empty($course_id)) {
             $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sessionCondition = api_get_session_condition($session_id);
-            $sql = "DELETE FROM $table
+            $sql = "SELECT exe_id FROM $table
                     WHERE
                         exe_user_id = $user_id AND
                         exe_exo_id = $exercise_id AND
@@ -1229,16 +1231,25 @@ class Event
                         status = 'incomplete'
                         $sessionCondition
                         ";
-            Database::query($sql);
-            self::addEvent(
-                LOG_EXERCISE_RESULT_DELETE,
-                LOG_EXERCISE_AND_USER_ID,
-                $exercise_id.'-'.$user_id,
-                null,
-                null,
-                $course_id,
-                $session_id
-            );
+            $result = Database::query($sql);
+            $repo = Container::getTrackExerciseRepository();
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $exeId = $row['exe_id'];
+                /** @var TrackExercise $track */
+                $track = $repo->find($exeId);
+
+                self::addEvent(
+                    LOG_EXERCISE_RESULT_DELETE,
+                    LOG_EXERCISE_AND_USER_ID,
+                    $track->getExeExoId().'-'.$track->getUser()->getId(),
+                    null,
+                    null,
+                    $course_id,
+                    $session_id
+                );
+                $repo->delete($track);
+            }
+
         }
     }
 

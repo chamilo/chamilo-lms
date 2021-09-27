@@ -12,8 +12,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * TrackECourseAccessRepository.
- *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class TrackECourseAccessRepository extends ServiceEntityRepository

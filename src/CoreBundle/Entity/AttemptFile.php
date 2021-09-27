@@ -28,7 +28,7 @@ class AttemptFile
     protected Uuid $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", inversedBy="files")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", inversedBy="attemptFiles")
      * @ORM\JoinColumn(name="attempt_id", referencedColumnName="id", onDelete="CASCADE")
      */
     #[Assert\NotNull]

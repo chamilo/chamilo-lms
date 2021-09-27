@@ -28,7 +28,7 @@ class AttemptFeedback
     protected Uuid $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", inversedBy="attemptFiles")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", inversedBy="attemptFeedbacks")
      * @ORM\JoinColumn(name="attempt_id", referencedColumnName="id", onDelete="CASCADE")
      */
     #[Assert\NotNull]

@@ -644,13 +644,14 @@ class HTML_QuickForm_element extends HTML_Common
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 $template = '
-                <div class="mb-6  '.$size[0].' {error_class}">
+                <div class="mb-6 '.$size[0].' {error_class}">
                     <label {label-for} class="
                         '.$height.'
                         block
                         text-sm
                         font-medium
                         text-gray-700
+                        mb-2
                     " >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}

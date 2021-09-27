@@ -367,6 +367,19 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $strHtml .= $tabs . '<!-- ' . $this->getComment() . " //-->\n";
             }
 
+            $layout = $this->getLayout();
+            $class = '';
+            if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+                $class = 'w-full mt-1';
+            }
+
+            $extraClass = "block appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 $class";
+            if (isset($this->_attributes['class'])) {
+                $this->_attributes['class'] .= $extraClass;
+            } else {
+                $this->_attributes['class'] = $extraClass;
+            }
+
             if (!$this->getMultiple()) {
                 $attrString = $this->_getAttrString($this->_attributes);
             } else {

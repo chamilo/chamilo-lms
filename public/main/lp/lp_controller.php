@@ -523,6 +523,7 @@ switch ($action) {
                 $audio = $_FILES['mp3'];
             }
 
+            $previous = isset($_POST['previous']) ? $_POST['previous'] : '';
             $description = isset($_POST['description']) ? $_POST['description'] : '';
             $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
             $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
@@ -531,7 +532,7 @@ switch ($action) {
             $oLP->edit_item(
                 $_REQUEST['id'],
                 $_POST['parent'],
-                $_POST['previous'],
+                $previous,
                 $post_title,
                 $description,
                 $prerequisites,

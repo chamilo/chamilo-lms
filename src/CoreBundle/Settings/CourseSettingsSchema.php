@@ -83,6 +83,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'lp_show_reduced_report' => 'false',
                     'course_creation_splash_screen' => 'true',
                     'block_registered_users_access_to_open_course_contents' => 'false',
+                    'enable_bootstrap_in_documents_html' => 'false',
                     // @todo
                 ]
             )
@@ -222,6 +223,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('lp_show_reduced_report', YesNoType::class)
             ->add('course_creation_splash_screen', YesNoType::class)
             ->add('block_registered_users_access_to_open_course_contents', YesNoType::class)
+            ->add('enable_bootstrap_in_documents_html', YesNoType::class)
         ;
     }
 }

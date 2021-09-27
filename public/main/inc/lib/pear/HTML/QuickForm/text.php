@@ -120,6 +120,13 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             bg-white
             font-normal
             h-10
+            rounded
+            border
+            shadow
+            appearance-none
+            leading-tight
+            focus:outline-none
+            focus:shadow-outline
             $class
         ";
         if (isset($this->_attributes['class'])) {

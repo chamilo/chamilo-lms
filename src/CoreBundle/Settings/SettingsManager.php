@@ -861,6 +861,7 @@ class SettingsManager implements SettingsManagerInterface
             'gradebook_show_percentage_in_reports' => 'gradebook',
             'course_creation_splash_screen' => 'Course',
             'translate_html' => 'Editor',
+            'enable_bootstrap_in_documents_html' => 'Course',
         ];
     }
 

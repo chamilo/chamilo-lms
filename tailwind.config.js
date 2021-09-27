@@ -10,6 +10,7 @@ module.exports = {
         'ch-primary': {
           DEFAULT: '#2e75a3',
           'dark': '#1c6391',
+          'light': '#9cc2da',
         },
         'ch-secondary': {
           DEFAULT: '#fd6600',

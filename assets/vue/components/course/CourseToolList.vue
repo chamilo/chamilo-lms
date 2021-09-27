@@ -8,7 +8,7 @@
             <v-icon
                 :icon="tool.tool.icon"
                 size="48px"
-                class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-blue-600"
+                class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light"
             />
 <!--          <img-->
 <!--              :alt="tool.tool.name"-->

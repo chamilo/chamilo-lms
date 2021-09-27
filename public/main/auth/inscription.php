@@ -31,6 +31,75 @@ if (false !== $allowedFieldsConfiguration) {
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
 
+$webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
+$hash = api_get_plugin_setting('logintcc', 'hash');
+
+if (!empty($webserviceUrl)) {
+    $htmlHeadXtra[] = '<script>
+    $(document).ready(function() {
+        $("#search_user").click(function() {
+
+            var data = new Object();
+            data.Mail = $("input[name=\'email\']").val();
+            data.HashKey = "'.$hash.'";
+
+            $.ajax({
+                url: "'.$webserviceUrl.'/IsExistEmail",
+                data: JSON.stringify(data),
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data, status) {
+                    if (data.d.Exist) {
+                        var monU = data.d.User;
+                        $("input[name=\'extra_tcc_user_id\']").val(monU.UserID);
+                        $("input[name=\'extra_tcc_hash_key\']").val(monU.HashKey);
+                        var $radios = $("input:radio[name=\'extra_terms_genre[extra_terms_genre]\']");
+                        if (monU.Genre == "Masculin") {
+                            $radios.filter(\'[value=homme]\').prop(\'checked\', true);
+                        } else {
+                            $radios.filter(\'[value=femme]\').prop(\'checked\', true);
+                        }
+                        $("input[name=\'lastname\']").val(monU.Nom);
+                        $("input[name=\'firstname\']").val(monU.Prenom);
+
+                        var date = monU.DateNaissance; // 30/06/1986
+                        if (date != "") {
+                            var parts = date.split(\'/\');
+                            $("#extra_terms_datedenaissance").datepicker("setDate", new Date(parts[2], parts[1], parts[0]));
+                        }
+
+                        if (monU.Langue == "fr-FR") {
+                            $("#language").selectpicker("val", "french");
+                            $("#language").selectpicker(\'render\');
+                        }
+
+                        if (monU.Langue == "de-DE") {
+                            $("#language").selectpicker("val", "german");
+                            $("#language").selectpicker(\'render\');
+                        }
+
+                        $("input[name=\'extra_terms_nationalite\']").val(monU.Nationalite);
+                        $("input[name=\'extra_terms_paysresidence\']").val(monU.PaysResidence);
+                        $("input[name=\'extra_terms_adresse\']").val(monU.Adresse);
+                        $("input[name=\'extra_terms_codepostal\']").val(monU.CP);
+                        $("input[name=\'extra_terms_ville\']").val(monU.Ville);
+                    } else {
+                        alert("'.get_lang("UnknownUser").'");
+                    }
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+
+            return false;
+        });
+    });
+    </script>';
+}
+
 $extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 // User is not allowed if Terms and Conditions are disabled and
@@ -78,6 +147,10 @@ $form = new FormValidator('registration');
 $user_already_registered_show_terms = false;
 if ('true' === api_get_setting('allow_terms_conditions')) {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
+    // Ofaj change
+    if (api_is_anonymous() === true) {
+        $user_already_registered_show_terms = false;
+    }
 }
 
 $sessionPremiumChecker = Session::read('SessionIsPremium');
@@ -106,6 +179,16 @@ if (!empty($course_code_redirect)) {
 if (false === $user_already_registered_show_terms &&
     'false' !== api_get_setting('allow_registration')
 ) {
+    // EMAIL
+    $form->addElement('text', 'email', get_lang('e-mail'), ['size' => 40]);
+    if ('true' === api_get_setting('registration', 'email')) {
+        $form->addRule('email', get_lang('Required field'), 'required');
+    }
+
+    if (!empty($webserviceUrl)) {
+        $form->addButtonSearch(get_lang('SearchTCC'), 'search', ['id' => 'search_user']);
+    }
+
     // STUDENT/TEACHER
     if ('false' != api_get_setting('allow_registration_as_teacher')) {
         if (in_array('status', $allowedFields)) {
@@ -138,12 +221,6 @@ if (false === $user_already_registered_show_terms &&
     $form->applyFilter(['lastname', 'firstname'], 'trim');
     $form->addRule('lastname', get_lang('Required field'), 'required');
     $form->addRule('firstname', get_lang('Required field'), 'required');
-
-    // EMAIL
-    $form->addElement('text', 'email', get_lang('e-mail'), ['size' => 40]);
-    if ('true' === api_get_setting('registration', 'email')) {
-        $form->addRule('email', get_lang('Required field'), 'required');
-    }
 
     if ('true' === api_get_setting('login_is_email')) {
         $form->applyFilter('email', 'trim');
@@ -198,6 +275,8 @@ if (false === $user_already_registered_show_terms &&
         get_lang('Pass'),
         ['id' => 'pass1', 'size' => 20, 'autocomplete' => 'off']
     );
+
+    $checkPass = api_get_setting('allow_strength_pass_checker');
 
     $form->addElement(
         'password',
@@ -325,6 +404,16 @@ if (false === $user_already_registered_show_terms &&
         }
     }
 
+    $form->addElement(
+        'hidden',
+        'extra_tcc_user_id'
+    );
+
+    $form->addElement(
+        'hidden',
+        'extra_tcc_hash_key'
+    );
+
     // EXTRA FIELDS
     if (array_key_exists('extra_fields', $allowedFields) ||
         in_array('extra_fields', $allowedFields)
@@ -355,7 +444,9 @@ if (false === $user_already_registered_show_terms &&
             [],
             [],
             false,
-            $requiredFields
+            [],
+            $requiredFields,
+            true
         );
         $extraFieldsLoaded = true;
     }
@@ -425,6 +516,10 @@ if (!empty($_GET['phone'])) {
     $defaults['phone'] = Security::remove_XSS($_GET['phone']);
 }
 
+if (api_get_setting('openid_authentication') === 'true' && !empty($_GET['openid'])) {
+    $defaults['openid'] = Security::remove_XSS($_GET['openid']);
+}
+
 $defaults['status'] = STUDENT;
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
@@ -468,6 +563,8 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     }
 }
 
+$tool_name = get_lang('Registration');
+
 if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
     $tool_name = get_lang('Terms and Conditions');
 }
@@ -486,6 +583,8 @@ if ('approval' === api_get_setting('allow_registration')) {
     $content .= Display::return_message(get_lang('Your account has to be approved'));
 }
 
+$blockButton = false;
+$termActivated = false;
 $showTerms = false;
 // Terms and conditions
 if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
@@ -629,6 +728,7 @@ if ($extraConditions && $extraFieldsLoaded) {
     }
 }
 
+$text_after_registration = '';
 if ($form->validate()) {
     $values = $form->getSubmitValues(1);
     // Make *sure* the login isn't too long
@@ -678,11 +778,22 @@ if ($form->validate()) {
         $values['language'] = isset($values['language']) ? $values['language'] : api_get_language_isocode();
         $values['address'] = isset($values['address']) ? $values['address'] : '';
 
+        // It gets a creator id when user is not logged
+        $creatorId = 0;
+        if (api_is_anonymous()) {
+            $adminList = UserManager::get_all_administrators();
+            $creatorId = 1;
+            if (!empty($adminList)) {
+                $adminInfo = current($adminList);
+                $creatorId = (int) $adminInfo['user_id'];
+            }
+        }
+
         // Creates a new user
         $user_id = UserManager::create_user(
             $values['firstname'],
             $values['lastname'],
-            $status,
+            (int) $status,
             $values['email'],
             $values['username'],
             $values['pass1'],
@@ -696,11 +807,12 @@ if ($form->validate()) {
             0,
             $extras,
             null,
-            true,
+            false,
             false,
             $values['address'],
             false,
-            $form
+            $form,
+            $creatorId
         );
 
         // Update the extra fields
@@ -907,7 +1019,7 @@ if ($form->validate()) {
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
     // Stats
-    Event::eventLogin($user_id);
+    //Event::eventLogin($user_id);
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
@@ -1028,7 +1140,9 @@ if ($form->validate()) {
     Session::erase('only_one_course_session_redirect');
 
     $tpl = new Template($tool_name);
+    $tpl->assign('inscription_header', Display::page_header($tool_name));
     $tpl->assign('inscription_content', $content);
+    $tpl->assign('form', '');
     $tpl->assign('text_after_registration', $text_after_registration);
     $tpl->assign('hide_header', $hideHeaders);
     $inscription = $tpl->get_template('auth/inscription.tpl');
@@ -1063,6 +1177,7 @@ if ($form->validate()) {
     $tpl->assign('inscription_content', $content);
     $tpl->assign('form', $form->returnForm());
     $tpl->assign('hide_header', $hideHeaders);
+    $tpl->assign('text_after_registration', $text_after_registration);
     //$page = Container::getPage('inscription');
     //$tpl->assign('page', $page);
 

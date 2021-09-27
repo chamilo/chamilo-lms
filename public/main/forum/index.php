@@ -245,9 +245,10 @@ if (!empty($allCourseForums)) {
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 
 $languages = api_get_language_list_for_flag();
-$defaultUserLanguage = 'en';
+$defaultUserLanguage = 'english';
 if (null !== $user) {
-    $defaultUserLanguage = $user->getLocale();
+    $langInfo = api_get_language_from_iso($user->getLocale());
+    $defaultUserLanguage = $langInfo->getEnglishName();
 }
 
 $extraFieldValues = new ExtraFieldValue('user');
@@ -259,7 +260,7 @@ if ($value && isset($value['value']) && !empty($value['value'])) {
 
 // Create a search-box
 $searchFilter = '';
-$translate = api_get_configuration_value('translate_html');
+$translate = 'true' === api_get_setting('editor.translate_html');
 if ($translate) {
     $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
     $form->addHidden('cid', api_get_course_int_id());
@@ -281,7 +282,7 @@ if ($translate) {
         [],
         true //$addEmptyOptionSelects = false,
     );
-    $form->setDefaults(['extra_language' => $defaultUserLanguage]);
+    $form->setDefault('extra_language', $defaultUserLanguage);
 
     $searchFilter = $form->returnForm();
 }
@@ -596,6 +597,9 @@ if (is_array($forumCategories)) {
             $forumCategoryInfo['forums'] = $forumsDetailsList;
         }
 
+        // It set the languages by category
+        $extraFieldValue = new ExtraFieldValue('forum_category');
+        $forumCategoryInfo['extra_fields'] = $extraFieldValue->getAllValuesByItem($categoryId);
         // Don't show empty categories (for students)
         if (!api_is_allowed_to_edit()) {
             if (empty($forumCategoryInfo['forums'])) {

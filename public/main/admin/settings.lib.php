@@ -149,14 +149,16 @@ function handlePlugins()
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
     echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'">';
-    echo '<table class="table table-hover table-striped table-bordered">';
+    echo '<table class="table table-hover table-striped table-bordered table-fixed">';
+    echo '<thead class="bg-gray-50">';
     echo '<tr>';
-    echo '<th width="20px">';
+    echo '<th width="20px" class="px-6 py-2 uppercase font-normal leading-normal mt-0 mb-2 text-gray-500">';
     echo get_lang('Action');
-    echo '</th><th>';
+    echo '</th><th class="px-6 py-2 uppercase font-normal leading-normal mt-0 mb-2 text-gray-500">';
     echo get_lang('Description');
     echo '</th>';
     echo '</tr>';
+    echo '</thead>';
 
     /*$plugin_list = array();
     $my_plugin_list = $plugin_obj->get_plugin_regions();
@@ -174,23 +176,23 @@ function handlePlugins()
             $pluginRow = '';
 
             if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= '<tr class="row_selected">';
+                $pluginRow .= '<tr class="row_selected whitespace-nowrap">';
             } else {
-                $pluginRow .= '<tr>';
+                $pluginRow .= '<tr class="whitespace-nowrap">';
             }
-            $pluginRow .= '<td>';
+            $pluginRow .= '<td class="px-6 py-4 text-sm text-gray-500">';
             // Checkbox
             if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked" class="border rounded">';
             } else {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" class="border rounded">';
             }
-            $pluginRow .= '</td><td>';
-            $pluginRow .= '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
+            $pluginRow .= '</td><td class="px-6 py-4 text-sm text-gray-500">';
+            $pluginRow .= '<h3 class="text-3xl font-normal leading-normal mt-0 mb-2">'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h3>';
             $pluginRow .= '<p>'.$plugin_info['comment'].'</p>';
             $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
 
-            $pluginRow .= '<div class="btn-group btn-group-sm">';
+            $pluginRow .= '<div class="btn-group btn-group-sm mt-4">';
             if (in_array($pluginName, $installed_plugins)) {
                 $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
@@ -209,7 +211,7 @@ function handlePlugins()
                     "<em class='fa fa-file-text-o'></em> readme.txt",
                     api_get_path(WEB_PLUGIN_PATH).$pluginName."/readme.txt",
                     [
-                        'class' => 'btn btn-primary ajax',
+                        'class' => 'btn btn-blue ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
                         '_target' => '_blank',
@@ -223,7 +225,7 @@ function handlePlugins()
                     "<em class='fa fa-file-text-o'></em> README.md",
                     api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$pluginName,
                     [
-                        'class' => 'btn btn-primary ajax',
+                        'class' => 'btn btn-blue ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
                         '_target' => '_blank',
@@ -241,9 +243,10 @@ function handlePlugins()
             }
         }
     }
-
+    echo '<tbody class="bg-white">';
     echo $installed;
     echo $notInstalled;
+    echo '</tbody>';
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';

@@ -46,7 +46,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $session = (new Session())
             ->setName($name)
-            ->setGeneralCoach($this->getUser('admin'))
+            ->addGeneralCoach($this->getUser('admin'))
             ->addAccessUrl($this->getAccessUrl())
         ;
         $errors = $this->getViolations($session);
@@ -202,7 +202,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         /** @var Session $session */
         $session = $sessionRepo->find($session->getId());
-        $this->assertSame(1, $session->getUsers()->count());
+        $this->assertSame(2, $session->getUsers()->count());
 
         // Add the user again!
         $this->createClientWithCredentials($token)->request(
@@ -258,6 +258,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         /** @var User $user */
         $user = $userRepo->find($user->getId());
+        /** @var Session $session */
         $session = $sessionRepo->find($session->getId());
         $this->assertSame(1, \count($user->getStudentSessions()));
 
@@ -266,15 +267,53 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $hasUser = $session->hasUserInCourse($user, $course, $studentStatus);
         $this->assertTrue($hasUser);
+        $this->assertTrue($session->hasStudentInCourse($user, $course));
+        $this->assertTrue($session->hasStudentInCourseList($user));
 
-        $this->assertSame(1, $session->getUsers()->count());
+        $this->assertSame(2, $session->getUsers()->count());
 
         // 4. Delete user
         $userRepo->delete($user);
 
         /** @var Session $session */
         $session = $sessionRepo->find($session->getId());
-        $this->assertSame(0, $session->getUsers()->count());
+        $this->assertSame(1, $session->getUsers()->count());
         $this->assertSame(0, $session->getSessionRelCourseRelUsers()->count());
+    }
+
+    public function testGeneralCoachesInSession(): void
+    {
+        self::bootKernel();
+
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+
+        $session = $this->createSession('test for general coaches');
+        $coach1 = $this->createUser('gencoach1');
+
+        $session->addGeneralCoach($coach1);
+
+        $sessionRepo->update($session);
+
+        // when creating one user "admin" was already added (so 1 + 1)
+        $this->assertSame(2, $session->getGeneralCoaches()->count());
+        $this->assertTrue($session->hasUserAsGeneralCoach($coach1));
+    }
+
+    public function testAdminInSession(): void
+    {
+        self::bootKernel();
+
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+
+        $session = $this->createSession('test for session admin');
+        $admin1 = $this->createUser('sessadmin1');
+
+        $session->addSessionAdmin($admin1);
+
+        $sessionRepo->update($session);
+
+        // when creating one user "admin" was already added (so 1 + 1)
+        $this->assertSame(1, $session->getSessionAdmins()->count());
+        $this->assertTrue($session->hasUserAsSessionAdmin($admin1));
     }
 }

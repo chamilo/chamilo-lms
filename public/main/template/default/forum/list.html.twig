@@ -58,7 +58,9 @@
                 {% set panel_title %}
                     {{ item.title }}{{ item.icon_session }}
                     {% for category_language_item in category_language_array %}
+                        {% if languages[category_language_item | lower] is defined %}
                         <span class="flag-icon flag-icon-{{ languages[category_language_item | lower] }}"></span>
+                        {% endif %}
                     {% endfor %}
                 {% endset %}
             {% else %}
@@ -68,7 +70,9 @@
                         {{ item.title }}{{ item.icon_session }}
                     </a>
                     {% for category_language_item in category_language_array %}
+                        {% if languages[category_language_item | lower] is defined %}
                         <span class="flag-icon flag-icon-{{ languages[category_language_item | lower] }}"></span>
+                        {% endif %}
                     {% endfor %}
                     <div class="pull-right">
                         {{ item.tools  }}

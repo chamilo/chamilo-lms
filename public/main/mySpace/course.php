@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
 
-$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
+$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : null;
 
 api_block_anonymous_users();
 
@@ -19,6 +19,8 @@ $allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
 if (!$allowToTrack) {
     api_not_allowed(true);
 }
+
+$session = api_get_session_entity($sessionId);
 
 $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
 
@@ -49,11 +51,7 @@ function count_courses()
 $showImportIcon = false;
 if ('true' == api_get_setting('add_users_by_coach')) {
     if (!api_is_platform_admin()) {
-        $isGeneralCoach = SessionManager::user_is_general_coach(
-            api_get_user_id(),
-            $sessionId
-        );
-        if ($isGeneralCoach) {
+        if ($session && $session->hasUserAsGeneralCoach(api_get_user_entity())) {
             $showImportIcon = true;
         }
     }
@@ -155,13 +153,13 @@ if ($showImportIcon) {
 function get_count_courses()
 {
     $userId = api_get_user_id();
-    $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
+    $session = api_get_session_entity($_GET['sid'] ?? 0);
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
     $drhLoaded = false;
 
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
-            if (empty($sessionId)) {
+            if (null === $session) {
                 $count = SessionManager::getAllCoursesFollowedByUser(
                     $userId,
                     null,
@@ -174,7 +172,7 @@ function get_count_courses()
                 );
             } else {
                 $count = SessionManager::getCourseCountBySessionId(
-                    $sessionId,
+                    $session->getId(),
                     $keyword
                 );
             }
@@ -183,13 +181,8 @@ function get_count_courses()
     }
 
     if (false == $drhLoaded) {
-        $isGeneralCoach = SessionManager::user_is_general_coach(
-            api_get_user_id(),
-            $sessionId
-        );
-
-        if ($isGeneralCoach) {
-            $courseList = SessionManager::getCoursesInSession($sessionId);
+        if ($session && $session->hasUserAsGeneralCoach(api_get_user_entity())) {
+            $courseList = SessionManager::getCoursesInSession($session->getId());
             $count = count($courseList);
         } else {
             $count = CourseManager::getCoursesFollowedByUser(
@@ -201,7 +194,7 @@ function get_count_courses()
                 null,
                 true,
                 $keyword,
-                $sessionId
+                (int) $session?->getId()
             );
         }
     }
@@ -220,7 +213,8 @@ function get_count_courses()
 function get_courses($from, $limit, $column, $direction)
 {
     $userId = api_get_user_id();
-    $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+    $sessionId = isset($_GET['sid']) ? intval($_GET['sid']) : 0;
+    $session = api_get_session_entity($sessionId);
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
     $follow = isset($_GET['follow']) ? true : false;
     $drhLoaded = false;
@@ -241,14 +235,9 @@ function get_courses($from, $limit, $column, $direction)
     }
 
     if (false == $drhLoaded) {
-        $isGeneralCoach = SessionManager::user_is_general_coach(
-            api_get_user_id(),
-            $sessionId
-        );
-
         // General coach can see all reports
-        if ($isGeneralCoach) {
-            $courseList = SessionManager::getCoursesInSession($sessionId);
+        if ($session && $session->hasUserAsGeneralCoach(api_get_user_entity())) {
+            $courseList = SessionManager::getCoursesInSession($session->getId());
             $courses = [];
             if (!empty($courseList)) {
                 foreach ($courseList as $courseId) {
@@ -273,14 +262,13 @@ function get_courses($from, $limit, $column, $direction)
 
     $courseList = [];
     if (!empty($courses)) {
-        $session = api_get_session_entity($sessionId);
         foreach ($courses as $data) {
             $courseCode = $data['code'];
             $courseId = $data['real_id'];
             $courseInfo = api_get_course_info($courseCode);
             $course = api_get_course_entity($courseId);
 
-            if (empty($sessionId)) {
+            if (null === $session) {
                 $userList = CourseManager::get_user_list_from_course_code($data['code']);
             } else {
                 $userList = CourseManager::get_user_list_from_course_code(
@@ -347,11 +335,15 @@ function get_courses($from, $limit, $column, $direction)
                 $data['title'],
                 $courseInfo['course_public_url'].'?id_session='.$sessionId
             );
-
-            $attendanceLink = Display::url(
-                Display::return_icon('attendance_list.png', get_lang('Attendance'), [], ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH).'attendance/index.php?cid='.$courseId.'&sid='.$sessionId.'&action=calendar_logins'
-            );
+            $attendance = new Attendance();
+            $result = $attendance->getAttendanceBaseInLogin(false, true);
+            $attendanceLink = '';
+            if (false !== $result) {
+                $attendanceLink = Display::url(
+                    Display::return_icon('attendance_list.png', get_lang('Attendance'), [], ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'attendance/index.php?cid='.$courseId.'&sid='.$sessionId.'&action=calendar_logins'
+                );
+            }
 
             $courseList[] = [
                 $title,
@@ -393,7 +385,7 @@ $table->set_header(9, get_lang('Details'), false);
 $form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/course.php');
 $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addButtonSearch(get_lang('Search'));
-$form->addElement('hidden', 'session_id', $sessionId);
+$form->addElement('hidden', 'sid', $sessionId);
 
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 

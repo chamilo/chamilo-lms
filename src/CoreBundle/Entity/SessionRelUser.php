@@ -71,8 +71,9 @@ class SessionRelUser
      * @var string[]
      */
     public array $relationTypeList = [
-        0 => 'student',
-        1 => 'drh',
+        Session::STUDENT => 'student',
+        Session::DRH => 'drh',
+        Session::SESSION_COACH => 'session_coach',
     ];
 
     /**
@@ -135,7 +136,7 @@ class SessionRelUser
 
     public function __construct()
     {
-        $this->relationType = 0;
+        $this->relationType = Session::STUDENT;
         $this->duration = 0;
         $this->movedTo = null;
         $this->movedStatus = null;

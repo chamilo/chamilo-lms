@@ -397,13 +397,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $portals;
 
     /**
-     * @var Collection<int, Session>|Session[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
-     */
-    protected Collection $sessionsAsGeneralCoach;
-
-    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="creator")
      *
      * @var Collection<int, ResourceNode>|ResourceNode[]
@@ -825,7 +818,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->gradeBookCertificates = new ArrayCollection();
         $this->courseGroupsAsMember = new ArrayCollection();
         $this->courseGroupsAsTutor = new ArrayCollection();
-        $this->sessionsAsGeneralCoach = new ArrayCollection();
         $this->resourceNodes = new ArrayCollection();
         $this->sessionRelCourseRelUsers = new ArrayCollection();
         $this->achievedSkills = new ArrayCollection();
@@ -1690,19 +1682,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->portals = $value;
     }
 
-    public function getSessionsAsGeneralCoach(): Collection
+    public function getSessionsAsGeneralCoach(): array
     {
-        return $this->sessionsAsGeneralCoach;
+        return $this->getSessions(Session::SESSION_COACH);
     }
 
-    /**
-     * @param Collection<int, Session>|Session[] $value
-     */
-    public function setSessionsAsGeneralCoach(Collection $value): self
+    public function getSessionsAsAdmin(): array
     {
-        $this->sessionsAsGeneralCoach = $value;
-
-        return $this;
+        return $this->getSessions(Session::SESSION_ADMIN);
     }
 
     public function getCommentedUserSkills(): Collection
@@ -2256,7 +2243,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getStudentSessions(): array
     {
-        return $this->getSessions(0);
+        return $this->getSessions(Session::STUDENT);
     }
 
     /**
@@ -2305,7 +2292,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getDRHSessions(): array
     {
-        return $this->getSessions(1);
+        return $this->getSessions(Session::DRH);
     }
 
     /**
@@ -2315,7 +2302,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @return Session[]
      */
-    public function getCurrentlyAccessibleSessions(int $relationType = 0): array
+    public function getCurrentlyAccessibleSessions(int $relationType = Session::STUDENT): array
     {
         $sessions = [];
         foreach ($this->getSessions($relationType) as $session) {
@@ -2375,6 +2362,19 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         }
 
         return $this;
+    }
+
+    public function getSessionsByStatusInCourseSubscription(int $status): Collection
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('status', $status)
+        );
+
+        return $this
+            ->getSessionRelCourseRelUsers()
+            ->matching($criteria)
+            ->map(fn (SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession())
+        ;
     }
 
     /**

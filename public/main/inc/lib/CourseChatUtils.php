@@ -665,7 +665,7 @@ class CourseChatUtils
                     );
                 } else {
                     $criteria->andWhere(
-                        Criteria::expr()->eq('status', Session::COACH)
+                        Criteria::expr()->eq('status', Session::COURSE_COACH)
                     );
                 }
             }

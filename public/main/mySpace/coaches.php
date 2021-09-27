@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 ob_start();
 $cidReset = true;
 
@@ -41,7 +43,7 @@ if (isset($_GET["id_student"])) {
     $id_student = intval($_GET["id_student"]);
     $sql_coachs = "SELECT DISTINCT srcru.user_id as id_coach
 		FROM $tbl_session_rel_course_rel_user as srcru
-		WHERE srcru.user_id='$id_student' AND srcru.status=2";
+		WHERE srcru.user_id='$id_student' AND srcru.status=".Session::COURSE_COACH;
 } else {
     if (api_is_platform_admin()) {
         $sql_coachs = "SELECT DISTINCT
@@ -49,7 +51,7 @@ if (isset($_GET["id_student"])) {
 			FROM $tbl_user, $tbl_session_rel_course_rel_user srcru
 			WHERE
 			 	srcru.user_id=user_id AND
-			 	srcru.status=2 ".$order_clause;
+			 	srcru.status=".Session::COURSE_COACH." ".$order_clause;
     } else {
         $sql_coachs = "SELECT DISTINCT user_id as id_coach, user.id as user_id, lastname, firstname
 			FROM
@@ -63,7 +65,7 @@ if (isset($_GET["id_student"])) {
 				course_rel_user.status='1' AND
 				course_rel_user.user_id='".api_get_user_id()."' AND
 				srcu.user_id = user.id AND
-				srcu.status = 2
+				srcu.status = ".Session::COURSE_COACH."
 				".$order_clause;
     }
 }

@@ -1326,13 +1326,15 @@ class learnpath
 
         $settings = api_get_configuration_value('lp_view_settings');
         $display = $settings['display'] ?? false;
+        $icon = Display::getMdiIcon('information');
+
         $reportingIcon = '
             <a class="icon-toolbar"
                 id="stats_link"
                 href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lpId.'"
                 onclick="window.parent.API.save_asset(); return true;"
                 target="content_name" title="'.$reportingText.'">
-                <span class="fa fa-info"></span><span class="sr-only">'.$reportingText.'</span>
+                '.$icon.'<span class="sr-only">'.$reportingText.'</span>
             </a>';
 
         if (!empty($display)) {
@@ -1350,20 +1352,23 @@ class learnpath
         $previousIcon = '';
         $nextIcon = '';
         if (false === $hideArrows) {
+            $icon = Display::getMdiIcon('chevron-left');
             $previousIcon = '
                 <a class="icon-toolbar" id="scorm-previous" href="#"
                     onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
-                    <span class="fa fa-chevron-left"></span><span class="sr-only">'.$previousText.'</span>
+                    '.$icon.'<span class="sr-only">'.$previousText.'</span>
                 </a>';
 
+            $icon = Display::getMdiIcon('chevron-right');
             $nextIcon = '
                 <a class="icon-toolbar" id="scorm-next" href="#"
                     onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
-                    <span class="fa fa-chevron-right"></span><span class="sr-only">'.$nextText.'</span>
+                    '.$icon.'<span class="sr-only">'.$nextText.'</span>
                 </a>';
         }
 
         if ('fullscreen' === $this->mode) {
+            $icon = Display::getMdiIcon('view-column');
             $navbar = '
                   <span id="'.$barId.'" class="buttons">
                     '.$reportingIcon.'
@@ -1371,7 +1376,7 @@ class learnpath
                     '.$nextIcon.'
                     <a class="icon-toolbar" id="view-embedded"
                         href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
-                        <span class="fa fa-columns"></span><span class="sr-only">'.$fullScreenText.'</span>
+                        '.$icon.'<span class="sr-only">'.$fullScreenText.'</span>
                     </a>
                   </span>';
         } else {

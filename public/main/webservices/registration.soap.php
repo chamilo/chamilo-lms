@@ -4104,7 +4104,7 @@ function WSCreateSession($params)
                     $date_end,
                     $coachStartDate,
                     $coachEndDate,
-                    $id_coach,
+                    [$id_coach],
                     0,
                     1,
                     false,

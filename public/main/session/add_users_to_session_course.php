@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 // resetting the course id
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 // including some necessary files
@@ -125,7 +127,7 @@ function search_users($needle, $type)
                     WHERE
                         sc.c_id = $courseId AND
                         su.session_id = $id_session AND
-                        relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                        su.relation_type = ".Session::STUDENT;
                 $res = Database::query($sql);
                 $user_ids = [];
                 if (Database::num_rows($res) > 0) {
@@ -393,7 +395,7 @@ if ($ajax_search) {
         ON su.user_id = u.id
         WHERE
             su.session_id = ".intval($id_session)." AND
-            su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
+            su.relation_type = ".Session::STUDENT." AND
             sc.c_id = $courseId AND
             u.status<>".DRH." AND
             u.status <> 6
@@ -410,7 +412,7 @@ if ($ajax_search) {
                 INNER JOIN $tbl_session_rel_user su
                 ON
                     su.user_id = u.id AND
-                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
+                    su.relation_type = ".Session::STUDENT." AND
                     su.session_id = ".intval($id_session)."
                 INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
@@ -435,7 +437,7 @@ if ($ajax_search) {
     // Filter the user list in all courses in the session
     foreach ($sessionUserInfo as $sessionUser) {
         // filter students in session
-        if (0 != $sessionUser['status_in_session']) {
+        if (Session::STUDENT != $sessionUser['status_in_session']) {
             continue;
         }
 
@@ -516,7 +518,7 @@ if ($ajax_search) {
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.relation_type = ".Session::STUDENT."
             INNER JOIN $tableRelSessionCourseUser sc
             ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
             $where_filter
@@ -532,7 +534,7 @@ if ($ajax_search) {
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.relation_type = ".Session::STUDENT."
             WHERE
                 u.status <> ".DRH." AND
                 u.status <> 6
@@ -549,7 +551,7 @@ if ($ajax_search) {
                 LEFT JOIN $tbl_session_rel_user su
                     ON su.user_id = u.id
                     AND su.session_id = $id_session
-                    AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    AND su.relation_type = ".Session::STUDENT."
                 INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
 
@@ -585,7 +587,7 @@ if ($ajax_search) {
         LEFT JOIN $tbl_session_rel_user su
         ON su.user_id = u.id
         AND su.session_id = $id_session
-        AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+        AND su.relation_type = ".Session::STUDENT."
         INNER JOIN $tableRelSessionCourseUser sc
         ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
         WHERE
@@ -604,7 +606,7 @@ if ($ajax_search) {
                 LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.relation_type = ".Session::STUDENT."
                 INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
                 INNER JOIN $tableRelSessionCourseUser sc

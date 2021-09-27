@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -930,7 +930,7 @@ class Template
                 WHERE scu.status = :teacher_status AND scu.session = :session AND scu.course = :course
             ')
             ->setParameters([
-                'teacher_status' => SessionRelCourseRelUser::STATUS_COURSE_COACH,
+                'teacher_status' => Session::COURSE_COACH,
                 'session' => api_get_session_id(),
                 'course' => api_get_course_int_id(),
             ])

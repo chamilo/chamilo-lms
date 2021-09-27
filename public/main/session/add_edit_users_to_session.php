@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -12,30 +14,30 @@ $xajax->registerFunction('search_users');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-if (empty($id_session)) {
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+if (empty($sessionId)) {
     api_not_allowed(true);
 }
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
-$session = api_get_session_entity($id_session);
+$session = api_get_session_entity($sessionId);
 SessionManager::protectSession($session);
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = [
-    'url' => "resume_session.php?id_session=".$id_session,
+    'url' => "resume_session.php?id_session=".$sessionId,
     "name" => get_lang('Session overview'),
 ];
 
 // Database Table Definitions
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+$tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+$tblUser = Database::get_main_table(TABLE_MAIN_USER);
+$tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 // setting the name of the tool
-$tool_name = get_lang('Subscribe users to this session');
+$toolName = get_lang('Subscribe users to this session');
 $add_type = 'unique';
 if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
@@ -73,10 +75,10 @@ if (is_array($extra_field_list)) {
 
 function search_users($needle, $type)
 {
-    global $id_session;
+    global $sessionId;
 
-    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-    $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+    $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
     $xajax_response = new xajaxResponse();
     $return = '';
@@ -108,12 +110,12 @@ function search_users($needle, $type)
 
         // Only for single & multiple
         if (in_array($type, ['single', 'multiple'])) {
-            if (!empty($id_session)) {
-                $id_session = intval($id_session);
+            if (!empty($sessionId)) {
+                $sessionId = intval($sessionId);
                 // check id_user from session_rel_user table
                 $sql = "
-                    SELECT user_id FROM $tbl_session_rel_user
-                    WHERE session_id = $id_session AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
+                    SELECT user_id FROM $tblSessionRelUser
+                    WHERE session_id = $sessionId AND relation_type = ".Session::STUDENT;
                 $res = Database::query($sql);
                 $user_ids = [];
                 if (Database::num_rows($res) > 0) {
@@ -132,7 +134,7 @@ function search_users($needle, $type)
                 // search users where username or firstname or lastname begins likes $needle
                 $sql = "
                     SELECT user.id, username, lastname, firstname, official_code
-                    FROM $tbl_user user
+                    FROM $tblUser user
                     WHERE
                         (
                             username LIKE '$needle%'
@@ -147,7 +149,7 @@ function search_users($needle, $type)
             case 'multiple':
                 $sql = "
                     SELECT user.id, username, lastname, firstname, official_code
-                    FROM $tbl_user user
+                    FROM $tblUser user
                     WHERE
                         lastname LIKE '$needle%'
                         AND user.status <> ".DRH."
@@ -158,8 +160,8 @@ function search_users($needle, $type)
             case 'any_session':
                 $sql = "
                     SELECT DISTINCT user.id, username, lastname, firstname, official_code
-                    FROM $tbl_user user
-                    LEFT OUTER JOIN $tbl_session_rel_user s ON (s.user_id = user.id)
+                    FROM $tblUser user
+                    LEFT OUTER JOIN $tblSessionRelUser s ON (s.user_id = user.id)
                     WHERE
                         s.user_id IS NULL
                         AND user.status <> ".DRH."
@@ -177,7 +179,7 @@ function search_users($needle, $type)
                     case 'single':
                         $sql = "
                             SELECT user.id, username, lastname, firstname, official_code
-                            FROM $tbl_user user
+                            FROM $tblUser user
                             INNER JOIN $tbl_user_rel_access_url url_user
                                 ON (url_user.user_id = user.id)
                             WHERE
@@ -195,7 +197,7 @@ function search_users($needle, $type)
                     case 'multiple':
                         $sql = "
                             SELECT user.id, username, lastname, firstname, official_code
-                            FROM $tbl_user user
+                            FROM $tblUser user
                             INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=user.id)
                             WHERE
                                 access_url_id = $access_url_id
@@ -208,8 +210,8 @@ function search_users($needle, $type)
                     case 'any_session':
                         $sql = "
                             SELECT DISTINCT user.id, username, lastname, firstname, official_code
-                            FROM $tbl_user user
-                            LEFT OUTER JOIN $tbl_session_rel_user s
+                            FROM $tblUser user
+                            LEFT OUTER JOIN $tblSessionRelUser s
                                 ON (s.user_id = user.id)
                             INNER JOIN $tbl_user_rel_access_url url_user
                                 ON (url_user.user_id = user.id)
@@ -331,19 +333,19 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
         // Added a parameter to send emails when registering a user
         SessionManager::subscribeUsersToSession(
-            $id_session,
+            $sessionId,
             $UserList,
             null,
             !$notEmptyList
         );
         Display::addFlash(Display::return_message(get_lang('Update successful')));
-        header('Location: resume_session.php?id_session='.$id_session);
+        header('Location: resume_session.php?id_session='.$sessionId);
         exit;
     }
 }
 
-$session_info = SessionManager::fetch($id_session);
-Display::display_header($tool_name);
+$sessionInfo = SessionManager::fetch($sessionId);
+Display::display_header($toolName);
 
 $nosessionUsersList = $sessionUsersList = [];
 $where_filter = null;
@@ -366,11 +368,11 @@ if ('true' === $orderListByOfficialCode) {
 if ($ajax_search) {
     $sql = "
         SELECT u.id, u.lastname, u.firstname, u.username, session_id, u.official_code
-        FROM $tbl_user u
-        INNER JOIN $tbl_session_rel_user su
+        FROM $tblUser u
+        INNER JOIN $tblSessionRelUser su
             ON su.user_id = u.id
-            AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-            AND su.session_id = ".intval($id_session)."
+            AND su.relation_type = ".Session::STUDENT."
+            AND su.session_id = ".intval($sessionId)."
         WHERE u.status<>".DRH."
             AND u.status <> 6
         $order_clause
@@ -382,11 +384,11 @@ if ($ajax_search) {
         if (-1 != $access_url_id) {
             $sql = "
                 SELECT u.id, u.lastname, u.firstname, u.username, session_id, u.official_code
-                FROM $tbl_user u
-                INNER JOIN $tbl_session_rel_user su
+                FROM $tblUser u
+                INNER JOIN $tblSessionRelUser su
                     ON su.user_id = u.id
-                    AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-                    AND su.session_id = ".intval($id_session)."
+                    AND su.relation_type = ".Session::STUDENT."
+                    AND su.session_id = ".intval($sessionId)."
                 INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id = u.id)
                 WHERE access_url_id = $access_url_id
                     AND u.status <> ".DRH."
@@ -401,12 +403,12 @@ if ($ajax_search) {
         $sessionUsersList[$user['id']] = $user;
     }
 
-    $sessionUserInfo = SessionManager::getTotalUserCoursesInSession($id_session);
+    $sessionUserInfo = SessionManager::getTotalUserCoursesInSession($sessionId);
 
     // Filter the user list in all courses in the session
     foreach ($sessionUserInfo as $sessionUser) {
         // filter students in session
-        if (0 != $sessionUser['status_in_session']) {
+        if (Session::STUDENT != $sessionUser['status_in_session']) {
             continue;
         }
 
@@ -483,11 +485,11 @@ if ($ajax_search) {
     if ($use_extra_fields) {
         $sql = "
             SELECT  u.id, lastname, firstname, username, session_id, official_code
-            FROM $tbl_user u
-            LEFT JOIN $tbl_session_rel_user su
+            FROM $tblUser u
+            LEFT JOIN $tblSessionRelUser su
                 ON su.user_id = u.id
-                AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.session_id = $sessionId
+                AND su.relation_type = ".Session::STUDENT."
             $where_filter
                 AND u.status <> ".DRH."
                 AND u.status <> 6
@@ -496,11 +498,11 @@ if ($ajax_search) {
     } else {
         $sql = "
             SELECT  u.id, lastname, firstname, username, session_id, official_code
-            FROM $tbl_user u
-            LEFT JOIN $tbl_session_rel_user su
+            FROM $tblUser u
+            LEFT JOIN $tblSessionRelUser su
                 ON su.user_id = u.id
-                AND su.session_id = $id_session
-                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.session_id = $sessionId
+                AND su.relation_type = ".Session::STUDENT."
             WHERE u.status <> ".DRH." AND u.status <> 6
             $order_clause
         ";
@@ -511,11 +513,11 @@ if ($ajax_search) {
         if (-1 != $access_url_id) {
             $sql = "
                 SELECT  u.id, lastname, firstname, username, session_id, official_code
-                FROM $tbl_user u
-                LEFT JOIN $tbl_session_rel_user su
+                FROM $tblUser u
+                LEFT JOIN $tblSessionRelUser su
                     ON su.user_id = u.id
-                    AND su.session_id = $id_session
-                    AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    AND su.session_id = $sessionId
+                    AND su.relation_type = ".Session::STUDENT."
                 INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
                 WHERE access_url_id = $access_url_id $where_filter
@@ -529,7 +531,7 @@ if ($ajax_search) {
     $result = Database::query($sql);
     $users = Database::store_result($result, 'ASSOC');
     foreach ($users as $uid => $user) {
-        if ($user['session_id'] != $id_session) {
+        if ($user['session_id'] != $sessionId) {
             $nosessionUsersList[$user['id']] = [
                 'fn' => $user['firstname'],
                 'ln' => $user['lastname'],
@@ -544,11 +546,11 @@ if ($ajax_search) {
     // filling the correct users in list
     $sql = "
         SELECT  u.id, lastname, firstname, username, session_id, official_code
-        FROM $tbl_user u
-        LEFT JOIN $tbl_session_rel_user
-        ON $tbl_session_rel_user.user_id = u.id
-            AND $tbl_session_rel_user.session_id = $id_session
-            AND $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+        FROM $tblUser u
+        LEFT JOIN $tblSessionRelUser
+        ON $tblSessionRelUser.user_id = u.id
+            AND $tblSessionRelUser.session_id = $sessionId
+            AND $tblSessionRelUser.relation_type = ".Session::STUDENT."
         WHERE u.status <> ".DRH." AND u.status <> 6 $order_clause
     ";
 
@@ -558,11 +560,11 @@ if ($ajax_search) {
         if (-1 != $access_url_id) {
             $sql = "
                 SELECT  u.id, lastname, firstname, username, session_id, official_code
-                FROM $tbl_user u
-                LEFT JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.user_id = u.id
-                    AND $tbl_session_rel_user.session_id = $id_session
-                    AND $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                FROM $tblUser u
+                LEFT JOIN $tblSessionRelUser
+                    ON $tblSessionRelUser.user_id = u.id
+                    AND $tblSessionRelUser.session_id = $sessionId
+                    AND $tblSessionRelUser.relation_type = ".Session::STUDENT."
                 INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id = u.id)
                 WHERE access_url_id = $access_url_id
                     AND u.status <> ".DRH."
@@ -575,7 +577,7 @@ if ($ajax_search) {
     $result = Database::query($sql);
     $users = Database::store_result($result, 'ASSOC');
     foreach ($users as $uid => $user) {
-        if ($user['session_id'] == $id_session) {
+        if ($user['session_id'] == $sessionId) {
             $sessionUsersList[$user['id']] = $user;
             if (array_key_exists($user['id'], $nosessionUsersList)) {
                 unset($nosessionUsersList[$user['id']]);
@@ -588,13 +590,13 @@ if ($ajax_search) {
 
 if ('multiple' == $add_type) {
     $link_add_type_unique =
-        '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$addProcess.'&add_type=unique">'.
+        '<a href="'.api_get_self().'?id_session='.$sessionId.'&add='.$addProcess.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('Single registration').'</a>';
     $link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('Multiple registration'), '');
 } else {
     $link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('Single registration'), '');
     $link_add_type_multiple =
-        '<a href="'.api_get_self().'?id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
+        '<a href="'.api_get_self().'?id_session='.$sessionId.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
         .Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 $link_add_group = Display::url(
@@ -605,12 +607,12 @@ $link_add_group = Display::url(
 $newLinks = Display::url(
     Display::return_icon('teacher.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
         get_lang('Enroll trainers from existing sessions'),
-    api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$id_session
+    api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$sessionId
 );
 $newLinks .= Display::url(
     Display::return_icon('user.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
         get_lang('Enroll students from existing sessions'),
-    api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$id_session
+    api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$sessionId
 );
 ?>
     <div class="actions">
@@ -622,12 +624,12 @@ $newLinks .= Display::url(
         ?>
     </div>
     <form name="formulaire" method="post"
-          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
+          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; ?><?php if (!empty($addProcess)) {
             echo '&add=true';
         } ?>" <?php if ($ajax_search) {
             echo ' onsubmit="valide();"';
         } ?>>
-        <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
+        <?php echo '<legend>'.$toolName.' ('.$sessionInfo['name'].') </legend>'; ?>
         <?php
         if ('multiple' == $add_type) {
             if (is_array($extra_field_list)) {

@@ -5,14 +5,17 @@
 /**
  * Implements the edition of course-session settings.
  */
+
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-$session = api_get_session_entity($id_session);
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+$session = api_get_session_entity($sessionId);
 SessionManager::protectSession($session);
-$course_code = $_GET['course_code'];
+$courseCode = $_GET['course_code'];
 $course_info = api_get_course_info($_REQUEST['course_code']);
 
 if (empty($course_info)) {
@@ -20,35 +23,35 @@ if (empty($course_info)) {
 }
 
 // Database Table Definitions
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tblUser = Database::get_main_table(TABLE_MAIN_USER);
+$tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+$tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+$tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $courseId = $course_info['real_id'];
 $tool_name = $course_info['name'];
 $sql = "SELECT s.name, c.title
-        FROM $tbl_session_course sc, $tbl_session s, $tbl_course c
+        FROM $tblSessionRelCourse sc, $tblSession s, $tblCourse c
         WHERE
             sc.session_id = s.id AND
             sc.c_id = c.id AND
-            sc.session_id='$id_session' AND
+            sc.session_id='$sessionId' AND
             sc.c_id ='".$courseId."'";
 $result = Database::query($sql);
 
 if (!list($session_name, $course_title) = Database::fetch_row($result)) {
-    header('Location: session_course_list.php?id_session='.$id_session);
+    header('Location: session_course_list.php?id_session='.$sessionId);
     exit();
 }
 
 $interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang("Session list")];
 $interbreadcrumb[] = [
-    'url' => "resume_session.php?id_session=".$id_session,
+    'url' => "resume_session.php?id_session=".$sessionId,
     "name" => get_lang('Session overview'),
 ];
 $interbreadcrumb[] = [
-    'url' => "session_course_list.php?id_session=$id_session",
+    'url' => "session_course_list.php?id_session=$sessionId",
     "name" => api_htmlentities($session_name, ENT_QUOTES, $charset),
 ];
 
@@ -56,8 +59,8 @@ $arr_infos = [];
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     // get all tutor by course_code in the session
     $sql = "SELECT user_id
-	        FROM $tbl_session_rel_course_rel_user
-	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2";
+	        FROM $tblSessionRelCourseRelUser
+	        WHERE session_id = '$sessionId' AND c_id = '".$courseId."' AND status = ".Session::COURSE_COACH;
     $rs_coaches = Database::query($sql);
 
     $coaches_course_session = [];
@@ -73,7 +76,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             $id_coach = intval($id_coach);
             $rs1 = SessionManager::set_coach_to_course_session(
                 $id_coach,
-                $id_session,
+                $sessionId,
                 $courseId
             );
         }
@@ -84,22 +87,22 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         foreach ($array_intersect as $no_coach_user_id) {
             $rs2 = SessionManager::set_coach_to_course_session(
                 $no_coach_user_id,
-                $id_session,
+                $sessionId,
                 $courseId,
                 true
             );
         }
         Display::addFlash(Display::return_message(get_lang('Update successful')));
-        header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
+        header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$sessionId);
         exit();
     }
 } else {
     $sql = "SELECT user_id
-	        FROM $tbl_session_rel_course_rel_user
+	        FROM $tblSessionRelCourseRelUser
 	        WHERE
-                session_id = '$id_session' AND
+                session_id = '$sessionId' AND
                 c_id = '".$courseId."' AND
-                status = 2 ";
+                status = ".Session::COURSE_COACH;
     $rs = Database::query($sql);
 
     if (Database::num_rows($rs) > 0) {
@@ -115,7 +118,7 @@ if (api_is_multiple_url_enabled()) {
     $tbl_access_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     $sql = "SELECT u.id as user_id,lastname,firstname,username
-            FROM $tbl_user u
+            FROM $tblUser u
             LEFT JOIN $tbl_access_rel_user  a
             ON(u.id= a.user_id)
             WHERE
@@ -125,7 +128,7 @@ if (api_is_multiple_url_enabled()) {
             $order_clause;
 } else {
     $sql = "SELECT id as user_id,lastname,firstname,username
-            FROM $tbl_user
+            FROM $tblUser
             WHERE
                 status = '1' AND
                 active = 1 ".
@@ -147,7 +150,7 @@ Display::page_subheader2($tool_name);
 $form = new FormValidator(
     'form',
     'post',
-    api_get_self().'?id_session='.$id_session.'&course_code='.$course_code.'&page='.Security::remove_XSS($_GET['page'])
+    api_get_self().'?id_session='.$sessionId.'&course_code='.$courseCode.'&page='.Security::remove_XSS($_GET['page'])
 );
 
 $options = [];

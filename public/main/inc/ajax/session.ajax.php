@@ -243,7 +243,7 @@ switch ($action) {
     case 'get_basic_course_documents_form':
         $courseId = isset($_GET['course']) ? (int) $_GET['course'] : 0;
         $sessionId = isset($_GET['session']) ? (int) $_GET['session'] : 0;
-        $currentUserId = api_get_user_id();
+        $currentUser = api_get_user_entity();
 
         $em = Database::getManager();
         $course = api_get_course_entity($courseId);
@@ -253,7 +253,7 @@ switch ($action) {
             break;
         }
 
-        if (!api_is_platform_admin(true) || $session->getSessionAdmin()->getId() != $currentUserId) {
+        if (!api_is_platform_admin(true) || !$session->hasUserAsSessionAdmin($currentUser)) {
             break;
         }
 
@@ -269,7 +269,7 @@ switch ($action) {
 
                 $newFolderData = create_unexisting_directory(
                     $courseInfo,
-                    $currentUserId,
+                    $currentUser->getId(),
                     $session->getId(),
                     0,
                     0,
@@ -383,13 +383,13 @@ switch ($action) {
 
         $courseInfo = api_get_course_info_by_id($courseId);
         $session = api_get_session_entity($sessionId);
-        $currentUserId = api_get_user_id();
+        $currentUser = api_get_user_entity();
 
         if (empty($courseInfo) || !$session) {
             break;
         }
 
-        if (!api_is_platform_admin(true) || $session->getSessionAdmin()->getId() != $currentUserId) {
+        if (!api_is_platform_admin(true) || !$session->hasUserAsSessionAdmin($currentUser)) {
             break;
         }
 

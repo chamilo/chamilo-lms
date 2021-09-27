@@ -1,15 +1,26 @@
 <template>
   <q-form>
-    <q-input
-        id="item_title"
-        v-model="item.title"
-        :placeholder="$t('Title')"
-        :error="v$.item.title.$error"
-        @input="v$.item.title.$touch()"
-        @blur="v$.item.title.$touch()"
-        :error-message="titleErrors"
-    />
-    <slot></slot>
+    <v-container>
+      <v-row>
+        <v-col md="9">
+          <q-input
+            id="item_title"
+            v-model="item.title"
+            :error="v$.item.title.$error"
+            :error-message="titleErrors"
+            :placeholder="$t('Title')"
+            @blur="v$.item.title.$touch()"
+            @input="v$.item.title.$touch()"
+          />
+          <slot></slot>
+        </v-col>
+        <v-col md="3">
+          <div v-text="$t('Atachments')" class="text-h6"/>
+
+          <AudioRecorder></AudioRecorder>
+        </v-col>
+      </v-row>
+    </v-container>
   </q-form>
 </template>
 
@@ -17,10 +28,12 @@
 import has from 'lodash/has';
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
+import AudioRecorder from "../AudioRecorder";
 
 export default {
   name: 'MessageForm',
-  setup () {
+  components: {AudioRecorder},
+  setup() {
     return { v$: useVuelidate() }
   },
   props: {

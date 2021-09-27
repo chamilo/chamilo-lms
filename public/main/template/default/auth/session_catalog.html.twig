@@ -65,14 +65,16 @@
                         </h5>
                     </div>
 
-                    {% if show_tutor and item.coach_id %}
-                    <div class="card-author mb-2">
-                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                            <a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
-                                {{ item.coach_name }}
-                            </a>
-                            <p>{{ 'SessionGeneralCoach'|get_lang }}</p>
-                    </div>
+                    {% if show_tutor and item.coaches %}
+                        {% for coach in item.coaches %}
+                            <div class="card-author mb-2">
+                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                <a href="{{ coach.url }}" class="ajax" data-title="{{ coach.name }}">
+                                    {{ coach.name }}
+                                </a>
+                                <p>{{ 'SessionGeneralCoach'|get_lang }}</p>
+                            </div>
+                        {% endfor %}
                     {% endif %}
 
                     <div class="card-info">

@@ -3,6 +3,7 @@
 {% import "@ChamiloCore/Macros/buttons.html.twig" as macro_buttons %}
 {% import "@ChamiloCore/Macros/image.html.twig" as macro_image %}
 {% import '@ChamiloCore/Macros/headers.html.twig' as macro_headers %}
+{% import '@ChamiloCore/Macros/modals.html.twig' as macro_modals %}
 {# Chamilo theme #}
 {% set theme = 'chamilo' %}
 {% if not from_vue %}
@@ -26,3 +27,4 @@
 {% else %}
     {{ block('page_content') }}
 {% endif %}
+{{ macro_modals.global_modal('') }}

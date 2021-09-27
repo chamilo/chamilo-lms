@@ -302,7 +302,7 @@ if (!empty($_GET['category']) &&
         exit;
     }
 }
-$htmlHeadXtra[] = '<script>    
+$htmlHeadXtra[] = '<script>
     var hide_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting_na.png";
     var show_icon = "'.api_get_path(WEB_IMG_PATH).'/icons/32/shared_setting.png";
     var url       = "'.api_get_path(WEB_AJAX_PATH).'admin.ajax.php?a=update_changeable_setting";
@@ -442,9 +442,9 @@ if (!empty($_GET['category'])) {
             handlePlugins();
             echo '</div>';
 
-            echo '<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="plugin-tab-2">';
-            DashboardManager::handle_dashboard_plugins();
-            echo '</div>';
+            //echo '<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="plugin-tab-2">';
+            //DashboardManager::handle_dashboard_plugins();
+            //echo '</div>';
 
             echo '<div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="plugin-tab-3">';
             handleExtensions();

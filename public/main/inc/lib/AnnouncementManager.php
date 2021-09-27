@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
@@ -82,15 +83,20 @@ class AnnouncementManager
         $generalCoachEmail = '';
         $coaches = '';
         if (!empty($sessionId)) {
-            $sessionInfo = api_get_session_info($sessionId);
+            $session = api_get_session_entity($sessionId);
+
             $coaches = CourseManager::get_coachs_from_course_to_string(
                 $sessionId,
                 $courseInfo['real_id']
             );
 
-            $generalCoach = api_get_user_info($sessionInfo['id_coach']);
-            $generalCoachName = $generalCoach['complete_name'];
-            $generalCoachEmail = $generalCoach['email'];
+            $session->getGeneralCoaches()
+                ->forAll(function (int $key, User $user) use (&$generalCoachName, &$generalCoachEmail) {
+                    $generalCoachName .= $user->getFullname().PHP_EOL;
+                    $generalCoachEmail .= $user->getEmail().PHP_EOL;
+
+                    return true;
+                });
         }
 
         $data = [];

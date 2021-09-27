@@ -109,7 +109,7 @@ if (!$exportToXLS) {
 
         $menuItems[] = Display::url(
             Display::return_icon('teacher.png', get_lang('Trainer View'), [], 32),
-            api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher'
+            api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=teacher'
         );
         if (api_is_platform_admin()) {
             $menuItems[] = Display::url(
@@ -130,6 +130,7 @@ if (!$exportToXLS) {
                 $actionsLeft .= $item;
             }
         }
+        $actionsLeft = TrackingCourseLog::actionsLeft('exams', $sessionId, false);
     } else {
         $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id(), false);
         $actionsRight .= Display::url(

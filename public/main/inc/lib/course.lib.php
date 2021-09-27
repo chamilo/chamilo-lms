@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
@@ -635,7 +636,7 @@ class CourseManager
                 }
                 $endDate = new DateTime();
                 $endDate->add($duration);
-                $session = new \Chamilo\CoreBundle\Entity\Session();
+                $session = new SessionEntity();
                 $session->setName(
                     sprintf(get_lang('FirstnameLastnameCourses'), $user->getFirstname(), $user->getLastname())
                 );
@@ -644,7 +645,7 @@ class CourseManager
                 $session->setDisplayEndDate($endDate);
                 $session->setSendSubscriptionNotification(false);
                 $adminId = api_get_configuration_value('session_automatic_creation_user_id') ?: 1;
-                $session->setSessionAdmin(api_get_user_entity($adminId));
+                $session->addSessionAdmin(api_get_user_entity($adminId));
                 $session->addUserInSession(0, $user);
                 Database::getManager()->persist($session);
                 try {
@@ -1187,14 +1188,16 @@ class CourseManager
         }
 
         $sql = "SELECT 1 FROM $tableSessionCourseUser
-                WHERE user_id = $userId AND session_id = $session_id AND status = 2 $condition_course";
+                WHERE user_id = $userId AND session_id = $session_id AND status = ".SessionEntity::COURSE_COACH." $condition_course";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
-              " WHERE id = $session_id AND id_coach = $userId";
+        $sql = "SELECT s.id FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." s
+            INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." sru
+                ON (sru.session_id = s.id AND sru.relation_type = ".SessionEntity::SESSION_COACH.")
+            WHERE sru.user_id = $userId AND s.id = $session_id";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
@@ -1793,7 +1796,7 @@ class CourseManager
 
         // We get the coach for the given course in a given session.
         $sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-               " WHERE session_id = $session_id AND c_id = $courseId AND status = 2";
+               " WHERE session_id = $session_id AND c_id = $courseId AND status = ".SessionEntity::COURSE_COACH;
         $rs = Database::query($sql);
         while ($user = Database::fetch_array($rs)) {
             $userInfo = api_get_user_info($user['user_id']);
@@ -1803,12 +1806,9 @@ class CourseManager
         }
 
         if ($addGeneralCoach) {
-            $table = Database::get_main_table(TABLE_MAIN_SESSION);
-            // We get the session coach.
-            $sql = "SELECT id_coach FROM $table WHERE id = $session_id";
-            $rs = Database::query($sql);
-            $session_id_coach = Database::result($rs, 0, 'id_coach');
-            if (is_int($session_id_coach)) {
+            $generalCoachesId = SessionManager::getGeneralCoachesIdForSession($session_id);
+
+            foreach ($generalCoachesId as $session_id_coach) {
                 $userInfo = api_get_user_info($session_id_coach);
                 if ($userInfo) {
                     $users[$session_id_coach] = $userInfo;
@@ -1919,7 +1919,7 @@ class CourseManager
                       $joinSession
                       INNER JOIN $userTable u
                       ON scu.user_id = u.id
-                      WHERE scu.c_id = $courseId AND scu.status <> 2";
+                      WHERE scu.c_id = $courseId AND scu.status = ".SessionEntity::STUDENT;
 
             if (!empty($date_from) && !empty($date_to)) {
                 $date_from = Database::escape_string($date_from);
@@ -2138,7 +2138,7 @@ class CourseManager
                 WHERE
                     scu.session_id = $session_id AND
                     scu.c_id = $courseId AND
-                    scu.status = 2";
+                    scu.status = ".SessionEntity::COURSE_COACH;
         $rs = Database::query($sql);
 
         $coaches = [];
@@ -3367,7 +3367,7 @@ class CourseManager
         if (!empty($sessionId)) {
             if (COURSEMANAGER == $status) {
                 // Teacher of course or teacher inside session
-                $whereConditions = " AND (cru.status = ".COURSEMANAGER." OR srcru.status = 2) ";
+                $whereConditions = " AND (cru.status = ".COURSEMANAGER." OR srcru.status = ".SessionEntity::COURSE_COACH.") ";
             }
             $courseList = SessionManager::get_course_list_by_session_id($sessionId);
             if (!empty($courseList)) {
@@ -3962,7 +3962,7 @@ class CourseManager
         if ($isAdmin ||
             COURSEMANAGER === $userInCourseStatus ||
             $is_coach ||
-            $user_id == $sessionInfo['session_admin_id']
+            SessionManager::sessionHasSessionAdmin($session_id, $user_id)
         ) {
             $params['completed'] = true;
             $params['requirements'] = '';
@@ -4049,11 +4049,10 @@ class CourseManager
         $session_category_id = null;
         $active = false;
         if (!empty($session_id)) {
-            $sessionCoachName = '';
-            if (!empty($sessionInfo['id_coach'])) {
-                $coachInfo = api_get_user_info($sessionInfo['id_coach']);
-                $sessionCoachName = $coachInfo['complete_name'];
-            }
+            $sessionCoachName = implode(
+                ' - ',
+                SessionManager::getGeneralCoachesNamesForSession($session_id)
+            );
 
             $session_category_id = self::get_session_category_id_by_session_id($course_info['id_session']);
 

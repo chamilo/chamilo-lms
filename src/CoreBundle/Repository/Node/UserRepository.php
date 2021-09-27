@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
@@ -306,7 +305,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $qb->expr()->andX(
                     $qb->expr()->eq('scu.session', $session->getId()),
                     $qb->expr()->eq('scu.course', $course->getId()),
-                    $qb->expr()->eq('scu.status', SessionRelCourseRelUser::STATUS_COURSE_COACH)
+                    $qb->expr()->eq('scu.status', Session::COURSE_COACH)
                 )
             )
         ;
@@ -402,7 +401,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $qb->expr()->eq('scu.user', $user->getId())
             )
             ->andWhere(
-                $qb->expr()->eq('su.relationType', SESSION_RELATION_TYPE_RRHH)
+                $qb->expr()->eq('su.relationType', Session::DRH)
             )
         ;
 

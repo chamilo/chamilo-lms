@@ -102,14 +102,18 @@ if ($editingCourse) {
     }
 
     $sessionItem = $plugin->getSessionForConfiguration($session, $currency);
-    $generalCoach = $session->getGeneralCoach();
-    $generalCoachOption = [
-        'text' => $generalCoach->getCompleteName(),
-        'value' => $generalCoach->getId(),
-    ];
-    $defaultBeneficiaries = [
-        $generalCoach->getId(),
-    ];
+    $generalCoaches = $session->getGeneralCoaches();
+    $generalCoachesOptions = [];
+    $defaultBeneficiaries = [];
+
+    foreach ($generalCoaches as $generalCoach) {
+        $generalCoachesOptions[] = [
+            'text' => $generalCoach->getFullname(),
+            'value' => $generalCoach->getId(),
+        ];
+        $defaultBeneficiaries[] = $generalCoach->getId();
+    }
+
     $courseCoachesOptions = [];
     $sessionCourses = $session->getCourses();
 
@@ -117,7 +121,7 @@ if ($editingCourse) {
         $courseCoaches = $userRepo->getCoachesForSessionCourse($session, $sessionCourse->getCourse());
 
         foreach ($courseCoaches as $courseCoach) {
-            if ($generalCoach->getId() === $courseCoach->getId()) {
+            if ($session->hasUserAsGeneralCoach($courseCoach)) {
                 continue;
             }
 
@@ -173,7 +177,7 @@ if ('true' === $commissionsEnable) {
                 } else {
                     showSliders(100, 'default', '".$commissions."');
                 }
-                
+
                 var maxPercentage = 100;
                 $('#selectBox').on('change', function() {
                     $('#panelSliders').html('');
@@ -222,7 +226,7 @@ if ($editingCourse) {
     $beneficiariesSelect->addOptGroup($teachersOptions, get_lang('Teachers'));
 } elseif ($editingSession) {
     $courseCoachesOptions = api_unique_multidim_array($courseCoachesOptions, 'value');
-    $beneficiariesSelect->addOptGroup([$generalCoachOption], get_lang('SessionGeneralCoach'));
+    $beneficiariesSelect->addOptGroup($generalCoachesOptions, get_lang('Session general coaches'));
     $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('SessionCourseCoach'));
 }
 

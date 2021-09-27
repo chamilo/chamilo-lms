@@ -521,7 +521,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
                             $content = str_replace('</head>', $js.'</head>', $content);
                         }
                     }
-
+                    if ('true' === $this->getSettingsManager()->getSetting('course.enable_bootstrap_in_documents_html')) {
+                        // It adds the bootstrap and awesome css
+                        $links = '<link href="'.api_get_path(WEB_PATH).'libs/bootstrap/bootstrap.min.css" rel="stylesheet">';
+                        $links .= '<link href="'.api_get_path(WEB_PATH).'libs/bootstrap/font-awesome.min.css" rel="stylesheet">';
+                        // Insert inside the head tag.
+                        $content = str_replace('</head>', $links.'</head>', $content);
+                    }
                     $response->setContent($content);
                     /*$contents = $this->renderView('@ChamiloCore/Resource/view_html.twig', [
                         'category' => '...',

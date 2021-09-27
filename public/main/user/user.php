@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -242,9 +243,9 @@ if (isset($_GET['action'])) {
 
                 // only users no coaches/teachers
                 if (COURSEMANAGER == $type) {
-                    $sql .= " AND session_course_user.status = 2 ";
+                    $sql .= " AND session_course_user.status = ".Session::COURSE_COACH;
                 } else {
-                    $sql .= " AND session_course_user.status = 0 ";
+                    $sql .= " AND session_course_user.status = .".Session::STUDENT;
                 }
                 $sql .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
 
@@ -440,7 +441,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $sql = "SELECT user.id as user_id
 					FROM $tbl_user user
 					INNER JOIN $tbl_session_rel_user reluser
-					ON user.id = reluser.user_id AND reluser.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+					ON user.id = reluser.user_id AND reluser.relation_type = ".Session::STUDENT."
 					INNER JOIN $tbl_session_rel_course rel_course
 					ON rel_course.session_id = reluser.session_id
 					WHERE

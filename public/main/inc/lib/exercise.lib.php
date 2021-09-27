@@ -1955,10 +1955,6 @@ HOTSPOT;
         if (!$showSessionField) {
             $session_id_and = " AND te.session_id = $sessionId ";
             $sessionCondition = " AND ttte.session_id = $sessionId";
-            if (empty($sessionId)) {
-                $session_id_and = " AND te.session_id IS NULL ";
-                $sessionCondition = " AND ttte.session_id IS NULL ";
-            }
         }
 
         $exercise_where = '';
@@ -3626,13 +3622,15 @@ EOT;
                     relation_type <> 2
                 )";
             } else {
+                $sessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                 $courseCondition = "
-                    INNER JOIN $courseUser c
-                    ON (
-                        e.exe_user_id = c.user_id AND
-                        e.c_id = c.c_id AND
-                        c.status = 0
-                    )";
+            INNER JOIN $sessionRelCourse sc
+            ON (
+                        e.exe_user_id = sc.user_id AND
+                        e.c_id = sc.c_id AND
+                        e.session_id = sc.session_id AND
+                        sc.status = ".SessionEntity::STUDENT."
+                )";
             }
             $sql .= $courseCondition;
         }
@@ -3763,8 +3761,8 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = " AND cu.status = 0 ";
+            ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            $courseConditionWhere = " AND cu.status = ".SessionEntity::STUDENT;
         }
 
         $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
@@ -3833,8 +3831,8 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = ' AND cu.status = 0 ';
+            ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
         $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
@@ -3919,8 +3917,8 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = a.c_id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = ' AND cu.status = 0 ';
+            ON (cu.c_id = a.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
         $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');

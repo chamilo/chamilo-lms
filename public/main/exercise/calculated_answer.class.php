@@ -280,7 +280,7 @@ class CalculatedAnswer extends Question
             [
                 'where' => [
                     'question_id = ?' => [
-                        $this->id
+                        $this->id,
                     ],
                 ],
             ]

@@ -3,7 +3,7 @@
     <q-header bordered class="bg-white text-grey-8" height-hint="64">
       <q-toolbar>
         <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
-          <img style="width:200px" src="/build/css/themes/chamilo/images/header-logo.png" />
+          <img style="height:40px" src="/build/css/themes/chamilo/images/header-logo.svg" />
         </q-toolbar-title>
 
         <q-space />

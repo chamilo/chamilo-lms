@@ -479,7 +479,8 @@ body {
     margin: 0;
 }
 
-.icon-toolbar .fa {
+.icon-toolbar .fa,
+.icon-toolbar .mdi {
     width: 35px;
     height: 35px;
     line-height: 35px;
@@ -490,20 +491,24 @@ body {
     color: #FFF;
 }
 
-.icon-toolbar .fa:hover {
+.icon-toolbar .fa:hover,
+.icon-toolbar .mdi:hover {
     background-color: #000;
 }
 
-.expand .fa {
+.expand .fa,
+.expand .mdi {
     background-color: #00829C;
 }
 
-.expand .fa:hover {
+.expand .fa:hover,
+.expand .mdi:hover {
     background-color: #006A84;
     color: #ffffff;
 }
 
-.expand .fa:active, .expand .fa:focus {
+.expand .fa:active, .expand .fa:focus,
+.expand .mdi:active, .expand .mdi:focus {
     color: #ffffff;
 }
 
@@ -593,7 +598,7 @@ body {
     height: 40px;
     width: 40px;
     line-height: 19px;
-    padding: 10px;
+    padding: 7px;
     background: #ffffff;
     font-size: 16px;
     border: 1px solid #8dcbf3;
@@ -861,7 +866,8 @@ body {
         padding: 10px 5px;
     }
 
-    .icon-toolbar .fa {
+    .icon-toolbar .fa,
+    .icon-toolbar .mdi {
         width: 35px;
         height: 35px;
         line-height: 35px;

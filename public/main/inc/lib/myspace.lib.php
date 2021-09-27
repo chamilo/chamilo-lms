@@ -129,7 +129,7 @@ class MySpace
                 [],
                 32
             ),
-            api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher'
+            api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=teacher'
         );
         $menuItems[] = Display::url(
             Display::return_icon(

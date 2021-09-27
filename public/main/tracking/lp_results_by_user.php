@@ -92,11 +92,11 @@ if (!$export_to_csv) {
                 &nbsp;'.get_lang('Print').'</a>
                     </div>';
 
-        $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('Trainer View').'</a>';
+        $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=teacher">'.get_lang('Trainer View').'</a>';
         if (api_is_platform_admin()) {
-            $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin">'.get_lang('Admin view').'</a>';
+            $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('Admin view').'</a>';
         } else {
-            $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=coach">'.get_lang('Admin view').'</a>';
+            $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=coach">'.get_lang('Admin view').'</a>';
         }
         $menu_items[] = get_lang('Exam tracking');
         $nb_menu_items = count($menu_items);

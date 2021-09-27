@@ -113,13 +113,13 @@
                                         <div class="col-xs-6">
                                             {% if gamification_stars > 0 %}
                                                 {% for i in 1..gamification_stars %}
-                                                    <em class="fa fa-star level"></em>
+                                                    <i class="level mdi-star-face mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
                                                 {% endfor %}
                                             {% endif %}
 
                                             {% if gamification_stars < 4 %}
                                                 {% for i in 1..4 - gamification_stars %}
-                                                    <em class="fa fa-star"></em>
+                                                    <i class="mdi-home-outline mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
@@ -160,14 +160,14 @@
                             <li role="presentation" class="active">
                                 <a href="#lp-view-content" title="{{ 'Lesson'|trans }}"
                                    aria-controls="lp-view-content" role="tab" data-toggle="tab">
-                                    <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span>
+                                    <i class="mdi-book mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
                                     <span class="sr-only">{{ 'Lesson'|trans }}</span>
                                 </a>
                             </li>
                             <li role="presentation">
                                 <a href="#lp-view-forum" title="{{ 'Forum'|trans }}"
                                    aria-controls="lp-view-forum" role="tab" data-toggle="tab">
-                                    <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span>
+                                    <i class="mdi-message-reply-text mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>
                                     <span class="sr-only">{{ 'Forum'|trans }}</span>
                                 </a>
                             </li>
@@ -253,10 +253,10 @@
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
                 $('#learning_path_main').toggleClass('lp-view-collapsed');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-                var className = $('#lp-view-expand-toggle span.fa').attr('class');
-                if (className == 'fa fa-expand') {
+                $('#lp-view-expand-toggle i.mdi').toggleClass('mdi-arrow-expand-horizontal');
+                $('#lp-view-expand-toggle i.mdi').toggleClass('mdi-arrow-collapse-horizontal');
+                var className = $('#lp-view-expand-toggle i.mdi').attr('class');
+                if (className == 'mdi-arrow-collapse-horizontal') {
                     $(this).attr('title', '{{ "Expand" | trans }}');
                 } else {
                     $(this).attr('title', '{{ "Collapse" | trans }}');
@@ -272,11 +272,11 @@
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
                 $('#learning_path_main').toggleClass('lp-view-collapsed');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                $('#lp-view-expand-toggle i.mdi').toggleClass('mdi-arrow-collapse-horizontal');
+                $('#lp-view-expand-toggle i.mdi').toggleClass('mdi-arrow-expand-horizontal');
 
-                var className = $('#lp-view-expand-toggle span.fa').attr('class');
-                if (className == 'fa fa-expand') {
+                var className = $('#lp-view-expand-toggle i.mdi').attr('class');
+                if (className == 'mdi-arrow-expand-horizontal') {
                     $(this).attr('title', '{{ "Expand" | trans }}');
                 } else {
                     $(this).attr('title', '{{ "Collapse" | trans }}');
@@ -290,13 +290,13 @@
 
             $('a#ui-option').on('click', function (e) {
                 e.preventDefault();
-                var icon = $(this).children('.fa');
-                if (icon.is('.fa-chevron-up')) {
-                    icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                var icon = $(this).children('.mdi');
+                if (icon.is('.mdi-chevron-up')) {
+                    icon.removeClass('mdi-chevron-up').addClass('mdi-chevron-down');
 
                     return;
                 }
-                icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                icon.removeClass('mdi-chevron-down').addClass('mdi-chevron-up');
             });
 
             LPViewUtils.setHeightLPToc();

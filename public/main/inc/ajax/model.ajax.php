@@ -1903,13 +1903,13 @@ switch ($action) {
                 );
                 $detailButtons[] = Display::url(
                     Display::return_icon('2rightarrow.png'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id']
+                    api_get_path(WEB_CODE_PATH).'mySpace/course.php?sid='.$session['id']
                 );
 
                 $item = [
                     'name' => Display::url(
                         $session['name'],
-                        api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id']
+                        api_get_path(WEB_CODE_PATH).'mySpace/course.php?sid='.$session['id']
                     ),
                     'date' => $dateToString,
                     'course_per_session' => $count_courses_in_session,

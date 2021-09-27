@@ -52,7 +52,17 @@ export default {
     const showBreadcrumb = ref(true);
 
     const layout = computed(
-        () => `${currentRoute.value.meta.layout || defaultLayout}Layout`
+        () => {
+            let queryParams = new URLSearchParams(window.location.href);
+
+            if (queryParams.has('lp')
+                || (queryParams.has('origin') && queryParams.get('origin') === 'learnpath')
+            ) {
+                return 'EmptyLayout';
+            } else {
+                return `${currentRoute.value.meta.layout || defaultLayout}Layout`
+            }
+        }
     );
     provide(DefaultApolloClient, apolloClient)
 

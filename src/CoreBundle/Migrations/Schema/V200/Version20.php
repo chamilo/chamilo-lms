@@ -28,7 +28,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('set autocommit=0');
         $this->addSql('set unique_checks=0');
         $this->addSql('set foreign_key_checks=0');
-        $this->addSql('set innodb_autoinc_lock_mode=2');
 
         // Basic checks.
         $this->abortIf(!$this->adminExist(), 'Admin not found in the system');

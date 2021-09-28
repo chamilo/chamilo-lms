@@ -119,7 +119,7 @@
                 </q-item>
                 <q-item href="/logout" tag="a" clickable class="">
                   <q-item-section>
-                    {{ $t('Signed out') }}
+                    {{ $t('Sign out') }}
                   </q-item-section>
                 </q-item>
               </q-list>

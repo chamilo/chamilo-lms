@@ -9,6 +9,7 @@
       >
         <CourseCard
             :course="edge.node.course"
+            :session-id="session._id"
         />
       </div>
   </div>

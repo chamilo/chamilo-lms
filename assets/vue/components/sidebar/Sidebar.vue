@@ -15,7 +15,7 @@
       <div class="flex items-center justify-center mt-4">
         <div class="flex items-center">
           <span class="text-white text-2xl mx-2 font-semibold">
-            <img class="" style="width:200px" src="/build/css/themes/chamilo/images/header-logo.png" />
+            <img style="height:40px" src="/build/css/themes/chamilo/images/header-logo.svg" />
             <img class="hidden w-5" src="/build/css/themes/chamilo/images/avatar.svg" />
           </span>
         </div>

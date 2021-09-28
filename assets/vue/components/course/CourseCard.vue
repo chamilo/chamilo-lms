@@ -8,7 +8,7 @@
     <div class="p-4">
       <div class="h-10 flex flex-row justify-between">
         <div class="line-clamp-2 text-md w-5/6">
-          <router-link :to="{ name: 'CourseHome', params: {id: course._id, course: course}}">
+          <router-link :to="{ name: 'CourseHome', params: {id: course._id, course: course}, query: { sid: sessionId } }">
             {{ course.title }}
           </router-link>
         </div>
@@ -60,6 +60,11 @@ export default {
   name: 'CourseCard',
   props: {
     course: Object,
+    sessionId: {
+      type: Number,
+      required: false,
+      default: 0
+    }
   },
   data() {
     return {

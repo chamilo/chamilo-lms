@@ -149,7 +149,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $attempt = $attemptRepo->findOneBy([
                         'user' => $userId,
                         'questionId' => $questionId,
-                        'filename' => $fileName
+                        'filename' => $fileName,
                     ]);
                     if (null !== $attempt) {
                         if ($attempt->getAttemptFiles()->count() > 0) {

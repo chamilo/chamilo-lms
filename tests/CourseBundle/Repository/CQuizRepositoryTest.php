@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 
 class CQuizRepositoryTest extends AbstractApiTest
 {
@@ -40,7 +41,7 @@ class CQuizRepositoryTest extends AbstractApiTest
             ->setPageResultConfiguration([])
             ->setHideQuestionTitle(true)
             ->setRandomAnswers(false)
-            ->setStartTime(new \DateTime())
+            ->setStartTime(new DateTime())
             ->setExpiredTime(100)
             ->setSaveCorrectAnswers(1)
             ->setDisplayCategoryName(1)

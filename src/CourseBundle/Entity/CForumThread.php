@@ -186,12 +186,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get forumId.
-     *
-     * @return null|CForum
-     */
-    public function getForum()
+    public function getForum(): ?CForum
     {
         return $this->forum;
     }

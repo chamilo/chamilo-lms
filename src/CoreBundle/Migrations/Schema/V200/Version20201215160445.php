@@ -222,8 +222,12 @@ final class Version20201215160445 extends AbstractMigrationChamilo
 
                 $course = $courseRepo->find($courseId);
 
-                /** @var CForumThread $thread */
+                /** @var CForumThread|null $thread */
                 $thread = $forumThreadRepo->find($threadId);
+
+                if (null === $thread) {
+                    continue;
+                }
 
                 $forum = $thread->getForum();
                 // For some reason the thread doesn't have a forum, so we ignore the thread posts.

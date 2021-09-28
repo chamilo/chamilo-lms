@@ -523,6 +523,10 @@ class ExtraField extends Model
      */
     public static function getLocalizationInput($variable, $text)
     {
+        $textHelp = $text;
+        if (is_array($text)) {
+            $textHelp = $text[0];
+        }
         return '
                 <div class="form-group">
                     <label for="geolocalization_extra_'.$variable.'"
@@ -543,7 +547,7 @@ class ExtraField extends Model
                 </div>
                 <div class="form-group">
                     <label for="map_extra_'.$variable.'" class="col-sm-2 control-label">
-                        '.$text.' - '.get_lang('Map').'
+                        '.$textHelp.' - '.get_lang('Map').'
                     </label>
                     <div class="col-sm-8">
                         <div name="map_extra_'.$variable.'"

@@ -7,6 +7,7 @@ import userRoutes from './user';
 import userGroupRoutes from './usergroup';
 import userRelUserRoutes from './userreluser';
 import calendarEventRoutes from './ccalendarevent';
+import sessionRoutes from './session';
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
@@ -64,6 +65,12 @@ const router = createRouter({
                     path: '/courses', name: 'MyCourses', component: MyCourseList,
                     meta: {requiresAuth: true},
                 },
+            ]
+        },
+        {
+            path: '/sessions',
+            component: MySessionList,
+            children: [
                 {
                     path: '/sessions', name: 'MySessions', component: MySessionList,
                     meta: {requiresAuth: true},
@@ -96,7 +103,8 @@ const router = createRouter({
         userRoutes,
         userGroupRoutes,
         userRelUserRoutes,
-        calendarEventRoutes
+        calendarEventRoutes,
+        sessionRoutes
     ]
 });
 

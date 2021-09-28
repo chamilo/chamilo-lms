@@ -161,21 +161,26 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             $admin = $this->getAdmin();
 
             foreach ($items as $itemData) {
-                $id = $itemData['iid'];
+                $id = (int) $itemData['iid'];
                 /** @var CForumThread $resource */
                 $resource = $forumThreadRepo->find($id);
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
 
-                $forumId = $itemData['forum_id'];
+                $forumId = (int) $itemData['forum_id'];
                 if (empty($forumId)) {
                     continue;
                 }
 
-                $course = $courseRepo->find($courseId);
-                /** @var CForum $resource */
+                /** @var CForum|null $forum */
                 $forum = $forumRepo->find($forumId);
+                if (null === $forum) {
+                    continue;
+                }
+
+                $course = $courseRepo->find($courseId);
+
                 $result = $this->fixItemProperty(
                     'forum_thread',
                     $forumThreadRepo,
@@ -206,6 +211,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 $id = (int) $itemData['iid'];
                 /** @var CForumPost $resource */
                 $resource = $forumPostRepo->find($id);
+
                 if ($resource->hasResourceNode()) {
                     continue;
                 }

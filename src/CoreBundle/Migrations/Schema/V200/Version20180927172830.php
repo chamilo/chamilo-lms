@@ -88,6 +88,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_5DA7884C29CCBAD0 ON c_forum_thread (forum_id);');
         }
         $this->addSql('DELETE FROM c_forum_thread WHERE forum_id NOT IN (SELECT iid from c_forum_forum)');
+        $this->addSql('DELETE FROM c_forum_post WHERE thread_id NOT IN (SELECT iid from c_forum_thread)');
 
         if (false === $table->hasForeignKey('FK_5DA7884C29CCBAD0')) {
             $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid) ON DELETE SET NULL;');

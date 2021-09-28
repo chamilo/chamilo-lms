@@ -50,6 +50,13 @@ class SystemTemplate
      */
     protected $content;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="language", type="string", length=40, nullable=true, unique=false)
+     */
+    protected $language;
+
     public function __construct()
     {
         $this->comment = '';
@@ -149,6 +156,30 @@ class SystemTemplate
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set language.
+     *
+     * @param string $language
+     *
+     * @return SystemTemplate
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * Get language.
+     *
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 
     /**

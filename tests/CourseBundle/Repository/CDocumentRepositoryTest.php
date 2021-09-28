@@ -16,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 
 class CDocumentRepositoryTest extends AbstractApiTest
@@ -820,7 +821,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $link = $document->getFirstResourceLink();
 
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $link->setVisibility(888);
 
         $link->setUserGroup(null);

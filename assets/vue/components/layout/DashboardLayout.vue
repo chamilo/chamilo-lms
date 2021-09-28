@@ -163,7 +163,7 @@
             </q-item-section>
           </q-item>
 
-          <q-separator inset class="q-my-sm" />
+          <q-separator v-if="isAdmin" inset class="q-my-sm" />
 
           <q-item v-if="isAdmin" class="GNL__drawer-item" v-ripple v-for="link in linksAdmin" :key="link.text" :to="link.url"  clickable>
             <q-item-section avatar>

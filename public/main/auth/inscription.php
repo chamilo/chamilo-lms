@@ -148,7 +148,7 @@ $user_already_registered_show_terms = false;
 if ('true' === api_get_setting('allow_terms_conditions')) {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
     // Ofaj change
-    if (api_is_anonymous() === true) {
+    if (true === api_is_anonymous()) {
         $user_already_registered_show_terms = false;
     }
 }
@@ -516,7 +516,7 @@ if (!empty($_GET['phone'])) {
     $defaults['phone'] = Security::remove_XSS($_GET['phone']);
 }
 
-if (api_get_setting('openid_authentication') === 'true' && !empty($_GET['openid'])) {
+if ('true' === api_get_setting('openid_authentication') && !empty($_GET['openid'])) {
     $defaults['openid'] = Security::remove_XSS($_GET['openid']);
 }
 

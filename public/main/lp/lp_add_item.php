@@ -43,13 +43,13 @@ if ($learnPath->get_lp_session_id() != api_get_session_id()) {
 }
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array()."
-$(function() {        
+$(function() {
     if ($('#previous')) {
         if('parent is'+$('#idParent').val()) {
             load_cbo($('#idParent').val());
         }
     }
-    
+
     $('.lp_resource_element').click(function() {
         //window.location.href = $('a', this).attr('href');
     });

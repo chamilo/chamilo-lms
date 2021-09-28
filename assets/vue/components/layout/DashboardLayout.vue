@@ -275,6 +275,7 @@ export default {
       { icon: 'mdi-clipboard-text', url: '/main/admin/course_list.php', text: 'Courses' },
       { icon: 'mdi-clipboard-text',  url: '/main/session/session_list.php', text: 'Sessions' },
       { icon: 'mdi-cogs', url: '/main/admin/index.php', text: 'Administration' },
+      { icon: 'mdi-chart-box', url: '/main/mySpace/index.php', text: 'Reporting' },
     ],
     links3: [
       //{ icon: '', text: 'Settings' },

@@ -24,6 +24,10 @@ class Version20 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $this->addSql('set sql_mode=""');
+        // Optimize bulk operations - see https://dev.mysql.com/doc/refman/5.6/en//optimizing-innodb-bulk-data-loading.html
+        $this->addSql('set autocommit=0');
+        $this->addSql('set unique_checks=0');
+        $this->addSql('set foreign_key_checks=0');
 
         // Basic checks.
         $this->abortIf(!$this->adminExist(), 'Admin not found in the system');

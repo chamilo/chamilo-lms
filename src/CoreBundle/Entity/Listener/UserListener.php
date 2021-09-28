@@ -39,12 +39,15 @@ class UserListener
         if (!$user->hasResourceNode()) {
             // Check if creator is set with $resource->setCreator()
             $creator = $user->getResourceNodeCreator();
-
             if (null === $creator) {
                 /** @var User|null $defaultCreator */
                 $defaultCreator = $this->security->getUser();
                 if (null !== $defaultCreator) {
                     $creator = $defaultCreator;
+                } else {
+                    if (!empty($user->getCreatorId())) {
+                        $creator = api_get_user_entity($user->getCreatorId());
+                    }
                 }
             }
 

@@ -142,7 +142,7 @@ class UserManager
         $redirectToURLAfterLogin = ''
     ) {
         $authSource = !empty($authSource) ? $authSource : PLATFORM_AUTH_SOURCE;
-        $creatorId = empty($creatorId) ? api_get_user_id() : 0;
+        $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
 
         if (0 === $creatorId) {
             Display::addFlash(

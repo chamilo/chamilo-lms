@@ -40,7 +40,6 @@ export default {
     SessionCardList,
   },
   setup() {
-    const loading = ref('Loading');
     const store = useStore();
     let user = computed(() => store.getters['security/getUser']);
 
@@ -51,7 +50,7 @@ export default {
         user: "/api/users/" + userId
       }, );
 
-      const sessions = useResult(result, null, (data) => {
+      const sessions = useResult(result, [], (data) => {
         return data.sessionRelUsers.edges.map(function(edge) {
           return edge.node.session;
         });

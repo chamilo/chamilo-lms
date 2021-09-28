@@ -258,11 +258,11 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $sessionId = $item['session_id'] ?? 0;
             $groupId = $item['to_group_id'] ?? 0;
 
-            $newVisibility = ResourceLink::VISIBILITY_PENDING;
+            $newVisibility = ResourceLink::VISIBILITY_DRAFT;
             // Old visibility (item property) is based in this switch:
             switch ($visibility) {
                 case 0:
-                    $newVisibility = ResourceLink::VISIBILITY_PENDING;
+                    $newVisibility = ResourceLink::VISIBILITY_DRAFT;
 
                     break;
                 case 1:

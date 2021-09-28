@@ -34,6 +34,7 @@ const router = createRouter({
             component: Index,
             meta: {
                 requiresAuth: false,
+                showBreadcrumb: false,
             }
         },
         {

@@ -37,18 +37,20 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE message SET parent_id = NULL WHERE parent_id = 0');
 
-        $sql = 'SELECT id, parent_id FROM message WHERE parent_id IS NOT NULL';
+        $sql = 'SELECT id, parent_id FROM message WHERE parent_id IS NOT NULL AND parent_id <> 0';
         $result = $connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
+
         foreach ($items as $item) {
             $id = $item['id'];
-            $parentId = $item['parent_id'];
+            $parentId = (int) $item['parent_id'];
             $sql = "SELECT id FROM message WHERE id = $parentId";
             $result = $connection->executeQuery($sql);
             $subItem = $result->fetchAllAssociative();
+
             if (empty($subItem)) {
                 $sql = "DELETE FROM message WHERE id = $id";
-                $connection->executeQuery($sql);
+                $this->addSql($sql);
             }
         }
 

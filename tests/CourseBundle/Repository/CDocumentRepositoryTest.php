@@ -16,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 
 class CDocumentRepositoryTest extends AbstractApiTest
@@ -816,18 +817,33 @@ class CDocumentRepositoryTest extends AbstractApiTest
         ;
 
         $documentRepo->create($document);
-
         $documentRepo->setVisibilityPublished($document);
+
         $link = $document->getFirstResourceLink();
+
+        $this->expectException(LogicException::class);
+        $link->setVisibility(888);
+
+        $link->setUserGroup(null);
+
+        $this->assertFalse($link->hasGroup());
+        $this->assertFalse($link->hasSession());
+        $this->assertTrue($link->isPublished());
+        $this->assertFalse($link->isDraft());
+        $this->assertFalse($link->isPending());
+
         $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $link->getVisibility());
+        $this->assertSame('Published', $link->getVisibilityName());
 
         $documentRepo->setVisibilityDraft($document);
         $link = $document->getFirstResourceLink();
         $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $link->getVisibility());
+        $this->assertSame('Draft', $link->getVisibilityName());
 
         $documentRepo->toggleVisibilityPublishedDraft($document);
         $link = $document->getFirstResourceLink();
         $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $link->getVisibility());
+        $this->assertSame('Published', $link->getVisibilityName());
 
         $documentRepo->toggleVisibilityPublishedDraft($document);
         $link = $document->getFirstResourceLink();
@@ -836,14 +852,17 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $documentRepo->setVisibilityPending($document);
         $link = $document->getFirstResourceLink();
         $this->assertSame(ResourceLink::VISIBILITY_PENDING, $link->getVisibility());
+        $this->assertSame('Pending', $link->getVisibilityName());
 
         $documentRepo->setVisibilityDeleted($document);
         $link = $document->getFirstResourceLink();
         $this->assertSame(ResourceLink::VISIBILITY_DELETED, $link->getVisibility());
+        $this->assertSame('Deleted', $link->getVisibilityName());
 
         $documentRepo->softDelete($document);
         $link = $document->getFirstResourceLink();
         $this->assertSame(ResourceLink::VISIBILITY_DELETED, $link->getVisibility());
+        $this->assertSame('Deleted', $link->getVisibilityName());
     }
 
     public function testGetTotalSpaceByCourse(): void

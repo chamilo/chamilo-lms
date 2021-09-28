@@ -73,12 +73,12 @@ if ($is_platform_admin) {
             Display::return_icon('statistics.png', get_lang('Current courses report'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
         );
-        /*
-        $menu_items[] = Display::url(
-            Display::return_icon('dashboard.png', get_lang('Dashboard'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'dashboard/index.php'
-        );
-        */
+    /*
+    $menu_items[] = Display::url(
+        Display::return_icon('dashboard.png', get_lang('Dashboard'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'dashboard/index.php'
+    );
+    */
     } else {
         $menu_items[] = Display::url(
             Display::return_icon(

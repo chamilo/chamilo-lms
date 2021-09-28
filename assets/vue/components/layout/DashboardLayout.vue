@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh LpR lff" class="bg-grey-1">
-    <q-header elevated class="bg-white text-grey-8" height-hint="64">
+    <q-header class="bg-white text-grey-8 header-border-bottom" height-hint="64">
       <q-toolbar>
         <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
           <img style="height:40px" src="/build/css/themes/chamilo/images/header-logo.svg" />

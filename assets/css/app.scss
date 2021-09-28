@@ -195,6 +195,10 @@
     @apply flex flex-row;
   }
 
+  .header-border-bottom {
+    border-bottom: 1px solid #e4e9ed !important;
+  }
+
   @import "scss/index.scss";
 }
 

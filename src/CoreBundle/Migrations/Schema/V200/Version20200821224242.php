@@ -106,7 +106,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         //$this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
         $this->addSql('UPDATE message SET user_receiver_id = NULL WHERE user_receiver_id = 0');
 
-        $connection = $this->getEntityManager()->getConnection();
+        /*$connection = $this->getEntityManager()->getConnection();
         $result = $connection->executeQuery('SELECT * FROM message WHERE user_receiver_id IS NOT NULL');
         $messages = $result->fetchAllAssociative();
 
@@ -123,9 +123,9 @@ final class Version20200821224242 extends AbstractMigrationChamilo
                 }
                 //$this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
             }
-        }
+        }*/
 
-        if (false === $table->hasForeignKey('FK_B6BD307FF6C43E79')) {
+        if (!$table->hasForeignKey('FK_B6BD307FF6C43E79')) {
             $this->addSql(
                 'ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)'
             );

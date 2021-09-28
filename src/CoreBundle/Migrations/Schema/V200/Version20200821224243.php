@@ -24,14 +24,15 @@ final class Version20200821224243 extends AbstractMigrationChamilo
 
         if ($messages) {
             foreach ($messages as $message) {
-                $messageId = $message['id'];
-                $receiverId = $message['user_receiver_id'];
+                $messageId = (int) $message['id'];
+                $receiverId = (int) $message['user_receiver_id'];
 
                 $result = $connection->executeQuery(" SELECT * FROM message_rel_user WHERE message_id = $messageId AND user_id = $receiverId");
                 $exists = $result->fetchAllAssociative();
 
                 if (empty($exists)) {
-                    $this->addSql("INSERT INTO message_rel_user (message_id, user_id, msg_read, starred) VALUES('$messageId', '$receiverId', 1, 0) ");
+                    $sql = "INSERT INTO message_rel_user (message_id, user_id, msg_read, starred, receiver_type) VALUES('$messageId', '$receiverId', 1, 0, 1) ";
+                    $this->addSql($sql);
                 }
                 //$this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
             }

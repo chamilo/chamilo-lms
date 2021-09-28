@@ -411,6 +411,12 @@ abstract class AbstractResource
     {
         $link = $this->getFirstResourceLinkFromCourseSession($course, $session);
         if (null === $link) {
+            if ((new ReflectionClass($this))->hasProperty('loadCourseResourcesInSession')) {
+                $link = $this->getFirstResourceLinkFromCourseSession($course);
+            }
+        }
+
+        if (null === $link) {
             return false;
         }
 

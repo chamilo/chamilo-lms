@@ -5357,13 +5357,13 @@ class learnpath
         $finish = $this->getFinalItemForm();
         $size = ICON_SIZE_MEDIUM; //ICON_SIZE_BIG
         $headers = [
-            Display::return_icon('folder_document.png', get_lang('Documents'), [], $size),
-            Display::return_icon('quiz.png', get_lang('Tests'), [], $size),
-            Display::return_icon('links.png', get_lang('Links'), [], $size),
-            Display::return_icon('works.png', get_lang('Assignments'), [], $size),
-            Display::return_icon('forum.png', get_lang('Forums'), [], $size),
-            Display::return_icon('add_learnpath_section.png', get_lang('Add section'), [], $size),
-            Display::return_icon('certificate.png', get_lang('Certificate'), [], $size),
+            '<i class="mdi-bookshelf mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Documents')).'"></i>',
+            '<i class="mdi-ballot mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Tests')).'"></i>',
+            '<i class="mdi-file-link mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Links')).'"></i>',
+            '<i class="mdi-inbox-full mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Assignments')).'"></i>',
+            '<i class="mdi-comment-quote mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Forums')).'"></i>',
+            '<i class="mdi-bookmark-multiple mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Add section')).'"></i>',
+            '<i class="mdi-certificate mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Certificate')).'"></i>',
         ];
         $content = '';
         /*$content = Display::return_message(
@@ -6447,7 +6447,8 @@ class learnpath
         return Display::tabs(
             $headers,
             [$documentTree, $new, $form->returnForm()],
-            'subtab'
+            'subtab',
+            ['class' => 'my-2']
         );
     }
 

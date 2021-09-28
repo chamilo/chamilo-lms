@@ -150,19 +150,19 @@
   }
 
   .alert-info {
-    @apply text-white bg-blue-400;
+    @apply text-white bg-ch-info;
   }
 
   .alert-warning {
-    @apply text-yellow-700 bg-yellow-100;
+    @apply text-gray-900 bg-ch-warning;
   }
 
   .alert-success {
-    @apply text-white bg-green-400;
+    @apply text-gray-900 bg-ch-success;
   }
 
   .alert-danger {
-    @apply text-white bg-red-500;
+    @apply text-white bg-ch-error;
   }
 
   // Tabs

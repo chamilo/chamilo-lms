@@ -323,7 +323,7 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
-        if (!$this->categoryBelongToOwner($category)) {
+        if (!api_is_platform_admin()) {
             api_not_allowed(true);
         }
 
@@ -434,7 +434,7 @@ class PortfolioController
      */
     public function deleteCategory(PortfolioCategory $category)
     {
-        if (!$this->categoryBelongToOwner($category)) {
+        if (!api_is_platform_admin()) {
             api_not_allowed(true);
         }
 

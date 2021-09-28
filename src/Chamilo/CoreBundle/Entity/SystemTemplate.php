@@ -53,7 +53,7 @@ class SystemTemplate
     /**
      * @var string
      *
-     * @ORM\Column(name="language", type="string", length=40, nullable=true, unique=false)
+     * ORM\Column(name="language", type="string", length=40, nullable=true, unique=false)
      */
     protected $language;
 

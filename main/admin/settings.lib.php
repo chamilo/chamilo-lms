@@ -1363,7 +1363,7 @@ function searchImageFilter($image)
  */
 function addEditTemplate()
 {
-    global $language_interface;
+    $language_interface = api_get_interface_language();
 
     $em = Database::getManager();
     // Initialize the object.

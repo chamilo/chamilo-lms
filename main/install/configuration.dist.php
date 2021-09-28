@@ -1134,7 +1134,8 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // $_configuration['mail_template_system'] = false;
 
 // Enable filter by language for system and courses templates
-//ALTER TABLE system_template ADD language VARCHAR(40) NOT NULL DEFAULT 'english';	
+//ALTER TABLE system_template ADD language VARCHAR(40) NOT NULL DEFAULT 'english';
+//Edit src/Chamilo/CoreBundle/Entity/SystemTemplate.php and add a '@' character in front of 'ORM\Column(name="language"'
 // $_configuration['template_activate_language_filter'] = false;
 
 // Students can only upload one publication

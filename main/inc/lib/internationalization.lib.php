@@ -165,19 +165,19 @@ function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
 /**
  * Gets the current interface language.
  *
- * @param bool $purified              (optional)    When it is true, a purified (refined)
- *                                    language value will be returned, for example 'french' instead of 'french_unicode'
- * @param bool $setParentLanguageName
+ * @param bool $purified              (optional)    When it is true, a purified (refined) language value will be returned, for example 'french' instead of 'french_unicode'
+ * @param bool $check_sub_language    (optional) Whether we have to consider sub-languages for the determination of a common parent language
+ * @param bool $setParentLanguageName (optional) If $check_sub_language is true and there is a parent, return the parent language rather than the sub-language
  *
  * @throws Exception
  *
  * @return string the current language of the interface
  */
 function api_get_interface_language(
-    $purified = false,
-    $check_sub_language = false,
-    $setParentLanguageName = true
-) {
+    bool $purified = false,
+    bool $check_sub_language = false,
+    bool $setParentLanguageName = true
+): string {
     global $language_interface;
 
     if (empty($language_interface)) {
@@ -188,7 +188,7 @@ function api_get_interface_language(
         static $parent_language_name = null;
 
         if (!isset($parent_language_name)) {
-            // 2. The current language is a sub language so we grab the father's
+            // 2. The current language is a sub language, so we grab the father's
             // setting according to the internalization_database/name_order_convetions.php file
             $language_id = api_get_language_id($language_interface);
             $language_info = api_get_language_info($language_id);

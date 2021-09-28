@@ -203,7 +203,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             $admin = $this->getAdmin();
             foreach ($items as $itemData) {
-                $id = $itemData['iid'];
+                $id = (int) $itemData['iid'];
                 /** @var CForumPost $resource */
                 $resource = $forumPostRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -214,13 +214,11 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                     $resource->setPostTitle(sprintf('Post #%s', $resource->getIid()));
                 }
 
-                $threadId = $itemData['thread_id'];
+                $threadId = (int) $itemData['thread_id'];
 
                 if (empty($threadId)) {
                     continue;
                 }
-
-                $course = $courseRepo->find($courseId);
 
                 /** @var CForumThread|null $thread */
                 $thread = $forumThreadRepo->find($threadId);
@@ -230,10 +228,13 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 }
 
                 $forum = $thread->getForum();
+
                 // For some reason the thread doesn't have a forum, so we ignore the thread posts.
                 if (null === $forum) {
                     continue;
                 }
+
+                $course = $courseRepo->find($courseId);
 
                 $result = $this->fixItemProperty(
                     'forum_post',

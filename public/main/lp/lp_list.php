@@ -76,44 +76,24 @@ if (!empty($sessionId)) {
 
 if ($is_allowed_to_edit) {
     $actionLeft = Display::url(
-        Display::return_icon(
-            'new_learnpath.png',
-            get_lang('Create new learning path'),
-            '',
-            ICON_SIZE_MEDIUM
-        ),
+        '<i class="mdi-map-marker-path mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Create new learning path')).'"></i>',
         api_get_self().'?'.api_get_cidreq().'&action=add_lp'
     );
     $actionLeft .= Display::url(
-        Display::return_icon(
-            'import_scorm.png',
-            get_lang('Import AICC, SCORM and Chamilo learning path'),
-            '',
-            ICON_SIZE_MEDIUM
-        ),
+        '<i class="mdi-archive-arrow-up mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Import AICC, SCORM and Chamilo learning path')).'"></i>',
         '../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
     );
 
     if ('true' === api_get_setting('service_ppt2lp', 'active')) {
         $actionLeft .= Display::url(
-            Display::return_icon(
-                'import_powerpoint.png',
-                get_lang('Chamilo RAPID'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
+            '<i class="mdi-file-powerpoint mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Chamilo RAPID')).'"></i>',
             '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
         );
     }
 
     if ($allowCategory) {
         $actionLeft .= Display::url(
-            Display::return_icon(
-                'new_folder.png',
-                get_lang('Add category'),
-                [],
-                ICON_SIZE_MEDIUM
-            ),
+            '<i class="mdi-folder-plus mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Add category')).'"></i>',
             api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
         );
     }
@@ -182,15 +162,9 @@ $hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
 $options = learnpath::getIconSelect();
 $cidReq = api_get_cidreq();
 
-$defaultLpIcon = Display::return_icon(
-    'learnpath.png',
-    get_lang('Learning path name')
-);
+$defaultLpIcon = '<i class="mdi-map-marker-path mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Learning path name')).'"></i>';
 
-$defaultDisableLpIcon = Display::return_icon(
-    'learnpath_na.png',
-    get_lang('Learning path name')
-);
+$defaultDisableLpIcon = '<i class="mdi-map-marker-path mdi v-icon ch-tool-icon-disabled" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Learning path name')).'"></i>';
 
 $courseSettingsIcon = Display::return_icon(
     'settings.png',
@@ -1012,7 +986,7 @@ $template->assign('no_data', '');
 if (false === $lpIsShown && api_is_allowed_to_edit()) {
     $noData = Display::noDataView(
         get_lang('Learning paths'),
-        Display::return_icon('scorms.png', '', [], 64),
+        '<i class="mdi-map-marker-path mdi v-icon ch-tool-icon-gradient" style="font-size: 128px; width: 128px; height: 128px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Create new learning path')).'"></i>',
         get_lang('Create new learning path'),
         api_get_self().'?'.api_get_cidreq().'&action=add_lp'
     );

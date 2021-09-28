@@ -150,19 +150,19 @@
   }
 
   .alert-info {
-    @apply text-white bg-blue-400;
+    @apply text-white bg-ch-info;
   }
 
   .alert-warning {
-    @apply text-yellow-700 bg-yellow-100;
+    @apply text-gray-900 bg-ch-warning;
   }
 
   .alert-success {
-    @apply text-white bg-green-400;
+    @apply text-gray-900 bg-ch-success;
   }
 
   .alert-danger {
-    @apply text-white bg-red-500;
+    @apply text-white bg-ch-error;
   }
 
   // Tabs
@@ -197,6 +197,16 @@
 
   .header-border-bottom {
     border-bottom: 1px solid #e4e9ed !important;
+  }
+
+  .ch-tool-icon {
+    @apply font-extrabold text-transparent bg-clip-text bg-ch-primary
+  }
+  .ch-tool-icon-disabled {
+    @apply font-extrabold text-transparent bg-clip-text bg-gray-400
+  }
+  .ch-tool-icon-gradient {
+    @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light
   }
 
   @import "scss/index.scss";

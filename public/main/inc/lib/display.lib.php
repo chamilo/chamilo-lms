@@ -2319,23 +2319,23 @@ class Display
             $ariaExpanded = $open ? 'true' : 'false';
 
             $html = <<<HTML
-                <div class="card" id="$id">
-                    <div class="card-header">
+                <div class="v-card bg-white mx-2" id="$id">
+                    <div class="v-card-header text-xl my-2">
                         $title
                     </div>
-                    <div class="card-body">$content</div>
+                    <div class="v-card-text">$content</div>
                 </div>
 HTML;
         } else {
             if (!empty($id)) {
                 $params['id'] = $id;
             }
-            $params['class'] = 'card';
+            $params['class'] = 'v-card bg-white mx-2';
             $html = '';
             if (!empty($title)) {
-                $html .= '<div class="card-header">'.$title.'</div>'.PHP_EOL;
+                $html .= '<div class="v-card-header text-xl my-2">'.$title.'</div>'.PHP_EOL;
             }
-            $html .= '<div class="card-body">'.$content.'</div>'.PHP_EOL;
+            $html .= '<div class="v-card-text">'.$content.'</div>'.PHP_EOL;
             $html = self::div($html, $params);
         }
 

@@ -8,7 +8,7 @@
       <div class="p-10 text-center">
         <div>
           <v-icon
-            icon="mdi-book-open-page-variant"
+            icon="mdi-google-classroom"
             size="72px"
             class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light"
           />

@@ -17,6 +17,10 @@ switch ($action) {
         echo api_get_language_translate_html();
         break;
     case 'translate_portfolio_category':
+        if (false === Security::check_token('get')) {
+            exit;
+        }
+        Security::clear_token();
         if (isset($_REQUEST['new_language']) && isset($_REQUEST['variable_language']) && isset($_REQUEST['category_id'])) {
             $newLanguage = Security::remove_XSS($_REQUEST['new_language']);
             $langVariable = Security::remove_XSS($_REQUEST['variable_language']);

@@ -67,7 +67,7 @@ class PortfolioController
         $originalName = $category->getTitle();
         $variableLanguage = '$'.$this->getLanguageVariable($originalName);
 
-        $translateUrl = api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_portfolio_category';
+        $translateUrl = api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_portfolio_category&sec_token='.Security::get_token();
         $form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
         $form->addHeader(get_lang('AddWordForTheSubLanguage'));
         $form->addText('variable_language', get_lang('LanguageVariable'), false);

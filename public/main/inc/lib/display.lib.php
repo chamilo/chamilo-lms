@@ -1068,7 +1068,10 @@ class Display
         }
 
         $attributes['id'] = ''.$id;
-        $attributes['class'] = 'tab_wrapper ';
+        if (empty($attributes['class'])) {
+            $attributes['class'] = '';
+        }
+        $attributes['class'] .= ' tab_wrapper ';
         $attributes['x-data'] = ' { openTab: 1 } ';
 
         return self::tag(

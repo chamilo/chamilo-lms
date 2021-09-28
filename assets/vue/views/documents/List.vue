@@ -211,8 +211,8 @@
           </Button>
 
           <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-primary" @click="changeVisibilityHandler(slotProps.data, slotProps)">
-            <v-icon v-if="slotProps.data.resourceLinkListFromEntity[0].visibility == 2" icon="mdi-eye"/>
-            <v-icon v-if="slotProps.data.resourceLinkListFromEntity[0].visibility == 0" icon="mdi-eye-off"/>
+            <v-icon v-if="RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility" icon="mdi-eye"/>
+            <v-icon v-if="RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility" icon="mdi-eye-off"/>
           </Button>
 
           <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)">
@@ -329,7 +329,7 @@ import ResourceFileIcon from '../../components/documents/ResourceFileIcon.vue';
 import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
 import DataFilter from '../../components/DataFilter';
 import DocumentsFilterForm from '../../components/documents/Filter';
-import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import {RESOURCE_LINK_PUBLISHED, RESOURCE_LINK_DRAFT} from "../../components/resource_links/visibility";
 
 export default {
   name: 'DocumentsList',
@@ -344,6 +344,8 @@ export default {
   mixins: [ListMixin],
   data() {
     return {
+      RESOURCE_LINK_PUBLISHED: RESOURCE_LINK_PUBLISHED,
+      RESOURCE_LINK_DRAFT: RESOURCE_LINK_DRAFT,
       sortBy: 'title',
       sortDesc: false,
       // columnsQua: [

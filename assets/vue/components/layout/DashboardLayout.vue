@@ -136,6 +136,7 @@
         content-class="bg-white"
         :width="280"
         :breakpoint="850"
+        class="q-mt-sm"
     >
       <q-scroll-area class="fit">
 

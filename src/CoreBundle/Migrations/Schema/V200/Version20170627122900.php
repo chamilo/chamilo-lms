@@ -302,7 +302,6 @@ class Version20170627122900 extends AbstractMigrationChamilo
         $this->addSql("UPDATE settings_current SET selected_value = ''
                            WHERE variable = 'platform_language' AND selected_value IS NULL");
 
-
         // Delete settings
         $settings = [
             'use_session_mode',

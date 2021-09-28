@@ -198,7 +198,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             $sql = "SELECT iid, path FROM c_document
                     WHERE
                           c_id = {$courseId} AND
-                          path NOT LIKE '/../exercises/%'
+                          path NOT LIKE '/../exercises/%' AND
+                          path NOT LIKE '/chat_files/%'
                     ORDER BY filetype DESC, path";
             $result = $connection->executeQuery($sql);
             $documents = $result->fetchAllAssociative();

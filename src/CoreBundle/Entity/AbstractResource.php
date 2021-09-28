@@ -435,19 +435,7 @@ abstract class AbstractResource
             $found = false;
             $link = null;
             foreach ($links as $link) {
-                if (null === $session) {
-                    $found = $link->getCourse() === $course;
-
-                    break;
-                }
-
-                if ((new ReflectionClass($this))->hasProperty('loadCourseResourcesInSession')) {
-                    $found = $link->getSession() === $session || null === $link->getSession();
-
-                    break;
-                }
-
-                if ($link->getSession() === $session) {
+                if ($link->getCourse() === $course && $link->getSession() === $session) {
                     $found = true;
 
                     break;

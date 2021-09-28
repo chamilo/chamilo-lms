@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh LpR lff" class="bg-grey-1">
-    <q-header bordered class="bg-white text-grey-8" height-hint="64">
+    <q-header class="bg-white text-grey-8 header-border-bottom" height-hint="64">
       <q-toolbar>
         <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
           <img style="height:40px" src="/build/css/themes/chamilo/images/header-logo.svg" />
@@ -119,7 +119,7 @@
                 </q-item>
                 <q-item href="/logout" tag="a" clickable class="">
                   <q-item-section>
-                    {{ $t('Signed out') }}
+                    {{ $t('Sign out') }}
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -136,6 +136,7 @@
         content-class="bg-white"
         :width="280"
         :breakpoint="850"
+        class="q-mt-sm"
     >
       <q-scroll-area class="fit">
 
@@ -263,7 +264,7 @@ export default {
     linksUser: [
       //{ icon: 'home', url: '/', text: 'Home' },
       //{ icon: 'star_border', url: '/', text: 'News' },
-      { icon: 'mdi-clipboard-text', url: '/courses', text: 'My courses' },
+      { icon: 'mdi-book-open-page-variant', url: '/courses', text: 'My courses' },
       { icon: 'mdi-google-classroom', url: '/sessions', text: 'My Sessions' },
       { icon: 'mdi-calendar-text', url: '/resources/ccalendarevent', text: 'Events' },
       { icon: 'mdi-chart-box', url: '/main/auth/my_progress.php', text: 'My progress' },
@@ -273,7 +274,7 @@ export default {
     ],
     linksAdmin: [
       { icon: 'mdi-account-multiple', url: '/main/admin/user_list.php', text: 'Users' },
-      { icon: 'mdi-clipboard-text', url: '/main/admin/course_list.php', text: 'Courses' },
+      { icon: 'mdi-book-open-page-variant', url: '/main/admin/course_list.php', text: 'Courses' },
       { icon: 'mdi-google-classroom',  url: '/main/session/session_list.php', text: 'Sessions' },
       { icon: 'mdi-cogs', url: '/main/admin/index.php', text: 'Administration' },
       { icon: 'mdi-chart-box', url: '/main/mySpace/index.php', text: 'Reporting' },

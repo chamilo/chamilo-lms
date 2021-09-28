@@ -7237,7 +7237,7 @@ class learnpath
     {
         // Using doctrine extensions
         $repo = Container::getLpCategoryRepository();
-        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId), api_get_session_entity());
 
         return $qb->getQuery()->getResult();
     }

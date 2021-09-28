@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -434,7 +435,19 @@ abstract class AbstractResource
             $found = false;
             $link = null;
             foreach ($links as $link) {
-                if ($link->getCourse() === $course && $link->getSession() === $session) {
+                if (null === $session) {
+                    $found = $link->getCourse() === $course;
+
+                    break;
+                }
+
+                if ((new ReflectionClass($this))->hasProperty('loadCourseResourcesInSession')) {
+                    $found = $link->getSession() === $session || null === $link->getSession();
+
+                    break;
+                }
+
+                if ($link->getSession() === $session) {
                     $found = true;
 
                     break;

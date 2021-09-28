@@ -123,12 +123,11 @@ class CourseController extends ToolBaseController
         $tools = [];
         $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
+        $skipTools = ['course_tool', 'chat', 'notebook', 'wiki'];
+
         /** @var CTool $item */
         foreach ($result as $item) {
-            if ('course_tool' === $item->getName() ||
-                'chat' === $item->getName() ||
-                'notebook' === $item->getName()
-            ) {
+            if (\in_array($item->getName(), $skipTools, true)) {
                 continue;
             }
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());

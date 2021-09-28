@@ -97,11 +97,11 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                             $em->persist($attemptFile);
                             $em->flush();
 
-                            $sql = "UPDATE c_document
+                            /*$sql = "UPDATE c_document
                                     SET comment = 'skip_migrate'
                                     WHERE iid = $documentId
                             ";
-                            $connection->executeQuery($sql);
+                            $connection->executeQuery($sql);*/
                         }
                     }
                 }
@@ -149,7 +149,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $attempt = $attemptRepo->findOneBy([
                         'user' => $userId,
                         'questionId' => $questionId,
-                        'filename' => $fileName
+                        'filename' => $fileName,
                     ]);
                     if (null !== $attempt) {
                         if ($attempt->getAttemptFiles()->count() > 0) {
@@ -173,11 +173,11 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                         $em->persist($attemptFile);
                         $em->flush();
 
-                        $sql = "UPDATE c_document
+                        /*$sql = "UPDATE c_document
                                 SET comment = 'skip_migrate'
                                 WHERE iid = $documentId
                         ";
-                        $connection->executeQuery($sql);
+                        $connection->executeQuery($sql);*/
                     }
                 }
             }
@@ -198,7 +198,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             $sql = "SELECT iid, path FROM c_document
                     WHERE
                           c_id = {$courseId} AND
-                         (comment IS NULL OR comment <> 'skip_migrate')
+                          path NOT LIKE '/../exercises/%' AND
+                          path NOT LIKE '/chat_files/%'
                     ORDER BY filetype DESC, path";
             $result = $connection->executeQuery($sql);
             $documents = $result->fetchAllAssociative();

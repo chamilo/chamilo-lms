@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Traits\ShowCourseResourcesInSessionTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,6 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CLp extends AbstractResource implements ResourceInterface
 {
+    use ShowCourseResourcesInSessionTrait;
+
     public const LP_TYPE = 1;
     public const SCORM_TYPE = 2;
     public const AICC_TYPE = 3;

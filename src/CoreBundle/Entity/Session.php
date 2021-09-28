@@ -629,7 +629,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @return DateTime
      */
-    public function getDisplayStartDate()
+    public function getDisplayStartDate(): ?DateTime
     {
         return $this->displayStartDate;
     }
@@ -646,7 +646,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @return DateTime
      */
-    public function getDisplayEndDate()
+    public function getDisplayEndDate(): ?DateTime
     {
         return $this->displayEndDate;
     }
@@ -663,7 +663,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @return DateTime
      */
-    public function getAccessStartDate()
+    public function getAccessStartDate(): ?DateTime
     {
         return $this->accessStartDate;
     }
@@ -680,7 +680,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @return DateTime
      */
-    public function getAccessEndDate()
+    public function getAccessEndDate(): ?DateTime
     {
         return $this->accessEndDate;
     }
@@ -697,7 +697,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @return DateTime
      */
-    public function getCoachAccessStartDate()
+    public function getCoachAccessStartDate(): ?DateTime
     {
         return $this->coachAccessStartDate;
     }
@@ -714,7 +714,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @return DateTime
      */
-    public function getCoachAccessEndDate()
+    public function getCoachAccessEndDate(): ?DateTime
     {
         return $this->coachAccessEndDate;
     }
@@ -1164,7 +1164,7 @@ class Session implements ResourceWithAccessUrlInterface
         return false;
     }
 
-    protected function compareDates(DateTime $start, DateTime $end): bool
+    protected function compareDates(DateTime $start, DateTime $end = null): bool
     {
         $now = new Datetime('now');
 

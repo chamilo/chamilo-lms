@@ -15,8 +15,13 @@
           <slot></slot>
         </v-col>
         <v-col md="3">
-          <div v-if="item.attachments && item.attachments.length > 0">
-            <div class="text-h6" v-text="$t('Atachments')"/>
+          <div
+            v-if="item.attachments && item.attachments.length > 0"
+          >
+            <div
+              class="text-h6"
+              v-text="$t('Atachments')"
+            />
             <ul>
               <li
                 v-for="(attachment, index) in item.attachments"

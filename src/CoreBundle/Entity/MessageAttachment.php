@@ -47,7 +47,7 @@ use Doctrine\ORM\Mapping as ORM;
     ],
     iri: 'http://schema.org/MediaObject',
     itemOperations: ['get'],
-    normalizationContext: ['groups' => 'message:read']
+    normalizationContext: ['groups' => 'message:read'],
 )]
 class MessageAttachment extends AbstractResource implements ResourceInterface
 {

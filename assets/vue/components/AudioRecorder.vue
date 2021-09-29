@@ -119,7 +119,8 @@ export default {
       attachAudio,
       URL
     };
-  }
+  },
+  emits: ['attachAudio'],
 }
 </script>
 

@@ -25,7 +25,7 @@ class CreateMessageAttachmentAction extends BaseResourceFileAction
         /** @var UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
 
-        if (!$uploadedFile) {
+        if (empty($uploadedFile)) {
             throw new BadRequestHttpException('file is required');
         }
 

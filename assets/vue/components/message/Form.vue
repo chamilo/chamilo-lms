@@ -16,11 +16,21 @@
         </v-col>
         <v-col md="3">
           <div v-if="item.attachments && item.attachments.length > 0">
-            <div v-text="$t('Atachments')" class="text-h6"/>
+            <div class="text-h6" v-text="$t('Atachments')"/>
             <ul>
-              <li v-for="(attachment, index) in item.attachments" :key="index" class="my-2">
-                <audio v-if="attachment.type.indexOf('audio') === 0" controls class="max-w-full">
-                  <source :src="URL.createObjectURL(attachment)">
+              <li
+                v-for="(attachment, index) in item.attachments"
+                :key="index"
+                class="my-2"
+              >
+                <audio
+                  v-if="attachment.type.indexOf('audio') === 0"
+                  class="max-w-full"
+                  controls
+                >
+                  <source
+                    :src="URL.createObjectURL(attachment)"
+                  >
                 </audio>
               </li>
             </ul>
@@ -28,7 +38,9 @@
             <hr class="my-2">
           </div>
 
-          <AudioRecorder @attach-audio="attachAudios"></AudioRecorder>
+          <AudioRecorder
+            @attach-audio="attachAudios"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -38,14 +50,14 @@
 <script>
 import has from 'lodash/has';
 import useVuelidate from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import {required} from '@vuelidate/validators';
 import AudioRecorder from "../AudioRecorder";
 
 export default {
   name: 'MessageForm',
   components: {AudioRecorder},
   setup() {
-    return { v$: useVuelidate(), URL }
+    return {v$: useVuelidate(), URL}
   },
   props: {
     values: {
@@ -54,11 +66,13 @@ export default {
     },
     errors: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     initialValues: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
   },
   data() {

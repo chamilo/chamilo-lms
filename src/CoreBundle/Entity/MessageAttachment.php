@@ -96,9 +96,14 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->getFilename();
     }
 
-    public function setPath(string $path): self
+    public function getFilename(): string
     {
-        $this->path = $path;
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): self
+    {
+        $this->filename = $filename;
 
         return $this;
     }
@@ -113,9 +118,9 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->path;
     }
 
-    public function setComment(string $comment): self
+    public function setPath(string $path): self
     {
-        $this->comment = $comment;
+        $this->path = $path;
 
         return $this;
     }
@@ -130,9 +135,9 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->comment;
     }
 
-    public function setSize(int $size): self
+    public function setComment(string $comment): self
     {
-        $this->size = $size;
+        $this->comment = $comment;
 
         return $this;
     }
@@ -142,9 +147,9 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->size;
     }
 
-    public function setMessage(Message $message): self
+    public function setSize(int $size): self
     {
-        $this->message = $message;
+        $this->size = $size;
 
         return $this;
     }
@@ -154,16 +159,16 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this->message;
     }
 
-    public function setFilename(string $filename): self
+    public function setMessage(Message $message): self
     {
-        $this->filename = $filename;
+        $this->message = $message;
 
         return $this;
     }
 
-    public function getFilename(): string
+    public function getResourceIdentifier(): int
     {
-        return $this->filename;
+        return $this->getId();
     }
 
     /**
@@ -174,11 +179,6 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getResourceIdentifier(): int
-    {
-        return $this->getId();
     }
 
     public function getResourceName(): string

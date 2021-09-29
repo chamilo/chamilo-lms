@@ -2246,7 +2246,7 @@ class Display
                 'class' => "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass",
                 'style' => $style,
                 'medium' => '',
-                'aria-hidden' => 'true'
+                'aria-hidden' => 'true',
             ]
         );
     }

@@ -76,25 +76,29 @@ if (!empty($sessionId)) {
 
 if ($is_allowed_to_edit) {
     $actionLeft = Display::url(
-        '<i class="mdi-map-marker-path mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Create new learning path')).'"></i>',
-        api_get_self().'?'.api_get_cidreq().'&action=add_lp'
+        Display::getMdiIcon('map-marker-path', 'ch-tool-icon', 'font-size: 32px; width: 32px; height: 32px;'),
+        api_get_self().'?'.api_get_cidreq().'&action=add_lp',
+        ['title' => htmlentities(get_lang('Create new learning path'))]
     );
     $actionLeft .= Display::url(
-        '<i class="mdi-archive-arrow-up mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Import AICC, SCORM and Chamilo learning path')).'"></i>',
-        '../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
+        Display::getMdiIcon('archive-arrow-up', 'ch-tool-icon', 'font-size: 32px; width: 32px; height: 32px;'),
+        '../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH,
+        ['title' => htmlentities(get_lang('Import AICC, SCORM and Chamilo learning path'))]
     );
 
     if ('true' === api_get_setting('service_ppt2lp', 'active')) {
         $actionLeft .= Display::url(
-            '<i class="mdi-file-powerpoint mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Chamilo RAPID')).'"></i>',
-            '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
+            Display::getMdiIcon('file-powerpoint', 'ch-tool-icon', 'font-size: 32px; width: 32px; height: 32px;'),
+            '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH,
+            ['title' => htmlentities(get_lang('Chamilo RAPID'))]
         );
     }
 
     if ($allowCategory) {
         $actionLeft .= Display::url(
-            '<i class="mdi-folder-plus mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Add category')).'"></i>',
-            api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
+            Display::getMdiIcon('folder-plus', 'ch-tool-icon', 'font-size: 32px; width: 32px; height: 32px;'),
+            api_get_self().'?'.api_get_cidreq().'&action=add_lp_category',
+            ['title' => htmlentities(get_lang('Add category'))]
         );
     }
     $actions = Display::toolbarAction('actions-lp', [$actionLeft]);
@@ -545,7 +549,7 @@ foreach ($categories as $category) {
                     if (1 == $details['seriousgame_mode'] && 1 == $details['lp_prevent_reinit']) {
                         // seriousgame mode | next = single
                         $dsp_reinit = Display::url(
-                            Display::getMdiIcon('mdi-sync-circle', 'ch-tool-icon', 'font-size: 22px; width: 22px; height: 22px;'),
+                            Display::getMdiIcon('sync-circle', 'ch-tool-icon', 'font-size: 22px; width: 22px; height: 22px;'),
                             'lp_controller.php?'.$cidReq."&action=switch_attempt_mode&lp_id=$id",
                             ['title' => htmlentities(get_lang('Prevent multiple attempts'))]
                         );
@@ -555,7 +559,7 @@ foreach ($categories as $category) {
                     ) {
                         // single mode | next = multiple
                         $dsp_reinit = Display::url(
-                            Display::getMdiIcon('mdi-sync', 'ch-tool-icon', 'font-size: 22px; width: 22px; height: 22px;'),
+                            Display::getMdiIcon('sync', 'ch-tool-icon', 'font-size: 22px; width: 22px; height: 22px;'),
                             'lp_controller.php?'.$cidReq."&action=switch_attempt_mode&lp_id=$id",
                             ['title' => htmlentities(get_lang('Allow multiple attempts'))]
                         );

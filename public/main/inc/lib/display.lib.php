@@ -2237,9 +2237,18 @@ class Display
         return $html;
     }
 
-    public static function getMdiIcon(string $name): string
+    public static function getMdiIcon(string $name, string $additionalClass = '', string $style = ''): string
     {
-        return '<i class="mdi-'.$name.' mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>';
+        return self::tag(
+            'i',
+            '',
+            [
+                'class' => "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass",
+                'style' => $style,
+                'medium' => '',
+                'aria-hidden' => 'true'
+            ]
+        );
     }
 
     /**

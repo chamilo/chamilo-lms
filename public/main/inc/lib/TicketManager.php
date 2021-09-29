@@ -726,8 +726,7 @@ class TicketManager
         $fileAttach,
         $ticketId,
         $messageId
-    ): bool
-    {
+    ): bool {
         if (!is_array($fileAttach) || UPLOAD_ERR_OK != $fileAttach['error']) {
             return false;
         }

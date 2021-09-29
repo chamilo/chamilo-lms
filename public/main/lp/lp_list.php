@@ -526,7 +526,6 @@ foreach ($categories as $category) {
                     }
                 } else {
                     $dsp_publish = '<i class="mdi-checkbox-multiple-blank-outline mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('do not publish')).'"></i>';
-
                 }
 
                 /*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE

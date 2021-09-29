@@ -536,6 +536,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->getDefaultViewMod());
 $template->assign('lp_title_scorm', $lp->getName());
+$template->assign('lp_item_parents', $oLP->getCurrentItemParentNames($oLP->get_current_item_id()));
 
 // @todo Fix lp_view_accordion
 /*if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {

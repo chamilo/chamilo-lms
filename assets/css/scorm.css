@@ -250,12 +250,6 @@ body {
     padding-right: 1.5em;
 }
 
-.scorm_item_normal a.items-list {
-    color: #666666;
-    display: inline-block;
-    width: 100%;
-}
-
 .scorm_item_normal a:hover {
     text-decoration: none;
 }
@@ -266,15 +260,11 @@ body {
 
 .scorm_item_section.scorm_completed {
     background-color: #F5F5F5;
-    color: #000;
+    color: #fff;
 }
 
 .scorm_completed .item {
     background: url("../../public/img/scorm/scorm_completed.png") no-repeat 10px center;
-}
-
-.scorm_completed .item a {
-    color: #000;
 }
 
 .scorm_failed .item {
@@ -405,16 +395,6 @@ body {
 
 #learning_path_right_zone.no-right-col {
     left: 0;
-}
-
-#learning_path_right_zone .lp-view-tabs .tab-content {
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 45px;
-    border: 1px solid #dddddd;
-    border-top: none;
 }
 
 #learning_path_right_zone .tab-pane {
@@ -735,13 +715,6 @@ body {
     #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
     #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
         top: 0;
-    }
-
-    #learning_path_right_zone .lp-view-tabs .tab-content {
-        bottom: 0;
-        right: 0;
-        top: 45px;
-        left: 0;
     }
 
     #learning_path_right_zone .tab-pane {

@@ -242,6 +242,26 @@
   #learning_path_toc .child_item.lp_item_type_document.scorm_highlight{
     background-color: #f1f4f9;
   }
+  #learning_path_right_zone .lp-view-tabs .tab-content {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    border: 1px solid #dddddd;
+    border-top: none;
+  }
+  .scorm_item_normal a.items-list {
+    color: #666666;
+    display: inline-block;
+    width: 100%;
+  }
+  .scorm_completed .item a{
+    @apply text-gray-500;
+  }
+  .scorm_completed .item a.scorm_highlighted{
+    @apply text-gray-50;
+  }
 
   @import "scss/index.scss";
 }

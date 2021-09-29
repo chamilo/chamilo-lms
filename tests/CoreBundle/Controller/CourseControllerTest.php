@@ -51,7 +51,7 @@ class CourseControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testIndexJsonWithAccessRegistered()
+    public function testIndexJsonWithAccessRegistered(): void
     {
         $client = static::createClient();
 

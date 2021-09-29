@@ -4540,34 +4540,11 @@ class learnpath
     public function getBuildTree($noWrapper = false, $dropElement = false): string
     {
         $mainUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
+        $upIcon = '<i class="mdi-arrow-up-bold mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Up')).'"></i>';
+        $disableUpIcon = '<i class="mdi-arrow-up-bold mdi v-icon ch-tool-icon-disabled" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Up')).'"></i>';
+        $downIcon = '<i class="mdi-arrow-down-bold mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Down')).'"></i>';
+        $previewImage = '<i class="mdi-magnify-plus-outline mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Preview')).'"></i>';
 
-        $upIcon = Display::return_icon(
-            'up.png',
-            get_lang('Up'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $disableUpIcon = Display::return_icon(
-            'up_na.png',
-            get_lang('Up'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $downIcon = Display::return_icon(
-            'down.png',
-            get_lang('Down'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $previewImage = Display::return_icon(
-            'preview_view.png',
-            get_lang('Preview'),
-            [],
-            ICON_SIZE_TINY
-        );
         $lpItemRepo = Container::getLpItemRepository();
         $itemRoot = $lpItemRepo->getRootItem($this->get_id());
 
@@ -4615,22 +4592,27 @@ class learnpath
                 $moveIcon = '';
                 if (TOOL_LP_FINAL_ITEM !== $type) {
                     $moveIcon .= '<a class="moved" href="#">';
-                    $moveIcon .= Display::return_icon(
-                        'move_everywhere.png',
-                        get_lang('Move'),
-                        [],
-                        ICON_SIZE_TINY
-                    );
+                    $moveIcon .= '<i class="mdi-cursor-move mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Move')).'"></i>';
                     $moveIcon .= '</a>';
                 }
 
                 $iconName = str_replace(' ', '', $type);
-                $icon = Display::return_icon(
-                    'lp_'.$iconName.'.png',
-                    '',
-                    [],
-                    ICON_SIZE_TINY
-                );
+                $icon = '';
+                switch ($iconName) {
+                    case 'chapter':
+                    case 'folder':
+                    case 'dir':
+                        $icon = '<i class="mdi-bookmark-multiple mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Up')).'"></i>';
+                        break;
+                    default:
+                        $icon = Display::return_icon(
+                            'lp_'.$iconName.'.png',
+                            '',
+                            [],
+                            ICON_SIZE_TINY
+                        );
+                        break;
+                }
 
                 $urlPreviewLink = $mainUrl.'&action=view_item&mode=preview_document&id='.$itemId.'&lp_id='.$lpId;
                 $previewIcon = Display::url(
@@ -4646,26 +4628,16 @@ class learnpath
                 $url = $mainUrl.'&view=build&id='.$itemId.'&lp_id='.$lpId;
 
                 $preRequisitesIcon = Display::url(
-                    Display::return_icon(
-                        'accept.png',
-                        get_lang('Prerequisites'),
-                        [],
-                        ICON_SIZE_TINY
-                    ),
+                    '<i class="mdi-graph mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Prerequisites')).'"></i>',
                     $url.'&action=edit_item_prereq',
-                    ['class' => 'btn btn-default']
+                    ['class' => '']
                 );
 
                 $editIcon = '<a
                     href="'.$mainUrl.'&action=edit_item&view=build&id='.$itemId.'&lp_id='.$lpId.'&path_item='.$node['path'].'"
-                    class="btn btn-default"
+                    class=""
                     >';
-                $editIcon .= Display::return_icon(
-                    'edit.png',
-                    get_lang('Edit section description/name'),
-                    [],
-                    ICON_SIZE_TINY
-                );
+                $editIcon .= '<i class="mdi-pencil mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Edit section description/name')).'"></i>';
                 $editIcon .= '</a>';
                 $orderIcons = '';
                 /*if ('final_item' !== $type) {
@@ -4686,13 +4658,8 @@ class learnpath
                     data-title = \''.addslashes($title).'\'
                     href="javascript:void(0);"
                     onclick="return deleteItem(this);"
-                    class="btn btn-default">';
-                $deleteIcon .= Display::return_icon(
-                    'delete.png',
-                    get_lang('Delete section'),
-                    [],
-                    ICON_SIZE_TINY
-                );
+                    class="">';
+                $deleteIcon .= '<i class="mdi-delete mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Delete section')).'"></i>';
                 $deleteIcon .= '</a>';
                 $extra = '';
 
@@ -4715,7 +4682,7 @@ class learnpath
                 );
 
                 return
-                    "<div class='flex flex-row'> $moveIcon  $icon <div>$title </div></div>
+                    "<div class='flex flex-row'> $moveIcon  $icon <span class='mx-1'>$title </span></div>
                     $extra
                     $buttons
                     "
@@ -4771,22 +4738,12 @@ class learnpath
         $lpId = $this->lp_id;
         if (!isset($extraField['backTo']) && empty($extraField['backTo'])) {
             $back = Display::url(
-                Display::return_icon(
-                    'back.png',
-                    get_lang('Back to learning paths'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
+                '<i class="mdi-arrow-left-bold-box mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Back to learning paths')).'"></i>',
                 'lp_controller.php?'.api_get_cidreq()
             );
         } else {
             $back = Display::url(
-                Display::return_icon(
-                    'back.png',
-                    get_lang('Back'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
+                '<i class="mdi-arrow-left-bold-box mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Back')).'"></i>',
                 $extraField['backTo']
             );
         }
@@ -4806,12 +4763,7 @@ class learnpath
         $actionsLeft = $back;
 
         $actionsLeft .= Display::url(
-            Display::return_icon(
-                'preview_view.png',
-                get_lang('Preview'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
+            '<i class="mdi-magnify-plus-outline mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Preview')).'"></i>',
             'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'view',
                 'lp_id' => $lpId,
@@ -4838,12 +4790,7 @@ class learnpath
         $request = api_request_uri();
         if (false === strpos($request, 'edit')) {
             $actionsLeft .= Display::url(
-                Display::return_icon(
-                    'settings.png',
-                    get_lang('Course settings'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
+                '<i class="mdi-hammer-screwdriver mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Course settings')).'"></i>',
                 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                     'action' => 'edit',
                     'lp_id' => $lpId,
@@ -4856,12 +4803,7 @@ class learnpath
             in_array($action, ['add_audio'], true)
         ) {
             $actionsLeft .= Display::url(
-                Display::return_icon(
-                    'edit.png',
-                    get_lang('Edit'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
+                '<i class="mdi-pencil mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Edit')).'"></i>',
                 'lp_controller.php?'.http_build_query([
                     'action' => 'build',
                     'lp_id' => $lpId,
@@ -4873,12 +4815,7 @@ class learnpath
             if (1 == $this->subscribeUsers &&
                 $subscriptionSettings['allow_add_users_to_lp']) {
                 $actionsLeft .= Display::url(
-                    Display::return_icon(
-                        'user.png',
-                        get_lang('Subscribe users to learning path'),
-                        '',
-                        ICON_SIZE_MEDIUM
-                    ),
+                    '<i class="mdi-account-multiple-plus mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Subscribe users to learning path')).'"></i>',
                     api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=$lpId&".api_get_cidreq()
                 );
             }
@@ -4929,12 +4866,7 @@ class learnpath
 
         if (api_is_platform_admin() && isset($extraField['authorlp'])) {
             $actionsLeft .= Display::url(
-                Display::return_icon(
-                    'add-groups.png',
-                    get_lang('Author'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
+                '<i class="mdi-account-multiple-plus mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Author')).'"></i>',
                 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                     'action' => 'author_view',
                     'lp_id' => $lpId,
@@ -5357,13 +5289,13 @@ class learnpath
         $finish = $this->getFinalItemForm();
         $size = ICON_SIZE_MEDIUM; //ICON_SIZE_BIG
         $headers = [
-            Display::return_icon('folder_document.png', get_lang('Documents'), [], $size),
-            Display::return_icon('quiz.png', get_lang('Tests'), [], $size),
-            Display::return_icon('links.png', get_lang('Links'), [], $size),
-            Display::return_icon('works.png', get_lang('Assignments'), [], $size),
-            Display::return_icon('forum.png', get_lang('Forums'), [], $size),
-            Display::return_icon('add_learnpath_section.png', get_lang('Add section'), [], $size),
-            Display::return_icon('certificate.png', get_lang('Certificate'), [], $size),
+            '<i class="mdi-bookshelf mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Documents')).'"></i>',
+            '<i class="mdi-ballot mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Tests')).'"></i>',
+            '<i class="mdi-file-link mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Links')).'"></i>',
+            '<i class="mdi-inbox-full mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Assignments')).'"></i>',
+            '<i class="mdi-comment-quote mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Forums')).'"></i>',
+            '<i class="mdi-bookmark-multiple mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Add section')).'"></i>',
+            '<i class="mdi-certificate mdi v-icon ch-tool-icon-gradient" style="font-size: 64px; width: 64px; height: 64px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Certificate')).'"></i>',
         ];
         $content = '';
         /*$content = Display::return_message(
@@ -6447,7 +6379,8 @@ class learnpath
         return Display::tabs(
             $headers,
             [$documentTree, $new, $form->returnForm()],
-            'subtab'
+            'subtab',
+            ['class' => 'mt-2']
         );
     }
 
@@ -6536,7 +6469,7 @@ class learnpath
         $form->addButtonSearch(get_lang('Search'));
         $return = $form->returnForm();*/
 
-        $return = '<ul class = "list-group lp_resource">';
+        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
         $return .= Display::return_icon('new_exercice.png');
         $return .= '<a
@@ -6549,7 +6482,7 @@ class learnpath
             get_lang('Preview')
         );
         $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_TINY);
-        $moveIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
+        $moveIcon = '<i class="mdi-cursor-move mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Move')).'"></i>';
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
         foreach ($exercises as $exercise) {
             $exerciseId = $exercise->getIid();
@@ -6611,12 +6544,7 @@ class learnpath
         $courseIdReq = api_get_cidreq();
         $userInfo = api_get_user_info();
 
-        $moveEverywhereIcon = Display::return_icon(
-            'move_everywhere.png',
-            get_lang('Move'),
-            [],
-            ICON_SIZE_TINY
-        );
+        $moveEverywhereIcon = '<i class="mdi-cursor-move mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Move')).'"></i>';
 
         $categorizedLinks = [];
         $categories = [];
@@ -6645,7 +6573,7 @@ class learnpath
             }
         </script>
 
-        <ul class="list-group lp_resource">
+        <ul class="mt-2 bg-white list-group lp_resource">
             <li class="list-group-item lp_resource_element disable_drag ">
                 '.Display::return_icon('linksnew.gif').'
                 <a
@@ -6719,7 +6647,7 @@ class learnpath
      */
     public function get_student_publications()
     {
-        $return = '<ul class="list-group lp_resource">';
+        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element">';
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
@@ -6738,12 +6666,7 @@ class learnpath
                     data-id="'.$workId.'"
                     >';
                 $return .= '<a class="moved" href="#">';
-                $return .= Display::return_icon(
-                    'move_everywhere.png',
-                    get_lang('Move'),
-                    [],
-                    ICON_SIZE_TINY
-                );
+                $return .= '<i class="mdi-cursor-move mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Move')).'"></i>';
                 $return .= '</a> ';
 
                 $return .= $icon;
@@ -6806,7 +6729,7 @@ class learnpath
             }
         }
 
-        $return = '<ul class="list-group lp_resource">';
+        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
 
         // First add link
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
@@ -6833,7 +6756,7 @@ class learnpath
                 }
             }
         </script>';
-        $moveIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
+        $moveIcon = '<i class="mdi-cursor-move mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Move')).'"></i>';
         foreach ($a_forums as $forum) {
             $forumId = $forum->getIid();
             $title = Security::remove_XSS($forum->getForumTitle());

@@ -7,7 +7,7 @@
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 <div class="lp-view-zone-container">
                     <div id="scorm-info">
-                        <div id="panel-scorm" class="panel-body">
+                        <div id="panel-scorm" class="bg-ch-primary panel-body">
                             <div class="image-avatar">
                                 {% if lp_author == '' %}
                                     <div class="text-center">
@@ -155,7 +155,15 @@
         <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
             <div class="lp-view-zone-container">
                 <div class="lp-view-tabs">
-                    <div id="navTabBar" class="nav-tabs-bar">
+                    <div id="navTabBar" class="mt-2 mb-16 nav-tabs-bar">
+                        <div class="text-left">
+                            <h2 class="text-2xl">{{ lp_title_scorm }}</h2>
+                            <div id="item-parent-names">
+                                {% for parent_title in lp_item_parents %}
+                                    <h3 class="text-xl">{{  parent_title }}</h3>
+                                {% endfor %}
+                            </div>
+                        </div>
                         <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                             <li role="presentation" class="active">
                                 <a href="#lp-view-content" title="{{ 'Lesson'|trans }}"
@@ -176,7 +184,7 @@
 
                     {% include '@ChamiloCore/LearnPath/menubar.html.twig' %}
 
-                    <div id="tab-iframe" class="tab-content">
+                    <div id="tab-iframe" class="auto tab-content">
                         <div role="tabpanel" class="tab-pane active" id="lp-view-content">
                             <div id="wrapper-iframe">
                                 {% if lp_mode == 'fullscreen' %}

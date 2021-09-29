@@ -617,7 +617,7 @@ foreach ($categories as $category) {
                 /*  DEBUG  */
                 if ('test' === $test_mode || api_is_platform_admin()) {
                     if (1 == $details['lp_scorm_debug']) {
-                        $dsp_debug = Display::url(,
+                        $dsp_debug = Display::url(
                             Display::getMdiIcon('bug-check', 'ch-tool-icon', 'font-size: 22px; width: 22px; height: 22px;'),
                             "lp_controller.php?$cidReq&action=switch_scorm_debug&lp_id=$id",
                             ['title' => htmlentities(get_lang('Hide debug'))]

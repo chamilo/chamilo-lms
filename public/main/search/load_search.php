@@ -1156,20 +1156,20 @@ foreach ($headers as $header => $value) {
 }
 
 $button = '';
+$userReportButton = '';
 if ($userToLoad) {
-    /*$button = Display::url(
+    $button = Display::url(
         get_lang('Ofaj End Of LearnPath'),
-        api_get_path(WEB_CODE_PATH).'messages/new_message.php?prefill=ofaj&send_to_user='.$userToLoad,
+        api_get_path(WEB_PATH).'resources/messages/new',
         ['class' => 'btn btn-default']
     );
-    $button .= '<br /><br />';*/
+    $button .= '<br /><br />';
+    $userReportButton = Display::url(
+        get_lang('Diagnostic Validate LearningPath'),
+        api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userToLoad,
+        ['class' => 'btn btn-primary']
+    );
 }
-
-$userReportButton = Display::url(
-    get_lang('Diagnostic Validate LearningPath'),
-    api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userToLoad,
-    ['class' => 'btn btn-primary']
-);
 
 $tpl->assign('grid', $grid.$button.$table->toHtml().$userReportButton);
 $tpl->assign('grid_js', $griJs);

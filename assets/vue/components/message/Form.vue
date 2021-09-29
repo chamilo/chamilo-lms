@@ -15,9 +15,20 @@
           <slot></slot>
         </v-col>
         <v-col md="3">
-          <div v-text="$t('Atachments')" class="text-h6"/>
+          <div v-if="item.attachments && item.attachments.length > 0">
+            <div v-text="$t('Atachments')" class="text-h6"/>
+            <ul>
+              <li v-for="(attachment, index) in item.attachments" :key="index" class="my-2">
+                <audio v-if="attachment.type.indexOf('audio') === 0" controls class="max-w-full">
+                  <source :src="URL.createObjectURL(attachment)">
+                </audio>
+              </li>
+            </ul>
 
-          <AudioRecorder></AudioRecorder>
+            <hr class="my-2">
+          </div>
+
+          <AudioRecorder @attach-audio="attachAudios"></AudioRecorder>
         </v-col>
       </v-row>
     </v-container>
@@ -34,7 +45,7 @@ export default {
   name: 'MessageForm',
   components: {AudioRecorder},
   setup() {
-    return { v$: useVuelidate() }
+    return { v$: useVuelidate(), URL }
   },
   props: {
     values: {
@@ -87,6 +98,15 @@ export default {
 
     violations() {
       return this.errors || {};
+    }
+  },
+  methods: {
+    attachAudios(audio) {
+      if (!this.item.attachments) {
+        this.item.attachments = [];
+      }
+
+      this.item.attachments.push(audio);
     }
   },
   validations: {

@@ -175,6 +175,17 @@ export default {
     }),
   },
   methods: {
+    onCreated(message) {
+      if (this.item.attachments) {
+        this.item.attachments.forEach(attachment => {
+          this.createWithFormData({
+            messageId: message.id,
+            file: attachment
+          });
+        })
+      }
+    },
+    ...mapActions('messageattachment', ['createWithFormData']),
     ...mapActions('message', ['create', 'reset'])
   }
 };

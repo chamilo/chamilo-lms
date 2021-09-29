@@ -1,26 +1,37 @@
 <template>
-    <div class="py-2">
+    <div class="py-4">
         <q-btn v-if="!isRecording" color="primary" icon="mic" :label="$t('Start recording')" @click="record()"/>
 
-        <q-btn v-if="isRecording" color="red" icon="stop" :label="$t('Stop recording')" @click="stop()"/>
+        <q-btn v-if="isRecording" :label="$t('Stop recording')" color="red" icon="stop" @click="stop()"/>
 
         <div v-for="(audio, index) in audioList" :key="index" class="py-2">
-            <audio controls style="max-width: 100%;">
-                <source :src="audio">
+            <audio controls class="max-w-full">
+                <source :src="URL.createObjectURL(audio)">
             </audio>
+            {{ $t('Size') }} {{ audio.size }}
+            <q-btn :label="$t('Attach')" class="my-1" color="green" icon="attachment" size="sm"
+                   @click="attachAudio(audio)"/>
         </div>
     </div>
 </template>
 
 <script>
-import {ref} from "vue";
+import {reactive, toRefs} from "vue";
 
 export default {
     name: "AudioRecorder",
-
-    setup() {
-        const isRecording = ref(false)
-        const audioList = ref([]);
+    props: {
+        multiple: {
+            type: Boolean,
+            required: false,
+            default: true
+        },
+    },
+    setup(props, {emit}) {
+        const recorderState = reactive({
+            isRecording: false,
+            audioList: [],
+        });
 
         let mediaRecorder = null;
         let mediaChunks = [];
@@ -37,16 +48,17 @@ export default {
                         mediaChunks.push(e.data)
                     };
                     mediaRecorder.onstop = e => {
-                        const blob = new Blob(mediaChunks, {type: 'audio/ogg; codecs=opus'});
-                        const audioUrl = URL.createObjectURL(blob);
+                        stream.getAudioTracks()[0].stop();
+
+                        const audioItem = new Blob(mediaChunks, {type: 'audio/ogg; codecs=opus'});
 
                         mediaChunks = [];
 
-                        audioList.value.push(audioUrl);
+                        recorderState.audioList.push(audioItem);
                     };
                     mediaRecorder.start();
 
-                    isRecording.value = true;
+                    recorderState.isRecording = true;
                 })
                 .catch(console.log);
         }
@@ -56,16 +68,30 @@ export default {
                 return;
             }
 
+            if (false === props.multiple && recorderState.audioList.length > 0) {
+                recorderState.audioList.shift();
+            }
+
             mediaRecorder.stop();
-            mediaRecorder.stream.getAudioTracks()[0].stop();
-            isRecording.value = false;
+            recorderState.isRecording = false;
+        }
+
+        function attachAudio(audio) {
+            emit('attach-audio', audio);
+
+            const index = recorderState.audioList.indexOf(audio);
+
+            if (index >= 0) {
+                recorderState.audioList.splice(index, 1);
+            }
         }
 
         return {
             record,
             stop,
-            audioList,
-            isRecording
+            ...toRefs(recorderState),
+            attachAudio,
+            URL
         };
     }
 }

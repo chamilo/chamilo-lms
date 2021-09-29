@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use Chamilo\CoreBundle\Controller\Api\CreateMessageAttachmentAction;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,6 +16,39 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="message_attachment")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository")
  */
+#[ApiResource(
+    collectionOperations: [
+        'get',
+        'post' => [
+            'controller' => CreateMessageAttachmentAction::class,
+            'deserialize' => false,
+            'validation_groups' => ['Default', 'message_attachment:create'],
+            'openapi_context' => [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                    'messageId' => [
+                                        'type' => 'integer',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    iri: 'http://schema.org/MediaObject',
+    itemOperations: ['get'],
+    normalizationContext: ['groups' => 'message:read']
+)]
 class MessageAttachment extends AbstractResource implements ResourceInterface
 {
     /**
@@ -39,7 +74,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     protected int $size;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="attachments")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="attachments", cascade={"persist"})
      * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
      */
     protected Message $message;

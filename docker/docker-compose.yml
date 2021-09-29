@@ -6,7 +6,7 @@ services:
     build:
       dockerfile: ./Dockerfile
     restart: 'always'
-    volumes: 
+    volumes:
       - chamilowww:/var/www/html
     depends_on:
       - mariadb
@@ -18,7 +18,7 @@ services:
   mariadb:
     image: "mariadb:latest"
     restart: 'always'
-    volumes: 
+    volumes:
       - data-db-chamilo2:/var/lib/mysql
       # Backups restore
       # - ./Chamilo/backup/chamilo-backup-file.sql:/docker-entrypoint-initdb.d/dump.sql
@@ -31,6 +31,6 @@ services:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-volumes: 
+volumes:
   chamilowww2:
   data-db-chamilo2:

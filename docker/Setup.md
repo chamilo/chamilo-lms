@@ -11,7 +11,7 @@ Not all possible PHP extensions have been enabled but only the required ones as 
 
 You can easily modify it to add more extensions. Layers are not squashed to make sure you can refresh Chamilo source for example by rebuilding without eventually needing refresh the previous layers.
 
-As for the database it expect you can point to yours or use a default MariaDB container when using the `docker compose up` version. 
+As for the database it expect you can point to yours or use a default MariaDB container when using the `docker compose up` version.
 
 ## Test stack (`docker compose` approach)
 

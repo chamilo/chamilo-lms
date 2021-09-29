@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  chamilo:
+    image: "chamilo2:latest"
+    build:
+      dockerfile: ./Dockerfile
+    restart: 'always'
+    volumes: 
+      - chamilowww:/var/www/html
+    depends_on:
+      - mariadb
+    restart: 'always'
+    ports:
+      - '80:80'
+    links:
+      - mariadb
+  mariadb:
+    image: "mariadb:latest"
+    restart: 'always'
+    volumes: 
+      - data-db-chamilo2:/var/lib/mysql
+      # Backups restore
+      # - ./Chamilo/backup/chamilo-backup-file.sql:/docker-entrypoint-initdb.d/dump.sql
+      # Mounted local volumes
+      # - "/var/lib/mysql/data:${MARIADB_DATA_DIR}"
+      # - "/var/lib/mysql/logs:${MARIADB_LOG_DIR}"
+      # - /var/docker/mariadb/conf:/etc/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+volumes: 
+  chamilowww2:
+  data-db-chamilo2:

@@ -285,31 +285,6 @@ body {
     background: url("../../public/img/scorm/scorm_not_attempted.png") no-repeat 10px center;
 }
 
-.scorm_highlight .item {
-    background: url("../../public/img/scorm/scorm_highlight.png") no-repeat 10px center !important;
-    color: #009AB8;
-}
-
-.scorm_highlight.scorm_completed .item {
-    background: url("../../public/img/scorm/scorm_current.png") no-repeat 10px center !important;
-}
-
-.scorm_highlight.scorm_failed .item {
-    background: url("../../public/img/scorm/scorm_failed.png") no-repeat 10px center !important;
-}
-
-.scorm_highlight a {
-    /* color: #FFFFFF !important;*/
-}
-
-.scorm_item_normal.scorm_highlight {
-    background-color: #00829C;
-}
-
-.scorm_item_normal.scorm_highlight a {
-    /* color: #FFFFFF; once again this make links invisible!! */
-}
-
 /* END SCORM CSS BASE*/
 #scorm-info {
     padding: 0;
@@ -667,14 +642,6 @@ body {
     background: url(../../public/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
 }
 
-.scorm_item_normal.scorm_highlight.scorm_not_attempted {
-    background: url(../../public/img/icons/svg/check-not-attempted.svg) #00829C right center no-repeat;
-}
-
-.scorm_item_normal.scorm_highlight.scorm_completed {
-    background: url(../../public/img/icons/svg/check-highlight.svg) #00829C right center no-repeat;
-}
-
 .sidebar-scorm {
     border-right: 1px solid #e6e6e6;
 }
@@ -695,9 +662,6 @@ body {
     padding-left: 20px;
 }
 
-.scorm_item_normal.scorm_highlight a {
-    color: #FFFFFF;
-}
 .tab-none-forum{
     top: 0 !important;
 }
@@ -739,12 +703,7 @@ body {
 #learning_path_toc .root_item.lp_item_type_document.scorm_not_attempted{
     background: url(../../public/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
 }
-#learning_path_toc .root_item.lp_item_type_document.scorm_highlight{
-    background-color: #f1f4f9;
-}
-#learning_path_toc .child_item.lp_item_type_document.scorm_highlight{
-    background-color: #f1f4f9;
-}
+
 .status-heading .panel-heading .item-action{
     padding: 10px 15px;
     display: inline-block;

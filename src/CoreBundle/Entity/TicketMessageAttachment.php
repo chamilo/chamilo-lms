@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ticket_message_attachments")
  * @ORM\Entity
  */
-class TicketMessageAttachment
+class TicketMessageAttachment extends AbstractResource implements ResourceInterface
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -68,6 +68,11 @@ class TicketMessageAttachment
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
     protected ?DateTime $lastEditDateTime = null;
+
+    public function __toString(): string
+    {
+        return $this->getFilename();
+    }
 
     /**
      * @return int
@@ -133,6 +138,47 @@ class TicketMessageAttachment
     public function setSize(int $size): self
     {
         $this->size = $size;
+
+        return $this;
+    }
+
+    public function getTicket(): Ticket
+    {
+        return $this->ticket;
+    }
+
+    public function setTicket(Ticket $ticket): self
+    {
+        $this->ticket = $ticket;
+
+        return $this;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getFilename();
+    }
+
+    public function setResourceName(string $name)
+    {
+        return $this->setFilename($name);
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function setInsertUserId(int $insertUserId): self
+    {
+        $this->insertUserId = $insertUserId;
+
+        return $this;
+    }
+
+    public function setInsertDateTime(DateTime $insertDateTime): self
+    {
+        $this->insertDateTime = $insertDateTime;
 
         return $this;
     }

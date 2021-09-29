@@ -3,12 +3,14 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Ticket;
+use Chamilo\CoreBundle\Entity\TicketMessage;
 use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class TicketManager.
@@ -716,64 +718,66 @@ class TicketManager
     /**
      * Attachment files when a message is sent.
      *
-     * @param $file_attach
-     * @param $ticketId
-     * @param $message_id
-     *
-     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function saveMessageAttachmentFile(
-        $file_attach,
+        $fileAttach,
         $ticketId,
-        $message_id
-    ) {
-        throw new Exception('Implement saveMessageAttachmentFile');
-        $now = api_get_utc_datetime();
-        $userId = api_get_user_id();
-        $ticketId = (int) $ticketId;
-
-        $new_file_name = add_ext_on_mime(
-            stripslashes($file_attach['name']),
-            $file_attach['type']
-        );
-        $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
-        if (!filter_extension($new_file_name)) {
-            echo Display::return_message(
-                get_lang('File upload failed: this file extension or file type is prohibited'),
-                'error'
-            );
-        } else {
-            throw new Exception('@todo file upload ticket_attachment');
-            //$result = api_upload_file('ticket_attachment', $file_attach, $ticketId);
-            if ($result) {
-                $safe_file_name = Database::escape_string($new_file_name);
-                $safe_new_file_name = Database::escape_string($result['path_to_save']);
-                $sql = "INSERT INTO $table_support_message_attachments (
-                        filename,
-                        path,
-                        ticket_id,
-                        message_id,
-                        size,
-                        sys_insert_user_id,
-                        sys_insert_datetime,
-                        sys_lastedit_user_id,
-                        sys_lastedit_datetime
-                    ) VALUES (
-                        '$safe_file_name',
-                        '$safe_new_file_name',
-                        '$ticketId',
-                        '$message_id',
-                        '".$file_attach['size']."',
-                        '$userId',
-                        '$now',
-                        '$userId',
-                        '$now'
-                    )";
-                Database::query($sql);
-
-                return true;
-            }
+        $messageId
+    ): bool
+    {
+        if (!is_array($fileAttach) || UPLOAD_ERR_OK != $fileAttach['error']) {
+            return false;
         }
+
+        $em = Database::getManager();
+
+        $ticket = $em->find(Ticket::class, $ticketId);
+        $message = $em->find(TicketMessage::class, $messageId);
+
+        $newFileName = add_ext_on_mime(
+            stripslashes($fileAttach['name']),
+            $fileAttach['type']
+        );
+
+        $fileName = $fileAttach['name'];
+
+        if (!filter_extension($newFileName)) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('File upload failed: this file extension or file type is prohibited'),
+                    'error'
+                )
+            );
+
+            return false;
+        }
+
+        $currentUser = api_get_user_entity();
+
+        $repo = Container::getTicketMessageAttachmentRepository();
+        $attachment = (new TicketMessageAttachment())
+            ->setFilename($fileName)
+            ->setPath(uniqid('ticket_message', true))
+            ->setMessage($message)
+            ->setSize((int) $fileAttach['size'])
+            ->setTicket($ticket)
+            ->setInsertUserId($currentUser->getId())
+            ->setInsertDateTime(api_get_utc_datetime(null, false, true))
+            ->addUserLink($currentUser)
+            ->setParent($currentUser)
+        ;
+
+        $em->persist($attachment);
+        $em->flush();
+
+        $file = new UploadedFile($fileAttach['tmp_name'], $fileAttach['name'], $fileAttach['type'], $fileAttach['error']);
+
+        $repo->addFile($attachment, $file);
+
+        return true;
     }
 
     /**

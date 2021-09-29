@@ -49,7 +49,7 @@ class Ticket
      * @ORM\ManyToOne(targetEntity="TicketCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
-    protected TicketProject $category;
+    protected TicketCategory $category;
 
     /**
      * @ORM\ManyToOne(targetEntity="TicketPriority")

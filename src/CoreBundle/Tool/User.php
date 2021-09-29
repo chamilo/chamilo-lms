@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Tool;
 
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\PersonalFile;
+use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 
 class User extends AbstractTool implements ToolInterface
 {
@@ -36,6 +37,7 @@ class User extends AbstractTool implements ToolInterface
         return [
             'files' => PersonalFile::class,
             'message_attachments' => MessageAttachment::class,
+            'ticket_message_attachments' => TicketMessageAttachment::class,
         ];
     }
 }

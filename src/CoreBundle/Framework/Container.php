@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
@@ -28,6 +29,7 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
+use Chamilo\CoreBundle\Repository\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\TrackExerciseRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -278,6 +280,11 @@ class Container
     public static function getAnnouncementAttachmentRepository(): CAnnouncementAttachmentRepository
     {
         return self::$container->get(CAnnouncementAttachmentRepository::class);
+    }
+
+    public static function getTicketMessageAttachmentRepository(): TicketMessageAttachmentRepository
+    {
+        return self::$container->get(TicketMessageAttachmentRepository::class);
     }
 
     public static function getCourseRepository(): CourseRepository

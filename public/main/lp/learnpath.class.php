@@ -6380,7 +6380,7 @@ class learnpath
             $headers,
             [$documentTree, $new, $form->returnForm()],
             'subtab',
-            ['class' => 'my-2']
+            ['class' => 'mt-2']
         );
     }
 
@@ -6469,7 +6469,7 @@ class learnpath
         $form->addButtonSearch(get_lang('Search'));
         $return = $form->returnForm();*/
 
-        $return = '<ul class = "list-group lp_resource">';
+        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
         $return .= Display::return_icon('new_exercice.png');
         $return .= '<a
@@ -6573,7 +6573,7 @@ class learnpath
             }
         </script>
 
-        <ul class="list-group lp_resource">
+        <ul class="mt-2 bg-white list-group lp_resource">
             <li class="list-group-item lp_resource_element disable_drag ">
                 '.Display::return_icon('linksnew.gif').'
                 <a
@@ -6647,7 +6647,7 @@ class learnpath
      */
     public function get_student_publications()
     {
-        $return = '<ul class="list-group lp_resource">';
+        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element">';
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
@@ -6729,7 +6729,7 @@ class learnpath
             }
         }
 
-        $return = '<ul class="list-group lp_resource">';
+        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
 
         // First add link
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';

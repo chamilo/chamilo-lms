@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -48,14 +49,20 @@ class CourseControllerTest extends WebTestCase
             '/course/'.$course->getId().'/home.json'
         );
         $this->assertResponseIsSuccessful();
+    }
 
-        // Course is REGISTERED.
-        $course = $this->getCourse($course->getId());
+    public function testIndexJsonWithAccessRegistered()
+    {
+        $client = static::createClient();
 
-        $em = $this->getEntityManager();
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $course = $this->createCourse('course with acess for registered users');
         $course->setVisibility(Course::REGISTERED);
-        $em->persist($course);
-        $em->flush();
+        $courseRepo->update($course);
+
+        $userTest1 = $this->createUser('test1');
+        $client->loginUser($userTest1);
 
         $client->request(
             'GET',

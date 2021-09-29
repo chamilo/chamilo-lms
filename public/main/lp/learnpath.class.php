@@ -2569,7 +2569,7 @@ class learnpath
         if ($isAllow && false == $hideIcons) {
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
-                $html .= '<div class="flex flex-row justify-center">';
+                $html .= '<div class="flex flex-row justify-center mb-2">';
                 $html .= "<a
                     class='btn btn-sm btn-default'
                     href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."&isStudentView=false'

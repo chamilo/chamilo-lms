@@ -12,7 +12,7 @@ class ToolIntro extends AbstractTool implements ToolInterface
 {
     public function getName(): string
     {
-        return 'toolintro';
+        return 'ctoolintro';
     }
 
     public function getIcon(): string
@@ -22,7 +22,7 @@ class ToolIntro extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/resources/toolintro';
+        return '/resources/ctoolintro';
     }
 
     public function getCategory(): string
@@ -33,7 +33,7 @@ class ToolIntro extends AbstractTool implements ToolInterface
     public function getResourceTypes(): ?array
     {
         return [
-            'toolintro' => CToolIntro::class,
+            'ctoolintro' => CToolIntro::class,
         ];
     }
 }

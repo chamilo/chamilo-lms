@@ -102,13 +102,13 @@ export default {
   },
   mixins: [ShowMixin],
   computed: {
-    ...mapFields('toolintro', {
+    ...mapFields('ctoolintro', {
       isLoading: 'isLoading'
     }),
-    ...mapGetters('toolintro', ['find'])
+    ...mapGetters('ctoolintro', ['find'])
   },
   methods: {
-    ...mapActions('toolintro', {
+    ...mapActions('ctoolintro', {
       deleteItem: 'del',
       reset: 'resetShow',
       retrieve: 'load'

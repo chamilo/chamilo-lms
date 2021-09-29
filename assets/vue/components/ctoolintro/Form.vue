@@ -63,9 +63,10 @@ export default {
   },
   data() {
     return {
-      item: {
-        content: null
-      },
+      title: null,
+      contentFile: null,
+      parentResourceNodeId: null,
+      resourceNode: null,
     };
   },
   computed: {
@@ -140,8 +141,12 @@ export default {
   },
   validations: {
     item: {
-      content: {
+      contentFile: {
         //required,
+      },
+      parentResourceNodeId: {
+      },
+      resourceNode:{
       }
     }
   }

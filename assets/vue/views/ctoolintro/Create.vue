@@ -13,19 +13,22 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields';
-import ToolIntroForm from '../../components/toolintro/Form.vue';
+import ToolIntroForm from '../../components/ctoolintro/Form.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
-import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
-
+import {computed, onMounted, ref} from "vue";
+import useVuelidate from "@vuelidate/core";
+import {useRoute, useRouter} from "vue-router";
+import isEmpty from "lodash/isEmpty";
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility.js";
 const servicePrefix = 'ToolIntro';
 
 const { mapFields } = createHelpers({
-  getterType: 'toolintro/getField',
-  mutationType: 'toolintro/updateField'
+  getterType: 'ctoolintro/getField',
+  mutationType: 'ctoolintro/updateField'
 });
 
 export default {
@@ -43,7 +46,11 @@ export default {
     };
   },
   computed: {
-    ...mapFields(['error', 'isLoading', 'created', 'violations'])
+    ...mapFields(['error', 'isLoading', 'created', 'violations']),
+    ...mapGetters({
+      'isAuthenticated': 'security/isAuthenticated',
+      'currentUser': 'security/getUser',
+    }),
   },
   created() {
     this.item.parentResourceNodeId = this.$route.params.node;
@@ -55,7 +62,7 @@ export default {
     }]);
   },
   methods: {
-    ...mapActions('toolintro', ['createWithFormData', 'reset'])
+    ...mapActions('ctoolintro', ['create', 'createWithFormData'])
   }
 };
 </script>

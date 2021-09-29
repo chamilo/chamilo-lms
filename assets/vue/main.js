@@ -19,7 +19,7 @@ import userService from './services/user';
 import userGroupService from './services/usergroup';
 import userRelUserService from './services/userreluser';
 import calendarEventService from './services/ccalendarevent';
-import toolIntroService from './services/toolintro';
+import toolIntroService from './services/ctoolintro';
 
 import makeCrudModule from './store/modules/crud';
 //import vuetify from './plugins/vuetify' // path to vuetify export
@@ -69,7 +69,7 @@ store.registerModule(
 );
 
 store.registerModule(
-  'toolintro',
+  'ctoolintro',
   makeCrudModule({
     service: toolIntroService
   })

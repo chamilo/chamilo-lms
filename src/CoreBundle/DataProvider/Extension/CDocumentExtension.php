@@ -85,7 +85,10 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
         ;
 
-        $allowDraft = $this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $allowDraft =
+            $this->security->isGranted('ROLE_ADMIN') ||
+            $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+        ;
 
         if (!$allowDraft) {
             $queryBuilder

@@ -2255,6 +2255,7 @@ class Display
         if (!empty($title)) {
             $additionalAttributes['title'] = htmlentities($title);
         }
+
         return self::tag(
             'i',
             '',

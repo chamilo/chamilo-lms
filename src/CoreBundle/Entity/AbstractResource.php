@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
-use ReflectionClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;

@@ -309,10 +309,13 @@ class UserRepositoryTest extends AbstractApiTest
 
         $this->assertResponseStatusCodeSame(403);
 
+        $admin = $this->getUser('admin');
+        $adminIri = $admin->getIri();
+
         // Try to update admin!
         $this->createClientWithCredentials($tokenTest)->request(
             'PUT',
-            '/api/users/1',
+            $adminIri,
             [
                 'json' => [
                     'firstname' => 'updated',
@@ -325,7 +328,7 @@ class UserRepositoryTest extends AbstractApiTest
         // Try to delete admin!
         $this->createClientWithCredentials($tokenTest)->request(
             'DELETE',
-            '/api/users/1'
+            $adminIri
         );
         $this->assertResponseStatusCodeSame(403);
     }

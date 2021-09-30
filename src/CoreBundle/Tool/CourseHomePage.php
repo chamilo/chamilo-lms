@@ -6,19 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CourseBundle\Entity\CToolIntro;
-
-class CourseTool extends AbstractTool implements ToolInterface
+class CourseHomePage extends AbstractTool implements ToolInterface
 {
     public function getName(): string
     {
-        return 'course_tool';
+        return 'course_homepage';
     }
 
     public function getLink(): string
     {
-        return '/resources/course_tool/links';
+        return '/resources/course_homepage';
     }
 
     public function getIcon(): string
@@ -34,8 +31,6 @@ class CourseTool extends AbstractTool implements ToolInterface
     public function getResourceTypes(): ?array
     {
         return [
-            'links' => CTool::class,
-            'introductions' => CToolIntro::class,
         ];
     }
 }

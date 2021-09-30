@@ -10,7 +10,6 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use function count;
 
 class CCourseDescriptionRepositoryTest extends AbstractApiTest
 {

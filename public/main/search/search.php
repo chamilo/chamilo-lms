@@ -718,7 +718,7 @@ if ($userForm->validate()) {
 
     $superiorUserList = UserManager::getStudentBossList($userInfo['user_id']);
     if ($superiorUserList && false === $isPartial) {
-        $url = api_get_path(WEB_PATH).'load_search.php?user_id='.$userInfo['user_id'];
+        $url = api_get_path(WEB_PATH).'/main/search/load_search.php?user_id='.$userInfo['user_id'];
         $urlContact = api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social';
         $subject = sprintf(get_lang('Diagnosis From User %s'), $userInfo['complete_name']);
         $message = sprintf(

@@ -6,20 +6,34 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CToolIntro.
- *
  * @ORM\Table(
  *     name="c_tool_intro",
  *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"})
  *     }
  * )
  * @ORM\Entity
  */
-class CToolIntro
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')",
+    ],
+    denormalizationContext: [
+        'groups' => ['c_tool_intro:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['c_tool_intro:read'],
+    ],
+)]
+class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
     /**
      * @ORM\Column(name="iid", type="integer")
@@ -29,19 +43,41 @@ class CToolIntro
     protected int $iid;
 
     /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected int $cId;
-
-    /**
      * @ORM\Column(name="intro_text", type="text", nullable=false)
      */
+    #[Assert\NotNull]
+    #[Groups(['c_tool_intro:read', 'c_tool_intro:write'])]
     protected string $introText;
 
     /**
-     * @ORM\Column(name="session_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CTool")
+     * @ORM\JoinColumn(name="c_tool_id", referencedColumnName="iid", nullable=false)
      */
-    protected int $sessionId;
+    #[Assert\NotNull]
+    #[Groups(['c_tool_intro:read', 'c_tool_intro:write'])]
+    protected CTool $courseTool;
+
+    public function __toString(): string
+    {
+        return $this->getIntroText();
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    public function getCourseTool(): CTool
+    {
+        return $this->courseTool;
+    }
+
+    public function setCourseTool(CTool $courseTool): self
+    {
+        $this->courseTool = $courseTool;
+
+        return $this;
+    }
 
     public function setIntroText(string $introText): self
     {
@@ -50,57 +86,23 @@ class CToolIntro
         return $this;
     }
 
-    /**
-     * Get introText.
-     *
-     * @return string
-     */
-    public function getIntroText()
+    public function getIntroText(): string
     {
         return $this->introText;
     }
 
-    /**
-     * Set cId.
-     *
-     * @return CToolIntro
-     */
-    public function setCId(int $cId)
+    public function getResourceIdentifier(): int
     {
-        $this->cId = $cId;
-
-        return $this;
+        return $this->getIid();
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getResourceName(): string
     {
-        return $this->cId;
+        return $this->getIntroText();
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return CToolIntro
-     */
-    public function setSessionId(int $sessionId)
+    public function setResourceName(string $name): self
     {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
+        return $this->setIntroText($name);
     }
 }

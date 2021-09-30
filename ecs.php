@@ -101,6 +101,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__.'/src/CoreBundle/Traits/Repository/*',
             __DIR__.'/src/CourseBundle/Component/*',
             __DIR__.'/src/DataFixtures/*',
+            __DIR__.'/src/CoreBundle/Entity/ResourceInterface.php',
             IncrementStyleFixer::class => 'post',
             PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION,
             PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT,
@@ -123,7 +124,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             \PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff::class.'.FoundInWhileCondition',
             \PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff::class.'.Found',
             \PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer::class,
-            PhpCsFixer\Fixer\Import\NoUnusedImportsFixer::class,
         ]
     );
 };

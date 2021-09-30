@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\Tool\GlobalTool;
 use Chamilo\CoreBundle\Tool\ToolChain;
-use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\Common\Collections\ArrayCollection;

@@ -6,22 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\ResourceType;
-use Chamilo\CoreBundle\Entity\Tool;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\Tool\HandlerCollection;
-use Chamilo\CoreBundle\Tool\ToolChain;
-use Chamilo\CourseBundle\Entity\CAnnouncement;
-use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
-use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
-use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
-use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CToolIntroRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class CToolIntroRepositoryTest extends AbstractApiTest
 {

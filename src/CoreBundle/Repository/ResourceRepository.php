@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -268,8 +269,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
             ;
-            // @todo Add start/end visibility restrictions.
         }
+
+        // @todo Add start/end visibility restrictions.
 
         return $qb;
     }
@@ -289,7 +291,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $reflectionClass = $this->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
-        $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
+        $loadBaseSessionContent = \in_array(
+            ResourceShowCourseResourcesInSessionInterface::class,
+            $reflectionClass->getInterfaceNames(),
+            true
+        );
 
         $this->addCourseQueryBuilder($course, $qb);
 
@@ -373,6 +379,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $qb = $this->getResources($parentNode);
         $this->addCourseQueryBuilder($course, $qb);
         $this->addVisibilityQueryBuilder($qb);
+
+        $qb->andWhere('links.session IS NULL');
 
         return $qb;
     }

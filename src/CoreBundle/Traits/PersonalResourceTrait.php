@@ -6,9 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Traits;
 
-/**
- * Trait ShowCourseResourcesInSessionTrait.
- */
 trait PersonalResourceTrait
 {
     protected bool $loadPersonalResources = true;

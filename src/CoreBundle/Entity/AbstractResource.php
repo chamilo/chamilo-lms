@@ -410,10 +410,9 @@ abstract class AbstractResource
     public function isVisible(Course $course, Session $session = null): bool
     {
         $link = $this->getFirstResourceLinkFromCourseSession($course, $session);
-        if (null === $link) {
-            if ((new ReflectionClass($this))->hasProperty('loadCourseResourcesInSession')) {
-                $link = $this->getFirstResourceLinkFromCourseSession($course);
-            }
+
+        if (null === $link && $this instanceof ResourceShowCourseResourcesInSessionInterface) {
+            $link = $this->getFirstResourceLinkFromCourseSession($course);
         }
 
         if (null === $link) {

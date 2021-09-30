@@ -8,20 +8,16 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Traits\ShowCourseResourcesInSessionTrait;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CCourseDescription.
- *
  * @ORM\Table(name="c_course_description")
  * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CCourseDescriptionRepository")
  */
-class CCourseDescription extends AbstractResource implements ResourceInterface
+class CCourseDescription extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
-    use ShowCourseResourcesInSessionTrait;
-
     public const TYPE_DESCRIPTION = 1;
     public const TYPE_OBJECTIVES = 2;
     public const TYPE_TOPICS = 3;

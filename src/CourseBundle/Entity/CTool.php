@@ -9,9 +9,9 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
-use Chamilo\CoreBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -31,10 +31,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CToolRepository")
  */
-class CTool extends AbstractResource implements ResourceInterface
+class CTool extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
-    use ShowCourseResourcesInSessionTrait;
-
     /**
      * @Groups({"ctool:read"})
      *

@@ -6,6 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-interface ResourceToCourseInterface
+interface ResourceShowCourseResourcesInSessionInterface
 {
 }

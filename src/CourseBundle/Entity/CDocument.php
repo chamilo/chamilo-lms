@@ -17,7 +17,7 @@ use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Traits\ShowCourseResourcesInSessionTrait;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -166,10 +166,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     'resourceNode.resourceFile.size',
     'resourceNode.updatedAt',
 ])]
-class CDocument extends AbstractResource implements ResourceInterface
+class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
-    use ShowCourseResourcesInSessionTrait;
-
     /**
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id

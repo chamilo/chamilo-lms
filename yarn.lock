@@ -1991,14 +1991,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tailwindcss/forms@npm:^0.3.3":
-  version: 0.3.3
-  resolution: "@tailwindcss/forms@npm:0.3.3"
+"@tailwindcss/forms@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "@tailwindcss/forms@npm:0.3.4"
   dependencies:
     mini-svg-data-uri: ^1.2.3
   peerDependencies:
     tailwindcss: ">=2.0.0"
-  checksum: 75637650c5a528ec577f26d6bd043bb9295c2fa443fe943b7391914b0ecd0570624be18bb69da8ca460743538d27b46a18d80936efb6806df991cce2face40d7
+  checksum: 15843088bcb974ecd5aabe7267650de3250ad57271a8140c9c4f4459a49701abbd1da8256ea1ca6e5c063a105fa0d77537b9b1cb7d96122bb93ff1d5eb591313
   languageName: node
   linkType: hard
 
@@ -2319,10 +2319,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.173":
-  version: 4.14.173
-  resolution: "@types/lodash@npm:4.14.173"
-  checksum: 098ac766eb74f95d359a8e1745c173e9cd3c2a7ab7b230f6ec9f1fa78cf977b41692db6f2e5b423e0e5482d93e0407a3b8690b7fe7d41ea8e46685bbb1866809
+"@types/lodash@npm:^4.14.175":
+  version: 4.14.175
+  resolution: "@types/lodash@npm:4.14.175"
+  checksum: d56c57f3784ff73d84ba5d2bb1dba8f6f88f97fb36113010c4a69fd7b823e4fe855b2fbabe8d020bc723e83dc84dc1fc3fc900a6e341fd12a8aaf75f1fddeb70
   languageName: node
   linkType: hard
 
@@ -4111,12 +4111,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alpinejs@npm:^3.4.1":
-  version: 3.4.1
-  resolution: "alpinejs@npm:3.4.1"
+"alpinejs@npm:^3.4.2":
+  version: 3.4.2
+  resolution: "alpinejs@npm:3.4.2"
   dependencies:
     "@vue/reactivity": ~3.1.1
-  checksum: c53fd8a58b82667a837601d2ca0c9b23bf940455060ca5d440d34fdc477d1527e6d4e39b9112b5a4ca5e1c8e92a8000bd9ce9c851db4861990f7651219a6e436
+  checksum: 961a8df23c376b2a7093e9291a14a77ce3464e9af7606ba50e9f10ded3888f5510277a775b9710e5c6439f27ad9a0cde7f68f0d9cdc7316642e887badd1ba06b
   languageName: node
   linkType: hard
 
@@ -4797,21 +4797,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.3.5":
-  version: 10.3.5
-  resolution: "autoprefixer@npm:10.3.5"
+"autoprefixer@npm:^10.3.6":
+  version: 10.3.6
+  resolution: "autoprefixer@npm:10.3.6"
   dependencies:
     browserslist: ^4.17.1
-    caniuse-lite: ^1.0.30001259
+    caniuse-lite: ^1.0.30001260
     fraction.js: ^4.1.1
-    nanocolors: ^0.1.5
+    nanocolors: ^0.2.8
     normalize-range: ^0.1.2
     postcss-value-parser: ^4.1.0
   peerDependencies:
     postcss: ^8.1.0
   bin:
     autoprefixer: bin/autoprefixer
-  checksum: 5c8841f4eaadca1ec606243f71018c929924233dc2f8452c64495c4bf5b94364c610f8c3c53d839c07b6bebeeb852b2d7fa07eb03b7a31d4c28dbe89193fc9bd
+  checksum: 2e1b990592a6f982dfc2311a7c58494080b783ab45531277eed14949994c91704c25c596251fc0967dd2749a0cb6459a110781f724805f3c576dde4d3aa886d2
   languageName: node
   linkType: hard
 
@@ -5745,9 +5745,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"blueimp-file-upload@npm:^10.31.0":
-  version: 10.31.0
-  resolution: "blueimp-file-upload@npm:10.31.0"
+"blueimp-file-upload@npm:^10.32.0":
+  version: 10.32.0
+  resolution: "blueimp-file-upload@npm:10.32.0"
   dependencies:
     blueimp-canvas-to-blob: 3
     blueimp-load-image: 5
@@ -5761,14 +5761,21 @@ __metadata:
       optional: true
     blueimp-tmpl:
       optional: true
-  checksum: 075c84bd9b94ca80f4bdc42ad5c239730b9018f5d13fe9aa6f6f26ac9f640aa746cc6486afa6a65840a348528dc9cc922c6f2a3f33a77d3746d749467615f8e4
+  checksum: f2d876616079928cea271b44916110aaa3c67a261b46020954e3388a3c780267d19d9113cd3832a6f38f52bab46d36bffd742ebc7ce90ae9b153035bf59e9da0
   languageName: node
   linkType: hard
 
-"blueimp-load-image@npm:5, blueimp-load-image@npm:^5.14.0":
+"blueimp-load-image@npm:5":
   version: 5.14.0
   resolution: "blueimp-load-image@npm:5.14.0"
   checksum: 47186f50d7f3918909b18fe92d9cae66638f4c181e1becfc86b74c229863d37387e9001170782c2fc0c85f2c98043177fa3b5a3bc3b04d966b0350d3f2682a05
+  languageName: node
+  linkType: hard
+
+"blueimp-load-image@npm:^5.15.0":
+  version: 5.15.0
+  resolution: "blueimp-load-image@npm:5.15.0"
+  checksum: e468b49a4726c9d661ab412671bb60764153aa1195e080262e1e2405c847b4936ae7d1d03c0f1246ff51e93c4088a7499a80ca99c871ed8829b463ee2d239a91
   languageName: node
   linkType: hard
 
@@ -6396,6 +6403,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"caniuse-lite@npm:^1.0.30001260":
+  version: 1.0.30001261
+  resolution: "caniuse-lite@npm:1.0.30001261"
+  checksum: 7739142d9388560b287e0cedef5c4a9699cc8516afb3d0dc954e15dc6506729f893dc780438d398fb49234f5a2aec9e90e1021a7fbeb33c55368c4a4f5d17b59
+  languageName: node
+  linkType: hard
+
 "canvg@npm:^3.0.6":
   version: 3.0.7
   resolution: "canvg@npm:3.0.7"
@@ -6499,12 +6513,12 @@ __metadata:
     "@popperjs/core": 2.10.1
     "@quasar/extras": ^1.11.1
     "@symfony/webpack-encore": 1.6.1
-    "@tailwindcss/forms": ^0.3.3
+    "@tailwindcss/forms": ^0.3.4
     "@tailwindcss/line-clamp": ^0.2.1
     "@tailwindcss/typography": ^0.4.1
     "@tailwindcss/ui": ^0.7.2
     "@tinymce/tinymce-vue": ^4.0.4
-    "@types/lodash": ^4.14.173
+    "@types/lodash": ^4.14.175
     "@uppy/core": ^2.0.3
     "@uppy/dashboard": ^2.0.3
     "@uppy/drag-drop": ^2.0.2
@@ -6523,20 +6537,20 @@ __metadata:
     "@vue/compiler-sfc": 3.2.13
     "@vuelidate/core": ^2.0.0-alpha.23
     "@vuelidate/validators": ^2.0.0-alpha.20
-    alpinejs: ^3.4.1
-    autoprefixer: ^10.3.5
+    alpinejs: ^3.4.2
+    autoprefixer: ^10.3.6
     axios: ^0.21.4
     babel-cli: 6.26.0
     babel-plugin-transform-builtin-extend: 1.1.2
     babel-polyfill: 6.26.0
     babel-preset-env: 1.7.0
-    blueimp-file-upload: ^10.31.0
-    blueimp-load-image: ^5.14.0
+    blueimp-file-upload: ^10.32.0
+    blueimp-load-image: ^5.15.0
     bootstrap-daterangepicker: ^3.1
     bootstrap-select: ^1.13.18
     chart.js: ^3.5.1
     copy-webpack-plugin: 9.0.1
-    core-js: 3.18.0
+    core-js: 3.18.1
     cropper: ^4.1.0
     datepair.js: ^0.4.17
     deepmerge: ^4.2.2
@@ -6578,7 +6592,7 @@ __metadata:
     optimize-css-assets-webpack-plugin: ^6.0.1
     path: ^0.12.7
     popper.js: ^1.16.1
-    postcss: ^8.3.7
+    postcss: ^8.3.8
     postcss-loader: ^6.1.1
     postcss-prefix-selector: ^1.13.0
     postcss-rtl: ^1.7.3
@@ -6597,7 +6611,7 @@ __metadata:
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
     sweetalert2: ^11.1.7
-    tailwindcss: ^2.2.15
+    tailwindcss: ^2.2.16
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
     textcomplete: ^0.18.2
@@ -7380,10 +7394,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.18.0":
-  version: 3.18.0
-  resolution: "core-js@npm:3.18.0"
-  checksum: a37d8abbfd9fed31bd2f5ddc2ae780af462c27fde4fded94cfc1558b01941fe50f27453d93edad646562a43dc398498b202cf583d0822d0619c1da081a4cae4b
+"core-js@npm:3.18.1":
+  version: 3.18.1
+  resolution: "core-js@npm:3.18.1"
+  checksum: 78ffdaf4a442fc090f5324acba27ed78deb20f9ed7fef04d892b839dddb71dd866432a73416e920e9c0468e45a02d249844090966fa09e4e68a25ef07f2000e7
   languageName: node
   linkType: hard
 
@@ -14087,6 +14101,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"nanocolors@npm:^0.2.2, nanocolors@npm:^0.2.8":
+  version: 0.2.12
+  resolution: "nanocolors@npm:0.2.12"
+  checksum: 6f66a8cccb3bf419aacc9ec416dc948d4cea10681f6cf19ecfebdf707b593ea53f6dd6d675128c41e0a4164e734e54497beb20ddd00dacd859c4b5cad2a8c60f
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:^2.1.0":
   version: 2.1.11
   resolution: "nanoid@npm:2.1.11"
@@ -16364,14 +16385,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.3.7":
-  version: 8.3.7
-  resolution: "postcss@npm:8.3.7"
+"postcss@npm:^8.3.8":
+  version: 8.3.8
+  resolution: "postcss@npm:8.3.8"
   dependencies:
-    nanocolors: ^0.1.5
+    nanocolors: ^0.2.2
     nanoid: ^3.1.25
     source-map-js: ^0.6.2
-  checksum: cbcef5f8be9120336cb5dac6681025e9af34d664a5dbde61ab08c557c7a9030411577464b213e35d0f4d5e4a7d3e2cfee073975ac48c80e37f6384a5aa81a7b7
+  checksum: bea4f2f367c803739ca89c6773aa80ecad6480171db7e1ebb211fabe7eaf7ff68b3b4d007e41f84d561344a588d62d1b50b3e46e1f5c368712100df553fc09ca
   languageName: node
   linkType: hard
 
@@ -18927,9 +18948,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^2.2.15":
-  version: 2.2.15
-  resolution: "tailwindcss@npm:2.2.15"
+"tailwindcss@npm:^2.2.16":
+  version: 2.2.16
+  resolution: "tailwindcss@npm:2.2.16"
   dependencies:
     arg: ^5.0.1
     bytes: ^3.0.0
@@ -18969,7 +18990,7 @@ fsevents@~2.3.2:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: 471dc81b678cc9b887890e062d6a1fe43436703d6837fb7a8ba6b870c694d4ea16ac26f6409cb8c4429fd6ddec3d1fc0f2af5b3fdd0f1f916be4e704d4875ff8
+  checksum: 19042923367fa11bacf45329f6b6bd11e7d1ee7c11ec638213a9c485960fe3f3beafa11f0e91761315b812f3217372aed6f9c40ed18581e3766a6672d01a85c5
   languageName: node
   linkType: hard
 

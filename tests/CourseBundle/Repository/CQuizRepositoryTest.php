@@ -119,8 +119,10 @@ class CQuizRepositoryTest extends AbstractApiTest
         ;
         $repo->create($exercise);
 
+        $this->assertTrue($exercise->isVisible($course));
+
         $qb = $repo->findAllByCourse($course);
-        $this->assertSame(2, \count($qb->getQuery()->getResult()));
+        $this->assertCount(2, $qb->getQuery()->getResult());
 
         $found = $repo->findCourseResourceByTitle('exercise 1', $course->getResourceNode(), $course);
         $this->assertNotNull($found);
@@ -139,18 +141,40 @@ class CQuizRepositoryTest extends AbstractApiTest
 
         // Find resources.
         $foundList = $repo->findCourseResourcesByTitle('exercise 1', $course->getResourceNode(), $course);
-        $this->assertSame(2, \count($foundList));
+        $this->assertCount(2, $foundList);
 
         $items = $repo->getResourcesByCourseOnly($course, $course->getResourceNode())->getQuery()->getResult();
-        $this->assertTrue(\count($items) > 0);
+        $this->assertCount(2, $items);
 
         $qb = $repo->getResourcesByCreator($teacher, $course->getResourceNode());
-        $this->assertSame(2, \count($qb->getQuery()->getResult()));
+        $this->assertCount(2, $qb->getQuery()->getResult());
 
         $qb = $repo->getResourcesByCourseLinkedToUser($teacher, $course);
-        $this->assertSame(2, \count($qb->getQuery()->getResult()));
+        $this->assertCount(2, $qb->getQuery()->getResult());
 
         $qb = $repo->getResourcesByLinkedUser($teacher, $course->getResourceNode());
-        $this->assertSame(0, \count($qb->getQuery()->getResult()));
+        $this->assertCount(0, $qb->getQuery()->getResult());
+
+        $session = $this->createSession('session 1');
+
+        $exercise = (new CQuiz())
+            ->setTitle('exercise 2')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course, $session)
+        ;
+        $repo->create($exercise);
+
+        $items = $repo->getResourcesByCourseOnly($course, $course->getResourceNode())->getQuery()->getResult();
+        $this->assertCount(2, $items);
+
+        $items = $repo->getResourcesByCourse($course)->getQuery()->getResult();
+        $this->assertCount(2, $items);
+
+        $items = $repo->getResourcesByCourse($course, $session)->getQuery()->getResult();
+        $this->assertCount(3, $items);
+
+        $this->assertFalse($exercise->isVisible($course));
+        $this->assertTrue($exercise->isVisible($course, $session));
     }
 }

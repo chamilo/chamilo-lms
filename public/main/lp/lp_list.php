@@ -467,7 +467,7 @@ foreach ($categories as $category) {
                 if ($sessionId == $details['lp_session']) {
                     if (1 == $details['lp_type'] || 2 == $details['lp_type']) {
                         $dsp_build = Display::url(
-                            Display::getMdiIcon('pencil', 'ch-tool-icon', ''    , 22),
+                            Display::getMdiIcon('pencil', 'ch-tool-icon', '', 22),
                             'lp_controller.php?'.$cidReq.'&'
                                 .http_build_query(
                                     [

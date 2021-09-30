@@ -79,14 +79,15 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
             ->innerJoin('node.resourceLinks', 'links')
         ;
 
+        // Do not show deleted resources.
         $queryBuilder
             ->andWhere('links.visibility != :visibilityDeleted')
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
         ;
 
-        $isAllowedToSeeDraft = $this->security->isGranted(['ROLE_ADMIN', 'ROLE_CURRENT_COURSE_TEACHER']);
+        $allowDraft = $this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
-        if ($isAllowedToSeeDraft) {
+        if (!$allowDraft) {
             $queryBuilder
                 ->andWhere('links.visibility != :visibilityDraft')
                 ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)

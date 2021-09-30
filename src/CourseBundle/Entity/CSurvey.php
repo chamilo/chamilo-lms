@@ -16,8 +16,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CSurvey.
- *
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(
  *     name="c_survey",

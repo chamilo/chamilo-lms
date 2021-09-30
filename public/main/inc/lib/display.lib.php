@@ -2237,17 +2237,28 @@ class Display
         return $html;
     }
 
-    public static function getMdiIcon(string $name, string $additionalClass = '', string $style = ''): string
+    public static function getMdiIcon(string $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null): string
     {
+        $sizeString = '';
+        if (!empty($pixelSize)) {
+            $sizeString = 'font-size: '.$pixelSize.'px; width: '.$pixelSize.'px; height: '.$pixelSize.'px; ';
+        }
+        if (empty($style)) {
+            $style = '';
+        }
+        $additionalAttributes = [
+            'class' => "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass",
+            'style' => $sizeString.$style,
+            'medium' => '',
+            'aria-hidden' => 'true',
+        ];
+        if (!empty($title)) {
+            $additionalAttributes['title'] = htmlentities($title);
+        }
         return self::tag(
             'i',
             '',
-            [
-                'class' => "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass",
-                'style' => $style,
-                'medium' => '',
-                'aria-hidden' => 'true',
-            ]
+            $additionalAttributes
         );
     }
 

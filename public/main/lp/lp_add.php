@@ -223,7 +223,7 @@ if ($form->validate()) {
 Display::display_header(get_lang('Create new learning path'), 'Path');
 
 $actions = '<a href="lp_controller.php?'.api_get_cidreq().'">'.
-    '<i class="mdi-arrow-left-bold-box mdi v-icon ch-tool-icon" style="font-size: 32px; width: 32px; height: 32px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Return to learning paths')).'"></i>'
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', '', 32, get_lang('Return to learning paths'))
     .'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 

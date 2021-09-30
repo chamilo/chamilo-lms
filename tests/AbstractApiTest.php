@@ -50,7 +50,7 @@ abstract class AbstractApiTest extends ApiTestCase
     }
 
     /**
-     * Use credentials with token.
+     * Use credentials with token, by default it returns the admin token.
      */
     protected function getUserToken($body = [], $cleanToken = false): string
     {

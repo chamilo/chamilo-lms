@@ -96,13 +96,44 @@ class CDocumentRepositoryTest extends AbstractApiTest
             'title' => $folderName,
             'parentResourceNode' => $course->getResourceNode()->getId(),
         ]);
+    }
+
+    public function testUpdateFolder(): void
+    {
+        $course = $this->createCourse('Test');
+        $courseId = $course->getId();
+
+        // Create folder.
+        $resourceLinkList = [
+            [
+                'cid' => $courseId,
+                'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+        ];
+
+        $folderName = 'folder1';
+        $token = $this->getUserToken([]);
+        $response = $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/documents',
+            [
+                'json' => [
+                    'title' => $folderName,
+                    'filetype' => 'folder',
+                    'parentResourceNodeId' => $course->getResourceNode()->getId(),
+                    'resourceLinkList' => $resourceLinkList,
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
 
         // Update.
-        $id = $response->toArray()['@id'];
+        $iri = $response->toArray()['@id'];
 
         $this->createClientWithCredentials($token)->request(
             'PUT',
-            $id,
+            $iri,
             [
                 'json' => [
                     'title' => 'edited',
@@ -117,14 +148,95 @@ class CDocumentRepositoryTest extends AbstractApiTest
             '@type' => 'Documents',
             'title' => 'edited',
         ]);
+    }
 
-        // Test access.
-        $data = json_decode($response->getContent());
-        $documentId = $data->iid;
+    public function testDeleteFolder(): void
+    {
+        $course = $this->createCourse('Test');
+        $courseId = $course->getId();
+
+        // Create folder.
+        $resourceLinkList = [
+            [
+                'cid' => $courseId,
+                'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+        ];
+
+        $folderName = 'folder1';
+        $token = $this->getUserToken([]);
+        $response = $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/documents',
+            [
+                'json' => [
+                    'title' => $folderName,
+                    'filetype' => 'folder',
+                    'parentResourceNodeId' => $course->getResourceNode()->getId(),
+                    'resourceLinkList' => $resourceLinkList,
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+
+        $iri = $response->toArray()['@id'];
+
+        $this->createClientWithCredentials($token)->request(
+            'DELETE',
+            $iri
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(204);
 
         $this->createClientWithCredentials($token)->request(
             'GET',
-            '/api/documents/'.$documentId,
+            $iri,
+            [
+                'query' => [
+                    'getFile' => true,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(404);
+    }
+
+    public function testAccessFolder(): void
+    {
+        $course = $this->createCourse('Test');
+        $courseId = $course->getId();
+
+        // Create folder.
+        $resourceLinkList = [
+            [
+                'cid' => $courseId,
+                'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+        ];
+
+        $folderName = 'folder1';
+        $token = $this->getUserToken([]);
+        $response = $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/documents',
+            [
+                'json' => [
+                    'title' => $folderName,
+                    'filetype' => 'folder',
+                    'parentResourceNodeId' => $course->getResourceNode()->getId(),
+                    'resourceLinkList' => $resourceLinkList,
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+
+        // Test access.
+        $iri = $response->toArray()['@id'];
+
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            $iri,
             [
                 'query' => [
                     'getFile' => true,
@@ -133,30 +245,20 @@ class CDocumentRepositoryTest extends AbstractApiTest
         );
         $this->assertResponseIsSuccessful();
 
-        $this->createUser('test');
+        // Test as student.
+        $this->createUser('student');
 
-        $testToken = $this->getUserToken(
+        $studentToken = $this->getUserToken(
             [
-                'username' => 'test',
-                'password' => 'test',
+                'username' => 'student',
+                'password' => 'student',
             ],
             true
         );
 
-        $this->createClientWithCredentials($testToken)->request(
+        $this->createClientWithCredentials($studentToken)->request(
             'GET',
-            '/api/documents/'.$documentId,
-            [
-                'query' => [
-                    'cid' => $courseId,
-                ],
-            ]
-        );
-        $this->assertResponseIsSuccessful();
-
-        $this->createClientWithCredentials($testToken)->request(
-            'GET',
-            '/api/documents/'.$documentId,
+            $iri,
             [
                 'query' => [
                     'cid' => 'abc',
@@ -166,6 +268,77 @@ class CDocumentRepositoryTest extends AbstractApiTest
             ]
         );
         $this->assertResponseStatusCodeSame(403);
+
+        $this->createClientWithCredentials($studentToken)->request(
+            'GET',
+            $iri,
+            [
+                'query' => [
+                    'cid' => $courseId,
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/Documents',
+            '@type' => 'Documents',
+            'title' => 'folder1',
+        ]);
+
+        $documentId = $response->toArray()['iid'];
+
+        // Change visibility to draft.
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $document = $documentRepo->find($documentId);
+        $documentRepo->setVisibilityDraft($document);
+
+        // Admin access.
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            $iri,
+            [
+                'query' => [
+                    'cid' => $courseId,
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+
+        $response = $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/documents',
+            [
+                'query' => [
+                    'cid' => $courseId,
+                    'resourceNode.parent' => $course->getResourceNode()->getId(),
+                ],
+            ]
+        );
+        $this->assertCount(1, $response->toArray()['hydra:member']);
+
+        // Student access.
+        $this->createClientWithCredentials($studentToken)->request(
+            'GET',
+            $iri,
+            [
+                'query' => [
+                    'cid' => $courseId,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
+
+        $response = $this->createClientWithCredentials($studentToken)->request(
+            'GET',
+            '/api/documents',
+            [
+                'query' => [
+                    'cid' => $courseId,
+                    'resourceNode.parent' => $course->getResourceNode()->getId(),
+                ],
+            ]
+        );
+        $this->assertCount(0, $response->toArray()['hydra:member']);
     }
 
     public function testUploadFile(): void
@@ -688,9 +861,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertInstanceOf(ResourceLink::class, $link);
         $this->assertSame($link->getVisibility(), ResourceLink::VISIBILITY_PUBLISHED);
         $this->assertSame($link->getCourse(), $course);
-        $this->assertSame($link->getGroup(), null);
-        $this->assertSame($link->getUser(), null);
-        $this->assertSame($link->getUserGroup(), null);
+        $this->assertNull($link->getGroup());
+        $this->assertNull($link->getUser());
+        $this->assertNull($link->getUserGroup());
 
         $teacher = $this->createUser('teacher');
 
@@ -732,14 +905,14 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertInstanceOf(ResourceLink::class, $secondLink);
 
         $this->assertSame($firstLink->getCourse(), $course);
-        $this->assertSame($firstLink->getGroup(), null);
-        $this->assertSame($firstLink->getSession(), null);
-        $this->assertSame($firstLink->getUser(), null);
+        $this->assertNull($firstLink->getGroup());
+        $this->assertNull($firstLink->getSession());
+        $this->assertNull($firstLink->getUser());
 
         $this->assertSame($secondLink->getCourse(), $course);
         $this->assertSame($secondLink->getGroup(), $group);
         $this->assertSame($secondLink->getSession(), $session);
-        $this->assertSame($secondLink->getUser(), null);
+        $this->assertNull($secondLink->getUser());
 
         $user = $this->createUser('test2');
         $document->addResourceToUserList([$user]);
@@ -769,8 +942,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $fourthLink = $document->getResourceNode()->getResourceLinks()[3];
         $this->assertInstanceOf(ResourceLink::class, $fourthLink);
-        $this->assertSame($fourthLink->getUser(), null);
-        $this->assertSame($fourthLink->getSession(), null);
+        $this->assertNull($fourthLink->getUser());
+        $this->assertNull($fourthLink->getSession());
         $this->assertSame($fourthLink->getGroup(), $group2);
 
         $this->assertTrue($document->isVisible($course));
@@ -783,21 +956,21 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $usersAndGroups = $document->getUsersAndGroupSubscribedToResource();
         $this->assertFalse($usersAndGroups['everyone']);
-        $this->assertSame(1, \count($usersAndGroups['users']));
-        $this->assertSame(2, \count($usersAndGroups['groups']));
+        $this->assertCount(1, $usersAndGroups['users']);
+        $this->assertCount(2, $usersAndGroups['groups']);
     }
 
     public function testSeparateUsersGroups(): void
     {
         $usersAndGroupsSeparated = CDocument::separateUsersGroups(['USER:1']);
 
-        $this->assertSame(1, \count($usersAndGroupsSeparated['users']));
-        $this->assertSame(0, \count($usersAndGroupsSeparated['groups']));
+        $this->assertCount(1, $usersAndGroupsSeparated['users']);
+        $this->assertCount(0, $usersAndGroupsSeparated['groups']);
 
         $usersAndGroupsSeparated = CDocument::separateUsersGroups(['USER:1', 'GROUP:1']);
 
-        $this->assertSame(1, \count($usersAndGroupsSeparated['users']));
-        $this->assertSame(1, \count($usersAndGroupsSeparated['groups']));
+        $this->assertCount(1, $usersAndGroupsSeparated['users']);
+        $this->assertCount(1, $usersAndGroupsSeparated['groups']);
     }
 
     public function testSetVisibility(): void

@@ -4039,7 +4039,7 @@ class learnpath
      */
     public function update_reinit()
     {
-        $force = $this->entity->getPreventReinit();
+        $force = $this->prevent_reinit;
         if (1 == $force) {
             $force = 0;
         } elseif (0 == $force) {
@@ -4163,7 +4163,7 @@ class learnpath
     public function set_seriousgame_mode()
     {
         $table = Database::get_course_table(TABLE_LP_MAIN);
-        $force = $this->entity->getSeriousgameMode();
+        $force = $this->seriousgame_mode;
         if (1 == $force) {
             $force = 0;
         } elseif (0 == $force) {
@@ -4185,7 +4185,7 @@ class learnpath
     public function update_scorm_debug()
     {
         $table = Database::get_course_table(TABLE_LP_MAIN);
-        $force = $this->entity->getDebug();
+        $force = $this->scorm_debug;
         if (1 == $force) {
             $force = 0;
         } elseif (0 == $force) {

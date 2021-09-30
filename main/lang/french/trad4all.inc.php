@@ -8741,4 +8741,8 @@ $Guidance = "Guidance";
 $RemoveTime = "Supprimer du temps";
 $CopyWithSessionContent = "Copier avec le contenu de session";
 $ExportByClass = "Exporter par classe";
+$UploadAnswer = "Uploader la réponse";
+$TokenExpiredActionAlreadyRealized = "Token expiré, action déjà réalisée";
+$Corrector = "Correcteur";
+$CorrectionDate = "Date de correction";
 ?>

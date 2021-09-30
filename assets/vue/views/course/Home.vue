@@ -108,6 +108,15 @@
           :go-to-setting-course-tool="goToSettingCourseTool"
       />
 
+      <CourseToolList
+          v-for="tool in tools.plugin"
+          :course="course"
+          :tool="tool"
+          :go-to-course-tool="goToCourseTool"
+          :change-visibility="changeVisibility"
+          :go-to-setting-course-tool="goToSettingCourseTool"
+      />
+
       <ShortCutList
           v-for="shortcut in shortcuts"
           :shortcut="shortcut"

@@ -157,6 +157,7 @@ class ToolChain
             'notebook',
             //'blog',
             'course_tool',
+            'course_homepage',
             'tracking',
             'course_setting',
             'course_maintenance',

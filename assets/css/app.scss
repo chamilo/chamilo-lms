@@ -209,6 +209,11 @@
     @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light
   }
 
+  // Forms
+  input {
+    appearance: auto !important;
+  }
+
   // Learning paths menu brought in to use primary/secondary colors
   .scorm_highlight .item {
     background: url("../../public/img/scorm/scorm_highlight.png") no-repeat 10px center !important;

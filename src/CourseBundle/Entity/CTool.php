@@ -6,21 +6,19 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CTool.
- *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
  *     name="c_tool",
@@ -31,30 +29,38 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CToolRepository")
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')",
+    ],
+    denormalizationContext: [
+        'groups' => ['ctool:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['ctool:read'],
+    ],
+)]
 class CTool extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
     /**
-     * @Groups({"ctool:read"})
-     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
+    #[Groups(['ctool:read'])]
     protected int $iid;
 
     /**
-     * @Groups({"ctool:read"})
-     *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
     #[Assert\NotBlank]
+    #[Groups(['ctool:read'])]
     protected string $name;
 
     /**
-     * @Groups({"ctool:read"})
-     *
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
      */
+    #[Groups(['ctool:read'])]
     protected ?bool $visibility = null;
 
     /**
@@ -81,9 +87,7 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
      */
     protected int $position;
 
-    /**
-     * @Groups({"ctool:read"})
-     */
+    #[Groups(['ctool:read'])]
     protected string $nameToTranslate;
 
     public function __construct()
@@ -167,17 +171,6 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
         $this->tool = $tool;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PostPersist()
-     */
-    public function postPersist(LifecycleEventArgs $args): void
-    {
-        // Update id with iid value
-        /*$em = $args->getEntityManager();
-        $em->persist($this);
-        $em->flush();*/
     }
 
     public function getPosition(): int

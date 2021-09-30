@@ -467,27 +467,27 @@ class AddCourse
                             <h2>'.get_lang('Introduction text').'</h2>
                          </p>';
 
-            $toolIntro = new CToolIntro();
-            $toolIntro
-                ->setCId($course_id)
-                ->setSessionId(0)
-                ->setIntroText($intro_text);
+            $toolIntro = (new CToolIntro())
+                ->setIntroText($intro_text)
+                ->addCourseLink($course)
+            ;
             $manager->persist($toolIntro);
 
-            $toolIntro = new CToolIntro();
-            $toolIntro
-                ->setCId($course_id)
-                ->setSessionId(0)
-                ->setIntroText(get_lang('This page allows users and groups to publish documents.'));
+            $toolIntro = (new CToolIntro())
+                ->setIntroText(get_lang('This page allows users and groups to publish documents.'))
+                ->addCourseLink($course)
+            ;
             $manager->persist($toolIntro);
 
-            $toolIntro = new CToolIntro();
-            $toolIntro
-                ->setCId($course_id)
-                ->setSessionId(0)
-                ->setIntroText(get_lang('The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning "fast" or "speed". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to the page. Because of this, the pages improve continuously.'));
+            $toolIntro = (new CToolIntro())
+                ->setIntroText(
+                    get_lang(
+                        'The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning "fast" or "speed". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to the page. Because of this, the pages improve continuously.'
+                    )
+                )
+                ->addCourseLink($course)
+            ;
             $manager->persist($toolIntro);
-
             $manager->flush();
 
             /*  Exercise tool */

@@ -14,8 +14,10 @@ use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\Tool\GlobalTool;
 use Chamilo\CoreBundle\Tool\ToolChain;
+use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class ToolChainTest extends AbstractApiTest
 {
@@ -125,7 +127,7 @@ class ToolChainTest extends AbstractApiTest
 
         $tools = $toolChain->getTools();
 
-        $this->assertSame($countBefore, \count($tools));
+        $this->assertCount($countBefore, $tools);
 
         $em = $this->getEntityManager();
 
@@ -161,5 +163,21 @@ class ToolChainTest extends AbstractApiTest
 
         $items = $resourceTypeRepo->findAll();
         $this->assertNotEmpty($items);
+
+        $resourceType = (new ResourceType())
+            ->setName('test')
+        ;
+        $this->assertHasNoEntityViolations($resourceType);
+        $em->persist($resourceType);
+        $collection = new ArrayCollection();
+        $collection->add($resourceType);
+
+        $tool = (new Tool())
+            ->setName('lasagna')
+            ->setResourceTypes($collection)
+        ;
+        $this->assertHasNoEntityViolations($tool);
+        $em->persist($tool);
+        $em->flush();
     }
 }

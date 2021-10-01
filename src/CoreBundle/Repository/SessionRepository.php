@@ -65,28 +65,6 @@ class SessionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return SessionRelUser[]
-     */
-    public function getUsersByCourse(Session $session, Course $course, AccessUrl $url)
-    {
-        if (0 === $session->getUsers()->count()) {
-            return [];
-        }
-
-        $qb = $this->addSessionRelUserFilterByUrl($session, $url);
-        $qb
-            ->innerJoin(SessionRelCourseRelUser::class, 'srcu')
-            ->andWhere('srcu.session = :session AND srcu.course = :course ')
-            ->setParameters([
-                'course' => $course,
-                'session' => $session,
-            ])
-        ;
-
-        return $qb->getQuery()->getResult();
-    }
-
-    /**
      * @return Session[]
      */
     public function getSessionsByUser(User $user, AccessUrl $url)

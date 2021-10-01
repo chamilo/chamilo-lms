@@ -47,7 +47,7 @@ class UpdateVueTranslations extends Command
         $languages = $this->languageRepository->findAll();
         $dir = $this->parameterBag->get('kernel.project_dir');
 
-        $vueLocalePath = $dir.'/assets/vue/locales/';
+        $vueLocalePath = $dir.'/assets/locales/';
         $englishJson = file_get_contents($vueLocalePath.'en.json');
         $translations = json_decode($englishJson, true);
 

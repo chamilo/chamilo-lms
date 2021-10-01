@@ -2,7 +2,7 @@ import { createI18n } from 'vue-i18n';
 
 function loadLocaleMessages() {
     const locales = require.context(
-        "./locales",
+        "./../locales",
         true,
         /[A-Za-z0-9-_,\s]+\.json$/i
     );

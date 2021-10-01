@@ -115,7 +115,7 @@ class ResourceNode
      * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
     protected ?ResourceFile $resourceFile = null;
 
     /**

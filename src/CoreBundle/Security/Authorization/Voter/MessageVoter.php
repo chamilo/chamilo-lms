@@ -69,6 +69,7 @@ class MessageVoter extends Voter
 
         switch ($attribute) {
             case self::CREATE:
+            case self::EDIT:
                 if ($message->getSender() === $user) {
                     return true;
                 }
@@ -80,7 +81,6 @@ class MessageVoter extends Voter
                 }
 
                 break;
-            case self::EDIT:
             case self::DELETE:
                 // @todo
                 break;

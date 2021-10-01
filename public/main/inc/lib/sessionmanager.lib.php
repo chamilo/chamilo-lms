@@ -9627,7 +9627,7 @@ class SessionManager
 
         $em = Database::getManager();
 
-        $relationInfo = array_merge(['visiblity' => 0, 'status' => Session::STUDENT], $relationInfo);
+        $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
 
         foreach ($studentIds as $studentId) {
             $user = api_get_user_entity($studentId);

@@ -21,8 +21,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
 /**
- * SessionRepository.
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 class SessionRepository extends ServiceEntityRepository

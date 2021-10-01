@@ -888,6 +888,7 @@ class Session implements ResourceWithAccessUrlInterface
     /**
      * Add a user course subscription.
      * If user status in session is student, then increase number of course users.
+     * Status example: Session::STUDENT
      */
     public function addUserInCourse(int $status, User $user, Course $course): SessionRelCourseRelUser
     {

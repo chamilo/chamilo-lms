@@ -40,6 +40,10 @@ class CreateMessageAttachmentAction extends BaseResourceFileAction
             ->setCreator($message->getSender())
         ;
 
+        foreach ($message->getReceivers() as $receiver) {
+            $attachment->addUserLink($receiver->getReceiver());
+        }
+
         $message->addAttachment($attachment);
 
         $em->persist($attachment);

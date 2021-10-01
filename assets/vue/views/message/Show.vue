@@ -57,51 +57,82 @@
         track-by="id"
     />
 
-    <v-card
-        elevation="2"
-    >
-      <v-card-header>
-        <v-card-header-text>
-          <v-card-title>
-            {{ item.title }}
-          </v-card-title>
-        </v-card-header-text>
-      </v-card-header>
-
-      <v-card-subtitle>
-        <p class="text-base" v-if="item.sender">
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">
+          {{ item.title }}
+        </div>
+        <div
+          v-if="item.sender"
+          class="text-subtitle2"
+        >
           <q-avatar size="32px">
             <img :src="item.sender['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
           </q-avatar>
           {{ item.sender['username'] }}
           {{ $luxonDateTime.fromISO(item['sendDate']).toRelative() }}
-        </p>
-      </v-card-subtitle>
+        </div>
+      </q-card-section>
 
-      <v-card-text>
-        <div v-if="item.receiversTo">
+      <q-card-section>
+        <div
+          v-if="item.receiversTo"
+        >
           {{ $t('To') }} :
-          <v-chip v-for="receiver in item.receiversTo ">
+          <v-chip v-for="receiver in item.receiversTo">
             {{ receiver.receiver['username'] }}
           </v-chip>
         </div>
 
         <div v-if="item.receiversCc.length">
           {{ $t('Cc') }} :
-          <v-chip v-for="receiver in item.receiversCc ">
+          <v-chip v-for="receiver in item.receiversCc">
             {{ receiver.receiver['username'] }}
           </v-chip>
         </div>
+      </q-card-section>
 
-        <div class="flex flex-row">
-          <div class="w-full">
-            <p v-html="item.content" />
+      <q-card-section>
+        <div
+          v-html="item.content"
+        />
+      </q-card-section>
+
+      <q-card-section
+        v-if="item.attachments && item.attachments.length > 0"
+      >
+        <q-separator />
+
+        <p class="my-3">
+          {{ item.attachments.length }} {{ $t('Attachments') }}
+        </p>
+
+        <div class="q-gutter-y-sm q-gutter-x-sm row">
+          <div
+            v-for="(attachment, index) in item.attachments"
+            :key="index"
+          >
+            <div
+              v-if="attachment.resourceNode.resourceFile.audio"
+            >
+              <audio controls>
+                <source :src="attachment.downloadUrl">
+              </audio>
+            </div>
+
+            <q-btn
+              v-else
+              :href="attachment.downloadUrl"
+              flat
+              icon="attachment"
+              type="a"
+            >
+              {{ attachment.resourceNode.resourceFile.originalName }}
+            </q-btn>
           </div>
         </div>
-
-      </v-card-text>
-
-    </v-card>
+      </q-card-section>
+    </q-card>
     <Loading :visible="isLoading" />
   </div>
 </template>

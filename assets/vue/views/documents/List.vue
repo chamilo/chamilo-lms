@@ -32,7 +32,7 @@
 <!--        @request="onRequest"-->
 <!--        v-model:pagination="pagination"-->
 <!--        :no-results-label="$t('No results')"-->
-<!--        :loading-label="$t('Loading...')"-->
+<!--        :loading-label="$t('Loading')"-->
 <!--        :rows-per-page-label="$t('Records per page:')"-->
 <!--        :rows-per-page-options="[10, 20, 50, 0]"-->
 <!--        :loading="isLoading"-->

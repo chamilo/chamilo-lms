@@ -121,9 +121,7 @@ class DateTimeRangePicker extends DateRangePicker
         return '';
     }
 
-    /**
-     */
-    public function parseDateRange(string $dateRange): Array
+    public function parseDateRange(string $dateRange): array
     {
         $dateRange = Security::remove_XSS($dateRange);
         $dates = explode('@@', $dateRange);

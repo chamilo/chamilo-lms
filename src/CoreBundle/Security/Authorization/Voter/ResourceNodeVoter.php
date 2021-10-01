@@ -78,7 +78,6 @@ class ResourceNodeVoter extends Voter
             self::EXPORT,
         ];
 
-        //error_log('resourceNode supports');
         // if the attribute isn't one we support, return false
         if (!\in_array($attribute, $options, true)) {
             return false;
@@ -99,8 +98,6 @@ class ResourceNodeVoter extends Voter
         /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
         $resourceTypeName = $resourceNode->getResourceType()->getName();
-
-        //error_log("resourceNode voteOnAttribute $attribute : ".$resourceNode->getTitle());
 
         // Illustrations are always visible, nothing to check.
         if ('illustrations' === $resourceTypeName) {
@@ -241,7 +238,8 @@ class ResourceNodeVoter extends Voter
 
         // Getting rights from the link
         $rightsFromResourceLink = $link->getResourceRights();
-        $allowAnonsToSee = false;
+        $allowAnonsToView = false;
+
         $rights = [];
         if ($rightsFromResourceLink->count() > 0) {
             // Taken rights from the link.
@@ -251,7 +249,7 @@ class ResourceNodeVoter extends Voter
             //$rights = $link->getResourceNode()->getTool()->getToolResourceRight();
             //$rights = $link->getResourceNode()->getResourceType()->getTool()->getToolResourceRight();
 
-            // By default the rights are:
+            // By default, the rights are:
             // Teachers: CRUD.
             // Students: Only read.
             // Anons: Only read.
@@ -261,20 +259,17 @@ class ResourceNodeVoter extends Voter
             if ($courseId && $link->hasCourse() && $link->getCourse()->getId() === $courseId) {
                 // If teacher.
                 if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_TEACHER)) {
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
+                    $resourceRight = (new ResourceRight())
                         ->setMask($editorMask)
                         ->setRole(self::ROLE_CURRENT_COURSE_TEACHER)
                     ;
                     $rights[] = $resourceRight;
                 }
-
                 // If student.
                 if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT) &&
                     ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
                 ) {
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
+                    $resourceRight = (new ResourceRight())
                         ->setMask($readerMask)
                         ->setRole(self::ROLE_CURRENT_COURSE_STUDENT)
                     ;
@@ -285,9 +280,8 @@ class ResourceNodeVoter extends Voter
                 if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() &&
                     $link->getCourse()->isPublic()
                 ) {
-                    $allowAnonsToSee = true;
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
+                    $allowAnonsToView = true;
+                    $resourceRight = (new ResourceRight())
                         ->setMask($readerMask)
                         ->setRole('IS_AUTHENTICATED_ANONYMOUSLY')
                     ;
@@ -297,8 +291,7 @@ class ResourceNodeVoter extends Voter
 
             if (!empty($groupId)) {
                 if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
+                    $resourceRight = (new ResourceRight())
                         ->setMask($editorMask)
                         ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)
                     ;
@@ -306,8 +299,7 @@ class ResourceNodeVoter extends Voter
                 }
 
                 if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
+                    $resourceRight = (new ResourceRight())
                         ->setMask($readerMask)
                         ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
                     ;
@@ -366,11 +358,10 @@ class ResourceNodeVoter extends Voter
         $currentTeacherSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
 
         //$superAdmin = new GenericRole('ROLE_SUPER_ADMIN');
-        $admin = new GenericRole('ROLE_ADMIN');
+        //$admin = new GenericRole('ROLE_ADMIN');
 
         // Setting Simple ACL.
-        $acl = new Acl();
-        $acl
+        $acl = (new Acl())
             ->addRole($anon)
             ->addRole($userRole)
             ->addRole($student)
@@ -384,9 +375,6 @@ class ResourceNodeVoter extends Voter
 
             ->addRole($currentStudentGroup)
             ->addRole($currentTeacherGroup, self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
-
-            //->addRole($superAdmin)
-            ->addRole($admin)
         ;
 
         // Add a security resource.
@@ -414,20 +402,17 @@ class ResourceNodeVoter extends Voter
         );*/
 
         // Anons can see.
-        if ($allowAnonsToSee) {
+        if ($allowAnonsToView) {
             $acl->allow($anon, null, (string) self::getReaderMask());
         }
 
-        // Admin can do everything
-        $acl->allow($admin);
-        //$acl->allow($superAdmin);
-
-        //if ($token instanceof AnonymousToken) {
         if ($token instanceof NullToken) {
             return $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $linkId, $askedMask);
         }
 
-        foreach ($user->getRoles() as $role) {
+        $roles = $user->getRoles();
+
+        foreach ($roles as $role) {
             if ($acl->isAllowed($role, $linkId, $askedMask)) {
                 return true;
             }

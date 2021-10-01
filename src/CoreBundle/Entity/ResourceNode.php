@@ -70,19 +70,19 @@ class ResourceNode
     public const PATH_SEPARATOR = '/';
 
     /**
-     * @Groups({"resource_node:read", "document:read", "ctool:read", "user_json:read"})
      * @ORM\Id
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[Groups(['resource_node:read', 'document:read', 'ctool:read', 'user_json:read'])]
     protected ?int $id = null;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      * @Gedmo\TreePathSource
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     #[Assert\NotBlank]
     protected string $title;
 
@@ -112,19 +112,18 @@ class ResourceNode
     /**
      * ResourceFile available file for this node.
      *
-     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
-     *
      * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     protected ?ResourceFile $resourceFile = null;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:write"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     #[Assert\NotNull]
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
     protected User $creator;
 
     /**
@@ -153,11 +152,11 @@ class ResourceNode
     protected ?int $level = null;
 
     /**
-     * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\TreePath(appendId=true, separator="/")
      *
      * @ORM\Column(name="path", type="text", nullable=true)
      */
+    #[Groups(['resource_node:read', 'document:read'])]
     protected ?string $path = null;
 
     /**
@@ -176,17 +175,17 @@ class ResourceNode
     protected Collection $comments;
 
     /**
-     * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
+    #[Groups(['resource_node:read', 'document:read'])]
     protected DateTime $createdAt;
 
     /**
-     * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
+    #[Groups(['resource_node:read', 'document:read'])]
     protected DateTime $updatedAt;
 
     #[Groups(['resource_node:read', 'document:read'])]
@@ -212,6 +211,7 @@ class ResourceNode
     /**
      * @ORM\Column(type="uuid", unique=true)
      */
+    #[Groups(['resource_node:read', 'document:read'])]
     protected UuidV4 $uuid;
 
     public function __construct()

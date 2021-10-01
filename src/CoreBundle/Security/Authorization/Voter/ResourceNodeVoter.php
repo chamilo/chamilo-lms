@@ -49,8 +49,7 @@ class ResourceNodeVoter extends Voter
 
     public static function getReaderMask(): int
     {
-        $builder = new MaskBuilder();
-        $builder
+        $builder = (new MaskBuilder())
             ->add(self::VIEW)
         ;
 
@@ -59,8 +58,7 @@ class ResourceNodeVoter extends Voter
 
     public static function getEditorMask(): int
     {
-        $builder = new MaskBuilder();
-        $builder
+        $builder = (new MaskBuilder())
             ->add(self::VIEW)
             ->add(self::EDIT)
         ;

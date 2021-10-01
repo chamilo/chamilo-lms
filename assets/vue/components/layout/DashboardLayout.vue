@@ -178,15 +178,6 @@
 
           <q-separator inset class="q-my-sm" />
 
-          <q-item class="GNL__drawer-item" v-ripple v-for="link in links3" :key="link.text" clickable>
-            <q-item-section>
-              <q-item-label>{{ link.text }}
-                <!--                <q-icon v-if="link.icon" :name="link.icon" />-->
-                <v-icon :icon="link.icon" size="lg" />
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-
           <div class="q-mt-md">
             <div class="flex flex-center q-gutter-xs">
               <a
@@ -223,6 +214,8 @@ import useState from "../../hooks/useState";
 import {computed, ref, toRefs} from "vue";
 import Breadcrumb from '../../components/Breadcrumb.vue';
 
+import { useI18n } from 'vue-i18n'
+
 export default {
   name: "DashboardLayout",
   components: {
@@ -237,14 +230,46 @@ export default {
   setup (props) {
     const { isSidebarOpen, isSettingsPanelOpen, isSearchPanelOpen, isNotificationsPanelOpen } = useState();
     const rightDrawerOpen = ref(false);
+    const linksUser = ref([]);
+    const linksAdmin = ref([]);
+    const linksAnon = ref([]);
     const { showBreadcrumb } = toRefs(props);
     const config = ref([]);
 
     if (!isEmpty(window.config)) {
       config.value = window.config;
     }
+    const { t } = useI18n();
+
+    linksUser.value = [
+      //{ icon: 'home', url: '/', text: 'Home' },
+      //{ icon: 'star_border', url: '/', text: 'News' },
+      { icon: 'mdi-book-open-page-variant', url: '/courses', text: t('My courses') },
+      { icon: 'mdi-google-classroom', url: '/sessions', text: t('My Sessions') },
+      { icon: 'mdi-calendar-text', url: '/resources/ccalendarevent', text: t('Events') },
+      { icon: 'mdi-chart-box', url: '/main/auth/my_progress.php', text: t('My progress') },
+      //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
+      //{ icon: 'compass', url: '/catalog', text: 'Explore' },
+      // { icon: 'star_border', url: '/news', text: 'News' },
+    ];
+
+    linksAdmin.value = [
+      { icon: 'mdi-account-multiple', url: '/main/admin/user_list.php', text: t('Users') },
+      { icon: 'mdi-book-open-page-variant', url: '/main/admin/course_list.php', text: t('Courses') },
+      { icon: 'mdi-google-classroom',  url: '/main/session/session_list.php', text: t('Sessions') },
+      { icon: 'mdi-cogs', url: '/main/admin/index.php', text: t('Administration') },
+      { icon: 'mdi-chart-box', url: '/main/mySpace/index.php', text: t('Reporting') },
+    ];
+
+    linksAnon.value = [
+      { icon: 'mdi-home', url: '/home', text: 'Home' },
+      //{ icon: 'mdi-compass', url: '/catalog', text: 'Explore' },
+    ];
 
     return {
+      linksAnon,
+      linksUser,
+      linksAdmin,
       config,
       showBreadcrumb,
       isSettingsPanelOpen,
@@ -261,32 +286,6 @@ export default {
   data: () => ({
     user: {},
     moved: true,
-    linksUser: [
-      //{ icon: 'home', url: '/', text: 'Home' },
-      //{ icon: 'star_border', url: '/', text: 'News' },
-      { icon: 'mdi-book-open-page-variant', url: '/courses', text: 'My courses' },
-      { icon: 'mdi-google-classroom', url: '/sessions', text: 'My Sessions' },
-      { icon: 'mdi-calendar-text', url: '/resources/ccalendarevent', text: 'Events' },
-      { icon: 'mdi-chart-box', url: '/main/auth/my_progress.php', text: 'My progress' },
-      //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
-      //{ icon: 'compass', url: '/catalog', text: 'Explore' },
-      // { icon: 'star_border', url: '/news', text: 'News' },
-    ],
-    linksAdmin: [
-      { icon: 'mdi-account-multiple', url: '/main/admin/user_list.php', text: 'Users' },
-      { icon: 'mdi-book-open-page-variant', url: '/main/admin/course_list.php', text: 'Courses' },
-      { icon: 'mdi-google-classroom',  url: '/main/session/session_list.php', text: 'Sessions' },
-      { icon: 'mdi-cogs', url: '/main/admin/index.php', text: 'Administration' },
-      { icon: 'mdi-chart-box', url: '/main/mySpace/index.php', text: 'Reporting' },
-    ],
-    links3: [
-      //{ icon: '', text: 'Settings' },
-      // { icon: 'open_in_new', text: 'open in new' },
-    ],
-    linksAnon: [
-      { icon: 'mdi-home', url: '/home', text: 'Home' },
-      //{ icon: 'mdi-compass', url: '/catalog', text: 'Explore' },
-    ],
     drawer: true,
     breadcrumb: [],
     languageArray: ['en', 'fr'],

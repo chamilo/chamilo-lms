@@ -40,7 +40,7 @@
     "@vuelidate/validators": "^2.0.0-alpha.20",
     "alpinejs": "^3.4.2",
     "autoprefixer": "^10.3.6",
-    "axios": "^0.21.4",
+    "axios": "^0.22.0",
     "babel-cli": "6.26.0",
     "babel-plugin-transform-builtin-extend": "1.1.2",
     "babel-polyfill": "6.26.0",

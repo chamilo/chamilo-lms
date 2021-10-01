@@ -223,9 +223,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         array $items = []
     ) {
         $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
-        /** @var Connection $connection */
+        $em = $this->getEntityManager();
         $connection = $em->getConnection();
 
         $courseId = $course->getId();
@@ -259,7 +257,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $groupId = $item['to_group_id'] ?? 0;
 
             $newVisibility = ResourceLink::VISIBILITY_DRAFT;
-            // Old visibility (item property) is based in this switch:
+            // Old 1.11.x visibility (item property) is based in this switch:
             switch ($visibility) {
                 case 0:
                     $newVisibility = ResourceLink::VISIBILITY_DRAFT;

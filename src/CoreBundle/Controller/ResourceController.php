@@ -324,7 +324,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
-            throw new FileNotFoundException('Resource not found');
+            throw new FileNotFoundException($this->trans('Resource not found'));
         }
 
         return $this->processFile($request, $resourceNode, 'show', $filter);
@@ -368,7 +368,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
-            throw new FileNotFoundException('Resource not found');
+            throw new FileNotFoundException($this->trans('Resource not found'));
         }
 
         $repo = $this->getRepositoryFromRequest($request);

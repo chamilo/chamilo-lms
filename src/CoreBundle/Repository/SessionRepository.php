@@ -69,7 +69,6 @@ class SessionRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s');
         $qb
-            ->select('s')
             ->innerJoin('s.users', 'sru')
             ->leftJoin(AccessUrlRelUser::class, 'uru', Join::WITH, 'uru.user = sru.user')
             ->andWhere('sru.user = :user AND uru.url = :url')
@@ -186,7 +185,7 @@ class SessionRepository extends ServiceEntityRepository
     /**
      * @return array<SessionRelCourse>
      */
-    public function getSessionCoursesByStatusInCourseSuscription(User $user, Session $session, int $status, AccessUrl $url = null): array
+    public function getSessionCoursesByStatusInCourseSubscription(User $user, Session $session, int $status, AccessUrl $url = null): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 

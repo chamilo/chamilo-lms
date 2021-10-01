@@ -2914,7 +2914,7 @@ class UserManager
                     SessionEntity::SESSION_COACH,
                     $url
                 );
-                $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSuscription(
+                $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSubscription(
                     $user,
                     $session,
                     SessionEntity::COURSE_COACH,
@@ -3076,7 +3076,7 @@ class UserManager
                 SessionEntity::SESSION_COACH,
                 $url
             );
-            $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSuscription(
+            $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSubscription(
                 $user,
                 $session,
                 SessionEntity::COURSE_COACH,

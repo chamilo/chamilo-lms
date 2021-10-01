@@ -1786,8 +1786,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * Returns the user roles.
-     *
-     * @return array The roles
      */
     public function getRoles(): array
     {

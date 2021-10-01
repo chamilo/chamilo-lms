@@ -93,7 +93,7 @@ class CourseRepositoryTest extends WebTestCase
         $this->assertSame(1, $count);
 
         // Check tools.
-        $this->assertCount(23, $course->getTools());
+        $this->assertCount(25, $course->getTools());
 
         // Check resource links for each Tool
         foreach ($course->getTools() as $tool) {

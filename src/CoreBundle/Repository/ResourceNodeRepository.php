@@ -103,7 +103,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
                 $params = [
                     'tool' => $resourceNode->getResourceType()->getTool(),
                     'type' => $resourceNode->getResourceType(),
-                    'id' => $resourceNode->getId(),
+                    'id' => $resourceNode->getUuid(),
                 ];
 
                 if (!empty($extraParams)) {

@@ -14,6 +14,7 @@ import personalFileService from './services/personalfile';
 import resourceLinkService from './services/resourcelink';
 import resourceNodeService from './services/resourcenode';
 import messageService from './services/message';
+import messageAttachmentService from './services/messageattachment';
 import messageRelUserService from './services/messagereluser';
 import userService from './services/user';
 import userGroupService from './services/usergroup';
@@ -92,6 +93,13 @@ store.registerModule(
     'message',
     makeCrudModule({
         service: messageService
+    })
+);
+
+store.registerModule(
+    'messageattachment',
+    makeCrudModule({
+        service: messageAttachmentService
     })
 );
 

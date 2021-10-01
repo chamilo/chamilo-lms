@@ -14,8 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CAttendance.
- *
  * @ORM\Table(
  *     name="c_attendance",
  *     indexes={

@@ -67,7 +67,7 @@ class SessionRepositoryTest extends AbstractApiTest
             [
                 'json' => [
                     'name' => 'test',
-                    'generalCoach' => '/api/users/'.$user->getId(),
+                    'generalCoach' => $user->getIri(),
                 ],
             ]
         );

@@ -1,73 +1,126 @@
 <template>
-    <div class="py-2">
-        <q-btn v-if="!isRecording" color="primary" icon="mic" :label="$t('Start recording')" @click="record()"/>
+  <div class="py-4">
+    <q-btn
+      v-if="!isRecording"
+      :label="$t('Start recording')"
+      color="primary"
+      icon="mic"
+      @click="record()"
+    />
 
-        <q-btn v-if="isRecording" color="red" icon="stop" :label="$t('Stop recording')" @click="stop()"/>
+    <q-btn
+      v-if="isRecording"
+      :label="$t('Stop recording')"
+      color="red"
+      icon="stop"
+      @click="stop()"
+    />
 
-        <div v-for="(audio, index) in audioList" :key="index" class="py-2">
-            <audio controls style="max-width: 100%;">
-                <source :src="audio">
-            </audio>
-        </div>
+    <div
+      v-for="(audio, index) in audioList"
+      :key="index"
+      class="py-2"
+    >
+      <audio
+        class="max-w-full"
+        controls
+      >
+        <source
+          :src="URL.createObjectURL(audio)"
+        >
+      </audio>
+      <q-btn
+        :label="$t('Attach')"
+        class="my-1"
+        color="green"
+        icon="attachment"
+        size="sm"
+        @click="attachAudio(audio)"
+      />
     </div>
+  </div>
 </template>
 
 <script>
-import {ref} from "vue";
+import {reactive, toRefs} from "vue";
 
 export default {
-    name: "AudioRecorder",
+  name: "AudioRecorder",
+  props: {
+    multiple: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+  },
+  setup(props, {emit}) {
+    const recorderState = reactive({
+      isRecording: false,
+      audioList: [],
+    });
 
-    setup() {
-        const isRecording = ref(false)
-        const audioList = ref([]);
+    let mediaRecorder = null;
+    let mediaChunks = [];
 
-        let mediaRecorder = null;
-        let mediaChunks = [];
+    function record() {
+      if (!navigator.mediaDevices.getUserMedia) {
+        return;
+      }
 
-        function record() {
-            if (!navigator.mediaDevices.getUserMedia) {
-                return;
-            }
+      navigator.mediaDevices.getUserMedia({audio: true})
+        .then((stream) => {
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.ondataavailable = e => {
+            mediaChunks.push(e.data)
+          };
+          mediaRecorder.onstop = e => {
+            stream.getAudioTracks()[0].stop();
 
-            navigator.mediaDevices.getUserMedia({audio: true})
-                .then((stream) => {
-                    mediaRecorder = new MediaRecorder(stream);
-                    mediaRecorder.ondataavailable = e => {
-                        mediaChunks.push(e.data)
-                    };
-                    mediaRecorder.onstop = e => {
-                        const blob = new Blob(mediaChunks, {type: 'audio/ogg; codecs=opus'});
-                        const audioUrl = URL.createObjectURL(blob);
+            const audioItem = new Blob(mediaChunks, {type: 'audio/ogg; codecs=opus'});
 
-                        mediaChunks = [];
+            mediaChunks = [];
 
-                        audioList.value.push(audioUrl);
-                    };
-                    mediaRecorder.start();
+            recorderState.audioList.push(audioItem);
+          };
+          mediaRecorder.start();
 
-                    isRecording.value = true;
-                })
-                .catch(console.log);
-        }
-
-        function stop() {
-            if (!mediaRecorder) {
-                return;
-            }
-
-            mediaRecorder.stop();
-            mediaRecorder.stream.getAudioTracks()[0].stop();
-            isRecording.value = false;
-        }
-
-        return {
-            record,
-            stop,
-            audioList,
-            isRecording
-        };
+          recorderState.isRecording = true;
+        })
+        .catch(console.log);
     }
+
+    function stop() {
+      if (!mediaRecorder) {
+        return;
+      }
+
+      if (false === props.multiple && recorderState.audioList.length > 0) {
+        recorderState.audioList.shift();
+      }
+
+      mediaRecorder.stop();
+      recorderState.isRecording = false;
+    }
+
+    function attachAudio(audio) {
+      emit('attach-audio', audio);
+
+      const index = recorderState.audioList.indexOf(audio);
+
+      if (index >= 0) {
+        recorderState.audioList.splice(index, 1);
+      }
+    }
+
+    return {
+      record,
+      stop,
+      ...toRefs(recorderState),
+      attachAudio,
+      URL
+    };
+  },
+  emits: ['attachAudio'],
 }
 </script>
 

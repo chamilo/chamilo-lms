@@ -52,7 +52,7 @@ class CoursesController extends AbstractController
             return $this->redirectToRoute('chamilo_core_resource_view', [
                 'tool' => 'document',
                 'type' => 'file',
-                'id' => $document->getResourceNode()->getId(),
+                'id' => $document->getResourceNode()->getUuid(),
             ]);
         }
 

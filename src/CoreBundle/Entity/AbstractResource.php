@@ -238,12 +238,9 @@ abstract class AbstractResource
             );
 
             if ($exists) {
-                //error_log('Link already exist for user: '.$user->getUsername().', skipping');
-
                 return $this;
             }
 
-            //error_log('New link can be added for user: '.$user->getUsername());
             $resourceNode->addResourceLink($resourceLink);
         } else {
             $this->addLink($resourceLink);
@@ -398,14 +395,6 @@ abstract class AbstractResource
         return null;
     }
 
-    /**
-     * See ResourceLink to see the visibility constants. Example: ResourceLink::VISIBILITY_DELETED.
-     */
-    /*public function getLinkVisibility(Course $course, Session $session = null): ?ResourceLink
-    {
-        return $this->getFirstResourceLinkFromCourseSession($course, $session)->getVisibility();
-    }*/
-
     public function isVisible(Course $course, Session $session = null): bool
     {
         $link = $this->getFirstResourceLinkFromCourseSession($course, $session);
@@ -423,17 +412,7 @@ abstract class AbstractResource
 
     public function getFirstResourceLinkFromCourseSession(Course $course, Session $session = null): ?ResourceLink
     {
-        /*$criteria = Criteria::create();
-        $criteria
-            ->where(Criteria::expr()->eq('course', $course->getId()))
-            ->andWhere(
-                Criteria::expr()->eq('session', $session)
-            )
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-        ;*/
         $resourceNode = $this->getResourceNode();
-        $result = null;
         if ($resourceNode && $resourceNode->getResourceLinks()->count() > 0) {
             $links = $resourceNode->getResourceLinks();
             $found = false;
@@ -460,12 +439,10 @@ abstract class AbstractResource
 
         $result = false;
         foreach ($links as $link) {
-            if ($link->hasUser()) {
-                if ($link->getUser()->getId() === $user->getId()) {
-                    $result = true;
+            if ($link->hasUser() && $link->getUser()->getId() === $user->getId()) {
+                $result = true;
 
-                    break;
-                }
+                break;
             }
         }
 

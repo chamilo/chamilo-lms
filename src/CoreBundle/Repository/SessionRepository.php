@@ -261,8 +261,8 @@ class SessionRepository extends ServiceEntityRepository
         $qb
             ->select('sru')
             ->from(User::class, 'u')
-            ->innerJoin(SessionRelUser::class, 'sru')
-            ->innerJoin(AccessUrlRelUser::class, 'uru')
+            ->innerJoin(SessionRelUser::class, 'sru', Join::WITH, 'sru.user = u.id')
+            ->innerJoin(AccessUrlRelUser::class, 'uru', Join::WITH, 'uru.user = u.id')
             ->andWhere('sru.session = :session AND uru.url = :url')
             ->setParameters([
                 'session' => $session,

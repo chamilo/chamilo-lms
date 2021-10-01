@@ -26,9 +26,9 @@ class LanguageRepository extends ServiceEntityRepository
             ->where(
                 $qb->expr()->eq('l.available', true)
             )
-            ->andWhere(
+            /*->andWhere(
                 $qb->expr()->isNull('l.parent')
-            )
+            )*/
         ;
 
         return $qb;

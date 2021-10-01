@@ -285,7 +285,7 @@ export default {
     ],
     linksAnon: [
       { icon: 'mdi-home', url: '/home', text: 'Home' },
-      { icon: 'mdi-compass', url: '/catalog', text: 'Explore' },
+      //{ icon: 'mdi-compass', url: '/catalog', text: 'Explore' },
     ],
     drawer: true,
     breadcrumb: [],

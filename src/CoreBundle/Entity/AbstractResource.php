@@ -238,7 +238,6 @@ abstract class AbstractResource
             );
 
             if ($exists) {
-
                 return $this;
             }
 

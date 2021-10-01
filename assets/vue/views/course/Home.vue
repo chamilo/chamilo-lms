@@ -42,7 +42,7 @@
                     v-for="tool in tools.admin"
                 >
                   <q-item-section>
-                    {{ $t(tool.ctool.nameToTranslate) }}
+                    {{ $t(tool.tool.nameToShow) }}
                   </q-item-section>
                 </q-item>
               </q-list>

@@ -63,6 +63,7 @@ class UpdateVueTranslations extends Command
                 $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
                 $fileToSave = $vueLocalePath.'en.json';
                 file_put_contents($fileToSave, $newLanguageToString);
+
                 continue;
             }
 

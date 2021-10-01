@@ -519,7 +519,7 @@ foreach ($posts as $post) {
         }
     } else {
         if (postNeedsRevision($postEntity)) {
-            $askForRevision = giveRevisionButton($post['post_id'], $threadEntity);
+            $askForRevision = getGiveRevisionButton($post['post_id'], $threadEntity);
         } else {
             $revision = getPostRevision($post['post_id']);
             if (!empty($revision)) {

@@ -5391,11 +5391,9 @@ function postNeedsRevision(CForumPost $post): bool
 }
 
 /**
- * @param array $threadInfo
- *
- * @return string
+ * Generates an HTML button to ask for a review
  */
-function getAskRevisionButton(CForumPost $post, $threadInfo)
+function getAskRevisionButton(CForumPost $post, CForumThread $threadInfo): string
 {
     if (false === api_get_configuration_value('allow_forum_post_revisions')) {
         return '';
@@ -5411,27 +5409,22 @@ function getAskRevisionButton(CForumPost $post, $threadInfo)
     return Display::url(
         get_lang('Ask for a revision'),
         api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
-        api_get_cidreq().'&action=ask_revision&post_id='.$postId.'&forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'],
+        api_get_cidreq().'&action=ask_revision&post_id='.$postId.'&forum='.$threadInfo->getForum()->getIid().'&thread='.$threadInfo->getIid(),
         ['class' => "btn $status", 'title' => get_lang('Ask for a revision')]
     );
 }
 
 /**
- * @param int   $postId
- * @param array $threadInfo
- *
- * @return string
+ * Generates an HTML button to give a review
  */
-function giveRevisionButton($postId, $threadInfo)
+function getGiveRevisionButton(int $postId, CForumThread $threadInfo): string
 {
-    $postId = (int) $postId;
-
     return Display::toolbarButton(
         get_lang('Give revision'),
         api_get_path(WEB_CODE_PATH).'forum/reply.php?'.api_get_cidreq().'&'.http_build_query(
             [
-                'forum' => $threadInfo['forum_id'],
-                'thread' => $threadInfo['thread_id'],
+                'forum' => $threadInfo->getForum()->getIid(),
+                'thread' => $threadInfo->getIid(),
                 'post' => $postId,
                 'action' => 'replymessage',
                 'give_revision' => 1,
@@ -5444,19 +5437,15 @@ function giveRevisionButton($postId, $threadInfo)
 }
 
 /**
- * @param int   $postId
- * @param array $threadInfo
- *
- * @return string
+ * Generates an HTML button to report a post as offensive
  */
-function getReportButton($postId, $threadInfo)
+function getReportButton(int $postId, CForumThread $threadInfo): string
 {
-    $postId = (int) $postId;
-
     return Display::url(
         Display::returnFontAwesomeIcon('flag'),
         api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
-        api_get_cidreq().'&action=report&post_id='.$postId.'&forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'],
+        api_get_cidreq().'&action=report&post_id='.$postId.
+        '&forum='.$threadInfo->getForum()->getIid().'&thread='.$threadInfo->getIid(),
         ['class' => 'btn btn-danger', 'title' => get_lang('Report')]
     );
 }
@@ -5526,12 +5515,9 @@ function getReportRecipients()
 }
 
 /**
- * @param array $forumInfo
- * @param array $threadInfo
- *
- * @return bool
+ * Sends an e-mail to all users from getReportRecipients() (users with extra field 'forum_report_recipients')
  */
-function reportPost(CForumPost $post, $forumInfo, $threadInfo)
+function reportPost(CForumPost $post, CForum $forumInfo, CForumThread $threadInfo): bool
 {
     if (!reportAvailable()) {
         return false;
@@ -5547,7 +5533,7 @@ function reportPost(CForumPost $post, $forumInfo, $threadInfo)
     $users = getReportRecipients();
     if (!empty($users)) {
         $url = api_get_path(WEB_CODE_PATH).
-            'forum/viewthread.php?forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'].'&'.api_get_cidreq().'&post_id='.$postId.'#post_id_'.$postId;
+            'forum/viewthread.php?forum='.$forumInfo->getIid().'&thread='.$threadInfo->getIid().'&'.api_get_cidreq().'&post_id='.$postId.'#post_id_'.$postId;
         $postLink = Display::url(
             $post->getPostTitle(),
             $url
@@ -5557,10 +5543,12 @@ function reportPost(CForumPost $post, $forumInfo, $threadInfo)
             get_lang('User %s has reported the message %s in the forum %s'),
             $currentUser['complete_name'],
             $postLink,
-            $forumInfo['forum_title']
+            $forumInfo->getForumTitle()
         );
         foreach ($users as $userId) {
             MessageManager::send_message_simple($userId, $subject, $content);
         }
     }
+
+    return true;
 }

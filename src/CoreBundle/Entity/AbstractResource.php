@@ -28,7 +28,7 @@ abstract class AbstractResource
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"})
      */
     public ?string $contentUrl = null;
 
@@ -36,7 +36,7 @@ abstract class AbstractResource
      * Download URL of the Resource File Property set by ResourceNormalizer.php.
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"})
      */
     public ?string $downloadUrl = null;
 
@@ -66,7 +66,7 @@ abstract class AbstractResource
     /**
      * @Assert\Valid()
      * @ApiSubresource()
-     * @Groups({"resource_node:read", "resource_node:write", "personal_file:write", "document:write", "ctool:read", "course:read", "illustration:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "personal_file:write", "document:write", "ctool:read", "course:read", "illustration:read", "message:read"})
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},

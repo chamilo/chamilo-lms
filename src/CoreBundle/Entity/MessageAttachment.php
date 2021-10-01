@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Controller\Api\CreateMessageAttachmentAction;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * MessageAttachment.
@@ -22,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
         'post' => [
             'controller' => CreateMessageAttachmentAction::class,
             'deserialize' => false,
+            'security' => "is_granted('ROLE_USER')",
             'validation_groups' => ['Default', 'message_attachment:create'],
             'openapi_context' => [
                 'requestBody' => [
@@ -66,6 +68,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
+    #[Groups(['message:read'])]
     protected ?string $comment = null;
 
     /**

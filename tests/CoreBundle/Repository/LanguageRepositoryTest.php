@@ -44,10 +44,10 @@ class LanguageRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(LanguageRepository::class);
         $languages = $repo->getAllAvailable()->getQuery()->getResult();
         $this->assertNotNull($languages);
-        $this->assertCount(10, $languages);
+        $this->assertCount(11, $languages);
 
         $languages = $repo->getAllAvailableToArray();
-        $this->assertCount(10, $languages);
+        $this->assertCount(11, $languages);
     }
 
     public function testFindAllSubLanguages(): void

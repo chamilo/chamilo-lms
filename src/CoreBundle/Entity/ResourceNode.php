@@ -212,7 +212,7 @@ class ResourceNode
      * @ORM\Column(type="uuid", unique=true)
      */
     #[Groups(['resource_node:read', 'document:read'])]
-    protected UuidV4 $uuid;
+    protected ?UuidV4 $uuid = null;
 
     public function __construct()
     {
@@ -223,6 +223,11 @@ class ResourceNode
         $this->comments = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->fileEditableText = false;
+    }
+
+    public function getUuid(): ?UuidV4
+    {
+        return $this->uuid;
     }
 
     public function __toString(): string

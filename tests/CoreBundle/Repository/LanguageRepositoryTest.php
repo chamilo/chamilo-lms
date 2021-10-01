@@ -27,7 +27,8 @@ class LanguageRepositoryTest extends AbstractApiTest
             ->setAvailable(true)
             ->setOriginalName('language')
             ->setEnglishName('language')
-            ->setIsocode('lan');
+            ->setIsocode('lan')
+        ;
         $this->assertHasNoEntityViolations($language);
         $em->persist($language);
         $em->flush();

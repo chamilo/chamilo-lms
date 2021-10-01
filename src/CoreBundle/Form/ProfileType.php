@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Form;
 
-use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Chamilo\CoreBundle\Repository\LanguageRepository;

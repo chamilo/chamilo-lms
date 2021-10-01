@@ -178,7 +178,7 @@ $forumCategories = get_forum_categories();
 // Step 2: We find all the forums (only the visible ones if it is a student).
 // display group forum in general forum tool depending to configuration option
 $setting = api_get_setting('display_groups_forum_in_general_tool');
-$allCourseForums = get_forums('', '', 'true' === $setting);
+$allCourseForums = get_forums();
 $user_id = api_get_user_id();
 
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */

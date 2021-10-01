@@ -16,15 +16,15 @@ class WSCMForum extends WSCM
     {
         if ("valid" == $this->verifyUserPass($username, $password)) {
             $course_db = api_get_course_info($course_code);
-            $foruns_info = get_forums($id = '', $course_db['code']);
-            $foruns_id = '#';
-            foreach ($foruns_info as $forum) {
+            $forumInfo = get_forums($course_db['id']);
+            $forumIds = '#';
+            foreach ($forumInfo as $forum) {
                 if (isset($forum['forum_id'])) {
-                    $foruns_id .= $forum['forum_id']."#";
+                    $forumIds .= $forum['forum_id']."#";
                 }
             }
 
-            return $foruns_id;
+            return $forumIds;
         } else {
             return get_lang('Login failed - incorrect login or password.');
         }

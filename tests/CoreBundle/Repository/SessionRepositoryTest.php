@@ -14,8 +14,8 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use function count;
 
 class SessionRepositoryTest extends AbstractApiTest
 {
@@ -236,8 +236,8 @@ class SessionRepositoryTest extends AbstractApiTest
 
         // 2. Add course to session.
         $session
-            ->setDisplayStartDate(new \DateTime('2010-01-01 15:00'))
-            ->setDisplayEndDate(new \DateTime('2010-01-01 18:00'))
+            ->setDisplayStartDate(new DateTime('2010-01-01 15:00'))
+            ->setDisplayEndDate(new DateTime('2010-01-01 18:00'))
             ->addCourse($course)
         ;
         $sessionRepo->update($session);
@@ -328,8 +328,8 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $category = (new SessionCategory())
             ->setName('cat')
-            ->setDateStart(new \DateTime())
-            ->setDateEnd(new \DateTime())
+            ->setDateStart(new DateTime())
+            ->setDateEnd(new DateTime())
             ->setUrl($this->getAccessUrl())
         ;
         $em->persist($category);
@@ -348,10 +348,10 @@ class SessionRepositoryTest extends AbstractApiTest
             ->setCategory($category)
             ->setDuration(100)
             ->setStatus(1)
-            ->setAccessStartDate(new \DateTime())
-            ->setAccessEndDate(new \DateTime())
-            ->setDisplayStartDate(new \DateTime())
-            ->setDisplayEndDate(new \DateTime())
+            ->setAccessStartDate(new DateTime())
+            ->setAccessEndDate(new DateTime())
+            ->setDisplayStartDate(new DateTime())
+            ->setDisplayEndDate(new DateTime())
             ->setPosition(1)
             ->setShowDescription(true)
             ->setDescription('desc')
@@ -417,17 +417,24 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $session = $sessionRepo->find($session->getId());
 
-
         $this->assertSame(3, $session->getUsers()->count());
         $this->assertSame(3, $session->getNbrUsers());
         $this->assertSame(2, $session->getAllUsersFromCourse(Session::STUDENT)->count());
 
-        //$student1 = $this->getUser('student1');
-        //$sessions = $sessionRepo->getSessionsByUser($student1, $url);
-        //$this->assertCount(1, $sessions);
+        $student1 = $this->getUser('student1');
+        $sessions = $sessionRepo->getSessionsByUser($student1, $url);
+        $this->assertCount(1, $sessions);
 
-        //$users = $sessionRepo->getUsersByAccessUrl($session, $url);
+        $sessions = $sessionRepo->getSessionCoursesByStatusInUserSubscription($student1, $session, Session::STUDENT);
+        $this->assertCount(1, $sessions);
 
-        //$session->addUserInCourse($status, $user, $course)
+        $sessions = $sessionRepo->getSessionCoursesByStatusInCourseSubscription($student1, $session, Session::STUDENT);
+        $this->assertCount(1, $sessions);
+
+        $sessions = $sessionRepo->getUsersByAccessUrl($session, $url);
+        $this->assertCount(3, $sessions);
+
+        $sessions = $sessionRepo->getUsersByAccessUrl($session, $url, [Session::STUDENT]);
+        $this->assertCount(2, $sessions);
     }
 }

@@ -1653,7 +1653,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function setCurrentUrl(AccessUrl $url): self
     {
-        $accessUrlRelUser = (new AccessUrlRelUser)
+        $accessUrlRelUser = (new AccessUrlRelUser())
             ->setUrl($url)
             ->setUser($this)
         ;

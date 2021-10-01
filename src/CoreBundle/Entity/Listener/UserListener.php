@@ -46,7 +46,7 @@ class UserListener
                     $creator = $defaultCreator;
                 } else {
                     if (!empty($user->getCreatorId())) {
-                        $creator = api_get_user_entity($user->getCreatorId());
+                        $creator = $this->userRepository->find($user->getCreatorId());
                     }
                 }
             }
@@ -71,10 +71,7 @@ class UserListener
      */
     public function preUpdate(User $user, LifecycleEventArgs $args): void
     {
-        //error_log('User listener preUpdate');
-        if ($user) {
-            $this->userRepository->updatePassword($user);
-            $this->userRepository->updateCanonicalFields($user);
-        }
+        $this->userRepository->updatePassword($user);
+        $this->userRepository->updateCanonicalFields($user);
     }
 }

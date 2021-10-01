@@ -1,4 +1,21 @@
 {
+    "Agenda": "Agenda",
+    "Announcement": "Pengumuman",
+    "Attendance": "",
+    "Course description": "",
+    "Course progress": "",
+    "Documents": "Dokumen",
+    "Tests": "Latihan\/Ujian",
+    "Forum": "Forum",
+    "Glossary": "",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Link",
+    "Student publication": "Student publication",
+    "Groups": "Groups",
+    "Member": "Anggota",
+    "Survey": "",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Daftar Mata Kuliah Ku",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "User",
     "Sent date": "",
     "Sent": "",
-    "Attachments": "Resource ditambahkan"
+    "Attachments": "Resource ditambahkan",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

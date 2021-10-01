@@ -1,4 +1,21 @@
 {
+    "Agenda": "Dienas k\u0101rt\u012bba",
+    "Announcement": "Pazi\u0146ojums",
+    "Attendance": "Kl\u0101tienes nodarb\u012bbas",
+    "Course description": "Kursa apraksts",
+    "Course progress": "Kursa apguves tematiskais pl\u0101ns",
+    "Documents": "Dokumenti",
+    "Tests": "Kontroldarbi",
+    "Forum": "Diskusijas kurs\u0101",
+    "Glossary": "Terminu skaidrojumu v\u0101rdn\u012bca",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Hipersaite",
+    "Student publication": "Student publication",
+    "Groups": "Grupas",
+    "Member": "Biedrs",
+    "Survey": "Aptaujas kurs\u0101",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Mani kursi",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Lietot\u0101jv\u0101rds",
     "Sent date": "S\u016bt\u012b\u0161anas datums",
     "Sent": "Nos\u016bt\u012bts",
-    "Attachments": "Pielikumi"
+    "Attachments": "Pielikumi",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

@@ -1,4 +1,21 @@
 {
+    "Agenda": "Agendo",
+    "Announcement": "Komuniko",
+    "Attendance": "",
+    "Course description": "",
+    "Course progress": "",
+    "Documents": "Dokumentoj",
+    "Tests": "Ekzercoj XX",
+    "Forum": "Forumoj",
+    "Glossary": "",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Ligilo",
+    "Student publication": "Student publication",
+    "Groups": "Grupoj",
+    "Member": "Uzanto",
+    "Survey": "",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "miajn kursojn",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Uzulo",
     "Sent date": "",
     "Sent": "",
-    "Attachments": "Aldonita\u0135oj"
+    "Attachments": "Aldonita\u0135oj",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

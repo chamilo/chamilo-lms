@@ -1,4 +1,21 @@
 {
+    "Agenda": "Darbotvark\u0117",
+    "Announcement": "Skelbimas",
+    "Attendance": "",
+    "Course description": "",
+    "Course progress": "",
+    "Documents": "Dokumentai",
+    "Tests": "Testai",
+    "Forum": "Forumai",
+    "Glossary": "",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Nuoroda",
+    "Student publication": "Student publication",
+    "Groups": "Grup\u0117s",
+    "Member": "Narys",
+    "Survey": "Apklausa",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Mano kursai",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Vartotojai",
     "Sent date": "Siuntimo diena",
     "Sent": "",
-    "Attachments": "Prisegti failai"
+    "Attachments": "Prisegti failai",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

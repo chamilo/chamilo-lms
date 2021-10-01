@@ -1,4 +1,21 @@
 {
+    "Agenda": "Terminarz",
+    "Announcement": "Og\u0142oszenie",
+    "Attendance": "Obecno\u015b\u0107",
+    "Course description": "Opis kursu",
+    "Course progress": "Post\u0119p kursu",
+    "Documents": "Dokumenty",
+    "Tests": "Testy",
+    "Forum": "Fora",
+    "Glossary": "S\u0142ownik",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Odno\u015bniki",
+    "Student publication": "Student publication",
+    "Groups": "Grupy",
+    "Member": "U\u017cytkownik",
+    "Survey": "Ankieta",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Lista moich kurs\u00f3w",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "U\u017cytkownik",
     "Sent date": "Data wys\u0142ania",
     "Sent": "Wys\u0142ano",
-    "Attachments": "Za\u0142\u0105czniki"
+    "Attachments": "Za\u0142\u0105czniki",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

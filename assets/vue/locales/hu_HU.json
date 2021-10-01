@@ -1,4 +1,21 @@
 {
+    "Agenda": "Napt\u00e1r",
+    "Announcement": "Bejelent\u00e9s",
+    "Attendance": "",
+    "Course description": "",
+    "Course progress": "",
+    "Documents": "Dokumentumok",
+    "Tests": "Tesztek",
+    "Forum": "F\u00f3rumok",
+    "Glossary": "",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Hivatkoz\u00e1s",
+    "Student publication": "Student publication",
+    "Groups": "Csoportok",
+    "Member": "Tag",
+    "Survey": "K\u00e9rd\u0151\u00edv",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Kurzusaim",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Felhaszn\u00e1l\u00f3",
     "Sent date": "K\u00fcld\u00e9s d\u00e1tuma",
     "Sent": "",
-    "Attachments": "Csatol\u00e1sok"
+    "Attachments": "Csatol\u00e1sok",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

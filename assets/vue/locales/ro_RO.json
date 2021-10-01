@@ -1,4 +1,21 @@
 {
+    "Agenda": "Agenda",
+    "Announcement": "Anunt",
+    "Attendance": "Asistenta",
+    "Course description": "Descrierea cursului",
+    "Course progress": "",
+    "Documents": "Documente",
+    "Tests": "Exercitii",
+    "Forum": "Forumuri",
+    "Glossary": "Glosariu",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Legatura",
+    "Student publication": "Student publication",
+    "Groups": "Grupuri",
+    "Member": "Uzuar",
+    "Survey": "Ancheta",
+    "Tracking": "Tracking",
     "Sign in": "Conectare",
     "My courses": "Cursurile mele",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Uzuar",
     "Sent date": "Data trimiterii",
     "Sent": "Trimis",
-    "Attachments": "Atasamente"
+    "Attachments": "Atasamente",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

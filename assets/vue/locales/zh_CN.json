@@ -1,4 +1,21 @@
 {
+    "Agenda": "\u8bae\u7a0b",
+    "Announcement": "\u901a\u77e5",
+    "Attendance": "\u8003\u52e4",
+    "Course description": "",
+    "Course progress": "\u8bfe\u7a0b\u8fdb\u5ea6",
+    "Documents": "\u6587\u6863",
+    "Tests": "\u6d4b\u9a8c",
+    "Forum": "\u8bba\u575b",
+    "Glossary": "\u8bcd\u6c47\u8868",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "\u94fe\u63a5",
+    "Student publication": "Student publication",
+    "Groups": "\u5c0f\u7ec4",
+    "Member": "\u6210\u5458",
+    "Survey": "\u8c03\u67e5",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "\u6211\u7684\u8bfe\u7a0b",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "\u7528\u6237",
     "Sent date": "",
     "Sent": "",
-    "Attachments": "\u9644\u4ef6"
+    "Attachments": "\u9644\u4ef6",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

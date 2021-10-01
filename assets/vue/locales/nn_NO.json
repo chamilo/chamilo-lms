@@ -1,4 +1,21 @@
 {
+    "Agenda": "",
+    "Announcement": "Annonsering",
+    "Attendance": "",
+    "Course description": "",
+    "Course progress": "",
+    "Documents": "Dokumenter",
+    "Tests": "",
+    "Forum": "Forum",
+    "Glossary": "",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Lenke",
+    "Student publication": "Student publication",
+    "Groups": "",
+    "Member": "",
+    "Survey": "",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Mine kurs",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Bruker",
     "Sent date": "",
     "Sent": "",
-    "Attachments": "Vedlegg"
+    "Attachments": "Vedlegg",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

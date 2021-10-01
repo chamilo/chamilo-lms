@@ -1,4 +1,21 @@
 {
+    "Agenda": "Gruppen-Kalender",
+    "Announcement": "Ank\u00fcndigung",
+    "Attendance": "Anwesenheit",
+    "Course description": "Kursbeschreibung",
+    "Course progress": "Kurs-Themen",
+    "Documents": "Dokumente",
+    "Tests": "Tests",
+    "Forum": "Forum",
+    "Glossary": "Lexikon",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Link",
+    "Student publication": "Student publication",
+    "Groups": "Gruppen",
+    "Member": "Mitglied",
+    "Survey": "Umfrage",
+    "Tracking": "Tracking",
     "Sign in": "Eintragen",
     "My courses": "Meine Kurse",
     "Start recording": "Aufnahme starten",
@@ -96,5 +113,9 @@
     "User": "Benutzer",
     "Sent date": "Datum senden",
     "Sent": "Gesendet",
-    "Attachments": "Anh\u00e4nge"
+    "Attachments": "Anh\u00e4nge",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

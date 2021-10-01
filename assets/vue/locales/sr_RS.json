@@ -1,4 +1,21 @@
 {
+    "Agenda": "",
+    "Announcement": "Obave\u0161tenje",
+    "Attendance": "",
+    "Course description": "Opis kursa",
+    "Course progress": "",
+    "Documents": "Dokumenta",
+    "Tests": "Testovi",
+    "Forum": "Forumi",
+    "Glossary": "",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Link",
+    "Student publication": "Student publication",
+    "Groups": "Grupe",
+    "Member": "",
+    "Survey": "",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Moja lista kurseva",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Koristnik",
     "Sent date": "",
     "Sent": "",
-    "Attachments": "Resursi su dodati"
+    "Attachments": "Resursi su dodati",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

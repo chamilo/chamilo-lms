@@ -1,4 +1,21 @@
 {
+    "Agenda": "",
+    "Announcement": "Ozn\u00e1men\u00ed",
+    "Attendance": "",
+    "Course description": "",
+    "Course progress": "",
+    "Documents": "",
+    "Tests": "Testy",
+    "Forum": "",
+    "Glossary": "",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "",
+    "Student publication": "Student publication",
+    "Groups": "Skupiny",
+    "Member": "\u010clen",
+    "Survey": "",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Moje kurzy",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "U\u017eivatel",
     "Sent date": "",
     "Sent": "",
-    "Attachments": "P\u0159idan\u00e9 zdroje"
+    "Attachments": "P\u0159idan\u00e9 zdroje",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

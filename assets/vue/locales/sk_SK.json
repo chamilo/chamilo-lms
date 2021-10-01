@@ -1,4 +1,21 @@
 {
+    "Agenda": "Agenda",
+    "Announcement": "Oznam",
+    "Attendance": "Doch\u00e1dzka",
+    "Course description": "Popis kurzu",
+    "Course progress": "Pokrok v kurze",
+    "Documents": "Dokumenty",
+    "Tests": "Testy",
+    "Forum": "F\u00f3rum",
+    "Glossary": "Slovn\u00edk",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Odkaz",
+    "Student publication": "Student publication",
+    "Groups": "Skupiny",
+    "Member": "\u010clen",
+    "Survey": "Prieskum",
+    "Tracking": "Tracking",
     "Sign in": "Prihl\u00e1si\u0165 sa",
     "My courses": "Moje kurzy",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Pou\u017e\u00edvate\u013e",
     "Sent date": "D\u00e1tum odoslania",
     "Sent": "Odoslan\u00e9",
-    "Attachments": "Pridan\u00e9 zdroje"
+    "Attachments": "Pridan\u00e9 zdroje",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

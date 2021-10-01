@@ -1,4 +1,21 @@
 {
+    "Agenda": "",
+    "Announcement": "",
+    "Attendance": "",
+    "Course description": "",
+    "Course progress": "",
+    "Documents": "",
+    "Tests": "Royndir",
+    "Forum": "",
+    "Glossary": "",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "",
+    "Student publication": "Student publication",
+    "Groups": "",
+    "Member": "",
+    "Survey": "",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "M\u00edni skei\u00f0",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "",
     "Sent date": "",
     "Sent": "",
-    "Attachments": ""
+    "Attachments": "",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

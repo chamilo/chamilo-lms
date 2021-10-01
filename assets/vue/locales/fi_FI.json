@@ -1,4 +1,21 @@
 {
+    "Agenda": "",
+    "Announcement": "Ilmoitus",
+    "Attendance": "",
+    "Course description": "Kurssin kuvaus",
+    "Course progress": "Kurssin edistyminen",
+    "Documents": "Dokumentit",
+    "Tests": "Testit",
+    "Forum": "Keskustelut",
+    "Glossary": "Sanasto",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "",
+    "Student publication": "Student publication",
+    "Groups": "Ryhm\u00e4t",
+    "Member": "J\u00e4sen",
+    "Survey": "Kysely",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Kurssini",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "K\u00e4ytt\u00e4j\u00e4",
     "Sent date": "",
     "Sent": "",
-    "Attachments": "Liitteet"
+    "Attachments": "Liitteet",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

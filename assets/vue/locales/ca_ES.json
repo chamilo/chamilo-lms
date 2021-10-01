@@ -1,4 +1,21 @@
 {
+    "Agenda": "Agenda",
+    "Announcement": "Anunci",
+    "Attendance": "Assist\u00e8ncia",
+    "Course description": "Detalls del curs",
+    "Course progress": "Programaci\u00f3 did\u00e0ctica",
+    "Documents": "Documents",
+    "Tests": "Exercicis",
+    "Forum": "F\u00f2rums",
+    "Glossary": "Glossari",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Enlla\u00e7",
+    "Student publication": "Student publication",
+    "Groups": "Grups",
+    "Member": "Usuari",
+    "Survey": "Enquesta",
+    "Tracking": "Tracking",
     "Sign in": "Accedeix",
     "My courses": "La meva llista de cursos",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Usuari",
     "Sent date": "Data d'enviament",
     "Sent": "Enviat",
-    "Attachments": "Annexes"
+    "Attachments": "Annexes",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

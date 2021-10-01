@@ -1,4 +1,21 @@
 {
+    "Agenda": "Axenda",
+    "Announcement": "Anuncies",
+    "Attendance": "",
+    "Course description": "Descripci\u00f3n del cursu",
+    "Course progress": "",
+    "Documents": "Documentos",
+    "Tests": "Exercicios",
+    "Forum": "Foros",
+    "Glossary": "Glosariu",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Enllaces",
+    "Student publication": "Student publication",
+    "Groups": "Grupos",
+    "Member": "Usuariu",
+    "Survey": "Encuesta",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Los mios cursos",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Usuariu",
     "Sent date": "Fecha d'unv\u00edu",
     "Sent": "",
-    "Attachments": "Recursos amestaos"
+    "Attachments": "Recursos amestaos",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

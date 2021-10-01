@@ -1,4 +1,21 @@
 {
+    "Agenda": "Kalender",
+    "Announcement": "Tillk\u00e4nnagivande",
+    "Attendance": "",
+    "Course description": "",
+    "Course progress": "Kurs utveckling",
+    "Documents": "Dokument",
+    "Tests": "Tester",
+    "Forum": "Forum",
+    "Glossary": "",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "L\u00e4nk",
+    "Student publication": "Student publication",
+    "Groups": "Grupper",
+    "Member": "Medlem",
+    "Survey": "Enk\u00e4ter",
+    "Tracking": "Tracking",
     "Sign in": "",
     "My courses": "Mina kurser",
     "Start recording": "",
@@ -96,5 +113,9 @@
     "User": "Anv\u00e4ndare",
     "Sent date": "",
     "Sent": "",
-    "Attachments": "Bilagor"
+    "Attachments": "Bilagor",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

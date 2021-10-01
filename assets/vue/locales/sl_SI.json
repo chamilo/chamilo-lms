@@ -1,4 +1,21 @@
 {
+    "Agenda": "Agenda",
+    "Announcement": "Obvestilo",
+    "Attendance": "Prisotnost",
+    "Course description": "Podrobnosti te\u010daja",
+    "Course progress": "Napredek te\u010daja",
+    "Documents": "Dokumenti",
+    "Tests": "Vaje",
+    "Forum": "Forumi",
+    "Glossary": "Glosarij",
+    "Gradebook": "Gradebook",
+    "Learnpath": "Learnpath",
+    "Link": "Povezava",
+    "Student publication": "Student publication",
+    "Groups": "Skupine",
+    "Member": "\u010clan",
+    "Survey": "Evalvacijski vpra\u0161alnik",
+    "Tracking": "Tracking",
     "Sign in": "Vpi\u0161i",
     "My courses": "Moji te\u010daji",
     "Start recording": "Pri\u010dni snemanje",
@@ -96,5 +113,9 @@
     "User": "Uporabnik",
     "Sent date": "Datum po\u0161iljanja",
     "Sent": "Poslano",
-    "Attachments": "Priponke"
+    "Attachments": "Priponke",
+    "You don't have course content": "You don't have course content",
+    "You don't have any course yet": "You don't have any course yet",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
+    "You don't have any session yet": "You don't have any session yet"
 }

@@ -63,7 +63,7 @@
         </div>
 
         <div class="mt-2 font-bold">
-          {{ $t('You don\'t have course content') }}
+          {{ $t("You don't have course content") }}
         </div>
         <div>
           {{ $t('Add a course introduction to display to your students.') }}

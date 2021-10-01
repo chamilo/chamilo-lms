@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -33,9 +34,9 @@ class LocaleSubscriber implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
-        if (!$request->hasPreviousSession()) {
+        /*if (!$request->hasPreviousSession()) {
             return;
-        }
+        }*/
 
         $installed = false;
         if ($this->parameterBag->has('installed')) {
@@ -62,87 +63,91 @@ class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // Try to see if the locale has been set as a _locale routing parameter (from lang switcher)
-        //if ($locale = $request->getSession('_locale')) {
         if ($loadFromDb) {
-            $localeList = [];
-
-            // 1. Check platform locale
-            $platformLocale = $this->settingsManager->getSetting('language.platform_language');
-
-            if (!empty($platformLocale)) {
-                $localeList['platform_lang'] = $platformLocale;
-            }
-            // 2. Check user locale
-            // _locale_user is set when user logins the system check UserLocaleListener
-            $userLocale = $request->getSession()->get('_locale_user');
-
-            if (!empty($userLocale)) {
-                $localeList['user_profil_lang'] = $userLocale;
-            }
-
-            // 3. Check course locale
-            $courseId = $request->get('cid');
-
-            if (!empty($courseId)) {
-                /** @var Course $course */
-                $course = $request->getSession()->get('course');
-                // 3. Check course locale
-                if (!empty($course)) {
-                    $courseLocale = $course->getCourseLanguage();
-                    if (!empty($courseLocale)) {
-                        $localeList['course_lang'] = $platformLocale;
-                    }
-                }
-            }
-
-            // 4. force locale if it was selected from the URL
-            $localeFromUrl = $request->get('_locale');
-            if (!empty($localeFromUrl)) {
-                $localeList['user_selected_lang'] = $platformLocale;
-            }
-
-            $priorityList = [
-                'language_priority_4',
-                'language_priority_3',
-                'language_priority_2',
-                'language_priority_1',
-            ];
-
-            $locale = '';
-            foreach ($priorityList as $setting) {
-                $priority = $this->settingsManager->getSetting(sprintf('language.%s', $setting));
-                if (!empty($priority) && isset($localeList[$priority])) {
-                    $locale = $localeList[$priority];
-
-                    break;
-                }
-            }
-
-            if (empty($locale)) {
-                // Use default order
-                $priorityList = [
-                    'platform_lang',
-                    'user_profil_lang',
-                    'course_lang',
-                    'user_selected_lang',
-                ];
-                foreach ($priorityList as $setting) {
-                    if (isset($localeList[$setting])) {
-                        $locale = $localeList[$setting];
-                    }
-                }
-            }
-
-            if (empty($locale)) {
-                $locale = $this->defaultLocale;
-            }
-
+            $locale = $this->getCurrentLanguage($request);
             // if no explicit locale has been set on this request, use one from the session
             $request->setLocale($locale);
             $request->getSession()->set('_locale', $locale);
             $request->getSession()->set('check_locale_from_db', false);
         }
+    }
+
+    public function getCurrentLanguage(Request $request): string
+    {
+        $localeList = [];
+
+        // 1. Check platform locale
+        $platformLocale = $this->settingsManager->getSetting('language.platform_language');
+
+        if (!empty($platformLocale)) {
+            $localeList['platform_lang'] = $platformLocale;
+        }
+        // 2. Check user locale
+        // _locale_user is set when user logins the system check UserLocaleListener
+        $userLocale = $request->getSession()->get('_locale_user');
+
+        if (!empty($userLocale)) {
+            $localeList['user_profil_lang'] = $userLocale;
+        }
+
+        // 3. Check course locale
+        $courseId = $request->get('cid');
+
+        if (!empty($courseId)) {
+            /** @var Course $course */
+            $course = $request->getSession()->get('course');
+            // 3. Check course locale
+            if (!empty($course)) {
+                $courseLocale = $course->getCourseLanguage();
+                if (!empty($courseLocale)) {
+                    $localeList['course_lang'] = $platformLocale;
+                }
+            }
+        }
+
+        // 4. force locale if it was selected from the URL
+        $localeFromUrl = $request->get('_locale');
+        if (!empty($localeFromUrl)) {
+            $localeList['user_selected_lang'] = $platformLocale;
+        }
+
+        $priorityList = [
+            'language_priority_4',
+            'language_priority_3',
+            'language_priority_2',
+            'language_priority_1',
+        ];
+
+        $locale = '';
+        foreach ($priorityList as $setting) {
+            $priority = $this->settingsManager->getSetting(sprintf('language.%s', $setting));
+            if (!empty($priority) && isset($localeList[$priority])) {
+                $locale = $localeList[$priority];
+
+                break;
+            }
+        }
+
+        if (empty($locale)) {
+            // Use default order
+            $priorityList = [
+                'platform_lang',
+                'user_profil_lang',
+                'course_lang',
+                'user_selected_lang',
+            ];
+            foreach ($priorityList as $setting) {
+                if (isset($localeList[$setting])) {
+                    $locale = $localeList[$setting];
+                }
+            }
+        }
+
+        if (empty($locale)) {
+            $locale = $this->defaultLocale;
+        }
+
+        return $locale;
     }
 
     public static function getSubscribedEvents()

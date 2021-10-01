@@ -20,7 +20,7 @@
           >
             <div
               class="text-h6"
-              v-text="$t('Atachments')"
+              v-text="$t('Attachments')"
             />
             <ul>
               <li

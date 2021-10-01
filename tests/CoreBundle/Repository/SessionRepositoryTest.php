@@ -397,6 +397,7 @@ class SessionRepositoryTest extends AbstractApiTest
             ->setVisibility(Session::INVISIBLE)
         ;
         $em->persist($session);
+
         $this->assertSame(0, $session->getCourses()->count());
 
         $session->addCourse($course);
@@ -435,6 +436,9 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertCount(3, $sessions);
 
         $sessions = $sessionRepo->getUsersByAccessUrl($session, $url, [Session::STUDENT]);
+        $this->assertCount(2, $sessions);
+
+        $sessions = $sessionRepo->getUsersByAccessUrl($session, $url, [Session::STUDENT, Session::DRH]);
         $this->assertCount(2, $sessions);
     }
 }

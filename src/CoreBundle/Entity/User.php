@@ -344,11 +344,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
      *
-     * @Groups({"user:read", "user:write", "user_json:read"})
      * @ORM\Column(type="array")
      *
      * @var mixed[]|string[]
      */
+    #[Groups(['user:read', 'user:write', 'user_json:read'])]
     protected array $roles = [];
 
     /**
@@ -716,7 +716,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     protected ?int $hrDeptId = null;
 
-    protected AccessUrl $currentUrl;
+    #[Groups(['user:write'])]
+    protected ?AccessUrl $currentUrl = null;
 
     /**
      * @var Collection<int, MessageTag>|MessageTag[]
@@ -1645,25 +1646,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getCurrentUrl(): AccessUrl
+    public function getCurrentUrl(): ?AccessUrl
     {
         return $this->currentUrl;
     }
 
-    /**
-     * Sets the AccessUrl for the current user in memory.
-     */
     public function setCurrentUrl(AccessUrl $url): self
     {
-        $urlList = $this->getPortals();
-        /** @var AccessUrlRelUser $item */
-        foreach ($urlList as $item) {
-            if ($item->getUrl()->getId() === $url->getId()) {
-                $this->currentUrl = $url;
-
-                break;
-            }
-        }
+        $accessUrlRelUser = (new AccessUrlRelUser)
+            ->setUrl($url)
+            ->setUser($this)
+        ;
+        $this->getPortals()->add($accessUrlRelUser);
 
         return $this;
     }

@@ -447,7 +447,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON)) {
     $couponTable->addColumn('valid_start', Types::DATETIME_MUTABLE);
     $couponTable->addColumn('valid_end', Types::DATETIME_MUTABLE);
     $couponTable->addColumn('delivered', Types::INTEGER);
-    $couponTable->addColumn('active', Types::TINYINT);
+    $couponTable->addColumn('active', Types::BOOLEAN);
     $couponTable->setPrimaryKey(['id']);
 }
 

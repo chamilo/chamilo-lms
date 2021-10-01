@@ -299,7 +299,7 @@ class GroupManager
                 $category = $repo->findOneBy($criteria);*/
 
                 if (empty($category)) {
-                    $categoryId = store_forumcategory(['forum_category_title' => $forumName]);
+                    $categoryId = saveForumCategory(['forum_category_title' => $forumName]);
                 } else {
                     $categoryId = $category->getIid();
                 }

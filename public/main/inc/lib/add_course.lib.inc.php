@@ -531,7 +531,7 @@ class AddCourse
                 'forum_category_comment' => '',
             ];
 
-            $forumCategoryId = store_forumcategory($params, $courseInfo, false);
+            $forumCategoryId = saveForumCategory($params, $courseInfo, false);
 
             $params = [
                 'forum_category' => $forumCategoryId,

@@ -899,8 +899,8 @@ function getLastPostOfThread(int $threadId): array
 {
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $sql = "SELECT iid, post_date FROM $table_posts
-            WHERE threadId = ".(int) $threadId.'
-            ORDER BY post_date DESC LIMIT 1';
+            WHERE threadId = $threadId
+            ORDER BY post_date DESC LIMIT 1";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         return Database::fetch_array($result);
@@ -1461,21 +1461,21 @@ function get_thread_users_details(int $thread_id)
                     user.id = session_rel_user_rel_course.user_id AND
                     session_rel_user_rel_course.status = ".SessionEntity::STUDENT." AND
                     session_rel_user_rel_course.user_id NOT IN ($user_to_avoid) AND
-                    p.threadId = ".(int) $thread_id.' AND
-                    session_id = '.api_get_session_id()." AND
+                    p.threadId = $thread_id AND
+                    session_id = ".api_get_session_id()." AND
                     p.c_id = $course_id AND
-                    session_rel_user_rel_course.c_id = ".$course_id." $orderby ";
+                    session_rel_user_rel_course.c_id = $course_id $orderby ";
     } else {
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, threadId
                 FROM $t_posts p, $t_users user, $t_course_user course_user
                 WHERE
                     p.poster_id = user.id
                     AND user.id = course_user.user_id
-                    AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH.'
-                    AND p.threadId = '.(int) $thread_id."
-                    AND course_user.status NOT IN('1') AND
+                    AND course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                    AND p.threadId = $thread_id
+                    AND course_user.status != '1' AND
                     p.c_id = $course_id AND
-                    course_user.c_id = ".$course_id." $orderby";
+                    course_user.c_id = $course_id $orderby";
     }
 
     return Database::query($sql);
@@ -1521,10 +1521,10 @@ function get_thread_users_qualify(int $thread_id)
                     AND user.id = scu.user_id
                     AND scu.status = ".SessionEntity::STUDENT."
                     AND scu.user_id NOT IN ($user_to_avoid)
-                    AND qualify.threadId = ".(int) $thread_id.'
-                    AND post.threadId = '.(int) $thread_id."
+                    AND qualify.threadId = $thread_id
+                    AND post.threadId = $thread_id
                     AND scu.session_id = $sessionId
-                    AND scu.c_id = ".$course_id." AND
+                    AND scu.c_id = $course_id AND
                     qualify.c_id = $course_id AND
                     post.c_id = $course_id
                 $orderby ";
@@ -1538,9 +1538,9 @@ function get_thread_users_qualify(int $thread_id)
                      post.poster_id = user.id
                      AND post.poster_id = qualify.user_id
                      AND user.id = course_user.user_id
-                     AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH.'
-                     AND qualify.threadId = '.(int) $thread_id.'
-                     AND post.threadId = '.(int) $thread_id."
+                     AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                     AND qualify.threadId = $thread_id
+                     AND post.threadId = $thread_id
                      AND course_user.status not in('1')
                      AND course_user.c_id = $course_id
                      AND qualify.c_id = $course_id

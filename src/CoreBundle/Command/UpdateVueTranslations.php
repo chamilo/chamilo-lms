@@ -55,6 +55,14 @@ class UpdateVueTranslations extends Command
             $iso = $language->getIsocode();
 
             if ('en_US' === $iso) {
+                // Only update with the same variables.
+                $newLanguage = [];
+                foreach ($translations as $variable => $translation) {
+                    $newLanguage[$variable] = $variable;
+                }
+                $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
+                $fileToSave = $vueLocalePath.'en.json';
+                file_put_contents($fileToSave, $newLanguageToString);
                 continue;
             }
 

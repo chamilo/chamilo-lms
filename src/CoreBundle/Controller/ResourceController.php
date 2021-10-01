@@ -315,9 +315,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * View file of a resource node.
-     *
-     * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view")
      */
+    #[Route('/{tool}/{type}/{id}/view', name: 'chamilo_core_resource_view', methods: ['GET'])]
     public function viewAction(Request $request): Response
     {
         $id = $request->get('id');
@@ -334,10 +333,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * Redirect resource to link.
      *
-     * @Route("/{tool}/{type}/{id}/link", methods={"GET"}, name="chamilo_core_resource_link")
-     *
      * @return RedirectResponse|void
      */
+    #[Route('/{tool}/{type}/{id}/link', name: 'chamilo_core_resource_link', methods: ['GET'])]
     public function linkAction(Request $request, RouterInterface $router)
     {
         $id = $request->get('id');
@@ -361,10 +359,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * Download file of a resource node.
      *
-     * @Route("/{tool}/{type}/{id}/download", methods={"GET"}, name="chamilo_core_resource_download")
-     *
      * @return RedirectResponse|StreamedResponse
      */
+    #[Route('/{tool}/{type}/{id}/download', name: 'chamilo_core_resource_download', methods: ['GET'])]
     public function downloadAction(Request $request)
     {
         $id = (int) $request->get('id');

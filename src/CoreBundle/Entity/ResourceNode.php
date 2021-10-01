@@ -32,13 +32,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Base entity for all resources.
  *
- * @ApiResource(
- *     collectionOperations={"get"},
- *     normalizationContext={"groups"={"resource_node:read", "document:read"}},
- *     denormalizationContext={"groups"={"resource_node:write", "document:write"}}
- * )
- *
- * @ApiFilter(OrderFilter::class, properties={"id", "title", "resourceFile", "createdAt", "updatedAt"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *
  * @ORM\HasLifecycleCallbacks
@@ -47,6 +40,24 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @Gedmo\Tree(type="materializedPath")
  */
+#[ApiResource(
+    collectionOperations: [
+        'get',
+    ],
+    denormalizationContext: [
+        'groups' => ['resource_node:write', 'document:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['resource_node:read', 'document:read'],
+    ],
+)]
+#[ApiFilter(OrderFilter::class, properties: [
+    'id',
+    'title',
+    'resourceFile',
+    'createdAt',
+    'updatedAt',
+])]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',

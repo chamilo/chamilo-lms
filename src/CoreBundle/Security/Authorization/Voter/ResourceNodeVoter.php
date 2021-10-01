@@ -17,7 +17,6 @@ use Laminas\Permissions\Acl\Resource\GenericResource;
 use Laminas\Permissions\Acl\Role\GenericRole;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -242,95 +241,96 @@ class ResourceNodeVoter extends Voter
         if ($rightsFromResourceLink->count() > 0) {
             // Taken rights from the link.
             $rights = $rightsFromResourceLink;
-        } else {
-            // Taken the rights from the default tool
-            //$rights = $link->getResourceNode()->getTool()->getToolResourceRight();
-            //$rights = $link->getResourceNode()->getResourceType()->getTool()->getToolResourceRight();
+        }
 
-            // By default, the rights are:
-            // Teachers: CRUD.
-            // Students: Only read.
-            // Anons: Only read.
-            $readerMask = self::getReaderMask();
-            $editorMask = self::getEditorMask();
+        // Taken the rights from context (request + user roles).
+        //$rights = $link->getResourceNode()->getTool()->getToolResourceRight();
+        //$rights = $link->getResourceNode()->getResourceType()->getTool()->getToolResourceRight();
 
-            if ($courseId && $link->hasCourse() && $link->getCourse()->getId() === $courseId) {
-                // If teacher.
-                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_TEACHER)) {
-                    $resourceRight = (new ResourceRight())
-                        ->setMask($editorMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_TEACHER)
-                    ;
-                    $rights[] = $resourceRight;
-                }
-                // If student.
-                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT) &&
-                    ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
-                ) {
-                    $resourceRight = (new ResourceRight())
-                        ->setMask($readerMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_STUDENT)
-                    ;
-                    $rights[] = $resourceRight;
-                }
+        // By default, the rights are:
+        // Teachers: CRUD.
+        // Students: Only read.
+        // Anons: Only read.
+        $readerMask = self::getReaderMask();
+        $editorMask = self::getEditorMask();
 
-                // For everyone.
-                if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() &&
-                    $link->getCourse()->isPublic()
-                ) {
-                    $allowAnonsToView = true;
-                    $resourceRight = (new ResourceRight())
-                        ->setMask($readerMask)
-                        ->setRole('IS_AUTHENTICATED_ANONYMOUSLY')
-                    ;
-                    $rights[] = $resourceRight;
-                }
-            }
-
-            if (!empty($groupId)) {
-                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
-                    $resourceRight = (new ResourceRight())
-                        ->setMask($editorMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)
-                    ;
-                    $rights[] = $resourceRight;
-                }
-
-                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
-                    $resourceRight = (new ResourceRight())
-                        ->setMask($readerMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
-                    ;
-                    $rights[] = $resourceRight;
-                }
-            }
-
-            if (!empty($sessionId)) {
-                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
-                    $resourceRight = (new ResourceRight())
-                        ->setMask($editorMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)
-                    ;
-                    $rights[] = $resourceRight;
-                }
-
-                if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
-                    $resourceRight = (new ResourceRight())
-                        ->setMask($readerMask)
-                        ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
-                    ;
-                    $rights[] = $resourceRight;
-                }
-            }
-
-            if (empty($rights) && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-                // Give just read access.
+        if ($courseId && $link->hasCourse() && $link->getCourse()->getId() === $courseId) {
+            // If teacher.
+            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_TEACHER)) {
                 $resourceRight = (new ResourceRight())
-                    ->setMask($readerMask)
-                    ->setRole('ROLE_USER')
+                    ->setMask($editorMask)
+                    ->setRole(self::ROLE_CURRENT_COURSE_TEACHER)
                 ;
                 $rights[] = $resourceRight;
             }
+
+            // If student.
+            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT) &&
+                ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+            ) {
+                $resourceRight = (new ResourceRight())
+                    ->setMask($readerMask)
+                    ->setRole(self::ROLE_CURRENT_COURSE_STUDENT)
+                ;
+                $rights[] = $resourceRight;
+            }
+
+            // For everyone.
+            if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() &&
+                $link->getCourse()->isPublic()
+            ) {
+                $allowAnonsToView = true;
+                $resourceRight = (new ResourceRight())
+                    ->setMask($readerMask)
+                    ->setRole('IS_AUTHENTICATED_ANONYMOUSLY')
+                ;
+                $rights[] = $resourceRight;
+            }
+        }
+
+        if (!empty($groupId)) {
+            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
+                $resourceRight = (new ResourceRight())
+                    ->setMask($editorMask)
+                    ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)
+                ;
+                $rights[] = $resourceRight;
+            }
+
+            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
+                $resourceRight = (new ResourceRight())
+                    ->setMask($readerMask)
+                    ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
+                ;
+                $rights[] = $resourceRight;
+            }
+        }
+
+        if (!empty($sessionId)) {
+            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
+                $resourceRight = (new ResourceRight())
+                    ->setMask($editorMask)
+                    ->setRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)
+                ;
+                $rights[] = $resourceRight;
+            }
+
+            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
+                $resourceRight = (new ResourceRight())
+                    ->setMask($readerMask)
+                    ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
+                ;
+                $rights[] = $resourceRight;
+            }
+        }
+
+        if (empty($rights) && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
+            // Give just read access.
+            $resourceRight = (new ResourceRight())
+                ->setMask($readerMask)
+                ->setRole('ROLE_USER')
+            ;
+            $rights[] = $resourceRight;
         }
 
         // Asked mask
@@ -354,9 +354,6 @@ class ResourceNodeVoter extends Voter
 
         $currentStudentSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT);
         $currentTeacherSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-        //$superAdmin = new GenericRole('ROLE_SUPER_ADMIN');
-        //$admin = new GenericRole('ROLE_ADMIN');
 
         // Setting Simple ACL.
         $acl = (new Acl())

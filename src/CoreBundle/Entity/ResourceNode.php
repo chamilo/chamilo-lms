@@ -225,14 +225,14 @@ class ResourceNode
         $this->fileEditableText = false;
     }
 
-    public function getUuid(): ?UuidV4
-    {
-        return $this->uuid;
-    }
-
     public function __toString(): string
     {
         return $this->getPathForDisplay();
+    }
+
+    public function getUuid(): ?UuidV4
+    {
+        return $this->uuid;
     }
 
     /**

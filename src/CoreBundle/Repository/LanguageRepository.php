@@ -34,6 +34,19 @@ class LanguageRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    public function getAllAvailableToArray(): array
+    {
+        $languages = $this->getAllAvailable()->getQuery()->getResult();
+
+        $list = [];
+        /** @var Language $language */
+        foreach ($languages as $language) {
+            $list[$language->getIsocode()] = $language->getOriginalName();
+        }
+
+        return $list;
+    }
+
     /**
      * Get all the sub languages that are made available by the admin.
      *

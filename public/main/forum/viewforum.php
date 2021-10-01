@@ -469,7 +469,7 @@ if (is_array($threads)) {
                             .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
                     }
 
-                    $iconsEdit .= return_visible_invisible_icon(
+                    $iconsEdit .= returnVisibleInvisibleIcon(
                         'thread',
                         $thread->getIid(),
                         $thread->isVisible($courseEntity, $sessionEntity),
@@ -478,7 +478,7 @@ if (is_array($threads)) {
                             'gid' => $groupId,
                         ]
                     );
-                    $iconsEdit .= return_lock_unlock_icon(
+                    $iconsEdit .= returnLockUnlockIcon(
                         'thread',
                         $thread->getIid(),
                         $thread->getLocked(),

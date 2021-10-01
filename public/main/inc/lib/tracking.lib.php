@@ -9053,9 +9053,12 @@ class TrackingCourseLog
 
         $attendanceLink = '';
         if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+            $startDate = $sessionInfo['access_start_date'];
+            $endDate = $sessionInfo['access_end_date'];
             $attendance = new Attendance();
-            $result = $attendance->getAttendanceBaseInLogin(false, true);
-            if (false !== $result) {
+            $checkExport = $attendance->getAttendanceLogin($startDate, $endDate);
+            if (false !== $checkExport) {
                 $attendanceLink = Display::url(
                     Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
                     api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'

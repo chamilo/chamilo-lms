@@ -41,7 +41,9 @@
                     class=""
                     v-for="tool in tools.admin"
                 >
-                  <q-item-section>{{ tool.ctool.nameToTranslate }}</q-item-section>
+                  <q-item-section>
+                    {{ $t(tool.ctool.nameToTranslate) }}
+                  </q-item-section>
                 </q-item>
               </q-list>
             </div>
@@ -51,7 +53,9 @@
 
     </div>
 
-    <div v-if="isCurrentTeacher && course" class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2">
+    <div v-if="isCurrentTeacher && course"
+         class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2"
+    >
       <div class="p-10 text-center">
         <div>
           <v-icon
@@ -59,14 +63,12 @@
               size="72px"
               class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light"
           />
-
         </div>
-
         <div class="mt-2 font-bold">
           {{ $t("You don't have course content") }}
         </div>
         <div>
-          {{ $t('Add a course introduction to display to your students.') }}
+          {{ $t('Add a course introduction to display to your students') }}
         </div>
         <a class="mt-2 btn btn-info">
           <v-icon>mdi-plus</v-icon>

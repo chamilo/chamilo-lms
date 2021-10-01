@@ -119,22 +119,10 @@ abstract class AbstractTool
         return $this;
     }
 
-    /*public function getIcon(): string
-    {
-        return $this->icon;
-    }
-
-    public function setIcon(string $icon): self
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }*/
-
     public function getNameToShow(): string
     {
-        return $this->getName();
-        //return ucfirst(str_replace('_', ' ', $this->nameToShow));
+        //return $this->getName();
+        return ucfirst(str_replace('_', ' ', $this->getName()));
     }
 
     public function setNameToShow(string $nameToShow): self

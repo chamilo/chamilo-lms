@@ -117,7 +117,7 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="question_options">';
+            echo '<div class="question_options type-'.$answerType.'">';
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId, $course_id, $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
@@ -520,16 +520,14 @@ class ExerciseLib
                             if ($show_comment) {
                                 if (empty($comment)) {
                                     $s .= '<div id="answer'.$questionId.$numAnswer.'"
-                                            class="exercise-unique-answer-image" style="text-align: center">';
+                                            class="exercise-unique-answer-image text-center">';
                                 } else {
                                     $s .= '<div id="answer'.$questionId.$numAnswer.'"
-                                            class="exercise-unique-answer-image col-xs-6 col-sm-12"
-                                            style="text-align: center">';
+                                            class="exercise-unique-answer-image col-xs-6 col-sm-12 text-center">';
                                 }
                             } else {
                                 $s .= '<div id="answer'.$questionId.$numAnswer.'"
-                                        class="exercise-unique-answer-image col-xs-6 col-md-3"
-                                        style="text-align: center">';
+                                        class="exercise-unique-answer-image col-xs-6 col-md-3 text-center">';
                             }
                         }
 

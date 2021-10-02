@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CToolIntroRepository;
@@ -75,9 +76,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
     public function testCreateIntroApi(): void
     {
         $course = $this->createCourse('new');
-
         $token = $this->getUserToken();
-
         $resourceNodeId = $course->getResourceNode()->getId();
 
         /** @var CTool $courseTool */
@@ -85,7 +84,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
 
         $iri = '/api/c_tools/'.$courseTool->getIid();
 
-        $this->createClientWithCredentials($token)->request(
+        $response = $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/c_tool_intros',
             [
@@ -93,6 +92,12 @@ class CToolIntroRepositoryTest extends AbstractApiTest
                     'introText' => 'introduction here',
                     'courseTool' => $iri,
                     'parentResourceNodeId' => $resourceNodeId,
+                    'resourceLinkList' => [
+                        [
+                            'cid' => $course->getId(),
+                            'visibility' => ResourceLink::VISIBILITY_PUBLISHED
+                        ]
+                    ]
                 ],
             ]
         );
@@ -105,6 +110,17 @@ class CToolIntroRepositoryTest extends AbstractApiTest
             '@type' => 'CToolIntro',
             'introText' => 'introduction here',
         ]);
+
+        $repo = self::getContainer()->get(CToolIntroRepository::class);
+        $id = $response->toArray()['iid'];
+
+        /** @var CToolIntro $toolIntro */
+        $toolIntro = $repo->find($id);
+        $this->assertNotNull($toolIntro);
+        $this->assertNotNull($toolIntro->getResourceNode());
+        $this->assertsame(1, $toolIntro->getResourceNode()->getResourceLinks()->count());
+
+        $this->assertSame(1, $repo->count([]));
     }
 
     public function testUpdateIntroApi(): void

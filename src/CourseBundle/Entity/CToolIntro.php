@@ -9,8 +9,6 @@ namespace Chamilo\CourseBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Chamilo\CoreBundle\Controller\Api\CreateCToolIntroAction;
-//use Chamilo\CoreBundle\Controller\Api\UpdateCToolIntroAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -33,7 +31,6 @@ use Symfony\Component\Validator\Constraints as Assert;
             'security' => "is_granted('ROLE_USER')",
         ],
         'post' => [
-            'controller' => CreateCToolIntroAction::class,
             'security_post_denormalize' => "is_granted('CREATE', object)",
         ],
     ],
@@ -42,8 +39,6 @@ use Symfony\Component\Validator\Constraints as Assert;
             'security' => "is_granted('VIEW', object)",
         ],
         'put' => [
-            //'controller' => UpdateCToolIntroAction::class,
-            //'deserialize' => false,
             'security' => "is_granted('EDIT', object)",
         ],
         'delete' => [

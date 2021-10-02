@@ -59,8 +59,13 @@
 
     <q-card>
       <q-card-section>
-        <div class="text-h6">{{ item.title }}</div>
-        <div class="text-subtitle2" v-if="item.sender">
+        <div class="text-h6">
+          {{ item.title }}
+        </div>
+        <div
+          v-if="item.sender"
+          class="text-subtitle2"
+        >
           <q-avatar size="32px">
             <img :src="item.sender['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
           </q-avatar>
@@ -70,16 +75,18 @@
       </q-card-section>
 
       <q-card-section>
-        <div v-if="item.receiversTo">
+        <div
+          v-if="item.receiversTo"
+        >
           {{ $t('To') }} :
-          <v-chip v-for="receiver in item.receiversTo ">
+          <v-chip v-for="receiver in item.receiversTo">
             {{ receiver.receiver['username'] }}
           </v-chip>
         </div>
 
         <div v-if="item.receiversCc.length">
           {{ $t('Cc') }} :
-          <v-chip v-for="receiver in item.receiversCc ">
+          <v-chip v-for="receiver in item.receiversCc">
             {{ receiver.receiver['username'] }}
           </v-chip>
         </div>
@@ -94,7 +101,7 @@
       <q-card-section
         v-if="item.attachments && item.attachments.length > 0"
       >
-        <q-separator/>
+        <q-separator />
 
         <p class="my-3">
           {{ item.attachments.length }} {{ $t('Attachments') }}
@@ -116,7 +123,8 @@
             <q-btn
               v-else
               :href="attachment.downloadUrl"
-              flat icon="attachment"
+              flat
+              icon="attachment"
               type="a"
             >
               {{ attachment.resourceNode.resourceFile.originalName }}

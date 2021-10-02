@@ -64,7 +64,7 @@ function handleForum($url)
                 return $formContent;
                 break;
             case 'add_category':
-                $formContent = getForumCategoryAddForm([], $lp_id);
+                $formContent = getForumCategoryAddForm($lp_id);
 
                 return $formContent;
                 break;
@@ -196,7 +196,7 @@ function handleForum($url)
  * @version may 2011, Chamilo 1.8.8
  * @throws Exception
  */
-function getForumCategoryAddForm(int $lp_id): string
+function getForumCategoryAddForm(int $lp_id = null): string
 {
     $form = new FormValidator(
         'forumcategory',
@@ -457,7 +457,7 @@ function forumForm(CForum $forum = null, int $lp_id = null): string
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->getSubmitValues();
-            $forumId = store_forum($values, '', true);
+            $forumId = store_forum($values, [], true);
             if ($forumId) {
                 // SkillModel::saveSkills($form, ITEM_TYPE_FORUM, $forumId);
                 if (isset($values['forum_id'])) {
@@ -676,7 +676,7 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
 
     // Remove existing picture if it was requested.
     if (!empty($_POST['remove_picture'])) {
-        deleteForumImage($values['forum_id']);
+        //deleteForumImage($values['forum_id']);
     }
 
     $new_file_name = '';
@@ -1229,7 +1229,6 @@ function get_forums_in_category(int $categoryId, int $courseId = 0)
  */
 function get_forums(
     int $courseId = null,
-    bool $includeGroupsForum = true,
     int $sessionId = 0
 ) {
     $repo = Container::getForumRepository();
@@ -1243,6 +1242,22 @@ function get_forums(
         ->setParameter('catId', $cat_id);
     */
     return $qb->getQuery()->getResult();
+}
+
+/**
+ * Returns the given forum ID's forum instance
+ */
+function getForum(
+    int $forumId = null
+): CForum|bool {
+    if (!empty($forumId)) {
+        $repo = Container::getForumRepository();
+        $qb = $repo->find($forumId);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    return false;
 }
 
 /**
@@ -2801,9 +2816,10 @@ function store_reply(CForum $forum, CForumThread $thread, $values, $courseId = 0
 
         $repo = Container::getForumPostRepository();
         $post = new CForumPost();
+        $text = empty($values['post_text']) ? '' : $values['post_text'];
         $post
             ->setPostTitle($values['post_title'])
-            ->setPostText(isset($values['post_text']) ?: null)
+            ->setPostText($text)
             ->setThread($thread)
             ->setForum($forum)
             ->setUser(api_get_user_entity($userId))
@@ -4652,10 +4668,11 @@ function get_name_thread_by_id($thread_id)
  * This function gets all the post written by an user.
  *
  * @param int $user_id
+ * @param int $courseId
  *
  * @return string
  */
-function get_all_post_from_user($user_id, $courseId)
+function get_all_post_from_user(int $user_id, int $courseId): string
 {
     $j = 0;
     $forums = get_forums($courseId);

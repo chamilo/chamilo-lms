@@ -61,3 +61,42 @@
 .question_menu {
   @apply p-4 flex flex-row gap-1;
 }
+
+/** Question unique answer image */
+.question_options {
+  &.type-17 {
+    @apply grid grid-flow-col auto-cols-max;
+  }
+
+  .exercise-unique-answer-image {
+    .radio {
+      padding-left: 10px;
+      margin-left: 0;
+    }
+  }
+
+  label {
+    > input {
+      .thumbnail {
+        @apply p-2;
+        box-sizing: border-box;
+        border: 2px solid #eeeeee;
+
+        p {
+          @apply m-0;
+        }
+
+        img {
+          max-width: 100%;
+        }
+      }
+
+      &:checked {
+        + .thumbnail {
+          border: 2px solid #337AB7;
+          box-shadow: 0 4px 18px #C8C8C8;
+        }
+      }
+    }
+  }
+}

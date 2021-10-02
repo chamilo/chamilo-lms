@@ -50,6 +50,10 @@ If there are DB changes you can migrate your test installation with:
 
 Those commands will install Chamilo in the chamilo_test database.
 
+In order to delete the test database and restart the process use:
+
+`php bin/console --env=test doctrine:database:drop`
+
 ### Use 
 Execute the tests with: 
 

@@ -403,7 +403,15 @@ class UserManager
                     'original_password' => stripslashes($original_password),
                     'mailWebPath' => $url,
                     'new_user' => $user,
+                    'search_link' => $url
                 ];
+
+                // ofaj
+                if ('true' === api_get_setting('session.allow_search_diagnostic')) {
+                    $urlSearch = api_get_path(WEB_CODE_PATH).'search/search.php';
+                    $linkSearch = Display::url($urlSearch, $urlSearch);
+                    $params['search_link'] = $linkSearch;
+                }
 
                 $emailBody = $tpl->render(
                     '@ChamiloCore/Mailer/Legacy/content_registration_platform.html.twig',
@@ -536,6 +544,7 @@ class UserManager
                         'user_added' => $user,
                         'link' => Display::url($url, $url),
                         'form' => $formData,
+                        'user_language' => $user->getLocale(),
                     ];
                     $emailBody = $tpl->render(
                         '@ChamiloCore/Mailer/Legacy/content_registration_platform_to_admin.html.twig',

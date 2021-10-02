@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * This script displays a form for registering new users.
@@ -13,7 +14,7 @@ use ChamiloSession as Session;
 if (!empty($_POST['language'])) {
     $_GET['language'] = $_POST['language'];
 }
-require_once __DIR__.'/../inc/global.inc.php';
+
 $hideHeaders = isset($_GET['hide_headers']);
 
 $allowedFields = [
@@ -111,16 +112,7 @@ if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'));
 }
 
-if (!empty($_SESSION['user_language_choice'])) {
-    $user_selected_language = $_SESSION['user_language_choice'];
-} elseif (!empty($_SESSION['_user']['language'])) {
-    $user_selected_language = $_SESSION['_user']['language'];
-} else {
-    $user_selected_language = api_get_setting('platformLanguage');
-}
-
 $extraConditions = api_get_configuration_value('show_conditions_to_user');
-
 if ($extraConditions && isset($extraConditions['conditions'])) {
     // Create user extra fields for the conditions
     $userExtraField = new ExtraField('user');
@@ -268,11 +260,13 @@ if (false === $user_already_registered_show_terms &&
         $form->addRule('username', get_lang('This login is already in use'), 'username_available');
     }
 
+    $passDiv = '<div id="password_progress"></div><div id="password-verdict"></div><div id="password-errors"></div>';
+
     // PASSWORD
     $form->addElement(
         'password',
         'pass1',
-        get_lang('Pass'),
+        [get_lang('Pass'), $passDiv],
         ['id' => 'pass1', 'size' => 20, 'autocomplete' => 'off']
     );
 
@@ -311,7 +305,9 @@ if (false === $user_already_registered_show_terms &&
         if ('true' == api_get_setting('registration', 'language')) {
             $form->addSelectLanguage(
                 'language',
-                get_lang('Language')
+                get_lang('Language'),
+                [],
+                ['id' => 'language']
             );
         }
     }
@@ -424,7 +420,6 @@ if (false === $user_already_registered_show_terms &&
             $extraFieldList = $allowedFields['extra_fields'];
         }
         $requiredFields = api_get_configuration_value('required_extra_fields_in_inscription');
-
         if (!empty($requiredFields) && $requiredFields['options']) {
             $requiredFields = $requiredFields['options'];
         }
@@ -529,174 +524,243 @@ $form->applyFilter('__ALL__', 'Security::remove_XSS');
 $form->setDefaults($defaults);
 $content = null;
 
-$tool_name = get_lang('Registration');
+$_user['language'] = 'french';
+$userInfo = api_get_user_info();
+if (!empty($userInfo)) {
+    $langInfo = api_get_language_from_iso($userInfo['language']);
+    $_user['language'] = $langInfo->getEnglishName();
+}
 
+$tool_name = get_lang('Registration', null, (!empty($_POST['language']) ? $_POST['language'] : $_user['language']));
+$tool_name = get_lang('Registration');
+if (!CustomPages::enabled()) {
 // Load terms & conditions from the current lang
-if ('true' === api_get_setting('allow_terms_conditions')) {
-    $get = array_keys($_GET);
-    if (isset($get)) {
-        if (isset($get[0]) && 'legal' == $get[0]) {
-            $language = api_get_language_isocode();
-            $language = api_get_language_id($language);
-            $term_preview = LegalManager::get_last_condition($language);
-            if (!$term_preview) {
-                //look for the default language
-                $language = api_get_setting('platformLanguage');
+    if ('true' === api_get_setting('allow_terms_conditions')) {
+        $get = array_keys($_GET);
+        if (isset($get)) {
+            if (isset($get[0]) && 'legal' == $get[0]) {
+                $language = api_get_language_isocode();
                 $language = api_get_language_id($language);
                 $term_preview = LegalManager::get_last_condition($language);
-            }
-            Display::display_header(get_lang('Terms and Conditions'));
-            if (!empty($term_preview['content'])) {
-                echo $term_preview['content'];
-
-                $termExtraFields = new ExtraFieldValue('terms_and_condition');
-                $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
-                foreach ($values as $value) {
-                    echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                if (!$term_preview) {
+                    //look for the default language
+                    $language = api_get_setting('platformLanguage');
+                    $language = api_get_language_id($language);
+                    $term_preview = LegalManager::get_last_condition($language);
                 }
-            } else {
-                echo get_lang('Coming soon...');
+
+                Display::display_header(get_lang('Terms and Conditions'));
+                if (!empty($term_preview['content'])) {
+                    echo $term_preview['content'];
+
+                    $termExtraFields = new ExtraFieldValue('terms_and_condition');
+                    $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+                    foreach ($values as $value) {
+                        echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                    }
+                } else {
+                    echo get_lang('Coming soon...');
+                }
+                Display::display_footer();
+                exit;
             }
-            Display::display_footer();
-            exit;
         }
     }
-}
 
-$tool_name = get_lang('Registration');
+    $tool_name = get_lang('Registration');
 
-if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
-    $tool_name = get_lang('Terms and Conditions');
-}
+    if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
+        $tool_name = get_lang('Terms and Conditions');
+    }
 
 // Forbidden to self-register
-if ($isNotAllowedHere) {
-    api_not_allowed(
-        true,
-        get_lang(
-            'Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'
-        )
-    );
-}
+    if ($isNotAllowedHere) {
+        api_not_allowed(
+            true,
+            get_lang(
+                'Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'
+            )
+        );
+    }
 
-if ('approval' === api_get_setting('allow_registration')) {
-    $content .= Display::return_message(get_lang('Your account has to be approved'));
+    if ('approval' === api_get_setting('allow_registration')) {
+        $content .= Display::return_message(get_lang('Your account has to be approved'));
+    }
+
+    //if openid was not found
+    if (!empty($_GET['openid_msg']) && 'idnotfound' == $_GET['openid_msg']) {
+        $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
+    }
 }
 
 $blockButton = false;
 $termActivated = false;
 $showTerms = false;
 // Terms and conditions
-if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
+if ('true' === api_get_setting('allow_terms_conditions')) {
     if (!api_is_platform_admin()) {
         if ('true' === api_get_setting('show_terms_if_profile_completed')) {
             $userInfo = api_get_user_info();
             if ($userInfo && ANONYMOUS != $userInfo['status']) {
+                $extraFieldValue = new ExtraFieldValue('user');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    api_get_user_id(),
+                    'termactivated'
+                );
+                if (isset($value['value'])) {
+                    $termActivated = !empty($value['value']) && 1 == $value['value'];
+                }
+
+                if (false === $termActivated) {
+                    $blockButton = true;
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('Term activated is needed description'),
+                            'warning',
+                            false
+                        )
+                    );
+                }
+
+                if (false === $blockButton) {
+                    if (1 !== (int) $userInfo['profile_completed']) {
+                        $blockButton = true;
+                        Display::addFlash(
+                            Display::return_message(
+                                get_lang('Term your profile is not completed'),
+                                'warning',
+                                false
+                            )
+                        );
+                    }
+                }
+                /*
                 if (1 !== (int) $userInfo['profile_completed']) {
                     api_not_allowed(true);
-                }
+                }*/
             }
         }
     }
 
-    // Get user language ignoring the platform language
-    $language = api_get_language_isocode();
-    $language = api_get_language_id($language);
-    $term_preview = LegalManager::get_last_condition($language);
-
-    if (!$term_preview) {
-        //we load from the platform
-        $language = api_get_setting('platformLanguage');
+    // Ofaj
+    if (!api_is_anonymous()) {
+        $language = api_get_language_isocode();
         $language = api_get_language_id($language);
         $term_preview = LegalManager::get_last_condition($language);
-
-        //if is false we load from english
         if (!$term_preview) {
-            $language = api_get_language_id('english'); //this must work
+            //we load from the platform
+            $language = api_get_setting('platformLanguage');
+            $language = api_get_language_id($language);
             $term_preview = LegalManager::get_last_condition($language);
+
+            //if is false we load from english
+            if (!$term_preview) {
+                $language = api_get_language_id('english'); //this must work
+                $term_preview = LegalManager::get_last_condition($language);
+            }
+        }
+
+        // ofaj
+        if ($termActivated !== false) {
+            // Version and language
+            $form->addElement(
+                'hidden',
+                'legal_accept_type',
+                $term_preview['version'].':'.$term_preview['language_id']
+            );
+            $form->addElement(
+                'hidden',
+                'legal_info',
+                $term_preview['id'].':'.$term_preview['language_id']
+            );
+            if ($term_preview['type'] == 1) {
+                $form->addElement(
+                    'checkbox',
+                    'legal_accept',
+                    null,
+                    get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.
+                    get_lang('TermsAndConditions').'</a>'
+                );
+                $form->addRule(
+                    'legal_accept',
+                    get_lang('ThisFieldIsRequired'),
+                    'required'
+                );
+            } else {
+                $preview = LegalManager::show_last_condition($term_preview);
+                $form->addElement('label', null, $preview);
+
+                $termExtraFields = new ExtraFieldValue('terms_and_condition');
+                $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+                foreach ($values as $value) {
+                    //if ($value['variable'] === 'category') {
+                    $form->addLabel($value['display_text'], $value['value']);
+                    //}
+                }
+            }
         }
     }
+}
 
-    // Version and language
-    $form->addHidden('legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
-    $form->addHidden('legal_info', $term_preview['id'].':'.$term_preview['language_id']);
+if ($user_already_registered_show_terms === false) {
+    $form->addCheckBox(
+        'extra_platformuseconditions',
+        null,
+        get_lang('PlatformUseConditions')
+    );
+    $form->addRule(
+        'extra_platformuseconditions',
+        get_lang('ThisFieldIsRequired'),
+        'required'
+    );
+}
 
-    // Show if only HTML type
-    if ('2' == $term_preview['type']) {
-        $termExtraFields = new ExtraFieldValue('terms_and_condition');
-        $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
-        foreach ($values as $value) {
-            //if ($value['variable'] === 'category') {
-            $form->addLabel($value['display_text'], $value['value']);
-            //}
-        }
-    }
-
-    if (1 == $term_preview['type']) {
-        $form->addElement(
-            'checkbox',
-            'legal_accept',
+if ($blockButton) {
+    if ($termActivated !== false) {
+        $form->addButton(
+            'submit',
+            get_lang('RegisterUserOk'),
+            'check',
+            'primary',
             null,
-            get_lang('I have read and agree to the').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang(
-                'Terms and Conditions'
-            ).'</a>'
+            null,
+            ['disabled' => 'disabled'],
+            false
         );
-        $form->addRule('legal_accept', get_lang('We need you to accept our treatment of your data in order to provide you with this service. If you want to register an account, please accept the terms and click Submit. If you don\'t accept, no personal data will be treated by us about you.'), 'required');
+    }
+} else {
+    $allow = api_get_configuration_value('allow_double_validation_in_registration');
+
+    if ($allow && $termActivated == false) {
+        $htmlHeadXtra[] = '<script>
+            $(document).ready(function() {
+                $("#pre_validation").click(function() {
+                    $(this).hide();
+                    $("#final_button").show();
+                });
+            });
+        </script>';
+
+        $form->addLabel(
+            null,
+            Display::url(
+                get_lang('Ok'),
+                'javascript:void',
+                ['class' => 'btn btn-default', 'id' => 'pre_validation']
+            )
+        );
+        $form->addHtml('<div id="final_button" style="display: none">');
+        $form->addLabel(
+            null,
+            Display::return_message(get_lang('DoubleValidationMessage'), 'info', false)
+        );
+
+        $form->addButton('submit', get_lang('RegisterUser'), '', 'primary');
+        $form->addHtml('</div>');
     } else {
-        $preview = LegalManager::show_last_condition($term_preview);
-        $form->addElement('label', null, $preview);
+        $form->addButtonNext(get_lang('RegisterUser'));
     }
     $showTerms = true;
-}
-
-$allowDoubleValidation = api_get_configuration_value('allow_double_validation_in_registration');
-
-$formContainsSendButton = false;
-if ($allowDoubleValidation && false == $showTerms) {
-    $htmlHeadXtra[] = '<script>
-        $(function() {
-            $("#pre_validation").click(function() {
-                $(this).hide();
-                $("#final_button").show();
-            });
-        });
-    </script>';
-
-    $form->addLabel(
-        null,
-        Display::url(
-            get_lang('Validate'),
-            'javascript:void',
-            ['class' => 'btn btn-default', 'id' => 'pre_validation']
-        )
-    );
-    $form->addHtml('<div id="final_button" style="display: none">');
-    $form->addLabel(
-        null,
-        Display::return_message(get_lang('You confirm that you really want to subscribe to this plateform.'), 'info', false)
-    );
-    $form->addButton('submit', get_lang('Register'), '', 'primary');
-    $form->addHtml('</div>');
-    $formContainsSendButton = true;
-} else {
-    // In normal cases (without double validation), we check if the
-    // registration is allowed in any way or if the user is already registered
-    // but needs to confirm terms. If not, send not allowed message
-    if (
-        'approval' === api_get_setting('allow_registration') ||
-        'true' === api_get_setting('allow_registration') ||
-        'confirmation' === api_get_setting('allow_registration') ||
-        $user_already_registered_show_terms ||
-        $showTerms
-    ) {
-        $form->addButtonNext(get_lang('Register'));
-        $formContainsSendButton = true;
-    }
-}
-
-// Blocks page because there's any action to do.
-if (!$formContainsSendButton) {
-    api_not_allowed(true);
 }
 
 $course_code_redirect = Session::read('course_redirect');
@@ -807,10 +871,10 @@ if ($form->validate()) {
             0,
             $extras,
             null,
-            false,
+            true,
             false,
             $values['address'],
-            false,
+            true,
             $form,
             $creatorId
         );
@@ -980,6 +1044,7 @@ if ($form->validate()) {
                 if (!empty($bossList)) {
                     $bossList = array_column($bossList, 'boss_id');
                     $currentUserInfo = api_get_user_info($user_id);
+                    $followUpPath = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$currentUserInfo['id'];
                     foreach ($bossList as $bossId) {
                         $subjectEmail = sprintf(
                             get_lang('User %s signed the agreement.'),
@@ -1139,48 +1204,66 @@ if ($form->validate()) {
     Session::erase('session_redirect');
     Session::erase('only_one_course_session_redirect');
 
-    $tpl = new Template($tool_name);
-    $tpl->assign('inscription_header', Display::page_header($tool_name));
-    $tpl->assign('inscription_content', $content);
-    $tpl->assign('form', '');
-    $tpl->assign('text_after_registration', $text_after_registration);
-    $tpl->assign('hide_header', $hideHeaders);
-    $inscription = $tpl->get_template('auth/inscription.tpl');
-    $tpl->display($inscription);
+    if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION_FEEDBACK)) {
+        CustomPages::display(
+            CustomPages::REGISTRATION_FEEDBACK,
+            ['info' => $text_after_registration]
+        );
+    } else {
+        $tpl = new Template($tool_name);
+        $tpl->assign('inscription_header', Display::page_header($tool_name));
+        $tpl->assign('inscription_content', $content);
+        $tpl->assign('form', '');
+        $tpl->assign('text_after_registration', $text_after_registration);
+        $tpl->assign('hide_header', $hideHeaders);
+        $inscription = $tpl->get_template('auth/inscription.tpl');
+        $tpl->display($inscription);
+    }
 } else {
-    if (!api_is_anonymous()) {
-        // Saving user to course if it was set.
-        if (!empty($course_code_redirect)) {
-            $course_info = api_get_course_info($course_code_redirect);
-            if (!empty($course_info)) {
-                if (in_array(
-                    $course_info['visibility'],
-                    [
-                        COURSE_VISIBILITY_OPEN_PLATFORM,
-                        COURSE_VISIBILITY_OPEN_WORLD,
-                    ]
-                )
-                ) {
-                    CourseManager::subscribeUser(
-                        api_get_user_id(),
-                        $course_info['real_id']
-                    );
+    // Custom pages
+    if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION)) {
+        CustomPages::display(
+            CustomPages::REGISTRATION,
+            ['form' => $form, 'content' => $content]
+        );
+    } else {
+        if (!api_is_anonymous()) {
+            // Saving user to course if it was set.
+            if (!empty($course_code_redirect)) {
+                $course_info = api_get_course_info($course_code_redirect);
+                if (!empty($course_info)) {
+                    if (in_array(
+                        $course_info['visibility'],
+                        [
+                            COURSE_VISIBILITY_OPEN_PLATFORM,
+                            COURSE_VISIBILITY_OPEN_WORLD,
+                        ]
+                    )
+                    ) {
+                        CourseManager::subscribeUser(
+                            api_get_user_id(),
+                            $course_info['real_id']
+                        );
+                    }
                 }
             }
+            CourseManager::redirectToCourse([]);
         }
-        CourseManager::redirectToCourse([]);
+
+        $tpl = new Template($tool_name);
+        $inscription_header = '';
+        if ($termActivated !== false) {
+            $inscription_header = Display::page_header($tool_name);
+        }
+        $tpl->assign('inscription_header', $inscription_header);
+        $tpl->assign('inscription_content', $content);
+        $tpl->assign('form', $form->returnForm());
+        $tpl->assign('hide_header', $hideHeaders);
+        $tpl->assign('text_after_registration', $text_after_registration);
+        //$page = Container::getPage('inscription');
+        //$tpl->assign('page', $page);
+
+        $inscription = $tpl->get_template('auth/inscription.tpl');
+        $tpl->display($inscription);
     }
-
-    $tpl = new Template($tool_name);
-
-    $tpl->assign('inscription_header', Display::page_header($tool_name));
-    $tpl->assign('inscription_content', $content);
-    $tpl->assign('form', $form->returnForm());
-    $tpl->assign('hide_header', $hideHeaders);
-    $tpl->assign('text_after_registration', $text_after_registration);
-    //$page = Container::getPage('inscription');
-    //$tpl->assign('page', $page);
-
-    $inscription = $tpl->get_template('auth/inscription.tpl');
-    $tpl->display($inscription);
 }

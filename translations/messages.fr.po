@@ -2052,7 +2052,7 @@ msgid "Tests"
 msgstr "Tests"
 
 msgid "Courses"
-msgstr "Parcours d'apprentissage"
+msgstr "Cours"
 
 msgid "Copy course"
 msgstr "Copier un cours"

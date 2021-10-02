@@ -123,13 +123,13 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $html .= '<table class="table table-striped table-hover">
             <thead>
-                <tr style="text-align: center;">
-                    <th width="10">'.get_lang('N°').'</th>
+                <tr>
+                    <th>'.get_lang('N°').'</th>
                     <th>'.get_lang('True').'</th>
                     <th>'.get_lang('Answer').'</th>
                         '.$commentTitle.'
                         '.$feedbackTitle.'
-                    <th width="15">'.get_lang('Score').'</th>
+                    <th>'.get_lang('Score').'</th>
                 </tr>
             </thead>
             <tbody>';

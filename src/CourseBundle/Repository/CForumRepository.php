@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CForumRepository extends ResourceRepository

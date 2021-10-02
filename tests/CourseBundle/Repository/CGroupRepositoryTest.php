@@ -30,20 +30,21 @@ class CGroupRepositoryTest extends AbstractApiTest
             ->setParent($course)
             ->setCreator($teacher)
             ->setMaxStudent(100)
-
         ;
+
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);
         $em->flush();
 
         $this->assertSame(1, $repo->count([]));
         $this->assertNotNull($repo->findOneByTitle('Group'));
+
+        $repo->delete($item);
+        $this->assertSame(0, $repo->count([]));
     }
 
     public function testFindAllByCourse(): void
     {
-        self::bootKernel();
-
         $repo = self::getContainer()->get(CGroupRepository::class);
 
         $course = $this->createCourse('new');
@@ -59,6 +60,6 @@ class CGroupRepositoryTest extends AbstractApiTest
         $repo->create($item);
 
         $qb = $repo->findAllByCourse($course);
-        $this->assertSame(1, \count($qb->getQuery()->getResult()));
+        $this->assertCount(1, $qb->getQuery()->getResult());
     }
 }

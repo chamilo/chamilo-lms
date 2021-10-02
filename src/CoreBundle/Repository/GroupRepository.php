@@ -45,9 +45,9 @@ class GroupRepository extends ServiceEntityRepository
         return [];
     }
 
-    public function createDefaultGroups(AccessGroupFixtures $accessGroupFixtures = null): void
+    public function getDefaultGroups(): array
     {
-        $groups = [
+        return [
             [
                 'code' => 'ADMIN',
                 'title' => 'Administrators',
@@ -89,27 +89,31 @@ class GroupRepository extends ServiceEntityRepository
                 'roles' => ['ROLE_INVITEE'],
             ],
         ];
+    }
 
-        $manager = $this->getEntityManager();
+    public function createDefaultGroups(AccessGroupFixtures $accessGroupFixtures = null): void
+    {
+        $em = $this->getEntityManager();
+        $groups = $this->getDefaultGroups();
 
-        foreach ($groups as $groupData) {
-            $groupExists = $this->findOneBy(['code' => $groupData['code']]);
+        foreach ($groups as $groupItem) {
+            $groupExists = $this->findOneBy(['code' => $groupItem['code']]);
             if (null === $groupExists) {
-                $group = (new Group($groupData['title']))
-                    ->setCode($groupData['code'])
+                $group = (new Group($groupItem['title']))
+                    ->setCode($groupItem['code'])
                 ;
 
-                foreach ($groupData['roles'] as $role) {
+                foreach ($groupItem['roles'] as $role) {
                     $group->addRole($role);
                 }
-                $manager->persist($group);
+                $em->persist($group);
 
                 if (null !== $accessGroupFixtures) {
-                    $accessGroupFixtures->addReference('GROUP_'.$groupData['code'], $group);
+                    $accessGroupFixtures->addReference('GROUP_'.$groupItem['code'], $group);
                 }
             }
         }
 
-        $manager->flush();
+        $em->flush();
     }
 }

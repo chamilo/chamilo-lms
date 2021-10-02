@@ -4377,10 +4377,7 @@ class Exercise
                                  ";
                         $resq = Database::query($query);
                         $row = Database::fetch_assoc($resq);
-                        $choice = [
-                            'answer' => '',
-                            'marks' => 0,
-                        ];
+                        $choice = '';
                         $questionScore = 0;
 
                         if (is_array($row)) {

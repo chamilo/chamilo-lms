@@ -145,7 +145,6 @@ export default function makeCrudModule({
       findAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
 
-        console.log('crud.js findAll');
         //commit(ACTIONS.TOGGLE_LOADING);
 
         return service
@@ -161,8 +160,6 @@ export default function makeCrudModule({
       },
       fetchAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
-
-        console.log('crud.js fetchAll');
 
         commit(ACTIONS.TOGGLE_LOADING);
 
@@ -385,13 +382,13 @@ export default function makeCrudModule({
         });
       },
       [ACTIONS.SET_CREATED]: (state, created) => {
-        console.log('set _created');
-        console.log(created);
+        //console.log('set _created');
+        //console.log(created);
         Object.assign(state, { created });
         state.created = created;
       },
       [ACTIONS.SET_DELETED]: (state, deleted) => {
-        console.log('SET_DELETED');
+        //console.log('SET_DELETED');
         if (!state.allIds.includes(deleted['@id'])) {
           return;
         }

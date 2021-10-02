@@ -51,22 +51,19 @@ abstract class AbstractResource
      * Resource illustration URL - Property set by ResourceNormalizer.php.
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({
-     *     "resource_node:read",
-     *     "document:read",
-     *     "media_object_read",
-     *     "course:read",
-     *     "session:read",
-     *     "course_rel_user:read",
-     *     "session_rel_course_rel_user:read"
-     * })
      */
+    #[Groups([
+        'resource_node:read',
+        'document:read',
+        'media_object_read',
+        'course:read',
+        'session:read',
+        'course_rel_user:read',
+        'session_rel_course_rel_user:read',
+    ])]
     public ?string $illustrationUrl = null;
 
     /**
-     * @Assert\Valid()
-     * @ApiSubresource()
-     * @Groups({"resource_node:read", "resource_node:write", "personal_file:write", "document:write", "ctool:read", "course:read", "illustration:read", "message:read"})
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},
@@ -74,6 +71,19 @@ abstract class AbstractResource
      * )
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    #[Assert\Valid]
+    #[ApiSubresource]
+    #[Groups([
+        'resource_node:read',
+        'resource_node:write',
+        'personal_file:write',
+        'document:write',
+        'ctool:read',
+        'course:read',
+        'illustration:read',
+        'message:read',
+        'c_tool_intro:read',
+    ])]
     public ?ResourceNode $resourceNode = null;
 
     /**
@@ -92,15 +102,14 @@ abstract class AbstractResource
      */
     public $parentResource;
 
-    /**
-     * @Groups({"resource_node:read", "document:read"})
-     */
+    #[Groups(['resource_node:read', 'document:read'])]
     public ?array $resourceLinkListFromEntity = null;
 
     /**
      * Use when sending a request to Api platform.
      * Temporal array that saves the resource link list that will be filled by CreateDocumentFileAction.php.
      */
+    #[Groups(['c_tool_intro:write', 'resource_node:write'])]
     public array $resourceLinkList = [];
 
     /**
@@ -291,16 +300,16 @@ abstract class AbstractResource
         return $this;
     }
 
+    public function getResourceLinkArray()
+    {
+        return $this->resourceLinkList;
+    }
+
     public function setResourceLinkArray(array $links)
     {
         $this->resourceLinkList = $links;
 
         return $this;
-    }
-
-    public function getResourceLinkArray()
-    {
-        return $this->resourceLinkList;
     }
 
     public function getResourceLinkListFromEntity()

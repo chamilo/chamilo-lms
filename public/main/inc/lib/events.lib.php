@@ -1506,7 +1506,7 @@ class Event
             if (Database::num_rows($res_revised) > 0) {
                 $row['attempt_revised'] = 1;
             }
-            $row['total_percentage'] = ($row['score'] / $row['max_score']) * 100;
+            $row['total_percentage'] = $row['max_score'] > 0 ? ($row['score'] / $row['max_score']) * 100 : 0;
             $list[$row['exe_id']] = $row;
             $sql = "SELECT * FROM $table_track_attempt
                     WHERE exe_id = $exeId";

@@ -298,15 +298,30 @@ export default {
     if (this.isAuthenticated) {
       if (this.isBoss) {
         if(!this.linksUser.some(data => data.id === 'load_search')) {
-          this.linksUser.push({icon: 'mdi-format-list-checks', url: '/main/search/load_search.php', text: t('Diagnosis Management'), id: 'load_search'});
+          this.linksUser.push({
+            icon: 'mdi-format-list-checks',
+            url: '/main/search/load_search.php',
+            text: this.$i18n.t('Diagnosis Management'),
+            id: 'load_search'
+          });
         }
         if(!this.linksUser.some(data => data.id === 'search')) {
-          this.linksUser.push({icon: 'mdi-account-search', url: '/main/search/search.php', text: t('Diagnostic Form'), id: 'search'});
+          this.linksUser.push({
+            icon: 'mdi-account-search',
+            url: '/main/search/search.php',
+            text: this.$i18n.t('Diagnostic Form'),
+            id: 'search'
+          });
         }
       }
       if (this.isStudent) {
         if(!this.linksUser.some(data => data.id === 'search')) {
-          this.linksUser.push({icon: 'mdi-account-search', url: '/main/search/search.php', text: t('Diagnostic Form'), id: 'search'});
+          this.linksUser.push({
+            icon: 'mdi-account-search',
+            url: '/main/search/search.php',
+            text: this.$i18n.t('Diagnostic Form'),
+            id: 'search'
+          });
         }
       }
     }

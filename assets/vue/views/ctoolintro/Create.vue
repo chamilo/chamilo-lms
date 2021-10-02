@@ -25,7 +25,7 @@ import isEmpty from "lodash/isEmpty";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility.js";
 import axios from 'axios'
 import { ENTRYPOINT } from '../../config/entrypoint'
-const servicePrefix = 'ToolIntro';
+const servicePrefix = 'ctoolintro';
 
 const { mapFields } = createHelpers({
   getterType: 'ctoolintro/getField',
@@ -53,8 +53,10 @@ export default {
       id = route.query.id;
     }
 
+    let toolId = route.params.courseTool;
+
     // Get the current intro text.
-    axios.get(ENTRYPOINT + 'c_tool_intros/3').then(response => {
+    axios.get(ENTRYPOINT + 'c_tool_intros/'+toolId).then(response => {
       let data = response.data;
       item.value['introText'] = data.introText;
     }).catch(function (error) {
@@ -63,9 +65,8 @@ export default {
 
     const currentUser = computed(() => store.getters['security/getUser']);
     item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
-    item.value['title'] = 'ctoolintro';
+    item.value['courseTool'] = '/api/c_tools/'+toolId;
 
-    console.log("In setup()");
     console.log('parentResourceNodeId : ' + item.value['parentResourceNodeId']);
 
     return {v$: useVuelidate(), users, isLoadingSelect, item};

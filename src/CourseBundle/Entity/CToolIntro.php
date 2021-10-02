@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateCToolIntroAction;
-use Chamilo\CoreBundle\Controller\Api\UpdateCToolIntroAction;
+//use Chamilo\CoreBundle\Controller\Api\UpdateCToolIntroAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -40,8 +42,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             'security' => "is_granted('VIEW', object)",
         ],
         'put' => [
-            'controller' => UpdateCToolIntroAction::class,
-            'deserialize' => false,
+            //'controller' => UpdateCToolIntroAction::class,
+            //'deserialize' => false,
             'security' => "is_granted('EDIT', object)",
         ],
         'delete' => [
@@ -58,6 +60,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['c_tool_intro:read'],
     ],
 )]
+
+#[ApiFilter(SearchFilter::class, properties: [
+    'courseTool' => 'exact',
+])]
 class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
     /**
@@ -65,6 +71,7 @@ class CToolIntro extends AbstractResource implements ResourceInterface, Resource
      * @ORM\Id
      * @ORM\GeneratedValue
      */
+    #[Groups(['c_tool_intro:read'])]
     protected int $iid;
 
     /**

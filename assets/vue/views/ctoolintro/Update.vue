@@ -1,24 +1,16 @@
 <template>
-  <div>
-    <v-card
-        class="mx-auto"
-    >
-      <CourseForm
-          ref="updateForm"
-          v-if="item"
-          :values="item"
-          :errors="violations"
-      />
-      <Loading :visible="isLoading || deleteLoading" />
-      <v-footer>
-        <Toolbar
-            :handle-submit="onSendForm"
-            :handle-reset="resetForm"
-            :handle-delete="del"
-        />
-      </v-footer>
-    </v-card>
-  </div>
+  <Toolbar
+      :handle-submit="onSendForm"
+  />
+
+    <ToolIntroForm
+        ref="updateForm"
+        v-if="item"
+        :values="item"
+        :errors="violations"
+    />
+    <Loading :visible="isLoading || deleteLoading" />
+
 </template>
 
 <script>
@@ -29,7 +21,7 @@ import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import UpdateMixin from '../../mixins/UpdateMixin';
 
-const servicePrefix = 'ToolIntro';
+const servicePrefix = 'ctoolintro';
 
 export default {
   name: 'ToolIntroUpdate',
@@ -49,10 +41,11 @@ export default {
       updated: 'updated',
       violations: 'violations'
     }),
-    ...mapGetters('ctoolintro', ['find'])
-
+    ...mapGetters('ctoolintro', ['find']),
+    ...mapGetters({
+      'isCurrentTeacher': 'security/isCurrentTeacher',
+    }),
   },
-
   methods: {
     ...mapActions('ctoolintro', {
       createReset: 'resetCreate',
@@ -60,6 +53,7 @@ export default {
       delReset: 'resetDelete',
       retrieve: 'load',
       update: 'update',
+      updateWithFormData: 'updateWithFormData',
       updateReset: 'resetUpdate'
     })
   }

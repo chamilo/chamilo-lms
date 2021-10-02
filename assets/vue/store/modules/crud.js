@@ -145,7 +145,6 @@ export default function makeCrudModule({
       findAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
 
-        console.log('crud.js findAll');
         //commit(ACTIONS.TOGGLE_LOADING);
 
         return service
@@ -161,8 +160,6 @@ export default function makeCrudModule({
       },
       fetchAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
-
-        console.log('crud.js fetchAll');
 
         commit(ACTIONS.TOGGLE_LOADING);
 

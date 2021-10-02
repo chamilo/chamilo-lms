@@ -91,7 +91,7 @@ import Loading from '../../components/Loading.vue';
 import ShowMixin from '../../mixins/ShowMixin';
 import Toolbar from '../../components/Toolbar.vue';
 
-const servicePrefix = 'ToolIntro';
+const servicePrefix = 'ctoolintro';
 
 export default {
   name: 'ToolIntroShow',

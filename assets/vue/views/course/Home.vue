@@ -48,33 +48,47 @@
           </div>
         </div>
       </div>
-
     </div>
 
-    <div v-if="isCurrentTeacher && course" class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2">
-      <div class="p-10 text-center">
-        <div>
-          <v-icon
-              icon="mdi-book-open-page-variant"
-              size="72px"
-              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light"
-          />
+    <div v-if="isCurrentTeacher && course"
+         class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2"
+    >
+      <div v-if="intro" class="p-10 text-center">
+        <span v-html="intro.introText" />
 
-        </div>
-
-        <div class="mt-2 font-bold">
-          {{ $t('You don\'t have course content') }}
-        </div>
-        <div>
-          {{ $t('Add a course introduction to display to your students.') }}
-        </div>
         <router-link
-            :to="{ name: 'ToolIntroCreate' }"
+            v-if="introTool"
+            :to="{ name: 'ToolIntroUpdate', params: {'id': intro['@id']} }"
             tag="button"
             class="mt-2 btn btn-info">
-          <v-icon>mdi-plus</v-icon>
-          {{ $t('Course introduction') }}
+          <v-icon>mdi-pencil</v-icon>
+          {{ $t('Update') }}
         </router-link>
+      </div>
+      <div v-else>
+          <div>
+            <v-icon
+                icon="mdi-book-open-page-variant"
+                size="72px"
+                class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light"
+            />
+          </div>
+
+          <div class="mt-2 font-bold">
+            {{ $t('You don\'t have course content') }}
+          </div>
+          <div>
+            {{ $t('Add a course introduction to display to your students.') }}
+          </div>
+
+          <router-link
+              v-if="introTool"
+              :to="{ name: 'ToolIntroCreate', params: {'courseTool': introTool.iid} }"
+              tag="button"
+              class="mt-2 btn btn-info">
+            <v-icon>mdi-plus</v-icon>
+            {{ $t('Course introduction') }}
+          </router-link>
       </div>
     </div>
 
@@ -136,11 +150,12 @@ import Toolbar from '../../components/Toolbar.vue';
 import CourseToolList from '../../components/course/CourseToolList.vue';
 import ShortCutList from '../../components/course/ShortCutList.vue';
 
+import isEmpty from "lodash/isEmpty";
 import {useRoute} from 'vue-router'
 import axios from "axios";
 import {ENTRYPOINT} from '../../config/entrypoint';
-import {reactive, toRefs} from 'vue'
-import {mapGetters} from "vuex";
+import {computed, onMounted, reactive, toRefs} from 'vue'
+import {mapGetters, useStore} from "vuex";
 
 export default {
   name: 'Home',
@@ -157,12 +172,16 @@ export default {
       tools: [],
       shortcuts: [],
       dropdownOpen: false,
+      intro: null,
+      introTool: null,
       goToCourseTool,
       changeVisibility,
       goToSettingCourseTool,
       goToShortCut
     });
     const route = useRoute()
+    const store = useStore();
+
     let courseId = route.params.id;
     let sessionId = route.query.sid ?? 0;
 
@@ -170,9 +189,28 @@ export default {
       state.course = response.data.course;
       state.tools = response.data.tools;
       state.shortcuts = response.data.shortcuts;
+      getIntro();
     }).catch(function (error) {
       console.log(error);
     });
+
+    async function getIntro() {
+      const introTool = state.course.tools.find(element => element.name === 'course_homepage');
+      const filter = {
+        courseTool : introTool.iid,
+        cid : courseId,
+        sid : sessionId,
+      };
+
+      state.introTool = introTool;
+
+      store.dispatch('ctoolintro/findAll', filter).then(response => {
+        if (!isEmpty(response)) {
+          // first item
+          state.intro = response[0];
+        }
+      });
+    }
 
     function goToSettingCourseTool(course, tool) {
       return '/course/' + courseId + '/settings/' + tool.tool.name + '?sid=' + sessionId;
@@ -183,8 +221,8 @@ export default {
     }
 
     function goToShortCut(shortcut) {
-      var url = new URLSearchParams('?')
-      //let url = new URL(shortcut.url);
+      const url = new URLSearchParams('?')
+
       url.append('cid', courseId);
       url.append('sid', sessionId);
 

@@ -7,12 +7,12 @@ export default {
   children: [
     {
       name: 'ToolIntroCreate',
-      path: 'new',
+      path: 'new/:courseTool',
       component: () => import('../views/ctoolintro/Create.vue')
     },
     {
       name: 'ToolIntroUpdate',
-      path: ':id/edit',
+      path: 'edit',
       component: () => import('../views/ctoolintro/Update.vue')
     },
     {

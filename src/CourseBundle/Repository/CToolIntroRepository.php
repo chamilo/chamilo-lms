@@ -6,17 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
-use Chamilo\CourseBundle\Entity\CGroup;
-use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CToolIntroRepository extends ResourceRepository
@@ -57,5 +49,4 @@ final class CToolIntroRepository extends ResourceRepository
 
         return $toolIntro;
     }
-
 }

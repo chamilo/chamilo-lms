@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CToolIntroRepository;
-use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 
 class UpdateCToolIntroAction extends BaseResourceFileAction

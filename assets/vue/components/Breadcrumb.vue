@@ -5,8 +5,20 @@
         large
     >
 <!--      <q-breadcrumbs-el v-for ="item in items" :label="item.text" :to="item.href" />-->
-      <q-breadcrumbs-el v-for="item in items" :label="item.text" :to="item.href" />
+      <q-breadcrumbs-el v-for="item in items" :label="item.text" :to="item.href" exact-path />
     </q-breadcrumbs>
+
+<!--    <v-breadcrumbs-->
+<!--        rounded-->
+<!--        density="compact"-->
+<!--    >-->
+
+<!--        <a  v-for="item in items" :href="item.href"  >-->
+<!--          <v-breadcrumbs-item>-->
+<!--          {{item.text}}-->
+<!--            </v-breadcrumbs-item>-->
+<!--        </a>-->
+<!--    </v-breadcrumbs>-->
   </div>
 </template>
 
@@ -43,17 +55,26 @@ export default {
         });
       }*/
       if (this.legacy) {
+        const mainUrl = window.location.href;
+        const mainPath = mainUrl.indexOf("main/");
+
         for (let i = 0, len = this.legacy.length; i < len; i += 1) {
-          console.log(this.legacy[i]);
+          console.log(this.legacy[i]['name']);
+          let url = this.legacy[i]['url'].toString();
+          let newUrl = '/' + url.substring(mainPath, url.length);
+          if (newUrl === '/') {
+            newUrl = '#';
+          }
+
           items.push({
             text: this.legacy[i]['name'],
             //disabled: route.path === path || lastItem.path === route.path,
-            href: this.legacy[i]['url']
+            href: newUrl
           });
         }
       }
 
-
+      console.log(items);
       console.log('resourceNode');
       if (this.resourceNode) {
         let folderParams = this.$route.query;
@@ -86,10 +107,10 @@ export default {
           let route = parts[i];
           let routeParts = route.split('-');
           if (0 === i) {
-            let firstParts = parts[i+1].split('-');
+            let firstParts = parts[i + 1].split('-');
             items.push({
-              text:  matched[0].name,
-              href: '/resources/document/' + firstParts[1]+ '/?'+queryParams
+              text: matched[0].name,
+              href: '/resources/document/' + firstParts[1] + '/?' + queryParams
             });
             i++;
             continue;

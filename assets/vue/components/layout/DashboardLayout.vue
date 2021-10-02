@@ -245,7 +245,7 @@ export default {
       //{ icon: 'home', url: '/', text: 'Home' },
       //{ icon: 'star_border', url: '/', text: 'News' },
       { icon: 'mdi-book-open-page-variant', url: '/courses', text: t('My courses') },
-      { icon: 'mdi-google-classroom', url: '/sessions', text: t('My Sessions') },
+      { icon: 'mdi-google-classroom', url: '/sessions', text: t('My sessions') },
       { icon: 'mdi-calendar-text', url: '/resources/ccalendarevent', text: t('Events') },
       { icon: 'mdi-chart-box', url: '/main/auth/my_progress.php', text: t('My progress') },
       //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
@@ -262,7 +262,7 @@ export default {
     ];
 
     linksAnon.value = [
-      { icon: 'mdi-home', url: '/home', text: 'Home' },
+      { icon: 'mdi-home', url: '/home', text: t('Home') },
       //{ icon: 'mdi-compass', url: '/catalog', text: 'Explore' },
     ];
 
@@ -298,15 +298,15 @@ export default {
     if (this.isAuthenticated) {
       if (this.isBoss) {
         if(!this.linksUser.some(data => data.id === 'load_search')) {
-          this.linksUser.push({icon: 'mdi-format-list-checks', url: '/main/search/load_search.php', text: 'Diagnosis Management', id: 'load_search'});
+          this.linksUser.push({icon: 'mdi-format-list-checks', url: '/main/search/load_search.php', text: t('Diagnosis Management'), id: 'load_search'});
         }
         if(!this.linksUser.some(data => data.id === 'search')) {
-          this.linksUser.push({icon: 'mdi-account-search', url: '/main/search/search.php', text: 'Diagnostic Form', id: 'search'});
+          this.linksUser.push({icon: 'mdi-account-search', url: '/main/search/search.php', text: t('Diagnostic Form'), id: 'search'});
         }
       }
       if (this.isStudent) {
         if(!this.linksUser.some(data => data.id === 'search')) {
-          this.linksUser.push({icon: 'mdi-account-search', url: '/main/search/search.php', text: 'Diagnostic Form', id: 'search'});
+          this.linksUser.push({icon: 'mdi-account-search', url: '/main/search/search.php', text: t('Diagnostic Form'), id: 'search'});
         }
       }
     }

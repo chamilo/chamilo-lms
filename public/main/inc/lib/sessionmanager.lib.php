@@ -2346,16 +2346,6 @@ class SessionManager
             $session_id,
             ['visibility' => $session_visibility]
         );
-
-        if (!empty($forums)) {
-            foreach ($user_list as $enreg_user) {
-                $userInfo = api_get_user_info($enreg_user);
-                foreach ($forums as $forum) {
-                    $forumId = $forum['iid'];
-                    //set_notification('forum', $forumId, false, $userInfo, $courseInfo);
-                }
-            }
-        }
     }
 
     /**

@@ -4,8 +4,6 @@
 
 /**
  * Form element to select a date.
- *
- * Class DatePicker
  */
 class DateTimeRangePicker extends DateRangePicker
 {

@@ -21,7 +21,7 @@
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn v-close-popup flat label="Cancel"/>
+          <q-btn v-close-popup flat :label="$t('Cancel')" />
           <q-btn :label="item['@id'] ? $t('Edit') : $t('Add') " flat @click="onCreateEventForm"/>
         </q-card-actions>
       </q-card>
@@ -34,9 +34,9 @@
           <CCalendarEventInfo :event="item" />
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn color="primary" flat label="Delete" @click="confirmDelete"/>
-          <q-btn v-if="isEventEditable" color="primary" flat label="Edit" @click="dialog = true"/>
-          <q-btn v-close-popup flat label="Close"/>
+          <q-btn color="primary" flat no-caps :label="$t('Delete')" @click="confirmDelete"/>
+          <q-btn v-if="isEventEditable" color="primary" flat no-caps :label="$t('Edit')" @click="dialog = true"/>
+          <q-btn v-close-popup flat no-caps :label="$t('Close')" />
         </q-card-actions>
       </q-card>
     </q-dialog>

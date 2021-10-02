@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -23,6 +25,26 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  */
 #[ApiResource(
+    collectionOperations: [
+        'get' => [
+            //'security' => "is_granted('VIEW', object)",  // the get collection is also filtered by MessageExtension.php
+            'security' => "is_granted('ROLE_USER')",
+        ],
+        'post' => [
+            'security_post_denormalize' => "is_granted('CREATE', object)",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('VIEW', object)",
+        ],
+        'put' => [
+            'security' => "is_granted('EDIT', object)",
+        ],
+        'delete' => [
+            'security' => "is_granted('DELETE', object)",
+        ],
+    ],
     attributes: [
         'security' => "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')",
     ],
@@ -33,6 +55,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['c_tool_intro:read'],
     ],
 )]
+
+#[ApiFilter(SearchFilter::class, properties: [
+    'courseTool' => 'exact',
+])]
 class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
 {
     /**
@@ -40,6 +66,7 @@ class CToolIntro extends AbstractResource implements ResourceInterface, Resource
      * @ORM\Id
      * @ORM\GeneratedValue
      */
+    #[Groups(['c_tool_intro:read'])]
     protected int $iid;
 
     /**

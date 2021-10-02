@@ -106,7 +106,7 @@ class ResourceNode
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
     #[ApiSubresource]
-    #[Groups(['ctool:read'])]
+    #[Groups(['ctool:read', 'c_tool_intro:read'])]
     protected Collection $resourceLinks;
 
     /**

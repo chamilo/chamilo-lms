@@ -123,7 +123,6 @@ export default {
     const currentUser = computed(() => store.getters['security/getUser']);
     const { t, locale } = useI18n();
 
-
     let currentEvent = null;
 
     const sessionState = reactive({

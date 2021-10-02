@@ -50,30 +50,60 @@
           </div>
         </div>
       </div>
-
     </div>
 
-    <div v-if="isCurrentTeacher && course"
+    <div v-if="isCurrentTeacher"
          class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2"
     >
-      <div class="p-10 text-center">
-        <div>
-          <v-icon
-              icon="mdi-book-open-page-variant"
-              size="72px"
-              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light"
-          />
-        </div>
-        <div class="mt-2 font-bold">
-          {{ $t("You don't have course content") }}
-        </div>
-        <div>
-          {{ $t('Add a course introduction to display to your students') }}
-        </div>
-        <a class="mt-2 btn btn-info">
+      <div v-if="intro" class="p-10 text-center">
+        <span v-html="intro.introText" />
+
+        <button
+            class="mt-2 btn btn-info"
+            @click="updateIntro(intro)"
+        >
+          <v-icon>mdi-pencil</v-icon>
+          {{ $t('Update') }}
+        </button>
+      </div>
+      <div v-else>
+          <div>
+            <v-icon
+                icon="mdi-book-open-page-variant"
+                size="72px"
+                class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light"
+            />
+          </div>
+
+          <div class="mt-2 font-bold">
+            {{ $t("You don't have course content") }}
+          </div>
+          <div>
+	        {{ $t('Add a course introduction to display to your students') }}
+          </div>
+
+<!--          <router-link-->
+<!--              v-if="introTool"-->
+<!--              :to="{ name: 'ToolIntroCreate', params: {'courseTool': introTool.iid, cid: course.id, sid: route.query.sid} }"-->
+<!--              tag="button"-->
+<!--              class="mt-2 btn btn-info">-->
+<!--            <v-icon>mdi-plus</v-icon>-->
+<!--            {{ $t('Course introduction') }}-->
+<!--          </router-link>-->
+
+        <button
+            class="mt-2 btn btn-info"
+            v-if="introTool"
+            @click="addIntro(course, introTool)"
+        >
           <v-icon>mdi-plus</v-icon>
           {{ $t('Course introduction') }}
-        </a>
+        </button>
+      </div>
+    </div>
+    <div v-else>
+      <div v-if="intro" class="p-10 text-center">
+        <span v-html="intro.introText" />
       </div>
     </div>
 
@@ -135,11 +165,12 @@ import Toolbar from '../../components/Toolbar.vue';
 import CourseToolList from '../../components/course/CourseToolList.vue';
 import ShortCutList from '../../components/course/ShortCutList.vue';
 
-import {useRoute} from 'vue-router'
+import isEmpty from "lodash/isEmpty";
+import {useRoute, useRouter} from 'vue-router'
 import axios from "axios";
 import {ENTRYPOINT} from '../../config/entrypoint';
-import {reactive, toRefs} from 'vue'
-import {mapGetters} from "vuex";
+import {computed, onMounted, reactive, toRefs} from 'vue'
+import {mapGetters, useStore} from "vuex";
 
 export default {
   name: 'Home',
@@ -156,12 +187,19 @@ export default {
       tools: [],
       shortcuts: [],
       dropdownOpen: false,
+      intro: null,
+      introTool: null,
       goToCourseTool,
       changeVisibility,
       goToSettingCourseTool,
-      goToShortCut
+      goToShortCut,
+      addIntro,
+      updateIntro,
     });
     const route = useRoute()
+    const store = useStore();
+    const router = useRouter();
+
     let courseId = route.params.id;
     let sessionId = route.query.sid ?? 0;
 
@@ -169,9 +207,52 @@ export default {
       state.course = response.data.course;
       state.tools = response.data.tools;
       state.shortcuts = response.data.shortcuts;
+      getIntro();
     }).catch(function (error) {
       console.log(error);
     });
+
+    async function getIntro() {
+      const introTool = state.course.tools.find(element => element.name === 'course_homepage');
+      const filter = {
+        courseTool : introTool.iid,
+        cid : courseId,
+        sid : sessionId,
+      };
+
+      state.introTool = introTool;
+
+      store.dispatch('ctoolintro/findAll', filter).then(response => {
+        if (!isEmpty(response)) {
+          // first item
+          state.intro = response[0];
+        }
+      });
+    }
+
+    function addIntro(course, introTool) {
+      return router.push({
+        name: 'ToolIntroCreate',
+        params: {'courseTool': introTool.iid },
+        query: {
+          'cid': courseId,
+          'sid': sessionId,
+          'parentResourceNodeId': course.resourceNode.id
+        }
+      });
+    }
+
+    function updateIntro(intro) {
+      return router.push({
+        name: 'ToolIntroUpdate',
+        params: {'id': intro['@id'] },
+        query: {
+          'cid': courseId,
+          'sid': sessionId,
+          'id': intro['@id']
+        }
+      });
+    }
 
     function goToSettingCourseTool(course, tool) {
       return '/course/' + courseId + '/settings/' + tool.tool.name + '?sid=' + sessionId;
@@ -182,8 +263,8 @@ export default {
     }
 
     function goToShortCut(shortcut) {
-      var url = new URLSearchParams('?')
-      //let url = new URL(shortcut.url);
+      const url = new URLSearchParams('?')
+
       url.append('cid', courseId);
       url.append('sid', sessionId);
 

@@ -1951,8 +1951,8 @@ HOTSPOT;
         $session_id_and = '';
         $sessionCondition = '';
         if (!$showSessionField) {
-            $session_id_and = " AND te.session_id = $sessionId ";
-            $sessionCondition = " AND ttte.session_id = $sessionId";
+            $session_id_and = api_get_session_condition($sessionId, true, false, 'te.session_id');
+            $sessionCondition = api_get_session_condition($sessionId, true, false, 'ttte.session_id');
         }
 
         $exercise_where = '';

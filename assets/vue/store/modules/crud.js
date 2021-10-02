@@ -382,13 +382,13 @@ export default function makeCrudModule({
         });
       },
       [ACTIONS.SET_CREATED]: (state, created) => {
-        console.log('set _created');
-        console.log(created);
+        //console.log('set _created');
+        //console.log(created);
         Object.assign(state, { created });
         state.created = created;
       },
       [ACTIONS.SET_DELETED]: (state, deleted) => {
-        console.log('SET_DELETED');
+        //console.log('SET_DELETED');
         if (!state.allIds.includes(deleted['@id'])) {
           return;
         }

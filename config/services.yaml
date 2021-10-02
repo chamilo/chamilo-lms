@@ -45,15 +45,6 @@ services:
         # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
 
-#    App\ApiPlatform\AutoGroupResourceMetadataFactory:
-#        # causes this to decorate around the cached factory so that
-#        # our service is never cached (which, of course, can have performance
-#        # implications!
-#        decoration_priority: -20
-
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-
     Vich\UploaderBundle\Naming\SubdirDirectoryNamer:
         public: true
 

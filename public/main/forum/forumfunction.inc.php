@@ -899,7 +899,7 @@ function getLastPostOfThread(int $threadId): array
 {
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $sql = "SELECT iid, post_date FROM $table_posts
-            WHERE threadId = $threadId
+            WHERE thread_id = $threadId
             ORDER BY post_date DESC LIMIT 1";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {

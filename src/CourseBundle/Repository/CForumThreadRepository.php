@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Doctrine\ORM\QueryBuilder;
@@ -56,10 +57,13 @@ class CForumThreadRepository extends ResourceRepository
     {
         /** @var CForumThread $resource */
         $posts = $resource->getPosts();
-        foreach ($posts as $post) {
-            parent::delete($post);
+        $repo = Container::getForumPostRepository();
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                /** @var CForumPost $post */
+                $repo->delete($post);
+            }
         }
-
         parent::delete($resource);
     }
 }

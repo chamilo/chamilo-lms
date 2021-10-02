@@ -11,7 +11,9 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
@@ -38,4 +40,19 @@ class CForumCategoryRepository extends ResourceRepository
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }*/
+
+    public function delete(ResourceInterface $resource): void
+    {
+        /** @var CForumCategory $resource */
+        $forums = $resource->getForums();
+        $repo = Container::getForumRepository();
+        if (!empty($forums)) {
+            foreach ($forums as $forum) {
+                /** @var CForum $forum */
+                $repo->delete($forum);
+            }
+        }
+
+        parent::delete($resource);
+    }
 }

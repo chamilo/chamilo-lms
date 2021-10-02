@@ -169,7 +169,9 @@ switch ($my_action) {
         ) {
             /** @var CForumPost $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
-            deletePost($postEntity);
+            if (!empty($postEntity)) {
+                deletePost($postEntity);
+            }
         }
         header('Location: '.$currentUrl);
         exit;

@@ -335,14 +335,20 @@ function get_courses($from, $limit, $column, $direction)
                 $data['title'],
                 $courseInfo['course_public_url'].'?id_session='.$sessionId
             );
-            $attendance = new Attendance();
-            $result = $attendance->getAttendanceBaseInLogin(false, true);
+
             $attendanceLink = '';
-            if (false !== $result) {
-                $attendanceLink = Display::url(
-                    Display::return_icon('attendance_list.png', get_lang('Attendance'), [], ICON_SIZE_MEDIUM),
-                    api_get_path(WEB_CODE_PATH).'attendance/index.php?cid='.$courseId.'&sid='.$sessionId.'&action=calendar_logins'
-                );
+            if (!empty($sessionId)) {
+                $sessionInfo = api_get_session_info($sessionId);
+                $startDate = $sessionInfo['access_start_date'];
+                $endDate = $sessionInfo['access_end_date'];
+                $attendance = new Attendance();
+                $checkExport = $attendance->getAttendanceLogin($startDate, $endDate);
+                if (false !== $checkExport) {
+                    $attendanceLink = Display::url(
+                        Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                        api_get_path(WEB_CODE_PATH).'attendance/index.php?cid='.$courseId.'&sid='.$sessionId.'&action=calendar_logins'
+                    );
+                }
             }
 
             $courseList[] = [

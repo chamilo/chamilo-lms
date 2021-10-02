@@ -18,13 +18,15 @@ import ToolIntroForm from '../../components/ctoolintro/Form.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, reactive, ref, toRefs} from "vue";
 import useVuelidate from "@vuelidate/core";
 import {useRoute, useRouter} from "vue-router";
 import isEmpty from "lodash/isEmpty";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility.js";
 import axios from 'axios'
 import { ENTRYPOINT } from '../../config/entrypoint'
+import useNotification from "../../components/Notification";
+import {useI18n} from "vue-i18n";
 const servicePrefix = 'ctoolintro';
 
 const { mapFields } = createHelpers({
@@ -45,8 +47,10 @@ export default {
     const users = ref([]);
     const isLoadingSelect = ref(false);
     const item = ref({});
-    const store = useStore();
     const route = useRoute();
+    const router = useRouter();
+    const {showNotification} = useNotification();
+    const { t } = useI18n();
 
     let id = route.params.id;
     if (isEmpty(id)) {
@@ -56,20 +60,28 @@ export default {
     let toolId = route.params.courseTool;
 
     // Get the current intro text.
-    axios.get(ENTRYPOINT + 'c_tool_intros/'+toolId).then(response => {
+    axios.get(ENTRYPOINT + 'c_tool_intros/' + toolId).then(response => {
       let data = response.data;
       item.value['introText'] = data.introText;
     }).catch(function (error) {
       console.log(error);
     });
 
-    const currentUser = computed(() => store.getters['security/getUser']);
-    item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
+    item.value['parentResourceNodeId'] = Number(route.query.parentResourceNodeId);
     item.value['courseTool'] = '/api/c_tools/'+toolId;
 
-    console.log('parentResourceNodeId : ' + item.value['parentResourceNodeId']);
+    item.value['resourceLinkList'] = [{
+      sid: route.query.sid,
+      cid: route.query.cid,
+      visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+    }];
 
-    return {v$: useVuelidate(), users, isLoadingSelect, item};
+    function onCreated(item) {
+      showNotification(t('Updated'));
+      router.go(-1);
+    }
+
+    return {v$: useVuelidate(), users, isLoadingSelect, item, onCreated};
   },
   computed: {
     ...mapFields(['error', 'isLoading', 'created', 'violations']),
@@ -77,16 +89,6 @@ export default {
       'isAuthenticated': 'security/isAuthenticated',
       'currentUser': 'security/getUser',
     }),
-  },
-  created() {
-    /*console.log('In created() : ' + this.$route.params.node);
-    this.item.parentResourceNodeId = this.$route.params.node;
-    this.item.resourceLinkList = JSON.stringify([{
-      gid: this.$route.query.gid,
-      sid: this.$route.query.sid,
-      cid: this.$route.query.cid,
-      visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-    }]);*/
   },
   methods: {
     ...mapActions('ctoolintro', ['create', 'createWithFormData'])

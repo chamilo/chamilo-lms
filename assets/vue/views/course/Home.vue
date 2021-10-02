@@ -58,14 +58,14 @@
       <div v-if="intro" class="p-10 text-center">
         <span v-html="intro.introText" />
 
-        <router-link
-            v-if="introTool"
-            :to="{ name: 'ToolIntroUpdate', params: {'id': intro['@id']} }"
-            tag="button"
-            class="mt-2 btn btn-info">
+        <button
+            class="mt-2 btn btn-info"
+            @click="updateIntro(intro)"
+        >
           <v-icon>mdi-pencil</v-icon>
           {{ $t('Update') }}
-        </router-link>
+        </button>
+
       </div>
       <div v-else>
           <div>
@@ -83,14 +83,23 @@
 	     {{ $t('Add a course introduction to display to your students') }}
           </div>
 
-          <router-link
-              v-if="introTool"
-              :to="{ name: 'ToolIntroCreate', params: {'courseTool': introTool.iid} }"
-              tag="button"
-              class="mt-2 btn btn-info">
-            <v-icon>mdi-plus</v-icon>
-            {{ $t('Course introduction') }}
-          </router-link>
+<!--          <router-link-->
+<!--              v-if="introTool"-->
+<!--              :to="{ name: 'ToolIntroCreate', params: {'courseTool': introTool.iid, cid: course.id, sid: route.query.sid} }"-->
+<!--              tag="button"-->
+<!--              class="mt-2 btn btn-info">-->
+<!--            <v-icon>mdi-plus</v-icon>-->
+<!--            {{ $t('Course introduction') }}-->
+<!--          </router-link>-->
+
+        <button
+            class="mt-2 btn btn-info"
+            v-if="introTool"
+            @click="addIntro(course, introTool)"
+        >
+          <v-icon>mdi-plus</v-icon>
+          {{ $t('Course introduction') }}
+        </button>
       </div>
     </div>
 
@@ -153,7 +162,7 @@ import CourseToolList from '../../components/course/CourseToolList.vue';
 import ShortCutList from '../../components/course/ShortCutList.vue';
 
 import isEmpty from "lodash/isEmpty";
-import {useRoute} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import axios from "axios";
 import {ENTRYPOINT} from '../../config/entrypoint';
 import {computed, onMounted, reactive, toRefs} from 'vue'
@@ -179,10 +188,13 @@ export default {
       goToCourseTool,
       changeVisibility,
       goToSettingCourseTool,
-      goToShortCut
+      goToShortCut,
+      addIntro,
+      updateIntro,
     });
     const route = useRoute()
     const store = useStore();
+    const router = useRouter();
 
     let courseId = route.params.id;
     let sessionId = route.query.sid ?? 0;
@@ -210,6 +222,30 @@ export default {
         if (!isEmpty(response)) {
           // first item
           state.intro = response[0];
+        }
+      });
+    }
+
+    function addIntro(course, introTool) {
+      return router.push({
+        name: 'ToolIntroCreate',
+        params: {'courseTool': introTool.iid },
+        query: {
+          'cid': courseId,
+          'sid': sessionId,
+          'parentResourceNodeId': course.resourceNode.id
+        }
+      });
+    }
+
+    function updateIntro(intro) {
+      return router.push({
+        name: 'ToolIntroUpdate',
+        params: {'id': intro['@id'] },
+        query: {
+          'cid': courseId,
+          'sid': sessionId,
+          'id': intro['@id']
         }
       });
     }

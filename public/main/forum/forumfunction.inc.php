@@ -897,16 +897,16 @@ function deletePost(CForumPost $post): void
  */
 function getLastPostOfThread(int $threadId): array
 {
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $sql = "SELECT iid, post_date FROM $table_posts
-            WHERE threadId = $threadId
-            ORDER BY post_date DESC LIMIT 1";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        return Database::fetch_array($result);
+    $post = Container::getForumPostRepository()->findOneBy(['thread' => $threadId], ['postDate' => 'DESC']);
+
+    if (null === $post) {
+        return [];
     }
 
-    return [];
+    return [
+        'iid' => $post->getIid(),
+        'post_date' => $post->getPostDate()->format('Y-m-d H:i:s'),
+    ];
 }
 
 /**

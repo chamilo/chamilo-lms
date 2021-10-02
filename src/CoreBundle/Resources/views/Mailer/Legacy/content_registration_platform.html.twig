@@ -1,3 +1,4 @@
+{% autoescape false %}
 <p>{{ 'Dear'|trans }} {{ complete_name }},</p>
 <p>{{ 'Welcome to this platform'|trans }}</p>
 <p>{{ 'You are registered to'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'with the following settings:'|trans }}</p>
@@ -7,3 +8,4 @@
 <p>{{ 'In case of trouble, contact us.'|trans }}</p>
 
 {% include '@ChamiloCore/Mailer/Legacy/_admin_signature_footer.html.twig' %}
+{% endautoescape %}

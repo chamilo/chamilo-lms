@@ -1,3 +1,4 @@
+{% autoescape false %}
 <p>{{ 'User %s with language %s registered to the site'|trans|format(complete_name, user_language) }} </p>
 <p>{{ 'His profile is'|trans }} </p>
 <div class="row">
@@ -11,3 +12,4 @@
 <p>{{ 'You can assign a tutor in this link %s'|trans|format(link)}} </p>
 
 {% include '@ChamiloCore/Mailer/Legacy/_admin_signature_footer.html.twig' %}
+{% endautoescape %}

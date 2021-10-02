@@ -626,8 +626,9 @@ class Rest extends WebService
 
         $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
-        $includeGroupsForums = 'true' === api_get_setting('display_groups_forum_in_general_tool');
-        $forumsFullData = get_forums('', $this->course->getCode(), $includeGroupsForums, $sessionId);
+        //@todo implement the group filter again
+        //$includeGroupsForums = 'true' === api_get_setting('display_groups_forum_in_general_tool');
+        $forumsFullData = get_forums($this->course->getId(), $sessionId);
         $forums = [];
 
         foreach ($forumsFullData as $forumId => $forumInfo) {
@@ -693,7 +694,7 @@ class Rest extends WebService
     public function getCourseForum($forumId)
     {
         $sessionId = $this->session ? $this->session->getId() : 0;
-        $forumInfo = get_forums($forumId, $this->course->getCode(), true, $sessionId);
+        $forumInfo = getForum($forumId);
 
         if (!isset($forumInfo['iid'])) {
             throw new Exception(get_lang('NoForum'));
@@ -743,7 +744,7 @@ class Rest extends WebService
             'posts' => [],
         ];
 
-        $forumInfo = get_forums($threadInfo['forum_id'], $this->course->getCode(), true, $sessionId);
+        $forumInfo = getForum($threadInfo['forum_id']);
         $postsInfo = getPosts($forumInfo, $threadInfo['iid'], 'ASC');
 
         foreach ($postsInfo as $postInfo) {
@@ -959,7 +960,7 @@ class Rest extends WebService
      */
     public function saveForumPost(array $postValues, $forumId)
     {
-        $forum = get_forums($forumId, $this->course->getCode());
+        $forum = getForum($forumId);
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
 
         return [
@@ -1117,7 +1118,7 @@ class Rest extends WebService
     public function saveForumThread(array $values, $forumId)
     {
         $sessionId = $this->session ? $this->session->getId() : 0;
-        $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
+        $forum = getForum($forumId);
         $courseInfo = api_get_course_info($this->course->getCode());
         $thread = saveThread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
 

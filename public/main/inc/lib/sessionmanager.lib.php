@@ -2317,7 +2317,7 @@ class SessionManager
         $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
         $forums = [];
         if (1 === $subscribe) {
-            $forums = get_forums(0, $course_code, true, $session_id);
+            $forums = get_forums($courseId, $session_id);
         }
 
         if ($removeUsersNotInList) {
@@ -2347,7 +2347,7 @@ class SessionManager
             ['visibility' => $session_visibility]
         );
 
-        /*if (!empty($forums)) {
+        if (!empty($forums)) {
             foreach ($user_list as $enreg_user) {
                 $userInfo = api_get_user_info($enreg_user);
                 foreach ($forums as $forum) {
@@ -2355,7 +2355,7 @@ class SessionManager
                     //set_notification('forum', $forumId, false, $userInfo, $courseInfo);
                 }
             }
-        }*/
+        }
     }
 
     /**

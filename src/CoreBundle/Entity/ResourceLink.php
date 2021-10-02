@@ -86,7 +86,7 @@ class ResourceLink
     /**
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
-    #[Groups(['ctool:read'])]
+    #[Groups(['ctool:read', 'c_tool_intro:read'])]
     protected int $visibility;
 
     /**

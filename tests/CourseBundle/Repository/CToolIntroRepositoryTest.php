@@ -44,12 +44,101 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertNotEmpty($intro->getIntroText());
+        $this->assertSame(1, $repo->count([]));
+        $repo->delete($intro);
+        $this->assertSame(0, $repo->count([]));
+    }
+
+    public function testCreateInSession(): void
+    {
+        self::bootKernel();
+
+        $em = $this->getEntityManager();
+        $repo = self::getContainer()->get(CToolIntroRepository::class);
+
+        $course = $this->createCourse('new');
+        $teacher = $this->createUser('teacher');
+
+        $session = $this->createSession('my session');
+        $session->addCourse($course);
+        $em->persist($session);
+        $em->flush();
+
+        /** @var CTool $courseTool */
+        $courseTool = $course->getTools()->first();
+
+        // Create Intro for the base course.
+        $intro = (new CToolIntro())
+            ->setIntroText('test')
+            ->setCourseTool($courseTool)
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $em->persist($intro);
+        $em->flush();
 
         $this->assertSame(1, $repo->count([]));
 
-        $repo->delete($intro);
+        // Create intro in session.
 
-        $this->assertSame(0, $repo->count([]));
+        $intro2 = (new CToolIntro())
+            ->setIntroText('test in session')
+            ->setCourseTool($courseTool)
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course, $session)
+        ;
+        $this->assertHasNoEntityViolations($intro2);
+        $em->persist($intro2);
+        $em->flush();
+
+        $this->assertSame(2, $repo->count([]));
+
+        $token = $this->getUserToken([]);
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_tool_intros',
+            [
+                'query' => [
+                    'cid' => $course->getId(),
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+        // Asserts that the returned JSON is a superset of this one
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/CToolIntro',
+            '@id' => '/api/c_tool_intros',
+            '@type' => 'hydra:Collection',
+            'hydra:totalItems' => 1,
+        ]);
+
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_tool_intros',
+            [
+                'query' => [
+                    'cid' => $course->getId(),
+                    'sid' => $session->getId(),
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        // Asserts that the returned JSON is a superset of this one
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/CToolIntro',
+            '@id' => '/api/c_tool_intros',
+            '@type' => 'hydra:Collection',
+            'hydra:totalItems' => 1,
+            'hydra:member' => [
+                [
+                    '@type' => 'CToolIntro',
+                    'introText' => 'test in session',
+                ],
+            ],
+        ]);
     }
 
     public function testGetToolIntros(): void

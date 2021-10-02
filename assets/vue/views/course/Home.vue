@@ -58,13 +58,28 @@
       <div v-if="intro" class="p-10 text-center">
         <span v-html="intro.introText" />
 
-        <button
-            class="mt-2 btn btn-info"
-            @click="updateIntro(intro)"
-        >
-          <v-icon>mdi-pencil</v-icon>
-          {{ $t('Update') }}
-        </button>
+        <div v-if="createInSession">
+          <button
+              class="mt-2 btn btn-info"
+              v-if="introTool"
+              @click="addIntro(course, introTool)"
+          >
+            <v-icon>mdi-plus</v-icon>
+            {{ $t('Course introduction in a session') }}
+          </button>
+        </div>
+
+        <div v-else>
+
+          <button
+              class="mt-2 btn btn-info"
+              @click="updateIntro(intro)"
+          >
+            <v-icon>mdi-pencil</v-icon>
+            {{ $t('Update') }}
+          </button>
+        </div>
+
       </div>
       <div v-else>
           <div>
@@ -78,27 +93,19 @@
           <div class="mt-2 font-bold">
             {{ $t("You don't have course content") }}
           </div>
+
           <div>
-	        {{ $t('Add a course introduction to display to your students') }}
+            {{ $t('Add a course introduction to display to your students') }}
           </div>
 
-<!--          <router-link-->
-<!--              v-if="introTool"-->
-<!--              :to="{ name: 'ToolIntroCreate', params: {'courseTool': introTool.iid, cid: course.id, sid: route.query.sid} }"-->
-<!--              tag="button"-->
-<!--              class="mt-2 btn btn-info">-->
-<!--            <v-icon>mdi-plus</v-icon>-->
-<!--            {{ $t('Course introduction') }}-->
-<!--          </router-link>-->
-
-        <button
-            class="mt-2 btn btn-info"
-            v-if="introTool"
-            @click="addIntro(course, introTool)"
-        >
-          <v-icon>mdi-plus</v-icon>
-          {{ $t('Course introduction') }}
-        </button>
+          <button
+              class="mt-2 btn btn-info"
+              v-if="introTool"
+              @click="addIntro(course, introTool)"
+          >
+            <v-icon>mdi-plus</v-icon>
+            {{ $t('Course introduction') }}
+          </button>
       </div>
     </div>
     <div v-else>
@@ -189,12 +196,13 @@ export default {
       dropdownOpen: false,
       intro: null,
       introTool: null,
+      createInSession: false,
       goToCourseTool,
       changeVisibility,
       goToSettingCourseTool,
       goToShortCut,
       addIntro,
-      updateIntro,
+      updateIntro
     });
     const route = useRoute()
     const store = useStore();
@@ -213,14 +221,15 @@ export default {
     });
 
     async function getIntro() {
+      // Searching for the CTool called 'course_homepage'.
       const introTool = state.course.tools.find(element => element.name === 'course_homepage');
+      state.introTool = introTool;
+
+      // Search CToolIntro for this
       const filter = {
         courseTool : introTool.iid,
         cid : courseId,
-        sid : sessionId,
       };
-
-      state.introTool = introTool;
 
       store.dispatch('ctoolintro/findAll', filter).then(response => {
         if (!isEmpty(response)) {
@@ -228,6 +237,22 @@ export default {
           state.intro = response[0];
         }
       });
+
+      if (!isEmpty(sessionId)) {
+        state.createInSession = true;
+        const filter = {
+          courseTool : introTool.iid,
+          cid : courseId,
+          sid : sessionId,
+        };
+
+        store.dispatch('ctoolintro/findAll', filter).then(response => {
+          if (!isEmpty(response)) {
+            state.createInSession = false;
+            state.intro = response[0];
+          }
+        });
+      }
     }
 
     function addIntro(course, introTool) {

@@ -68,6 +68,7 @@ use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
 use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
+use Chamilo\CourseBundle\Repository\CToolIntroRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\LtiBundle\Repository\ExternalToolRepository;
@@ -553,6 +554,11 @@ class Container
     public static function getWikiRepository(): CWikiRepository
     {
         return self::$container->get(CWikiRepository::class);
+    }
+
+    public static function getToolIntroRepository(): CToolIntroRepository
+    {
+        return self::$container->get(CToolIntroRepository::class);
     }
 
     public static function getFormFactory(): FormFactory

@@ -68,10 +68,13 @@
         <div>
           {{ $t('Add a course introduction to display to your students.') }}
         </div>
-        <a class="mt-2 btn btn-info">
+        <router-link
+            :to="{ name: 'ToolIntroCreate' }"
+            tag="button"
+            class="mt-2 btn btn-info">
           <v-icon>mdi-plus</v-icon>
           {{ $t('Course introduction') }}
-        </a>
+        </router-link>
       </div>
     </div>
 

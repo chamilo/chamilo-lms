@@ -82,7 +82,7 @@ abstract class AbstractResource
         'course:read',
         'illustration:read',
         'message:read',
-        'c_tool_intro:read'
+        'c_tool_intro:read',
     ])]
     public ?ResourceNode $resourceNode = null;
 

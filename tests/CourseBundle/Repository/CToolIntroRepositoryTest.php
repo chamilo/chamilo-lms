@@ -95,9 +95,9 @@ class CToolIntroRepositoryTest extends AbstractApiTest
                     'resourceLinkList' => [
                         [
                             'cid' => $course->getId(),
-                            'visibility' => ResourceLink::VISIBILITY_PUBLISHED
-                        ]
-                    ]
+                            'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+                        ],
+                    ],
                 ],
             ]
         );

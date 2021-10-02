@@ -245,7 +245,7 @@ export default {
       //{ icon: 'home', url: '/', text: 'Home' },
       //{ icon: 'star_border', url: '/', text: 'News' },
       { icon: 'mdi-book-open-page-variant', url: '/courses', text: t('My courses') },
-      { icon: 'mdi-google-classroom', url: '/sessions', text: t('My Sessions') },
+      { icon: 'mdi-google-classroom', url: '/sessions', text: t('My sessions') },
       { icon: 'mdi-calendar-text', url: '/resources/ccalendarevent', text: t('Events') },
       { icon: 'mdi-chart-box', url: '/main/auth/my_progress.php', text: t('My progress') },
       //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },

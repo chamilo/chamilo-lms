@@ -18,9 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
-/**
- * @Route("/admin")
- */
+#[Route('/admin')]
 class SettingsController extends BaseController
 {
     use ControllerTrait;

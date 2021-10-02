@@ -41,7 +41,9 @@
                     class=""
                     v-for="tool in tools.admin"
                 >
-                  <q-item-section>{{ tool.ctool.nameToTranslate }}</q-item-section>
+                  <q-item-section>
+                    {{ $t(tool.tool.nameToShow) }}
+                  </q-item-section>
                 </q-item>
               </q-list>
             </div>
@@ -75,10 +77,10 @@
           </div>
 
           <div class="mt-2 font-bold">
-            {{ $t('You don\'t have course content') }}
+            {{ $t("You don't have course content") }}
           </div>
           <div>
-            {{ $t('Add a course introduction to display to your students.') }}
+	     {{ $t('Add a course introduction to display to your students') }}
           </div>
 
           <router-link

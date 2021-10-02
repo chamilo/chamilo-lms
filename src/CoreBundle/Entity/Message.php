@@ -234,8 +234,9 @@ class Message
     /**
      * @var Collection|MessageAttachment[]
      *
-     * @ORM\OneToMany(targetEntity="MessageAttachment", mappedBy="message", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="MessageAttachment", mappedBy="message", cascade={"remove", "persist"})
      */
+    #[Groups(['message:read'])]
     protected Collection $attachments;
 
     /**

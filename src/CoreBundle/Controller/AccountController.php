@@ -18,19 +18,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class AccountController.
- *
- * @Route("/account")
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
+#[Route('/account')]
 class AccountController extends BaseController
 {
     use ControllerTrait;
 
-    /**
-     * @Route("/edit", methods={"GET", "POST"}, name="chamilo_core_account_edit")
-     */
+    #[Route('/edit', name: 'chamilo_core_account_edit', methods:['GET', 'POST'])]
     public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo): Response
     {
         $user = $this->getUser();

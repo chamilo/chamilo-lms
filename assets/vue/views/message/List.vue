@@ -359,15 +359,18 @@ export default {
     }
 
     function deleteItemButton() {
-      let myReceiver = {};
-      itemToDelete.value.receivers.forEach(receiver => {
-        if (receiver.receiver['@id'] === user['@id']) {
-          myReceiver = receiver;
-        }
-      });
+      if (itemToDelete.value.sender['@id'] === user['@id']) {
+        itemToDelete.value.status = 3;
+        store.dispatch('message/update', itemToDelete.value);
+      } else {
+        let myReceiver = itemToDelete.value.receivers.find(receiver => receiver.receiver['@id'] === user['@id']) || {};
 
-      console.log('deleteItem');
-      store.dispatch('messagereluser/del', myReceiver);
+        if (myReceiver) {
+          console.log('deleteItem');
+          store.dispatch('messagereluser/del', myReceiver);
+        }
+      }
+
       deleteItemDialog.value = false;
 
       showNotification('Deleted');

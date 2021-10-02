@@ -15,13 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Julio Montoya <gugli100@gmail.com>.
  */
+#[Route('/news')]
 class NewsController extends BaseController
 {
     use ControllerTrait;
 
-    /**
-     * @Route("/news/list", name="news_index", methods={"GET"}, options={"expose"=true})
-     */
+    #[Route('/list', name: 'news_index', methods: ['GET'])]
     public function indexAction(SysAnnouncementRepository $sysAnnouncementRepository): Response
     {
         $user = $this->getUser();

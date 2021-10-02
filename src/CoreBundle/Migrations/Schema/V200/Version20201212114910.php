@@ -69,8 +69,11 @@ final class Version20201212114910 extends AbstractMigrationChamilo
             $userId = $userEntity->getId();
             $this->write("Migrating user: #$userId");
 
-            $userEntity->setUuid(Uuid::v4());
-            $userEntity->setRoleFromStatus($userEntity->getStatus());
+            $userEntity
+                ->setUuid(Uuid::v4())
+                ->setRoles([])
+                ->setRoleFromStatus($userEntity->getStatus())
+            ;
 
             $creatorId = $userEntity->getCreatorId();
             $creator = null;

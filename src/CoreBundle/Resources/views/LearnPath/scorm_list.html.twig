@@ -25,7 +25,7 @@
                     class="section {{ itemLevel }}"
                     title="{{ item.description | striptags | e('html') }}"
                 >
-                    {{ item.title }}
+                    {{ item.title | raw }}
                 </div>
             {% else %}
                 <div
@@ -39,7 +39,7 @@
                         href="#"
                         onclick="switch_item('{{ lp_current_item_id }}','{{ item.iid }}'); return false;"
                     >
-                        {{ item.title }}
+                        {{ item.title | raw }}
                     </a>
                 </div>
             {% endif %}
@@ -97,13 +97,13 @@
                                    data-toggle="collapse" data-parent="#tocchildren_{{ item.parent_id }}"
                                    href="#tocchildren_{{ item.id }}"
                                    aria-expanded="true" aria-controls="tocchildren_{{ item.id }}">
-                                    {{ item.title }}
+                                    {{ item.title | raw }}
                                 </a>
                             {% else %}
                                 <a data-type="type-{{ item.type }}" class="item-action" href="#"
                                    onclick="switch_item('{{ item.current_id }}','{{ item.id }}'); return false;">
                                     <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
-                                    {{ item.title }}
+                                    {{ item.title | raw }}
                                 </a>
                             {% endif %}
                         </div>

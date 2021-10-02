@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Form;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Type\IllustrationType;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
@@ -20,58 +21,33 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProfileType extends AbstractType
 {
-    /**
-     * @todo replace hardcode values of locale.preferred_choices
-     */
+    private LanguageRepository $languageRepository;
+
+    public function __construct(LanguageRepository $languageRepository)
+    {
+        $this->languageRepository = $languageRepository;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $languages = array_flip($this->languageRepository->getAllAvailableToArray());
+
         $builder
-            ->add(
-                'firstname',
-                null,
-                [
-                    'label' => 'Firstname',
-                    'required' => true,
-                ]
-            )
-            ->add(
-                'lastname',
-                null,
-                [
-                    'label' => 'Lastname',
-                    'required' => true,
-                ]
-            )
+            ->add('firstname', TextType::class, ['label' => 'Firstname', 'required' => true])
+            ->add('lastname', TextType::class, ['label' => 'Lastname', 'required' => true])
             //->add('official_code', TextType::class)
             //->add('groups')
-            ->add(
-                'locale',
-                LocaleType::class,
-                [
-                    'preferred_choices' => [
-                        'en',
-                        'fr',
-                        'es',
-                        'pt',
-                        'nl',
-                    ],
-                ]
-            )
-            /*->add(
-                'dateOfBirth',
+            ->add('locale', LocaleType::class, [
+                //'preferred_choices' => ['en', 'fr_FR', 'es_ES', 'pt', 'nl'],
+                'choices' => $languages,
+                'choice_loader' => null,
+            ])
+            /*->add(                'dateOfBirth',
                 BirthdayType::class,
                 [
                     'label' => 'form.label_date_of_birth',
                     'required' => false,
                     'widget' => 'single_text',
-                ]
-            )*/
-            /*->add(
-                'website',
-                UrlType::class,
-                [
-                    'label' => 'Website',
-                    'required' => false,
                 ]
             )
             ->add(
@@ -86,42 +62,14 @@ class ProfileType extends AbstractType
                 'label'    => 'form.label_locale',
                 'required' => false,
             ))*/
-            ->add(
-                'timezone',
-                TimezoneType::class,
-                [
-                    'label' => 'Timezone',
-                    'required' => true,
-                    //'preferred_choices' => array('Europe/Paris', 'America/Lima'),
-                ]
-            )
-            ->add(
-                'phone',
-                null,
-                [
-                    'label' => 'Phone number',
-                    'required' => false,
-                ]
-            )
+            ->add('timezone', TimezoneType::class, ['label' => 'Timezone', 'required' => true])
+            ->add('phone', TextType::class, ['label' => 'Phone number', 'required' => false])
             ->add(
                 'illustration',
                 IllustrationType::class,
-                [
-                    'label' => 'Picture',
-                    'required' => false,
-                    'mapped' => false,
-                ]
+                ['label' => 'Picture', 'required' => false, 'mapped' => false]
             )
-            /*->add(
-                'picture',
-                'sonata_media_type',
-                [
-                    'provider' => 'sonata.media.provider.image',
-                    'context' => 'user',
-                    'required' => false,
-                    'data_class' => 'Chamilo\MediaBundle\Entity\Media',
-                ]
-            )*/
+            //->add('website', UrlType::class, ['label' => 'Website', 'required' => false])
             /*->add(
                 'extraFieldValues',
                 CollectionType::class,
@@ -167,6 +115,6 @@ class ProfileType extends AbstractType
 
     public function getName(): string
     {
-        return 'chamilo_sonata_user_profile';
+        return 'chamilo_user_profile';
     }
 }

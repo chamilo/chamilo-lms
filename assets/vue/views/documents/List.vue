@@ -32,7 +32,7 @@
 <!--        @request="onRequest"-->
 <!--        v-model:pagination="pagination"-->
 <!--        :no-results-label="$t('No results')"-->
-<!--        :loading-label="$t('Loading...')"-->
+<!--        :loading-label="$t('Loading')"-->
 <!--        :rows-per-page-label="$t('Records per page:')"-->
 <!--        :rows-per-page-options="[10, 20, 50, 0]"-->
 <!--        :loading="isLoading"-->
@@ -93,7 +93,7 @@
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2" >
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
-        <Button label="New folder" class="btn btn-primary" @click="openNew">
+        <Button class="btn btn-primary" @click="openNew">
           <v-icon icon="mdi-folder-plus"/>
           {{ $t('New folder') }}
         </Button>

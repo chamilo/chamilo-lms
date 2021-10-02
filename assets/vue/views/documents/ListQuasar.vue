@@ -29,7 +29,7 @@
             @request="onRequest"
             :no-data-label="$t('Data unavailable')"
             :no-results-label="$t('No results')"
-            :loading-label="$t('Loading...')"
+            :loading-label="$t('Loading')"
             :rows-per-page-label="$t('Records per page:')"
             :loading="isLoading"
         >

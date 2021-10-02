@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -34,8 +35,8 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertSame(3, $count);
         $this->assertHasNoEntityViolations($student);
 
-        $this->assertSame(1, \count($student->getRoles()));
-        $this->assertTrue(\in_array('ROLE_USER', $student->getRoles(), true));
+        $this->assertCount(1, $student->getRoles());
+        $this->assertContains('ROLE_USER', $student->getRoles());
 
         $student->addRole('ROLE_STUDENT');
         $userRepo->update($student);
@@ -43,18 +44,18 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertTrue($student->hasRole('ROLE_STUDENT'));
         $this->assertTrue($student->isEqualTo($student));
 
-        $this->assertSame(2, \count($student->getRoles()));
+        $this->assertCount(2, $student->getRoles());
 
         $student->addRole('ROLE_STUDENT');
         $userRepo->update($student);
 
         $this->assertTrue($student->isStudent());
-        $this->assertSame(2, \count($student->getRoles()));
+        $this->assertCount(2, $student->getRoles());
 
         $student->removeRole('ROLE_STUDENT');
         $userRepo->update($student);
 
-        $this->assertSame(1, \count($student->getRoles()));
+        $this->assertCount(1, $student->getRoles());
 
         $this->assertTrue($student->isAccountNonExpired());
         $this->assertTrue($student->isAccountNonLocked());
@@ -64,6 +65,8 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertFalse($student->isStudentBoss());
         $this->assertFalse($student->isSuperAdmin());
         $this->assertTrue($student->isCredentialsNonExpired());
+
+        $this->assertSame(1, $student->getPortals()->count());
     }
 
     public function testCreateAdmin(): void
@@ -103,7 +106,7 @@ class UserRepositoryTest extends AbstractApiTest
         $admin = $userRepo->find($admin->getId());
 
         $this->assertTrue($admin->hasGroup('test'));
-        $this->assertSame(2, \count($admin->getRoles()));
+        $this->assertCount(2, $admin->getRoles());
     }
 
     public function testCreateUserSkipResourceNode(): void
@@ -146,12 +149,12 @@ class UserRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame(3, $userRepo->count([]));
-        $this->assertSame(3, \count($user->getRoles()));
+        $this->assertCount(3, $user->getRoles());
 
         $this->assertSame('Joe Doe', $user->getCompleteNameWithClasses());
         $this->assertSame('Joe Doe', $user->getFullname());
 
-        $this->assertSame(0, \count($user->getCurrentlyAccessibleSessions()));
+        $this->assertCount(0, $user->getCurrentlyAccessibleSessions());
         $this->assertSame('/img/icons/svg/identifier_admin.svg', $user->getIconStatus());
     }
 
@@ -159,6 +162,9 @@ class UserRepositoryTest extends AbstractApiTest
     {
         $token = $this->getUserToken([]);
         $username = 'test';
+
+        $iri = $this->findIriBy(AccessUrl::class, ['id' => $this->getAccessUrl()->getId()]);
+
         $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/users',
@@ -173,12 +179,12 @@ class UserRepositoryTest extends AbstractApiTest
                     'plainPassword' => 'test',
                     'timezone' => 'Europe\Paris',
                     'email' => 'test@example.com',
-                    //'expiresAt' => new \DateTime(),
                     'phone' => '123456',
                     'address' => 'Paris',
                     'roles' => [
                         'ROLE_USER',
                     ],
+                    'currentUrl' => $iri,
                 ],
             ]
         );
@@ -189,7 +195,16 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertJsonContains([
             '@context' => '/api/contexts/User',
             'username' => $username,
+            'roles' => [
+                'ROLE_USER',
+            ],
         ]);
+
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $user = $userRepo->findByUsername($username);
+        $this->assertNotNull($user);
+
+        $this->assertSame(1, $user->getPortals()->count());
     }
 
     public function testAddFriendToUser(): void

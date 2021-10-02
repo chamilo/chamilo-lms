@@ -274,58 +274,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * Shows the associated resource file.
-     *
-     * @deprecated use vue
-     *
-     * @Route("/{tool}/{type}/{id}/view_resource", methods={"GET"}, name="chamilo_core_resource_view_resource")
-     */
-    /*public function viewResourceAction(Request $request, RouterInterface $router): Response
-    {
-        $id = $request->get('id');
-
-        $resourceNode = $this->getResourceNodeRepository()->find($id);
-
-        if (null === $resourceNode) {
-            throw new FileNotFoundException('Resource not found');
-        }
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $repository = $this->getRepositoryFromRequest($request);
-
-        $resource = $repository->getResourceFromResourceNode($id);
-
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $this->setBreadCrumb($request, $resourceNode);
-
-        $params = [
-            'resource' => $resource,
-            'tool' => $tool,
-            'type' => $type,
-        ];
-
-        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
-    }*/
-
-    /**
      * View file of a resource node.
-     *
-     * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view")
      */
+    #[Route('/{tool}/{type}/{id}/view', name: 'chamilo_core_resource_view', methods: ['GET'])]
     public function viewAction(Request $request): Response
     {
         $id = $request->get('id');
         $filter = (string) $request->get('filter'); // See filters definitions in /config/services.yml.
-        $resourceNode = $this->getResourceNodeRepository()->find($id);
+        $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
 
         if (null === $resourceNode) {
-            throw new FileNotFoundException('Resource not found');
+            throw new FileNotFoundException($this->trans('Resource not found'));
         }
 
         return $this->processFile($request, $resourceNode, 'show', $filter);
@@ -334,10 +293,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * Redirect resource to link.
      *
-     * @Route("/{tool}/{type}/{id}/link", methods={"GET"}, name="chamilo_core_resource_link")
-     *
      * @return RedirectResponse|void
      */
+    #[Route('/{tool}/{type}/{id}/link', name: 'chamilo_core_resource_link', methods: ['GET'])]
     public function linkAction(Request $request, RouterInterface $router)
     {
         $id = $request->get('id');
@@ -361,17 +319,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * Download file of a resource node.
      *
-     * @Route("/{tool}/{type}/{id}/download", methods={"GET"}, name="chamilo_core_resource_download")
-     *
      * @return RedirectResponse|StreamedResponse
      */
+    #[Route('/{tool}/{type}/{id}/download', name: 'chamilo_core_resource_download', methods: ['GET'])]
     public function downloadAction(Request $request)
     {
-        $id = (int) $request->get('id');
-        $resourceNode = $this->getResourceNodeRepository()->find($id);
+        $id = $request->get('id');
+        $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
+        //$resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
-            throw new FileNotFoundException('Resource not found');
+            throw new FileNotFoundException($this->trans('Resource not found'));
         }
 
         $repo = $this->getRepositoryFromRequest($request);

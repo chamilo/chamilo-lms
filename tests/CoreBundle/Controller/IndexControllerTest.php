@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Repository\SettingsCurrentRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +22,35 @@ class IndexControllerTest extends WebTestCase
         $client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testLogin(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/login');
+        $this->assertResponseIsSuccessful();
+        $this->assertStringContainsString('lang="en"', $client->getResponse()->getContent());
+    }
+
+    public function testLoginChangeLanguage(): void
+    {
+        $client = static::createClient();
+
+        $repo = $this->getContainer()->get(SettingsCurrentRepository::class);
+
+        /** @var SettingsCurrent $setting */
+        $setting = $repo->findOneBy(['variable' => 'platform_language']);
+        $this->assertNotNull($setting);
+
+        $setting->setSelectedValue('fr_FR');
+        $repo->update($setting);
+
+        $setting = $repo->findOneBy(['variable' => 'platform_language']);
+        $this->assertSame('fr_FR', $setting->getSelectedValue());
+
+        $client->request('GET', '/login');
+        $this->assertResponseIsSuccessful();
+        $this->assertStringContainsString('lang="fr_FR"', $client->getResponse()->getContent());
     }
 
     public function testToggleStudentViewAction(): void
@@ -40,7 +71,6 @@ class IndexControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $response = $client->request('GET', '/');
-        $defaultUrl = $response->getUri();
 
         // retrieve the admin
         $admin = $this->getUser('admin');

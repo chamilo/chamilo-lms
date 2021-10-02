@@ -1078,11 +1078,6 @@ class UserManager
         }
 
         $user->setRoleFromStatus($status);
-        /*$group = Container::$container->get(GroupRepository::class)->findOneBy(['code' => $statusToGroup[$status]]);
-        if ($group) {
-            $user->addGroup($group);
-        }*/
-
         $userManager->updateUser($user, true);
         Event::addEvent(LOG_USER_UPDATE, LOG_USER_ID, $user_id);
 
@@ -2919,7 +2914,7 @@ class UserManager
                     SessionEntity::SESSION_COACH,
                     $url
                 );
-                $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSuscription(
+                $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSubscription(
                     $user,
                     $session,
                     SessionEntity::COURSE_COACH,
@@ -3081,7 +3076,7 @@ class UserManager
                 SessionEntity::SESSION_COACH,
                 $url
             );
-            $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSuscription(
+            $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSubscription(
                 $user,
                 $session,
                 SessionEntity::COURSE_COACH,

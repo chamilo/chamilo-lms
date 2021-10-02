@@ -65,7 +65,7 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
             $resourceNode = $object->getResourceNode();
 
             $params = [
-                'id' => $resourceNode->getId(),
+                'id' => $resourceNode->getUuid(),
                 'cid' => $courseId,
                 'sid' => $sessionId,
                 'gid' => $groupId,

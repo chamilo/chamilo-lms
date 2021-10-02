@@ -187,7 +187,7 @@ export default defineComponent({
       // { icon: 'person', url: '/courses', text: 'My courses' },
       // { icon: 'star_border', url: '/sessions', text: 'Sessions' },
       //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
-      { icon: 'compass', url: '/catalog', text: 'Explore' },
+      //{ icon: 'compass', url: '/catalog', text: 'Explore' },
       // { icon: 'star_border', url: '/news', text: 'News' },
     ];
 

@@ -16,4 +16,10 @@ class SettingsCurrentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, SettingsCurrent::class);
     }
+
+    public function update(SettingsCurrent $setting): void
+    {
+        $this->getEntityManager()->persist($setting);
+        $this->getEntityManager()->flush();
+    }
 }

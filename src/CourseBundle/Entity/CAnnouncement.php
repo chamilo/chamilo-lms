@@ -15,8 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CAnnouncement.
- *
  * @ORM\Table(name="c_announcement")
  * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CAnnouncementRepository")
  */

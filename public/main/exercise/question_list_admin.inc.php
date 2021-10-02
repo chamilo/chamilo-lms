@@ -199,7 +199,7 @@ if (!$inATest) {
         $objExercise->questionSelectionType = $originalQuestionSelectType;
 
         echo '
-            <div class="row hidden-xs">
+            <div class="row gt-xs my-4">
                 <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
                 <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>
                 <div class="col-sm-2"><strong>'.get_lang('Category').'</strong></div>
@@ -307,7 +307,8 @@ if (!$inATest) {
 
                 $questionType = Display::return_icon(
                     $objQuestionTmp->getTypePicture(),
-                    $objQuestionTmp->getExplanation()
+                    $objQuestionTmp->getExplanation(),
+                    ['class' => 'm-auto']
                 );
 
                 // Question category
@@ -336,19 +337,19 @@ if (!$inATest) {
                                     .$questionName.'
                                 </div>
                                 <div class="type text-center col-sm-1 col-xs-12">
-                                    <span class="visible-xs-inline">'.get_lang('Type').' </span>'
+                                    <span class="xs">'.get_lang('Type').' </span>'
                                     .$questionType.'
                                 </div>
                                 <div class="category col-sm-2 col-xs-12" title="'.$questionCategory.'">
-                                    <span class="visible-xs-inline">'.get_lang('Category').' </span>'
+                                    <span class="xs">'.get_lang('Category').' </span>'
                                     .cut($questionCategory, 42).'
                                 </div>
                                 <div class="level text-right col-sm-1 col-xs-6">
-                                    <span class="visible-xs-inline">'.get_lang('Difficulty').' </span>'
+                                    <span class="xs">'.get_lang('Difficulty').' </span>'
                                     .$questionLevel.'
                                 </div>
                                 <div class="score text-right col-sm-1 col-xs-6">
-                                    <span class="visible-xs-inline">'.get_lang('Score').' </span>'
+                                    <span class="xs">'.get_lang('Score').' </span>'
                                     .$questionScore.'
                                 </div>
                                 <div class="btn-actions text-right col-sm-2 col-xs-6">

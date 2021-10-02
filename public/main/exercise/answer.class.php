@@ -785,17 +785,14 @@ class Answer
 
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers + 1;
-            if (isset($this->position[$i])) {
-                while ($this->position[$i]) {
-                    $position = $this->position[$i];
-                    $sql = "DELETE FROM $answerTable
-                        WHERE
-                            c_id = {$this->course_id} AND
-                            question_id = '".$questionId."' AND
-                            position ='$position'";
-                    Database::query($sql);
-                    $i++;
-                }
+            while (isset($this->position[$i])) {
+                $position = $this->position[$i];
+                $sql = "DELETE FROM $answerTable
+                    WHERE
+                        question_id = '".$questionId."' AND
+                        position ='$position'";
+                Database::query($sql);
+                $i++;
             }
         }
 

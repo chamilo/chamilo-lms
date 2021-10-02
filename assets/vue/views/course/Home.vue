@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <div v-if="isCurrentTeacher && course"
+    <div v-if="isCurrentTeacher"
          class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2"
     >
       <div v-if="intro" class="p-10 text-center">
@@ -65,7 +65,6 @@
           <v-icon>mdi-pencil</v-icon>
           {{ $t('Update') }}
         </button>
-
       </div>
       <div v-else>
           <div>
@@ -80,7 +79,7 @@
             {{ $t("You don't have course content") }}
           </div>
           <div>
-	     {{ $t('Add a course introduction to display to your students') }}
+	        {{ $t('Add a course introduction to display to your students') }}
           </div>
 
 <!--          <router-link-->
@@ -100,6 +99,11 @@
           <v-icon>mdi-plus</v-icon>
           {{ $t('Course introduction') }}
         </button>
+      </div>
+    </div>
+    <div v-else>
+      <div v-if="intro" class="p-10 text-center">
+        <span v-html="intro.introText" />
       </div>
     </div>
 

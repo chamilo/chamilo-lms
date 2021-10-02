@@ -272,6 +272,8 @@ import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibilit
 import {MESSAGE_TYPE_INBOX} from "../../components/message/msgType";
 import useNotification from "../../components/Notification";
 
+import {useI18n} from "vue-i18n";
+
 export default {
   name: 'MessageList',
   servicePrefix: 'Message',
@@ -295,6 +297,7 @@ export default {
     const index = ref('inbox');
 
     const {showNotification} = useNotification();
+    const { t } = useI18n();
 
     // Inbox
     const inBoxFilter = {
@@ -373,7 +376,7 @@ export default {
 
       deleteItemDialog.value = false;
 
-      showNotification('Deleted');
+      showNotification(t('Deleted'));
 
       goToInbox();
     }

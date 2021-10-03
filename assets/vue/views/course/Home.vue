@@ -1,7 +1,7 @@
 <template>
   <div v-if="course" class="grid gap-4">
     <div class="flex flex-row justify-between border-b-2 border-gray-200 ">
-      <div class=" line-clamp-1 text-2xl font-bold">
+      <div class="line-clamp-1 text-2xl font-bold">
         {{ course.title }}
       </div>
 
@@ -60,17 +60,15 @@
 
         <div v-if="createInSession">
           <button
-              class="mt-2 btn btn-info"
               v-if="introTool"
+              class="mt-2 btn btn-info"
               @click="addIntro(course, introTool)"
           >
             <v-icon>mdi-plus</v-icon>
-            {{ $t('Course introduction in a session') }}
+            {{ $t('Course introduction') }}
           </button>
         </div>
-
         <div v-else>
-
           <button
               class="mt-2 btn btn-info"
               @click="updateIntro(intro)"
@@ -91,16 +89,16 @@
           </div>
 
           <div class="mt-2 font-bold">
-            {{ $t("You don't have course content") }}
+            {{ $t("You don't have any course content yet.") }}
           </div>
 
           <div>
-            {{ $t('Add a course introduction to display to your students') }}
+            {{ $t('Add a course introduction to display to your students.') }}
           </div>
 
           <button
-              class="mt-2 btn btn-info"
               v-if="introTool"
+              class="mt-2 btn btn-info"
               @click="addIntro(course, introTool)"
           >
             <v-icon>mdi-plus</v-icon>

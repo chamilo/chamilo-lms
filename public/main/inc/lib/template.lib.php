@@ -78,9 +78,12 @@ class Template
         // Page title
         $this->title = $title;
         global $interbreadcrumb;
-        $interbreadcrumb[] = ['url' => '#', 'name' => $title];
+
+        if (!empty($title)) {
+            $interbreadcrumb[] = ['url' => '#', 'name' => $title];
+        }
+
         $this->show_learnpath = $show_learnpath;
-        //$this->setResponseCode($responseCode);
 
         if (empty($this->show_learnpath)) {
             $origin = api_get_origin();
@@ -320,16 +323,6 @@ class Template
         // Only if course is available
         $courseToolBar = '';
         $show_course_navigation_menu = '';
-        if (!empty($this->course_id) && $this->user_is_logged_in) {
-            if ('false' !== api_get_setting('show_toolshortcuts')) {
-                // Course toolbar
-                $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
-            }
-            if ('false' !== api_get_setting('show_navigation_menu')) {
-                //Course toolbar
-                $show_course_navigation_menu = CourseHome::show_navigation_menu();
-            }
-        }
         $this->assign('show_course_shortcut', $courseToolBar);
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }

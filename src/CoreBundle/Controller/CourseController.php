@@ -30,7 +30,6 @@ use Event;
 use Exercise;
 use ExtraFieldValue;
 use Fhaculty\Graph\Graph;
-use Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,22 +92,6 @@ class CourseController extends ToolBaseController
             $session->set('is_allowed_in_course', true);
         }
 
-        /*$action = empty($_GET['action']) ? '' : Security::remove_XSS($_GET['action']);
-        if ('subscribe' === $action && Security::check_token('get')) {
-            Security::clear_token();
-            $result = CourseManager::autoSubscribeToCourse($courseCode);
-            if ($result && CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
-                $session->set('is_allowed_in_course', true);
-            }
-            header('Location: '.api_get_self());
-            exit;
-        }
-
-        $logInfo = [
-            'tool' => 'course-main',
-            'action' => $action,
-        ];
-        Event::registerLog($logInfo);*/
         $logInfo = [
             'tool' => 'course-main',
         ];
@@ -224,15 +207,6 @@ class CourseController extends ToolBaseController
                 'Content-type' => 'application/json',
             ]
         );
-        /*return $this->render(
-            '@ChamiloCore/Course/home.html.twig',
-            [
-                'course' => $course,
-                'shortcuts' => $shortcuts,
-                'diagram' => $diagram,
-                'tools' => $tools,
-            ]
-        );*/
     }
 
     /**

@@ -17,10 +17,10 @@
         </div>
 
         <div class="mt-2 font-bold">
-          {{ $t("You don't have any course yet") }}
+          {{ $t("You don't have any course yet.") }}
         </div>
         <div>
-          {{ $t('Go to "Explore" to find a topic of interest, or wait for someone to subscribe you') }}
+          {{ $t('Go to "Explore" to find a topic of interest, or wait for someone to subscribe you.') }}
         </div>
       </div>
     </div>

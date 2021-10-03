@@ -9606,7 +9606,7 @@ msgid "The file you uploaded was not received succesfully. Please try again late
 msgstr "Le fichier envoyé n'a pas été reçu avec succès. Merci de réessayer plus tard ou de prendre contact avec l'administrateur de ce portail."
 
 msgid "Assessments"
-msgstr "Mon cahier de notes"
+msgstr "Cahier de notes"
 
 msgid "What is OpenID?"
 msgstr "OpenID, qu'est-ce que c'est?"
@@ -11184,7 +11184,7 @@ msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditi
 msgstr "En cliquant sur le bouton \"Valider mon inscription\" ci-dessous, vous marquez votre accord avec les conditions d'utilisation de ce site."
 
 msgid "Forgot your password ?"
-msgstr "Vous avez oublié votre mot de passe?"
+msgstr "Mot de passe oublié ?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."
 msgstr "Entrez votre nom d'utilisateur ou l'adresse avec laquelle vous vous êtes enregistré et nous vous enverrons votre mot de passe par courriel."
@@ -24079,3 +24079,24 @@ msgstr "Se souvenir de moi"
 
 msgid "Register oneself"
 msgstr "Créer un compte"
+
+msgid "Course introduction"
+msgstr "Introduction de cours"
+
+msgid "You don't have any course content yet."
+msgstr "Vous n'avez pas encore de contenu de cours."
+
+msgid "You don't have any course yet."
+msgstr "Vous n'avez pas encore de cours."
+
+msgid "You don't have any session yet."
+msgstr "Vous n'avez pas encore de session."
+
+msgid "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you."
+msgstr "Cliquez sur \"Explorer\" pour trouver un cours qui vous intéresse, ou attendez que quelqu'un vous y inscrive."
+
+msgid "Add a course introduction to display to your students."
+msgstr "Ajoutez une introduction de cours pour vos apprenants."
+
+msgid "See as student"
+msgstr "Voir comme apprenant"

@@ -129,6 +129,13 @@ class Display
 
         if (empty($interbreadcrumb)) {
             $interbreadcrumb = [];
+        } else {
+            $interbreadcrumb = array_filter(
+                $interbreadcrumb,
+                function ($item) {
+                    return isset($item['name']) && !empty($item['name']);
+                }
+            );
         }
 
         $params['legacy_javascript'] = $htmlHeadXtra;
@@ -166,7 +173,6 @@ class Display
     ) {
         // @todo replace introduction section with a vue page.
         return;
-        echo self::return_introduction_section($tool, $editor_config);
     }
 
     /**
@@ -177,13 +183,6 @@ class Display
         $tool,
         $editor_config = null
     ) {
-        $moduleId = $tool;
-        if ('true' === api_get_setting('enable_tool_introduction') || TOOL_COURSE_HOMEPAGE == $tool) {
-            $introduction_section = null;
-            require api_get_path(SYS_CODE_PATH).'inc/introductionSection.inc.php';
-
-            return $introduction_section;
-        }
     }
 
     /**

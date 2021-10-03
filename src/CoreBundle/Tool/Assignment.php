@@ -18,6 +18,11 @@ class Assignment extends AbstractTool implements ToolInterface
         return 'student_publication';
     }
 
+    public function getNameToShow(): string
+    {
+        return 'Assignments';
+    }
+
     public function getLink(): string
     {
         return '/main/work/work.php';

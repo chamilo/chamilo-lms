@@ -17,10 +17,8 @@ class AccountControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        // retrieve the admin
         $admin = $this->getUser('admin');
 
-        // simulate $testUser being logged in
         $client->loginUser($admin);
 
         $client->request('GET', '/account/edit');
@@ -28,6 +26,7 @@ class AccountControllerTest extends WebTestCase
 
         $client->submitForm('Update profile', [
             'profile[firstname]' => 'admin firstname',
+            'profile[email]' => 'test@test.com',
         ]);
         $this->assertResponseRedirects('/account/home');
 

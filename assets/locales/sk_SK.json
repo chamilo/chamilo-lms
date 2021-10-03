@@ -8,10 +8,7 @@
     "Tests": "Testy",
     "Forum": "F\u00f3rum",
     "Glossary": "Slovn\u00edk",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Odkaz",
-    "Student publication": "Student publication",
     "Groups": "Skupiny",
     "Member": "\u010clen",
     "Survey": "Prieskum",
@@ -53,7 +50,6 @@
     "Courses": "U\u010debn\u00e9 osnovy",
     "Sessions": "Sessions",
     "Administration": "Administr\u00e1cia",
-    "Reporting": "Hl\u00e1senie",
     "Remember me": "Remember me",
     "Forgot your password ?": "Zabudli ste heslo?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "Pou\u017e\u00edvate\u013esk\u00e9 meno",
     "Password": "Heslo",
     "Update": "Aktualizova\u0165",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "M\u00f4j klasifika\u010dn\u00fd h\u00e1rok",
+    "Assignments": "Zadania",
+    "Videoconference": "Videokonferencia",
+    "Reporting": "Hl\u00e1senie",
+    "Learning paths": "U\u010debn\u00e1 osnova"
 }

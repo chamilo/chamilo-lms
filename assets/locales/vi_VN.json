@@ -8,10 +8,7 @@
     "Tests": "",
     "Forum": "Forum",
     "Glossary": "",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Li\u00ean k\u1ebft",
-    "Student publication": "Student publication",
     "Groups": "S\u1eeda Nh\u00f3m",
     "Member": "",
     "Survey": "",
@@ -53,7 +50,6 @@
     "Courses": "",
     "Sessions": "Sessions",
     "Administration": "Qu\u1ea3n tr\u1ecb",
-    "Reporting": "",
     "Remember me": "Remember me",
     "Forgot your password ?": "",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "",
     "Update": "",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "",
+    "Assignments": "",
+    "Videoconference": "",
+    "Reporting": "",
+    "Learning paths": "Qu\u00e1 tr\u00ecnh h\u1ecdc t\u1eadp"
 }

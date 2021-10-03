@@ -8,10 +8,7 @@
     "Tests": "\ud14c\uc2a4\ud2b8",
     "Forum": "\ud3ec\ub7fc",
     "Glossary": "",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "\ub9c1\ud06c",
-    "Student publication": "Student publication",
     "Groups": "\uadf8\ub8f9",
     "Member": "",
     "Survey": "",
@@ -53,7 +50,6 @@
     "Courses": "Learnpaths",
     "Sessions": "Sessions",
     "Administration": "\uad00\ub9ac",
-    "Reporting": "",
     "Remember me": "Remember me",
     "Forgot your password ?": "",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "\ud328\uc2a4\uc6cc\ub4dc",
     "Update": "",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "",
+    "Assignments": "\ud559\uc0dd \ucd9c\ud310",
+    "Videoconference": "",
+    "Reporting": "",
+    "Learning paths": "Learning path"
 }

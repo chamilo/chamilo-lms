@@ -16,6 +16,11 @@ class LearningPath extends AbstractTool implements ToolInterface
         return 'learnpath';
     }
 
+    public function getNameToShow(): string
+    {
+        return 'Learning paths';
+    }
+
     public function getCategory(): string
     {
         return 'authoring';

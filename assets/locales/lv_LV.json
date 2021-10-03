@@ -8,10 +8,7 @@
     "Tests": "Kontroldarbi",
     "Forum": "Diskusijas kurs\u0101",
     "Glossary": "Terminu skaidrojumu v\u0101rdn\u012bca",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Hipersaite",
-    "Student publication": "Student publication",
     "Groups": "Grupas",
     "Member": "Biedrs",
     "Survey": "Aptaujas kurs\u0101",
@@ -53,7 +50,6 @@
     "Courses": "Kursi",
     "Sessions": "Sessions",
     "Administration": "Administr\u0113\u0161ana",
-    "Reporting": "Atskaites",
     "Remember me": "Remember me",
     "Forgot your password ?": "Aizmirs\u0101t savu paroli?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "Parole",
     "Update": "Atjaunin\u0101t",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "Ieskai\u0161u gr\u0101mati\u0146as iestat\u012bjumi",
+    "Assignments": "Refer\u0101ti \/ M\u0101jas darbi",
+    "Videoconference": "Videokonference",
+    "Reporting": "Atskaites",
+    "Learning paths": "M\u0101c\u012bbu gaita"
 }

@@ -8,10 +8,7 @@
     "Tests": "Testy",
     "Forum": "Fora",
     "Glossary": "S\u0142ownik",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Odno\u015bniki",
-    "Student publication": "Student publication",
     "Groups": "Grupy",
     "Member": "U\u017cytkownik",
     "Survey": "Ankieta",
@@ -53,7 +50,6 @@
     "Courses": "\u015acie\u017cki szkoleniowe (Kursy)",
     "Sessions": "Sessions",
     "Administration": "Administracja",
-    "Reporting": "Raporty",
     "Remember me": "Remember me",
     "Forgot your password ?": "Nie pami\u0119tasz has\u0142a?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "Has\u0142o",
     "Update": "Aktualizuj",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "Moje Oceny",
+    "Assignments": "Zadania",
+    "Videoconference": "Wideokonferencja",
+    "Reporting": "Raporty",
+    "Learning paths": "\u015acie\u017cka nauczania"
 }

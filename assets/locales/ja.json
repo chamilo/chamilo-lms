@@ -8,10 +8,7 @@
     "Tests": "\u30c6\u30b9\u30c8",
     "Forum": "\u30d5\u30a9\u30fc\u30e9\u30e0",
     "Glossary": "\u7528\u8a9e\u96c6",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "",
-    "Student publication": "Student publication",
     "Groups": "",
     "Member": "",
     "Survey": "\u610f\u898b\u8abf\u67fb",
@@ -53,7 +50,6 @@
     "Courses": "",
     "Sessions": "Sessions",
     "Administration": "",
-    "Reporting": "\u30ec\u30dd\u30fc\u30c8\u4f5c\u6210",
     "Remember me": "Remember me",
     "Forgot your password ?": "\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u304a\u5fd8\u308c\u3067\u3059\u304b ?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "\u30e6\u30fc\u30b6\u30fc\u540d",
     "Password": "",
     "Update": "",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "",
+    "Assignments": "\u8ab2\u984c",
+    "Videoconference": "",
+    "Reporting": "\u30ec\u30dd\u30fc\u30c8\u4f5c\u6210",
+    "Learning paths": "\u5b66\u7fd2\u30d1\u30b9"
 }

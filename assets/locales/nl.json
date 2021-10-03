@@ -8,10 +8,7 @@
     "Tests": "Oefeningen",
     "Forum": "Forums",
     "Glossary": "Woordenlijst",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Link",
-    "Student publication": "Student publication",
     "Groups": "Groepen",
     "Member": "Gebruiker",
     "Survey": "Enquete",
@@ -53,7 +50,6 @@
     "Courses": "Leerpaden",
     "Sessions": "Sessions",
     "Administration": "Beheer",
-    "Reporting": "Rapportering",
     "Remember me": "Remember me",
     "Forgot your password ?": "Wachtwoord vergeten?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "Gebruikersnaam ('log-in')",
     "Password": "Wachtwoord",
     "Update": "Updaten",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "Mijn puntenboekje",
+    "Assignments": "Studentenpublicaties",
+    "Videoconference": "Videoconferentie",
+    "Reporting": "Rapportering",
+    "Learning paths": "Leerpad"
 }

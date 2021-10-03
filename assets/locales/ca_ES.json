@@ -8,10 +8,7 @@
     "Tests": "Exercicis",
     "Forum": "F\u00f2rums",
     "Glossary": "Glossari",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Enlla\u00e7",
-    "Student publication": "Student publication",
     "Groups": "Grups",
     "Member": "Usuari",
     "Survey": "Enquesta",
@@ -53,7 +50,6 @@
     "Courses": "Itinerari formatiu",
     "Sessions": "Sessions",
     "Administration": "Administraci\u00f3",
-    "Reporting": "Informes",
     "Remember me": "Remember me",
     "Forgot your password ?": "Ha oblidat la seva contrasenya?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "Usuari",
     "Password": "Contrasenya",
     "Update": "Actualitzar",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "Les meues qualificacions",
+    "Assignments": "Publicacions d'estudiants",
+    "Videoconference": "Videoconfer\u00e8ncia",
+    "Reporting": "Informes",
+    "Learning paths": "Itinerari formatiu"
 }

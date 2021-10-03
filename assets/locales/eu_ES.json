@@ -8,10 +8,7 @@
     "Tests": "Ariketak",
     "Forum": "Foroa",
     "Glossary": "Glosarioa",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Lotura",
-    "Student publication": "Student publication",
     "Groups": "Taldeak",
     "Member": "Kidea",
     "Survey": "Inkesta",
@@ -53,7 +50,6 @@
     "Courses": "Ikasteko ibilbideak",
     "Sessions": "Sessions",
     "Administration": "Administrazioa",
-    "Reporting": "Txostenak",
     "Remember me": "Remember me",
     "Forgot your password ?": "Ahaztu al duzu pasahitza?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "Pasahitza",
     "Update": "Eguneratu",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "Ebaluazioak",
+    "Assignments": "Egin beharreko lanak",
+    "Videoconference": "Bideokonferentzia",
+    "Reporting": "Txostenak",
+    "Learning paths": "Ikaskuntza ibilbideak"
 }

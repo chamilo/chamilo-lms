@@ -8,10 +8,7 @@
     "Tests": "Testit",
     "Forum": "Keskustelut",
     "Glossary": "Sanasto",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "",
-    "Student publication": "Student publication",
     "Groups": "Ryhm\u00e4t",
     "Member": "J\u00e4sen",
     "Survey": "Kysely",
@@ -53,7 +50,6 @@
     "Courses": "Oppimispolut",
     "Sessions": "Sessions",
     "Administration": "",
-    "Reporting": "Raportointi",
     "Remember me": "Remember me",
     "Forgot your password ?": "Unohditko salasanasi?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "K\u00e4ytt\u00e4j\u00e4tunnus",
     "Password": "Salasana",
     "Update": "P\u00e4ivit\u00e4",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "Arvioinnit",
+    "Assignments": "",
+    "Videoconference": "Videoneuvottelu",
+    "Reporting": "Raportointi",
+    "Learning paths": "Learning Path"
 }

@@ -8,10 +8,7 @@
     "Tests": "Ejercicios",
     "Forum": "Foro",
     "Glossary": "Glosario",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Enlaces",
-    "Student publication": "Student publication",
     "Groups": "Grupos",
     "Member": "Usuario",
     "Survey": "Encuesta",
@@ -53,7 +50,6 @@
     "Courses": "Lecciones",
     "Sessions": "Sessions",
     "Administration": "Administraci\u00f3n",
-    "Reporting": "Informes",
     "Remember me": "Remember me",
     "Forgot your password ?": "\u00bfHa olvidado su contrase\u00f1a?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "Nombre de usuario",
     "Password": "Contrase\u00f1a",
     "Update": "Actualizar",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "Evaluaciones",
+    "Assignments": "Tareas",
+    "Videoconference": "Videoconferencia",
+    "Reporting": "Informes",
+    "Learning paths": "Lecciones"
 }

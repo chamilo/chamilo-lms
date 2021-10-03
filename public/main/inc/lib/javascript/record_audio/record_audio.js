@@ -40,12 +40,11 @@ window.RecordAudio = (function () {
     function pauseTimer() {
         clearInterval(window.timerInterval);
     }
-    function useRecordRTC(rtcInfo, fileName) {
+    function useRecordRTC(rtcInfo) {
         $(rtcInfo.blockId).show();
 
         var mediaConstraints = {audio: true},
             recordRTC = null,
-            txtName = $('#audio-title-rtc'),
             btnStart = $(rtcInfo.btnStartId),
             btnPause = $(rtcInfo.btnPauseId),
             btnPlay = $(rtcInfo.btnPlayId),
@@ -61,21 +60,19 @@ window.RecordAudio = (function () {
             }
 
             var btnSaveText = btnSave ? btnSave.html() : '';
-            var fileExtension = '.' + recordedBlob.type.split('/')[1];
+
+            var fileName = 'oral_expression_' + rtcInfo.tExerciseId + '_' + rtcInfo.questionId;
 
             var formData = new FormData();
-            formData.append('audio_blob', recordedBlob, fileName + fileExtension);
-            formData.append('audio_dir', rtcInfo.directory);
-            var courseParams = "";
-            if (rtcInfo.cidReq) {
-                courseParams = "&"+rtcInfo.cidReq;
-            }
+            formData.append('type', rtcInfo.type);
+            formData.append('audio_blob', recordedBlob, fileName);
+            formData.append('t_exercise', rtcInfo.tExerciseId);
+            formData.append('question', rtcInfo.questionId);
+
+            var courseParams = rtcInfo.cidReq.replaceAll('&amp;', '&');
 
             $.ajax({
-                url: rtcInfo.recordAudioUrl + '?'+ $.param({
-                    type: rtcInfo.type,
-                    tool: (!!txtName.length ? 'document' : 'exercise')
-                }) + courseParams,
+                url: rtcInfo.recordAudioUrl + '?a=' + courseParams,
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -90,13 +87,6 @@ window.RecordAudio = (function () {
                     }
                 }
             }).done(function (response) {
-                if (!!txtName.length) {
-                    if (rtcInfo.reload_page == 1) {
-                        window.location.reload();
-                        return;
-                    }
-                }
-
                 $(response.message).insertAfter($(rtcInfo.blockId).find('.well'));
             }).always(function () {
                 if (btnSave) {
@@ -105,20 +95,10 @@ window.RecordAudio = (function () {
                 btnStop.prop('disabled', true).addClass('hidden');
                 btnPause.prop('disabled', true).addClass('hidden');
                 btnStart.prop('disabled', false).removeClass('hidden');
-                txtName.prop('readonly', false);
             });
         }
 
         btnStart.on('click', function () {
-            if (!fileName) {
-                fileName = txtName.val();
-
-                if (!$.trim(fileName)) {
-                    return;
-                }
-            }
-
-
             function successCallback(stream) {
                 stopTimer();
                 startTimer();
@@ -130,7 +110,6 @@ window.RecordAudio = (function () {
                 });
                 recordRTC.startRecording();
 
-                txtName.prop('readonly', true);
                 if (btnSave) {
                     btnSave.prop('disabled', true).addClass('hidden');
                 }
@@ -215,14 +194,14 @@ window.RecordAudio = (function () {
     }
 
     return {
-        init: function (rtcInfo, fileName) {
+        init: function (rtcInfo) {
             $(rtcInfo.blockId).hide();
 
             var webRTCIsEnabled = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia ||
                 navigator.mediaDevices.getUserMedia;
 
             if (webRTCIsEnabled) {
-                useRecordRTC(rtcInfo, fileName);
+                useRecordRTC(rtcInfo);
 
                 return;
             }

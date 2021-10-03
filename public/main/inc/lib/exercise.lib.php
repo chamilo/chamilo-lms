@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackExercise;
 use Chamilo\CoreBundle\Framework\Container;
@@ -217,16 +218,9 @@ class ExerciseLib
                                 $exercise_stat_info['exe_exo_id'],
                                 $exercise_stat_info['exe_id']
                             );
-                        } else {
-                            $objQuestionTmp->initFile(
-                                api_get_session_id(),
-                                api_get_user_id(),
-                                $exerciseId,
-                                'temp_exe'
-                            );
-                        }
 
-                        echo $objQuestionTmp->returnRecorder();
+                            echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
+                        }
                     }
 
                     $form = new FormValidator('free_choice_'.$questionId);
@@ -5135,10 +5129,9 @@ EOT;
     public static function getOralFeedbackForm($attemptId, $questionId, $userId)
     {
         $view = new Template('', false, false, false, false, false, false);
-        $view->assign('user_id', $userId);
+        $view->assign('type', Asset::EXERCISE_FEEDBACK);
         $view->assign('question_id', $questionId);
-        $view->assign('directory', "/../exercises/teacher_audio/$attemptId/");
-        $view->assign('file_name', "{$questionId}_{$userId}");
+        $view->assign('attempt', $attemptId);
         $template = $view->get_template('exercise/oral_expression.tpl');
 
         return $view->fetch($template);

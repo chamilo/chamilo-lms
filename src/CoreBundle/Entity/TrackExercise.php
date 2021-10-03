@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -469,5 +470,25 @@ class TrackExercise
         $this->session = $session;
 
         return $this;
+    }
+
+    public function getAttemptByQuestionId(int $questionId): ?TrackEAttempt
+    {
+        $criteria = Criteria::create();
+        $criteria
+            ->where(
+                Criteria::expr()->eq('questionId', $questionId)
+            )
+            ->setMaxResults(1)
+        ;
+
+        /** @var TrackEAttempt $attempt */
+        $attempt = $this->attempts->matching($criteria)->first();
+
+        if (!empty($attempt)) {
+            return $attempt;
+        }
+
+        return null;
     }
 }

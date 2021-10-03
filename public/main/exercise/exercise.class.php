@@ -3594,10 +3594,6 @@ class Exercise
                 isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId
             );
 
-            // Probably this attempt came in an exercise all question by page
-            if (0 == $feedback_type) {
-                $objQuestionTmp->replaceWithRealExe($exeId);
-            }
             $generatedFile = $objQuestionTmp->getFileUrl();
         }
 
@@ -5997,7 +5993,7 @@ class Exercise
             } elseif (ORAL_EXPRESSION == $answerType) {
                 $answer = $choice;
                 /** @var OralExpression $objQuestionTmp */
-                Event::saveQuestionAttempt(
+                $questionAttemptId = Event::saveQuestionAttempt(
                     $this,
                     $questionScore,
                     $answer,
@@ -6009,6 +6005,10 @@ class Exercise
                     $questionDuration,
                     $objQuestionTmp->getAbsoluteFilePath()
                 );
+
+                if (false !== $questionAttemptId) {
+                    OralExpression::saveAssetInQuestionAttempt($questionAttemptId);
+                }
             } elseif (
             in_array(
                 $answerType,

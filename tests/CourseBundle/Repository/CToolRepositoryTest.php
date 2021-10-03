@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Repository\ToolRepository;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -15,10 +16,38 @@ class CToolRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
+    public function testCreate(): void
+    {
+        $repo = self::getContainer()->get(CToolRepository::class);
+        $toolRepo = self::getContainer()->get(ToolRepository::class);
+        $this->assertSame(0, $repo->count([]));
+
+        $em = $this->getEntityManager();
+
+        $course = $this->createCourse('new');
+        $defaultCount = $repo->count([]);
+        $admin = $this->getUser('admin');
+
+        $tool = $toolRepo->findOneBy(['name' => 'course_homepage']);
+        $this->assertNotNull($tool);
+
+        $cTool = (new CTool())
+            ->setName('test')
+            ->setCourse($course)
+            ->setTool($tool)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $this->assertHasNoEntityViolations($cTool);
+        $em->persist($cTool);
+        $em->flush();
+        
+        $this->assertSame($defaultCount + 1, $repo->count([]));
+    }
+
     public function testDelete(): void
     {
-        self::bootKernel();
-
         $repo = self::getContainer()->get(CToolRepository::class);
         $this->assertSame(0, $repo->count([]));
 

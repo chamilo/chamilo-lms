@@ -6,11 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\Tool;
-use Chamilo\CoreBundle\Entity\UserRelTag;
-use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Repository\ToolRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;

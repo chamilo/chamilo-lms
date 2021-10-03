@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
-use ReflectionClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,7 +28,7 @@ abstract class AbstractResource
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"})
      */
     public ?string $contentUrl = null;
 
@@ -37,7 +36,7 @@ abstract class AbstractResource
      * Download URL of the Resource File Property set by ResourceNormalizer.php.
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"})
      */
     public ?string $downloadUrl = null;
 
@@ -52,22 +51,19 @@ abstract class AbstractResource
      * Resource illustration URL - Property set by ResourceNormalizer.php.
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({
-     *     "resource_node:read",
-     *     "document:read",
-     *     "media_object_read",
-     *     "course:read",
-     *     "session:read",
-     *     "course_rel_user:read",
-     *     "session_rel_course_rel_user:read"
-     * })
      */
+    #[Groups([
+        'resource_node:read',
+        'document:read',
+        'media_object_read',
+        'course:read',
+        'session:read',
+        'course_rel_user:read',
+        'session_rel_course_rel_user:read',
+    ])]
     public ?string $illustrationUrl = null;
 
     /**
-     * @Assert\Valid()
-     * @ApiSubresource()
-     * @Groups({"resource_node:read", "resource_node:write", "personal_file:write", "document:write", "ctool:read", "course:read", "illustration:read"})
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},
@@ -75,6 +71,19 @@ abstract class AbstractResource
      * )
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    #[Assert\Valid]
+    #[ApiSubresource]
+    #[Groups([
+        'resource_node:read',
+        'resource_node:write',
+        'personal_file:write',
+        'document:write',
+        'ctool:read',
+        'course:read',
+        'illustration:read',
+        'message:read',
+        'c_tool_intro:read',
+    ])]
     public ?ResourceNode $resourceNode = null;
 
     /**
@@ -93,15 +102,14 @@ abstract class AbstractResource
      */
     public $parentResource;
 
-    /**
-     * @Groups({"resource_node:read", "document:read"})
-     */
+    #[Groups(['resource_node:read', 'document:read'])]
     public ?array $resourceLinkListFromEntity = null;
 
     /**
      * Use when sending a request to Api platform.
      * Temporal array that saves the resource link list that will be filled by CreateDocumentFileAction.php.
      */
+    #[Groups(['c_tool_intro:write', 'resource_node:write'])]
     public array $resourceLinkList = [];
 
     /**
@@ -239,12 +247,9 @@ abstract class AbstractResource
             );
 
             if ($exists) {
-                //error_log('Link already exist for user: '.$user->getUsername().', skipping');
-
                 return $this;
             }
 
-            //error_log('New link can be added for user: '.$user->getUsername());
             $resourceNode->addResourceLink($resourceLink);
         } else {
             $this->addLink($resourceLink);
@@ -295,16 +300,16 @@ abstract class AbstractResource
         return $this;
     }
 
+    public function getResourceLinkArray()
+    {
+        return $this->resourceLinkList;
+    }
+
     public function setResourceLinkArray(array $links)
     {
         $this->resourceLinkList = $links;
 
         return $this;
-    }
-
-    public function getResourceLinkArray()
-    {
-        return $this->resourceLinkList;
     }
 
     public function getResourceLinkListFromEntity()
@@ -399,21 +404,12 @@ abstract class AbstractResource
         return null;
     }
 
-    /**
-     * See ResourceLink to see the visibility constants. Example: ResourceLink::VISIBILITY_DELETED.
-     */
-    /*public function getLinkVisibility(Course $course, Session $session = null): ?ResourceLink
-    {
-        return $this->getFirstResourceLinkFromCourseSession($course, $session)->getVisibility();
-    }*/
-
     public function isVisible(Course $course, Session $session = null): bool
     {
         $link = $this->getFirstResourceLinkFromCourseSession($course, $session);
-        if (null === $link) {
-            if ((new ReflectionClass($this))->hasProperty('loadCourseResourcesInSession')) {
-                $link = $this->getFirstResourceLinkFromCourseSession($course);
-            }
+
+        if (null === $link && $this instanceof ResourceShowCourseResourcesInSessionInterface) {
+            $link = $this->getFirstResourceLinkFromCourseSession($course);
         }
 
         if (null === $link) {
@@ -425,17 +421,7 @@ abstract class AbstractResource
 
     public function getFirstResourceLinkFromCourseSession(Course $course, Session $session = null): ?ResourceLink
     {
-        /*$criteria = Criteria::create();
-        $criteria
-            ->where(Criteria::expr()->eq('course', $course->getId()))
-            ->andWhere(
-                Criteria::expr()->eq('session', $session)
-            )
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-        ;*/
         $resourceNode = $this->getResourceNode();
-        $result = null;
         if ($resourceNode && $resourceNode->getResourceLinks()->count() > 0) {
             $links = $resourceNode->getResourceLinks();
             $found = false;
@@ -462,12 +448,10 @@ abstract class AbstractResource
 
         $result = false;
         foreach ($links as $link) {
-            if ($link->hasUser()) {
-                if ($link->getUser()->getId() === $user->getId()) {
-                    $result = true;
+            if ($link->hasUser() && $link->getUser()->getId() === $user->getId()) {
+                $result = true;
 
-                    break;
-                }
+                break;
             }
         }
 

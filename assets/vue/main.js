@@ -14,11 +14,13 @@ import personalFileService from './services/personalfile';
 import resourceLinkService from './services/resourcelink';
 import resourceNodeService from './services/resourcenode';
 import messageService from './services/message';
+import messageAttachmentService from './services/messageattachment';
 import messageRelUserService from './services/messagereluser';
 import userService from './services/user';
 import userGroupService from './services/usergroup';
 import userRelUserService from './services/userreluser';
 import calendarEventService from './services/ccalendarevent';
+import toolIntroService from './services/ctoolintro';
 
 import makeCrudModule from './store/modules/crud';
 //import vuetify from './plugins/vuetify' // path to vuetify export
@@ -68,6 +70,13 @@ store.registerModule(
 );
 
 store.registerModule(
+  'ctoolintro',
+  makeCrudModule({
+    service: toolIntroService
+  })
+);
+
+store.registerModule(
     'personalfile',
     makeCrudModule({
         service: personalFileService
@@ -92,6 +101,13 @@ store.registerModule(
     'message',
     makeCrudModule({
         service: messageService
+    })
+);
+
+store.registerModule(
+    'messageattachment',
+    makeCrudModule({
+        service: messageAttachmentService
     })
 );
 

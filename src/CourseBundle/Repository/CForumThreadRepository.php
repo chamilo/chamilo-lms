@@ -56,10 +56,11 @@ class CForumThreadRepository extends ResourceRepository
     {
         /** @var CForumThread $resource */
         $posts = $resource->getPosts();
-        foreach ($posts as $post) {
-            parent::delete($post);
+        if (!empty($posts)) {
+            foreach ($posts as $post) {
+                parent::delete($post);
+            }
         }
-
         parent::delete($resource);
     }
 }

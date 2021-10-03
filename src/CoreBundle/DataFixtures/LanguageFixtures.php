@@ -449,7 +449,7 @@ class LanguageFixtures extends Fixture
                 'original_name' => 'Español',
                 'english_name' => 'spanish',
                 'isocode' => 'es',
-                'available' => 0,
+                'available' => 1,
 
                 'format' => 'title last_name first_name',
                 'sort_by' => 'last_name',

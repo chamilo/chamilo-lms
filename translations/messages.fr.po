@@ -2052,7 +2052,7 @@ msgid "Tests"
 msgstr "Tests"
 
 msgid "Courses"
-msgstr "Parcours d'apprentissage"
+msgstr "Cours"
 
 msgid "Copy course"
 msgstr "Copier un cours"
@@ -3345,7 +3345,7 @@ msgid "Write the title here"
 msgstr "Entrez le titre ici"
 
 msgid "Updated"
-msgstr "Date modification"
+msgstr "Mise à jour enregistrée"
 
 msgid "Add new note in my personal notebook"
 msgstr "Ajouter une note dans mon carnet personnel"

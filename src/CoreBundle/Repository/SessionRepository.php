@@ -21,8 +21,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
 /**
- * SessionRepository.
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 class SessionRepository extends ServiceEntityRepository
@@ -46,7 +44,7 @@ class SessionRepository extends ServiceEntityRepository
     /**
      * @return array<SessionRelUser>
      */
-    public function getUsersByAccessUrl(Session $session, AccessUrl $url, array $onlyTypes = []): array
+    public function getUsersByAccessUrl(Session $session, AccessUrl $url, array $relationTypeList = []): array
     {
         if (0 === $session->getUsers()->count()) {
             return [];
@@ -55,33 +53,11 @@ class SessionRepository extends ServiceEntityRepository
         $qb = $this->addSessionRelUserFilterByUrl($session, $url);
         $qb->orderBy('sru.relationType');
 
-        if ($onlyTypes) {
+        if ($relationTypeList) {
             $qb->andWhere(
-                $qb->expr()->in('sru.relationType', $onlyTypes)
+                $qb->expr()->in('sru.relationType', $relationTypeList)
             );
         }
-
-        return $qb->getQuery()->getResult();
-    }
-
-    /**
-     * @return SessionRelUser[]
-     */
-    public function getUsersByCourse(Session $session, Course $course, AccessUrl $url)
-    {
-        if (0 === $session->getUsers()->count()) {
-            return [];
-        }
-
-        $qb = $this->addSessionRelUserFilterByUrl($session, $url);
-        $qb
-            ->innerJoin(SessionRelCourseRelUser::class, 'srcu')
-            ->andWhere('srcu.session = :session AND srcu.course = :course ')
-            ->setParameters([
-                'course' => $course,
-                'session' => $session,
-            ])
-        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -93,7 +69,6 @@ class SessionRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s');
         $qb
-            ->select('s')
             ->innerJoin('s.users', 'sru')
             ->leftJoin(AccessUrlRelUser::class, 'uru', Join::WITH, 'uru.user = sru.user')
             ->andWhere('sru.user = :user AND uru.url = :url')
@@ -210,7 +185,7 @@ class SessionRepository extends ServiceEntityRepository
     /**
      * @return array<SessionRelCourse>
      */
-    public function getSessionCoursesByStatusInCourseSuscription(User $user, Session $session, int $status, AccessUrl $url = null): array
+    public function getSessionCoursesByStatusInCourseSubscription(User $user, Session $session, int $status, AccessUrl $url = null): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -260,10 +235,10 @@ class SessionRepository extends ServiceEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
             ->select('sru')
-            ->from(User::class, 'u')
-            ->innerJoin(SessionRelUser::class, 'sru')
-            ->innerJoin(AccessUrlRelUser::class, 'uru')
-            ->andWhere('sru.session = :session AND uru.url = :url')
+            ->from(SessionRelUser::class, 'sru')
+            ->innerJoin('sru.user', 'u')
+            ->innerJoin('u.portals', 'p')
+            ->andWhere('sru.session = :session AND p.url = :url')
             ->setParameters([
                 'session' => $session,
                 'url' => $url,

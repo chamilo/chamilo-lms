@@ -4,8 +4,6 @@
 
 /**
  * Form element to select a date.
- *
- * Class DatePicker
  */
 class DateTimeRangePicker extends DateRangePicker
 {
@@ -117,14 +115,11 @@ class DateTimeRangePicker extends DateRangePicker
                         </div>';
                 break;
         }
+
+        return '';
     }
 
-    /**
-     * @param array $dateRange
-     *
-     * @return array
-     */
-    public function parseDateRange($dateRange)
+    public function parseDateRange(string $dateRange): array
     {
         $dateRange = Security::remove_XSS($dateRange);
         $dates = explode('@@', $dateRange);

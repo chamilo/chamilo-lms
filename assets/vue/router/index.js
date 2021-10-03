@@ -7,6 +7,7 @@ import userRoutes from './user';
 import userGroupRoutes from './usergroup';
 import userRelUserRoutes from './userreluser';
 import calendarEventRoutes from './ccalendarevent';
+import toolIntroRoutes from './ctoolintro';
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
@@ -103,12 +104,12 @@ const router = createRouter({
         userRoutes,
         userGroupRoutes,
         userRelUserRoutes,
-        calendarEventRoutes
+        calendarEventRoutes,
+        toolIntroRoutes
     ]
 });
 
 router.beforeEach((to, from, next) => {
-    //console.log('beforeEach');
     if (to.matched.some(record => record.meta.requiresAuth)) {
         //console.log('requiresAuth');
         // this route requires auth, check if logged in

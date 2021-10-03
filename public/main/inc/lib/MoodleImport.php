@@ -199,7 +199,7 @@ class MoodleImport
                     // Create a Forum category based on Moodle forum type.
                     $catForumValues['forum_category_title'] = $moduleValues['type'];
                     $catForumValues['forum_category_comment'] = '';
-                    $catId = store_forumcategory(
+                    $catId = saveForumCategory(
                         $catForumValues,
                         $courseInfo,
                         false

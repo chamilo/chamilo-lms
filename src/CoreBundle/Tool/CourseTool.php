@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Tool;
 
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CToolIntro;
 
 class CourseTool extends AbstractTool implements ToolInterface
 {
@@ -34,6 +35,7 @@ class CourseTool extends AbstractTool implements ToolInterface
     {
         return [
             'links' => CTool::class,
+            'introductions' => CToolIntro::class,
         ];
     }
 }

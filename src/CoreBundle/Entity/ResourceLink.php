@@ -84,23 +84,21 @@ class ResourceLink
     protected Collection $resourceRights;
 
     /**
-     * @Groups({"ctool:read"})
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
+    #[Groups(['ctool:read', 'c_tool_intro:read'])]
     protected int $visibility;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
-     *
      * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
      */
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:write', 'document:read'])]
     protected ?DateTimeInterface $startVisibilityAt = null;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
-     *
      * @ORM\Column(name="end_visibility_at", type="datetime", nullable=true)
      */
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:write', 'document:read'])]
     protected ?DateTimeInterface $endVisibilityAt = null;
 
     public function __construct()

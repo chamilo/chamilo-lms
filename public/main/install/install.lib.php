@@ -2133,15 +2133,10 @@ function finishInstallationWithContainer(
     $allowSelfRegProf,
     $installationProfile = ''
 ) {
-    error_log('finishInstallationWithContainer');
     Container::setContainer($container);
     Container::setLegacyServices($container);
-    error_log('setLegacyServices');
 
-    //UserManager::setPasswordEncryption($encryptPassForm);
     $timezone = api_get_timezone();
-
-    error_log('user creation - admin');
 
     $repo = Container::getUserRepository();
     /** @var User $admin */

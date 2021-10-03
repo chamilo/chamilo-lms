@@ -168,43 +168,86 @@ class MessageRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = $this->getEntityManager();
+        $user1 = $this->getUser('admin');
+        $user2 = $this->createUser('user2');
 
-        $messageAttachmentRepo = self::getContainer()->get(MessageAttachmentRepository::class);
-        $messageRepo = self::getContainer()->get(MessageRepository::class);
+        $user1Token = $this->getUserTokenFromUser($user1);
 
-        $admin = $this->getUser('admin');
-        $testUser = $this->createUser('test');
+        $client = $this->createClientWithCredentials($user1Token);
 
-        // Create message.
-        $message = (new Message())
-            ->setTitle('hello')
-            ->setContent('content')
-            ->setMsgType(Message::MESSAGE_TYPE_INBOX)
-            ->setSender($admin)
-            ->addReceiver($testUser)
-        ;
+        $responseMessage = $client->request(
+            'POST',
+            '/api/messages',
+            [
+                'json' => [
+                    'msgType' => Message::MESSAGE_TYPE_INBOX,
+                    'title' => 'Message title',
+                    'content' => 'Message content',
+                    'receivers' => [
+                        [
+                            'receiver' => "/api/users/{$user2->getId()}",
+                            'receiverType' => MessageRelUser::TYPE_TO,
+                        ],
+                    ],
+                    'sender' => "/api/users/{$user1->getId()}",
+                ],
+            ]
+        );
 
-        $this->assertHasNoEntityViolations($message);
-        $messageRepo->update($message);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/Message',
+                '@type' => 'Message',
+                'sender' => [
+                    '@id' => "/api/users/{$user1->getId()}",
+                ],
+                'receiversTo' => [
+                    [
+                        '@type' => 'MessageRelUser',
+                        'receiver' => [
+                            '@id' => "/api/users/{$user2->getId()}",
+                        ],
+                        'receiverType' => MessageRelUser::TYPE_TO,
+                    ],
+                ],
+                'msgType' => Message::MESSAGE_TYPE_INBOX,
+                'title' => 'Message title',
+                'content' => 'Message content',
+            ]
+        );
+
+        $messageId = $responseMessage->toArray()['id'];
 
         $file = $this->getUploadedFile();
 
-        $attachment = (new MessageAttachment())
-            ->setFilename($file->getFilename())
-            ->setMessage($message)
-            ->setParent($message->getSender())
-            ->setCreator($message->getSender())
-        ;
-        $message->addAttachment($attachment);
+        $responseAttachment = $client->request(
+            'POST',
+            '/api/message_attachments',
+            [
+                'headers' => [
+                    'Content-Type' => 'multipart/form-data',
+                ],
+                'extra' => [
+                    'files' => [
+                        'file' => $file,
+                    ],
+                    'parameters' => [
+                        'messageId' => $messageId,
+                    ],
+                ],
+            ]
+        );
 
-        $em->persist($attachment);
-        $messageAttachmentRepo->addFile($attachment, $file);
-        $em->flush();
-
-        $em->clear();
-
-        $this->assertSame(1, $messageAttachmentRepo->count([]));
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/MessageAttachment',
+                '@type' => 'http://schema.org/MediaObject',
+            ]
+        );
     }
 
     public function testDeleteMessage(): void

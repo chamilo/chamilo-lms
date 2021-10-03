@@ -50,7 +50,6 @@ class CCourseDescriptionRepositoryTest extends AbstractApiTest
 
         $course = $this->createCourse('Test');
         $session = $this->createSession('Test Session');
-
         $admin = $this->getUser('admin');
 
         $item = (new CCourseDescription())
@@ -68,11 +67,9 @@ class CCourseDescriptionRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $descriptionsInCourse = $repo->findByTypeInCourse(CCourseDescription::TYPE_DESCRIPTION, $course);
-
-        $this->assertSame(1, \count($descriptionsInCourse));
+        $this->assertCount(1, $descriptionsInCourse);
 
         $descriptionsInSession = $repo->findByTypeInCourse(CCourseDescription::TYPE_DESCRIPTION, $course, $session);
-
-        $this->assertSame(1, \count($descriptionsInSession));
+        $this->assertCount(1, $descriptionsInSession);
     }
 }

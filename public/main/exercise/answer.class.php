@@ -225,7 +225,7 @@ class Answer
         $questionId = (int) $this->questionId;
 
         $sql = "SELECT type FROM $TBL_QUIZ
-                WHERE c_id = {$this->course_id} AND iid = $questionId";
+                WHERE iid = $questionId";
         $result_question = Database::query($sql);
         $questionType = Database::fetch_array($result_question);
 
@@ -248,7 +248,6 @@ class Answer
                     iid
                 FROM $TBL_ANSWER
                 WHERE
-                    c_id = {$this->course_id} AND
                     question_id='".$questionId."'
                 ORDER BY $field $order";
         $result = Database::query($sql);
@@ -786,17 +785,14 @@ class Answer
 
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers + 1;
-            if (isset($this->position[$i])) {
-                while ($this->position[$i]) {
-                    $position = $this->position[$i];
-                    $sql = "DELETE FROM $answerTable
-                        WHERE
-                            c_id = {$this->course_id} AND
-                            question_id = '".$questionId."' AND
-                            position ='$position'";
-                    Database::query($sql);
-                    $i++;
-                }
+            while (isset($this->position[$i])) {
+                $position = $this->position[$i];
+                $sql = "DELETE FROM $answerTable
+                    WHERE
+                        question_id = '".$questionId."' AND
+                        position ='$position'";
+                Database::query($sql);
+                $i++;
             }
         }
 

@@ -21,7 +21,7 @@
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn v-close-popup flat label="Cancel"/>
+          <q-btn v-close-popup flat :label="$t('Cancel')" />
           <q-btn :label="item['@id'] ? $t('Edit') : $t('Add') " flat @click="onCreateEventForm"/>
         </q-card-actions>
       </q-card>
@@ -34,9 +34,9 @@
           <CCalendarEventInfo :event="item" />
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn color="primary" flat label="Delete" @click="confirmDelete"/>
-          <q-btn v-if="isEventEditable" color="primary" flat label="Edit" @click="dialog = true"/>
-          <q-btn v-close-popup flat label="Close"/>
+          <q-btn color="primary" flat no-caps :label="$t('Delete')" @click="confirmDelete"/>
+          <q-btn v-if="isEventEditable" color="primary" flat no-caps :label="$t('Edit')" @click="dialog = true"/>
+          <q-btn v-close-popup flat no-caps :label="$t('Close')" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -64,7 +64,8 @@
           </div>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn color="primary" flat :label="$t('Go to session')" type="a" :href="`/sessions/${sessionAsEvent.id}/about`" />
+          <q-btn color="primary" flat :label="$t('Go to session')" type="a"
+                 :href="`/sessions/${sessionAsEvent.id}/about`" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -90,6 +91,8 @@ import {useRoute, useRouter} from "vue-router";
 import {useQuasar} from 'quasar';
 import CCalendarEventInfo from "../../components/ccalendarevent/Info";
 import {ENTRYPOINT} from "../../config/entrypoint";
+import {useI18n} from "vue-i18n";
+import allLocales from '@fullcalendar/core/locales-all';
 
 const servicePrefix = 'CCalendarEvent';
 
@@ -118,6 +121,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const currentUser = computed(() => store.getters['security/getUser']);
+    const { t, locale } = useI18n();
 
     let currentEvent = null;
 
@@ -158,15 +162,26 @@ export default {
       return sessions.data['hydra:member'];
     }
 
+    // @todo fix locale connection between fullcalendar + chamilo
+    if ('fr_FR' === locale.value) {
+      locale.value = 'fr';
+    }
+
+    if ('pl_PL' === locale.value) {
+      locale.value = 'pl';
+    }
+
     calendarOptions.value = {
       plugins: [
         dayGridPlugin,
         timeGridPlugin,
         interactionPlugin
       ],
+      locales: allLocales,
+      locale: locale.value,
       customButtons: {
         addEvent: {
-          text: 'Add event',
+          text: t('Add event'),
           click: function () {
             item.value = {};
             item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];

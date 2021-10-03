@@ -76,6 +76,10 @@ $repo = Container::getForumRepository();
 
 /** @var CForum $forumEntity */
 $forumEntity = $repo->find($forumId);
+if (null === $forumEntity) {
+    api_not_allowed(true);
+}
+
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
 $isForumOpenByDateAccess = api_is_date_in_date_range($forumEntity->getStartTime(), $forumEntity->getEndTime());
@@ -469,7 +473,7 @@ if (is_array($threads)) {
                             .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
                     }
 
-                    $iconsEdit .= return_visible_invisible_icon(
+                    $iconsEdit .= returnVisibleInvisibleIcon(
                         'thread',
                         $thread->getIid(),
                         $thread->isVisible($courseEntity, $sessionEntity),
@@ -478,7 +482,7 @@ if (is_array($threads)) {
                             'gid' => $groupId,
                         ]
                     );
-                    $iconsEdit .= return_lock_unlock_icon(
+                    $iconsEdit .= returnLockUnlockIcon(
                         'thread',
                         $thread->getIid(),
                         $thread->getLocked(),

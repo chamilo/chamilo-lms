@@ -54,7 +54,7 @@ $blocks['users']['icon'] = Display::return_icon(
     false
 );
 $blocks['users']['description'] = get_lang('Here you can manage registered users within your platform');
-$blocks['users']['label'] = api_ucfirst(get_lang('User management'));
+$blocks['users']['label'] = get_lang('User management');
 $blocks['users']['class'] = 'block-admin-users';
 
 $searchForm = new FormValidator(
@@ -129,7 +129,7 @@ if (api_is_platform_admin()) {
         ICON_SIZE_MEDIUM,
         false
     );
-    $blocks['courses']['label'] = api_ucfirst(get_lang('Course management'));
+    $blocks['courses']['label'] = get_lang('Course management');
     $blocks['courses']['description'] = get_lang('Create and manage your courses in a simple way');
     $blocks['courses']['class'] = 'block-admin-courses';
     $blocks['courses']['editable'] = true;
@@ -188,7 +188,7 @@ if (api_is_platform_admin()) {
         ICON_SIZE_MEDIUM,
         false
     );
-    $blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions management'));
+    $blocks['sessions']['label'] = get_lang('Sessions management');
     $blocks['sessions']['description'] = get_lang('Create course packages for a certain time with training sessions.');
     $blocks['sessions']['class'] = 'block-admin-sessions';
 
@@ -315,7 +315,7 @@ if (api_is_platform_admin()) {
         ICON_SIZE_MEDIUM,
         false
     );
-    $blocks['platform']['label'] = api_ucfirst(get_lang('Platform management'));
+    $blocks['platform']['label'] = get_lang('Platform management');
     $blocks['platform']['description'] = get_lang('Configure your platform, view reports, publish and send announcements globally');
     $blocks['platform']['class'] = 'block-admin-platform';
     $blocks['platform']['editable'] = true;
@@ -397,7 +397,7 @@ if (api_is_platform_admin()) {
         ICON_SIZE_MEDIUM,
         false
     );
-    $blocks['settings']['label'] = api_ucfirst(get_lang('System'));
+    $blocks['settings']['label'] = get_lang('System');
     $blocks['settings']['description'] = get_lang('View the status of your server, perform performance tests');
     $blocks['settings']['class'] = 'block-admin-settings';
 

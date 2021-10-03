@@ -8,13 +8,9 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumCategory;
-use Chamilo\CourseBundle\Entity\CGroup;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 class CForumCategoryRepository extends ResourceRepository
@@ -33,9 +29,4 @@ class CForumCategoryRepository extends ResourceRepository
             $session
         );
     }
-
-    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
-    {
-        return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }*/
 }

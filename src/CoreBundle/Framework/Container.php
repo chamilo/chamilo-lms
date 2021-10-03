@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Editor;
-use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
@@ -69,10 +68,10 @@ use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
 use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
+use Chamilo\CourseBundle\Repository\CToolIntroRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\LtiBundle\Repository\ExternalToolRepository;
-use Chamilo\Tests\CoreBundle\Repository\TrackEExerciseRepositoryTest;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -555,6 +554,11 @@ class Container
     public static function getWikiRepository(): CWikiRepository
     {
         return self::$container->get(CWikiRepository::class);
+    }
+
+    public static function getToolIntroRepository(): CToolIntroRepository
+    {
+        return self::$container->get(CToolIntroRepository::class);
     }
 
     public static function getFormFactory(): FormFactory

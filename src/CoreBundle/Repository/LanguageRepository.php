@@ -26,12 +26,25 @@ class LanguageRepository extends ServiceEntityRepository
             ->where(
                 $qb->expr()->eq('l.available', true)
             )
-            ->andWhere(
+            /*->andWhere(
                 $qb->expr()->isNull('l.parent')
-            )
+            )*/
         ;
 
         return $qb;
+    }
+
+    public function getAllAvailableToArray(): array
+    {
+        $languages = $this->getAllAvailable()->getQuery()->getResult();
+
+        $list = [];
+        /** @var Language $language */
+        foreach ($languages as $language) {
+            $list[$language->getIsocode()] = $language->getOriginalName();
+        }
+
+        return $list;
     }
 
     /**

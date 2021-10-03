@@ -272,6 +272,8 @@ import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibilit
 import {MESSAGE_TYPE_INBOX} from "../../components/message/msgType";
 import useNotification from "../../components/Notification";
 
+import {useI18n} from "vue-i18n";
+
 export default {
   name: 'MessageList',
   servicePrefix: 'Message',
@@ -295,6 +297,7 @@ export default {
     const index = ref('inbox');
 
     const {showNotification} = useNotification();
+    const { t } = useI18n();
 
     // Inbox
     const inBoxFilter = {
@@ -359,18 +362,21 @@ export default {
     }
 
     function deleteItemButton() {
-      let myReceiver = {};
-      itemToDelete.value.receivers.forEach(receiver => {
-        if (receiver.receiver['@id'] === user['@id']) {
-          myReceiver = receiver;
-        }
-      });
+      if (itemToDelete.value.sender['@id'] === user['@id']) {
+        itemToDelete.value.status = 3;
+        store.dispatch('message/update', itemToDelete.value);
+      } else {
+        let myReceiver = itemToDelete.value.receivers.find(receiver => receiver.receiver['@id'] === user['@id']) || {};
 
-      console.log('deleteItem');
-      store.dispatch('messagereluser/del', myReceiver);
+        if (myReceiver) {
+          console.log('deleteItem');
+          store.dispatch('messagereluser/del', myReceiver);
+        }
+      }
+
       deleteItemDialog.value = false;
 
-      showNotification('Deleted');
+      showNotification(t('Deleted'));
 
       goToInbox();
     }

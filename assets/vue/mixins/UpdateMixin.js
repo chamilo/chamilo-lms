@@ -10,13 +10,11 @@ export default {
     };
   },
   created() {
-    console.log('mixin update created');
     // Changed
     let id = this.$route.params.id;
     if (isEmpty(id)) {
       id = this.$route.query.id;
     }
-    console.log(id);
     if (!isEmpty(id)) {
       // Ajax call
       this.retrieve(decodeURIComponent(id));
@@ -54,8 +52,6 @@ export default {
   methods: {
     del() {
       console.log('mixin del');
-      //let item = this.retrieved;
-
       console.log(this.item);
 
       this.deleteItem(this.item).then(() => {

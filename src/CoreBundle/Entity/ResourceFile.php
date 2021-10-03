@@ -29,7 +29,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ApiResource(
  *     iri="http://schema.org/MediaObject",
  *     normalizationContext={
- *         "groups"={"resource_file:read", "resource_node:read", "document:read", "media_object_read"}
+ *         "groups"={"resource_file:read", "resource_node:read", "document:read", "media_object_read", "message:read"}
  *     },
  *     collectionOperations={
  *         "post"={
@@ -75,7 +75,7 @@ class ResourceFile
     use TimestampableEntity;
 
     /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      * @ORM\Id
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue
@@ -91,13 +91,13 @@ class ResourceFile
     protected ?string $name = null;
 
     /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      * @ORM\Column(type="text", nullable=true)
      */
     protected ?string $mimeType = null;
 
     /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      * @ORM\Column(type="text", nullable=true)
      */
     protected ?string $originalName = null;
@@ -109,7 +109,7 @@ class ResourceFile
     protected ?array $dimensions;
 
     /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      *
      * @ORM\Column(type="integer")
      */
@@ -152,18 +152,21 @@ class ResourceFile
      */
     protected ?array $metadata = [];
 
+    #[Groups(['message:read'])]
+    protected ?bool $audio = null;
+
     /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      */
     protected ?bool $image = null;
 
     /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      */
     protected ?bool $video = null;
 
     /**
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "message:read"})
      */
     protected ?bool $text = null;
 
@@ -210,6 +213,13 @@ class ResourceFile
         $mimeType = $this->getMimeType();
 
         return str_contains($mimeType, 'video');
+    }
+
+    public function isAudio(): bool
+    {
+        $mimeType = $this->getMimeType();
+
+        return str_contains($mimeType, 'audio');
     }
 
     public function getName(): ?string

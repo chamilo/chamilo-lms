@@ -22,6 +22,7 @@ class LanguageRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(LanguageRepository::class);
         $defaultCount = $repo->count([]);
+
         $language = (new Language())
             ->setAvailable(true)
             ->setOriginalName('language')
@@ -37,5 +38,25 @@ class LanguageRepositoryTest extends AbstractApiTest
         $this->assertSame('lan', $language->getIsocode());
         $this->assertIsInt($language->getId());
         $this->assertSame($defaultCount + 1, $repo->count([]));
+    }
+
+    public function testGetAllAvailable(): void
+    {
+        $repo = self::getContainer()->get(LanguageRepository::class);
+        $languages = $repo->getAllAvailable()->getQuery()->getResult();
+        $this->assertNotNull($languages);
+        $this->assertCount(11, $languages);
+
+        $languages = $repo->getAllAvailableToArray();
+        $this->assertCount(11, $languages);
+    }
+
+    public function testFindAllSubLanguages(): void
+    {
+        $repo = self::getContainer()->get(LanguageRepository::class);
+        $languages = $repo->findAllSubLanguages();
+
+        $this->assertNotNull($languages);
+        $this->assertCount(0, $languages);
     }
 }

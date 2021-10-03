@@ -169,7 +169,9 @@ switch ($my_action) {
         ) {
             /** @var CForumPost $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
-            deletePost($postEntity);
+            if (null !== $postEntity) {
+                deletePost($postEntity);
+            }
         }
         header('Location: '.$currentUrl);
         exit;
@@ -479,7 +481,7 @@ foreach ($posts as $post) {
             api_is_session_general_coach() //&&            $forumEntity->getSessionId() != $sessionId
         )
     ) {
-        $iconEdit .= return_visible_invisible_icon(
+        $iconEdit .= returnVisibleInvisibleIcon(
             'post',
             $post['post_id'],
             $post['visible'],
@@ -519,7 +521,7 @@ foreach ($posts as $post) {
         }
     } else {
         if (postNeedsRevision($postEntity)) {
-            $askForRevision = giveRevisionButton($post['post_id'], $threadEntity);
+            $askForRevision = getGiveRevisionButton($post['post_id'], $threadEntity);
         } else {
             $revision = getPostRevision($post['post_id']);
             if (!empty($revision)) {

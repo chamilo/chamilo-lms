@@ -178,7 +178,7 @@ $forumCategories = get_forum_categories();
 // Step 2: We find all the forums (only the visible ones if it is a student).
 // display group forum in general forum tool depending to configuration option
 $setting = api_get_setting('display_groups_forum_in_general_tool');
-$allCourseForums = get_forums('', '', 'true' === $setting);
+$allCourseForums = get_forums();
 $user_id = api_get_user_id();
 
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
@@ -369,17 +369,17 @@ if (is_array($forumCategories)) {
                         ICON_SIZE_SMALL
                     )
                     .'</a>';
-                $tools .= return_visible_invisible_icon(
+                $tools .= returnVisibleInvisibleIcon(
                     'forumcategory',
                     $categoryId,
                     $visibility
                 );
-                $tools .= return_lock_unlock_icon(
+                $tools .= returnLockUnlockIcon(
                     'forumcategory',
                     $categoryId,
                     $forumCategory->getLocked()
                 );
-                $tools .= return_up_down_icon(
+                $tools .= returnUpDownIcon(
                     'forumcategory',
                     $categoryId,
                     $forumCategories
@@ -553,19 +553,19 @@ if (is_array($forumCategories)) {
                                 .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)
                                 .'</a>';
 
-                            $toolActions .= return_visible_invisible_icon(
+                            $toolActions .= returnVisibleInvisibleIcon(
                                 'forum',
                                 $forumId,
                                 $forumVisibility
                             );
 
-                            $toolActions .= return_lock_unlock_icon(
+                            $toolActions .= returnLockUnlockIcon(
                                 'forum',
                                 $forumId,
                                 $forum->getLocked()
                             );
 
-                            $toolActions .= return_up_down_icon(
+                            $toolActions .= returnUpDownIcon(
                                 'forum',
                                 $forumId,
                                 $forumsInCategory

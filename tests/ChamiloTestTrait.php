@@ -40,7 +40,9 @@ trait ChamiloTestTrait
             ->setStatus(1)
             ->setPlainPassword($password)
             ->setEmail($email)
-            ->setCreator($admin);
+            ->setCreator($admin)
+            ->setCurrentUrl($this->getAccessUrl())
+        ;
 
         $repo->updateUser($user);
 

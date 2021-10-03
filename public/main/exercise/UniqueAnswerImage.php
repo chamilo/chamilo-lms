@@ -123,13 +123,13 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $html .= '<table class="table table-striped table-hover">
             <thead>
-                <tr style="text-align: center;">
-                    <th width="10">'.get_lang('N°').'</th>
+                <tr>
+                    <th>'.get_lang('N°').'</th>
                     <th>'.get_lang('True').'</th>
                     <th>'.get_lang('Answer').'</th>
                         '.$commentTitle.'
                         '.$feedbackTitle.'
-                    <th width="15">'.get_lang('Score').'</th>
+                    <th>'.get_lang('Score').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -189,23 +189,23 @@ class UniqueAnswerImage extends UniqueAnswer
         for ($i = 1; $i <= $numberAnswers; $i++) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
-                if ($answer->correct[$i]) {
+                if (isset($answer->correct[$i]) && $answer->correct[$i]) {
                     $correct = $i;
                 }
 
-                $defaults['answer['.$i.']'] = $answer->answer[$i];
-                $defaults['comment['.$i.']'] = $answer->comment[$i];
-                $defaults['weighting['.$i.']'] = float_format(
-                    $answer->weighting[$i],
-                    1
-                );
+                $defaults['answer['.$i.']'] = $answer->answer[$i] ?? '';
+                $defaults['comment['.$i.']'] = $answer->comment[$i] ?? '';
+                $defaults['weighting['.$i.']'] = isset($answer->weighting[$i]) ? float_format($answer->weighting[$i], 1) : 0;
 
-                $itemList = explode('@@', $answer->destination[$i]);
+                $itemList = [];
+                if (isset($answer->destination[$i])) {
+                    $itemList = explode('@@', $answer->destination[$i]);
+                }
 
-                $try = $itemList[0];
-                $lp = $itemList[1];
-                $listDestination = $itemList[2];
-                $url = $itemList[3];
+                $try = $itemList[0] ?? '';
+                $lp = $itemList[1] ?? '';
+                $listDestination = $itemList[2] ?? '';
+                $url = $itemList[3] ?? '';
 
                 $tryResult = 0;
                 if (0 != $try) {
@@ -339,6 +339,11 @@ class UniqueAnswerImage extends UniqueAnswer
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
 
             $scenario = $form->getSubmitValue('scenario');
+
+            $try = null;
+            $lp = null;
+            $destination = null;
+            $url = null;
             //$listDestination = $form -> getSubmitValue('destination'.$i);
             //$destinationStr = $form -> getSubmitValue('destination'.$i);
             $try = $scenario['try'.$i] ?? null;

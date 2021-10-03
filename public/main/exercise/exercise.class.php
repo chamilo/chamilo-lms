@@ -4377,10 +4377,7 @@ class Exercise
                                  ";
                         $resq = Database::query($query);
                         $row = Database::fetch_assoc($resq);
-                        $choice = [
-                            'answer' => '',
-                            'marks' => 0,
-                        ];
+                        $choice = '';
                         $questionScore = 0;
 
                         if (is_array($row)) {
@@ -8481,12 +8478,12 @@ class Exercise
                 $answerMissing = (int) $array['missing'] - $answerUsed;
                 for ($i = 1; $i <= $answerUsed; $i++) {
                     $html .= '<span class="score-img">'.
-                        Display::return_icon('attempt-check.png', null, null, ICON_SIZE_SMALL).
+                        Display::return_icon('attempt-check.png').
                         '</span>';
                 }
                 for ($i = 1; $i <= $answerMissing; $i++) {
                     $html .= '<span class="score-img">'.
-                        Display::return_icon('attempt-nocheck.png', null, null, ICON_SIZE_SMALL).
+                        Display::return_icon('attempt-nocheck.png').
                         '</span>';
                 }
                 $label = '<div class="score-title">'.get_lang('Correct answers').': '.$result.'</div>';
@@ -9028,13 +9025,13 @@ class Exercise
                     if ($repo->isGranted('EDIT', $exerciseEntity)) {
                         // Questions list
                         $actions = Display::url(
-                            Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
+                            Display::return_icon('edit.png', get_lang('Edit')),
                             'admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                         );
 
                         // Test settings
                         $settings = Display::url(
-                            Display::return_icon('settings.png', get_lang('Configure'), '', ICON_SIZE_SMALL),
+                            Display::return_icon('settings.png', get_lang('Configure')),
                             'exercise_admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId
                         );
 
@@ -9045,7 +9042,7 @@ class Exercise
 
                         // Exercise results
                         $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::return_icon('test_results.png', get_lang('Results')).'</a>';
 
                         if ($limitTeacherAccess) {
                             if (api_is_platform_admin()) {
@@ -9063,9 +9060,7 @@ class Exercise
                                 $actions .= Display::url(
                                     Display::return_icon(
                                         'launch_na.png',
-                                        get_lang('Enable'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Enable')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&action=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9074,9 +9069,7 @@ class Exercise
                                 $actions .= Display::url(
                                     Display::return_icon(
                                         'launch.png',
-                                        get_lang('Disable'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Disable')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&action=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9104,9 +9097,7 @@ class Exercise
                                 $clean = Display::url(
                                     Display::return_icon(
                                         'clean.png',
-                                        get_lang('CleanStudentResults'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('CleanStudentResults')
                                     ),
                                     '',
                                     [
@@ -9124,9 +9115,7 @@ class Exercise
                             } else {
                                 $clean = Display::return_icon(
                                     'clean_na.png',
-                                    get_lang('ResourceLockedByGradebook'),
-                                    '',
-                                    ICON_SIZE_SMALL
+                                    get_lang('ResourceLockedByGradebook')
                                 );
                             }
                         }
@@ -9137,18 +9126,14 @@ class Exercise
                         if (true == $exercise->exercise_was_added_in_lp) {
                             $visibility = Display::return_icon(
                                 'invisible.png',
-                                get_lang('AddedToLPCannotBeAccessed'),
-                                '',
-                                ICON_SIZE_SMALL
+                                get_lang('AddedToLPCannotBeAccessed')
                             );
                         } else {
                             if (0 === $exerciseEntity->getActive()) {
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'invisible.png',
-                                        get_lang('Activate'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Activate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9158,9 +9143,7 @@ class Exercise
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'visible.png',
-                                        get_lang('Deactivate'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Deactivate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9178,9 +9161,7 @@ class Exercise
                         $export = Display::url(
                             Display::return_icon(
                                 'export_qti2.png',
-                                'IMS/QTI',
-                                '',
-                                ICON_SIZE_SMALL
+                                'IMS/QTI'
                             ),
                             'exercise.php?action=exportqti2&exerciseId='.$exerciseId.'&'.api_get_cidreq()
                         );
@@ -9201,18 +9182,14 @@ class Exercise
                         if (true == $exercise->exercise_was_added_in_lp) {
                             $visibility = Display::return_icon(
                                 'invisible.png',
-                                get_lang('AddedToLPCannotBeAccessed'),
-                                '',
-                                ICON_SIZE_SMALL
+                                get_lang('AddedToLPCannotBeAccessed')
                             );
                         } else {
                             if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'invisible.png',
-                                        get_lang('Activate'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Activate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9222,9 +9199,7 @@ class Exercise
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'visible.png',
-                                        get_lang('Deactivate'),
-                                        '',
-                                        ICON_SIZE_SMALL
+                                        get_lang('Deactivate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
                                     ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
@@ -9238,7 +9213,7 @@ class Exercise
 
                         $actions .= $visibility;
                         $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::return_icon('test_results.png', get_lang('Results')).'</a>';
                         $actions .= Display::url(
                             Display::return_icon('cd.gif', get_lang('CopyExercise')),
                             '',
@@ -9259,9 +9234,7 @@ class Exercise
                             $delete = Display::url(
                                 Display::return_icon(
                                     'delete.png',
-                                    get_lang('Delete'),
-                                    '',
-                                    ICON_SIZE_SMALL
+                                    get_lang('Delete')
                                 ),
                                 '',
                                 [
@@ -9275,9 +9248,7 @@ class Exercise
                         } else {
                             $delete = Display::return_icon(
                                 'delete_na.png',
-                                get_lang('ResourceLockedByGradebook'),
-                                '',
-                                ICON_SIZE_SMALL
+                                get_lang('ResourceLockedByGradebook')
                             );
                         }
                     }
@@ -9496,7 +9467,7 @@ class Exercise
                     if ($isDrhOfCourse) {
                         $currentRow[] = '<a
                             href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).
+                            Display::return_icon('test_results.png', get_lang('Results')).
                             '</a>';
                     }
                     if ($returnData) {
@@ -9550,11 +9521,11 @@ class Exercise
 
             if ($is_allowedToEdit) {
                 $table->set_header($i++, get_lang('Questions'), false);
-                $table->set_header($i++, get_lang('Actions'), false);
+                $table->set_header($i++, get_lang('Actions'), false, ['class' => 'text-right']);
             } else {
                 $table->set_header($i++, get_lang('Status'), false);
                 if ($isDrhOfCourse) {
-                    $table->set_header($i++, get_lang('Actions'), false);
+                    $table->set_header($i++, get_lang('Actions'), false, ['class' => 'text-right']);
                 }
             }
 

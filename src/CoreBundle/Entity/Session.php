@@ -76,11 +76,11 @@ class Session implements ResourceWithAccessUrlInterface
     public const SESSION_ADMIN = 4;
 
     /**
-     * @Groups({"session:read", "session_rel_user:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
+    #[Groups(['session:read', 'session_rel_user:read'])]
     protected ?int $id = null;
 
     /**
@@ -99,8 +99,6 @@ class Session implements ResourceWithAccessUrlInterface
     protected Collection $users;
 
     /**
-     * @Groups({"session:read", "session_rel_user:read"})
-     *
      * @var Collection|SessionRelCourseRelUser[]
      *
      * @ORM\OneToMany(
@@ -110,6 +108,7 @@ class Session implements ResourceWithAccessUrlInterface
      *     orphanRemoval=true
      * )
      */
+    #[Groups(['session:read', 'session_rel_user:read'])]
     protected Collection $sessionRelCourseRelUsers;
 
     /**
@@ -155,46 +154,45 @@ class Session implements ResourceWithAccessUrlInterface
     protected string $name;
 
     /**
-     * @Groups({"session:read", "session:write"})
-     *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
+    #[Groups(['session:read', 'session:write'])]
     protected ?string $description;
 
     /**
-     * @Groups({"session:read", "session:write"})
      * @ORM\Column(name="show_description", type="boolean", nullable=true)
      */
+    #[Groups(['session:read', 'session:write'])]
     protected ?bool $showDescription;
 
     /**
-     * @Groups({"session:read", "session:write"})
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
+    #[Groups(['session:read', 'session:write'])]
     protected ?int $duration = null;
 
     /**
-     * @Groups({"session:read"})
      * @ORM\Column(name="nbr_courses", type="integer", nullable=false, unique=false)
      */
+    #[Groups(['session:read'])]
     protected int $nbrCourses;
 
     /**
-     * @Groups({"session:read"})
      * @ORM\Column(name="nbr_users", type="integer", nullable=false, unique=false)
      */
+    #[Groups(['session:read'])]
     protected int $nbrUsers;
 
     /**
-     * @Groups({"session:read"})
      * @ORM\Column(name="nbr_classes", type="integer", nullable=false, unique=false)
      */
+    #[Groups(['session:read'])]
     protected int $nbrClasses;
 
     /**
-     * @Groups({"session:read", "session:write"})
      * @ORM\Column(name="visibility", type="integer")
      */
+    #[Groups(['session:read', 'session:write'])]
     protected int $visibility;
 
     /**
@@ -204,15 +202,15 @@ class Session implements ResourceWithAccessUrlInterface
     protected ?Promotion $promotion = null;
 
     /**
-     * @Groups({"session:read", "session_rel_user:read"})
      * @ORM\Column(name="display_start_date", type="datetime", nullable=true, unique=false)
      */
+    #[Groups(['session:read', 'session_rel_user:read'])]
     protected ?DateTime $displayStartDate;
 
     /**
-     * @Groups({"session:read", "session_rel_user:read"})
      * @ORM\Column(name="display_end_date", type="datetime", nullable=true, unique=false)
      */
+    #[Groups(['session:read', 'session_rel_user:read'])]
     protected ?DateTime $displayEndDate;
 
     /**
@@ -241,17 +239,16 @@ class Session implements ResourceWithAccessUrlInterface
     protected int $position;
 
     /**
-     * @Groups({"session:read"})
-     *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
+    #[Groups(['session:read'])]
     protected int $status;
 
     /**
-     * @Groups({"session:read", "session:write"})
      * @ORM\ManyToOne(targetEntity="SessionCategory", inversedBy="sessions")
      * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
      */
+    #[Groups(['session:read', 'session:write'])]
     protected ?SessionCategory $category = null;
 
     /**
@@ -891,6 +888,7 @@ class Session implements ResourceWithAccessUrlInterface
     /**
      * Add a user course subscription.
      * If user status in session is student, then increase number of course users.
+     * Status example: Session::STUDENT.
      */
     public function addUserInCourse(int $status, User $user, Course $course): SessionRelCourseRelUser
     {

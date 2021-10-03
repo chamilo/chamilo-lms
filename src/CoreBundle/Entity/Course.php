@@ -59,20 +59,19 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public const HIDDEN = 4;
 
     /**
-     * @Groups({"course:read", "course_rel_user:read", "session_rel_user:read", "session_rel_course_rel_user:read", "session_rel_user:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[Groups(['course:read', 'course_rel_user:read', 'session_rel_course_rel_user:read', 'session_rel_user:read'])]
     protected ?int $id = null;
 
     /**
      * The course title.
      *
-     * @Groups({"course:read", "course:write", "course_rel_user:read", "session_rel_course_rel_user:read", "session_rel_user:read"})
-     *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
+    #[Groups(['course:read', 'course:write', 'course_rel_user:read', 'session_rel_course_rel_user:read', 'session_rel_user:read'])]
     #[Assert\NotBlank(message: 'A Course requires a title')]
     protected ?string $title = null;
 
@@ -84,7 +83,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *     maxMessage = "Code cannot be longer than {{ limit }} characters"
      * )
      * @ApiProperty(iri="http://schema.org/courseCode")
-     * @Groups({"course:read", "course:write", "course_rel_user:read"})
      *
      * @Gedmo\Slug(
      *     fields={"title"},
@@ -95,6 +93,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * )
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
+    #[Groups(['course:read', 'user:write', 'course_rel_user:read'])]
     #[Assert\NotBlank]
     protected string $code;
 
@@ -110,13 +109,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var Collection|CourseRelUser[]
      *
-     * @Groups({"course:read", "user:read"})
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
      *
      * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
+    #[Groups(['course:read', 'user:read'])]
     #[ApiSubresource]
     protected Collection $users;
 
@@ -149,6 +148,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})
      */
+    #[Groups(['course:read'])]
     protected Collection $tools;
 
     protected Session $currentSession;

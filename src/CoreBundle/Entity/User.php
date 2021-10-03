@@ -130,12 +130,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public ?string $illustrationUrl = null;
 
     /**
-     * @Groups({"user:read", "resource_node:read", "user_json:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
     #[Groups([
+        'user:read',
+        'resource_node:read',
+        'user_json:read',
         'message:read',
         'user_rel_user:read',
     ])]
@@ -186,26 +188,24 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $lastname = null;
 
     /**
-     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="website", type="string", length=255, nullable=true)
      */
+    #[Groups(['user:read', 'user:write'])]
     protected ?string $website;
 
     /**
-     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="biography", type="text", nullable=true)
      */
+    #[Groups(['user:read', 'user:write'])]
     protected ?string $biography;
 
     /**
-     * @Groups({"user:read", "user:write", "user_json:read"})
      * @ORM\Column(name="locale", type="string", length=10)
      */
+    #[Groups(['user:read', 'user:write', 'user_json:read'])]
     protected string $locale;
 
-    /**
-     * @Groups({"user:write"})
-     */
+    #[Groups(['user:write'])]
     protected ?string $plainPassword = null;
 
     /**
@@ -219,9 +219,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected string $usernameCanonical;
 
     /**
-     * @Groups({"user:read", "user:write", "user_json:read"})
      * @ORM\Column(name="timezone", type="string", length=64)
      */
+    #[Groups(['user:read', 'user:write', 'user_json:read'])]
     protected string $timezone;
 
     /**
@@ -230,10 +230,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected string $emailCanonical;
 
     /**
-     * @Groups({"user:read", "user:write", "user_json:read"})
-     *
      * @ORM\Column(name="email", type="string", length=100)
      */
+    #[Groups(['user:read', 'user:write', 'user_json:read'])]
     #[Assert\NotBlank]
     #[Assert\Email]
     protected string $email;
@@ -244,16 +243,16 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected bool $locked;
 
     /**
-     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="enabled", type="boolean")
      */
+    #[Groups(['user:read', 'user:write'])]
     #[Assert\NotNull]
     protected bool $enabled;
 
     /**
-     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="expired", type="boolean")
      */
+    #[Groups(['user:read', 'user:write'])]
     protected bool $expired;
 
     /**
@@ -272,21 +271,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?DateTime $dateOfBirth;
 
     /**
-     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="expires_at", type="datetime", nullable=true)
      */
+    #[Groups(['user:read', 'user:write'])]
     protected ?DateTime $expiresAt;
 
     /**
-     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="phone", type="string", length=64, nullable=true)
      */
+    #[Groups(['user:read', 'user:write'])]
     protected ?string $phone = null;
 
     /**
-     * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="address", type="string", length=250, nullable=true)
      */
+    #[Groups(['user:read', 'user:write'])]
     protected ?string $address = null;
 
     /**
@@ -300,9 +299,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $gender = null;
 
     /**
-     * @Groups({"user:read"})
      * @ORM\Column(name="last_login", type="datetime", nullable=true)
      */
+    #[Groups(['user:read'])]
     protected ?DateTime $lastLogin = null;
 
     /**
@@ -345,11 +344,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
      *
-     * @Groups({"user:read", "user:write", "user_json:read"})
      * @ORM\Column(type="array")
      *
      * @var mixed[]|string[]
      */
+    #[Groups(['user:read', 'user:write', 'user_json:read'])]
     protected array $roles = [];
 
     /**
@@ -717,7 +716,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     protected ?int $hrDeptId = null;
 
-    protected AccessUrl $currentUrl;
+    #[Groups(['user:write'])]
+    protected ?AccessUrl $currentUrl = null;
 
     /**
      * @var Collection<int, MessageTag>|MessageTag[]
@@ -1646,25 +1646,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getCurrentUrl(): AccessUrl
+    public function getCurrentUrl(): ?AccessUrl
     {
         return $this->currentUrl;
     }
 
-    /**
-     * Sets the AccessUrl for the current user in memory.
-     */
     public function setCurrentUrl(AccessUrl $url): self
     {
-        $urlList = $this->getPortals();
-        /** @var AccessUrlRelUser $item */
-        foreach ($urlList as $item) {
-            if ($item->getUrl()->getId() === $url->getId()) {
-                $this->currentUrl = $url;
-
-                break;
-            }
-        }
+        $accessUrlRelUser = (new AccessUrlRelUser())
+            ->setUrl($url)
+            ->setUser($this)
+        ;
+        $this->getPortals()->add($accessUrlRelUser);
 
         return $this;
     }
@@ -1786,8 +1779,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * Returns the user roles.
-     *
-     * @return array The roles
      */
     public function getRoles(): array
     {

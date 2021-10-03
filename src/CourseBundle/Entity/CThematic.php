@@ -14,8 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CThematic.
- *
  * @ORM\Table(
  *     name="c_thematic",
  *     indexes={

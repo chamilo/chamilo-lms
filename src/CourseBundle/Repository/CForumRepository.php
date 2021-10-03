@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CForumRepository extends ResourceRepository
@@ -22,9 +23,11 @@ final class CForumRepository extends ResourceRepository
     {
         /** @var CForum $resource */
         $threads = $resource->getThreads();
+        $repo = $this->getEntityManager()->getRepository(CForumThread::class);
         if (!empty($threads)) {
             foreach ($threads as $thread) {
-                parent::delete($thread);
+                /** @var CForumThread $thread */
+                $repo->delete($thread);
             }
         }
 

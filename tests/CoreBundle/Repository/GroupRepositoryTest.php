@@ -17,8 +17,6 @@ class GroupRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(GroupRepository::class);
         $defaultGroups = $repo->count([]);
@@ -36,7 +34,7 @@ class GroupRepositoryTest extends AbstractApiTest
     {
         $repo = self::getContainer()->get(GroupRepository::class);
         $admins = $repo->getAdmins();
-        $this->assertSame(0, \count($admins));
+        $this->assertCount(0, $admins);
     }
 
     public function testCreateDefaultGroups(): void

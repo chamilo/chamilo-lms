@@ -3,6 +3,7 @@ namespace Chamilo\Tests;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
+use Chamilo\CoreBundle\Entity\User;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 
 abstract class AbstractApiTest extends ApiTestCase
@@ -49,8 +50,17 @@ abstract class AbstractApiTest extends ApiTestCase
         return static::createClient([], ['headers' => ['authorization' => 'Bearer '.$token]]);
     }
 
+    public function getUserTokenFromUser(User $user)
+    {
+        return $this->getUserToken([
+                'username' => $user->getUsername(),
+                'password' => $user->getUsername(),
+            ], true
+        );
+    }
+
     /**
-     * Use credentials with token.
+     * Use credentials with token, by default it returns the admin token.
      */
     protected function getUserToken($body = [], $cleanToken = false): string
     {

@@ -12,7 +12,7 @@ services:
 
     Chamilo\CoreBundle\:
         resource: '../../*'
-        exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity}'
+        exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity}'
         public: true
 
     Doctrine\Migrations\Version\DbalMigrationFactory: ~

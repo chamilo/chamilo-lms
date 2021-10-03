@@ -1689,38 +1689,22 @@ class Display
     }
 
     /**
-     * @param string $content
-     * @param string $type
-     *
-     * @return string
+     * Return an HTML span element with the badge class and an additional bg-$type class
      */
-    public static function label($content, $type = 'default')
+    public static function label(string $content, string $type = 'default'): string
     {
-        switch ($type) {
-            case 'success':
-                $class = 'success';
-                break;
-            case 'warning':
-                $class = 'warning text-dark';
-                break;
-            case 'important':
-            case 'danger':
-                $class = 'danger';
-                break;
-            case 'info':
-                $class = 'info';
-                break;
-            case 'primary':
-                $class = 'primary';
-                break;
-            default:
-                $class = 'secondary';
-                break;
-        }
-
         $html = '';
         if (!empty($content)) {
-            $html = '<span class="badge bg-'.$class.'">';
+            $class = match ($type) {
+                'success' => 'success',
+                'warning' => 'warning',
+                'important', 'danger' => 'danger',
+                'info' => 'info',
+                'primary' => 'primary',
+                default => 'secondary',
+            };
+
+            $html = '<span class="badge bg-ch-'.$class.'">';
             $html .= $content;
             $html .= '</span>';
         }
@@ -2237,17 +2221,29 @@ class Display
         return $html;
     }
 
-    public static function getMdiIcon(string $name, string $additionalClass = '', string $style = ''): string
+    public static function getMdiIcon(string $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null): string
     {
+        $sizeString = '';
+        if (!empty($pixelSize)) {
+            $sizeString = 'font-size: '.$pixelSize.'px; width: '.$pixelSize.'px; height: '.$pixelSize.'px; ';
+        }
+        if (empty($style)) {
+            $style = '';
+        }
+        $additionalAttributes = [
+            'class' => "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass",
+            'style' => $sizeString.$style,
+            'medium' => '',
+            'aria-hidden' => 'true',
+        ];
+        if (!empty($title)) {
+            $additionalAttributes['title'] = htmlentities($title);
+        }
+
         return self::tag(
             'i',
             '',
-            [
-                'class' => "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass",
-                'style' => $style,
-                'medium' => '',
-                'aria-hidden' => 'true'
-            ]
+            $additionalAttributes
         );
     }
 

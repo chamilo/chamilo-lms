@@ -116,10 +116,12 @@
     "Sent date": "\u0414\u0430\u0442\u0430 \u043d\u0430 \u0438\u0437\u043f\u0440\u0430\u0449\u0430\u043d\u0435",
     "Sent": "",
     "Attachments": "\u041f\u0440\u0438\u043a\u0440\u0435\u043f\u0435\u043d\u0438 \u0440\u0435\u0441\u0443\u0440\u0441\u0438",
-    "You don't have course content": "You don't have course content",
-    "You don't have any course yet": "You don't have any course yet",
-    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet",
+    "You don't have any course content yet.": "You don't have any course content yet.",
+    "You don't have any course yet.": "You don't have any course yet.",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you.": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you.",
+    "You don't have any session yet.": "You don't have any session yet.",
     "Username": "",
-    "Password": "\u041f\u0430\u0440\u043e\u043b\u0430"
+    "Password": "\u041f\u0430\u0440\u043e\u043b\u0430",
+    "Update": "\u041e\u0431\u043d\u043e\u0432\u044f\u0432\u0430\u043d\u0435",
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
 }

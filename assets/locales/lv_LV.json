@@ -116,10 +116,12 @@
     "Sent date": "S\u016bt\u012b\u0161anas datums",
     "Sent": "Nos\u016bt\u012bts",
     "Attachments": "Pielikumi",
-    "You don't have course content": "You don't have course content",
-    "You don't have any course yet": "You don't have any course yet",
-    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet",
+    "You don't have any course content yet.": "You don't have any course content yet.",
+    "You don't have any course yet.": "You don't have any course yet.",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you.": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you.",
+    "You don't have any session yet.": "You don't have any session yet.",
     "Username": "",
-    "Password": "Parole"
+    "Password": "Parole",
+    "Update": "Atjaunin\u0101t",
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
 }

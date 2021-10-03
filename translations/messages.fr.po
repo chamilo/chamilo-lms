@@ -24079,3 +24079,24 @@ msgstr "Se souvenir de moi"
 
 msgid "Register oneself"
 msgstr "Créer un compte"
+
+msgid "Course introduction"
+msgstr "Introduction de cours"
+
+msgid "You don't have any course content yet."
+msgstr "Vous n'avez pas encore de contenu de cours."
+
+msgid "You don't have any course yet."
+msgstr "Vous n'avez pas encore de cours."
+
+msgid "You don't have any session yet."
+msgstr "Vous n'avez pas encore de session."
+
+msgid "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you."
+msgstr "Cliquez sur \"Explorer\" pour trouver un cours qui vous intéresse, ou attendez que quelqu'un vous y inscrive."
+
+msgid "Add a course introduction to display to your students."
+msgstr "Ajoutez une introduction de cours pour vos apprenants."
+
+msgid "See as student"
+msgstr "Voir comme apprenant"

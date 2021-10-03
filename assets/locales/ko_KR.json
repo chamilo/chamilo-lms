@@ -116,10 +116,12 @@
     "Sent date": "",
     "Sent": "",
     "Attachments": "\ucca8\ubd80",
-    "You don't have course content": "You don't have course content",
-    "You don't have any course yet": "You don't have any course yet",
-    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet",
+    "You don't have any course content yet.": "You don't have any course content yet.",
+    "You don't have any course yet.": "You don't have any course yet.",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you.": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you.",
+    "You don't have any session yet.": "You don't have any session yet.",
     "Username": "",
-    "Password": "\ud328\uc2a4\uc6cc\ub4dc"
+    "Password": "\ud328\uc2a4\uc6cc\ub4dc",
+    "Update": "",
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
 }

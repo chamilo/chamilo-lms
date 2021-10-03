@@ -65,7 +65,7 @@
               @click="addIntro(course, introTool)"
           >
             <v-icon>mdi-plus</v-icon>
-            {{ $t('Course introduction in a session') }}
+            {{ $t('Course introduction') }}
           </button>
         </div>
 
@@ -91,11 +91,11 @@
           </div>
 
           <div class="mt-2 font-bold">
-            {{ $t("You don't have course content") }}
+            {{ $t("You don't have any course content yet.") }}
           </div>
 
           <div>
-            {{ $t('Add a course introduction to display to your students') }}
+            {{ $t('Add a course introduction to display to your students.') }}
           </div>
 
           <button

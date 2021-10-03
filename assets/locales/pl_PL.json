@@ -116,10 +116,12 @@
     "Sent date": "Data wys\u0142ania",
     "Sent": "Wys\u0142ano",
     "Attachments": "Za\u0142\u0105czniki",
-    "You don't have course content": "You don't have course content",
-    "You don't have any course yet": "You don't have any course yet",
-    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet",
+    "You don't have any course content yet.": "You don't have any course content yet.",
+    "You don't have any course yet.": "You don't have any course yet.",
+    "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you.": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you.",
+    "You don't have any session yet.": "You don't have any session yet.",
     "Username": "",
-    "Password": "Has\u0142o"
+    "Password": "Has\u0142o",
+    "Update": "Aktualizuj",
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
 }

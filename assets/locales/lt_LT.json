@@ -8,10 +8,7 @@
     "Tests": "Testai",
     "Forum": "Forumai",
     "Glossary": "",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Nuoroda",
-    "Student publication": "Student publication",
     "Groups": "Grup\u0117s",
     "Member": "Narys",
     "Survey": "Apklausa",
@@ -53,7 +50,6 @@
     "Courses": "Teorin\u0117 kurs\u0173 med\u017eiaga",
     "Sessions": "Sessions",
     "Administration": "Administravimas",
-    "Reporting": "Reporting",
     "Remember me": "Remember me",
     "Forgot your password ?": "",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "Slapta\u017eodis",
     "Update": "Atnaujinimas",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "",
+    "Assignments": "Student\u0173 publikacijos",
+    "Videoconference": "",
+    "Reporting": "Reporting",
+    "Learning paths": "Teorin\u0117 kurso med\u017eiaga"
 }

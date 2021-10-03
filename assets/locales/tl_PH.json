@@ -8,10 +8,7 @@
     "Tests": "Mga Pagsusulit",
     "Forum": "Forum",
     "Glossary": "Talahulugan",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "",
-    "Student publication": "Student publication",
     "Groups": "",
     "Member": "",
     "Survey": "Sarbey",
@@ -53,7 +50,6 @@
     "Courses": "",
     "Sessions": "Sessions",
     "Administration": "",
-    "Reporting": "Pag-uulat",
     "Remember me": "Remember me",
     "Forgot your password ?": "Nakalimutan ang iyong password ?",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "",
     "Update": "",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "",
+    "Assignments": "Mga takdang-aralin",
+    "Videoconference": "",
+    "Reporting": "Pag-uulat",
+    "Learning paths": "Mga learning path"
 }

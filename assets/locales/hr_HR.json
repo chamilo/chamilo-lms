@@ -8,10 +8,7 @@
     "Tests": "Vje\u017ebe",
     "Forum": "Forumi",
     "Glossary": "",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "Poveznica",
-    "Student publication": "Student publication",
     "Groups": "Grupe",
     "Member": "\u010clan",
     "Survey": "Anketa",
@@ -53,7 +50,6 @@
     "Courses": "Putovi u\u010denja",
     "Sessions": "Sessions",
     "Administration": "Administracija",
-    "Reporting": "Izvje\u0161tavanje",
     "Remember me": "Remember me",
     "Forgot your password ?": "",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "Zaporka",
     "Update": "A\u017euriraj",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "Moj dnevnik ocjena",
+    "Assignments": "Publikacije studenata",
+    "Videoconference": "",
+    "Reporting": "Izvje\u0161tavanje",
+    "Learning paths": "Put u\u010denja"
 }

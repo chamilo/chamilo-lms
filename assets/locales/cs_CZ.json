@@ -8,10 +8,7 @@
     "Tests": "Testy",
     "Forum": "",
     "Glossary": "",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "",
-    "Student publication": "Student publication",
     "Groups": "Skupiny",
     "Member": "\u010clen",
     "Survey": "",
@@ -53,7 +50,6 @@
     "Courses": "Learn-paths (sp\u016fsob u\u010den\u00ed)",
     "Sessions": "Sessions",
     "Administration": "Administrace",
-    "Reporting": "",
     "Remember me": "Remember me",
     "Forgot your password ?": "",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "Heslo",
     "Update": "",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "",
+    "Assignments": "\u00dakol",
+    "Videoconference": "",
+    "Reporting": "",
+    "Learning paths": ""
 }

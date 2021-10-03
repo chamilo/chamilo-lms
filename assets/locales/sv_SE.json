@@ -8,10 +8,7 @@
     "Tests": "Tester",
     "Forum": "Forum",
     "Glossary": "",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "L\u00e4nk",
-    "Student publication": "Student publication",
     "Groups": "Grupper",
     "Member": "Medlem",
     "Survey": "Enk\u00e4ter",
@@ -53,7 +50,6 @@
     "Courses": "Learnpaths",
     "Sessions": "Sessions",
     "Administration": "Administration",
-    "Reporting": "Rapportering",
     "Remember me": "Remember me",
     "Forgot your password ?": "",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "Anv\u00e4ndarnamn",
     "Password": "L\u00f6senord",
     "Update": "Uppdatera",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "",
+    "Assignments": "Elevpublikationer",
+    "Videoconference": "",
+    "Reporting": "Rapportering",
+    "Learning paths": "Inl\u00e4rningsv\u00e4gar"
 }

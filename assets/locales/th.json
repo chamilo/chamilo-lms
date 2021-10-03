@@ -8,10 +8,7 @@
     "Tests": "\u0e41\u0e1a\u0e1a\u0e17\u0e14\u0e2a\u0e2d\u0e1a",
     "Forum": "\u0e01\u0e32\u0e23\u0e2d\u0e20\u0e34\u0e1b\u0e23\u0e32\u0e22",
     "Glossary": "",
-    "Gradebook": "Gradebook",
-    "Learnpath": "Learnpath",
     "Link": "\u0e01\u0e32\u0e23\u0e40\u0e0a\u0e37\u0e48\u0e2d\u0e21\u0e42\u0e22\u0e07",
-    "Student publication": "Student publication",
     "Groups": "\u0e01\u0e25\u0e38\u0e48\u0e21",
     "Member": "",
     "Survey": "",
@@ -53,7 +50,6 @@
     "Courses": "\u0e25\u0e33\u0e14\u0e31\u0e1a\u0e01\u0e32\u0e23\u0e40\u0e23\u0e35\u0e22\u0e19",
     "Sessions": "Sessions",
     "Administration": "\u0e01\u0e32\u0e23\u0e1a\u0e23\u0e34\u0e2b\u0e32\u0e23\u0e08\u0e31\u0e14\u0e01\u0e32\u0e23\u0e23\u0e30\u0e1a\u0e1a",
-    "Reporting": "",
     "Remember me": "Remember me",
     "Forgot your password ?": "",
     "Register oneself": "Register oneself",
@@ -123,5 +119,10 @@
     "Username": "",
     "Password": "\u0e23\u0e2b\u0e31\u0e2a\u0e1c\u0e48\u0e32\u0e19",
     "Update": "",
-    "Add a course introduction to display to your students.": "Add a course introduction to display to your students."
+    "Add a course introduction to display to your students.": "Add a course introduction to display to your students.",
+    "Assessments": "",
+    "Assignments": "\u0e1c\u0e25\u0e07\u0e32\u0e19\/\u0e01\u0e32\u0e23\u0e1a\u0e49\u0e32\u0e19\u0e02\u0e2d\u0e07\u0e1c\u0e39\u0e49\u0e40\u0e23\u0e35\u0e22\u0e19",
+    "Videoconference": "",
+    "Reporting": "",
+    "Learning paths": "\u0e41\u0e1c\u0e19\u0e01\u0e32\u0e23\u0e40\u0e23\u0e35\u0e22\u0e19"
 }

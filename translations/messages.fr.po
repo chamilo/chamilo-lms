@@ -1683,7 +1683,7 @@ msgid "Message Sent"
 msgstr "Message envoyé"
 
 msgid "Settings"
-msgstr "Propriétés du cours"
+msgstr "Paramètres"
 
 msgid "The information has been modified"
 msgstr "Les informations ont été modifiées"
@@ -24071,3 +24071,5 @@ msgstr "Retour à la liste des tentatives"
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
 msgstr "Montrer le résultat à l'apprenant : Montrer le score, le choix de l'apprenant et son feedback à chaque tentative, ajouter la réponse correcte et son feedback lorsque la limite choisie de tentatives est atteinte."
 
+msgid "Signed in as"
+msgstr "Connecté comme"

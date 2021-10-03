@@ -24071,3 +24071,5 @@ msgstr "Back to the attempt list"
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
 msgstr "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
 
+msgid "Signed in as"
+msgstr "Signed in as"

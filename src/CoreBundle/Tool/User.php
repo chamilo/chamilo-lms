@@ -17,6 +17,11 @@ class User extends AbstractTool implements ToolInterface
         return 'user';
     }
 
+    public function getNameToShow(): string
+    {
+        return 'Users';
+    }
+
     public function getIcon(): string
     {
         return 'mdi-user';

@@ -17,6 +17,11 @@ class Gradebook extends AbstractTool implements ToolInterface
         return 'gradebook';
     }
 
+    public function getNameToShow(): string
+    {
+        return 'Assessments';
+    }
+
     public function getLink(): string
     {
         return '/main/gradebook/index.php';

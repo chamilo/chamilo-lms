@@ -15,7 +15,7 @@ class VideoConference extends AbstractTool implements ToolInterface
 
     public function getNameToShow(): string
     {
-        return 'VideoConference';
+        return 'Videoconference';
     }
 
     public function getIcon(): string

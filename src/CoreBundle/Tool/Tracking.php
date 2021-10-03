@@ -13,6 +13,11 @@ class Tracking extends AbstractTool implements ToolInterface
         return 'tracking';
     }
 
+    public function getNameToShow(): string
+    {
+        return 'Reporting';
+    }
+
     public function getIcon(): string
     {
         return 'mdi-google-analytics';

@@ -9,7 +9,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 use DateTime;
 use PclZip;
 use Symfony\Component\Filesystem\Filesystem;
-use UnserializeApi;
 
 /**
  * Some functions to write a course-object to a zip-file and to read a course-

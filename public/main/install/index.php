@@ -506,7 +506,7 @@ if (isset($_POST['step2'])) {
 
     if ('new' === $installType) {
         echo Display::return_message(
-            '<h4 style="text-align: center">'.get_lang(
+            '<h4 style="text-align: center" class="m-2">'.get_lang(
                 'Warning'
             ).'</h4>'.
             get_lang('The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.'),
@@ -774,9 +774,8 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
     </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../../build/css/app.css">
     <link rel="stylesheet" href="../../build/vue.css">
-    <link rel="stylesheet" href="../../build/css/bootstrap.css">
+    <link rel="stylesheet" href="../../build/css/app.css">
     <script type="text/javascript" src="../../../build/runtime.js"></script>
     <script type="text/javascript" src="../../../build/app.js"></script>
     <script>
@@ -860,7 +859,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
         }
     </script>
 </head>
-<body class="w-full justify-center bg-gradient-to-r from-blue-400 to-blue-600">
+<body class="w-full justify-center bg-gradient-to-br from-ch-primary to-ch-primary-light">
     <div class="flex flex-col items-center justify-center ">
         <div class="rounded p-4 m-8 w-3/5 bg-white flex">
             <div class="w-1/3 p-4">
@@ -903,7 +902,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                     </ol>
                 </div>
                 <div id="note">
-                    <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
+                    <a class="btn btn-info btn-block m-2" href="<?php echo $installationGuideLink; ?>" target="_blank">
                         <em class="fa fa-file-alt"></em>
                         <?php echo $translator->trans('Read the installation guide'); ?>
                     </a>

@@ -440,11 +440,11 @@ function display_language_selection()
         <label for="language_list"><?php echo get_lang('Please select installation language'); ?></label>
         <div class="form-group">
             <?php echo display_language_selection_box('language_list', api_get_language_isocode()); ?>
+            <button type="submit" name="step1" class="btn btn-primary" value="<?php echo get_lang('Next'); ?>">
+                <em class="fa fa-forward"> </em>
+                <?php echo get_lang('Next'); ?>
+            </button>
         </div>
-        <button type="submit" name="step1" class="btn btn-success" value="<?php echo get_lang('Next'); ?>">
-            <em class="fa fa-forward"> </em>
-            <?php echo get_lang('Next'); ?>
-        </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         <div class="RequirementHeading">
             <?php echo get_lang('Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator.'); ?>
@@ -881,7 +881,7 @@ function display_requirements(
             </button>
             <button
                 type="submit" name="step2_install"
-                class="btn btn-success"
+                class="btn btn-primary"
                 value="<?php echo get_lang('New installation'); ?>" <?php if ($error) {
             echo 'disabled="disabled"';
         } ?> >
@@ -1286,7 +1286,7 @@ function display_database_settings_form(
     );
     echo '</div></div>';
     if (INSTALL_TYPE_UPDATE != $installType) { ?>
-        <button type="submit" class="btn btn-primary" name="step3" value="step3">
+        <button type="submit" class="btn btn-primary m-2" name="step3" value="step3">
             <em class="fa fa-sync"> </em>
             <?php echo get_lang('Check database connection'); ?>
         </button>
@@ -1414,7 +1414,7 @@ function display_configuration_parameter(
     $displayWhenUpdate = 'true'
 ) {
     $html = '<div class="form-group row">';
-    $html .= '<label class="col-sm-6 control-label">'.$parameterName.'</label>';
+    $html .= '<label class="col-sm-6 p-2 control-label">'.$parameterName.'</label>';
     if (INSTALL_TYPE_UPDATE == $installType && $displayWhenUpdate) {
         $html .= '<input
             type="hidden"
@@ -1749,7 +1749,7 @@ function display_after_install_message()
         'To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory.'), 'var/config/', 'main/install/');
     $html .= '</div></form>
     <br />
-    <a class="btn btn-success btn-block" href="../../">
+    <a class="btn btn-success" href="../../">
         '.$trans->trans('Go to your newly created portal.').'
     </a>';
 

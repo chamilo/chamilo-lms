@@ -66,15 +66,15 @@
   }
 
   .btn-warning {
-    @apply text-ch-text-warning bg-ch-warning hover:bg-ch-warning-dark focus:bg-ch-warning-light;
+    @apply text-ch-text-warning bg-ch-warning hover:bg-ch-warning-dark focus:ring-ch-warning-light;
   }
 
   .btn-success {
-    @apply text-ch-text-success bg-ch-success hover:bg-ch-success-dark focus:bg-ch-success-light;
+    @apply text-ch-text-success bg-ch-success hover:bg-ch-success-dark focus:ring-ch-success-light;
   }
 
   .btn-danger {
-    @apply text-ch-text-error bg-ch-error hover:bg-ch-error-dark focus:bg-ch-error-light;
+    @apply text-ch-text-error bg-ch-error hover:bg-ch-error-dark focus:ring-ch-error-light;
   }
 
   // Buttons with icons.
@@ -224,6 +224,7 @@
   // Forms
   input {
     appearance: auto !important;
+    border-width: 1px !important;
   }
 
   // Special

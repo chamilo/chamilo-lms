@@ -29,6 +29,7 @@ class CThematicRepositoryTest extends AbstractApiTest
             ->setTitle('thematic')
             ->setParent($course)
             ->setCreator($teacher)
+            ->addCourseLink($course)
         ;
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);

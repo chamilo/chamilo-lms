@@ -57,11 +57,9 @@ class CForumThreadRepository extends ResourceRepository
     {
         /** @var CForumThread $resource */
         $posts = $resource->getPosts();
-        $repo = $this->getEntityManager()->getRepository(CForumPost::class);
         if (!empty($posts)) {
             foreach ($posts as $post) {
-                /** @var CForumPost $post */
-                $repo->delete($post);
+                parent::delete($post);
             }
         }
         parent::delete($resource);

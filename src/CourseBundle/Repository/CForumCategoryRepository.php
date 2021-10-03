@@ -30,24 +30,4 @@ class CForumCategoryRepository extends ResourceRepository
             $session
         );
     }
-
-    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
-    {
-        return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }*/
-
-    public function delete(ResourceInterface $resource): void
-    {
-        /** @var CForumCategory $resource */
-        $forums = $resource->getForums();
-        $repo = $this->getEntityManager()->getRepository(CForum::class);
-        if (!empty($forums)) {
-            foreach ($forums as $forum) {
-                /** @var CForum $forum */
-                $repo->delete($forum);
-            }
-        }
-
-        parent::delete($resource);
-    }
 }

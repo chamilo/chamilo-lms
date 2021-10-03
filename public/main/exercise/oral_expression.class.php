@@ -20,13 +20,6 @@ class OralExpression extends Question
     public $typePicture = 'audio_question.png';
     public $explanationLangVar = 'Oral expression';
     public $available_extensions = ['wav', 'ogg'];
-    private $sessionId;
-    private $userId;
-    private $exerciseId;
-    private $exeId;
-    private $storePath;
-    private $fileName;
-    private $filePath;
 
     public function __construct()
     {
@@ -73,25 +66,6 @@ class OralExpression extends Question
     }
 
     /**
-     * initialize the attributes to generate the file path.
-     *
-     * @param int $sessionId
-     * @param int $userId
-     * @param int $exerciseId
-     * @param int $exeId
-     */
-    public function initFile($sessionId, $userId, $exerciseId, $exeId)
-    {
-        $this->sessionId = (int) $sessionId;
-        $this->userId = (int) $userId;
-        $this->exerciseId = 0;
-        $this->exeId = (int) $exeId;
-        if (!empty($exerciseId)) {
-            $this->exerciseId = (int) $exerciseId;
-        }
-    }
-
-    /**
      * Return the HTML code to show the RecordRTC/Wami recorder.
      */
     public function returnRecorder(int $trackExerciseId): string
@@ -113,92 +87,6 @@ class OralExpression extends Question
         $template = $recordAudioView->get_template('exercise/oral_expression.html.twig');
 
         return $recordAudioView->fetch($template);
-    }
-
-    /**
-     * Get the absolute file path. Return null if the file doesn't exists.
-     *
-     * @param bool $loadFromDatabase
-     *
-     * @return string
-     */
-    public function getAbsoluteFilePath($loadFromDatabase = false)
-    {
-        $fileName = $this->fileName;
-
-        if ($loadFromDatabase) {
-            $em = Database::getManager();
-            //Load the real filename just if exists
-            if (isset($this->exeId, $this->userId, $this->id, $this->sessionId, $this->course['real_id'])) {
-                $result = $em
-                    ->getRepository(TrackEAttempt::class)
-                    ->findOneBy([
-                        'exeId' => $this->exeId,
-                        'userId' => $this->userId,
-                        'questionId' => $this->id,
-                        'sessionId' => $this->sessionId,
-                        'course' => $this->course['real_id'],
-                    ]);
-
-                if (!$result) {
-                    return '';
-                }
-
-                $fileName = $result->getFilename();
-
-                if (empty($fileName)) {
-                    return '';
-                }
-
-                return $this->storePath.$result->getFilename();
-            }
-        }
-
-        foreach ($this->available_extensions as $extension) {
-            $audioFile = $this->storePath.$fileName;
-            $file = "$audioFile.$extension";
-
-            if (is_file($file)) {
-                return $file;
-            }
-
-            // Function handle_uploaded_document() adds the session and group id by default.
-            $file = "$audioFile".'__'.$this->sessionId."__0.$extension";
-
-            if (is_file($file)) {
-                return $file;
-            }
-
-            continue;
-        }
-
-        return '';
-    }
-
-    /**
-     * Get the URL for the audio file. Return null if the file doesn't exists.
-     *
-     * @todo fix path
-     *
-     * @param bool $loadFromDatabase
-     *
-     * @return string
-     */
-    public function getFileUrl($loadFromDatabase = false)
-    {
-        return null;
-
-        $filePath = $this->getAbsoluteFilePath($loadFromDatabase);
-
-        if (empty($filePath)) {
-            return null;
-        }
-
-        return str_replace(
-            api_get_path(SYS_COURSE_PATH),
-            api_get_path(WEB_COURSE_PATH),
-            $filePath
-        );
     }
 
     public static function saveAssetInQuestionAttempt($attemptId)

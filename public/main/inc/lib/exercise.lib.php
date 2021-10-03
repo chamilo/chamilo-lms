@@ -212,13 +212,6 @@ class ExerciseLib
                         //@todo pass this as a parameter
                         global $exercise_stat_info;
                         if (!empty($exercise_stat_info)) {
-                            $objQuestionTmp->initFile(
-                                api_get_session_id(),
-                                api_get_user_id(),
-                                $exercise_stat_info['exe_exo_id'],
-                                $exercise_stat_info['exe_id']
-                            );
-
                             echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
                         }
                     }

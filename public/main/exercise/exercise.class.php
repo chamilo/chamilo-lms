@@ -3582,21 +3582,6 @@ class Exercise
             $nbrAnswers = 1;
         }
 
-        $generatedFile = '';
-        if (ORAL_EXPRESSION == $answerType) {
-            $exe_info = Event::get_exercise_results_by_attempt($exeId);
-            $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
-            /** @var OralExpression $objQuestionTmp */
-            $objQuestionTmp->initFile(
-                api_get_session_id(),
-                isset($exe_info['exe_user_id']) ? $exe_info['exe_user_id'] : api_get_user_id(),
-                isset($exe_info['exe_exo_id']) ? $exe_info['exe_exo_id'] : $this->getId(),
-                isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId
-            );
-
-            $generatedFile = $objQuestionTmp->getFileUrl();
-        }
-
         $user_answer = '';
         // Get answer list for matching
         $sql = "SELECT iid, answer
@@ -4984,7 +4969,7 @@ class Exercise
                                 $choice,
                                 0,
                                 0,
-                                $objQuestionTmp->getFileUrl(true),
+                                null,
                                 $results_disabled,
                                 $questionScore
                             );
@@ -5383,7 +5368,7 @@ class Exercise
                                     $choice,
                                     $exeId,
                                     $questionId,
-                                    $objQuestionTmp->getFileUrl(),
+                                    null,
                                     $results_disabled,
                                     $questionScore
                                 ).'</td>
@@ -6002,8 +5987,7 @@ class Exercise
                     0,
                     $this->id,
                     false,
-                    $questionDuration,
-                    $objQuestionTmp->getAbsoluteFilePath()
+                    $questionDuration
                 );
 
                 if (false !== $questionAttemptId) {
@@ -6113,7 +6097,7 @@ class Exercise
             'open_question' => $arrques,
             'open_answer' => $arrans,
             'answer_type' => $answerType,
-            'generated_oral_file' => $generatedFile,
+            'generated_oral_file' => '',
             'user_answered' => $userAnsweredQuestion,
             'correct_answer_id' => $correctAnswerId,
             'answer_destination' => $answerDestination,

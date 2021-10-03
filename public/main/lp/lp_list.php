@@ -51,19 +51,6 @@ $session = api_get_session_entity($sessionId);
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
 $introduction = '';
-/* Introduction section (editable by course admins) */
-/*$introduction = Display::return_introduction_section(
-    TOOL_LEARNPATH,
-    [
-        'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH)
-            .api_get_course_path().'/document/',
-        'CreateDocumentDir' => '../..'.api_get_path(REL_COURSE_PATH)
-            .api_get_course_path().'/document/',
-        'BaseHref' => api_get_path(WEB_COURSE_PATH)
-            .api_get_course_path().'/',
-    ]
-);*/
-
 $message = '';
 $actions = '';
 $allowCategory = true;

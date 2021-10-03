@@ -71,7 +71,6 @@
         <file name="public/main/inc/lib/course.lib.php"/>
         <file name="public/main/inc/lib/course_category.lib.php"/>
 <!--        <file name="public/main/inc/lib/course_description.lib.php"/>-->
-<!--        <file name="public/main/inc/lib/course_home.lib.php"/>-->
         <file name="public/main/inc/lib/course_request.lib.php"/>
         <file name="public/main/inc/lib/display.lib.php"/>
 <!--        <file name="public/main/inc/lib/document.lib.php"/>-->

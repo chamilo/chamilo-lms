@@ -30,7 +30,6 @@ use Event;
 use Exercise;
 use ExtraFieldValue;
 use Fhaculty\Graph\Graph;
-use Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

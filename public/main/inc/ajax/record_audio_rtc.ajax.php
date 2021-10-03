@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\AttemptFeedback;
-use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -60,7 +59,6 @@ switch ($type) {
 
         $attemptFeedback = (new AttemptFeedback())
             ->setAsset($asset);
-        ;
 
         /** @var TrackExercise $exeAttempt */
         $exeAttempt = Container::getTrackExerciseRepository()->find($trackExerciseId);

@@ -93,8 +93,6 @@ class OralExpression extends Question
 
     /**
      * Return the HTML code to show the RecordRTC/Wami recorder.
-     *
-     * @return string
      */
     public function returnRecorder(int $trackExerciseId): string
     {

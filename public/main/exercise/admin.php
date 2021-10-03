@@ -244,10 +244,13 @@ if (api_is_in_gradebook()) {
     ];
 }
 
-$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Tests')];
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Tests'),
+];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
-        'url' => 'admin.php?exerciseId='.$objExercise->getId().'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$objExercise->getId().'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 } else {

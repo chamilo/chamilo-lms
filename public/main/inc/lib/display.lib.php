@@ -129,6 +129,13 @@ class Display
 
         if (empty($interbreadcrumb)) {
             $interbreadcrumb = [];
+        } else {
+            $interbreadcrumb = array_filter(
+                $interbreadcrumb,
+                function ($item) {
+                    return isset($item['name']) && !empty($item['name']);
+                }
+            );
         }
 
         $params['legacy_javascript'] = $htmlHeadXtra;

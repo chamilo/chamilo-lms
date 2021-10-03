@@ -55,8 +55,8 @@
     "Administration": "",
     "Reporting": "Raportointi",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "Rekister\u00f6idy",
+    "Forgot your password ?": "Unohditko salasanasi?",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "Kurssi",
     "Session": "Sessio",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "K\u00e4ytt\u00e4j\u00e4tunnus",
+    "Password": "Salasana"
 }

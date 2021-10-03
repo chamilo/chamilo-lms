@@ -55,8 +55,8 @@
     "Administration": "Amministrazione",
     "Reporting": "Registro",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "Iscrivi",
+    "Forgot your password ?": "Password dimenticata?",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "Corso",
     "Session": "Sessione",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "Nome utente",
+    "Password": "Password"
 }

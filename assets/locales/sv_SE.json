@@ -55,8 +55,8 @@
     "Administration": "Administration",
     "Reporting": "Rapportering",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "Registrera",
+    "Forgot your password ?": "",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "Kurs",
     "Session": "Period",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "Anv\u00e4ndarnamn",
+    "Password": "L\u00f6senord"
 }

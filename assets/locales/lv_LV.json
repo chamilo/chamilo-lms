@@ -55,8 +55,8 @@
     "Administration": "Administr\u0113\u0161ana",
     "Reporting": "Atskaites",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "Re\u0123istr\u0113t",
+    "Forgot your password ?": "Aizmirs\u0101t savu paroli?",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "Kursa nosaukums",
     "Session": "Sesija",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "",
+    "Password": "Parole"
 }

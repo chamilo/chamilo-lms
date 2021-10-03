@@ -24071,3 +24071,11 @@ msgstr ""
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
 msgstr ""
 
+msgid "Signed in as"
+msgstr "Eingeloggt als"
+
+msgid "Remember me"
+msgstr "Eingeloggt bleiben"
+
+msgid "Register oneself"
+msgstr "Registrieren"

@@ -55,8 +55,8 @@
     "Administration": "\u0394\u03b9\u03b1\u03c7\u03b5\u03af\u03c1\u03b9\u03c3\u03b7",
     "Reporting": "\u0391\u03bd\u03b1\u03c6\u03bf\u03c1\u03ad\u03c2",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "\u0395\u03b3\u03b3\u03c1\u03b1\u03c6\u03ae",
+    "Forgot your password ?": "\u039e\u03b5\u03c7\u03ac\u03c3\u03b1\u03c4\u03b5 \u03c4\u03bf\u03bd \u03ba\u03c9\u03b4\u03b9\u03ba\u03cc \u03c3\u03b1\u03c2?",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "\u039c\u03ac\u03b8\u03b7\u03bc\u03b1",
     "Session": "\u03a0\u03b5\u03c1\u03af\u03bf\u03b4\u03bf\u03c2",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "\u038c\u03bd\u03bf\u03bc\u03b1 \u03c7\u03c1\u03ae\u03c3\u03c4\u03b7",
+    "Password": "\u03a3\u03c5\u03bd\u03b8\u03b7\u03bc\u03b1\u03c4\u03b9\u03ba\u03cc"
 }

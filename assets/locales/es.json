@@ -55,8 +55,8 @@
     "Administration": "Administraci\u00f3n",
     "Reporting": "Informes",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "Inscribir",
+    "Forgot your password ?": "\u00bfHa olvidado su contrase\u00f1a?",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "Curso",
     "Session": "Sesi\u00f3n",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "Nombre de usuario",
+    "Password": "Contrase\u00f1a"
 }

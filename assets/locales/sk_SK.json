@@ -55,8 +55,8 @@
     "Administration": "Administr\u00e1cia",
     "Reporting": "Hl\u00e1senie",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "Registrova\u0165",
+    "Forgot your password ?": "Zabudli ste heslo?",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "Kurz",
     "Session": "Stretnutie",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "Pou\u017e\u00edvate\u013esk\u00e9 meno",
+    "Password": "Heslo"
 }

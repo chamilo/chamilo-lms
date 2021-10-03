@@ -55,8 +55,8 @@
     "Administration": "Adminisztr\u00e1ci\u00f3",
     "Reporting": "Jelent\u00e9s",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "Regisztr\u00e1ci\u00f3",
+    "Forgot your password ?": "",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "Kurzus",
     "Session": "Munkamenet",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "",
+    "Password": "Jelsz\u00f3"
 }

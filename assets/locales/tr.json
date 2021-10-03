@@ -55,8 +55,8 @@
     "Administration": "Y\u00f6netim",
     "Reporting": "",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "Kay\u0131t ol",
+    "Forgot your password ?": "\u015eifrenizi mi unuttunuz ?",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "",
     "Session": "",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "",
+    "Password": "\u015eifre"
 }

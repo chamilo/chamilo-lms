@@ -16,7 +16,7 @@
            tag="a"
            class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent pr-6"
         >
-          Home
+          {{ $t('Home') }}
         </router-link>
 
         <router-link
@@ -24,7 +24,7 @@
             tag="a"
             class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent pr-6"
         >
-          My courses
+          {{ $t('My courses') }}
         </router-link>
       </div>
     </div>
@@ -98,7 +98,7 @@
           <img
               class="h-full w-full object-cover"
               :src="userAvatar + '?w=80&h=80&fit=crop'"
-              alt="Your avatar"
+              :alt="$t('Your avatar')"
           />
         </button>
 
@@ -132,7 +132,7 @@
               <q-list dense>
                 <q-item class="GL__menu-link-signed-in">
                   <q-item-section>
-                    <div>Signed in as <strong>{{ currentUser.username }}</strong></div>
+                    <div>{{ $t('Signed in as') }}<strong>{{ currentUser.username }}</strong></div>
                   </q-item-section>
                 </q-item>
                 <!--                <q-separator />-->
@@ -146,15 +146,15 @@
                 <!--                </q-item>-->
                 <q-separator />
                 <q-item replace :to="'/main/messages/index.php'" clickable class="">
-                  <q-item-section>Inbox</q-item-section>
+                  <q-item-section>{{ $t('Inbox') }}</q-item-section>
                 </q-item>
                 <q-item href="/account/home" tag="a" class="">
                   <q-item-section>
-                    Your profile
+                    {{ $t('Your profile') }}
                   </q-item-section>
                 </q-item>
                 <q-item href="/account/edit" tag="a"  class="">
-                  <q-item-section>Settings</q-item-section>
+                  <q-item-section>{{ $t('Settings') }}</q-item-section>
                 </q-item>
 <!--                href="/logout"-->
                 <q-item
@@ -162,7 +162,7 @@
 
                         tag="a" clickable class="">
                   <q-item-section>
-                    Sign out
+                    {{ $t('Logout') }}
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -174,7 +174,7 @@
             :to="'/login'"
             tag="button"
            class="btn btn-primary">
-          Sign in
+          {{ $t('Sign in') }}
         </router-link>
       </div>
     </div>

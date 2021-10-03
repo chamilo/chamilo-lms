@@ -24073,3 +24073,9 @@ msgstr "Show the result to the learner: Show the score, the learner's choice and
 
 msgid "Signed in as"
 msgstr "Signed in as"
+
+msgid "Remember me"
+msgstr "Remember me"
+
+msgid "Register oneself"
+msgstr "Register oneself"

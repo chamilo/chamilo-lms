@@ -43,8 +43,8 @@
     "Content is required": "Content is required",
     "Profile": "Mise \u00e0 jour du profil",
     "Inbox": "Bo\u00eete de r\u00e9ception",
-    "Signed in as": "Signed in as",
-    "Settings": "Propri\u00e9t\u00e9s du cours",
+    "Signed in as": "Connect\u00e9 comme",
+    "Settings": "Param\u00e8tres",
     "Sign out": "Sign out",
     "My sessions": "Mes sessions",
     "Events": "\u00c9v\u00e9nements",
@@ -54,9 +54,9 @@
     "Sessions": "Sessions",
     "Administration": "Administration",
     "Reporting": "Suivi",
-    "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "Inscrire",
+    "Remember me": "Se souvenir de moi",
+    "Forgot your password ?": "Vous avez oubli\u00e9 votre mot de passe?",
+    "Register oneself": "Cr\u00e9er un compte",
     "Share with User": "Share with User",
     "Course": "Cours",
     "Session": "Session",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "Nom d'utilisateur",
+    "Password": "Mot de passe"
 }

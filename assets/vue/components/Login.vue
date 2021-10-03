@@ -3,19 +3,19 @@
     <input type="hidden" name="remember" value="true" />
     <div class="rounded-md shadow-sm -space-y-px">
       <div>
-        <label for="login" class="sr-only">Username</label>
+        <label for="login" class="sr-only">{{ $t('Username') }}</label>
         <input id="login" v-model="login" name="login" type="text" autocomplete="login" required=""
                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-               placeholder="Username"
+               :placeholder="$t('Username')"
                tabindex="1"
         />
       </div>
       <div>
-        <label for="password" class="sr-only">Password</label>
+        <label for="password" class="sr-only">{{ $t('Password') }}</label>
         <input id="password" v-model="password" name="password" type="password" autocomplete="current-password"
                required=""
                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-               placeholder="Password"
+               :placeholder="$t('Password')"
                tabindex="2"
         />
       </div>
@@ -37,7 +37,7 @@
            class="font-medium text-ch-primary hover:text-ch-primary-dark"
            tabindex="5"
         >
-          {{ $t('Forgot your password?') }}
+          {{ $t('Forgot your password ?') }}
         </a>
       </div>
     </div>
@@ -70,7 +70,7 @@
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </span>
-        {{ $t('Register') }}
+        {{ $t('Register oneself') }}
       </a>
     </div>
   </form>

@@ -24073,3 +24073,9 @@ msgstr "Montrer le résultat à l'apprenant : Montrer le score, le choix de l'ap
 
 msgid "Signed in as"
 msgstr "Connecté comme"
+
+msgid "Remember me"
+msgstr "Se souvenir de moi"
+
+msgid "Register oneself"
+msgstr "Créer un compte"

@@ -55,8 +55,8 @@
     "Administration": "\u0e01\u0e32\u0e23\u0e1a\u0e23\u0e34\u0e2b\u0e32\u0e23\u0e08\u0e31\u0e14\u0e01\u0e32\u0e23\u0e23\u0e30\u0e1a\u0e1a",
     "Reporting": "",
     "Remember me": "Remember me",
-    "Forgot your password?": "Forgot your password?",
-    "Register": "\u0e25\u0e07\u0e17\u0e30\u0e40\u0e1a\u0e35\u0e22\u0e19",
+    "Forgot your password ?": "",
+    "Register oneself": "Register oneself",
     "Share with User": "Share with User",
     "Course": "",
     "Session": "",
@@ -119,5 +119,7 @@
     "You don't have course content": "You don't have course content",
     "You don't have any course yet": "You don't have any course yet",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you": "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you",
-    "You don't have any session yet": "You don't have any session yet"
+    "You don't have any session yet": "You don't have any session yet",
+    "Username": "",
+    "Password": "\u0e23\u0e2b\u0e31\u0e2a\u0e1c\u0e48\u0e32\u0e19"
 }

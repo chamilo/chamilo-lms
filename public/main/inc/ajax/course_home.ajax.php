@@ -1,8 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CTool;
-use ChamiloSession as Session;
+/* For licensing terms, see /license.txt */
 
 // @todo refactor this script, create a class that manage the jqgrid requests
 /**

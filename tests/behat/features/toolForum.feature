@@ -51,7 +51,6 @@ Feature: Forum tool
     And I follow "Forum Test"
     Then I follow "Thread One"
     Then I follow "Delete"
-    And I confirm the popup
     And wait for the page to be loaded
     Then I should see "Thread deleted"
 

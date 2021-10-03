@@ -176,6 +176,11 @@ class Version20191101132000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_tool_intro;');
         }
 
+        $this->addSql("DELETE FROM c_tool_intro WHERE id = '0' ");
+
+        // Migrate only course intro.
+        $this->addSql("DELETE FROM c_tool_intro WHERE id <> 'course_homepage'  ");
+
         $this->addSql('ALTER TABLE c_tool_intro CHANGE id id VARCHAR(255) DEFAULT NULL');
 
         if (!$table->hasColumn('c_tool_id')) {

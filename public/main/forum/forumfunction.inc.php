@@ -757,17 +757,6 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
         // Update.
         $repo->update($forum);
 
-        if (isset($upload_ok)) {
-            if ($has_attachment) {
-                //$params['forum_image'] = $new_file_name;
-            }
-        }
-
-        if (isset($values['remove_picture']) && 1 == $values['remove_picture']) {
-            /*$params['forum_image'] = '';
-            deleteForumImage($forum);*/
-        }
-
         // Move groups from one group to another
         if (isset($values['group_forum']) && false) {
             $forumData = get_forums($values['forum_id']);
@@ -786,9 +775,6 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
         ];
         Event::registerLog($logInfo);
     } else {
-        if ($image_moved) {
-            $new_file_name = isset($new_file_name) ? $new_file_name : '';
-        }
         $forum
             ->setParent($forumCategory)
             ->addCourseLink($course, $session);
@@ -839,33 +825,31 @@ function deletePost(CForumPost $post): void
 {
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $em = Database::getManager();
-    if ($post) {
-        $em
-            ->createQuery('
-                UPDATE ChamiloCourseBundle:CForumPost p
-                SET p.postParent = :parent_of_deleted_post
-                WHERE
-                    p.postParent = :post AND
-                    p.thread = :thread_of_deleted_post AND
-                    p.forum = :forum_of_deleted_post
-            ')
-            ->execute([
-                'parent_of_deleted_post' => $post->getPostParent(),
-                'post' => $post->getIid(),
-                'thread_of_deleted_post' => $post->getThread() ? $post->getThread()->getIid() : 0,
-                'forum_of_deleted_post' => $post->getForum(),
-            ]);
+    $em
+        ->createQuery('
+            UPDATE ChamiloCourseBundle:CForumPost p
+            SET p.postParent = :parent_of_deleted_post
+            WHERE
+                p.postParent = :post AND
+                p.thread = :thread_of_deleted_post AND
+                p.forum = :forum_of_deleted_post
+        ')
+        ->execute([
+            'parent_of_deleted_post' => $post->getPostParent(),
+            'post' => $post->getIid(),
+            'thread_of_deleted_post' => $post->getThread() ? $post->getThread()->getIid() : 0,
+            'forum_of_deleted_post' => $post->getForum(),
+        ]);
 
-        $attachments = $post->getAttachments();
-        if (!empty($attachments)) {
-            foreach ($attachments as $attachment) {
-                $em->remove($attachment);
-            }
+    $attachments = $post->getAttachments();
+    if (!empty($attachments)) {
+        foreach ($attachments as $attachment) {
+            $em->remove($attachment);
         }
-
-        $em->remove($post);
-        $em->flush();
     }
+
+    $em->remove($post);
+    $em->flush();
 
     $lastPostOfTheTread = getLastPostOfThread($post->getThread()->getIid());
 

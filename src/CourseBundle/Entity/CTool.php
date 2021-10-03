@@ -48,7 +48,7 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
      * @ORM\GeneratedValue
      */
     #[Groups(['ctool:read'])]
-    protected int $iid;
+    protected ?int $iid = null;
 
     /**
      * @ORM\Column(name="name", type="text", nullable=false)
@@ -92,6 +92,7 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
 
     public function __construct()
     {
+        $this->visibility = true;
         $this->position = 0;
     }
 
@@ -117,10 +118,7 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -156,7 +154,7 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    public function getVisibility(): bool
+    public function getVisibility(): ?bool
     {
         return $this->visibility;
     }

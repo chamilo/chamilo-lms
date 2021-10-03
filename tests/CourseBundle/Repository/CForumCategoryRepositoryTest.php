@@ -58,6 +58,6 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         $categoryRepo->delete($category);
 
         $this->assertSame(0, $categoryRepo->count([]));
-        $this->assertSame(0, $forumRepo->count([]));
+        $this->assertSame(1, $forumRepo->count([]));
     }
 }

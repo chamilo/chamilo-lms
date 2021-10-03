@@ -8,14 +8,14 @@ module.exports = {
       },
       colors: {
         'ch-primary': {
-          DEFAULT: '#2e75a3',
-          'dark': '#1c6391',
-          'light': '#9cc2da',
+          DEFAULT: '#84bd00', //default to '#2e75a3'
+          'dark': '#649d00', //default to '#1c6391',
+          'light': '#84bd00', //default '#9cc2da'
         },
         'ch-secondary': {
-          DEFAULT: '#fd6600',
-          'dark': '#ea5300',
-          'light': '#ff7913',
+          DEFAULT: '#772583', //default to '#fd6600',
+          'dark': '#570563', //default to '#ea5300',
+          'light': '#772583', //default to '#ff7913',
         },
         'ch-support-1': 'rgba(46, 117, 163, 0.08)',
         'ch-support-2': '#f5f8fa',

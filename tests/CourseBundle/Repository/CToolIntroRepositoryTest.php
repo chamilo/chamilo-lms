@@ -44,6 +44,9 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertNotEmpty($intro->getIntroText());
+        $this->assertNotNull($intro->getIid());
+        $this->assertNotEmpty($intro->getResourceName());
+
         $this->assertSame(1, $repo->count([]));
         $repo->delete($intro);
         $this->assertSame(0, $repo->count([]));

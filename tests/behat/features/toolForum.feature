@@ -51,8 +51,9 @@ Feature: Forum tool
     And I follow "Forum Test"
     Then I follow "Thread One"
     Then I follow "Delete"
+    And I confirm the popup
     And wait for the page to be loaded
-    Then I should see "Thread deleted"
+    Then I should see "deleted"
 
 # This test is commented because to quote a message is necessary load HTML code inside of textarea.
 # And this breaks the page for Behat

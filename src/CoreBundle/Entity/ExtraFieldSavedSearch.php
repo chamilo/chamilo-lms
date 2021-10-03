@@ -41,7 +41,7 @@ class ExtraFieldSavedSearch
     /**
      * @ORM\Column(name="value", type="array", nullable=true, unique=false)
      */
-    protected ?array $value;
+    protected $value;
 
     public function __construct()
     {
@@ -65,7 +65,7 @@ class ExtraFieldSavedSearch
         return $this;
     }
 
-    public function getValue(): ?array
+    public function getValue()
     {
         return $this->value;
     }

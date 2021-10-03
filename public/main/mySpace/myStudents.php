@@ -559,15 +559,20 @@ switch ($action) {
     case 'send_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
         if ($isBoss || api_is_platform_admin()) {
-            $subject = get_lang('Legal conditions');
-            $content = sprintf(
-                get_lang(
-                    'Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s'
-                ),
-                api_get_path(WEB_PATH)
-            );
-            MessageManager::send_message_simple($studentId, $subject, $content);
-            Display::addFlash(Display::return_message(get_lang('Sent')));
+            LegalManager::sendLegal($studentId);
+            /*
+                $currentUserInfo = api_get_user_info();
+                $subject = get_lang('SendLegalSubject');
+                $linkLegal = api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php";
+                $content = sprintf(
+                    get_lang('SendTermsDescriptionToUrlX'),
+                    $user_info['complete_name'],
+                    "<a href=\"".$linkLegal."\">".$linkLegal."</a>",
+                    $currentUserInfo['complete_name']
+                );
+                MessageManager::send_message_simple($student_id, $subject, $content);
+                Display::addFlash(Display::return_message(get_lang('Sent')));
+            */
         }
         break;
     case 'delete_legal':

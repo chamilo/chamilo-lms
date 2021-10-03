@@ -1092,6 +1092,10 @@ function dateDiffInWeeks($date1, $date2)
     if (empty($date1) || empty($date2)) {
         return 0;
     }
+    // it validates a correct date format Y-m-d
+    if (false === DateTime::createFromFormat('Y-m-d', $date1) || false === DateTime::createFromFormat('Y-m-d', $date2)) {
+        return 0;
+    }
 
     if ($date1 > $date2) {
         return dateDiffInWeeks($date2, $date1);
@@ -1156,20 +1160,20 @@ foreach ($headers as $header => $value) {
 }
 
 $button = '';
+$userReportButton = '';
 if ($userToLoad) {
-    /*$button = Display::url(
+    $button = Display::url(
         get_lang('Ofaj End Of LearnPath'),
-        api_get_path(WEB_CODE_PATH).'messages/new_message.php?prefill=ofaj&send_to_user='.$userToLoad,
+        api_get_path(WEB_PATH).'resources/messages/new',
         ['class' => 'btn btn-default']
     );
-    $button .= '<br /><br />';*/
+    $button .= '<br /><br />';
+    $userReportButton = Display::url(
+        get_lang('Diagnostic Validate LearningPath'),
+        api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userToLoad,
+        ['class' => 'btn btn-primary']
+    );
 }
-
-$userReportButton = Display::url(
-    get_lang('Diagnostic Validate LearningPath'),
-    api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userToLoad,
-    ['class' => 'btn btn-primary']
-);
 
 $tpl->assign('grid', $grid.$button.$table->toHtml().$userReportButton);
 $tpl->assign('grid_js', $griJs);

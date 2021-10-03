@@ -29,6 +29,11 @@ class LegalManager
     {
         $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
+
+        if (false === $last) {
+            $last = [];
+        }
+
         $type = (int) $type;
         $time = time();
 
@@ -56,8 +61,8 @@ class LegalManager
             }
         }
 
-        if ($last['content'] != $content || !empty($changeList)) {
-            $version = self::getLastVersion($language);
+        if ((isset($last['content']) && $last['content'] != $content) || !empty($changeList) || empty($last)) {
+            $version = (int) self::getLastVersion($language);
             $version++;
             $params = [
                 'language_id' => $language,
@@ -73,7 +78,7 @@ class LegalManager
             self::updateExtraFields($id, $extraFieldValuesToSave);
 
             return $id;
-        } elseif ($last['type'] != $type && $language == $last['language_id']) {
+        } elseif ((isset($last['type']) && $last['type'] != $type) && $language == $last['language_id']) {
             // Update
             $id = $last['id'];
             $params = [
@@ -160,7 +165,6 @@ class LegalManager
                 LIMIT 1 ";
         $result = Database::query($sql);
         $result = Database::fetch_array($result, 'ASSOC');
-
         if (isset($result['content'])) {
             $result['content'] = self::replaceTags($result['content']);
         }
@@ -187,9 +191,9 @@ class LegalManager
         }
 
         $sql = "SELECT version FROM $table
-                WHERE 
-                    language_id = $language AND 
-                    version = $version                
+                WHERE
+                    language_id = $language AND
+                    version = $version
                 LIMIT 1 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -309,10 +313,10 @@ class LegalManager
         $column = (int) $column;
 
         $sql = "SELECT version, original_name as language, content, changes, type, FROM_UNIXTIME(date)
-                FROM $table 
+                FROM $table
                 INNER JOIN $lang_table l
-                ON (language_id = l.id) 
-                ORDER BY language, version ASC 
+                ON (language_id = l.id)
+                ORDER BY language, version ASC
                 LIMIT $from, $number_of_items ";
 
         $result = Database::query($sql);

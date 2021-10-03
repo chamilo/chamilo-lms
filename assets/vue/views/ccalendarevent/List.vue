@@ -163,6 +163,11 @@ export default {
     }
 
     // @todo fix locale connection between fullcalendar + chamilo
+
+    if ('en_US' === locale.value) {
+      locale.value = 'en';
+    }
+
     if ('fr_FR' === locale.value) {
       locale.value = 'fr';
     }

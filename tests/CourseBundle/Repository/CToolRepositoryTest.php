@@ -42,7 +42,7 @@ class CToolRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($cTool);
         $em->persist($cTool);
         $em->flush();
-        
+
         $this->assertSame($defaultCount + 1, $repo->count([]));
     }
 

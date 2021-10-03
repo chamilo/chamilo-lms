@@ -86,7 +86,7 @@ class CToolIntro extends AbstractResource implements ResourceInterface, Resource
 
     public function __toString(): string
     {
-        return $this->getIntroText();
+        return (string) $this->getIid();
     }
 
     public function getIid(): int
@@ -125,11 +125,12 @@ class CToolIntro extends AbstractResource implements ResourceInterface, Resource
 
     public function getResourceName(): string
     {
-        return $this->getIntroText();
+        return (string) $this->getIid();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setIntroText($name);
+        //return $this->setIntroText($name);
+        return $this;
     }
 }

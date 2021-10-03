@@ -58,19 +58,19 @@
   }
 
   .btn-primary {
-    @apply text-white bg-ch-primary hover:bg-ch-primary-dark focus:ring-ch-primary-dark;
+    @apply text-white bg-ch-primary hover:bg-ch-primary-dark focus:ring-ch-primary-light;
   }
 
   .btn-warning {
-    @apply text-white bg-yellow-400 hover:bg-yellow-800 focus:ring-yellow-500;
+    @apply text-white bg-ch-warning hover:bg-ch-warning-dark focus:bg-ch-warning-light;
   }
 
   .btn-success {
-    @apply text-white bg-green-400 hover:bg-green-800;
+    @apply text-white bg-ch-success hover:bg-ch-success-dark focus:bg-ch-success-light;
   }
 
   .btn-danger {
-    @apply text-white bg-ch-error hover:bg-ch-error-dark;
+    @apply text-white bg-ch-error hover:bg-ch-error-dark focus:bg-ch-error-light;
   }
 
   // Buttons with icons.

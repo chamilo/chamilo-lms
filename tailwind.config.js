@@ -8,13 +8,14 @@ module.exports = {
       },
       colors: {
         'ch-primary': {
-          DEFAULT: '#2e75a3',
-          'dark': '#1c6391',
-          'light': '#9cc2da',
+          DEFAULT: '#84bd00', //default to '#2e75a3'
+          'dark': '#649d00', //default to '#1c6391',
+          'light': '#84bd00', //default '#9cc2da'
         },
         'ch-secondary': {
-          DEFAULT: '#fd6600',
-          'dark': '#ea5300',
+          DEFAULT: '#772583', //default to '#fd6600',
+          'dark': '#570563', //default to '#ea5300',
+          'light': '#772583', //default to '#ff7913',
         },
         'ch-support-1': 'rgba(46, 117, 163, 0.08)',
         'ch-support-2': '#f5f8fa',
@@ -22,13 +23,26 @@ module.exports = {
         'ch-support-4': '#244d67',
         'ch-support-5': '#e06410',
         'ch-support-6': '#faf7f5',
-        'ch-warning': '#eddf0e',
-        'ch-success': '#a4dc2d',
+        'ch-warning': {
+          DEFAULT: '#eddf0e',
+          'dark': '#dacc0a',
+          'light': '#ffef1f',
+        },
+        'ch-success': {
+          DEFAULT: '#a4dc2d',
+          'dark': '#91c91a',
+          'light': '#b7ef3f',
+        },
         'ch-error': {
           DEFAULT: '#ef3e3e',
           'dark': '#dc2b2b',
+          'light': '#ff4f4f',
         },
-        'ch-info': '#3e9aef'
+        'ch-info': {
+          DEFAULT: '#3e9aef',
+          'dark': '#2b87dc',
+          'light': '#4fadff',
+        }
       }
     },
   },

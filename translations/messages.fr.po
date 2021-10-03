@@ -11184,7 +11184,7 @@ msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditi
 msgstr "En cliquant sur le bouton \"Valider mon inscription\" ci-dessous, vous marquez votre accord avec les conditions d'utilisation de ce site."
 
 msgid "Forgot your password ?"
-msgstr "Vous avez oublié votre mot de passe?"
+msgstr "Mot de passe oublié ?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."
 msgstr "Entrez votre nom d'utilisateur ou l'adresse avec laquelle vous vous êtes enregistré et nous vous enverrons votre mot de passe par courriel."

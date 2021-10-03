@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\AttemptFeedback;
 use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
@@ -90,11 +91,11 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                             $em->persist($asset);
                             $em->flush();
 
-                            $attemptFile = (new AttemptFile())
+                            $attempFeedback = (new AttemptFeedback())
                                 ->setAsset($asset)
                             ;
-                            $attempt->addAttemptFile($attemptFile);
-                            $em->persist($attemptFile);
+                            $attempt->addAttemptFeedback($attempFeedback);
+                            $em->persist($attempFeedback);
                             $em->flush();
 
                             /*$sql = "UPDATE c_document

@@ -1092,6 +1092,10 @@ function dateDiffInWeeks($date1, $date2)
     if (empty($date1) || empty($date2)) {
         return 0;
     }
+    // it validates a correct date format Y-m-d
+    if (false === DateTime::createFromFormat('Y-m-d', $date1) || false === DateTime::createFromFormat('Y-m-d', $date2)) {
+        return 0;
+    }
 
     if ($date1 > $date2) {
         return dateDiffInWeeks($date2, $date1);

@@ -39,12 +39,26 @@ export default {
     }),
     items() {
       console.log('Breadcrumb.vue');
+      console.log(this.$route.name);
+
       const items = [
         {
           text: this.$t('Home'),
           href: '/'
         }
       ];
+
+      const list = [
+        'CourseHome',
+        'MyCourses',
+        'MySessions',
+        'Home',
+        'CCalendarEventList',
+      ];
+
+      if (list.includes(this.$route.name)) {
+        return items;
+      }
 
       // Course
       /*if (this.$route.query.cid) {
@@ -54,7 +68,9 @@ export default {
           href: '/course/' + this.$route.query.cid + '/home'
         });
       }*/
+
       if (this.legacy) {
+        // Checking data from legacy main (1.11.x)
         const mainUrl = window.location.href;
         const mainPath = mainUrl.indexOf("main/");
 
@@ -80,8 +96,8 @@ export default {
       }
 
       console.log(items);
-      console.log('resourceNode');
       if (this.resourceNode) {
+        console.log('resourceNode');
         let folderParams = this.$route.query;
         var queryParams = '';
         for (var key in folderParams) {
@@ -99,9 +115,9 @@ export default {
         const lastItem = matched[matched.length - 1];
 
         // Get course
-        let courseId = document.body.getAttribute("data-course-id")
+        let courseId = this.$route.query.cid;
         if (courseId) {
-          let courseCode = document.body.getAttribute("data-course-code")
+          let courseCode = this.$route.query.cid;
           items.push({
             text:  courseCode,
             href: '/course/' + courseId + '/home?'+queryParams

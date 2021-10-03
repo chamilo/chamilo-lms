@@ -330,7 +330,6 @@ export default {
     this.legacyContent = '';
     let isAuthenticated = false;
     if (!isEmpty(window.user)) {
-      //console.log('is logged in as ' + window.user.username);
       this.user = window.user;
       isAuthenticated = true;
     }

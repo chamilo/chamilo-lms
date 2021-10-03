@@ -78,9 +78,12 @@ class Template
         // Page title
         $this->title = $title;
         global $interbreadcrumb;
-        $interbreadcrumb[] = ['url' => '#', 'name' => $title];
+
+        if (!empty($title)) {
+            $interbreadcrumb[] = ['url' => '#', 'name' => $title];
+        }
+
         $this->show_learnpath = $show_learnpath;
-        //$this->setResponseCode($responseCode);
 
         if (empty($this->show_learnpath)) {
             $origin = api_get_origin();

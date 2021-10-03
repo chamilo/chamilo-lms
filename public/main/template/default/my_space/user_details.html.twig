@@ -31,8 +31,11 @@
                     {{ display.card_widget('First login in platform'|trans, user_extra.first_connection, 'calendar') }}
                     {{ display.card_widget('Latest login in platform'|trans, user_extra.last_connection, 'calendar') }}
 
-                    {% if user_extra.legal %}
-                        {{ display.card_widget('Legal accepted'|trans, user_extra.legal.datetime, 'gavel', user_extra.legal.icon) }}
+                    {% if user_extra.legal is defined %}
+                        {{ display.card_widget(user_extra.legal.label, user_extra.legal.url_send, user_extra.legal.datetime) }}
+                    {% endif %}
+                    {% if user_extra.certificate is defined %}
+                        {{ display.card_widget(user_extra.certificate.label, user_extra.certificate.content) }}
                     {% endif %}
                 </div>
             </div>

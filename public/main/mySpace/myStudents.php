@@ -550,11 +550,11 @@ switch ($action) {
         if ($myCertificate) {
             $certificate = new Certificate($myCertificate['id'], $studentId);
             $certificate->deleteCertificate(true);
+            // Create new one
+            $certificate = new Certificate(0, $studentId);
+            $certificate->generatePdfFromCustomCertificate();
+            exit;
         }
-        // Create new one
-        $certificate = new Certificate(0, $studentId);
-        $certificate->generatePdfFromCustomCertificate();
-        exit;
         break;
     case 'send_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
@@ -1003,11 +1003,20 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
         }
     }
     $userInfoExtra['legal'] = [
-        'icon' => $icon,
+        'label' => get_lang('Legal accepted').$icon,
         'datetime' => $timeLegalAccept,
         'url_send' => $btn,
     ];
 }
+$iconCertificate = ' '.Display::url(
+        get_lang('Generate'),
+        api_get_self().'?action=generate_certificate&student='.$studentId.'&cid='.$courseId.'&course='.$courseCode,
+        ['class' => 'btn btn-primary btn-xs']
+    );
+$userInfoExtra['certificate'] = [
+    'label' => get_lang('Certificate'),
+    'content' => $iconCertificate,
+];
 
 if (isset($_GET['action']) && 'all_attendance' === $_GET['action']) {
     /* Display all attendances */

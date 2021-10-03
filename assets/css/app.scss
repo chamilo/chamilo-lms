@@ -58,19 +58,23 @@
   }
 
   .btn-primary {
-    @apply text-white bg-ch-primary hover:bg-ch-primary-dark focus:ring-ch-primary-light;
+    @apply text-ch-text-primary bg-ch-primary hover:bg-ch-primary-dark focus:ring-ch-primary-light;
+  }
+
+  .btn-secondary {
+    @apply text-ch-text-secondary bg-ch-secondary hover:bg-ch-secondary-dark focus:ring-ch-secondary-light;
   }
 
   .btn-warning {
-    @apply text-white bg-ch-warning hover:bg-ch-warning-dark focus:bg-ch-warning-light;
+    @apply text-ch-text-warning bg-ch-warning hover:bg-ch-warning-dark focus:ring-ch-warning-light;
   }
 
   .btn-success {
-    @apply text-white bg-ch-success hover:bg-ch-success-dark focus:bg-ch-success-light;
+    @apply text-ch-text-success bg-ch-success hover:bg-ch-success-dark focus:ring-ch-success-light;
   }
 
   .btn-danger {
-    @apply text-white bg-ch-error hover:bg-ch-error-dark focus:bg-ch-error-light;
+    @apply text-ch-text-error bg-ch-error hover:bg-ch-error-dark focus:ring-ch-error-light;
   }
 
   // Buttons with icons.
@@ -158,19 +162,19 @@
   }
 
   .alert-info {
-    @apply text-white bg-ch-info;
+    @apply text-ch-text-info bg-ch-info;
   }
 
   .alert-warning {
-    @apply text-gray-900 bg-ch-warning;
+    @apply text-ch-text-warning bg-ch-warning;
   }
 
   .alert-success {
-    @apply text-gray-900 bg-ch-success;
+    @apply text-ch-text-success bg-ch-success;
   }
 
   .alert-danger {
-    @apply text-white bg-ch-error;
+    @apply text-ch-text-error bg-ch-error;
   }
 
   // Tabs
@@ -220,6 +224,13 @@
   // Forms
   input {
     appearance: auto !important;
+    border-width: 1px !important;
+  }
+
+  // Special
+
+  .badge {
+    @apply border-ch-text rounded-sm p-1;
   }
 
   // Learning paths menu brought in to use primary/secondary colors

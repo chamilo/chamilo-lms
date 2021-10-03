@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -35,6 +36,7 @@ class ProfileType extends AbstractType
         $builder
             ->add('firstname', TextType::class, ['label' => 'Firstname', 'required' => true])
             ->add('lastname', TextType::class, ['label' => 'Lastname', 'required' => true])
+            ->add('email', EmailType::class, ['label' => 'Email', 'required' => true])
             //->add('official_code', TextType::class)
             //->add('groups')
             ->add('locale', LocaleType::class, [

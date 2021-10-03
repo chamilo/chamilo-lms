@@ -61,7 +61,12 @@ export default {
         for (let i = 0, len = this.legacy.length; i < len; i += 1) {
           console.log(this.legacy[i]['name']);
           let url = this.legacy[i]['url'].toString();
-          let newUrl = '/' + url.substring(mainPath, url.length);
+
+          let newUrl = url;
+          if (url.indexOf("main/") > 0) {
+            newUrl = '/' + url.substring(mainPath, url.length);
+          }
+
           if (newUrl === '/') {
             newUrl = '#';
           }

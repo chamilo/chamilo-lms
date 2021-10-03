@@ -54,6 +54,14 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         }
         $em->flush();
 
+        $sql = 'SELECT DISTINCT(user_id) FROM admin';
+        $result = $em->getConnection()->executeQuery($sql);
+        $results = $result->fetchAllAssociative();
+        $adminList = [];
+        if (!empty($results)) {
+            $adminList = array_map('intval', array_column($results, 'user_id'));
+        }
+
         // Adding users to the resource node tree.
         $batchSize = self::BATCH_SIZE;
         $counter = 1;
@@ -74,6 +82,10 @@ final class Version20201212114910 extends AbstractMigrationChamilo
                 ->setRoles([])
                 ->setRoleFromStatus($userEntity->getStatus())
             ;
+
+            if (\in_array($userId, $adminList, true)) {
+                $userEntity->addRole('ROLE_ADMIN');
+            }
 
             $creatorId = $userEntity->getCreatorId();
             $creator = null;

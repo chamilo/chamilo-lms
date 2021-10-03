@@ -76,6 +76,10 @@ $repo = Container::getForumRepository();
 
 /** @var CForum $forumEntity */
 $forumEntity = $repo->find($forumId);
+if (null === $forumEntity) {
+    api_not_allowed(true);
+}
+
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
 $isForumOpenByDateAccess = api_is_date_in_date_range($forumEntity->getStartTime(), $forumEntity->getEndTime());

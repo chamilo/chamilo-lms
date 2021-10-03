@@ -9,7 +9,6 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -58,7 +57,7 @@ class CForumThreadRepository extends ResourceRepository
     {
         /** @var CForumThread $resource */
         $posts = $resource->getPosts();
-        $repo = Container::getForumPostRepository();
+        $repo = $this->getEntityManager()->getRepository(CForumPost::class);
         if (!empty($posts)) {
             foreach ($posts as $post) {
                 /** @var CForumPost $post */

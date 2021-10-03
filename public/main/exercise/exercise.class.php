@@ -2925,8 +2925,7 @@ class Exercise
         $sql = "DELETE FROM $table_track_e_exercises
                 WHERE
                   c_id = ".api_get_course_int_id().' AND
-                  exe_exo_id = '.$this->getId()." $sql_where AND
-                  session_id = ".$sessionId;
+                  exe_exo_id = '.$this->getId()." $sql_where $sessionCondition";
         Database::query($sql);
 
         $this->generateStats($this->getId(), api_get_course_info(), $sessionId);

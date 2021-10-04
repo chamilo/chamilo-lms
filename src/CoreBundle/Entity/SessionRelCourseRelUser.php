@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -43,6 +44,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     'course' => 'exact',
     'user.username' => 'partial',
 ])]
+#[ApiFilter(
+    DateFilter::class,
+    properties: ['session.displayStartDate' => null, 'session.displayEndDate' => null]
+)]
 class SessionRelCourseRelUser
 {
     use UserTrait;

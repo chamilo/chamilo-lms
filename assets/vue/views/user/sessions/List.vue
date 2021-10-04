@@ -50,10 +50,16 @@ export default {
         user: "/api/users/" + userId
       }, );
 
-      const sessions = useResult(result, [], (data) => {
-        return data.sessionRelUsers.edges.map(function(edge) {
+      const sessions = useResult(result, [], ({sessionRelCourseRelUsers, sessionRelUsers}) => {
+        const su = sessionRelUsers.edges.map(function(edge) {
           return edge.node.session;
         });
+
+        const scu = sessionRelCourseRelUsers.edges.map(function(edge) {
+          return edge.node.session;
+        })
+
+        return [].concat(su).concat(scu);
       });
 
       return {

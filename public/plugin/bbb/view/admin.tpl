@@ -1,3 +1,4 @@
+{% autoescape false %}
 {{ settings_form }}
 
 {{ 'RecordList'|get_plugin_lang('BBBPlugin') }}
@@ -56,3 +57,5 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% endautoescape %}

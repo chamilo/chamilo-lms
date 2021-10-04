@@ -10,6 +10,8 @@
         font-weight: bold;
     }
 </style>
+
+{% autoescape false %}
 <div class ="row">
 {% if bbb_status == true %}
     <div class ="col-md-12" style="text-align:center">
@@ -163,7 +165,9 @@
     </div>
 {% else %}
     <div class ="col-md-12" style="text-align:center">
-        {{ 'ServerIsNotRunning' | get_plugin_lang('BBBPlugin') | return_message('warning') }}
+        {{ 'ServerIsNotRunning' | get_plugin_lang('BBBPlugin')  }}
     </div>
 {% endif %}
 </div>
+
+{% endautoescape %}

@@ -189,9 +189,9 @@ class bbb
 
         return http_build_query(
             [
-                'cidReq' => $courseCode,
-                'id_session' => $sessionId ?: $this->sessionId,
-                'gidReq' => $groupId ?: $this->groupId,
+                'cid' => $courseId,
+                'sid' => $sessionId ?: $this->sessionId,
+                'gid' => $groupId ?: $this->groupId,
             ]
         );
     }
@@ -384,6 +384,7 @@ class bbb
         $params['voice_bridge'] = rand(10000, 99999);
         $params['created_at'] = api_get_utc_datetime();
         $params['access_url'] = $this->accessUrl;
+        $params['closed_at'] = '';
 
         // Check interface feature is installed
         $interfaceFeature = $this->plugin->get('interface');

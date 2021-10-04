@@ -362,7 +362,8 @@ if (false === $bbb->isGlobalConference() &&
     !empty($courseInfo) &&
     'true' === $plugin->get('enable_conference_in_course_groups')
 ) {
-    $url = api_get_self().'?'.api_get_cidreq(true, false).'&gidReq=';
+    $url = api_get_self().'?'.api_get_cidreq(true, false).'&gid=0';
+
     $htmlHeadXtra[] = '<script>
          $(function() {
             $("#group_select").on("change", function() {

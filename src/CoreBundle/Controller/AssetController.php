@@ -38,7 +38,7 @@ class AssetController
         if ($exists) {
             $fileName = basename($filePath);
             $detector = new ExtensionMimeTypeDetector();
-            $mimeType = $detector->detectMimeTypeFromFile($filePath);
+            $mimeType = (string) $detector->detectMimeTypeFromFile($filePath);
             // If image use glide, because why not.
             if (str_contains($mimeType, 'image')) {
                 $server = $glide->getServer();

@@ -350,14 +350,14 @@ export default {
     const route = useRoute();
 
     // Set resource node.
-    let id = route.params.node;
-    if (isEmpty(id)) {
-      id = route.query.node;
+    let nodeId = route.params.node;
+    if (isEmpty(nodeId)) {
+      nodeId = route.query.node;
     }
     let cid = toInteger(route.query.cid);
-    id = '/api/courses/' + cid
-    const params = {id };
-    store.dispatch('course/findCourse', params);
+    let courseIri = '/api/courses/' + cid;
+    store.dispatch('course/findCourse', { id: courseIri });
+    store.dispatch('resourcenode/findResourceNode', { id: '/api/resource_nodes/' + nodeId});
   },
   data() {
     return {

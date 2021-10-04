@@ -24,6 +24,7 @@
 
 <script>
 import {mapGetters} from "vuex";
+import isEmpty from "lodash/isEmpty";
 
 export default {
   name: 'Breadcrumb',
@@ -109,6 +110,7 @@ export default {
 
       // course is set in documents/List.vue
       if (this.course) {
+        console.log('copursssss');
         // First node
         items.push({
           text:  this.course.title,
@@ -116,6 +118,7 @@ export default {
         });
       }
 
+      console.log(items);
       if (this.resourceNode) {
         console.log('resourceNode');
         console.log(this.resourceNode);
@@ -137,6 +140,7 @@ export default {
             i++;
             continue;
           }
+
           if (routeParts[0]) {
             items.push({
               text: routeParts[0],
@@ -157,10 +161,10 @@ export default {
             });
           }
         }
-        console.log('BREADCRUMB');
-        console.log(items);
       }
 
+      console.log('BREADCRUMB');
+      console.log(items);
       return items;
     }
   }

@@ -1024,14 +1024,17 @@ class Template
             if (!empty($sessionId)) {
                 $url .= '?sid='.$sessionId;
             }
-            array_unshift(
-                $interbreadcrumb,
-                ['name' => $courseInfo['title'], 'url' => $url]
-            );
+            if (empty($interbreadcrumb)) {
+                $interbreadcrumb = ['name' => $courseInfo['title'], 'url' => $url];
+            } else {
+                array_unshift(
+                    $interbreadcrumb,
+                    ['name' => $courseInfo['title'], 'url' => $url]
+                );
+            }
         }
 
         $this->params['legacy_breadcrumb'] = json_encode($interbreadcrumb);
-
         global $htmlHeadXtra;
         $this->params['legacy_javascript'] = $htmlHeadXtra;
     }

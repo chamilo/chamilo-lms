@@ -11,7 +11,6 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInter
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -82,7 +81,6 @@ final class CourseExtension implements QueryCollectionExtensionInterface
                 ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
             ;
         }
-
 
         /*$queryBuilder->
             andWhere('node.creator = :current_user')

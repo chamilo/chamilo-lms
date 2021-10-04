@@ -10,11 +10,12 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
-class CourseRepositoryTest extends WebTestCase
+class CourseRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
@@ -23,7 +24,6 @@ class CourseRepositoryTest extends WebTestCase
      */
     public function testCreateNoCreator(): void
     {
-        self::bootKernel();
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         $this->expectException(UserNotFoundException::class);
@@ -37,7 +37,6 @@ class CourseRepositoryTest extends WebTestCase
 
     public function testCreateEntity(): void
     {
-        self::bootKernel();
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         $em = $this->getEntityManager();
@@ -71,7 +70,6 @@ class CourseRepositoryTest extends WebTestCase
 
     public function testCreateCourseSameTitle(): void
     {
-        self::bootKernel();
         $course = $this->createCourse('Test course');
         $this->assertSame('TESTCOURSE', $course->getCode());
 
@@ -139,11 +137,6 @@ class CourseRepositoryTest extends WebTestCase
         $this->assertSame(1, $course->getStudents()->count());
         $this->assertSame(0, $course->getTeachers()->count());
 
-        // Retrieve the admin
-        $user = $this->getUser('student');
-
-        $client->loginUser($user);
-
         $client->request('GET', sprintf('/course/%s/home', $course->getId()));
         $this->assertResponseIsSuccessful();
     }
@@ -186,12 +179,10 @@ class CourseRepositoryTest extends WebTestCase
         $courseRepo->update($course);
         $this->assertSame(2, $course->getTeachers()->count());
 
-        // Retrieve the admin
-        $user = $this->getUser('teacher');
+        $teacher = $this->getUser('teacher');
 
-        $client->loginUser($user);
-
-        $client->request('GET', sprintf('/course/%s/home', $course->getId()));
+        $token = $this->getUserTokenFromUser($teacher);
+        $this->createClientWithCredentials($token)->request('GET', sprintf('/course/%s/home', $course->getId()));
         $this->assertResponseIsSuccessful();
     }
 
@@ -217,14 +208,39 @@ class CourseRepositoryTest extends WebTestCase
         $this->assertSame(1, $course->getUsers()->count());
 
         // retrieve the admin
-        $user = $this->getUser('student');
+        $student = $this->getUser('student');
+        $token = $this->getUserTokenFromUser($student);
+        $this->createClientWithCredentials($token)->request('GET', sprintf('/course/%s/home', $course->getId()));
+        $this->assertResponseIsSuccessful();
+    }
 
-        $client->loginUser($user);
+    public function testGetCourses(): void
+    {
+        $course = $this->createCourse('new');
 
-        $client->request('GET', sprintf('/course/%s/home', $course->getId()));
+        // Test as admin.
+        $token = $this->getUserToken([]);
+        $this->createClientWithCredentials($token)->request('GET', '/api/courses');
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/Course',
+            '@id' => '/api/courses',
+            '@type' => 'hydra:Collection',
+            'hydra:totalItems' => 1,
+        ]);
+
+        $student = $this->createUser('student');
+        $token = $this->getUserTokenFromUser($student);
+        $response = $this->createClientWithCredentials($token)->request('GET', '/api/courses');
         $this->assertResponseIsSuccessful();
 
-        // Create a user.
-        //$student2 = $this->createUser('student2');
+        // Asserts that the returned JSON is a superset of this one
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/Course',
+            '@id' => '/api/courses',
+            '@type' => 'hydra:Collection',
+            'hydra:totalItems' => 0,
+        ]);
+        $this->assertCount(0, $response->toArray()['hydra:member']);
     }
 }

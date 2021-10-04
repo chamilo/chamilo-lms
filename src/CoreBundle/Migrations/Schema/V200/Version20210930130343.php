@@ -28,8 +28,6 @@ final class Version20210930130343 extends AbstractMigrationChamilo
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
 
-        $batchSize = self::BATCH_SIZE;
-
         $introRepo = $container->get(CToolIntroRepository::class);
         $cToolRepo = $container->get(CToolRepository::class);
         $toolRepo = $container->get(ToolRepository::class);
@@ -46,6 +44,24 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
+
+            if (empty($items)) {
+                $admin = $this->getAdmin();
+                $tool = $toolRepo->findOneBy(['name' => 'course_homepage']);
+                $cTool = (new CTool())
+                    ->setName('course_homepage')
+                    ->setCourse($course)
+                    ->setTool($tool)
+                    ->setCreator($admin)
+                    ->setParent($course)
+                    ->addCourseLink($course)
+                ;
+                $em->persist($cTool);
+                $em->flush();
+
+                continue;
+            }
+
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
                 $sessionId = (int) $itemData['session_id'];

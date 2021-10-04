@@ -636,8 +636,8 @@ $showTerms = false;
 // Terms and conditions
 if ('true' === api_get_setting('allow_terms_conditions')) {
     if (!api_is_platform_admin()) {
-        if ('true' === api_get_setting('show_terms_if_profile_completed')) {
-            $userInfo = api_get_user_info();
+        if ('true' === api_get_setting('ticket.show_terms_if_profile_completed')) {
+            $userInfo = api_get_user_info(api_get_user_id());
             if ($userInfo && ANONYMOUS != $userInfo['status']) {
                 $extraFieldValue = new ExtraFieldValue('user');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -645,7 +645,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                     'termactivated'
                 );
                 if (isset($value['value'])) {
-                    $termActivated = !empty($value['value']) && 1 == $value['value'];
+                    $termActivated = !empty($value['value']) && 1 === (int) $value['value'];
                 }
 
                 if (false === $termActivated) {

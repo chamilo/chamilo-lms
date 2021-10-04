@@ -33,7 +33,7 @@ $em = Database::getManager();
 $legalTermsRepo = $em->getRepository(Legal::class);
 $legalCount = $legalTermsRepo->countAllActiveLegalTerms();
 $languages = api_get_languages();
-$available_languages = count($languages['folder']);
+$available_languages = count($languages);
 if ($legalCount != $available_languages) {
     echo Display::return_message(get_lang('You should create the "Term and Conditions" for all the available languages.'), 'warning');
 }

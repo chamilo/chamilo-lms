@@ -92,7 +92,7 @@ if ($form->validate()) {
                 $my_lang = $_POST['language'];
                 if (isset($_POST['language'])) {
                     $all_langs = api_get_languages();
-                    if (in_array($my_lang, $all_langs['folder'])) {
+                    if (in_array($my_lang, array_keys($all_langs))) {
                         $language = api_get_language_id($my_lang);
                         $term_preview = LegalManager::get_last_condition($language);
                         $defaults = $term_preview;

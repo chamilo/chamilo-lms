@@ -106,11 +106,11 @@
                 </div>
                 <div class="stat-content">
                     <div class="text-left">
-                        <div class="stat-text">
-                            {{ content }}
-                        </div>
                         <div class="stat-heading">
                             {{ name }}
+                        </div>
+                        <div class="stat-text">
+                            {{ content }}
                         </div>
                     </div>
                 </div>
@@ -152,18 +152,12 @@
                 <dt>{{ 'Timezone'|trans }}</dt>
                 <dd>{{ user.timezone }}</dd>
             {% endif %}
+
+            {% if user.legal is defined %}
+                <dt>{{ 'Legal'|trans }}</dt>
+                <dd>{{ user.legal.url_send }}</dd>
+            {% endif %}
         </dl>
-
-{#        {% if user.created %}#}
-{#            <div class="create">{{ user.created }}</div>#}
-{#        {% endif %}#}
-
-{#        {% if user.url_access or user.legal.url_send %}#}
-{#            <div class="access">#}
-{#                {{ user.url_access }}#}
-{#                {{ user.legal.url_send }}#}
-{#            </div>#}
-{#        {% endif %}#}
     </div>
     {% endautoescape %}
 {% endmacro %}

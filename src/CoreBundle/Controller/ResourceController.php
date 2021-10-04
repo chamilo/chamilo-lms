@@ -378,7 +378,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                     $fileName = $resourceNodeRepo->getFilename($resourceFile);
 
-                    return $server->getImageResponse($fileName, $params);
+                    $response = $server->getImageResponse($fileName, $params);
+
+                    $disposition = $response->headers->makeDisposition(
+                        ResponseHeaderBag::DISPOSITION_INLINE,
+                        basename($fileName)
+                    );
+                    $response->headers->set('Content-Disposition', $disposition);
+
+                    return $response;
                 }
 
                 // Modify the HTML content before displaying it.

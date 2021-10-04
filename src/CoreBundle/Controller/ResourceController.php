@@ -159,40 +159,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * Preview a file. Mostly used when using a modal.
-     *
-     * @Route("/{tool}/{type}/{id}/preview", methods={"GET"}, name="chamilo_core_resource_preview")
-     */
-    /*public function previewAction(Request $request): Response
-    {
-        $nodeId = $request->get('id');
-        $repository = $this->getRepositoryFromRequest($request);
-
-        $resource = $repository->getResourceFromResourceNode($nodeId);
-        $this->denyAccessUnlessValidResource($resource);
-
-        $resourceNode = $resource->getResourceNode();
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $this->setBreadCrumb($request, $resourceNode);
-
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-
-        $params = [
-            'resource' => $resource,
-            'tool' => $tool,
-            'type' => $type,
-        ];
-
-        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
-    }*/
-
-    /**
      * @deprecated use vue
      *
      * @Route("/{tool}/{type}/{id}/change_visibility", name="chamilo_core_resource_change_visibility")
@@ -233,44 +199,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         ];
 
         return new JsonResponse($result);
-    }
-
-    /**
-     * @deprecated Use Vue + api platform
-     *
-     * @Route("/{tool}/{type}/{id}/delete", name="chamilo_core_resource_delete")
-     */
-    public function deleteAction(Request $request): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $id = $request->get('id');
-        $resourceNode = $this->getDoctrine()->getRepository(ResourceNode::class)->find($id);
-        $parentId = $resourceNode->getParent()->getId();
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::DELETE,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $children = $resourceNode->getChildren();
-
-        if (!empty($children)) {
-            /** @var ResourceNode $child */
-            foreach ($children as $child) {
-                $em->remove($child);
-            }
-        }
-
-        $em->remove($resourceNode);
-        $this->addFlash('success', $this->trans('Deleted').': '.$resourceNode->getSlug());
-        $em->flush();
-
-        $routeParams = $this->getResourceParams($request);
-        $routeParams['id'] = $parentId;
-
-        return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
     }
 
     /**

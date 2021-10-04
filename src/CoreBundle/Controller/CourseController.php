@@ -210,7 +210,7 @@ class CourseController extends ToolBaseController
     }
 
     /**
-     * Redirects the page to a tool, following the tools.yml settings.
+     * Redirects the page to a tool, following the tools settings.
      */
     #[Route('/{cid}/tool/{toolName}', name: 'chamilo_core_course_redirect_tool')]
     public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse

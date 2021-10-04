@@ -185,6 +185,16 @@ export default {
           });
         })
       }
+
+      this.showMessage(this.$i18n.t('{resource} created', {'resource': message.title}));
+
+      let folderParams = this.$route.query;
+
+      this.$router.push({
+        name: `${this.$options.servicePrefix}List`,
+        params: {id: message['@id']},
+        query: folderParams
+      });
     },
     ...mapActions('messageattachment', ['createWithFormData']),
     ...mapActions('message', ['create', 'reset'])

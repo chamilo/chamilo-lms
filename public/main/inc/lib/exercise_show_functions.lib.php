@@ -1,6 +1,9 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Framework\Container;
+
 class ExerciseShowFunctions
 {
     /**
@@ -137,50 +140,52 @@ class ExerciseShowFunctions
     /**
      * @param $feedback_type
      * @param $answer
-     * @param $id
+     * @param $trackExerciseId
      * @param $questionId
-     * @param null $fileUrl
-     * @param int  $resultsDisabled
-     * @param int  $questionScore
+     * @param int $resultsDisabled
+     * @param int $questionScore
      */
     public static function display_oral_expression_answer(
         $feedback_type,
         $answer,
-        $id,
+        $trackExerciseId,
         $questionId,
-        $fileUrl = null,
         $resultsDisabled = 0,
-        $questionScore = 0
+        $questionScore = 0,
+        $showAlertIfNotCorrected = false
     ) {
-        if (isset($fileUrl)) {
-            echo '
-                <tr>
-                    <td><audio src="'.$fileUrl.'" controls></audio></td>
-                </tr>
-            ';
+        /** @var TrackExercise $trackExercise */
+        $trackExercise = Container::getTrackExerciseRepository()->find($trackExerciseId);
+
+        if (null === $trackExerciseId) {
+            return;
         }
 
-        if (empty($id)) {
-            echo '<tr>';
-            if (!empty($answer)) {
-                echo Display::tag('td', Security::remove_XSS($answer), ['width' => '55%']);
-            }
-            echo '</tr>';
-            if (!$questionScore && EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
-                echo '<tr>';
-                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), ['width' => '45%']);
-                echo '</tr>';
-            } else {
-                echo '<tr><td>&nbsp;</td></tr>';
-            }
-        } else {
-            echo '<tr>';
-            echo '<td>';
-            if (!empty($answer)) {
-                echo Security::remove_XSS($answer);
-            }
-            echo '</td>';
-            echo '</tr>';
+        $questionAttempt = $trackExercise->getAttemptByQuestionId($questionId);
+
+        if (null === $questionAttempt) {
+            return;
+        }
+
+        $assetRepo = Container::getAssetRepository();
+
+        foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
+            echo Display::tag(
+                'audio',
+                '',
+                [
+                    'src' => $assetRepo->getAssetUrl($attemptFile->getAsset()),
+                    'controls' => '',
+                ]
+            );
+        }
+
+        if (!empty($answer)) {
+            echo Display::tag('p', Security::remove_XSS($answer));
+        }
+
+        if ($showAlertIfNotCorrected && !$questionScore && EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
+            echo Display::tag('p', ExerciseLib::getNotCorrectedYetText());
         }
     }
 

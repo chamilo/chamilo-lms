@@ -5141,34 +5141,32 @@ EOT;
      */
     public static function getOralFeedbackAudio($attemptId, $questionId, $userId)
     {
-        return;
-        $courseInfo = api_get_course_info();
-        $sessionId = api_get_session_id();
-        $groupId = api_get_group_id();
-        $sysCourseDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
-        $webCourseDir = api_get_path(WEB_COURSE_PATH).$courseInfo['path'];
-        $fileName = "{$questionId}_{$userId}".DocumentManager::getDocumentSuffix($courseInfo, $sessionId, $groupId);
-        $filePath = null;
+        /** @var TrackExercise $tExercise */
+        $tExercise = Container::getTrackExerciseRepository()->find($attemptId);
 
-        $relFilePath = "/exercises/teacher_audio/$attemptId/$fileName";
-
-        if (file_exists($sysCourseDir.$relFilePath.'.ogg')) {
-            $filePath = $webCourseDir.$relFilePath.'.ogg';
-        } elseif (file_exists($sysCourseDir.$relFilePath.'.wav.wav')) {
-            $filePath = $webCourseDir.$relFilePath.'.wav.wav';
-        } elseif (file_exists($sysCourseDir.$relFilePath.'.wav')) {
-            $filePath = $webCourseDir.$relFilePath.'.wav';
-        }
-
-        if (!$filePath) {
+        if (null === $tExercise) {
             return '';
         }
 
-        return Display::tag(
-            'audio',
-            null,
-            ['src' => $filePath]
-        );
+        $qAttempt = $tExercise->getAttemptByQuestionId($questionId);
+
+        if (null === $qAttempt) {
+            return '';
+        }
+
+        $html = '';
+
+        $assetRepo = Container::getAssetRepository();
+
+        foreach ($qAttempt->getAttemptFeedbacks() as $attemptFeedback) {
+            $html .= Display::tag(
+                'audio',
+                null,
+                ['src' => $assetRepo->getAssetUrl($attemptFeedback->getAsset())]
+            );
+        };
+
+        return $html;
     }
 
     public static function getNotificationSettings(): array

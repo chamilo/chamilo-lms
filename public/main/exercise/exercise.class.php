@@ -4967,11 +4967,11 @@ class Exercise
                             ExerciseShowFunctions::display_oral_expression_answer(
                                 $feedback_type,
                                 $choice,
-                                0,
-                                0,
-                                null,
+                                $exeId,
+                                $questionId,
                                 $results_disabled,
-                                $questionScore
+                                $questionScore,
+                                true
                             );
                         } elseif (HOT_SPOT == $answerType) {
                             $correctAnswerId = 0;
@@ -5368,7 +5368,6 @@ class Exercise
                                     $choice,
                                     $exeId,
                                     $questionId,
-                                    null,
                                     $results_disabled,
                                     $questionScore
                                 ).'</td>

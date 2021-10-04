@@ -90,17 +90,17 @@ class UserManager
      * @param string        $email
      * @param string        $loginName
      * @param string        $password
-     * @param string        $official_code           Any official code (optional)
+     * @param string        $officialCode           Any official code (optional)
      * @param string        $language                User language    (optional)
      * @param string        $phone                   Phone number    (optional)
-     * @param string        $picture_uri             Picture URI        (optional)
+     * @param string        $pictureUri             Picture URI        (optional)
      * @param string        $authSource              Authentication source (defaults to 'platform', dependind on constant)
      * @param string        $expirationDate          Account expiration date (optional, defaults to null)
      * @param int           $active                  Whether the account is enabled or disabled by default
-     * @param int           $hr_dept_id              The department of HR in which the user is registered (defaults to 0)
+     * @param int           $hrDeptId              The department of HR in which the user is registered (defaults to 0)
      * @param array         $extra                   Extra fields (labels must be prefixed by "extra_")
-     * @param string        $encrypt_method          Used if password is given encrypted. Set to an empty string by default
-     * @param bool          $send_mail
+     * @param string        $encryptMethod          Used if password is given encrypted. Set to an empty string by default
+     * @param bool          $sendMail
      * @param bool          $isAdmin
      * @param string        $address
      * @param bool          $sendEmailToAllAdmins
@@ -122,17 +122,17 @@ class UserManager
         $email,
         $loginName,
         $password,
-        $official_code = '',
+        $officialCode = '',
         $language = '',
         $phone = '',
-        $picture_uri = '',
+        $pictureUri = '',
         $authSource = null,
         $expirationDate = null,
         $active = 1,
-        $hr_dept_id = 0,
+        $hrDeptId = 0,
         $extra = [],
-        $encrypt_method = '',
-        $send_mail = false,
+        $encryptMethod = '',
+        $sendMail = false,
         $isAdmin = false,
         $address = '',
         $sendEmailToAllAdmins = false,
@@ -273,14 +273,14 @@ class UserManager
             ->setStatus($status)
             ->setPlainPassword($password)
             ->setEmail($email)
-            ->setOfficialCode($official_code)
+            ->setOfficialCode($officialCode)
             ->setCreatorId($creatorId)
             ->setAuthSource($authSource)
             ->setPhone($phone)
             ->setAddress($address)
             ->setLocale($language)
             ->setRegistrationDate($now)
-            ->setHrDeptId($hr_dept_id)
+            ->setHrDeptId($hrDeptId)
             ->setActive($active)
             ->setEnabled($active)
             ->setTimezone(api_get_timezone())
@@ -368,7 +368,7 @@ class UserManager
                 RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
             }
 
-            if (!empty($email) && $send_mail) {
+            if (!empty($email) && $sendMail) {
                 $recipient_name = api_get_person_name(
                     $firstName,
                     $lastName,
@@ -403,7 +403,7 @@ class UserManager
                     'original_password' => stripslashes($original_password),
                     'mailWebPath' => $url,
                     'new_user' => $user,
-                    'search_link' => $url
+                    'search_link' => $url,
                 ];
 
                 // ofaj

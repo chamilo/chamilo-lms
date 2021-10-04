@@ -844,8 +844,8 @@ if ($form->validate()) {
         'true' === api_get_setting('allow_terms_conditions')
     ) {
         $userId = $termRegistered['user_id'];
-        $is_admin = UserManager::is_admin($userId);
-        Session::write('is_platformAdmin', $is_admin);
+        $isAdmin = UserManager::is_admin($userId);
+        Session::write('is_platformAdmin', $isAdmin);
     } else {
         // Moved here to include extra fields when creating a user. Formerly placed after user creation
         // Register extra fields
@@ -900,8 +900,8 @@ if ($form->validate()) {
         );
 
         // Update the extra fields
-        $count_extra_field = count($extras);
-        if ($count_extra_field > 0 && is_int($userId)) {
+        $countExtraField = count($extras);
+        if ($countExtraField > 0 && is_int($userId)) {
             foreach ($extras as $key => $value) {
                 // For array $value -> if exists key 'tmp_name' then must not be empty
                 // This avoid delete from user field value table when doesn't upload a file
@@ -1116,7 +1116,7 @@ if ($form->validate()) {
         stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.
         get_lang('Your personal settings have been registered').".</p>";
 
-    $form_data = [
+    $formData = [
         'button' => Display::button(
             'next',
             get_lang('Next'),
@@ -1129,16 +1129,16 @@ if ($form->validate()) {
 
     if ('true' === api_get_setting('allow_terms_conditions') && $userAlreadyRegisteredShowTerms) {
         if ('login' === api_get_setting('load_term_conditions_section')) {
-            $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
+            $formData['action'] = api_get_path(WEB_PATH).'user_portal.php';
         } else {
             $courseInfo = api_get_course_info();
             if (!empty($courseInfo)) {
-                $form_data['action'] = $courseInfo['course_public_url'].'?id_session='.api_get_session_id();
+                $formData['action'] = $courseInfo['course_public_url'].'?id_session='.api_get_session_id();
                 $cidReset = true;
                 Session::erase('_course');
                 Session::erase('_cid');
             } else {
-                $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
+                $formData['action'] = api_get_path(WEB_PATH).'user_portal.php';
             }
         }
     } else {
@@ -1148,23 +1148,23 @@ if ($form->validate()) {
 
         if ($is_allowedCreateCourse) {
             if ($usersCanCreateCourse) {
-                $form_data['message'] = '<p>'.get_lang('You can now create your course').'</p>';
+                $formData['message'] = '<p>'.get_lang('You can now create your course').'</p>';
             }
-            $form_data['action'] = api_get_path(WEB_CODE_PATH).'create_course/add_course.php';
+            $formData['action'] = api_get_path(WEB_CODE_PATH).'create_course/add_course.php';
 
             if ('true' === api_get_setting('course_validation')) {
-                $form_data['button'] = Display::button(
+                $formData['button'] = Display::button(
                     'next',
                     get_lang('Create a course request'),
                     ['class' => 'btn btn-primary btn-large']
                 );
             } else {
-                $form_data['button'] = Display::button(
+                $formData['button'] = Display::button(
                     'next',
                     get_lang('Create a course'),
                     ['class' => 'btn btn-primary btn-large']
                 );
-                $form_data['go_button'] = '&nbsp;&nbsp;<a href="'.api_get_path(WEB_PATH).'index.php'.'">'.
+                $formData['go_button'] = '&nbsp;&nbsp;<a href="'.api_get_path(WEB_PATH).'index.php'.'">'.
                     Display::span(
                         get_lang('Next'),
                         ['class' => 'btn btn-primary btn-large']
@@ -1172,12 +1172,12 @@ if ($form->validate()) {
             }
         } else {
             if ('true' == api_get_setting('allow_students_to_browse_courses')) {
-                $form_data['action'] = 'courses.php?action=subscribe';
-                $form_data['message'] = '<p>'.get_lang('You can now select, in the list, the course you want access to').".</p>";
+                $formData['action'] = 'courses.php?action=subscribe';
+                $formData['message'] = '<p>'.get_lang('You can now select, in the list, the course you want access to').".</p>";
             } else {
-                $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
+                $formData['action'] = api_get_path(WEB_PATH).'user_portal.php';
             }
-            $form_data['button'] = Display::button(
+            $formData['button'] = Display::button(
                 'next',
                 get_lang('Next'),
                 ['class' => 'btn btn-primary btn-large']
@@ -1196,27 +1196,27 @@ if ($form->validate()) {
 
     $redirectBuyCourse = Session::read('buy_course_redirect');
     if (!empty($redirectBuyCourse)) {
-        $form_data['action'] = api_get_path(WEB_PATH).$redirectBuyCourse;
+        $formData['action'] = api_get_path(WEB_PATH).$redirectBuyCourse;
         Session::erase('buy_course_redirect');
     }
 
-    $form_data = CourseManager::redirectToCourse($form_data);
-    $form_register = new FormValidator('form_register', 'post', $form_data['action']);
-    if (!empty($form_data['message'])) {
-        $form_register->addElement('html', $form_data['message'].'<br /><br />');
+    $formData = CourseManager::redirectToCourse($formData);
+    $formRegister = new FormValidator('form_register', 'post', $formData['action']);
+    if (!empty($formData['message'])) {
+        $formRegister->addElement('html', $formData['message'].'<br /><br />');
     }
 
     if ($usersCanCreateCourse) {
-        $form_register->addElement('html', $form_data['button']);
+        $formRegister->addElement('html', $formData['button']);
     } else {
         if (!empty($redirectBuyCourse)) {
-            $form_register->addButtonNext(get_lang('Next'));
+            $formRegister->addButtonNext(get_lang('Next'));
         } else {
-            $form_register->addElement('html', $form_data['go_button']);
+            $formRegister->addElement('html', $formData['go_button']);
         }
     }
 
-    $textAfterRegistration .= $form_register->returnForm();
+    $textAfterRegistration .= $formRegister->returnForm();
 
     // Just in case
     Session::erase('course_redirect');

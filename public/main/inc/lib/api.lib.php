@@ -1298,6 +1298,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         'expiration_date',
         'last_login',
         'user_is_online',
+        'profile_completed',
     ];
 
     if ('true' === api_get_setting('extended_profile')) {

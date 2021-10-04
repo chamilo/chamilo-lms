@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use ChamiloSession as Session;
 
 /**
  * Class ExtraFieldValue
@@ -119,6 +120,7 @@ class ExtraFieldValue extends Model
 
         $extraField = new ExtraField($this->type);
         $extraFields = $extraField->get_all(null, 'option_order');
+        $resultsExist = [];
         $em = Database::getManager();
 
         // Parse params.
@@ -158,6 +160,8 @@ class ExtraFieldValue extends Model
             if (isset($params[$fieldVariableWithExtra])) {
                 $value = $params[$fieldVariableWithExtra];
             }
+
+            $resultsExist[$field_variable] = isset($value) && $value !== '' ? true : false;
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
 
             if (!$extraFieldInfo) {
@@ -389,6 +393,38 @@ class ExtraFieldValue extends Model
                         'comment' => $comment,
                     ];
                     $this->save($newParams, $showQuery);
+            }
+        }
+
+        // ofaj
+        // Set user.profile_completed = 1
+        if ($this->type === 'user') {
+            if (api_get_setting('show_terms_if_profile_completed') === 'true') {
+                $justTermResults = [];
+
+                foreach ($resultsExist as $term => $value) {
+                    if (strpos($term, 'terms_') !== false) {
+                        $justTermResults[$term] = $value;
+                    }
+                }
+
+                $profileCompleted = 0;
+                if (!in_array(false, $justTermResults)) {
+                    $profileCompleted = 1;
+                }
+
+                $userId = $params['item_id'];
+
+                // Check if user has a photo
+                $userInfo = api_get_user_info($userId);
+                if (empty($userInfo['picture_uri'])) {
+                    $profileCompleted = 0;
+                }
+
+                $table = Database::get_main_table(TABLE_MAIN_USER);
+                $sql = "UPDATE $table SET profile_completed = $profileCompleted WHERE id = $userId";
+                Database::query($sql);
+                Session::write('profile_completed_result', $justTermResults);
             }
         }
     }

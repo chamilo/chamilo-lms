@@ -125,10 +125,10 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
                 'variable' => $condition['variable'],
                 'display_text' => $condition['display_text'],
                 'default_value' => '',
-                'visible_to_self' => true,
-                'visible_to_others' => false,
-                'changeable' => true,
-                'filter' => false,
+                'visible_to_self' => 0,
+                'visible_to_others' => 0,
+                'changeable' => 0,
+                'filter' => 0,
             ];
             $userExtraField->save($params);
         }
@@ -137,8 +137,9 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
 
 $form = new FormValidator('registration');
 $user_already_registered_show_terms = false;
+$termRegistered = Session::read('term_and_condition');
 if ('true' === api_get_setting('allow_terms_conditions')) {
-    $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
+    $user_already_registered_show_terms = isset($termRegistered['user_id']);
     // Ofaj change
     if (true === api_is_anonymous()) {
         $user_already_registered_show_terms = false;
@@ -262,6 +263,11 @@ if (false === $user_already_registered_show_terms &&
 
     $passDiv = '<div id="password_progress"></div><div id="password-verdict"></div><div id="password-errors"></div>';
 
+    $checkPass = api_get_setting('allow_strength_pass_checker');
+    if ($checkPass === 'true') {
+        $checkPass = '';
+    }
+
     // PASSWORD
     $form->addElement(
         'password',
@@ -283,6 +289,15 @@ if (false === $user_already_registered_show_terms &&
     $form->addRule(['pass1', 'pass2'], get_lang('You have typed two different passwords'), 'compare');
     $form->addPasswordRule('pass1');
 
+    if ($checkPass) {
+        $form->addRule(
+            'pass1',
+            get_lang('PassTooEasy').': '.api_generate_password(),
+            'callback',
+            'api_check_password'
+        );
+    }
+
     // PHONE
     if (in_array('phone', $allowedFields)) {
         $form->addElement(
@@ -291,7 +306,7 @@ if (false === $user_already_registered_show_terms &&
             get_lang('Phone'),
             ['size' => 20]
         );
-        if ('true' == api_get_setting('registration', 'phone')) {
+        if ('true' === api_get_setting('registration', 'phone')) {
             $form->addRule(
                 'phone',
                 get_lang('Required field'),
@@ -302,7 +317,7 @@ if (false === $user_already_registered_show_terms &&
 
     // Language
     if (in_array('language', $allowedFields)) {
-        if ('true' == api_get_setting('registration', 'language')) {
+        if ('true' === api_get_setting('registration', 'language')) {
             $form->addSelectLanguage(
                 'language',
                 get_lang('Language'),
@@ -328,9 +343,32 @@ if (false === $user_already_registered_show_terms &&
         }
     }
 
+    // STUDENT/TEACHER
+    if (api_get_setting('allow_registration_as_teacher') != 'false') {
+        if (in_array('status', $allowedFields)) {
+            $form->addElement(
+                'radio',
+                'status',
+                get_lang('Profile'),
+                get_lang('RegStudent'),
+                STUDENT
+            );
+            $form->addElement(
+                'radio',
+                'status',
+                null,
+                get_lang('RegAdmin'),
+                COURSEMANAGER
+            );
+        }
+    }
+
+    $captcha = api_get_setting('allow_captcha');
+    $allowCaptcha = $captcha === 'true';
+
     // EXTENDED FIELDS
-    if ('true' == api_get_setting('extended_profile') &&
-        'true' == api_get_setting('extendedprofile_registration', 'mycomptetences')
+    if ('true' === api_get_setting('extended_profile') &&
+        'true' === api_get_setting('extendedprofile_registration', 'mycomptetences')
     ) {
         $form->addHtmlEditor(
             'competences',
@@ -341,8 +379,8 @@ if (false === $user_already_registered_show_terms &&
         );
     }
 
-    if ('true' == api_get_setting('extended_profile') &&
-        'true' == api_get_setting('extendedprofile_registration', 'mydiplomas')
+    if ('true' === api_get_setting('extended_profile') &&
+        'true' === api_get_setting('extendedprofile_registration', 'mydiplomas')
     ) {
         $form->addHtmlEditor(
             'diplomas',
@@ -353,8 +391,8 @@ if (false === $user_already_registered_show_terms &&
         );
     }
 
-    if ('true' == api_get_setting('extended_profile') &&
-        'true' == api_get_setting('extendedprofile_registration', 'myteach')
+    if ('true' === api_get_setting('extended_profile') &&
+        'true' === api_get_setting('extendedprofile_registration', 'myteach')
     ) {
         $form->addHtmlEditor(
             'teach',
@@ -365,8 +403,8 @@ if (false === $user_already_registered_show_terms &&
         );
     }
 
-    if ('true' == api_get_setting('extended_profile') &&
-        'true' == api_get_setting('extendedprofile_registration', 'mypersonalopenarea')
+    if ('true' === api_get_setting('extended_profile') &&
+        'true' === api_get_setting('extendedprofile_registration', 'mypersonalopenarea')
     ) {
         $form->addHtmlEditor(
             'openarea',
@@ -531,7 +569,6 @@ if (!empty($userInfo)) {
     $_user['language'] = $langInfo->getEnglishName();
 }
 
-$tool_name = get_lang('Registration', null, (!empty($_POST['language']) ? $_POST['language'] : $_user['language']));
 $tool_name = get_lang('Registration');
 if (!CustomPages::enabled()) {
 // Load terms & conditions from the current lang
@@ -634,10 +671,6 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                         );
                     }
                 }
-                /*
-                if (1 !== (int) $userInfo['profile_completed']) {
-                    api_not_allowed(true);
-                }*/
             }
         }
     }
@@ -731,7 +764,7 @@ if ($blockButton) {
 } else {
     $allow = api_get_configuration_value('allow_double_validation_in_registration');
 
-    if ($allow && $termActivated == false) {
+    if (false === $allow && $termActivated) {
         $htmlHeadXtra[] = '<script>
             $(document).ready(function() {
                 $("#pre_validation").click(function() {
@@ -744,7 +777,7 @@ if ($blockButton) {
         $form->addLabel(
             null,
             Display::url(
-                get_lang('Ok'),
+                get_lang('Validate'),
                 'javascript:void',
                 ['class' => 'btn btn-default', 'id' => 'pre_validation']
             )
@@ -752,13 +785,13 @@ if ($blockButton) {
         $form->addHtml('<div id="final_button" style="display: none">');
         $form->addLabel(
             null,
-            Display::return_message(get_lang('DoubleValidationMessage'), 'info', false)
+            Display::return_message(get_lang('You confirm that you really want to subscribe to this plateform.'),
+                'info', false)
         );
-
-        $form->addButton('submit', get_lang('RegisterUser'), '', 'primary');
+        $form->addButton('submit', get_lang('Register'), '', 'primary');
         $form->addHtml('</div>');
     } else {
-        $form->addButtonNext(get_lang('RegisterUser'));
+        $form->addButtonNext(get_lang('Register User'));
     }
     $showTerms = true;
 }
@@ -815,7 +848,7 @@ if ($form->validate()) {
     if ($user_already_registered_show_terms &&
         'true' === api_get_setting('allow_terms_conditions')
     ) {
-        $user_id = $_SESSION['term_and_condition']['user_id'];
+        $user_id = $termRegistered['user_id'];
         $is_admin = UserManager::is_admin($user_id);
         Session::write('is_platformAdmin', $is_admin);
     } else {
@@ -1006,7 +1039,7 @@ if ($form->validate()) {
 
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('YouNeedConfirmYourAccountViae-mailToAccessThePlatform'),
+                        get_lang('You need confirm your accountViae - mail to access the platform'),
                         'warning'
                     )
                 );

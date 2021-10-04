@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
@@ -264,7 +264,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     $passDiv = '<div id="password_progress"></div><div id="password-verdict"></div><div id="password-errors"></div>';
 
     $checkPass = api_get_setting('allow_strength_pass_checker');
-    if ($checkPass === 'true') {
+    if ('true' === $checkPass) {
         $checkPass = '';
     }
 
@@ -344,7 +344,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     }
 
     // STUDENT/TEACHER
-    if (api_get_setting('allow_registration_as_teacher') != 'false') {
+    if ('false' != api_get_setting('allow_registration_as_teacher')) {
         if (in_array('status', $allowedFields)) {
             $form->addElement(
                 'radio',
@@ -364,7 +364,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     }
 
     $captcha = api_get_setting('allow_captcha');
-    $allowCaptcha = $captcha === 'true';
+    $allowCaptcha = 'true' === $captcha;
 
     // EXTENDED FIELDS
     if ('true' === api_get_setting('extended_profile') &&
@@ -626,7 +626,6 @@ if (!empty($_GET['openid_msg']) && 'idnotfound' == $_GET['openid_msg']) {
     $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
 }
 
-
 $blockButton = false;
 $termActivated = false;
 $showTerms = false;
@@ -691,7 +690,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
         }
 
         // ofaj
-        if ($termActivated !== false) {
+        if (false !== $termActivated) {
             // Version and language
             $form->addElement(
                 'hidden',
@@ -703,7 +702,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 'legal_info',
                 $termPreview['id'].':'.$termPreview['language_id']
             );
-            if ($termPreview['type'] == 1) {
+            if (1 == $termPreview['type']) {
                 $form->addElement(
                     'checkbox',
                     'legal_accept',
@@ -732,7 +731,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     }
 }
 
-if ($userAlreadyRegisteredShowTerms === false) {
+if (false === $userAlreadyRegisteredShowTerms) {
     $form->addCheckBox(
         'extra_platformuseconditions',
         null,
@@ -746,7 +745,7 @@ if ($userAlreadyRegisteredShowTerms === false) {
 }
 
 if ($blockButton) {
-    if ($termActivated !== false) {
+    if (false !== $termActivated) {
         $form->addButton(
             'submit',
             get_lang('RegisterUserOk'),
@@ -1233,7 +1232,6 @@ if ($form->validate()) {
     $tpl->assign('hide_header', $hideHeaders);
     $inscription = $tpl->get_template('auth/inscription.tpl');
     $tpl->display($inscription);
-
 } else {
     if (!api_is_anonymous()) {
         // Saving user to course if it was set.
@@ -1260,7 +1258,7 @@ if ($form->validate()) {
 
     $tpl = new Template($toolName);
     $inscriptionHeader = '';
-    if ($termActivated !== false) {
+    if (false !== $termActivated) {
         $inscriptionHeader = Display::page_header($toolName);
     }
     $tpl->assign('inscription_header', $inscriptionHeader);

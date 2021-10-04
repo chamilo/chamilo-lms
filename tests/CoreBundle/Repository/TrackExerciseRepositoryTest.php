@@ -130,6 +130,7 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
 
         //$trackExercise = $repo->find($trackExercise->getExeId());
         $this->assertSame(1, $trackExercise->getAttempts()->count());
+        $this->assertInstanceOf(TrackEAttempt::class, $trackExercise->getAttemptByQuestionId(1));
 
         $file = $this->getUploadedFile();
 

@@ -37,6 +37,9 @@ export default {
     ...mapGetters('resourcenode', {
       resourceNode: 'getResourceNode',
     }),
+    ...mapGetters('course', {
+      course: 'getCourse',
+    }),
     items() {
       console.log('Breadcrumb.vue');
       console.log(this.$route.name);
@@ -53,7 +56,6 @@ export default {
         'MyCourses',
         'MySessions',
         'Home',
-        'CCalendarEventList',
       ];
 
       if (list.includes(this.$route.name)) {
@@ -70,6 +72,7 @@ export default {
       }*/
 
       if (this.legacy) {
+        console.log('legacy');
         // Checking data from legacy main (1.11.x)
         const mainUrl = window.location.href;
         const mainPath = mainUrl.indexOf("main/");
@@ -95,34 +98,32 @@ export default {
         }
       }
 
-      console.log(items);
+      let folderParams = this.$route.query;
+      var queryParams = '';
+      for (var key in folderParams) {
+        if (queryParams != '') {
+          queryParams += "&";
+        }
+        queryParams += key + '=' + encodeURIComponent(folderParams[key]);
+      }
+
+      // course is set in documents/List.vue
+      if (this.course) {
+        // First node
+        items.push({
+          text:  this.course.title,
+          href: '/course/' + this.course.id + '/home?'+queryParams
+        });
+      }
+
       if (this.resourceNode) {
         console.log('resourceNode');
-        let folderParams = this.$route.query;
-        var queryParams = '';
-        for (var key in folderParams) {
-          if (queryParams != '') {
-              queryParams += "&";
-          }
-          queryParams += key + '=' + encodeURIComponent(folderParams[key]);
-        }
-
         console.log(this.resourceNode);
         console.log(this.resourceNode.path);
 
         const parts = this.resourceNode.path.split('/');
         const { path, matched } = this.$route;
         const lastItem = matched[matched.length - 1];
-
-        // Get course
-        let courseId = this.$route.query.cid;
-        if (courseId) {
-          let courseCode = this.$route.query.cid;
-          items.push({
-            text:  courseCode,
-            href: '/course/' + courseId + '/home?'+queryParams
-          });
-        }
 
         for (let i = 0, len = parts.length; i < len; i += 1) {
           let route = parts[i];

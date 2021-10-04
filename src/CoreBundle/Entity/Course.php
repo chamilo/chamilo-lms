@@ -40,7 +40,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     iri: 'https://schema.org/Course',
     attributes: [
-        'security' => "is_granted('ROLE_ADMIN')",
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('VIEW', object)",
+        ],
     ],
     normalizationContext: [
         'groups' => ['course:read'],

@@ -26,13 +26,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
- *     iri="https://schema.org/Course",
- *     normalizationContext={"groups"={"course:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"course:write"}},
- * )
- *
  * @ORM\Table(
  *     name="course",
  *     indexes={
@@ -43,6 +36,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\CourseRepository")
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
+
+#[ApiResource(
+    iri: 'https://schema.org/Course',
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN')",
+    ],
+    normalizationContext: [
+        'groups' => ['course:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['course:write'],
+    ],
+)]
+
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',
     'code' => 'partial',

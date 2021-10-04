@@ -28,9 +28,8 @@
 
 <script>
 import SessionCardList from '../../../components/session/SessionCardList.vue';
-import {ref, computed} from "vue";
+import {computed} from "vue";
 import {useStore} from 'vuex';
-import gql from "graphql-tag";
 import {useQuery, useResult} from '@vue/apollo-composable'
 import {GET_SESSION_REL_USER} from "../../../graphql/queries/SessionRelUser.js";
 
@@ -51,13 +50,19 @@ export default {
       }, );
 
       const sessions = useResult(result, [], ({sessionRelCourseRelUsers, sessionRelUsers}) => {
-        const su = sessionRelUsers.edges.map(function(edge) {
-          return edge.node.session;
-        });
+        const su = sessionRelUsers.edges.map(({
+          node
+        }) => node.session);
 
-        const scu = sessionRelCourseRelUsers.edges.map(function(edge) {
-          return edge.node.session;
-        })
+        const scu = sessionRelCourseRelUsers.edges
+          .map(({
+            node
+          }) => {
+            const existsSession = su.findIndex(suSession => suSession._id === node.session._id) >= 0;
+
+            return existsSession ? null : node.session;
+          })
+          .filter(scuSession => scuSession !== null);
 
         return [].concat(su).concat(scu);
       });

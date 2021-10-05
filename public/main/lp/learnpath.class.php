@@ -2571,19 +2571,14 @@ class learnpath
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
                 $html .= '<div class="flex flex-row justify-center mb-2">';
                 $html .= "<a
-                    class='btn btn-sm btn-default'
-                    href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."&isStudentView=false'
-                    target='_parent'>".
-                    Display::getMdiIcon('google-street-view').get_lang('Overview')."</a>";
-                $html .= "<a
-                    class='btn btn-sm btn-default'
+                    class='btn btn-sm btn-default mx-1'
                     href='lp_controller.php?".api_get_cidreq()."&action=add_item&type=step&lp_id=".$this->lp_id."&isStudentView=false'
                     target='_parent'>".
                     Display::getMdiIcon('pencil').get_lang('Edit')."</a>";
                 $html .= '<a
-                    class="btn btn-sm btn-default"
+                    class="btn btn-sm btn-default mx-1"
                     href="lp_controller.php?'.api_get_cidreq()."&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
-                    Display::getMdiIcon('cog').get_lang('Settings').'</a>';
+                    Display::getMdiIcon('hammer-screwdriver').get_lang('Settings').'</a>';
                 $html .= '</div>';
                 $html .= '</div>';
             }

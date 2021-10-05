@@ -11,9 +11,9 @@ require_once __DIR__.'/../../../vendor/autoload.php';
 ini_set('memory_limit', '600M');
 
 // 1. Source trad4all.inc.php
-$langPath = __DIR__.'/../../../trad4all.inc.php';
+$langPath = __DIR__.'/../../../german.trad4all.inc.php';
 // 2. Destination po file
-$destinationFile = __DIR__.'/../../../trad4all.inc.php.po';
+$destinationFile = __DIR__.'/../../../GERMAN2.po';
 // 3. Iso code
 $languageCode = 'fr_FR';
 
@@ -38,9 +38,17 @@ $originalTermsInLanguage = SubLanguageManager::get_all_language_variable_in_file
     $langPath,
     true
 );
-foreach ($originalTermsInLanguage as $id => $content) {    
+
+$termsInLanguage = [];
+$missingTerms = [];
+foreach ($originalTermsInLanguage as $id => $content) {
     if (!isset($termsInLanguage[$id])) {
         $termsInLanguage[$id] = trim(rtrim($content, ';'), '"');
+    }
+    if (!isset($terms[$id])) {
+        if (!isset($missingTerms[$id])) {
+            $missingTerms[$id] = trim(rtrim($content, ';'), '"');
+        }
     }
 }
 
@@ -61,7 +69,6 @@ foreach ($terms as $term => $englishTranslation) {
     if (preg_match('/\\\$/', $englishTranslation)) {
         $englishTranslation .= '"';
     }
-    $englishTranslation2 = '';
     $search = ['\\{', '\\}', '\\(', '\\)', '\\;'];
     $replace = ['\\\\{', '\\\\}', '\\\\(', '\\\\)', '\\\\;'];
     $englishTranslation = str_replace($search, $replace, $englishTranslation);
@@ -75,6 +82,22 @@ foreach ($terms as $term => $englishTranslation) {
     // Now build the line
     $bigString .= 'msgid "'.$englishTranslation.'"'."\n".'msgstr "'.$translatedTerm.'"'."\n\n";
 }
+
+foreach ($missingTerms as $id => $englishTranslation) {
+    $translatedTerm = $englishTranslation;
+    if (preg_match('/\\\$/', $englishTranslation)) {
+        $englishTranslation .= '"';
+    }
+    $search = ['\\{', '\\}', '\\(', '\\)', '\\;'];
+    $replace = ['\\\\{', '\\\\}', '\\\\(', '\\\\)', '\\\\;'];
+    $englishTranslation = str_replace($search, $replace, $englishTranslation);
+    if (preg_match('/\\\$/', $translatedTerm)) {
+        $translatedTerm .= '"';
+    }
+    $translatedTerm = str_replace($search, $replace, $translatedTerm);
+    $bigString .= 'msgid "'.$id.'"'."\n".'msgstr "'.$translatedTerm.'"'."\n\n";
+}
+
 file_put_contents($destinationFile, $bigString, FILE_APPEND);
 
 echo "Done generating gettext file in $destinationFile !\n";

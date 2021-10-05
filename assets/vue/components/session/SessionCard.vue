@@ -6,7 +6,6 @@
           no-body
           style="max-width: 540px;"
       >
-        {{ node }}
         <CourseCard
             :course="course.node.course"
             :session-id="session._id"
@@ -26,9 +25,6 @@
 import CourseCard from '../course/CourseCard.vue';
 import {computed, ref} from "vue";
 import isEmpty from 'lodash/isEmpty';
-import {useQuery, useResult} from "@vue/apollo-composable";
-import {GET_SESSION_REL_USER} from "../../graphql/queries/SessionRelUser";
-import {useStore} from 'vuex';
 
 export default {
   name: 'SessionCard',
@@ -39,20 +35,12 @@ export default {
     session: Object,
   },
   setup(props) {
-    const store = useStore();
-
-    console.log('card lis');
-    console.log(props.session.users);
     const session = props.session;
-
     const courses = ref([]);
 
     let showAllCourses = false;
 
-    console.log('session: ' + session._id);
-
     if (!isEmpty(session.users.edges)) {
-      console.log('check relation')
       session.users.edges.forEach(({node}) => {
         // User is Session::SESSION_ADMIN
         if (4 === node.relationType) {
@@ -64,15 +52,9 @@ export default {
 
     if (showAllCourses) {
       courses.value = session.courses.edges;
-      console.log('all');
-      console.log(courses.value);
     } else {
       courses.value = session.sessionRelCourseRelUsers.edges;
-      console.log('single');
-      console.log(
-          courses.value );
     }
-
 
     return {
       courses

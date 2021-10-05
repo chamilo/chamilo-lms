@@ -30,11 +30,12 @@ export const GET_SESSION_REL_USER = gql`
                                     course {
                                         _id
                                         title
+                                        illustrationUrl
                                     }
                                 }
                             }
                         }
-                        sessionRelCourseRelUsers {
+                        sessionRelCourseRelUsers(user: $user) {
                             edges {
                                 node {
                                     course {

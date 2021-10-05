@@ -50,21 +50,16 @@ export default {
       }, );
 
       const sessions = useResult(result, [], ({sessionRelCourseRelUsers, sessionRelUsers}) => {
-        const su = sessionRelUsers.edges.map(({
-          node
-        }) => node.session);
+        const sessionInSessionRelUser = sessionRelUsers.edges.map(({node}) => node.session);
 
-        const scu = sessionRelCourseRelUsers.edges
-          .map(({
-            node
-          }) => {
-            const existsSession = su.findIndex(suSession => suSession._id === node.session._id) >= 0;
+        const scu = sessionRelCourseRelUsers.edges.map(({node}) => {
+            const sessionExists = sessionInSessionRelUser.findIndex(suSession => suSession._id === node.session._id) >= 0;
 
-            return existsSession ? null : node.session;
+            return sessionExists ? null : node.session;
           })
           .filter(scuSession => scuSession !== null);
 
-        return [].concat(su).concat(scu);
+        return [].concat(sessionInSessionRelUser).concat(scu);
       });
 
       return {

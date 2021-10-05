@@ -26,6 +26,7 @@ $userId = api_get_user_id();
 $groupId = api_get_group_id();
 $sessionId = api_get_session_id();
 $courseInfo = api_get_course_info();
+$course = api_get_course_entity();
 
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 
@@ -44,7 +45,8 @@ if (!empty($courseInfo) && !empty($groupId) && !api_is_allowed_to_edit()) {
             $courseInfo
         ) === '1';
     if ($groupEnabled) {
-        $isSubscribed = GroupManager::is_user_in_group(api_get_user_id(), GroupManager::get_group_properties($groupId));
+        $group = api_get_group_entity($groupId);
+        $isSubscribed = GroupManager::isUserInGroup(api_get_user_id(), $group);
         if ($isSubscribed) {
             $allowStudentAsConferenceManager = api_get_course_plugin_setting(
                     'bbb',
@@ -73,7 +75,7 @@ if ($conferenceManager && $allowToEdit) {
             $courseInfo = api_get_course_info();
             $agenda = new Agenda('course');
             $id = (int) $_GET['id'];
-            $title = sprintf($plugin->get_lang('VideoConferenceXCourseX'), $id, $courseInfo['name']);
+            $title = sprintf($plugin->get_lang('VideoConferenceXCourseX'), $id, $course->getTitle());
             $content = Display::url($plugin->get_lang('GoToTheVideoConference'), $_GET['url']);
 
             $eventId = $agenda->addEvent(
@@ -402,7 +404,7 @@ if (false === $bbb->isGlobalConference() &&
 
     $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
     if ($conferenceManager && false === $allowStudentAsConferenceManager) {
-        $groups = GroupManager::get_group_list(null, $courseInfo, null, $sessionId);
+        $groups = GroupManager::get_group_list(null, $course, null, $sessionId);
     } else {
         if (!empty($groupId)) {
             $group = api_get_group_entity($groupId);

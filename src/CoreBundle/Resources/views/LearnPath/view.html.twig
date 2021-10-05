@@ -164,7 +164,7 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
+                        <!--ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                             <li role="presentation" class="active">
                                 <a href="#lp-view-content" title="{{ 'Lesson'|trans }}"
                                    aria-controls="lp-view-content" role="tab" data-toggle="tab">
@@ -179,7 +179,7 @@
                                     <span class="sr-only">{{ 'Forum'|trans }}</span>
                                 </a>
                             </li>
-                        </ul>
+                        </ul-->
                     </div>
 
                     {% include '@ChamiloCore/LearnPath/menubar.html.twig' %}
@@ -244,7 +244,7 @@
                     $('.menu-button').css('color', '#000');
                 }
             });
-            if (/iPhone|iPod|iPad|Safari/.test(navigator.userAgent)) {
+            if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
                 // Fix an issue where you cannot scroll below first screen in
                 // learning paths on Apple devices
                 document.getElementById('wrapper-iframe').setAttribute(

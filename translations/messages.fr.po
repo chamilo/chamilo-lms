@@ -24100,3 +24100,18 @@ msgstr "Ajoutez une introduction de cours pour vos apprenants."
 
 msgid "See as student"
 msgstr "Voir comme apprenant"
+
+msgid "Send date"
+msgstr "Date d'envoi"
+
+msgid "Edit profile"
+msgstr "Éditer le profil"
+
+msgid "Update profile"
+msgstr "Mettre à jour le profil"
+
+msgid "Firstname"
+msgstr "Prénom"
+
+msgid "Lastname"
+msgstr "Nom"

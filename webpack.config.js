@@ -37,7 +37,7 @@ Encore
     .addStyleEntry('css/markdown', './assets/css/markdown.css')
     .addStyleEntry('css/print', './assets/css/print.css')
     .addStyleEntry('css/responsive', './assets/css/responsive.css')
-    .addStyleEntry('css/scorm', './assets/css/scorm.css')
+    .addStyleEntry('css/scorm', './assets/css/scorm.scss')
 
     .enableSingleRuntimeChunk()
     .enableIntegrityHashes()

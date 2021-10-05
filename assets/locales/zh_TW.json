@@ -126,5 +126,9 @@
     "Reporting": "\u5831\u544a",
     "Learning paths": "\u5b78\u7fd2\u8def\u7dda",
     "Diagnostic Form": "Diagnostic Form",
-    "Diagnosis Management": "Diagnosis Management"
+    "Diagnosis Management": "Diagnosis Management",
+    "Edit profile": "",
+    "Update profile": "Update profile",
+    "Firstname": "Firstname",
+    "Lastname": "Lastname"
 }

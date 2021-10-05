@@ -153,7 +153,7 @@ $hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
 $options = learnpath::getIconSelect();
 $cidReq = api_get_cidreq();
 
-$defaultLpIcon = Display::getMdiIcon('map-market-path', 'ch-tool-icon', '', 22, get_lang('Learning path name'));
+$defaultLpIcon = Display::getMdiIcon('map-marker-path', 'ch-tool-icon', '', 22, get_lang('Learning path name'));
 
 $defaultDisableLpIcon = Display::getMdiIcon('map-marker-path', 'ch-tool-icon-disabled', '', 22, get_lang('Learning path name'));
 

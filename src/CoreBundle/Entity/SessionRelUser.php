@@ -84,24 +84,23 @@ class SessionRelUser
     protected ?int $id = null;
 
     /**
-     * @Groups({"session_rel_user:read"})
-     *
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
+    #[Groups(['session_rel_user:read'])]
     protected Session $session;
 
     /**
-     * @Groups({"session_rel_user:read"})
-     *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsRelUser", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[Groups(['session_rel_user:read'])]
     protected User $user;
 
     /**
      * @ORM\Column(name="relation_type", type="integer")
      */
+    #[Groups(['session_rel_user:read'])]
     protected int $relationType;
 
     /**
@@ -129,9 +128,7 @@ class SessionRelUser
      */
     protected DateTime $registeredAt;
 
-    /**
-     * @Groups({"session_rel_user:read"})
-     */
+    #[Groups(['session_rel_user:read'])]
     protected Collection $courses;
 
     public function __construct()

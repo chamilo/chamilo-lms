@@ -74,7 +74,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    #[Groups(['course:read', 'course_rel_user:read', 'session_rel_course_rel_user:read', 'session_rel_user:read'])]
+    #[Groups([
+        'course:read',
+        'course_rel_user:read',
+        'session:read',
+        'session_rel_course_rel_user:read',
+        'session_rel_user:read',
+        'session_rel_course:read',
+    ])]
     protected ?int $id = null;
 
     /**
@@ -82,7 +89,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
-    #[Groups(['course:read', 'course:write', 'course_rel_user:read', 'session_rel_course_rel_user:read', 'session_rel_user:read'])]
+    #[Groups([
+        'course:read',
+        'course:write',
+        'course_rel_user:read',
+        'session:read',
+        'session_rel_course_rel_user:read',
+        'session_rel_user:read',
+        'session_rel_course:read',
+    ])]
     #[Assert\NotBlank(message: 'A Course requires a title')]
     protected ?string $title = null;
 

@@ -10,7 +10,41 @@ export const GET_SESSION_REL_USER = gql`
             edges {
                 node {
                     session {
-                        ...sessionFields
+                        _id
+                        name
+                        displayStartDate
+                        displayEndDate
+                        users(user: $user) {
+                            edges {
+                                node {
+                                    user {
+                                        id
+                                    }
+                                    relationType
+                                }
+                            }
+                        }
+                        courses {
+                            edges {
+                                node {
+                                    course {
+                                        _id
+                                        title
+                                    }
+                                }
+                            }
+                        }
+                        sessionRelCourseRelUsers {
+                            edges {
+                                node {
+                                    course {
+                                        _id
+                                        title
+                                        illustrationUrl
+                                    }
+                                }
+                            }
+                        }                        
                     }
                 }
             }
@@ -33,7 +67,7 @@ export const GET_SESSION_REL_USER = gql`
         _id
         name
         displayStartDate
-        displayEndDate
+        displayEndDate        
         sessionRelCourseRelUsers(user: $user) {
             edges {
                 node {

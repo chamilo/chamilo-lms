@@ -28,7 +28,7 @@
 
 <script>
 import SessionCardList from '../../../components/session/SessionCardList.vue';
-import {computed} from "vue";
+import {computed, ref} from "vue";
 import {useStore} from 'vuex';
 import {useQuery, useResult} from '@vue/apollo-composable'
 import {GET_SESSION_REL_USER} from "../../../graphql/queries/SessionRelUser.js";
@@ -47,19 +47,20 @@ export default {
 
       const {result, loading} = useQuery(GET_SESSION_REL_USER, {
         user: "/api/users/" + userId
-      }, );
+      });
 
-      const sessions = useResult(result, [], ({sessionRelCourseRelUsers, sessionRelUsers}) => {
-        const sessionInSessionRelUser = sessionRelUsers.edges.map(({node}) => node.session);
+     const sessions = useResult(result, [], ({sessionRelCourseRelUsers, sessionRelUsers})=> {
+        let sessionList = [];
+        const sessionInSessionRelUser = sessionRelUsers.edges.map(({node}) => {
+          const sessionExists = sessionList.findIndex(suSession => suSession._id === node.session._id) >= 0;
+          if (!sessionExists) {
+            sessionList.push(node.session);
+          }
 
-        const scu = sessionRelCourseRelUsers.edges.map(({node}) => {
-            const sessionExists = sessionInSessionRelUser.findIndex(suSession => suSession._id === node.session._id) >= 0;
+          return sessionExists ? null : node.session;
+        });
 
-            return sessionExists ? null : node.session;
-          })
-          .filter(scuSession => scuSession !== null);
-
-        return [].concat(sessionInSessionRelUser).concat(scu);
+        return sessionList;
       });
 
       return {

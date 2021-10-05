@@ -66,17 +66,17 @@ class SessionRelCourse
     protected ?int $id = null;
 
     /**
-     * @Groups({"session_rel_course:read", "session_rel_course:write"})
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
+    #[Groups(['session_rel_course:read', 'session_rel_course:write'])]
     protected ?Session $session = null;
 
     /**
-     * @Groups({"session_rel_course:read", "session_rel_course:write"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
+    #[Groups(['session_rel_course:read', 'session_rel_course:write'])]
     protected ?Course $course = null;
 
     /**

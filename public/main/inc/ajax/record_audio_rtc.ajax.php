@@ -15,13 +15,12 @@ api_block_anonymous_users();
 
 $httpRequest = Request::createFromGlobals();
 
-/** @var UploadedFile $audioBlob */
-$audioBlob = $httpRequest->files->get('audio_blob');
 $type = $httpRequest->get('type');
 $trackExerciseId = (int) $httpRequest->get('t_exercise');
 $questionId = (int) $httpRequest->get('question');
+$userId = api_get_user_id();
 
-if (empty($audioBlob)) {
+if (empty($_FILES) || empty($_FILES['audio_blob'])) {
     Display::addFlash(
         Display::return_message(
             get_lang('Upload failed, please check maximum file size limits and folder rights.'),
@@ -32,17 +31,16 @@ if (empty($audioBlob)) {
 }
 
 $em = Container::getEntityManager();
+$assetRepo = Container::getAssetRepository();
 
 switch ($type) {
     case Asset::EXERCISE_ATTEMPT:
         $asset = (new Asset())
             ->setCategory(Asset::EXERCISE_ATTEMPT)
-            ->setTitle(time().uniqid('tea'))
-            ->setFile($audioBlob)
+            ->setTitle("oral_expression_{$questionId}_$userId")
         ;
 
-        $em->persist($asset);
-        $em->flush();
+        $asset = $assetRepo->createFromRequest($asset, $_FILES['audio_blob']);
 
         ChamiloSession::write("oral_expression_asset_$questionId", $asset->getId()->toRfc4122());
         break;
@@ -50,12 +48,10 @@ switch ($type) {
     case Asset::EXERCISE_FEEDBACK:
         $asset = (new Asset())
             ->setCategory(Asset::EXERCISE_FEEDBACK)
-            ->setTitle(time().uniqid('tea'))
-            ->setFile($audioBlob)
+            ->setTitle("feedback_$questionId")
         ;
 
-        $em->persist($asset);
-        $em->flush();
+        $asset = $assetRepo->createFromRequest($asset, $_FILES['audio_blob']);
 
         $attemptFeedback = (new AttemptFeedback())
             ->setAsset($asset);

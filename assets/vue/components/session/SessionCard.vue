@@ -7,7 +7,7 @@
           style="max-width: 540px;"
       >
         <CourseCard
-            :course="course.node.course"
+            :course="course"
             :session-id="session._id"
         />
       </div>
@@ -51,9 +51,17 @@ export default {
     }
 
     if (showAllCourses) {
-      courses.value = session.courses.edges;
+      courses.value = session.courses.edges.map(({node}) => {
+        return node.course;
+      });
     } else {
-      courses.value = session.sessionRelCourseRelUsers.edges;
+      session.sessionRelCourseRelUsers.edges.map(({node}) => {
+        const courseExists = session.courses.edges.findIndex(courseItem => courseItem.node.course._id === node.course._id) >= 0;
+
+        if (courseExists) {
+          courses.value.push(node.course);
+        }
+      });
     }
 
     return {

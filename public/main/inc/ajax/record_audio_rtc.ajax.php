@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\AttemptFeedback;
 use Chamilo\CoreBundle\Entity\TrackExercise;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__.'/../global.inc.php';

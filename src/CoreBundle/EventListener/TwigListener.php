@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use TicketManager;
 use Twig\Environment;
 
 class TwigListener
@@ -55,7 +56,7 @@ class TwigListener
                     'groups' => ['user_json:read'],
                 ]);
                 $isAuth = true;
-                $userIsAllowedInProject = \TicketManager::userIsAllowInProject(['status' => $user->getStatus()], 1);
+                $userIsAllowedInProject = TicketManager::userIsAllowInProject(['status' => $user->getStatus()], 1);
             }
         }
 

@@ -83,7 +83,7 @@ final class IllustrationRepository extends ResourceRepository
         return $file;
     }
 
-    public function getIllustrationNodeFromParent(?ResourceNode $resourceNode): ?ResourceNode
+    public function getIllustrationNodeFromParent(ResourceNode $resourceNode): ?ResourceNode
     {
         $nodeRepo = $this->getResourceNodeRepository();
         $name = $this->getResourceTypeName();
@@ -96,7 +96,7 @@ final class IllustrationRepository extends ResourceRepository
             ->where('node.parent = :parent')
             ->andWhere('type.name = :name')
             ->setParameters([
-                'parent' => isset($resourceNode) ? $resourceNode->getId() : 0,
+                'parent' => $resourceNode->getId(),
                 'name' => $name,
             ])
             ->setMaxResults(1)
@@ -139,7 +139,7 @@ final class IllustrationRepository extends ResourceRepository
         return $illustration;
     }
 
-    private function getIllustrationUrlFromNode(?ResourceNode $node, string $filter = ''): string
+    private function getIllustrationUrlFromNode(ResourceNode $node, string $filter = ''): string
     {
         $node = $this->getIllustrationNodeFromParent($node);
 

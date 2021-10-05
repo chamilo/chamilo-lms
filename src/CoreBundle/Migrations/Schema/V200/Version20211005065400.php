@@ -4,15 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\Repository\ToolRepository;
-use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CourseBundle\Entity\CToolIntro;
-use Chamilo\CourseBundle\Repository\CToolIntroRepository;
-use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20211005065400 extends AbstractMigrationChamilo

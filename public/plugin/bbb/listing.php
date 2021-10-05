@@ -39,20 +39,20 @@ if ($bbb->isGlobalConference()) {
 
 $allowStudentAsConferenceManager = false;
 if (!empty($courseInfo) && !empty($groupId) && !api_is_allowed_to_edit()) {
-    $groupEnabled = api_get_course_plugin_setting(
+    $groupEnabled = '1' === api_get_course_plugin_setting(
             'bbb',
             'bbb_enable_conference_in_groups',
             $courseInfo
-        ) === '1';
+        );
     if ($groupEnabled) {
         $group = api_get_group_entity($groupId);
         $isSubscribed = GroupManager::isUserInGroup(api_get_user_id(), $group);
         if ($isSubscribed) {
-            $allowStudentAsConferenceManager = api_get_course_plugin_setting(
+            $allowStudentAsConferenceManager = '1' === api_get_course_plugin_setting(
                     'bbb',
                     'big_blue_button_students_start_conference_in_groups',
                     $courseInfo
-                ) === '1';
+                );
         }
     }
 }

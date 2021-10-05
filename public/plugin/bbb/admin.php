@@ -72,8 +72,8 @@ if ($action) {
             foreach ($meetings as $meeting) {
                 $dataToExport[] = [
                     $meeting['created_at'],
-                    $meeting['status'] == 1 ? $plugin->get_lang('MeetingOpened') : $plugin->get_lang('MeetingClosed'),
-                    $meeting['record'] == 1 ? get_lang('Yes') : get_lang('No'),
+                    1 == $meeting['status'] ? $plugin->get_lang('MeetingOpened') : $plugin->get_lang('MeetingClosed'),
+                    1 == $meeting['record'] ? get_lang('Yes') : get_lang('No'),
                     $meeting['course'] ? $meeting['course']->getTitle() : '-',
                     $meeting['session'] ? $meeting['session']->getName() : '-',
                     isset($meeting['participants']) ? implode(PHP_EOL, $meeting['participants']) : null,

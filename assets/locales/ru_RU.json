@@ -126,5 +126,9 @@
     "Reporting": "\u041e\u0442\u0447\u0435\u0442",
     "Learning paths": "\u0423\u0447\u0435\u0431\u043d\u044b\u0439 \u043f\u043b\u0430\u043d",
     "Diagnostic Form": "Diagnostic Form",
-    "Diagnosis Management": "Diagnosis Management"
+    "Diagnosis Management": "Diagnosis Management",
+    "Edit profile": "",
+    "Update profile": "Update profile",
+    "Firstname": "Firstname",
+    "Lastname": "Lastname"
 }

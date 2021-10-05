@@ -42,6 +42,8 @@ class TwigListener
         $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
 
+        $userIsAllowedInProject = false;
+
         $data = null;
         $isAuth = false;
         if (null !== $token) {
@@ -53,6 +55,7 @@ class TwigListener
                     'groups' => ['user_json:read'],
                 ]);
                 $isAuth = true;
+                $userIsAllowedInProject = \TicketManager::userIsAllowInProject(['status' => $user->getStatus()], 1);
             }
         }
 
@@ -74,6 +77,12 @@ class TwigListener
         foreach ($settings as $variable) {
             $value = $this->settingsManager->getSetting($variable);
             $config[$variable] = $value;
+        }
+
+        if ($userIsAllowedInProject && 'true' === $this->settingsManager->getSetting('display.show_link_ticket_notification')) {
+            $config['display.show_link_ticket_notification'] = 'true';
+        } else {
+            $config['display.show_link_ticket_notification'] = 'false';
         }
 
         $languages = $this->languageRepository->getAllAvailable()->getQuery()->getArrayResult();

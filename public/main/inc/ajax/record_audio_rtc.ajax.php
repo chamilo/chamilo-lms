@@ -37,7 +37,7 @@ switch ($type) {
     case Asset::EXERCISE_ATTEMPT:
         $asset = (new Asset())
             ->setCategory(Asset::EXERCISE_ATTEMPT)
-            ->setTitle("oral_expression_{$questionId}_$userId")
+            ->setTitle($_FILES['audio_blob']['name'])
         ;
 
         $asset = $assetRepo->createFromRequest($asset, $_FILES['audio_blob']);

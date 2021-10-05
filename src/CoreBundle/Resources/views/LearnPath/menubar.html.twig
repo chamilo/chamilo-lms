@@ -13,10 +13,10 @@
         <div class="circle {{ show_toolbar_by_default == 1 ? 'open' : '' }}">
             {% if show_left_column == 1 %}
                 {% set label = "Collapse" | trans %}
-                {% set icon_expand = "arrow-expand-horizontal" %}
+                {% set icon_expand = "arrow-collapse-horizontal" %}
                 {% if lp_mode == 'embedframe' %}
                     {% set label = "Expand" | trans %}
-                    {% set icon_expand = "arrow-collapse-horizontal" %}
+                    {% set icon_expand = "arrow-expand-horizontal" %}
                 {% endif %}
                 <a href="#"
                    id="lp-view-expand-toggle"

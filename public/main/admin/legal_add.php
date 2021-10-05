@@ -18,7 +18,7 @@ if ('true' !== api_get_setting('allow_terms_conditions')) {
 $form = new FormValidator('addlegal');
 
 $defaults = [];
-$term_preview = [
+$termPreview = [
     'type' => 0,
     'content' => '',
     'changes' => '',
@@ -86,19 +86,19 @@ if ($form->validate()) {
                 $defaults['type'] = $type;
                 $defaults['content'] = $content;
                 $defaults['changes'] = $changes;
-                $term_preview = $defaults;
-                $term_preview['type'] = (int) $_POST['type'];
+                $termPreview = $defaults;
+                $termPreview['type'] = (int) $_POST['type'];
             } else {
-                $my_lang = $_POST['language'];
+                $myLang = $_POST['language'];
                 if (isset($_POST['language'])) {
-                    $all_langs = api_get_languages();
-                    if (in_array($my_lang, array_keys($all_langs))) {
-                        $language = api_get_language_id($my_lang);
-                        $term_preview = LegalManager::get_last_condition($language);
-                        $defaults = $term_preview;
-                        if (!$term_preview) {
+                    $allLangs = api_get_languages();
+                    if (in_array($myLang, array_keys($allLangs))) {
+                        $language = api_get_language_id($myLang);
+                        $termPreview = LegalManager::get_last_condition($language);
+                        $defaults = $termPreview;
+                        if (!$termPreview) {
                             // there are not terms and conditions
-                            $term_preview['type'] = -1;
+                            $termPreview['type'] = -1;
                             $defaults['type'] = 0;
                         }
                     }
@@ -134,14 +134,14 @@ if (isset($_POST['language'])) {
     $form->addElement('radio', 'type', '', get_lang('HTML'), '0');
     $form->addElement('radio', 'type', '', get_lang('Page Link'), '1');
 
-    $preview = LegalManager::show_last_condition($term_preview);
+    $preview = LegalManager::show_last_condition($termPreview);
 
-    if (-1 != $term_preview['type']) {
+    if (-1 != $termPreview['type']) {
         $preview = LegalManager::replaceTags($preview);
         $form->addElement('label', get_lang('Preview'), $preview);
     }
 
-    $termId = isset($term_preview['id']) ? $term_preview['id'] : 0;
+    $termId = isset($termPreview['id']) ? $termPreview['id'] : 0;
     $returnParams = $extraField->addElements(
         $form,
         $termId,
@@ -180,7 +180,7 @@ if (isset($_POST['language'])) {
     $form->addButtonSearch(get_lang('Load'), 'send');
 }
 
-$tool_name = get_lang('Add terms and conditions');
+$toolName = get_lang('Add terms and conditions');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
@@ -190,7 +190,7 @@ $(function () {
 });
 </script>';
 
-Display::display_header($tool_name);
+Display::display_header($toolName);
 
 echo '<script>
 function sendlang() {

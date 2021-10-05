@@ -58,4 +58,25 @@ class LegalRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * Get type of terms and conditions.
+     * Type 0 is HTML Text
+     * Type 1 is a link to a different terms and conditions page.
+     *
+     * @param int $legalId
+     * @param int $languageId
+     *
+     * @return mixed The current type of terms and conditions (int) or false on error
+     */
+    public function getTypeOfTermsAndConditions(int $legalId, int $languageId)
+    {
+        $qb = $this->createQueryBuilder('l');
+        $qb->select('l.type')
+            ->where($qb->expr()->eq('l.id', $legalId))
+            ->andWhere($qb->expr()->eq('l.languageId', $languageId))
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

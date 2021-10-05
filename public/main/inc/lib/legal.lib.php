@@ -29,11 +29,6 @@ class LegalManager
     {
         $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
-
-        if (false === $last) {
-            $last = [];
-        }
-
         $type = (int) $type;
         $time = time();
 
@@ -61,8 +56,8 @@ class LegalManager
             }
         }
 
-        if ((isset($last['content']) && $last['content'] != $content) || !empty($changeList) || empty($last)) {
-            $version = (int) self::getLastVersion($language);
+        if ($last['content'] != $content || !empty($changeList)) {
+            $version = self::getLastVersion($language);
             $version++;
             $params = [
                 'language_id' => $language,
@@ -78,7 +73,7 @@ class LegalManager
             self::updateExtraFields($id, $extraFieldValuesToSave);
 
             return $id;
-        } elseif ((isset($last['type']) && $last['type'] != $type) && $language == $last['language_id']) {
+        } elseif ($last['type'] != $type && $language == $last['language_id']) {
             // Update
             $id = $last['id'];
             $params = [

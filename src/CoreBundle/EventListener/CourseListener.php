@@ -26,6 +26,9 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
+use Chamilo\CoreBundle\Repository\LegalRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class CourseListener.
@@ -37,11 +40,16 @@ class CourseListener
 
     private Environment $twig;
     private AuthorizationCheckerInterface $authorizationChecker;
+    private SettingsManager $settingsManager;
 
-    public function __construct(Environment $twig, AuthorizationCheckerInterface $authorizationChecker)
-    {
+    public function __construct(
+        Environment $twig,
+        AuthorizationCheckerInterface $authorizationChecker,
+        SettingsManager $settingsManager
+    ) {
         $this->twig = $twig;
         $this->authorizationChecker = $authorizationChecker;
+        $this->settingsManager= $settingsManager;
     }
 
     /**
@@ -132,79 +140,6 @@ class CourseListener
             // Setting variables for the twig templates.
             $twig->addGlobal('course', $course);
 
-            // checking the terms and condition
-            $allowTerms = api_get_setting('registration.allow_terms_conditions');
-            $loadTermsSection = api_get_setting('platform.load_term_conditions_section');
-            $termsSections = [0 => 'platform', 1 => 'course'];
-
-            // Platform legal terms and conditions
-            if ('true' === $allowTerms && 'course' === $termsSections[$loadTermsSection]) {
-
-                $user = api_get_user_entity();
-
-                $termAndConditionStatus = api_check_term_condition($user->getId());
-                if ($termAndConditionStatus === false) {
-                    $sessionHandler->set('term_and_condition', ['user_id' => $user->getId()]);
-                } else {
-                    $sessionHandler->remove('term_and_condition');
-                }
-                $termsAndCondition = $sessionHandler->get('term_and_condition');
-
-                if (null !== $termsAndCondition) {
-                    // user id
-                    $userId = $termsAndCondition['user_id'];
-
-                    // Update the terms & conditions
-                    $legalType = null;
-
-                    // Verify type of terms and conditions
-                    if (null !== $request->get('legal_info')) {
-                        $infoLegal = explode(':', $request->get('legal_info'));
-                        $legalType = LegalManager::get_type_of_terms_and_conditions(
-                            $infoLegal[0],
-                            $infoLegal[1]
-                        );
-                    }
-
-                    $legalOption = (empty($legalType));
-                    // is necessary verify check
-                    if (1 === $legalType) {
-                        $legalOption = (null !== $request->get('legal_accept') && 1 === (int) $request->get('legal_accept'));
-                    }
-
-                    if (null !== $request->get('legal_accept_type') && true === $legalOption) {
-                        $condArray = explode(':', $request->get('legal_accept_type'));
-                        if (!empty($condArray[0]) && !empty($condArray[1])) {
-                            $time = time();
-                            $conditionToSave = intval($condArray[0]).':'.intval($condArray[1]).':'.$time;
-                            UserManager::update_extra_field_value(
-                                $userId,
-                                'legal_accept',
-                                $conditionToSave
-                            );
-                        }
-                    }
-
-                    $url = '';
-                    $redirect = true;
-                    $allow = api_get_configuration_value('allow_public_course_with_no_terms_conditions');
-                    if (true === $allow &&
-                        null !== $course->getVisibility() &&
-                        COURSE_VISIBILITY_OPEN_WORLD == $course->getVisibility()
-                    ) {
-                        $redirect = false;
-                    }
-                    if ($redirect && !api_is_platform_admin()) {
-                        $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
-                    }
-
-                    if (!empty($url)) {
-                        header('Location: '.$url);
-                        exit;
-                    }
-                }
-            }
-
             // Checking if sid is used.
             $sessionId = (int) $request->get('sid');
             $session = null;
@@ -281,6 +216,81 @@ class CourseListener
             $courseParams = $this->generateCourseUrl($course, $sessionId, $groupId, $origin);
             $sessionHandler->set('course_url_params', $courseParams);
             $twig->addGlobal('course_url_params', $courseParams);
+
+            // checking the terms and condition
+            $allowTerms = $this->settingsManager->getSetting('registration.allow_terms_conditions');
+            $loadTermsSection = $this->settingsManager->getSetting('platform.load_term_conditions_section');
+
+            // Platform legal terms and conditions
+            if ('true' === $allowTerms && 'course' === $loadTermsSection) {
+
+                $user = api_get_user_entity();
+                $termAndConditionStatus = api_check_term_condition($user->getId());
+                if ($termAndConditionStatus === false) {
+                    $sessionHandler->set('term_and_condition', ['user_id' => $user->getId()]);
+                } else {
+                    $sessionHandler->remove('term_and_condition');
+                }
+                $termsAndCondition = $sessionHandler->get('term_and_condition');
+                if (null !== $termsAndCondition) {
+                    // user id
+                    $userId = $termsAndCondition['user_id'];
+
+                    // Update the terms & conditions
+                    $legalType = null;
+
+                    // Verify type of terms and conditions
+                    if (null !== $request->get('legal_info')) {
+                        $infoLegal = explode(':', $request->get('legal_info'));
+                        /** @var LegalRepository $legalTermsRepo */
+                        $legalTermsRepo = $em->getRepository(Legal::class);
+                        $legalId = (int) $infoLegal[0];
+                        $languageId = (int) $infoLegal[1];
+                        $legalType = $legalTermsRepo->getTypeOfTermsAndConditions($legalId, $languageId);
+                        error_log($legalType);
+                    }
+
+                    $legalOption = (empty($legalType));
+                    // is necessary verify check
+                    if (1 === $legalType) {
+                        $legalOption = (null !== $request->get('legal_accept') && 1 === (int) $request->get('legal_accept'));
+                    }
+
+                    if (null !== $request->get('legal_accept_type') && true === $legalOption) {
+                        $condArray = explode(':', $request->get('legal_accept_type'));
+                        if (!empty($condArray[0]) && !empty($condArray[1])) {
+                            $time = time();
+                            $conditionToSave = intval($condArray[0]).':'.intval($condArray[1]).':'.$time;
+                            UserManager::update_extra_field_value(
+                                $userId,
+                                'legal_accept',
+                                $conditionToSave
+                            );
+                        }
+                    }
+
+                    $url = '';
+                    $redirect = true;
+                    $allow = api_get_configuration_value('allow_public_course_with_no_terms_conditions');
+                    if (true === $allow &&
+                        null !== $course->getVisibility() &&
+                        COURSE_VISIBILITY_OPEN_WORLD == $course->getVisibility()
+                    ) {
+                        $redirect = false;
+                    }
+                    if ($redirect && !api_is_platform_admin()) {
+                        $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
+                    }
+
+                    if (!empty($url)) {
+                        error_log('The url :'.$url);
+                        //$response = new RedirectResponse($url);
+                        //event->setResponse($response);
+                        $event->setResponse(new RedirectResponse($url));
+                    }
+                }
+            }
+
         }
     }
 

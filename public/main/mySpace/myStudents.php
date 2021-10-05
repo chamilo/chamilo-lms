@@ -1009,10 +1009,10 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     ];
 }
 $iconCertificate = ' '.Display::url(
-        get_lang('Generate'),
-        api_get_self().'?action=generate_certificate&student='.$studentId.'&cid='.$courseId.'&course='.$courseCode,
-        ['class' => 'btn btn-primary btn-xs']
-    );
+    get_lang('Generate'),
+    api_get_self().'?action=generate_certificate&student='.$studentId.'&cid='.$courseId.'&course='.$courseCode,
+    ['class' => 'btn btn-primary btn-xs']
+);
 $userInfoExtra['certificate'] = [
     'label' => get_lang('Certificate'),
     'content' => $iconCertificate,

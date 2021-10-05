@@ -56,12 +56,8 @@ class ScormApi
     ) {
         $debug = 0;
         $return = null;
-        $courseCode = api_get_course_id();
-        if (!empty($courseId)) {
-            $courseInfo = api_get_course_info_by_id($courseId);
-            if ($courseInfo) {
-                $courseCode = $courseInfo['code'];
-            }
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
         }
 
         if ($debug > 0) {
@@ -72,10 +68,10 @@ class ScormApi
             error_log("SCORE: $score - max:$max - min: $min - status:$status");
             error_log("TIME: $time - suspend: $suspend - location: $location - core_exit: $core_exit");
             error_log("finish: $lmsFinish - navigatesAway: $userNavigatesAway");
-            error_log("courseCode: $courseCode");
+            error_log("courseId: $courseId");
         }
 
-        $myLP = learnpath::getLpFromSession($courseCode, $lp_id, $user_id);
+        $myLP = learnpath::getLpFromSession($courseId, $lp_id, $user_id);
 
         if (!is_a($myLP, 'learnpath')) {
             if ($debug) {
@@ -606,7 +602,7 @@ class ScormApi
          * -'last'
          * - a real item ID
          */
-        $mylp = learnpath::getLpFromSession(api_get_course_id(), $lpId, $user_id);
+        $mylp = learnpath::getLpFromSession(api_get_course_int_id(), $lpId, $user_id);
         $new_item_id = 0;
         switch ($next_item) {
             case 'next':

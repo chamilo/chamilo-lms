@@ -433,30 +433,28 @@ body {
     line-height: 35px;
     text-align: center;
     border-radius: 100%;
-    background-color: #34495E;
     font-size: 20px;
-    color: #FFF;
+    @apply bg-ch-ternary text-ch-text-secondary;
 }
 
 .icon-toolbar .fa:hover,
 .icon-toolbar .mdi:hover {
-    background-color: #000;
+    @apply bg-ch-primary-light;
 }
 
 .expand .fa,
 .expand .mdi {
-    background-color: #00829C;
+    @apply bg-ch-ternary;
 }
 
 .expand .fa:hover,
 .expand .mdi:hover {
-    background-color: #006A84;
-    color: #ffffff;
+    @apply bg-ch-primary-light text-ch-text-secondary;
 }
 
 .expand .fa:active, .expand .fa:focus,
 .expand .mdi:active, .expand .mdi:focus {
-    color: #ffffff;
+    @apply bg-ch-primary-light text-ch-text-secondary;
 }
 
 #scorm-info .progress-bar {
@@ -491,14 +489,13 @@ body {
     margin-top: 4px;
     padding: 2px;
     border-radius: 20px;
-    background-color: #ffffff;
-    border: 1px solid #8dcbf3;
     -webkit-transform: translate(-100%);
     -moz-transform:  translate(-100%);
     -transform:  translate(-100%);
     -webkit-transition: all 0.4s ease-out;
     -moz-transition: all 0.4s ease-out;
     transition: all 0.4s ease-out;
+    @apply border-2 border-ch-ternary-dark bg-ch-text-secondary;
 }
 .c-menu-right .circle {
     opacity: 0;
@@ -507,7 +504,7 @@ body {
     padding: 2px;
     border-radius: 20px;
     background-color: #ffffff;
-    border: 1px solid #8dcbf3;
+    @apply border-2 border-ch-ternary-dark bg-ch-text-secondary;
 }
 
 .c-menu-left .open.circle {
@@ -522,13 +519,13 @@ body {
 
 .c-menu-left .circle a, .c-menu-right .circle a {
     text-decoration: none;
-    color: #fff;
     display: inline-block;
     height: 35px;
     width: 35px;
     line-height: 35px;
     text-align: center;
     border-radius: 100%;
+    @apply text-ch-text-secondary;
 }
 
 .c-menu-left .circle a:hover {
@@ -548,11 +545,14 @@ body {
     padding: 7px;
     background: #ffffff;
     font-size: 16px;
-    border: 1px solid #8dcbf3;
+    @apply border-2 border-ch-ternary-dark;
 }
 
 .menu-button:hover {
-    background-color: #ffffff;
+  @apply bg-ch-ternary-light text-ch-text-secondary;
+}
+.menu-button-selected {
+  @apply bg-ch-ternary text-ch-text-secondary;
 }
 
 /* LP VIEW COLLAPSE */

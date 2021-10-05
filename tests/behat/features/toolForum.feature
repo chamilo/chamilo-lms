@@ -20,6 +20,7 @@ Feature: Forum tool
       | forum_title   | Forum Test |
     And I fill in editor field "forum_comment" with "This is the first forum for test"
     And I press "SubmitForum"
+    And wait very long for the page to be loaded
     Then I should see "The forum has been added"
 
   Scenario: Create a forum thread

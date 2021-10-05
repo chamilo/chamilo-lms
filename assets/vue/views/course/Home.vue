@@ -209,6 +209,24 @@ export default {
     let courseId = route.params.id;
     let sessionId = route.query.sid ?? 0;
 
+    if (!isEmpty(window.config)) {
+      const allowTerms = window.config['registration.allow_terms_conditions'];
+      const loadTermsSection = window.config['platform.load_term_conditions_section'];
+      console.log(loadTermsSection);
+      console.log(allowTerms);
+      if (allowTerms && loadTermsSection == 'course') {
+        axios.post(ENTRYPOINT + '../course/' + courseId + '/checkLegal.json').then(response => {
+          console.log("En check legal");
+          console.log(response);
+          if (response.data.redirect) {
+            router.push({path: response.data.url});
+          }
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
+    }
+
     axios.get(ENTRYPOINT + '../course/' + courseId + '/home.json').then(response => {
       state.course = response.data.course;
       state.tools = response.data.tools;

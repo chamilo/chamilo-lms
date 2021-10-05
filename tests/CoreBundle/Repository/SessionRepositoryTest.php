@@ -138,7 +138,10 @@ class SessionRepositoryTest extends AbstractApiTest
                 '@context' => '/api/contexts/SessionRelCourse',
                 '@type' => 'SessionRelCourse',
                 'session' => '/api/sessions/'.$session->getId(),
-                'course' => '/api/courses/'.$course->getId(),
+                'course' => [
+                    '@type' => 'https://schema.org/Course',
+                    'id' => $course->getId(),
+                ],
             ]
         );
 

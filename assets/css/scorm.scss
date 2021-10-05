@@ -243,12 +243,13 @@ body {
 .scorm_item_section .section {
     background: url("../../public/img/scorm/folder-item-closed.png") no-repeat 10px center;
     padding: 10px 20px 10px 35px;
+    @apply text-ch-ternary;
 }
 
 .scorm_item_section.scorm_completed .section {
     background: url("../../public/img/scorm/folder-item-open.png") no-repeat 10px center;
     padding-right: 1.5em;
-    @apply text-ch-text;
+    @apply text-ch-ternary;
 }
 
 .scorm_item_normal a:hover {
@@ -664,16 +665,20 @@ body {
     background: url("../../public/img/scorm/folder-item-open.png") #f5f5f5 no-repeat 10px center;
 }
 #learning_path_toc .child_item.lp_item_type_document.scorm_completed{
-    background: url(../../public/img/icons/svg/check-completed.svg) #FFFFFF right center no-repeat;
+    background: url(../../public/img/icons/svg/check-completed.svg) right center no-repeat;
+    @apply bg-ch-ternary;
 }
 #learning_path_toc .child_item.lp_item_type_document.scorm_not_attempted{
-    background: url(../../public/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+    background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
+    @apply bg-ch-ternary;
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_completed{
-    background: url(../../public/img/icons/svg/check-completed.svg) #FFFFFF right center no-repeat;
+    background: url(../../public/img/icons/svg/check-completed.svg) right center no-repeat;
+    @apply bg-ch-ternary;
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_not_attempted{
-    background: url(../../public/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+    background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
+    @apply bg-ch-ternary;
 }
 
 .status-heading .panel-heading .item-action{
@@ -694,10 +699,10 @@ body {
   width: 100%;
 }
 .scorm_completed .item a{
-  @apply text-gray-500;
+  @apply text-ch-ternary;
 }
 .scorm_completed .item a.scorm_highlighted{
-  @apply text-gray-50;
+  @apply text-ch-ternary;
 }
 .scorm_highlight .item {
   background: url("../../public/img/scorm/scorm_highlight.png") no-repeat 10px center !important;

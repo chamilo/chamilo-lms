@@ -2,6 +2,7 @@ import NotificationMixin from './NotificationMixin';
 import { formatDateTime } from '../utils/dates';
 import isEmpty from 'lodash/isEmpty';
 import {MESSAGE_TYPE_INBOX} from "../components/message/msgType";
+
 export default {
   mixins: [NotificationMixin],
   methods: {

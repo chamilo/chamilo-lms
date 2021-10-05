@@ -24,16 +24,10 @@
 
 <script>
 import {mapGetters} from "vuex";
-import isEmpty from "lodash/isEmpty";
 
 export default {
   name: 'Breadcrumb',
   props: ['layoutClass', 'legacy'],
-  data() {
-    return {
-      //legacy:[],
-    };
-  },
   computed: {
     ...mapGetters('resourcenode', {
       resourceNode: 'getResourceNode',
@@ -62,15 +56,6 @@ export default {
       if (list.includes(this.$route.name)) {
         return items;
       }
-
-      // Course
-      /*if (this.$route.query.cid) {
-        items.push({
-          text: this.$route.query.cid,
-          //disabled: route.path === path || lastItem.path === route.path,
-          href: '/course/' + this.$route.query.cid + '/home'
-        });
-      }*/
 
       if (this.legacy) {
         console.log('legacy');

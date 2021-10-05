@@ -137,9 +137,7 @@ export default {
   },
   setup() {
     const store = useStore();
-
     const linksType = ref('users');
-
     const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);
     const isAdmin = computed(() => store.getters['security/isAdmin']);
 

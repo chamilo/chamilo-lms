@@ -1071,11 +1071,11 @@ class learnpath
     /**
      * Gets the number of items currently completed.
      *
-     * @param bool $failedStatusException flag to determine the failed status is not considered progressed
+     * @param bool Flag to determine the failed status is not considered progressed
      *
      * @return int The number of items currently completed
      */
-    public function get_complete_items_count($failedStatusException = false)
+    public function get_complete_items_count(bool $failedStatusException = false): int
     {
         $i = 0;
         $completedStatusList = [

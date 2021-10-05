@@ -24079,3 +24079,19 @@ msgstr "Eingeloggt bleiben"
 
 msgid "Register oneself"
 msgstr "Registrieren"
+
+msgid "Send date"
+msgstr "Sendedatum"
+
+msgid "Edit profile"
+msgstr "Profil bearbeiten"
+
+msgid "Update profile"
+msgstr "Profil aktualisieren"
+
+msgid "Firstname"
+msgstr "Vorname"
+
+msgid "Lastname"
+msgstr "Nachname"
+

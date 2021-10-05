@@ -167,7 +167,7 @@ class bbb
      */
     public function getUrlParams($courseId = 0, $sessionId = 0, $groupId = 0)
     {
-        if (empty($this->courseCode) && !$courseId) {
+        if (empty($this->courseId) && !$courseId) {
             if ($this->isGlobalConferencePerUserEnabled()) {
                 return 'global=1&user_id='.$this->userId;
             }
@@ -179,19 +179,16 @@ class bbb
             return '';
         }
 
-        $courseCode = $this->courseCode;
+        $defaultCourseId = (int) $this->courseId;
         if (!empty($courseId)) {
-            $course = api_get_course_info_by_id($courseId);
-            if ($course) {
-                $courseCode = $course['code'];
-            }
+            $defaultCourseId = (int) $courseId;
         }
 
         return http_build_query(
             [
-                'cid' => $courseId,
-                'sid' => $sessionId ?: $this->sessionId,
-                'gid' => $groupId ?: $this->groupId,
+                'cid' => $defaultCourseId,
+                'sid' => (int) $sessionId ?: $this->sessionId,
+                'gid' => (int) $groupId ?: $this->groupId,
             ]
         );
     }
@@ -366,12 +363,12 @@ class bbb
             $params['user_id'] = (int) $this->userId;
         }
 
-        $params['attendee_pw'] = isset($params['attendee_pw']) ? $params['attendee_pw'] : $this->getUserMeetingPassword();
+        $params['attendee_pw'] = $params['attendee_pw'] ?? $this->getUserMeetingPassword();
         $attendeePassword = $params['attendee_pw'];
-        $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
+        $params['moderator_pw'] = $params['moderator_pw'] ?? $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
 
-        $params['record'] = api_get_course_plugin_setting('bbb', 'big_blue_button_record_and_store') == 1;
+        $params['record'] = api_get_course_plugin_setting('bbb', 'big_blue_button_record_and_store') == 1 ? 1 : 0;
         $max = api_get_course_plugin_setting('bbb', 'big_blue_button_max_students_allowed');
         $max = isset($max) ? $max : -1;
 
@@ -385,7 +382,6 @@ class bbb
         $params['created_at'] = api_get_utc_datetime();
         $params['access_url'] = $this->accessUrl;
         $params['closed_at'] = '';
-
 
         $id = Database::insert($this->table, $params);
 
@@ -473,9 +469,8 @@ class bbb
         if ($this->isGlobalConference()) {
             return 'url_'.api_get_current_access_url_id();
         }
-        $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
 
-        return $courseCode;
+        return empty($courseCode) ? api_get_course_id() : $courseCode;
     }
 
     /**

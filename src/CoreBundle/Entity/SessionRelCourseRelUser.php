@@ -68,24 +68,24 @@ class SessionRelCourseRelUser
     protected ?int $id = null;
 
     /**
-     * @Groups({"session:read", "session_rel_course_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
+    #[Groups(['session:read', 'session_rel_course_rel_user:read'])]
     protected User $user;
 
     /**
-     * @Groups({"session_rel_course_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
+    #[Groups(['session_rel_course_rel_user:read'])]
     protected Session $session;
 
     /**
-     * @Groups({"session:read", "session_rel_course_rel_user:read", "session_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Course", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
+    #[Groups(['session:read', 'session_rel_course_rel_user:read', 'session_rel_user:read'])]
     #[MaxDepth(1)]
     protected Course $course;
 

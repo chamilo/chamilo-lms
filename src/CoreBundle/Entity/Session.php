@@ -89,6 +89,7 @@ class Session implements ResourceWithAccessUrlInterface
      * @ORM\OrderBy({"position"="ASC"})
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
+    #[Groups(['session:read', 'session_rel_user:read'])]
     protected Collection $courses;
 
     /**
@@ -96,6 +97,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
+    #[Groups(['session:read', 'session_rel_user:read'])]
     protected Collection $users;
 
     /**

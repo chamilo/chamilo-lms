@@ -40,7 +40,7 @@ function initializeItem($lpId, $user_id, $view_id, $next_item, $startTime = 0)
      * -'last'
      * - a real item ID
      */
-    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lpId, $user_id);
+    $mylp = learnpath::getLpFromSession(api_get_course_int_id(), $lpId, $user_id);
     $mylp->set_current_item($next_item);
     if ($debug) {
         error_log('In initialize_item() - new item is '.$next_item);

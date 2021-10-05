@@ -7234,13 +7234,13 @@ class learnpath
     }
 
     /**
-     * @param string $courseCode
-     * @param int    $lpId
-     * @param int    $user_id
+     * @param int   $courseId
+     * @param int   $lpId
+     * @param int   $user_id
      *
      * @return learnpath
      */
-    public static function getLpFromSession($courseCode, $lpId, $user_id)
+    public static function getLpFromSession(int $courseId, int $lpId, int $user_id)
     {
         $debug = 0;
         $learnPath = null;
@@ -7262,11 +7262,11 @@ class learnpath
         }
 
         if (!is_object($learnPath)) {
-            $learnPath = new learnpath($lp, api_get_course_info($courseCode), $user_id);
+            $learnPath = new learnpath($lp, api_get_course_info_by_id($courseId), $user_id);
             if ($debug) {
                 error_log('------getLpFromSession------');
                 error_log('getLpFromSession: create new learnpath');
-                error_log("create new LP with $courseCode - $lpId - $user_id");
+                error_log("create new LP with $courseId - $lpId - $user_id");
                 error_log("lp_view_session_id: ".$learnPath->lp_view_session_id);
                 error_log("api_get_sessionid: ".api_get_session_id());
             }

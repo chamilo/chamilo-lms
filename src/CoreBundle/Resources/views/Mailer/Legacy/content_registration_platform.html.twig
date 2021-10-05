@@ -1,9 +1,11 @@
+{% autoescape false %}
 <p>{{ 'Dear'|trans }} {{ complete_name }},</p>
+<p>{{ 'Welcome to this platform'|trans }}</p>
 <p>{{ 'You are registered to'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'with the following settings:'|trans }}</p>
 <p>{{ 'Username'|trans }} : {{ login_name }}<br>
     {{ 'Pass'|trans }} : {{ original_password }}</p>
-<p>{{ 'Thanks for registering to %s.'|trans|format('platform.site_name' | api_get_setting) }}</p>
-<p>{{ 'Address'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'is'|trans }} : {{ mailWebPath }}</p>
+<p>{{ 'For more details visit %s'|trans|format(search_link) }}</p>
 <p>{{ 'In case of trouble, contact us.'|trans }}</p>
 
 {% include '@ChamiloCore/Mailer/Legacy/_admin_signature_footer.html.twig' %}
+{% endautoescape %}

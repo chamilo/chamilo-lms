@@ -8,13 +8,15 @@
 require_once __DIR__.'/../../../vendor/autoload.php';
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
-$isGlobal = isset($_GET['global']) ? true : false;
+
+$isGlobal = isset($_GET['global']);
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 
 // If global setting is used then we delete the course sessions (cidReq/id_session)
 if ($isGlobalPerUser || $isGlobal) {
     $cidReset = true;
 }
+
 require_once __DIR__.'/config.php';
 
 $logInfo = [
@@ -28,8 +30,6 @@ $tpl = new Template($tool_name);
 $vmIsEnabled = false;
 $host = '';
 $salt = '';
-$interface = isset($_GET['interface']) ? (int) $_GET['interface'] : 0;
-
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 
 $conferenceManager = $bbb->isConferenceManager();
@@ -39,6 +39,7 @@ if ($bbb->isGlobalConference()) {
     api_protect_course_script(true);
 }
 
+$message = null;
 if ($bbb->pluginEnabled) {
     if ($bbb->isServerConfigured()) {
         if ($bbb->isServerRunning()) {
@@ -68,7 +69,6 @@ if ($bbb->pluginEnabled) {
 
                 $meetingParams = [];
                 $meetingParams['meeting_name'] = $bbb->getCurrentVideoConferenceName();
-                $meetingParams['interface'] = $interface;
                 $url = null;
                 if ($bbb->meetingExists($meetingParams['meeting_name'])) {
                     $joinUrl = $bbb->joinMeeting($meetingParams['meeting_name']);
@@ -83,7 +83,7 @@ if ($bbb->pluginEnabled) {
 
                 $meetingInfo = $bbb->findMeetingByName($meetingParams['meeting_name']);
                 if (!empty($meetingInfo) && $url) {
-                    $bbb->saveParticipant($meetingInfo['id'], api_get_user_id(), $interface);
+                    $bbb->saveParticipant($meetingInfo['id'], api_get_user_id());
                     $bbb->redirectToBBB($url);
                 } else {
                     Display::addFlash(
@@ -107,5 +107,6 @@ if ($bbb->pluginEnabled) {
 } else {
     $message = Display::return_message(get_lang('ServerIsNotConfigured'), 'warning');
 }
+
 $tpl->assign('message', $message);
 $tpl->display_one_col_template();

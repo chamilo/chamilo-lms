@@ -480,7 +480,7 @@ class Version20 extends AbstractMigrationChamilo
             'c_student_publication_rel_document' => ['c_id'],
             'c_student_publication_rel_user' => ['c_id'],
             'c_survey' => ['c_id', 'session_id', 'survey_id'],
-            'c_survey_answer' => ['c_id'],
+            'c_survey_answer' => ['c_id', 'answer_id'],
             'c_survey_group' => ['c_id'],
             'c_survey_invitation' => [
                 'c_id',

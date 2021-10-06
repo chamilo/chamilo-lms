@@ -4,9 +4,10 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Repository;
+namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class TicketMessageAttachmentRepository extends ResourceRepository

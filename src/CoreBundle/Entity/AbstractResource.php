@@ -59,6 +59,8 @@ abstract class AbstractResource
         'course:read',
         'session:read',
         'course_rel_user:read',
+        'session_rel_course:read',
+        'session_rel_user:read',
         'session_rel_course_rel_user:read',
     ])]
     public ?string $illustrationUrl = null;

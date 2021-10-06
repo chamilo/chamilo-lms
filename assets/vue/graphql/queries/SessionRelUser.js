@@ -45,7 +45,7 @@ export const GET_SESSION_REL_USER = gql`
                                     }
                                 }
                             }
-                        }                        
+                        }
                     }
                 }
             }
@@ -58,24 +58,32 @@ export const GET_SESSION_REL_USER = gql`
             edges {
                 node {
                     session {
-                        ...sessionFields
-                    }
-                }
-            }
-        }
-    }
-    fragment sessionFields on Session {
-        _id
-        name
-        displayStartDate
-        displayEndDate        
-        sessionRelCourseRelUsers(user: $user) {
-            edges {
-                node {
-                    course {
                         _id
-                        title
-                        illustrationUrl
+                        name
+                        displayStartDate
+                        displayEndDate
+                        courses {
+                            edges {
+                                node {
+                                    course {
+                                        _id
+                                        title
+                                        illustrationUrl
+                                    }
+                                }
+                            }
+                        }
+                        sessionRelCourseRelUsers(user: $user) {
+                            edges {
+                                node {
+                                    course {
+                                        _id
+                                        title
+                                        illustrationUrl
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

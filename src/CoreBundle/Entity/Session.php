@@ -89,7 +89,7 @@ class Session implements ResourceWithAccessUrlInterface
      * @ORM\OrderBy({"position"="ASC"})
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
-    #[Groups(['session:read', 'session_rel_user:read'])]
+    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
     protected Collection $courses;
 
     /**
@@ -274,6 +274,7 @@ class Session implements ResourceWithAccessUrlInterface
         $this->nbrUsers = 0;
         $this->nbrCourses = 0;
         $this->sendSubscriptionNotification = false;
+
         $now = new DateTime();
         $this->displayStartDate = $now;
         $this->displayEndDate = $now;

@@ -51,7 +51,7 @@ export default {
 
      const sessions = useResult(result, [], ({sessionRelCourseRelUsers, sessionRelUsers})=> {
         let sessionList = [];
-        const sessionInSessionRelUser = sessionRelUsers.edges.map(({node}) => {
+        sessionRelUsers.edges.map(({node}) => {
           const sessionExists = sessionList.findIndex(suSession => suSession._id === node.session._id) >= 0;
           if (!sessionExists) {
             sessionList.push(node.session);
@@ -60,9 +60,21 @@ export default {
           return sessionExists ? null : node.session;
         });
 
+       sessionRelCourseRelUsers.edges.map(({node}) => {
+         const sessionExists = sessionList.findIndex(suSession => suSession._id === node.session._id) >= 0;
+
+         if (!sessionExists) {
+           sessionList.push(node.session);
+         }
+
+         return sessionExists ? null : node.session;
+       });
+
+
         return sessionList;
       });
 
+      console.log(sessions);
       return {
         sessions,
         loading

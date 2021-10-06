@@ -189,7 +189,7 @@ switch ($action) {
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $user_table
                         SET active = '".$status."'
-                        WHERE user_id = '".$user_id."'";
+                        WHERE id = '".$user_id."'";
                 $result = Database::query($sql);
 
                 // Send and email if account is active

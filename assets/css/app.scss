@@ -215,10 +215,13 @@
     @apply font-extrabold text-transparent bg-clip-text bg-ch-primary
   }
   .ch-tool-icon-disabled {
-    @apply font-extrabold text-transparent bg-clip-text bg-gray-400
+    @apply font-extrabold text-transparent bg-clip-text bg-gray-400;
   }
   .ch-tool-icon-gradient {
-    @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light
+    @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light;
+  }
+  .ch-tool-icon-button {
+    @apply font-extrabold bg-clip-text bg-ch-text;
   }
 
   // Forms

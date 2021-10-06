@@ -18,7 +18,7 @@ class Agenda extends AbstractTool implements ToolInterface
 
     public function getIcon(): string
     {
-        return 'mdi-certificate';
+        return 'mdi-calendar-text';
     }
 
     public function getLink(): string

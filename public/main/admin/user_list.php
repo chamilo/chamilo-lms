@@ -153,10 +153,10 @@ function clear_session_list(div_session) {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon-button', null, 16).' '.get_lang('Advanced search').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon('arrow-right-bold', 'ch-tool-icon-button', null, 16).' '.get_lang('Advanced search').'\');
     }
 }
 
@@ -1014,7 +1014,7 @@ $searchAdvanced = '
 <a id="advanced_params" href="javascript://"
     class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
-    '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'
+    '.Display::getMdiIcon('arrow-right-bold', 'ch-tool-icon-button', null, 16).' '.get_lang('Advanced search').'
     </span>
 </a>';
 $actionsLeft = '';

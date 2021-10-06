@@ -1483,7 +1483,6 @@ class learnpathItem
      */
     public function get_status($check_db = true, $update_local = false)
     {
-        $courseId = $this->courseId;
         $debug = self::DEBUG;
         if ($debug) {
             error_log('learnpathItem::get_status() on item '.$this->db_id);
@@ -1492,7 +1491,7 @@ class learnpathItem
             if ($debug) {
                 error_log('learnpathItem::get_status(): checking db');
             }
-            if (!empty($this->db_item_view_id) && !empty($courseId)) {
+            if (!empty($this->db_item_view_id)) {
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                 $sql = "SELECT status FROM $table
                         WHERE

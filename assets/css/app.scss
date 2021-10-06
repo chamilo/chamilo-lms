@@ -241,6 +241,21 @@
     @apply bg-ch-secondary text-ch-text-secondary;
   }
 
+  // Pager
+  .pager-bar {
+  }
+  .pager-bar .pager-select {
+  }
+  .pager-bar .pager-counter {
+    @apply mt-4;
+  }
+  .pager-bar .pager-jumper {
+    @apply mt-4;
+  }
+  .pager-bar .pager-jumper .btn-link {
+    @apply -mt-2 mx-2;
+  }
+
   @import "scss/index.scss";
 }
 

@@ -19,6 +19,8 @@ $invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($
 $action = $_REQUEST['action'] ?? '';
 $survey = null;
 $repo = Container::getSurveyRepository();
+$questionRepo = Container::getSurveyQuestionRepository();
+
 if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
     $table_survey = Database::get_course_table(TABLE_SURVEY);
@@ -38,7 +40,7 @@ if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     }
 }
 
-/** @var CSurvey $survey */
+/** @var CSurvey|null $survey */
 $survey = $repo->find($surveyId);
 
 if (null === $survey) {
@@ -74,10 +76,11 @@ if (isset($_POST) && !empty($_POST)) {
     $status = 1;
     if (!empty($options)) {
         foreach ($options as $selectedQuestionId) {
+            $question = $questionRepo->find($selectedQuestionId);
             SurveyUtil::saveAnswer(
                 $userId,
                 $survey,
-                $selectedQuestionId,
+                $question,
                 1,
                 $status
             );
@@ -85,17 +88,18 @@ if (isset($_POST) && !empty($_POST)) {
     } else {
         foreach ($questions as $item) {
             $questionId = $item['question_id'];
+            $question = $questionRepo->find($questionId);
             SurveyUtil::saveAnswer(
                 $userId,
                 $survey,
-                $questionId,
+                $question,
                 1,
                 0
             );
         }
     }
 
-    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user_id']);
+    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user_id'] ?? api_get_user_id());
 
     Display::addFlash(Display::return_message(get_lang('Saved.')));
     header('Location: '.$url);
@@ -151,7 +155,7 @@ $table->setHeaderContents(
 );
 
 foreach ($questions as $item) {
-    $questionId = $item['question_id'];
+    $questionId = $item->getIid();
     $count = 0;
     $questionsWithAnswer = 0;
     if (isset($answerList[$questionId])) {
@@ -187,16 +191,17 @@ foreach ($students as $studentId) {
         }
         $rowColumn = 1;
         foreach ($questions as $item) {
+            $questionId = $item->getIid();
             $checked = '';
             $html = '';
-            if (isset($answerList[$item['question_id']][$studentId])) {
+            if (isset($answerList[$questionId][$studentId])) {
                 $checked = $availableIcon;
-                if (empty($answerList[$item['question_id']][$studentId])) {
+                if (empty($answerList[$questionId][$studentId])) {
                     $checked = $notAvailableIcon;
                 }
                 if ('edit' === $action) {
                     $checked = '';
-                    if (1 == $answerList[$item['question_id']][$studentId]) {
+                    if (1 == $answerList[$questionId][$studentId]) {
                         $checked = 'checked';
                     }
                 }
@@ -204,8 +209,8 @@ foreach ($students as $studentId) {
 
             if ('edit' === $action) {
                 $html = '<div class="alert alert-info"><input
-                    id="'.$item['question_id'].'"
-                    name="options['.$item['question_id'].']"
+                    id="'.$questionId.'"
+                    name="options['.$questionId.']"
                     class="question" '.$checked.'
                     type="checkbox"
                 /></div>';
@@ -223,10 +228,11 @@ foreach ($students as $studentId) {
     } else {
         $rowColumn = 1;
         foreach ($questions as $item) {
+            $questionId = $item->getIid();
             $checked = '';
-            if (isset($answerList[$item['question_id']][$studentId])) {
+            if (isset($answerList[$questionId][$studentId])) {
                 $checked = $availableIcon;
-                if (empty($answerList[$item['question_id']][$studentId])) {
+                if (empty($answerList[$questionId][$studentId])) {
                     $checked = $notAvailableIcon;
                 }
             }

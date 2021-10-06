@@ -22,10 +22,6 @@ if (!api_is_allowed_to_edit()) {
     }
 }
 
-$htmlHeadXtra[] = api_get_css_asset('jt.timepicker/jquery.timepicker.css');
-$htmlHeadXtra[] = api_get_asset('jt.timepicker/jquery.timepicker.js');
-$htmlHeadXtra[] = api_get_asset('datepair.js/dist/datepair.js');
-$htmlHeadXtra[] = api_get_asset('datepair.js/dist/jquery.datepair.js');
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
@@ -52,18 +48,14 @@ $form = new FormValidator(
     api_get_self().'?action=edit&'.api_get_cidreq().'&survey_id='.$surveyId
 );
 
-$form->addElement('header', $tool_name);
+$form->addHeader($tool_name);
 $form->addHidden('anonymous', 0);
 $form->addHidden('survey_language', $courseInfo['language']);
 $form->addHidden('survey_subtitle', '');
 $form->addHidden('survey_thanks', '');
 $form->addHidden('visible_results', '0');
 $form->addHidden('survey_type', 3);
-
-$text = $form->addText(
-    'survey_title',
-    get_lang('Title')
-);
+$text = $form->addText('survey_title', get_lang('Title'));
 
 $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
@@ -73,8 +65,8 @@ if ($allowSurveyAvailabilityDatetime) {
     $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
     $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 } else {
-    $form->addElement('date_picker', 'start_date', get_lang('Start Date'));
-    $form->addElement('date_picker', 'end_date', get_lang('End Date'));
+    $form->addDatePicker('start_date', get_lang('Start Date'));
+    $form->addDatePicker('end_date', get_lang('End Date'));
     $form->addRule('start_date', get_lang('Invalid date'), 'date');
     $form->addRule('end_date', get_lang('Invalid date'), 'date');
 }

@@ -20,7 +20,7 @@ class Version20211005154000 extends AbstractMigrationChamilo
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function up(Schema $schema): void
     {

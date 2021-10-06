@@ -110,10 +110,6 @@ if ($form->validate()) {
         if (isset($values[$name]) && !empty($values[$name])) {
             $date = $values[$name];
 
-            if (empty($date)) {
-                continue;
-            }
-
             $start = $name.'_time_range_start';
             $end = $name.'_time_range_end';
 

@@ -504,7 +504,7 @@ class Version20 extends AbstractMigrationChamilo
             'message' => ['user_receiver_id'],
         ];
 
-        $this->addSql("ALTER TABLE c_survey_invitation CHANGE survey_code survey_code VARCHAR(20) DEFAULT NULL");
+        $this->addSql('ALTER TABLE c_survey_invitation CHANGE survey_code survey_code VARCHAR(20) DEFAULT NULL');
 
         foreach ($tables as $tableName => $fields) {
             $table = $schema->getTable($tableName);

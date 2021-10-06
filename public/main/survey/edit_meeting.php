@@ -22,7 +22,6 @@ if (!api_is_allowed_to_edit()) {
     }
 }
 
-
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('Survey list'),

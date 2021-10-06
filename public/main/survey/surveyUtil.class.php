@@ -2966,7 +2966,7 @@ class SurveyUtil
     public static function modify_filter($survey_id, $drh = false)
     {
         $repo = Container::getSurveyRepository();
-        /** @var CSurvey $survey */
+        /** @var CSurvey|null $survey */
         $survey = $repo->find($survey_id);
 
         if (null === $survey) {

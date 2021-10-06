@@ -271,9 +271,9 @@ body {
 /* END SCORM CSS BASE*/
 #scorm-info {
     padding: 0;
-    background-color: #EBF3F5;
     display: inline-block;
     width: 100%;
+    @apply bg-ch-primary;
 }
 
 #scorm-info .description-autor p {
@@ -289,8 +289,17 @@ body {
     margin-bottom: 10px;
 }
 
+#scorm-info #progress_bar {
+  @apply mb-2;
+}
+
 #scorm-info #progress_bar .progress {
-    margin-bottom: 5px;
+    @apply rounded-sm ring-1 ring-ch-secondary bg-white text-sm text-center min-h-full ml-12 mr-4;
+}
+
+#scorm-info .progress-bar {
+  line-height: 17px;
+  @apply bg-ch-secondary text-ch-text-secondary;
 }
 
 .scorm-title {
@@ -456,10 +465,6 @@ body {
 .expand .fa:active, .expand .fa:focus,
 .expand .mdi:active, .expand .mdi:focus {
     @apply bg-ch-primary-light text-ch-text-secondary;
-}
-
-#scorm-info .progress-bar {
-    line-height: 17px;
 }
 
 .actions_lp {

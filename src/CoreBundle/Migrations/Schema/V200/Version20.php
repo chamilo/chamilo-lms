@@ -482,7 +482,7 @@ class Version20 extends AbstractMigrationChamilo
             'c_survey' => ['c_id', 'session_id', 'survey_id'],
             'c_survey_answer' => ['c_id'],
             'c_survey_group' => ['c_id'],
-            'c_survey_invitation' => ['c_id', 'session_id', 'group_id'],
+            'c_survey_invitation' => ['c_id', 'session_id', 'group_id', 'survey_invitation_id'],
             'c_survey_question' => ['c_id', 'question_id'],
             'c_survey_question_option' => ['c_id', 'question_option_id'],
             'c_thematic' => ['c_id', 'session_id'],
@@ -496,6 +496,8 @@ class Version20 extends AbstractMigrationChamilo
 
             'message' => ['user_receiver_id'],
         ];
+
+        $this->addSql("ALTER TABLE c_survey_invitation CHANGE survey_code survey_code VARCHAR(20) DEFAULT NULL");
 
         foreach ($tables as $tableName => $fields) {
             $table = $schema->getTable($tableName);

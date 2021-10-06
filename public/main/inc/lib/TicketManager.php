@@ -765,7 +765,6 @@ class TicketManager
             ->setTicket($ticket)
             ->setInsertUserId($currentUser->getId())
             ->setInsertDateTime(api_get_utc_datetime(null, false, true))
-            ->addUserLink($currentUser)
             ->setParent($currentUser)
         ;
 

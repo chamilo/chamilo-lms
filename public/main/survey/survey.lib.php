@@ -335,6 +335,7 @@ class SurveyManager
                 ->setSurveyThanks($values['survey_thanks'])
                 ->setAnonymous((string) $values['anonymous'])
                 ->setVisibleResults((int) $values['visible_results'])
+                ->setSurveyType((int) ($values['survey_type'] ?? 1))
                 ->setParent($course)
                 ->addCourseLink($course, $session)
             ;

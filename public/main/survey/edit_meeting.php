@@ -149,7 +149,6 @@ $form->addLabel(
 );
 
 $form->addButtonUpdate(get_lang('Edit'), 'submit_survey');
-
 $surveyData['start_date'] = api_get_local_time($surveyData['start_date']);
 $surveyData['end_date'] = api_get_local_time($surveyData['end_date']);
 $form->setDefaults($surveyData);

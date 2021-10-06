@@ -16,7 +16,7 @@ $courseInfo = api_get_course_info();
 
 $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
 $invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($_REQUEST['invitationcode']) : 0;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
 $survey = null;
 $repo = Container::getSurveyRepository();
 if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
@@ -33,18 +33,24 @@ if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     }
 
     $survey_invitation = Database::fetch_array($result, 'ASSOC');
-    /** @var CSurvey $survey */
-    $survey = $repo->find($survey_invitation['survey_id']);
-    $surveyId = $survey->getIid();
+    if ($survey_invitation) {
+        $surveyId = (int) $survey_invitation['survey_id'];
+    }
 }
+
+/** @var CSurvey $survey */
+$survey = $repo->find($surveyId);
 
 if (null === $survey) {
     api_not_allowed(true);
 }
 
+$surveyId = $survey->getIid();
+
 SurveyManager::checkTimeAvailability($survey);
 $invitations = SurveyUtil::get_invited_users($survey);
 $students = $invitations['course_users'] ?? [];
+
 $content = Display::page_header($survey->getTitle());
 
 $interbreadcrumb[] = [
@@ -62,7 +68,7 @@ if (isset($_POST) && !empty($_POST)) {
 
     foreach ($questions as $item) {
         $questionId = $item->getIid();
-        SurveyUtil::remove_answer($userId, $surveyId, $questionId, $courseId);
+        SurveyUtil::remove_answer($userId, $surveyId, $questionId);
     }
 
     $status = 1;

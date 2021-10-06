@@ -2678,6 +2678,7 @@ class SurveyUtil
 
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $sessionCondition = api_get_session_condition($session_id);
 
         // Selecting all the invitations of this survey AND the additional emailaddresses (the left join)
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
@@ -2685,8 +2686,8 @@ class SurveyUtil
 				FROM $table_survey_invitation as table_invitation
 				WHERE
 				    table_invitation.c_id = $course_id AND
-                    survey_id='".$surveyId."' AND
-                    session_id = $session_id
+                    survey_id = ".$surveyId."
+                    $sessionCondition
                 ";
 
         $defaults = [];
@@ -3326,7 +3327,6 @@ class SurveyUtil
             LIMIT $from,$number_of_items
         ";
 
-        //$res = Database::query($sql);
         $efv = new ExtraFieldValue('survey');
         $list = [];
         foreach ($surveys as $survey) {
@@ -3334,6 +3334,7 @@ class SurveyUtil
             $surveyId = $survey->getIid();
             $array[0] = $surveyId;
             $type = $survey->getSurveyType();
+
             $title = $survey->getTitle();
             if (self::checkHideEditionToolsByCode($survey->getCode())) {
                 $array[1] = $title;

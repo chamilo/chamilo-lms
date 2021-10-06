@@ -19,14 +19,14 @@ final class Version20211005065400 extends AbstractMigrationChamilo
         if ($schema->hasTable('plugin_bbb_meeting')) {
             $table = $schema->getTable('plugin_bbb_meeting');
             if (!$table->hasColumn('internal_meeting_id')) {
-                //$this->addSql('ALTER TABLE plugin_bbb_meeting ADD COLUMN internal_meeting_id VARCHAR(255) DEFAULT NULL;');
+                $this->addSql('ALTER TABLE plugin_bbb_meeting ADD COLUMN internal_meeting_id VARCHAR(255) DEFAULT NULL;');
             }
         }
 
         if ($schema->hasTable('plugin_bbb_room')) {
             $table = $schema->getTable('plugin_bbb_room');
-            if (!$table->hasColumn('ALTER TABLE plugin_bbb_room ADD close INT NOT NULL DEFAULT 0;')) {
-                $this->addSql('');
+            if (!$table->hasColumn('close')) {
+                $this->addSql('ALTER TABLE plugin_bbb_room ADD close INT NOT NULL DEFAULT 0;');
             }
         }
     }

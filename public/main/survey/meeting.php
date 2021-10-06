@@ -16,9 +16,11 @@ $courseInfo = api_get_course_info();
 
 $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
 $invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($_REQUEST['invitationcode']) : 0;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
 $survey = null;
 $repo = Container::getSurveyRepository();
+$questionRepo = Container::getSurveyQuestionRepository();
+
 if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
     $table_survey = Database::get_course_table(TABLE_SURVEY);
@@ -33,18 +35,24 @@ if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     }
 
     $survey_invitation = Database::fetch_array($result, 'ASSOC');
-    /** @var CSurvey $survey */
-    $survey = $repo->find($survey_invitation['survey_id']);
-    $surveyId = $survey->getIid();
+    if ($survey_invitation) {
+        $surveyId = (int) $survey_invitation['survey_id'];
+    }
 }
+
+/** @var CSurvey|null $survey */
+$survey = $repo->find($surveyId);
 
 if (null === $survey) {
     api_not_allowed(true);
 }
 
+$surveyId = $survey->getIid();
+
 SurveyManager::checkTimeAvailability($survey);
 $invitations = SurveyUtil::get_invited_users($survey);
 $students = $invitations['course_users'] ?? [];
+
 $content = Display::page_header($survey->getTitle());
 
 $interbreadcrumb[] = [
@@ -62,16 +70,17 @@ if (isset($_POST) && !empty($_POST)) {
 
     foreach ($questions as $item) {
         $questionId = $item->getIid();
-        SurveyUtil::remove_answer($userId, $surveyId, $questionId, $courseId);
+        SurveyUtil::remove_answer($userId, $surveyId, $questionId);
     }
 
     $status = 1;
     if (!empty($options)) {
         foreach ($options as $selectedQuestionId) {
+            $question = $questionRepo->find($selectedQuestionId);
             SurveyUtil::saveAnswer(
                 $userId,
                 $survey,
-                $selectedQuestionId,
+                $question,
                 1,
                 $status
             );
@@ -79,17 +88,18 @@ if (isset($_POST) && !empty($_POST)) {
     } else {
         foreach ($questions as $item) {
             $questionId = $item['question_id'];
+            $question = $questionRepo->find($questionId);
             SurveyUtil::saveAnswer(
                 $userId,
                 $survey,
-                $questionId,
+                $question,
                 1,
                 0
             );
         }
     }
 
-    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user_id']);
+    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user_id'] ?? api_get_user_id());
 
     Display::addFlash(Display::return_message(get_lang('Saved.')));
     header('Location: '.$url);
@@ -145,7 +155,7 @@ $table->setHeaderContents(
 );
 
 foreach ($questions as $item) {
-    $questionId = $item['question_id'];
+    $questionId = $item->getIid();
     $count = 0;
     $questionsWithAnswer = 0;
     if (isset($answerList[$questionId])) {
@@ -181,16 +191,17 @@ foreach ($students as $studentId) {
         }
         $rowColumn = 1;
         foreach ($questions as $item) {
+            $questionId = $item->getIid();
             $checked = '';
             $html = '';
-            if (isset($answerList[$item['question_id']][$studentId])) {
+            if (isset($answerList[$questionId][$studentId])) {
                 $checked = $availableIcon;
-                if (empty($answerList[$item['question_id']][$studentId])) {
+                if (empty($answerList[$questionId][$studentId])) {
                     $checked = $notAvailableIcon;
                 }
                 if ('edit' === $action) {
                     $checked = '';
-                    if (1 == $answerList[$item['question_id']][$studentId]) {
+                    if (1 == $answerList[$questionId][$studentId]) {
                         $checked = 'checked';
                     }
                 }
@@ -198,8 +209,8 @@ foreach ($students as $studentId) {
 
             if ('edit' === $action) {
                 $html = '<div class="alert alert-info"><input
-                    id="'.$item['question_id'].'"
-                    name="options['.$item['question_id'].']"
+                    id="'.$questionId.'"
+                    name="options['.$questionId.']"
                     class="question" '.$checked.'
                     type="checkbox"
                 /></div>';
@@ -217,10 +228,11 @@ foreach ($students as $studentId) {
     } else {
         $rowColumn = 1;
         foreach ($questions as $item) {
+            $questionId = $item->getIid();
             $checked = '';
-            if (isset($answerList[$item['question_id']][$studentId])) {
+            if (isset($answerList[$questionId][$studentId])) {
                 $checked = $availableIcon;
-                if (empty($answerList[$item['question_id']][$studentId])) {
+                if (empty($answerList[$questionId][$studentId])) {
                     $checked = $notAvailableIcon;
                 }
             }

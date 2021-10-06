@@ -23,7 +23,6 @@ class SessionRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
         /** @var SessionRepository $repo */
         $repo = self::getContainer()->get(SessionRepository::class);
 
@@ -38,7 +37,6 @@ class SessionRepositoryTest extends AbstractApiTest
 
     public function testCreateSessionSameTitle(): void
     {
-        self::bootKernel();
         $name = 'session';
         $session = $this->createSession($name);
         $this->assertHasNoEntityViolations($session);
@@ -86,12 +84,11 @@ class SessionRepositoryTest extends AbstractApiTest
 
     public function testUpdateWithApi(): void
     {
-        $token = $this->getUserToken();
-
         $sessionName = 'simple';
         $newSessionName = 'simple2';
         $session = $this->createSession($sessionName);
 
+        $token = $this->getUserToken();
         $this->createClientWithCredentials($token)->request(
             'PUT',
             '/api/sessions/'.$session->getId(),

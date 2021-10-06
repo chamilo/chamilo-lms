@@ -29,7 +29,7 @@ class Version20191208160020 extends AbstractMigrationChamilo
 
         foreach ($items as $item) {
             $id = $item['id'];
-            $value = 'a:1:{'.$item['value'].'}';
+            $value = 'a:1:{i:0;'.$item['value'].'}';
             $sql = sprintf("UPDATE extra_field_saved_search SET value = '%s' WHERE id = %s", $value, $id);
             $connection->executeQuery($sql);
         }

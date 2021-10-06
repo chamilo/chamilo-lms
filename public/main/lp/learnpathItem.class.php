@@ -2915,6 +2915,7 @@ class learnpathItem
      * Sets the lp_view id this item view is registered to.
      *
      * @param int $lp_view_id lp_view DB ID
+     *
      * @todo //todo insert into lp_item_view if lp_view not exists
      */
     public function set_lp_view(int $lp_view_id): bool

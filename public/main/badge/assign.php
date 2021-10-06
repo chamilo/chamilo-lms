@@ -227,7 +227,7 @@ $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
 $form->addRule('skill', get_lang('Required field'), 'required');
 
-$showLevels = false;// === api_get_configuration_value('hide_skill_levels');
+$showLevels = false; // === api_get_configuration_value('hide_skill_levels');
 
 if ($showLevels) {
     $form->addSelect('acquired_level', get_lang('Level acquired'), $acquiredLevel);

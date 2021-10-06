@@ -524,7 +524,7 @@ class Session implements ResourceWithAccessUrlInterface
             );
         }
 
-        return $this->getSessionRelCourseRelUsers()->matching($criteria);
+        return $this->sessionRelCourseRelUsers->matching($criteria);
     }
 
     public function setName(string $name): self

@@ -234,11 +234,13 @@ class SessionRepositoryTest extends AbstractApiTest
         $session = $this->createSession($name);
         $course = $this->createCourse('new');
         $user = $this->createUser('student');
+        $sessionAdmin = $this->createUser('session_admin');
 
         $this->assertHasNoEntityViolations($session);
 
         // 2. Add course to session.
         $session
+            ->addSessionAdmin($sessionAdmin)
             ->setDisplayStartDate(new DateTime('2010-01-01 15:00'))
             ->setDisplayEndDate(new DateTime('2010-01-01 18:00'))
             ->addCourse($course)
@@ -246,7 +248,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $sessionRepo->update($session);
         $this->assertSame(1, $session->getCourses()->count());
 
-        // 3. Add student to session - course - course
+        // 3. Add student to session - course.
         $course = $courseRepo->find($course->getId());
 
         /** @var User $user */
@@ -270,18 +272,37 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertCount(1, $sessions);
 
         $hasUser = $session->hasUserInCourse($user, $course, $studentStatus);
+
         $this->assertTrue($hasUser);
         $this->assertTrue($session->hasStudentInCourse($user, $course));
         $this->assertTrue($session->hasStudentInCourseList($user));
 
-        $this->assertSame(2, $session->getUsers()->count());
+        $this->assertSame(3, $session->getUsers()->count());
 
-        // 4. Delete user
+        $sessionRelUser1 = $session->getUsers()[0];
+        $admin = $this->getUser('admin');
+
+        $this->assertNotNull($sessionRelUser1->getSession());
+        $this->assertSame($session, $sessionRelUser1->getSession());
+        $this->assertSame($admin, $sessionRelUser1->getUser());
+
+        $sessionRelUser2 = $session->getUsers()[1];
+
+        // Student is to one course.
+        $this->assertSame(1, $sessionRelUser2->getCourses()->count());
+        $this->assertSame($user, $sessionRelUser2->getUser());
+
+        // Session admin is not connected to any course.
+        $sessionRelUser3 = $session->getUsers()[2];
+        $this->assertNotNull($sessionRelUser3->getSession());
+        $this->assertSame(0, $sessionRelUser3->getCourses()->count());
+
+        // 4. Delete student
         $userRepo->delete($user);
 
         /** @var Session $session */
         $session = $sessionRepo->find($session->getId());
-        $this->assertSame(1, $session->getUsers()->count());
+        $this->assertSame(2, $session->getUsers()->count());
         $this->assertSame(0, $session->getSessionRelCourseRelUsers()->count());
     }
 

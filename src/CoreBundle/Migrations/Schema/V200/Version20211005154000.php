@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -35,7 +37,7 @@ class Version20211005154000 extends AbstractMigrationChamilo
         $attachmentRepo = $container->get(TicketMessageAttachmentRepository::class);
         $userRepo = $container->get(UserRepository::class);
 
-        $sql = "SELECT * FROM ticket_message_attachments ORDER BY id";
+        $sql = 'SELECT * FROM ticket_message_attachments ORDER BY id';
 
         $result = $connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();

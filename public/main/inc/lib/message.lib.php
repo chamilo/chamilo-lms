@@ -542,7 +542,7 @@ class MessageManager
             $attachment->addUserLink($message->getSender());
             $receivers = $message->getReceivers();
             foreach ($receivers as $receiver) {
-                $attachment->addUserLink($receiver);
+                $attachment->addUserLink($receiver->getReceiver());
             }
             $em->flush();
 

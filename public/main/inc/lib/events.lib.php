@@ -1540,7 +1540,7 @@ class Event
         $exercise_id = (int) $exercise_id;
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
-        $sessionCondition = api_get_session_condition($origin_session_id);
+        $sessionCondition = api_get_session_condition($session_id);
         $sql = "SELECT count(*) as count
                 FROM $table
                 WHERE status = ''  AND

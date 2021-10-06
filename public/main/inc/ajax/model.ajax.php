@@ -798,8 +798,9 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-        $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : SessionManager::getDefaultSessionTab();
+        $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
         $language = isset($_REQUEST['lang']) ? $_REQUEST['lang'] : '';
+        $order = isset($_REQUEST['order']) ? $_REQUEST['order'] : '';
 
         $sessionColumns = SessionManager::getGridColumns($listType);
         $columns = $sessionColumns['simple_column_name'];
@@ -832,9 +833,9 @@ switch ($action) {
                     ['where' => $whereCondition, 'extra' => $extra_fields],
                     true,
                     [],
-                    $extraFieldsToLoad,
                     $listType,
-                    $extraFieldsToLoad
+                    $extraFieldsToLoad,
+                    $search
                 );
                 break;
             case 'active':
@@ -1966,7 +1967,8 @@ switch ($action) {
                     false,
                     $sessionColumns,
                     $listType,
-                    $extraFieldsToLoad
+                    $extraFieldsToLoad,
+                    $search
                 );
                 break;
             case 'active':

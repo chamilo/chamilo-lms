@@ -522,7 +522,7 @@ if (!empty($extraFieldsToFilter)) {
 $extraFieldListToString = implode(',', $extraFieldToSearch);
 $result = SessionManager::getGridColumns('simple', $extraFieldsToFilter);
 $columns = $result['columns'];
-$column_model = $result['column_model'];
+$columnModel = $result['column_model'];
 
 $form->setDefaults($defaults);
 
@@ -984,7 +984,7 @@ $extra_params['autowidth'] = 'true';
 
 // height auto
 $extra_params['height'] = 'auto';
-$extra_params['postData'] = [
+$extraParams['postData'] = [
     'filters' => [
         'groupOp' => 'AND',
         'rules' => $result['rules'],
@@ -999,7 +999,8 @@ if (!empty($sessionByUserList)) {
         $sessionUserList[] = (string) $sessionByUser['session_id'];
     }
 }
-$action_links = 'function action_formatter(cellvalue, options, rowObject) {
+
+$actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
     var sessionList = '.json_encode($sessionUserList).';
     var id = options.rowId.toString();
     if (sessionList.indexOf(id) == -1) {
@@ -1027,10 +1028,10 @@ $griJs = Display::grid_js(
     'sessions',
     $url,
     $columns,
-    $column_model,
-    $extra_params,
+    $columnModel,
+    $extraParams,
     [],
-    $action_links,
+    $actionLinks,
     true
 );
 
@@ -1077,9 +1078,9 @@ $table = new HTML_Table(['class' => 'data_table']);
 $column = 0;
 $row = 0;
 
-$total = '0';
-$sumHours = '0';
-$numHours = '0';
+$total = 0;
+$sumHours = 0;
+$numHours = 0;
 
 $field = 'heures_disponibilite_par_semaine';
 $extraField = new ExtraFieldValue('user');
@@ -1107,7 +1108,7 @@ function dateDiffInWeeks($date1, $date2)
 }
 
 if ($data) {
-    $availableHoursPerWeek = $data['value'];
+    $availableHoursPerWeek = (int) $data['value'];
     $numberWeeks = 0;
     if ($form->validate()) {
         $formData = $form->getSubmitValues();
@@ -1135,12 +1136,12 @@ if ($data) {
 
         foreach ($sessions as $session) {
             $sessionId = $session['id'];
-            $data = $sessionFieldValue->get_values_by_handler_and_field_variable(
+            $dataTravails = $sessionFieldValue->get_values_by_handler_and_field_variable(
                 $sessionId,
                 'temps_de_travail'
             );
-            if ($data) {
-                $sumHours += $data['value'];
+            if ($dataTravails) {
+                $sumHours += (int) $dataTravails['value'];
             }
         }
     }

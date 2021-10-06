@@ -458,11 +458,13 @@ class SessionManager
     /**
      * Get session list for a session admin or platform admin.
      *
-     * @param int    $userId   User Id for the session admin.
-     * @param array  $options  Order and limit keys.
-     * @param bool   $getCount Whether to get all the results or only the count.
-     * @param array  $columns  Columns from jqGrid.
+     * @param int   $userId   User Id for the session admin.
+     * @param array $options  Order and limit keys.
+     * @param bool  $getCount Whether to get all the results or only the count.
+     * @param array $columns  Columns from jqGrid.
      * @param string $listType
+     * @param array $extraFieldsToLoad
+     * @param bool  $formatted
      *
      * @return array
      */
@@ -472,7 +474,8 @@ class SessionManager
         $getCount = false,
         $columns = [],
         $listType = 'all',
-        $extraFieldsToLoad = []
+        $extraFieldsToLoad = [],
+        $formatted = false
     ) {
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -489,7 +492,7 @@ class SessionManager
         $where .= $conditions['where'];
         $sqlInjectWhere = $conditions['inject_where'];
         $injectExtraFields = $conditions['inject_extra_fields'];
-        $order = empty($conditions['order']) ? ' ORDER BY position ASC' : $conditions['order'];
+        $order = empty($conditions['order']) ? ' ORDER BY s.name ASC' : $conditions['order'];
         $limit = $conditions['limit'];
 
         $isMakingOrder = false;
@@ -627,27 +630,166 @@ class SessionManager
 
         $query .= $order;
         $query .= $limit;
-        $result = Database::query($query);
-
-        $sessions = Database::store_result($result, 'ASSOC');
-
-        if ($showCountUsers && !$getCount) {
-            foreach ($sessions as &$session) {
-                $result = Database::query("SELECT COUNT(1) AS nbr
+        if (!$formatted) {
+            $result = Database::query($query);
+            $sessions = Database::store_result($result, 'ASSOC');
+            if ($showCountUsers && !$getCount) {
+                foreach ($sessions as &$session) {
+                    $result = Database::query("SELECT COUNT(session_id) AS nbr
                     FROM session_rel_user WHERE session_id = {$session['id']} AND relation_type = ".Session::STUDENT);
-                $session['users'] = Database::fetch_assoc($result)['nbr'];
+                    $session['users'] = Database::fetch_assoc($result)['nbr'];
+                }
             }
+            if ('all' === $listType) {
+                if ($getCount) {
+                    return $sessions[0]['total_rows'];
+                }
+                return $sessions;
+            }
+            return $sessions;
         }
 
-        if ('all' === $listType) {
+        // For search diagnosis format (Ofaj)
+        $categories = self::get_all_session_category();
+        $orderedCategories = [];
+        if (!empty($categories)) {
+            foreach ($categories as $category) {
+                $orderedCategories[$category['id']] = $category['name'];
+            }
+        }
+        $result = Database::query($query);
+        $formattedSessions = [];
+        if (Database::num_rows($result)) {
+            $sessions = Database::store_result($result, 'ASSOC');
             if ($getCount) {
                 return $sessions[0]['total_rows'];
             }
 
-            return $sessions;
+            $activeIcon = Display::return_icon(
+                'accept.png',
+                get_lang('Active'),
+                [],
+                ICON_SIZE_SMALL
+            );
+            $inactiveIcon = Display::return_icon(
+                'error.png',
+                get_lang('Inactive'),
+                [],
+                ICON_SIZE_SMALL
+            );
+
+            foreach ($sessions as $session) {
+                $session_id = $session['id'];
+                if ($showCountUsers) {
+                    $session['users'] = self::get_users_by_session(
+                        $session['id'],
+                        null,
+                        true
+                    );
+                    $courses = self::getCoursesInSession($session_id);
+                    $teachers = '';
+                    foreach ($courses as $courseId) {
+                        $courseInfo = api_get_course_info_by_id($courseId);
+
+                        // Ofaj
+                        $teachers = CourseManager::get_coachs_from_course_to_string($session_id, $courseInfo['real_id']);
+                        /*$teachers .= CourseManager::get_teacher_list_from_course_code_to_string(
+                            $courseInfo['code']
+                        );*/
+                    }
+                    // ofaj
+                    $session['teachers'] = '';
+                    if (!empty($teachers)) {
+                        $session['teachers'] = Display::return_icon('teacher.png', addslashes($teachers));
+                    }
+                }
+                $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
+                if (api_is_drh()) {
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
+                }
+                if (api_is_platform_admin()) {
+                    $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
+                }
+
+                if ($extraFieldsToLoad) {
+                    $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
+                }
+                $session['name'] = Display::url($session['name'], $url);
+
+                if (isset($session['session_active']) && $session['session_active'] == 1) {
+                    $session['session_active'] = $activeIcon;
+                } else {
+                    $session['session_active'] = $inactiveIcon;
+                }
+
+                $session = self::convert_dates_to_local($session, true);
+
+                switch ($session['visibility']) {
+                    case SESSION_VISIBLE_READ_ONLY: //1
+                        $session['visibility'] = get_lang('ReadOnly');
+                        break;
+                    case SESSION_VISIBLE:           //2
+                    case SESSION_AVAILABLE:         //4
+                        $session['visibility'] = get_lang('Visible');
+                        break;
+                    case SESSION_INVISIBLE:         //3
+                        $session['visibility'] = api_ucfirst(get_lang('Invisible'));
+                        break;
+                }
+
+                if (!empty($extraFieldsToLoad)) {
+                    foreach ($extraFieldsToLoad as $field) {
+                        $extraFieldValue = new ExtraFieldValue('session');
+                        $fieldData = $extraFieldValue->getAllValuesByItemAndField(
+                            $session['id'],
+                            $field['id']
+                        );
+                        $fieldDataArray = [];
+                        if (!empty($fieldData)) {
+                            foreach ($fieldData as $data) {
+                                $fieldDataArray[] = $data['value'];
+                            }
+                            $fieldDataToString = implode(', ', $fieldDataArray);
+                        }
+                        $session[$field['variable']] = $fieldDataToString;
+                    }
+                }
+
+                // Cleaning double selects.
+                foreach ($session as $key => &$value) {
+                    if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
+                        $options = explode('::', $value);
+                    }
+                    $original_key = $key;
+                    if (strpos($key, '_second') === false) {
+                    } else {
+                        $key = str_replace('_second', '', $key);
+                    }
+
+                    if (isset($options_by_double[$key])) {
+                        if (isset($options[0])) {
+                            if (isset($options_by_double[$key][$options[0]])) {
+                                if (strpos($original_key, '_second') === false) {
+                                    $value = $options_by_double[$key][$options[0]]['option_display_text'];
+                                } else {
+                                    $value = $options_by_double[$key][$options[1]]['option_display_text'];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
+                $session['category_name'] = $categoryName;
+                if (isset($session['status'])) {
+                    $session['status'] = self::getStatusLabel($session['status']);
+                }
+
+                $formattedSessions[] = $session;
+            }
         }
 
-        return $sessions;
+        return $formattedSessions;
     }
 
     /**

@@ -300,39 +300,17 @@ class SortableTable extends HTML_Table
             $params['urlVar'] = $this->param_prefix.'page_nr';
             $params['currentPage'] = $this->page_nr;
             $icon_attributes = ['style' => 'vertical-align: middle;'];
-            /*$params['prevImg'] = Display:: return_icon(
-                'action_prev.png',
-                get_lang('Previous page'),
-                $icon_attributes
-            );*/
-            $params['prevImg'] = Display::returnFontAwesomeIcon('caret-left');
-
-            /*$params['nextImg'] = Display:: return_icon(
-                'action_next.png',
-                get_lang('Next page'),
-                $icon_attributes
-            );*/
-            $params['nextImg'] = Display::returnFontAwesomeIcon('caret-right');
-
-            /*$params['firstPageText'] = Display:: return_icon(
-                'action_first.png',
-                get_lang('First page'),
-                $icon_attributes
-            );*/
-            $params['firstPageText'] = Display::returnFontAwesomeIcon('step-backward');
-
-            /*$params['lastPageText'] = Display:: return_icon(
-                'action_last.png',
-                get_lang('Last page'),
-                $icon_attributes
-            );*/
-            $params['lastPageText'] = Display::returnFontAwesomeIcon('step-forward');
+            $params['prevImg'] = Display::getMdiIcon('step-backward');
+            $params['nextImg'] = Display::getMdiIcon('step-forward');
+            $params['firstPageText'] = Display::getMdiIcon('step-backward-2');
+            $params['lastPageText'] = Display::getMdiIcon('step-forward-2');
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';
             $params['firstPagePost'] = '';
             $params['lastPagePost'] = '';
             $params['spacesBeforeSeparator'] = '';
             $params['spacesAfterSeparator'] = '';
+            $params['curPageLinkClassName'] = 'ch-pager';
             $query_vars = array_keys($_GET);
             $query_vars_needed = [
                 $this->param_prefix.'column',
@@ -402,15 +380,15 @@ class SortableTable extends HTML_Table
                 $form = $this->get_page_select_form();
                 $nav = $this->get_navigation_html();
                 $html = '<div class="q-card">';
-                $html .= '<div class="flex flex-row justify-between">';
+                $html .= '<div class="flex flex-row justify-between pager-bar">';
                 $html .= '<div class="col">';
-                $html .= '<div class="page-select pb-2 pt-2">'.$form.'</div>';
+                $html .= '<div class="pb-2 pt-2 pager-select">'.$form.'</div>';
                 $html .= '</div>';
                 $html .= '<div class="col">';
-                $html .= '<div class="row justify-center">'.$this->get_table_title().'</div>';
+                $html .= '<div class="row justify-center pager-counter">'.$this->get_table_title().'</div>';
                 $html .= '</div>';
                 $html .= '<div class="col">';
-                $html .= '<div class="row justify-end">'.$nav.'</div>';
+                $html .= '<div class="row justify-end pager-jumper">'.$nav.'</div>';
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</div>';

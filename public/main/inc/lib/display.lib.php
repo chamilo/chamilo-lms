@@ -2255,6 +2255,7 @@ class Display
      * @param string     $additionalClass Optional. Additional class
      *
      * @return string
+     * @deprecated Use getMdiIcon() instead
      */
     public static function returnFontAwesomeIcon(
         $name,

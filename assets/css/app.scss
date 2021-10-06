@@ -233,6 +233,29 @@
     @apply border-ch-text rounded-sm p-1;
   }
 
+  // Progress bars
+  .progress {
+    @apply rounded-sm ring-1 ring-ch-secondary bg-ch-primary text-sm text-center min-h-full ml-12 mr-4;
+  }
+  .progress .progress-bar {
+    @apply bg-ch-secondary text-ch-text-secondary;
+  }
+
+  // Pager
+  .pager-bar {
+  }
+  .pager-bar .pager-select {
+  }
+  .pager-bar .pager-counter {
+    @apply mt-4;
+  }
+  .pager-bar .pager-jumper {
+    @apply mt-4;
+  }
+  .pager-bar .pager-jumper .btn-link {
+    @apply -mt-2 mx-2;
+  }
+
   @import "scss/index.scss";
 }
 

@@ -5284,7 +5284,7 @@ class learnpath
         $size = ICON_SIZE_MEDIUM; //ICON_SIZE_BIG
         $headers = [
             Display::getMdiIcon('bookshelf', 'ch-tool-icon-gradient', '', 64, get_lang('Documents')),
-            Display::getMdiIcon('ballot', 'ch-tool-icon-gradient', '', 64, get_lang('Tests')),
+            Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon-gradient', '', 64, get_lang('Tests')),
             Display::getMdiIcon('file-link', 'ch-tool-icon-gradient', '', 64, get_lang('Links')),
             Display::getMdiIcon('inbox-full', 'ch-tool-icon-gradient', '', 64, get_lang('Assignments')),
             Display::getMdiIcon('comment-quote', 'ch-tool-icon-gradient', '', 64, get_lang('Forums')),

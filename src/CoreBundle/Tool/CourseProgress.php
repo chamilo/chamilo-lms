@@ -17,7 +17,7 @@ class CourseProgress extends AbstractTool implements ToolInterface
 
     public function getIcon(): string
     {
-        return 'mdi-file-tree';
+        return 'mdi-progress-upload';
     }
 
     public function getLink(): string

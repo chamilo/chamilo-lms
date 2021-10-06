@@ -245,7 +245,7 @@ class learnpath
                     case CLp::AICC_TYPE:
                         $oItem = new aiccItem('db', $itemId, $course_id);
                         if (is_object($oItem)) {
-                            $oItem->set_lp_view($this->lp_view_id, $course_id);
+                            $oItem->set_lp_view($this->lp_view_id);
                             $oItem->set_prevent_reinit($this->prevent_reinit);
                             // Don't use reference here as the next loop will make the pointed object change.
                             $this->items[$itemId] = $oItem;
@@ -255,7 +255,7 @@ class learnpath
                     case CLp::SCORM_TYPE:
                         $oItem = new scormItem('db', $itemId);
                         if (is_object($oItem)) {
-                            $oItem->set_lp_view($this->lp_view_id, $course_id);
+                            $oItem->set_lp_view($this->lp_view_id);
                             $oItem->set_prevent_reinit($this->prevent_reinit);
                             // Don't use reference here as the next loop will make the pointed object change.
                             $this->items[$itemId] = $oItem;
@@ -284,7 +284,7 @@ class learnpath
 
                 // Setting the view in the item object.
                 if (isset($this->items[$itemId]) && is_object($this->items[$itemId])) {
-                    $this->items[$itemId]->set_lp_view($this->lp_view_id, $course_id);
+                    $this->items[$itemId]->set_lp_view($this->lp_view_id);
                     if (TOOL_HOTPOTATOES == $this->items[$itemId]->get_type()) {
                         $this->items[$itemId]->current_start_time = 0;
                         $this->items[$itemId]->current_stop_time = 0;
@@ -345,8 +345,7 @@ class learnpath
                                     Database::insert($itemViewTable, $params);
 
                                     $this->items[$item_id]->set_lp_view(
-                                        $this->lp_view_id,
-                                        $course_id
+                                        $this->lp_view_id
                                     );
                                 }
                             }
@@ -670,7 +669,7 @@ class learnpath
 
                         // If children was not set try to get the info
                         if (empty($childItem->db_item_view_id)) {
-                            $childItem->set_lp_view($this->lp_view_id, $this->course_int_id);
+                            $childItem->set_lp_view($this->lp_view_id);
                         }
 
                         // Check all his brothers (parent's children) for completion status.

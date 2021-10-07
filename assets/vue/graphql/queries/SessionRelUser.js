@@ -1,11 +1,11 @@
 import gql from 'graphql-tag';
 
 export const GET_SESSION_REL_USER = gql`
-    query getSessions($user: String!, $afterStartDate: String, $beforeEndDate: String) {
+    query getSessions($user: String!, $afterStartDate: String, $afterEndDate: String, $beforeStartDate: String, $beforeEndDate: String) {
         sessionRelUsers(
             user: $user
-            session_displayStartDate: {after: $afterStartDate}
-            session_displayEndDate: {before: $beforeEndDate}
+            session_accessStartDate: {after: $afterStartDate, before: $beforeStartDate}
+            session_accessEndDate: {after: $afterEndDate, before: $beforeEndDate}
         ) {
             edges {
                 node {
@@ -52,8 +52,8 @@ export const GET_SESSION_REL_USER = gql`
         }
         sessionRelCourseRelUsers(
             user: $user
-            session_displayStartDate: {after: $afterStartDate}
-            session_displayEndDate: {before: $beforeEndDate}
+            session_accessStartDate: {after: $afterStartDate, before: $beforeStartDate}
+            session_accessEndDate: {after: $afterEndDate, before: $beforeEndDate}
         ) {
             edges {
                 node {

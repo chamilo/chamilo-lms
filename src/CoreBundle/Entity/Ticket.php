@@ -77,7 +77,11 @@ class Ticket
     /**
      * @ORM\Column(name="assigned_last_user", type="integer", nullable=true)
      */
-    protected ?int $assignedLastUser = null;
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="assigned_last_user", referencedColumnName="id")
+     */
+    protected ?User $assignedLastUser = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="TicketStatus")
@@ -179,6 +183,18 @@ class Ticket
     public function setMessage(string $message): self
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getAssignedLastUser(): ?User
+    {
+        return $this->assignedLastUser;
+    }
+
+    public function setAssignedLastUser(?User $assignedLastUser): self
+    {
+        $this->assignedLastUser = $assignedLastUser;
 
         return $this;
     }

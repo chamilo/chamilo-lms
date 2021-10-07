@@ -178,7 +178,7 @@ foreach ($messages as $message) {
             'class' => 'attachment-link',
         ];
         foreach ($message['attachments'] as $attach) {
-            $attachmentLinks .= Display::tag('div', $attach['attachment_link'], $attributeClass);
+            $attachmentLinks .= Display::tag('div', $attach, $attributeClass);
         }
     }
 

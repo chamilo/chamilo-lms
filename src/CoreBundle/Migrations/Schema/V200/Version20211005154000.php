@@ -39,37 +39,30 @@ class Version20211005154000 extends AbstractMigrationChamilo
         $result = $connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
-        $counter = 1;
-
         foreach ($items as $item) {
-            /** @var TicketMessageAttachment $resource */
-            $resource = $attachmentRepo->find($item['id']);
+            /** @var TicketMessageAttachment $messageAttachment */
+            $messageAttachment = $attachmentRepo->find($item['id']);
 
-            if ($resource->hasResourceNode()) {
+            if ($messageAttachment->hasResourceNode()) {
                 continue;
             }
 
+            $ticket = $messageAttachment->getTicket();
             $user = $userRepo->find($item['sys_insert_user_id']);
-//
-//            $resource
-//                ->addUserLink($user)
-//                ->setParent($user);
 
-            $attachmentRepo->addResourceNode($resource, $user, $user);
+            $attachmentRepo->addResourceNode($messageAttachment, $user, $user);
 
-            $attachmentRepo->create($resource);
-
-            $filePath = $rootPath.'/app/upload/ticket_attachment/'.$item['path'];
-            $this->addLegacyFileToResource($filePath, $attachmentRepo, $resource, $item['id']);
-
-            $em->persist($resource);
-
-            if (($counter % self::BATCH_SIZE) === 0) {
-                $em->flush();
-                $em->clear();
+            if (null !== $ticket->getAssignedLastUser()) {
+                $messageAttachment->addUserLink($ticket->getAssignedLastUser());
             }
 
-            $counter++;
+            $attachmentRepo->create($messageAttachment);
+
+            $filePath = $rootPath.'/app/upload/ticket_attachment/'.$item['path'];
+            $this->addLegacyFileToResource($filePath, $attachmentRepo, $messageAttachment, $item['id']);
+
+            $em->persist($messageAttachment);
+            $em->flush();
         }
     }
 }

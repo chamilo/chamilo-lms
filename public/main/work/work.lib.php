@@ -1310,7 +1310,7 @@ function getWorkListStudent(
         if (null !== $count && !empty($count)) {
             $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$lastWork['iid'].'&'.api_get_cidreq();
             $feedback = '&nbsp;'.Display::url(
-                Display::returnFontAwesomeIcon('comments-o'),
+                Display::getMdiIcon('comment-multiple-outline'),
                 $urlView,
                 ['title' => get_lang('View')]
             );
@@ -1515,7 +1515,7 @@ function getAllWorkListStudent(
                 $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$lastWork['iid'].'&'.$cidReq;
 
                 $feedback = '&nbsp;'.Display::url(
-                        Display::returnFontAwesomeIcon('comments-o'),
+                        Display::getMdiIcon('comment-outline'),
                         $urlView,
                         ['title' => get_lang('View')]
                     );
@@ -2173,7 +2173,7 @@ function get_work_user_list(
 
         $blockEdition = api_get_configuration_value('block_student_publication_edition');
         $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
-        $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+        $loading = Display::getMdiIcon('loading', 'animate-spin');
         $router = Container::getRouter();
         $studentDeleteOwnPublication = api_get_course_setting('student_delete_own_publication');
         /** @var CStudentPublication $assignment */
@@ -2271,7 +2271,7 @@ function get_work_user_list(
                         $feedback .= ' ';
                     }
                     $feedback .= Display::url(
-                        $count.' '.Display::returnFontAwesomeIcon('comments-o'),
+                        $count.' '.Display::getMdiIcon('comment-multiple-outline'),
                         $url.'view.php?'.api_get_cidreq().'&id='.$item_id
                     );
                 }
@@ -2704,7 +2704,7 @@ function getAllWork(
     $parentList = [];
     $blockEdition = api_get_configuration_value('block_student_publication_edition');
     $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
-    $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+    $loading = Display::getMdiIcon('loading', 'animate-spin');
     $qualification_exists = true;
     $repo = Container::getStudentPublicationRepository();
     while ($work = Database::fetch_array($result, 'ASSOC')) {
@@ -2805,7 +2805,7 @@ function getAllWork(
                     $feedback .= ' ';
                 }
                 $feedback .= Display::url(
-                    $count.' '.Display::returnFontAwesomeIcon('comments-o'),
+                    $count.' '.Display::getMdiIcon('comment-multiple-outline'),
                     $url.'view.php?'.$cidReq.'&id='.$item_id
                 );
             }

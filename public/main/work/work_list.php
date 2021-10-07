@@ -71,8 +71,8 @@ $onlyOnePublication = api_get_configuration_value('allow_only_one_student_public
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee()) {
     $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId;
     $actionsRight = Display::url(
-        Display::returnFontAwesomeIcon(
-            ' fa-upload'
+        Display::getMdiIcon(
+            ' file-upload'
         ).
         get_lang('Upload my assignment'),
         $url,

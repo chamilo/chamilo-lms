@@ -336,7 +336,7 @@ if ($inATest) {
     }
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
-            Display::returnFontAwesomeIcon('exclamation-triangle"')
+            Display::getMdiIcon('alert')
                 .get_lang('ThisQuestionExistsInAnotherTestsWarning'),
             'warning',
             false

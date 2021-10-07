@@ -44,10 +44,10 @@ $(function() {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon('arrow-down-bold').' '.get_lang('Advanced search').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::getMdiIcon('arrow-right-bold').' '.get_lang('Advanced search').'\');
     }
 }
 </script>';
@@ -221,7 +221,7 @@ if (!empty($projectId)) {
 
     $advancedSearch = Display::url(
         '<span id="img_plus_and_minus">&nbsp;'.
-        Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search'),
+        Display::getMdiIcon('arrow-right-bold').' '.get_lang('Advanced search'),
         'javascript://',
         [
             'class' => 'btn btn-default advanced-parameters',

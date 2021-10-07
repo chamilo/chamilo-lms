@@ -5208,7 +5208,7 @@ function getPostStatus(CForum $forum, array $row, bool $addWrapper = true): stri
         } else {
             if ($showStatus) {
                 $statusIcon .= Display::label(
-                    Display::returnFontAwesomeIcon($icon).$label,
+                    Display::getMdiIcon($icon).$label,
                     $buttonType
                 );
             }
@@ -5393,7 +5393,7 @@ function getGiveRevisionButton(int $postId, CForumThread $threadInfo): string
 function getReportButton(int $postId, CForumThread $threadInfo): string
 {
     return Display::url(
-        Display::returnFontAwesomeIcon('flag'),
+        Display::getMdiIcon('flag'),
         api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
         api_get_cidreq().'&action=report&post_id='.$postId.
         '&forum='.$threadInfo->getForum()->getIid().'&thread='.$threadInfo->getIid(),

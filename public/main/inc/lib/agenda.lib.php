@@ -1645,9 +1645,8 @@ class Agenda
             $attachmentList = $row->getAttachments();
             $event['attachment'] = '';
             if (!empty($attachmentList)) {
-                $icon = Display::returnFontAwesomeIcon(
-                    'paperclip',
-                    '1'
+                $icon = Display::getMdiIcon(
+                    'paperclip'
                 );
                 /** @var CCalendarEventAttachment $attachment */
                 foreach ($attachmentList as $attachment) {

@@ -407,7 +407,7 @@ class Compilatio
      */
     public static function getProgressionAnalyseDocv31($status, $pour = 0, $text = [])
     {
-        $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+        $loading = Display::getMdiIcon('loading', 'animate-spin');
         $loading .= '&nbsp;';
         //$refreshReturn = Display::url('javascript:window.location.reload(false);', $loading);
         switch ($status) {
@@ -588,7 +588,7 @@ class Compilatio
                     );
                     break;
                 case 'ANALYSE_IN_QUEUE':
-                    $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+                    $loading = Display::getMdiIcon('loading', 'animate-spin');
                     $actionCompilatio .= $loading.'&nbsp;'.get_lang('Waiting for analysis');
                     break;
                 case 'BAD_FILETYPE':

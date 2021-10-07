@@ -193,7 +193,7 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
             $social_right_content .= '<a
                 class="btn btn-default btn-sm"
                 href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
-                    Display::returnFontAwesomeIcon('envelope').' '.
+                    Display::getMdiIcon('email').' '.
                 get_lang('You have been invited to join now').'</a>';
         }
         $social_right_content .= '</div>';
@@ -211,7 +211,7 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
                     'action' => 'add_message_group',
                 ]);
             $create_thread_link = Display::url(
-                Display::returnFontAwesomeIcon('commenting').' '.
+                Display::getMdiIcon('comment-text').' '.
                 get_lang('You should create a topic'),
                 $createThreadUrl,
                 [
@@ -231,7 +231,7 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
                     'action' => 'add_message_group',
                 ]);
             $create_thread_link = Display::url(
-                Display::returnFontAwesomeIcon('commenting').' '.
+                Display::getMdiIcon('comment-text').' '.
                 get_lang('Create thread'),
                 $createThreadUrl,
                 [
@@ -259,7 +259,7 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
             $member_content .= '<div class="group-tool">';
             $member_content .= '<div class="pull-right">';
             $member_content .= Display::url(
-                Display::returnFontAwesomeIcon('pencil').' '.get_lang('Edit members list'),
+                Display::getMdiIcon('pencil').' '.get_lang('Edit members list'),
                 'group_members.php?id='.$group_id,
                 ['class' => 'btn btn-default btn-sm', 'title' => get_lang('Edit members list')]
             );

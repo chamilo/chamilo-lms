@@ -26,7 +26,6 @@ class UserRepositoryTest extends AbstractApiTest
 
     public function testCreateUser(): void
     {
-        self::bootKernel();
         $student = $this->createUser('student');
         $userRepo = self::getContainer()->get(UserRepository::class);
 
@@ -37,6 +36,13 @@ class UserRepositoryTest extends AbstractApiTest
 
         $this->assertCount(1, $student->getRoles());
         $this->assertContains('ROLE_USER', $student->getRoles());
+
+        $this->assertSame('ROLE_TEACHER', User::getRoleFromStatus(1));
+        $this->assertSame('ROLE_STUDENT', User::getRoleFromStatus(5));
+        $this->assertSame('ROLE_RRHH', User::getRoleFromStatus(4));
+        $this->assertSame('ROLE_SESSION_MANAGER', User::getRoleFromStatus(3));
+        $this->assertSame('ROLE_STUDENT_BOSS', User::getRoleFromStatus(17));
+        $this->assertSame('ROLE_INVITEE', User::getRoleFromStatus(20));
 
         $student->addRole('ROLE_STUDENT');
         $userRepo->update($student);

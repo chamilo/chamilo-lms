@@ -250,6 +250,8 @@ switch ($action) {
         $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
         $active = isset($_REQUEST['active']) ? (int) $_REQUEST['active'] : null;
 
+        $role = User::getRoleFromStatus($status);
+
         $criteria = new Criteria();
         $criteria
             ->where(
@@ -260,7 +262,7 @@ switch ($action) {
                 )
             )
             ->andWhere(
-                Criteria::expr()->eq('status', $status)
+                Criteria::expr()->in('roles', [$role])
             );
 
         if (null !== $active) {

@@ -209,7 +209,7 @@ export default {
     let courseId = route.params.id;
     let sessionId = route.query.sid ?? 0;
 
-    axios.get(ENTRYPOINT + '../course/' + courseId + '/home.json').then(response => {
+    axios.get(ENTRYPOINT + '../course/' + courseId + '/home.json?sid=' + sessionId).then(response => {
       state.course = response.data.course;
       state.tools = response.data.tools;
       state.shortcuts = response.data.shortcuts;

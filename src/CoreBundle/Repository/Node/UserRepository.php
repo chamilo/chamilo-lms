@@ -205,6 +205,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     {
         $qb = $this->createQueryBuilder('u');
 
+        $this->addActiveAndNotAnonUserQueryBuilder($qb);
         $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
         $this->addRoleQueryBuilder($role, $qb);
         $this->addSearchByKeywordQueryBuilder($keyword, $qb);

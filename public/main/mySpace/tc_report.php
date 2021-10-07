@@ -35,7 +35,7 @@ switch ($action) {
             get_lang('User'),
             [],
             [
-                'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role&active=1&status='.STUDENT,
+                'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role&status='.STUDENT,
             ]
         );
         $form->addButtonSave(get_lang('Add'));
@@ -165,7 +165,7 @@ if ('add_user' !== $action) {
             [],
             [
                 'width' => '200px',
-                'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role&active=1&status='.STUDENT,
+                'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role&status='.STUDENT,
             ]
         );
         $addUserForm->addButtonSave(get_lang('Add'));

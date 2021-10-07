@@ -213,9 +213,21 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $user->getPortals()->count());
     }
 
+    public function testFindByRole(): void
+    {
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $user = $this->createUser('user', 'user');
+
+        $user->addRole('ROLE_SESSION_MANAGER');
+        $userRepo->update($user);
+        $urlId = $this->getAccessUrl()->getId();
+        $users = $userRepo->findByRole('ROLE_SESSION_MANAGER', '', $urlId);
+        $this->assertNotNull($users);
+        $this->assertCount(1, $users);
+    }
+
     public function testAddFriendToUser(): void
     {
-        self::bootKernel();
         $em = $this->getEntityManager();
 
         $user = $this->createUser('user', 'user');

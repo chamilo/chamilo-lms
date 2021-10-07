@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 
@@ -246,38 +247,19 @@ switch ($action) {
         break;
     case 'user_by_role':
         api_block_anonymous_users(false);
-
         $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
-        $active = isset($_REQUEST['active']) ? (int) $_REQUEST['active'] : null;
 
         $role = User::getRoleFromStatus($status);
 
-        $criteria = new Criteria();
-        $criteria
-            ->where(
-                Criteria::expr()->orX(
-                    Criteria::expr()->contains('username', $_REQUEST['q']),
-                    Criteria::expr()->contains('firstname', $_REQUEST['q']),
-                    Criteria::expr()->contains('lastname', $_REQUEST['q'])
-                )
-            )
-            ->andWhere(
-                Criteria::expr()->in('roles', [$role])
-            );
+        $users = Container::getUserRepository()->findByRole($role, $_REQUEST['q'], api_get_current_access_url_id());
 
-        if (null !== $active) {
-            $criteria->andWhere(Criteria::expr()->eq('active', $active));
-        }
-        $users = UserManager::getRepository()->matching($criteria);
-
-        if (!$users->count()) {
+        if (empty($users)) {
             echo json_encode([]);
             break;
         }
 
         $items = [];
 
-        /** @var User $user */
         foreach ($users as $user) {
             $items[] = [
                 'id' => $user->getId(),

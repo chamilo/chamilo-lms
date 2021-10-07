@@ -5167,7 +5167,8 @@ class CourseManager
                             is_tutor = 0,
                             sort = 0,
                             relation_type = 0,
-                            user_course_cat = $userCourseCategory
+                            user_course_cat = $userCourseCategory,
+                            progress = 0
                     ";
                 }
                 Database::query($sql);

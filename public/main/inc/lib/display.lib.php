@@ -1194,7 +1194,7 @@ class Display
         $obj->datatype = 'json';
         $obj->viewrecords = 'true';
         $obj->guiStyle = 'bootstrap4';
-        $obj->iconSet = 'fontAwesomeSolid';
+        $obj->iconSet = 'materialDesignIcons';
         $all_value = 10000000;
 
         // Sets how many records we want to view in the grid

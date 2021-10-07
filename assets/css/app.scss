@@ -259,6 +259,11 @@
     @apply -mt-2 mx-2;
   }
 
+  // free-jqGrid override
+  .ui-jqgrid-bootstrap.modal {
+    @apply bg-white;
+  }
+
   @import "scss/index.scss";
 }
 

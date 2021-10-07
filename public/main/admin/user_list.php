@@ -1131,7 +1131,7 @@ $table = new SortableTable(
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');
 $table->set_header(1, get_lang('Photo'), false);
-$table->set_header(2, get_lang('Code'));
+$table->set_header(2, get_lang('Official code'));
 
 if (api_is_western_name_order()) {
     $table->set_header(3, get_lang('First name'));
@@ -1140,7 +1140,7 @@ if (api_is_western_name_order()) {
     $table->set_header(3, get_lang('Last name'));
     $table->set_header(4, get_lang('First name'));
 }
-$table->set_header(5, get_lang('Login'));
+$table->set_header(5, get_lang('Username'));
 $table->set_header(6, get_lang('e-mail'));
 $table->set_header(7, get_lang('Profile'));
 $table->set_header(8, get_lang('active'), true, 'width="15px"');

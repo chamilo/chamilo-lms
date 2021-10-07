@@ -157,9 +157,9 @@ $defaultLpIcon = Display::getMdiIcon('map-marker-path', 'ch-tool-icon', '', 22, 
 
 $defaultDisableLpIcon = Display::getMdiIcon('map-marker-path', 'ch-tool-icon-disabled', '', 22, get_lang('Learning path name'));
 
-$courseSettingsIcon = Display::getMdiIcon('hammer-screwdriver', 'ch-tool-icon', '', 22);
+$courseSettingsIcon = Display::getMdiIcon('hammer-wrench', 'ch-tool-icon', '', 22);
 
-$courseSettingsDisableIcon = Display::getMdiIcon('hammer-screwdriver', 'ch-tool-icon-disabled', '', 22, get_lang('Course settings'));
+$courseSettingsDisableIcon = Display::getMdiIcon('hammer-wrench', 'ch-tool-icon-disabled', '', 22, get_lang('Course settings'));
 
 $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $gameMode = api_get_setting('gamification_mode');

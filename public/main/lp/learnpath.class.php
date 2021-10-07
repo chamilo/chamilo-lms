@@ -2577,7 +2577,7 @@ class learnpath
                 $html .= '<a
                     class="btn btn-sm btn-default mx-1"
                     href="lp_controller.php?'.api_get_cidreq()."&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
-                    Display::getMdiIcon('hammer-screwdriver').get_lang('Settings').'</a>';
+                    Display::getMdiIcon('hammer-wrench').get_lang('Settings').'</a>';
                 $html .= '</div>';
                 $html .= '</div>';
             }
@@ -4784,7 +4784,7 @@ class learnpath
         $request = api_request_uri();
         if (false === strpos($request, 'edit')) {
             $actionsLeft .= Display::url(
-                Display::getMdiIcon('hammer-screwdriver', 'ch-tool-icon', '', 32, get_lang('Course settings')),
+                Display::getMdiIcon('hammer-wrench', 'ch-tool-icon', '', 32, get_lang('Course settings')),
                 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                     'action' => 'edit',
                     'lp_id' => $lpId,

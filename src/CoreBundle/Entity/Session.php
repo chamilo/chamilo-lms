@@ -206,33 +206,37 @@ class Session implements ResourceWithAccessUrlInterface
     /**
      * @ORM\Column(name="display_start_date", type="datetime", nullable=true, unique=false)
      */
-    #[Groups(['session:read', 'session_rel_user:read'])]
+    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
     protected ?DateTime $displayStartDate;
 
     /**
      * @ORM\Column(name="display_end_date", type="datetime", nullable=true, unique=false)
      */
-    #[Groups(['session:read', 'session_rel_user:read'])]
+    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
     protected ?DateTime $displayEndDate;
 
     /**
      * @ORM\Column(name="access_start_date", type="datetime", nullable=true, unique=false)
      */
+    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
     protected ?DateTime $accessStartDate;
 
     /**
      * @ORM\Column(name="access_end_date", type="datetime", nullable=true, unique=false)
      */
+    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
     protected ?DateTime $accessEndDate;
 
     /**
      * @ORM\Column(name="coach_access_start_date", type="datetime", nullable=true, unique=false)
      */
+    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
     protected ?DateTime $coachAccessStartDate;
 
     /**
      * @ORM\Column(name="coach_access_end_date", type="datetime", nullable=true, unique=false)
      */
+    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
     protected ?DateTime $coachAccessEndDate;
 
     /**

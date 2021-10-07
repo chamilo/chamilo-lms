@@ -14,6 +14,8 @@ import documents from './documents';
 import store from '../store';
 import MyCourseList from '../views/user/courses/List.vue';
 import MySessionList from '../views/user/sessions/List.vue';
+import MySessionListPast from '../views/user/sessions/Past.vue';
+import MySessionListUpcoming from '../views/user/sessions/Upcoming.vue';
 
 import CatalogLayout from '../layouts/Catalog.vue';
 import MyCoursesLayout from '../layouts/MyCourses.vue';
@@ -70,14 +72,27 @@ const router = createRouter({
         },
         {
             path: '/sessions',
+            //redirect: '/sessions/now',
             component: MySessionList,
             children: [
                 {
-                    path: '/sessions', name: 'MySessions', component: MySessionList,
+                    path: '/sessions', name: 'MySessions',
+                    component: MySessionList,
                     meta: {requiresAuth: true},
                 },
             ],
         },
+        {
+            path: '/sessions/past', name: 'MySessionsPast',
+            component: MySessionListPast,
+            meta: {requiresAuth: true},
+        },
+        {
+            path: '/sessions/upcoming', name: 'MySessionsUpcoming',
+            component: MySessionListUpcoming,
+            meta: {requiresAuth: true},
+        },
+
         {
             path: '/catalog',
             redirect: '/catalog/course',

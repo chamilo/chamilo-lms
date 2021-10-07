@@ -19,9 +19,6 @@ class Version20211005154000 extends AbstractMigrationChamilo
         return 'Migrate ticket attachment files';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $container = $this->getContainer();

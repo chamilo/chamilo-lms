@@ -61,7 +61,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(SearchFilter::class, properties: ['session' => 'exact', 'user' => 'exact'])]
 #[ApiFilter(
     DateFilter::class,
-    properties: ['session.displayStartDate' => null, 'session.displayEndDate' => null]
+    properties: [
+        'session.displayStartDate' => null,
+        'session.displayEndDate' => null,
+        'session.accessStartDate' => null,
+        'session.accessEndDate' => null,
+        'session.coachAccessStartDate' => null,
+        'session.coachAccessEndDate' => null,
+    ]
 )]
 class SessionRelUser
 {

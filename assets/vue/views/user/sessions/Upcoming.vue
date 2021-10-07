@@ -1,5 +1,5 @@
 <template>
-
+  <!--  todo make a component-->
   <q-tabs align="left" dense inline-label no-caps>
     <q-route-tab :to="{name: 'MySessionsPast'}" label="Past" />
     <q-route-tab  :to="{name: 'MySessions'}" label="Current" />
@@ -43,7 +43,7 @@ import {GET_SESSION_REL_USER} from "../../../graphql/queries/SessionRelUser.js";
 import {DateTime} from "luxon";
 
 export default {
-  name: 'SessionList',
+  name: 'SessionListUpcoming',
   components: {
     SessionCardList,
   },
@@ -55,15 +55,13 @@ export default {
       let userId = user.value.id;
 
       let start = DateTime.local().toISO();
-      let end = DateTime.local().toISO();
 
       const {result, loading} = useQuery(GET_SESSION_REL_USER, {
         user: "/api/users/" + userId,
-        beforeStartDate: start,
-        afterEndDate: end,
+        afterStartDate: start,
       });
 
-      const sessions = useResult(result, [], ({sessionRelCourseRelUsers, sessionRelUsers})=> {
+     const sessions = useResult(result, [], ({sessionRelCourseRelUsers, sessionRelUsers})=> {
         let sessionList = [];
         sessionRelUsers.edges.map(({node}) => {
           const sessionExists = sessionList.findIndex(suSession => suSession._id === node.session._id) >= 0;

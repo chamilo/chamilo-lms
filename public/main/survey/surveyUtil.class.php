@@ -2972,7 +2972,7 @@ class SurveyUtil
         if (null === $survey) {
             return '';
         }
-        
+
         $hideSurveyEdition = self::checkHideEditionToolsByCode($survey->getCode());
 
         if ($hideSurveyEdition) {

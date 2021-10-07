@@ -46,7 +46,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 ])]
 #[ApiFilter(
     DateFilter::class,
-    properties: ['session.displayStartDate' => null, 'session.displayEndDate' => null]
+    properties: [
+        'session.displayStartDate' => null,
+        'session.displayEndDate' => null,
+        'session.accessStartDate' => null,
+        'session.accessEndDate' => null,
+        'session.coachAccessStartDate' => null,
+        'session.coachAccessEndDate' => null,
+    ]
 )]
 class SessionRelCourseRelUser
 {

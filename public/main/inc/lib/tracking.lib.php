@@ -2477,7 +2477,7 @@ class Tracking
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
                     status = '' AND
-                    exe_user_id= $student_id AND
+                    exe_user_id= $student_id
                     $sessionCondition
                     ";
 

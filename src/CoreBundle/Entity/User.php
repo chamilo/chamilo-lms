@@ -1757,9 +1757,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->hasRole('ROLE_SUPER_ADMIN');
     }
 
-    public function setRoleFromStatus(int $status): void
+    public static function getRoleFromStatus(int $status): string
     {
-        $role = match ($status) {
+        return match ($status) {
             COURSEMANAGER => 'ROLE_TEACHER',
             STUDENT => 'ROLE_STUDENT',
             DRH => 'ROLE_RRHH',
@@ -1768,6 +1768,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             INVITEE => 'ROLE_INVITEE',
             default => 'ROLE_USER',
         };
+    }
+
+    public function setRoleFromStatus(int $status): void
+    {
+        $role = self::getRoleFromStatus($status);
 
         $this->addRole($role);
     }

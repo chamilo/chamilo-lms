@@ -516,7 +516,7 @@ class Compilatio
         $courseId = (int) $courseId;
 
         $table = Database::get_course_table(TABLE_PLAGIARISM);
-        $sql = "SELECT compilatio_id FROM $table 
+        $sql = "SELECT compilatio_id FROM $table
                 WHERE document_id = $documentId AND c_id= $courseId";
         $result = Database::query($sql);
         $result = Database::fetch_object($result);

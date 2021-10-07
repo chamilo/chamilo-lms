@@ -104,7 +104,7 @@ if (is_array($results) && count($results) > 0) {
         );
         $result['picture'] = '<img class="social-groups-image" src="'.$picture.'" />';
 
-        $members = Display::returnFontAwesomeIcon('user').$count_users_group;
+        $members = Display::getMdiIcon('account').$count_users_group;
         $html = '<div class="row">';
         $html .= '<div class="col-md-2">';
         $html .= $result['picture'];
@@ -156,7 +156,7 @@ foreach ($results as $result) {
 
     $picture = $usergroup->get_picture_group($result['id'], $result['picture'], 80);
     $result['picture'] = '<img class="social-groups-image" src="'.$picture.'" />';
-    $members = Display::returnFontAwesomeIcon('user').$count_users_group;
+    $members = Display::getMdiIcon('account').$count_users_group;
 
     $html = '<div class="row">';
     $html .= '<div class="col-md-2">';

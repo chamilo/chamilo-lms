@@ -153,7 +153,7 @@ if (0 == count($nosessionUsersList)) {
         $social_right_content .= Display::return_message(get_lang('You already invite all your contacts'), 'info');
     }
     $social_right_content .= '<div>';
-    $social_right_content .= '<a href="search.php" class="btn btn-default btn-sm">'.Display::returnFontAwesomeIcon('search').' '.get_lang('Try and find some friends').'</a>';
+    $social_right_content .= '<a href="search.php" class="btn btn-default btn-sm">'.Display::getMdiIcon('magnify').' '.get_lang('Try and find some friends').'</a>';
     $social_right_content .= '</div>';
     $social_right_content .= '<br />';
 }

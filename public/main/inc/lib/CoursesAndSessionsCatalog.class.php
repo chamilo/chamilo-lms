@@ -1154,7 +1154,7 @@ class CoursesAndSessionsCatalog
         }
 
         return Display::url(
-            Display::returnFontAwesomeIcon('check').' '.$title,
+            Display::getMdiIcon('check').' '.$title,
             api_get_self().'?action='.$action.'&sec_token='.$stok.
             '&course_code='.$course['code'].'&search_term='.$search_term.'&category_code='.$categoryCode,
             ['class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title]
@@ -1183,7 +1183,7 @@ class CoursesAndSessionsCatalog
             '&search_term='.$search_term.'&category_code='.$categoryCode;
 
         return Display::url(
-            Display::returnFontAwesomeIcon('sign-in').'&nbsp;'.$title,
+            Display::getMdiIcon('login').'&nbsp;'.$title,
             $url,
             ['class' => 'btn btn-danger', 'title' => $title, 'aria-label' => $title]
         );

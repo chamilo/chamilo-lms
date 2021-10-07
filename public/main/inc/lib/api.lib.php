@@ -3173,17 +3173,17 @@ function api_display_tool_view_option()
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
             $output_string .= '<a class="btn btn-primary btn-sm" href="'.$sourceurl.'&isStudentView=false" target="_self">'.
-                Display::returnFontAwesomeIcon('eye').' '.get_lang('Switch to teacher view').'</a>';
+                Display::getMdiIcon('eye').' '.get_lang('Switch to teacher view').'</a>';
         } elseif ('teacherview' == $_SESSION['studentview']) {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
             $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
-                Display::returnFontAwesomeIcon('eye').' '.get_lang('Switch to student view').'</a>';
+                Display::getMdiIcon('eye').' '.get_lang('Switch to student view').'</a>';
         }
     } else {
         $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
-            Display::returnFontAwesomeIcon('eye').' '.get_lang('Switch to student view').'</a>';
+            Display::getMdiIcon('eye').' '.get_lang('Switch to student view').'</a>';
     }
     $output_string = Security::remove_XSS($output_string);
     $html = Display::tag('div', $output_string, ['class' => 'view-options']);

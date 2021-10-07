@@ -581,7 +581,7 @@ if ($nbStudents > 0) {
     ];
     $el = $form->addSelect(
         'since',
-        Display::returnFontAwesomeIcon('warning').get_lang('Remind learners inactive since'),
+        Display::getMdiIcon('alert').get_lang('Remind learners inactive since'),
         $options,
         ['disable_js' => true, 'class' => 'col-sm-3']
     );

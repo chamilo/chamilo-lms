@@ -54,7 +54,7 @@ $template->assign('navigator_is_firefox', $navigator['name'] == 'Mozilla');
 $tpl = $template->get_template('chat/video.tpl');
 $content = $template->fetch($tpl);
 
-$templateHeader = Display::returnFontAwesomeIcon('video-camera', 'lg', true)
+$templateHeader = Display::getMdiIcon('video')
     . $chatVideo->getRoomName();
 
 $template->assign('header', $templateHeader);

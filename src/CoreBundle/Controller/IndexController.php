@@ -21,11 +21,12 @@ class IndexController extends BaseController
      * @Route("/course/{cid}/home", name="chamilo_core_course_home")
      * @Route("/courses", name="courses", methods={"GET", "POST"}, options={"expose"=true})
      *
-     * @Route("/sessions", name="sessions", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/catalog/{slug}", name="catalog", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager")
      * @Route("/account/home", name="account", options={"expose"=true}, name="chamilo_core_account_home")
      */
+    #[Route('/sessions', name: 'sessions')]
+    #[Route('/sessions/{extra}', name: 'sessions_options')]
     public function indexAction(): Response
     {
         return $this->render('@ChamiloCore/Index/vue.html.twig');

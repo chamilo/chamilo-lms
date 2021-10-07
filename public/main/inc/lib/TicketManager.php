@@ -1015,7 +1015,7 @@ class TicketManager
 					    title="'.get_lang('History').'"
 					    alt="'.get_lang('History').'"
                     >
-                    '.Display::returnFontAwesomeIcon('history').'
+                    '.Display::getMdiIcon('history').'
                     </a>
 
 					<div class="blackboard_hide" id="div_'.$row['ticket_id'].'">&nbsp;&nbsp;</div>

@@ -358,7 +358,7 @@ class BuyCoursesPlugin extends Plugin
         $productType = (int) $productType;
         $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$productId.'&t='.$productType;
         $html = '<a class="btn btn-success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
-            Display::returnFontAwesomeIcon('shopping-cart').'</a>';
+            Display::getMdiIcon('cart').'</a>';
 
         return $html;
     }

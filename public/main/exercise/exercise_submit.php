@@ -1165,7 +1165,7 @@ if ($time_control) {
 }
 
 if ($showQuestionClock) {
-    $icon = Display::returnFontAwesomeIcon('clock-o');
+    $icon = Display::getMdiIcon('clock-outline');
     echo '<div class="well" style="text-align: center">
             '.get_lang('RemainingTimeToFinishQuestion').'
             <div id="question_timer" class="label label-warning"></div>
@@ -1304,7 +1304,7 @@ if ($allowBlockCategory &&
         false,
         true
     );
-$loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+    $loading = Display::getMdiIcon('loading', 'animate-spin');
 
     echo '<script>
         function addExerciseEvent(elm, evType, fn, useCapture) {

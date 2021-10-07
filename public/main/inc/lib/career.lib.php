@@ -903,13 +903,13 @@ class Career extends Model
                     $icon = '';
                     switch ($iconData['Icon']) {
                         case 0:
-                            $icon = Display::returnFontAwesomeIcon('times-circle', $size);
+                            $icon = Display::getMdiIcon('close-circle');
                             break;
                         case 1:
-                            $icon = Display::returnFontAwesomeIcon('check-circle', $size);
+                            $icon = Display::getMdiIcon('check-circle');
                             break;
                         case 2:
-                            $icon = Display::returnFontAwesomeIcon('info-circle', $size);
+                            $icon = Display::getMdiIcon('information');
                             break;
                     }
 

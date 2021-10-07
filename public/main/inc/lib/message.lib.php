@@ -1182,7 +1182,7 @@ class MessageManager
         // get file attachments by message id
         $list = [];
         if ($files) {
-            $attachIcon = Display::returnFontAwesomeIcon('paperclip');
+            $attachIcon = Display::getMdiIcon('paperclip');
             $repo = Container::getMessageAttachmentRepository();
             foreach ($files as $file) {
                 $size = format_file_size($file->getSize());
@@ -1700,7 +1700,7 @@ class MessageManager
 
         $btnLike = Display::button(
             'like',
-            Display::returnFontAwesomeIcon('thumbs-up', '', true)
+            Display::getMdiIcon('thumb-up')
                 .PHP_EOL.'<span>'.$countLikes['likes'].'</span>',
             [
                 'title' => get_lang('Like'),
@@ -1717,7 +1717,7 @@ class MessageManager
 
             $btnDislike = Display::button(
                 'like',
-                Display::returnFontAwesomeIcon('thumbs-down', '', true)
+                Display::getMdiIcon('thumb-down')
                 .PHP_EOL.'<span>'.$countLikes['dislikes'].'</span>',
                 [
                     'title' => get_lang('Dislike'),

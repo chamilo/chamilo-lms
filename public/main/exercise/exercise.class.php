@@ -7244,7 +7244,7 @@ class Exercise
             '<span id="counter_to_redirect" class="red_alert"></span>'
         );
         $html .= '</div>';
-        $icon = Display::returnFontAwesomeIcon('clock-o');
+        $icon = Display::getMdiIcon('clock-outline');
         $html .= '<div class="count_down">
                     '.get_lang('RemainingTimeToFinishExercise').'
                     '.$icon.'<span id="exercise_clock_warning"></span>

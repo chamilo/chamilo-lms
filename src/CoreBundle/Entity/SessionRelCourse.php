@@ -32,7 +32,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     collectionOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('ROLE_USER')",
         ],
         'post' => [
             'security' => "is_granted('ROLE_ADMIN')",
@@ -40,14 +40,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     itemOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)",
         ],
         'put' => [
             'security' => "is_granted('ROLE_ADMIN')",
         ],
-    ],
-    attributes: [
-        'security' => "is_granted('ROLE_ADMIN')",
     ],
     denormalizationContext: [
         'groups' => ['session_rel_course:write'],

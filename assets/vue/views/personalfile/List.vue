@@ -223,11 +223,6 @@ export default {
   methods: {
     // prime
     onPage(event) {
-      console.log(event);
-      console.log(event.page);
-      console.log(event.sortField);
-      console.log(event.sortOrder);
-
       this.options.itemsPerPage = event.rows;
       this.options.page = event.page + 1;
       this.options.sortBy = event.sortField;

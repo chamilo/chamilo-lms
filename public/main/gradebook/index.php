@@ -817,7 +817,7 @@ if (!empty($selectCat)) {
                 $certificate = Category::generateUserCertificate($category, $stud_id);
                 if ('true' !== $hideCertificateExport && isset($certificate['pdf_url'])) {
                     $actionsLeft .= Display::url(
-                        Display::returnFontAwesomeIcon('file-pdf-o').get_lang('Download certificate in PDF'),
+                        Display::getMdiIcon('file-pdf-box').get_lang('Download certificate in PDF'),
                         $certificate['pdf_url'],
                         ['class' => 'btn btn-default']
                     );
@@ -834,7 +834,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     $allowButton = false === api_get_configuration_value('gradebook_hide_pdf_report_button');
     if ($allowButton) {
         $actionsLeft .= Display::url(
-            Display::returnFontAwesomeIcon('file-pdf-o').get_lang('Download report in PDF'),
+            Display::getMdiIcon('file-pdf-box').get_lang('Download report in PDF'),
             api_get_self().'?action=export_table&'.api_get_cidreq().'&category_id='.$selectCat,
             ['class' => 'btn btn-default']
         );

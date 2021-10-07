@@ -164,7 +164,7 @@ $quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable'
 if ($quizCheckButtonEnabled) {
     $btnCheck = Display::button(
             'quiz_check_request_button',
-            Display::returnFontAwesomeIcon('spinner', '', true, 'fa-spin hidden').' '.get_lang('TestYourBrowser'),
+            Display::getMdiIcon('loading', 'animate-spin hidden').' '.get_lang('TestYourBrowser'),
             [
                 'type' => 'button',
                 'role' => 'button',
@@ -504,7 +504,7 @@ if ($quizCheckButtonEnabled) {
     $html .= "<script>
         $(function () {
             var btnTest = $('#quiz-check-request-button'),
-                iconBtnTest = btnTest.children('.fa.fa-spin');
+                iconBtnTest = btnTest.children('.animate-spin');
 
             btnTest.on('click', function (e) {
                 e.preventDefault();

@@ -768,6 +768,10 @@ class TicketManager
             ->setParent($currentUser)
         ;
 
+        if (null !== $ticket->getAssignedLastUser()) {
+            $attachment->addUserLink($ticket->getAssignedLastUser());
+        }
+
         $em->persist($attachment);
         $em->flush();
 

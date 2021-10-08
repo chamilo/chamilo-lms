@@ -1767,8 +1767,6 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $tbl_student_publication_assignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $trackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
@@ -2300,11 +2298,6 @@ class SessionManager
         $session_visibility = SESSION_VISIBLE_READ_ONLY,
         $removeUsersNotInList = false
     ) {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
         if (empty($session_id) || empty($course_code)) {
             return false;
         }
@@ -8079,7 +8072,8 @@ class SessionManager
                        FROM $extraFieldTables $tbl_session s
                        LEFT JOIN  $tbl_session_category sc
                        ON s.session_category_id = sc.id
-                       INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
+                       INNER JOIN $tblSessionRelUser sru 
+                       ON s.id = sru.session_id
                        INNER JOIN $tbl_user u
                        ON sru.user_id = u.id
                        INNER JOIN $sessionCourseUserTable scu

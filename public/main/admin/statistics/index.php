@@ -406,14 +406,15 @@ switch ($report) {
             }
 
             $content .= Display::page_subheader2(get_lang('GeneralStats'));
-            // Coach
-            // Coach
-            $sql = "SELECT COUNT(DISTINCT(sru.user_id)) count FROM $tableSession s
-                INNER JOIN $tableSessionRelUser sru ON s.id = sru.session_id
+            // Coach.
+            $sql = "SELECT COUNT(DISTINCT(sru.user_id)) count 
+                    FROM $tableSession s
+                    INNER JOIN $tableSessionRelUser sru 
+                    ON s.id = sru.session_id
                     WHERE
                         (s.display_start_date BETWEEN '$start' AND '$end' OR
-                        s.display_end_date BETWEEN '$start' AND '$end')
-                    AND sru.relation_type = ".Session::GENERAL_COACH."
+                        s.display_end_date BETWEEN '$start' AND '$end') AND
+                        sru.relation_type = ".Session::GENERAL_COACH."
                         $statusCondition
                      ";
             $result = Database::query($sql);

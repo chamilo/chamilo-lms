@@ -3,7 +3,6 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**

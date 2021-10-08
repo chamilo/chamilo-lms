@@ -599,12 +599,7 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    /**
-     * Get visibility.
-     *
-     * @return int
-     */
-    public function getVisibility()
+    public function getVisibility(): int
     {
         return $this->visibility;
     }

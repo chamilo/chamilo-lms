@@ -18,7 +18,7 @@ class CourseControllerTest extends WebTestCase
 {
     use ChamiloTestTrait;
 
-    public function testIndexJsonAction(): void
+    public function testIndexJson(): void
     {
         $client = static::createClient();
         $course = $this->createCourse('course 1');

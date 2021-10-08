@@ -2265,7 +2265,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * Retrieves this user's related sessions.
      *
-     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     * @param int $relationType
      *
      * @return Session[]
      */
@@ -2294,7 +2294,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * Get this user's related accessible sessions of a type, student by default.
      *
-     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     * @param int $relationType
      *
      * @return Session[]
      */

@@ -75,15 +75,6 @@ class SessionRelUser
     use UserTrait;
 
     /**
-     * @var string[]
-     */
-    public array $relationTypeList = [
-        Session::STUDENT => 'student',
-        Session::DRH => 'drh',
-        Session::SESSION_COACH => 'session_coach',
-    ];
-
-    /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -172,15 +163,6 @@ class SessionRelUser
     public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
-
-        return $this;
-    }
-
-    public function setRelationTypeByName(string $relationType): self
-    {
-        if (isset($this->relationTypeList[$relationType])) {
-            $this->setRelationType((int) $this->relationTypeList[$relationType]);
-        }
 
         return $this;
     }

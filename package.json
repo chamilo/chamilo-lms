@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.4.7",
-    "@babel/plugin-transform-runtime": "7.15.0",
+    "@babel/plugin-transform-runtime": "7.15.8",
     "@fancyapps/fancybox": "^3.5.7",
     "@fullcalendar/core": "^5.9.0",
     "@fullcalendar/daygrid": "^5.9.0",
@@ -17,7 +17,7 @@
     "@headlessui/vue": "^1.4.1",
     "@heroicons/vue": "^1.0.4",
     "@popperjs/core": "2.10.2",
-    "@quasar/extras": "^1.11.1",
+    "@quasar/extras": "^1.11.2",
     "@tailwindcss/forms": "^0.3.4",
     "@tailwindcss/line-clamp": "^0.2.2",
     "@tailwindcss/typography": "^0.4.1",
@@ -77,7 +77,7 @@
     "jsplumb": "^2.15.6",
     "linkifyjs": "3.0.1",
     "litepicker": "^2.0.11",
-    "luxon": "^1.28.0",
+    "luxon": "^2.0.2",
     "mathjax": "^2.7.9",
     "mediaelement": "^5.0.1",
     "mediaelement-plugins": "https://github.com/chamilo/mediaelement-plugins",
@@ -130,7 +130,7 @@
     "webpack-jquery-ui": "^2.0.1"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.15.7",
+    "@babel/eslint-parser": "^7.15.8",
     "@mdi/font": "^6.2.95",
     "@symfony/webpack-encore": "1.6.1",
     "@vue/cli-plugin-babel": "4.5.13",

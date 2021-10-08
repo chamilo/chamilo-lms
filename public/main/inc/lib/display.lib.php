@@ -2220,7 +2220,7 @@ class Display
         return $html;
     }
 
-    public static function getMdiIcon(string $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null): string
+    public static function getMdiIcon(string $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
     {
         $sizeString = '';
         if (!empty($pixelSize)) {
@@ -2229,12 +2229,11 @@ class Display
         if (empty($style)) {
             $style = '';
         }
-        $additionalAttributes = [
-            'class' => "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass",
-            'style' => $sizeString.$style,
-            'medium' => '',
-            'aria-hidden' => 'true',
-        ];
+        $additionalAttributes['class'] = "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass";
+        $additionalAttributes['style'] = $sizeString.$style;
+        $additionalAttributes['medium'] = '';
+        $additionalAttributes['aria-hidden'] = 'true';
+
         if (!empty($title)) {
             $additionalAttributes['title'] = htmlentities($title);
         }

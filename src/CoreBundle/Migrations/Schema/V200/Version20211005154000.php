@@ -50,6 +50,10 @@ class Version20211005154000 extends AbstractMigrationChamilo
             $ticket = $messageAttachment->getTicket();
             $user = $userRepo->find($item['sys_insert_user_id']);
 
+            if (null === $user) {
+                continue;
+            }
+
             $attachmentRepo->addResourceNode($messageAttachment, $user, $user);
 
             if (null !== $ticket->getAssignedLastUser()) {

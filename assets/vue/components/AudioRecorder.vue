@@ -43,6 +43,7 @@
 
 <script>
 import {reactive, toRefs} from "vue";
+import {RecordRTCPromisesHandler, StereoAudioRecorder} from "recordrtc";
 
 export default {
   name: "AudioRecorder",
@@ -59,38 +60,27 @@ export default {
       audioList: [],
     });
 
-    let mediaRecorder = null;
-    let mediaChunks = [];
+    let recorder = null;
 
-    function record() {
+    async function record() {
       if (!navigator.mediaDevices.getUserMedia) {
         return;
       }
 
-      navigator.mediaDevices.getUserMedia({audio: true})
-        .then((stream) => {
-          mediaRecorder = new MediaRecorder(stream);
-          mediaRecorder.ondataavailable = e => {
-            mediaChunks.push(e.data)
-          };
-          mediaRecorder.onstop = e => {
-            stream.getAudioTracks()[0].stop();
+      let stream = await navigator.mediaDevices.getUserMedia({video: false, audio: true});
+      recorder = new RecordRTCPromisesHandler(stream, {
+        recorderType: StereoAudioRecorder,
+        type: 'audio',
+        mimeType: 'audio/wav',
+        numberOfAudioChannels: 2
+      });
+      recorder.startRecording();
 
-            const audioItem = new Blob(mediaChunks, {type: 'audio/ogg; codecs=opus'});
-
-            mediaChunks = [];
-
-            recorderState.audioList.push(audioItem);
-          };
-          mediaRecorder.start();
-
-          recorderState.isRecording = true;
-        })
-        .catch(console.log);
+      recorderState.isRecording = true;
     }
 
-    function stop() {
-      if (!mediaRecorder) {
+    async function stop() {
+      if (!recorder) {
         return;
       }
 
@@ -98,7 +88,12 @@ export default {
         recorderState.audioList.shift();
       }
 
-      mediaRecorder.stop();
+      await recorder.stopRecording();
+
+      const audioBlob = await recorder.getBlob();
+
+      recorderState.audioList.push(audioBlob);
+
       recorderState.isRecording = false;
     }
 

@@ -247,6 +247,9 @@ $form->addElement('text', 'disk_quota', [get_lang('Disk Space'), null, get_lang(
 $form->addRule('disk_quota', get_lang('Required field'), 'required');
 $form->addRule('disk_quota', get_lang('This field should be numeric'), 'numeric');
 
+$form->addText('video_url', get_lang('Video URL'), false);
+$form->addCheckBox('sticky', null, get_lang('Sticky'));
+
 // Extra fields
 $extraField = new ExtraField('course');
 $extra = $extraField->addElements(
@@ -282,7 +285,7 @@ $form->addButtonUpdate(get_lang('Edit course information'));
 // Set some default values
 $courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
 $courseInfo['real_code'] = $courseInfo['code'];
-$courseInfo['add_teachers_to_sessions_courses'] = isset($courseInfo['add_teachers_to_sessions_courses']) ? $courseInfo['add_teachers_to_sessions_courses'] : 0;
+$courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_sessions_courses'] ?? 0;
 
 $form->setDefaults($courseInfo);
 
@@ -356,6 +359,8 @@ if ($form->validate()) {
         ->setSubscribe($course['subscribe'])
         ->setUnsubscribe($course['unsubscribe'])
         ->setVisibility($visibility)
+        ->setSticky(1 === (int) ($course['sticky'] ?? 0))
+        ->setVideoUrl($params['video_url'] ?? '')
     ;
 
     $em->persist($courseEntity);

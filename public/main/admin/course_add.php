@@ -141,6 +141,8 @@ $form->addElement('text', 'disk_quota', [get_lang('Disk Space'), null, get_lang(
     'id' => 'disk_quota',
 ]);
 $form->addRule('disk_quota', get_lang('This field should be numeric'), 'numeric');
+$form->addText('video_url', get_lang('Video URL'), false);
+$form->addCheckBox('sticky', null, get_lang('Sticky'));
 
 $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);

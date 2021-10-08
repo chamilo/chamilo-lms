@@ -759,6 +759,8 @@ class AddCourse
                 ->setDepartmentName($department_name)
                 ->setDepartmentUrl($department_url)
                 ->setSubscribe($subscribe)
+                ->setSticky(1 === (int) ($params['sticky'] ?? 0))
+                ->setVideoUrl($params['video_url'] ?? '')
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
                 ->addAccessUrl(api_get_url_entity())

@@ -2174,6 +2174,8 @@ function api_format_course_array(Course $course = null)
     $courseData['activate_legal'] = $course->getActivateLegal();
     $courseData['legal'] = $course->getLegal();
     $courseData['show_score'] = $course->getShowScore(); //used in the work tool
+    $courseData['video_url'] = $course->getVideoUrl();
+    $courseData['sticky'] = (int) $course->isSticky();
 
     $coursePath = '/course/';
     $webCourseHome = $coursePath.$courseData['real_id'].'/home';

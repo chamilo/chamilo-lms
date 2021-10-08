@@ -254,7 +254,7 @@ class Session implements ResourceWithAccessUrlInterface
      * @ORM\ManyToOne(targetEntity="SessionCategory", inversedBy="sessions")
      * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
      */
-    #[Groups(['session:read', 'session:write'])]
+    #[Groups(['session:read', 'session:write', 'session_rel_user:read'])]
     protected ?SessionCategory $category = null;
 
     /**

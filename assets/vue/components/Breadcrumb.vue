@@ -50,6 +50,8 @@ export default {
         'CourseHome',
         'MyCourses',
         'MySessions',
+        'MySessionListUpcoming',
+        'MySessionListPast',
         'Home',
       ];
 

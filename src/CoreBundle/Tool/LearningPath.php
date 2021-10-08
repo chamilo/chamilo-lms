@@ -33,7 +33,7 @@ class LearningPath extends AbstractTool implements ToolInterface
 
     public function getIcon(): string
     {
-        return 'mdi-routes';
+        return 'mdi-map-marker-path';
     }
 
     public function getResourceTypes(): ?array

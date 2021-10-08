@@ -61,7 +61,9 @@ window.RecordAudio = (function () {
 
             var btnSaveText = btnSave ? btnSave.html() : '';
 
+            var typeParts = recordedBlob.type.split('/');
             var fileName = 'oral_expression_' + rtcInfo.tExerciseId + '_' + rtcInfo.questionId;
+            fileName += typeParts.length > 1 ? '.' + typeParts[1] : '';
 
             var formData = new FormData();
             formData.append('type', rtcInfo.type);

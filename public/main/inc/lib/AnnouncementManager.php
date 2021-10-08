@@ -562,7 +562,7 @@ class AnnouncementManager
                 $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
                 $html .= '<tr><td>';
                 $html .= '<br/>';
-                $html .= Display::returnFontAwesomeIcon('paperclip');
+                $html .= Display::getMdiIcon('paperclip');
                 $html .= '<a href="'.$url.' "> '.$attachment->getFilename().' </a>';
                 $html .= ' - <span class="forum_attach_comment" >'.$attachment->getComment().'</span>';
                 if (api_is_allowed_to_edit(false, true)) {

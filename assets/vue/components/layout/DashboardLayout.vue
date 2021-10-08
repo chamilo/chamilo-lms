@@ -33,6 +33,19 @@
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
+          <q-btn
+            v-if="isAuthenticated && 'true' === config['display.show_link_ticket_notification']"
+            color="grey-8"
+            dense
+            flat
+            icon="mdi-face-agent"
+            round
+            type="a"
+            :href="generateTicketUrl()"
+          >
+            <q-tooltip>{{ $t('Ticket') }}</q-tooltip>
+          </q-btn>
+
           <q-btn v-if="isAuthenticated" round dense flat color="grey-8"
                  icon="person"
                  :to="'/account/home'"
@@ -213,6 +226,7 @@ import isEmpty from "lodash/isEmpty";
 import useState from "../../hooks/useState";
 import {computed, ref, toRefs} from "vue";
 import Breadcrumb from '../../components/Breadcrumb.vue';
+import {useRoute} from 'vue-router'
 
 import { useI18n } from 'vue-i18n'
 
@@ -235,6 +249,7 @@ export default {
     const linksAnon = ref([]);
     const { showBreadcrumb } = toRefs(props);
     const config = ref([]);
+    const route = useRoute();
 
     if (!isEmpty(window.config)) {
       config.value = window.config;
@@ -266,6 +281,16 @@ export default {
       //{ icon: 'mdi-compass', url: '/catalog', text: 'Explore' },
     ];
 
+    function generateTicketUrl() {
+      const queryParams = new URLSearchParams(window.location.href);
+
+      const cid = route.query.cid || route.params.id || queryParams.get('cid') || 0;
+      const sid = route.query.sid || queryParams.get('sid') || 0;
+      const gid = route.query.gid || queryParams.get('gid') || 0;
+
+      return `/main/ticket/tickets.php?project_id=1&cid=${cid}&sid=${sid}&gid=${gid}`;
+    }
+
     return {
       linksAnon,
       linksUser,
@@ -279,7 +304,8 @@ export default {
       rightDrawerOpen,
       toggleRightDrawer () {
         rightDrawerOpen.value = !rightDrawerOpen.value
-      }
+      },
+      generateTicketUrl,
     }
   },
 

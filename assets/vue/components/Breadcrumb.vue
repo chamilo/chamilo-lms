@@ -28,14 +28,12 @@ import {mapGetters} from "vuex";
 export default {
   name: 'Breadcrumb',
   props: ['layoutClass', 'legacy'],
-  data() {
-    return {
-      //legacy:[],
-    };
-  },
   computed: {
     ...mapGetters('resourcenode', {
       resourceNode: 'getResourceNode',
+    }),
+    ...mapGetters('course', {
+      course: 'getCourse',
     }),
     items() {
       console.log('Breadcrumb.vue');
@@ -52,24 +50,17 @@ export default {
         'CourseHome',
         'MyCourses',
         'MySessions',
+        'MySessionListUpcoming',
+        'MySessionListPast',
         'Home',
-        'CCalendarEventList',
       ];
 
       if (list.includes(this.$route.name)) {
         return items;
       }
 
-      // Course
-      /*if (this.$route.query.cid) {
-        items.push({
-          text: this.$route.query.cid,
-          //disabled: route.path === path || lastItem.path === route.path,
-          href: '/course/' + this.$route.query.cid + '/home'
-        });
-      }*/
-
       if (this.legacy) {
+        console.log('legacy');
         // Checking data from legacy main (1.11.x)
         const mainUrl = window.location.href;
         const mainPath = mainUrl.indexOf("main/");
@@ -95,34 +86,34 @@ export default {
         }
       }
 
+      let folderParams = this.$route.query;
+      var queryParams = '';
+      for (var key in folderParams) {
+        if (queryParams != '') {
+          queryParams += "&";
+        }
+        queryParams += key + '=' + encodeURIComponent(folderParams[key]);
+      }
+
+      // course is set in documents/List.vue
+      if (this.course) {
+        console.log('copursssss');
+        // First node
+        items.push({
+          text:  this.course.title,
+          href: '/course/' + this.course.id + '/home?'+queryParams
+        });
+      }
+
       console.log(items);
       if (this.resourceNode) {
         console.log('resourceNode');
-        let folderParams = this.$route.query;
-        var queryParams = '';
-        for (var key in folderParams) {
-          if (queryParams != '') {
-              queryParams += "&";
-          }
-          queryParams += key + '=' + encodeURIComponent(folderParams[key]);
-        }
-
         console.log(this.resourceNode);
         console.log(this.resourceNode.path);
 
         const parts = this.resourceNode.path.split('/');
         const { path, matched } = this.$route;
         const lastItem = matched[matched.length - 1];
-
-        // Get course
-        let courseId = this.$route.query.cid;
-        if (courseId) {
-          let courseCode = this.$route.query.cid;
-          items.push({
-            text:  courseCode,
-            href: '/course/' + courseId + '/home?'+queryParams
-          });
-        }
 
         for (let i = 0, len = parts.length; i < len; i += 1) {
           let route = parts[i];
@@ -136,6 +127,7 @@ export default {
             i++;
             continue;
           }
+
           if (routeParts[0]) {
             items.push({
               text: routeParts[0],
@@ -156,10 +148,10 @@ export default {
             });
           }
         }
-        console.log('BREADCRUMB');
-        console.log(items);
       }
 
+      console.log('BREADCRUMB');
+      console.log(items);
       return items;
     }
   }

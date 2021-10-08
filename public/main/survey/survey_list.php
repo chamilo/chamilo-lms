@@ -47,8 +47,6 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
-//$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
-
 if ($isDrhOfCourse) {
     Display::display_header(get_lang('Survey list'));
     Display::display_introduction_section('survey', 'left');
@@ -179,6 +177,11 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     }
                 }
 
+                // No questions.
+                if (empty($questionsOptions)) {
+                    continue;
+                }
+
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE c_id = $course_id AND survey_id = $surveyId ";
                 $userAnswers = [];
@@ -189,6 +192,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $all_answers[$answers_of_user['user']][$answers_of_user['question_id']][] = $answers_of_user;
                 }
 
+                if (empty($userAnswers)) {
+                    continue;
+                }
+                //echo '<pre>';
                 foreach ($questionsOptions as $question) {
                     foreach ($usersWithAnswers as $userData) {
                         $userIdItem = $userData['user_id'];

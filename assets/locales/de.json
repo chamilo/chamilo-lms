@@ -104,7 +104,7 @@
     "Updated at": "Aktualsiert von",
     "File": "Datei",
     "From": "Von",
-    "Send date": "Send date",
+    "Send date": "Sendedatum",
     "Sender": "Sender",
     "To": "An",
     "Cc": "Cc",
@@ -124,5 +124,11 @@
     "Assignments": "Ausarbeitungen von Teilnehmern",
     "Videoconference": "Video-Konferenz",
     "Reporting": "Auswertung",
-    "Learning paths": "Lernpfad"
+    "Learning paths": "Lernpfad",
+    "Diagnostic Form": "Diagnostic Form",
+    "Diagnosis Management": "Diagnosis Management",
+    "Edit profile": "Profil bearbeiten",
+    "Update profile": "Profil aktualisieren",
+    "Firstname": "Vorname",
+    "Lastname": "Nachname"
 }

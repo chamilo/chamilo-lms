@@ -42,7 +42,7 @@ class CoursesController extends AbstractController
         $parent = $course;
         foreach ($pathList as $pathPart) {
             $pathPart = Urlizer::urlize($pathPart);
-            $document = $documentRepository->findCourseResourceBySlug($pathPart, $parent->getResourceNode(), $course);
+            $document = $documentRepository->findCourseResourceBySlugIgnoreVisibility($pathPart, $parent->getResourceNode(), $course);
             if (null !== $document) {
                 $parent = $document;
             }

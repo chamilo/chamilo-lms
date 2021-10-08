@@ -78,7 +78,7 @@ if ($session) {
             $usersInfo[$user->getId()][$course->getId().'_last_work'] = null;
             $usersInfo[$user->getId()][$course->getId().'_time_spent_of_course'] = null;
 
-            if (!$session->hasCoachInCourseWithStatus($user, $course)) {
+            if (!$session->hasCourseCoachInCourse($user, $course)) {
                 continue;
             }
 

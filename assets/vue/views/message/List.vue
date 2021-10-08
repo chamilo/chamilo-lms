@@ -1,48 +1,48 @@
 <template>
-  <Toolbar  >
+  <Toolbar>
     <template v-slot:right>
-        <v-btn
-            tile
-            icon
-            @click="composeHandler">
-          <v-icon icon="mdi-email-plus-outline" />
-        </v-btn>
+      <v-btn
+        icon
+        tile
+        @click="composeHandler">
+        <v-icon icon="mdi-email-plus-outline"/>
+      </v-btn>
 
-        <v-btn
-            tile
-            icon
-            :loading="isLoading"
-            @click="reloadHandler">
-          <v-icon icon="mdi-refresh" />
-        </v-btn>
+      <v-btn
+        :loading="isLoading"
+        icon
+        tile
+        @click="reloadHandler">
+        <v-icon icon="mdi-refresh"/>
+      </v-btn>
 
-         <v-btn
-            tile
-            icon
-            @click="confirmDeleteMultiple"
-            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
-         >
-          <v-icon icon="mdi-delete" />
-        </v-btn>
-<!--        :disabled="!selectedItems || !selectedItems.length"-->
+      <v-btn
+        :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
+        icon
+        tile
+        @click="confirmDeleteMultiple"
+      >
+        <v-icon icon="mdi-delete"/>
+      </v-btn>
+      <!--        :disabled="!selectedItems || !selectedItems.length"-->
 
-        <v-btn
-            icon
-            tile
-            @click="markAsReadMultiple"
-            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
-        >
-          <v-icon icon="mdi-email" />
-        </v-btn>
+      <v-btn
+        :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
+        icon
+        tile
+        @click="markAsReadMultiple"
+      >
+        <v-icon icon="mdi-email"/>
+      </v-btn>
 
-        <v-btn
-            tile
-            icon
-            @click="markAsUnReadMultiple"
-            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
-        >
-          <v-icon icon="mdi-email-open" />
-        </v-btn>
+      <v-btn
+        :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
+        icon
+        tile
+        @click="markAsUnReadMultiple"
+      >
+        <v-icon icon="mdi-email-open"/>
+      </v-btn>
 
     </template>
   </Toolbar>
@@ -53,219 +53,209 @@
         max-width="300"
         tile
       >
-      <v-list dense>
-  <!--      v-model="selectedItem"-->
-        <v-list-item-group
+        <v-list dense>
+          <!--      v-model="selectedItem"-->
+          <v-list-item-group
             color="primary"
-        >
-          <v-list-item @click="goToInbox">
-            <v-list-item-icon>
-              <v-icon icon="mdi-inbox"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Inbox</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          >
+            <v-list-item @click="goToInbox">
+              <v-list-item-icon>
+                <v-icon icon="mdi-inbox"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Inbox</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-          <v-list-item @click="goToSent">
-            <v-list-item-icon>
-              <v-icon icon="mdi-send-outline"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Sent</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+            <v-list-item @click="goToSent">
+              <v-list-item-icon>
+                <v-icon icon="mdi-send-outline"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Sent</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-          <v-list-item @click="goToUnread">
-            <v-list-item-icon>
-              <v-icon icon="mdi-email-outline"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Unread</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item
+            <v-list-item @click="goToUnread">
+              <v-list-item-icon>
+                <v-icon icon="mdi-email-outline"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Unread</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item
               v-for="(tag, i) in tags"
               :key="i"
               @click="goToTag(tag)"
-          >
-            <v-list-item-icon>
-              <v-icon icon="mdi-label-outline"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="tag.tag"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-card>
+            >
+              <v-list-item-icon>
+                <v-icon icon="mdi-label-outline"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="tag.tag"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
     </div>
     <div class="w-4/5 pl-4">
       <div class="text-h4 q-mb-md">{{ title }}</div>
       <DataTable
-        class="p-datatable-sm"
-        :value="items"
-        v-model:selection="selectedItems"
-        dataKey="id"
         v-model:filters="filters"
-        filterDisplay="menu"
-        sortBy="sendDate"
-        sortOrder="asc"
+        v-model:selection="selectedItems"
+        :globalFilterFields="['title', 'sendDate']"
         :lazy="true"
+        :loading="isLoading"
         :paginator="true"
         :rows="10"
-        :totalRecords="totalItems"
-        :loading="isLoading"
-        @page="onPage($event)"
-        @sort="sortingChanged($event)"
-        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         :rowsPerPageOptions="[5, 10, 20, 50]"
-        responsiveLayout="scroll"
+        :totalRecords="totalItems"
+        :value="items"
+        class="p-datatable-sm"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-        :globalFilterFields="['title', 'sendDate']">
+        dataKey="id"
+        filterDisplay="menu"
+        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+        responsiveLayout="scroll"
+        sortBy="sendDate"
+        sortOrder="asc"
+        @page="onPage($event)"
+        @sort="sortingChanged($event)">
 
-      <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
+        <Column :exportable="false" selectionMode="multiple" style="width: 3rem"></Column>
 
-      <Column field="sender" :header="$t('From')" :sortable="false">
-        <template #body="slotProps">
-          <q-avatar size="40px">
-            <img :src="slotProps.data.sender.illustrationUrl + '?w=80&h=80&fit=crop'" />
-          </q-avatar>
+        <Column :header="$t('From')" :sortable="false" field="sender">
+          <template #body="slotProps">
+            <q-avatar size="40px">
+              <img :src="slotProps.data.sender.illustrationUrl + '?w=80&h=80&fit=crop'"/>
+            </q-avatar>
 
-          <a
+            <a
               v-if="slotProps.data"
-              @click="showHandler(slotProps.data)"
-              class="cursor-pointer"
               :class="{ 'font-semibold': index == 'inbox' && !slotProps.data.firstReceiver.read }"
-          >
-            {{ slotProps.data.sender.username }}
-          </a>
-
-        </template>
-      </Column>
-
-      <Column field="title" :header="$t('Title')" :sortable="false">
-        <template #body="slotProps">
-          <a
-              v-if="slotProps.data"
-              @click="showHandler(slotProps.data)"
               class="cursor-pointer"
+              @click="showHandler(slotProps.data)"
+            >
+              {{ slotProps.data.sender.username }}
+            </a>
+
+          </template>
+        </Column>
+
+        <Column :header="$t('Title')" :sortable="false" field="title">
+          <template #body="slotProps">
+            <a
+              v-if="slotProps.data"
               :class="{ 'font-semibold': index == 'inbox' &&  !slotProps.data.firstReceiver.read }"
-          >
-            {{ slotProps.data.title }}
-          </a>
+              class="cursor-pointer"
+              @click="showHandler(slotProps.data)"
+            >
+              {{ slotProps.data.title }}
+            </a>
 
-          <div
-             v-if = "index == 'inbox' && slotProps.data.firstReceiver"
-             class="flex flex-row"
-          >
-            <v-chip v-for="tag in slotProps.data.firstReceiver.tags" >
-              {{ tag.tag }}
-            </v-chip>
-          </div>
-        </template>
+            <div
+              v-if="index == 'inbox' && slotProps.data.firstReceiver"
+              class="flex flex-row"
+            >
+              <v-chip v-for="tag in slotProps.data.firstReceiver.tags">
+                {{ tag.tag }}
+              </v-chip>
+            </div>
+          </template>
 
-        <!--         <template #filter="{filterModel}">-->
-        <!--           <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>-->
-        <!--         </template>-->
-        <!--         -->
+          <!--         <template #filter="{filterModel}">-->
+          <!--           <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>-->
+          <!--         </template>-->
+          <!--         -->
 
-        <!--      <template #filter="{filterModel}">-->
-        <!--        <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by title"/>-->
-        <!--      </template>-->
-        <!--      <template #filterclear="{filterCallback}">-->
-        <!--        <Button type="button" icon="pi pi-times" @click="filterCallback()" class="p-button-secondary"></Button>-->
-        <!--      </template>-->
-        <!--      <template #filterapply="{filterCallback}">-->
-        <!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
-        <!--      </template>-->
-      </Column>
+          <!--      <template #filter="{filterModel}">-->
+          <!--        <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by title"/>-->
+          <!--      </template>-->
+          <!--      <template #filterclear="{filterCallback}">-->
+          <!--        <Button type="button" icon="pi pi-times" @click="filterCallback()" class="p-button-secondary"></Button>-->
+          <!--      </template>-->
+          <!--      <template #filterapply="{filterCallback}">-->
+          <!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
+          <!--      </template>-->
+        </Column>
 
-      <Column field="sendDate" :header="$t('Send date')" :sortable="false">
-        <template #body="slotProps">
-          {{$luxonDateTime.fromISO(slotProps.data.sendDate).toRelative() }}
-        </template>
-      </Column>
+        <Column :header="$t('Send date')" :sortable="false" field="sendDate">
+          <template #body="slotProps">
+            {{ $luxonDateTime.fromISO(slotProps.data.sendDate).toRelative() }}
+          </template>
+        </Column>
 
-      <Column :exportable="false">
-        <template #body="slotProps">
-          <div class="flex flex-row gap-2">
-            <v-btn
-                tile
+        <Column :exportable="false">
+          <template #body="slotProps">
+            <div class="flex flex-row gap-2">
+              <v-btn
                 icon
-                @click="confirmDeleteItem(slotProps.data)" >
-              <v-icon icon="mdi-delete" />
-            </v-btn>
-          </div>
-        </template>
-      </Column>
-    </DataTable>
+                tile
+                @click="confirmDeleteItem(slotProps.data)">
+                <v-icon icon="mdi-delete"/>
+              </v-btn>
+            </div>
+          </template>
+        </Column>
+      </DataTable>
     </div>
   </div>
 
-<!--  Dialogs-->
+  <!--  Dialogs-->
 
-  <Dialog v-model:visible="itemDialog" :style="{width: '450px'}" :header="$t('New folder')" :modal="true" class="p-fluid">
+  <Dialog v-model:visible="itemDialog" :header="$t('New folder')" :modal="true" :style="{width: '450px'}"
+          class="p-fluid">
     <div class="p-field">
       <label for="name">{{ $t('Name') }}</label>
       <InputText
-          autocomplete="off"
-          id="title"
-          v-model.trim="item.title"
-          required="true"
-          autofocus
-          :class="{'p-invalid': submitted && !item.title}"
+        id="title"
+        v-model.trim="item.title"
+        :class="{'p-invalid': submitted && !item.title}"
+        autocomplete="off"
+        autofocus
+        required="true"
       />
-      <small class="p-error" v-if="submitted && !item.title">$t('Title is required')</small>
+      <small v-if="submitted && !item.title" class="p-error">$t('Title is required')</small>
     </div>
 
     <template #footer>
-      <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
-      <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveItem" />
+      <Button class="p-button-text" icon="pi pi-times" label="Cancel" @click="hideDialog"/>
+      <Button class="p-button-text" icon="pi pi-check" label="Save" @click="saveItem"/>
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="deleteItemDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+  <Dialog v-model:visible="deleteItemDialog" :modal="true" :style="{width: '450px'}" header="Confirm">
     <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
-      <span v-if="item">Are you sure you want to delete <b>{{item.title}}</b>?</span>
+      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"/>
+      <span v-if="item">Are you sure you want to delete <b>{{ item.title }}</b>?</span>
     </div>
     <template #footer>
-      <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteItemDialog = false"/>
-      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItemButton(item)" />
+      <Button class="p-button-text" icon="pi pi-times" label="No" @click="deleteItemDialog = false"/>
+      <Button class="p-button-text" icon="pi pi-check" label="Yes" @click="deleteItemButton(item)"/>
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="deleteMultipleDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+  <Dialog v-model:visible="deleteMultipleDialog" :modal="true" :style="{width: '450px'}" header="Confirm">
     <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
+      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"/>
       <span v-if="item">Are you sure you want to delete the selected items?</span>
     </div>
     <template #footer>
-      <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteMultipleDialog = false"/>
-      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteMultipleItems" />
+      <Button class="p-button-text" icon="pi pi-times" label="No" @click="deleteMultipleDialog = false"/>
+      <Button class="p-button-text" icon="pi pi-check" label="Yes" @click="deleteMultipleItems"/>
     </template>
   </Dialog>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
+import {mapActions, mapGetters, useStore} from 'vuex';
+import {mapFields} from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell.vue';
 import Toolbar from '../../components/Toolbar.vue';
-import ResourceFileIcon from '../../components/documents/ResourceFileIcon.vue';
-import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
-
-import {useRoute, useRouter} from 'vue-router'
-import DataFilter from '../../components/DataFilter';
-import DocumentsFilterForm from '../../components/documents/Filter';
-import { ref, reactive, onMounted, computed } from 'vue';
-import { useStore } from 'vuex';
-import isEmpty from 'lodash/isEmpty';
-import moment from "moment";
-import toInteger from "lodash/toInteger";
-import useState from "../../hooks/useState";
+import {ref} from 'vue';
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
@@ -297,7 +287,7 @@ export default {
     const index = ref('inbox');
 
     const {showNotification} = useNotification();
-    const { t } = useI18n();
+    const {t} = useI18n();
 
     // Inbox
     const inBoxFilter = {
@@ -383,7 +373,7 @@ export default {
 
     function confirmDeleteItem(item) {
       itemToDelete.value = item;
-      deleteItemDialog.value  = true;
+      deleteItemDialog.value = true;
     }
 
     function confirmDeleteMultiple() {
@@ -468,10 +458,10 @@ export default {
   data() {
     return {
       columns: [
-        { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
-        { label: this.$i18n.t('Sender'), field: 'sender', name: 'sender', sortable: true},
-        { label: this.$i18n.t('Modified'), field: 'sendDate', name: 'updatedAt', sortable: true},
-        { label: this.$i18n.t('Actions'), name: 'action', sortable: false}
+        {label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
+        {label: this.$i18n.t('Sender'), field: 'sender', name: 'sender', sortable: true},
+        {label: this.$i18n.t('Modified'), field: 'sendDate', name: 'updatedAt', sortable: true},
+        {label: this.$i18n.t('Actions'), name: 'action', sortable: false}
       ],
       pageOptions: [10, 20, 50, this.$i18n.t('All')],
       selected: [],
@@ -516,7 +506,7 @@ export default {
   methods: {
     composeHandler() {
       let folderParams = this.$route.query;
-      this.$router.push({ name: `${this.$options.servicePrefix}Create` , query: folderParams});
+      this.$router.push({name: `${this.$options.servicePrefix}Create`, query: folderParams});
     },
     reloadHandler() {
       this.onUpdateOptions();

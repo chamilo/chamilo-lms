@@ -3,6 +3,10 @@
         v-for="session in sessions"
         :key="session.id"
     >
+      <div v-if="session.category">
+        <h3>{{ session.category.name }}</h3>
+      </div>
+
       <SessionCard
           :session="session"
       />

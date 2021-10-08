@@ -2331,16 +2331,16 @@ class SkillModel extends Model
     }
 
     /**
-     * @param User   $user
-     * @param Skill  $skill
-     * @param int    $levelId
-     * @param string $argumentation
-     * @param int    $authorId
-     *
-     * @return SkillRelUser|null
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
-    {
+    public function addSkillToUserBadge(
+        User $user,
+        Skill $skill,
+        int $levelId,
+        string $argumentation,
+        int $authorId
+    ): ?SkillRelUser {
         $showLevels = false === api_get_configuration_value('hide_skill_levels');
 
         $entityManager = Database::getManager();

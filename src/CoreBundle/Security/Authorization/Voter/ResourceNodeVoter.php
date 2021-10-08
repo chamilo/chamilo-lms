@@ -140,6 +140,13 @@ class ResourceNodeVoter extends Voter
         $sessionId = (int) $request->get('sid');
         $groupId = (int) $request->get('gid');
 
+        // Try Session values.
+        if (empty($courseId) && $request->hasSession()) {
+            $courseId = (int) $request->getSession()->get('cid');
+            $sessionId = (int) $request->getSession()->get('sid');
+            $groupId = (int) $request->getSession()->get('gid');
+        }
+
         $links = $resourceNode->getResourceLinks();
 
         $linkFound = 0;

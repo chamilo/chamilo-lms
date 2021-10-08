@@ -765,9 +765,12 @@ class TicketManager
             ->setTicket($ticket)
             ->setInsertUserId($currentUser->getId())
             ->setInsertDateTime(api_get_utc_datetime(null, false, true))
-            ->addUserLink($currentUser)
             ->setParent($currentUser)
         ;
+
+        if (null !== $ticket->getAssignedLastUser()) {
+            $attachment->addUserLink($ticket->getAssignedLastUser());
+        }
 
         $em->persist($attachment);
         $em->flush();
@@ -1012,7 +1015,7 @@ class TicketManager
 					    title="'.get_lang('History').'"
 					    alt="'.get_lang('History').'"
                     >
-                    '.Display::returnFontAwesomeIcon('history').'
+                    '.Display::getMdiIcon('history').'
                     </a>
 
 					<div class="blackboard_hide" id="div_'.$row['ticket_id'].'">&nbsp;&nbsp;</div>
@@ -1172,13 +1175,14 @@ class TicketManager
      */
     public static function get_ticket_detail_by_id($ticketId)
     {
+        $attachmentRepo = Container::getTicketMessageAttachmentRepository();
+
         $ticketId = (int) $ticketId;
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
-        $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $sql = "SELECT
@@ -1280,23 +1284,23 @@ class TicketManager
             $result = Database::query($sql);
             $ticket['messages'] = [];
             $attach_icon = Display::return_icon('attachment.gif', '');
-            $webPath = api_get_path(WEB_CODE_PATH);
+
             while ($row = Database::fetch_assoc($result)) {
                 $message = $row;
                 $message['admin'] = UserManager::is_admin($message['user_id']);
                 $message['user_info'] = api_get_user_info($message['user_id']);
-                $sql = "SELECT *
-                        FROM $table_support_message_attachments
-                        WHERE
-                            message_id = ".$row['message_id']." AND
-                            ticket_id = $ticketId";
 
-                $result_attach = Database::query($sql);
-                while ($row2 = Database::fetch_assoc($result_attach)) {
-                    $archiveURL = $webPath.'ticket/download.php?ticket_id='.$ticketId.'&id='.$row2['id'];
-                    $row2['attachment_link'] = $attach_icon.
-                        '&nbsp;<a href="'.$archiveURL.'">'.$row2['filename'].'</a>&nbsp;('.$row2['size'].')';
-                    $message['attachments'][] = $row2;
+                $messageAttachments = $attachmentRepo->findBy(['ticket' => $ticketId, 'message' => $row['message_id']]);
+
+                /** @var TicketMessageAttachment $messageAttachment */
+                foreach ($messageAttachments as $messageAttachment) {
+                    $archiveURL = $attachmentRepo->getResourceFileDownloadUrl($messageAttachment);
+                    $link = Display::url(
+                        sprintf("%s (%d)", $messageAttachment->getFilename(), $messageAttachment->getSize()),
+                        $archiveURL
+                    );
+
+                    $message['attachments'][] = $attach_icon.PHP_EOL.$link;
                 }
                 $ticket['messages'][] = $message;
             }

@@ -24100,3 +24100,6 @@ msgstr "Add a course introduction to show your students."
 
 msgid "See as student"
 msgstr "See as student"
+
+msgid "Official code"
+msgstr "Official code"

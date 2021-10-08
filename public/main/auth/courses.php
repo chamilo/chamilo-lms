@@ -513,7 +513,7 @@ switch ($action) {
                     // if user registered as student
                     if ($userRegisteredInCourse) {
                         $course['already_registered_formatted'] = Display::url(
-                            Display::returnFontAwesomeIcon('external-link').'&nbsp;'.
+                            Display::getMdiIcon('external-link', 'mdi-tool-icon-button').'&nbsp;'.
                             get_lang('GoToCourse'),
                             $courseUrl.$course['directory'].'/index.php?id_session=0',
                             ['class' => 'btn btn-primary']

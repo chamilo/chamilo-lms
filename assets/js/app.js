@@ -61,6 +61,8 @@ require('blueimp-file-upload');
 require('blueimp-load-image');
 import('mediaelement');
 require('multiselect-two-sides');
+require('datepair.js');
+require('timepicker');
 
 //import 'jquery-sortablejs';
 
@@ -282,24 +284,6 @@ $(function () {
   //moment.locale(locale);
   //$.datepicker.setDefaults($.datepicker.regional[locale]);
   //$.datepicker.regional["local"] = $.datepicker.regional[locale];
-
-  // Chosen select
-  // $(".chzn-select").chosen({
-  //   disable_search_threshold: 10,
-  //   /*no_results_text: '{{ 'SearchNoResultsFound' | get_lang | escape('js') }}',
-  //       placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang | escape('js') }}',
-  //       placeholder_text_single: '{{ 'SelectAnOption' | get_lang | escape('js') }}',*/
-  //   width: "100%"
-  // });
-
-  // Bootstrap tabs.
-  /*$('.tab_wrapper .nav a').on('click', function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  });*/
-
-  // Fixes bug when loading links inside a tab.
-  //$('.tab_wrapper .tab-pane a').unbind();
 
   /**
      * Advanced options

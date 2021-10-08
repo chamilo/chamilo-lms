@@ -153,13 +153,13 @@ $hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
 $options = learnpath::getIconSelect();
 $cidReq = api_get_cidreq();
 
-$defaultLpIcon = Display::getMdiIcon('map-market-path', 'ch-tool-icon', '', 22, get_lang('Learning path name'));
+$defaultLpIcon = Display::getMdiIcon('map-marker-path', 'ch-tool-icon', '', 22, get_lang('Learning path name'));
 
 $defaultDisableLpIcon = Display::getMdiIcon('map-marker-path', 'ch-tool-icon-disabled', '', 22, get_lang('Learning path name'));
 
-$courseSettingsIcon = Display::getMdiIcon('hammer-screwdriver', 'ch-tool-icon', '', 22);
+$courseSettingsIcon = Display::getMdiIcon('hammer-wrench', 'ch-tool-icon', '', 22);
 
-$courseSettingsDisableIcon = Display::getMdiIcon('hammer-screwdriver', 'ch-tool-icon-disabled', '', 22, get_lang('Course settings'));
+$courseSettingsDisableIcon = Display::getMdiIcon('hammer-wrench', 'ch-tool-icon-disabled', '', 22, get_lang('Course settings'));
 
 $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $gameMode = api_get_setting('gamification_mode');
@@ -622,7 +622,8 @@ foreach ($categories as $category) {
                     }
                 }
 
-                /* Export */
+                /* Export to SCORM - Temporarily disabled until fixed */
+                /*
                 if (1 == $details['lp_type']) {
                     $dsp_disk = Display::url(
                         Display::getMdiIcon('package', 'ch-tool-icon', '', 22),
@@ -638,14 +639,18 @@ foreach ($categories as $category) {
                     );
                 } else {
                     $dsp_disk = Display::getMdiIcon('package', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
-                }
+                }*/
+                $dsp_disk = Display::getMdiIcon('package', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
 
-                // Copy
+                // Copy temporarily disabled until course copy works
+                /*
                 $copy = Display::url(
                     Display::getMdiIcon('text-box-plus', 'ch-tool-icon', '', 22),
                     api_get_self().'?'.$cidReq."&action=copy&lp_id=$id",
                     ['title' => htmlentities(get_lang('Copy'))]
                 );
+                */
+                $copy = Display::getMdiIcon('text-box-plus', 'ch-tool-icon-disabled', '', 22);
 
                 // Subscribe users
                 $subscribeUsers = '';

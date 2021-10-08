@@ -4383,7 +4383,7 @@ msgid "What is the available disk space for a course? You can override the quota
 msgstr "Quel est le quota par défaut pour un cours? Vous pouvez passer outre ce paramètre pour des cours spécifiques via: Administration > Cours > modifier"
 
 msgid "Profile"
-msgstr "Mise à jour du profil"
+msgstr "Rôle"
 
 msgid "Which parts of the profile can be changed?"
 msgstr "Quelle partie du profil souhaitez-vous modifier?"
@@ -7827,7 +7827,7 @@ msgid "Assesment settings"
 msgstr "Paramètres d'évaluation"
 
 msgid "active"
-msgstr "actif"
+msgstr "Actif"
 
 msgid "inactive"
 msgstr "inactif"
@@ -24100,3 +24100,21 @@ msgstr "Ajoutez une introduction de cours pour vos apprenants."
 
 msgid "See as student"
 msgstr "Voir comme apprenant"
+
+msgid "Send date"
+msgstr "Date d'envoi"
+
+msgid "Edit profile"
+msgstr "Éditer le profil"
+
+msgid "Update profile"
+msgstr "Mettre à jour le profil"
+
+msgid "Firstname"
+msgstr "Prénom"
+
+msgid "Lastname"
+msgstr "Nom"
+
+msgid "Official code"
+msgstr "Code officiel"

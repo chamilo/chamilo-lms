@@ -132,8 +132,6 @@ if (!empty($action)) {
     api_location(api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq());
 }
 
-//$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
-
 Display::display_header($tool_name, 'Survey');
 
 if (!empty($survey_data['survey_version'])) {

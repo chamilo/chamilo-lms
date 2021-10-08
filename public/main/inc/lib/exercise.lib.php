@@ -5164,7 +5164,7 @@ EOT;
                 null,
                 ['src' => $assetRepo->getAssetUrl($attemptFeedback->getAsset())]
             );
-        };
+        }
 
         return $html;
     }

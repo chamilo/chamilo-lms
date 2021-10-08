@@ -164,7 +164,7 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
+                        <!--ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                             <li role="presentation" class="active">
                                 <a href="#lp-view-content" title="{{ 'Lesson'|trans }}"
                                    aria-controls="lp-view-content" role="tab" data-toggle="tab">
@@ -179,7 +179,7 @@
                                     <span class="sr-only">{{ 'Forum'|trans }}</span>
                                 </a>
                             </li>
-                        </ul>
+                        </ul-->
                     </div>
 
                     {% include '@ChamiloCore/LearnPath/menubar.html.twig' %}
@@ -236,26 +236,22 @@
         $(function() {
             $('.menu-button').on('click', function() {
                 $('.circle').toggleClass('open');
-                if ($('.circle').hasClass('open')) {
-                    $('.menu-button').css('background', '#00829C');
-                    $('.menu-button').css('color', '#fff');
-                } else {
-                    $('.menu-button').css('background', '#fff');
-                    $('.menu-button').css('color', '#000');
-                }
+                $('.menu-button').toggleClass('menu-button-selected');
             });
             if (/iPhone|iPod|iPad|Safari/.test(navigator.userAgent)) {
-                // Fix an issue where you cannot scroll below first screen in
-                // learning paths on Apple devices
-                document.getElementById('wrapper-iframe').setAttribute(
-                    'style',
-                    'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
-                );
-                $('#wrapper-iframe').before('<a style="position:fixed;right:5px;top:5px;z-index:1001;" target="_blank" href="{{ iframe_src }}" >Open PDF on Safari</a>');
+                if (!/Chrome/.test(navigator.userAgent)) {
+                    // Fix an issue where you cannot scroll below first screen in
+                    // learning paths on Apple devices
+                    document.getElementById('wrapper-iframe').setAttribute(
+                        'style',
+                        'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
+                    );
+                    $('#wrapper-iframe').before('<a style="position:fixed;right:5px;top:5px;z-index:1001;" target="_blank" href="{{ iframe_src }}" >Open PDF on Safari</a>');
 
-                // Fix another issue whereby buttons do not react to click below
-                // second screen in learning paths on Apple devices
-                document.getElementById('content_id').setAttribute('style', 'overflow: auto;');
+                    // Fix another issue whereby buttons do not react to click below
+                    // second screen in learning paths on Apple devices
+                    document.getElementById('content_id').setAttribute('style', 'overflow: auto;');
+                }
             }
             {% if lp_mode == 'embedframe' %}
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {

@@ -32,17 +32,6 @@
             show-select
             @update:options="onUpdateOptions"
           >
-            <template slot="item.category" slot-scope="{ item }">
-              <div v-if="item['category']">
-                <router-link :to="{ name: 'CourseCategoryUpdate', params: {id: item['category']['@id']}}">
-                  {{ item['category'].name }}
-                </router-link>
-              </div>
-              <div v-else>
-                -
-              </div>
-            </template>
-
             <template slot="item.visibility" slot-scope="{ item }">
               {{ $n(item['visibility']) }}
             </template>
@@ -90,7 +79,6 @@ export default {
         { text: 'title', value: 'title' },
         { text: 'code', value: 'code' },
         { text: 'courseLanguage', value: 'Language' },
-        { text: 'category', value: 'category' },
         { text: 'visibility', value: 'visibility' },
         {
           text: 'Actions',

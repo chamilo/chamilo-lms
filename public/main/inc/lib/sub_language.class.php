@@ -2,15 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class SubLanguageManager.
- *
- * @deprecated
+ * This is used in some scripts inside tests.
  */
 class SubLanguageManager
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }

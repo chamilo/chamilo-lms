@@ -2175,6 +2175,8 @@ function api_format_course_array(Course $course = null)
     $courseData['activate_legal'] = $course->getActivateLegal();
     $courseData['legal'] = $course->getLegal();
     $courseData['show_score'] = $course->getShowScore(); //used in the work tool
+    $courseData['video_url'] = $course->getVideoUrl();
+    $courseData['sticky'] = (int) $course->isSticky();
 
     $coursePath = '/course/';
     $webCourseHome = $coursePath.$courseData['real_id'].'/home';
@@ -2962,10 +2964,14 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
 
     if (!empty($session_id)) {
         $sql = "SELECT DISTINCT s.id
-            FROM $session_table AS s
-            INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
-            WHERE sru.user_id = $userId AND s.id = $session_id AND sru.relation_type = ".SessionEntity::SESSION_COACH
-            ." ORDER BY s.access_start_date, s.access_end_date, s.name";
+                FROM $session_table AS s
+                INNER JOIN $tblSessionRelUser sru 
+                ON s.id = sru.session_id
+                WHERE 
+                    sru.user_id = $userId AND 
+                    s.id = $session_id AND 
+                    sru.relation_type = ".SessionEntity::GENERAL_COACH." 
+                ORDER BY s.access_start_date, s.access_end_date, s.name";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
             $sessionIsCoach = array_merge(
@@ -3174,17 +3180,17 @@ function api_display_tool_view_option()
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
             $output_string .= '<a class="btn btn-primary btn-sm" href="'.$sourceurl.'&isStudentView=false" target="_self">'.
-                Display::returnFontAwesomeIcon('eye').' '.get_lang('Switch to teacher view').'</a>';
+                Display::getMdiIcon('eye').' '.get_lang('Switch to teacher view').'</a>';
         } elseif ('teacherview' == $_SESSION['studentview']) {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
             $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
-                Display::returnFontAwesomeIcon('eye').' '.get_lang('Switch to student view').'</a>';
+                Display::getMdiIcon('eye').' '.get_lang('Switch to student view').'</a>';
         }
     } else {
         $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
-            Display::returnFontAwesomeIcon('eye').' '.get_lang('Switch to student view').'</a>';
+            Display::getMdiIcon('eye').' '.get_lang('Switch to student view').'</a>';
     }
     $output_string = Security::remove_XSS($output_string);
     $html = Display::tag('div', $output_string, ['class' => 'view-options']);
@@ -4840,12 +4846,12 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = "SELECT sru_2.user_id AS session_admin_id, sru_1.user_id AS session_coach_id
-            FROM $tbl_session AS s
-            INNER JOIN $tblSessionRelUser sru_1
-                ON (sru_1.session_id = s.id AND sru_1.relation_type = ".SessionEntity::SESSION_COACH.")
-            INNER JOIN $tblSessionRelUser sru_2
+                FROM $tbl_session AS s
+                INNER JOIN $tblSessionRelUser sru_1
+                ON (sru_1.session_id = s.id AND sru_1.relation_type = ".SessionEntity::GENERAL_COACH.")
+                INNER JOIN $tblSessionRelUser sru_2
                 ON (sru_2.session_id = s.id AND sru_2.relation_type = ".SessionEntity::SESSION_ADMIN.")
-            INNER JOIN $tbl_session_course src
+                INNER JOIN $tbl_session_course src
                 ON (src.session_id = s.id AND src.c_id = $courseId)";
 
         $result = Database::query($sql);

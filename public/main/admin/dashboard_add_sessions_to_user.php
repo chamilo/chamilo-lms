@@ -25,7 +25,6 @@ $interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')]
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 // Initializing variables

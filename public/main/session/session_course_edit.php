@@ -2,11 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 /**
  * Implements the edition of course-session settings.
  */
-
-use Chamilo\CoreBundle\Entity\Session;
 
 $cidReset = true;
 
@@ -52,7 +52,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => "session_course_list.php?id_session=$sessionId",
-    "name" => api_htmlentities($session_name, ENT_QUOTES, $charset),
+    "name" => api_htmlentities($session_name),
 ];
 
 $arr_infos = [];
@@ -73,7 +73,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $id_coaches = isset($_POST['id_coach']) ? $_POST['id_coach'] : [0];
     if (is_array($id_coaches) && count($id_coaches) > 0) {
         foreach ($id_coaches as $id_coach) {
-            $id_coach = intval($id_coach);
+            $id_coach = (int) $id_coach;
             $rs1 = SessionManager::set_coach_to_course_session(
                 $id_coach,
                 $sessionId,
@@ -85,7 +85,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $array_intersect = array_diff($coaches_course_session, $id_coaches);
 
         foreach ($array_intersect as $no_coach_user_id) {
-            $rs2 = SessionManager::set_coach_to_course_session(
+            SessionManager::set_coach_to_course_session(
                 $no_coach_user_id,
                 $sessionId,
                 $courseId,

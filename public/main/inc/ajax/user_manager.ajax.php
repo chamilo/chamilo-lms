@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
-use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -189,7 +189,7 @@ switch ($action) {
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $user_table
                         SET active = '".$status."'
-                        WHERE user_id = '".$user_id."'";
+                        WHERE id = '".$user_id."'";
                 $result = Database::query($sql);
 
                 // Send and email if account is active
@@ -246,36 +246,19 @@ switch ($action) {
         break;
     case 'user_by_role':
         api_block_anonymous_users(false);
-
         $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
-        $active = isset($_REQUEST['active']) ? (int) $_REQUEST['active'] : null;
 
-        $criteria = new Criteria();
-        $criteria
-            ->where(
-                Criteria::expr()->orX(
-                    Criteria::expr()->contains('username', $_REQUEST['q']),
-                    Criteria::expr()->contains('firstname', $_REQUEST['q']),
-                    Criteria::expr()->contains('lastname', $_REQUEST['q'])
-                )
-            )
-            ->andWhere(
-                Criteria::expr()->eq('status', $status)
-            );
+        $role = User::getRoleFromStatus($status);
 
-        if (null !== $active) {
-            $criteria->andWhere(Criteria::expr()->eq('active', $active));
-        }
-        $users = UserManager::getRepository()->matching($criteria);
+        $users = Container::getUserRepository()->findByRole($role, $_REQUEST['q'], api_get_current_access_url_id());
 
-        if (!$users->count()) {
+        if (empty($users)) {
             echo json_encode([]);
             break;
         }
 
         $items = [];
 
-        /** @var User $user */
         foreach ($users as $user) {
             $items[] = [
                 'id' => $user->getId(),

@@ -16,15 +16,14 @@ api_protect_admin_script();
 
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
-
-$isGlobal = isset($_GET['global']) ? true : false;
+$isGlobal = isset($_GET['global']);
 
 $bbb = new bbb('', '', $isGlobal);
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 
 $currentMonth = date('n');
-$dateStart = isset($_REQUEST['search_meeting_start']) ? $_REQUEST['search_meeting_start'] : date('Y-m-d', mktime(1, 1, 1, $currentMonth, 1, date('Y')));
-$dateEnd = isset($_REQUEST['search_meeting_end']) ? $_REQUEST['search_meeting_end'] : date('Y-m-d', mktime(1, 1, 1, ++$currentMonth, 0, date('Y')));
+$dateStart = $_REQUEST['search_meeting_start'] ?? date('Y-m-d', mktime(1, 1, 1, $currentMonth, 1, date('Y')));
+$dateEnd = $_REQUEST['search_meeting_end'] ?? date('Y-m-d', mktime(1, 1, 1, ++$currentMonth, 0, date('Y')));
 
 $dateRange = [
     'search_meeting_start' => $dateStart,
@@ -49,7 +48,7 @@ foreach ($meetings as &$meeting) {
         /** @var User $participant */
         $participant = $meetingParticipant['participant'];
         if ($participant) {
-            $meeting['participants'][] = $participant->getCompleteName().' ('.$participant->getEmail().')';
+            $meeting['participants'][] = UserManager::formatUserFullName($participant).' ('.$participant->getEmail().')';
         }
     }
 }

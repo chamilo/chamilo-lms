@@ -153,6 +153,23 @@ abstract class ResourceRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find resources ignoring the visibility.
+     */
+    public function findCourseResourceBySlugIgnoreVisibility(
+        string $title,
+        ResourceNode $parentNode,
+        Course $course,
+        Session $session = null,
+        CGroup $group = null
+    ): ?ResourceInterface {
+        $qb = $this->getResourcesByCourseIgnoreVisibility($course, $session, $group, $parentNode);
+        $this->addSlugQueryBuilder($title, $qb);
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * @return ResourceInterface[]
      */
     public function findCourseResourcesByTitle(
@@ -366,6 +383,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
     {
         $qb = $this->getResources($parentNode);
         $this->addVisibilityQueryBuilder($qb);
+        $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
+
+        return $qb;
+    }
+
+    public function getResourcesByCourseIgnoreVisibility(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
+    {
+        $qb = $this->getResources($parentNode);
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
 
         return $qb;

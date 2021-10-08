@@ -659,7 +659,7 @@ foreach ($posts as $post) {
         'AW:',
         'Aw:',
     ];
-    $replace = '<span>'.Display::returnFontAwesomeIcon('mail-reply').'</span>';
+    $replace = '<span>'.Display::getMdiIcon('reply').'</span>';
     $post['post_title'] = str_replace($search, $replace, Security::remove_XSS($post['post_title']));
 
     // The post title
@@ -678,7 +678,7 @@ foreach ($posts as $post) {
         $repo = Container::getForumAttachmentRepository();
         /** @var CForumAttachment $attachment */
         foreach ($attachments as $attachment) {
-            $post['post_attachments'] .= Display::returnFontAwesomeIcon('paperclip');
+            $post['post_attachments'] .= Display::getMdiIcon('paperclip');
             $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
             $post['post_attachments'] .= Display::url($attachment->getFilename(), $url);
             $post['post_attachments'] .= '<span class="forum_attach_comment" >'.$attachment->getComment().'</span>';

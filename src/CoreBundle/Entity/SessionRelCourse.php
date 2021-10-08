@@ -32,7 +32,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     collectionOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('ROLE_USER')",
         ],
         'post' => [
             'security' => "is_granted('ROLE_ADMIN')",
@@ -40,14 +40,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     itemOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)",
         ],
         'put' => [
             'security' => "is_granted('ROLE_ADMIN')",
         ],
-    ],
-    attributes: [
-        'security' => "is_granted('ROLE_ADMIN')",
     ],
     denormalizationContext: [
         'groups' => ['session_rel_course:write'],
@@ -66,17 +63,17 @@ class SessionRelCourse
     protected ?int $id = null;
 
     /**
-     * @Groups({"session_rel_course:read", "session_rel_course:write"})
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
+    #[Groups(['session_rel_course:read', 'session_rel_course:write'])]
     protected ?Session $session = null;
 
     /**
-     * @Groups({"session_rel_course:read", "session_rel_course:write"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
+    #[Groups(['session_rel_course:read', 'session_rel_course:write'])]
     protected ?Course $course = null;
 
     /**

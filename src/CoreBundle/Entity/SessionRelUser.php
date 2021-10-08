@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User subscriptions to a session. See also SessionRelCourseRelUser.php for a more detail subscription by course.
@@ -61,20 +62,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(SearchFilter::class, properties: ['session' => 'exact', 'user' => 'exact'])]
 #[ApiFilter(
     DateFilter::class,
-    properties: ['session.displayStartDate' => null, 'session.displayEndDate' => null]
+    properties: [
+        'session.displayStartDate' => null,
+        'session.displayEndDate' => null,
+        'session.accessStartDate' => null,
+        'session.accessEndDate' => null,
+        'session.coachAccessStartDate' => null,
+        'session.coachAccessEndDate' => null,
+    ]
 )]
 class SessionRelUser
 {
     use UserTrait;
-
-    /**
-     * @var string[]
-     */
-    public array $relationTypeList = [
-        Session::STUDENT => 'student',
-        Session::DRH => 'drh',
-        Session::SESSION_COACH => 'session_coach',
-    ];
 
     /**
      * @ORM\Column(name="id", type="integer")
@@ -84,29 +83,32 @@ class SessionRelUser
     protected ?int $id = null;
 
     /**
-     * @Groups({"session_rel_user:read"})
-     *
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
+    #[Assert\NotNull]
+    #[Groups(['session_rel_user:read'])]
     protected Session $session;
 
     /**
-     * @Groups({"session_rel_user:read"})
-     *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsRelUser", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[Assert\NotNull]
+    #[Groups(['session_rel_user:read'])]
     protected User $user;
 
     /**
      * @ORM\Column(name="relation_type", type="integer")
      */
+    #[Groups(['session_rel_user:read'])]
+    #[Assert\Choice(callback: [Session::class, 'getRelationTypeList'], message: 'Choose a valid relation type.')]
     protected int $relationType;
 
     /**
      * @ORM\Column(name="duration", type="integer", nullable=false)
      */
+    #[Groups(['session_rel_user:read'])]
     protected int $duration;
 
     /**
@@ -129,9 +131,7 @@ class SessionRelUser
      */
     protected DateTime $registeredAt;
 
-    /**
-     * @Groups({"session_rel_user:read"})
-     */
+    #[Groups(['session_rel_user:read'])]
     protected Collection $courses;
 
     public function __construct()
@@ -168,15 +168,6 @@ class SessionRelUser
     public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
-
-        return $this;
-    }
-
-    public function setRelationTypeByName(string $relationType): self
-    {
-        if (isset($this->relationTypeList[$relationType])) {
-            $this->setRelationType((int) $this->relationTypeList[$relationType]);
-        }
 
         return $this;
     }

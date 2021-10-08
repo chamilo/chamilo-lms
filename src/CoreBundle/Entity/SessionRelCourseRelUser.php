@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -43,6 +44,17 @@ use Symfony\Component\Validator\Constraints as Assert;
     'course' => 'exact',
     'user.username' => 'partial',
 ])]
+#[ApiFilter(
+    DateFilter::class,
+    properties: [
+        'session.displayStartDate' => null,
+        'session.displayEndDate' => null,
+        'session.accessStartDate' => null,
+        'session.accessEndDate' => null,
+        'session.coachAccessStartDate' => null,
+        'session.coachAccessEndDate' => null,
+    ]
+)]
 class SessionRelCourseRelUser
 {
     use UserTrait;
@@ -63,24 +75,24 @@ class SessionRelCourseRelUser
     protected ?int $id = null;
 
     /**
-     * @Groups({"session:read", "session_rel_course_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
+    #[Groups(['session:read', 'session_rel_course_rel_user:read'])]
     protected User $user;
 
     /**
-     * @Groups({"session_rel_course_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
+    #[Groups(['session_rel_course_rel_user:read'])]
     protected Session $session;
 
     /**
-     * @Groups({"session:read", "session_rel_course_rel_user:read", "session_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Course", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
+    #[Groups(['session:read', 'session_rel_course_rel_user:read', 'session_rel_user:read'])]
     #[MaxDepth(1)]
     protected Course $course;
 

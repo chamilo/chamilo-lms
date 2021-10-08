@@ -268,7 +268,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             Database::insert(
                                 $tblSessionUser,
                                 [
-                                    'relation_type' => Session::SESSION_COACH,
+                                    'relation_type' => Session::GENERAL_COACH,
                                     'duration' => 0,
                                     'registered_at' => api_get_utc_datetime(),
                                     'user_id' => $coachId,
@@ -302,7 +302,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 Database::insert(
                                     $tblSessionUser,
                                     [
-                                        'relation_type' => Session::SESSION_COACH,
+                                        'relation_type' => Session::GENERAL_COACH,
                                         'duration' => 0,
                                         'registered_at' => api_get_utc_datetime(),
                                         'user_id' => $coachId,
@@ -337,7 +337,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 Database::insert(
                                     $tblSessionUser,
                                     [
-                                        'relation_type' => Session::SESSION_COACH,
+                                        'relation_type' => Session::GENERAL_COACH,
                                         'duration' => 0,
                                         'registered_at' => api_get_utc_datetime(),
                                         'user_id' => $coachId,

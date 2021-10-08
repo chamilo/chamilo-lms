@@ -20,11 +20,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(
     attributes: [
-        'security' => "is_granted('ROLE_ADMIN')",
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_USER')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
     ],
     normalizationContext: [
         'groups' => ['session_category:read'],
-        'swagger_definition_name' => 'Read',
     ],
     denormalizationContext: [
         'groups' => ['session_category:write'],
@@ -33,11 +40,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SessionCategory
 {
     /**
-     * @Groups({"session_category:read"})
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
+    #[Groups(['session_category:read', 'session_rel_user:read'])]
     protected int $id;
 
     /**
@@ -52,9 +59,9 @@ class SessionCategory
     protected Collection $sessions;
 
     /**
-     * @Groups({"session_category:read", "session_category:write"})
      * @ORM\Column(name="name", type="string", length=100, nullable=false, unique=false)
      */
+    #[Groups(['session_category:read', 'session_category:write', 'session:read', 'session_rel_user:read'])]
     #[Assert\NotBlank]
     protected string $name;
 

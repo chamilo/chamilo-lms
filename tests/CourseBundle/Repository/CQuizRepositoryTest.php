@@ -130,6 +130,9 @@ class CQuizRepositoryTest extends AbstractApiTest
         $found = $repo->findCourseResourceBySlug('exercise-1', $course->getResourceNode(), $course);
         $this->assertNotNull($found);
 
+        $found = $repo->findCourseResourceBySlugIgnoreVisibility('exercise-1', $course->getResourceNode(), $course);
+        $this->assertNotNull($found);
+
         $found = $repo->findCourseResourceBySlug('exercise-1', $course->getResourceNode(), $course);
         $this->assertNotNull($found);
 

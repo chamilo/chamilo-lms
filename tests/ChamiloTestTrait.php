@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 trait ChamiloTestTrait
 {
-    public function createUser(string $username, string $password = '', string $email = ''): ?User
+    public function createUser(string $username, string $password = '', string $email = '', string $role = ''): ?User
     {
         /** @var UserRepository $repo */
         $repo = static::getContainer()->get(UserRepository::class);
@@ -43,6 +43,10 @@ trait ChamiloTestTrait
             ->setCreator($admin)
             ->setCurrentUrl($this->getAccessUrl())
         ;
+
+        if (!empty($role)) {
+            $user->addRole($role);
+        }
 
         $repo->updateUser($user);
 

@@ -92,7 +92,7 @@
             {{ $t("You don't have any course content yet.") }}
           </div>
 
-          <div>
+          <div v-if="introTool">
             {{ $t('Add a course introduction to display to your students.') }}
           </div>
 
@@ -227,7 +227,7 @@ export default {
       }
     }
 
-    axios.get(ENTRYPOINT + '../course/' + courseId + '/home.json').then(response => {
+    axios.get(ENTRYPOINT + '../course/' + courseId + '/home.json?sid=' + sessionId).then(response => {
       state.course = response.data.course;
       state.tools = response.data.tools;
       state.shortcuts = response.data.shortcuts;
@@ -238,36 +238,39 @@ export default {
 
     async function getIntro() {
       // Searching for the CTool called 'course_homepage'.
-      const introTool = state.course.tools.find(element => element.name === 'course_homepage');
-      state.introTool = introTool;
+      let introTool = state.course.tools.find(element => element.name === 'course_homepage');
 
-      // Search CToolIntro for this
-      const filter = {
-        courseTool : introTool.iid,
-        cid : courseId,
-      };
+      if (!isEmpty(introTool)) {
+        state.introTool = introTool;
 
-      store.dispatch('ctoolintro/findAll', filter).then(response => {
-        if (!isEmpty(response)) {
-          // first item
-          state.intro = response[0];
-        }
-      });
-
-      if (!isEmpty(sessionId)) {
-        state.createInSession = true;
+        // Search CToolIntro for this
         const filter = {
-          courseTool : introTool.iid,
-          cid : courseId,
-          sid : sessionId,
+          courseTool: introTool.iid,
+          cid: courseId,
         };
 
         store.dispatch('ctoolintro/findAll', filter).then(response => {
           if (!isEmpty(response)) {
-            state.createInSession = false;
+            // first item
             state.intro = response[0];
           }
         });
+
+        if (!isEmpty(sessionId)) {
+          state.createInSession = true;
+          const filter = {
+            courseTool: introTool.iid,
+            cid: courseId,
+            sid: sessionId,
+          };
+
+          store.dispatch('ctoolintro/findAll', filter).then(response => {
+            if (!isEmpty(response)) {
+              state.createInSession = false;
+              state.intro = response[0];
+            }
+          });
+        }
       }
     }
 

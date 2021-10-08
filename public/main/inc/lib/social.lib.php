@@ -2012,7 +2012,7 @@ class SocialManager extends UserManager
 
         if ($canEdit) {
             $htmlDelete = Display::url(
-                Display::returnFontAwesomeIcon('trash', '', true),
+                Display::getMdiIcon('delete'),
                 'javascript:void(0)',
                 [
                     'id' => 'message_'.$message['id'],

@@ -24,8 +24,18 @@ class Version20191101132000 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('course');
+
         if (!$table->hasColumn('introduction')) {
             $this->addSql('ALTER TABLE course ADD introduction LONGTEXT DEFAULT NULL');
+        }
+
+        if (!$table->hasColumn('video_url')) {
+            $this->addSql('ALTER TABLE course ADD video_url VARCHAR(255) NOT NULL');
+            $this->addSql('UPDATE course SET video_url = ""');
+        }
+
+        if (!$table->hasColumn('sticky')) {
+            $this->addSql('ALTER TABLE course ADD sticky TINYINT(1) NOT NULL');
         }
 
         if (!$table->hasColumn('resource_node_id')) {
@@ -173,7 +183,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_tool');
 
         if ($table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_tool_intro;');
+            //$this->addSql('DROP INDEX course ON c_tool');
         }
 
         $table = $schema->getTable('c_tool_intro');
@@ -185,13 +195,14 @@ class Version20191101132000 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_tool_intro CHANGE id id VARCHAR(255) DEFAULT NULL');
 
-        if (!$table->hasColumn('c_tool_id')) {
-            $this->addSql('ALTER TABLE c_tool_intro ADD c_tool_id INT NOT NULL, ADD resource_node_id BIGINT DEFAULT NULL;');
-            $this->addSql('ALTER TABLE c_tool_intro ADD CONSTRAINT FK_D705267B1DF6B517 FOREIGN KEY (c_tool_id) REFERENCES c_tool (iid);');
+        if (!$table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_tool_intro ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_tool_intro ADD CONSTRAINT FK_D705267B1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
-
-            $this->addSql('CREATE INDEX IDX_D705267B1DF6B517 ON c_tool_intro (c_tool_id);');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_D705267B1BAD783F ON c_tool_intro (resource_node_id);');
+        }
+
+        if (!$table->hasColumn('c_tool_id')) {
+            $this->addSql('ALTER TABLE c_tool_intro ADD c_tool_id INT NOT NULL');
         }
     }
 

@@ -104,7 +104,7 @@
     "Updated at": "Mis \u00e0 jour \u00e0",
     "File": "Fichier",
     "From": "De",
-    "Send date": "Send date",
+    "Send date": "Date d'envoi",
     "Sender": "Sender",
     "To": "\u00c0",
     "Cc": "Cc",
@@ -124,5 +124,11 @@
     "Assignments": "Travaux d'\u00e9tudiants",
     "Videoconference": "Vid\u00e9oconf\u00e9rence",
     "Reporting": "Suivi",
-    "Learning paths": "Parcours d'apprentissage"
+    "Learning paths": "Parcours d'apprentissage",
+    "Diagnostic Form": "Diagnostic Form",
+    "Diagnosis Management": "Diagnosis Management",
+    "Edit profile": "\u00c9diter le profil",
+    "Update profile": "Mettre \u00e0 jour le profil",
+    "Firstname": "Pr\u00e9nom",
+    "Lastname": "Nom"
 }

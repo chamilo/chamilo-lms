@@ -245,7 +245,7 @@ class learnpath
                     case CLp::AICC_TYPE:
                         $oItem = new aiccItem('db', $itemId, $course_id);
                         if (is_object($oItem)) {
-                            $oItem->set_lp_view($this->lp_view_id, $course_id);
+                            $oItem->set_lp_view($this->lp_view_id);
                             $oItem->set_prevent_reinit($this->prevent_reinit);
                             // Don't use reference here as the next loop will make the pointed object change.
                             $this->items[$itemId] = $oItem;
@@ -255,7 +255,7 @@ class learnpath
                     case CLp::SCORM_TYPE:
                         $oItem = new scormItem('db', $itemId);
                         if (is_object($oItem)) {
-                            $oItem->set_lp_view($this->lp_view_id, $course_id);
+                            $oItem->set_lp_view($this->lp_view_id);
                             $oItem->set_prevent_reinit($this->prevent_reinit);
                             // Don't use reference here as the next loop will make the pointed object change.
                             $this->items[$itemId] = $oItem;
@@ -284,7 +284,7 @@ class learnpath
 
                 // Setting the view in the item object.
                 if (isset($this->items[$itemId]) && is_object($this->items[$itemId])) {
-                    $this->items[$itemId]->set_lp_view($this->lp_view_id, $course_id);
+                    $this->items[$itemId]->set_lp_view($this->lp_view_id);
                     if (TOOL_HOTPOTATOES == $this->items[$itemId]->get_type()) {
                         $this->items[$itemId]->current_start_time = 0;
                         $this->items[$itemId]->current_stop_time = 0;
@@ -345,8 +345,7 @@ class learnpath
                                     Database::insert($itemViewTable, $params);
 
                                     $this->items[$item_id]->set_lp_view(
-                                        $this->lp_view_id,
-                                        $course_id
+                                        $this->lp_view_id
                                     );
                                 }
                             }
@@ -670,7 +669,7 @@ class learnpath
 
                         // If children was not set try to get the info
                         if (empty($childItem->db_item_view_id)) {
-                            $childItem->set_lp_view($this->lp_view_id, $this->course_int_id);
+                            $childItem->set_lp_view($this->lp_view_id);
                         }
 
                         // Check all his brothers (parent's children) for completion status.
@@ -1071,11 +1070,11 @@ class learnpath
     /**
      * Gets the number of items currently completed.
      *
-     * @param bool $failedStatusException flag to determine the failed status is not considered progressed
+     * @param bool Flag to determine the failed status is not considered progressed
      *
      * @return int The number of items currently completed
      */
-    public function get_complete_items_count($failedStatusException = false)
+    public function get_complete_items_count(bool $failedStatusException = false): int
     {
         $i = 0;
         $completedStatusList = [
@@ -2571,19 +2570,14 @@ class learnpath
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
                 $html .= '<div class="flex flex-row justify-center mb-2">';
                 $html .= "<a
-                    class='btn btn-sm btn-default'
-                    href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."&isStudentView=false'
-                    target='_parent'>".
-                    Display::getMdiIcon('google-street-view').get_lang('Overview')."</a>";
-                $html .= "<a
-                    class='btn btn-sm btn-default'
+                    class='btn btn-sm btn-default mx-1'
                     href='lp_controller.php?".api_get_cidreq()."&action=add_item&type=step&lp_id=".$this->lp_id."&isStudentView=false'
                     target='_parent'>".
                     Display::getMdiIcon('pencil').get_lang('Edit')."</a>";
                 $html .= '<a
-                    class="btn btn-sm btn-default"
+                    class="btn btn-sm btn-default mx-1"
                     href="lp_controller.php?'.api_get_cidreq()."&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
-                    Display::getMdiIcon('cog').get_lang('Settings').'</a>';
+                    Display::getMdiIcon('hammer-wrench').get_lang('Settings').'</a>';
                 $html .= '</div>';
                 $html .= '</div>';
             }
@@ -4790,7 +4784,7 @@ class learnpath
         $request = api_request_uri();
         if (false === strpos($request, 'edit')) {
             $actionsLeft .= Display::url(
-                Display::getMdiIcon('hammer-screwdriver', 'ch-tool-icon', '', 32, get_lang('Course settings')),
+                Display::getMdiIcon('hammer-wrench', 'ch-tool-icon', '', 32, get_lang('Course settings')),
                 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                     'action' => 'edit',
                     'lp_id' => $lpId,
@@ -5290,7 +5284,7 @@ class learnpath
         $size = ICON_SIZE_MEDIUM; //ICON_SIZE_BIG
         $headers = [
             Display::getMdiIcon('bookshelf', 'ch-tool-icon-gradient', '', 64, get_lang('Documents')),
-            Display::getMdiIcon('ballot', 'ch-tool-icon-gradient', '', 64, get_lang('Tests')),
+            Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon-gradient', '', 64, get_lang('Tests')),
             Display::getMdiIcon('file-link', 'ch-tool-icon-gradient', '', 64, get_lang('Links')),
             Display::getMdiIcon('inbox-full', 'ch-tool-icon-gradient', '', 64, get_lang('Assignments')),
             Display::getMdiIcon('comment-quote', 'ch-tool-icon-gradient', '', 64, get_lang('Forums')),
@@ -7239,13 +7233,13 @@ class learnpath
     }
 
     /**
-     * @param string $courseCode
-     * @param int    $lpId
-     * @param int    $user_id
+     * @param int   $courseId
+     * @param int   $lpId
+     * @param int   $user_id
      *
      * @return learnpath
      */
-    public static function getLpFromSession($courseCode, $lpId, $user_id)
+    public static function getLpFromSession(int $courseId, int $lpId, int $user_id)
     {
         $debug = 0;
         $learnPath = null;
@@ -7267,11 +7261,11 @@ class learnpath
         }
 
         if (!is_object($learnPath)) {
-            $learnPath = new learnpath($lp, api_get_course_info($courseCode), $user_id);
+            $learnPath = new learnpath($lp, api_get_course_info_by_id($courseId), $user_id);
             if ($debug) {
                 error_log('------getLpFromSession------');
                 error_log('getLpFromSession: create new learnpath');
-                error_log("create new LP with $courseCode - $lpId - $user_id");
+                error_log("create new LP with $courseId - $lpId - $user_id");
                 error_log("lp_view_session_id: ".$learnPath->lp_view_session_id);
                 error_log("api_get_sessionid: ".api_get_session_id());
             }

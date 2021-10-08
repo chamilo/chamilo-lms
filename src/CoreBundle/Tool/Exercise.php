@@ -25,7 +25,7 @@ class Exercise extends AbstractTool implements ToolInterface
 
     public function getIcon(): string
     {
-        return 'mdi-ballot';
+        return 'mdi-order-bool-ascending-variant';
     }
 
     public function getLink(): string

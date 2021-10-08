@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Skill;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_webservices();
@@ -45,7 +47,7 @@ function WSHelperVerifyKey($params)
     // if we are behind a reverse proxy, assume it will send the
     // HTTP_X_FORWARDED_FOR header and use this IP instead
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        list($ip1) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        [$ip1] = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
     if ($debug) {
@@ -459,7 +461,7 @@ function WSAssignSkill($params)
     $skillManager = new SkillModel();
 
     $skillId = isset($params['skill_id']) ? $params['skill_id'] : 0;
-    $skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
+    $skillRepo = $em->getRepository(Skill::class);
     $skill = $skillRepo->find($skillId);
 
     if (empty($skill)) {

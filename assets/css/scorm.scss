@@ -243,24 +243,17 @@ body {
 .scorm_item_section .section {
     background: url("../../public/img/scorm/folder-item-closed.png") no-repeat 10px center;
     padding: 10px 20px 10px 35px;
+    @apply text-ch-ternary;
 }
 
 .scorm_item_section.scorm_completed .section {
     background: url("../../public/img/scorm/folder-item-open.png") no-repeat 10px center;
     padding-right: 1.5em;
+    @apply text-ch-ternary;
 }
 
 .scorm_item_normal a:hover {
     text-decoration: none;
-}
-
-.scorm_item_normal.scorm_completed {
-    background-color: #F5F5F5;
-}
-
-.scorm_item_section.scorm_completed {
-    background-color: #F5F5F5;
-    color: #fff;
 }
 
 .scorm_completed .item {
@@ -278,9 +271,9 @@ body {
 /* END SCORM CSS BASE*/
 #scorm-info {
     padding: 0;
-    background-color: #EBF3F5;
     display: inline-block;
     width: 100%;
+    @apply bg-ch-primary;
 }
 
 #scorm-info .description-autor p {
@@ -296,8 +289,17 @@ body {
     margin-bottom: 10px;
 }
 
+#scorm-info #progress_bar {
+  @apply mb-2;
+}
+
 #scorm-info #progress_bar .progress {
-    margin-bottom: 5px;
+    @apply rounded-sm ring-1 ring-ch-secondary bg-white text-sm text-center min-h-full ml-12 mr-4;
+}
+
+#scorm-info .progress-bar {
+  line-height: 17px;
+  @apply bg-ch-secondary text-ch-text-secondary;
 }
 
 .scorm-title {
@@ -441,34 +443,28 @@ body {
     line-height: 35px;
     text-align: center;
     border-radius: 100%;
-    background-color: #34495E;
     font-size: 20px;
-    color: #FFF;
+    @apply bg-ch-ternary text-ch-text-secondary;
 }
 
 .icon-toolbar .fa:hover,
 .icon-toolbar .mdi:hover {
-    background-color: #000;
+    @apply bg-ch-primary-light;
 }
 
 .expand .fa,
 .expand .mdi {
-    background-color: #00829C;
+    @apply bg-ch-ternary;
 }
 
 .expand .fa:hover,
 .expand .mdi:hover {
-    background-color: #006A84;
-    color: #ffffff;
+    @apply bg-ch-primary-light text-ch-text-secondary;
 }
 
 .expand .fa:active, .expand .fa:focus,
 .expand .mdi:active, .expand .mdi:focus {
-    color: #ffffff;
-}
-
-#scorm-info .progress-bar {
-    line-height: 17px;
+    @apply bg-ch-primary-light text-ch-text-secondary;
 }
 
 .actions_lp {
@@ -499,14 +495,13 @@ body {
     margin-top: 4px;
     padding: 2px;
     border-radius: 20px;
-    background-color: #ffffff;
-    border: 1px solid #8dcbf3;
     -webkit-transform: translate(-100%);
     -moz-transform:  translate(-100%);
     -transform:  translate(-100%);
     -webkit-transition: all 0.4s ease-out;
     -moz-transition: all 0.4s ease-out;
     transition: all 0.4s ease-out;
+    @apply border-2 border-ch-ternary-dark bg-ch-text-secondary;
 }
 .c-menu-right .circle {
     opacity: 0;
@@ -515,7 +510,7 @@ body {
     padding: 2px;
     border-radius: 20px;
     background-color: #ffffff;
-    border: 1px solid #8dcbf3;
+    @apply border-2 border-ch-ternary-dark bg-ch-text-secondary;
 }
 
 .c-menu-left .open.circle {
@@ -530,13 +525,13 @@ body {
 
 .c-menu-left .circle a, .c-menu-right .circle a {
     text-decoration: none;
-    color: #fff;
     display: inline-block;
     height: 35px;
     width: 35px;
     line-height: 35px;
     text-align: center;
     border-radius: 100%;
+    @apply text-ch-text-secondary;
 }
 
 .c-menu-left .circle a:hover {
@@ -556,11 +551,14 @@ body {
     padding: 7px;
     background: #ffffff;
     font-size: 16px;
-    border: 1px solid #8dcbf3;
+    @apply border-2 border-ch-ternary-dark;
 }
 
 .menu-button:hover {
-    background-color: #ffffff;
+  @apply bg-ch-ternary-light text-ch-text-secondary;
+}
+.menu-button-selected {
+  @apply bg-ch-ternary text-ch-text-secondary;
 }
 
 /* LP VIEW COLLAPSE */
@@ -672,16 +670,20 @@ body {
     background: url("../../public/img/scorm/folder-item-open.png") #f5f5f5 no-repeat 10px center;
 }
 #learning_path_toc .child_item.lp_item_type_document.scorm_completed{
-    background: url(../../public/img/icons/svg/check-completed.svg) #FFFFFF right center no-repeat;
+    background: url(../../public/img/icons/svg/check-completed.svg) right center no-repeat;
+    @apply bg-ch-ternary;
 }
 #learning_path_toc .child_item.lp_item_type_document.scorm_not_attempted{
-    background: url(../../public/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+    background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
+    @apply bg-ch-ternary;
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_completed{
-    background: url(../../public/img/icons/svg/check-completed.svg) #FFFFFF right center no-repeat;
+    background: url(../../public/img/icons/svg/check-completed.svg) right center no-repeat;
+    @apply bg-ch-ternary;
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_not_attempted{
-    background: url(../../public/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+    background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
+    @apply bg-ch-ternary;
 }
 
 .status-heading .panel-heading .item-action{
@@ -695,6 +697,60 @@ body {
 #learning_path_toc .panel-collapse .panel-body{
     padding: 10px 0 10px 10px;
 }
+
+// Using preset styles from SCSS
+.scorm_item_normal a.items-list {
+  display: inline-block;
+  width: 100%;
+}
+.scorm_completed .item a{
+  @apply text-ch-ternary;
+}
+.scorm_completed .item a.scorm_highlighted{
+  @apply text-ch-ternary;
+}
+.scorm_highlight .item {
+  background: url("../../public/img/scorm/scorm_highlight.png") no-repeat 10px center !important;
+  @apply bg-ch-secondary text-ch-text-secondary;
+}
+.scorm_highlight.scorm_completed .item {
+  background: url("../../public/img/scorm/scorm_current.png") no-repeat 10px center !important;
+  @apply bg-ch-secondary text-ch-text-secondary;
+}
+.scorm_highlight.scorm_failed .item {
+  background: url("../../public/img/scorm/scorm_failed.png") no-repeat 10px center !important;
+  @apply bg-ch-secondary text-ch-text-secondary;
+}
+.scorm_item_normal.scorm_highlight {
+  @apply bg-ch-secondary text-ch-text-secondary;
+}
+.scorm_item_normal.scorm_highlight.scorm_not_attempted {
+  background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
+  @apply bg-ch-secondary text-ch-text-secondary;
+}
+.scorm_item_normal.scorm_highlight.scorm_completed {
+  background: url(../../public/img/icons/svg/check-highlight.svg) right center no-repeat;
+  @apply bg-ch-secondary text-ch-text-secondary;
+}
+.scorm_item_normal.scorm_highlight a {
+  @apply text-ch-text-secondary;
+}
+#learning_path_toc .root_item.lp_item_type_document.scorm_highlight{
+  @apply bg-ch-primary;
+}
+#learning_path_toc .child_item.lp_item_type_document.scorm_highlight{
+  @apply bg-ch-primary;
+}
+#learning_path_right_zone .lp-view-tabs .tab-content {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  top: 60px;
+  right: 0;
+}
+
+
+
 
 /* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */

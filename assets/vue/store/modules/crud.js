@@ -17,7 +17,8 @@ const initialState = () => ({
   updated: null,
   view: null,
   violations: null,
-  resourceNode: null
+  resourceNode: null,
+  course: null,
 });
 
 const handleError = (commit, e) => {
@@ -57,7 +58,8 @@ export const ACTIONS = {
   SET_VIEW: 'SET_VIEW',
   SET_VIOLATIONS: 'SET_VIOLATIONS',
   TOGGLE_LOADING: 'TOGGLE_LOADING',
-  ADD_RESOURCE_NODE: 'ADD_RESOURCE_NODE'
+  ADD_RESOURCE_NODE: 'ADD_RESOURCE_NODE',
+  ADD_COURSE: 'ADD_COURSE'
 };
 
 export default function makeCrudModule({
@@ -247,6 +249,29 @@ export default function makeCrudModule({
           })
           .catch(e => handleError(commit, e));
       },
+      findCourse: ({ commit }, params) => {
+        const id = params['id'];
+        delete params['id'];
+        if (!service) throw new Error('No service specified!');
+        console.log('findCourse');
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        return service
+            .find(id, params)
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
+
+            .then(item => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD_COURSE, item);
+
+              return item;
+            })
+            .catch(e => handleError(commit, e));
+      },
       findResourceNode: ({ commit }, params) => {
         const id = params['id'];
         delete params['id'];
@@ -324,9 +349,18 @@ export default function makeCrudModule({
       getResourceNode: (state) => {
         return state.resourceNode;
       },
+      getCourse: (state) => {
+        return state.course;
+      },
     },
     mutations: {
       updateField,
+      [ACTIONS.ADD_COURSE]: (state, item) => {
+        state.course = item;
+        state.isLoading = false;
+        //this.$set(state, 'resourceNode', item);
+        //this.$set(state, 'isLoading', false);
+      },
       [ACTIONS.ADD_RESOURCE_NODE]: (state, item) => {
         state.resourceNode = item;
         state.isLoading = false;

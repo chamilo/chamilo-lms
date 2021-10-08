@@ -81,7 +81,7 @@ class SessionRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function addUserInCourse(int $status, User $user, Course $course, Session $session): void
+    public function addUserInCourse(int $relationType, User $user, Course $course, Session $session): void
     {
         if (!$session->isActive()) {
             throw new Exception('Session not active');
@@ -91,9 +91,9 @@ class SessionRepository extends ServiceEntityRepository
             throw new Exception('User not active');
         }
 
-        if (!$course->isActive()) {
+        /*if (!$course->isActive()) {
             throw new Exception('Course not active');
-        }
+        }*/
 
         if (!$session->hasCourse($course)) {
             $msg = sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getName());
@@ -101,7 +101,11 @@ class SessionRepository extends ServiceEntityRepository
             throw new Exception($msg);
         }
 
-        switch ($status) {
+        if (!\in_array($relationType, Session::getRelationTypeList(), true)) {
+            throw new Exception(sprintf('Cannot handle relationType %s', $relationType));
+        }
+
+        switch ($relationType) {
             case Session::DRH:
                 if ($user->hasRole('ROLE_RRHH')) {
                     $session->addUserInSession(Session::DRH, $user);
@@ -111,26 +115,23 @@ class SessionRepository extends ServiceEntityRepository
             case Session::STUDENT:
                 $session
                     ->addUserInSession(Session::STUDENT, $user)
-                    ->addUserInCourse(
-                        Session::STUDENT,
-                        $user,
-                        $course
-                    )
+                    ->addUserInCourse(Session::STUDENT, $user, $course)
                 ;
 
                 break;
             case Session::COURSE_COACH:
                 if ($user->hasRole('ROLE_TEACHER')) {
-                    $session->addUserInCourse(
-                        Session::COURSE_COACH,
-                        $user,
-                        $course
-                    );
+                    $session
+                        ->addUserInSession(Session::COURSE_COACH, $user)
+                        ->addUserInCourse(
+                            Session::COURSE_COACH,
+                            $user,
+                            $course
+                        )
+                    ;
                 }
 
                 break;
-            default:
-                throw new Exception(sprintf('Cannot handle status %s', $status));
         }
     }
 

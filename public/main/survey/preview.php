@@ -58,22 +58,22 @@ Display::display_header(get_lang('Survey preview'));
 SurveyUtil::check_first_last_question($surveyId, false);
 
 // Survey information
-echo '<div class="page-header"><h2>'.$survey->getTitle().'</h2></div>';
+echo '<div class="page-header"><h2>'.Security::remove_XSS($survey->getTitle()).'</h2></div>';
 if (!empty($survey->getSubtitle())) {
-    echo '<div id="survey_subtitle">'.$survey->getSubtitle().'</div>';
+    echo '<div id="survey_subtitle">'.Security::remove_XSS($survey->getSubtitle()).'</div>';
 }
 
 // Displaying the survey introduction
 if (!isset($_GET['show'])) {
     if (!empty($survey->getIntro())) {
-        echo '<div class="survey_content">'.$survey->getIntro().'</div>';
+        echo '<div class="survey_content">'.Security::remove_XSS($survey->getIntro()).'</div>';
     }
 }
 
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
-    echo $survey->getSurveythanks();
+    echo Security::remove_XSS($survey->getSurveythanks());
     Display::display_footer();
     exit;
 }
@@ -149,10 +149,10 @@ if (isset($_GET['show'])) {
                 $sort = $row['sort'];
                 $questions[$sort]['question_id'] = $row['question_id'];
                 $questions[$sort]['survey_id'] = $row['survey_id'];
-                $questions[$sort]['survey_question'] = $row['survey_question'];
+                $questions[$sort]['survey_question'] = Security::remove_XSS($row['survey_question']);
                 $questions[$sort]['display'] = $row['display'];
                 $questions[$sort]['type'] = $row['type'];
-                $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
+                $questions[$sort]['options'][$row['question_option_id']] = Security::remove_XSS($row['option_text']);
                 $questions[$sort]['maximum_score'] = $row['max_value'];
                 $questions[$sort]['parent_id'] = isset($row['parent_id']) ? $row['parent_id'] : 0;
                 $questions[$sort]['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;
@@ -231,7 +231,7 @@ if (is_array($questions) && count($questions) > 0) {
         if ($showNumber) {
             $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
         }
-        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
+        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div>');
         $display->render($form, $question);
         $form->addHtml('</div>');
         $counter++;

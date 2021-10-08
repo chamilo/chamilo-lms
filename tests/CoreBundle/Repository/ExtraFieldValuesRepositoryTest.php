@@ -18,8 +18,6 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $field = (new ExtraField())
@@ -48,6 +46,6 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(ExtraFieldValuesRepository::class);
         $values = $repo->getVisibleValues(0, 0);
 
-        $this->assertSame(0, \count($values));
+        $this->assertCount(0, $values);
     }
 }

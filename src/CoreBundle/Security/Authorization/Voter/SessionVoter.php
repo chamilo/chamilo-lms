@@ -65,32 +65,35 @@ class SessionVoter extends Voter
     {
         /** @var User $user */
         $user = $token->getUser();
-
         // Make sure there is a user object (i.e. that the user is logged in)
         if (!$user instanceof UserInterface) {
             return false;
         }
 
-        // Admins have access to everything
+        // Admins have access to everything.
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
         // Checks if the current course was set up
-        // $session->getCurrentCourse() is set in the class CourseListener
+        // $session->getCurrentCourse() is set in the class CourseListener.
         /** @var Session $session */
         $session = $subject;
         $currentCourse = $session->getCurrentCourse();
 
         switch ($attribute) {
             case self::VIEW:
+                // @todo improve performance.
                 $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
-                $userIsCourseCoach = $currentCourse && $session->hasCoachInCourseWithStatus($user, $currentCourse);
-                $userIsStudent = $currentCourse
-                    ? $session->hasUserInCourse($user, $currentCourse, Session::STUDENT)
-                    : $session->getSessionRelCourseByUser($user, Session::STUDENT)->count() > 0;
-
-                if (empty($session->getDuration())) {
+                if (null === $currentCourse) {
+                    $userIsStudent = $session->getSessionRelCourseByUser($user, Session::STUDENT)->count() > 0;
+                    $userIsCourseCoach = false;
+                } else {
+                    $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $currentCourse);
+                    $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
+                }
+                $duration = (int) $session->getDuration();
+                if (0 === $duration) {
                     // General coach.
                     if ($userIsGeneralCoach && $session->isActiveForCoach()) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
@@ -105,7 +108,7 @@ class SessionVoter extends Voter
                         return true;
                     }
 
-                    // Student access
+                    // Student access.
                     if ($userIsStudent && $session->isActiveForStudent()) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
 

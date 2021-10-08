@@ -59,11 +59,21 @@ $response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
 $context = Container::getRouter()->getContext();
 
 $pos = strpos($currentBaseUrl, 'main');
-if (false === $pos) {
+$posPlugin = strpos($currentBaseUrl, 'plugin');
+
+if (false === $pos && false === $posPlugin) {
     echo 'Cannot load current URL';
     exit;
 }
-$newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
+
+if (false !== $pos) {
+    $newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
+}
+
+if (false !== $posPlugin) {
+    $newBaseUrl = substr($currentBaseUrl, 0, $posPlugin - 1);
+}
+
 $context->setBaseUrl($newBaseUrl);
 
 try {

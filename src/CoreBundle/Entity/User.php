@@ -1677,7 +1677,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getSessionsAsGeneralCoach(): array
     {
-        return $this->getSessions(Session::SESSION_COACH);
+        return $this->getSessions(Session::GENERAL_COACH);
     }
 
     public function getSessionsAsAdmin(): array
@@ -1757,9 +1757,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->hasRole('ROLE_SUPER_ADMIN');
     }
 
-    public function setRoleFromStatus(int $status): void
+    public static function getRoleFromStatus(int $status): string
     {
-        $role = match ($status) {
+        return match ($status) {
             COURSEMANAGER => 'ROLE_TEACHER',
             STUDENT => 'ROLE_STUDENT',
             DRH => 'ROLE_RRHH',
@@ -1768,6 +1768,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             INVITEE => 'ROLE_INVITEE',
             default => 'ROLE_USER',
         };
+    }
+
+    public function setRoleFromStatus(int $status): void
+    {
+        $role = self::getRoleFromStatus($status);
 
         $this->addRole($role);
     }
@@ -1808,7 +1813,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function addRole(string $role): self
     {
         $role = strtoupper($role);
-        if ($role === static::ROLE_DEFAULT) {
+        if ($role === static::ROLE_DEFAULT || empty($role)) {
             return $this;
         }
 
@@ -2260,8 +2265,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * Retrieves this user's related sessions.
      *
-     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
-     *
      * @return Session[]
      */
     public function getSessions(int $relationType): array
@@ -2288,8 +2291,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * Get this user's related accessible sessions of a type, student by default.
-     *
-     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
      *
      * @return Session[]
      */

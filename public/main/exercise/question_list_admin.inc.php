@@ -296,7 +296,7 @@ if (!$inATest) {
                 $title = strip_tags($title);
                 $move = '&nbsp;';
                 if ($allowQuestionOrdering) {
-                    $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
+                    $move = Display::getMdiIcon('cursor-move');
                 }
 
                 // Question name

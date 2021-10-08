@@ -137,9 +137,10 @@ class CourseController extends ToolBaseController
 
     #[Route('/{cid}/home.json', name: 'chamilo_core_course_home_json')]
     #[Entity('course', expr: 'repository.find(cid)')]
-    public function indexJsonAction(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain): Response
+    public function indexJson(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain): Response
     {
         $course = $this->getCourse();
+        $sessionId = $this->getSessionId();
 
         if (null === $course) {
             throw $this->createAccessDeniedException();
@@ -157,7 +158,6 @@ class CourseController extends ToolBaseController
 
         $courseCode = $course->getCode();
         $courseId = $course->getId();
-        $sessionId = $this->getSessionId();
 
         if ($user && $user->hasRole('ROLE_INVITEE')) {
             $isInASession = $sessionId > 0;
@@ -299,7 +299,7 @@ class CourseController extends ToolBaseController
     }
 
     /**
-     * Redirects the page to a tool, following the tools.yml settings.
+     * Redirects the page to a tool, following the tools settings.
      */
     #[Route('/{cid}/tool/{toolName}', name: 'chamilo_core_course_redirect_tool')]
     public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse

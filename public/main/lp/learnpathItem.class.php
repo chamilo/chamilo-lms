@@ -1483,7 +1483,6 @@ class learnpathItem
      */
     public function get_status($check_db = true, $update_local = false)
     {
-        $courseId = $this->courseId;
         $debug = self::DEBUG;
         if ($debug) {
             error_log('learnpathItem::get_status() on item '.$this->db_id);
@@ -1492,7 +1491,7 @@ class learnpathItem
             if ($debug) {
                 error_log('learnpathItem::get_status(): checking db');
             }
-            if (!empty($this->db_item_view_id) && !empty($courseId)) {
+            if (!empty($this->db_item_view_id)) {
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                 $sql = "SELECT status FROM $table
                         WHERE
@@ -1749,7 +1748,7 @@ class learnpathItem
         } else {
             // Calulate minimum and accumulated time
             $user_id = api_get_user_id();
-            $myLP = learnpath::getLpFromSession(api_get_course_id(), $this->lp_id, $user_id);
+            $myLP = learnpath::getLpFromSession(api_get_course_int_id(), $this->lp_id, $user_id);
             $timeLp = $myLP->getAccumulateWorkTime();
             $timeTotalCourse = $myLP->getAccumulateWorkTimeTotalCourse();
             /*
@@ -2915,21 +2914,11 @@ class learnpathItem
      * Sets the lp_view id this item view is registered to.
      *
      * @param int $lp_view_id lp_view DB ID
-     * @param int $courseId
-     *
-     * @return bool
      *
      * @todo //todo insert into lp_item_view if lp_view not exists
      */
-    public function set_lp_view($lp_view_id, $courseId = null)
+    public function set_lp_view(int $lp_view_id): bool
     {
-        $lp_view_id = (int) $lp_view_id;
-        $courseId = (int) $courseId;
-
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
-
         $lpItemId = $this->get_id();
 
         if (empty($lpItemId)) {
@@ -2984,9 +2973,7 @@ class learnpathItem
             // Now get the number of interactions for this little guy.
             $table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
             $sql = "SELECT * FROM $table
-                    WHERE
-                        c_id = $courseId AND
-                        lp_iv_id = '".$this->db_item_view_id."'";
+                    WHERE lp_iv_id = ".$this->db_item_view_id;
 
             $res = Database::query($sql);
             if (false !== $res) {
@@ -2997,9 +2984,7 @@ class learnpathItem
             // Now get the number of objectives for this little guy.
             $table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
             $sql = "SELECT * FROM $table
-                    WHERE
-                        c_id = $courseId AND
-                        lp_iv_id = '".$this->db_item_view_id."'";
+                    WHERE lp_iv_id = ".$this->db_item_view_id;
 
             $this->objectives_count = 0;
             $res = Database::query($sql);

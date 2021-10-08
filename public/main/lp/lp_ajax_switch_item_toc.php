@@ -33,7 +33,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     if ($debug > 0) {
         error_log('In switch_item_toc('.$lpId.','.$userId.','.$viewId.','.$currentItem.','.$nextItem.')', 0);
     }
-    $myLP = learnpath::getLpFromSession(api_get_course_id(), $lpId, $userId);
+    $myLP = learnpath::getLpFromSession(api_get_course_int_id(), $lpId, $userId);
     $newItemId = 0;
     $oldItemId = 0;
     switch ($nextItem) {

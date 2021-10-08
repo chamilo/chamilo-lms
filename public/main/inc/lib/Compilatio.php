@@ -407,7 +407,7 @@ class Compilatio
      */
     public static function getProgressionAnalyseDocv31($status, $pour = 0, $text = [])
     {
-        $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+        $loading = Display::getMdiIcon('loading', 'animate-spin');
         $loading .= '&nbsp;';
         //$refreshReturn = Display::url('javascript:window.location.reload(false);', $loading);
         switch ($status) {
@@ -516,7 +516,7 @@ class Compilatio
         $courseId = (int) $courseId;
 
         $table = Database::get_course_table(TABLE_PLAGIARISM);
-        $sql = "SELECT compilatio_id FROM $table 
+        $sql = "SELECT compilatio_id FROM $table
                 WHERE document_id = $documentId AND c_id= $courseId";
         $result = Database::query($sql);
         $result = Database::fetch_object($result);
@@ -588,7 +588,7 @@ class Compilatio
                     );
                     break;
                 case 'ANALYSE_IN_QUEUE':
-                    $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+                    $loading = Display::getMdiIcon('loading', 'animate-spin');
                     $actionCompilatio .= $loading.'&nbsp;'.get_lang('Waiting for analysis');
                     break;
                 case 'BAD_FILETYPE':

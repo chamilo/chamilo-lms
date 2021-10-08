@@ -34,8 +34,7 @@ class CourseControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-
-    public function testIndexJsonAction(): void
+    public function testIndexJson(): void
     {
         $client = static::createClient();
         $course = $this->createCourse('course 1');

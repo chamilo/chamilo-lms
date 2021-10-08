@@ -268,7 +268,7 @@
   <Dialog v-model:visible="deleteMultipleDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
-      <span v-if="item">Are you sure you want to delete the selected items?</span>
+      <span v-if="item">{{ $t('Are you sure you want to delete the selected items?') }}</span>
     </div>
     <template #footer>
       <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteMultipleDialog = false"/>
@@ -320,7 +320,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import {mapActions, mapGetters, useStore} from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell.vue';
@@ -330,6 +330,9 @@ import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
 import DataFilter from '../../components/DataFilter';
 import DocumentsFilterForm from '../../components/documents/Filter';
 import {RESOURCE_LINK_PUBLISHED, RESOURCE_LINK_DRAFT} from "../../components/resource_links/visibility";
+import isEmpty from "lodash/isEmpty";
+import toInteger from "lodash/toInteger";
+import {useRoute, useRouter} from "vue-router";
 
 export default {
   name: 'DocumentsList',
@@ -342,6 +345,20 @@ export default {
     DataFilter
   },
   mixins: [ListMixin],
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+
+    // Set resource node.
+    let nodeId = route.params.node;
+    if (isEmpty(nodeId)) {
+      nodeId = route.query.node;
+    }
+    let cid = toInteger(route.query.cid);
+    let courseIri = '/api/courses/' + cid;
+    store.dispatch('course/findCourse', { id: courseIri });
+    store.dispatch('resourcenode/findResourceNode', { id: '/api/resource_nodes/' + nodeId});
+  },
   data() {
     return {
       RESOURCE_LINK_PUBLISHED: RESOURCE_LINK_PUBLISHED,
@@ -370,13 +387,9 @@ export default {
       deleteItemDialog: false,
       deleteMultipleDialog: false,
       item: {},
-      filters: {},
+      filters: {'loadNode' : 1},
       submitted: false,
     };
-  },
-  created() {
-    //console.log('created - vue/views/documents/List.vue');
-    this.filters['loadNode'] = 1;
   },
   mounted() {
     this.filters['loadNode'] = 1;
@@ -434,11 +447,6 @@ export default {
   methods: {
     // prime
     onPage(event) {
-      console.log('onPage');
-      console.log(event.page);
-      console.log(event.sortField);
-      console.log(event.sortOrder);
-
       this.options.itemsPerPage = event.rows;
       this.options.page = event.page + 1;
       this.options.sortBy = event.sortField;
@@ -471,7 +479,6 @@ export default {
       if (this.item.title.trim()) {
         if (this.item.id) {
         } else {
-          //this.products.push(this.product);
           this.item.filetype = 'folder';
           this.item.parentResourceNodeId = this.$route.params.node;
           this.item.resourceLinkList = JSON.stringify([{

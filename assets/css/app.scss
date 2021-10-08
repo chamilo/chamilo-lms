@@ -212,13 +212,16 @@
   }
 
   .ch-tool-icon {
-    @apply font-extrabold text-transparent bg-clip-text bg-ch-primary
+    @apply font-extrabold text-transparent bg-clip-text bg-ch-primary mr-0.5;
   }
   .ch-tool-icon-disabled {
-    @apply font-extrabold text-transparent bg-clip-text bg-gray-400
+    @apply font-extrabold text-transparent bg-clip-text bg-gray-400 mr-0.5;
   }
   .ch-tool-icon-gradient {
-    @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light
+    @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light;
+  }
+  .ch-tool-icon-button {
+    @apply font-extrabold bg-clip-text bg-ch-text;
   }
 
   // Forms
@@ -233,58 +236,32 @@
     @apply border-ch-text rounded-sm p-1;
   }
 
-  // Learning paths menu brought in to use primary/secondary colors
-  .scorm_highlight .item {
-    background: url("../../public/img/scorm/scorm_highlight.png") no-repeat 10px center !important;
-    @apply bg-ch-secondary;
+  // Progress bars
+  .progress {
+    @apply rounded-sm ring-1 ring-ch-secondary bg-ch-primary text-sm text-center min-h-full ml-12 mr-4;
   }
-  .scorm_highlight.scorm_completed .item {
-    background: url("../../public/img/scorm/scorm_current.png") no-repeat 10px center !important;
-    @apply bg-ch-secondary;
+  .progress .progress-bar {
+    @apply bg-ch-secondary text-ch-text-secondary;
   }
-  .scorm_highlight.scorm_failed .item {
-    background: url("../../public/img/scorm/scorm_failed.png") no-repeat 10px center !important;
-    @apply bg-ch-secondary;
+
+  // Pager
+  .pager-bar {
   }
-  .scorm_item_normal.scorm_highlight {
-    @apply bg-ch-secondary;
+  .pager-bar .pager-select {
   }
-  .scorm_item_normal.scorm_highlight.scorm_not_attempted {
-    background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
-    @apply bg-ch-secondary;
+  .pager-bar .pager-counter {
+    @apply mt-4;
   }
-  .scorm_item_normal.scorm_highlight.scorm_completed {
-    background: url(../../public/img/icons/svg/check-highlight.svg) right center no-repeat;
-    @apply bg-ch-secondary;
+  .pager-bar .pager-jumper {
+    @apply mt-4;
   }
-  .scorm_item_normal.scorm_highlight a {
-    color: #FFFFFF;
+  .pager-bar .pager-jumper .btn-link {
+    @apply -mt-2 mx-2;
   }
-  #learning_path_toc .root_item.lp_item_type_document.scorm_highlight{
-    background-color: #f1f4f9;
-  }
-  #learning_path_toc .child_item.lp_item_type_document.scorm_highlight{
-    background-color: #f1f4f9;
-  }
-  #learning_path_right_zone .lp-view-tabs .tab-content {
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    top: 60px;
-    right: 0;
-    border: 1px solid #dddddd;
-    border-top: none;
-  }
-  .scorm_item_normal a.items-list {
-    color: #666666;
-    display: inline-block;
-    width: 100%;
-  }
-  .scorm_completed .item a{
-    @apply text-gray-500;
-  }
-  .scorm_completed .item a.scorm_highlighted{
-    @apply text-gray-50;
+
+  // free-jqGrid override
+  .ui-jqgrid-bootstrap.modal {
+    @apply bg-white;
   }
 
   @import "scss/index.scss";
@@ -307,4 +284,5 @@
 
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
+@import "~timepicker/jquery.timepicker.min.css";
 //@import "~jquery-contextmenu/dist/jquery.contextMenu.css";

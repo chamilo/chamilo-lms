@@ -179,7 +179,7 @@ switch ($type) {
 }
 
 $actionsLeft = Display::url(
-    Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, '32', get_lang('Back')),
     $url
 );
 
@@ -229,19 +229,20 @@ function get_number_of_users()
 
     $courseCode = api_get_course_id();
     $sessionId = api_get_session_id();
+    $courseId = api_get_course_int_id();
 
-    if (isset($_REQUEST['type']) && 'teacher' === $_REQUEST['type']) {
+    if (isset($_REQUEST['type']) && COURSEMANAGER === $_REQUEST['type']) {
         if (0 != api_get_session_id()) {
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
                         u.id = cu.user_id AND
-                        c_id = '".api_get_course_int_id()."' AND
-                        session_id ='".$sessionId."'
+                        c_id = $courseId AND
+                        session_id = $sessionId
                     WHERE
                         cu.user_id IS NULL AND
-                        u.status = 1 AND
+                        u.status IN (1,3,10,11,12,13,16) AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
             if (api_is_multiple_url_enabled()) {
@@ -252,14 +253,14 @@ function get_number_of_users()
                             FROM $user_table u
                             LEFT JOIN $tbl_session_rel_course_user cu
                             ON
-                                u.id = cu.user_id AND cu.c_id = '".api_get_course_int_id()."' AND
-                                session_id ='".$sessionId."'
+                                u.id = cu.user_id AND cu.c_id = $courseId AND
+                                session_id = $sessionId
                             INNER JOIN  $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id)
                             WHERE
                                 cu.user_id IS NULL AND
-                                access_url_id= $url_access_id AND
-                                u.status = 1 AND
+                                access_url_id = $url_access_id AND
+                                u.status  IN (1,3,10,11,12,13,16) AND
                                 (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
                             ";
                 }
@@ -268,8 +269,8 @@ function get_number_of_users()
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
-                    ON u.id = cu.user_id and c_id='".api_get_course_int_id()."'
-                    WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+                    ON u.id = cu.user_id and c_id = $courseId
+                    WHERE cu.user_id IS NULL AND u.status in (1,3,10,11,12,13,16) ";
 
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
@@ -279,10 +280,12 @@ function get_number_of_users()
                     $sql = "SELECT COUNT(u.id)
                         FROM $user_table u
                         LEFT JOIN $course_user_table cu
-                        ON u.id = cu.user_id AND c_id='".api_get_course_int_id()."'
+                        ON u.id = cu.user_id AND c_id = $courseId
                         INNER JOIN  $tbl_url_rel_user as url_rel_user
                         ON (url_rel_user.user_id = u.id)
-                        WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+                        WHERE cu.user_id IS NULL
+                          AND u.status IN (1,3,10,11,12,13,16)
+                          AND access_url_id = $url_access_id ";
                 }
             }
         }
@@ -294,11 +297,11 @@ function get_number_of_users()
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
                         u.id = cu.user_id AND
-                        c_id='".api_get_course_int_id()."' AND
-                        session_id ='".$sessionId."'
+                        c_id = $courseId AND
+                        session_id = $sessionId
                     WHERE
                         cu.user_id IS NULL AND
-                        u.status<>".DRH." AND
+                        u.status <> ".DRH." AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
             if (api_is_multiple_url_enabled()) {
@@ -310,14 +313,14 @@ function get_number_of_users()
                             LEFT JOIN $tbl_session_rel_course_user cu
                             ON
                                 u.id = cu.user_id AND
-                                c_id='".api_get_course_int_id()."' AND
-                                session_id ='".$sessionId."'
+                                c_id = $courseId AND
+                                session_id = $sessionId
                             INNER JOIN $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id)
                             WHERE
                                 cu.user_id IS NULL AND
-                                u.status<>".DRH." AND
-                                access_url_id= $url_access_id AND
+                                u.status <> ".DRH." AND
+                                access_url_id = $url_access_id AND
                                 (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
                 }
             }
@@ -325,7 +328,7 @@ function get_number_of_users()
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
-                    ON u.id = cu.user_id AND c_id='".api_get_course_int_id()."'";
+                    ON u.id = cu.user_id AND c_id = $courseId";
 
             // we change the SQL when we have a filter
             if (isset($_GET['subscribe_user_filter_value']) &&
@@ -343,7 +346,7 @@ function get_number_of_users()
                         field_values.value = '".Database::escape_string($field_identification[1])."'
                     ";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
+                $sql .= " WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
             }
 
             if (api_is_multiple_url_enabled()) {
@@ -354,10 +357,10 @@ function get_number_of_users()
                     $sql = "SELECT COUNT(u.id)
                             FROM $user_table u
                             LEFT JOIN $course_user_table cu
-                            ON u.id = cu.user_id AND c_id='".api_get_course_int_id()."'
+                            ON u.id = cu.user_id AND c_id = $courseId
                             INNER JOIN $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id)
-                            WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status <> ".DRH." ";
+                            WHERE cu.user_id IS NULL AND access_url_id = $url_access_id AND u.status <> ".DRH." ";
                 }
             }
         }
@@ -456,8 +459,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
                         u.id = cu.user_id AND
-                        c_id ='".$courseId."' AND
-                        session_id ='".$sessionId."'
+                        c_id = $courseId AND
+                        session_id = $sessionId
                     INNER JOIN  $tbl_url_rel_user as url_rel_user
                     ON (url_rel_user.user_id = u.id) ";
 
@@ -477,7 +480,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+                $sql .= " WHERE cu.user_id IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
             $sql .= " AND access_url_id = $url_access_id";
         } else {
@@ -485,7 +488,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $sql = "SELECT $select_fields
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
-                    ON u.id = cu.user_id AND c_id = '".$courseId."'";
+                    ON u.id = cu.user_id AND c_id = $courseId";
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
@@ -500,7 +503,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
+                $sql .= " WHERE cu.user_id IS NULL AND u.status  IN (1,3,10,11,12,13,16)";
             }
 
             // adding a teacher NOT trough a session on a portal with multiple URLs
@@ -509,7 +512,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     $sql = "SELECT $select_fields
                             FROM $user_table u
                             LEFT JOIN $course_user_table cu
-                            ON u.id = cu.user_id and c_id='".$courseId."'
+                            ON u.id = cu.user_id and c_id = $courseId
                             INNER JOIN  $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id) ";
 
@@ -524,11 +527,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
                                 ON field_values.item_id = u.id
                             WHERE
                                 cu.user_id IS NULL AND
-                                u.status<>".DRH." AND
+                                u.status IN (1,3,10,11,12,13,16) AND
                                 field_values.field_id = '".intval($field_identification[0])."' AND
                                 field_values.value = '".Database::escape_string($field_identification[1])."'";
                     } else {
-                        $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." AND access_url_id= $url_access_id ";
+                        $sql .= " WHERE cu.user_id IS NULL
+                            AND u.status IN (1,3,10,11,12,13,16)
+                            AND access_url_id = $url_access_id ";
                     }
                 }
             }
@@ -563,7 +568,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE
+                $sql .= " WHERE
                             cu.user_id IS NULL AND
                             u.status <> ".DRH." AND
                             (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
@@ -591,7 +596,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
+                $sql .= " WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
             }
 
             //showing only the courses of the current Chamilo access_url_id
@@ -600,7 +605,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     $sql = "SELECT $select_fields
                         FROM $user_table u
                         LEFT JOIN $course_user_table cu
-                        ON u.id = cu.user_id AND c_id='".$courseId."'
+                        ON u.id = cu.user_id AND c_id = $courseId
                         INNER JOIN  $tbl_url_rel_user as url_rel_user
                         ON (url_rel_user.user_id = u.id) ";
 
@@ -621,7 +626,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                                 access_url_id = $url_access_id
                             ";
                     } else {
-                        $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id = $url_access_id ";
+                        $sql .= " WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id = $url_access_id ";
                     }
                 }
             }
@@ -666,7 +671,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
     $sql .= " LIMIT $from, $number_of_items";
-
+error_log($sql);
     $res = Database::query($sql);
     $users = [];
     while ($user = Database::fetch_row($res)) {

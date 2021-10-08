@@ -335,6 +335,7 @@ class SurveyManager
                 ->setSurveyThanks($values['survey_thanks'])
                 ->setAnonymous((string) $values['anonymous'])
                 ->setVisibleResults((int) $values['visible_results'])
+                ->setSurveyType((int) ($values['survey_type'] ?? 1))
                 ->setParent($course)
                 ->addCourseLink($course, $session)
             ;
@@ -433,8 +434,8 @@ class SurveyManager
                 ->setTitle($values['survey_title'])
                 ->setSubtitle($values['survey_title'])
                 ->setLang($values['survey_language'])
-                ->setAvailFrom(api_get_utc_datetime($values['start_date'].':00', true, true))
-                ->setAvailTill(api_get_utc_datetime($values['end_date'].':59', true, true))
+                ->setAvailFrom(api_get_utc_datetime($values['start_date'].' 00:00', true, true))
+                ->setAvailTill(api_get_utc_datetime($values['end_date'].' 23:59', true, true))
                 ->setIsShared($shared_survey_id)
                 ->setTemplate('template')
                 ->setIntro($values['survey_introduction'])

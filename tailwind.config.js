@@ -17,11 +17,16 @@ module.exports = {
           'dark': '#570563', //default to '#ea5300',
           'light': '#772583', //default to '#ff7913',
         },
+        'ch-ternary': {
+          DEFAULT: '#162A83',
+          'dark': '#031770',
+          'light': '#293A96',
+        },
         'ch-text': {
-          DEFAULT: '#111827',
+          DEFAULT: '#333',
           'primary': '#fff',
           'secondary': '#fff',
-          'warning': '#111827',
+          'warning': '#333',
           'success': '#fff',
           'error': '#fff',
           'info': '#fff',

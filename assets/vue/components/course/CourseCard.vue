@@ -1,5 +1,5 @@
 <template>
-  <v-card
+  <v-card v-if="course"
       elevation="4"
   >
     <div class="">

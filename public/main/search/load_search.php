@@ -9,17 +9,12 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_block_anonymous_users();
+
 if ('false' === api_get_setting('session.allow_search_diagnostic')) {
     api_not_allowed();
 }
 
-$htmlHeadXtra[] = '<script>
-$(function() {
-    //$("#user_form select").select2();
-});
-</script>';
-
-api_block_anonymous_users();
 $allowToSee = api_is_drh() || api_is_student_boss() || api_is_platform_admin();
 
 if (false === $allowToSee) {
@@ -34,7 +29,7 @@ $userToLoadInfo = [];
 if ($userToLoad) {
     $userToLoadInfo = api_get_user_info($userToLoad);
 }
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$action = $_GET['action'] ?? '';
 
 switch ($action) {
     case 'subscribe_user':
@@ -101,6 +96,9 @@ if (!empty($userInfo)) {
     if (!empty($users)) {
         $userList = [];
         foreach ($users as $user) {
+            if (empty($user)) {
+                continue;
+            }
             $userList[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
         }
         $formSearch->addSelect('user_id', get_lang('User'), $userList);
@@ -1045,25 +1043,6 @@ $htmlHeadXtra[] = '<style>
 	}
 </style>';
 
-$htmlHeadXtra[] = '<script>
-$(function() {
-	var blocks = [
-        "#collapseOne",
-        "#collapseTwo",
-        "#collapseThree",
-        "#collapseFour",
-        "#collapseFive",
-        "#collapseSix",
-        "#collapseSeven",
-        "#collapseEight"
-    ];
-
-    $.each(blocks, function( index, value ) {
-        //$(value).collapse("hide");
-    });
-});
-</script>';
-
 $tpl = new Template(get_lang('Diagnosis'));
 
 if (empty($items)) {
@@ -1083,8 +1062,11 @@ $sumHours = 0;
 $numHours = 0;
 
 $field = 'heures_disponibilite_par_semaine';
+$data = null;
 $extraField = new ExtraFieldValue('user');
-$data = $extraField->get_values_by_handler_and_field_variable($userToLoad, $field);
+if (!empty($userToLoad)) {
+    $data = $extraField->get_values_by_handler_and_field_variable($userToLoad, $field);
+}
 
 $availableHoursPerWeek = 0;
 

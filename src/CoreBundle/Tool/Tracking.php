@@ -20,7 +20,7 @@ class Tracking extends AbstractTool implements ToolInterface
 
     public function getIcon(): string
     {
-        return 'mdi-google-analytics';
+        return 'mdi-chart-box';
     }
 
     public function getLink(): string

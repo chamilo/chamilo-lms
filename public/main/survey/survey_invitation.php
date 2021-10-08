@@ -161,7 +161,7 @@ foreach ($sentInvitations as $row) {
                 $link = SurveyUtil::generateFillSurveyLink($survey, $code, $course, $sessionId);
                 $link = Display::input('text', 'copy_'.$id, $link, ['id' => 'copy_'.$id, 'class' => '']);
                 $link .= ' '.Display::url(
-                        Display::returnFontAwesomeIcon('copy').get_lang('Copy text'),
+                        Display::getMdiIcon('content-copy').get_lang('Copy text'),
                         'javascript:void()',
                         ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
                     );
@@ -189,7 +189,7 @@ foreach ($sentInvitations as $row) {
         $link = SurveyUtil::generateFillSurveyLink($survey, $code, $course, $sessionId);
         $link = Display::input('text', 'copy_'.$id, $link, ['id' => 'copy_'.$id, 'class' => '']);
         $link .= ' '.Display::url(
-                Display::returnFontAwesomeIcon('copy').get_lang('Copy text'),
+                Display::getMdiIcon('content-copy').get_lang('Copy text'),
                 'javascript:void()',
                 ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
             );

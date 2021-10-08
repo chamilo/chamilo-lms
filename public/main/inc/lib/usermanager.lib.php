@@ -90,17 +90,17 @@ class UserManager
      * @param string        $email
      * @param string        $loginName
      * @param string        $password
-     * @param string        $official_code           Any official code (optional)
+     * @param string        $officialCode           Any official code (optional)
      * @param string        $language                User language    (optional)
      * @param string        $phone                   Phone number    (optional)
-     * @param string        $picture_uri             Picture URI        (optional)
+     * @param string        $pictureUri             Picture URI        (optional)
      * @param string        $authSource              Authentication source (defaults to 'platform', dependind on constant)
      * @param string        $expirationDate          Account expiration date (optional, defaults to null)
      * @param int           $active                  Whether the account is enabled or disabled by default
-     * @param int           $hr_dept_id              The department of HR in which the user is registered (defaults to 0)
+     * @param int           $hrDeptId              The department of HR in which the user is registered (defaults to 0)
      * @param array         $extra                   Extra fields (labels must be prefixed by "extra_")
-     * @param string        $encrypt_method          Used if password is given encrypted. Set to an empty string by default
-     * @param bool          $send_mail
+     * @param string        $encryptMethod          Used if password is given encrypted. Set to an empty string by default
+     * @param bool          $sendMail
      * @param bool          $isAdmin
      * @param string        $address
      * @param bool          $sendEmailToAllAdmins
@@ -122,17 +122,17 @@ class UserManager
         $email,
         $loginName,
         $password,
-        $official_code = '',
+        $officialCode = '',
         $language = '',
         $phone = '',
-        $picture_uri = '',
+        $pictureUri = '',
         $authSource = null,
         $expirationDate = null,
         $active = 1,
-        $hr_dept_id = 0,
+        $hrDeptId = 0,
         $extra = [],
-        $encrypt_method = '',
-        $send_mail = false,
+        $encryptMethod = '',
+        $sendMail = false,
         $isAdmin = false,
         $address = '',
         $sendEmailToAllAdmins = false,
@@ -273,14 +273,14 @@ class UserManager
             ->setStatus($status)
             ->setPlainPassword($password)
             ->setEmail($email)
-            ->setOfficialCode($official_code)
+            ->setOfficialCode($officialCode)
             ->setCreatorId($creatorId)
             ->setAuthSource($authSource)
             ->setPhone($phone)
             ->setAddress($address)
             ->setLocale($language)
             ->setRegistrationDate($now)
-            ->setHrDeptId($hr_dept_id)
+            ->setHrDeptId($hrDeptId)
             ->setActive($active)
             ->setEnabled($active)
             ->setTimezone(api_get_timezone())
@@ -368,7 +368,7 @@ class UserManager
                 RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
             }
 
-            if (!empty($email) && $send_mail) {
+            if (!empty($email) && $sendMail) {
                 $recipient_name = api_get_person_name(
                     $firstName,
                     $lastName,
@@ -403,7 +403,15 @@ class UserManager
                     'original_password' => stripslashes($original_password),
                     'mailWebPath' => $url,
                     'new_user' => $user,
+                    'search_link' => $url,
                 ];
+
+                // ofaj
+                if ('true' === api_get_setting('session.allow_search_diagnostic')) {
+                    $urlSearch = api_get_path(WEB_CODE_PATH).'search/search.php';
+                    $linkSearch = Display::url($urlSearch, $urlSearch);
+                    $params['search_link'] = $linkSearch;
+                }
 
                 $emailBody = $tpl->render(
                     '@ChamiloCore/Mailer/Legacy/content_registration_platform.html.twig',
@@ -536,6 +544,7 @@ class UserManager
                         'user_added' => $user,
                         'link' => Display::url($url, $url),
                         'form' => $formData,
+                        'user_language' => $user->getLocale(),
                     ];
                     $emailBody = $tpl->render(
                         '@ChamiloCore/Mailer/Legacy/content_registration_platform_to_admin.html.twig',
@@ -698,7 +707,7 @@ class UserManager
         $currentUserId = api_get_user_id();
         $sql = "UPDATE session_rel_user
             SET user_id = $currentUserId
-            WHERE user_id = $user_id AND relation_type = ".SessionEntity::SESSION_COACH;
+            WHERE user_id = $user_id AND relation_type = ".SessionEntity::GENERAL_COACH;
         Database::query($sql);
 
         $sql = "UPDATE session_rel_user
@@ -2540,7 +2549,7 @@ class UserManager
             INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
             LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
             INNER JOIN ChamiloCoreBundle:SessionRelUser AS su WITH su.session = s
-            WHERE (su.user = :user AND su.relationType = ".SessionEntity::SESSION_COACH.") AND url.url = :url ";
+            WHERE (su.user = :user AND su.relationType = ".SessionEntity::GENERAL_COACH.") AND url.url = :url ";
 
         // Default order
         $order = 'ORDER BY sc.name, s.name';
@@ -2884,7 +2893,7 @@ class UserManager
                 FROM $tbl_session s
                 INNER JOIN $tbl_session_user sru ON sru.session_id = s.id
                 WHERE (
-                    sru.user_id = $user_id AND sru.relation_type = ".SessionEntity::SESSION_COACH."
+                    sru.user_id = $user_id AND sru.relation_type = ".SessionEntity::GENERAL_COACH."
                 )
                 $coachCourseConditions
                 ORDER BY s.access_start_date, s.access_end_date, s.name";
@@ -2911,7 +2920,7 @@ class UserManager
                 $coursesAsGeneralCoach = $sessionRepo->getSessionCoursesByStatusInUserSubscription(
                     $user,
                     $session,
-                    SessionEntity::SESSION_COACH,
+                    SessionEntity::GENERAL_COACH,
                     $url
                 );
                 $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSubscription(
@@ -3073,7 +3082,7 @@ class UserManager
             $coursesAsGeneralCoach = $sessionRepo->getSessionCoursesByStatusInUserSubscription(
                 $user,
                 $session,
-                SessionEntity::SESSION_COACH,
+                SessionEntity::GENERAL_COACH,
                 $url
             );
             $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSubscription(
@@ -4351,7 +4360,7 @@ class UserManager
                                     ON session_rel_access_rel_user.session_id = s.id
                                     INNER JOIN $tbl_session_rel_user sru ON s.id = sru.session_id
                                     WHERE access_url_id = ".$urlId."
-                                        AND (sru.relation_type = ".SessionEntity::SESSION_COACH."
+                                        AND (sru.relation_type = ".SessionEntity::GENERAL_COACH."
                                         AND sru.user_id = $userId)
                                 ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s

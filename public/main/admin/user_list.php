@@ -805,7 +805,7 @@ function modify_filter($user_id, $url_params, $row)
                         get_lang('Assign courses')
                     ),
                     "dashboard_add_courses_to_user.php?user={$user_id}",
-                    ['title' =>  get_lang('Assign courses')]
+                    ['title' => get_lang('Assign courses')]
                 );
 
                 $result .= Display::url(

@@ -72,38 +72,6 @@ if ($variables) {
 Session::write('variables_to_show', $variablesToShow);
 
 $htmlHeadXtra[] = '<script>
-function load_course_list (div_course,my_user_id) {
-     $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(myObject) {
-            $("div#"+div_course).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-        type: "POST",
-        url: "'.$url.'",
-        data: "user_id="+my_user_id,
-        success: function(datos) {
-            $("div#"+div_course).html(datos);
-            $("div#div_"+my_user_id).attr("class","blackboard_show");
-            $("div#div_"+my_user_id).attr("style","");
-        }
-    });
-}
-
-function load_session_list(div_session, my_user_id) {
-     $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(myObject) {
-            $("div#"+div_session).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-        type: "POST",
-        url: "'.$urlSession.'",
-        data: "user_id="+my_user_id,
-        success: function(datos) {
-            $("div#"+div_session).html(datos);
-            $("div#div_s_"+my_user_id).attr("class","blackboard_show");
-            $("div#div_s_"+my_user_id).attr("style","");
-        }
-    });
-}
-
 function active_user(element_div) {
     id_image=$(element_div).attr("id");
     image_clicked=$(element_div).attr("src");
@@ -139,15 +107,6 @@ function active_user(element_div) {
             }
         });
     }
-}
-
-function clear_course_list(div_course) {
-    $("div#"+div_course).html("&nbsp;");
-    $("div#"+div_course).hide("");
-}
-function clear_session_list(div_session) {
-    $("div#"+div_session).html("&nbsp;");
-    $("div#"+div_session).hide("");
 }
 
 function display_advanced_search_form () {
@@ -527,7 +486,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function email_filter($email)
 {
-    return Display::encrypted_mailto_link($email, cut($email, 26), 'small clickable_email_link');
+    return Display::getMdiIcon('email', null, null, null, $email).
+        ' '.
+        Display::encrypted_mailto_link($email, cut($email, 10), 'small clickable_email_link');
 }
 
 /**
@@ -571,30 +532,6 @@ function modify_filter($user_id, $url_params, $row)
         $user_is_anonymous = true;
     }
     $result = '';
-    if (!$user_is_anonymous) {
-        $icon = Display::return_icon(
-            'course.png',
-            get_lang('Courses'),
-            ['onmouseout' => 'clear_course_list (\'div_'.$user_id.'\')']
-        );
-        $result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
-                    '.$icon.'
-                    <div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
-                    </a>';
-
-        $icon = Display::return_icon(
-            'session.png',
-            get_lang('Course sessions'),
-            ['onmouseout' => 'clear_session_list (\'div_s_'.$user_id.'\')']
-        );
-        $result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
-                    '.$icon.'
-                    <div class="blackboard_hide" id="div_s_'.$user_id.'">&nbsp;&nbsp;</div>
-                    </a>';
-    } else {
-        $result .= Display::return_icon('course_na.png', get_lang('Courses')).'&nbsp;&nbsp;';
-        $result .= Display::return_icon('course_na.png', get_lang('Course sessions')).'&nbsp;&nbsp;';
-    }
 
     if (api_is_platform_admin()) {
         if (!$user_is_anonymous) {
@@ -828,13 +765,13 @@ function active_filter($active, $params, $row)
 
     if ('1' == $active) {
         $action = 'Lock';
-        $image = 'accept';
+        $image = 'accept'; //mdi-check-circle
     } elseif ('-1' == $active) {
         $action = 'edit';
-        $image = 'warning';
+        $image = 'warning'; //mdi-alert-circle
     } elseif ('0' == $active) {
         $action = 'Unlock';
-        $image = 'error';
+        $image = 'error'; //mdi-minus-circle
     }
 
     $result = '';

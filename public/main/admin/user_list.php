@@ -662,15 +662,29 @@ function modify_filter($user_id, $url_params, $row)
             !$user_is_anonymous &&
             api_global_admin_can_edit_admin($user_id)
         ) {
-            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  class="delete-swal" title="'.addslashes(api_htmlentities(get_lang("Please confirm your choice"))).'" >'.
+            $anonymizeUrl = "user_list.php?$url_params&"
+                .http_build_query(
+                    [
+                        'action' => 'anonymize',
+                        'user_id' => $user_id,
+                        'sec_token' => Security::getTokenFromSession(),
+                    ]
+                );
+            $result .= Display::url(
                 Display::getMdiIcon(
                     'incognito',
                     'ch-tool-icon',
                     null,
-                    22,
+                    ICON_SIZE_SMALL,
                     get_lang('Anonymize')
-                ).
-                '</a>';
+                ),
+                $anonymizeUrl,
+                [
+                    'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+                    'class' => 'delete-swal',
+                    'title' => get_lang('Anonymize'),
+                ]
+            );
         }
 
         $deleteAllowed = !api_get_configuration_value('deny_delete_users');
@@ -681,15 +695,29 @@ function modify_filter($user_id, $url_params, $row)
             ) {
                 // you cannot lock yourself out otherwise you could disable all the accounts
                 // including your own => everybody is locked out and nobody can change it anymore.
-                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang("Please confirm your choice"))).'" class="delete-swal">'.
+                $deleteUrl = "user_list.php?$url_params&"
+                    .http_build_query(
+                        [
+                            'action' => 'delete_user',
+                            'user_id' => $user_id,
+                            'sec_token' => Security::getTokenFromSession(),
+                        ]
+                    );
+                $result .= Display::url(
                     Display::getMdiIcon(
                         'delete',
                         'ch-tool-icon',
                         null,
                         22,
                         get_lang('Delete')
-                    ).
-                    '</a>';
+                    ),
+                    $deleteUrl,
+                    [
+                        'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+                        'title' => get_lang('Delete'),
+                        'class' => 'delete-swal',
+                    ]
+                );
             } else {
                 $result .= Display::getMdiIcon(
                     'delete',
@@ -710,15 +738,29 @@ function modify_filter($user_id, $url_params, $row)
             api_global_admin_can_edit_admin($user_id, null, true)
         ) {
             // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-            $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang('Please confirm your choice'))).'" class="delete-swal">'.
+            $deleteUrl = "user_list.php?$url_params&"
+                .http_build_query(
+                    [
+                        'action' => 'delete_user',
+                        'user_id' => $user_id,
+                        'sec_token' => Security::getTokenFromSession(),
+                    ]
+                );
+            $result .= Display::url(
                 Display::getMdiIcon(
                     'delete',
                     'ch-tool-icon',
                     null,
-                    22,
+                    ICON_SIZE_SMALL,
                     get_lang('Delete')
-                ).
-                '</a>';
+                ),
+                $deleteUrl,
+                [
+                    'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+                    'title' => get_lang('Delete'),
+                    'class' => 'delete-swal',
+                ]
+            );
         }
     }
 
@@ -748,7 +790,8 @@ function modify_filter($user_id, $url_params, $row)
                         22,
                         get_lang('Assign users')
                     ),
-                    "dashboard_add_users_to_user.php?user={$user_id}"
+                    "dashboard_add_users_to_user.php?user={$user_id}",
+                    ['title' => get_lang('Assign users')]
                 );
             }
 
@@ -761,7 +804,8 @@ function modify_filter($user_id, $url_params, $row)
                         22,
                         get_lang('Assign courses')
                     ),
-                    "dashboard_add_courses_to_user.php?user={$user_id}"
+                    "dashboard_add_courses_to_user.php?user={$user_id}",
+                    ['title' =>  get_lang('Assign courses')]
                 );
 
                 $result .= Display::url(
@@ -772,7 +816,8 @@ function modify_filter($user_id, $url_params, $row)
                         22,
                         get_lang('Assign sessions')
                     ),
-                    "dashboard_add_sessions_to_user.php?user={$user_id}"
+                    "dashboard_add_sessions_to_user.php?user={$user_id}",
+                    ['title' => get_lang('Assign sessions')]
                 );
             }
         }

@@ -131,7 +131,7 @@ $(function () {
   $('.delete-swal').click(function (e) {
     e.preventDefault(); // Prevent the href from redirecting directly
     var url = $(this).attr("href");
-    var title = $(this).attr("title");
+    var title = $(this).data('title') || $(this).attr("title");
 
     Swal.fire({
       title: title,

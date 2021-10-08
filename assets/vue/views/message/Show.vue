@@ -4,57 +4,57 @@
       :handle-delete="del"
     >
       <template v-slot:right>
-<!--        <v-toolbar-title v-if="item">-->
-<!--          {{-->
-<!--            `${$options.servicePrefix} ${item['@id']}`-->
-<!--          }}-->
-<!--        </v-toolbar-title>-->
+        <!--        <v-toolbar-title v-if="item">-->
+        <!--          {{-->
+        <!--            `${$options.servicePrefix} ${item['@id']}`-->
+        <!--          }}-->
+        <!--        </v-toolbar-title>-->
         <v-btn
-            :loading="isLoading"
-            tile
-            icon
-            @click="reply"
+          :loading="isLoading"
+          icon
+          tile
+          @click="reply"
         >
-          <v-icon icon="mdi-reply" />
+          <v-icon icon="mdi-reply"/>
         </v-btn>
 
         <v-btn
-            :loading="isLoading"
-            tile
-            icon
-            @click="replyAll"
+          :loading="isLoading"
+          icon
+          tile
+          @click="replyAll"
         >
-          <v-icon icon="mdi-reply-all" />
+          <v-icon icon="mdi-reply-all"/>
         </v-btn>
 
         <v-btn
-            tile
-            icon
-            @click="createEvent"
+          icon
+          tile
+          @click="createEvent"
         >
-          <v-icon icon="mdi-calendar-plus" />
+          <v-icon icon="mdi-calendar-plus"/>
         </v-btn>
       </template>
     </Toolbar>
 
     <VueMultiselect
-        placeholder="Tags"
-        v-model="myReceiver.tags"
-        :loading="isLoadingSelect"
-        tag-placeholder="Add this as new tag"
-        :options="tags"
-        :multiple="true"
-        :searchable="true"
-        :internal-search="false"
-        @search-change="asyncFind"
+      v-model="myReceiver.tags"
+      :internal-search="false"
+      :loading="isLoadingSelect"
+      :multiple="true"
+      :options="tags"
+      :searchable="true"
+      :taggable="true"
+      label="tag"
+      placeholder="Tags"
 
-        @select="addTagToMessage"
-        @remove="removeTagFromMessage"
+      tag-placeholder="Add this as new tag"
+      track-by="id"
 
-        :taggable="true"
-        @tag="addTag"
-        label="tag"
-        track-by="id"
+      @remove="removeTagFromMessage"
+      @select="addTagToMessage"
+      @tag="addTag"
+      @search-change="asyncFind"
     />
 
     <q-card>
@@ -67,7 +67,7 @@
           class="text-subtitle2"
         >
           <q-avatar size="32px">
-            <img :src="item.sender['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
+            <img :src="item.sender['illustrationUrl'] + '?w=80&h=80&fit=crop'"/>
           </q-avatar>
           {{ item.sender['username'] }}
           {{ $luxonDateTime.fromISO(item['sendDate']).toRelative() }}
@@ -101,7 +101,7 @@
       <q-card-section
         v-if="item.attachments && item.attachments.length > 0"
       >
-        <q-separator />
+        <q-separator/>
 
         <p class="my-3">
           {{ item.attachments.length }} {{ $t('Attachments') }}
@@ -133,7 +133,7 @@
         </div>
       </q-card-section>
     </q-card>
-    <Loading :visible="isLoading" />
+    <Loading :visible="isLoading"/>
   </div>
 </template>
 
@@ -141,12 +141,12 @@
 
 <script>
 import {mapActions, mapGetters, useStore} from 'vuex';
-import { mapFields } from 'vuex-map-fields';
+import {mapFields} from 'vuex-map-fields';
 import Loading from '../../components/Loading.vue';
 import ShowMixin from '../../mixins/ShowMixin';
 import Toolbar from '../../components/Toolbar.vue';
 import VueMultiselect from 'vue-multiselect'
-import {computed, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import isEmpty from "lodash/isEmpty";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
@@ -160,12 +160,12 @@ const servicePrefix = 'Message';
 export default {
   name: 'MessageShow',
   components: {
-      Loading,
-      Toolbar,
-      VueMultiselect
+    Loading,
+    Toolbar,
+    VueMultiselect
   },
   mixins: [ShowMixin, NotificationMixin],
-  setup () {
+  setup() {
     const item = ref({});
     const tags = ref([]);
     const isLoadingSelect = ref(false);
@@ -284,7 +284,7 @@ export default {
       router.push({name: `CCalendarEventCreate`, query: params});
     }
 
-    function asyncFind (query) {
+    function asyncFind(query) {
       if (query.toString().length < 3) {
         return;
       }

@@ -470,6 +470,11 @@ ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 // Session admin allowed to edit all courses content
 //$_configuration['session_admins_edit_courses_content'] = false;
 // Adds roles to the system announcements (requires DB change BT#12476)
+/*
+ALTER TABLE sys_announcement ADD COLUMN visible_drh INT DEFAULT 0;
+ALTER TABLE sys_announcement ADD COLUMN visible_session_admin INT DEFAULT 0;
+ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
+*/
 //$_configuration['system_announce_extra_roles'] = false;
 // Limits that a session admin has access to list users
 //$_configuration['limit_session_admin_list_users'] = false;

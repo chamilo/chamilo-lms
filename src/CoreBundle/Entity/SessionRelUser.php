@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User subscriptions to a session. See also SessionRelCourseRelUser.php for a more detail subscription by course.
@@ -85,6 +86,7 @@ class SessionRelUser
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
+    #[Assert\NotNull]
     #[Groups(['session_rel_user:read'])]
     protected Session $session;
 
@@ -92,6 +94,7 @@ class SessionRelUser
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsRelUser", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[Assert\NotNull]
     #[Groups(['session_rel_user:read'])]
     protected User $user;
 
@@ -99,11 +102,13 @@ class SessionRelUser
      * @ORM\Column(name="relation_type", type="integer")
      */
     #[Groups(['session_rel_user:read'])]
+    #[Assert\Choice(callback: [Session::class, 'getRelationTypeList'], message: 'Choose a valid relation type.')]
     protected int $relationType;
 
     /**
      * @ORM\Column(name="duration", type="integer", nullable=false)
      */
+    #[Groups(['session_rel_user:read'])]
     protected int $duration;
 
     /**

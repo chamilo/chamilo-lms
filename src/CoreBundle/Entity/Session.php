@@ -72,7 +72,7 @@ class Session implements ResourceWithAccessUrlInterface
     public const STUDENT = 0;
     public const DRH = 1;
     public const COURSE_COACH = 2;
-    public const SESSION_COACH = 3;
+    public const GENERAL_COACH = 3;
     public const SESSION_ADMIN = 4;
 
     /**
@@ -149,10 +149,10 @@ class Session implements ResourceWithAccessUrlInterface
     protected ?Course $currentCourse = null;
 
     /**
-     * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read", "document:read", "session_rel_user:read"})
      * @ORM\Column(name="name", type="string", length=150)
      */
     #[Assert\NotBlank]
+    #[Groups(['session:read', "session:write", "session_rel_course_rel_user:read", "document:read", "session_rel_user:read"])]
     protected string $name;
 
     /**
@@ -296,6 +296,17 @@ class Session implements ResourceWithAccessUrlInterface
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    public static function getRelationTypeList(): array
+    {
+        return [
+            self::STUDENT,
+            self::DRH,
+            self::COURSE_COACH,
+            self::GENERAL_COACH,
+            self::SESSION_ADMIN
+        ];
     }
 
     public function getDuration(): ?int
@@ -477,7 +488,7 @@ class Session implements ResourceWithAccessUrlInterface
         return $this->hasUserInCourse($user, $course, self::STUDENT);
     }
 
-    public function hasCoachInCourseWithStatus(User $user, Course $course = null): bool
+    public function hasCourseCoachInCourse(User $user, Course $course = null): bool
     {
         if (null === $course) {
             return false;
@@ -623,11 +634,6 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    /**
-     * Get displayStartDate.
-     *
-     * @return DateTime
-     */
     public function getDisplayStartDate(): ?DateTime
     {
         return $this->displayStartDate;
@@ -640,11 +646,6 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    /**
-     * Get displayEndDate.
-     *
-     * @return DateTime
-     */
     public function getDisplayEndDate(): ?DateTime
     {
         return $this->displayEndDate;
@@ -657,11 +658,6 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    /**
-     * Get accessStartDate.
-     *
-     * @return DateTime
-     */
     public function getAccessStartDate(): ?DateTime
     {
         return $this->accessStartDate;
@@ -674,11 +670,6 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    /**
-     * Get accessEndDate.
-     *
-     * @return DateTime
-     */
     public function getAccessEndDate(): ?DateTime
     {
         return $this->accessEndDate;
@@ -691,11 +682,6 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    /**
-     * Get coachAccessStartDate.
-     *
-     * @return DateTime
-     */
     public function getCoachAccessStartDate(): ?DateTime
     {
         return $this->coachAccessStartDate;
@@ -708,11 +694,6 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    /**
-     * Get coachAccessEndDate.
-     *
-     * @return DateTime
-     */
     public function getCoachAccessEndDate(): ?DateTime
     {
         return $this->coachAccessEndDate;
@@ -732,7 +713,7 @@ class Session implements ResourceWithAccessUrlInterface
     {
         $criteria = Criteria::create()
             ->where(
-                Criteria::expr()->eq('relationType', self::SESSION_COACH)
+                Criteria::expr()->eq('relationType', self::GENERAL_COACH)
             )
         ;
 
@@ -743,7 +724,7 @@ class Session implements ResourceWithAccessUrlInterface
     {
         $criteria = Criteria::create()
             ->where(
-                Criteria::expr()->eq('relationType', self::SESSION_COACH)
+                Criteria::expr()->eq('relationType', self::GENERAL_COACH)
             )
             ->andWhere(
                 Criteria::expr()->eq('user', $user)
@@ -755,7 +736,7 @@ class Session implements ResourceWithAccessUrlInterface
 
     public function addGeneralCoach(User $coach): self
     {
-        return $this->addUserInSession(self::SESSION_COACH, $coach);
+        return $this->addUserInSession(self::GENERAL_COACH, $coach);
     }
 
     public function getCategory(): ?SessionCategory
@@ -821,12 +802,14 @@ class Session implements ResourceWithAccessUrlInterface
             (null === $this->accessEndDate || $now < $this->accessEndDate);
     }
 
-    public function addCourse(Course $course): void
+    public function addCourse(Course $course): self
     {
         $sessionRelCourse = (new SessionRelCourse())
             ->setCourse($course)
         ;
         $this->addCourses($sessionRelCourse);
+
+        return $this;
     }
 
     /**
@@ -1142,7 +1125,7 @@ class Session implements ResourceWithAccessUrlInterface
     public function hasCoachInCourseList(User $user): bool
     {
         foreach ($this->courses as $sessionCourse) {
-            if ($this->hasCoachInCourseWithStatus($user, $sessionCourse->getCourse())) {
+            if ($this->hasCourseCoachInCourse($user, $sessionCourse->getCourse())) {
                 return true;
             }
         }

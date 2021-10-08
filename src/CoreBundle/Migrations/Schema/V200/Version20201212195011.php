@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CToolRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201212195011 extends AbstractMigrationChamilo
@@ -103,7 +102,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
             $counter = 1;
             $courseId = $course->getId();
 
-            if (!empty($specialCourses) && in_array($courseId, $specialCourses)) {
+            if (!empty($specialCourses) && \in_array($courseId, $specialCourses, true)) {
                 $this->addSql("UPDATE course SET sticky = 1 WHERE id = $courseId ");
             }
 

@@ -1677,7 +1677,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getSessionsAsGeneralCoach(): array
     {
-        return $this->getSessions(Session::SESSION_COACH);
+        return $this->getSessions(Session::GENERAL_COACH);
     }
 
     public function getSessionsAsAdmin(): array
@@ -1813,7 +1813,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function addRole(string $role): self
     {
         $role = strtoupper($role);
-        if ($role === static::ROLE_DEFAULT) {
+        if ($role === static::ROLE_DEFAULT || empty($role)) {
             return $this;
         }
 

@@ -413,7 +413,7 @@ switch ($report) {
                     WHERE
                         (s.display_start_date BETWEEN '$start' AND '$end' OR
                         s.display_end_date BETWEEN '$start' AND '$end')
-                    AND sru.relation_type = ".Session::SESSION_COACH."
+                    AND sru.relation_type = ".Session::GENERAL_COACH."
                         $statusCondition
                      ";
             $result = Database::query($sql);

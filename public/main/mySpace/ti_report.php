@@ -84,7 +84,8 @@ if ($form->validate()) {
 
     $sql = "SELECT sru.user_id, s.name, s.id as session_id, s.display_start_date, s.display_end_date
             FROM $tblSession s
-            LEFT JOIN $tblSessionRelUser sru ON (sru.session_id = s.id AND sru.relation_type = ".Session::SESSION_COACH.")
+            LEFT JOIN $tblSessionRelUser sru 
+            ON (sru.session_id = s.id AND sru.relation_type = ".Session::GENERAL_COACH.")
             WHERE s.display_start_date BETWEEN '$startDate' AND '$endDate'
             ORDER BY sru.user_id";
     $result = Database::query($sql);

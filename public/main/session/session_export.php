@@ -48,7 +48,7 @@ if (isset($_POST['formSent'])) {
                     s.session_category_id
                 FROM $tblSession s
                 INNER JOIN $tblSessionRelUser sru
-                    ON (s.id = sru.session_id AND sru.relation_type = ".Session::SESSION_COACH.")
+                    ON (s.id = sru.session_id AND sru.relation_type = ".Session::GENERAL_COACH.")
                 INNER JOIN $tblUser u
                 ON u.id = sru.user_id
                 ORDER BY s.id";
@@ -62,7 +62,7 @@ if (isset($_POST['formSent'])) {
                     INNER JOIN $tbl_session_rel_access_url as session_rel_url
                     ON (s.id= session_rel_url.session_id)
                     INNER JOIN $tblSessionRelUser sru
-                        ON (s.id = sru.session_id AND sru.relation_type = ".Session::SESSION_COACH.")
+                        ON (s.id = sru.session_id AND sru.relation_type = ".Session::GENERAL_COACH.")
                     INNER JOIN $tblUser u ON (u.id = sru.user_id)
                     WHERE session_rel_url.access_url_id = $access_url_id
                     ORDER BY s.id";
@@ -74,7 +74,7 @@ if (isset($_POST['formSent'])) {
         $sql = "SELECT s.id,s.name,u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
                 FROM $tblSession s
                 INNER JOIN $tblSessionRelUser sru
-                    ON (s.id = sru.session_id AND sru.relation_type = ".Session::SESSION_COACH.")
+                    ON (s.id = sru.session_id AND sru.relation_type = ".Session::GENERAL_COACH.")
                 INNER JOIN $tblUser u
                     ON u.id = sru.user_id
                 WHERE s.id='$session_id'";

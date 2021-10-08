@@ -101,6 +101,10 @@ class SessionRepository extends ServiceEntityRepository
             throw new Exception($msg);
         }
 
+        if (!in_array($relationType, Session::getRelationTypeList(), true)) {
+            throw new Exception(sprintf('Cannot handle relationType %s', $relationType));
+        }
+
         switch ($relationType) {
             case Session::DRH:
                 if ($user->hasRole('ROLE_RRHH')) {
@@ -123,10 +127,7 @@ class SessionRepository extends ServiceEntityRepository
                         $course
                     );
                 }
-
                 break;
-            default:
-                throw new Exception(sprintf('Cannot handle relationType %s', $relationType));
         }
     }
 

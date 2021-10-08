@@ -707,7 +707,7 @@ class UserManager
         $currentUserId = api_get_user_id();
         $sql = "UPDATE session_rel_user
             SET user_id = $currentUserId
-            WHERE user_id = $user_id AND relation_type = ".SessionEntity::SESSION_COACH;
+            WHERE user_id = $user_id AND relation_type = ".SessionEntity::GENERAL_COACH;
         Database::query($sql);
 
         $sql = "UPDATE session_rel_user
@@ -2549,7 +2549,7 @@ class UserManager
             INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
             LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
             INNER JOIN ChamiloCoreBundle:SessionRelUser AS su WITH su.session = s
-            WHERE (su.user = :user AND su.relationType = ".SessionEntity::SESSION_COACH.") AND url.url = :url ";
+            WHERE (su.user = :user AND su.relationType = ".SessionEntity::GENERAL_COACH.") AND url.url = :url ";
 
         // Default order
         $order = 'ORDER BY sc.name, s.name';
@@ -2893,7 +2893,7 @@ class UserManager
                 FROM $tbl_session s
                 INNER JOIN $tbl_session_user sru ON sru.session_id = s.id
                 WHERE (
-                    sru.user_id = $user_id AND sru.relation_type = ".SessionEntity::SESSION_COACH."
+                    sru.user_id = $user_id AND sru.relation_type = ".SessionEntity::GENERAL_COACH."
                 )
                 $coachCourseConditions
                 ORDER BY s.access_start_date, s.access_end_date, s.name";
@@ -2920,7 +2920,7 @@ class UserManager
                 $coursesAsGeneralCoach = $sessionRepo->getSessionCoursesByStatusInUserSubscription(
                     $user,
                     $session,
-                    SessionEntity::SESSION_COACH,
+                    SessionEntity::GENERAL_COACH,
                     $url
                 );
                 $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSubscription(
@@ -3082,7 +3082,7 @@ class UserManager
             $coursesAsGeneralCoach = $sessionRepo->getSessionCoursesByStatusInUserSubscription(
                 $user,
                 $session,
-                SessionEntity::SESSION_COACH,
+                SessionEntity::GENERAL_COACH,
                 $url
             );
             $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSubscription(
@@ -4360,7 +4360,7 @@ class UserManager
                                     ON session_rel_access_rel_user.session_id = s.id
                                     INNER JOIN $tbl_session_rel_user sru ON s.id = sru.session_id
                                     WHERE access_url_id = ".$urlId."
-                                        AND (sru.relation_type = ".SessionEntity::SESSION_COACH."
+                                        AND (sru.relation_type = ".SessionEntity::GENERAL_COACH."
                                         AND sru.user_id = $userId)
                                 ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s

@@ -89,7 +89,7 @@ class SessionVoter extends Voter
                     $userIsStudent = $session->getSessionRelCourseByUser($user, Session::STUDENT)->count() > 0;
                     $userIsCourseCoach = false;
                 } else {
-                    $userIsCourseCoach = $session->hasCoachInCourseWithStatus($user, $currentCourse);
+                    $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $currentCourse);
                     $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
                 }
                 $duration = (int) $session->getDuration();

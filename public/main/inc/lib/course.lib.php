@@ -1195,9 +1195,9 @@ class CourseManager
         }
 
         $sql = "SELECT s.id FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." s
-            INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." sru
-                ON (sru.session_id = s.id AND sru.relation_type = ".SessionEntity::SESSION_COACH.")
-            WHERE sru.user_id = $userId AND s.id = $session_id";
+                INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." sru
+                ON (sru.session_id = s.id AND sru.relation_type = ".SessionEntity::GENERAL_COACH.")
+                WHERE sru.user_id = $userId AND s.id = $session_id";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;

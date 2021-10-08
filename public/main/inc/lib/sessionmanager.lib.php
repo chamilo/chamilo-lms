@@ -567,7 +567,7 @@ class SessionManager
             }
 
             if ($allowTeachersToCreateSessions) {
-                $relationTypeList[] = Session::SESSION_COACH;
+                $relationTypeList[] = Session::GENERAL_COACH;
             }
 
             $where .= " AND (sru.user_id = $userId AND sru.relation_type IN(".implode(',', $relationTypeList)."))";
@@ -4205,7 +4205,7 @@ class SessionManager
     }
 
     /**
-     * The general coach (session_rel_user.relation_type = Session::SESSION_COACH).
+     * The general coach (session_rel_user.relation_type = Session::GENERAL_COACH).
      *
      * @param int  $user_id         user id
      * @param bool $asPlatformAdmin The user is platform admin, return everything
@@ -4222,7 +4222,7 @@ class SessionManager
 
         if (!$asPlatformAdmin) {
             $innerJoin = " INNER JOIN session_rel_user AS sru ON (s.id = sru.session_id) ";
-            $whereConditions = "sru.user_id = $user_id AND sru.relation_type = ".Session::SESSION_COACH;
+            $whereConditions = "sru.user_id = $user_id AND sru.relation_type = ".Session::GENERAL_COACH;
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -5004,7 +5004,7 @@ class SessionManager
                         Database::insert(
                             $tbl_session_user,
                             [
-                                'relation_type' => Session::SESSION_COACH,
+                                'relation_type' => Session::GENERAL_COACH,
                                 'duration' => 0,
                                 'registered_at' => api_get_utc_datetime(),
                                 'user_id' => $coach_id,
@@ -5014,7 +5014,7 @@ class SessionManager
                         Database::insert(
                             $tbl_session_user,
                             [
-                                'relation_type' => Session::SESSION_COACH,
+                                'relation_type' => Session::GENERAL_COACH,
                                 'duration' => 0,
                                 'registered_at' => api_get_utc_datetime(),
                                 'user_id' => $defaultUserId,
@@ -5082,7 +5082,7 @@ class SessionManager
                             Database::insert(
                                 $tbl_session_user,
                                 [
-                                    'relation_type' => Session::SESSION_COACH,
+                                    'relation_type' => Session::GENERAL_COACH,
                                     'duration' => 0,
                                     'registered_at' => api_get_utc_datetime(),
                                     'user_id' => $coach_id,
@@ -5092,7 +5092,7 @@ class SessionManager
                             Database::insert(
                                 $tbl_session_user,
                                 [
-                                    'relation_type' => Session::SESSION_COACH,
+                                    'relation_type' => Session::GENERAL_COACH,
                                     'duration' => 0,
                                     'registered_at' => api_get_utc_datetime(),
                                     'user_id' => $defaultUserId,
@@ -5220,12 +5220,12 @@ class SessionManager
                             Database::update($tbl_session, $params, ['id = ?' => $session_id]);
                             Database::delete(
                                 $tbl_session_user,
-                                ['session_id = ? AND relation_type = ?' => [$session_id, Session::SESSION_COACH]]
+                                ['session_id = ? AND relation_type = ?' => [$session_id, Session::GENERAL_COACH]]
                             );
                             Database::insert(
                                 $tbl_session_user,
                                 [
-                                    'relation_type' => Session::SESSION_COACH,
+                                    'relation_type' => Session::GENERAL_COACH,
                                     'duration' => 0,
                                     'registered_at' => api_get_utc_datetime(),
                                     'user_id' => $coach_id,
@@ -8031,7 +8031,7 @@ class SessionManager
             $user_id = api_get_user_id();
             $where .= ' AND (sru.relation_type = '.Session::SESSION_ADMIN." AND sru.user_id = $user_id) ";
         } else {
-            $where .= ' AND sru.relation_type = '.Session::SESSION_COACH.' ';
+            $where .= ' AND sru.relation_type = '.Session::GENERAL_COACH.' ';
         }
 
         $extraFieldTables = '';
@@ -8705,7 +8705,7 @@ class SessionManager
                 $user_id = api_get_user_id();
                 $where .= ' AND (sru.relation_type = '.Session::SESSION_ADMIN." AND sru.user_id = $user_id) ";
             } else {
-                $where .= ' AND sru.relation_type = '.Session::SESSION_COACH.' ';
+                $where .= ' AND sru.relation_type = '.Session::GENERAL_COACH.' ';
             }
         }
 

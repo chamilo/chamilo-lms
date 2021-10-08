@@ -2963,8 +2963,10 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
         $sql = "SELECT DISTINCT s.id
             FROM $session_table AS s
             INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
-            WHERE sru.user_id = $userId AND s.id = $session_id AND sru.relation_type = ".SessionEntity::SESSION_COACH
-            ." ORDER BY s.access_start_date, s.access_end_date, s.name";
+            WHERE sru.user_id = $userId AND 
+                  s.id = $session_id AND 
+                  sru.relation_type = ".SessionEntity::GENERAL_COACH." 
+                  ORDER BY s.access_start_date, s.access_end_date, s.name";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
             $sessionIsCoach = array_merge(
@@ -4841,11 +4843,11 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         $sql = "SELECT sru_2.user_id AS session_admin_id, sru_1.user_id AS session_coach_id
             FROM $tbl_session AS s
             INNER JOIN $tblSessionRelUser sru_1
-                ON (sru_1.session_id = s.id AND sru_1.relation_type = ".SessionEntity::SESSION_COACH.")
+            ON (sru_1.session_id = s.id AND sru_1.relation_type = ".SessionEntity::GENERAL_COACH.")
             INNER JOIN $tblSessionRelUser sru_2
-                ON (sru_2.session_id = s.id AND sru_2.relation_type = ".SessionEntity::SESSION_ADMIN.")
+            ON (sru_2.session_id = s.id AND sru_2.relation_type = ".SessionEntity::SESSION_ADMIN.")
             INNER JOIN $tbl_session_course src
-                ON (src.session_id = s.id AND src.c_id = $courseId)";
+            ON (src.session_id = s.id AND src.c_id = $courseId)";
 
         $result = Database::query($sql);
         $row = Database::store_result($result);

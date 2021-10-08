@@ -671,7 +671,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
     $sql .= " LIMIT $from, $number_of_items";
-error_log($sql);
+    error_log($sql);
     $res = Database::query($sql);
     $users = [];
     while ($user = Database::fetch_row($res)) {

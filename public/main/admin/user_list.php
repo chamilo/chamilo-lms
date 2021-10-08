@@ -539,7 +539,7 @@ function modify_filter($user_id, $url_params, $row)
                 Display::getMdiIcon('information', 'ch-tool-icon', null, 22, get_lang('Information')).
                 '</a>';
         } else {
-            $result .= Display::getMdiIcon('information', 'ch-tool-icon-disabled', null, 22,  get_lang('Information'));
+            $result .= Display::getMdiIcon('information', 'ch-tool-icon-disabled', null, 22, get_lang('Information'));
         }
     }
 
@@ -721,7 +721,6 @@ function modify_filter($user_id, $url_params, $row)
                 '</a>';
         }
     }
-
 
     // actions for assigning sessions, courses or users
     if (!api_is_session_admin()) {

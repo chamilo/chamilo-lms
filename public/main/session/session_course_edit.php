@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Entity\Session;
 /**
  * Implements the edition of course-session settings.
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

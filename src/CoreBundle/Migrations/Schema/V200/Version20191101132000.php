@@ -183,7 +183,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_tool');
 
         if ($table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_tool_intro;');
+            //$this->addSql('DROP INDEX course ON c_tool');
         }
 
         $table = $schema->getTable('c_tool_intro');

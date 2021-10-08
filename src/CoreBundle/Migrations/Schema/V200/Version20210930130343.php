@@ -122,6 +122,19 @@ final class Version20210930130343 extends AbstractMigrationChamilo
 
             $em->flush();
             $em->clear();
+
+            $table = $schema->getTable('c_tool_intro');
+
+            if ($table->hasColumn('c_tool_id')) {
+                if (!$table->hasForeignKey('FK_D705267B1DF6B517')) {
+                    $this->addSql(
+                        'ALTER TABLE c_tool_intro ADD CONSTRAINT FK_D705267B1DF6B517 FOREIGN KEY (c_tool_id) REFERENCES c_tool (iid);'
+                    );
+                }
+                if (!$table->hasIndex('IDX_D705267B1DF6B517')) {
+                    $this->addSql('CREATE INDEX IDX_D705267B1DF6B517 ON c_tool_intro (c_tool_id);');
+                }
+            }
         }
     }
 

@@ -195,13 +195,14 @@ class Version20191101132000 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_tool_intro CHANGE id id VARCHAR(255) DEFAULT NULL');
 
-        if (!$table->hasColumn('c_tool_id')) {
-            $this->addSql('ALTER TABLE c_tool_intro ADD c_tool_id INT NOT NULL, ADD resource_node_id BIGINT DEFAULT NULL;');
-            $this->addSql('ALTER TABLE c_tool_intro ADD CONSTRAINT FK_D705267B1DF6B517 FOREIGN KEY (c_tool_id) REFERENCES c_tool (iid);');
+        if (!$table->hasColumn('resource_node_id')) {
+            $this->addSql('ALTER TABLE c_tool_intro ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_tool_intro ADD CONSTRAINT FK_D705267B1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
-
-            $this->addSql('CREATE INDEX IDX_D705267B1DF6B517 ON c_tool_intro (c_tool_id);');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_D705267B1BAD783F ON c_tool_intro (resource_node_id);');
+        }
+
+        if (!$table->hasColumn('c_tool_id')) {
+            $this->addSql('ALTER TABLE c_tool_intro ADD c_tool_id INT NOT NULL');
         }
     }
 

@@ -111,12 +111,12 @@ class Version20190210182615 extends AbstractMigrationChamilo
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
-            $coachId = $item['id_coach'];
-            $adminId = $item['session_admin_id'];
-            $sessionId = $item['id'];
+            $coachId = (int) $item['id_coach'];
+            $adminId = (int) $item['session_admin_id'];
+            $sessionId = (int) $item['id'];
 
             if (!empty($coachId)) {
-                $result = $connection->executeQuery('SELECT * FROM session_rel_user WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 3 ');
+                $result = $connection->executeQuery("SELECT * FROM session_rel_user WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 3 ");
                 $items = $result->fetchAllAssociative();
                 if (empty($items)) {
                     $this->addSql(
@@ -126,7 +126,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
             }
 
             if (!empty($adminId)) {
-                $result = $connection->executeQuery('SELECT * FROM session_rel_user WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 4 ');
+                $result = $connection->executeQuery("SELECT * FROM session_rel_user WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 4 ");
                 $items = $result->fetchAllAssociative();
                 if (empty($items)) {
                     $this->addSql(
@@ -143,12 +143,12 @@ class Version20190210182615 extends AbstractMigrationChamilo
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
-            $userId = $item['user_id'];
-            $sessionId = $item['session_id'];
-            $status = $item['status'];
-            if (!empty($adminId)) {
+            $userId = (int) $item['user_id'];
+            $sessionId = (int) $item['session_id'];
+            $status = (int) $item['status'];
+            if (!empty($userId)) {
                 $result = $connection->executeQuery(
-                    'SELECT * FROM session_rel_user WHERE user_id = $userId AND session_id = $sessionId AND relation_type = $status '
+                    "SELECT * FROM session_rel_user WHERE user_id = $userId AND session_id = $sessionId AND relation_type = $status "
                 );
                 $items = $result->fetchAllAssociative();
                 if (empty($items)) {

@@ -143,7 +143,7 @@ function save_ticket()
     $other_area = (int) $_POST['other_area'];
     $personal_email = $_POST['personal_email'];
     $source = (int) $_POST['source_id'];
-    $user_id = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
+    $user_id = isset($_POST['user_id']) ? (int) $_POST['user_id'] : null;
     $priority = isset($_POST['priority_id']) ? (int) $_POST['priority_id'] : '';
     $status = isset($_POST['status_id']) ? (int) $_POST['status_id'] : '';
     $file_attachments = $_FILES;

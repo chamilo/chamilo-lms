@@ -274,21 +274,21 @@ class TicketManager
     /**
      * Inserts a new ticket in the corresponding tables.
      *
-     * @param int    $category_id
-     * @param int    $course_id
-     * @param int    $sessionId
-     * @param int    $project_id
-     * @param string $other_area
-     * @param string $subject
-     * @param string $content
-     * @param string $personalEmail
-     * @param array  $fileAttachments
-     * @param string $source
-     * @param string $priority
-     * @param string $status
-     * @param int    $assignedUserId
-     * @param int    $exerciseId
-     * @param int    $lpId
+     * @param int      $category_id
+     * @param int      $course_id
+     * @param int      $sessionId
+     * @param int      $project_id
+     * @param string   $other_area
+     * @param string   $subject
+     * @param string   $content
+     * @param string   $personalEmail
+     * @param array    $fileAttachments
+     * @param string   $source
+     * @param string   $priority
+     * @param string   $status
+     * @param int|null $assignedUserId
+     * @param int      $exerciseId
+     * @param int      $lpId
      *
      * @return bool
      */
@@ -305,7 +305,7 @@ class TicketManager
         $source = '',
         $priority = '',
         $status = '',
-        $assignedUserId = 0,
+        $assignedUserId = null,
         $exerciseId = null,
         $lpId = null
     ) {

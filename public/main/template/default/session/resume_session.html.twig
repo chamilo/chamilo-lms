@@ -7,7 +7,7 @@
 
 <table id="session-properties" class="table table-bordered">
     <tr>
-        <td>{{ 'Created by'|get_lang }}</td>
+        <td>{{ 'Created by'|trans }}</td>
         <td>
             {% for session_admin in session.sessionAdmins %}
                 {{ session_admin | user_complete_name_with_link }}<br>
@@ -15,7 +15,7 @@
         </td>
     </tr>
     <tr>
-        <td>{{ 'General coach' | get_lang}} :</td>
+        <td>{{ 'General coach' | trans}} :</td>
         <td>
             {% for coach in session.generalCoaches %}
                 {{ coach | user_complete_name_with_link }}<br>
@@ -24,58 +24,58 @@
     </tr>
     {% if session.category  %}
     <tr>
-        <td>{{ 'Session category' | get_lang}} </td>
+        <td>{{ 'Session category' | trans}} </td>
         <td>{{ session.category.name }}</td>
     </tr>
     {% endif %}
 
     {% if session.duration > 0 %}
     <tr>
-        <td>{{ 'Duration' | get_lang}} </td>
+        <td>{{ 'Duration' | trans}} </td>
         <td>
-            {{ session.duration }} {{ 'Days' | get_lang }}
+            {{ session.duration }} {{ 'Days' | trans }}
         </td>
     </tr>
     {% else %}
     <tr>
-        <td>{{ 'Dates shown' | get_lang}} </td>
+        <td>{{ 'Dates shown' | trans}} </td>
         <td>{{ session_dates.display }}</td>
     </tr>
     <tr>
-        <td>{{ 'Access dates for students' | get_lang}} </td>
+        <td>{{ 'Access dates for students' | trans}} </td>
         <td>{{ session_dates.access }}</td>
     </tr>
     <tr>
-        <td>{{ 'Access dates for coaches' | get_lang}} </td>
+        <td>{{ 'Access dates for coaches' | trans}} </td>
         <td>{{ session_dates.coach }}</td>
     </tr>
     {% endif %}
 
     <tr>
-        <td>{{ 'Description' | get_lang}} </td>
+        <td>{{ 'Description' | trans}} </td>
         <td>
             {{ session.description }}
         </td>
     </tr>
     <tr>
-        <td>{{ 'Show description' | get_lang}} </td>
+        <td>{{ 'Show description' | trans}} </td>
         <td>
             {% if session.showDescription == 1 %}
-                {{ 'Yes' | get_lang}}
+                {{ 'Yes' | trans}}
             {% else %}
-                {{ 'No' | get_lang}}
+                {{ 'No' | trans}}
             {% endif %}
         </td>
     </tr>
     <tr>
-        <td>{{ 'Visibility after end date' | get_lang}} </td>
+        <td>{{ 'Visibility after end date' | trans}} </td>
         <td>
             {{ session_visibility }}
         </td>
     </tr>
     {% if session.promotion %}
         <tr>
-            <td>{{ 'Career' | get_lang}}</td>
+            <td>{{ 'Career' | trans}}</td>
             <td>
                 <a href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ session.promotion.career.id }}&submit=&_qf__filter_form=">
                     {{ session.promotion.career.name }}
@@ -83,7 +83,7 @@
             </td>
         </tr>
         <tr>
-            <td>{{ 'Promotion' | get_lang}}</td>
+            <td>{{ 'Promotion' | trans}}</td>
             <td>
                 <a href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ session.promotion.id }}">
                     {{ session.promotion.name }}
@@ -112,10 +112,10 @@
 
     {% if programmed_announcement %}
         <tr>
-            <td>{{ 'Scheduled announcements' | get_lang }}</td>
+            <td>{{ 'Scheduled announcements' | trans }}</td>
             <td>
                 <a class="btn btn-default" href="{{ _p.web_main }}session/scheduled_announcement.php?session_id={{ session.id }}">
-                    {{ 'Edit' | get_lang }}
+                    {{ 'Edit' | trans }}
                 </a>
             </td>
         </tr>

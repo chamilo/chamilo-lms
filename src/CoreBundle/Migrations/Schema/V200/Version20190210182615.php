@@ -126,7 +126,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
             }
 
             if (!empty($adminId)) {
-                $result = $connection->executeQuery("SELECT * FROM session_rel_user WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 4 ");
+                $result = $connection->executeQuery("SELECT * FROM session_rel_user WHERE user_id = $adminId AND session_id = $sessionId AND relation_type = 4 ");
                 $items = $result->fetchAllAssociative();
                 if (empty($items)) {
                     $this->addSql(
@@ -160,17 +160,17 @@ class Version20190210182615 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('session');
-        if ($table->hasIndex('FK_D044D5D4D1DC2CFC')) {
+        if ($table->hasForeignKey('FK_D044D5D4D1DC2CFC')) {
             $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4D1DC2CFC');
-        }
-
-        if ($table->hasIndex('idx_id_coach')) {
-            $this->addSql('DROP INDEX idx_id_coach ON session');
         }
 
         //$this->addSql('ALTER TABLE session DROP COLUMN id_coach');
         if ($table->hasForeignKey('FK_D044D5D4EF87E278')) {
             $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4EF87E278');
+        }
+
+        if ($table->hasIndex('idx_id_coach')) {
+            $this->addSql('DROP INDEX idx_id_coach ON session');
         }
 
         if ($table->hasForeignKey('idx_id_session_admin_id')) {

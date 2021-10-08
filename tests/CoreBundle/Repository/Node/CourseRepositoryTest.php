@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class CourseRepositoryTest extends AbstractApiTest
@@ -58,9 +59,9 @@ class CourseRepositoryTest extends AbstractApiTest
             ->setDescription('desc')
             ->setShowScore(0)
             ->setDiskQuota(0)
-            ->setLastVisit(new \DateTime())
-            ->setCreationDate(new \DateTime())
-            ->setExpirationDate(new \DateTime())
+            ->setLastVisit(new DateTime())
+            ->setCreationDate(new DateTime())
+            ->setExpirationDate(new DateTime())
             ->setSubscribe(true)
             ->setUnsubscribe(false)
             ->setVideoUrl('https://example.com/video.mp4')

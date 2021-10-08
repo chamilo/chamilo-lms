@@ -81,7 +81,7 @@ class SessionRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function addUserInCourse(int $status, User $user, Course $course, Session $session): void
+    public function addUserInCourse(int $relationType, User $user, Course $course, Session $session): void
     {
         if (!$session->isActive()) {
             throw new Exception('Session not active');
@@ -101,7 +101,7 @@ class SessionRepository extends ServiceEntityRepository
             throw new Exception($msg);
         }
 
-        switch ($status) {
+        switch ($relationType) {
             case Session::DRH:
                 if ($user->hasRole('ROLE_RRHH')) {
                     $session->addUserInSession(Session::DRH, $user);
@@ -111,11 +111,7 @@ class SessionRepository extends ServiceEntityRepository
             case Session::STUDENT:
                 $session
                     ->addUserInSession(Session::STUDENT, $user)
-                    ->addUserInCourse(
-                        Session::STUDENT,
-                        $user,
-                        $course
-                    )
+                    ->addUserInCourse(Session::STUDENT, $user, $course)
                 ;
 
                 break;
@@ -130,7 +126,7 @@ class SessionRepository extends ServiceEntityRepository
 
                 break;
             default:
-                throw new Exception(sprintf('Cannot handle status %s', $status));
+                throw new Exception(sprintf('Cannot handle relationType %s', $relationType));
         }
     }
 

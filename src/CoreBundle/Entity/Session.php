@@ -361,12 +361,12 @@ class Session implements ResourceWithAccessUrlInterface
         }
     }
 
-    public function addUserInSession(int $status, User $user): self
+    public function addUserInSession(int $relationType, User $user): self
     {
         $sessionRelUser = (new SessionRelUser())
             ->setSession($this)
             ->setUser($user)
-            ->setRelationType($status)
+            ->setRelationType($relationType)
         ;
 
         $this->addUser($sessionRelUser);

@@ -116,11 +116,23 @@ class Version20190210182615 extends AbstractMigrationChamilo
             $sessionId = $item['id'];
 
             if (!empty($coachId)) {
-                $this->addSql("INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES (3, 0, NOW(), $coachId, $sessionId)");
+                $result = $connection->executeQuery('SELECT * FROM session_rel_user WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 3 ');
+                $items = $result->fetchAllAssociative();
+                if (empty($items)) {
+                    $this->addSql(
+                        "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES (3, 0, NOW(), $coachId, $sessionId)"
+                    );
+                }
             }
 
             if (!empty($adminId)) {
-                $this->addSql("INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES (4, 0, NOW(), $adminId, $sessionId)");
+                $result = $connection->executeQuery('SELECT * FROM session_rel_user WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 4 ');
+                $items = $result->fetchAllAssociative();
+                if (empty($items)) {
+                    $this->addSql(
+                        "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES (4, 0, NOW(), $adminId, $sessionId)"
+                    );
+                }
             }
         }
 
@@ -134,16 +146,37 @@ class Version20190210182615 extends AbstractMigrationChamilo
             $userId = $item['user_id'];
             $sessionId = $item['session_id'];
             $status = $item['status'];
-            $this->addSql("INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES ($status, 0, NOW(), $userId, $sessionId)");
+            if (!empty($adminId)) {
+                $result = $connection->executeQuery(
+                    'SELECT * FROM session_rel_user WHERE user_id = $userId AND session_id = $sessionId AND relation_type = $status '
+                );
+                $items = $result->fetchAllAssociative();
+                if (empty($items)) {
+                    $this->addSql(
+                        "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES ($status, 0, NOW(), $userId, $sessionId)"
+                    );
+                }
+            }
         }
 
-        $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4D1DC2CFC');
-        $this->addSql('DROP INDEX idx_id_coach ON session');
-        $this->addSql('ALTER TABLE session DROP COLUMN id_coach');
+        $table = $schema->getTable('session');
+        if ($table->hasIndex('FK_D044D5D4D1DC2CFC')) {
+            $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4D1DC2CFC');
+        }
 
-        $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4EF87E278');
-        $this->addSql('DROP INDEX idx_id_session_admin_id ON session');
-        $this->addSql('ALTER TABLE session DROP COLUMN session_admin_id');
+        if ($table->hasIndex('idx_id_coach')) {
+            $this->addSql('DROP INDEX idx_id_coach ON session');
+        }
+
+        //$this->addSql('ALTER TABLE session DROP COLUMN id_coach');
+        if ($table->hasForeignKey('FK_D044D5D4EF87E278')) {
+            $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4EF87E278');
+        }
+
+        if ($table->hasForeignKey('idx_id_session_admin_id')) {
+            $this->addSql('DROP INDEX idx_id_session_admin_id ON session');
+        }
+        //$this->addSql('ALTER TABLE session DROP COLUMN session_admin_id');
     }
 
     public function down(Schema $schema): void

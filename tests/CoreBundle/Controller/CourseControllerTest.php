@@ -18,6 +18,23 @@ class CourseControllerTest extends WebTestCase
 {
     use ChamiloTestTrait;
 
+    public function testCheckTermsAndConditionJson(): void
+    {
+        $client = static::createClient();
+        $course = $this->createCourse('course 1');
+
+        $admin = $this->getUser('admin');
+        $client->loginUser($admin);
+
+        // Test as admin.
+        $client->request(
+            'GET',
+            '/course/'.$course->getId().'/checkLegal.json'
+        );
+        $this->assertResponseIsSuccessful();
+    }
+
+
     public function testIndexJsonAction(): void
     {
         $client = static::createClient();

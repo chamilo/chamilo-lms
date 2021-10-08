@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -48,16 +49,16 @@ use UserManager;
 class CourseController extends ToolBaseController
 {
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
-    public function checkTermsAndConditionJsonAction(Request $request): Response
+    public function checkTermsAndConditionJson(Request $request, LegalRepository $legalTermsRepo, LanguageRepository $languageRepository): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = api_get_user_entity();
+        $user = $this->getUser();
         $course = $this->getCourse();
         $responseData = [
             'redirect' => false,
             'url' => '#',
         ];
-        $termAndConditionStatus = api_check_term_condition($user->getId());
+
+        $termAndConditionStatus = $legalTermsRepo->apiCheckTermCondition($user);
         if ($termAndConditionStatus === false) {
             $request->getSession()->set('term_and_condition', ['user_id' => $user->getId()]);
         } else {
@@ -74,11 +75,11 @@ class CourseController extends ToolBaseController
             // Verify type of terms and conditions
             if (null !== $request->get('legal_info')) {
                 $infoLegal = explode(':', $request->get('legal_info'));
-                /** @var LegalRepository $legalTermsRepo */
-                $legalTermsRepo = $em->getRepository(Legal::class);
                 $legalId = (int) $infoLegal[0];
                 $languageId = (int) $infoLegal[1];
-                $legalType = $legalTermsRepo->getTypeOfTermsAndConditions($legalId, $languageId);
+                $legal = $legalTermsRepo->find($legalId);
+                $language = $languageRepository->find($languageId);
+                $legalType = $legalTermsRepo->getTypeOfTermsAndConditions($legal, $language);
             }
 
             $legalOption = (empty($legalType));
@@ -108,7 +109,7 @@ class CourseController extends ToolBaseController
             ) {
                 $redirect = false;
             }
-            if ($redirect && !api_is_platform_admin()) {
+            if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
                 $url = '/main/auth/inscription.php';
                 $responseData =[
                     'redirect' => $redirect,

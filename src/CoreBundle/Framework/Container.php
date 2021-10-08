@@ -13,6 +13,8 @@ use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -559,6 +561,16 @@ class Container
     public static function getToolIntroRepository(): CToolIntroRepository
     {
         return self::$container->get(CToolIntroRepository::class);
+    }
+
+    public static function getLegalRepository(): LegalRepository
+    {
+        return self::$container->get(LegalRepository::class);
+    }
+
+    public static function getLanguageRepository(): LanguageRepository
+    {
+        return self::$container->get(LanguageRepository::class);
     }
 
     public static function getFormFactory(): FormFactory

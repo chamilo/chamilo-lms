@@ -186,26 +186,21 @@ export default {
     item.value.receiversCc = [];
 
     onMounted(async () => {
-      const response = await store.dispatch('message/load', id);
+      item.value = await store.dispatch('message/load', id);
 
-      item.value = await response;
-      item.value.receivers.forEach(receiver => {
-        if (receiver.receiver['@id'] === user['@id']) {
-          myReceiver.value = receiver;
-        }
-      });
+      myReceiver.value = item.value.receivers.find(({receiver}) => receiver['@id'] === user['@id']);
+
+      // Change to read.
+      if (false === myReceiver.value.read) {
+        axios.put(myReceiver.value['@id'], {
+          read: true,
+        }).then(response => {
+          console.log(response);
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
     });
-
-    // Change to read.
-    if (false === myReceiver.value.read) {
-      axios.put(myReceiver.value['@id'], {
-        read: true,
-      }).then(response => {
-        console.log(response);
-      }).catch(function (error) {
-        console.log(error);
-      });
-    }
 
     function addTag(newTag) {
       axios.post(ENTRYPOINT + 'message_tags', {

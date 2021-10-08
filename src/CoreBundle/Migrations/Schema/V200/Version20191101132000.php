@@ -24,8 +24,18 @@ class Version20191101132000 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('course');
+
         if (!$table->hasColumn('introduction')) {
             $this->addSql('ALTER TABLE course ADD introduction LONGTEXT DEFAULT NULL');
+        }
+
+        if (!$table->hasColumn('video_url')) {
+            $this->addSql('ALTER TABLE course ADD video_url VARCHAR(255) NOT NULL');
+            $this->addSql('UPDATE course SET video_url = ""');
+        }
+
+        if (!$table->hasColumn('sticky')) {
+            $this->addSql('ALTER TABLE course ADD sticky TINYINT(1) NOT NULL');
         }
 
         if (!$table->hasColumn('resource_node_id')) {

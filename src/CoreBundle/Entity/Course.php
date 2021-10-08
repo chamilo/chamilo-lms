@@ -253,28 +253,24 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected ?string $directory = null;
 
     /**
-     * @Groups({"course:read", "list"})
      * @ORM\Column(name="course_language", type="string", length=20, nullable=false, unique=false)
      */
+    #[Groups(['course:read'])]
     protected string $courseLanguage;
 
     /**
-     * @Groups({"course:read", "course_rel_user:read"})
-     *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
+    #[Groups(['course:read', 'course_rel_user:read'])]
     protected ?string $description;
 
     /**
-     * @Groups({"course:read", "course_rel_user:read"})
-     *
      * @ORM\Column(name="introduction", type="text", nullable=true)
      */
+    #[Groups(['course:read', 'course_rel_user:read'])]
     protected ?string $introduction;
 
     /**
-     * @Groups({"course:read", "course:write", "course_rel_user:read"})
-     *
      * @var CourseCategory[]|Collection
      *
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
@@ -288,16 +284,16 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * )
      */
     #[ApiSubresource]
+    #[Groups(['course:read', 'course:write', 'course_rel_user:read'])]
     protected Collection $categories;
 
     /**
      * @var int Course visibility
      *
-     * @Groups({"course:read", "course:write"})
-     *
      * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
     #[Assert\NotBlank]
+    #[Groups(['course:read', 'course:write'])]
     protected int $visibility;
 
     /**
@@ -311,18 +307,30 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected ?string $tutorName;
 
     /**
-     * @Groups({"course:read", "list"})
      * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
      */
+    #[Groups(['course:read'])]
     protected ?string $departmentName = null;
 
     /**
-     * @Groups({"course:read", "list"})
-     * @Assert\Url()
-     *
      * @ORM\Column(name="department_url", type="string", length=180, nullable=true, unique=false)
      */
+    #[Assert\Url]
+    #[Groups(['course:read', 'course:write'])]
     protected ?string $departmentUrl = null;
+
+    /**
+     * @ORM\Column(name="video_url", type="string", length=255)
+     */
+    #[Assert\Url]
+    #[Groups(['course:read', 'course:write'])]
+    protected string $videoUrl;
+
+    /**
+     * @ORM\Column(name="sticky", type="boolean")
+     */
+    #[Groups(['course:read', 'course:write'])]
+    protected bool $sticky;
 
     /**
      * @ORM\Column(name="disk_quota", type="bigint", nullable=true, unique=false)
@@ -345,9 +353,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected DateTime $creationDate;
 
     /**
-     * @Groups({"course:read", "list"})
      * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
+    #[Groups(['course:read'])]
     protected ?DateTime $expirationDate = null;
 
     /**
@@ -409,8 +417,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->description = '';
         $this->introduction = '';
         $this->tutorName = '';
-        $this->registrationCode = null;
         $this->legal = '';
+        $this->videoUrl = '';
+        $this->registrationCode = null;
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
         $this->tools = new ArrayCollection();
@@ -429,6 +438,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->courseLanguage = 'en';
         $this->subscribe = true;
         $this->unsubscribe = false;
+        $this->sticky = false;
         //$this->specificFieldValues = new ArrayCollection();
         //$this->sharedSurveys = new ArrayCollection();
     }
@@ -1317,6 +1327,30 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function setTemplates(Collection $templates): self
     {
         $this->templates = $templates;
+
+        return $this;
+    }
+
+    public function getVideoUrl(): string
+    {
+        return $this->videoUrl;
+    }
+
+    public function setVideoUrl(string $videoUrl): self
+    {
+        $this->videoUrl = $videoUrl;
+
+        return $this;
+    }
+
+    public function isSticky(): bool
+    {
+        return $this->sticky;
+    }
+
+    public function setSticky(bool $sticky): self
+    {
+        $this->sticky = $sticky;
 
         return $this;
     }

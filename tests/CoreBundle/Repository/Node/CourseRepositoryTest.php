@@ -29,6 +29,8 @@ class CourseRepositoryTest extends AbstractApiTest
 
         $course = (new Course())
             ->setTitle('test')
+            ->setCode('test')
+            ->setVisualCode('test')
             ->addAccessUrl($this->getAccessUrl())
         ;
         $courseRepo->create($course);
@@ -46,6 +48,8 @@ class CourseRepositoryTest extends AbstractApiTest
         $em->persist($category);
         $em->flush();
 
+        $this->assertIsArray(Course::getStatusList());
+
         $course = (new Course())
             ->setTitle('test julio')
             ->setCreator($this->getUser('admin'))
@@ -53,6 +57,19 @@ class CourseRepositoryTest extends AbstractApiTest
             ->setCourseLanguage('en')
             ->setDescription('desc')
             ->setShowScore(0)
+            ->setDiskQuota(0)
+            ->setLastVisit(new \DateTime())
+            ->setCreationDate(new \DateTime())
+            ->setExpirationDate(new \DateTime())
+            ->setSubscribe(true)
+            ->setUnsubscribe(false)
+            ->setVideoUrl('https://example.com/video.mp4')
+            ->setSticky(false)
+            ->setRegistrationCode('123')
+            ->setLegal('123')
+            ->setActivateLegal(123)
+            ->setCourseTypeId(1)
+            ->setIntroduction('intro')
             ->addCategory($category)
         ;
         $courseRepo->create($course);

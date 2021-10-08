@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -29,9 +30,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
-        /** @var Connection $connection */
+        $em = $this->getEntityManager();
         $connection = $em->getConnection();
 
         $courseRepo = $container->get(CourseRepository::class);
@@ -78,12 +77,36 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         $em->flush();
         $em->clear();
 
+        // Special course.
+        $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
+        $sql = "SELECT id FROM extra_field
+                WHERE extra_field_type = $extraFieldType AND variable = 'special_course'";
+        $result = $connection->executeQuery($sql);
+        $extraFieldId = $result->fetchOne();
+
+        $specialCourses = '';
+        if (!empty($extraFieldId)) {
+            $sql = 'SELECT DISTINCT(item_id)
+                    FROM extra_field_values
+                    WHERE field_id = '.$extraFieldId." AND value = '1'";
+            $result = $connection->executeQuery($sql);
+            $specialCourses = $result->fetchAllAssociative();
+            if (!empty($specialCourses)) {
+                $specialCourses = array_column($specialCourses, 'item_id');
+            }
+        }
+
         // Migrating c_tool.
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $counter = 1;
             $courseId = $course->getId();
+
+            if (!empty($specialCourses) && in_array($courseId, $specialCourses)) {
+                $this->addSql("UPDATE course SET sticky = 1 WHERE id = $courseId ");
+            }
+
             $sql = "SELECT * FROM c_tool
                     WHERE c_id = {$courseId} ";
             $result = $connection->executeQuery($sql);

@@ -152,7 +152,7 @@ class Session implements ResourceWithAccessUrlInterface
      * @ORM\Column(name="name", type="string", length=150)
      */
     #[Assert\NotBlank]
-    #[Groups(['session:read', "session:write", "session_rel_course_rel_user:read", "document:read", "session_rel_user:read"])]
+    #[Groups(['session:read', 'session:write', 'session_rel_course_rel_user:read', 'document:read', 'session_rel_user:read'])]
     protected string $name;
 
     /**
@@ -305,7 +305,7 @@ class Session implements ResourceWithAccessUrlInterface
             self::DRH,
             self::COURSE_COACH,
             self::GENERAL_COACH,
-            self::SESSION_ADMIN
+            self::SESSION_ADMIN,
         ];
     }
 

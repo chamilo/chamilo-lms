@@ -84,14 +84,13 @@ switch ($action) {
             $class = (int) $_GET['class'];
             $result = Database::query(
                 "DELETE FROM $tbl_session_rel_class
-                 WHERE session_id = $sessionId
-                  AND class_id = $class"
+                       WHERE session_id = $sessionId AND class_id = $class"
             );
             $nbr_affected_rows = Database::affected_rows($result);
             Database::query(
                 "UPDATE $tbl_session
-                SET nbr_classes = nbr_classes - $nbr_affected_rows
-                WHERE id = $sessionId");
+                        SET nbr_classes = nbr_classes - $nbr_affected_rows
+                        WHERE id = $sessionId");
         }
 
         if (!empty($_GET['user'])) {
@@ -102,6 +101,9 @@ switch ($action) {
         }
 
         Display::addFlash(Display::return_message(get_lang('Update successful')));
+        header('Location: resume_session.php?id_session='.$sessionId);
+        exit;
+
         break;
 }
 

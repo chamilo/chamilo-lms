@@ -16,12 +16,13 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Exception;
 
 class SessionRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testSession()
+    public function testSession(): void
     {
         $this->assertIsArray(Session::getRelationTypeList());
     }
@@ -251,7 +252,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $this->assertSame(1, $session->getCourses()->count());
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $sessionRepo->addUserInCourse(8888, $student, $course, $session);
 
         $sessionRepo->addUserInCourse(Session::STUDENT, $student, $course, $session);

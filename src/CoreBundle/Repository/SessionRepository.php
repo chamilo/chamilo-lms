@@ -91,9 +91,9 @@ class SessionRepository extends ServiceEntityRepository
             throw new Exception('User not active');
         }
 
-        if (!$course->isActive()) {
+        /*if (!$course->isActive()) {
             throw new Exception('Course not active');
-        }
+        }*/
 
         if (!$session->hasCourse($course)) {
             $msg = sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getName());
@@ -101,7 +101,7 @@ class SessionRepository extends ServiceEntityRepository
             throw new Exception($msg);
         }
 
-        if (!in_array($relationType, Session::getRelationTypeList(), true)) {
+        if (!\in_array($relationType, Session::getRelationTypeList(), true)) {
             throw new Exception(sprintf('Cannot handle relationType %s', $relationType));
         }
 
@@ -121,12 +121,16 @@ class SessionRepository extends ServiceEntityRepository
                 break;
             case Session::COURSE_COACH:
                 if ($user->hasRole('ROLE_TEACHER')) {
-                    $session->addUserInCourse(
-                        Session::COURSE_COACH,
-                        $user,
-                        $course
-                    );
+                    $session
+                        ->addUserInSession(Session::COURSE_COACH, $user)
+                        ->addUserInCourse(
+                            Session::COURSE_COACH,
+                            $user,
+                            $course
+                        )
+                    ;
                 }
+
                 break;
         }
     }

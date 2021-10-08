@@ -124,6 +124,19 @@ class Version20190210182615 extends AbstractMigrationChamilo
             }
         }
 
+        $sql = 'SELECT user_id, session_id, status
+                FROM session_rel_course_rel_user 
+                WHERE user_id NOT IN (SELECT user_id FROM session_rel_user);';
+        $result = $connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
+
+        foreach ($items as $item) {
+            $userId = $item['user_id'];
+            $sessionId = $item['session_id'];
+            $status = $item['status'];
+            $this->addSql("INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES ($status, 0, NOW(), $userId, $sessionId)");
+        }
+
         $this->addSql('ALTER TABLE session DROP FOREIGN KEY FK_D044D5D4D1DC2CFC');
         $this->addSql('DROP INDEX idx_id_coach ON session');
         $this->addSql('ALTER TABLE session DROP COLUMN id_coach');

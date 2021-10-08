@@ -176,10 +176,12 @@ import axios from "axios";
 import {ENTRYPOINT} from '../../config/entrypoint';
 import {computed, onMounted, reactive, toRefs} from 'vue'
 import {mapGetters, useStore} from "vuex";
+import TranslateHtmlMixin from '../../mixins/TranslateHtmlMixin';
 
 export default {
   name: 'Home',
   servicePrefix: 'Courses',
+  mixins: [TranslateHtmlMixin],
   components: {
     Loading,
     Toolbar,
@@ -235,6 +237,7 @@ export default {
           if (!isEmpty(response)) {
             // first item
             state.intro = response[0];
+            TranslateHtmlMixin.methods.translate();
           }
         });
 
@@ -250,6 +253,7 @@ export default {
             if (!isEmpty(response)) {
               state.createInSession = false;
               state.intro = response[0];
+              TranslateHtmlMixin.methods.translate();
             }
           });
         }

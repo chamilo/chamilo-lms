@@ -20,32 +20,32 @@ document.addEventListener('DOMContentLoaded', function () {
           userLang.style.display = 'block';
         });
       }
-    } else {
-      // it checks content from old version
-      const langs = document.querySelectorAll('span[lang]');
-      if (langs.length > 0) {
-        // it hides all contents with lang
-        langs.forEach(function (el) {
-          el.style.display = 'none';
-        });
+    }
 
-        // To show only the content by user language.
-        if (isoCode == 'pl_PL') {
-          isoCode = 'pl';
-        }
-        if (isoCode == 'fr_FR') {
-          isoCode = 'fr';
-        }
-        if (isoCode == 'en_US') {
-          isoCode = 'en';
-        }
-        const selectedLang = document.querySelectorAll('span[lang="' + isoCode + '"]');
-        if (selectedLang.length > 0) {
-          selectedLang.forEach(function (userLang) {
-            userLang.classList.remove('hidden')
-            userLang.style.display = 'block';
-          });
-        }
+    // it checks content from old version
+    const langs = document.querySelectorAll('span[lang]:not(.mce-translatehtml)');
+    if (langs.length > 0) {
+      // it hides all contents with lang
+      langs.forEach(function (el) {
+        el.style.display = 'none';
+      });
+
+      // To show only the content by user language.
+      if (isoCode == 'pl_PL') {
+        isoCode = 'pl';
+      }
+      if (isoCode == 'fr_FR') {
+        isoCode = 'fr';
+      }
+      if (isoCode == 'en_US') {
+        isoCode = 'en';
+      }
+      const selectedLang = document.querySelectorAll('span[lang="' + isoCode + '"]');
+      if (selectedLang.length > 0) {
+        selectedLang.forEach(function (userLang) {
+          userLang.classList.remove('hidden')
+          userLang.style.display = 'block';
+        });
       }
     }
   }

@@ -87,7 +87,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
                     continue;
                 }
                 $sql = "DELETE FROM session_rel_course_rel_user WHERE id = $id";
-                $this->addSql($sql);
+                $connection->executeQuery($sql);
                 $counter++;
             }
         }

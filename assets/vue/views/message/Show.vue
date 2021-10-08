@@ -15,7 +15,7 @@
           tile
           @click="reply"
         >
-          <v-icon icon="mdi-reply"/>
+          <v-icon icon="mdi-reply" />
         </v-btn>
 
         <v-btn
@@ -24,7 +24,7 @@
           tile
           @click="replyAll"
         >
-          <v-icon icon="mdi-reply-all"/>
+          <v-icon icon="mdi-reply-all" />
         </v-btn>
 
         <v-btn
@@ -32,7 +32,7 @@
           tile
           @click="createEvent"
         >
-          <v-icon icon="mdi-calendar-plus"/>
+          <v-icon icon="mdi-calendar-plus" />
         </v-btn>
       </template>
     </Toolbar>
@@ -67,7 +67,7 @@
           class="text-subtitle2"
         >
           <q-avatar size="32px">
-            <img :src="item.sender['illustrationUrl'] + '?w=80&h=80&fit=crop'"/>
+            <img :src="item.sender['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
           </q-avatar>
           {{ item.sender['username'] }}
           {{ $luxonDateTime.fromISO(item['sendDate']).toRelative() }}
@@ -101,7 +101,7 @@
       <q-card-section
         v-if="item.attachments && item.attachments.length > 0"
       >
-        <q-separator/>
+        <q-separator />
 
         <p class="my-3">
           {{ item.attachments.length }} {{ $t('Attachments') }}
@@ -133,7 +133,7 @@
         </div>
       </q-card-section>
     </q-card>
-    <Loading :visible="isLoading"/>
+    <Loading :visible="isLoading" />
   </div>
 </template>
 

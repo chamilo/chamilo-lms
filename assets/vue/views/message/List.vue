@@ -5,7 +5,7 @@
         icon
         tile
         @click="composeHandler">
-        <v-icon icon="mdi-email-plus-outline"/>
+        <v-icon icon="mdi-email-plus-outline" />
       </v-btn>
 
       <v-btn
@@ -13,7 +13,7 @@
         icon
         tile
         @click="reloadHandler">
-        <v-icon icon="mdi-refresh"/>
+        <v-icon icon="mdi-refresh" />
       </v-btn>
 
       <v-btn
@@ -22,7 +22,7 @@
         tile
         @click="confirmDeleteMultiple"
       >
-        <v-icon icon="mdi-delete"/>
+        <v-icon icon="mdi-delete" />
       </v-btn>
       <!--        :disabled="!selectedItems || !selectedItems.length"-->
 
@@ -32,7 +32,7 @@
         tile
         @click="markAsReadMultiple"
       >
-        <v-icon icon="mdi-email"/>
+        <v-icon icon="mdi-email" />
       </v-btn>
 
       <v-btn
@@ -41,7 +41,7 @@
         tile
         @click="markAsUnReadMultiple"
       >
-        <v-icon icon="mdi-email-open"/>
+        <v-icon icon="mdi-email-open" />
       </v-btn>
 
     </template>
@@ -105,22 +105,22 @@
       <DataTable
         v-model:filters="filters"
         v-model:selection="selectedItems"
-        :globalFilterFields="['title', 'sendDate']"
+        :global-filter-fields="['title', 'sendDate']"
         :lazy="true"
         :loading="isLoading"
         :paginator="true"
         :rows="10"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
+        :rows-per-page-options="[5, 10, 20, 50]"
         :totalRecords="totalItems"
         :value="items"
         class="p-datatable-sm"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+        current-page-report-template="Showing {first} to {last} of {totalRecords}"
         dataKey="id"
-        filterDisplay="menu"
-        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-        responsiveLayout="scroll"
+        filter-display="menu"
+        paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+        responsive-layout="scroll"
         sortBy="sendDate"
-        sortOrder="asc"
+        sort-order="asc"
         @page="onPage($event)"
         @sort="sortingChanged($event)">
 
@@ -129,7 +129,7 @@
         <Column :header="$t('From')" :sortable="false" field="sender">
           <template #body="slotProps">
             <q-avatar size="40px">
-              <img :src="slotProps.data.sender.illustrationUrl + '?w=80&h=80&fit=crop'"/>
+              <img :src="slotProps.data.sender.illustrationUrl + '?w=80&h=80&fit=crop'" />
             </q-avatar>
 
             <a
@@ -194,7 +194,7 @@
                 icon
                 tile
                 @click="confirmDeleteItem(slotProps.data)">
-                <v-icon icon="mdi-delete"/>
+                <v-icon icon="mdi-delete" />
               </v-btn>
             </div>
           </template>
@@ -205,8 +205,13 @@
 
   <!--  Dialogs-->
 
-  <Dialog v-model:visible="itemDialog" :header="$t('New folder')" :modal="true" :style="{width: '450px'}"
-          class="p-fluid">
+  <Dialog
+    v-model:visible="itemDialog"
+    :header="$t('New folder')"
+    :modal="true"
+    :style="{width: '450px'}"
+    class="p-fluid"
+  >
     <div class="p-field">
       <label for="name">{{ $t('Name') }}</label>
       <InputText
@@ -217,34 +222,74 @@
         autofocus
         required="true"
       />
-      <small v-if="submitted && !item.title" class="p-error">$t('Title is required')</small>
+      <small
+        v-if="submitted && !item.title"
+        class="p-error"
+      >
+        $t('Title is required')
+      </small>
     </div>
 
     <template #footer>
-      <Button class="p-button-text" icon="pi pi-times" label="Cancel" @click="hideDialog"/>
-      <Button class="p-button-text" icon="pi pi-check" label="Save" @click="saveItem"/>
+      <Button
+        class="p-button-text"
+        icon="pi pi-times"
+        label="Cancel"
+        @click="hideDialog"
+      />
+      <Button
+        class="p-button-text"
+        icon="pi pi-check"
+        label="Save"
+        @click="saveItem"
+      />
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="deleteItemDialog" :modal="true" :style="{width: '450px'}" header="Confirm">
+  <Dialog
+    v-model:visible="deleteItemDialog"
+    :modal="true"
+    :style="{width: '450px'}"
+    header="Confirm"
+  >
     <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"/>
+      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
       <span v-if="item">Are you sure you want to delete <b>{{ item.title }}</b>?</span>
     </div>
     <template #footer>
-      <Button class="p-button-text" icon="pi pi-times" label="No" @click="deleteItemDialog = false"/>
-      <Button class="p-button-text" icon="pi pi-check" label="Yes" @click="deleteItemButton(item)"/>
+      <Button
+        class="p-button-text"
+        icon="pi pi-times"
+        label="No"
+        @click="deleteItemDialog = false"
+      />
+      <Button
+        class="p-button-text"
+        icon="pi pi-check"
+        label="Yes"
+        @click="deleteItemButton(item)"
+      />
     </template>
   </Dialog>
 
   <Dialog v-model:visible="deleteMultipleDialog" :modal="true" :style="{width: '450px'}" header="Confirm">
     <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"/>
+      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
       <span v-if="item">Are you sure you want to delete the selected items?</span>
     </div>
     <template #footer>
-      <Button class="p-button-text" icon="pi pi-times" label="No" @click="deleteMultipleDialog = false"/>
-      <Button class="p-button-text" icon="pi pi-check" label="Yes" @click="deleteMultipleItems"/>
+      <Button
+        class="p-button-text"
+        icon="pi pi-times"
+        label="No"
+        @click="deleteMultipleDialog = false"
+      />
+      <Button
+        class="p-button-text"
+        icon="pi pi-check"
+        label="Yes"
+        @click="deleteMultipleItems"
+      />
     </template>
   </Dialog>
 </template>

@@ -14,7 +14,7 @@ import NotificationMixin from './mixins/NotificationMixin';
 import axios from "axios";
 import { computed, watch, provide, ref } from 'vue';
 import isEmpty from 'lodash/isEmpty';
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router';
 
 import useState from './hooks/useState'
 /*import Sidebar from './components/sidebar/Sidebar.vue'
@@ -24,8 +24,7 @@ import SearchPanel from './components/panels/SearchPanel.vue'
 import NotificationsPanel from './components/panels/NotificationsPanel.vue'
 import Button from './components/global/Button.vue'*/
 
-const defaultLayout = "Dashboard";
-
+const defaultLayout = 'Dashboard';
 import { DefaultApolloClient } from '@vue/apollo-composable';
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core';
 
@@ -36,7 +35,7 @@ const httpLink = createHttpLink({
 })
 
 // Cache implementation
-const cache = new InMemoryCache()
+const cache = new InMemoryCache();
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
@@ -64,6 +63,7 @@ export default {
             }
         }
     );
+
     provide(DefaultApolloClient, apolloClient)
 
     watch(
@@ -92,6 +92,7 @@ export default {
   }),
   watch: {
     $route() {
+      //console.log('watch.$route');
       this.legacyContent = '';
 
       // This code below will handle the legacy content to be loaded.

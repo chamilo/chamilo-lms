@@ -6,7 +6,7 @@
     "start": "vue-cli-service serve --open"
   },
   "dependencies": {
-    "@apollo/client": "3.4.7",
+    "@apollo/client": "3.4.16",
     "@babel/plugin-transform-runtime": "7.15.8",
     "@fancyapps/fancybox": "^3.5.7",
     "@fullcalendar/core": "^5.9.0",

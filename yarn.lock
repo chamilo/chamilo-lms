@@ -14,9 +14,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.4.7":
-  version: 3.4.7
-  resolution: "@apollo/client@npm:3.4.7"
+"@apollo/client@npm:3.4.16":
+  version: 3.4.16
+  resolution: "@apollo/client@npm:3.4.16"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -29,7 +29,7 @@ __metadata:
     symbol-observable: ^4.0.0
     ts-invariant: ^0.9.0
     tslib: ^2.3.0
-    zen-observable-ts: ^1.1.0
+    zen-observable-ts: ~1.1.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
     react: ^16.8.0 || ^17.0.0
@@ -39,7 +39,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: b209622aa80fd099c18e9f7957313d4c4251ad613985d14bb02824136b4d5dc0735db4ccc65258785cccd5784f7dd1ae90c6d5d73e6779acc1dd2ebc47882232
+  checksum: d1bc66ebe41fd3e452db7fa2a125ab91f5e10c2be219de0e35ead2c819179153291a256e3e59ea82e3d35e04a4edd047c450631c1bd7cf4ea48b08d56c1e86e9
   languageName: node
   linkType: hard
 
@@ -6567,7 +6567,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "chamilo@workspace:."
   dependencies:
-    "@apollo/client": 3.4.7
+    "@apollo/client": 3.4.16
     "@babel/eslint-parser": ^7.15.8
     "@babel/plugin-transform-runtime": 7.15.8
     "@fancyapps/fancybox": ^3.5.7
@@ -6674,6 +6674,7 @@ __metadata:
     qtip2: 3.0.3
     quasar: 2.1.0
     readmore-js: ^2.2.1
+    recordrtc: ^5.6.2
     sass: ^1.42.1
     sass-loader: ^12.1.0
     select2: ^4.1.0-rc.0
@@ -17144,6 +17145,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"recordrtc@npm:^5.6.2":
+  version: 5.6.2
+  resolution: "recordrtc@npm:5.6.2"
+  checksum: b03a6f912ae881d053115033ad58b7f983493d889adfc4df913accb72ee0ec9ccbe1365792a2a7810f573c2f9f22149a6af6ea175323af17185b52fceafc5a54
+  languageName: node
+  linkType: hard
+
 "redent@npm:^3.0.0":
   version: 3.0.0
   resolution: "redent@npm:3.0.0"
@@ -21420,7 +21428,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"zen-observable-ts@npm:^1.1.0":
+"zen-observable-ts@npm:~1.1.0":
   version: 1.1.0
   resolution: "zen-observable-ts@npm:1.1.0"
   dependencies:

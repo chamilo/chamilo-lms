@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import SessionCardList from '../../../components/session/SessionCardList.vue';
+import SessionCardList from './SessionCardList.vue';
 
 export default {
   name: 'SessionListWrapper',

@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
@@ -40,6 +41,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     iri: 'https://schema.org/Course',
     attributes: [
         'security' => "is_granted('ROLE_USER')",
+        'filters' => [
+            'course.sticky_boolean_filter',
+        ],
     ],
     itemOperations: [
         'get' => [
@@ -57,7 +61,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',
     'code' => 'partial',
+    //'sticky' => 'partial',
 ])]
+
+//#[ApiFilter(BooleanFilter::class, properties: ['isSticky'])]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
 

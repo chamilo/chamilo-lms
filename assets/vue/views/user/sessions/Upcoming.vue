@@ -10,8 +10,8 @@ import {useStore} from 'vuex';
 import {useQuery, useResult} from '@vue/apollo-composable'
 import {GET_SESSION_REL_USER} from "../../../graphql/queries/SessionRelUser.js";
 import {DateTime} from "luxon";
-import SessionListWrapper from './SessionListWrapper';
-import SessionTabs from './Tabs';
+import SessionListWrapper from '../../../components/session/SessionListWrapper';
+import SessionTabs from '../../../components/session/Tabs';
 
 export default {
   name: 'SessionListUpcoming',

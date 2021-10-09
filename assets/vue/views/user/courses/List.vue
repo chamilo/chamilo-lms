@@ -1,9 +1,12 @@
 <template>
-<!--  {{ loading }}-->
-  <div v-if="courses.length" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2">
-      <CourseCardList
-          :courses="courses"
-      />
+  <StickyCourses/>
+  <!--  {{ loading }}-->
+  <div
+      v-if="courses.length"
+      class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2">
+    <CourseCardList
+        :courses="courses"
+    />
   </div>
   <div v-else>
     <div class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2">
@@ -29,14 +32,16 @@
 
 <script>
 import CourseCardList from '../../../components/course/CourseCardList.vue';
-import {ref, computed} from "vue";
+import {computed} from "vue";
 import {useStore} from 'vuex';
 import {useQuery, useResult} from '@vue/apollo-composable'
 import {GET_COURSE_REL_USER} from "../../../graphql/queries/CourseRelUser.js";
+import StickyCourses from '../../../views/user/courses/StickyCourses.vue';
 
 export default {
   name: 'CourseList',
   components: {
+    StickyCourses,
     CourseCardList,
   },
   setup() {
@@ -48,10 +53,10 @@ export default {
 
       const {result, loading, error} = useQuery(GET_COURSE_REL_USER, {
         user: "/api/users/" + userId
-      }, );
+      });
 
       const courses = useResult(result, [], (data) => {
-        return data.courseRelUsers.edges.map(function(edge) {
+        return data.courseRelUsers.edges.map(function (edge) {
           return edge.node.course;
         });
       });

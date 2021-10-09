@@ -19,8 +19,6 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class SessionVoter.
- *
  * @todo remove legacy code.
  */
 class SessionVoter extends Voter
@@ -65,6 +63,7 @@ class SessionVoter extends Voter
     {
         /** @var User $user */
         $user = $token->getUser();
+
         // Make sure there is a user object (i.e. that the user is logged in)
         if (!$user instanceof UserInterface) {
             return false;
@@ -80,6 +79,11 @@ class SessionVoter extends Voter
         /** @var Session $session */
         $session = $subject;
         $currentCourse = $session->getCurrentCourse();
+
+        // Course checks.
+        if ($currentCourse->isHidden()) {
+            return false;
+        }
 
         switch ($attribute) {
             case self::VIEW:

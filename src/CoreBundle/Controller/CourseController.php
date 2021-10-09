@@ -57,7 +57,9 @@ class CourseController extends ToolBaseController
             throw $this->createAccessDeniedException();
         }
 
-        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        if (empty($sessionId)) {
+            $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        }
 
         $session = $request->getSession();
 

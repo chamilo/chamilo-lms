@@ -374,6 +374,7 @@ class SortableTable extends HTML_Table
         $table_id = 'form_'.$this->table_name.'_id';
         $html = '';
         $form = '';
+        $nav = '';
         if (false === $this->hideNavigation) {
             // Only show pagination if there are more than 1 page.
             if ($this->get_pager()->numPages() > 1) {

@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
@@ -35,8 +34,7 @@ class ResourceVoter extends Voter
 
     public static function getReaderMask(): int
     {
-        $builder = new MaskBuilder();
-        $builder
+        $builder = (new MaskBuilder())
             ->add(self::VIEW)
         ;
 
@@ -45,8 +43,7 @@ class ResourceVoter extends Voter
 
     public static function getEditorMask(): int
     {
-        $builder = new MaskBuilder();
-        $builder
+        $builder = (new MaskBuilder())
             ->add(self::VIEW)
             ->add(self::EDIT)
         ;

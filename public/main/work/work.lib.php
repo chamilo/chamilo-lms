@@ -1470,10 +1470,9 @@ function getAllWorkListStudent(
     while ($work = Database::fetch_array($result, 'ASSOC')) {
         $courseId = $work['c_id'];
         $courseInfo = $courseList[$work['c_id']];
-        $courseCode = $courseInfo['code'];
         $sessionId = $work['session_id'];
 
-        $cidReq = api_get_cidreq_params($courseCode, $sessionId);
+        $cidReq = api_get_cidreq_params($courseId, $sessionId);
         $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.$cidReq;
         $isSubscribed = userIsSubscribedToWork($userId, $work['iid'], $courseId);
         if (false == $isSubscribed) {

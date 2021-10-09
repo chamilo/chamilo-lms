@@ -8751,11 +8751,13 @@ class Exercise
     ) {
         $is_allowedToEdit = api_is_allowed_to_edit(null, true);
         $courseId = $courseId ? (int) $courseId : api_get_course_int_id();
-        $courseInfo = api_get_course_info_by_id($courseId);
         $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
 
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
+
+        $userId = $userId ? (int) $userId : api_get_user_id();
+        $user = api_get_user_entity($userId);
 
         $repo = Container::getQuizRepository();
 
@@ -8784,17 +8786,13 @@ class Exercise
             $autoLaunchAvailable = true;
         }
 
-        $courseId = $courseInfo['real_id'];
+        $courseId = $course->getId();
         $tableRows = [];
         $origin = api_get_origin();
         $charset = 'utf-8';
         $token = Security::get_token();
-        $userId = $userId ? (int) $userId : api_get_user_id();
-        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, $courseInfo);
+        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, ['real_id' => $courseId]);
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
-
-        // Condition for the session
-        $condition_session = api_get_session_condition($sessionId, true, true, 'e.session_id');
         $content = '';
         $column = 0;
         if ($is_allowedToEdit) {
@@ -8857,12 +8855,13 @@ class Exercise
             //avoid sending empty parameters
             $mylpid = empty($learnpath_id) ? '' : '&learnpath_id='.$learnpath_id;
             $mylpitemid = empty($learnpath_item_id) ? '' : '&learnpath_item_id='.$learnpath_item_id;
+
             /** @var CQuiz $exerciseEntity */
             foreach ($exerciseList as $exerciseEntity) {
                 $currentRow = [];
                 $exerciseId = $exerciseEntity->getIid();
-                $attempt_text = '';
                 $actions = '';
+                $attempt_text = '';
                 $exercise = new Exercise($courseId);
                 $exercise->read($exerciseId, false);
 
@@ -8870,10 +8869,41 @@ class Exercise
                     continue;
                 }
 
-                $locked = $exercise->is_gradebook_locked;
+                $allowToEditBaseCourse = true;
+                $visibility = $visibilityInCourse = $exerciseEntity->isVisible($course);
+                $visibilityInSession = false;
+                if (!empty($sessionId)) {
+                    // If we are in a session, the test is invisible
+                    // in the base course, it is included in a LP
+                    // *and* the setting to show it is *not*
+                    // specifically set to true, then hide it.
+                    if (false === $visibility) {
+                        if (!$visibilitySetting) {
+                            if ($exercise->exercise_was_added_in_lp) {
+                                continue;
+                            }
+                        }
+                    }
+
+                    $visibility = $visibilityInSession = $exerciseEntity->isVisible($course, $session);
+                }
+
                 // Validation when belongs to a session
-                $session_img = null;
-                //$session_img = api_get_session_image($row['session_id'], $userInfo['status']);
+                $isBaseCourseExercise = true;
+                if (!($visibilityInCourse && $visibilityInSession)) {
+                    $isBaseCourseExercise = false;
+                }
+
+                if (!empty($sessionId) && $isBaseCourseExercise) {
+                    $allowToEditBaseCourse = false;
+                }
+
+                $sessionStar = null;
+                if (!$isBaseCourseExercise) {
+                    $sessionStar = api_get_session_image($sessionId, $user);
+                }
+
+                $locked = $exercise->is_gradebook_locked;
 
                 $startTime = $exerciseEntity->getStartTime();
                 $endTime = $exerciseEntity->getEndTime();
@@ -8944,31 +8974,6 @@ class Exercise
                         );
                     }
 
-                    $visibility = $exerciseEntity->isVisible($course, $session);
-
-                    // Get visibility in base course
-                    /*$visibility = api_get_item_visibility(
-                        $courseInfo,
-                        TOOL_QUIZ,
-                        $exerciseId,
-                        0
-                    );*/
-
-                    if (!empty($sessionId)) {
-                        // If we are in a session, the test is invisible
-                        // in the base course, it is included in a LP
-                        // *and* the setting to show it is *not*
-                        // specifically set to true, then hide it.
-                        if (false === $visibility) {
-                            if (!$visibilitySetting) {
-                                if (true == $exercise->exercise_was_added_in_lp) {
-                                    continue;
-                                }
-                            }
-                        }
-
-                        $visibility = $exerciseEntity->isVisible($course, $session);
-                    }
 
                     $style = '';
                     if (0 === $exerciseEntity->getActive() || false === $visibility) {
@@ -8995,16 +9000,10 @@ class Exercise
                         $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
                     }
 
-                    $currentRow['title'] = $url.' '.$session_img.$lp_blocked;
-
-                    // Count number exercise - teacher
-                    /*$sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
-                            WHERE quiz_id = $exerciseId";
-                    $sqlresult = Database::query($sql);
-                    $rowi = (int) Database::result($sqlresult, 0, 0);*/
+                    $currentRow['title'] = $url.' '.$sessionStar.$lp_blocked;
                     $rowi = $exerciseEntity->getQuestions()->count();
 
-                    if ($repo->isGranted('EDIT', $exerciseEntity)) {
+                    if ($repo->isGranted('EDIT', $exerciseEntity) && $allowToEditBaseCourse) {
                         // Questions list
                         $actions = Display::url(
                             Display::return_icon('edit.png', get_lang('Edit')),
@@ -9075,7 +9074,7 @@ class Exercise
                         // Clean exercise
                         $clean = '';
                         if (true === $allowClean) {
-                            if (false == $locked) {
+                            if (!$locked) {
                                 $clean = Display::url(
                                     Display::return_icon(
                                         'clean.png',
@@ -9083,9 +9082,10 @@ class Exercise
                                     ),
                                     '',
                                     [
-                                        'onclick' => "javascript:if(!confirm('".addslashes(
+                                        'onclick' => "javascript:if(!confirm('".
+                                            addslashes(
                                                 api_htmlentities(
-                                                    get_lang('AreYouSureToDeleteResults'),
+                                                    get_lang('Are you sure to delete results'),
                                                     ENT_QUOTES,
                                                     $charset
                                                 )
@@ -9105,7 +9105,7 @@ class Exercise
                         $actions .= $clean;
                         // Visible / invisible
                         // Check if this exercise was added in a LP
-                        if (true == $exercise->exercise_was_added_in_lp) {
+                        if ($exercise->exercise_was_added_in_lp) {
                             $visibility = Display::return_icon(
                                 'invisible.png',
                                 get_lang('AddedToLPCannotBeAccessed')
@@ -9161,7 +9161,7 @@ class Exercise
                         );
 
                         // Check if this exercise was added in a LP
-                        if (true == $exercise->exercise_was_added_in_lp) {
+                        if ($exercise->exercise_was_added_in_lp) {
                             $visibility = Display::return_icon(
                                 'invisible.png',
                                 get_lang('AddedToLPCannotBeAccessed')
@@ -9197,11 +9197,11 @@ class Exercise
                         $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'">'.
                             Display::return_icon('test_results.png', get_lang('Results')).'</a>';
                         $actions .= Display::url(
-                            Display::return_icon('cd.gif', get_lang('CopyExercise')),
+                            Display::return_icon('cd.gif', get_lang('Copy this exercise as a new one')),
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(
-                                        api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset)
+                                        api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES, $charset)
                                     )." ".addslashes($title)."?"."')) return false;",
                                 'href' => 'exercise.php?'.api_get_cidreq(
                                     ).'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
@@ -9211,8 +9211,9 @@ class Exercise
 
                     // Delete
                     $delete = '';
-                    if ($repo->isGranted('DELETE', $exerciseEntity)) {
-                        if (false == $locked) {
+                    if ($repo->isGranted('DELETE', $exerciseEntity) && $allowToEditBaseCourse) {
+                        if (!$locked) {
+                            $deleteUrl = 'exercise.php?'.api_get_cidreq().'&action=delete&sec_token='.$token.'&exerciseId='.$exerciseId;
                             $delete = Display::url(
                                 Display::return_icon(
                                     'delete.png',
@@ -9220,17 +9221,18 @@ class Exercise
                                 ),
                                 '',
                                 [
-                                    'onclick' => "javascript:if(!confirm('".addslashes(
-                                            api_htmlentities(get_lang('Are you sure to delete?'))
-                                        )." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
-                                    'href' => 'exercise.php?'.api_get_cidreq(
-                                        ).'&action=delete&sec_token='.$token.'&exerciseId='.$exerciseId,
+                                    'onclick' => "javascript:if(!confirm('".
+                                        addslashes(api_htmlentities(get_lang('Are you sure to delete?')))." ".
+                                        addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
+                                    'href' => $deleteUrl
                                 ]
                             );
                         } else {
                             $delete = Display::return_icon(
                                 'delete_na.png',
-                                get_lang('ResourceLockedByGradebook')
+                                get_lang(
+                                    'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'
+                                )
                             );
                         }
                     }
@@ -9247,8 +9249,7 @@ class Exercise
                     }
                     $actions .= $delete;
 
-                    // Number of questions
-                    $random_label = null;
+                    // Number of questions.
                     $random = $exerciseEntity->getRandom();
                     if ($random > 0 || -1 == $random) {
                         // if random == -1 means use random questions with all questions
@@ -9299,7 +9300,7 @@ class Exercise
                         $cut_title.'</a>';
 
                     // Link of the exercise.
-                    $currentRow['title'] = $url.' '.$session_img;
+                    $currentRow['title'] = $url.' '.$sessionStar;
                     // This query might be improved later on by ordering by the new "tms" field rather than by exe_id
                     if ($returnData) {
                         $currentRow['title'] = $exercise->getUnformattedTitle();
@@ -9455,7 +9456,7 @@ class Exercise
                     if ($returnData) {
                         $currentRow['id'] = $exercise->id;
                         $currentRow['url'] = $webPath.'exercise/overview.php?'
-                            .api_get_cidreq_params($courseInfo['code'], $sessionId).'&'
+                            .api_get_cidreq_params($courseId, $sessionId).'&'
                             ."$mylpid$mylpitemid&exerciseId={$exercise->id}";
                         $currentRow['name'] = $currentRow[0];
                     }

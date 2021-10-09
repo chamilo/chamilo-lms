@@ -21,4 +21,7 @@ global.textcomplete = textcomplete;
 
 require('chart.js');
 require('./annotation.js');
-require('./translatehtml.js');
+import translateHtml from './translatehtml.js';
+document.addEventListener('DOMContentLoaded', function () {
+  translateHtml();
+});

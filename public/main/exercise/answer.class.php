@@ -816,183 +816,184 @@ class Answer
      * @author Olivier Brouckaert
      *
      * @param Question $newQuestion
-     * @param array    $course_info destination course info (result of the function api_get_course_info() )
+     * @param null     $courseInfo destination course info (result of the function api_get_course_info() )
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function duplicate($newQuestion, $course_info = null)
+    public function duplicate(Question $newQuestion, $courseInfo = null)
     {
         $newQuestionId = $newQuestion->id;
 
-        if (empty($course_info)) {
-            $course_info = $this->course;
+        $questionRepo = Container::getQuestionRepository();
+        $question = $questionRepo->find($newQuestionId);
+
+        if (empty($courseInfo)) {
+            $courseInfo = $this->course;
         }
 
-        $fixed_list = [];
+        $fixedList = [];
         $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         if (MULTIPLE_ANSWER_TRUE_FALSE === self::getQuestionType() ||
             MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === self::getQuestionType()
         ) {
             // Selecting origin options
-            $origin_options = Question::readQuestionOption($this->selectQuestionId(), $this->course['real_id']);
+            $originOptions = Question::readQuestionOption($this->selectQuestionId());
 
-            if (!empty($origin_options)) {
-                foreach ($origin_options as $item) {
-                    $new_option_list[] = $item['iid'];
+            if (!empty($originOptions)) {
+                foreach ($originOptions as $item) {
+                    $newOptionList[] = $item['iid'];
                 }
             }
 
-            $destination_options = Question::readQuestionOption($newQuestionId, $course_info['real_id']);
+            $destinationOptions = Question::readQuestionOption($newQuestionId);
             $i = 0;
-            if (!empty($destination_options)) {
-                foreach ($destination_options as $item) {
-                    $fixed_list[$new_option_list[$i]] = $item['iid'];
+            if (!empty($destinationOptions)) {
+                foreach ($destinationOptions as $item) {
+                    $fixedList[$newOptionList[$i]] = $item['iid'];
                     $i++;
                 }
             }
         }
 
-        $repo = Container::getQuestionRepository();
-
         // if at least one answer
-        if ($this->nbrAnswers) {
-            // inserts new answers into data base
-            $courseId = $course_info['real_id'];
-            $correctAnswers = [];
-            $onlyAnswers = [];
-            $allAnswers = [];
+        if (empty($this->nbrAnswers)) {
+            return;
+        }
+        // inserts new answers into data base
+        $courseId = $courseInfo['real_id'];
+        $correctAnswers = [];
+        $onlyAnswers = [];
+        $allAnswers = [];
 
-            $em = Database::getManager();
+        $em = Database::getManager();
 
-            if (in_array($newQuestion->type, [MATCHING, MATCHING_DRAGGABLE])) {
-                $temp = [];
-                for ($i = 1; $i <= $this->nbrAnswers; $i++) {
-                    $answer = [
-                        'id' => $this->id[$i],
-                        'answer' => $this->answer[$i],
-                        'correct' => $this->correct[$i],
-                        'comment' => $this->comment[$i],
-                        'weighting' => $this->weighting[$i],
-                        'ponderation' => $this->weighting[$i],
-                        'position' => $this->position[$i],
-                        'hotspot_coordinates' => $this->hotspot_coordinates[$i],
-                        'hotspot_type' => $this->hotspot_type[$i],
-                        'destination' => $this->destination[$i],
-                    ];
-                    $temp[$answer['position']] = $answer;
-                    $allAnswers[$this->id[$i]] = $this->answer[$i];
-                }
-
-                foreach ($temp as $answer) {
-                    if ($this->course['id'] != $course_info['id']) {
-                        // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                        $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
-                            $answer['answer'],
-                            $this->course['id'],
-                            $course_info['id']
-                        );
-
-                        $answer['comment'] = DocumentManager::replaceUrlWithNewCourseCode(
-                            $answer['comment'],
-                            $this->course['id'],
-                            $course_info['id']
-                        );
-                    }
-
-                    $question = $repo->find($newQuestionId);
-
-                    $quizAnswer = new CQuizAnswer();
-                    $quizAnswer
-                        ->setQuestion($question)
-                        ->setAnswer($answer['answer'])
-                        ->setCorrect($answer['correct'])
-                        ->setComment($answer['comment'])
-                        ->setPonderation($answer['ponderation'])
-                        ->setPosition($answer['position'])
-                        ->setHotspotCoordinates($answer['hotspot_coordinates'])
-                        ->setHotspotType($answer['hotspot_type'])
-                    ;
-
-                    $em->persist($quizAnswer);
-                    $em->flush();
-
-                    $answerId = $quizAnswer->getIid();
-
-                    if ($answerId) {
-                        $em->persist($quizAnswer);
-                        $em->flush();
-
-                        $correctAnswers[$answerId] = $answer['correct'];
-                        $onlyAnswers[$answerId] = $answer['answer'];
-                    }
-                }
-            } else {
-                for ($i = 1; $i <= $this->nbrAnswers; $i++) {
-                    if ($this->course['id'] != $course_info['id']) {
-                        $this->answer[$i] = DocumentManager::replaceUrlWithNewCourseCode(
-                            $this->answer[$i],
-                            $this->course['id'],
-                            $course_info['id']
-                        );
-                        $this->comment[$i] = DocumentManager::replaceUrlWithNewCourseCode(
-                            $this->comment[$i],
-                            $this->course['id'],
-                            $course_info['id']
-                        );
-                    }
-
-                    $correct = $this->correct[$i];
-                    if (MULTIPLE_ANSWER_TRUE_FALSE == $newQuestion->type ||
-                        MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $newQuestion->type
-                    ) {
-                        $correct = $fixed_list[(int) $correct];
-                    }
-
-                    $question = $repo->find($newQuestionId);
-                    $quizAnswer = new CQuizAnswer();
-                    $quizAnswer
-                        ->setQuestion($question)
-                        ->setAnswer($this->answer[$i])
-                        ->setCorrect($correct)
-                        ->setComment($this->comment[$i])
-                        ->setPonderation($this->weighting[$i])
-                        ->setPosition($this->position[$i])
-                        ->setHotspotCoordinates($this->hotspot_coordinates[$i])
-                        ->setHotspotType($this->hotspot_type[$i])
-                        ->setDestination($this->destination[$i]);
-
-                    $em->persist($quizAnswer);
-                    $em->flush();
-
-                    $answerId = $quizAnswer->getIid();
-
-                    $correctAnswers[$answerId] = $correct;
-                    $onlyAnswers[$answerId] = $this->answer[$i];
-                    $allAnswers[$this->id[$i]] = $this->answer[$i];
-                }
+        if (in_array($newQuestion->type, [MATCHING, MATCHING_DRAGGABLE])) {
+            $temp = [];
+            for ($i = 1; $i <= $this->nbrAnswers; $i++) {
+                $answer = [
+                    'id' => $this->id[$i],
+                    'answer' => $this->answer[$i],
+                    'correct' => $this->correct[$i],
+                    'comment' => $this->comment[$i],
+                    'weighting' => $this->weighting[$i],
+                    'ponderation' => $this->weighting[$i],
+                    'position' => $this->position[$i],
+                    'hotspot_coordinates' => $this->hotspot_coordinates[$i],
+                    'hotspot_type' => $this->hotspot_type[$i],
+                    'destination' => $this->destination[$i],
+                ];
+                $temp[$answer['position']] = $answer;
+                $allAnswers[$this->id[$i]] = $this->answer[$i];
             }
 
-            // Fix correct answers
-            if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
-                $onlyAnswersFlip = array_flip($onlyAnswers);
-                foreach ($correctAnswers as $answerIdItem => $correct_answer) {
-                    $params = [];
-                    if (isset($allAnswers[$correct_answer]) &&
-                        isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
-                    ) {
-                        $params['correct'] = $onlyAnswersFlip[$allAnswers[$correct_answer]];
-                        Database::update(
-                            $tableAnswer,
-                            $params,
-                            [
-                                'iid = ? AND c_id = ? AND question_id = ? ' => [
-                                    $answerIdItem,
-                                    $courseId,
-                                    $newQuestionId,
-                                ],
-                            ]
-                        );
-                    }
+            foreach ($temp as $answer) {
+                if ($this->course['id'] != $courseInfo['id']) {
+                    // check resources inside html from ckeditor tool and copy correct urls into recipient course
+                    $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $answer['answer'],
+                        $this->course['id'],
+                        $courseInfo['id']
+                    );
+
+                    $answer['comment'] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $answer['comment'],
+                        $this->course['id'],
+                        $courseInfo['id']
+                    );
                 }
+
+                $quizAnswer = new CQuizAnswer();
+                $quizAnswer
+                    ->setQuestion($question)
+                    ->setAnswer($answer['answer'])
+                    ->setCorrect($answer['correct'])
+                    ->setComment($answer['comment'])
+                    ->setPonderation($answer['ponderation'])
+                    ->setPosition($answer['position'])
+                    ->setHotspotCoordinates($answer['hotspot_coordinates'])
+                    ->setHotspotType($answer['hotspot_type'])
+                ;
+
+                $em->persist($quizAnswer);
+                $em->flush();
+
+                $answerId = $quizAnswer->getIid();
+
+                if ($answerId) {
+                    $em->persist($quizAnswer);
+                    $em->flush();
+
+                    $correctAnswers[$answerId] = $answer['correct'];
+                    $onlyAnswers[$answerId] = $answer['answer'];
+                }
+            }
+        } else {
+            for ($i = 1; $i <= $this->nbrAnswers; $i++) {
+                if ($this->course['id'] != $courseInfo['id']) {
+                    $this->answer[$i] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $this->answer[$i],
+                        $this->course['id'],
+                        $courseInfo['id']
+                    );
+                    $this->comment[$i] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $this->comment[$i],
+                        $this->course['id'],
+                        $courseInfo['id']
+                    );
+                }
+
+                $correct = $this->correct[$i];
+                if (MULTIPLE_ANSWER_TRUE_FALSE == $newQuestion->type ||
+                    MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $newQuestion->type
+                ) {
+                    $correct = $fixedList[(int) $correct];
+                }
+
+                $quizAnswer = new CQuizAnswer();
+                $quizAnswer
+                    ->setQuestion($question)
+                    ->setAnswer($this->answer[$i])
+                    ->setCorrect($correct)
+                    ->setComment($this->comment[$i])
+                    ->setPonderation($this->weighting[$i])
+                    ->setPosition($this->position[$i])
+                    ->setHotspotCoordinates($this->hotspot_coordinates[$i])
+                    ->setHotspotType($this->hotspot_type[$i])
+                    ->setDestination($this->destination[$i]);
+
+                $em->persist($quizAnswer);
+                $em->flush();
+
+                $answerId = $quizAnswer->getIid();
+
+                $correctAnswers[$answerId] = $correct;
+                $onlyAnswers[$answerId] = $this->answer[$i];
+                $allAnswers[$this->id[$i]] = $this->answer[$i];
+            }
+        }
+
+        // Fix correct answers
+        if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
+            $onlyAnswersFlip = array_flip($onlyAnswers);
+            foreach ($correctAnswers as $answerIdItem => $correctAnswer) {
+                $params = [];
+                if (!isset($allAnswers[$correctAnswer]) || !isset($onlyAnswersFlip[$allAnswers[$correctAnswer]])) {
+                    continue;
+                }
+                $params['correct'] = $onlyAnswersFlip[$allAnswers[$correctAnswer]];
+                Database::update(
+                    $tableAnswer,
+                    $params,
+                    [
+                        'iid = ? AND c_id = ? AND question_id = ? ' => [
+                            $answerIdItem,
+                            $courseId,
+                            $newQuestionId,
+                        ],
+                    ]
+                );
             }
         }
     }

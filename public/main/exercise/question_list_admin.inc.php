@@ -33,42 +33,9 @@ if ($deleteQuestion) {
 }
 $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.(int) $exerciseId;
 ?>
-<div id="dialog-confirm"
-     title="<?php echo get_lang('Please confirm your choice'); ?>"
-     style="display:none;">
-    <p>
-        <?php echo get_lang('Are you sure you want to delete'); ?>
-    </p>
-</div>
 <script>
     $(function () {
         $("#dialog:ui-dialog").dialog("destroy");
-        $("#dialog-confirm").dialog({
-            autoOpen: false,
-            show: "blind",
-            resizable: false,
-            height: 150,
-            modal: false
-        });
-
-        $(".opener").click(function () {
-            var targetUrl = $(this).attr("href");
-            $("#dialog-confirm").dialog({
-                modal: true,
-                buttons: {
-                    "<?php echo get_lang('Yes'); ?>": function () {
-                        location.href = targetUrl;
-                        $(this).dialog("close");
-
-                    },
-                    "<?php echo get_lang('No'); ?>": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-            $("#dialog-confirm").dialog("open");
-            return false;
-        });
 
         var stop = false;
         $("#question_list h3").click(function (event) {
@@ -278,7 +245,9 @@ if (!$inATest) {
                             ]),
                         [
                             'id' => "delete_$id",
-                            'class' => 'opener btn btn-default btn-sm',
+                            'class' => 'delete-swal btn btn-default btn-sm',
+                            'data-title' => get_lang('Are you sure you want to delete'),
+                            'title' => get_lang('Delete'),
                         ]
                     );
                 }

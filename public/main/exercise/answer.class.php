@@ -825,7 +825,9 @@ class Answer
     {
         $newQuestionId = $newQuestion->id;
 
+        $em = Database::getManager();
         $questionRepo = Container::getQuestionRepository();
+        $answerRepo = $em->getRepository(CQuizAnswer::class);
         $question = $questionRepo->find($newQuestionId);
 
         if (empty($courseInfo)) {
@@ -833,7 +835,6 @@ class Answer
         }
 
         $fixedList = [];
-        $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         if (MULTIPLE_ANSWER_TRUE_FALSE === self::getQuestionType() ||
             MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === self::getQuestionType()
@@ -862,12 +863,9 @@ class Answer
             return;
         }
         // inserts new answers into data base
-        $courseId = $courseInfo['real_id'];
         $correctAnswers = [];
         $onlyAnswers = [];
         $allAnswers = [];
-
-        $em = Database::getManager();
 
         if (in_array($newQuestion->type, [MATCHING, MATCHING_DRAGGABLE])) {
             $temp = [];
@@ -978,22 +976,14 @@ class Answer
         if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
             $onlyAnswersFlip = array_flip($onlyAnswers);
             foreach ($correctAnswers as $answerIdItem => $correctAnswer) {
-                $params = [];
                 if (!isset($allAnswers[$correctAnswer]) || !isset($onlyAnswersFlip[$allAnswers[$correctAnswer]])) {
                     continue;
                 }
-                $params['correct'] = $onlyAnswersFlip[$allAnswers[$correctAnswer]];
-                Database::update(
-                    $tableAnswer,
-                    $params,
-                    [
-                        'iid = ? AND c_id = ? AND question_id = ? ' => [
-                            $answerIdItem,
-                            $courseId,
-                            $newQuestionId,
-                        ],
-                    ]
-                );
+                $answer = $answerRepo->find($answerIdItem);
+                $answer->setCorrect((int) $onlyAnswersFlip[$allAnswers[$correctAnswer]]);
+
+                $em->persist($answer);
+                $em->flush();
             }
         }
     }

@@ -23,7 +23,9 @@
 </template>
 
 <script>
+
 import {mapGetters} from "vuex";
+import isEmpty from 'lodash/isEmpty';
 
 export default {
   name: 'Breadcrumb',
@@ -53,7 +55,16 @@ export default {
         'MySessionListUpcoming',
         'MySessionListPast',
         'Home',
+        'MessageList',
       ];
+
+      if (!isEmpty(this.$route.name) && this.$route.name.includes('Message')) {
+        items.push({
+          text: this.$t('Messages'),
+          //disabled: route.path === path || lastItem.path === route.path,
+          href: '/resources/messages'
+        });
+      }
 
       if (list.includes(this.$route.name)) {
         return items;
@@ -97,8 +108,6 @@ export default {
 
       // course is set in documents/List.vue
       if (this.course) {
-        console.log('copursssss');
-        // First node
         items.push({
           text:  this.course.title,
           href: '/course/' + this.course.id + '/home?'+queryParams
@@ -106,14 +115,12 @@ export default {
       }
 
       console.log(items);
-      if (this.resourceNode) {
-        console.log('resourceNode');
-        console.log(this.resourceNode);
-        console.log(this.resourceNode.path);
 
+      const { path, matched } = this.$route;
+      const lastItem = matched[matched.length - 1];
+
+      if (this.resourceNode) {
         const parts = this.resourceNode.path.split('/');
-        const { path, matched } = this.$route;
-        const lastItem = matched[matched.length - 1];
 
         for (let i = 0, len = parts.length; i < len; i += 1) {
           let route = parts[i];
@@ -135,18 +142,16 @@ export default {
             });
           }
         }
+      }
 
-        console.log('legacy');
-        for (let i = 1, len = matched.length; i < len; i += 1) {
-          const route = matched[i];
-          console.log(route.name);
-          if (route.path) {
-            items.push({
-              text: route.name,
-              disabled: route.path === path || lastItem.path === route.path,
-              href: route.path
-            });
-          }
+      for (let i = 1, len = matched.length; i < len; i += 1) {
+        const route = matched[i];
+        if (route.path) {
+          items.push({
+            text: route.name,
+            disabled: route.path === path || lastItem.path === route.path,
+            href: route.path
+          });
         }
       }
 

@@ -2359,14 +2359,13 @@ HTML;
             return '';
         }
 
-        if ($dateTime instanceof \DateTime) {
-            $dateTime = $dateTime->format('Y-m-d H:i:s');
+        if (is_string($dateTime)) {
+            $dateTime = new \DateTime($dateTime, new \DateTimeZone('UTC'));
         }
 
         return self::tip(
             date_to_str_ago($dateTime),
             api_convert_and_format_date($dateTime, DATE_TIME_FORMAT_LONG)
-            //api_get_local_time($dateTime)
         );
     }
 

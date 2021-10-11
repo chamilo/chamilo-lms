@@ -10,7 +10,7 @@
             flat
             dense
             round
-            @click="isSidebarOpen = !isSidebarOpen"
+            @click="toggleSidebar()"
             aria-label="Menu"
             icon="menu"
             class="q-mr-sm"
@@ -143,7 +143,7 @@
     </q-header>
 
     <q-drawer
-        v-model="isSidebarOpen"
+        v-if="isSidebarOpen"
         show-if-above
         bordered
         content-class="bg-white"
@@ -152,7 +152,6 @@
         class="q-mt-sm"
     >
       <q-scroll-area class="fit">
-
         <q-list class="text-grey-8">
           <q-item class="GNL__drawer-item" v-ripple v-for="link in linksAnon" :key="link.text" :to="link.url" clickable>
             <q-item-section avatar>
@@ -231,7 +230,7 @@ import Breadcrumb from '../../components/Breadcrumb.vue';
 import {useRoute} from 'vue-router'
 
 import {useI18n} from 'vue-i18n'
-
+import Cookies from 'js-cookie'
 export default {
   name: "DashboardLayout",
   components: {
@@ -253,6 +252,23 @@ export default {
     const config = ref([]);
     const route = useRoute();
     const {t} = useI18n();
+
+    let open = Cookies.get('open_sidebar');
+
+    if (true === open) {
+      isSidebarOpen.value = true;
+    } else {
+      isSidebarOpen.value = false;
+    }
+
+    function toggleSidebar() {
+      isSidebarOpen.value = !isSidebarOpen.value;
+      if (true === isSidebarOpen.value) {
+        Cookies.set('open_sidebar', true);
+      } else {
+        Cookies.set('open_sidebar', false);
+      }
+    }
 
     if (!isEmpty(window.config)) {
       config.value = window.config;
@@ -294,6 +310,7 @@ export default {
     }
 
     return {
+      toggleSidebar,
       linksAnon,
       linksUser,
       linksAdmin,

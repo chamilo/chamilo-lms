@@ -495,17 +495,17 @@ function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false
     if ('pt' === $isoCode) {
         $isoCode = 'pt-BR';
     }
+    if ('fr_FR' === $isoCode) {
+        $isoCode = 'Fr';
+    }
     $isoCode = ucfirst($isoCode);
     $class = "Westsworld\TimeAgo\Translations\\".$isoCode;
-
     if (class_exists($class)) {
         $language = new $class();
     } else {
         $language = new Westsworld\TimeAgo\Translations\En();
     }
 
-    // Use carbon?
-    //Carbon::instance($this->getCreatedAt())->diffForHumans();
     $timeAgo = new TimeAgo($language);
     if (!($date instanceof DateTime)) {
         $date = api_get_utc_datetime($date, null, true);

@@ -7104,7 +7104,7 @@ msgid "Edit learnpath"
 msgstr "Éditer le nom et/ou la description du parcours"
 
 msgid "Delete"
-msgstr "Supprimer le parcours"
+msgstr "Supprimer"
 
 msgid "do not publish"
 msgstr "Ne pas afficher sur le page d'accueil du cours"

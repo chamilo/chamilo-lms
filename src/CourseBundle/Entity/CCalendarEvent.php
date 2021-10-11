@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateCCalendarEventAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateCCalendarEventAction;
@@ -68,11 +69,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 
 #[ApiFilter(SearchFilter::class, properties: [
-    'startDate' => 'exact',
-    'endDate' => 'exact',
+    //'startDate' => 'exact',
+    //'endDate' => 'exact',
     'allDay' => 'boolean',
 ])]
 
+//#[ApiFilter(RangeFilter::class, properties: ['startDate', 'endDate'])]
 #[ApiFilter(DateFilter::class, strategy: DateFilter::EXCLUDE_NULL)]
 
 class CCalendarEvent extends AbstractResource implements ResourceInterface

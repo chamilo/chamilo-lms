@@ -93,6 +93,7 @@ import CCalendarEventInfo from "../../components/ccalendarevent/Info";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {useI18n} from "vue-i18n";
 import allLocales from '@fullcalendar/core/locales-all';
+import toInteger from "lodash/toInteger";
 
 const servicePrefix = 'CCalendarEvent';
 
@@ -119,7 +120,6 @@ export default {
 
     const store = useStore();
     const route = useRoute();
-    const router = useRouter();
     const currentUser = computed(() => store.getters['security/getUser']);
     const { t, locale } = useI18n();
 
@@ -136,11 +136,21 @@ export default {
       showSessionDialog: false
     });
 
-    async function getCalendarEvents({startStr, endStr}) {
+    const cid = toInteger(route.query.cid);
+    const sid = toInteger(route.query.sid);
+    const gid = toInteger(route.query.gid);
+
+    async function getCalendarEvents({startStr, endStr})  {
       const calendarEvents = await axios.get(ENTRYPOINT + 'c_calendar_events', {
         params: {
-          'startDate[after]': startStr,
-          'endDate[before]': endStr
+          'startDate': startStr,
+          'endDate': endStr,
+//          'startDate[after]': startStr,
+//          'startDate[before]': startStr,
+          //'startDate[between]': startStr+'..'+endStr,
+          'cid': cid,
+          'sid': sid,
+          'gid': gid,
         }
       });
 
@@ -263,6 +273,7 @@ export default {
         dialog.value = true;
       },
       events(info, successCallback, failureCallback) {
+        console.log(info);
         Promise
             .all([getCalendarEvents(info), getSessions(info)])
             .then(values => {

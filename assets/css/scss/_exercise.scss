@@ -62,39 +62,39 @@
   @apply p-4 flex flex-row gap-1;
 }
 
-/** Question unique answer image */
 .question_options {
+  /** Question unique answer image */
   &.type-17 {
     @apply grid sm:grid-cols-3 grid-cols-2 gap-4;
-  }
 
-  .exercise-unique-answer-image {
-    .radio {
-      padding-left: 10px;
-      margin-left: 0;
-    }
-  }
-
-  label {
-    > input {
-      + .thumbnail {
-        @apply p-2;
-        box-sizing: border-box;
-        border: 2px solid #eeeeee;
-
-        p {
-          @apply m-0;
-        }
-
-        img {
-          min-width: 100%;
-        }
+    .exercise-unique-answer-image {
+      .radio {
+        padding-left: 10px;
+        margin-left: 0;
       }
+    }
 
-      &:checked {
+    label {
+      > input {
         + .thumbnail {
-          border: 2px solid #337AB7;
-          box-shadow: 0 4px 18px #C8C8C8;
+          @apply p-2;
+          box-sizing: border-box;
+          border: 2px solid #eeeeee;
+
+          p {
+            @apply m-0;
+          }
+
+          img {
+            min-width: 100%;
+          }
+        }
+
+        &:checked {
+          + .thumbnail {
+            border: 2px solid #337AB7;
+            box-shadow: 0 4px 18px #C8C8C8;
+          }
         }
       }
     }

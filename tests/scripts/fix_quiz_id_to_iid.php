@@ -109,7 +109,53 @@ foreach ($exercises as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
-echo "(".date('Y-m-d H:i:s').") Updated track_e_exercises".PHP_EOL;
+echo "(".date('Y-m-d H:i:s').") Updated track_e_exercises.exe_exo_id".PHP_EOL;
+
+// Split and update the track_e_exercises.data_tracking field, which is a
+// comma-separated list of question IDs the student had to go through in his/her test
+$sqlTemplate = "SELECT id, iid FROM c_quiz_question WHERE c_id = %d AND id = %d";
+$sql = "SELECT exe_id, c_id, exe_exo_id, data_tracking FROM $tblTrackExercises ORDER BY exe_id";
+$res = Database::query($sql);
+$count = Database::num_rows($res);
+echo "  (".date('Y-m-d H:i:s').") Counted $count rows in track_e_exercises".PHP_EOL;
+$k = 0;
+while ($row = Database::fetch_assoc($res)) {
+    if (empty($row['data_tracking'])) {
+        $k++;
+        continue;
+    }
+    $questionsList = explode(',', $row['data_tracking']);
+    if (!empty($questionsList)) {
+        $newDataTracking = '';
+        foreach ($questionsList as $questionId) {
+            $sql = sprintf($sqlTemplate, $row['c_id'], $questionId);
+            $resQ = Database::query($sql);
+            $rowQ = Database::fetch_assoc($resQ);
+            if (!empty($rowQ)) {
+                $indexQ = $row['c_id'].'-'.$questionId;
+                if (isset($questions[$indexQ])) {
+                    // If id = iid, $questions[c_id-id] is not defined anyway
+                    $newDataTracking .= $questions[$indexQ]['iid'].',';
+                } else {
+                    $newDataTracking .= $rowQ['iid'].',';
+                }
+            }
+        }
+        if (!empty($newDataTracking)) {
+            $newDataTracking = substr($newDataTracking, 0, -1);
+        }
+        $sqlU = "UPDATE $tblTrackExercises
+            SET data_tracking = '$newDataTracking'
+            WHERE exe_id = ".$row['exe_id'];
+        $resU = Database::query($sqlU);
+    }
+    $k++;
+    if ($k % 5000 === 0) {
+        echo "  (".date('Y-m-d H:i:s').") $k of $count rows treated".PHP_EOL;
+    }
+}
+echo "(".date('Y-m-d H:i:s').") Updated track_e_exercises.data_tracking".PHP_EOL;
+
 // track_e_attempt, question *AND* answer, question_id and answer fields
 $sqlTemplate = "UPDATE $tblTrackAttempt SET answer = '%s' WHERE c_id = %d AND question_id = %d AND answer = '%s'";
 foreach ($answers as $key => $value) {

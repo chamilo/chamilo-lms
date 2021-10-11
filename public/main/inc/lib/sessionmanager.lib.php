@@ -1680,8 +1680,24 @@ class SessionManager
                     ->setCoachAccessEndDate(null)
                 ;
 
+                $originalCoaches = $sessionEntity->getGeneralCoachesSubscriptions();
+                if ($originalCoaches->count()) {
+                    $deleteCoachList = $originalCoaches->map(function (SessionRelUser $subscription) use ($coachesId) {
+                        if (!in_array($subscription->getUser()->getId(), $coachesId)) {
+                            return $subscription;
+                        }
+                    });
+
+                    if (!empty($deleteCoachList)) {
+                        foreach ($deleteCoachList as $subscription) {
+                            $em->remove($subscription);
+                        }
+                    }
+                }
+
                 foreach ($coachesId as $coachId) {
-                    $sessionEntity->addGeneralCoach(api_get_user_entity($coachId));
+                    $coach = api_get_user_entity($coachId);
+                    $sessionEntity->addGeneralCoach($coach);
                 }
 
                 if (!empty($sessionAdminId)) {

@@ -109,7 +109,7 @@ if ($form->validate()) {
         $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
     }
 
-    $status = isset($params['status']) ? $params['status'] : 0;
+    $status = $params['status'] ?? 0;
 
     $return = SessionManager::edit_session(
         $id,

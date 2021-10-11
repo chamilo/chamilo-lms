@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -138,13 +140,18 @@ if ('add_user' !== $action) {
     if (!empty($languageFilter) && 'placeholder' !== $languageFilter) {
         $conditions['language'] = $languageFilter;
     }
-    $bossList = UserManager::get_user_list($conditions, ['firstname']);
+    $userRepo = Container::getUserRepository();
+    $bossList = $userRepo->findByRole('ROLE_STUDENT_BOSS', '', api_get_current_access_url_id());
+    //$bossList = UserManager::get_user_list($conditions, ['firstname']);
     $tableContent .= '<div class="container-fluid"><div class="row flex-row flex-nowrap">';
     foreach ($bossList as $boss) {
-        $bossId = $boss['id'];
+        if (!empty($languageFilter) && $languageFilter !== $boss->getLocale()) {
+            continue;
+        }
+        $bossId = $boss->getId();
         $tableContent .= '<div class="col-md-1">';
         $tableContent .= '<div class="boss_column">';
-        $tableContent .= '<h5><strong>'.api_get_person_name($boss['firstname'], $boss['lastname']).'</strong></h5>';
+        $tableContent .= '<h5><strong>'.UserManager::formatUserFullName($boss).'</strong></h5>';
         $tableContent .= Statistics::getBossTable($bossId);
 
         $url = api_get_self().'?a=add_user&boss_id='.$bossId;

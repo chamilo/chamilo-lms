@@ -81,24 +81,17 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         $startDate = $request->query->get('startDate');
         $endDate = $request->query->get('endDate');
 
-        $qb->andWhere(
-            "
+        if (!empty($startDate) && !empty($endDate)) {
+            $qb->andWhere(
+                "
                 $alias.startDate BETWEEN :start AND :end OR
                 $alias.endDate BETWEEN :start AND :end 
             "
-        );
-
-        /*OR
-        (
-            $alias.startDate IS NOT NULL AND $alias.endDate IS NOT NULL AND
-    YEAR($alias.startDate) = YEAR($alias.endDate) AND
-    MONTH(':start') BETWEEN MONTH($alias.startDate) AND MONTH($alias.endDate)
-                 )*/
-
-        $qb
-            ->setParameter('start', $startDate)
-            ->setParameter('end', $endDate)
-        ;
+            );
+            $qb
+                ->setParameter('start', $startDate)
+                ->setParameter('end', $endDate);
+        }
 
         if (empty($courseId)) {
             $qb

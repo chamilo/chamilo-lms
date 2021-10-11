@@ -90,7 +90,8 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             );
             $qb
                 ->setParameter('start', $startDate)
-                ->setParameter('end', $endDate);
+                ->setParameter('end', $endDate)
+            ;
         }
 
         if (empty($courseId)) {

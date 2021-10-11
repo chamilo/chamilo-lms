@@ -37,7 +37,6 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
 
     /*public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
     {
-        error_log('applyToItem');
         $this->addWhere($queryBuilder, $resourceClass);
     }*/
 

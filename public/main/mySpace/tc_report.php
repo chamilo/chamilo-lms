@@ -17,8 +17,8 @@ if (!$allowToTrack) {
 }
 
 $userInfo = [];
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
-$languageFilter = isset($_REQUEST['language']) ? $_REQUEST['language'] : '';
+$action = $_REQUEST['a'] ?? null;
+$languageFilter = $_REQUEST['language'] ?? '';
 $content = '';
 
 switch ($action) {
@@ -27,7 +27,7 @@ switch ($action) {
         $bossInfo = api_get_user_info($bossId);
 
         $form = new FormValidator('add_user');
-        $form->addHeader(get_lang('AddUser').' '.$bossInfo['complete_name']);
+        $form->addHeader(get_lang('Add user').' '.$bossInfo['complete_name']);
         $form->addHidden('a', 'add_user');
         $form->addHidden('boss_id', $bossId);
         $form->addSelectAjax(
@@ -94,7 +94,7 @@ if ('add_user' !== $action) {
     $form->addSelectLanguage(
         'language',
         get_lang('Language'),
-        ['placeholder' => get_lang('SelectAnOption')]
+        ['placeholder' => get_lang('Select an option')]
     );
     $form->addButtonSearch(get_lang('Search'));
 
@@ -150,7 +150,7 @@ if ('add_user' !== $action) {
         $url = api_get_self().'?a=add_user&boss_id='.$bossId;
 
         $tableContent .= '<div class="add_user">';
-        $tableContent .= '<strong>'.get_lang('AddStudent').'</strong>';
+        $tableContent .= '<strong>'.get_lang('Add student').'</strong>';
         $addUserForm = new FormValidator(
             'add_user_to_'.$bossId,
             'post',

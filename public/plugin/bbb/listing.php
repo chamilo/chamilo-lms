@@ -195,7 +195,7 @@ if ($conferenceManager && $allowToEdit) {
                 $meetingId = $meetingData['id'];
 
                 // If creator -> update
-                if ($meetingData['creator_id'] == api_get_user_id()) {
+                if ($meetingData['user_id'] == api_get_user_id()) {
                     $pass = $bbb->getModMeetingPassword($courseCode);
 
                     $meetingBBB = $bbb->getMeetingInfo(

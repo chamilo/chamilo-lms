@@ -3,8 +3,10 @@
         v-for="session in sessions"
         :key="session.id"
     >
-      <div v-if="session.category">
-        <h3>{{ session.category.name }}</h3>
+      <div v-if="session.category"
+           class="text-xl"
+      >
+        <v-icon icon="mdi-folder" /> {{ session.category.name }}
       </div>
 
       <SessionCard

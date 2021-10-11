@@ -22,7 +22,7 @@ if (!$allowToTrack) {
 }
 
 $userInfo = [];
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$action = $_REQUEST['a'] ?? null;
 $content = '';
 switch ($action) {
     case 'add_user':
@@ -57,7 +57,7 @@ echo '<style>
 $form = new FormValidator('users', 'get', api_get_self().'?a=users_active');
 $form->addDateRangePicker(
     'daterange',
-    get_lang('DateRange'),
+    get_lang('Date range'),
     true,
     ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
 );

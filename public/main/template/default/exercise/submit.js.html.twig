@@ -41,6 +41,14 @@ var DraggableAnswer = {
             item
                 .appendTo(DraggableAnswer.gallery.filter('[data-question="' + questionId + '"]'))
                 .fadeIn();
+
+            DraggableAnswer.trash.children('.gallery').each(function () {
+                var $el = $(this);
+
+                if ($el.children().length === 0) {
+                    $el.remove();
+                }
+            });
         });
 
         $('#' + originSelectId + ' option').prop('selected', false);

@@ -139,14 +139,10 @@ class ExerciseLib
                 case MATCHING_DRAGGABLE:
                     if (DRAGGABLE == $answerType) {
                         $isVertical = 'v' === $objQuestionTmp->extra;
-                        $s .= '
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p class="small">'.get_lang('DraggableQuestionIntro').'</p>
-                                    <ul class="exercise-draggable-answer list-unstyled '
-                            .($isVertical ? '' : 'list-inline').'" id="question-'.$questionId.'" data-question="'
-                            .$questionId.'">
-                        ';
+                        $s .= '<div><p class="small">'
+                            .get_lang('Sort the following options from the list as you see fit by dragging them to the lower areas. You can put them back in this area to modify your answer.')
+                            .'</p><ul class="exercise-draggable-answer '.($isVertical ? '' : 'list-inline')
+                            .'" id="question-'.$questionId.'" data-question="'.$questionId.'">';
                     } else {
                         $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
                                <table class="table table-hover table-striped data_table">';
@@ -1377,33 +1373,22 @@ HTML;
 
             if (DRAGGABLE == $answerType) {
                 $isVertical = 'v' == $objQuestionTmp->extra;
-                $s .= "
-                           </ul>
-                        </div><!-- .col-md-12 -->
-                    </div><!-- .row -->
-                ";
+                $s .= "</ul></div>";
                 $counterAnswer = 1;
-                $s .= $isVertical ? '' : '<div class="row">';
+                $s .= '<div class="question-answer__items--'.($isVertical ? 'vertical' : 'horizontal').'">';
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $windowId = $questionId.'_'.$counterAnswer;
                     if ($answerCorrect) {
-                        $s .= $isVertical ? '<div class="row">' : '';
-                        $s .= '
-                            <div class="'.($isVertical ? 'col-md-12' : 'col-xs-12 col-sm-4 col-md-3 col-lg-2').'">
-                                <div class="droppable-item">
-                                    <span class="number">'.$counterAnswer.'.</span>
-                                    <div id="drop_'.$windowId.'" class="droppable">
-                                    </div>
-                                 </div>
-                            </div>
-                        ';
-                        $s .= $isVertical ? '</div>' : '';
+                        $s .= '<div class="droppable-item">
+                            <span class="number">'.$counterAnswer.'</span>
+                            <div id="drop_'.$windowId.'" class="droppable"></div>
+                            </div>';
                         $counterAnswer++;
                     }
                 }
 
-                $s .= $isVertical ? '' : '</div>'; // row
+                $s .= '</div>';
 //                $s .= '</div>';
             }
 

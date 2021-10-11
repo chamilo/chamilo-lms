@@ -1,5 +1,9 @@
 // Exercise CSS
 
+.main-question {
+  @apply mb-4;
+}
+
 .question_menu {
   list-style: none;
   margin: 0;
@@ -95,6 +99,57 @@
             border: 2px solid #337AB7;
             box-shadow: 0 4px 18px #C8C8C8;
           }
+        }
+      }
+    }
+  }
+
+  /* Question sequence ordering */
+  &.type-18 {
+    .exercise-draggable-answer {
+      @apply border-dashed border-4 p-4 mb-3 flex flex-row flex-wrap gap-4;
+
+      &:empty {
+        min-height: 4rem;
+      }
+    }
+
+    .exercise-draggable-answer-option {
+      @apply border border-gray-400 rounded-sm p-2 cursor-move bg-gray-100;
+    }
+
+    .question-answer__items {
+      &--horizontal,
+      &--vertical {
+        @apply flex gap-4;
+      }
+
+      &--horizontal {
+        @apply flex-row flex-wrap;
+      }
+      &--vertical {
+        @apply flex-col;
+      }
+    }
+
+    .droppable-item {
+      @apply p-2 bg-indigo-200;
+
+      &.list-inline {
+        @apply text-center align-middle;
+      }
+
+      span.number {
+        @apply font-bold;
+      }
+
+      .droppable {
+        @apply p-2;
+
+        &:empty {
+          @apply bg-indigo-300 rounded-sm;
+          min-height: 4rem;
+          min-width: 6rem;
         }
       }
     }

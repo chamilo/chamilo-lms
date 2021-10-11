@@ -23,7 +23,9 @@
 </template>
 
 <script>
+
 import {mapGetters} from "vuex";
+import isEmpty from 'lodash/isEmpty';
 
 export default {
   name: 'Breadcrumb',
@@ -56,7 +58,7 @@ export default {
         'MessageList',
       ];
 
-      if (this.$route.name.includes('Message')) {
+      if (!isEmpty(this.$route.name) && this.$route.name.includes('Message')) {
         items.push({
           text: this.$t('Messages'),
           //disabled: route.path === path || lastItem.path === route.path,
@@ -106,7 +108,6 @@ export default {
 
       // course is set in documents/List.vue
       if (this.course) {
-        // First node
         items.push({
           text:  this.course.title,
           href: '/course/' + this.course.id + '/home?'+queryParams
@@ -119,10 +120,6 @@ export default {
       const lastItem = matched[matched.length - 1];
 
       if (this.resourceNode) {
-        console.log('resourceNode');
-        console.log(this.resourceNode);
-        console.log(this.resourceNode.path);
-
         const parts = this.resourceNode.path.split('/');
 
         for (let i = 0, len = parts.length; i < len; i += 1) {
@@ -149,7 +146,6 @@ export default {
 
       for (let i = 1, len = matched.length; i < len; i += 1) {
         const route = matched[i];
-        console.log(route.name);
         if (route.path) {
           items.push({
             text: route.name,

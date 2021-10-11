@@ -77,7 +77,9 @@
         <tr>
             <td>{{ 'Career' | trans}}</td>
             <td>
-                <a href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ session.promotion.career.id }}&submit=&_qf__filter_form=">
+                <a
+                    href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ session.promotion.career.id }}&submit=&_qf__filter_form="
+                >
                     {{ session.promotion.career.name }}
                 </a>
             </td>
@@ -114,7 +116,9 @@
         <tr>
             <td>{{ 'Scheduled announcements' | trans }}</td>
             <td>
-                <a class="btn btn-default" href="{{ _p.web_main }}session/scheduled_announcement.php?session_id={{ session.id }}">
+                <a class="btn btn-default"
+                   href="{{ _p.web_main }}session/scheduled_announcement.php?session_id={{ session.id }}"
+                >
                     {{ 'Edit' | trans }}
                 </a>
             </td>
@@ -124,8 +128,8 @@
 
 {{ course_list }}
 {{ user_list }}
-
 {{ requirements }}
 {{ dependencies }}
+
 {% endautoescape %}
 {% endblock %}

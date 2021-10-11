@@ -1688,9 +1688,11 @@ class SessionManager
                         }
                     });
 
-                    if (!empty($deleteCoachList)) {
+                    if ($deleteCoachList->count() > 0) {
                         foreach ($deleteCoachList as $subscription) {
-                            $em->remove($subscription);
+                            if (null !== $subscription) {
+                                $em->remove($subscription);
+                            }
                         }
                     }
                 }

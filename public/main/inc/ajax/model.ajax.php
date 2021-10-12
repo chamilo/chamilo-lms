@@ -1854,6 +1854,7 @@ switch ($action) {
         if (!empty($sessions)) {
             $pdfIcon = Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL);
             foreach ($sessions as $session) {
+                $sessionEntity = api_get_session_entity($session['id']);
                 if (api_drh_can_access_all_session_content()) {
                     $count_courses_in_session = SessionManager::get_course_list_by_session_id(
                         $session['id'],
@@ -1876,11 +1877,7 @@ switch ($action) {
                     true
                 );
 
-                $session['display_start_date'] = '';
-                $session['display_end_date'] = '';
-                $session['coach_access_start_date'] = '';
-                $session['coach_access_end_date'] = '';
-                $dateData = SessionManager::parseSessionDates($session, true);
+                $dateData = SessionManager::parseSessionDates($sessionEntity, true);
                 $dateToString = $dateData['access'];
 
                 $detailButtons = [];

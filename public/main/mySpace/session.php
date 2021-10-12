@@ -377,7 +377,7 @@ if (api_is_platform_admin(true, true)) {
     $toolbar = Display::toolbarAction('toolbar-session', [$actionsLeft, $actionsRight]);
     echo $toolbar;
 
-    echo Display::page_header(get_lang('YourCourse sessionsList'));
+    echo Display::page_header(get_lang('Your sessions'));
 } elseif (api_is_teacher()) {
     $actionsRight = Display::url(
         Display::return_icon('clock.png', get_lang('Teachers time report by session'), [], ICON_SIZE_MEDIUM),
@@ -387,7 +387,7 @@ if (api_is_platform_admin(true, true)) {
     $toolbar = Display::toolbarAction('toolbar-session', ['', $actionsRight]);
     echo $toolbar;
 
-    echo Display::page_header(get_lang('YourCourse sessionsList'));
+    echo Display::page_header(get_lang('Your sessions'));
 } else {
     $a_sessions = Tracking::get_sessions_coached_by_user($id_coach);
 }

@@ -813,25 +813,13 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $item = $this->getItemByProduct(
-            $session->getId(),
-            self::PRODUCT_TYPE_SESSION
-        );
+        $item = $this->getItemByProduct($session->getId(), self::PRODUCT_TYPE_SESSION);
 
         if (empty($item)) {
             return [];
         }
 
-        $sessionDates = SessionManager::parseSessionDates(
-            [
-                'display_start_date' => $session->getDisplayStartDate(),
-                'display_end_date' => $session->getDisplayEndDate(),
-                'access_start_date' => $session->getAccessStartDate(),
-                'access_end_date' => $session->getAccessEndDate(),
-                'coach_access_start_date' => $session->getCoachAccessStartDate(),
-                'coach_access_end_date' => $session->getCoachAccessEndDate(),
-            ]
-        );
+        $sessionDates = SessionManager::parseSessionDates($session);
 
         $globalParameters = $this->getGlobalParameters();
         $sessionInfo = [

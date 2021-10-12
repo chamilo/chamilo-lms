@@ -6429,6 +6429,9 @@ class Tracking
         Course $course,
         SessionEntity $session = null
     ) {
+        // @todo
+        return null;
+
         return Database::getManager()
             ->createQuery("
                 SELECT csp

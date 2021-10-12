@@ -1050,11 +1050,11 @@ if ($export_csv) {
     array_unshift($csvContentInSession, $csv_headers);
 
     if ($sessionId) {
-        $sessionInfo = api_get_session_info($sessionId);
-        $sessionDates = SessionManager::parseSessionDates($sessionInfo);
+        $session = api_get_session_entity($sessionId);
+        $sessionDates = SessionManager::parseSessionDates($session);
 
         array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
-        array_unshift($csvContentInSession, [get_lang('Session name'), $sessionInfo['name']]);
+        array_unshift($csvContentInSession, [get_lang('Session name'), $session->getName()]);
     }
 
     Export::arrayToCsv($csvContentInSession, 'reporting_student_list');

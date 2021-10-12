@@ -176,6 +176,7 @@ import axios from "axios";
 import {ENTRYPOINT} from '../../config/entrypoint';
 import {computed, onMounted, reactive, toRefs} from 'vue'
 import {mapGetters, useStore} from "vuex";
+import translateHtml from '../../../js/translatehtml.js';
 
 export default {
   name: 'Home',
@@ -235,6 +236,7 @@ export default {
           if (!isEmpty(response)) {
             // first item
             state.intro = response[0];
+            translateHtml();
           }
         });
 
@@ -250,6 +252,7 @@ export default {
             if (!isEmpty(response)) {
               state.createInSession = false;
               state.intro = response[0];
+              translateHtml();
             }
           });
         }

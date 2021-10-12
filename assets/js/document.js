@@ -1,3 +1,6 @@
 /** This JS  will be included when loading an HTML in the Document tool */
 
-require('./translatehtml.js');
+import translateHtml from './translatehtml.js';
+document.addEventListener('DOMContentLoaded', function () {
+  translateHtml();
+});

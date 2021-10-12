@@ -9085,8 +9085,7 @@ class Exercise
                                             addslashes(
                                                 api_htmlentities(
                                                     get_lang('Are you sure to delete results'),
-                                                    ENT_QUOTES,
-                                                    $charset
+                                                    ENT_QUOTES
                                                 )
                                             )." ".addslashes($title)."?"."')) return false;",
                                         'href' => 'exercise.php?'.api_get_cidreq(

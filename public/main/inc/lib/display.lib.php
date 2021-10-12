@@ -462,8 +462,7 @@ class Display
         if ($filter) {
             $message = api_htmlentities(
                 $message,
-                ENT_QUOTES,
-                api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding()
+                ENT_QUOTES
             );
         }
 

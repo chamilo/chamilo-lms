@@ -57,7 +57,7 @@ class OpenofficeText extends OpenofficeDocument
         // The file is utf8 encoded and it seems to make problems with special quotes.
         // Then we htmlentities that, we replace these quotes and html_entity_decode that in good charset.
         $charset = api_get_system_encoding();
-        $content = api_htmlentities($content, ENT_COMPAT, $this->original_charset);
+        $content = api_htmlentities($content, ENT_COMPAT);
         $content = str_replace('&rsquo;', '\'', $content);
         $content = api_convert_encoding($content, $charset, $this->original_charset);
         $content = str_replace($this->original_charset, $charset, $content);

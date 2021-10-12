@@ -40,7 +40,7 @@ class OpenofficePresentation extends OpenofficeDocument
             list($slide_name, $file_name, $slide_body) = explode('||', $file);
             // Filename is utf8 encoded, but when we decode, some chars are not translated (like quote &rsquo;).
             // so we remove these chars by translating it in htmlentities and the reconvert it in want charset.
-            $slide_name = api_htmlentities($slide_name, ENT_COMPAT, $this->original_charset);
+            $slide_name = api_htmlentities($slide_name, ENT_COMPAT);
             $slide_name = str_replace('&rsquo;', '\'', $slide_name);
             $slide_name = api_convert_encoding($slide_name, api_get_system_encoding(), $this->original_charset);
             $slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());
@@ -247,7 +247,7 @@ class OpenofficePresentation extends OpenofficeDocument
         foreach ($files as $file) {
             // '||' is used as separator between slide name (with accents) and file name (without accents).
             list($slide_name, $file_name) = explode('||', $file);
-            $slide_name = api_htmlentities($slide_name, ENT_COMPAT, $this->original_charset);
+            $slide_name = api_htmlentities($slide_name, ENT_COMPAT);
             $slide_name = str_replace('&rsquo;', '\'', $slide_name);
             $slide_name = api_convert_encoding($slide_name, api_get_system_encoding(), $this->original_charset);
             $slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());

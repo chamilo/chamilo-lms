@@ -459,7 +459,7 @@ class Security
                 if (!empty($list)) {
                     foreach ($list as $term) {
                         $term = str_replace(["\r\n", "\r", "\n", "\t"], '', $term);
-                        $html_entities_value = api_htmlentities($term, ENT_QUOTES, api_get_system_encoding());
+                        $html_entities_value = api_htmlentities($term, ENT_QUOTES);
                         $bad_terms[] = $term;
                         if ($term != $html_entities_value) {
                             $bad_terms[] = $html_entities_value;

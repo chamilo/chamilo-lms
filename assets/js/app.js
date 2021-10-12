@@ -18,6 +18,7 @@ const { DateTime } = require("luxon");
 window.luxon = global.luxon = DateTime;
 import 'select2/dist/js/select2.full.min';
 import 'select2/dist/css/select2.min.css';
+import 'moment';
 
 // Gets HTML content from tinymce
 window.getContentFromEditor = function (id) {
@@ -53,9 +54,16 @@ require('webpack-jquery-ui/css');
 
 require('./vendor');
 import './main';
-import('bootstrap-daterangepicker');
+
+// Date time settings.
+import moment from 'moment'
+global.moment = moment;
+moment.locale(locale);
+//$.datepicker.setDefaults($.datepicker.regional[locale]);
+//$.datepicker.regional["local"] = $.datepicker.regional[locale];
+
 import('qtip2');
-//require('bootstrap-daterangepicker/daterangepicker.js');
+require('bootstrap-daterangepicker/daterangepicker.js');
 
 require('blueimp-file-upload');
 require('blueimp-load-image');
@@ -279,11 +287,6 @@ $(function () {
       }
     });
   });
-
-  // Date time settings.
-  //moment.locale(locale);
-  //$.datepicker.setDefaults($.datepicker.regional[locale]);
-  //$.datepicker.regional["local"] = $.datepicker.regional[locale];
 
   /**
      * Advanced options

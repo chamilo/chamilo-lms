@@ -225,12 +225,13 @@
 import {mapGetters, useStore} from "vuex";
 import isEmpty from "lodash/isEmpty";
 import useState from "../../hooks/useState";
-import {computed, ref, toRefs} from "vue";
+import {computed, onMounted, ref, toRefs} from "vue";
 import Breadcrumb from '../../components/Breadcrumb.vue';
 import {useRoute} from 'vue-router'
 
 import {useI18n} from 'vue-i18n'
 import Cookies from 'js-cookie'
+import toInteger from "lodash/toInteger";
 export default {
   name: "DashboardLayout",
   components: {
@@ -253,20 +254,22 @@ export default {
     const route = useRoute();
     const {t} = useI18n();
 
-    let open = Cookies.get('open_sidebar');
+    onMounted(() => {
+      let open = toInteger(Cookies.get('open_sidebar'));
 
-    if (true === open) {
-      isSidebarOpen.value = true;
-    } else {
-      isSidebarOpen.value = false;
-    }
+      if (1 === open) {
+        isSidebarOpen.value = true;
+      } else {
+        isSidebarOpen.value = false;
+      }
+    });
 
     function toggleSidebar() {
       isSidebarOpen.value = !isSidebarOpen.value;
       if (true === isSidebarOpen.value) {
-        Cookies.set('open_sidebar', true);
+        Cookies.set('open_sidebar', 1);
       } else {
-        Cookies.set('open_sidebar', false);
+        Cookies.set('open_sidebar', 0);
       }
     }
 

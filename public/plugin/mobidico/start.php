@@ -6,7 +6,7 @@ $course_plugin = 'mobidico'; //needed in order to load the plugin lang variables
 
 $plugin = Mobidico::create();
 
-if ($plugin->get('tool_enable') !== 'true') {
+if ('true' !== $plugin->get('tool_enable')) {
     api_not_allowed(true);
 }
 
@@ -33,10 +33,10 @@ try {
     );
 
     $status = $response->getStatusCode();
-    if ($status === 200) {
+    if (200 === $status) {
         $result = json_decode($response->getBody());
         if ($result && isset($result->status)) {
-            if ($result->status == 'OK') {
+            if ('OK' == $result->status) {
                 $redirect = $url.'/app/index.html?session='.$result->session;
             } else {
                 api_not_allowed(true);

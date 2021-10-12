@@ -260,31 +260,10 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
-                    /*
-                    $fileDir = $fileDirStored = '';
-                    switch ($this->type) {
-                        case 'course':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
-                            $fileDirStored = "courses/";
-                            break;
-                        case 'session':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
-                            $fileDirStored = "sessions/";
-                            break;
-                        case 'user':
-                            $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
-                            $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
-                            break;
-                        case 'work':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
-                            $fileDirStored = 'work/';
-                            break;
-                    }*/
                     $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 === (int) $value['error']) {
                         $repo = Container::getAssetRepository();
-                        $asset = new Asset();
-                        $asset
+                        $asset = (new Asset())
                             ->setCategory(Asset::EXTRA_FIELD)
                             ->setTitle($fileName)
                         ;
@@ -294,15 +273,16 @@ class ExtraFieldValue extends Model
                         }
                         $asset = $repo->createFromRequest($asset, $value);
                         if ($asset) {
-                            $assetId = $asset->getId();
-                            $newParams = [
-                                'item_id' => $params['item_id'],
-                                'field_id' => $extraFieldInfo['id'],
-                                'value' => $assetId,
-                                'asset_id' => $assetId,
-                                'comment' => $comment,
-                            ];
-                            $this->save($newParams);
+                            $field = Container::getExtraFieldRepository()->find($extraFieldInfo['id']);
+                            $extraFieldValues = (new ExtraFieldValues())
+                                ->setItemId((int) $params['item_id'])
+                                ->setField($field)
+                                ->setValue(1)
+                                ->setAsset($asset)
+                                ->setComment($comment ?? '')
+                            ;
+                            $em->persist($extraFieldValues);
+                            $em->flush();
                         }
                     }
                     break;
@@ -313,8 +293,7 @@ class ExtraFieldValue extends Model
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
                         $mimeType = mime_content_type($value['tmp_name']);
                         $file = new UploadedFile($value['tmp_name'], $fileName, $mimeType, null, true);
-                        $asset = new Asset();
-                        $asset
+                        $asset = (new Asset())
                             ->setCategory(Asset::EXTRA_FIELD)
                             ->setTitle($fileName)
                             ->setFile($file)
@@ -324,17 +303,23 @@ class ExtraFieldValue extends Model
                         $assetId = $asset->getId();
 
                         if ($assetId) {
-                            $new_params = [
+                            /*$new_params = [
                                 'item_id' => $params['item_id'],
                                 'field_id' => $extraFieldInfo['id'],
                                 'value' => $assetId,
                                 'asset_id' => $assetId,
-                            ];
-                            if ('session' !== $this->type && 'course' !== $this->type) {
-                                $new_params['comment'] = $comment;
-                            }
-
-                            $this->save($new_params);
+                            ];*/
+                            $field = Container::getExtraFieldRepository()->find($extraFieldInfo['id']);
+                            $extraFieldValues = (new ExtraFieldValues())
+                                ->setItemId((int) $params['item_id'])
+                                ->setField($field)
+                                ->setValue(1)
+                                ->setAsset($asset)
+                                ->setComment($comment ?? '')
+                            ;
+                            $em->persist($extraFieldValues);
+                            $em->flush();
+                            //$this->save($new_params);
                         }
                     }
                     break;

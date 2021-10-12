@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Carbon\Carbon;
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;

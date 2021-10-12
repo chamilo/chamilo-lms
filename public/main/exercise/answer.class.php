@@ -815,8 +815,7 @@ class Answer
      *
      * @author Olivier Brouckaert
      *
-     * @param Question $newQuestion
-     * @param null     $courseInfo destination course info (result of the function api_get_course_info() )
+     * @param null $courseInfo destination course info (result of the function api_get_course_info() )
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException

@@ -8974,7 +8974,6 @@ class Exercise
                         );
                     }
 
-
                     $style = '';
                     if (0 === $exerciseEntity->getActive() || false === $visibility) {
                         $style = 'color:grey';
@@ -9224,7 +9223,7 @@ class Exercise
                                     'onclick' => "javascript:if(!confirm('".
                                         addslashes(api_htmlentities(get_lang('Are you sure to delete?')))." ".
                                         addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
-                                    'href' => $deleteUrl
+                                    'href' => $deleteUrl,
                                 ]
                             );
                         } else {

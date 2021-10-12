@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Class Mobidico.
- */
 class Mobidico extends Plugin
 {
     public $isCoursePlugin = true;
@@ -10,9 +7,6 @@ class Mobidico extends Plugin
     // When creating a new course this settings are added to the course
     public $course_settings = [];
 
-    /**
-     * Constructor.
-     */
     protected function __construct()
     {
         parent::__construct(
@@ -36,16 +30,10 @@ class Mobidico extends Plugin
         return $result ? $result : $result = new self();
     }
 
-    /**
-     * Install.
-     */
     public function install()
     {
     }
 
-    /**
-     * Uninstall.
-     */
     public function uninstall()
     {
     }

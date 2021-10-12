@@ -332,7 +332,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
     echo '<a
         href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.
         api_get_cidreq().'&action=delete&survey_id='.$survey_id.'&question_id='.$questionId.'"
-        onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurveyQuestion").'?', ENT_QUOTES, $charset)).'\')) return false;">'.
+        onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurveyQuestion").'?', ENT_QUOTES)).'\')) return false;">'.
         Display::return_icon('delete.png', get_lang('Delete')).'</a>';
     if (3 != $survey_data['survey_type']) {
         if ($question_counter > 1) {

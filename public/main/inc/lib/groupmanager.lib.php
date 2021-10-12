@@ -2117,7 +2117,7 @@ class GroupManager
         $url = api_get_path(WEB_CODE_PATH).'group/';
 
         $confirmMessage = addslashes(
-            api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset)
+            api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)
         );
 
         foreach ($groupList as $group) {

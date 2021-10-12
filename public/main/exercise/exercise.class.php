@@ -9063,7 +9063,7 @@ class Exercise
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(
-                                        api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES, $charset)
+                                        api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES)
                                     )." ".addslashes($title)."?"."')) return false;",
                                 'href' => 'exercise.php?'.api_get_cidreq(
                                     ).'&action=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
@@ -9200,7 +9200,7 @@ class Exercise
                             '',
                             [
                                 'onclick' => "javascript:if(!confirm('".addslashes(
-                                        api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES, $charset)
+                                        api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES)
                                     )." ".addslashes($title)."?"."')) return false;",
                                 'href' => 'exercise.php?'.api_get_cidreq(
                                     ).'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,

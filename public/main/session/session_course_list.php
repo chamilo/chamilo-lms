@@ -62,7 +62,7 @@ $sql = "SELECT c.id, c.code, c.title, nbr_users
 		LIMIT $from,".($limit + 1);
 $result = Database::query($sql);
 $Courses = Database::store_result($result);
-$tool_name = api_htmlentities($session_name, ENT_QUOTES, $charset).' : '.get_lang('Courses in this session');
+$tool_name = api_htmlentities($session_name, ENT_QUOTES).' : '.get_lang('Courses in this session');
 
 $interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('Session list')];
 $interbreadcrumb[] = ['url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']), "name" => get_lang('Session overview')];
@@ -83,13 +83,13 @@ $tableCourses = [];
 foreach ($Courses as $key => $enreg) {
     $course = [];
     $course[] = '<input type="checkbox" name="idChecked[]" value="'.$enreg['id'].'">';
-    $course[] = api_htmlentities($enreg['title'], ENT_QUOTES, $charset);
+    $course[] = api_htmlentities($enreg['title'], ENT_QUOTES);
     $course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['code'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
     $course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$enreg['code'].'/?id_session='.$id_session.'">'.
         Display::return_icon('course_home.png', get_lang('Course')).'</a>
 			<a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['code'].'">'.
         Display::return_icon('edit.png', get_lang('Edit')).'</a>
-			<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset)).'\')) return false;">'.
+			<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES)).'\')) return false;">'.
         Display::return_icon('delete.png', get_lang('Delete')).'</a>';
     $tableCourses[] = $course;
 }

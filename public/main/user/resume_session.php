@@ -250,7 +250,7 @@ if ('true' === $allowTutors) {
             if (!empty($user['user_id'])) {
                 $user_link = '<a
                     href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.
-                    api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']), ENT_QUOTES, $charset).' ('.$user['username'].')</a>';
+                    api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']), ENT_QUOTES).' ('.$user['username'].')</a>';
             }
 
             $link_to_add_user_in_url = '';

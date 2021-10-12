@@ -87,7 +87,12 @@ var MatchingDraggable = {
     curviness: 0,
     connectorType: 'Straight',
     initialized: false,
+    instances: {},
     init: function (questionId) {
+        var instance = jsPlumb.getInstance();
+
+        MatchingDraggable.instances[questionId] = instance;
+
         var windowQuestionSelector = '.window' + questionId + '_question',
             countConnections = $(windowQuestionSelector).length,
             colorArray = [],
@@ -101,25 +106,17 @@ var MatchingDraggable = {
             colorArrayDestination = $.xcolor.analogous("#51a351", 10);
         }
 
-        jsPlumb.importDefaults({
-            DragOptions: {cursor: 'pointer', zIndex: 2000},
-            PaintStyle: {strokeStyle: '#000'},
-            EndpointStyle: {strokeStyle: '#316b31'},
-            Endpoint: 'Rectangle',
-            Anchors: ['TopCenter', 'TopCenter']
-        });
+        var scope = questionId + "_scope";
 
         var exampleDropOptions = {
-            tolerance: 'touch',
-            hoverClass: 'dropHover',
-            activeClass: 'dragActive'
+            tolerance: 'touch'
         };
 
         var destinationEndPoint = {
             endpoint: ["Dot", {radius: 15}],
-            paintStyle: {fillStyle: MatchingDraggable.colorDestination},
+            paintStyle: {fill: MatchingDraggable.colorDestination},
             isSource: false,
-            connectorStyle: {strokeStyle: MatchingDraggable.colorDestination, lineWidth: 8},
+            connectorStyle: {stroke: MatchingDraggable.colorDestination, strokeWidth: 8},
             connector: [
                 MatchingDraggable.connectorType,
                 {curviness: MatchingDraggable.curviness}
@@ -127,9 +124,10 @@ var MatchingDraggable = {
             maxConnections: 1000,
             isTarget: true,
             dropOptions: exampleDropOptions,
+            scope: scope,
             beforeDrop: function (params) {
-                jsPlumb.select({source: params.sourceId}).each(function (connection) {
-                    jsPlumb.detach(connection);
+                instance.select({source: params.sourceId}).each(function (connection) {
+                    instance.detach(connection);
                 });
 
                 var selectId = params.sourceId + "_select";
@@ -146,65 +144,53 @@ var MatchingDraggable = {
             }
         };
 
-        var count = 0;
-        var sourceDestinationArray = [];
+        var sourceEndPoint = {
+            endpoint: [
+                "Dot",
+                {radius: 15}
+            ],
+            paintStyle: {
+                fill: MatchingDraggable.colorDestination
+            },
+            isSource: true,
+            connectorStyle: {
+                stroke: "#8a8888",
+                strokeWidth: 8
+            },
+            connector: [
+                MatchingDraggable.connectorType,
+                {curviness: MatchingDraggable.curviness}
+            ],
+            maxConnections: 1,
+            isTarget: false,
+            dropOptions: exampleDropOptions,
+            scope: scope
+        };
 
         $(windowQuestionSelector).each(function (index) {
             var windowId = $(this).attr("id");
-            var scope = windowId + "scope";
-            var destinationColor = colorArray[count].getHex();
+            sourceEndPoint.paintStyle.fill = colorArray[index].getHex();
 
-            var sourceEndPoint = {
-                endpoint: [
-                    "Dot",
-                    {radius: 15}
-                ],
-                paintStyle: {
-                    fillStyle: destinationColor
-                },
-                isSource: true,
-                connectorStyle: {
-                    strokeStyle: "#8a8888",
-                    lineWidth: 8
-                },
-                connector: [
-                    MatchingDraggable.connectorType,
-                    {curviness: MatchingDraggable.curviness}
-                ],
-                maxConnections: 1,
-                isTarget: false,
-                dropOptions: exampleDropOptions,
-                scope: scope
-            };
-
-            sourceDestinationArray[count + 1] = sourceEndPoint;
-
-            count++;
-
-            jsPlumb.addEndpoint(
+            instance.addEndpoint(
                 windowId,
                 {
                     anchor: ['RightMiddle', 'RightMiddle', 'RightMiddle', 'RightMiddle']
                 },
                 sourceEndPoint
             );
+        });
 
-            var destinationCount = 0;
+        $(windowQuestionSelector).each(function (index) {
+            var windowDestinationId = $(this).attr("id");
+            destinationEndPoint.paintStyle.fill = colorArrayDestination[index].getHex();
 
-            $(windowQuestionSelector).each(function (index) {
-                var windowDestinationId = $(this).attr("id");
-                destinationEndPoint.scope = scope;
-                destinationEndPoint.paintStyle.fillStyle = colorArrayDestination[destinationCount].getHex();
-                destinationCount++;
-
-                jsPlumb.addEndpoint(
-                    windowDestinationId + "_answer",
-                    {
-                        anchors: ['LeftMiddle', 'LeftMiddle', 'LeftMiddle', 'LeftMiddle']
-                    },
-                    destinationEndPoint
-                );
-            });
+            instance.addEndpoint(
+                windowDestinationId + "_answer",
+                {
+                    anchors: ['LeftMiddle', 'LeftMiddle', 'LeftMiddle', 'LeftMiddle']
+                },
+                destinationEndPoint
+            );
         });
 
         MatchingDraggable.attachBehaviour();
@@ -218,8 +204,6 @@ var MatchingDraggable = {
 
 jsPlumb.ready(function () {
     if ($(".drag_question").length > 0) {
-        MatchingDraggable.init();
-
         $(document).scroll(function () {
             jsPlumb.repaintEverything();
         });

@@ -154,4 +154,24 @@
       }
     }
   }
+
+  &.type-19 {
+    @apply mb-4;
+
+    .drag_question {
+      @apply relative;
+
+      .window {
+        @apply border rounded-md relative;
+
+        &.window_left_question {
+          @apply text-right p-3 pr-5;
+        }
+
+        &.window_right_question {
+          @apply p-3 pl-5;
+        }
+      }
+    }
+  }
 }

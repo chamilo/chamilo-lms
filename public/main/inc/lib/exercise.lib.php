@@ -1373,7 +1373,7 @@ HTML;
                 $isVertical = 'v' == $objQuestionTmp->extra;
                 $s .= "</ul></div>";
                 $counterAnswer = 1;
-                $s .= '<div class="question-answer__items--'.($isVertical ? 'vertical' : 'horizontal').'">';
+                $s .= '<div class="question-answer__items question-answer__items--'.($isVertical ? 'vertical' : 'horizontal').'">';
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $windowId = $questionId.'_'.$counterAnswer;

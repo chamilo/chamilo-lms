@@ -118,18 +118,18 @@
       @apply border border-gray-400 rounded-sm p-2 cursor-move bg-gray-100;
     }
 
-    .question-answer__items {
-      &--horizontal,
-      &--vertical {
-        @apply flex gap-4;
-      }
+    .question-answer {
+        &__items {
+          @apply flex gap-4;
 
-      &--horizontal {
-        @apply flex-row flex-wrap;
-      }
-      &--vertical {
-        @apply flex-col;
-      }
+          &--horizontal {
+            @apply flex-row flex-wrap;
+          }
+
+          &--vertical {
+            @apply flex-col;
+          }
+        }
     }
 
     .droppable-item {

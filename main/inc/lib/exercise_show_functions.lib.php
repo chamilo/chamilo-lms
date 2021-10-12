@@ -207,11 +207,6 @@ class ExerciseShowFunctions
         }
 
         if (empty($id)) {
-            echo '<tr>';
-            if (!empty($answer)) {
-                echo Display::tag('td', Security::remove_XSS($answer), ['width' => '55%']);
-            }
-            echo '</tr>';
             if (!$questionScore && EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
                 echo '<tr>';
                 echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), ['width' => '45%']);

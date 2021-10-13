@@ -1,9 +1,10 @@
 <template>
-  <div v-if="sessions.length" >
+  <div v-if="sessions.length"
+       class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+  >
     <div
         v-for="session in sessions"
         :key="session.id"
-        class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
     >
       <SessionCardSimple
           :session="session"

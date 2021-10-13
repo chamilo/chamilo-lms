@@ -190,7 +190,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                     <tr class="<?php echo $i ? 'row_odd' : 'row_even'; ?>">
                         <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]"
                                    value="<?php echo $enreg['id']; ?>"></td>
-                        <td><?php echo api_htmlentities($enreg['name'], ENT_QUOTES, $charset); ?></td>
+                        <td><?php echo api_htmlentities($enreg['name'], ENT_QUOTES); ?></td>
                         <td><?php echo "<a href=\"session_list.php?id_category=".$enreg['id']."\">".$nb_courses
                                 ." Session(s) </a>"; ?></td>
                         <td><?php echo api_format_date($enreg['date_start'], DATE_FORMAT_SHORT); ?></td>

@@ -25,10 +25,9 @@ class Block
         $closeLink = '<a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(
                 api_htmlentities(
                     get_lang('Please confirm your choice'),
-                    ENT_QUOTES,
-                    $charset
+                    ENT_QUOTES
                 )
-            ).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'"> 
+            ).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
                 <em class="fa fa-times"></em>
             </a>';
 

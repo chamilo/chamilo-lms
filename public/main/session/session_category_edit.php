@@ -93,9 +93,9 @@ if (!empty($return)) {
             <label class="col-sm-3 control-label"><?php echo get_lang('Name'); ?></label>
             <div class="col-sm-6">
                 <input class="form-control" type="text" name="name" size="50" maxlength="50" value="<?php if ($formSent) {
-    echo api_htmlentities($name, ENT_QUOTES, $charset);
+    echo api_htmlentities($name, ENT_QUOTES);
 } else {
-    echo api_htmlentities($infos['name'], ENT_QUOTES, $charset);
+    echo api_htmlentities($infos['name'], ENT_QUOTES);
 } ?>">
             </div>
             <div class="col-sm-3"></div>

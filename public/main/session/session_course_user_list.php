@@ -194,16 +194,16 @@ echo Display::page_header($tool_name);
                     <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['user_id']; ?>"></td>
                     <?php if ($is_western_name_order) {
                     ?>
-                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES, $charset); ?></td>
-                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES, $charset); ?></td>
+                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES); ?></td>
+                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES); ?></td>
                     <?php
                 } else {
                     ?>
-                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES, $charset); ?></td>
-                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES, $charset); ?></td>
+                        <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES); ?></td>
+                        <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES); ?></td>
                     <?php
                 } ?>
-                    <td><?php echo api_htmlentities($enreg['username'], ENT_QUOTES, $charset); ?></td>
+                    <td><?php echo api_htmlentities($enreg['username'], ENT_QUOTES); ?></td>
                     <td>
                         <?php if ($enreg['is_subscribed']) {
                     ?>

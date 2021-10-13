@@ -3154,7 +3154,7 @@ class learnpathItem
         $new_terms_string = implode(',', $new_terms);
 
         // TODO: Validate csv string.
-        $terms = Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES, $charset));
+        $terms = Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES));
         $sql = "UPDATE $lp_item
                 SET terms = '$terms'
                 WHERE iid=".$this->get_id();

@@ -292,7 +292,7 @@ class CourseSelectForm
                       <button
                         class="save"
                         type="submit"
-                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;" >'.
+                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" >'.
                     get_lang('Validate').'</button>';
             } else {
                 if ($recycleOption) {

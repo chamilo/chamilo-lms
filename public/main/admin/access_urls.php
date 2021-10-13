@@ -172,7 +172,7 @@ foreach ($data as $row) {
         "access_url_edit.php?url_id=$url_id"
     );
     if ('1' != $url_id) {
-        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;">'.
+        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;">'.
             Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
     }
     $urls[] = [$url, $description, $status, $createdAt, $actions];

@@ -36,10 +36,15 @@ class ExtraFieldRepositoryTest extends AbstractApiTest
         $this->assertSame($defaultCount + 1, $repo->count([]));
     }
 
+    public function testGetExtraFields(): void
+    {
+        $repo = self::getContainer()->get(ExtraFieldRepository::class);
+        $this->assertNotNull($repo->getExtraFields());
+    }
+
     public function testCreateExtraFieldSavedSearch(): void
     {
         $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(ExtraFieldRepository::class);
         $extraFieldSavedSearchRepo = $em->getRepository(ExtraFieldSavedSearch::class);
 
         $student = $this->createUser('student');

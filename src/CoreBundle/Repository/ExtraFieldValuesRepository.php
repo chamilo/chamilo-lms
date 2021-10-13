@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,13 +29,13 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
      * @param int $extraFieldType The type of extra field
      * @param int $itemId         The item ID
      *
-     * @return array
+     * @return ExtraFieldValues[]
      */
     public function getVisibleValues(int $extraFieldType, int $itemId)
     {
-        $queryBuilder = $this->createQueryBuilder('fv');
+        $qb = $this->createQueryBuilder('fv');
 
-        $queryBuilder
+        $qb
             ->innerJoin(
                 'ChamiloCoreBundle:ExtraField',
                 'f',
@@ -41,14 +43,67 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
                 'fv.field = f.id'
             )
             ->where(
-                $queryBuilder->expr()->andX(
-                    $queryBuilder->expr()->eq('f.extraFieldType', $extraFieldType),
-                    $queryBuilder->expr()->eq('fv.itemId', $itemId),
-                    $queryBuilder->expr()->eq('f.visibleToSelf', true)
+                $qb->expr()->andX(
+                    $qb->expr()->eq('f.extraFieldType', $extraFieldType),
+                    $qb->expr()->eq('fv.itemId', $itemId),
+                    $qb->expr()->eq('f.visibleToSelf', true)
                 )
             )
         ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return ExtraFieldValues[]
+     */
+    public function getExtraFieldValuesFromItem(User $user)
+    {
+        $qb = $this->createQueryBuilder('v');
+        $qb
+            ->innerJoin('v.field', 'f')
+            ->andWhere('v.itemId = :id')
+            ->andWhere(
+                $qb->expr()->eq('f.visibleToSelf', true)
+            )
+            ->setParameter(
+                'id',
+                $user->getId()
+            )
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function updateItemData(ExtraField $extraField, User $user, $data): ?ExtraFieldValues
+    {
+        $itemId = $user->getId();
+        $qb = $this->createQueryBuilder('v');
+        $qb
+            ->innerJoin('v.field', 'f')
+            ->andWhere('v.itemId = :id ')
+            ->andWhere('f = :field ')
+            ->setParameter('id', $itemId)
+            ->setParameter('field', $extraField)
+        ;
+
+        $extraFieldValues = $qb->getQuery()->getOneOrNullResult();
+        $em = $this->getEntityManager();
+
+        if (null === $extraFieldValues) {
+            $extraFieldValues = (new ExtraFieldValues())
+                ->setItemId((int) $itemId)
+                ->setField($extraField)
+                ->setValue($data)
+            ;
+            $em->persist($extraFieldValues);
+            $em->flush();
+        } else {
+            $extraFieldValues->setValue($data);
+            $em->persist($extraFieldValues);
+            $em->flush();
+        }
+
+        return $extraFieldValues;
     }
 }

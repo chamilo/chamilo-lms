@@ -6,8 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Form;
 
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Type\IllustrationType;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
@@ -18,15 +22,23 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 class ProfileType extends AbstractType
 {
     private LanguageRepository $languageRepository;
+    private ExtraFieldValuesRepository $extraFieldValuesRepository;
+    private Security $security;
 
-    public function __construct(LanguageRepository $languageRepository)
+    public function __construct(LanguageRepository $languageRepository, ExtraFieldValuesRepository $extraFieldValuesRepository, ExtraFieldRepository $extraFieldRepository, Security $security)
     {
         $this->languageRepository = $languageRepository;
+        $this->extraFieldValuesRepository = $extraFieldValuesRepository;
+        $this->extraFieldRepository = $extraFieldRepository;
+        $this->security = $security;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -92,18 +104,58 @@ class ProfileType extends AbstractType
             //->add('save', 'submit', array('label' => 'Update')            )
         ;
 
-        // Update Author id
-        /*$builder->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($currentUser) {
-                // @var User $user
-                $user = $event->getData();
-                $extraFields = $user->getExtrafields();
+        $user = $this->security->getUser();
+
+        if (null === $user) {
+            return;
+        }
+
+        $extraFields = $this->extraFieldRepository->getExtraFields();
+        $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($user);
+
+        $data = [];
+        foreach ($values as $value) {
+            $data[$value->getField()->getVariable()] = $value->getValue();
+        }
+
+        foreach ($extraFields as $extraField) {
+            $text = $extraField->getDisplayText();
+            $variable = $extraField->getVariable();
+
+            $value = $data[$extraField->getVariable()] ?? '';
+
+            // @todo
+            /*switch ($extraField->getFieldType()) {
+                case \ExtraField::FIELD_TYPE_TEXTAREA:
+                case \ExtraField::FIELD_TYPE_TEXT:
+
+                    break;
+            }*/
+
+            $builder->add($variable, TextType::class, [
+                'label' => $text,
+                'required' => false,
+                'by_reference' => false,
+                'mapped' => false,
+                'data' => $value,
+            ]);
+        }
+
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($user, $extraFields): void {
+                $data = $event->getData();
+
+                /** @var ExtraField $extraField */
                 foreach ($extraFields as $extraField) {
-                    $extraField->setAuthor($currentUser);
+                    $newValue = $data[$extraField->getVariable()] ?? '';
+                    if (empty($newValue)) {
+                        continue;
+                    }
+                    $this->extraFieldValuesRepository->updateItemData($extraField, $user, $newValue);
                 }
             }
-        );*/
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

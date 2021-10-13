@@ -112,6 +112,7 @@ class ProfileType extends AbstractType
             //->add('save', 'submit', array('label' => 'Update')            )
         ;
 
+        /** @var User|null $user */
         $user = $this->security->getUser();
 
         if (null === $user) {

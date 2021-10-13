@@ -1037,7 +1037,7 @@ class AddCourse
             $exercise->description = $html;
             $exercise->save();
 
-            $exercise_id = $exercise->id;
+            $exercise_id = $exercise->iid;
 
             $question = new MultipleAnswer();
             $question->question = get_lang('SocraticIrony');

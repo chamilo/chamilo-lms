@@ -2478,6 +2478,7 @@ class PortfolioController
         if (isset($parentId)) {
             $categoriesCriteria['parentId'] = $parentId;
         }
+
         return $this->em
             ->getRepository(PortfolioCategory::class)
             ->findBy($categoriesCriteria);
@@ -2921,6 +2922,7 @@ class PortfolioController
      * It parsers a title for a variable in lang.
      *
      * @param $defaultDisplayText
+     *
      * @return string
      */
     private function getLanguageVariable($defaultDisplayText)
@@ -2936,6 +2938,7 @@ class PortfolioController
      * It translates the text as parameter.
      *
      * @param $defaultDisplayText
+     *
      * @return mixed
      */
     private function translateDisplayName($defaultDisplayText)

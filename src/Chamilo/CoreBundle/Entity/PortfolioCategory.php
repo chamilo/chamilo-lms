@@ -217,9 +217,7 @@ class PortfolioCategory
     }
 
     /**
-     * Set parent id
-     *
-     * @param int $parentId
+     * Set parent id.
      *
      * @return PortfolioCategory
      */
@@ -229,8 +227,6 @@ class PortfolioCategory
 
         return $this;
     }
-
-
 
     /**
      * Get items.

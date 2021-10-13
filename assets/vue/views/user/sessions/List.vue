@@ -9,7 +9,7 @@
         <v-icon icon="mdi-folder" /> {{ category.name }} {{category._id}}
       </div>
 
-      <SessionListWrapper :sessions="getSessionsFromCategory(category)"/>
+      <SessionListCategoryWrapper :sessions="getSessionsFromCategory(category)" />
 
     </div>
   </div>
@@ -24,8 +24,9 @@ import {GET_SESSION_REL_USER} from "../../../graphql/queries/SessionRelUser.js";
 import {DateTime} from "luxon";
 import SessionTabs from '../../../components/session/Tabs';
 import SessionListWrapper from '../../../components/session/SessionListWrapper';
-//import SessionCategoryListWrapper from '../../../components/session/SessionCategoryListWrapper';
+import SessionListCategoryWrapper from '../../../components/session/SessionListCategoryWrapper';
 import StickyCourses from '../../../views/user/courses/StickyCourses.vue';
+
 import isEmpty from "lodash/isEmpty";
 
 export default {
@@ -34,7 +35,7 @@ export default {
     StickyCourses,
     SessionTabs,
     SessionListWrapper,
-    //SessionCategoryListWrapper
+    SessionListCategoryWrapper,
   },
   setup() {
     const store = useStore();

@@ -34,7 +34,7 @@ export default {
     StickyCourses,
     SessionTabs,
     SessionListWrapper,
-    SessionCategoryListWrapper
+    //SessionCategoryListWrapper
   },
   setup() {
     const store = useStore();

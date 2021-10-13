@@ -42,7 +42,7 @@ $frmActivity->addButtonAdvancedSettings('advanced_params');
 $frmActivity->addHtml('<div id="advanced_params_options" style="display:none">');
 $frmActivity->addText('title', get_lang('Title'), false);
 $frmActivity->addTextarea('description', get_lang('Description'));
-$frmActivity->addCheckBox('allow_multiple_attempts', '', get_lang('TinCanAllowMultipleAttempts'));
+$frmActivity->addCheckBox('allow_multiple_attempts', '', $plugin->get_lang('TinCanAllowMultipleAttempts'));
 $frmActivity->addHtml('</div>');
 $frmActivity->addButtonAdvancedSettings('lrs_params', $plugin->get_lang('LrsConfiguration'));
 $frmActivity->addHtml('<div id="lrs_params_options" style="display:none">');

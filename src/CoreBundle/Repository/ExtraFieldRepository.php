@@ -20,13 +20,14 @@ class ExtraFieldRepository extends ServiceEntityRepository
     /**
      * @return ExtraField[]
      */
-    public function getExtraFields()
+    public function getExtraFields(int $type)
     {
         $qb = $this->createQueryBuilder('f');
         $qb
             ->where(
                 $qb->expr()->andX(
-                    $qb->expr()->eq('f.visibleToSelf', true)
+                    $qb->expr()->eq('f.visibleToSelf', true),
+                    $qb->expr()->eq('f.fieldType', $type)
                 )
             )
         ;

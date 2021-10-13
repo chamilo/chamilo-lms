@@ -15,6 +15,9 @@ use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -32,9 +35,14 @@ class ProfileType extends AbstractType
     private LanguageRepository $languageRepository;
     private ExtraFieldValuesRepository $extraFieldValuesRepository;
     private Security $security;
+    private ExtraFieldRepository $extraFieldRepository;
 
-    public function __construct(LanguageRepository $languageRepository, ExtraFieldValuesRepository $extraFieldValuesRepository, ExtraFieldRepository $extraFieldRepository, Security $security)
-    {
+    public function __construct(
+        LanguageRepository $languageRepository,
+        ExtraFieldValuesRepository $extraFieldValuesRepository,
+        ExtraFieldRepository $extraFieldRepository,
+        Security $security
+    ) {
         $this->languageRepository = $languageRepository;
         $this->extraFieldValuesRepository = $extraFieldValuesRepository;
         $this->extraFieldRepository = $extraFieldRepository;
@@ -110,8 +118,8 @@ class ProfileType extends AbstractType
             return;
         }
 
-        $extraFields = $this->extraFieldRepository->getExtraFields();
-        $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($user);
+        $extraFields = $this->extraFieldRepository->getExtraFields(ExtraField::USER_FIELD_TYPE);
+        $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($user, ExtraField::USER_FIELD_TYPE);
 
         $data = [];
         foreach ($values as $value) {
@@ -121,24 +129,76 @@ class ProfileType extends AbstractType
         foreach ($extraFields as $extraField) {
             $text = $extraField->getDisplayText();
             $variable = $extraField->getVariable();
-
             $value = $data[$extraField->getVariable()] ?? '';
 
             // @todo
-            /*switch ($extraField->getFieldType()) {
-                case \ExtraField::FIELD_TYPE_TEXTAREA:
-                case \ExtraField::FIELD_TYPE_TEXT:
+            switch ($extraField->getFieldType()) {
+                case \ExtraField::FIELD_TYPE_DATETIME:
+                    $builder->add($variable, DateTimeType::class, [
+                        'label' => $text,
+                        'required' => false,
+                        'by_reference' => false,
+                        'mapped' => false,
+                        'data' => $value,
+                    ]);
 
                     break;
-            }*/
+                case \ExtraField::FIELD_TYPE_DATE:
+                    $builder->add($variable, DateType::class, [
+                        'label' => $text,
+                        'required' => false,
+                        'by_reference' => false,
+                        'mapped' => false,
+                        'data' => $value,
+                    ]);
 
-            $builder->add($variable, TextType::class, [
-                'label' => $text,
-                'required' => false,
-                'by_reference' => false,
-                'mapped' => false,
-                'data' => $value,
-            ]);
+                    break;
+                case \ExtraField::FIELD_TYPE_TEXTAREA:
+                case \ExtraField::FIELD_TYPE_TEXT:
+                    $builder->add($variable, TextType::class, [
+                        'label' => $text,
+                        'required' => false,
+                        'by_reference' => false,
+                        'mapped' => false,
+                        'data' => $value,
+                    ]);
+
+                    break;
+                case \ExtraField::FIELD_TYPE_CHECKBOX:
+                case \ExtraField::FIELD_TYPE_RADIO:
+                case \ExtraField::FIELD_TYPE_SELECT:
+                case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
+                    $options = $extraField->getOptions();
+                    $choices = [];
+                    foreach ($options as $option) {
+                        $choices[$option->getDisplayText()] = $option->getValue();
+                    }
+
+                    $params = [
+                        'label' => $text,
+                        'required' => false,
+                        'by_reference' => false,
+                        'mapped' => false,
+                        'data' => $value,
+                        'choices' => $choices,
+                    ];
+
+                    if (\ExtraField::FIELD_TYPE_CHECKBOX === $extraField->getFieldType()) {
+                        $params['expanded'] = true;
+                        $params['multiple'] = true;
+                    }
+                    if (\ExtraField::FIELD_TYPE_SELECT === $extraField->getFieldType()) {
+                        $params['expanded'] = false;
+                        $params['multiple'] = false;
+                    }
+                    if (\ExtraField::FIELD_TYPE_SELECT_MULTIPLE === $extraField->getFieldType()) {
+                        $params['expanded'] = false;
+                        $params['multiple'] = true;
+                    }
+                    $builder->add($variable, ChoiceType::class, $params);
+
+                    break;
+            }
         }
 
         $builder->addEventListener(

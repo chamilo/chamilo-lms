@@ -57,14 +57,15 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
     /**
      * @return ExtraFieldValues[]
      */
-    public function getExtraFieldValuesFromItem(User $user)
+    public function getExtraFieldValuesFromItem(User $user, int $type)
     {
         $qb = $this->createQueryBuilder('v');
         $qb
             ->innerJoin('v.field', 'f')
             ->andWhere('v.itemId = :id')
             ->andWhere(
-                $qb->expr()->eq('f.visibleToSelf', true)
+                $qb->expr()->eq('f.visibleToSelf', true),
+                $qb->expr()->eq('f.fieldType', $type)
             )
             ->setParameter(
                 'id',

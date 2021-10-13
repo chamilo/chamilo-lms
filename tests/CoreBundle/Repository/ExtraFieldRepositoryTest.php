@@ -39,7 +39,7 @@ class ExtraFieldRepositoryTest extends AbstractApiTest
     public function testGetExtraFields(): void
     {
         $repo = self::getContainer()->get(ExtraFieldRepository::class);
-        $this->assertNotNull($repo->getExtraFields());
+        $this->assertNotNull($repo->getExtraFields(ExtraField::USER_FIELD_TYPE));
     }
 
     public function testCreateExtraFieldSavedSearch(): void

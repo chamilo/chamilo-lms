@@ -75,7 +75,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
 
         $extraFieldValue = $repo->updateItemData($field, $user, 'test');
 
-        $items = $repo->getExtraFieldValuesFromItem($user);
+        $items = $repo->getExtraFieldValuesFromItem($user, ExtraField::USER_FIELD_TYPE);
 
         $this->assertNotNull($items);
         $this->assertNotNull($extraFieldValue);

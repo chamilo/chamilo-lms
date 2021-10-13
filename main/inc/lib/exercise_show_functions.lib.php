@@ -208,7 +208,7 @@ class ExerciseShowFunctions
 
         if (empty($id)) {
             echo '<tr>';
-            if (!empty($answer)) {
+            if (!empty($answer) && ($answer != basename($fileUrl))) {
                 echo Display::tag('td', Security::remove_XSS($answer), ['width' => '55%']);
             }
             echo '</tr>';

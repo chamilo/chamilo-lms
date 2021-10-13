@@ -6,11 +6,9 @@
   <div v-if="categories.length" class="grid">
     <div v-for="category in categories" >
       <div class="text-xl">
-        <v-icon icon="mdi-folder" /> {{ category.name }} {{category._id}}
+        <v-icon icon="mdi-folder" /> {{ category.name }}
       </div>
-
       <SessionListCategoryWrapper :sessions="getSessionsFromCategory(category)" />
-
     </div>
   </div>
 </template>

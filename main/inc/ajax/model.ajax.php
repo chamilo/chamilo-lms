@@ -1595,7 +1595,7 @@ switch ($action) {
             $columns = array_merge(['official_code'], $columns);
         }
 
-        $sidx = in_array($sidx, $columns) ? $sidx : 'course';
+        $sidx = in_array($sidx, $columns) ? $sidx : 'c_id';
 
         $result = ExerciseLib::get_exam_results_data(
             $start,

@@ -1,8 +1,8 @@
 <template>
   <q-tabs align="left" dense inline-label no-caps>
-    <q-route-tab :to="{name: 'MySessionsPast'}" label="Past"/>
-    <q-route-tab :to="{name: 'MySessions'}" label="Current"/>
-    <q-route-tab :to="{name: 'MySessionsUpcoming'}" label="Upcoming"/>
+    <q-route-tab :to="{name: 'MySessionsPast'}" :label="$t('Past')"/>
+    <q-route-tab :to="{name: 'MySessions'}" :label="$t('Current')"/>
+    <q-route-tab :to="{name: 'MySessionsUpcoming'}" :label="$t('Upcoming')"/>
   </q-tabs>
 </template>
 

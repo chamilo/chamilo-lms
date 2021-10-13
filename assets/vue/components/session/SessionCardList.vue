@@ -1,23 +1,18 @@
 <template>
-    <div
-        v-for="session in sessions"
-        :key="session.id"
-    >
-      <div v-if="session.category"
-           class="text-xl"
-      >
-        <v-icon icon="mdi-folder" /> {{ session.category.name }}
-      </div>
-
-      <SessionCard
-          :session="session"
-      />
-    </div>
+  <div
+      v-for="session in sessions"
+      :key="session.id"
+  >
+    <SessionCard
+        :session="session"
+    />
+  </div>
 </template>
 
 <script>
 
 import SessionCard from './SessionCard.vue';
+
 export default {
   name: 'SessionCardList',
   components: {
@@ -32,13 +27,13 @@ export default {
     };
   },
   methods: {
-    isList: function (){
+    isList: function () {
       if (!this.deck) {
         return 'primary';
       }
       return 'secondary';
     },
-    isDeck: function (){
+    isDeck: function () {
       if (this.deck) {
         return 'primary';
       }

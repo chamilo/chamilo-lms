@@ -13,6 +13,7 @@ export const GET_SESSION_REL_USER = gql`
                         _id
                         name
                         category {
+                            _id
                             id
                             name
                         }

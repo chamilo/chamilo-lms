@@ -6183,6 +6183,11 @@ class Exercise
                 );
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
+                $absFilePath = $objQuestionTmp->getAbsoluteFilePath();
+                if (empty($answer) && !empty($absFilePath)) {
+                    // it takes the filename as answer to recognise has been saved
+                    $answer = basename($absFilePath);
+                }
                 Event::saveQuestionAttempt(
                     $questionScore,
                     $answer,
@@ -6192,7 +6197,7 @@ class Exercise
                     $this->iid,
                     false,
                     $questionDuration,
-                    $objQuestionTmp->getAbsoluteFilePath()
+                    $absFilePath
                 );
             } elseif (
                 in_array(

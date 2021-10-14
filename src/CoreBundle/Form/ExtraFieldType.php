@@ -165,7 +165,7 @@ class ExtraFieldType extends AbstractType
             }
         }
 
-        $builder->addEventListener(
+        /*$builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($item, $extraFields): void {
                 $data = $event->getData();
@@ -181,7 +181,7 @@ class ExtraFieldType extends AbstractType
                     }
                 }
             }
-        );
+        );*/
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
@@ -189,7 +189,6 @@ class ExtraFieldType extends AbstractType
                 $data = $event->getData();
                 foreach ($extraFields as $extraField) {
                     $newValue = $data[$extraField->getVariable()] ?? null;
-                    var_dump($extraField->getVariable(), var_dump($newValue));
                     if (empty($newValue)) {
                         continue;
                     }

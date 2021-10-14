@@ -169,6 +169,21 @@
             "type": "github",
             "url": "https://github.com/AngelFQC/vimeo.php.git",
             "no-api": true
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/xapi-model.git",
+            "no-api": true
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/xapi-repository-doctrine.git",
+            "no-api": true
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/xapi-symfony-serializer.git",
+            "no-api": true
         }
     ],
     "config": {

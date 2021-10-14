@@ -113,7 +113,7 @@ class CourseSelectForm
                 for (i = 0; i < d.elements.length; i++) {
                     if (d.elements[i].type == "checkbox") {
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
-                        if( name.indexOf('learnpath') > 0){
+                        if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
                                 setCheckbox('document',true);
                                 alert(message);
@@ -747,7 +747,7 @@ class CourseSelectForm
                 for (i = 0; i < d.elements.length; i++) {
                     if (d.elements[i].type == "checkbox") {
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
-                        if( name.indexOf('learnpath') > 0){
+                        if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
                                 setCheckbox('document',true);
                                 alert(message);

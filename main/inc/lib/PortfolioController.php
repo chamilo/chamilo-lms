@@ -686,13 +686,21 @@ class PortfolioController
             'cols-size' => [2, 10, 0],
         ];
         $form->addHtmlEditor('content', get_lang('Content'), true, false, $editorConfig);
-        $form->addSelectFromCollection(
+        $categoriesSelect = $form->addSelect(
             'category',
-            [get_lang('Category'), get_lang('PortfolioCategoryFieldHelp')],
-            $categories,
-            [],
-            true
+            [get_lang('Category'), get_lang('PortfolioCategoryFieldHelp')]
         );
+        $categoriesSelect->addOption(get_lang('SelectACategory'), 0);
+        $parentCategories = $this->getCategoriesForIndex(null, 0);
+        foreach ($parentCategories as $parentCategory) {
+            $categoriesSelect->addOption($parentCategory->getTitle(), $parentCategory->getId());
+            $subCategories = $this->getCategoriesForIndex(null, $parentCategory->getId());
+            if (count($subCategories) > 0) {
+                foreach ($subCategories as $subCategory) {
+                    $categoriesSelect->addOption(' &mdash; '.$subCategory->getTitle(), $subCategory->getId());
+                }
+            }
+        }
 
         $extraField = new ExtraField('portfolio');
         $extra = $extraField->addElements($form, $item->getId());
@@ -2928,7 +2936,10 @@ class PortfolioController
     private function getLanguageVariable($defaultDisplayText)
     {
         $variableLanguage = api_replace_dangerous_char(strtolower($defaultDisplayText));
-        $variableLanguage = str_replace('-', '_', $variableLanguage);
+        $variableLanguage = preg_replace('/[^A-Za-z0-9\_]/', '', $variableLanguage); // Removes special chars except underscore.
+        if (is_numeric($variableLanguage[0])) {
+            $variableLanguage = '_'.$variableLanguage;
+        }
         $variableLanguage = api_underscore_to_camel_case($variableLanguage);
 
         return $variableLanguage;

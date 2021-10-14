@@ -205,7 +205,8 @@ if (!empty($courses)) {
         false,
         $courseId,
         0,
-        true
+        true,
+        false
     );
     $selectWork = $form->addSelect(
         'work_parent_ids',

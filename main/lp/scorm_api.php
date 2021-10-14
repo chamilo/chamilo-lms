@@ -700,7 +700,8 @@ function LMSSetValue(param, val) {
         olms.updatable_vars_list['cmi.suspend_data'] = true;
         save_suspend_data_in_local(); // save to local storage if available
         return_value='true';
-    } else if ( param == "cmi.core.exit" ) {
+    } else if ( param == "cmi.core.exit" || param == "cmi.exit" ) {
+        //cmi.exit for SCORM 1.3
         olms.lms_item_core_exit = val;
         olms.updatable_vars_list['cmi.core.exit']=true;
         return_value='true';

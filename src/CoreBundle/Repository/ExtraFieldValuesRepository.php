@@ -7,14 +7,15 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldItemInterface;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ * @author Julio Montoya
  */
 class ExtraFieldValuesRepository extends ServiceEntityRepository
 {
@@ -55,9 +56,11 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param ExtraFieldItemInterface $item can be a User|Course|Any Entity that implements ExtraFieldItemInterface
+     *
      * @return ExtraFieldValues[]
      */
-    public function getExtraFieldValuesFromItem(User $user, int $type)
+    public function getExtraFieldValuesFromItem(ExtraFieldItemInterface $item, int $type)
     {
         $qb = $this->createQueryBuilder('v');
         $qb
@@ -65,20 +68,20 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->andWhere('v.itemId = :id')
             ->andWhere(
                 $qb->expr()->eq('f.visibleToSelf', true),
-                $qb->expr()->eq('f.fieldType', $type)
+                $qb->expr()->eq('f.extraFieldType', $type)
             )
             ->setParameter(
                 'id',
-                $user->getId()
+                $item->getResourceIdentifier()
             )
         ;
 
         return $qb->getQuery()->getResult();
     }
 
-    public function updateItemData(ExtraField $extraField, User $user, $data): ?ExtraFieldValues
+    public function updateItemData(ExtraField $extraField, ExtraFieldItemInterface $item, ?string $data): ?ExtraFieldValues
     {
-        $itemId = $user->getId();
+        $itemId = $item->getResourceIdentifier();
         $qb = $this->createQueryBuilder('v');
         $qb
             ->innerJoin('v.field', 'f')
@@ -93,7 +96,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
 
         if (null === $extraFieldValues) {
             $extraFieldValues = (new ExtraFieldValues())
-                ->setItemId((int) $itemId)
+                ->setItemId($itemId)
                 ->setField($extraField)
                 ->setValue($data)
             ;

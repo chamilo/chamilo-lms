@@ -85,7 +85,7 @@ use UserManager;
     'lastname' => 'partial',
 ])]
 #[ApiFilter(BooleanFilter::class, properties: ['isActive'])]
-class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface
+class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface
 {
     use TimestampableEntity;
     use UserCreatorTrait;

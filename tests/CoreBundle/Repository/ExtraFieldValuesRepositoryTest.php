@@ -61,6 +61,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
 
         $em = $this->getEntityManager();
 
+        // User extra field.
         $field = (new ExtraField())
             ->setDisplayText('test')
             ->setVariable('test')
@@ -78,6 +79,25 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $items = $repo->getExtraFieldValuesFromItem($user, ExtraField::USER_FIELD_TYPE);
 
         $this->assertNotNull($items);
+        $this->assertNotNull($extraFieldValue);
+        $this->assertCount(1, $items);
+
+        // Course extra field.
+
+        $field = (new ExtraField())
+            ->setDisplayText('test2')
+            ->setVariable('test2')
+            ->setVisibleToSelf(true)
+            ->setExtraFieldType(ExtraField::COURSE_FIELD_TYPE)
+            ->setFieldType(\ExtraField::FIELD_TYPE_TEXT)
+        ;
+        $em->persist($field);
+        $em->flush();
+
+        $course = $this->createCourse('new');
+
+        $extraFieldValue = $repo->updateItemData($field, $course, 'hahaha');
+        $items = $repo->getExtraFieldValuesFromItem($course, ExtraField::COURSE_FIELD_TYPE);
         $this->assertNotNull($extraFieldValue);
         $this->assertCount(1, $items);
     }

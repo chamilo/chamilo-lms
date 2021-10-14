@@ -482,11 +482,11 @@ class PortfolioController
         $categoriesSelect->addOption(get_lang('SelectACategory'), 0);
         $parentCategories = $this->getCategoriesForIndex(null, 0);
         foreach ($parentCategories as $parentCategory) {
-            $categoriesSelect->addOption($parentCategory->getTitle(), $parentCategory->getId());
+            $categoriesSelect->addOption($this->translateDisplayName($parentCategory->getTitle()), $parentCategory->getId());
             $subCategories = $this->getCategoriesForIndex(null, $parentCategory->getId());
             if (count($subCategories) > 0) {
                 foreach ($subCategories as $subCategory) {
-                    $categoriesSelect->addOption(' &mdash; '.$subCategory->getTitle(), $subCategory->getId());
+                    $categoriesSelect->addOption(' &mdash; '.$this->translateDisplayName($subCategory->getTitle()), $subCategory->getId());
                 }
             }
         }
@@ -693,11 +693,11 @@ class PortfolioController
         $categoriesSelect->addOption(get_lang('SelectACategory'), 0);
         $parentCategories = $this->getCategoriesForIndex(null, 0);
         foreach ($parentCategories as $parentCategory) {
-            $categoriesSelect->addOption($parentCategory->getTitle(), $parentCategory->getId());
+            $categoriesSelect->addOption($this->translateDisplayName($parentCategory->getTitle()), $parentCategory->getId());
             $subCategories = $this->getCategoriesForIndex(null, $parentCategory->getId());
             if (count($subCategories) > 0) {
                 foreach ($subCategories as $subCategory) {
-                    $categoriesSelect->addOption(' &mdash; '.$subCategory->getTitle(), $subCategory->getId());
+                    $categoriesSelect->addOption(' &mdash; '.$this->translateDisplayName($subCategory->getTitle()), $subCategory->getId());
                 }
             }
         }

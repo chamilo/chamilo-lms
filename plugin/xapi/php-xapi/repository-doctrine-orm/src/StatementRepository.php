@@ -35,25 +35,22 @@ final class StatementRepository extends EntityRepository implements BaseStatemen
     public function findStatements(array $criteria)
     {
         if (!empty($criteria['registration'])) {
-            $context = $this->_em->getRepository(Context::class)->findOneBy([
+            $contexts = $this->_em->getRepository(Context::class)->findBy([
                 'registration' => $criteria['registration'],
             ]);
 
-            unset(
-                $criteria['registration']
-            );
-
-            $criteria['context'] = $context;
+            $criteria['context'] = $contexts;
         }
 
         unset(
+            $criteria['registration'],
             $criteria['related_activities'],
             $criteria['related_agents'],
             $criteria['ascending'],
             $criteria['limit']
         );
 
-        return parent::findBy($criteria);
+        return parent::findBy($criteria, ['created' => 'ASC']);
     }
 
     /**

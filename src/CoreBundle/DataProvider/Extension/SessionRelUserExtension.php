@@ -45,7 +45,7 @@ final class SessionRelUserExtension implements QueryCollectionExtensionInterface
         }
 
         if (null === $user = $this->security->getUser()) {
-            throw new AccessDeniedException('Access Denied.');
+            throw new AccessDeniedException('Access Denied SessionRelUser');
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];

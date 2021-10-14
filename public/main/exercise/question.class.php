@@ -1499,8 +1499,12 @@ abstract class Question
             $explanation = $type->getExplanation();
             echo '<li>';
             echo '<div class="icon-image">';
-            $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'&exerciseId='.$exerciseId.'">'.
-                Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
+            $icon = Display::url(
+                Display::return_icon($img, $explanation, null, ICON_SIZE_BIG),
+                'admin.php?'.api_get_cidreq().'&'
+                    .http_build_query(['newQuestion' => 'yes', 'answerType' => $i, 'exerciseId' => $exerciseId]),
+                ['title' => $explanation]
+            );
 
             if (false === $objExercise->force_edit_exercise_in_lp) {
                 if (true == $objExercise->exercise_was_added_in_lp) {

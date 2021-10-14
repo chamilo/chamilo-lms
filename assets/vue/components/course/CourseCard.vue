@@ -1,5 +1,6 @@
 <template>
-  <v-card v-if="course"
+  <v-card
+      v-if="course"
       elevation="4"
   >
     <div class="">
@@ -9,6 +10,9 @@
       <div class="h-10 flex flex-row justify-between">
         <div class="line-clamp-2 text-md w-5/6">
           <router-link :to="{ name: 'CourseHome', params: {id: course._id, course: course}, query: { sid: sessionId } }">
+            <span v-if="session">
+              [ {{ session.name }} ]
+            </span>
             {{ course.title }}
           </router-link>
         </div>
@@ -60,6 +64,7 @@ export default {
   name: 'CourseCard',
   props: {
     course: Object,
+    session: Object,
     sessionId: {
       type: Number,
       required: false,

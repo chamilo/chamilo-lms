@@ -21,6 +21,12 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $field = (new ExtraField())
+            ->setFieldOrder(1)
+            ->setChangeable(true)
+            ->setFilter(true)
+            ->setHelperText('helper')
+            ->setVisibleToOthers(true)
+            ->setVisibleToSelf(true)
             ->setDisplayText('test')
             ->setVariable('test')
             ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
@@ -47,5 +53,32 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $values = $repo->getVisibleValues(0, 0);
 
         $this->assertCount(0, $values);
+    }
+
+    public function testUpdateItemData(): void
+    {
+        $repo = self::getContainer()->get(ExtraFieldValuesRepository::class);
+
+        $em = $this->getEntityManager();
+
+        $field = (new ExtraField())
+            ->setDisplayText('test')
+            ->setVariable('test')
+            ->setVisibleToSelf(true)
+            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
+            ->setFieldType(\ExtraField::FIELD_TYPE_TEXT)
+        ;
+        $em->persist($field);
+        $em->flush();
+
+        $user = $this->createUser('test');
+
+        $extraFieldValue = $repo->updateItemData($field, $user, 'test');
+
+        $items = $repo->getExtraFieldValuesFromItem($user, ExtraField::USER_FIELD_TYPE);
+
+        $this->assertNotNull($items);
+        $this->assertNotNull($extraFieldValue);
+        $this->assertCount(1, $items);
     }
 }

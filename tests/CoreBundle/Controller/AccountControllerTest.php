@@ -27,6 +27,7 @@ class AccountControllerTest extends WebTestCase
         $client->submitForm('Update profile', [
             'profile[firstname]' => 'admin firstname',
             'profile[email]' => 'test@test.com',
+            //'profile[mail_notify_invitation]' => 1,
         ]);
         $this->assertResponseRedirects('/account/home');
 

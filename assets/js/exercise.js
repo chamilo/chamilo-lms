@@ -8,3 +8,4 @@ import '../../public/main/inc/lib/javascript/epiclock/javascript/jquery.epiclock
 import '../../public/main/inc/lib/javascript/epiclock/renderers/minute/epiclock.minute.js';
 import './annotation'
 import '../../public/main/inc/lib/javascript/hotspot/js/hotspot.js';
+import '../../public/main/inc/lib/javascript/d3/jquery.xcolor.js';

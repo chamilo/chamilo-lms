@@ -4881,12 +4881,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.22.0":
-  version: 0.22.0
-  resolution: "axios@npm:0.22.0"
+"axios@npm:^0.23.0":
+  version: 0.23.0
+  resolution: "axios@npm:0.23.0"
   dependencies:
     follow-redirects: ^1.14.4
-  checksum: 8238c34fe3cec0ac3a09b00c1c6b355f99d37f9d3950dc570803ef4b4a6dd4971462ec94ecd2b3a89f4b13cda2568d8ac6d96abffb71ae2f0e9962bf5806b2e0
+  checksum: 6fc85412cab4e25a55c905d1387c39a4cb11b60fe965c62ffd1dfd393f862ae12a1dc5fb7bb4e3c77c0e431ed764d9256d8a74f01d0e35233ed9dfa966b145b0
   languageName: node
   linkType: hard
 
@@ -6579,7 +6579,7 @@ __metadata:
     "@vuelidate/validators": ^2.0.0-alpha.20
     alpinejs: ^3.4.2
     autoprefixer: ^10.3.7
-    axios: ^0.22.0
+    axios: ^0.23.0
     babel-cli: 6.26.0
     babel-plugin-transform-builtin-extend: 1.1.2
     babel-polyfill: 6.26.0
@@ -6590,7 +6590,7 @@ __metadata:
     bootstrap-select: ^1.13.18
     chart.js: ^3.5.1
     copy-webpack-plugin: 9.0.1
-    core-js: 3.18.2
+    core-js: 3.18.3
     cropper: ^4.1.0
     datepair.js: ^0.4.17
     deepmerge: ^4.2.2
@@ -6644,7 +6644,7 @@ __metadata:
     purgecss-webpack-plugin: 4.0.3
     pwstrength-bootstrap: 3.1.0
     qtip2: 3.0.3
-    quasar: 2.1.1
+    quasar: 2.1.2
     readmore-js: ^2.2.1
     recordrtc: ^5.6.2
     sass: ^1.42.1
@@ -7446,10 +7446,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.18.2":
-  version: 3.18.2
-  resolution: "core-js@npm:3.18.2"
-  checksum: bcdfca1a0fdf6c404b86a4871a4f7d13c4c64083fad1a818168d8626b492697e0f7ca131571830652a4d5e33b09076fc3aa47a35814503e4a5aa641916fa72a4
+"core-js@npm:3.18.3":
+  version: 3.18.3
+  resolution: "core-js@npm:3.18.3"
+  checksum: 01a927d02974a95313bc2325d9f832bbb4801c0c7e69639392574799f87041ce3dae52bdee3646c7cd58b4f38750a6093ca05363bf9f772be9c38dc69608c25c
   languageName: node
   linkType: hard
 
@@ -16815,10 +16815,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"quasar@npm:2.1.1":
-  version: 2.1.1
-  resolution: "quasar@npm:2.1.1"
-  checksum: 055d97b6d61254b7123009175e8bd644c9190ab3559ec2c1efa67c8e848a484060a47329a2bbeb18968c20cf686fee93fdef991a734faf2914a78c998de2ef49
+"quasar@npm:2.1.2":
+  version: 2.1.2
+  resolution: "quasar@npm:2.1.2"
+  checksum: debb435039d980330de790cafd33445a4dd508904f51ff3d577a946f430ac2d16db4fc12fe2e32433d121a2633d3c171d9cfa433fa73d9132dc75cc9b98c6391
   languageName: node
   linkType: hard
 

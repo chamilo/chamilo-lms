@@ -1302,18 +1302,16 @@ HTML;
                                     $s .= "
                                         <script>
                                             $(function() {
-                                                $(window).on('load', function() {
-                                                    jsPlumb.connect({
-                                                        source: 'window_$windowId',
-                                                        target: 'window_{$questionId}_{$selectedIndex}_answer',
-                                                        endpoint: ['Blank', {radius: 15}],
-                                                        anchors: ['RightMiddle', 'LeftMiddle'],
-                                                        paintStyle: {strokeStyle: '#8A8888', lineWidth: 8},
-                                                        connector: [
-                                                            MatchingDraggable.connectorType,
-                                                            {curvines: MatchingDraggable.curviness}
-                                                        ]
-                                                    });
+                                                MatchingDraggable.instances['$questionId'].connect({
+                                                    source: 'window_$windowId',
+                                                    target: 'window_{$questionId}_{$selectedIndex}_answer',
+                                                    endpoint: ['Dot', {radius: 12}],
+                                                    anchors: ['RightMiddle', 'LeftMiddle'],
+                                                    paintStyle: {stroke: '#8A8888', strokeWidth: 8},
+                                                    connector: [
+                                                        MatchingDraggable.connectorType,
+                                                        {curvines: MatchingDraggable.curviness}
+                                                    ]
                                                 });
                                             });
                                         </script>
@@ -1375,7 +1373,7 @@ HTML;
                 $isVertical = 'v' == $objQuestionTmp->extra;
                 $s .= "</ul></div>";
                 $counterAnswer = 1;
-                $s .= '<div class="question-answer__items--'.($isVertical ? 'vertical' : 'horizontal').'">';
+                $s .= '<div class="question-answer__items question-answer__items--'.($isVertical ? 'vertical' : 'horizontal').'">';
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $windowId = $questionId.'_'.$counterAnswer;

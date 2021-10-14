@@ -14,8 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class ExtraField.
- *
  * @ORM\Entity
  * @ORM\Table(name="extra_field")
  *

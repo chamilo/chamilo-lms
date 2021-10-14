@@ -1028,10 +1028,15 @@ class ExtraField extends Model
                         }
                     }
                 }
-
+                $hiddenElement = false;
                 if (!$adminPermissions) {
                     if (0 == $field_details['visible_to_self']) {
-                        continue;
+                        if (self::FIELD_TYPE_TEXT == $field_details['field_type']) {
+                            // It is a hidden element to keep the default value
+                            $hiddenElement = true;
+                        } else {
+                            continue;
+                        }
                     }
 
                     if (in_array($field_details['variable'], $exclude)) {
@@ -1068,24 +1073,31 @@ class ExtraField extends Model
 
                 switch ($field_details['field_type']) {
                     case self::FIELD_TYPE_TEXT:
-                        $form->addElement(
-                            'text',
-                            'extra_'.$field_details['variable'],
-                            $field_details['display_text'],
-                            [
-                                'id' => 'extra_'.$field_details['variable'],
-                            ]
-                        );
-                        $form->applyFilter(
-                            'extra_'.$field_details['variable'],
-                            'stripslashes'
-                        );
-                        $form->applyFilter(
-                            'extra_'.$field_details['variable'],
-                            'trim'
-                        );
-                        if ($freezeElement) {
-                            $form->freeze('extra_'.$field_details['variable']);
+                        if ($hiddenElement) {
+                            $form->addHidden(
+                                'extra_'.$field_details['variable'],
+                                ''
+                            );
+                        } else {
+                            $form->addElement(
+                                'text',
+                                'extra_'.$field_details['variable'],
+                                $field_details['display_text'],
+                                [
+                                    'id' => 'extra_'.$field_details['variable'],
+                                ]
+                            );
+                            $form->applyFilter(
+                                'extra_'.$field_details['variable'],
+                                'stripslashes'
+                            );
+                            $form->applyFilter(
+                                'extra_'.$field_details['variable'],
+                                'trim'
+                            );
+                            if ($freezeElement) {
+                                $form->freeze('extra_'.$field_details['variable']);
+                            }
                         }
                         break;
                     case self::FIELD_TYPE_TEXTAREA:

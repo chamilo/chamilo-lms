@@ -407,7 +407,7 @@ class ExtraField extends Model
 
                 $('#map_extra_{$variable}')
                     .html('<div class=\"alert alert-info\">"
-            .addslashes(get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap'))
+            .addslashes(get_lang('You need to activate the GoogleMaps plugin in adminPlatform to see the Map'))
             ."</div>');
             });
 

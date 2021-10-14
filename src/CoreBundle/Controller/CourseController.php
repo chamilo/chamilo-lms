@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -46,6 +48,93 @@ use UserManager;
 #[Route('/course')]
 class CourseController extends ToolBaseController
 {
+    #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
+    public function checkTermsAndConditionJson(Request $request, LegalRepository $legalTermsRepo, LanguageRepository $languageRepository): Response
+    {
+        $user = $this->getUser();
+        $course = $this->getCourse();
+        $responseData = [
+            'redirect' => false,
+            'url' => '#',
+        ];
+
+        $termAndConditionStatus = $legalTermsRepo->checkTermCondition($user);
+        if (false === $termAndConditionStatus) {
+            $request->getSession()->set('term_and_condition', ['user_id' => $user->getId()]);
+        } else {
+            $request->getSession()->remove('term_and_condition');
+        }
+        $termsAndCondition = $request->getSession()->get('term_and_condition');
+        if (null !== $termsAndCondition) {
+            // user id
+            $userId = $termsAndCondition['user_id'];
+
+            // Update the terms & conditions
+            $legalType = null;
+
+            // Verify type of terms and conditions
+            if (null !== $request->get('legal_info')) {
+                $infoLegal = explode(':', $request->get('legal_info'));
+                $legalId = (int) $infoLegal[0];
+                $languageId = (int) $infoLegal[1];
+                $legal = $legalTermsRepo->find($legalId);
+                $language = $languageRepository->find($languageId);
+                $legalType = $legalTermsRepo->getTypeOfTermsAndConditions($legal, $language);
+            }
+
+            $legalOption = (empty($legalType));
+            // is necessary verify check
+            if (1 === $legalType) {
+                $legalOption = (null !== $request->get('legal_accept') && 1 === (int) $request->get('legal_accept'));
+            }
+
+            if (null !== $request->get('legal_accept_type') && true === $legalOption) {
+                $condArray = explode(':', $request->get('legal_accept_type'));
+                if (!empty($condArray[0]) && !empty($condArray[1])) {
+                    $time = time();
+                    $conditionToSave = intval($condArray[0]).':'.intval($condArray[1]).':'.$time;
+                    UserManager::update_extra_field_value(
+                        $userId,
+                        'legal_accept',
+                        $conditionToSave
+                    );
+                }
+            }
+
+            $redirect = true;
+            $allow = api_get_configuration_value('allow_public_course_with_no_terms_conditions');
+            if (true === $allow &&
+                null !== $course->getVisibility() &&
+                COURSE_VISIBILITY_OPEN_WORLD == $course->getVisibility()
+            ) {
+                $redirect = false;
+            }
+            if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
+                $url = '/main/auth/inscription.php';
+                $responseData = [
+                    'redirect' => $redirect,
+                    'url' => $url,
+                ];
+            }
+        }
+
+        $json = $this->get('serializer')->serialize(
+            $responseData,
+            'json',
+            [
+                'groups' => ['course:read', 'ctool:read', 'tool:read', 'cshortcut:read'],
+            ]
+        );
+
+        return new Response(
+            $json,
+            Response::HTTP_OK,
+            [
+                'Content-type' => 'application/json',
+            ]
+        );
+    }
+
     #[Route('/{cid}/home.json', name: 'chamilo_core_course_home_json')]
     #[Entity('course', expr: 'repository.find(cid)')]
     public function indexJson(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain): Response

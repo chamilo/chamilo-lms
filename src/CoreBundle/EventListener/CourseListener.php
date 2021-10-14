@@ -26,6 +26,9 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
+use Chamilo\CoreBundle\Repository\LegalRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class CourseListener.
@@ -37,11 +40,16 @@ class CourseListener
 
     private Environment $twig;
     private AuthorizationCheckerInterface $authorizationChecker;
+    private SettingsManager $settingsManager;
 
-    public function __construct(Environment $twig, AuthorizationCheckerInterface $authorizationChecker)
-    {
+    public function __construct(
+        Environment $twig,
+        AuthorizationCheckerInterface $authorizationChecker,
+        SettingsManager $settingsManager
+    ) {
         $this->twig = $twig;
         $this->authorizationChecker = $authorizationChecker;
+        $this->settingsManager= $settingsManager;
     }
 
     /**

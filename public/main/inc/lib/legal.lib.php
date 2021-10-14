@@ -29,6 +29,11 @@ class LegalManager
     {
         $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
+
+        if (false === $last) {
+            return 0;
+        }
+
         $type = (int) $type;
         $time = time();
 
@@ -187,9 +192,9 @@ class LegalManager
         }
 
         $sql = "SELECT version FROM $table
-                WHERE 
-                    language_id = $language AND 
-                    version = $version                
+                WHERE
+                    language_id = $language AND
+                    version = $version
                 LIMIT 1 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -309,10 +314,10 @@ class LegalManager
         $column = (int) $column;
 
         $sql = "SELECT version, original_name as language, content, changes, type, FROM_UNIXTIME(date)
-                FROM $table 
+                FROM $table
                 INNER JOIN $lang_table l
-                ON (language_id = l.id) 
-                ORDER BY language, version ASC 
+                ON (language_id = l.id)
+                ORDER BY language, version ASC
                 LIMIT $from, $number_of_items ";
 
         $result = Database::query($sql);

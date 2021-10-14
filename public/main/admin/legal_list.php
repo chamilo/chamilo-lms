@@ -33,12 +33,12 @@ $em = Database::getManager();
 $legalTermsRepo = $em->getRepository(Legal::class);
 $legalCount = $legalTermsRepo->countAllActiveLegalTerms();
 $languages = api_get_languages();
-$available_languages = count($languages['folder']);
-if ($legalCount != $available_languages) {
+$availableLanguages = count($languages);
+if ($legalCount != $availableLanguages) {
     echo Display::return_message(get_lang('You should create the "Term and Conditions" for all the available languages.'), 'warning');
 }
 
-$table = new SortableTable('conditions', 'count_mask', 'get_legal_data_mask', 2);
+$table = new SortableTable('conditions', 'countMask', 'getLegalDataMask', 2);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('Version'), false, 'width="15px"');
 $table->set_header(1, get_lang('Language'), false, 'width="30px"');
@@ -49,12 +49,12 @@ $table->set_header(5, get_lang('Date'), false, 'width="50px"');
 $table->display();
 
 // this 2 "mask" function are here just because the SortableTable
-function get_legal_data_mask($id, $params = null, $row = null)
+function getLegalDataMask($id, $params = null, $row = null)
 {
     return LegalManager::get_legal_data($id, $params, $row);
 }
 
-function count_mask()
+function countMask()
 {
     return LegalManager::count();
 }

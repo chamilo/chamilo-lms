@@ -27,7 +27,7 @@ class ExtraFieldRepository extends ServiceEntityRepository
             ->where(
                 $qb->expr()->andX(
                     $qb->expr()->eq('f.visibleToSelf', true),
-                    $qb->expr()->eq('f.fieldType', $type)
+                    $qb->expr()->eq('f.extraFieldType', $type)
                 )
             )
         ;

@@ -333,42 +333,44 @@
     window.AnnotationQuestion = function (userSettings) {
         $(function () {
             var settings = $.extend(
-                {
-                    questionId: 0,
-                    exerciseId: 0,
-                    relPath: '/'
-                },
-                userSettings
-            ),
-            xhrUrl = 'exercise/annotation_user.php?' + _p.web_cid_query,
-            $container = $('#annotation-canvas-' + settings.questionId);
-            $.getJSON(settings.relPath + xhrUrl, {
-                question_id: parseInt(settings.questionId),
-                exe_id: parseInt(settings.exerciseId),
-                course_id: parseInt(settings.courseId)
-            })
-            .done(function (questionInfo) {
-                var image = new Image();
-                image.onload = function () {
-                    var elementsCollection = new ElementsCollection(),
-                        canvas = new AnnotationCanvasView(elementsCollection, this, settings.questionId);
+                    {
+                        questionId: 0,
+                        exerciseId: 0,
+                        relPath: '/'
+                    },
+                    userSettings
+                ),
+                xhrUrl = 'exercise/annotation_user.php?' + _p.web_cid_query,
+                $container = $('#annotation-canvas-' + settings.questionId);
 
-                    $container.html(canvas.render().el);
+            $
+                .getJSON(settings.relPath + xhrUrl, {
+                    question_id: parseInt(settings.questionId),
+                    exe_id: parseInt(settings.exerciseId),
+                    course_id: parseInt(settings.courseId)
+                })
+                .done(function (questionInfo) {
+                    var image = new Image();
+                    image.onload = function () {
+                        var elementsCollection = new ElementsCollection(),
+                            canvas = new AnnotationCanvasView(elementsCollection, this, settings.questionId);
 
-                    /** @namespace questionInfo.answers.paths */
-                    $.each(questionInfo.answers.paths, function (i, pathInfo) {
-                        var pathModel = SvgPathModel.decode(pathInfo);
-                        elementsCollection.add(pathModel);
-                    });
+                        $container.html(canvas.render().el);
 
-                    /** @namespace questionInfo.answers.texts */
-                    $(questionInfo.answers.texts).each(function (i, textInfo) {
-                        var textModel = TextModel.decode(textInfo);
-                        elementsCollection.add(textModel);
-                    });
-                };
-                image.src = questionInfo.image.path;
-            });
+                        /** @namespace questionInfo.answers.paths */
+                        $.each(questionInfo.answers.paths, function (i, pathInfo) {
+                            var pathModel = SvgPathModel.decode(pathInfo);
+                            elementsCollection.add(pathModel);
+                        });
+
+                        /** @namespace questionInfo.answers.texts */
+                        $(questionInfo.answers.texts).each(function (i, textInfo) {
+                            var textModel = TextModel.decode(textInfo);
+                            elementsCollection.add(textModel);
+                        });
+                    };
+                    image.src = questionInfo.image.path;
+                });
         });
     };
 })(window, window.jQuery);

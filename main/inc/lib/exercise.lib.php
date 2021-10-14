@@ -1706,7 +1706,7 @@ HOTSPOT;
                                 <script>
                                     AnnotationQuestion({
                                         questionId: '.$questionId.',
-                                        exerciseId: '.$exerciseId.',
+                                        exerciseId: '.$exe_id.',
                                         relPath: \''.$relPath.'\',
                                         courseId: '.$course_id.',
                                     });

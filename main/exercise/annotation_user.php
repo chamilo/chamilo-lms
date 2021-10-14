@@ -34,31 +34,28 @@ $data = [
     ],
 ];
 
-$attemptList = Event::getAllExerciseEventByExeId($exerciseId);
+$questionAttempt = Event::getQuestionAttemptByExeIdAndQuestion($exerciseId, $questionId);
 
-if (!empty($attemptList) && isset($attemptList[$questionId])) {
-    $questionAttempt = $attemptList[$questionId][0];
-    if (!empty($questionAttempt['answer'])) {
-        $answers = explode('|', $questionAttempt['answer']);
-        foreach ($answers as $answer) {
-            $parts = explode(')(', $answer);
-            $type = array_shift($parts);
+if (!empty($questionAttempt['answer'])) {
+    $answers = explode('|', $questionAttempt['answer']);
+    foreach ($answers as $answer) {
+        $parts = explode(')(', $answer);
+        $type = array_shift($parts);
 
-            switch ($type) {
-                case 'P':
-                    $points = [];
-                    foreach ($parts as $partPoint) {
-                        $points[] = Geometry::decodePoint($partPoint);
-                    }
-                    $data['answers']['paths'][] = $points;
-                    break;
-                case 'T':
-                    $text = [
-                        'text' => array_shift($parts),
-                    ];
-                    $data['answers']['texts'][] = $text + Geometry::decodePoint($parts[0]);
-                    break;
-            }
+        switch ($type) {
+            case 'P':
+                $points = [];
+                foreach ($parts as $partPoint) {
+                    $points[] = Geometry::decodePoint($partPoint);
+                }
+                $data['answers']['paths'][] = $points;
+                break;
+            case 'T':
+                $text = [
+                    'text' => array_shift($parts),
+                ];
+                $data['answers']['texts'][] = $text + Geometry::decodePoint($parts[0]);
+                break;
         }
     }
 }

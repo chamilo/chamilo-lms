@@ -4,6 +4,7 @@
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
+use Chamilo\PluginBundle\XApi\Lrs\Util\InternalLogUtil;
 use Symfony\Component\HttpFoundation\Response;
 use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
@@ -84,6 +85,8 @@ class StatementsController extends BaseController
             $this->httpRequest->getContent()
         );
 
+        InternalLogUtil::saveStatementForInternalLog($statement);
+
         return $putStatementController->putStatement($this->httpRequest, $statement);
     }
 
@@ -104,6 +107,10 @@ class StatementsController extends BaseController
         }
 
         $statements = $this->deserializeStatements($content);
+
+        foreach ($statements as $statement) {
+            InternalLogUtil::saveStatementForInternalLog($statement);
+        }
 
         return $postStatementController->postStatements($this->httpRequest, $statements);
     }

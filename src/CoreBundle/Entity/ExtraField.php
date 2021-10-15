@@ -196,9 +196,9 @@ class ExtraField
      */
     public function getDisplayText(bool $translated = true)
     {
-        if ($translated) {
+        /*if ($translated) {
             return \ExtraField::translateDisplayName($this->variable, $this->displayText);
-        }
+        }*/
 
         return $this->displayText;
     }

@@ -940,10 +940,7 @@ class ExtraField extends Model
         $option = new ExtraFieldOption($this->type);
         if (!empty($extraFields)) {
             foreach ($extraFields as &$extraField) {
-                $extraField['display_text'] = $this->translateDisplayName(
-                    $extraField['variable'],
-                    $extraField['display_text']
-                );
+                $extraField['display_text'] = get_lang($extraField['display_text']);
                 $extraField['options'] = $option->get_field_options_by_field(
                     $extraField['id'],
                     false,
@@ -3048,7 +3045,7 @@ JAVASCRIPT;
                     }
                     $assetId = $valueData['asset_id'];
                     $assetRepo = Container::getAssetRepository();
-                    /** @var Asset $asset */
+                    /** @var Asset|null $asset */
                     $asset = $assetRepo->find($assetId);
 
                     if (null === $asset) {

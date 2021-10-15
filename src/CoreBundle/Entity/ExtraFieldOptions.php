@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use ExtraFieldOption;
 
 /**
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository")
@@ -112,9 +111,9 @@ class ExtraFieldOptions
      */
     public function getDisplayText(bool $translated = true)
     {
-        if ($translated) {
+        /*if ($translated) {
             return ExtraFieldOption::translateDisplayName($this->displayText);
-        }
+        }*/
 
         return $this->displayText;
     }

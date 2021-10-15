@@ -11,7 +11,7 @@
         <div class="line-clamp-2 text-md w-5/6">
           <router-link :to="{ name: 'CourseHome', params: {id: course._id, course: course}, query: { sid: sessionId } }">
             <span v-if="session">
-              [ {{ session.name }} ]
+              {{ session.name }} -
             </span>
             {{ course.title }}
           </router-link>

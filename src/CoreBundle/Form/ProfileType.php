@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Form;
 
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
@@ -73,24 +72,6 @@ class ProfileType extends AbstractType
                 ['label' => 'Picture', 'required' => false, 'mapped' => false]
             )
             //->add('website', UrlType::class, ['label' => 'Website', 'required' => false])
-            /*->add(
-                'extraFieldValues',
-                CollectionType::class,
-                array(
-                    'required' => false,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'type' => 'chamilo_user_extra_field_value',
-                    'by_reference' => false,
-                    'prototype' => true,
-                    'widget_add_btn' => ['label' => 'Add'],
-                    'options' => array( // options for collection fields
-                        'widget_remove_btn' => array('label' => 'Remove'),
-                        'label_render' => false,
-                    )
-                )
-            )*/
-            //->add('save', 'submit', array('label' => 'Update')            )
         ;
 
         $builder->add('extra_fields', ExtraFieldType::class, ['mapped' => false]);

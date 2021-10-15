@@ -68,3 +68,12 @@ ALTER TABLE xapi_cmi5_item ADD CONSTRAINT FK_7CA116D8727ACA70 FOREIGN KEY (paren
 CREATE TABLE xapi_activity_state (id INT AUTO_INCREMENT NOT NULL, state_id VARCHAR(255) NOT NULL, activity_id VARCHAR(255) NOT NULL, agent LONGTEXT NOT NULL COMMENT '(DC2Type:json)', document_data LONGTEXT NOT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 CREATE TABLE xapi_activity_profile (id INT AUTO_INCREMENT NOT NULL, profile_id VARCHAR(255) NOT NULL, activity_id VARCHAR(255) NOT NULL, document_data LONGTEXT NOT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 ```
+
+**From 0.2 (beta) [2021-10-15]**
+With the LRS an internal log is registered based on the actor mbox's email or the actor account's name coming from the statement
+To update, execute this queries:
+
+```sql
+CREATE TABLE xapi_internal_log (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, statement_id VARCHAR(255) NOT NULL, verb VARCHAR(255) NOT NULL, activity_id VARCHAR(255) NOT NULL, activity_name VARCHAR(255) DEFAULT NULL, activity_description VARCHAR(255) DEFAULT NULL, score_scaled DOUBLE PRECISION DEFAULT NULL, score_raw DOUBLE PRECISION DEFAULT NULL, score_min DOUBLE PRECISION DEFAULT NULL, score_max DOUBLE PRECISION DEFAULT NULL, created_at DATETIME DEFAULT NULL, INDEX IDX_C1C667ACA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE xapi_internal_log ADD CONSTRAINT FK_C1C667ACA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
+```

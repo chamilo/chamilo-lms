@@ -100,6 +100,7 @@ class ExtraFieldType extends AbstractType
 
                     break;
                 case \ExtraField::FIELD_TYPE_DATE:
+                    $defaultOptions['data'] = null;
                     if (!empty($value)) {
                         $defaultOptions['data'] = new DateTime($value);
                     }
@@ -108,6 +109,7 @@ class ExtraFieldType extends AbstractType
 
                     break;
                 case \ExtraField::FIELD_TYPE_DATETIME:
+                    $defaultOptions['data'] = null;
                     if (!empty($value)) {
                         $defaultOptions['data'] = new DateTime($value);
                     }

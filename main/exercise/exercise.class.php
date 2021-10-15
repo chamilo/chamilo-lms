@@ -7431,68 +7431,13 @@ class Exercise
      */
     public function fill_in_blank_answer_to_array($answer)
     {
-        $allowedSeparator = [
-            ['[', ']'],
-            ['{', '}'],
-            ['(', ')'],
-            ['*', '*'],
-            ['#', '#'],
-            ['%', '%'],
-            ['$', '$'],
-        ];
-        $teacherAnswerList = [];
-        foreach ($allowedSeparator as $separator) {
-            $blankStartSeparator = $separator[0];
-            $blankEndSeparator = $separator[1];
-            $blanks = $this->fbAnswerMatchAll($answer, $blankStartSeparator, $blankEndSeparator);
-            if (!empty($blanks)) {
-                $teacherAnswerList = $blanks;
-                break;
-            }
-        }
+        $listStudentResults = FillBlanks::getAnswerInfo(
+            $answer,
+            true
+        );
+        $teacherAnswerList = $listStudentResults['student_answer'];
 
         return $teacherAnswerList;
-    }
-
-    /**
-     * Get Answer matching all by separator
-     *
-     * @param $answer
-     * @param $blankStartSeparator
-     * @param $blankEndSeparator
-     * @return mixed
-     */
-    public function fbAnswerMatchAll($answer, $blankStartSeparator, $blankEndSeparator)
-    {
-        $blankStartSeparatorRegexp = '\\'.$blankStartSeparator;
-        $blankEndSeparatorRegexp = '\\'.$blankEndSeparator;
-
-        $answer = preg_replace_callback(
-            "/".$blankStartSeparatorRegexp."[^".$blankEndSeparatorRegexp."]*".$blankEndSeparatorRegexp."/",
-            function ($matches) use ($blankStartSeparator, $blankEndSeparator) {
-                $matchingResult = $matches[0];
-                $matchingResult = trim($matchingResult, $blankStartSeparator);
-                $matchingResult = trim($matchingResult, $blankEndSeparator);
-                $matchingResult = trim($matchingResult);
-                // remove forbidden chars
-                $matchingResult = str_replace("/\\/", "", $matchingResult);
-                $matchingResult = str_replace('/"/', "", $matchingResult);
-
-                return $blankStartSeparator.$matchingResult.$blankEndSeparator;
-            },
-            $answer
-        );
-
-        // get the blanks weightings
-        $nb = preg_match_all(
-            '#'.$blankStartSeparatorRegexp.'([^'.$blankEndSeparatorRegexp.']*)'.$blankEndSeparatorRegexp.'#',
-            $answer,
-            $blanks
-        );
-
-        $answerList = $blanks[1];
-
-        return $answerList;
     }
 
     /**

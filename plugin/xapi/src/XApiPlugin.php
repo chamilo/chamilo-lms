@@ -113,7 +113,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         }
 
         $this->installPluginDbTables();
-        $this->installUuid();
+        $this->installInitialConfig();
         $this->addCourseTools();
         $this->installHook();
     }
@@ -528,7 +528,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     /**
      * @throws \Exception
      */
-    private function installUuid()
+    private function installInitialConfig()
     {
         $uuidNamespace = Uuid::uuid1();
 
@@ -538,6 +538,20 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         api_add_setting(
             $uuidNamespace,
             $pluginName.'_'.self::SETTING_UUID_NAMESPACE,
+            $pluginName,
+            'setting',
+            'Plugins',
+            $pluginName,
+            '',
+            '',
+            '',
+            $urlId,
+            1
+        );
+
+        api_add_setting(
+            api_get_path(WEB_PATH).'plugin/xapi/lrs.php',
+            $pluginName.'_'.self::SETTING_LRS_URL,
             $pluginName,
             'setting',
             'Plugins',

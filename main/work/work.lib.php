@@ -2091,7 +2091,8 @@ function get_work_user_list(
     $studentId = null,
     $getCount = false,
     $courseId = 0,
-    $sessionId = 0
+    $sessionId = 0,
+    $shortTitle = true
 ) {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -2333,7 +2334,7 @@ function get_work_user_list(
                 // Title
                 $work['title_clean'] = $work['title'];
                 $work['title'] = Security::remove_XSS($work['title']);
-                if (strlen($work['title']) > 30) {
+                if (strlen($work['title']) > 30 && $shortTitle) {
                     $short_title = substr($work['title'], 0, 27).'...';
                     $work['title'] = Display::span($short_title, ['class' => 'work-title', 'title' => $work['title']]);
                 } else {
@@ -2595,7 +2596,8 @@ function getAllWork(
     $getCount = false,
     $courseId = 0,
     $status = 0,
-    $onlyParents = false
+    $onlyParents = false,
+    $shortTitle = true
 ) {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -2875,7 +2877,7 @@ function getAllWork(
             // Title
             $work['title_clean'] = $work['title'];
             $work['title'] = Security::remove_XSS($work['title']);
-            if (strlen($work['title']) > 30) {
+            if (strlen($work['title']) > 30 && $shortTitle) {
                 $short_title = substr($work['title'], 0, 27).'...';
                 $work['title'] = Display::span($short_title, ['class' => 'work-title', 'title' => $work['title']]);
             } else {

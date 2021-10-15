@@ -1751,7 +1751,7 @@ class CourseBuilder
         }
 
         $sql = "SELECT * FROM $table_thematic
-                WHERE c_id = $courseId $sessionCondition ";
+                WHERE c_id = $courseId AND active = 1 $sessionCondition ";
         $db_result = Database::query($sql);
         while ($row = Database::fetch_array($db_result, 'ASSOC')) {
             $thematic = new Thematic($row);

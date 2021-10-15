@@ -18,7 +18,7 @@
 import {computed, ref} from "vue";
 import {useStore} from 'vuex';
 import {useQuery, useResult} from '@vue/apollo-composable'
-import {GET_SESSION_REL_USER, GET_SESSION_REL_USER_CURRENT} from "../../../graphql/queries/SessionRelUser.js";
+import {GET_SESSION_REL_USER_CURRENT} from "../../../graphql/queries/SessionRelUser.js";
 import {DateTime} from "luxon";
 import SessionTabs from '../../../components/session/Tabs';
 import SessionListWrapper from '../../../components/session/SessionListWrapper';
@@ -46,8 +46,6 @@ export default {
 
       const {result: resultSessions, loading: loadingSessions} = useQuery(GET_SESSION_REL_USER_CURRENT, {
         user: "/api/users/" + userId,
-        beforeStartDate: start,
-        afterEndDate: end,
       });
 
       let sessions = useResult(resultSessions, [], ({sessionRelUsers}) => {

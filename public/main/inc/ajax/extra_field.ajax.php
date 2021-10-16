@@ -39,13 +39,15 @@ switch ($action) {
         header('Content-Type: application/json');
         $tag = isset($_REQUEST['q']) ? (string) $_REQUEST['q'] : '';
 
-        if (empty($tag)) {
+        $extraFieldRepo = Container::getExtraFieldRepository();
+        $field = $extraFieldRepo->find($fieldId);
+
+        if (empty($tag || null === $field)) {
             echo json_encode(['items' => []]);
             exit;
         }
 
         $tagRepo = Container::getTagRepository();
-        $field = $tagRepo->find($fieldId);
         $tags = $tagRepo->findTagsByField($tag, $field);
         $result = [];
         foreach ($tags as $tag) {

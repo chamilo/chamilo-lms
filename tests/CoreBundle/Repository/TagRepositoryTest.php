@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelTag;
 use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
@@ -134,5 +135,32 @@ class TagRepositoryTest extends AbstractApiTest
 
         $this->assertCount(1, $tags);
         $this->assertInstanceOf(Tag::class, $tags[0]);
+    }
+
+    public function testAddTagToUser(): void
+    {
+        $em = $this->getEntityManager();
+        $repo = self::getContainer()->get(TagRepository::class);
+
+        $extraField = (new ExtraField())
+            ->setDisplayText('test')
+            ->setVariable('test')
+            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
+            ->setFieldType(\ExtraField::FIELD_TYPE_TAG)
+        ;
+        $em->persist($extraField);
+        $em->flush();
+
+        $user = $this->createUser('test');
+
+        $user = $repo->addTagToUser($extraField, $user, 'php');
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertSame(1, $user->getUserRelTags()->count());
+        $em->flush();
+        $em->clear();
+
+        $user = $this->getUser('test');
+        $repo->addTagToUser($extraField, $user, 'php');
+        $this->assertSame(1, $user->getUserRelTags()->count());
     }
 }

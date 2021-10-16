@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelTag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
@@ -67,5 +68,41 @@ class TagRepository extends ServiceEntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function addTagToUser(ExtraField $extraField, User $user, string $tag): User
+    {
+        $entityTag = $this->findOneBy(['tag' => $tag, 'field' => $extraField]);
+        $em = $this->getEntityManager();
+        if (null === $entityTag) {
+            $entityTag = (new Tag())
+                ->setField($extraField)
+                ->setTag($tag)
+            ;
+            $em->persist($entityTag);
+        }
+
+        $userRelTag = (new UserRelTag())
+            ->setUser($user)
+            ->setTag($entityTag)
+        ;
+
+        $exists = $user->getUserRelTags()->exists(
+            /** @var UserRelTag $element */
+            function ($key, $element) use ($userRelTag) {
+                return $userRelTag->getTag() === $element->getTag();
+            }
+        );
+
+        if (!$exists) {
+            $entityTag->setCount($entityTag->getCount() + 1);
+            $em->persist($entityTag);
+            $user->getUserRelTags()->add($userRelTag);
+        }
+
+        $em->persist($user);
+        $em->flush();
+
+        return $user;
     }
 }

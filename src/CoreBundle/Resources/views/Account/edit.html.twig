@@ -1,7 +1,29 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-    {% autoescape false %}
+
+
+    {% autoescape false %}<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $('.select2_user_rel_tag').each(function(i, obj) {
+                let fieldId = '&field_id=' + $(this).attr('data.field_id');
+                $(this).select2({
+                    ajax: {
+                        url: '{{ url('legacy_main', { 'name' : 'inc/ajax/extra_field.ajax.php', 'a': 'search_tags', 'type': 'user'}) }}' + fieldId,
+                        processResults: function (data) {
+                            return {
+                                results: data.items
+                            }
+                        }
+                    },
+                    cache: false,
+                    tags: true,
+                    tokenSeparators: [','],
+                });
+            });
+            $('.select2_user_rel_tag').refresh
+        });
+    </script>
         <h3>{{ user.userIdentifier }}</h3>
 {#        <a href="{{ url('app_forgot_password_request') }}" class="btn btn-primary">#}
 {#            Reset password#}

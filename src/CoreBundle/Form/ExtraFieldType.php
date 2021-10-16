@@ -7,10 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Form;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldItemInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Repository\TagRepository;
 use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -32,29 +32,32 @@ class ExtraFieldType extends AbstractType
     private ExtraFieldValuesRepository $extraFieldValuesRepository;
     private Security $security;
     private ExtraFieldRepository $extraFieldRepository;
+    private TagRepository $tagRepository;
 
     public function __construct(
         ExtraFieldValuesRepository $extraFieldValuesRepository,
         ExtraFieldRepository $extraFieldRepository,
+        TagRepository $tagRepository,
         Security $security
     ) {
         $this->extraFieldValuesRepository = $extraFieldValuesRepository;
         $this->extraFieldRepository = $extraFieldRepository;
         $this->security = $security;
+        $this->tagRepository = $tagRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         // @todo implement Course/Session extra fields
-        /** @var User|null|ExtraFieldItemInterface $item */
+        /** @var User|null $item */
         $item = $this->security->getUser();
 
         if (null === $item) {
             return;
         }
-
-        $extraFields = $this->extraFieldRepository->getExtraFields(ExtraField::USER_FIELD_TYPE);
-        $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($item, ExtraField::USER_FIELD_TYPE);
+        $extraFieldType = ExtraField::USER_FIELD_TYPE; // user/course/session ?
+        $extraFields = $this->extraFieldRepository->getExtraFields($extraFieldType);
+        $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($item, $extraFieldType);
 
         $data = [];
         foreach ($values as $value) {
@@ -78,7 +81,6 @@ class ExtraFieldType extends AbstractType
             switch ($extraField->getFieldType()) {
                 case \ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                 case \ExtraField::FIELD_TYPE_DIVIDER:
-                case \ExtraField::FIELD_TYPE_TAG:
                 case \ExtraField::FIELD_TYPE_TIMEZONE:
                 case \ExtraField::FIELD_TYPE_FILE_IMAGE:
                 case \ExtraField::FIELD_TYPE_FILE:
@@ -89,6 +91,36 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                 case \ExtraField::FIELD_TYPE_TRIPLE_SELECT:
                     //@todo
+                    break;
+                case \ExtraField::FIELD_TYPE_TAG:
+                    $defaultOptions['expanded'] = false;
+                    $defaultOptions['multiple'] = true;
+
+                    // The class will be loaded in the template: src/CoreBundle/Resources/views/Account/edit.html.twig
+                    // @todo implement generic form.
+                    $class = 'select2_extra_rel_tag';
+                    if (ExtraField::USER_FIELD_TYPE === $extraFieldType) {
+                        $class = 'select2_user_rel_tag';
+                        $tags = $this->tagRepository->getTagsByUser($extraField, $item);
+                        $choices = [];
+                        foreach ($tags as $tag) {
+                            $stringTag = $tag->getTag();
+                            if (empty($stringTag)) {
+                                continue;
+                            }
+                            $choices[$stringTag] = $stringTag;
+                        }
+                        $defaultOptions['choices'] = $choices;
+                        $defaultOptions['data'] = $choices;
+                    }
+
+                    $defaultOptions['attr'] = [
+                        'class' => $class,
+                        'style' => 'width:500px',
+                        'data.field_id' => $extraField->getId(),
+                    ];
+                    $builder->add($variable, ChoiceType::class, $defaultOptions);
+
                     break;
                 case \ExtraField::FIELD_TYPE_VIDEO_URL:
                 case \ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
@@ -191,6 +223,15 @@ class ExtraFieldType extends AbstractType
                 $data = $event->getData();
                 foreach ($extraFields as $extraField) {
                     $newValue = $data[$extraField->getVariable()] ?? null;
+
+                    if (\ExtraField::FIELD_TYPE_TAG === $extraField->getFieldType()) {
+                        foreach ($newValue as $tag) {
+                            $this->tagRepository->addTagToUser($extraField, $item, $tag);
+                        }
+
+                        continue;
+                    }
+
                     if (empty($newValue)) {
                         continue;
                     }

@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 
 /**
- * Class ExtraFieldOption
  * Handles the extra fields for various objects (users, sessions, courses).
  */
 class ExtraFieldOption extends Model
@@ -549,7 +548,7 @@ class ExtraFieldOption extends Model
                 'id' => $row->getId(),
                 'field_id' => $row->getField()->getId(),
                 'option_value' => $row->getValue(),
-                'display_text' => get_lang($row->getDisplayText()),
+                'display_text' => \ExtraField::translateDisplayName($row->getValue(), $row->getDisplayText()),
                 'priority' => $row->getPriority(),
                 'priority_message' => $row->getPriorityMessage(),
                 'option_order' => $row->getOptionOrder(),
@@ -861,38 +860,10 @@ class ExtraFieldOption extends Model
         $info = parent::get($id);
 
         if ($translateDisplayText) {
-            $info['display_text'] = self::translateDisplayName($info['display_text']);
+            $info['display_text'] = ExtraField::translateDisplayName($info['option_value'], $info['display_text']);
         }
 
         return $info;
-    }
-
-    /**
-     * Translate the display text for a extra field option.
-     *
-     * @param string $defaultDisplayText
-     *
-     * @return string
-     */
-    public static function translateDisplayName($defaultDisplayText)
-    {
-        $variableLanguage = self::getLanguageVariable($defaultDisplayText);
-
-        return isset($GLOBALS[$variableLanguage]) ? $GLOBALS[$variableLanguage] : $defaultDisplayText;
-    }
-
-    /**
-     * @param $defaultDisplayText
-     *
-     * @return mixed|string
-     */
-    public static function getLanguageVariable($defaultDisplayText)
-    {
-        $variableLanguage = api_replace_dangerous_char($defaultDisplayText);
-        $variableLanguage = str_replace('-', '_', $variableLanguage);
-        $variableLanguage = api_underscore_to_camel_case($variableLanguage);
-
-        return $variableLanguage;
     }
 
     /**
@@ -905,7 +876,7 @@ class ExtraFieldOption extends Model
         $result = parent::get_all($options);
 
         foreach ($result as &$row) {
-            $row['display_text'] = self::translateDisplayName($row['display_text']);
+            $row['display_text'] = ExtraField::translateDisplayName($row['option_value'], $row['display_text']);
         }
 
         return $result;

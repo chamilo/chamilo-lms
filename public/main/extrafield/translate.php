@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+exit;
+
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Language;
 
@@ -25,8 +27,8 @@ if (isset($_GET['extra_field'])) {
 } elseif (isset($_GET['extra_field_option'])) {
     $extraFieldOption = $em->find('ChamiloCoreBundle:ExtraFieldOptions', intval($_GET['extra_field_option']));
     $extraField = $extraFieldOption->getField();
-    $variableLanguage = '$'.ExtraFieldOption::getLanguageVariable($extraFieldOption->getDisplayText());
-    $originalName = $extraFieldOption->getDisplayText(false);
+    //$variableLanguage = '$'.ExtraFieldOption::getLanguageVariable($extraFieldOption->getDisplayText());
+    $originalName = $extraFieldOption->getDisplayText();
 }
 
 if (!$extraField || empty($variableLanguage) || empty($originalName)) {

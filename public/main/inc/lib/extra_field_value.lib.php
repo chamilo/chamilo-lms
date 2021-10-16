@@ -561,10 +561,10 @@ class ExtraFieldValue extends Model
                             if (isset($extra_field_option_result[0])) {
                                 $result['value'] = $extra_field_option_result[0]['display_text'];
                             }
+
                             break;
                         case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                             $options = explode('::', $result['value']);
-
                             $field_option = new ExtraFieldOption($this->type);
                             $result = $field_option->get($options[0]);
 
@@ -577,11 +577,9 @@ class ExtraFieldValue extends Model
                         case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
                             $optionIds = explode(';', $result['value']);
                             $optionValues = [];
-
                             foreach ($optionIds as $optionId) {
                                 $objEfOption = new ExtraFieldOption('user');
                                 $optionInfo = $objEfOption->get($optionId);
-
                                 $optionValues[] = $optionInfo['display_text'];
                             }
 

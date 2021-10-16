@@ -643,9 +643,9 @@ class ExtraField extends Model
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             $row['display_text'] = $this->translateDisplayName(
-                    $row['variable'],
-                    $row['display_text']
-                );
+                $row['variable'],
+                $row['display_text']
+            );
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag
@@ -670,11 +670,21 @@ class ExtraField extends Model
      *
      * @return string
      */
-    public static function translateDisplayName($variable, $defaultDisplayText)
+    public static function translateDisplayName($variable, $defaultDisplayText): string
     {
-        $camelCase = api_underscore_to_camel_case($variable);
+        // 1st priority variable.
+        $translatedVariable = get_lang($variable);
+        if ($variable !== $translatedVariable) {
+            return $translatedVariable;
+        }
 
-        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+        // 2nd priority display text.
+        $translatedDisplayText = get_lang($defaultDisplayText);
+        if ($defaultDisplayText !== $translatedDisplayText) {
+            return $translatedVariable;
+        }
+
+        return $defaultDisplayText;
     }
 
     /**
@@ -940,7 +950,7 @@ class ExtraField extends Model
         $option = new ExtraFieldOption($this->type);
         if (!empty($extraFields)) {
             foreach ($extraFields as &$extraField) {
-                $extraField['display_text'] = get_lang($extraField['display_text']);
+                $extraField['display_text'] = self::translateDisplayName($extraField['variable'], $extraField['display_text']);
                 $extraField['options'] = $option->get_field_options_by_field(
                     $extraField['id'],
                     false,
@@ -1998,15 +2008,12 @@ class ExtraField extends Model
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row) {
-                $row['display_text'] = $this->translateDisplayName(
-                    $row['variable'],
-                    $row['display_text']
-                );
+                $row['display_text'] = $this->translateDisplayName($row['variable'], $row['display_text']);
 
                 // All the options of the field
                 $sql = "SELECT * FROM $this->table_field_options
-                    WHERE field_id='".intval($row['id'])."'
-                    ORDER BY option_order ASC";
+                        WHERE field_id='".intval($row['id'])."'
+                        ORDER BY option_order ASC";
                 $result = Database::query($sql);
                 while ($option = Database::fetch_array($result)) {
                     $row['options'][$option['id']] = $option;
@@ -2995,11 +3002,7 @@ JAVASCRIPT;
 
             $valueAsArray = [];
             $fieldValue = new ExtraFieldValue($this->type);
-            $valueData = $fieldValue->get_values_by_handler_and_field_id(
-                $itemId,
-                $field['id'],
-                true
-            );
+            $valueData = $fieldValue->get_values_by_handler_and_field_id($itemId, $field['id'], true);
 
             $fieldType = (int) $field['field_type'];
             if (self::FIELD_TYPE_TAG === $fieldType) {
@@ -3022,10 +3025,9 @@ JAVASCRIPT;
             $displayedValue = get_lang('None');
             switch ($fieldType) {
                 case self::FIELD_TYPE_CHECKBOX:
+                    $displayedValue = get_lang('No');
                     if (false !== $valueData && '1' == $valueData['value']) {
                         $displayedValue = get_lang('Yes');
-                    } else {
-                        $displayedValue = get_lang('No');
                     }
                     break;
                 case self::FIELD_TYPE_DATE:

@@ -190,16 +190,10 @@ class ExtraField
     }
 
     /**
-     * @param bool $translated Optional. Whether translate the display text
-     *
      * @return string
      */
-    public function getDisplayText(bool $translated = true)
+    public function getDisplayText()
     {
-        /*if ($translated) {
-            return \ExtraField::translateDisplayName($this->variable, $this->displayText);
-        }*/
-
         return $this->displayText;
     }
 

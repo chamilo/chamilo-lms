@@ -45,7 +45,8 @@ switch ($action) {
         }
 
         $tagRepo = Container::getTagRepository();
-        $tags = $tagRepo->findTagsByField($tag, $fieldId);
+        $field = $tagRepo->find($fieldId);
+        $tags = $tagRepo->findTagsByField($tag, $field);
         $result = [];
         foreach ($tags as $tag) {
             $result[] = [

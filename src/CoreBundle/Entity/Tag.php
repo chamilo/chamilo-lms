@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,12 +37,25 @@ class Tag
     protected ExtraField $field;
 
     /**
+     * @var Collection<int, UserRelTag>|UserRelTag[]
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelTag", mappedBy="tag", cascade={"persist"})
+     */
+    protected Collection $userRelTags;
+
+    /**
+     * @var Collection<int, ExtraFieldRelTag>|ExtraFieldRelTag[]
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldRelTag", mappedBy="tag", cascade={"persist"})
+     */
+    protected Collection $extraFieldRelTags;
+
+    /**
      * @ORM\Column(name="count", type="integer", nullable=false)
      */
     protected int $count;
 
     public function __construct()
     {
+        $this->userRelTags = new ArrayCollection();
         $this->count = 0;
     }
 
@@ -86,6 +101,18 @@ class Tag
     public function setField(ExtraField $field): self
     {
         $this->field = $field;
+
+        return $this;
+    }
+
+    public function getUserRelTags()
+    {
+        return $this->userRelTags;
+    }
+
+    public function setUserRelTags($userRelTags): self
+    {
+        $this->userRelTags = $userRelTags;
 
         return $this;
     }

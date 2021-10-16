@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FieldRelTag.
- *
  * @ORM\Table(
  *     name="extra_field_rel_tag",
  *     indexes={
@@ -38,7 +36,7 @@ class ExtraFieldRelTag
     protected ExtraField $field;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tag")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tag", inversedBy="extraFieldRelTags")
      * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Tag $tag;

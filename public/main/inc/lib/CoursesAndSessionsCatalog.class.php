@@ -1566,7 +1566,7 @@ class CoursesAndSessionsCatalog
         $entityManager = Database::getManager();
         $sessionRelCourseRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourse');
         $extraFieldRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
-        $extraFieldRelTagRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+        $tagRepo = \Chamilo\CoreBundle\Framework\Container::getTagRepository();
 
         $tagsField = $extraFieldRepo->findOneBy([
             'extraFieldType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
@@ -1595,7 +1595,7 @@ class CoursesAndSessionsCatalog
                 ]);
                 /** @var SessionRelCourse $sessionRelCourse */
                 foreach ($sessionRelCourses as $sessionRelCourse) {
-                    $courseTags = $extraFieldRelTagRepo->getTags(
+                    $courseTags = $tagRepo->getTagsByItem(
                         $tagsField,
                         $sessionRelCourse->getCourse()->getId()
                     );

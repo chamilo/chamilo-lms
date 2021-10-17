@@ -105,4 +105,26 @@ class TagRepository extends ServiceEntityRepository
 
         return $user;
     }
+
+    public function deleteTagFromUser(User $user, Tag $tag): bool
+    {
+        $em = $this->getEntityManager();
+
+        $userRelTags = $user->getUserRelTags()->filter(
+            function ($element) use ($tag) {
+                return $tag->getId() === $element->getTag()->getId();
+            }
+        );
+
+        if ($userRelTags->count() > 0 && $userRelTags->first()) {
+            $tag->setCount($tag->getCount() - 1);
+            $em->persist($tag);
+            $em->remove($userRelTags->first());
+            $em->flush();
+
+            return true;
+        }
+
+        return false;
+    }
 }

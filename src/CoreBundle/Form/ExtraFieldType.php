@@ -102,15 +102,20 @@ class ExtraFieldType extends AbstractType
                     if (ExtraField::USER_FIELD_TYPE === $extraFieldType) {
                         $class = 'select2_user_rel_tag';
                         $tags = $this->tagRepository->getTagsByUser($extraField, $item);
+
                         $choices = [];
+                        $choicesAttributes = [];
                         foreach ($tags as $tag) {
                             $stringTag = $tag->getTag();
                             if (empty($stringTag)) {
                                 continue;
                             }
                             $choices[$stringTag] = $stringTag;
+                            $choicesAttributes[$stringTag] = ['data-id' => $tag->getId()];
                         }
+
                         $defaultOptions['choices'] = $choices;
+                        $defaultOptions['choice_attr'] = $choicesAttributes;
                         $defaultOptions['data'] = $choices;
                     }
 
@@ -200,22 +205,21 @@ class ExtraFieldType extends AbstractType
         }
 
         /*$builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
+            FormEvents::POST_SET_DATA,
             function (FormEvent $event) use ($item, $extraFields): void {
                 $data = $event->getData();
                 foreach ($extraFields as $extraField) {
-                    $newValue = $data[$extraField->getVariable()] ?? '';
+                    $newValue = $data[$extraField->getVariable()] ?? null;
                     if (!empty($newValue)) {
-                        if (\ExtraField::FIELD_TYPE_DATE === $extraField->getFieldType()) {
-                            var_dump($newValue);
-                            exit;
-                        }
-                        if (\ExtraField::FIELD_TYPE_DATETIME === $extraField->getFieldType()) {
+                        if (\ExtraField::FIELD_TYPE_TAG === $extraField->getFieldType()) {
+                            $formItem = $event->getForm()->get($extraField->getVariable());
+                            $formItem->setData($newValue);
                         }
                     }
                 }
             }
         );*/
+
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
@@ -223,8 +227,12 @@ class ExtraFieldType extends AbstractType
                 $data = $event->getData();
                 foreach ($extraFields as $extraField) {
                     $newValue = $data[$extraField->getVariable()] ?? null;
-
                     if (\ExtraField::FIELD_TYPE_TAG === $extraField->getFieldType()) {
+                        $formItem = $event->getForm()->get($extraField->getVariable());
+                        $options = $formItem->getConfig()->getOptions();
+                        $options['choices'] = $newValue;
+                        $event->getForm()->add($extraField->getVariable(), ChoiceType::class, $options);
+
                         foreach ($newValue as $tag) {
                             $this->tagRepository->addTagToUser($extraField, $item, $tag);
                         }

@@ -162,5 +162,12 @@ class TagRepositoryTest extends AbstractApiTest
         $user = $this->getUser('test');
         $repo->addTagToUser($extraField, $user, 'php');
         $this->assertSame(1, $user->getUserRelTags()->count());
+
+        $tag = $user->getUserRelTags()->first();
+        $repo->deleteTagFromUser($user, $tag->getTag());
+        $this->assertSame(0, $user->getUserRelTags()->count());
+
+        $repo->deleteTagFromUser($user, $tag->getTag());
+        $this->assertSame(0, $user->getUserRelTags()->count());
     }
 }

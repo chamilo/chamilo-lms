@@ -1,16 +1,23 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-
-
-    {% autoescape false %}<script>
-        document.addEventListener("DOMContentLoaded", function() {
+    {% autoescape false %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
             $('.select2_user_rel_tag').each(function(i, obj) {
                 let fieldId = '&field_id=' + $(this).attr('data.field_id');
                 $(this).select2({
                     ajax: {
                         url: '{{ url('legacy_main', { 'name' : 'inc/ajax/extra_field.ajax.php', 'a': 'search_tags', 'type': 'user'}) }}' + fieldId,
                         processResults: function (data) {
+                            /*let results = data.items.map(function(item){
+                                let newItem = {
+                                    id: item.text,
+                                    text: item.text
+                                };
+                                return newItem;
+                            });*/
+
                             return {
                                 results: data.items
                             }
@@ -19,6 +26,25 @@
                     cache: false,
                     tags: true,
                     tokenSeparators: [','],
+                });
+
+
+                $(this).on('select2:select', function (e) {
+                    const data = e.params.data;
+                    $(this).children('[value="' + data['id'] + '"]').attr({
+                        'data-id': data['id'],
+                        'value': data['text']
+                    });
+                });
+
+                $(this).on('select2:unselect', function (e) {
+                    //let fieldId = '&tag_id=' + e.params.data.id;
+                    let fieldId = '&tag_id=' + e.params.data.element.dataset.id;
+                    $.ajax({
+                        url: '{{ url('legacy_main', { 'name' : 'inc/ajax/extra_field.ajax.php', 'a': 'delete_tag', 'type': 'user'}) }}' + fieldId,
+                        success: function(data) {
+                        }
+                    });
                 });
             });
             $('.select2_user_rel_tag').refresh

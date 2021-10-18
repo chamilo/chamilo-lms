@@ -42,9 +42,9 @@ class InternalLog
     /**
      * @var string
      *
-     * @ORM\Column(name="activity_id", type="string")
+     * @ORM\Column(name="object_id", type="string")
      */
-    private $activityId;
+    private $objectId;
     /**
      * @var string|null
      *
@@ -129,14 +129,14 @@ class InternalLog
         return $this;
     }
 
-    public function getActivityId(): string
+    public function getObjectId(): string
     {
-        return $this->activityId;
+        return $this->objectId;
     }
 
-    public function setActivityId(string $activityId): InternalLog
+    public function setObjectId(string $objectId): InternalLog
     {
-        $this->activityId = $activityId;
+        $this->objectId = $objectId;
 
         return $this;
     }
@@ -153,9 +153,6 @@ class InternalLog
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getActivityDescription(): ?string
     {
         return $this->activityDescription;

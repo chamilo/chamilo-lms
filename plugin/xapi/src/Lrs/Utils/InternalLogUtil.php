@@ -38,13 +38,10 @@ class InternalLogUtil
             return;
         }
 
+        $internalLog->setObjectId($statementObject->getId()->getValue());
         $internalLog->setStatementId($statement->getId()->getValue());
 
         if (null !== $definition = $statementObject->getDefinition()) {
-            $internalLog->setActivityId(
-                $statementObject->getId()->getValue()
-            );
-
             if (null !== $nameInLanguages = $definition->getName()) {
                 $internalLog->setActivityName(
                     XApiPlugin::extractVerbInLanguage($nameInLanguages, $languageIso)

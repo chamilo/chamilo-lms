@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+
 /**
  * Class Matching
  * Matching questions type class.
@@ -305,20 +307,10 @@ class Matching extends Question
      */
     public static function isCorrect($position, $answer, $questionId)
     {
-        $em = Database::getManager();
+        $count = Database::getManager()
+            ->getRepository(CQuizAnswer::class)
+            ->count(['iid' => $position, 'correct' => $answer, 'question' => $questionId]);
 
-        $count = $em
-            ->createQuery('
-                SELECT COUNT(a) From ChamiloCourseBundle:CQuizAnswer a
-                WHERE a.iid = :position AND a.correct = :answer AND a.questionId = :question
-            ')
-            ->setParameters([
-                'position' => $position,
-                'answer' => $answer,
-                'question' => $questionId,
-            ])
-            ->getSingleScalarResult();
-
-        return $count ? true : false;
+        return (bool) $count;
     }
 }

@@ -81,6 +81,7 @@
         "knplabs/doctrine-behaviors": "~2.0",
         "knplabs/knp-components": "~3.0",
         "knpuniversity/oauth2-client-bundle": "~2.0",
+        "krixer/google-map-form-type-bundle": "^1.3",
         "laminas/laminas-config": "~3.5",
         "laminas/laminas-feed": "~2.14",
         "laminas/laminas-filter": "~2.9",

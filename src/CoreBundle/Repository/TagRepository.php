@@ -87,7 +87,6 @@ class TagRepository extends ServiceEntityRepository
             ->setTag($entityTag)
         ;
 
-        /** @var UserRelTag $element */
         $exists = $user->getUserRelTags()->exists(
             function ($key, $element) use ($userRelTag) {
                 return $userRelTag->getTag() === $element->getTag();

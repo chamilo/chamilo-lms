@@ -12,10 +12,13 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use DateTime;
+use GoogleMapsPlugin;
+use Oh\GoogleMapFormTypeBundle\Form\Type\GoogleMapType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -64,6 +67,9 @@ class ExtraFieldType extends AbstractType
             $data[$value->getField()->getVariable()] = $value->getValue();
         }
 
+        $gMapsPlugin = GoogleMapsPlugin::create();
+        $geolocalization = 'true' === $gMapsPlugin->get('enable_api');
+
         foreach ($extraFields as $extraField) {
             $text = $extraField->getDisplayText();
             $variable = $extraField->getVariable();
@@ -86,11 +92,32 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_FILE:
                 case \ExtraField::FIELD_TYPE_LETTERS_SPACE:
                 case \ExtraField::FIELD_TYPE_ALPHANUMERIC_SPACE:
-                case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
-                case \ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                 case \ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                 case \ExtraField::FIELD_TYPE_TRIPLE_SELECT:
                     //@todo
+                    break;
+                case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
+                case \ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                    if (!$geolocalization) {
+                        break 2;
+                    }
+
+                    $defaultOptions['addr_options'] = [
+                        'disabled' =>'disabled'
+                    ];
+                    if (!empty($value)) {
+                        $parts = explode('::', $value);
+                        $coordinates = explode(',', $parts[1]);
+                        $mapArray = [
+                            'address' => $parts[0],
+                            'latitude' => $coordinates[0],
+                            'longitude' => $coordinates[1],
+                        ];
+                        $defaultOptions['data'] = $mapArray;
+                    }
+
+                    $builder->add($variable, GoogleMapType::class, $defaultOptions);
+
                     break;
                 case \ExtraField::FIELD_TYPE_TAG:
                     $defaultOptions['expanded'] = false;
@@ -220,30 +247,40 @@ class ExtraFieldType extends AbstractType
             }
         );*/
 
-
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($item, $extraFields): void {
                 $data = $event->getData();
                 foreach ($extraFields as $extraField) {
                     $newValue = $data[$extraField->getVariable()] ?? null;
-                    if (\ExtraField::FIELD_TYPE_TAG === $extraField->getFieldType()) {
-                        $formItem = $event->getForm()->get($extraField->getVariable());
-                        $options = $formItem->getConfig()->getOptions();
-                        $options['choices'] = $newValue;
-                        $event->getForm()->add($extraField->getVariable(), ChoiceType::class, $options);
 
-                        foreach ($newValue as $tag) {
-                            $this->tagRepository->addTagToUser($extraField, $item, $tag);
-                        }
+                    switch ($extraField->getFieldType()) {
+                        case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
+                        case \ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                            if (!empty($newValue)) {
+                                $newValue = $newValue['address'].'::'.$newValue['latitude'].','.$newValue['longitude'];
+                            }
+                            $this->extraFieldValuesRepository->updateItemData($extraField, $item, $newValue);
+                            break;
+                        case \ExtraField::FIELD_TYPE_TAG:
+                            $formItem = $event->getForm()->get($extraField->getVariable());
+                            $options = $formItem->getConfig()->getOptions();
+                            $options['choices'] = $newValue;
+                            $event->getForm()->add($extraField->getVariable(), ChoiceType::class, $options);
 
-                        continue;
+                            foreach ($newValue as $tag) {
+                                $this->tagRepository->addTagToUser($extraField, $item, $tag);
+                            }
+
+                            break;
+                        default:
+                            if (empty($newValue)) {
+                                break;
+                            }
+                            $this->extraFieldValuesRepository->updateItemData($extraField, $item, $newValue);
+
+                            break;
                     }
-
-                    if (empty($newValue)) {
-                        continue;
-                    }
-                    $this->extraFieldValuesRepository->updateItemData($extraField, $item, $newValue);
                 }
             }
         );

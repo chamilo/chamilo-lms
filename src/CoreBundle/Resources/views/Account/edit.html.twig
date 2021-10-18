@@ -1,70 +1,62 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-    {% autoescape false %}
+{% autoescape false %}
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            $('.select2_user_rel_tag').each(function(i, obj) {
-                let fieldId = '&field_id=' + $(this).attr('data.field_id');
-                $(this).select2({
-                    ajax: {
-                        url: '{{ url('legacy_main', { 'name' : 'inc/ajax/extra_field.ajax.php', 'a': 'search_tags', 'type': 'user'}) }}' + fieldId,
-                        processResults: function (data) {
-                            /*let results = data.items.map(function(item){
-                                let newItem = {
-                                    id: item.text,
-                                    text: item.text
-                                };
-                                return newItem;
-                            });*/
-
-                            return {
-                                results: data.items
-                            }
+    document.addEventListener("DOMContentLoaded", function () {
+        $('.select2_user_rel_tag').each(function(i, obj) {
+            let fieldId = '&field_id=' + $(this).attr('data.field_id');
+            $(this).select2({
+                ajax: {
+                    url: '{{ url('legacy_main', { 'name' : 'inc/ajax/extra_field.ajax.php', 'a': 'search_tags', 'type': 'user'}) }}' + fieldId,
+                    processResults: function (data) {
+                        return {
+                            results: data.items
                         }
-                    },
-                    cache: false,
-                    tags: true,
-                    tokenSeparators: [','],
-                });
+                    }
+                },
+                cache: false,
+                tags: true,
+                tokenSeparators: [','],
+            });
 
-
-                $(this).on('select2:select', function (e) {
-                    const data = e.params.data;
-                    $(this).children('[value="' + data['id'] + '"]').attr({
-                        'data-id': data['id'],
-                        'value': data['text']
-                    });
-                });
-
-                $(this).on('select2:unselect', function (e) {
-                    //let fieldId = '&tag_id=' + e.params.data.id;
-                    let fieldId = '&tag_id=' + e.params.data.element.dataset.id;
-                    $.ajax({
-                        url: '{{ url('legacy_main', { 'name' : 'inc/ajax/extra_field.ajax.php', 'a': 'delete_tag', 'type': 'user'}) }}' + fieldId,
-                        success: function(data) {
-                        }
-                    });
+            $(this).on('select2:select', function (e) {
+                const data = e.params.data;
+                $(this).children('[value="' + data['id'] + '"]').attr({
+                    'data-id': data['id'],
+                    'value': data['text']
                 });
             });
-            $('.select2_user_rel_tag').refresh
+
+            $(this).on('select2:unselect', function (e) {
+                //let fieldId = '&tag_id=' + e.params.data.id;
+                let fieldId = '&tag_id=' + e.params.data.element.dataset.id;
+                $.ajax({
+                    url: '{{ url('legacy_main', { 'name' : 'inc/ajax/extra_field.ajax.php', 'a': 'delete_tag', 'type': 'user'}) }}' + fieldId,
+                    success: function(data) {
+                    }
+                });
+            });
         });
+    });
     </script>
-        <h3>{{ user.userIdentifier }}</h3>
+
+    <h3>{{ user.userIdentifier }}</h3>
 {#        <a href="{{ url('app_forgot_password_request') }}" class="btn btn-primary">#}
 {#            Reset password#}
 {#        </a>#}
 
-        <img class="inline-block h-16 w-16 rounded-full ring-2 ring-white"
-             src="{{ user | illustration }}?w=120&h=120&fit=crop"
-             alt=""
-        />
+    <img class="inline-block h-16 w-16 rounded-full ring-2 ring-white"
+         src="{{ user | illustration }}?w=120&h=120&fit=crop"
+         alt=""
+    />
 
-        {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
-        {{ form_widget(form) }}
-        <div>
-            <input class="btn btn-primary" name="update_profile" type="submit" value="{{ 'Update profile'|trans }}" />
-        </div>
-        {{ form_end(form) }}
-    {% endautoescape %}
+    {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
+    {{ form_widget(form) }}
+
+    <div>
+        <input class="btn btn-primary" name="update_profile" type="submit" value="{{ 'Update profile'|trans }}" />
+    </div>
+    {{ form_end(form) }}
+{% endautoescape %}
 {% endblock %}

@@ -102,16 +102,13 @@ class ExtraFieldType extends AbstractType
                         break 2;
                     }
 
-                    $defaultOptions['addr_options'] = [
-                        'disabled' =>'disabled'
-                    ];
                     if (!empty($value)) {
                         $parts = explode('::', $value);
                         $coordinates = explode(',', $parts[1]);
                         $mapArray = [
-                            'address' => $parts[0],
-                            'latitude' => $coordinates[0],
-                            'longitude' => $coordinates[1],
+                            'address' => $parts[0] ?? '',
+                            'latitude' => $coordinates[0] ?? '',
+                            'longitude' => $coordinates[1] ?? '',
                         ];
                         $defaultOptions['data'] = $mapArray;
                     }

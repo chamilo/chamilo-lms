@@ -7431,10 +7431,13 @@ class Exercise
      */
     public function fill_in_blank_answer_to_array($answer)
     {
-        api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
-        $teacher_answer_list = $teacher_answer_list[0];
+        $listStudentResults = FillBlanks::getAnswerInfo(
+            $answer,
+            true
+        );
+        $teacherAnswerList = $listStudentResults['student_answer'];
 
-        return $teacher_answer_list;
+        return $teacherAnswerList;
     }
 
     /**

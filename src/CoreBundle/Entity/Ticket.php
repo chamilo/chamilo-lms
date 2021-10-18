@@ -10,8 +10,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Ticket.
- *
  * @ORM\Table(name="ticket_ticket")
  * @ORM\Entity
  */
@@ -59,13 +57,13 @@ class Ticket
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Course $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Session $session;
 
@@ -79,7 +77,7 @@ class Ticket
      */
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="assigned_last_user", referencedColumnName="id")
+     * @ORM\JoinColumn(name="assigned_last_user", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ?User $assignedLastUser = null;
 

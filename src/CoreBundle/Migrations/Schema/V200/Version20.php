@@ -388,22 +388,39 @@ class Version20 extends AbstractMigrationChamilo
                 'columns' => ['hotspot_course_code'],
                 'index' => [],
             ],
+            'c_item_property' => [
+                'fks' => [
+                    'FK_1D84C18129F6EE60',
+                    'FK_1D84C181330D47E9',
+                    'FK_1D84C181613FECDF',
+                    'FK_1D84C18191D79BD3',
+                    'FK_1D84C1819C859CC3',
+                ],
+            ],
         ];
 
         foreach ($dropColumnsAndIndex as $tableName => $data) {
             if ($schema->hasTable($tableName)) {
-                $indexList = $data['index'];
+                $table = $schema->getTable($tableName);
+
+                $indexList = $data['index'] ?? [];
                 foreach ($indexList as $index) {
                     if ($table->hasIndex($index)) {
                         $table->dropIndex($index);
                     }
                 }
 
-                $columns = $data['columns'];
-                $table = $schema->getTable($tableName);
+                $columns = $data['columns'] ?? [];
                 foreach ($columns as $column) {
                     if ($table->hasColumn($column)) {
                         $table->dropColumn($column);
+                    }
+                }
+
+                $fks = $data['fks'] ?? [];
+                foreach ($fks as $fk) {
+                    if ($table->hasForeignKey($fk)) {
+                        $table->removeForeignKey($fk);
                     }
                 }
             }

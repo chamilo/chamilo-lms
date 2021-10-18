@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackExercise;
 use Chamilo\CoreBundle\Repository\AssetRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackExerciseRepository;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -29,11 +30,16 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $course = $this->createCourse('new');
+
         $teacher = $this->createUser('teacher');
         $student = $this->createUser('student');
 
-        $repo = self::getContainer()->get(TrackExerciseRepository::class);
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $trackExerciseRepo = self::getContainer()->get(TrackExerciseRepository::class);
         $exerciseRepo = self::getContainer()->get(CQuizRepository::class);
+
+        $this->assertSame(1, $courseRepo->count([]));
+
         $exercise = (new CQuiz())
             ->setTitle('exercise')
             ->setParent($course)
@@ -65,13 +71,22 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         $em->persist($trackExercise);
         $this->assertHasNoEntityViolations($trackExercise);
         $em->flush();
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame(1, $trackExerciseRepo->count([]));
+        $this->assertSame(1, $exerciseRepo->count([]));
+        $this->assertSame(1, $courseRepo->count([]));
+
+        $trackExerciseRepo->delete($trackExercise);
+
+        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame(0, $trackExerciseRepo->count([]));
         $this->assertSame(1, $exerciseRepo->count([]));
 
-        $repo->delete($trackExercise);
+        $em->remove($course);
+        $em->flush();
 
-        $this->assertSame(0, $repo->count([]));
-        $this->assertSame(1, $exerciseRepo->count([]));
+        $this->assertSame(0, $trackExerciseRepo->count([]));
+        $this->assertSame(0, $exerciseRepo->count([]));
+        $this->assertSame(0, $courseRepo->count([]));
     }
 
     public function testCreateWithAttempt(): void
@@ -79,7 +94,9 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         self::bootKernel();
 
         $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(TrackExerciseRepository::class);
+
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $trackExerciseRepo = self::getContainer()->get(TrackExerciseRepository::class);
         $exerciseRepo = self::getContainer()->get(CQuizRepository::class);
 
         $course = $this->createCourse('new');
@@ -128,7 +145,6 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($trackExercise);
         $em->flush();
 
-        //$trackExercise = $repo->find($trackExercise->getExeId());
         $this->assertSame(1, $trackExercise->getAttempts()->count());
         $this->assertInstanceOf(TrackEAttempt::class, $trackExercise->getAttemptByQuestionId(1));
 
@@ -190,8 +206,16 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $trackExercise->getAttempts()->count());
         $this->assertSame(1, $attempt->getAttemptFeedbacks()->count());
         $this->assertSame(1, $attempt->getAttemptFiles()->count());
-
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame(1, $trackExerciseRepo->count([]));
         $this->assertSame(1, $exerciseRepo->count([]));
+        $this->assertSame(1, $courseRepo->count([]));
+
+        // Delete course.
+        $em->remove($course);
+        $em->flush();
+
+        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame(0, $exerciseRepo->count([]));
+        $this->assertSame(0, $trackExerciseRepo->count([]));
     }
 }

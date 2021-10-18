@@ -40,7 +40,7 @@ class TrackEAttempt
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackExercise", inversedBy="attempts")
-     * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id", nullable=false)
+     * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id", nullable=false, onDelete="CASCADE")
      */
     #[Assert\NotNull]
     protected TrackExercise $trackExercise;

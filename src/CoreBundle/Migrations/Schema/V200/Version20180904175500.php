@@ -99,7 +99,6 @@ class Version20180904175500 extends AbstractMigrationChamilo
         $table = $schema->getTable('track_e_exercises');
 
         $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT DEFAULT NULL');
-
         $this->addSql('ALTER TABLE track_e_attempt CHANGE session_id session_id INT DEFAULT NULL');
         $this->addSql('UPDATE track_e_attempt SET session_id = NULL WHERE session_id = 0');
         $this->addSql('DELETE FROM track_e_attempt WHERE session_id IS NOT NULL AND session_id NOT IN (select id FROM session)');
@@ -111,15 +110,15 @@ class Version20180904175500 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM track_e_exercises WHERE exe_user_id IS NOT NULL AND exe_user_id NOT IN (select id FROM user)');
 
         if (!$table->hasForeignKey('FK_AA0DA082613FECDF')) {
-            $this->addSql('ALTER TABLE track_e_exercises ADD CONSTRAINT FK_AA0DA082613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+            $this->addSql('ALTER TABLE track_e_exercises ADD CONSTRAINT FK_AA0DA082613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE');
         }
 
         if (!$table->hasForeignKey('FK_AA0DA082613FECDF')) {
-            $this->addSql('ALTER TABLE track_e_exercises ADD CONSTRAINT FK_AA0DA08291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ');
+            $this->addSql('ALTER TABLE track_e_exercises ADD CONSTRAINT FK_AA0DA08291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE');
         }
 
         if (!$table->hasForeignKey('FK_AA0DA082F6A6790')) {
-            $this->addSql('ALTER TABLE track_e_exercises ADD CONSTRAINT FK_AA0DA082F6A6790 FOREIGN KEY (exe_user_id) REFERENCES user (id)  ');
+            $this->addSql('ALTER TABLE track_e_exercises ADD CONSTRAINT FK_AA0DA082F6A6790 FOREIGN KEY (exe_user_id) REFERENCES user (id) ON DELETE CASCADE ');
         }
 
         if ($table->hasColumn('exe_weighting')) {
@@ -167,7 +166,7 @@ class Version20180904175500 extends AbstractMigrationChamilo
 
         if (!$table->hasForeignKey('FK_F8C342C3B5A18F57')) {
             $this->addSql(
-                'ALTER TABLE track_e_attempt ADD CONSTRAINT FK_F8C342C3B5A18F57 FOREIGN KEY (exe_id) REFERENCES track_e_exercises (exe_id)'
+                'ALTER TABLE track_e_attempt ADD CONSTRAINT FK_F8C342C3B5A18F57 FOREIGN KEY (exe_id) REFERENCES track_e_exercises (exe_id) ON DELETE CASCADE'
             );
         }
 

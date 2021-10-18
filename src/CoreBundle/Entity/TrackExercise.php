@@ -34,21 +34,21 @@ class TrackExercise
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     #[Assert\NotNull]
     protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     #[Assert\NotNull]
     protected Course $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ?Session $session = null;
 

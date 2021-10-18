@@ -94,7 +94,6 @@ import {ENTRYPOINT} from "../../config/entrypoint";
 import {useI18n} from "vue-i18n";
 import allLocales from '@fullcalendar/core/locales-all';
 import toInteger from "lodash/toInteger";
-
 const servicePrefix = 'CCalendarEvent';
 
 export default {
@@ -139,6 +138,11 @@ export default {
     const cid = toInteger(route.query.cid);
     const sid = toInteger(route.query.sid);
     const gid = toInteger(route.query.gid);
+
+    if (cid) {
+      let courseIri = '/api/courses/' + cid;
+      store.dispatch('course/findCourse', { id: courseIri });
+    }
 
     function onCreated(item) {
       //showNotification(t('Updated'));

@@ -77,9 +77,10 @@ switch ($action) {
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
         $count = 0;
         $temp = [];
+        $userId = api_get_user_id();
         foreach ($course_list as $item) {
             $courseInfo = api_get_course_info($item['code']);
-            $list = new LearnpathList(api_get_user_id(), $courseInfo, $session_id);
+            $list = new LearnpathList($userId, $courseInfo, $session_id);
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $course_url = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
@@ -88,7 +89,7 @@ switch ($action) {
             foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id'] = $lp_id;
 
-                $lp = new learnpath($item['code'], $lp_id, api_get_user_id());
+                $lp = new learnpath(api_get_lp_entity($lp_id), $courseInfo, $userId);
                 if (100 == $lp->progress_db) {
                     continue;
                 }

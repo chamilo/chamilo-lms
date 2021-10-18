@@ -5,9 +5,7 @@
 use ChamiloSession as Session;
 
 /**
- *   Session view.
- *
- *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
+ * @author Julio Montoya <gugli100@gmail.com>  Beeznest
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -252,7 +250,7 @@ if (!empty($courseList)) {
         if (!empty($exerciseList)) {
             // Exercises
             foreach ($exerciseList as $exerciseInfo) {
-                if ('0000-00-00 00:00:00' == $exerciseInfo['start_time']) {
+                if ('0000-00-00 00:00:00' === $exerciseInfo['start_time']) {
                     $start_date = '-';
                 } else {
                     $start_date = $exerciseInfo['start_time'];
@@ -283,7 +281,7 @@ if (!empty($courseList)) {
 
                 if (empty($exerciseResultInfo)) {
                     // We check the date validation of the exercise if the user can make it
-                    if ('0000-00-00 00:00:00' != $exerciseInfo['start_time']) {
+                    if ('0000-00-00 00:00:00' !== $exerciseInfo['start_time']) {
                         $allowed_time = api_strtotime($exerciseInfo['start_time'], 'UTC');
                         if ($now < $allowed_time) {
                             continue;

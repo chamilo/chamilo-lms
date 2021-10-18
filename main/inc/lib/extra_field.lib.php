@@ -1031,8 +1031,7 @@ class ExtraField extends Model
                 $hiddenElement = false;
                 if (!$adminPermissions) {
                     if (0 == $field_details['visible_to_self']) {
-                        // It is a hidden element to keep the default value
-                        $hiddenElement = true;
+                        continue;
                     }
 
                     if (in_array($field_details['variable'], $exclude)) {
@@ -1067,391 +1066,369 @@ class ExtraField extends Model
                     }
                 }
 
-                if ($hiddenElement) {
-                    // It hides the elements to keep current data.
-                    $extraVariable = 'extra_'.$field_details['variable'];
-                    if (is_array($extraData[$extraVariable])) {
-                        foreach ($extraData[$extraVariable] as $item => $value) {
-                            $subvariable = $extraVariable.'['.$item.']';
-                            $form->addHidden(
-                                $subvariable,
-                                $value
-                            );
-                        }
-                    } else {
-                        $variable = $extraVariable;
-                        if (self::FIELD_TYPE_CHECKBOX == $field_details['field_type']) {
-                            $variable = $extraVariable.'['.$extraVariable.']';
-                        }
-                        $form->addHidden(
-                            $variable,
-                            $extraData[$extraVariable]
+                switch ($field_details['field_type']) {
+                    case self::FIELD_TYPE_TEXT:
+                        $form->addElement(
+                            'text',
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'],
+                            [
+                                'id' => 'extra_'.$field_details['variable'],
+                            ]
                         );
-                    }
-                } else {
-                    switch ($field_details['field_type']) {
-                        case self::FIELD_TYPE_TEXT:
-                            $form->addElement(
-                                'text',
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text'],
-                                [
-                                    'id' => 'extra_'.$field_details['variable'],
-                                ]
-                            );
-                            $form->applyFilter(
-                                'extra_'.$field_details['variable'],
-                                'stripslashes'
-                            );
-                            $form->applyFilter(
-                                'extra_'.$field_details['variable'],
-                                'trim'
-                            );
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
+                        $form->applyFilter(
+                            'extra_'.$field_details['variable'],
+                            'stripslashes'
+                        );
+                        $form->applyFilter(
+                            'extra_'.$field_details['variable'],
+                            'trim'
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_TEXTAREA:
+                        $form->addHtmlEditor(
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'],
+                            false,
+                            false,
+                            [
+                                'ToolbarSet' => 'Profile',
+                                'Width' => '100%',
+                                'Height' => '130',
+                                'id' => 'extra_'.$field_details['variable'],
+                            ]
+                        );
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_RADIO:
+                        $group = [];
+                        if (isset($field_details['options']) &&
+                            !empty($field_details['options'])
+                        ) {
+                            foreach ($field_details['options'] as $option_details) {
+                                $options[$option_details['option_value']] = $option_details['display_text'];
+                                $group[] = $form->createElement(
+                                    'radio',
+                                    'extra_'.$field_details['variable'],
+                                    $option_details['option_value'],
+                                    $option_details['display_text'].'<br />',
+                                    $option_details['option_value']
+                                );
                             }
-                            break;
-                        case self::FIELD_TYPE_TEXTAREA:
-                            $form->addHtmlEditor(
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text'],
-                                false,
-                                false,
-                                [
-                                    'ToolbarSet' => 'Profile',
-                                    'Width' => '100%',
-                                    'Height' => '130',
-                                    'id' => 'extra_'.$field_details['variable'],
-                                ]
-                            );
-                            $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'trim');
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_RADIO:
-                            $group = [];
-                            if (isset($field_details['options']) &&
-                                !empty($field_details['options'])
-                            ) {
-                                foreach ($field_details['options'] as $option_details) {
-                                    $options[$option_details['option_value']] = $option_details['display_text'];
-                                    $group[] = $form->createElement(
-                                        'radio',
-                                        'extra_'.$field_details['variable'],
-                                        $option_details['option_value'],
-                                        $option_details['display_text'].'<br />',
-                                        $option_details['option_value']
-                                    );
-                                }
-                            }
-                            $form->addGroup(
-                                $group,
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text']
-                            );
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_CHECKBOX:
-                            $group = [];
-                            if (isset($field_details['options']) &&
-                                !empty($field_details['options'])
-                            ) {
-                                foreach ($field_details['options'] as $option_details) {
-                                    $options[$option_details['option_value']] = $option_details['display_text'];
-                                    $group[] = $form->createElement(
-                                        'checkbox',
-                                        'extra_'.$field_details['variable'],
-                                        $option_details['option_value'],
-                                        $option_details['display_text'].'<br />',
-                                        $option_details['option_value']
-                                    );
-                                }
-                            } else {
-                                $fieldVariable = "extra_{$field_details['variable']}";
-                                $checkboxAttributes = [];
-                                if (is_array($extraData) &&
-                                    array_key_exists($fieldVariable, $extraData)
-                                ) {
-                                    if (!empty($extraData[$fieldVariable])) {
-                                        $checkboxAttributes['checked'] = 1;
-                                    }
-                                }
-
-                                if (empty($checkboxAttributes) &&
-                                    isset($field_details['default_value']) && empty($extraData)) {
-                                    if (1 == $field_details['default_value']) {
-                                        $checkboxAttributes['checked'] = 1;
-                                    }
-                                }
-
-                                // We assume that is a switch on/off with 1 and 0 as values
+                        }
+                        $form->addGroup(
+                            $group,
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text']
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_CHECKBOX:
+                        $group = [];
+                        if (isset($field_details['options']) &&
+                            !empty($field_details['options'])
+                        ) {
+                            foreach ($field_details['options'] as $option_details) {
+                                $options[$option_details['option_value']] = $option_details['display_text'];
                                 $group[] = $form->createElement(
                                     'checkbox',
                                     'extra_'.$field_details['variable'],
-                                    null,
-                                    get_lang('Yes'),
-                                    $checkboxAttributes
+                                    $option_details['option_value'],
+                                    $option_details['display_text'].'<br />',
+                                    $option_details['option_value']
                                 );
                             }
-
-                            $form->addGroup(
-                                $group,
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text']
-                            );
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_SELECT:
-                            $this->addSelectElement($form, $field_details, $defaultValueId, $freezeElement);
-                            break;
-                        case self::FIELD_TYPE_SELECT_MULTIPLE:
-                            $options = [];
-                            if (empty($defaultValueId)) {
-                                $options[''] = get_lang('SelectAnOption');
-                            }
-
-                            if (isset($field_details['options']) && !empty($field_details['options'])) {
-                                foreach ($field_details['options'] as $optionDetails) {
-                                    $options[$optionDetails['option_value']] = $optionDetails['display_text'];
+                        } else {
+                            $fieldVariable = "extra_{$field_details['variable']}";
+                            $checkboxAttributes = [];
+                            if (is_array($extraData) &&
+                                array_key_exists($fieldVariable, $extraData)
+                            ) {
+                                if (!empty($extraData[$fieldVariable])) {
+                                    $checkboxAttributes['checked'] = 1;
                                 }
                             }
 
-                            $form->addElement(
-                                'select',
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text'],
-                                $options,
-                                [
-                                    'multiple' => 'multiple',
-                                    'id' => 'extra_'.$field_details['variable'],
-                                ]
-                            );
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
+                            if (empty($checkboxAttributes) &&
+                                isset($field_details['default_value']) && empty($extraData)) {
+                                if (1 == $field_details['default_value']) {
+                                    $checkboxAttributes['checked'] = 1;
+                                }
                             }
-                            break;
-                        case self::FIELD_TYPE_DATE:
-                            $form->addDatePicker('extra_'.$field_details['variable'], $field_details['display_text']);
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_DATETIME:
-                            $form->addDateTimePicker(
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text']
-                            );
 
-                            $defaults['extra_'.$field_details['variable']] = api_get_local_time();
-                            if (!isset($form->_defaultValues['extra_'.$field_details['variable']])) {
-                                $form->setDefaults($defaults);
-                            }
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_DOUBLE_SELECT:
-                            $jquery_ready_content .= self::addDoubleSelectElement(
-                                $form,
-                                $field_details,
-                                $extraData,
-                                $freezeElement
+                            // We assume that is a switch on/off with 1 and 0 as values
+                            $group[] = $form->createElement(
+                                'checkbox',
+                                'extra_'.$field_details['variable'],
+                                null,
+                                get_lang('Yes'),
+                                $checkboxAttributes
                             );
-                            break;
-                        case self::FIELD_TYPE_DIVIDER:
-                            $form->addHtml(
-                                '
+                        }
+
+                        $form->addGroup(
+                            $group,
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text']
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_SELECT:
+                        $this->addSelectElement($form, $field_details, $defaultValueId, $freezeElement);
+                        break;
+                    case self::FIELD_TYPE_SELECT_MULTIPLE:
+                        $options = [];
+                        if (empty($defaultValueId)) {
+                            $options[''] = get_lang('SelectAnOption');
+                        }
+
+                        if (isset($field_details['options']) && !empty($field_details['options'])) {
+                            foreach ($field_details['options'] as $optionDetails) {
+                                $options[$optionDetails['option_value']] = $optionDetails['display_text'];
+                            }
+                        }
+
+                        $form->addElement(
+                            'select',
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'],
+                            $options,
+                            [
+                                'multiple' => 'multiple',
+                                'id' => 'extra_'.$field_details['variable'],
+                            ]
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_DATE:
+                        $form->addDatePicker('extra_'.$field_details['variable'], $field_details['display_text']);
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_DATETIME:
+                        $form->addDateTimePicker(
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text']
+                        );
+
+                        $defaults['extra_'.$field_details['variable']] = api_get_local_time();
+                        if (!isset($form->_defaultValues['extra_'.$field_details['variable']])) {
+                            $form->setDefaults($defaults);
+                        }
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_DOUBLE_SELECT:
+                        $jquery_ready_content .= self::addDoubleSelectElement(
+                            $form,
+                            $field_details,
+                            $extraData,
+                            $freezeElement
+                        );
+                        break;
+                    case self::FIELD_TYPE_DIVIDER:
+                        $form->addHtml(
+                            '
                             <div class="form-group ">
                                 <div class="col-sm-12">
                                     <div class="panel-separator">
                                        <h4 id="'.$field_details['variable'].'" class="form-separator">'
-                                .$field_details['display_text'].'
+                            .$field_details['display_text'].'
                                        </h4>
                                     </div>
                                 </div>
                             </div>
                         '
+                        );
+                        break;
+                    case self::FIELD_TYPE_TAG:
+                        $variable = $field_details['variable'];
+                        $field_id = $field_details['id'];
+                        $separateValue = 0;
+                        if (isset($separateExtraMultipleSelect[$field_details['variable']])) {
+                            $separateValue = $separateExtraMultipleSelect[$field_details['variable']];
+                        }
+
+                        $selectedOptions = [];
+                        if ($separateValue > 0) {
+                            $em = Database::getManager();
+                            $fieldTags = $em
+                                ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                ->findBy(
+                                    [
+                                        'fieldId' => $field_id,
+                                        'itemId' => $itemId,
+                                    ]
+                                );
+                            // ofaj
+
+                            for ($i = 0; $i < $separateValue; $i++) {
+                                $tagsSelect = $form->addElement(
+                                    'select',
+                                    'extra_'.$field_details['variable'].'['.$i.']',
+                                    $customLabelsExtraMultipleSelect[$field_details['variable']][$i],
+                                    null,
+                                    ['id' => 'extra_'.$field_details['variable'].'_'.$i]
+                                );
+
+                                if ($addEmptyOptionSelects) {
+                                    $tagsSelect->addOption(
+                                        '',
+                                        ''
+                                    );
+                                }
+
+                                foreach ($fieldTags as $fieldTag) {
+                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+
+                                    if (empty($tag)) {
+                                        continue;
+                                    }
+
+                                    $tagsSelect->addOption(
+                                        $tag->getTag(),
+                                        $tag->getTag()
+                                    );
+                                }
+                            }
+                        } else {
+                            $tagsSelect = $form->addSelect(
+                                "extra_{$field_details['variable']}",
+                                $field_details['display_text'],
+                                [],
+                                ['style' => 'width: 100%;']
                             );
-                            break;
-                        case self::FIELD_TYPE_TAG:
-                            $variable = $field_details['variable'];
-                            $field_id = $field_details['id'];
-                            $separateValue = 0;
-                            if (isset($separateExtraMultipleSelect[$field_details['variable']])) {
-                                $separateValue = $separateExtraMultipleSelect[$field_details['variable']];
+
+                            if (false === $useTagAsSelect) {
+                                $tagsSelect->setAttribute('class', null);
                             }
 
+                            $tagsSelect->setAttribute(
+                                'id',
+                                "extra_{$field_details['variable']}"
+                            );
+                            $tagsSelect->setMultiple(true);
+
                             $selectedOptions = [];
-                            if ($separateValue > 0) {
+                            if ('user' === $this->type) {
+                                // The magic should be here
+                                $user_tags = UserManager::get_user_tags(
+                                    $itemId,
+                                    $field_details['id']
+                                );
+
+                                if (is_array($user_tags) && count($user_tags) > 0) {
+                                    foreach ($user_tags as $tag) {
+                                        if (empty($tag['tag'])) {
+                                            continue;
+                                        }
+                                        $tagsSelect->addOption(
+                                            $tag['tag'],
+                                            $tag['tag'],
+                                            [
+                                                'selected' => 'selected',
+                                                'class' => 'selected',
+                                            ]
+                                        );
+                                        $selectedOptions[] = $tag['tag'];
+                                    }
+                                }
+                                $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
+                            } else {
                                 $em = Database::getManager();
-                                $fieldTags = $em
-                                    ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                $fieldTags = $em->getRepository(
+                                    'ChamiloCoreBundle:ExtraFieldRelTag'
+                                )
                                     ->findBy(
                                         [
                                             'fieldId' => $field_id,
                                             'itemId' => $itemId,
                                         ]
                                     );
-                                // ofaj
 
-                                for ($i = 0; $i < $separateValue; $i++) {
-                                    $tagsSelect = $form->addElement(
-                                        'select',
-                                        'extra_'.$field_details['variable'].'['.$i.']',
-                                        $customLabelsExtraMultipleSelect[$field_details['variable']][$i],
-                                        null,
-                                        ['id' => 'extra_'.$field_details['variable'].'_'.$i]
+                                /** @var ExtraFieldRelTag $fieldTag */
+                                foreach ($fieldTags as $fieldTag) {
+                                    /** @var Tag $tag */
+                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+
+                                    if (empty($tag)) {
+                                        continue;
+                                    }
+                                    $tagsSelect->addOption(
+                                        $tag->getTag(),
+                                        $tag->getTag()
                                     );
-
-                                    if ($addEmptyOptionSelects) {
-                                        $tagsSelect->addOption(
-                                            '',
-                                            ''
-                                        );
-                                    }
-
-                                    foreach ($fieldTags as $fieldTag) {
-                                        $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
-
-                                        if (empty($tag)) {
-                                            continue;
-                                        }
-
-                                        $tagsSelect->addOption(
-                                            $tag->getTag(),
-                                            $tag->getTag()
-                                        );
-                                    }
-                                }
-                            } else {
-                                $tagsSelect = $form->addSelect(
-                                    "extra_{$field_details['variable']}",
-                                    $field_details['display_text'],
-                                    [],
-                                    ['style' => 'width: 100%;']
-                                );
-
-                                if (false === $useTagAsSelect) {
-                                    $tagsSelect->setAttribute('class', null);
+                                    $selectedOptions[] = $tag->getTag();
                                 }
 
-                                $tagsSelect->setAttribute(
-                                    'id',
-                                    "extra_{$field_details['variable']}"
-                                );
-                                $tagsSelect->setMultiple(true);
-
-                                $selectedOptions = [];
-                                if ('user' === $this->type) {
-                                    // The magic should be here
-                                    $user_tags = UserManager::get_user_tags(
-                                        $itemId,
-                                        $field_details['id']
-                                    );
-
-                                    if (is_array($user_tags) && count($user_tags) > 0) {
-                                        foreach ($user_tags as $tag) {
-                                            if (empty($tag['tag'])) {
-                                                continue;
-                                            }
+                                if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
+                                    $data = $extraData['extra_'.$field_details['variable']];
+                                    if (!empty($data)) {
+                                        foreach ($data as $option) {
                                             $tagsSelect->addOption(
-                                                $tag['tag'],
-                                                $tag['tag'],
-                                                [
-                                                    'selected' => 'selected',
-                                                    'class' => 'selected',
-                                                ]
+                                                $option,
+                                                $option
                                             );
-                                            $selectedOptions[] = $tag['tag'];
                                         }
                                     }
-                                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
-                                } else {
-                                    $em = Database::getManager();
-                                    $fieldTags = $em->getRepository(
-                                        'ChamiloCoreBundle:ExtraFieldRelTag'
-                                    )
+                                }
+
+                                if ($useTagAsSelect) {
+                                    $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                                         ->findBy(
                                             [
                                                 'fieldId' => $field_id,
-                                                'itemId' => $itemId,
                                             ]
                                         );
-
-                                    /** @var ExtraFieldRelTag $fieldTag */
+                                    $tagsAdded = [];
                                     foreach ($fieldTags as $fieldTag) {
-                                        /** @var Tag $tag */
                                         $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
 
                                         if (empty($tag)) {
                                             continue;
                                         }
+
+                                        $tagText = $tag->getTag();
+
+                                        if (in_array($tagText, $tagsAdded)) {
+                                            continue;
+                                        }
+
                                         $tagsSelect->addOption(
                                             $tag->getTag(),
-                                            $tag->getTag()
+                                            $tag->getTag(),
+                                            []
                                         );
-                                        $selectedOptions[] = $tag->getTag();
+
+                                        $tagsAdded[] = $tagText;
                                     }
-
-                                    if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
-                                        $data = $extraData['extra_'.$field_details['variable']];
-                                        if (!empty($data)) {
-                                            foreach ($data as $option) {
-                                                $tagsSelect->addOption(
-                                                    $option,
-                                                    $option
-                                                );
-                                            }
-                                        }
-                                    }
-
-                                    if ($useTagAsSelect) {
-                                        $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
-                                            ->findBy(
-                                                [
-                                                    'fieldId' => $field_id,
-                                                ]
-                                            );
-                                        $tagsAdded = [];
-                                        foreach ($fieldTags as $fieldTag) {
-                                            $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
-
-                                            if (empty($tag)) {
-                                                continue;
-                                            }
-
-                                            $tagText = $tag->getTag();
-
-                                            if (in_array($tagText, $tagsAdded)) {
-                                                continue;
-                                            }
-
-                                            $tagsSelect->addOption(
-                                                $tag->getTag(),
-                                                $tag->getTag(),
-                                                []
-                                            );
-
-                                            $tagsAdded[] = $tagText;
-                                        }
-                                    }
-                                    $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                                 }
+                                $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
+                            }
 
-                                $form->setDefaults(
-                                    [
-                                        'extra_'.$field_details['variable'] => $selectedOptions,
-                                    ]
-                                );
+                            $form->setDefaults(
+                                [
+                                    'extra_'.$field_details['variable'] => $selectedOptions,
+                                ]
+                            );
 
-                                if (false == $useTagAsSelect) {
-                                    $jquery_ready_content .= "
+                            if (false == $useTagAsSelect) {
+                                $jquery_ready_content .= "
                                 $('#extra_$variable').select2({
                                     ajax: {
                                         url: '$url?a=search_tags&field_id=$field_id&type={$this->type}',
@@ -1467,177 +1444,177 @@ class ExtraField extends Model
                                     placeholder: '".get_lang('StartToType')."'
                                 });
                             ";
-                                }
                             }
+                        }
 
-                            break;
-                        case self::FIELD_TYPE_TIMEZONE:
-                            $form->addElement(
-                                'select',
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text'],
-                                api_get_timezones(),
-                                ''
-                            );
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
+                        break;
+                    case self::FIELD_TYPE_TIMEZONE:
+                        $form->addElement(
+                            'select',
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'],
+                            api_get_timezones(),
+                            ''
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_SOCIAL_PROFILE:
+                        // get the social network's favicon
+                        $extra_data_variable = isset($extraData['extra_'.$field_details['variable']])
+                            ? $extraData['extra_'.$field_details['variable']]
+                            : null;
+                        $field_default_value = isset($field_details['field_default_value'])
+                            ? $field_details['field_default_value']
+                            : null;
+                        $icon_path = UserManager::get_favicon_from_url(
+                            $extra_data_variable,
+                            $field_default_value
+                        );
+                        // special hack for hi5
+                        $leftpad = '1.7';
+                        $top = '0.4';
+                        $domain = parse_url($icon_path, PHP_URL_HOST);
+                        if ('www.hi5.com' === $domain || 'hi5.com' === $domain) {
+                            $leftpad = '3';
+                            $top = '0';
+                        }
+                        // print the input field
+                        $form->addElement(
+                            'text',
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'],
+                            [
+                                'size' => 60,
+                                'size' => implode(
+                                    '; ',
+                                    [
+                                        "background-image: url('$icon_path')",
+                                        'background-repeat: no-repeat',
+                                        "background-position: 0.4em {$top}em",
+                                        "padding-left: {$leftpad}em",
+                                    ]
+                                ),
+                            ]
+                        );
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_MOBILE_PHONE_NUMBER:
+                        $form->addElement(
+                            'text',
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'].' ('.get_lang('CountryDialCode').')',
+                            ['size' => 40, 'placeholder' => '(xx)xxxxxxxxx']
+                        );
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'mobile_phone_number_filter');
+                        $form->addRule(
+                            'extra_'.$field_details['variable'],
+                            get_lang('MobilePhoneNumberWrong'),
+                            'mobile_phone_number'
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_INTEGER:
+                        $form->addElement(
+                            'number',
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'],
+                            ['class' => 'span1', 'step' => 1]
+                        );
+
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'intval');
+
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_FILE_IMAGE:
+                        $fieldVariable = "extra_{$field_details['variable']}";
+                        $fieldTexts = [
+                            $field_details['display_text'],
+                        ];
+
+                        if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
+                            if (file_exists(api_get_path(SYS_UPLOAD_PATH).$extraData[$fieldVariable])) {
+                                $fieldTexts[] = Display::img(
+                                    api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
+                                    $field_details['display_text'],
+                                    ['width' => '300']
+                                );
                             }
-                            break;
-                        case self::FIELD_TYPE_SOCIAL_PROFILE:
-                            // get the social network's favicon
-                            $extra_data_variable = isset($extraData['extra_'.$field_details['variable']])
-                                ? $extraData['extra_'.$field_details['variable']]
-                                : null;
-                            $field_default_value = isset($field_details['field_default_value'])
-                                ? $field_details['field_default_value']
-                                : null;
-                            $icon_path = UserManager::get_favicon_from_url(
-                                $extra_data_variable,
-                                $field_default_value
-                            );
-                            // special hack for hi5
-                            $leftpad = '1.7';
-                            $top = '0.4';
-                            $domain = parse_url($icon_path, PHP_URL_HOST);
-                            if ('www.hi5.com' === $domain || 'hi5.com' === $domain) {
-                                $leftpad = '3';
-                                $top = '0';
-                            }
-                            // print the input field
-                            $form->addElement(
-                                'text',
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text'],
-                                [
-                                    'size' => 60,
-                                    'size' => implode(
-                                        '; ',
-                                        [
-                                            "background-image: url('$icon_path')",
-                                            'background-repeat: no-repeat',
-                                            "background-position: 0.4em {$top}em",
-                                            "padding-left: {$leftpad}em",
-                                        ]
-                                    ),
-                                ]
-                            );
-                            $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'trim');
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_MOBILE_PHONE_NUMBER:
-                            $form->addElement(
-                                'text',
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text'].' ('.get_lang('CountryDialCode').')',
-                                ['size' => 40, 'placeholder' => '(xx)xxxxxxxxx']
-                            );
-                            $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'trim');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'mobile_phone_number_filter');
-                            $form->addRule(
-                                'extra_'.$field_details['variable'],
-                                get_lang('MobilePhoneNumberWrong'),
-                                'mobile_phone_number'
-                            );
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_INTEGER:
-                            $form->addElement(
-                                'number',
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text'],
-                                ['class' => 'span1', 'step' => 1]
-                            );
+                        }
 
-                            $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'trim');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'intval');
+                        if ('Image' === $fieldTexts[0]) {
+                            $fieldTexts[0] = get_lang($fieldTexts[0]);
+                        }
 
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_FILE_IMAGE:
-                            $fieldVariable = "extra_{$field_details['variable']}";
-                            $fieldTexts = [
-                                $field_details['display_text'],
-                            ];
+                        $form->addFile(
+                            $fieldVariable,
+                            $fieldTexts,
+                            ['accept' => 'image/*', 'id' => 'extra_image', 'crop_image' => 'true']
+                        );
 
-                            if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
-                                if (file_exists(api_get_path(SYS_UPLOAD_PATH).$extraData[$fieldVariable])) {
-                                    $fieldTexts[] = Display::img(
-                                        api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
-                                        $field_details['display_text'],
-                                        ['width' => '300']
-                                    );
-                                }
-                            }
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
 
-                            if ('Image' === $fieldTexts[0]) {
-                                $fieldTexts[0] = get_lang($fieldTexts[0]);
-                            }
+                        $allowedPictureTypes = ['jpg', 'jpeg', 'png', 'gif'];
+                        $form->addRule(
+                            'extra_'.$field_details['variable'],
+                            get_lang('OnlyImagesAllowed').' ('.implode(',', $allowedPictureTypes).')',
+                            'filetype',
+                            $allowedPictureTypes
+                        );
 
-                            $form->addFile(
-                                $fieldVariable,
-                                $fieldTexts,
-                                ['accept' => 'image/*', 'id' => 'extra_image', 'crop_image' => 'true']
-                            );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_FLOAT:
+                        $form->addElement(
+                            'number',
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'],
+                            ['class' => 'span1', 'step' => '0.01']
+                        );
 
-                            $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'floatval');
 
-                            $allowedPictureTypes = ['jpg', 'jpeg', 'png', 'gif'];
-                            $form->addRule(
-                                'extra_'.$field_details['variable'],
-                                get_lang('OnlyImagesAllowed').' ('.implode(',', $allowedPictureTypes).')',
-                                'filetype',
-                                $allowedPictureTypes
-                            );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_FILE:
+                        $fieldVariable = "extra_{$field_details['variable']}";
+                        $fieldTexts = [
+                            $field_details['display_text'],
+                        ];
 
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_FLOAT:
-                            $form->addElement(
-                                'number',
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text'],
-                                ['class' => 'span1', 'step' => '0.01']
-                            );
+                        if (is_array($extraData) &&
+                            array_key_exists($fieldVariable, $extraData)
+                        ) {
+                            if (file_exists(api_get_path(SYS_UPLOAD_PATH).$extraData[$fieldVariable])) {
+                                $linkToDelete = '';
+                                $divItemId = $field_details['variable'];
+                                if (api_is_platform_admin()) {
+                                    $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?type='.$this->type;
+                                    $url .= '&a=delete_file&field_id='.$field_details['id'].'&item_id='.$itemId;
 
-                            $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'trim');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'floatval');
-
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_FILE:
-                            $fieldVariable = "extra_{$field_details['variable']}";
-                            $fieldTexts = [
-                                $field_details['display_text'],
-                            ];
-
-                            if (is_array($extraData) &&
-                                array_key_exists($fieldVariable, $extraData)
-                            ) {
-                                if (file_exists(api_get_path(SYS_UPLOAD_PATH).$extraData[$fieldVariable])) {
-                                    $linkToDelete = '';
-                                    $divItemId = $field_details['variable'];
-                                    if (api_is_platform_admin()) {
-                                        $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?type='.$this->type;
-                                        $url .= '&a=delete_file&field_id='.$field_details['id'].'&item_id='.$itemId;
-
-                                        $deleteId = $field_details['variable'].'_delete';
-                                        $form->addHtml(
-                                            "
+                                    $deleteId = $field_details['variable'].'_delete';
+                                    $form->addHtml(
+                                        "
                                         <script>
                                             $(function() {
                                                 $('#".$deleteId."').on('click', function() {
@@ -1654,132 +1631,130 @@ class ExtraField extends Model
                                             });
                                         </script>
                                     "
+                                    );
+
+                                    $linkToDelete = '&nbsp;'.Display::url(
+                                            Display::return_icon('delete.png', get_lang('Delete')),
+                                            'javascript:void(0)',
+                                            ['id' => $deleteId]
                                         );
-
-                                        $linkToDelete = '&nbsp;'.Display::url(
-                                                Display::return_icon('delete.png', get_lang('Delete')),
-                                                'javascript:void(0)',
-                                                ['id' => $deleteId]
-                                            );
-                                    }
-                                    $fieldTexts[] = '<div id="'.$divItemId.'">'.Display::url(
-                                            basename($extraData[$fieldVariable]),
-                                            api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
-                                            [
-                                                'title' => $field_details['display_text'],
-                                                'target' => '_blank',
-                                            ]
-                                        ).$linkToDelete.'</div>';
                                 }
+                                $fieldTexts[] = '<div id="'.$divItemId.'">'.Display::url(
+                                        basename($extraData[$fieldVariable]),
+                                        api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
+                                        [
+                                            'title' => $field_details['display_text'],
+                                            'target' => '_blank',
+                                        ]
+                                    ).$linkToDelete.'</div>';
                             }
+                        }
 
-                            $form->addElement(
-                                'file',
-                                $fieldVariable,
-                                $fieldTexts,
-                                []
-                            );
+                        $form->addElement(
+                            'file',
+                            $fieldVariable,
+                            $fieldTexts,
+                            []
+                        );
 
-                            $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                            $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
 
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_VIDEO_URL:
-                            $form->addUrl(
-                                "extra_{$field_details['variable']}",
-                                $field_details['display_text'],
-                                false,
-                                ['placeholder' => 'https://']
-                            );
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_LETTERS_ONLY:
-                            $form->addTextLettersOnly(
-                                "extra_{$field_details['variable']}",
-                                $field_details['display_text']
-                            );
-                            $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_VIDEO_URL:
+                        $form->addUrl(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text'],
+                            false,
+                            ['placeholder' => 'https://']
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_LETTERS_ONLY:
+                        $form->addTextLettersOnly(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text']
+                        );
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
 
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_ALPHANUMERIC:
-                            $form->addTextAlphanumeric(
-                                "extra_{$field_details['variable']}",
-                                $field_details['display_text']
-                            );
-                            $form->applyFilter(
-                                'extra_'.$field_details['variable'],
-                                'stripslashes'
-                            );
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_LETTERS_SPACE:
-                            $form->addTextLettersAndSpaces(
-                                "extra_{$field_details['variable']}",
-                                $field_details['display_text']
-                            );
-                            $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_ALPHANUMERIC:
+                        $form->addTextAlphanumeric(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text']
+                        );
+                        $form->applyFilter(
+                            'extra_'.$field_details['variable'],
+                            'stripslashes'
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_LETTERS_SPACE:
+                        $form->addTextLettersAndSpaces(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text']
+                        );
+                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
 
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_ALPHANUMERIC_SPACE:
-                            $form->addTextAlphanumericAndSpaces(
-                                "extra_{$field_details['variable']}",
-                                $field_details['display_text']
-                            );
-                            $form->applyFilter(
-                                'extra_'.$field_details['variable'],
-                                'stripslashes'
-                            );
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
-                        case self::FIELD_TYPE_GEOLOCALIZATION:
-                            $dataValue = isset($extraData['extra_'.$field_details['variable']])
-                                ? $extraData['extra_'.$field_details['variable']]
-                                : '';
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_ALPHANUMERIC_SPACE:
+                        $form->addTextAlphanumericAndSpaces(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text']
+                        );
+                        $form->applyFilter(
+                            'extra_'.$field_details['variable'],
+                            'stripslashes'
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
+                    case self::FIELD_TYPE_GEOLOCALIZATION:
+                        $dataValue = isset($extraData['extra_'.$field_details['variable']])
+                            ? $extraData['extra_'.$field_details['variable']]
+                            : '';
 
-                            $form->addGeoLocationMapField(
-                                'extra_'.$field_details['variable'],
-                                $field_details['display_text'],
-                                $dataValue,
-                                $hideGeoLocalizationDetails
-                            );
+                        $form->addGeoLocationMapField(
+                            'extra_'.$field_details['variable'],
+                            $field_details['display_text'],
+                            $dataValue,
+                            $hideGeoLocalizationDetails
+                        );
 
-                            if ($freezeElement) {
-                                $form->freeze('extra_'.$field_details['variable']);
-                            }
-                            break;
-                        case self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
-                            $jquery_ready_content .= $this->addSelectWithTextFieldElement(
-                                $form,
-                                $field_details,
-                                $freezeElement
-                            );
-                            break;
-                        case self::FIELD_TYPE_TRIPLE_SELECT:
-                            $jquery_ready_content .= $this->addTripleSelectElement(
-                                $form,
-                                $field_details,
-                                is_array($extraData) ? $extraData : [],
-                                $freezeElement
-                            );
-                            break;
-                    }
-
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$field_details['variable']);
+                        }
+                        break;
+                    case self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                        $jquery_ready_content .= $this->addSelectWithTextFieldElement(
+                            $form,
+                            $field_details,
+                            $freezeElement
+                        );
+                        break;
+                    case self::FIELD_TYPE_TRIPLE_SELECT:
+                        $jquery_ready_content .= $this->addTripleSelectElement(
+                            $form,
+                            $field_details,
+                            is_array($extraData) ? $extraData : [],
+                            $freezeElement
+                        );
+                        break;
                 }
             }
         }

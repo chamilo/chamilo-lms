@@ -77,7 +77,7 @@ import {mapActions, mapGetters, useStore} from 'vuex';
 import {mapFields} from 'vuex-map-fields';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
-import {computed, reactive, ref, toRefs} from "vue";
+import {computed, reactive, ref, toRefs, onMounted} from "vue";
 
 //import '@fullcalendar/core/vdom' // solve problem with Vite
 import FullCalendar from '@fullcalendar/vue3';
@@ -109,7 +109,7 @@ export default {
 
   mixins: [CreateMixin],
   //mixins: [ShowMixin],
-  setup(props) {
+  setup() {
     const $q = useQuasar();
 
     const calendarOptions = ref([]);
@@ -139,6 +139,11 @@ export default {
     const cid = toInteger(route.query.cid);
     const sid = toInteger(route.query.sid);
     const gid = toInteger(route.query.gid);
+
+    function onCreated(item) {
+      //showNotification(t('Updated'));
+      reFetch();
+    }
 
     async function getCalendarEvents({startStr, endStr})  {
       const calendarEvents = await axios.get(ENTRYPOINT + 'c_calendar_events', {
@@ -222,7 +227,6 @@ export default {
         if (event.extendedProps['@type'] && event.extendedProps['@type'] === 'Session') {
           sessionState.sessionAsEvent = event;
           sessionState.showSessionDialog = true;
-
           EventClickArg.jsEvent.preventDefault();
 
           return;
@@ -233,8 +237,8 @@ export default {
         item.value = {...event.extendedProps};
 
         item.value['title'] = event.title;
-        item.value['startDate'] = event.startStr;
-        item.value['endDate'] = event.endStr;
+        item.value['startDate'] = event.start;
+        item.value['endDate'] = event.end;
         item.value['parentResourceNodeId'] = event.extendedProps.resourceNode.creator.id;
 
         isEventEditable.value = item.value['parentResourceNodeId'] === currentUser.value['id'];
@@ -273,7 +277,6 @@ export default {
         dialog.value = true;
       },
       events(info, successCallback, failureCallback) {
-        console.log(info);
         Promise
             .all([getCalendarEvents(info), getSessions(info)])
             .then(values => {
@@ -300,37 +303,45 @@ export default {
       },
     }
 
+    const cal = ref(null);
     function reFetch() {
-      let calendarApi = this.$refs.cal.getApi();
+      const calendarApi = cal.value.getApi();
       calendarApi.refetchEvents();
     }
 
     function confirmDelete() {
-      $q
-          .dialog({
-            title: 'Delete',
-            message: 'Are you sure you want to delete this event?',
-            persistent: true,
-            cancel: true
-          })
-          .onOk(function () {
-            if (item.value['parentResourceNodeId'] === currentUser.value['id']) {
-              store.dispatch('ccalendarevent/del', item.value)
-            } else {
-              let filteredLinks = item.value['resourceLinkListFromEntity']
-                  .filter(resourceLinkFromEntity => resourceLinkFromEntity['user']['id'] === currentUser.value['id']);
+      $q.dialog({
+          title: 'Delete',
+          message: 'Are you sure you want to delete this event?',
+          persistent: true,
+          cancel: true
+        })
+        .onOk(function () {
+          if (item.value['parentResourceNodeId'] === currentUser.value['id']) {
+            store.dispatch('ccalendarevent/del', item.value);
 
-              if (filteredLinks.length > 0) {
-                store.dispatch('resourcelink/del', {'@id': `/api/resource_links/${filteredLinks[0]['id']}`})
+            dialogShow.value = false;
+            dialog.value = false;
+            reFetch();
+          } else {
+            let filteredLinks = item.value['resourceLinkListFromEntity']
+                .filter(resourceLinkFromEntity => resourceLinkFromEntity['user']['id'] === currentUser.value['id']);
 
-                currentEvent.remove();
-                dialogShow.value = false;
-              }
+            if (filteredLinks.length > 0) {
+              store.dispatch('resourcelink/del', {'@id': `/api/resource_links/${filteredLinks[0]['id']}`})
+
+              currentEvent.remove();
+              dialogShow.value = false;
+              dialog.value = false;
+              reFetch();
             }
-          });
+          }
+        });
     }
 
     return {
+      cal,
+      onCreated,
       calendarOptions,
       dialog,
       item,

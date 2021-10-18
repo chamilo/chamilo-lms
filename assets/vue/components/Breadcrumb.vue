@@ -52,8 +52,8 @@ export default {
         'CourseHome',
         'MyCourses',
         'MySessions',
-        'MySessionListUpcoming',
-        'MySessionListPast',
+        'MySessionsUpcoming',
+        'MySessionsPast',
         'Home',
         'MessageList',
       ];
@@ -65,7 +65,7 @@ export default {
           href: '/resources/messages'
         });
       }
-
+      console.log(this.$route.name);
       if (list.includes(this.$route.name)) {
         return items;
       }

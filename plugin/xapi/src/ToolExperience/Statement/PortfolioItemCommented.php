@@ -31,6 +31,8 @@ class PortfolioItemCommented extends BaseStatement
         $portfolioItem = $this->comment->getItem();
         $commentParent = $this->comment->getParent();
 
+        $statementId = $this->generateStatementId('portfolio-comment');
+
         $userActor = new UserActor($this->comment->getAuthor());
         $statementResult = new Result(null, null, null, $this->comment->getContent());
 
@@ -55,7 +57,7 @@ class PortfolioItemCommented extends BaseStatement
                 ->withAddedGroupingActivity($itemActivity->generate());
 
             return new Statement(
-                null,
+                $statementId,
                 $userActor->generate(),
                 $repliedVerb->generate(),
                 $parentCommentActivity->generate(),
@@ -72,6 +74,7 @@ class PortfolioItemCommented extends BaseStatement
             $commentedVerb = new CommentedVerb();
 
             return $itemShared->generate()
+                ->withId($statementId)
                 ->withActor($userActor->generate())
                 ->withVerb($commentedVerb->generate())
                 ->withStored($this->comment->getDate())

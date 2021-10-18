@@ -61,7 +61,7 @@ class QuizQuestionAnswered extends BaseStatement
             ->withAddedGroupingActivity($quizActivity->generate());
 
         return new Statement(
-            null,
+            $this->generateStatementId('exercise-question'),
             $userActor->generate(),
             $answeredVerb->generate(),
             $questionActivity->generate(),

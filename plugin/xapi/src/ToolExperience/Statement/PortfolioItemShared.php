@@ -11,6 +11,7 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as Portfolio
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Shared as SharedVerb;
 use Xabbuh\XApi\Model\Statement;
+use Xabbuh\XApi\Model\StatementId;
 
 /**
  * Class PortfolioItemShared.
@@ -60,7 +61,7 @@ class PortfolioItemShared extends BaseStatement
         );
 
         return new Statement(
-            null,
+            $this->generateStatementId('portfolio-item'),
             $userActor->generate(),
             $sharedVerb->generate(),
             $itemActivity->generate(),

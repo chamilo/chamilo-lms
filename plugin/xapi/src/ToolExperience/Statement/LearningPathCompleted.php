@@ -43,7 +43,7 @@ class LearningPathCompleted extends BaseStatement
         $lpActivity = new LearningPathActivity($this->lp);
 
         return new Statement(
-            null,
+            $this->generateStatementId('learning-path'),
             $userActor->generate(),
             $completedVerb->generate(),
             $lpActivity->generate(),

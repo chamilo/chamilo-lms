@@ -28,11 +28,11 @@ abstract class BaseStatement
 {
     abstract public function generate(): Statement;
 
-    protected function generateStatementId(string $type, string $value): StatementId
+    protected function generateStatementId(string $type): StatementId
     {
         $uuid = Uuid::uuid5(
             XApiPlugin::create()->get(XApiPlugin::SETTING_UUID_NAMESPACE),
-            "$type/$value"
+            uniqid($type)
         );
 
         return StatementId::fromUuid($uuid);

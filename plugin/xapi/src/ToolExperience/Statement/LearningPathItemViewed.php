@@ -59,7 +59,7 @@ class LearningPathItemViewed extends BaseStatement
             ->withAddedGroupingActivity($lpActivity->generate());
 
         return new Statement(
-            null,
+            $this->generateStatementId('learning-path-item'),
             $userActor->generate(),
             $viewedVerb->generate(),
             $lpItemActivity->generate(),

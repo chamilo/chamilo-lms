@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\GradebookResultAttempt;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
@@ -23,9 +24,64 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $repo = self::getContainer()->get(GradeBookCategoryRepository::class);
+
+        $course = $this->createCourse('new');
+
+        $category = (new GradebookCategory())
+            ->setName('cat1')
+            ->setCourse($course)
+            ->setWeight(100.00)
+            ->setVisible(true)
+            ->setGenerateCertificates(true)
+        ;
+        $this->assertHasNoEntityViolations($category);
+
+        $evaluation = (new GradebookEvaluation())
+            ->setName('eva')
+            ->setCategory($category)
+            ->setCourse($course)
+            ->setWeight(100.00)
+            ->setVisible(1)
+            ->setWeight(50.00)
+            ->setType('evaluation')
+            ->setMax(100.00)
+        ;
+        $this->assertHasNoEntityViolations($evaluation);
+
+        $link = (new GradebookLink())
+            ->setRefId(1)
+            ->setCategory($category)
+            ->setCourse($course)
+            ->setWeight(100.00)
+            ->setVisible(1)
+            ->setWeight(50.00)
+            ->setType(1)
+        ;
+        $this->assertHasNoEntityViolations($link);
+
+        $category->getLinks()->add($link);
+        $category->getEvaluations()->add($evaluation);
+
+        $em->persist($evaluation);
+        $em->persist($category);
+        $em->flush();
+
+        $this->assertSame(1, $courseRepo->count([]));
+
+        $em->remove($course);
+        $em->flush();
+
+        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame(0, $repo->count([]));
+    }
+
+    public function testCreateWithEvaluationAndLinks(): void
+    {
+        $em = $this->getEntityManager();
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
         $repo = self::getContainer()->get(GradeBookCategoryRepository::class);
 
         $course = $this->createCourse('new');
@@ -106,6 +162,8 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
         ;
         $em->persist($resultAttempt);
         $em->flush();
+
+        $this->assertSame(1, $courseRepo->count([]));
 
         $em->remove($category);
         $em->flush();

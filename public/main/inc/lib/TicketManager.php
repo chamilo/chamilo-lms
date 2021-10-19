@@ -2453,12 +2453,11 @@ class TicketManager
      * @param int $projectId
      *
      * @todo load from database instead of configuration.php setting
-     *
-     * @return array
      */
-    public static function getAllowedRolesFromProject($projectId)
+    public static function getAllowedRolesFromProject($projectId): array
     {
-        $options = api_get_configuration_value('ticket_project_user_roles');
+        $options = Container::getLegacyConfigurationValue('ticket_project_user_roles');
+
         if ($options) {
             if (isset($options['permissions'][$projectId])) {
                 return $options['permissions'][$projectId];

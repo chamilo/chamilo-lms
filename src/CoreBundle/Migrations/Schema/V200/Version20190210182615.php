@@ -123,7 +123,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
                 if (empty($exists)) {
                     $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) 
                             VALUES (3, 0, NOW(), $coachId, $sessionId)";
-                    $this->addSql($sql);
+                    $connection->executeQuery($sql);
                 }
             }
 
@@ -135,14 +135,14 @@ class Version20190210182615 extends AbstractMigrationChamilo
                 if (empty($exists)) {
                     $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) 
                             VALUES (4, 0, NOW(), $adminId, $sessionId)";
-                    $this->addSql($sql);
+                    $connection->executeQuery($sql);
                 }
             }
         }
 
         $sql = 'SELECT user_id, session_id, status
-                FROM session_rel_course_rel_user 
-                WHERE user_id NOT IN (SELECT user_id FROM session_rel_user);';
+                FROM session_rel_course_rel_user scu
+                WHERE user_id NOT IN (SELECT user_id FROM session_rel_user WHERE session_id = scu.session_id)';
         $result = $connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
@@ -158,7 +158,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
                 if (empty($exists)) {
                     $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) 
                             VALUES ($status, 0, NOW(), $userId, $sessionId)";
-                    $this->addSql($sql);
+                    $connection->executeQuery($sql);
                 }
             }
         }

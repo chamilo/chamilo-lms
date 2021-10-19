@@ -106,7 +106,7 @@
               <q-list dense>
                 <q-item class="GL__menu-link-signed-in">
                   <q-item-section>
-                    <div>{{ $t('Signed in as') }} <strong>{{ currentUser.username }}</strong></div>
+                    <div>{{ $t('Signed in as') }} <strong>{{ currentUser.fullName }}</strong></div>
                   </q-item-section>
                 </q-item>
                 <!--                <q-separator />-->

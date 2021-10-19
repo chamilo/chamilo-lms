@@ -790,6 +790,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     // Property used only during installation.
     protected bool $skipResourceNode = false;
 
+    #[Groups(['user:read', 'user_json:read'])]
+    protected string $fullName;
+
     public function __construct()
     {
         $this->skipResourceNode = false;
@@ -1451,7 +1454,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getFullname(): string
     {
-        return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+        if (empty($this->fullName)) {
+            return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+        }
+
+        return $this->fullName;
     }
 
     public function getFirstname(): ?string
@@ -2475,5 +2482,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
                     }
                 )->toArray()
             );
+    }
+
+    public function setFullName(string $fullName): self
+    {
+        $this->fullName = $fullName;
+
+        return $this;
     }
 }

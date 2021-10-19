@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\Kernel;
@@ -8,7 +10,7 @@ class LegacyConfigurationHelper
 {
     private array $configuration;
 
-    public function loadValues(Kernel $kernel)
+    public function loadValues(Kernel $kernel): void
     {
         $_configuration = [];
 
@@ -26,15 +28,14 @@ class LegacyConfigurationHelper
 
         // Check if variable exists
         if (isset($this->configuration[$variable])) {
-            if (is_array($this->configuration[$variable])) {
+            if (\is_array($this->configuration[$variable])) {
                 // Check if it exists for the sub portal
-                if (array_key_exists($urlId, $this->configuration[$variable])) {
+                if (\array_key_exists($urlId, $this->configuration[$variable])) {
                     return $this->configuration[$variable][$urlId];
-                } else {
-                    // Try to found element with id = 1 (master portal)
-                    if (array_key_exists(1, $this->configuration[$variable])) {
-                        return $this->configuration[$variable][1];
-                    }
+                }
+                // Try to found element with id = 1 (master portal)
+                if (\array_key_exists(1, $this->configuration[$variable])) {
+                    return $this->configuration[$variable][1];
                 }
             }
 

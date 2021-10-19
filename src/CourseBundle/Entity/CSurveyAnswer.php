@@ -27,7 +27,7 @@ class CSurveyAnswer
 
     /**
      * @ORM\ManyToOne(targetEntity="CSurvey")
-     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CSurvey $survey;
 

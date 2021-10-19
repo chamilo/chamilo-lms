@@ -26,7 +26,6 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
         $em = $this->getEntityManager();
 
         $course = $this->createCourse('new');
@@ -91,7 +90,6 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
 
     public function testCreateInSession(): void
     {
-        self::bootKernel();
         $em = $this->getEntityManager();
 
         $course = $this->createCourse('new');
@@ -160,8 +158,6 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
 
     public function testCreateWithAttempt(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);

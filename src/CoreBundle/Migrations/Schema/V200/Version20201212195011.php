@@ -81,10 +81,11 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         $sql = "SELECT id FROM extra_field
                 WHERE extra_field_type = $extraFieldType AND variable = 'special_course'";
         $result = $connection->executeQuery($sql);
-        $extraFieldId = $result->fetchOne();
+        $extraFieldRow = $result->fetchOne();
 
         $specialCourses = '';
-        if (!empty($extraFieldId)) {
+        if (!empty($extraFieldRow)) {
+            $extraFieldId = (int) $extraFieldRow['id'];
             $sql = 'SELECT DISTINCT(item_id)
                     FROM extra_field_values
                     WHERE field_id = '.$extraFieldId." AND value = '1'";

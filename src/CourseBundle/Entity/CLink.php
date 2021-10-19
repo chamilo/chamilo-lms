@@ -43,7 +43,7 @@ class CLink extends AbstractResource implements ResourceInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLinkCategory", inversedBy="links")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected ?CLinkCategory $category = null;
 

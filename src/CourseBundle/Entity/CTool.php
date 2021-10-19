@@ -71,7 +71,7 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     protected ?Session $session = null;
 

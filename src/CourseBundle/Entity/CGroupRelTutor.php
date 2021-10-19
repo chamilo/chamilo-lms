@@ -10,8 +10,6 @@ use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CGroupRelTutor.
- *
  * @ORM\Table(
  *     name="c_group_rel_tutor",
  *     indexes={
@@ -42,7 +40,7 @@ class CGroupRelTutor
 
     /**
      * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="tutors")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
      */
     protected CGroup $group;
 

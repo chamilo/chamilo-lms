@@ -139,7 +139,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
 
         if (false === $table->hasForeignKey('FK_9209C2A012469DE2')) {
             $this->addSql(
-                'ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A012469DE2 FOREIGN KEY (category_id) REFERENCES c_link_category (iid)'
+                'ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A012469DE2 FOREIGN KEY (category_id) REFERENCES c_link_category (iid) ON DELETE SET NULL'
             );
             $this->addSql('CREATE INDEX IDX_9209C2A012469DE2 ON c_link (category_id)');
         }

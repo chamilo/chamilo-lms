@@ -859,7 +859,7 @@ class ExtraFieldOption extends Model
     {
         $info = parent::get($id);
 
-        if ($translateDisplayText) {
+        if ($info && $translateDisplayText) {
             $info['display_text'] = ExtraField::translateDisplayName($info['option_value'], $info['display_text']);
         }
 

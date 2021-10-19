@@ -14,13 +14,23 @@ class LegacyConfigurationHelper
     {
         $_configuration = [];
 
-        require_once $kernel->getConfigurationFile();
+        $configFile = $kernel->getConfigurationFile();
+
+        if (!file_exists($configFile)) {
+            return;
+        }
+
+        require_once $configFile;
 
         $this->configuration = $_configuration;
     }
 
     public function getValue(string $variable)
     {
+        if (empty($this->configuration)) {
+            return false;
+        }
+
         // Check the current url id, id = 1 by default
         $urlId = isset($this->configuration['access_url']) ? (int) $this->configuration['access_url'] : 1;
 

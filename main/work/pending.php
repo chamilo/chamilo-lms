@@ -212,7 +212,7 @@ if (!empty($courses)) {
         'work_parent_ids',
         get_lang('Works'),
         [],
-        ['placeholder' => get_lang('SelectAnOption'), 'id' => 'search-works', 'multiple' => true]
+        ['placeholder' => get_lang('All'), 'id' => 'search-works', 'multiple' => true]
     );
     if (count($allWork) > 0) {
         foreach ($allWork as $work) {

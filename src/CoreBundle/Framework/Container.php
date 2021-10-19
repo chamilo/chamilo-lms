@@ -593,4 +593,11 @@ class Container
         $em = $doctrine->getManager();
         Database::setManager($em);
     }
+
+    public static function getLegacyConfigurationValue(string $variable)
+    {
+        $configuration = self::$container->get(LegacyConfigurationHelper::class);
+
+        return $configuration->getValue($variable);
+    }
 }

@@ -94,3 +94,7 @@ services:
     Chamilo\CoreBundle\Tool\HandlerCollection:
         arguments:
             - !tagged_iterator chamilo_core.tool_handler
+
+    Chamilo\CoreBundle\Framework\LegacyConfigurationHelper:
+        calls:
+            - [loadValues]

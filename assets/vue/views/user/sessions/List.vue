@@ -1,7 +1,13 @@
 <template>
   <StickyCourses/>
   <SessionTabs/>
-  <SessionListWrapper :sessions="sessionList"/>
+<!--  Default-->
+<!--  <SessionListWrapper :sessions="sessionList"/>-->
+<!--  Sessions in No category -->
+  <div class="text-xl">
+    <v-icon icon="mdi-folder" /> {{ $t('No category') }}
+  </div>
+  <SessionListCategoryWrapper :sessions="sessionList" />
 
   <div v-if="categories.length" class="grid">
     <div v-for="category in categories" >
@@ -11,6 +17,7 @@
       <SessionListCategoryWrapper :sessions="getSessionsFromCategory(category)" />
     </div>
   </div>
+
 </template>
 
 <script>

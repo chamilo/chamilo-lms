@@ -19,8 +19,6 @@ class CLpItemRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $lpRepo = self::getContainer()->get(CLpRepository::class);
         $lpItemRepo = self::getContainer()->get(CLpItemRepository::class);
 

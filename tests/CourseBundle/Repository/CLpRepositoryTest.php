@@ -19,8 +19,6 @@ class CLpRepositoryTest extends AbstractApiTest
 
     public function testCreateLp(): void
     {
-        self::bootKernel();
-
         $repo = self::getContainer()->get(CLpRepository::class);
 
         $course = $this->createCourse('new');
@@ -63,8 +61,6 @@ class CLpRepositoryTest extends AbstractApiTest
 
     public function testCreateWithForum(): void
     {
-        self::bootKernel();
-
         $lpRepo = self::getContainer()->get(CLpRepository::class);
         $forumRepo = self::getContainer()->get(CForumRepository::class);
 

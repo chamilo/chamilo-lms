@@ -19,8 +19,6 @@ class CQuizQuestionRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CQuizQuestionRepository::class);
 

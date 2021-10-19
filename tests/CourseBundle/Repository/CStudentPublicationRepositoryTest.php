@@ -17,8 +17,6 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
 
@@ -42,8 +40,6 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
 
     public function testFindAllByCourse(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
 
@@ -71,8 +67,6 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
 
     public function testGetStudentAssignments(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
 
@@ -116,8 +110,6 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
 
     public function testGetStudentPublicationByUser(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
 

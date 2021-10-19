@@ -18,8 +18,6 @@ class CQuizRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CQuizRepository::class);
 
@@ -70,8 +68,6 @@ class CQuizRepositoryTest extends AbstractApiTest
 
     public function testUpdateNodeForResource(): void
     {
-        self::bootKernel();
-
         $repo = self::getContainer()->get(CQuizRepository::class);
 
         $course = $this->createCourse('new');
@@ -96,8 +92,6 @@ class CQuizRepositoryTest extends AbstractApiTest
 
     public function testFindAllByCourse(): void
     {
-        self::bootKernel();
-
         $repo = self::getContainer()->get(CQuizRepository::class);
 
         $course = $this->createCourse('new');

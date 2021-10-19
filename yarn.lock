@@ -1549,66 +1549,66 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/common@npm:~5.9.0":
-  version: 5.9.0
-  resolution: "@fullcalendar/common@npm:5.9.0"
+"@fullcalendar/common@npm:~5.10.0":
+  version: 5.10.0
+  resolution: "@fullcalendar/common@npm:5.10.0"
   dependencies:
     tslib: ^2.1.0
-  checksum: bc6b9877dba7a157157924c86451d1e58937ebe9d1081c325a0b089b9d2946082b82cb2a55a17540e772cd644c70ae25b40a46c3e09d7e4aa367fe34fdb94df3
+  checksum: 03b669a01ee7218d783f774f7712598522f2df2ff51de005361f489e4803aa385a68ebea54790cc59ba1f2a1fe9111bd71dca0c5430938ad5530809f2689cf88
   languageName: node
   linkType: hard
 
-"@fullcalendar/core@npm:^5.9.0, @fullcalendar/core@npm:~5.9.0":
-  version: 5.9.0
-  resolution: "@fullcalendar/core@npm:5.9.0"
+"@fullcalendar/core@npm:^5.10.0, @fullcalendar/core@npm:~5.10.0":
+  version: 5.10.0
+  resolution: "@fullcalendar/core@npm:5.10.0"
   dependencies:
-    "@fullcalendar/common": ~5.9.0
+    "@fullcalendar/common": ~5.10.0
     preact: ^10.0.5
     tslib: ^2.1.0
-  checksum: 0cb2b34000c7fab2c5a3b5d2d70643565acb60114465211950e13accc79648fe9e1a9021b6eb64f2750ea763c20464549c75d3859e9ab13578372e40c89a9120
+  checksum: 7205b2e48544b1aa86927c08edfb2eb68612cb344d73ecc3e096bd57c7953e3227af3627549ba259579b0b1a3c2071852075297e19a2af0eecd506c659b52378
   languageName: node
   linkType: hard
 
-"@fullcalendar/daygrid@npm:^5.9.0, @fullcalendar/daygrid@npm:~5.9.0":
-  version: 5.9.0
-  resolution: "@fullcalendar/daygrid@npm:5.9.0"
+"@fullcalendar/daygrid@npm:^5.10.0, @fullcalendar/daygrid@npm:~5.10.0":
+  version: 5.10.0
+  resolution: "@fullcalendar/daygrid@npm:5.10.0"
   dependencies:
-    "@fullcalendar/common": ~5.9.0
+    "@fullcalendar/common": ~5.10.0
     tslib: ^2.1.0
-  checksum: b8b1cef0d42f2949662b7b7e5c77e6891c5df37e3eb18271a06a7c180dc6051e16a2c22f7167541ebba8faf9185225ff89780a6bb3892ed9e2ba8cfd87bf4839
+  checksum: 6167e78012370a97a2c72bf94aac08c4746a55cdc591064a7ac29bd6df412f2f6e56130ada6b6eafcefcb003a3865d562aec9ce40121e97df6636faa0d9091cc
   languageName: node
   linkType: hard
 
-"@fullcalendar/interaction@npm:^5.9.0":
-  version: 5.9.0
-  resolution: "@fullcalendar/interaction@npm:5.9.0"
+"@fullcalendar/interaction@npm:^5.10.0":
+  version: 5.10.0
+  resolution: "@fullcalendar/interaction@npm:5.10.0"
   dependencies:
-    "@fullcalendar/common": ~5.9.0
+    "@fullcalendar/common": ~5.10.0
     tslib: ^2.1.0
-  checksum: 459d6c45ffb9c2bd686da46144f156b008f720e4aeaef2e9dddb22e6cf7fb4fe5d4c5c55807aa296dbfb1957f68647014d44a5c789a4867c590f03592477d57a
+  checksum: a6da6df128f85c7faddbd30f7703baec5a8840081449c381fb34208c2a6eceb46149c466691431ce622b5820a180ec76108b0d60cf650d3346ccb0cd8793b540
   languageName: node
   linkType: hard
 
-"@fullcalendar/timegrid@npm:^5.9.0":
-  version: 5.9.0
-  resolution: "@fullcalendar/timegrid@npm:5.9.0"
+"@fullcalendar/timegrid@npm:^5.10.0":
+  version: 5.10.0
+  resolution: "@fullcalendar/timegrid@npm:5.10.0"
   dependencies:
-    "@fullcalendar/common": ~5.9.0
-    "@fullcalendar/daygrid": ~5.9.0
+    "@fullcalendar/common": ~5.10.0
+    "@fullcalendar/daygrid": ~5.10.0
     tslib: ^2.1.0
-  checksum: e6ccd6f605b6a4488eab10da70f98a76341eb5d147316ff9f1365d8eefbc4b76c41e691ee928955e1ef23d1e5694f0b65b02809d1102d73758ea2b78fda84395
+  checksum: a9b3c52f54401bc009eb5ef1fac33e60c6e4746238a350c3335ff0bdfa3d5f789b3faf152a9c747e801d9338f64aff6ae3ea5c5d9519219ee8b8e3102f8da36b
   languageName: node
   linkType: hard
 
-"@fullcalendar/vue3@npm:^5.9.0":
-  version: 5.9.0
-  resolution: "@fullcalendar/vue3@npm:5.9.0"
+"@fullcalendar/vue3@npm:^5.10.0":
+  version: 5.10.0
+  resolution: "@fullcalendar/vue3@npm:5.10.0"
   dependencies:
-    "@fullcalendar/core": ~5.9.0
+    "@fullcalendar/core": ~5.10.0
     tslib: ^2.1.0
   peerDependencies:
     vue: ^3.0.11
-  checksum: ea451e242751282bc69e342cf01bcbe4a6530dee1ff485897d3d88b2b2ae7266e66773f317cfceab6d1aa537bd43402bbb58b14e7175c67ecdc861d7f99d48ae
+  checksum: af4ccd1dc70046b1a6d8d6964c112e90a958da8fae2c0c958e578e60f285d4f6d13c7fa0ce30eda800a49736b3a2207d855176b6eb3726ba4faafb77ab07711a
   languageName: node
   linkType: hard
 
@@ -6542,11 +6542,11 @@ __metadata:
     "@babel/eslint-parser": ^7.15.8
     "@babel/plugin-transform-runtime": 7.15.8
     "@fancyapps/fancybox": ^3.5.7
-    "@fullcalendar/core": ^5.9.0
-    "@fullcalendar/daygrid": ^5.9.0
-    "@fullcalendar/interaction": ^5.9.0
-    "@fullcalendar/timegrid": ^5.9.0
-    "@fullcalendar/vue3": ^5.9.0
+    "@fullcalendar/core": ^5.10.0
+    "@fullcalendar/daygrid": ^5.10.0
+    "@fullcalendar/interaction": ^5.10.0
+    "@fullcalendar/timegrid": ^5.10.0
+    "@fullcalendar/vue3": ^5.10.0
     "@headlessui/vue": ^1.4.1
     "@heroicons/vue": ^1.0.4
     "@mdi/font": ^6.3.95
@@ -6619,11 +6619,11 @@ __metadata:
     js-cookie: ^2.2.1
     jspdf: ^2.4.0
     jsplumb: ^2.15.6
-    linkifyjs: 3.0.2
+    linkifyjs: 3.0.3
     litepicker: ^2.0.11
     luxon: ^2.0.2
     mathjax: ^2.7.9
-    mediaelement: ^5.0.1
+    mediaelement: ^5.0.2
     mediaelement-plugins: "https://github.com/chamilo/mediaelement-plugins"
     mini-css-extract-plugin: ^1.6.2
     moment: ^2.29.1
@@ -6638,7 +6638,7 @@ __metadata:
     postcss-prefix-selector: ^1.13.0
     postcss-rtl: ^1.7.3
     pretty-bytes: ^5.6.0
-    primeflex: ^3.0.1
+    primeflex: ^3.1.0
     primeicons: ^4.1.0
     primevue: ^3.8.1
     purgecss-webpack-plugin: 4.0.3
@@ -6652,7 +6652,7 @@ __metadata:
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
-    sweetalert2: ^11.1.7
+    sweetalert2: ^11.1.9
     tailwindcss: ^2.2.17
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
@@ -12972,10 +12972,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"linkifyjs@npm:3.0.2":
-  version: 3.0.2
-  resolution: "linkifyjs@npm:3.0.2"
-  checksum: 5c76aee1678e366a25c83325788521b36bd5f358798a48a117e680142e1b6339cd897acee4d25871f9a17713871007e5c92540525f8742f64d85def1d38da8f9
+"linkifyjs@npm:3.0.3":
+  version: 3.0.3
+  resolution: "linkifyjs@npm:3.0.3"
+  checksum: eb658a83fd74af16e889bd5b716ca5d38a96967f462ae4159e726c072cf1e50ad4742b187095a8987d3b0ca2783900c5459f06997bfcd9fb892ed77476c52c23
   languageName: node
   linkType: hard
 
@@ -13492,13 +13492,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mediaelement@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "mediaelement@npm:5.0.1"
+"mediaelement@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "mediaelement@npm:5.0.2"
   dependencies:
     global: ^4.3.1
     svg4everybody: ^2.1.9
-  checksum: ba26a83f5449fedb9439a8c2041aef20b32a2ce6feae06c4c1f9d1914b430925c8c6a916d29141020886b9a348c5d191603db10c1503d4c8452cb58de3dd8eb8
+  checksum: bd24db412edf7d6e50ec98178d92bf30bc3c7bf458a76c64a652e44f5d45de589231e742ae7f703b0d299e5f8eb4f4848a518c86cb4e849863549383eff2c63e
   languageName: node
   linkType: hard
 
@@ -16531,10 +16531,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"primeflex@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "primeflex@npm:3.0.1"
-  checksum: 0860861ef56f9fb25456e488f79c6700e74504a646e891dd3b1c7b2bd3bdfdc166d37e50e6a261c5199a17dec79ca3e6ce690a5435363e66faba5bc8aba1abfb
+"primeflex@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "primeflex@npm:3.1.0"
+  checksum: 01f494fbec8878b2f84ce078d6e61ce338a1508840de41b63ecc9fd7cd7d39278892d2389caf2b73f79b9588f5e66645469ffc2a673baf36c1b478b284655dc6
   languageName: node
   linkType: hard
 
@@ -18977,10 +18977,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^11.1.7":
-  version: 11.1.7
-  resolution: "sweetalert2@npm:11.1.7"
-  checksum: 78ea316596991e8dcf0e8eedb6101a6e252c03f2b001ba95ea1a299e1abe8c95bda42ee48e1fe96e5478fd23fd25694d8f65ea45e9e3879fb8081bb154b1c78f
+"sweetalert2@npm:^11.1.9":
+  version: 11.1.9
+  resolution: "sweetalert2@npm:11.1.9"
+  checksum: b7519c739a2b25ad09d42e90c8fceeb90ca87487f77c47fb35eb457260efb0df544f2acf48ad6caf6a5084a53690e8ad33e3d1c2b7e0cdf4897cd14bd349b2aa
   languageName: node
   linkType: hard
 

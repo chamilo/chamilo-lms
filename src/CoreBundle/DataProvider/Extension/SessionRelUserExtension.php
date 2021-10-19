@@ -48,6 +48,7 @@ final class SessionRelUserExtension implements QueryCollectionExtensionInterface
         $request = $this->requestStack->getCurrentRequest();
         $alias = $qb->getRootAliases()[0];
         $content = $request->getContent();
+
         $now = new DateTime('now', new DateTimeZone('UTC'));
         $date = $now->format('Y-m-d H:i:s');
 

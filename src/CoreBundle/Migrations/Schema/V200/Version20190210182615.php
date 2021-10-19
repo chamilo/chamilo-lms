@@ -116,22 +116,26 @@ class Version20190210182615 extends AbstractMigrationChamilo
             $sessionId = (int) $item['id'];
 
             if (!empty($coachId)) {
-                $result = $connection->executeQuery("SELECT * FROM session_rel_user WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 3 ");
-                $items = $result->fetchAllAssociative();
-                if (empty($items)) {
-                    $this->addSql(
-                        "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES (3, 0, NOW(), $coachId, $sessionId)"
-                    );
+                $sql = "SELECT * FROM session_rel_user 
+                        WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 3 ";
+                $result = $connection->executeQuery($sql);
+                $exists = $result->fetchAllAssociative();
+                if (empty($exists)) {
+                    $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) 
+                            VALUES (3, 0, NOW(), $coachId, $sessionId)";
+                    $this->addSql($sql);
                 }
             }
 
             if (!empty($adminId)) {
-                $result = $connection->executeQuery("SELECT * FROM session_rel_user WHERE user_id = $adminId AND session_id = $sessionId AND relation_type = 4 ");
-                $items = $result->fetchAllAssociative();
-                if (empty($items)) {
-                    $this->addSql(
-                        "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES (4, 0, NOW(), $adminId, $sessionId)"
-                    );
+                $sql = "SELECT * FROM session_rel_user 
+                        WHERE user_id = $adminId AND session_id = $sessionId AND relation_type = 4 ";
+                $result = $connection->executeQuery($sql);
+                $exists = $result->fetchAllAssociative();
+                if (empty($exists)) {
+                    $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) 
+                            VALUES (4, 0, NOW(), $adminId, $sessionId)";
+                    $this->addSql($sql);
                 }
             }
         }
@@ -147,14 +151,14 @@ class Version20190210182615 extends AbstractMigrationChamilo
             $sessionId = (int) $item['session_id'];
             $status = (int) $item['status'];
             if (!empty($userId)) {
-                $result = $connection->executeQuery(
-                    "SELECT * FROM session_rel_user WHERE user_id = $userId AND session_id = $sessionId AND relation_type = $status "
-                );
-                $items = $result->fetchAllAssociative();
-                if (empty($items)) {
-                    $this->addSql(
-                        "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) VALUES ($status, 0, NOW(), $userId, $sessionId)"
-                    );
+                $sql = "SELECT * FROM session_rel_user 
+                        WHERE user_id = $userId AND session_id = $sessionId AND relation_type = $status";
+                $result = $connection->executeQuery($sql);
+                $exists = $result->fetchAllAssociative();
+                if (empty($exists)) {
+                    $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id) 
+                            VALUES ($status, 0, NOW(), $userId, $sessionId)";
+                    $this->addSql($sql);
                 }
             }
         }

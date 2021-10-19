@@ -102,6 +102,7 @@ class ExtraFieldType extends AbstractType
                         break 2;
                     }
 
+                    $defaultOptions['data'] = [];
                     if (!empty($value)) {
                         $parts = explode('::', $value);
                         $coordinates = explode(',', $parts[1]);
@@ -243,7 +244,6 @@ class ExtraFieldType extends AbstractType
                 }
             }
         );*/
-
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($item, $extraFields): void {

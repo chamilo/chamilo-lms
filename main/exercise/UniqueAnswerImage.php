@@ -425,29 +425,4 @@ class UniqueAnswerImage extends UniqueAnswer
         $this->updateWeighting($questionWeighting);
         $this->save($exercise);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function return_header(Exercise $exercise, $counter = null, $score = [])
-    {
-        if ($exercise->showExpectedChoice()) {
-            $header = '<table class="'.$this->question_table_class.'">
-			<tr>
-				<th>'.get_lang('Choice').'</th>';
-            if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
-            }
-            $header .= '<th>'.get_lang('Answer').'</th>';
-            $header .= '<th>'.get_lang('Status').'</th>';
-            if (false === $exercise->hideComment) {
-                $header .= '<th>'.get_lang('Comment').'</th>';
-            }
-            $header .= '</tr>';
-        } else {
-            $header = parent::return_header($exercise, $counter, $score);
-        }
-
-        return $header;
-    }
 }

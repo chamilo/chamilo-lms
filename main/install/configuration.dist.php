@@ -2003,6 +2003,9 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 // Ckeditor settings.
 //$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true]];
 
+// Overwrites the app/config/auth.conf.php settings
+//$_configuration['extldap_config'] = ['host' => '', 'port' => ''];
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

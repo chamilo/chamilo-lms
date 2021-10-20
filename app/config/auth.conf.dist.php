@@ -70,7 +70,10 @@ $extldap_config = array(
   'user_search_import_all_users' => 'uid=*'
 );
 
-
+$ldapConfig = api_get_configuration_value('extldap_config');
+if (!empty($ldapConfig)) {
+    $extldap_config = $ldapConfig;
+}
 
 /**
  * Correspondance array between chamilo user info and ldap user info

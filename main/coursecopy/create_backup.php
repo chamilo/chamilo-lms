@@ -55,6 +55,10 @@ if (Security::check_token('post') &&
         $cb = new CourseBuilder('complete');
         $course = $cb->build();
     }
+    // It builds the documents and items related to the LP
+    $cb->exportToCourseBuildFormat();
+    // It builds documents added in text (quizzes, assignments)
+    $cb->restoreDocumentsFromList();
     $zipFile = CourseArchiver::createBackup($course);
     echo Display::return_message(get_lang('BackupCreated'), 'confirm');
     echo '<br />';

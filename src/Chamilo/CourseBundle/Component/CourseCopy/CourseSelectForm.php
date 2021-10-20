@@ -115,7 +115,7 @@ class CourseSelectForm
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
                         if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
-                                setCheckbox('document',true);
+                                //setCheckbox('document',true);
                                 alert(message);
                                 break;
                             }
@@ -749,7 +749,7 @@ class CourseSelectForm
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
                         if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
-                                setCheckbox('document',true);
+                                //setCheckbox('document',true);
                                 alert(message);
                                 break;
                             }

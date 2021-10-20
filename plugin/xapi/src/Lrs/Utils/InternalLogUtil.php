@@ -6,7 +6,6 @@ namespace Chamilo\PluginBundle\XApi\Lrs\Util;
 
 use Chamilo\PluginBundle\Entity\XApi\InternalLog;
 use Database;
-use Doctrine\ORM\ORMException;
 use UserManager;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\Actor;

@@ -11,7 +11,6 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as Portfolio
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Shared as SharedVerb;
 use Xabbuh\XApi\Model\Statement;
-use Xabbuh\XApi\Model\StatementId;
 
 /**
  * Class PortfolioItemShared.

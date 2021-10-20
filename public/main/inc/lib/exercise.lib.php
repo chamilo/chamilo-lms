@@ -4541,7 +4541,7 @@ EOT;
                 $contents = ob_get_clean();
                 $question_content = '';
                 if ($show_results) {
-                    $question_content = '<div class="question_row_answer">';
+                    $question_content = '<div class="question-answer-result">';
                     if (false === $showQuestionScore) {
                         $score = [];
                     }
@@ -4563,18 +4563,12 @@ EOT;
                 $attemptResult[] = $calculatedScore;
 
                 if ($objExercise->showExpectedChoice()) {
-                    $exercise_content .= Display::div(
-                        Display::panel($question_content),
-                        ['class' => 'question-panel']
-                    );
+                    $exercise_content .= Display::panel($question_content);
                 } else {
                     // $show_all_but_expected_answer should not happen at
                     // the same time as $show_results
                     if ($show_results && !$show_only_score) {
-                        $exercise_content .= Display::div(
-                            Display::panel($question_content),
-                            ['class' => 'question-panel']
-                        );
+                        $exercise_content .= Display::panel($question_content);
                     }
                 }
             }

@@ -1770,7 +1770,10 @@ abstract class Question
             }
         }
 
-        return $header;
+        return Display::div(
+            $header,
+            ['class' => 'question-answer-result__header']
+        );
     }
 
     /**

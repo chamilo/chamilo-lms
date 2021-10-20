@@ -8431,20 +8431,14 @@ class Exercise
         return false;
     }
 
-    /**
-     * @param string $class
-     * @param string $scoreLabel
-     * @param string $result
-     * @param array
-     *
-     * @return string
-     */
-    public function getQuestionRibbon($class, $scoreLabel, $result, $array)
+    public function getQuestionRibbon(string $class, string $scoreLabel, ?string $result, array $array): string
     {
         $hide = (int) $this->getPageConfigurationAttribute('hide_question_score');
         if (1 === $hide) {
             return '';
         }
+
+        $hideLabelClass = 'question-answer-result__header-ribbon--no-ribbon';
 
         if ($this->showExpectedChoice()) {
             $html = null;
@@ -8459,36 +8453,30 @@ class Exercise
                 $answerUsed = (int) $array['used'];
                 $answerMissing = (int) $array['missing'] - $answerUsed;
                 for ($i = 1; $i <= $answerUsed; $i++) {
-                    $html .= '<span class="score-img">'.
-                        Display::return_icon('attempt-check.png').
-                        '</span>';
+                    $html .= Display::return_icon('attempt-check.png');
                 }
                 for ($i = 1; $i <= $answerMissing; $i++) {
-                    $html .= '<span class="score-img">'.
-                        Display::return_icon('attempt-nocheck.png').
-                        '</span>';
+                    $html .= Display::return_icon('attempt-nocheck.png');
                 }
-                $label = '<div class="score-title">'.get_lang('Correct answers').': '.$result.'</div>';
-                $label .= '<div class="score-limits">';
+                $label = '<div class="question-answer-result__header-ribbon-title">'.get_lang('Correct answers').': '.$result.'</div>';
+                $label .= '<div class="question-answer-result__header-ribbon-detail">';
                 $label .= $html;
                 $label .= '</div>';
             }
 
-            return '<div class="ribbon">
-                '.$label.'
-                </div>';
+            $ribbon = $label;
         } else {
-            $html = '<div class="ribbon">
-                        <div class="rib rib-'.$class.'">
-                            <h3>'.$scoreLabel.'</h3>
-                        </div>';
+            $hideLabelClass = '';
+            $ribbon = '<div class="question-answer-result__header-ribbon-title question-answer-result__header-ribbon-title--'.$class.'">'.$scoreLabel.'</div>';
             if (!empty($result)) {
-                $html .= '<h4>'.get_lang('Score').': '.$result.'</h4>';
+                $ribbon .= '<div class="question-answer-result__header-ribbon-detail">'.get_lang('Score').': '.$result.'</div>';
             }
-            $html .= '</div>';
-
-            return $html;
         }
+
+        return Display::div(
+            $ribbon,
+            ['class' => "question-answer-result__header-ribbon $hideLabelClass"]
+        );
     }
 
     /**

@@ -854,7 +854,7 @@ foreach ($questionList as $questionId) {
     $i++;
 
     $contents = ob_get_clean();
-    $question_content = '<div class="question_row">';
+    $question_content = '<div class="question-answer-result">';
     if ($show_results && $objQuestionTmp) {
         $objQuestionTmp->export = 'export' === $action;
         // Shows question title an description

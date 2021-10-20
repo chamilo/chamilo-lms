@@ -379,6 +379,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
         ['id' => 'id_generate_api_key']
     );
 }
+$form->addHidden('origin', 'profile');
 //    SUBMIT
 if (is_profile_editable()) {
     $form->addButtonUpdate(get_lang('SaveSettings'), 'apply_change');

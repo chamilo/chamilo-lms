@@ -38,7 +38,7 @@ abstract class Question
     public $feedback;
     public $typePicture = 'new_question.png';
     public $explanationLangVar = '';
-    public $question_table_class = 'table table-striped question-answer-result__detail';
+    public $questionTableClass = 'table table-striped question-answer-result__detail';
     public $questionTypeWithFeedback;
     public $extra;
     public $export = false;

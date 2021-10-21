@@ -271,7 +271,7 @@ class Matching extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">';
+        $header .= '<table class="'.$this->questionTableClass.'">';
         $header .= '<tr>';
         $header .= '<th>'.get_lang('Elements list').'</th>';
         if (!in_array($exercise->results_disabled, [

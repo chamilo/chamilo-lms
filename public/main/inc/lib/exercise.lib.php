@@ -4195,7 +4195,7 @@ EOT;
 
         $counter = 1;
         $total_score = $total_weight = 0;
-        $exercise_content = null;
+        $exerciseContent = null;
 
         // Hide results
         $show_results = false;
@@ -4539,36 +4539,36 @@ EOT;
                 }
 
                 $contents = ob_get_clean();
-                $question_content = '';
+                $questionContent = '';
                 if ($show_results) {
-                    $question_content = '<div class="question-answer-result">';
+                    $questionContent = '<div class="question-answer-result">';
                     if (false === $showQuestionScore) {
                         $score = [];
                     }
 
                     // Shows question title an description
-                    $question_content .= $objQuestionTmp->return_header(
+                    $questionContent .= $objQuestionTmp->return_header(
                         $objExercise,
                         $counter,
                         $score
                     );
                 }
                 $counter++;
-                $question_content .= $contents;
+                $questionContent .= $contents;
                 if ($show_results) {
-                    $question_content .= '</div>';
+                    $questionContent .= '</div>';
                 }
 
-                $calculatedScore['question_content'] = $question_content;
+                $calculatedScore['question_content'] = $questionContent;
                 $attemptResult[] = $calculatedScore;
 
                 if ($objExercise->showExpectedChoice()) {
-                    $exercise_content .= Display::panel($question_content);
+                    $exerciseContent .= Display::panel($questionContent);
                 } else {
                     // $show_all_but_expected_answer should not happen at
                     // the same time as $show_results
                     if ($show_results && !$show_only_score) {
-                        $exercise_content .= Display::panel($question_content);
+                        $exerciseContent .= Display::panel($questionContent);
                     }
                 }
             }
@@ -4641,14 +4641,14 @@ EOT;
         }
 
         if ($show_all_but_expected_answer) {
-            $exercise_content .= Display::return_message(get_lang('Note: This test has been setup to hide the expected answers.'));
+            $exerciseContent .= Display::return_message(get_lang('Note: This test has been setup to hide the expected answers.'));
         }
 
         // Remove audio auto play from questions on results page - refs BT#7939
-        $exercise_content = preg_replace(
+        $exerciseContent = preg_replace(
             ['/autoplay[\=\".+\"]+/', '/autostart[\=\".+\"]+/'],
             '',
-            $exercise_content
+            $exerciseContent
         );
 
         echo $totalScoreText;
@@ -4661,7 +4661,7 @@ EOT;
             echo Display::div($objExercise->description, ['class' => 'exercise_description']);
         }
 
-        echo $exercise_content;
+        echo $exerciseContent;
         if (!$show_only_score) {
             echo $totalScoreText;
         }

@@ -1114,15 +1114,15 @@ class GradebookUtils
     }
 
     /**
-     * @param string[] $list_values
+     * @param string[] $listValues
      *
      * @return string
      */
-    public static function score_badges($list_values)
+    public static function scoreBadges($listValues)
     {
         $counter = 1;
         $badges = [];
-        foreach ($list_values as $value) {
+        foreach ($listValues as $value) {
             $class = 'warning';
             if (1 == $counter) {
                 $class = 'success';

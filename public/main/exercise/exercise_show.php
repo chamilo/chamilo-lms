@@ -854,20 +854,20 @@ foreach ($questionList as $questionId) {
     $i++;
 
     $contents = ob_get_clean();
-    $question_content = '<div class="question-answer-result">';
+    $questionContent = '<div class="question-answer-result">';
     if ($show_results && $objQuestionTmp) {
         $objQuestionTmp->export = 'export' === $action;
         // Shows question title an description
-        $question_content .= $objQuestionTmp->return_header(
+        $questionContent .= $objQuestionTmp->return_header(
             $objExercise,
             $counter,
             $score
         );
     }
     $counter++;
-    $question_content .= $contents;
-    $question_content .= '</div>';
-    $exercise_content .= Display::panel($question_content);
+    $questionContent .= $contents;
+    $questionContent .= '</div>';
+    $exercise_content .= Display::panel($questionContent);
 } // end of large foreach on questions
 
 $totalScoreText = '';

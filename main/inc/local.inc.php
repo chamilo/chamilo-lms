@@ -281,9 +281,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
         $load = true;
         if (isset($cas['skip_force_redirect_in'])) {
-            $skipCas = [
-                '/main/webservices/',
-            ];
+            $skipCas = $cas['skip_force_redirect_in'];
             foreach ($skipCas as $folder) {
                 if (false !== strpos($_SERVER['REQUEST_URI'], $folder)) {
                     $load = false;

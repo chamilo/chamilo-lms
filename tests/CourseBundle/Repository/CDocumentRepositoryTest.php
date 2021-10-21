@@ -992,6 +992,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $documentRepo->create($document);
         $documentRepo->setVisibilityPublished($document);
 
+        /** @var ResourceLink $link */
         $link = $document->getFirstResourceLink();
 
         $this->expectException(LogicException::class);

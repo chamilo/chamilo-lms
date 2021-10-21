@@ -11,8 +11,6 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumAttachment.
- *
  * @ORM\Table(
  *     name="c_forum_attachment",
  *     indexes={

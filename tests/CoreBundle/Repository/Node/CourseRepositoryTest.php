@@ -32,9 +32,13 @@ class CourseRepositoryTest extends AbstractApiTest
             ->setTitle('test')
             ->setCode('test')
             ->setVisualCode('test')
+            ->setDepartmentUrl('https://chamilo.org')
             ->addAccessUrl($this->getAccessUrl())
         ;
         $courseRepo->create($course);
+
+        $this->assertTrue($course->isActive());
+        $this->assertIsArray(Course::getStatusList());
     }
 
     public function testCreateEntity(): void
@@ -45,11 +49,16 @@ class CourseRepositoryTest extends AbstractApiTest
         $category = (new CourseCategory())
             ->setCode('Course cat')
             ->setName('Course cat')
+            ->setDescription('desc')
+            ->setAuthCatChild('cat')
+            ->setAuthCourseChild('cat')
+            ->setChildrenCount(0)
+            ->setTreePos(0)
         ;
         $em->persist($category);
         $em->flush();
 
-        $this->assertIsArray(Course::getStatusList());
+        $this->assertFalse($category->hasAsset());
 
         $course = (new Course())
             ->setTitle('test julio')

@@ -26,6 +26,10 @@ class CLinkRepositoryTest extends AbstractApiTest
         $item = (new CLink())
             ->setUrl('https://chamilo.org')
             ->setTitle('link')
+            ->setDescription('desc')
+            ->setDisplayOrder(1)
+            ->setTarget('blank')
+            ->setCategory(null)
             ->setParent($course)
             ->setCreator($teacher)
         ;

@@ -9,8 +9,6 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumMailcue.
- *
  * @ORM\Table(
  *     name="c_forum_mailcue",
  *     indexes={

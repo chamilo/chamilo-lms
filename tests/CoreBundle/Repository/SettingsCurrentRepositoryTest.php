@@ -29,6 +29,11 @@ class SettingsCurrentRepositoryTest extends AbstractApiTest
             ->setUrl($this->getAccessUrl())
             ->setCategory('cat')
             ->setAccessUrlChangeable(1)
+            ->setSubkey('sub')
+            ->setType('type')
+            ->setComment('comment')
+            ->setSubkeytext('setSubkeytext')
+            ->setAccessUrlLocked(1)
         ;
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);

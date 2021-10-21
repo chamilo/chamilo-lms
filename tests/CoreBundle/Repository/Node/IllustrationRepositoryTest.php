@@ -65,6 +65,7 @@ class IllustrationRepositoryTest extends WebTestCase
 
         $illustration = (new Illustration())
             ->setName('test')
+            ->setResourceName('test')
             ->setCreator($user)
             ->setParent($user)
         ;
@@ -72,5 +73,7 @@ class IllustrationRepositoryTest extends WebTestCase
         $repo->update($illustration);
 
         $this->assertSame('test', (string) $illustration);
+        $this->assertNotNull($illustration->getId());
+        $this->assertSame($illustration->getId(), $illustration->getResourceIdentifier());
     }
 }

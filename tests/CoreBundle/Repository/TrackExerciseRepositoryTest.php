@@ -177,6 +177,9 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $attempt = (new TrackEAttempt())
+            ->setTeacherComment('comment')
+            ->setFilename('')
+            ->setSecondsSpent(100)
             ->setTms(new DateTime())
             ->setQuestionId(1)
             ->setPosition(1)

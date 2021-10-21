@@ -124,6 +124,14 @@ class UserRepositoryTest extends AbstractApiTest
             ->setLastname('Doe')
             ->setFirstname('Joe')
             ->setUsername('admin2')
+            ->setEnabled(true)
+            ->setSalt('')
+            ->setRegistrationDate(new DateTime())
+            ->setExpirationDate(new DateTime())
+            ->setOpenid('')
+            ->setSlug('admin2')
+            ->setConfirmationToken('conf')
+            ->setRoles(['ROLE_TEST'])
             ->setStatus(1)
             ->setActive(true)
             ->setDateOfBirth(new DateTime())
@@ -155,7 +163,7 @@ class UserRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame(3, $userRepo->count([]));
-        $this->assertCount(3, $user->getRoles());
+        $this->assertCount(4, $user->getRoles());
 
         $this->assertSame('Joe Doe', $user->getCompleteNameWithClasses());
         $this->assertSame('Joe Doe', $user->getFullname());

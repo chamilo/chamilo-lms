@@ -77,12 +77,20 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
             ->setName($uploadedFile->getFilename())
             ->setOriginalName($uploadedFile->getFilename())
             ->setFile($uploadedFile)
+            ->setDescription('desc')
+            ->setCrop('')
+            ->setMetadata([])
         ;
         $em->persist($resourceFile);
 
         $node->setContent('')->setResourceFile($resourceFile);
         $em->persist($node);
         $em->flush();
+
+        $this->assertSame($uploadedFile->getFilename(), (string) $resourceFile);
+        $this->assertSame('desc', $resourceFile->getDescription());
+        $this->assertNotEmpty($resourceFile->getWidth());
+        $this->assertNotEmpty($resourceFile->getHeight());
 
         $content = $repo->getResourceNodeFileContent($node);
         $this->assertNotEmpty($content);

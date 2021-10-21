@@ -29,6 +29,9 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
 
         $category = (new CForumCategory())
             ->setCatTitle('cat 1')
+            ->setCatComment('comment')
+            ->setCatOrder(1)
+            ->setLocked(1)
             ->setParent($course)
             ->setCreator($teacher)
             ->addCourseLink($course)

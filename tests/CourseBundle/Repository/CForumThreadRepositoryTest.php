@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 
 class CForumThreadRepositoryTest extends AbstractApiTest
 {
@@ -19,7 +20,6 @@ class CForumThreadRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
@@ -36,6 +36,16 @@ class CForumThreadRepositoryTest extends AbstractApiTest
 
         $thread = (new CForumThread())
             ->setThreadTitle('thread title')
+            ->setThreadPeerQualify(true)
+            ->setThreadReplies(0)
+            ->setThreadDate(new DateTime())
+            ->setThreadSticky(false)
+            ->setLocked(1)
+            ->setThreadTitleQualify('title')
+            ->setThreadQualifyMax(100)
+            ->setThreadCloseDate(new DateTime())
+            ->setThreadWeight(100)
+            ->setItem(null)
             ->setForum($forum)
             ->setParent($course)
             ->setCreator($teacher)
@@ -50,7 +60,7 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $threadRepo->count([]));
         $this->assertSame(1, $forumRepo->count([]));
         $this->assertSame(1, $forum->getThreads()->count());
-
+        $this->assertTrue($forum->hasThread($thread));
         $this->assertNull($threadRepo->getForumThread('title', $course));
 
         $this->assertSame(0, $thread->getThreadViews());

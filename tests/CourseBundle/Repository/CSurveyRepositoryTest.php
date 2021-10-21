@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
+use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use Chamilo\CourseBundle\Repository\CSurveyAnswerRepository;
@@ -17,6 +18,7 @@ use Chamilo\CourseBundle\Repository\CSurveyQuestionRepository;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 
 class CSurveyRepositoryTest extends AbstractApiTest
 {
@@ -33,6 +35,21 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $survey = (new CSurvey())
             ->setTitle('survey')
             ->setCode('survey')
+            ->setSubtitle('subtitle')
+            ->setSurveythanks('thanks')
+            ->setIsMandatory(false)
+            ->setSurveyType(1)
+            ->setSurveyVersion('v1')
+            ->setAccessCondition('condition')
+            ->setShuffle(false)
+            ->setTemplate('tpl')
+            ->setAnonymous('0')
+            ->setVisibleResults(1)
+            ->setReminderMail('reminder')
+            ->setRgt(1)
+            ->setMailSubject('subject')
+            ->setInviteMail('invite')
+            ->setLang('lang')
             ->setParent($course)
             ->setCreator($teacher)
         ;
@@ -53,9 +70,12 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $surveyRepo = self::getContainer()->get(CSurveyRepository::class);
         $surveyQuestionRepo = self::getContainer()->get(CSurveyQuestionRepository::class);
         $surveyAnswerRepo = self::getContainer()->get(CSurveyAnswerRepository::class);
+        $surveyInvitationRepo = $em->getRepository(CSurveyInvitation::class);
+        $surveyOptionRepo = $em->getRepository(CSurveyQuestionOption::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
+        $student = $this->createUser('student');
 
         $survey = (new CSurvey())
             ->setTitle('survey')
@@ -82,17 +102,20 @@ class CSurveyRepositoryTest extends AbstractApiTest
         ;
         $this->assertHasNoEntityViolations($question);
         $em->persist($question);
+
+        $option = (new CSurveyQuestionOption())
+            ->setSurvey($survey)
+            ->setQuestion($question)
+            ->setOptionText('text')
+            ->setValue(1)
+            ->setSort(1)
+        ;
+        $em->persist($option);
+        $this->assertHasNoEntityViolations($option);
         $em->flush();
 
-        $questionOption = (new CSurveyQuestionOption())
-            ->setQuestion($question)
-            ->setValue(1)
-            ->setSurvey($survey)
-            ->setSort(1)
-            ->setOptionText('option text')
-        ;
-        $this->assertHasNoEntityViolations($questionOption);
-        $em->persist($questionOption);
+        $this->assertSame('hola?', $question->getSurveyQuestion());
+
         $em->flush();
 
         $answer = (new CSurveyAnswer())
@@ -104,8 +127,21 @@ class CSurveyRepositoryTest extends AbstractApiTest
         ;
         $this->assertHasNoEntityViolations($answer);
         $em->persist($answer);
-        $em->flush();
 
+        $invitation = (new CSurveyInvitation())
+            ->setCourse($course)
+            ->setUser($student)
+            ->setGroup(null)
+            ->setSession(null)
+            ->setSurvey($survey)
+            ->setInvitationCode('code')
+            ->setInvitationDate(new DateTime())
+            ->setAnswered(0)
+            ->setReminderDate(new DateTime())
+        ;
+        $em->persist($invitation);
+
+        $em->flush();
         $em->clear();
 
         /** @var CSurvey $survey */
@@ -113,6 +149,7 @@ class CSurveyRepositoryTest extends AbstractApiTest
         /** @var CSurveyQuestion $question */
         $question = $surveyQuestionRepo->find($question->getIid());
 
+        $this->assertSame(1, $survey->getInvitations()->count());
         $this->assertSame(1, $survey->getQuestions()->count());
         $this->assertSame(1, $question->getOptions()->count());
         $this->assertSame(1, $question->getAnswers()->count());
@@ -120,7 +157,8 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $surveyRepo->count([]));
         $this->assertSame(1, $surveyQuestionRepo->count([]));
         $this->assertSame(1, $surveyAnswerRepo->count([]));
-
+        $this->assertSame(1, $surveyInvitationRepo->count([]));
+        $this->assertSame(1, $surveyOptionRepo->count([]));
         $this->assertSame(1, $courseRepo->count([]));
 
         /** @var Course $course */
@@ -131,5 +169,7 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $this->assertSame(0, $surveyRepo->count([]));
         $this->assertSame(0, $surveyQuestionRepo->count([]));
         $this->assertSame(0, $surveyAnswerRepo->count([]));
+        $this->assertSame(0, $surveyInvitationRepo->count([]));
+        $this->assertSame(0, $surveyOptionRepo->count([]));
     }
 }

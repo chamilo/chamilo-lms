@@ -4150,8 +4150,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, CStudentPublication $
     }
 
     $em = Database::getManager();
-    $comment = new CStudentPublicationComment();
-    $comment
+    $comment = (new CStudentPublicationComment())
         ->setComment($data['comment'])
         ->setUser(api_get_user_entity($userId))
         ->setPublication($studentPublication)
@@ -4160,7 +4159,8 @@ function addWorkComment($courseInfo, $userId, $parentWork, CStudentPublication $
             $courseEntity,
             api_get_session_entity(),
             api_get_group_entity()
-        );
+        )
+    ;
 
     $repo = Container::getStudentPublicationCommentRepository();
     $repo->create($comment);

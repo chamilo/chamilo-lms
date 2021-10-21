@@ -74,7 +74,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
         if (false === $table->hasForeignKey('FK_62798E97163DDA15')) {
             $this->addSql(
-                'ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid)'
+                'ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid) ON DELETE CASCADE'
             );
         }
         if (false === $table->hasIndex('IDX_62798E97163DDA15')) {
@@ -101,7 +101,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
         if (false === $table->hasForeignKey('FK_1197487C2395FCED')) {
             $this->addSql(
-                'ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C2395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)'
+                'ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C2395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid) ON DELETE CASCADE'
             );
         }
 

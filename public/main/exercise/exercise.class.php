@@ -8445,12 +8445,12 @@ class Exercise
                 .'</div>';
         }
 
-        $ribbonClassModificator = '';
+        $ribbonClassModifier = '';
 
         if ($this->showExpectedChoice()) {
-            $ribbonClassModificator = 'question-answer-result__header-ribbon--no-ribbon';
             $hideLabel = api_get_configuration_value('exercise_hide_label');
             if (true === $hideLabel) {
+                $ribbonClassModifier = 'question-answer-result__header-ribbon--no-ribbon';
                 $html = '';
                 $answerUsed = (int) $array['used'];
                 $answerMissing = (int) $array['missing'] - $answerUsed;
@@ -8468,7 +8468,7 @@ class Exercise
 
         return Display::div(
             $ribbon,
-            ['class' => "question-answer-result__header-ribbon $ribbonClassModificator"]
+            ['class' => "question-answer-result__header-ribbon $ribbonClassModifier"]
         );
     }
 

@@ -2354,10 +2354,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.175":
-  version: 4.14.175
-  resolution: "@types/lodash@npm:4.14.175"
-  checksum: d56c57f3784ff73d84ba5d2bb1dba8f6f88f97fb36113010c4a69fd7b823e4fe855b2fbabe8d020bc723e83dc84dc1fc3fc900a6e341fd12a8aaf75f1fddeb70
+"@types/lodash@npm:^4.14.176":
+  version: 4.14.176
+  resolution: "@types/lodash@npm:4.14.176"
+  checksum: cc3c9d7522a20814d1bbc5125a3d5a4a4eed72e7cf6a3b01b0810aa5dcff0cf23ab40ea4ab00fe2425dd0828cd915087d8d073757ab9c925e2872903dd3e15d0
   languageName: node
   linkType: hard
 
@@ -5819,10 +5819,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"blueimp-load-image@npm:^5.15.0":
-  version: 5.15.0
-  resolution: "blueimp-load-image@npm:5.15.0"
-  checksum: e468b49a4726c9d661ab412671bb60764153aa1195e080262e1e2405c847b4936ae7d1d03c0f1246ff51e93c4088a7499a80ca99c871ed8829b463ee2d239a91
+"blueimp-load-image@npm:^5.16.0":
+  version: 5.16.0
+  resolution: "blueimp-load-image@npm:5.16.0"
+  checksum: c7dc2aedfe69905495949ce16631dff062db83db066a2391eb9af9a493284a8d161619f2bfabff9d37c1014ebee879d75dd0b9684e89ad933d218c0626cca07f
   languageName: node
   linkType: hard
 
@@ -6558,7 +6558,7 @@ __metadata:
     "@tailwindcss/typography": ^0.4.1
     "@tailwindcss/ui": ^0.7.2
     "@tinymce/tinymce-vue": ^4.0.4
-    "@types/lodash": ^4.14.175
+    "@types/lodash": ^4.14.176
     "@uppy/core": ^2.1.1
     "@uppy/dashboard": ^2.1.1
     "@uppy/drag-drop": ^2.0.4
@@ -6585,7 +6585,7 @@ __metadata:
     babel-polyfill: 6.26.0
     babel-preset-env: 1.7.0
     blueimp-file-upload: ^10.32.0
-    blueimp-load-image: ^5.15.0
+    blueimp-load-image: ^5.16.0
     bootstrap-daterangepicker: ^3.1
     bootstrap-select: ^1.13.18
     chart.js: ^3.5.1
@@ -6644,7 +6644,7 @@ __metadata:
     purgecss-webpack-plugin: 4.0.3
     pwstrength-bootstrap: 3.1.0
     qtip2: 3.0.3
-    quasar: 2.1.5
+    quasar: 2.1.9
     readmore-js: ^2.2.1
     recordrtc: ^5.6.2
     sass: ^1.42.1
@@ -16815,10 +16815,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"quasar@npm:2.1.5":
-  version: 2.1.5
-  resolution: "quasar@npm:2.1.5"
-  checksum: 4aa1b5a41c0a6e2c4eb56cd3956d21a17450c2798795553278e06f04318600e96b415b4ea6788a08f2409a95c58b656ea726bf7dee515dd0d7da7e16f7bbf71c
+"quasar@npm:2.1.9":
+  version: 2.1.9
+  resolution: "quasar@npm:2.1.9"
+  checksum: da6d0d7105c5c8fc970a5a0f031ad166399bfbcf19d39ec56e6fd19b969226d78624edc1a86293eec2fb4b6d46e4b0b08331e5b03b38db36d83649febca62666
   languageName: node
   linkType: hard
 

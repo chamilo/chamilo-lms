@@ -24,7 +24,7 @@
                 <span class="badge badge-dis">{{ session.vacancies }}</span>
                 {{ "Vacancies" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
             <p class="separate-badge">
-                <span class="badge badge-info">{{ session.nbr_users }}</span>
+                <span class="badge badge--info">{{ session.nbr_users }}</span>
                 {{ 'CountOfSubscribedUsers'|get_lang }}
             </p>
             <p class="separate-badge">

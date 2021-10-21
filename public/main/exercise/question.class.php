@@ -38,7 +38,7 @@ abstract class Question
     public $feedback;
     public $typePicture = 'new_question.png';
     public $explanationLangVar = '';
-    public $question_table_class = 'table table-striped';
+    public $questionTableClass = 'table table-striped question-answer-result__detail';
     public $questionTypeWithFeedback;
     public $extra;
     public $export = false;
@@ -1730,7 +1730,7 @@ abstract class Question
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div(
                 $this->description,
-                ['class' => 'question_description']
+                ['class' => 'question-answer-result__header-description']
             );
         } else {
             /** @var ReadingComprehension $this */
@@ -1770,7 +1770,10 @@ abstract class Question
             }
         }
 
-        return $header;
+        return Display::div(
+            $header,
+            ['class' => 'question-answer-result__header']
+        );
     }
 
     /**

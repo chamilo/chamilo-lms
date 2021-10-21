@@ -1098,7 +1098,7 @@ class SortableTable extends HTML_Table
      * function has the same parameters as defined here.
      *
      * @param int    $from      index of the first item to return
-     * @param int    $per_page  The number of items to return
+     * @param int    $perPage   The number of items to return
      * @param int    $column    The number of the column on which the data should be
      * @param bool   $sort      Whether to sort or not
      *                          sorted
@@ -1109,7 +1109,7 @@ class SortableTable extends HTML_Table
      */
     public function get_table_data(
         $from = null,
-        $per_page = null,
+        $perPage = null,
         $column = null,
         $direction = null,
         $sort = null

@@ -1636,41 +1636,6 @@ class Display
     }
 
     /**
-     * @param string $count
-     * @param string $type
-     *
-     * @return string|null
-     */
-    public static function badge($count, $type = 'warning')
-    {
-        $class = '';
-
-        switch ($type) {
-            case 'success':
-                $class = 'bg-success';
-                break;
-            case 'warning':
-                $class = 'bg-warning text-dark';
-                break;
-            case 'important':
-                $class = 'bg-important';
-                break;
-            case 'info':
-                $class = 'bg-info';
-                break;
-            case 'inverse':
-                $class = 'bg-inverse';
-                break;
-        }
-
-        if (!empty($count)) {
-            return ' <span class="badge '.$class.'">'.$count.'</span>';
-        }
-
-        return null;
-    }
-
-    /**
      * @param array $badge_list
      *
      * @return string
@@ -1696,13 +1661,13 @@ class Display
             $class = match ($type) {
                 'success' => 'success',
                 'warning' => 'warning',
-                'important', 'danger' => 'danger',
+                'important', 'danger', 'error' => 'error',
                 'info' => 'info',
                 'primary' => 'primary',
                 default => 'secondary',
             };
 
-            $html = '<span class="badge bg-ch-'.$class.'">';
+            $html = '<span class="badge badge--'.$class.'">';
             $html .= $content;
             $html .= '</span>';
         }

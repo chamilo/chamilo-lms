@@ -287,14 +287,14 @@ class GradebookTable extends SortableTable
      * Function used by SortableTable to generate the data to display.
      *
      * @param int    $from
-     * @param int    $per_page
+     * @param int    $perPage
      * @param int    $column
      * @param string $direction
      * @param int    $sort
      *
      * @return array|mixed
      */
-    public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
+    public function get_table_data($from = 1, $perPage = null, $column = null, $direction = null, $sort = null)
     {
         //variables load in index.php
         global $certificate_min_score;
@@ -377,7 +377,7 @@ class GradebookTable extends SortableTable
             'ORDER BY id'
         );
 
-        $total_categories_weight = 0;
+        $totalCategoriesWeight = 0;
         $scoredisplay = ScoreDisplay::instance();
         $totalBest = [0, 0];
         $totalAverage = [0, 0];
@@ -433,7 +433,7 @@ class GradebookTable extends SortableTable
 
                 $this->dataForGraph['categories'][] = $item->get_name();
                 $main_categories[$item->get_id()]['weight'] = $item->get_weight();
-                $total_categories_weight += $item->get_weight();
+                $totalCategoriesWeight += $item->get_weight();
 
                 // Description.
                 if (false == $this->exportToPdf) {
@@ -461,7 +461,7 @@ class GradebookTable extends SortableTable
                     }
                 }
 
-                $category_weight = $item->get_weight();
+                $categoryWeight = $item->get_weight();
                 if ($this->teacherView) {
                     $weight_total_links += $data[3];
                 }
@@ -598,7 +598,7 @@ class GradebookTable extends SortableTable
                             false,
                             $this->studentList
                         );
-                        $total_weight = 0;
+                        $totalWeight = 0;
 
                         // Links.
                         foreach ($data_array2 as $data) {
@@ -631,7 +631,7 @@ class GradebookTable extends SortableTable
                             }
 
                             $weight = $data[3];
-                            $total_weight += $weight;
+                            $totalWeight += $weight;
 
                             // Weight
                             if ($showWeight) {
@@ -696,20 +696,20 @@ class GradebookTable extends SortableTable
                         if (!empty($data_array)) {
                             if ($this->teacherView) {
                                 // Compare the category weight to the sum of all weights inside the category
-                                if (intval($total_weight) == $category_weight) {
+                                if (intval($totalWeight) == $categoryWeight) {
                                     $label = null;
-                                    $total = GradebookUtils::score_badges(
+                                    $total = GradebookUtils::scoreBadges(
                                         [
-                                            $total_weight.' / '.$category_weight,
+                                            $totalWeight.' / '.$categoryWeight,
                                             '100',
                                         ]
                                     );
                                 } else {
                                     $label = Display::return_icon(
                                         'warning.png',
-                                        sprintf(get_lang('The sum of all weights of activities must be %s'), $category_weight)
+                                        sprintf(get_lang('The sum of all weights of activities must be %s'), $categoryWeight)
                                     );
-                                    $total = Display::badge($total_weight.' / '.$category_weight, 'warning');
+                                    $total = Display::label($totalWeight.' / '.$categoryWeight, 'warning');
                                 }
                                 $row = [
                                     null,
@@ -727,13 +727,13 @@ class GradebookTable extends SortableTable
             }
         } //end looping categories
 
-        $main_weight = 0;
+        $mainWeight = 0;
         if (count($main_cat) > 1) {
             /** @var Category $myCat */
             foreach ($main_cat as $myCat) {
                 $myParentId = $myCat->get_parent_id();
                 if (0 == $myParentId) {
-                    $main_weight = (int) $myCat->get_weight();
+                    $mainWeight = (int) $myCat->get_weight();
                 }
             }
         }
@@ -741,15 +741,15 @@ class GradebookTable extends SortableTable
         if ($this->teacherView) {
             // Total for teacher.
             if (count($main_cat) > 1) {
-                if (intval($total_categories_weight) == $main_weight) {
-                    $total = GradebookUtils::score_badges(
+                if (intval($totalCategoriesWeight) == $mainWeight) {
+                    $total = GradebookUtils::scoreBadges(
                         [
-                            $total_categories_weight.' / '.$main_weight,
+                            $totalCategoriesWeight.' / '.$mainWeight,
                             '100',
                         ]
                     );
                 } else {
-                    $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');
+                    $total = Display::label($totalCategoriesWeight.' / '.$mainWeight, 'warning');
                 }
                 $row = [
                     null,
@@ -764,7 +764,7 @@ class GradebookTable extends SortableTable
             $showPercentage = false === $this->datagen->hidePercentage;
             // Total for student.
             if (count($main_cat) > 1) {
-                $main_weight = (int) $main_cat[0]->get_weight();
+                $mainWeight = (int) $main_cat[0]->get_weight();
                 $global = null;
                 $average = null;
                 $myTotal = 0;
@@ -777,7 +777,7 @@ class GradebookTable extends SortableTable
 
                 $totalResult[0] = $myTotal;
                 // Overwrite main weight
-                $totalResult[1] = $main_weight;
+                $totalResult[1] = $mainWeight;
 
                 if (!empty($model)) {
                     $totalResult = ExerciseLib::show_score($totalResult[0], $totalResult[1], false);
@@ -792,7 +792,7 @@ class GradebookTable extends SortableTable
                     );
 
                     if ($useExerciseScoreInTotal) {
-                        $totalResult = ExerciseLib::show_score($myTotal, $main_weight, false);
+                        $totalResult = ExerciseLib::show_score($myTotal, $mainWeight, false);
                     }
                 }
 
@@ -806,7 +806,7 @@ class GradebookTable extends SortableTable
                 }
 
                 if ($showWeight) {
-                    $row[] = $main_weight;
+                    $row[] = $mainWeight;
                 }
 
                 $row[] = $totalResult;
@@ -865,7 +865,7 @@ class GradebookTable extends SortableTable
                             $totalBest = $defaultData[$categoryId]['best'];
                         } else {
                             // Overwrite main weight
-                            $totalBest[1] = $main_weight;
+                            $totalBest[1] = $mainWeight;
                             $defaultData[$categoryId]['best'] = $totalBest;
                         }
 

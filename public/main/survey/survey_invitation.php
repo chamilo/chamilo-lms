@@ -81,7 +81,7 @@ if ('invited' === $view) {
     echo '<li role="presentation"><a href="'.$url.'&view=invited">'.
         get_lang('View invited');
 }
-echo Display::badge($invitationsCount);
+echo Display::label($invitationsCount, 'warning');
 echo '</a></li>';
 if ('answered' === $view) {
     echo '<li role="presentation" class="active"><a href="#">'.get_lang('View people who answered');
@@ -90,7 +90,7 @@ if ('answered' === $view) {
         <a href="'.$url.'&view=answered">'.
         get_lang('View people who answered');
 }
-echo Display::badge($answeredCount);
+echo Display::label($answeredCount, 'warning');
 echo '</a></li>';
 
 if ('unanswered' === $view) {
@@ -101,7 +101,7 @@ if ('unanswered' === $view) {
         <a href="'.$url.'&view=unanswered">'.
         get_lang('View people who didn\'t answer');
 }
-echo Display::badge($unAnsweredCount);
+echo Display::label($unAnsweredCount, 'warning');
 echo '</a></li>';
 echo '</ul>';
 echo '<table class="table table-hover table-striped data_table" style="margin-top: 5px;">';

@@ -8031,15 +8031,17 @@ class learnpath
      * Get the parent names for the current item.
      *
      * @param int $newItemId Optional. The item ID
-     *
-     * @return array
      */
-    public function getCurrentItemParentNames($newItemId = 0)
+    public function getCurrentItemParentNames($newItemId = 0): array
     {
         $newItemId = $newItemId ?: $this->get_current_item_id();
         $return = [];
         $item = $this->getItem($newItemId);
-        $parent = $this->getItem($item->get_parent());
+
+        $parent = null;
+        if ($item) {
+            $parent = $this->getItem($item->get_parent());
+        }
 
         while ($parent) {
             $return[] = $parent->get_title();
@@ -8058,7 +8060,7 @@ class learnpath
     {
         $subscriptionSettings = api_get_configuration_value('lp_subscription_settings');
         if (empty($subscriptionSettings)) {
-            // By default allow both settings
+            // By default, allow both settings
             $subscriptionSettings = [
                 'allow_add_users_to_lp' => true,
                 'allow_add_users_to_lp_category' => true,

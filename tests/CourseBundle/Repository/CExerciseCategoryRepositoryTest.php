@@ -36,5 +36,6 @@ class CExerciseCategoryRepositoryTest extends AbstractApiTest
 
         $this->assertSame('cat', (string) $item);
         $this->assertSame(1, $repo->count([]));
+        $this->assertCount(1, $repo->getCategories($course->getId()));
     }
 }

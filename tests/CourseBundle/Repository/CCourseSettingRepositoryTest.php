@@ -28,6 +28,10 @@ class CCourseSettingRepositoryTest extends AbstractApiTest
             ->setTitle('test')
             ->setVariable('test')
             ->setCategory('cat')
+            ->setSubkey('subkey')
+            ->setType('type')
+            ->setComment('comment')
+            ->setSubkeytext('text')
             ->setCId($courseId)
         ;
         $this->assertHasNoEntityViolations($item);

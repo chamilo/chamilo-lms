@@ -467,9 +467,11 @@ class CourseController extends ToolBaseController
         $em->flush();
 
         $this->addFlash('success', $this->trans('External tool added'));
+        /** @var User $user */
+        $user = $this->getUser();
 
         if (!$externalTool->isActiveDeepLinking()) {
-            $this->shortcutRepository->addShortCut($externalTool, $course, $course);
+            $this->shortcutRepository->addShortCut($externalTool, $user, $course);
 
             return $this->redirectToRoute(
                 'chamilo_core_course_home',
@@ -788,7 +790,9 @@ class CourseController extends ToolBaseController
         $em->persist($newTool);
         $em->flush();
 
-        $this->shortcutRepository->addShortCut($newTool, $course, $course);
+        /** @var User $user */
+        $user = $this->getUser();
+        $this->shortcutRepository->addShortCut($newTool, $user, $course);
 
         return $newTool;
     }

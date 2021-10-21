@@ -9,12 +9,10 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CShortcut;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CShortcutRepository extends ResourceRepository
@@ -24,7 +22,7 @@ final class CShortcutRepository extends ResourceRepository
         parent::__construct($registry, CShortcut::class);
     }
 
-    public function getShortcutFromResource(AbstractResource $resource): ?CShortcut
+    public function getShortcutFromResource(ResourceInterface $resource): ?CShortcut
     {
         $criteria = [
             'shortCutNode' => $resource->getResourceNode(),
@@ -33,16 +31,16 @@ final class CShortcutRepository extends ResourceRepository
         return $this->findOneBy($criteria);
     }
 
-    public function addShortCut(AbstractResource $resource, ResourceInterface $parent, Course $course, Session $session = null): CShortcut
+    public function addShortCut(ResourceInterface $resource, User $user, Course $course, Session $session = null): CShortcut
     {
         $shortcut = $this->getShortcutFromResource($resource);
 
         if (null === $shortcut) {
-            $shortcut = new CShortcut();
-            $shortcut
+            $shortcut = (new CShortcut())
                 ->setName($resource->getResourceName())
                 ->setShortCutNode($resource->getResourceNode())
-                ->setParent($parent)
+                ->setCreator($user)
+                ->setParent($course)
                 ->addCourseLink($course, $session)
             ;
 
@@ -52,7 +50,7 @@ final class CShortcutRepository extends ResourceRepository
         return $shortcut;
     }
 
-    public function removeShortCut(AbstractResource $resource): bool
+    public function removeShortCut(ResourceInterface $resource): bool
     {
         $em = $this->getEntityManager();
         $shortcut = $this->getShortcutFromResource($resource);
@@ -65,26 +63,4 @@ final class CShortcutRepository extends ResourceRepository
 
         return false;
     }
-
-    /*public function getResources(ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
-    {
-        $qb = $this->createQueryBuilder('resource')
-            ->select('resource')
-            //->from($className, 'resource')
-            ->innerJoin(
-                'resource.resourceNode',
-                'node'
-            )
-            ->leftJoin('node.resourceFile', 'file')
-            //->innerJoin('node.resourceLinks', 'links')
-            //->where('node.resourceType = :type')
-            //->setParameter('type',$type)
-        ;
-        if (null !== $parentNode) {
-            $qb->andWhere('node.parent = :parentNode');
-            $qb->setParameter('parentNode', $parentNode);
-        }
-
-        return $qb;
-    }*/
 }

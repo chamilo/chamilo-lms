@@ -3282,10 +3282,8 @@ class learnpath
             return false;
         }
         $repoShortcut = Container::getShortcutRepository();
-        $courseEntity = api_get_course_entity();
-
         if ($addShortcut) {
-            $repoShortcut->addShortCut($lp, $courseEntity, $courseEntity, api_get_session_entity());
+            $repoShortcut->addShortCut($lp, api_get_user_entity(), api_get_course_entity(), api_get_session_entity());
         } else {
             $repoShortcut->removeShortCut($lp);
         }
@@ -3320,7 +3318,7 @@ class learnpath
         $repoShortcut = Container::getShortcutRepository();
         if ($addShortcut) {
             $courseEntity = api_get_course_entity(api_get_course_int_id());
-            $repoShortcut->addShortCut($category, $courseEntity, $courseEntity, api_get_session_entity());
+            $repoShortcut->addShortCut($category, api_get_user_entity(), $courseEntity, api_get_session_entity());
         } else {
             $repoShortcut->removeShortCut($category);
         }

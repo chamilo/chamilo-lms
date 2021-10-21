@@ -57,6 +57,9 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         $forum = $forumRepo->find($forum->getIid());
 
         $this->assertSame('thread title', (string) $thread);
+
+        $qb = $threadRepo->findAllByCourse($course);
+        $this->assertCount(1, $qb->getQuery()->getResult());
         $this->assertSame(1, $threadRepo->count([]));
         $this->assertSame(1, $forumRepo->count([]));
         $this->assertSame(1, $forum->getThreads()->count());

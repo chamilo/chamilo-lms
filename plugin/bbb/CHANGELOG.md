@@ -1,3 +1,7 @@
+Version 3.0 - 2021-10
+---------------------
+* Add option to close all rooms on all campus on a multi-url enviroment
+
 Version 2.9 - 2021-08
 ---------------------
 * Remove interface option (HTML5/Flash)

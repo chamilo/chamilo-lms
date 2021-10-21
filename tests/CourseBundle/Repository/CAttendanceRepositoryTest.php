@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -20,6 +21,8 @@ class CAttendanceRepositoryTest extends AbstractApiTest
         self::bootKernel();
 
         $em = $this->getEntityManager();
+
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
         $repo = self::getContainer()->get(CAttendanceRepository::class);
 
         $course = $this->createCourse('new');
@@ -37,5 +40,8 @@ class CAttendanceRepositoryTest extends AbstractApiTest
 
         $this->assertSame('item', (string) $item);
         $this->assertSame(1, $repo->count([]));
+
+        $courseRepo->delete($course);
+        $this->assertSame(0, $repo->count([]));
     }
 }

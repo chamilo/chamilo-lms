@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
+use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -57,9 +58,16 @@ class CQuizQuestionRepositoryTest extends AbstractApiTest
             ->setCreator($teacher)
         ;
 
+        $option = (new CQuizQuestionOption())
+            ->setName('option 1')
+            ->setQuestion($question)
+            ->setPosition(1)
+        ;
+
         $question->addCategory($category);
         $question->updateCategory($category);
 
+        $em->persist($option);
         $em->persist($question);
 
         $quizRelQuestion = (new CQuizRelQuestion())
@@ -87,8 +95,10 @@ class CQuizQuestionRepositoryTest extends AbstractApiTest
         $em->flush();
         $em->clear();
 
+        /** @var CQuizQuestion $question */
         $question = $questionRepo->find($question->getIid());
 
+        $this->assertSame(1, $question->getOptions()->count());
         $this->assertSame(1, $question->getAnswers()->count());
         $this->assertSame(1, $exercise->getQuestions()->count());
         $this->assertSame(1, $questionRepo->count([]));

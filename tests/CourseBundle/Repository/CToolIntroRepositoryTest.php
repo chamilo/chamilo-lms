@@ -35,6 +35,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
 
         $intro = (new CToolIntro())
             ->setIntroText('test')
+            ->setResourceName('test')
             ->setCourseTool($courseTool)
             ->setParent($course)
             ->setCreator($teacher)
@@ -44,6 +45,8 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em->persist($intro);
         $em->flush();
 
+        $this->assertSame('test', (string) $intro);
+        $this->assertSame($intro->getIid(), $intro->getResourceIdentifier());
         $this->assertNotEmpty($intro->getIntroText());
         $this->assertNotNull($intro->getIid());
         $this->assertNotEmpty($intro->getResourceName());

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Repository\CForumRepository;
@@ -22,6 +23,7 @@ class CShortcutRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $shortcutRepo = self::getContainer()->get(CShortcutRepository::class);
         $forumRepo = self::getContainer()->get(CForumRepository::class);
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -62,5 +64,11 @@ class CShortcutRepositoryTest extends AbstractApiTest
         $shortcutRepo->addShortCut($resource, $teacher, $course);
 
         $this->assertSame(1, $shortcutRepo->count([]));
+
+        $course = $this->getCourse($course->getId());
+        $courseRepo->delete($course);
+
+        $this->assertSame(0, $shortcutRepo->count([]));
+        $this->assertSame(0, $courseRepo->count([]));
     }
 }

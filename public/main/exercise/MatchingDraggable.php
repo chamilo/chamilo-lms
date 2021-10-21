@@ -260,15 +260,13 @@ class MatchingDraggable extends Question
         ])
         ) {
             $header .= '<th>'.get_lang('Your choice').'</th>';
-        }
-
-        if ($exercise->showExpectedChoice()) {
             if ($exercise->showExpectedChoiceColumn()) {
                 $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
+        }
+
+        if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';
-        } else {
-            $header .= '<th>'.get_lang('Corresponds to').'</th>';
         }
         $header .= '</tr>';
 

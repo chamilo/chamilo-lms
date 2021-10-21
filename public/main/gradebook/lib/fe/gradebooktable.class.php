@@ -709,7 +709,7 @@ class GradebookTable extends SortableTable
                                         'warning.png',
                                         sprintf(get_lang('The sum of all weights of activities must be %s'), $category_weight)
                                     );
-                                    $total = Display::badge($total_weight.' / '.$category_weight, 'warning');
+                                    $total = Display::label($total_weight.' / '.$category_weight, 'warning');
                                 }
                                 $row = [
                                     null,
@@ -749,7 +749,7 @@ class GradebookTable extends SortableTable
                         ]
                     );
                 } else {
-                    $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');
+                    $total = Display::label($total_categories_weight.' / '.$main_weight, 'warning');
                 }
                 $row = [
                     null,

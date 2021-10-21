@@ -1128,7 +1128,7 @@ class GradebookUtils
                 $class = 'success';
             }
             $counter++;
-            $badges[] = Display::badge($value, $class);
+            $badges[] = Display::label($value, $class);
         }
 
         return Display::badgeGroup($badges);

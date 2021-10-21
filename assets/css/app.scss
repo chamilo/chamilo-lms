@@ -233,7 +233,31 @@
   // Special
 
   .badge {
-    @apply border-ch-text rounded-sm p-1;
+    @apply rounded-sm p-1 font-medium;
+
+    &--error {
+      @apply bg-ch-error text-ch-text-error;
+    }
+
+    &--success {
+      @apply bg-ch-success text-ch-text-success;
+    }
+
+    &--warning {
+      @apply bg-ch-warning text-ch-text-warning;
+    }
+
+    &--info {
+      @apply bg-ch-info text-ch-text-info;
+    }
+
+    &--primary {
+      @apply bg-ch-primary text-ch-text-primary;
+    }
+
+    &--secondary {
+      @apply bg-ch-secondary text-ch-text-secondary;
+    }
   }
 
   // Progress bars

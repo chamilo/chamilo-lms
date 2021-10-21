@@ -259,7 +259,7 @@ class CalculatedAnswer extends Question
             if ($exercise->showExpectedChoiceColumn()) {
                 $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
         $header .= '</tr>';
 

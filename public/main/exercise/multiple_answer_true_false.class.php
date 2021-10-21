@@ -317,7 +317,7 @@ class MultipleAnswerTrueFalse extends Question
         $header .= '<th>'.get_lang('Answer').'</th>';
 
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
         if (EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType() ||
             in_array(

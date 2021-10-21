@@ -4561,7 +4561,7 @@ class Exercise
                                                 }
                                                 echo '</td>';
                                             }
-                                            echo '<td>'.$status.'</td>';
+                                            echo '<td class="text-center">'.$status.'</td>';
                                         } else {
                                             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
@@ -4605,7 +4605,7 @@ class Exercise
                                                 $status = Display::label(get_lang('Correct'), 'success');
                                             }
                                             echo '<td>'.$s_answer_label.'</td>';
-                                            echo '<td>'.$status.'</td>';
+                                            echo '<td class="text-center">'.$status.'</td>';
                                         } else {
                                             echo '<td>'.$s_answer_label.'</td>';
                                             echo '<td>'.$user_answer.'</td>';

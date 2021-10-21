@@ -211,6 +211,10 @@
         @apply font-bold p-3;
       }
 
+      &-description {
+        @apply mb-4;
+      }
+
       &--no-ribbon {
         @apply border-l-8;
 
@@ -218,6 +222,14 @@
           @apply inline;
         }
       }
+    }
+  }
+
+  &__detail {
+    @apply mb-4;
+
+    th {
+      @apply text-left;
     }
   }
 }

@@ -285,7 +285,7 @@ class Matching extends Question
         }
 
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
         $header .= '</tr>';
 

@@ -423,7 +423,7 @@ class ExerciseShowFunctions
             if ($answerCorrect || ($answerCorrect && $studentChoiceInt === $answerCorrectChoice)) {
                 $status = Display::label(get_lang('Correct'), 'success');
             }
-            echo '<td width="20%">';
+            echo '<td class="text-center">';
             // Show only status for the selected student answer BT#16256
             if ($studentChoice) {
                 echo $status;
@@ -551,7 +551,7 @@ class ExerciseShowFunctions
                     $status = Display::label(get_lang('Correct'), 'success');
                 }
             }
-            $content .= '<td width="20%">';
+            $content .= '<td class="text-center">';
             $content .= $status;
             $content .= '</td>';
         }
@@ -779,7 +779,7 @@ class ExerciseShowFunctions
                     $status = Display::label(get_lang('Correct'), 'success');
                 }
             }
-            echo '<td width="20%">';
+            echo '<td class="text-center">';
             echo $status;
             echo '</td>';
         }

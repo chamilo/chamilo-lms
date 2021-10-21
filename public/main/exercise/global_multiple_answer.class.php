@@ -255,7 +255,7 @@ class GlobalMultipleAnswer extends Question
 
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<thclass="text-center">'.get_lang('Status').'</th>';
         }
         $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';

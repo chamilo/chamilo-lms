@@ -129,14 +129,12 @@
     @apply bg-gray-50;
   }
 
-  table thead th {
-    @apply py-2;
-  }
-
   table tbody {
     @apply bg-white divide-y divide-gray-200;
   }
 
+  table thead th,
+  table tbody th,
   table tbody td {
     @apply px-2 py-1;
   }

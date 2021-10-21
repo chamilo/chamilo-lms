@@ -149,7 +149,7 @@ class MultipleAnswerTrueFalse extends Question
             }
             // show comment when feedback is enable
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
-                $txtComment = $form->addHtmlEditor(
+                $form->addHtmlEditor(
                     'comment['.$i.']',
                     null,
                     true,
@@ -161,7 +161,7 @@ class MultipleAnswerTrueFalse extends Question
                     ]
                 );
                 if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
-                    $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));
+                    $form->getElement("comment[$i]")->setValue(Security::remove_XSS($_POST['comment'][$i]));
                 }
             }
 

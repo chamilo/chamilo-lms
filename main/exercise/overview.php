@@ -510,11 +510,15 @@ if ($isLimitReached) {
     );
 }
 
-$html .= Display::tag(
-    'div',
-    $table_content,
-    ['class' => 'table-responsive']
-);
+$showHideAttemptsTableOnStartPage = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
+$hideAttemptsTable = ($showHideAttemptsTableOnStartPage && 1 == $objExercise->hideAttemptsTableOnStartPage);
+if (!$hideAttemptsTable) {
+    $html .= Display::tag(
+        'div',
+        $table_content,
+        ['class' => 'table-responsive']
+    );
+}
 $html .= '</div>';
 
 if ($certificateBlock) {

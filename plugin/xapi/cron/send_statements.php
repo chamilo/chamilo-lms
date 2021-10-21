@@ -5,6 +5,8 @@
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\XApiException;
+use Xabbuh\XApi\Model\StatementId;
+use Xabbuh\XApi\Model\Uuid;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
 use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 
@@ -39,6 +41,12 @@ if ($countNotSent > 0) {
         $notSentStatement = $statementSerializer->deserializeStatement(
             json_encode($notSentSharedStatement->getStatement())
         );
+
+        if (null == $notSentStatement->getId()) {
+            $notSentStatement = $notSentStatement->withId(
+                StatementId::fromUuid(Uuid::uuid4())
+            );
+        }
 
         try {
             echo '['.time()."] Sending shared statement ({$notSentSharedStatement->getId()})";

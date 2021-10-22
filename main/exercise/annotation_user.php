@@ -40,20 +40,27 @@ if (!empty($questionAttempt['answer'])) {
     $answers = explode('|', $questionAttempt['answer']);
     foreach ($answers as $answer) {
         $parts = explode(')(', $answer);
-        $type = array_shift($parts);
+        $typeProperties = array_shift($parts);
+        $properties = explode(';', $typeProperties);
 
-        switch ($type) {
+        switch ($properties[0]) {
             case 'P':
                 $points = [];
                 foreach ($parts as $partPoint) {
                     $points[] = Geometry::decodePoint($partPoint);
                 }
-                $data['answers']['paths'][] = $points;
+                $data['answers']['paths'][] = [
+                    'color' => $properties[1] ?? null,
+                    'points' => $points,
+                ];
                 break;
             case 'T':
                 $text = [
                     'text' => array_shift($parts),
+                    'color' => $properties[1] ?? null,
+                    'fontSize' => $properties[2] ?? null,
                 ];
+
                 $data['answers']['texts'][] = $text + Geometry::decodePoint($parts[0]);
                 break;
         }

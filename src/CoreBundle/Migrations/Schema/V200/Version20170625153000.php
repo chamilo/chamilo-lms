@@ -115,7 +115,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
                 'ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
             $this->addSql(
-                'ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid) ON DELETE SET NULL'
+                'ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid) ON DELETE CASCADE'
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_5DA7884C1BAD783F ON c_forum_thread (resource_node_id)');
         }

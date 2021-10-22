@@ -75,7 +75,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected ?int $status = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts", )
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
     protected ?CForumThread $thread = null;
@@ -108,10 +108,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CForumAttachment[]
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CForumAttachment",
-     *     mappedBy="post", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="CForumAttachment", mappedBy="post", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $attachments;
 

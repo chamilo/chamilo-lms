@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CForumRepository;
@@ -20,7 +21,8 @@ class CForumRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        $repo = self::getContainer()->get(CForumRepository::class);
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $forumRepo = self::getContainer()->get(CForumRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -48,11 +50,20 @@ class CForumRepositoryTest extends AbstractApiTest
             ->setCreator($teacher)
         ;
         $this->assertHasNoEntityViolations($forum);
-        $repo->create($forum);
+        $forumRepo->create($forum);
 
         $this->assertSame('forum', (string) $forum);
-        $this->assertSame(1, $repo->count([]));
+
+        $this->assertSame($forum->getIid(), $forum->getResourceIdentifier());
+        $this->assertSame(1, $forum->getAllowAnonymous());
+        $this->assertSame(1, $forumRepo->count([]));
+
         $this->assertSame(0, $forum->getForumPosts());
+
+        $courseRepo->delete($course);
+
+        $this->assertSame(0, $forumRepo->count([]));
+        $this->assertSame(0, $courseRepo->count([]));
     }
 
     public function testCreateWithAttachment(): void

@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CourseBundle\Repository;
 
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CForumThreadQualify;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -25,6 +26,8 @@ class CForumThreadRepositoryTest extends AbstractApiTest
 
         $forumRepo = self::getContainer()->get(CForumRepository::class);
         $threadRepo = self::getContainer()->get(CForumThreadRepository::class);
+
+        $em = $this->getEntityManager();
 
         $forum = (new CForum())
             ->setForumTitle('forum')
@@ -53,6 +56,15 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         ;
         $threadRepo->create($thread);
 
+        $qualify = (new CForumThreadQualify())
+            ->setQualify(100)
+            ->setQualifyTime(new DateTime())
+            ->setThread($thread)
+            ->setCId($course->getId())
+        ;
+        $em->persist($qualify);
+        $em->flush();
+
         /** @var CForum $forum */
         $forum = $forumRepo->find($forum->getIid());
 
@@ -66,6 +78,7 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         $this->assertTrue($forum->hasThread($thread));
         $this->assertNull($threadRepo->getForumThread('title', $course));
 
+        $this->assertSame($thread->getIid(), $thread->getResourceIdentifier());
         $this->assertSame(0, $thread->getThreadViews());
         $threadRepo->increaseView($thread);
         $this->assertSame(1, $thread->getThreadViews());

@@ -60,6 +60,7 @@ class CForumPostRepositoryTest extends AbstractApiTest
             ->setThread($thread)
             ->setForum($forum)
             ->setUser($teacher)
+            ->addCourseLink($course)
         ;
         $postRepo->create($post);
 
@@ -104,11 +105,26 @@ class CForumPostRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $forum->getThreads()->count());
         $this->assertSame(1, $forum->getPosts()->count());
 
-        /*$forumRepo->delete($forum);
+        $count = $postRepo->countCourseForumPosts($course);
+        $this->assertSame(1, $count);
 
-        $this->assertSame(0, $attachmentRepo->count([]));
+        $count = $postRepo->countUserForumPosts($teacher, $course);
+        $this->assertSame(1, $count);
+
+        $postRepo->delete($post);
+
         $this->assertSame(0, $postRepo->count([]));
+        $this->assertSame(0, $attachmentRepo->count([]));
+        $this->assertSame(1, $threadRepo->count([]));
+        $this->assertSame(1, $forumRepo->count([]));
+
+        $this->getEntityManager()->clear();
+
+        /** @var CForum $forum */
+        $forum = $forumRepo->find($forum->getIid());
+        $forumRepo->delete($forum);
+
         $this->assertSame(0, $threadRepo->count([]));
-        $this->assertSame(0, $forumRepo->count([]));*/
+        $this->assertSame(0, $forumRepo->count([]));
     }
 }

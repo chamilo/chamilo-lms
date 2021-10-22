@@ -9,8 +9,6 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CStudentPublicationRelDocument.
- *
  * @ORM\Table(
  *     name="c_student_publication_rel_document",
  *     indexes={

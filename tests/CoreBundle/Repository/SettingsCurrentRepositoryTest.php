@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Entity\SettingsOptions;
 use Chamilo\CoreBundle\Repository\SettingsCurrentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -17,13 +18,11 @@ class SettingsCurrentRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(SettingsCurrentRepository::class);
         $count = $repo->count([]);
 
-        $item = (new SettingsCurrent())
+        $setting = (new SettingsCurrent())
             ->setTitle('test')
             ->setVariable('test')
             ->setUrl($this->getAccessUrl())
@@ -35,8 +34,16 @@ class SettingsCurrentRepositoryTest extends AbstractApiTest
             ->setSubkeytext('setSubkeytext')
             ->setAccessUrlLocked(1)
         ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
+        $this->assertHasNoEntityViolations($setting);
+        $em->persist($setting);
+
+        $option = (new SettingsOptions())
+            ->setValue('value')
+            ->setDisplayText('option1')
+            ->setVariable('variable')
+        ;
+        $em->persist($option);
+        $this->assertHasNoEntityViolations($option);
         $em->flush();
 
         // By default, there's a root branch.

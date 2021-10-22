@@ -73,7 +73,6 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
     public function testCreateWithComment(): void
     {
         $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(ResourceNodeRepository::class);
 
         $repoType = $em->getRepository(ResourceType::class);
         $user = $this->createUser('julio');
@@ -177,7 +176,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
 
         $type = $repoType->findOneBy(['name' => 'illustrations']);
 
-        $node = (new ResourceNode())
+        $resourceNode = (new ResourceNode())
             ->setContent('test')
             ->setTitle('test')
             ->setSlug('test')
@@ -185,10 +184,10 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
             ->setCreator($user)
             ->setParent($user->getResourceNode())
         ;
-        $em->persist($node);
+        $em->persist($resourceNode);
         $em->flush();
 
-        $content = $repo->getResourceNodeFileContent($node);
+        $content = $repo->getResourceNodeFileContent($resourceNode);
         $this->assertEmpty($content);
 
         $uploadedFile = $this->getUploadedFile();
@@ -203,8 +202,8 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         ;
         $em->persist($resourceFile);
 
-        $node->setContent('')->setResourceFile($resourceFile);
-        $em->persist($node);
+        $resourceNode->setContent('')->setResourceFile($resourceFile);
+        $em->persist($resourceNode);
         $em->flush();
 
         $this->assertSame($uploadedFile->getFilename(), (string) $resourceFile);
@@ -213,7 +212,18 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $this->assertNotEmpty($resourceFile->getHeight());
         $this->assertIsArray($resourceFile->getMetadata());
 
-        $content = $repo->getResourceNodeFileContent($node);
+        $this->assertSame('test', $resourceNode->getSlug());
+        $this->assertTrue($resourceNode->isResourceFileAnImage());
+        $this->assertFalse($resourceNode->isResourceFileAVideo());
+        $this->assertNotEmpty(1, $resourceNode->getIcon());
+
+        $router = $this->getContainer()->get(RouterInterface::class);
+        $this->assertStringContainsString(
+            '/r/asset/illustrations/'.$resourceNode->getId().'/view?filter=editor_thumbnail',
+            $resourceNode->getThumbnail($router)
+        );
+
+        $content = $repo->getResourceNodeFileContent($resourceNode);
         $this->assertNotEmpty($content);
     }
 }

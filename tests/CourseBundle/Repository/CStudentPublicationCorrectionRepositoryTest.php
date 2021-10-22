@@ -6,8 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
+use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -46,7 +49,26 @@ class CStudentPublicationCorrectionRepositoryTest extends AbstractApiTest
         $correctionRepo->create($correction);
         $correctionRepo->addFile($correction, $file);
         $correctionRepo->update($correction);
+        $em->flush();
 
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $admin = $this->getUser('admin');
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title 123')
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $documentRepo->create($document);
+
+        $document = (new CStudentPublicationRelDocument())
+            ->setPublication($publication)
+            ->setDocument($document)
+        ;
+        $em->persist($document);
         $em->flush();
         $em->clear();
 

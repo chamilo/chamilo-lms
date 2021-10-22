@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -35,12 +36,12 @@ class CQuizQuestionRepositoryTest extends AbstractApiTest
         ;
         $em->persist($exercise);
 
-        $category = (new CQuizQuestionCategory())
+        $quizQuestionCategory = (new CQuizQuestionCategory())
             ->setTitle('category')
             ->setParent($course)
             ->setCreator($teacher)
         ;
-        $em->persist($category);
+        $em->persist($quizQuestionCategory);
 
         $question = (new CQuizQuestion())
             ->setQuestionCode('code')
@@ -64,9 +65,16 @@ class CQuizQuestionRepositoryTest extends AbstractApiTest
             ->setPosition(1)
         ;
 
-        $question->addCategory($category);
-        $question->updateCategory($category);
+        $question->addCategory($quizQuestionCategory);
+        $question->updateCategory($quizQuestionCategory);
 
+        $quizRelQuestionCategory = (new CQuizRelQuestionCategory())
+            ->setCountQuestions(1)
+            ->setCategory($quizQuestionCategory)
+            ->setQuiz($exercise)
+        ;
+
+        $em->persist($quizRelQuestionCategory);
         $em->persist($option);
         $em->persist($question);
 

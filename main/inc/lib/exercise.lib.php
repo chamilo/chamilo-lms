@@ -1703,14 +1703,6 @@ HOTSPOT;
                             <div class="col-sm-8 col-md-9">
                                 <div id="annotation-canvas-'.$questionId.'" class="annotation-canvas center-block">
                                 </div>
-                                <script>
-                                    AnnotationQuestion({
-                                        questionId: '.$questionId.',
-                                        exerciseId: '.$exe_id.',
-                                        relPath: \''.$relPath.'\',
-                                        courseId: '.$course_id.',
-                                    });
-                                </script>
                             </div>
                             <div class="col-sm-4 col-md-3">
                                 <div class="well well-sm" id="annotation-toolbar-'.$questionId.'">
@@ -1731,11 +1723,26 @@ HOTSPOT;
                                                 <span class="fa fa-font fa-fw" aria-hidden="true"></span>
                                             </label>
                                         </div>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default btn-small"
+                                                title="'.get_lang('ClearAnswers').'"
+                                                id="btn-reset-'.$questionId.'">
+                                                <span class="fa fa-times-rectangle fa-fw" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
                                     </div>
                                     <ul class="list-unstyled"></ul>
                                 </div>
                             </div>
                         </div>
+                        <script>
+                            AnnotationQuestion({
+                                questionId: '.$questionId.',
+                                exerciseId: '.$exe_id.',
+                                relPath: \''.$relPath.'\',
+                                courseId: '.$course_id.',
+                            });
+                        </script>
                     </div>
                 ';
             }

@@ -157,6 +157,7 @@
         this.models = [];
         this.length = 0;
         this.addEvent = null;
+        this.resetEvent = null;
     };
     ElementsCollection.prototype.add = function (pathModel) {
         pathModel.id = ++this.length;
@@ -170,9 +171,19 @@
     ElementsCollection.prototype.get = function (index) {
         return this.models[index];
     };
+    ElementsCollection.prototype.reset = function () {
+        if (this.resetEvent) {
+            this.resetEvent();
+        }
+
+        this.models = [];
+    }
     ElementsCollection.prototype.onAdd = function (callback) {
         this.addEvent = callback;
     };
+    ElementsCollection.prototype.onReset = function (callback) {
+        this.resetEvent = callback;
+    }
 
     var AnnotationCanvasView = function (elementsCollection, image, questionId) {
         var self = this;
@@ -199,13 +210,22 @@
         this.elementsCollection.onAdd(function (pathModel) {
             self.renderElement(pathModel);
         });
+        this.elementsCollection.onReset(function () {
+            $(self.el.parentNode).children('input').remove();
+
+            self.$el.children('text, path').remove();
+
+            $('#annotation-toolbar-' + self.questionId + ' ul').empty();
+        })
 
         this.$rdbOptions = null;
+        this.$btnReset = null;
     };
     AnnotationCanvasView.prototype.render = function () {
-        this.setEvents();
-
         this.$rdbOptions = $('[name="' + this.questionId + '-options"]');
+        this.$btnReset = $('#btn-reset-' + this.questionId);
+
+        this.setEvents();
 
         return this;
     };
@@ -264,6 +284,12 @@
                 elementModel = null;
                 isMoving = false;
             });
+
+        this.$btnReset.on('click', function (e) {
+            e.preventDefault();
+
+            self.elementsCollection.reset();
+        });
     };
     AnnotationCanvasView.prototype.renderElement = function (elementModel) {
         var elementView = null,

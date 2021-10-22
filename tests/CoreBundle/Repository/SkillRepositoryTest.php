@@ -7,12 +7,22 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\Level;
+use Chamilo\CoreBundle\Entity\Profile;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillProfile;
+use Chamilo\CoreBundle\Entity\SkillRelCourse;
+use Chamilo\CoreBundle\Entity\SkillRelGradebook;
+use Chamilo\CoreBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Entity\SkillRelProfile;
+use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 
 class SkillRepositoryTest extends AbstractApiTest
 {
@@ -20,8 +30,6 @@ class SkillRepositoryTest extends AbstractApiTest
 
     public function testCreateSkill(): void
     {
-        self::bootKernel();
-
         $skillRepo = self::getContainer()->get(SkillRepository::class);
 
         $accessUrl = $this->getAccessUrl();
@@ -34,6 +42,7 @@ class SkillRepositoryTest extends AbstractApiTest
             ->setCriteria('criteria')
             ->setIcon('icon')
             ->setAccessUrlId($accessUrl->getId())
+            ->setUpdatedAt(new DateTime())
         ;
 
         $this->assertHasNoEntityViolations($skill);
@@ -41,6 +50,9 @@ class SkillRepositoryTest extends AbstractApiTest
 
         // By default, there's 1 root skill + this newly skill created.
         $this->assertSame(2, $skillRepo->count([]));
+        $this->assertSame('php', (string) $skill);
+        $this->assertSame('desc', $skill->getDescription());
+        $this->assertSame($accessUrl->getId(), $skill->getAccessUrlId());
         $this->assertSame(0, $skill->getItems()->count());
         $this->assertSame(0, $skill->getCourses()->count());
         $this->assertSame(0, $skill->getIssuedSkills()->count());
@@ -48,10 +60,142 @@ class SkillRepositoryTest extends AbstractApiTest
         $this->assertSame(0, $skill->getSkills()->count());
     }
 
+    public function testCreateWithProfile(): void
+    {
+        $em = $this->getEntityManager();
+        $skillRepo = self::getContainer()->get(SkillRepository::class);
+        $profileRepo = $em->getRepository(Profile::class);
+
+        $course = $this->createCourse('new');
+        $session = $this->createSession('session');
+
+        $courseId = $course->getId();
+
+        $accessUrl = $this->getAccessUrl();
+
+        $skillProfile = (new SkillProfile())
+            ->setDescription('desc')
+            ->setName('title')
+        ;
+        $em->persist($skillProfile);
+
+        $profile = (new Profile())
+            ->setName('profile')
+        ;
+        $em->persist($profile);
+
+        $level = (new Level())
+            ->setName('level')
+            ->setPosition(1)
+            ->setProfile($profile)
+            ->setShortName('level')
+        ;
+        $em->persist($level);
+
+        $skill = (new Skill())
+            ->setName('Dev')
+            ->setShortCode('Dev')
+            ->setStatus(Skill::STATUS_ENABLED)
+            ->setAccessUrlId($accessUrl->getId())
+            ->setProfile($profile)
+        ;
+        $skillRepo->update($skill);
+
+        $subSkill = (new Skill())
+            ->setName('php')
+            ->setShortCode('php')
+            ->setStatus(Skill::STATUS_ENABLED)
+            ->setAccessUrlId($accessUrl->getId())
+        ;
+        $skillRepo->update($subSkill);
+
+        $skillRelSkill = (new SkillRelSkill())
+            ->setLevel(1)
+            ->setRelationType(1)
+            ->setParent($skill)
+            ->setSkill($subSkill)
+        ;
+        $em->persist($skillRelSkill);
+
+        $skillRelProfile = (new SkillRelProfile())
+            ->setProfile($skillProfile)
+            ->setSkill($skill)
+        ;
+        $em->persist($skillRelProfile);
+
+        $skillRelItem = (new SkillRelItem())
+            ->setItemId(1)
+            ->setUpdatedAt(new DateTime())
+            ->setCreatedAt(new DateTime())
+            ->setCourseId($courseId)
+            ->setIsReal(true)
+            ->setObtainConditions('obtain')
+            ->setCreatedBy(1)
+            ->setItemType(1)
+            ->setSkill($skill)
+            ->setUpdatedBy(1)
+        ;
+        $skill->addItem($skillRelItem);
+
+        $skillRelCourse = (new SkillRelCourse())
+            ->setSkill($skill)
+            ->setCreatedAt(new DateTime())
+            ->setUpdatedAt(new DateTime())
+            ->setCourse($course)
+            ->setSession($session)
+        ;
+        $em->persist($skillRelCourse);
+        $skill->addToCourse($skillRelCourse);
+
+        $gradeBookCategory = (new GradebookCategory())
+            ->setName('title')
+            ->setCourse($course)
+            ->setVisible(true)
+            ->setWeight(100)
+        ;
+        $em->persist($gradeBookCategory);
+
+        $skillRelGradeBook = (new SkillRelGradebook())
+            ->setSkill($skill)
+            ->setType('type')
+            ->setGradeBookCategory($gradeBookCategory)
+        ;
+
+        $em->persist($skillRelGradeBook);
+        $em->persist($skillRelItem);
+        $em->flush();
+        $em->clear();
+
+        /** @var Profile $profile */
+        $profile = $profileRepo->find($profile->getId());
+
+        /** @var Skill $skill */
+        $skill = $skillRepo->find($skill->getId());
+
+        /** @var Skill $subSkill */
+        $subSkill = $skillRepo->find($subSkill->getId());
+
+        // By default, there's 1 root skill + this newly skill created.
+        $this->assertSame(3, $skillRepo->count([]));
+        $this->assertTrue($skill->hasItem(1, 1));
+        $this->assertFalse($skill->hasItem(1, 99));
+        $this->assertNotNull($skill->getId());
+        $this->assertSame(1, $skill->getCourses()->count());
+        $this->assertSame(1, $skill->getItems()->count());
+        $this->assertSame(1, $subSkill->getSkills()->count());
+
+        $this->assertTrue($skill->hasCourseAndSession($skillRelCourse));
+
+        $this->assertSame(1, $profile->getLevels()->count());
+        $this->assertSame(1, $profile->getSkills()->count());
+
+        $skillRepo->delete($skill);
+
+        $this->assertSame(2, $skillRepo->count([]));
+    }
+
     public function testGetLastByUser(): void
     {
-        self::bootKernel();
-
         $skillRepo = self::getContainer()->get(SkillRepository::class);
 
         $accessUrl = $this->getAccessUrl();
@@ -92,8 +236,6 @@ class SkillRepositoryTest extends AbstractApiTest
 
     public function testDeleteSkill(): void
     {
-        self::bootKernel();
-
         $skillRepo = self::getContainer()->get(SkillRepository::class);
         $accessUrl = $this->getAccessUrl();
 
@@ -111,8 +253,6 @@ class SkillRepositoryTest extends AbstractApiTest
 
     public function testCreateSkillWithAsset(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $skillRepo = self::getContainer()->get(SkillRepository::class);
@@ -152,8 +292,6 @@ class SkillRepositoryTest extends AbstractApiTest
 
     public function testDeleteSkillWithAsset(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $skillRepo = self::getContainer()->get(SkillRepository::class);

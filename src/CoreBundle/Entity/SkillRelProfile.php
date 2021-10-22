@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelProfile.
- *
  * @ORM\Table(name="skill_rel_profile")
  * @ORM\Entity
  */

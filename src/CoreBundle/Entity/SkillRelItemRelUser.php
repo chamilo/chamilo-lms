@@ -12,8 +12,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * SkillRelItemRelUser.
- *
  * @ORM\Table(name="skill_rel_item_rel_user")
  * @ORM\Entity
  */

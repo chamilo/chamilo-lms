@@ -10,8 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SkillProfile.
- *
  * @ORM\Table(name="skill_profile")
  * @ORM\Entity
  */

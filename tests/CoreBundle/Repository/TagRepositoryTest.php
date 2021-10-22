@@ -44,6 +44,9 @@ class TagRepositoryTest extends AbstractApiTest
         $em->persist($tag);
         $em->flush();
 
+        $this->assertSame('php', $tag->getTag());
+
+        $this->assertSame(0, $tag->getUserRelTags()->count());
         $this->assertSame(1, $repo->count([]));
 
         $tags = $repo->findTagsByField('php', $extraField);
@@ -78,6 +81,9 @@ class TagRepositoryTest extends AbstractApiTest
             ->setTag($tag)
         ;
         $em->persist($userRelTag);
+
+        $tag->getUserRelTags()->add($userRelTag);
+
         $em->flush();
         $em->clear();
 

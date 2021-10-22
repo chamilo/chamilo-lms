@@ -18,7 +18,6 @@ use Chamilo\CourseBundle\Entity\CShortcut;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use InvalidArgumentException;
@@ -463,21 +462,6 @@ class ResourceNode
         $this->resourceLinks = $resourceLinks;
 
         return $this;
-    }
-
-    /**
-     * @return Collection|ResourceLink[]
-     */
-    public function hasSession(Session $session = null)
-    {
-        $links = $this->getResourceLinks();
-        $criteria = Criteria::create();
-
-        $criteria->andWhere(
-            Criteria::expr()->eq('session', $session)
-        );
-
-        return $links->matching($criteria);
     }
 
     public function hasResourceFile(): bool

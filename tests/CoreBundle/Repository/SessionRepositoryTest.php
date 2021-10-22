@@ -366,7 +366,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $session->getCourses()->count());
 
         // 3. Add student to session - course.
-        $course = $courseRepo->find($course->getId());
+        $course = $this->getCourse($course->getId());
 
         /** @var User $user */
         $user = $userRepo->find($user->getId());
@@ -425,8 +425,6 @@ class SessionRepositoryTest extends AbstractApiTest
 
     public function testGeneralCoachesInSession(): void
     {
-        self::bootKernel();
-
         $sessionRepo = self::getContainer()->get(SessionRepository::class);
 
         $session = $this->createSession('test for general coaches');
@@ -443,8 +441,6 @@ class SessionRepositoryTest extends AbstractApiTest
 
     public function testAdminInSession(): void
     {
-        self::bootKernel();
-
         $sessionRepo = self::getContainer()->get(SessionRepository::class);
 
         $session = $this->createSession('test for session admin');

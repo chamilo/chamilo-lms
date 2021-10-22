@@ -17,8 +17,6 @@ class CCourseDescriptionRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CCourseDescriptionRepository::class);
 
@@ -38,13 +36,13 @@ class CCourseDescriptionRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame('title', (string) $item);
+        $this->assertNotNull($item->getProgress());
+        $this->assertSame($item->getIid(), $item->getResourceIdentifier());
         $this->assertSame(1, $repo->count([]));
     }
 
     public function testGetDescriptions(): void
     {
-        self::bootKernel();
-
         $repo = self::getContainer()->get(CCourseDescriptionRepository::class);
         $em = $this->getEntityManager();
 

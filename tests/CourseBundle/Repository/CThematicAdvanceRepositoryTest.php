@@ -160,7 +160,7 @@ class CThematicAdvanceRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $attendanceRepo->count([]));
         $this->assertSame(1, $advanceRepo->count([]));
 
-        $course = $courseRepo->find($course->getId());
+        $course = $this->getCourse($course->getId());
         $courseRepo->delete($course);
 
         $this->assertSame(0, $courseRepo->count([]));

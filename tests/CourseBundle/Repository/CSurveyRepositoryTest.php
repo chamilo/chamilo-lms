@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -161,8 +160,7 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $surveyOptionRepo->count([]));
         $this->assertSame(1, $courseRepo->count([]));
 
-        /** @var Course $course */
-        $course = $courseRepo->find($course->getId());
+        $course = $this->getCourse($course->getId());
         $courseRepo->delete($course);
 
         $this->assertSame(0, $courseRepo->count([]));

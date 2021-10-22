@@ -50,7 +50,11 @@ class CGroupRepositoryTest extends AbstractApiTest
         $em->persist($item);
         $em->flush();
 
+        $this->assertTrue($item->getSelfRegistrationAllowed());
+        $this->assertTrue($item->getSelfUnregistrationAllowed());
+
         $this->assertSame(1, $repo->count([]));
+
         $this->assertNotNull($repo->findOneByTitle('Group'));
 
         $repo->delete($item);
@@ -118,6 +122,9 @@ class CGroupRepositoryTest extends AbstractApiTest
         $em->persist($group);
         $em->flush();
 
+        $this->assertFalse($group->hasTutors());
+        $this->assertFalse($group->hasMembers());
+
         $groupRelUser = (new CGroupRelUser())
             ->setStatus(1)
             ->setUser($student)
@@ -140,6 +147,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         /** @var CGroup $group */
         $group = $groupRepo->find($group->getIid());
 
+        $this->assertSame($group->getResourceIdentifier(), $group->getIid());
         $this->assertSame(1, $group->getMembers()->count());
         $this->assertSame(1, $group->getTutors()->count());
 
@@ -153,7 +161,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $groupRepo->count([]));
         $this->assertNotNull($groupRepo->findOneByTitle('Group'));
 
-        $course = $courseRepo->find($course->getId());
+        $course = $this->getCourse($course->getId());
         $courseRepo->delete($course);
 
         $this->assertSame(0, $groupRepo->count([]));

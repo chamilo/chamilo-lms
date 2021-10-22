@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -90,6 +91,23 @@ trait ChamiloTestTrait
             ->setParent($course)
             ->setCreator($this->getUser('admin'))
             ->setMaxStudent(100)
+        ;
+        $em->persist($group);
+        $em->flush();
+
+        return $group;
+    }
+
+    public function createUserGroup(string $title): ?Usergroup
+    {
+        $em = $this->getEntityManager();
+        $creator = $this->createUser('usergroup_creator');
+
+        $group = (new Usergroup())
+            ->setName($title)
+            ->setDescription('desc')
+            ->setCreator($creator)
+            ->addAccessUrl($this->getAccessUrl())
         ;
         $em->persist($group);
         $em->flush();

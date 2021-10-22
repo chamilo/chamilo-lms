@@ -38,12 +38,15 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $this->assertSame(1, $count);
 
         $em = $this->getEntityManager();
+
         $sysAnnouncement = (new SysAnnouncement())
             ->setTitle('Welcome to Chamilo!')
             ->setContent('content')
+            ->setLang('lang')
             ->setUrl($this->getAccessUrl())
             ->setDateStart(new DateTime())
             ->setDateEnd(new DateTime('now +30 days'))
+            ->setRoles(['ROLE_ANOTHER'])
             ->addRole('ROLE_ANONYMOUS')
             ->addRole('ROLE_USER') // connected users
         ;
@@ -52,6 +55,11 @@ class SysAnnouncementRepositoryTest extends WebTestCase
 
         $repo->update($sysAnnouncement);
 
+        $this->assertNotNull($sysAnnouncement->getDateStart());
+        $this->assertNotNull($sysAnnouncement->getDateEnd());
+        $this->assertNotNull($sysAnnouncement->getLang());
+        $this->assertCount(3, $sysAnnouncement->getRoles());
+        $this->assertTrue($sysAnnouncement->isVisible());
         $this->assertSame(2, $repo->count([]));
 
         $repo->delete($sysAnnouncement->getId());
@@ -73,7 +81,7 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $repo = self::getContainer()->get(SysAnnouncementRepository::class);
         $user = $this->getUser('admin');
         $items = $repo->getAnnouncements($user, $this->getAccessUrl(), '');
-        $this->assertSame(1, \count($items));
+        $this->assertCount(1, $items);
 
         $career = (new Career())
             ->setName('Doctor')
@@ -95,6 +103,7 @@ class SysAnnouncementRepositoryTest extends WebTestCase
             ->setDateStart(new DateTime())
             ->setDateEnd(new DateTime('now +30 days'))
             ->setCareer($career)
+            ->setPromotion($promotion)
             ->addRole('ROLE_ANONYMOUS')
             ->addRole('ROLE_USER') // connected users
         ;

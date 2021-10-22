@@ -84,8 +84,8 @@ class CourseRepositoryTest extends AbstractApiTest
         ;
         $courseRepo->create($course);
 
-        /** @var Course $course */
-        $course = $courseRepo->find($course->getId());
+        $course = $this->getCourse($course->getId());
+
         $this->assertSame('test julio', $course->getName());
         $this->assertSame('test julio (TESTJULIO)', $course->getTitleAndCode());
         $this->assertSame('TESTJULIO', $course->getCode());

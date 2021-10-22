@@ -215,9 +215,9 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
 
         $this->assertSame(1, $trackExercise->getAttempts()->count());
         $this->assertInstanceOf(TrackEAttempt::class, $trackExercise->getAttemptByQuestionId(1));
+        $this->assertNull($trackExercise->getAttemptByQuestionId(99));
 
         $file = $this->getUploadedFile();
-
         $em = $this->getEntityManager();
 
         // Create asset.

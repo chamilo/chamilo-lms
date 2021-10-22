@@ -168,6 +168,7 @@ class ToolChainTest extends AbstractApiTest
         ;
         $this->assertHasNoEntityViolations($resourceType);
         $em->persist($resourceType);
+
         $collection = new ArrayCollection();
         $collection->add($resourceType);
 
@@ -178,5 +179,7 @@ class ToolChainTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($tool);
         $em->persist($tool);
         $em->flush();
+
+        $this->assertNotNull($resourceType->getId());
     }
 }

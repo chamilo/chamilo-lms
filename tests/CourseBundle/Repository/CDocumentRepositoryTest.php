@@ -463,7 +463,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         // Update course visibility to REGISTERED
         $courseRepo = self::getContainer()->get(CourseRepository::class);
-        $course = $courseRepo->find($courseId);
+        $course = $this->getCourse($courseId);
         $course->setVisibility(Course::REGISTERED);
         $courseRepo->update($course);
 
@@ -490,7 +490,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         // Update course visibility to CLOSED
         $courseRepo = self::getContainer()->get(CourseRepository::class);
-        $course = $courseRepo->find($courseId);
+        $course = $this->getCourse($courseId);
         $course->setVisibility(Course::CLOSED);
         $courseRepo->update($course);
 
@@ -508,7 +508,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         // Update course visibility to HIDDEN
         $courseRepo = self::getContainer()->get(CourseRepository::class);
-        $course = $courseRepo->find($courseId);
+        $course = $this->getCourse($courseId);
         $course->setVisibility(Course::HIDDEN);
         $courseRepo->update($course);
 

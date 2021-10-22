@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationRelUser;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -54,15 +56,19 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $repo->count([]));
     }
 
-    public function testCreateWithAssignment(): void
+    public function testCreateWithPublicationRelUser(): void
     {
         $em = $this->getEntityManager();
+
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $publicationRelUserRepo = $em->getRepository(CStudentPublicationRelUser::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
+        $student = $this->createUser('student');
 
-        $item = (new CStudentPublication())
+        $publication = (new CStudentPublication())
             ->setTitle('publi')
             ->setDescription('desc')
             ->setParent($course)
@@ -70,10 +76,26 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
             ->setWeight(100)
             ->setCreator($teacher)
         ;
-        $em->persist($item);
+        $em->persist($publication);
+
+        $pubRelUser = (new CStudentPublicationRelUser())
+            ->setUser($student)
+            ->setPublication($publication)
+        ;
+        $em->persist($pubRelUser);
         $em->flush();
 
         $this->assertSame(1, $repo->count([]));
+        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame(1, $publicationRelUserRepo->count([]));
+
+        $course = $this->getCourse($course->getId());
+
+        $courseRepo->delete($course);
+
+        $this->assertSame(0, $repo->count([]));
+        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame(0, $publicationRelUserRepo->count([]));
     }
 
     public function testFindAllByCourse(): void

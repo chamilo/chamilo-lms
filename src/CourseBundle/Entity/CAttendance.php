@@ -77,6 +77,13 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected Collection $calendars;
 
     /**
+     * @var Collection|CAttendanceResult[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceResult", mappedBy="attendance", cascade={"persist", "remove"})
+     */
+    protected Collection $results;
+
+    /**
      * @var Collection|CAttendanceSheetLog[]
      *
      * @ORM\OneToMany(targetEntity="CAttendanceSheetLog", mappedBy="attendance", cascade={"persist", "remove"})
@@ -90,6 +97,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
         $this->attendanceQualifyMax = 0;
         $this->locked = 0;
         $this->calendars = new ArrayCollection();
+        $this->results = new ArrayCollection();
         $this->logs = new ArrayCollection();
     }
 
@@ -228,6 +236,21 @@ class CAttendance extends AbstractResource implements ResourceInterface
     public function setLogs(Collection $logs): self
     {
         $this->logs = $logs;
+
+        return $this;
+    }
+
+    /**
+     * @return CAttendanceResult[]|Collection
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    public function setResults(Collection $results): self
+    {
+        $this->results = $results;
 
         return $this;
     }

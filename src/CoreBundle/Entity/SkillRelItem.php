@@ -11,8 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * SkillRelItem.
- *
  * @ORM\Table(name="skill_rel_item")
  * @ORM\Entity
  */
@@ -29,9 +27,9 @@ class SkillRelItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="items")
-     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected ?Skill $skill = null;
+    protected Skill $skill;
 
     /**
      * See ITEM_TYPE_* constants in api.lib.php.
@@ -106,18 +104,12 @@ class SkillRelItem
         return $this->id;
     }
 
-    /**
-     * @return Skill
-     */
-    public function getSkill()
+    public function getSkill(): Skill
     {
         return $this->skill;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setSkill(Skill $skill)
+    public function setSkill(Skill $skill): self
     {
         $this->skill = $skill;
 
@@ -150,10 +142,7 @@ class SkillRelItem
         return $this->obtainConditions;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setObtainConditions(string $obtainConditions)
+    public function setObtainConditions(string $obtainConditions): self
     {
         $this->obtainConditions = $obtainConditions;
 
@@ -165,10 +154,7 @@ class SkillRelItem
         return $this->requiresValidation;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setRequiresValidation(bool $requiresValidation)
+    public function setRequiresValidation(bool $requiresValidation): self
     {
         $this->requiresValidation = $requiresValidation;
 
@@ -180,10 +166,7 @@ class SkillRelItem
         return $this->isReal;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setIsReal(bool $isReal)
+    public function setIsReal(bool $isReal): self
     {
         $this->isReal = $isReal;
 
@@ -234,10 +217,7 @@ class SkillRelItem
         return $this->createdBy;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setCreatedBy(int $createdBy)
+    public function setCreatedBy(int $createdBy): self
     {
         $this->createdBy = $createdBy;
 
@@ -252,10 +232,7 @@ class SkillRelItem
         return $this->updatedBy;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setUpdatedBy(int $updatedBy)
+    public function setUpdatedBy(int $updatedBy): self
     {
         $this->updatedBy = $updatedBy;
 
@@ -270,10 +247,7 @@ class SkillRelItem
         return $this->itemType;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setItemType(int $itemType)
+    public function setItemType(int $itemType): self
     {
         $this->itemType = $itemType;
 
@@ -288,10 +262,7 @@ class SkillRelItem
         return $this->courseId;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setCourseId(int $courseId)
+    public function setCourseId(int $courseId): self
     {
         $this->courseId = $courseId;
 
@@ -306,20 +277,14 @@ class SkillRelItem
         return $this->sessionId;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setSessionId(int $sessionId)
+    public function setSessionId(int $sessionId): self
     {
         $this->sessionId = $sessionId;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getItemResultUrl(string $cidReq)
+    public function getItemResultUrl(string $cidReq): string
     {
         $url = '';
         switch ($this->getItemType()) {
@@ -336,10 +301,7 @@ class SkillRelItem
         return $url;
     }
 
-    /**
-     * @return string
-     */
-    public function getItemResultList(string $cidReq)
+    public function getItemResultList(string $cidReq): string
     {
         $url = '';
         switch ($this->getItemType()) {

@@ -19,6 +19,10 @@
         };
     }
 
+    /**
+     * @param {Object} attributes
+     * @constructor
+     */
     var SvgElementModel = function (attributes) {
         this.attributes = attributes;
         this.id = 0;
@@ -27,6 +31,10 @@
         this.changeEvents = [];
         this.destroyEvents = [];
     };
+    /**
+     * @param {string} key
+     * @param {*} value
+     */
     SvgElementModel.prototype.set = function (key, value) {
         this.attributes[key] = value;
 
@@ -42,16 +50,35 @@
             event();
         });
     };
-    SvgElementModel.prototype.on = function (event, callback) {
-        this[event + 'Events'].push(callback);
+    /**
+     * @param {string} eventName
+     * @param {(SvgElementModel~changeEvents|SvgElementModel~destroyEvents)} callback
+     */
+    SvgElementModel.prototype.on = function (eventName, callback) {
+        this[eventName + 'Events'].push(callback);
     };
-    SvgElementModel.decode = function () {
+    /**
+     * @abstract
+     * @static
+     * @param {Object} info
+     * @returns {SvgElementModel}
+     */
+    SvgElementModel.decode = function (info) {
         return new this();
     };
+    /**
+     * @abstract
+     * @returns {string}
+     */
     SvgElementModel.prototype.encode = function () {
         return "";
     };
 
+    /**
+     * @param {Object} userAttributes
+     * @constructor
+     * @extends SvgElementModel
+     */
     var SvgPathModel = function (userAttributes) {
         var attributes = $.extend({
             color: "#FF0000",
@@ -84,6 +111,11 @@
 
         return "P;" + typeProperties.join(";") + ")(" + pairedPoints.join(")(");
     };
+    /**
+     * @static
+     * @param {Object} pathInfo
+     * @returns {SvgPathModel}
+     */
     SvgPathModel.decode = function (pathInfo) {
         pathInfo.points = pathInfo.points.map(function (point) {
             return [point.x, point.y];
@@ -92,6 +124,11 @@
         return new SvgPathModel(pathInfo);
     };
 
+    /**
+     * @param {Object} userAttributes
+     * @constructor
+     * @extends SvgElementModel
+     */
     var SvgTextModel = function (userAttributes) {
         var attributes = $.extend({
             text: "",
@@ -112,10 +149,19 @@
 
         return "T;" + typeProperties.join(";") + ")(" + this.get("text") + ")(" + this.get("x") + ';' + this.get("y");
     };
+    /**
+     * @static
+     * @param {Object} textInfo
+     * @returns {SvgTextModel}
+     */
     SvgTextModel.decode = function (textInfo) {
         return new SvgTextModel(textInfo);
     };
 
+    /**
+     * @param {SvgElementModel} model
+     * @constructor
+     */
     var SvgElementView = function (model) {
         var self = this;
 
@@ -132,6 +178,7 @@
     /**
      * @param {SvgPathModel} model
      * @constructor
+     * @extends SvgElementView
      */
     var SvgPathView = function (model) {
         SvgElementView.call(this, model);
@@ -161,6 +208,7 @@
     /**
      * @param {SvgTextModel} model
      * @constructor
+     * @extends SvgElementView
      */
     var SvgTextView = function (model) {
         SvgElementView.call(this, model);
@@ -327,54 +375,83 @@
         }
     };
 
+    /**
+     * @constructor
+     */
     var ElementsCollection = function () {
+        /**
+         * @type {SvgElementModel[]}
+         */
         this.models = [];
-        this.lastId = 0;
         this.addEvent = null;
-    };
-    ElementsCollection.prototype.add = function (pathModel) {
-        pathModel.id = ++this.lastId;
 
-        this.models.push(pathModel);
+        var lastId = 0;
 
-        if (this.addEvent) {
-            this.addEvent(pathModel);
-        }
-    };
-    ElementsCollection.prototype.get = function (index) {
-        return this.models[index];
-    };
-    ElementsCollection.prototype.reset = function () {
-        this.models.forEach(function (model) {
-            model.destroy();
-        })
+        /**
+         * @param {SvgElementModel} pathModel
+         */
+        this.add = function (pathModel) {
+            pathModel.id = ++lastId;
 
-        this.models = [];
-    }
-    ElementsCollection.prototype.onAdd = function (callback) {
-        this.addEvent = callback;
+            this.models.push(pathModel);
+
+            if (this.addEvent) {
+                this.addEvent(pathModel);
+            }
+        };
+        /**
+         * @param {number} index
+         * @returns {SvgElementModel}
+         */
+        this.get = function (index) {
+            return this.models[index];
+        };
+        this.reset = function () {
+            this.models.forEach(function (model) {
+                model.destroy();
+            })
+
+            this.models = [];
+        };
+        /**
+         * @param {ElementsCollection~addEvent} callback
+         */
+        this.onAdd = function (callback) {
+            this.addEvent = callback;
+        };
     };
 
+    /**
+     * @param {ElementsCollection} elementsCollection
+     * @param {Image} image
+     * @param {number} questionId
+     * @constructor
+     */
     var AnnotationCanvasView = function (elementsCollection, image, questionId) {
         var self = this;
 
-        this.questionId = parseInt(questionId);
+        this.questionId = questionId;
         this.image = image;
 
-        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        this.el.setAttribute('version', '1.1');
-        this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
-        this.el.setAttribute('width', this.image.width);
-        this.el.setAttribute('height', this.image.height);
+        var svgImage = (function () {
+            var image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+            image.setAttributeNS('http://www.w3.org/1999/xlink', 'href', self.image.src);
+            image.setAttribute('width', self.image.width);
+            image.setAttribute('height', self.image.height);
 
-        var svgImage = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-        svgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
-        svgImage.setAttribute('width', this.image.width);
-        svgImage.setAttribute('height', this.image.height);
+            return image;
+        })();
 
+        this.el = (function () {
+            var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('version', '1.1');
+            svg.setAttribute('viewBox', '0 0 ' + self.image.width + ' ' + self.image.height);
+            svg.setAttribute('width', self.image.width);
+            svg.setAttribute('height', self.image.height);
+
+            return svg;
+        })();
         this.el.appendChild(svgImage);
-
-        this.$el = $(this.el);
 
         this.elementsCollection = elementsCollection;
         this.elementsCollection.onAdd(function (pathModel) {
@@ -396,80 +473,80 @@
             $(controllerView.el).children('input').eq(0).focus();
         });
 
-        this.$rdbOptions = null;
-        this.$btnReset = null;
-    };
-    AnnotationCanvasView.prototype.render = function () {
-        this.$rdbOptions = $('[name="' + this.questionId + '-options"]');
-        this.$btnReset = $('#btn-reset-' + this.questionId);
+        var $rdbOptions = null;
+        var $btnReset = null;
 
-        this.setEvents();
+        this.render = function () {
+            $rdbOptions = $('[name="' + this.questionId + '-options"]');
+            $btnReset = $('#btn-reset-' + this.questionId);
 
-        return this;
-    };
-    AnnotationCanvasView.prototype.setEvents = function () {
-        var self = this;
+            setEvents();
 
-        var isMoving = false,
-            elementModel = null;
+            return this;
+        };
 
-        self.$el
-            .on('dragstart', function (e) {
-                e.preventDefault();
-            })
-            .on('click', function (e) {
-                e.preventDefault();
-
-                if ("1" !== self.$rdbOptions.filter(':checked').val()) {
-                    return;
-                }
-
-                var point = getPointOnImage(self.el, e.clientX, e.clientY);
-                elementModel = new SvgTextModel({x: point.x, y: point.y, text: ''});
-                elementModel.questionId = self.questionId;
-                self.elementsCollection.add(elementModel);
+        function setEvents() {
+            var isMoving = false,
                 elementModel = null;
-                isMoving = false;
-            })
-            .on('mousedown', function (e) {
+
+            $(self.el)
+                .on('dragstart', function (e) {
+                    e.preventDefault();
+                })
+                .on('click', function (e) {
+                    e.preventDefault();
+
+                    if ("1" !== $rdbOptions.filter(':checked').val()) {
+                        return;
+                    }
+
+                    var point = getPointOnImage(self.el, e.clientX, e.clientY);
+                    elementModel = new SvgTextModel({x: point.x, y: point.y, text: ''});
+                    elementModel.questionId = self.questionId;
+                    self.elementsCollection.add(elementModel);
+                    elementModel = null;
+                    isMoving = false;
+                })
+                .on('mousedown', function (e) {
+                    e.preventDefault();
+
+                    var point = getPointOnImage(self.el, e.clientX, e.clientY);
+                    if (isMoving || "0" !== $rdbOptions.filter(':checked').val() || elementModel) {
+                        return;
+                    }
+
+                    elementModel = new SvgPathModel({points: [[point.x, point.y]]});
+                    elementModel.questionId = self.questionId;
+                    self.elementsCollection.add(elementModel);
+                    isMoving = true;
+                })
+                .on('mousemove', function (e) {
+                    e.preventDefault();
+
+                    if (!isMoving || "0" !== $rdbOptions.filter(':checked').val() || !elementModel) {
+                        return;
+                    }
+
+                    var point = getPointOnImage(self.el, e.clientX, e.clientY);
+                    elementModel.addPoint(point.x, point.y);
+                })
+                .on('mouseup', function (e) {
+                    e.preventDefault();
+
+                    if (!isMoving || "0" !== $rdbOptions.filter(':checked').val() || !elementModel) {
+                        return;
+                    }
+
+                    elementModel = null;
+                    isMoving = false;
+                });
+
+            $btnReset.on('click', function (e) {
                 e.preventDefault();
 
-                var point = getPointOnImage(self.el, e.clientX, e.clientY);
-                if (isMoving || "0" !== self.$rdbOptions.filter(':checked').val() || elementModel) {
-                    return;
-                }
-
-                elementModel = new SvgPathModel({points: [[point.x, point.y]]});
-                elementModel.questionId = self.questionId;
-                self.elementsCollection.add(elementModel);
-                isMoving = true;
-            })
-            .on('mousemove', function (e) {
-                e.preventDefault();
-
-                if (!isMoving || "0" !== self.$rdbOptions.filter(':checked').val() || !elementModel) {
-                    return;
-                }
-
-                var point = getPointOnImage(self.el, e.clientX, e.clientY);
-                elementModel.addPoint(point.x, point.y);
-            })
-            .on('mouseup', function (e) {
-                e.preventDefault();
-
-                if (!isMoving || "0" !== self.$rdbOptions.filter(':checked').val() || !elementModel) {
-                    return;
-                }
-
-                elementModel = null;
-                isMoving = false;
+                self.elementsCollection.reset();
             });
-
-        this.$btnReset.on('click', function (e) {
-            e.preventDefault();
-
-            self.elementsCollection.reset();
-        });
+        }
     };
 
     window.AnnotationQuestion = function (userSettings) {
@@ -495,7 +572,7 @@
                     var image = new Image();
                     image.onload = function () {
                         var elementsCollection = new ElementsCollection(),
-                            canvas = new AnnotationCanvasView(elementsCollection, this, settings.questionId);
+                            canvas = new AnnotationCanvasView(elementsCollection, this, parseInt(settings.questionId));
 
                         $container.html(canvas.render().el);
 

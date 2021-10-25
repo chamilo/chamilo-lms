@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ExtraFieldOptionRelFieldOption.
- *
  * @ORM\Table(
  *     name="extra_field_option_rel_field_option",
  *     uniqueConstraints={

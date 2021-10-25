@@ -23,8 +23,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Message.
- *
  * @ORM\Table(name="message", indexes={
  *     @ORM\Index(name="idx_message_user_sender", columns={"user_sender_id"}),
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),

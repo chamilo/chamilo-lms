@@ -19,8 +19,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Message tag.
- *
  * @ORM\Table(
  *     name="message_tag",
  *     uniqueConstraints={

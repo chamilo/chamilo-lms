@@ -12,8 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * MessageAttachment.
- *
  * @ORM\Table(name="message_attachment")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository")
  */

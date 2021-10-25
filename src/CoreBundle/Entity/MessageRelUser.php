@@ -17,8 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="message_rel_user", indexes={
- * },
+ * @ORM\Table(name="message_rel_user",
  * uniqueConstraints={
  *     @ORM\UniqueConstraint(name="message_receiver", columns={"message_id", "user_id"})
  *  },

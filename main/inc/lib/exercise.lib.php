@@ -1729,6 +1729,18 @@ HOTSPOT;
                                             <span class="fa fa-times-rectangle fa-fw" aria-hidden="true"></span>
                                         </button>
                                     </div>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default"
+                                            title="'.get_lang('Undo').'"
+                                            id="btn-undo-'.$questionId.'">
+                                            <span class="fa fa-undo fa-fw" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default"
+                                            title="'.get_lang('Redo').'"
+                                            id="btn-redo-'.$questionId.'">
+                                            <span class="fa fa-repeat fa-fw" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

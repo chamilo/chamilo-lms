@@ -2789,21 +2789,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@videojs/http-streaming@npm:2.10.3":
-  version: 2.10.3
-  resolution: "@videojs/http-streaming@npm:2.10.3"
+"@videojs/http-streaming@npm:2.11.0":
+  version: 2.11.0
+  resolution: "@videojs/http-streaming@npm:2.11.0"
   dependencies:
     "@babel/runtime": ^7.12.5
-    "@videojs/vhs-utils": 3.0.3
+    "@videojs/vhs-utils": 3.0.4
     aes-decrypter: 3.1.2
     global: ^4.4.0
     m3u8-parser: 4.7.0
-    mpd-parser: 0.19.0
-    mux.js: 5.13.0
+    mpd-parser: 0.19.1
+    mux.js: 5.14.0
     video.js: ^6 || ^7
   peerDependencies:
     video.js: ^6 || ^7
-  checksum: c8cf09110e85779401c63105a0aa6049ed54c1ce8db1be0fa6cea6213e44dade37a49d6fed8bd40a536a4200b115f42e3ed4dd4f5312e656948dc5a80487915e
+  checksum: 57c74d7f0297d46d97e59c0a5e29537abc8df7f8b7319efc962c9098e5924111bb8b2c9a02fd47dd4a6bacde0d3bf376e08a324b0475d6559f712ef5b7a66204
   languageName: node
   linkType: hard
 
@@ -2815,6 +2815,17 @@ __metadata:
     global: ^4.4.0
     url-toolkit: ^2.2.1
   checksum: d0e19a160e555af1f5305216b57c9a30cc73cd36f26a56fa6963b0166cec3878156188cac25e40954d7e54e0a24c4be061adf4101209bf0ecdf8c2857c3f5af8
+  languageName: node
+  linkType: hard
+
+"@videojs/vhs-utils@npm:3.0.4":
+  version: 3.0.4
+  resolution: "@videojs/vhs-utils@npm:3.0.4"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    global: ^4.4.0
+    url-toolkit: ^2.2.1
+  checksum: c2e9dc3795d8e66bfcfefdd13de41ea38f6685f8f71e9ce05c1ba659f3a054f5b5283dd1231b359d410b8d2fe374220881f51e5e247268023b5e13e957ac1c0e
   languageName: node
   linkType: hard
 
@@ -6588,9 +6599,9 @@ __metadata:
     blueimp-load-image: ^5.16.0
     bootstrap-daterangepicker: ^3.1
     bootstrap-select: ^1.13.18
-    chart.js: ^3.5.1
+    chart.js: ^3.6.0
     copy-webpack-plugin: 9.0.1
-    core-js: 3.18.3
+    core-js: 3.19.0
     cropper: ^4.1.0
     datepair.js: ^0.4.17
     deepmerge: ^4.2.2
@@ -6608,12 +6619,12 @@ __metadata:
     glob-all: ^3.2.1
     graphql: ^15.6.1
     graphql-tag: ^2.12.5
-    highlight.js: ^11.2.0
+    highlight.js: ^11.3.1
     hljs: ^6.2.3
     html2canvas: ^1.3.2
     image-map-resizer: ^1.0.10
     jquery: ^3.6.0
-    jquery-ui: ^1.12.1
+    jquery-ui: ^1.13.0
     jquery-ui-timepicker-addon: ^1.6.3
     jquery-ui-touch-punch: ^0.2.3
     js-cookie: ^2.2.1
@@ -6662,7 +6673,7 @@ __metadata:
     tinymce: ^5.10.0
     ts-loader: ^9.2.6
     typescript: ^4.3.5
-    video.js: ^7.15.6
+    video.js: ^7.16.0
     vue: 3.2.11
     vue-cli-plugin-quasar: 4.0.2
     vue-eslint-parser: 7.11.0
@@ -6692,10 +6703,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^3.5.1":
-  version: 3.5.1
-  resolution: "chart.js@npm:3.5.1"
-  checksum: 54bc3c9c373303c3bbc41bbb2e05df621634df41c91e0ce75245323ecd184be460b5341f9ad388f1ee0840f9e6dd2fc5f2d5132802ca22bdaa030711f5a16993
+"chart.js@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "chart.js@npm:3.6.0"
+  checksum: bb6032ab79e94c8d3897b0dc2968a64184c9aff7050c5b74461964ca51e24d0fce6807bb36d7d05a67d991c354498b3d185d06e838c7d8ebe70d3c775a3f9a07
   languageName: node
   linkType: hard
 
@@ -7446,10 +7457,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.18.3":
-  version: 3.18.3
-  resolution: "core-js@npm:3.18.3"
-  checksum: 01a927d02974a95313bc2325d9f832bbb4801c0c7e69639392574799f87041ce3dae52bdee3646c7cd58b4f38750a6093ca05363bf9f772be9c38dc69608c25c
+"core-js@npm:3.19.0":
+  version: 3.19.0
+  resolution: "core-js@npm:3.19.0"
+  checksum: 2e9352f7794e555c377a61c7d9c007a7f66ce11ee0f1a26c1cfb48ff52885a2c162972c026eb32cbbfbb3be4050701f649e78ea8c44d4ac659d447a9dbc5f0de
   languageName: node
   linkType: hard
 
@@ -11069,10 +11080,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"highlight.js@npm:^11.2.0":
-  version: 11.2.0
-  resolution: "highlight.js@npm:11.2.0"
-  checksum: e18f50d3a86bf716dcfba89ab71b1927ff4244b760da1b2721690367c1fdf351ca29b8bfdfb2233e0fe9fe13869a5d0980481358835bcbf09380b38637be294e
+"highlight.js@npm:^11.3.1":
+  version: 11.3.1
+  resolution: "highlight.js@npm:11.3.1"
+  checksum: 99bf4acd4f1ae530dd4b4eb68b5955d0a3fcae30eeb2aca99dec11339650d08c963e1826c259a61f2083103609b918bb1d0b17a537396932dd030aee87ea458c
   languageName: node
   linkType: hard
 
@@ -12543,7 +12554,16 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"jquery@npm:>2.1.4, jquery@npm:>=1.10, jquery@npm:>=1.5.0 <4.0, jquery@npm:>=1.6.0, jquery@npm:>=1.7, jquery@npm:^3.3.1, jquery@npm:^3.5.0, jquery@npm:^3.5.1, jquery@npm:^3.6.0":
+"jquery-ui@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "jquery-ui@npm:1.13.0"
+  dependencies:
+    jquery: ">=1.8.0 <4.0.0"
+  checksum: dae9d6f06852b324bfb367e6d531ff89b03baecdd0aaefcde1106c14480ac6f0b0d39bf8a82abe86e0099bf5f8a04ab61603f6b8a9a74679159a6f414ea08fe1
+  languageName: node
+  linkType: hard
+
+"jquery@npm:>2.1.4, jquery@npm:>=1.10, jquery@npm:>=1.5.0 <4.0, jquery@npm:>=1.6.0, jquery@npm:>=1.7, jquery@npm:>=1.8.0 <4.0.0, jquery@npm:^3.3.1, jquery@npm:^3.5.0, jquery@npm:^3.5.1, jquery@npm:^3.6.0":
   version: 3.6.0
   resolution: "jquery@npm:3.6.0"
   checksum: a0a819022a1bdff5efa79bbd9d4d7352de5bd32dabe42108e6ec0797238dba36c09c108e0eea2724f5d03acc1b30ee87d76bec80e15b9510106532292ebe6ba4
@@ -14016,9 +14036,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mpd-parser@npm:0.19.0":
-  version: 0.19.0
-  resolution: "mpd-parser@npm:0.19.0"
+"mpd-parser@npm:0.19.1":
+  version: 0.19.1
+  resolution: "mpd-parser@npm:0.19.1"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@videojs/vhs-utils": ^3.0.2
@@ -14026,7 +14046,7 @@ fsevents@~2.3.2:
     global: ^4.4.0
   bin:
     mpd-to-m3u8-json: bin/parse.js
-  checksum: 4e72ccc653121ad06a2a3b54a68ba2fe44fef9d9895bf8f17521fbdb8668c3b7720df9f5488b7dcaa748db64c306e3d7d9aa9c38fd6299711bdffd5c906ec9fc
+  checksum: 32e73525996a868ec8300e26be4a6da84ddb4790b5805be05517647a6f8ac86069b5ecfa7a6ee9ad9368c5b00c24be45f1b0939b457698656c434b57288d1176
   languageName: node
   linkType: hard
 
@@ -14104,14 +14124,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mux.js@npm:5.13.0":
-  version: 5.13.0
-  resolution: "mux.js@npm:5.13.0"
+"mux.js@npm:5.14.0":
+  version: 5.14.0
+  resolution: "mux.js@npm:5.14.0"
   dependencies:
     "@babel/runtime": ^7.11.2
   bin:
     muxjs-transmux: bin/transmux.js
-  checksum: b2283dfe44037381e7c5065fda38b21ca3e5a86d7e036d254c72a3b5115b4e14d354589396a60a52f1e28acd166b62b863d3ca932d073f648515155d0dcfa45f
+  checksum: 92b35262825ddfb431e84ecc4b49348efdafc580d6ef332bb03d5da0362f2daa27c6ba6ff06b3eb6791a16a7054a824ed92847cb46520ad9b21a3142db458635
   languageName: node
   linkType: hard
 
@@ -20172,24 +20192,24 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"video.js@npm:7.15.6, video.js@npm:^7.15.6":
-  version: 7.15.6
-  resolution: "video.js@npm:7.15.6"
+"video.js@npm:7.16.0, video.js@npm:^7.16.0":
+  version: 7.16.0
+  resolution: "video.js@npm:7.16.0"
   dependencies:
     "@babel/runtime": ^7.12.5
-    "@videojs/http-streaming": 2.10.3
+    "@videojs/http-streaming": 2.11.0
     "@videojs/vhs-utils": ^3.0.3
     "@videojs/xhr": 2.6.0
     aes-decrypter: 3.1.2
     global: ^4.4.0
     keycode: ^2.2.0
     m3u8-parser: 4.7.0
-    mpd-parser: 0.19.0
-    mux.js: 5.13.0
+    mpd-parser: 0.19.1
+    mux.js: 5.14.0
     safe-json-parse: 4.0.0
     videojs-font: 3.2.0
     videojs-vtt.js: ^0.15.3
-  checksum: 7a9cddc731b8ff2f7d80cf1cb615ba43acb655f8729e2a6802b6b838a42bae9300a672bbec3904bbe866ca28ea0108018715808e2ebd680e2aca45119ae94991
+  checksum: 07648a4313d4bcb38a936a32eab188ca96d89ba8e848f6ae1c84277ea1a4e2e8ea3ce1c5b56c1333375dba1d0822bb2b6ad00c6339ba8ae186651593a70f0f3e
   languageName: node
   linkType: hard
 

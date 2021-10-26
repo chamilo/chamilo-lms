@@ -13,6 +13,7 @@ $filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_u
 $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
 $exerciseId = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : 0;
 $statusId = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
+$exportXls = isset($_REQUEST['export_xls']) && !empty($_REQUEST['export_xls']) ? (int) $_REQUEST['export_xls'] : 0;
 $action = $_REQUEST['a'] ?? null;
 
 api_block_anonymous_users();
@@ -28,7 +29,8 @@ switch ($action) {
         $results = ExerciseLib::get_all_exercises_for_course_id(
             null,
             0,
-            $courseId
+            $courseId,
+            false
         );
         if (!empty($results)) {
             foreach ($results as $exercise) {
@@ -111,7 +113,41 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
     }
 }
 
+$htmlHeadXtra[] = '<script>
+    $(function() {
+        $("#export-xls").bind("click", function(e) {
+            e.preventDefault();
+            var input = $("<input>", {
+                type: "hidden",
+                name: "export_xls",
+                value: "1"
+            });
+            $("#pending").append(input);
+            $("#pending").submit();
+        });
+        $("#pending_pendingSubmit").bind("click", function(e) {
+            e.preventDefault();
+            if ($("input[name=\"export_xls\"]").length > 0) {
+                $("input[name=\"export_xls\"]").remove();
+            }
+            $("#pending").submit();
+        });
+    });
+</script>';
+
+if ($exportXls) {
+    ExerciseLib::exportPendingAttemptsToExcel($_REQUEST);
+}
+
 Display::display_header(get_lang('PendingAttempts'));
+$actions = '';
+$actions .= Display::url(
+    Display::return_icon('excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+    '#',
+    ['id' => 'export-xls']
+);
+
+echo Display::div($actions, ['class' => 'actions']);
 $token = Security::get_token();
 $extra = '<script>
     $(function() {
@@ -198,7 +234,8 @@ $extra .= '</div>';
 
 echo $extra;
 
-$courses = CourseManager::get_courses_list_by_user_id($userId, false, false, false);
+$showAttemptsInSessions = api_get_configuration_value('show_exercise_attempts_in_all_user_sessions');
+$courses = CourseManager::get_courses_list_by_user_id($userId, $showAttemptsInSessions, false, false);
 
 $form = new FormValidator('pending', 'GET');
 $courses = array_column($courses, 'title', 'real_id');
@@ -218,10 +255,12 @@ $status = [
     1 => get_lang('All'),
     2 => get_lang('Validated'),
     3 => get_lang('NotValidated'),
+    4 => get_lang('Unclosed'),
+    5 => get_lang('Ongoing'),
 ];
 
 $form->addSelect('status', get_lang('Status'), $status);
-$form->addButtonSearch(get_lang('Search'));
+$form->addButtonSearch(get_lang('Search'), 'pendingSubmit');
 $content = $form->returnForm();
 
 echo $content;
@@ -251,7 +290,8 @@ $columns = [
     get_lang('Score'),
     get_lang('IP'),
     get_lang('Status'),
-    //get_lang('ToolLearnpath'),
+    get_lang('Corrector'),
+    get_lang('CorrectionDate'),
     get_lang('Actions'),
 ];
 
@@ -303,7 +343,20 @@ $column_model = [
             'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'),
         ],*/
     ],
-    //['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '60', 'align' => 'left', 'search' => 'false'],
+    [
+        'name' => 'qualificator_fullname',
+        'index' => 'qualificator_fullname',
+        'width' => '20',
+        'align' => 'left',
+        'search' => 'true',
+    ],
+    [
+        'name' => 'date_of_qualification',
+        'index' => 'date_of_qualification',
+        'width' => '20',
+        'align' => 'left',
+        'search' => 'true',
+    ],
     [
         'name' => 'actions',
         'index' => 'actions',

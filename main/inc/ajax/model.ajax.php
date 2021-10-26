@@ -1588,6 +1588,8 @@ switch ($action) {
             'score',
             'user_ip',
             'status',
+            'qualificator_fullname',
+            'date_of_qualification',
             'actions',
         ];
         $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');

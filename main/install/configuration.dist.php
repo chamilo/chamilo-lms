@@ -2001,7 +2001,7 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 //$_configuration['enable_uploadimage_editor'] = false;
 
 // Ckeditor settings.
-//$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true]];
+//$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true, 'image_responsive' => true]];
 
 // Overwrites the app/config/auth.conf.php settings
 //$_configuration['extldap_config'] = ['host' => '', 'port' => ''];

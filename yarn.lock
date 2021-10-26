@@ -1672,12 +1672,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@heroicons/vue@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "@heroicons/vue@npm:1.0.4"
+"@heroicons/vue@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "@heroicons/vue@npm:1.0.5"
   peerDependencies:
     vue: ">= 3"
-  checksum: e448568522fdaaa15024e5b1599ddbb90a6528a2243b94e140bd8608d35b8a30102f62335321d9778650091eda393f110467a90802f43ea6fdb6fea67e5b714f
+  checksum: b18e64eaa486674e6b314ece890f429fcfd8c44054f2a8325735f71f26ab6e3f85ba763af35acc141f1e890c95d919df2079f348156492142aaebf97c29032a4
   languageName: node
   linkType: hard
 
@@ -1789,10 +1789,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdi/font@npm:^6.3.95":
-  version: 6.3.95
-  resolution: "@mdi/font@npm:6.3.95"
-  checksum: 35fa96de188a716bc6fffebde7210b20adcfd73cbdacea6c073ef6bc65d204a51eb8f986352d3e1f4092ba093c364968be5bc6ad100ffd3c93536009aeff6715
+"@mdi/font@npm:^6.4.95":
+  version: 6.4.95
+  resolution: "@mdi/font@npm:6.4.95"
+  checksum: 64426e4da44a29b7a1e09ac942f8e61d1a97d4bbff2f59e0241779a6cf12dee00dce5d49199c8a1344f25109ae9b9423c04931100740012641153861c62efd66
   languageName: node
   linkType: hard
 
@@ -1944,10 +1944,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@quasar/extras@npm:^1.11.2":
-  version: 1.11.2
-  resolution: "@quasar/extras@npm:1.11.2"
-  checksum: ae6485c09ea361f682e5d884329c390b0307f6e356a25bd2796402b51091c7c43d26c9ae392005fe92b4e020f7eabb7f4c445a49a739d9d407d34327194649c1
+"@quasar/extras@npm:^1.11.3":
+  version: 1.11.3
+  resolution: "@quasar/extras@npm:1.11.3"
+  checksum: cb64bd011de60e314245079b769db306c24bf1d06cd239f520ada31121d5e576182560cafa902dce0db4a85700997e63d5ff3e33f498e9d28839ce4716c009cb
   languageName: node
   linkType: hard
 
@@ -4881,12 +4881,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "axios@npm:0.23.0"
+"axios@npm:^0.24.0":
+  version: 0.24.0
+  resolution: "axios@npm:0.24.0"
   dependencies:
     follow-redirects: ^1.14.4
-  checksum: 6fc85412cab4e25a55c905d1387c39a4cb11b60fe965c62ffd1dfd393f862ae12a1dc5fb7bb4e3c77c0e431ed764d9256d8a74f01d0e35233ed9dfa966b145b0
+  checksum: e741dfea07def55be7b1082824d71f54f7859b9c3c75a86c6a74b91c6e48bb461aceac683f77867313f89ff40ef5f2d1d2a1fe1953fcb71bdc1c1fc0fc069925
   languageName: node
   linkType: hard
 
@@ -6548,10 +6548,10 @@ __metadata:
     "@fullcalendar/timegrid": ^5.10.0
     "@fullcalendar/vue3": ^5.10.0
     "@headlessui/vue": ^1.4.1
-    "@heroicons/vue": ^1.0.4
-    "@mdi/font": ^6.3.95
+    "@heroicons/vue": ^1.0.5
+    "@mdi/font": ^6.4.95
     "@popperjs/core": 2.10.2
-    "@quasar/extras": ^1.11.2
+    "@quasar/extras": ^1.11.3
     "@symfony/webpack-encore": 1.6.1
     "@tailwindcss/forms": ^0.3.4
     "@tailwindcss/line-clamp": ^0.2.2
@@ -6579,7 +6579,7 @@ __metadata:
     "@vuelidate/validators": ^2.0.0-alpha.20
     alpinejs: ^3.4.2
     autoprefixer: ^10.3.7
-    axios: ^0.23.0
+    axios: ^0.24.0
     babel-cli: 6.26.0
     babel-plugin-transform-builtin-extend: 1.1.2
     babel-polyfill: 6.26.0
@@ -6620,7 +6620,7 @@ __metadata:
     jspdf: ^2.4.0
     jsplumb: ^2.15.6
     linkifyjs: 3.0.3
-    litepicker: ^2.0.11
+    litepicker: ^2.0.12
     luxon: ^2.0.2
     mathjax: ^2.7.9
     mediaelement: ^5.0.2
@@ -6640,7 +6640,7 @@ __metadata:
     pretty-bytes: ^5.6.0
     primeflex: ^3.1.0
     primeicons: ^4.1.0
-    primevue: ^3.8.1
+    primevue: ^3.8.2
     purgecss-webpack-plugin: 4.0.3
     pwstrength-bootstrap: 3.1.0
     qtip2: 3.0.3
@@ -12979,10 +12979,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"litepicker@npm:^2.0.11":
-  version: 2.0.11
-  resolution: "litepicker@npm:2.0.11"
-  checksum: c600c3619ed80cd93bc743d63e54b407f5cc4c7257cd00b5af78a4628859ade20003162b06294fe847901fa312acb641edcc552ba85b4b80de574a009f396020
+"litepicker@npm:^2.0.12":
+  version: 2.0.12
+  resolution: "litepicker@npm:2.0.12"
+  checksum: 00e48574caf273c7a1ff89deaa963b2384978d9da72038606387282a71e8e77e5953ce8dab9e7e6b0250c8641e937329306ee6ca7c6aff6edad5e81664a7cc49
   languageName: node
   linkType: hard
 
@@ -16545,10 +16545,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"primevue@npm:^3.8.1":
-  version: 3.8.1
-  resolution: "primevue@npm:3.8.1"
-  checksum: 4babe7e8bb0f56085633cf904b256527091f1d6b43961ea129c0d304502a0f466ba0cfc770831528f5c275c192283674238ed8bbb5ae2fe1995e6b32fffd2098
+"primevue@npm:^3.8.2":
+  version: 3.8.2
+  resolution: "primevue@npm:3.8.2"
+  checksum: daf44c41a8d414828b4a1992d6e3562fab56c3d2371694131ac378ef1be2dfa06540255e76c8b488ee0f80c3cea070503de6370f2ebc15bbe4a9286d3d0fe13f
   languageName: node
   linkType: hard
 

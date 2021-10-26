@@ -20,8 +20,6 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CourseCategoryRepository::class);
         $defaultCount = $repo->count([]);
@@ -44,8 +42,6 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
     public function testCreateWithParent(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CourseCategoryRepository::class);
         $defaultCount = $repo->count([]);
@@ -71,8 +67,6 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
     public function testCreateWithAsset(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         /** @var CourseCategoryRepository $repoCourseCategory */
@@ -164,8 +158,6 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
     public function testEditAndDeleteAsset(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $repoCourseCategory = self::getContainer()->get(CourseCategoryRepository::class);
@@ -209,13 +201,13 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $categories = $repoCourseCategory->findAllInAccessUrl($urlId);
 
-        $this->assertSame(3, \count($categories));
+        $this->assertCount(3, $categories);
 
         $categories = $repoCourseCategory->findAllInAccessUrl($urlId, false);
-        $this->assertSame(3, \count($categories));
+        $this->assertCount(3, $categories);
 
         $categories = $repoCourseCategory->findAllInAccessUrl($urlId, false, 99);
-        $this->assertSame(0, \count($categories));
+        $this->assertCount(0, $categories);
     }
 
     public function testGetCategoriesByCourseIdAndAccessUrlId(): void
@@ -245,9 +237,9 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $categories = $repoCourseCategory->getCategoriesByCourseIdAndAccessUrlId($urlId, $course->getId());
-        $this->assertSame(1, \count($categories));
+        $this->assertCount(1, $categories);
 
         $categories = $repoCourseCategory->getCategoriesByCourseIdAndAccessUrlId($urlId, $course->getId(), true);
-        $this->assertSame(1, \count($categories));
+        $this->assertCount(1, $categories);
     }
 }

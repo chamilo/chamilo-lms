@@ -126,6 +126,11 @@ trait ChamiloTestTrait
         return $repo->findByUsername($username);
     }
 
+    public function getAdmin(): User
+    {
+        return $this->getUser('admin');
+    }
+
     public function getCourse($courseId): ?Course
     {
         $repo = static::getContainer()->get(CourseRepository::class);

@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -106,9 +105,7 @@ class SettingsController extends BaseController
     public function updateSettingAction(Request $request, string $namespace): Response
     {
         $manager = $this->getSettingsManager();
-        // @todo improve get the current url entity
-        $urlId = $request->getSession()->get('access_url_id');
-        $url = $this->getDoctrine()->getRepository(AccessUrl::class)->find($urlId);
+        $url = $this->getAccessUrl();
         $manager->setUrl($url);
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $searchForm = $this->getSearchForm();
@@ -188,12 +185,10 @@ class SettingsController extends BaseController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings_sync', name: 'admin_settings')]
-    public function syncSettings(Request $request): Response
+    public function syncSettings(): Response
     {
         $manager = $this->getSettingsManager();
-        // @todo improve get the current url entity
-        $urlId = $request->getSession()->get('access_url_id');
-        $url = $this->getDoctrine()->getRepository(AccessUrl::class)->find($urlId);
+        $url = $this->getAccessUrl();
         $manager->setUrl($url);
         $manager->installSchemas($url);
 

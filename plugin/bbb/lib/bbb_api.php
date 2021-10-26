@@ -494,8 +494,13 @@ class BigBlueButtonBN
 					'messageKey' => $xml->messageKey->__toString(),
 					'message' => $xml->message->__toString()
 				);
+				$formats = array();
 
 				foreach ($xml->recordings->recording as $r) {
+					foreach ($r->playback->format as $format) {
+						$formats[] = $format;
+					}
+
 					$result[] = array(
 						'recordId' => $r->recordID->__toString(),
 						'meetingId' => $r->meetingID->__toString(),
@@ -503,6 +508,7 @@ class BigBlueButtonBN
 						'published' => $r->published->__toString(),
 						'startTime' => $r->startTime->__toString(),
 						'endTime' => $r->endTime->__toString(),
+						'playbackFormat' => $formats,
 						'playbackFormatType' => $r->playback->format->type->__toString(),
 						'playbackFormatUrl' => $r->playback->format->url->__toString(),
 						'playbackFormatLength' => $r->playback->format->length->__toString(),
@@ -559,7 +565,12 @@ class BigBlueButtonBN
 				);
 				$result['records'] = [];
 				if (!empty($xml->recordings->recording)) {
+					$formats = array();
+
 					foreach ($xml->recordings->recording as $r) {
+						foreach ($r->playback->format as $format) {
+							$formats[] = $format;
+						}
 						$result['records'][] = array(
 							'recordId' => $r->recordID->__toString(),
 							'meetingId' => $r->meetingID->__toString(),
@@ -567,6 +578,7 @@ class BigBlueButtonBN
 							'published' => $r->published->__toString(),
 							'startTime' => $r->startTime->__toString(),
 							'endTime' => $r->endTime->__toString(),
+							'playbackFormat' => $formats,
 							'playbackFormatType' => $r->playback->format->type->__toString(),
 							'playbackFormatUrl' => $r->playback->format->url->__toString(),
 							'playbackFormatLength' => $r->playback->format->length->__toString(),

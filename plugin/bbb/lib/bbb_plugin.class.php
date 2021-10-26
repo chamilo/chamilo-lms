@@ -45,8 +45,8 @@ class BBBPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.9',
-            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz',
+            '2.10',
+            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz, Ghazi Triki, Adnen Manssouri',
             [
                 'tool_enable' => 'boolean',
                 'host' => 'text',
@@ -230,6 +230,15 @@ class BBBPlugin extends Plugin
             ]
         );
 
+        Database::query(
+            "CREATE TABLE plugin_bbb_meeting_format (
+                    id int unsigned not null PRIMARY KEY AUTO_INCREMENT,
+                    meeting_id int unsigned not null,
+                    format_type varchar(255) not null,
+                    resource_url text not null
+                    );"
+        );
+
         // Copy icons into the main/img/icons folder
         $iconName = 'bigbluebutton';
         $iconsList = [
@@ -313,6 +322,9 @@ class BBBPlugin extends Plugin
             $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
             Database::query($sql);
 
+            if ($sm->tablesExist('plugin_bbb_meeting_format')) {
+                Database::query('DROP TABLE IF EXISTS plugin_bbb_meeting_format');
+            }
             if ($sm->tablesExist('plugin_bbb_room')) {
                 Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
             }

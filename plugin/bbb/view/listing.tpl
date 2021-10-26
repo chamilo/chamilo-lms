@@ -84,12 +84,17 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if meeting.record == 1 %}
+                    {% if meeting.show_links.record  %}
                         {# Record list #}
-                        {{ meeting.show_links }}
-                    {% else %}
-                        {{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}
+                        {% for link in meeting.show_links %}
+                            {% if link is not iterable  %}
+                            {{ link }}
+                            {% endif %}
+                        {% endfor %}
+                        {% else %}
+                            {{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}
                     {% endif %}
+
                 </td>
                 {% if allow_to_edit %}
                     <td>

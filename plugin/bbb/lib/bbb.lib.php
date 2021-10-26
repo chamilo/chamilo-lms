@@ -1041,18 +1041,23 @@ class bbb
                             continue;
                         }
 
-                        if (!empty($record['playbackFormatUrl'])) {
+                        if (!empty($record['playbackFormat'])) {
                             $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
                         }
                     }
                 }
 
-                if (isset($record['playbackFormatUrl']) && !empty($record['playbackFormatUrl'])) {
-                    $recordLink = Display::url(
-                        $this->plugin->get_lang('ViewRecord'),
-                        $record['playbackFormatUrl'],
-                        ['target' => '_blank', 'class' => 'btn btn-default']
-                    );
+                if (isset($record['playbackFormat']) && !empty($record['playbackFormat'])) {
+                    $recordLink = array();
+                    foreach ($record['playbackFormat'] as $format) {
+                        $this->insertMeetingFormat(intval($meetingDB['id']), $format->type->__toString(), $format->url->__toString());
+                        $recordLink['record'][] = 1;
+                        $recordLink[] = Display::url(
+                            $this->plugin->get_lang($format->type->__toString()),
+                            $format->url->__toString(),
+                            ['target' => '_blank', 'class' => 'btn btn-default']
+                        );
+                    }
                 } else {
                     $recordLink = $this->plugin->get_lang('NoRecording');
                 }
@@ -1072,6 +1077,7 @@ class bbb
                     $isAdminReport
                 );
                 $item['show_links'] = $recordLink;
+                $item['record'] = true;
             } else {
                 $actionLinks = $this->getActionLinks(
                     $meetingDB,
@@ -1081,6 +1087,7 @@ class bbb
                 );
 
                 $item['show_links'] = $this->plugin->get_lang('NoRecording');
+                $item['record'] = false;
             }
 
             $item['action_links'] = implode(PHP_EOL, $actionLinks);
@@ -1242,6 +1249,30 @@ class bbb
             ['video_url' => $videoUrl],
             ['id = ?' => intval($meetingId)]
         );
+    }
+
+    /**
+     * @param int $meetingId
+     * @param string $formatType
+     * @param string $resourceUrl
+     *
+     * @return bool|int
+     */
+    public function insertMeetingFormat(int $meetingId, string $formatType, string $resourceUrl)
+    {
+        $em = Database::getManager();
+        $sm = $em->getConnection()->getSchemaManager();
+        if ($sm->tablesExist('plugin_bbb_meeting_format')) {
+            return Database::insert(
+                'plugin_bbb_meeting_format',
+                [
+                    'format_type' => $formatType,
+                    'resource_url' => $resourceUrl,
+                    'meeting_id' => $meetingId
+                ]
+            );
+        }
+
     }
 
     /**

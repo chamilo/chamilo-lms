@@ -22,13 +22,7 @@ To upgrade packages:
 
 Webpack takes CSS, JS and other files and generates tidy single-files to attach to your web package.
 
-The behaviour of how packages will be processed is describe here: "webpack.config.js".
-
-If the public/js/fos_js_routes.json file does not exist (or if you're in doubt about the version of your PHP libs), run:
-```
-composer update
-bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
-```
+The behaviour of how packages will be processed is described here: "webpack.config.js".
 
 Then, to create the public/build contents, run one of the following commands:
 To compile assets just once:

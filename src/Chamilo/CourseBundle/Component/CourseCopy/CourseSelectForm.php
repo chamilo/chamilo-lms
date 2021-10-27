@@ -110,12 +110,15 @@ class CourseSelectForm
 
             function checkLearnPath(message){
                 d = document.course_select_form;
+                var backup = (typeof d.destination_course === 'undefined');
                 for (i = 0; i < d.elements.length; i++) {
                     if (d.elements[i].type == "checkbox") {
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
                         if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
-                                //setCheckbox('document',true);
+                                if (!backup) {
+                                    setCheckbox('document', true);
+                                }
                                 alert(message);
                                 break;
                             }
@@ -744,12 +747,15 @@ class CourseSelectForm
             }
             function checkLearnPath(message){
                 d = document.course_select_form;
+                var backup = (typeof d.destination_course === 'undefined');
                 for (i = 0; i < d.elements.length; i++) {
                     if (d.elements[i].type == "checkbox") {
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
                         if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
-                                //setCheckbox('document',true);
+                                if (!backup) {
+                                    setCheckbox('document', true);
+                                }
                                 alert(message);
                                 break;
                             }

@@ -65,6 +65,6 @@ final class PageExtension implements QueryCollectionExtensionInterface //, Query
 
         if (!$this->security->isGranted('ROLE_ADMIN')) {
             $qb->andWhere("$alias.enabled = 1");
-       }
+        }
     }
 }

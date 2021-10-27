@@ -336,7 +336,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
 
         if ($ticketProjectUserRoles && isset($ticketProjectUserRoles['permissions'])) {
             $selectedValue = array_map(
-                fn($projectId, $roles) => "$projectId:".implode(',', $roles),
+                fn ($projectId, $roles) => "$projectId:".implode(',', $roles),
                 array_keys($ticketProjectUserRoles['permissions']),
                 array_values($ticketProjectUserRoles['permissions'])
             );

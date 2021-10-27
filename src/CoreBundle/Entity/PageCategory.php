@@ -65,7 +65,7 @@ class PageCategory
      * @ORM\Column(name="title", type="string", length=255)
      */
     #[Assert\NotBlank]
-    #[Groups(['page_category:read', 'page_category:write'])]
+    #[Groups(['page_category:read', 'page_category:write', 'page:read'])]
     protected string $title;
 
     /**

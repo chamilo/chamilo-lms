@@ -8,6 +8,7 @@ import userGroupRoutes from './usergroup';
 import userRelUserRoutes from './userreluser';
 import calendarEventRoutes from './ccalendarevent';
 import toolIntroRoutes from './ctoolintro';
+import pageRoutes from './page';
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
@@ -120,7 +121,8 @@ const router = createRouter({
         userGroupRoutes,
         userRelUserRoutes,
         calendarEventRoutes,
-        toolIntroRoutes
+        toolIntroRoutes,
+        pageRoutes
     ]
 });
 

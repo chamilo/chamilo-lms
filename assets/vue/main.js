@@ -21,6 +21,8 @@ import userGroupService from './services/usergroup';
 import userRelUserService from './services/userreluser';
 import calendarEventService from './services/ccalendarevent';
 import toolIntroService from './services/ctoolintro';
+import pageService from './services/page';
+import pageCategoryService from './services/pagecategory';
 
 import makeCrudModule from './store/modules/crud';
 //import vuetify from './plugins/vuetify' // path to vuetify export
@@ -75,6 +77,21 @@ store.registerModule(
     service: toolIntroService
   })
 );
+
+store.registerModule(
+    'page',
+    makeCrudModule({
+        service: pageService
+    })
+);
+
+store.registerModule(
+    'pagecategory',
+    makeCrudModule({
+        service: pageCategoryService
+    })
+);
+
 
 store.registerModule(
     'personalfile',

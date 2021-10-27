@@ -117,7 +117,7 @@ class CourseSelectForm
                         if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
                                 if (!backup) {
-                                    setCheckbox('document', true);
+                                    //setCheckbox('document', true);
                                 }
                                 alert(message);
                                 break;
@@ -754,7 +754,7 @@ class CourseSelectForm
                         if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
                                 if (!backup) {
-                                    setCheckbox('document', true);
+                                    //setCheckbox('document', true);
                                 }
                                 alert(message);
                                 break;

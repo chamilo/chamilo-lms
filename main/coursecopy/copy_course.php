@@ -44,12 +44,26 @@ if (Security::check_token('post') && (
 ) {
     // Clear token
     Security::clear_token();
-    if ($action === 'course_select_form') {
+    /*if ($action === 'course_select_form') {
         $course = CourseSelectForm::get_posted_course('copy_course');
     } else {
         $cb = new CourseBuilder();
         $course = $cb->build();
+    }*/
+    if ($action === 'course_select_form') {
+        $cb = new CourseBuilder('partial');
+        $course = $cb->build(0, null, false, array_keys($_POST['resource']), $_POST['resource']);
+        $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
+    } else {
+        $cb = new CourseBuilder('complete');
+        $course = $cb->build();
     }
+
+    // It builds the documents and items related to the LP
+    $cb->exportToCourseBuildFormat();
+    // It builds documents added in text (quizzes, assignments)
+    $cb->restoreDocumentsFromList();
+
     $cr = new CourseRestorer($course);
     $cr->set_file_option($_POST['same_file_name_option']);
     $cr->restore($_POST['destination_course']);

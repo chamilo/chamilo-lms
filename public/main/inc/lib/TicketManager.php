@@ -561,7 +561,6 @@ class TicketManager
                 }
             }
 
-
             if (!empty($personalEmail)) {
                 api_mail_html(
                     get_lang('Virtual support'),

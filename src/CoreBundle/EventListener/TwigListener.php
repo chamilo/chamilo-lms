@@ -42,7 +42,6 @@ class TwigListener
     {
         $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
-
         $userIsAllowedInProject = false;
 
         $data = null;
@@ -92,6 +91,7 @@ class TwigListener
         $this->twig->addGlobal('from_vue', $request->request->get('from_vue') ? 1 : 0);
         $this->twig->addGlobal('is_authenticated', json_encode($isAuth));
         $this->twig->addGlobal('user_json', $data ?? json_encode([]));
+        $this->twig->addGlobal('access_url_id', $request->getSession()->get('access_url_id'));
         $this->twig->addGlobal('config_json', json_encode($config));
         $this->twig->addGlobal('languages_json', json_encode($languages));
     }

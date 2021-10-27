@@ -6,6 +6,7 @@ parameters:
     secret: '%env(APP_SECRET)%'
     locale: '%env(APP_LOCALE)%'
     installed: '%env(APP_INSTALLED)%'
+    multiple_access_url: '%env(APP_MULTIPLE_ACCESS_URL)%'
     container.dumper.inline_factories: true
     twig:
         form:

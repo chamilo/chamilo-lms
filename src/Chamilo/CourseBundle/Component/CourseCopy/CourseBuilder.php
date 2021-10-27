@@ -1572,7 +1572,6 @@ class CourseBuilder
      */
     public function exportToCourseBuildFormat()
     {
-
         if (empty($this->itemListToAdd)) {
             return false;
         }

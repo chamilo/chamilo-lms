@@ -4982,8 +4982,7 @@ class learnpath
     }
 
     /**
-     * Update the last progress only in case
-     *
+     * Update the last progress only in case.
      */
     public function updateLpProgress()
     {
@@ -5023,7 +5022,6 @@ class learnpath
                     ->hookLearningPathEnd();
             }
         }
-
     }
 
     /**

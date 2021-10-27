@@ -2254,7 +2254,6 @@ HOTSPOT;
             $status
         );
 
-
         if (!empty($result)) {
             foreach ($result as $attempt) {
                 $data = [
@@ -2412,7 +2411,6 @@ HOTSPOT;
                 }
                 $session_id_and = " AND te.session_id IN(".implode(',', $sessionIds).")";
                 $sessionCondition = " AND ttte.session_id IN(".implode(',', $sessionIds).")";
-
             } else {
                 return false;
             }

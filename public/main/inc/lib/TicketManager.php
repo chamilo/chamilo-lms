@@ -331,14 +331,12 @@ class TicketManager
             }
         }
 
-        if (!empty($category_id)) {
-            if (empty($assignedUserId)) {
-                $usersInCategory = self::getUsersInCategory($category_id);
-                if (!empty($usersInCategory) && count($usersInCategory) > 0) {
-                    $userCategoryInfo = $usersInCategory[0];
-                    if (isset($userCategoryInfo['user_id'])) {
-                        $assignedUserId = $userCategoryInfo['user_id'];
-                    }
+        if (empty($assignedUserId)) {
+            $usersInCategory = self::getUsersInCategory($category_id);
+            if (!empty($usersInCategory) && count($usersInCategory) > 0) {
+                $userCategoryInfo = $usersInCategory[0];
+                if (isset($userCategoryInfo['user_id'])) {
+                    $assignedUserId = $userCategoryInfo['user_id'];
                 }
             }
         }
@@ -489,81 +487,80 @@ class TicketManager
                 );
             }
 
-            if (empty($category_id)) {
-                if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
-                    $warningSubject = sprintf(
-                        get_lang('Ticket %s createdWithNoCategory'),
-                        $ticket_code
-                    );
-                    Display::addFlash(Display::return_message($warningSubject));
+            if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
+                $warningSubject = sprintf(
+                    get_lang('Ticket %s createdWithNoCategory'),
+                    $ticket_code
+                );
+                Display::addFlash(Display::return_message($warningSubject));
 
-                    $admins = UserManager::get_all_administrators();
-                    foreach ($admins as $userId => $data) {
-                        if ($data['active']) {
-                            MessageManager::send_message_simple(
-                                $userId,
-                                $warningSubject,
-                                $helpDeskMessage
-                            );
-                        }
-                    }
-                }
-            } else {
-                $categoryInfo = self::getCategory($category_id);
-                $usersInCategory = self::getUsersInCategory($category_id);
-                $message = '<h2>'.get_lang('Ticket info').'</h2><br />'.$helpDeskMessage;
-
-                if ('true' === api_get_setting('ticket_warn_admin_no_user_in_category')) {
-                    $usersInCategory = self::getUsersInCategory($category_id);
-                    if (empty($usersInCategory)) {
-                        $subject = sprintf(
-                            get_lang('Warning: No one has been assigned to category %s'),
-                            $categoryInfo['name']
+                $admins = UserManager::get_all_administrators();
+                foreach ($admins as $userId => $data) {
+                    if ($data['active']) {
+                        MessageManager::send_message_simple(
+                            $userId,
+                            $warningSubject,
+                            $helpDeskMessage
                         );
-
-                        if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
-                            Display::addFlash(Display::return_message(
-                                sprintf(
-                                    get_lang(
-                                        'A notification was sent to the administrators to report this category has no user assigned'
-                                    ),
-                                    $categoryInfo['name']
-                                ),
-                                null,
-                                false
-                            ));
-
-                            $admins = UserManager::get_all_administrators();
-                            foreach ($admins as $userId => $data) {
-                                if ($data['active']) {
-                                    self::sendNotification(
-                                        $ticketId,
-                                        $subject,
-                                        $message,
-                                        $userId
-                                    );
-                                }
-                            }
-                        } else {
-                            Display::addFlash(Display::return_message($subject));
-                        }
-                    }
-                }
-
-                // Send notification to all users
-                if (!empty($usersInCategory)) {
-                    foreach ($usersInCategory as $data) {
-                        if ($data['user_id']) {
-                            self::sendNotification(
-                                $ticketId,
-                                $subject,
-                                $message,
-                                $data['user_id']
-                            );
-                        }
                     }
                 }
             }
+
+            $categoryInfo = self::getCategory($category_id);
+            $usersInCategory = self::getUsersInCategory($category_id);
+            $message = '<h2>'.get_lang('Ticket info').'</h2><br />'.$helpDeskMessage;
+
+            if ('true' === api_get_setting('ticket_warn_admin_no_user_in_category')) {
+                $usersInCategory = self::getUsersInCategory($category_id);
+                if (empty($usersInCategory)) {
+                    $subject = sprintf(
+                        get_lang('Warning: No one has been assigned to category %s'),
+                        $categoryInfo['name']
+                    );
+
+                    if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
+                        Display::addFlash(Display::return_message(
+                            sprintf(
+                                get_lang(
+                                    'A notification was sent to the administrators to report this category has no user assigned'
+                                ),
+                                $categoryInfo['name']
+                            ),
+                            null,
+                            false
+                        ));
+
+                        $admins = UserManager::get_all_administrators();
+                        foreach ($admins as $userId => $data) {
+                            if ($data['active']) {
+                                self::sendNotification(
+                                    $ticketId,
+                                    $subject,
+                                    $message,
+                                    $userId
+                                );
+                            }
+                        }
+                    } else {
+                        Display::addFlash(Display::return_message($subject));
+                    }
+                }
+            }
+
+            // Send notification to all users
+            if (!empty($usersInCategory)) {
+                foreach ($usersInCategory as $data) {
+                    if ($data['user_id']) {
+                        self::sendNotification(
+                            $ticketId,
+                            $subject,
+                            $message,
+                            $data['user_id']
+                        );
+                    }
+                }
+            }
+
 
             if (!empty($personalEmail)) {
                 api_mail_html(

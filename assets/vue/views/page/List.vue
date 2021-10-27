@@ -10,10 +10,10 @@
           <v-icon icon="mdi-file-plus"/>
           {{ $t('New page') }}
         </Button>
-        <Button label="{{ $t('Delete selected') }}" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length">
-          <v-icon icon="mdi-delete"/>
-          {{ $t('Delete selected') }}
-        </Button>
+<!--        <Button label="{{ $t('Delete selected') }}" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length">-->
+<!--          <v-icon icon="mdi-delete"/>-->
+<!--          {{ $t('Delete selected') }}-->
+<!--        </Button>-->
       </div>
     </div>
   </div>
@@ -53,6 +53,7 @@
 
     <Column field="locale" :header="$t('Locale')" />
     <Column field="category.title" :header="$t('Category')" />
+    <Column field="enabled" :header="$t('Enabled')" />
 
     <Column :exportable="false">
       <template #body="slotProps">

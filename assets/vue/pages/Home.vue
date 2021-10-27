@@ -56,7 +56,7 @@ export default {
       console.log(error);
     });
 
-    axios.get(ENTRYPOINT + 'pages.json?category.title=home').then(response => {
+    axios.get(ENTRYPOINT + 'pages.json?category.title=home&enabled=1').then(response => {
       if (Array.isArray(response.data)) {
         state.pages = response.data;
       }

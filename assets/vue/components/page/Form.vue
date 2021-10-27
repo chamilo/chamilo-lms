@@ -11,18 +11,17 @@
     />
 
     <div class="q-gutter-sm">
-      <q-checkbox v-model="item.enabled" :label="$t('Enabled')" />
+      <q-checkbox v-model="item.enabled" :label="$t('Enabled')"/>
     </div>
 
-    <q-select v-model="item.category" :options="categories" :label="$t('Category')"
-
-              option-value="id"
-              option-label="title"
-
+    <q-select
+        v-model="item.category"
+        :options="categories" :label="$t('Category')"
+        option-value="id"
+        option-label="title"
     />
 
-    <q-select v-model="item.locale" :options="locales" :label="$t('Locale')" />
-
+    <q-select v-model="item.locale" :options="locales" :label="$t('Locale')"/>
 
     <TinyEditor
         id="item_content"
@@ -58,11 +57,8 @@ import {computed, ref} from "vue";
 import {mapGetters, useStore} from "vuex";
 import isEmpty from 'lodash/isEmpty';
 
-import Dropdown from "primevue/dropdown";
-
 export default {
   name: 'PageForm',
-  components:{Dropdown},
   setup () {
     let locales = ref([]);
     const store = useStore();
@@ -98,7 +94,7 @@ export default {
       title: null,
       content: null,
       locale: null,
-      enabled: null,
+      enabled: true,
     };
   },
   computed: {
@@ -110,8 +106,6 @@ export default {
       if (this.values) {
         this.values.creator = this.currentUser['@id'];
         this.values.url = '/api/access_urls/' + window.access_url_id;
-
-
         if (!isEmpty(this.values.category)) {
           this.values.category = this.values.category['@id'];
         }
@@ -137,6 +131,9 @@ export default {
   validations: {
     item: {
       title: {
+        required,
+      },
+      enabled: {
         required,
       },
       content: {

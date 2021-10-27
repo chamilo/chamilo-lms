@@ -32,7 +32,9 @@ export default {
   },
   data() {
     return {
-      item: {}
+      item: {
+        enabled: true
+      }
     };
   },
   computed: {

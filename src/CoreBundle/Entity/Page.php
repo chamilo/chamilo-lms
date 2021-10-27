@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_USER')",
+            //'security' => "is_granted('ROLE_USER')",
         ],
         'post' => [
             'security' => "is_granted('ROLE_ADMIN')",
@@ -54,6 +54,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: [
     'locale' => 'exact',
     'url' => 'exact',
+    'enabled' => 'exact',
     'category' => 'exact',
     'category.title' => 'partial',
 ])]

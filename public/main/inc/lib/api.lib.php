@@ -5048,10 +5048,11 @@ function api_request_uri()
     return $uri;
 }
 
-/** Gets the current access_url id of the Chamilo Platform.
+/**
+ * Gets the current access_url id of the Chamilo Platform.
+ * @return int access_url_id of the current Chamilo Installation
  * @author Julio Montoya <gugli100@gmail.com>
  *
- * @return int access_url_id of the current Chamilo Installation
  */
 function api_get_current_access_url_id()
 {

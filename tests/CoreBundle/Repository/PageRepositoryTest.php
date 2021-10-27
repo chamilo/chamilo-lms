@@ -248,8 +248,8 @@ class PageRepositoryTest extends AbstractApiTest
         $this->assertJsonContains([
             '@id' => $iri,
             '@type' => 'Page',
-            'title' => 'english',
-            'content' => 'english content',
+            'title' => 'page1',
+            'content' => 'page1 content',
             '@context' => '/api/contexts/Page',
         ]);
     }

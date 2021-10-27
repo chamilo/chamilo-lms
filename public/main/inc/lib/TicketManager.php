@@ -2446,20 +2446,33 @@ class TicketManager
         return false;
     }
 
-    /**
-     * @param int $projectId
-     *
-     * @todo load from database instead of configuration.php setting
-     *
-     * @return array
-     */
-    public static function getAllowedRolesFromProject($projectId)
+    public static function getAllowedRolesFromProject(int $projectId): array
     {
-        $options = api_get_configuration_value('ticket_project_user_roles');
-        if ($options) {
-            if (isset($options['permissions'][$projectId])) {
-                return $options['permissions'][$projectId];
+        if ('' === $options = Container::getSettingsManager()->getSetting('ticket.ticket_project_user_roles')) {
+            return [];
+        }
+
+        if ([] === $permissionsLines = explode(PHP_EOL, $options)) {
+            return [];
+        }
+
+        foreach ($permissionsLines as $permissionsLine) {
+            [$id, $rolesLine] = explode(':', $permissionsLine, 2);
+
+            if (empty($rolesLine)) {
+                continue;
             }
+
+            $roles = explode(',', $rolesLine);
+
+            if ($projectId !== (int) $id) {
+                continue;
+            }
+
+            return array_map(
+                fn($role) => (int) $role,
+                $roles
+            );
         }
 
         return [];

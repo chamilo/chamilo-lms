@@ -510,9 +510,7 @@ if ($isLimitReached) {
     );
 }
 
-$showHideAttemptsTableOnStartPage = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
-$hideAttemptsTable = ($showHideAttemptsTableOnStartPage && 1 == $objExercise->hideAttemptsTableOnStartPage);
-if (!$hideAttemptsTable) {
+if (0 == $objExercise->getHideAttemptsTableOnStartPage()) {
     $html .= Display::tag(
         'div',
         $table_content,

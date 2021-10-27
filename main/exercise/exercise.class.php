@@ -1610,7 +1610,6 @@ class Exercise
         }
         $expired_time = (int) $this->expired_time;
         $showHideConfiguration = api_get_configuration_value('quiz_hide_question_number');
-        $showHideAttemptsTableOnStartPage = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
 
         // Exercise already exists
         if ($id) {
@@ -1688,9 +1687,7 @@ class Exercise
                 $paramsExtra['hide_question_number'] = $this->hideQuestionNumber;
             }
 
-            if ($showHideAttemptsTableOnStartPage) {
-                $paramsExtra['hide_attempts_table'] = $this->hideAttemptsTableOnStartPage;
-            }
+            $paramsExtra['hide_attempts_table'] = $this->getHideAttemptsTableOnStartPage();
 
             $params = array_merge($params, $paramsExtra);
 
@@ -2477,8 +2474,8 @@ class Exercise
                 get_lang('UpdateTitleInLps')
             );
 
-            $showHideAttemptsTableOnStartPage = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
-            if ($showHideAttemptsTableOnStartPage) {
+            $allowHideAttempts = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
+            if ($allowHideAttempts) {
                 $group = [
                     $form->createElement('radio', 'hide_attempts_table', null, get_lang('Yes'), '1'),
                     $form->createElement('radio', 'hide_attempts_table', null, get_lang('No'), '0'),
@@ -2863,10 +2860,7 @@ class Exercise
             $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
         }
 
-        $showHideAttemptsTableOnStartPage = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
-        if ($showHideAttemptsTableOnStartPage) {
-            $this->setHideAttemptsTableOnStartPage($form->getSubmitValue('hide_attempts_table'));
-        }
+        $this->setHideAttemptsTableOnStartPage($form->getSubmitValue('hide_attempts_table'));
 
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 

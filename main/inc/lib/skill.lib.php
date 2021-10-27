@@ -2869,7 +2869,7 @@ class Skill extends Model
     {
         $skills = (array) $form->getSubmitValue('skills');
         $courseId = (int) $form->getSubmitValue('course_id');
-        $sessionId = $form->getSubmitValue('session_id');
+        $sessionId = (int) $form->getSubmitValue('session_id');
 
         return self::saveSkillsToCourse($skills, $courseId, $sessionId);
     }
@@ -2878,8 +2878,6 @@ class Skill extends Model
      * @param array $skills
      * @param int   $courseId
      * @param int   $sessionId
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return bool
      */

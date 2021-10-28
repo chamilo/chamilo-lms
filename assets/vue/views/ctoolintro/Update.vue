@@ -18,10 +18,8 @@ import ToolIntroForm from '../../components/ctoolintro/Form.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import UpdateMixin from '../../mixins/UpdateMixin';
-import useNotification from "../../components/Notification";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
-import {watch} from "vue";
 import toInteger from "lodash/toInteger";
 
 const servicePrefix = 'ctoolintro';
@@ -36,9 +34,6 @@ export default {
     ToolIntroForm
   },
   setup() {
-    const {showNotification} = useNotification();
-    const { t } = useI18n();
-    const router = useRouter();
     const route = useRoute();
     const store = useStore();
     const cid = toInteger(route.query.cid);

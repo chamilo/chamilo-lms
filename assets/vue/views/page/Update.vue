@@ -1,8 +1,6 @@
 <template>
   <Toolbar :handle-submit="onSendForm" :handle-reset="resetForm"></Toolbar>
   <PageForm ref="updateForm" :values="item" :errors="violations" />
-
-
   <Loading :visible="isLoading" />
 </template>
 
@@ -29,7 +27,6 @@ export default {
     Toolbar,
     PageForm
   },
-
   computed: {
     ...mapFields('page', {
       deleteLoading: 'isLoading',

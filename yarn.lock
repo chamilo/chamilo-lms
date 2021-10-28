@@ -6613,7 +6613,7 @@ __metadata:
     eslint-plugin-vue: 7.18.0
     file-loader: ^6.2.0
     filemanager-webpack-plugin: ^5.0.0
-    flag-icon-css: ^3.5.0
+    flag-icon-css: ^4.1.3
     free-jqgrid: "https://github.com/chamilo/jqGrid.git#bs4"
     full-icu: ^1.4.0
     glob-all: ^3.2.1
@@ -10065,10 +10065,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flag-icon-css@npm:^3.5.0":
-  version: 3.5.0
-  resolution: "flag-icon-css@npm:3.5.0"
-  checksum: 6f650360dedc3668adc2012e345904e8ae9aa7fd9ead459a325fa82fb8645beab25fd04f7051b7139e77192a0e81eec67c17882fda38292fb23492a600516fd5
+"flag-icon-css@npm:^4.1.3":
+  version: 4.1.3
+  resolution: "flag-icon-css@npm:4.1.3"
+  checksum: 40797a44ed60d104cbc8c08b68737f9e4692ac457d897bb648232be02d9d2c92b6677ff7762a9fdb5b45b80be6df67d36a19311561786c137ee25fee5e47f825
   languageName: node
   linkType: hard
 

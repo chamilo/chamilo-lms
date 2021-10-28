@@ -114,7 +114,7 @@ class Page
 
     /**
      * @ORM\ManyToOne(targetEntity="AccessUrl", cascade={"persist"})
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id", onDelete="CASCADE")
      */
     #[Assert\NotNull]
     #[Groups(['page:read', 'page:write'])]

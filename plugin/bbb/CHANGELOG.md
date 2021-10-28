@@ -1,3 +1,7 @@
+Version 2.10 - 2021-10
+----------------------
+* Add support for multiple recording formats
+
 Version 2.9 - 2021-08
 ---------------------
 * Remove interface option (HTML5/Flash)

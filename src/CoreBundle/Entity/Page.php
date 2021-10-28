@@ -67,7 +67,6 @@ class Page
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    #[Groups(['page:read'])]
     protected ?int $id = null;
 
     /**

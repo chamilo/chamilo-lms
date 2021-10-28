@@ -58,6 +58,13 @@ export default {
         'MessageList',
       ];
 
+      if (!isEmpty(this.$route.name) && this.$route.name.includes('Page')) {
+        items.push({
+          text: this.$t('Pages'),
+          href: '/resources/pages'
+        });
+      }
+
       if (!isEmpty(this.$route.name) && this.$route.name.includes('Message')) {
         items.push({
           text: this.$t('Messages'),
@@ -65,7 +72,8 @@ export default {
           href: '/resources/messages'
         });
       }
-      console.log(this.$route.name);
+
+
       if (list.includes(this.$route.name)) {
         return items;
       }

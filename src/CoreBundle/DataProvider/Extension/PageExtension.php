@@ -53,16 +53,6 @@ final class PageExtension implements QueryCollectionExtensionInterface //, Query
             ->setParameter('url', $urlId)
         ;
 
-        $locale = $request->query->get('locale');
-
-        // By default, load the locale elements.
-        if (empty($locale)) {
-            $qb
-                ->andWhere("$alias.locale = :locale")
-                ->setParameter('locale', $request->getLocale())
-            ;
-        }
-
         if (!$this->security->isGranted('ROLE_ADMIN')) {
             $qb->andWhere("$alias.enabled = 1");
         }

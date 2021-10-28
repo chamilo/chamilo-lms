@@ -33,7 +33,19 @@
 
           <div class="md:row-start-1 md:col-start-1 md:col-end-1">
             <div class="flex justify-center lg:mt-16">
-              <img src="/img/document/images/mr_chamilo/svg/teaching.svg" />
+
+              <div
+                  v-for="page in pages"
+              >
+                <v-card
+                    elevation="2"
+                >
+                  <p class="text-h5 text--primary">
+                    {{ page.title }}
+                  </p>
+                  <p v-html="page.content"/>
+                </v-card>
+              </div>
             </div>
           </div>
         </div>
@@ -45,8 +57,8 @@
 <script>
 import Login from '../components/Login';
 import {reactive, toRefs} from 'vue'
-import axios from "axios";
-import {ENTRYPOINT} from "../config/entrypoint";
+import {useStore} from "vuex";
+import {useI18n} from "vue-i18n";
 
 export default {
   name: "Index",
@@ -54,17 +66,22 @@ export default {
     Login
   },
   setup() {
+    const store = useStore();
+    const { locale } = useI18n();
     const state = reactive({
       announcements: [],
       pages: [],
     });
 
-    axios.get(ENTRYPOINT + 'pages.json?category.title=index&enabled=1').then(response => {
-      if (Array.isArray(response.data)) {
-        state.pages = response.data;
-      }
-    }).catch(function (error) {
-      console.log(error);
+    let params = {
+      'category.title' : 'index',
+      'enabled.title' : '1',
+      'locale':  locale.value
+    }
+
+    const pages = store.dispatch('page/findAll', params);
+    pages.then((response) => {
+      state.pages = response;
     });
 
     return toRefs(state);

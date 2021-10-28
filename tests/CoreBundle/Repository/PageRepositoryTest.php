@@ -23,6 +23,7 @@ class PageRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $pageRepo = self::getContainer()->get(PageRepository::class);
+        $defaultCount = $pageRepo->count([]);
 
         $user = $this->getAdmin();
         $url = $this->getAccessUrl();
@@ -60,7 +61,8 @@ class PageRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame(0, $page->getPosition());
-        $this->assertSame(1, $pageRepo->count([]));
+        // 2 pages are already created during installation.
+        $this->assertSame($defaultCount + 1, $pageRepo->count([]));
 
         $category2 = (new PageCategory())
             ->setCreator($user)
@@ -91,7 +93,7 @@ class PageRepositoryTest extends AbstractApiTest
         $this->assertSame(0, $pageFrench->getPosition());
         $this->assertSame('fr', $pageFrench->getLocale());
         $this->assertSame('lete', $pageFrench->getSlug());
-        $this->assertSame(2, $pageRepo->count([]));
+        $this->assertSame($defaultCount + 2, $pageRepo->count([]));
 
         return $page;
     }
@@ -101,6 +103,8 @@ class PageRepositoryTest extends AbstractApiTest
         $page = $this->testCreate();
         $em = $this->getEntityManager();
         $pageRepo = self::getContainer()->get(PageRepository::class);
+
+        $defaultCount = $pageRepo->count([]);
 
         /** @var Page $page */
         $page = $pageRepo->find($page->getId());
@@ -121,7 +125,7 @@ class PageRepositoryTest extends AbstractApiTest
         $em->persist($anotherPage);
         $em->flush();
 
-        $this->assertSame(3, $pageRepo->count([]));
+        $this->assertSame($defaultCount + 1, $pageRepo->count([]));
         $this->assertSame(1, $anotherPage->getPosition());
         $this->assertNotNull($anotherPage->getCategory());
     }
@@ -130,22 +134,22 @@ class PageRepositoryTest extends AbstractApiTest
     {
         $page = $this->testCreate();
         $pageRepo = self::getContainer()->get(PageRepository::class);
-
-        $this->assertSame(2, $pageRepo->count([]));
+        $defaultCount = $pageRepo->count([]);
 
         $page->setLocale('fr');
         $pageRepo->update($page);
 
         $this->assertSame('fr', $page->getLocale());
-        $this->assertSame(2, $pageRepo->count([]));
+        $this->assertSame($defaultCount, $pageRepo->count([]));
     }
 
     public function testDelete(): void
     {
         $page = $this->testCreate();
         $pageRepo = self::getContainer()->get(PageRepository::class);
+        $defaultCount = $pageRepo->count([]);
         $pageRepo->delete($page);
-        $this->assertSame(1, $pageRepo->count([]));
+        $this->assertSame($defaultCount - 1, $pageRepo->count([]));
     }
 
     public function testGetPages(): void
@@ -175,10 +179,10 @@ class PageRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/Page',
             '@id' => '/api/pages',
             '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 2,
+            'hydra:totalItems' => 4,
         ]);
 
-        $this->assertCount(2, $response->toArray()['hydra:member']);
+        $this->assertCount(4, $response->toArray()['hydra:member']);
         $this->assertMatchesResourceCollectionJsonSchema(Page::class);
 
         $response = $this->createClientWithCredentials($token)->request(

@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use Chamilo\CourseBundle\Repository\CSurveyAnswerRepository;
+use Chamilo\CourseBundle\Repository\CSurveyInvitationRepository;
 use Chamilo\CourseBundle\Repository\CSurveyQuestionRepository;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -77,7 +78,7 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $surveyRepo = self::getContainer()->get(CSurveyRepository::class);
         $surveyQuestionRepo = self::getContainer()->get(CSurveyQuestionRepository::class);
         $surveyAnswerRepo = self::getContainer()->get(CSurveyAnswerRepository::class);
-        $surveyInvitationRepo = $em->getRepository(CSurveyInvitation::class);
+        $surveyInvitationRepo = self::getContainer()->get(CSurveyInvitationRepository::class);
         $surveyOptionRepo = $em->getRepository(CSurveyQuestionOption::class);
 
         $course = $this->createCourse('new');
@@ -87,6 +88,8 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $survey = (new CSurvey())
             ->setTitle('survey')
             ->setCode('survey')
+            ->setAvailFrom(new DateTime())
+            ->setAvailTill(new DateTime('now +30 days'))
             ->setParent($course)
             ->setCreator($teacher)
         ;
@@ -167,6 +170,9 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $surveyInvitationRepo->count([]));
         $this->assertSame(1, $surveyOptionRepo->count([]));
         $this->assertSame(1, $courseRepo->count([]));
+
+        $invitations = $surveyInvitationRepo->getUserPendingInvitations($student);
+        $this->assertCount(1, $invitations);
 
         $course = $this->getCourse($course->getId());
         $courseRepo->delete($course);

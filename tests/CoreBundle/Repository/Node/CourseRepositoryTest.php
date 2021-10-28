@@ -132,6 +132,63 @@ class CourseRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $course->getUrls()->count());
     }
 
+    public function testDeleteCourse(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $course = $this->createCourse('Test course');
+
+        $courseRepo->deleteCourse($course);
+
+        $this->assertSame(0, $courseRepo->count([]));
+    }
+
+    public function testGetCoursesByUser(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $student = $this->createUser('student');
+        $course = $this->createCourse('Test course');
+
+        $courses = $courseRepo->getCoursesByUser($student, $this->getAccessUrl());
+        $this->assertCount(0, $courses);
+
+        $course->addUser($student, 0, '', CourseRelUser::STUDENT);
+        $courseRepo->update($course);
+
+        $courses = $courseRepo->getCoursesByUser($student, $this->getAccessUrl());
+        $this->assertCount(1, $courses);
+    }
+
+    public function testGetSubscribedUsers(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $student = $this->createUser('student');
+        $course = $this->createCourse('Test course');
+
+        $qb = $courseRepo->getSubscribedUsers($course);
+        $this->assertCount(0, $qb->getQuery()->getResult());
+
+        $course->addUser($student, 0, '', CourseRelUser::STUDENT);
+        $courseRepo->update($course);
+
+        $qb = $courseRepo->getSubscribedUsers($course);
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $qb = $courseRepo->getSubscribedStudents($course);
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $qb = $courseRepo->getSubscribedCoaches($course);
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $qb = $courseRepo->getSubscribedTeachers($course);
+        $this->assertCount(0, $qb->getQuery()->getResult());
+    }
+
     public function testCourseStudentSubscription(): void
     {
         $client = static::createClient();

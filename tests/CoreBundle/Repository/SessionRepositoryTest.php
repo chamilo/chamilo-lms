@@ -269,6 +269,12 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertFalse($session->hasCourseCoachInCourse($drh, $course));
         $this->assertTrue($session->hasCourseCoachInCourse($courseCoach, $course));
 
+        $coaches = $userRepo->getCoachesForSessionCourse($session, $course);
+        $this->assertCount(1, $coaches);
+
+        $sessions = $userRepo->getSessionAdmins($sessionAdmin);
+        $this->assertCount(1, $sessions);
+
         $this->assertTrue($session->hasStudentInCourse($student, $course));
         $this->assertFalse($session->hasStudentInCourse($sessionAdmin, $course));
 

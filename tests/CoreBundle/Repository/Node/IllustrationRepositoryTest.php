@@ -35,6 +35,11 @@ class IllustrationRepositoryTest extends WebTestCase
             $url
         );
         $this->assertResponseIsSuccessful();
+        $this->assertSame(1, $repo->count([]));
+        $this->assertTrue($repo->hasIllustration($course));
+
+        $repo->deleteIllustration($course);
+        $this->assertSame(0, $repo->count([]));
     }
 
     public function testCreateUserIllustration(): void

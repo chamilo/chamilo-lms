@@ -7,10 +7,12 @@ namespace Chamilo\Tests\CoreBundle\Repository\Node;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class UserRepositoryTest extends AbstractApiTest
 {
@@ -18,10 +20,87 @@ class UserRepositoryTest extends AbstractApiTest
 
     public function testCount(): void
     {
-        self::bootKernel();
         $count = self::getContainer()->get(UserRepository::class)->count([]);
         // Admin + anon (registered in the DataFixture\AccessUrlAdminFixtures.php)
         $this->assertSame(2, $count);
+    }
+
+    public function testLoadUserByIdentifier(): void
+    {
+        $student = $this->createUser('student');
+        $userRepo = self::getContainer()->get(UserRepository::class);
+
+        $user = $userRepo->loadUserByIdentifier($student->getUsername());
+        $this->assertInstanceOf(User::class, $user);
+    }
+
+    public function testUpgradePassword(): void
+    {
+        $student = $this->createUser('student');
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $oldPassword = $student->getPassword();
+        $userRepo->upgradePassword($student, 'password');
+
+        $this->assertTrue($oldPassword !== $student->getPassword());
+    }
+
+    public function testGetRootUser(): void
+    {
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $user = $userRepo->getRootUser();
+        $this->assertInstanceOf(User::class, $user);
+    }
+
+    public function testDeleteUser(): void
+    {
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $student = $this->createUser('student');
+        $defaultCount = $userRepo->count([]);
+        $userRepo->deleteUser($student);
+        $this->assertSame($defaultCount - 1, $userRepo->count([]));
+    }
+
+    public function testFindByUsername(): void
+    {
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $this->expectException(UserNotFoundException::class);
+        $userRepo->findByUsername('no exist');
+    }
+
+    public function testGetCountUsersByUrl(): void
+    {
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $count = $userRepo->getCountUsersByUrl($this->getAccessUrl());
+        $this->assertNotEmpty($count);
+    }
+
+    public function testGetCountTeachersByUrl(): void
+    {
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $count = $userRepo->getCountTeachersByUrl($this->getAccessUrl());
+        $this->assertSame(0, $count);
+
+        $this->createUser('teacher', '', '', 'ROLE_TEACHER');
+
+        $count = $userRepo->getCountTeachersByUrl($this->getAccessUrl());
+        $this->assertSame(1, $count);
+    }
+
+    public function testGetAssignedHrmUserList(): void
+    {
+        $userRepo = self::getContainer()->get(UserRepository::class);
+
+        $student = $this->createUser('student');
+
+        $drh = $this->createUser('drh');
+        $drh->setRoles(['ROLE_RRHH']);
+        $userRepo->update($drh);
+
+        $student->addUserRelUser($drh, UserRelUser::USER_RELATION_TYPE_RRHH);
+        $userRepo->update($student);
+
+        $list = $userRepo->getAssignedHrmUserList($student->getId(), $this->getAccessUrl()->getId());
+        $this->assertCount(1, $list);
     }
 
     public function testCreateUser(): void
@@ -77,7 +156,6 @@ class UserRepositoryTest extends AbstractApiTest
 
     public function testCreateAdmin(): void
     {
-        self::bootKernel();
         $admin = $this->createUser('admin2');
         $userRepo = self::getContainer()->get(UserRepository::class);
 
@@ -155,7 +233,6 @@ class UserRepositoryTest extends AbstractApiTest
         ;
 
         $user->setRoleFromStatus(COURSEMANAGER);
-
         $em->persist($user);
 
         $userRepo->updateUser($user);

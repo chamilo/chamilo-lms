@@ -10,8 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * SkillRelCourse.
- *
  * @ORM\Table(name="skill_rel_course")
  * ORM\Entity // uncomment if api_get_configuration_value('allow_skill_rel_items')
  */
@@ -43,7 +41,7 @@ class SkillRelCourse
     /**
      * @var Session
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="skills", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     protected $session;
 

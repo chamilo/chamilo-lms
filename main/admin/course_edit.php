@@ -328,6 +328,33 @@ if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')
     }
     $form->addLabel('URLs', $urlToString);
 }
+$allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
+if ($allowSkillRelItem) {
+    $skillList = [];
+    $em = Database::getManager();
+    $items = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
+        ['course' => $courseId, 'session' => null]
+    );
+
+    $form->addHidden('course_id', $courseId);
+    $form->addHidden('session_id', 0);
+
+    /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skillRelCourse */
+    foreach ($items as $skillRelCourse) {
+        $skillList[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getName();
+    }
+    $form->addSelectAjax(
+        'skills',
+        get_lang('Skills'),
+        $skillList,
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=search_skills',
+            'multiple' => 'multiple',
+        ]
+    );
+
+    $courseInfo['skills'] = array_keys($skillList);
+}
 
 $htmlHeadXtra[] = '
 <script>
@@ -348,6 +375,10 @@ $form->setDefaults($courseInfo);
 if ($form->validate()) {
     $course = $form->getSubmitValues();
     $visibility = $course['visibility'];
+
+    if ($allowSkillRelItem) {
+        $result = Skill::saveSkillsToCourseFromForm($form);
+    }
 
     global $_configuration;
 

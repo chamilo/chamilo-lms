@@ -72,6 +72,17 @@ ALTER TABLE plugin_bbb_room DROP COLUMN interface;
 ALTER TABLE plugin_bbb_meeting DROP COLUMN interface;
 ```
 
+For version 2.10 (Handles multiple recording formats - Check https://github.com/chamilo/chamilo-lms/issues/3703)
+
+```sql
+CREATE TABLE plugin_bbb_meeting_format (
+	id int unsigned not null PRIMARY KEY AUTO_INCREMENT,
+	meeting_id int unsigned not null,
+	format_type varchar(255) not null,
+	resource_url text not null
+)
+```
+
 ## Improve access tracking in BBB
 You need to configure the cron using the *cron_close_meeting.php* file.
 

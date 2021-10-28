@@ -487,7 +487,7 @@ try {
             $userId = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
             $currentApiKey = $_POST['current_api_key'] ?? '';
 
-            if (empty($userId) || empty($currentApiKey))  {
+            if (empty($userId) || empty($currentApiKey)) {
                 throw new Exception(get_lang('NotAllowed'));
             }
 

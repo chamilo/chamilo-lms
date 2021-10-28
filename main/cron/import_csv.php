@@ -1867,7 +1867,7 @@ class ImportCsv
                     'value' => $row['SkillsetID'],
                 ];
                 $extraFieldValues->save($params);*/
-                $skillSetList[$row['SkillsetID']][] = $skill->getId();                
+                $skillSetList[$row['SkillsetID']][] = $skill->getId();
             }
 
             //$courseRelSkills = [];

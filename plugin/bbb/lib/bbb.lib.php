@@ -1048,7 +1048,7 @@ class bbb
                 }
 
                 if (isset($record['playbackFormat']) && !empty($record['playbackFormat'])) {
-                    $recordLink = array();
+                    $recordLink = [];
                     foreach ($record['playbackFormat'] as $format) {
                         $this->insertMeetingFormat(intval($meetingDB['id']), $format->type->__toString(), $format->url->__toString());
                         $recordLink['record'][] = 1;

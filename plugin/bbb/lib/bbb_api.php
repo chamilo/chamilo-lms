@@ -481,7 +481,7 @@ class BigBlueButtonBN
 			// If we don't get a success code or messageKey, find out why:
 			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
 				$result = array(
-					'returncode' => $xml->returncode->__toString(),
+                    'returncode' => $xml->returncode->__toString(),
 					'messageKey' => $xml->messageKey->__toString(),
 					'message' => $xml->message->__toString()
 				);
@@ -494,7 +494,7 @@ class BigBlueButtonBN
 					'messageKey' => $xml->messageKey->__toString(),
 					'message' => $xml->message->__toString()
 				);
-				$formats = array();
+				$formats = [];
 
 				foreach ($xml->recordings->recording as $r) {
 					foreach ($r->playback->format as $format) {
@@ -565,7 +565,7 @@ class BigBlueButtonBN
 				);
 				$result['records'] = [];
 				if (!empty($xml->recordings->recording)) {
-					$formats = array();
+					$formats = [];
 
 					foreach ($xml->recordings->recording as $r) {
 						foreach ($r->playback->format as $format) {

@@ -11,6 +11,7 @@ use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
+use Chamilo\CourseBundle\Entity\CAttendanceSheetLog;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -38,7 +39,7 @@ class CAttendanceRepositoryTest extends AbstractApiTest
             ->setActive(1)
             ->setAttendanceQualifyMax(100)
             ->setAttendanceQualifyTitle('title')
-            ->setAttendanceWeight(100)
+            ->setAttendanceWeight(100.0)
             ->setParent($course)
             ->setCreator($teacher)
         ;
@@ -48,6 +49,12 @@ class CAttendanceRepositoryTest extends AbstractApiTest
 
         $this->assertSame('item', (string) $item);
         $this->assertSame($item->getResourceIdentifier(), $item->getIid());
+        $this->assertSame(1, $item->getActive());
+        $this->assertSame('desc', $item->getDescription());
+        $this->assertSame(100, $item->getAttendanceQualifyMax());
+        $this->assertSame(100.0, $item->getAttendanceWeight());
+        $this->assertSame(1, $item->getLocked());
+
         $this->assertSame(1, $repo->count([]));
         $courseRepo->delete($course);
         $this->assertSame(0, $repo->count([]));
@@ -95,6 +102,16 @@ class CAttendanceRepositoryTest extends AbstractApiTest
             ->setPresence(true)
         ;
         $em->persist($sheet);
+
+        $log = (new CAttendanceSheetLog())
+            ->setUser($student)
+            ->setAttendance($attendance)
+            ->setCalendarDateValue(new DateTime())
+            ->setLasteditDate(new DateTime())
+            ->setLasteditType('last')
+        ;
+        $em->persist($log);
+
         $em->flush();
         $em->clear();
 

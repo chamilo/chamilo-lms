@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(
@@ -30,6 +31,7 @@ class CAttendanceSheet
     /**
      * @ORM\Column(name="presence", type="boolean", nullable=false)
      */
+    #[Assert\NotNull]
     protected bool $presence;
 
     /**

@@ -139,7 +139,7 @@ class PageCategory
         return $this->pages;
     }
 
-    public function setPages($pages): self
+    public function setPages(Collection $pages): self
     {
         $this->pages = $pages;
 

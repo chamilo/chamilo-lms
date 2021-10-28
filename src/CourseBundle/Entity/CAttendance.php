@@ -56,6 +56,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="attendance_qualify_max", type="integer", nullable=false)
      */
+    #[Assert\NotNull]
     protected int $attendanceQualifyMax;
 
     /**
@@ -67,6 +68,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
+    #[Assert\NotNull]
     protected int $locked;
 
     /**

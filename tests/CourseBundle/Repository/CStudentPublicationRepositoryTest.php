@@ -22,6 +22,7 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -47,6 +48,7 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
             ->setFiletype('folder')
             ->setWeight(100)
             ->setCreator($teacher)
+            ->addCourseLink($course)
         ;
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);
@@ -54,6 +56,15 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
 
         $this->assertSame('publi', (string) $item);
         $this->assertSame(1, $repo->count([]));
+
+        $count = $repo->countUserPublications($teacher, $course);
+        $this->assertSame(1, $count);
+
+        $count = $repo->countCoursePublications($course);
+        $this->assertSame(1, $count);
+
+        $courseRepo->delete($course);
+        $this->assertSame(0, $repo->count([]));
     }
 
     public function testCreateWithPublicationRelUser(): void

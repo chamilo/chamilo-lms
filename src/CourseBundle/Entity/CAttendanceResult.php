@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(
@@ -41,6 +42,7 @@ class CAttendanceResult
     /**
      * @ORM\Column(name="score", type="integer", nullable=false)
      */
+    #[Assert\NotNull]
     protected int $score;
 
     public function getUser(): User

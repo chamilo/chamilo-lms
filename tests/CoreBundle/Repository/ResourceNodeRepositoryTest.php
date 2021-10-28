@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 class ResourceNodeRepositoryTest extends AbstractApiTest
@@ -75,6 +76,8 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $repoType = $em->getRepository(ResourceType::class);
+        $repoComment = $em->getRepository(ResourceComment::class);
+
         $user = $this->createUser('julio');
 
         $type = $repoType->findOneBy(['name' => 'illustrations']);
@@ -101,6 +104,27 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $resourceNode->addComment($comment);
         $em->flush();
 
+        $this->assertSame(0, $comment->getChildren()->count());
+
+        $comment2 = (new ResourceComment())
+            ->setContent('content2')
+            ->setAuthor($user)
+            ->setResourceNode($resourceNode)
+        ;
+        $collection = new ArrayCollection();
+        $collection->add($comment2);
+        $comment->setChildren($collection);
+
+        $em->persist($comment2);
+        $em->persist($comment);
+        $em->flush();
+
+        /** @var ResourceComment $comment */
+        $comment = $repoComment->find($comment->getId());
+
+        $this->assertSame(1, $comment->getChildren()->count());
+        $this->assertSame('content', $comment->getContent());
+        $this->assertNotNull($comment->getId());
         $this->assertNotNull($comment->getResourceNode());
         $this->assertSame(1, $resourceNode->getComments()->count());
     }

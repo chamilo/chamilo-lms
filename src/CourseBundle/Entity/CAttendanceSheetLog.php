@@ -9,10 +9,9 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CAttendanceSheetLog.
- *
  * @ORM\Table(
  *     name="c_attendance_sheet_log",
  *     indexes={
@@ -44,11 +43,13 @@ class CAttendanceSheetLog
     /**
      * @ORM\Column(name="lastedit_date", type="datetime", nullable=false)
      */
+    #[Assert\NotNull]
     protected DateTime $lasteditDate;
 
     /**
      * @ORM\Column(name="lastedit_type", type="string", length=200, nullable=false)
      */
+    #[Assert\NotNull]
     protected string $lasteditType;
 
     /**

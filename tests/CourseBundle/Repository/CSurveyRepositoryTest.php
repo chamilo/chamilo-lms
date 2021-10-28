@@ -27,6 +27,7 @@ class CSurveyRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $surveyRepo = self::getContainer()->get(CSurveyRepository::class);
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -51,6 +52,7 @@ class CSurveyRepositoryTest extends AbstractApiTest
             ->setLang('lang')
             ->setParent($course)
             ->setCreator($teacher)
+            ->addCourseLink($course)
         ;
 
         $this->assertHasNoEntityViolations($survey);
@@ -59,6 +61,12 @@ class CSurveyRepositoryTest extends AbstractApiTest
 
         $this->assertSame('survey', (string) $survey);
         $this->assertSame(1, $surveyRepo->count([]));
+
+        $qb = $surveyRepo->findAllByCourse($course);
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $courseRepo->delete($course);
+        $this->assertSame(0, $surveyRepo->count([]));
     }
 
     public function testCreateWithQuestions(): void

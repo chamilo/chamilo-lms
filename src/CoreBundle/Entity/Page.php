@@ -67,7 +67,7 @@ class Page
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="title", type="string", length=255)
@@ -141,7 +141,7 @@ class Page
         $this->enabled = false;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

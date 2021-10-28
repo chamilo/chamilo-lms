@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class PageRepositoryTest extends AbstractApiTest
 {
@@ -51,6 +52,11 @@ class PageRepositoryTest extends AbstractApiTest
         ;
         $this->assertHasNoEntityViolations($page);
         $em->persist($page);
+
+        $collection = new ArrayCollection();
+        $collection->add($page);
+        $category->setPages($collection);
+        $em->persist($category);
         $em->flush();
 
         $this->assertSame(0, $page->getPosition());

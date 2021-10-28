@@ -483,6 +483,17 @@ try {
             $data = $restApi->updateUserFromUserName($_POST);
             $restResponse->setData([$data]);
             break;
+        case Rest::UPDATE_USER_APIKEY:
+            $userId = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
+            $currentApiKey = $_POST['current_api_key'] ?? '';
+
+            if (empty($userId) || empty($currentApiKey))  {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $data = $restApi->updateUserApiKey($userId, $currentApiKey);
+            $restResponse->setData($data);
+            break;
         case Rest::DELETE_USER:
             $result = UserManager::delete_user($_REQUEST['user_id']);
             $restResponse->setData(['status' => $result]);

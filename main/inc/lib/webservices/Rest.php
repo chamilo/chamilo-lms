@@ -89,6 +89,7 @@ class Rest extends WebService
     const SAVE_USER_GET_APIKEY = 'save_user_get_apikey';
     const SAVE_USER_JSON = 'save_user_json';
     const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
+    const UPDATE_USER_APIKEY = 'update_user_apikey';
     const DELETE_USER = 'delete_user';
 
     const GET_COURSES = 'get_courses';
@@ -1626,6 +1627,28 @@ class Rest extends WebService
 
         return [
             'id' => $userId,
+            'api_key' => current($apiKey),
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateUserApiKey(int $userId, string $oldApiKey): array
+    {
+        if (false === $currentApiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME)) {
+            throw new Exception(get_lang('NotAllowed'));
+        }
+
+        if (current($currentApiKeys) !== $oldApiKey) {
+            throw new Exception(get_lang('NotAllowed'));
+        }
+
+        UserManager::update_api_key($userId, self::SERVICE_NAME);
+
+        $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return [
             'api_key' => current($apiKey),
         ];
     }

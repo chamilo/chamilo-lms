@@ -11,10 +11,8 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -30,25 +28,6 @@ class CourseRepository extends ResourceRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Course::class);
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getTools(Course $course, Session $session = null)
-    {
-        $orWhere = Criteria::expr()->eq('sessionId', 0);
-
-        if (null !== $session) {
-            $orWhere = Criteria::expr()->in('sessionId', [0, $session->getId()]);
-        }
-
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->isNull('sessionId'))
-            ->orWhere($orWhere)
-        ;
-
-        return $course->getTools()->matching($criteria);
     }
 
     public function deleteCourse(Course $course): void
@@ -190,44 +169,5 @@ class CourseRepository extends ResourceRepository
         ;
 
         return $queryBuilder;
-    }
-
-    /**
-     * @return Course[]
-     */
-    public function getCoursesWithNoSession(int $urlId)
-    {
-        $queryBuilder = $this->createQueryBuilder('c');
-        $queryBuilder = $queryBuilder
-            ->select('c')
-            ->leftJoin('c.urls', 'u')
-            ->leftJoin('c.sessions', 's')
-            /*->leftJoin(
-                'ChamiloCoreBundle:SessionRelCourse',
-                'sc',
-                Join::WITH,
-                'c != sc.course'
-            )->leftJoin(
-                'ChamiloCoreBundle:AccessUrlRelCourse',
-                'ac',
-                Join::WITH,
-                'c = ac.course'
-            )*/
-            ->where($queryBuilder->expr()->isNull('s'))
-            //->where($queryBuilder->expr()->eq('s', 0))
-            ->where($queryBuilder->expr()->eq('u.url', $urlId))
-            ->getQuery()
-        ;
-
-        $courses = $queryBuilder->getResult();
-        $courseList = [];
-        /** @var Course $course */
-        foreach ($courses as $course) {
-            if (empty(0 === $course->getSessions()->count())) {
-                $courseList[] = $course;
-            }
-        }
-
-        return $courseList;
     }
 }

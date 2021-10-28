@@ -13,8 +13,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurveyInvitation.
- *
  * @ORM\Table(
  *     name="c_survey_invitation",
  *     indexes={

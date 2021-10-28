@@ -44,10 +44,30 @@
 
 <script>
 import Login from '../components/Login';
+import {reactive, toRefs} from 'vue'
+import axios from "axios";
+import {ENTRYPOINT} from "../config/entrypoint";
+
 export default {
+  name: "Index",
   components: {
     Login
   },
-  name: "Index"
+  setup() {
+    const state = reactive({
+      announcements: [],
+      pages: [],
+    });
+
+    axios.get(ENTRYPOINT + 'pages.json?category.title=index&enabled=1').then(response => {
+      if (Array.isArray(response.data)) {
+        state.pages = response.data;
+      }
+    }).catch(function (error) {
+      console.log(error);
+    });
+
+    return toRefs(state);
+  }
 }
 </script>

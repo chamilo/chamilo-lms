@@ -25,8 +25,12 @@
               {{ page.title }}
             </p>
             <p v-html="page.content"/>
-
           </v-card-text>
+
+          <v-card-actions v-if="isAdmin">
+            <q-btn flat label="Edit" color="primary" v-close-popup @click="handleClick(page)"/>
+          </v-card-actions>
+
         </v-card>
       </div>
     </div>
@@ -39,13 +43,22 @@
 import axios from "axios";
 import {reactive, toRefs} from 'vue'
 import {ENTRYPOINT} from "../config/entrypoint";
+import {mapGetters} from "vuex";
+import {useRouter} from "vue-router";
 
 export default {
   name: "Home",
   setup() {
+    const router = useRouter();
     const state = reactive({
       announcements: [],
       pages: [],
+      handleClick: function (page) {
+        router
+            .push({name: `PageUpdate`, params: {id: '/api/pages/' + page['id']}})
+            .catch(() => {
+            });
+      }
     });
 
     axios.get('/news/list').then(response => {
@@ -65,6 +78,11 @@ export default {
     });
 
     return toRefs(state);
+  },
+  computed: {
+    ...mapGetters({
+      'isAdmin': 'security/isAdmin',
+    }),
   }
 }
 </script>

@@ -75,7 +75,7 @@ export default {
 
     let params = {
       'category.title' : 'index',
-      'enabled.title' : '1',
+      'enabled' : '1',
       'locale':  locale.value
     }
 

@@ -87,7 +87,7 @@ export default {
 
     let params = {
       'category.title' : 'home',
-      'enabled.title' : '1',
+      'enabled' : '1',
       'locale':  locale.value
     }
 

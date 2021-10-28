@@ -1573,7 +1573,7 @@ function getWorkListTeacherQuery(
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
-    $condition_session = api_get_session_condition($sessionId);
+    $condition_session = " AND ( session_id = $sessionId OR session_id is null ) ";
     $groupIid = 0;
     if ($groupId) {
         $groupInfo = GroupManager::get_group_properties($groupId);

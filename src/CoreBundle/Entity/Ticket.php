@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="ticket_ticket")
@@ -70,6 +71,7 @@ class Ticket
     /**
      * @ORM\Column(name="personal_email", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $personalEmail;
 
     /**
@@ -132,6 +134,12 @@ class Ticket
      */
     protected DateTime $lastEditDateTime;
 
+    public function __construct()
+    {
+        $this->totalMessages = 0;
+        $this->insertDateTime = new DateTime();
+    }
+
     /**
      * @return int
      */
@@ -193,6 +201,42 @@ class Ticket
     public function setAssignedLastUser(?User $assignedLastUser): self
     {
         $this->assignedLastUser = $assignedLastUser;
+
+        return $this;
+    }
+
+    public function getPersonalEmail(): string
+    {
+        return $this->personalEmail;
+    }
+
+    public function setPersonalEmail(string $personalEmail): self
+    {
+        $this->personalEmail = $personalEmail;
+
+        return $this;
+    }
+
+    public function getTotalMessages(): int
+    {
+        return $this->totalMessages;
+    }
+
+    public function setTotalMessages(int $totalMessages): self
+    {
+        $this->totalMessages = $totalMessages;
+
+        return $this;
+    }
+
+    public function getInsertUserId(): int
+    {
+        return $this->insertUserId;
+    }
+
+    public function setInsertUserId(int $insertUserId): self
+    {
+        $this->insertUserId = $insertUserId;
 
         return $this;
     }

@@ -63,6 +63,7 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use Chamilo\CourseBundle\Repository\CSurveyInvitationRepository;
 use Chamilo\CourseBundle\Repository\CSurveyQuestionRepository;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
@@ -514,6 +515,11 @@ class Container
     public static function getSurveyRepository(): CSurveyRepository
     {
         return self::$container->get(CSurveyRepository::class);
+    }
+
+    public static function getSurveyInvitationRepository(): CSurveyInvitationRepository
+    {
+        return self::$container->get(CSurveyInvitationRepository::class);
     }
 
     public static function getSurveyQuestionRepository(): CSurveyQuestionRepository

@@ -464,6 +464,10 @@ try {
             $data = $restApi->addUser($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::SAVE_USER_GET_APIKEY:
+            $data = $restApi->addUserGetApikey($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::SAVE_USER_JSON:
             if (!array_key_exists('json', $_POST)) {
                 throw new Exception(get_lang('NoData'));

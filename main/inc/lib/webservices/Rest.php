@@ -86,6 +86,7 @@ class Rest extends WebService
     const GET_USERS = 'get_users';
     const USERNAME_EXIST = 'username_exist';
     const SAVE_USER = 'save_user';
+    const SAVE_USER_GET_APIKEY = 'save_user_get_apikey';
     const SAVE_USER_JSON = 'save_user_json';
     const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
     const DELETE_USER = 'delete_user';
@@ -1610,6 +1611,23 @@ class Rest extends WebService
         }
 
         return [$userId];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addUserGetApikey(array $userParams): array
+    {
+        list($userId) = $this->addUser($userParams);
+
+        UserManager::add_api_key($userId, self::SERVICE_NAME);
+
+        $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return [
+            'id' => $userId,
+            'api_key' => current($apiKey),
+        ];
     }
 
     /**

@@ -47,7 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['page:write'],
     ],
     normalizationContext: [
-        'groups' => ['page:read'],
+        'groups' => ['page:read', 'timestampable_created:read', 'timestampable_updated:read'],
     ],
 )]
 

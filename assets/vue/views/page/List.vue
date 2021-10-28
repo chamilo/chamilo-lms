@@ -43,7 +43,7 @@
       <template #body="slotProps">
         <a
             v-if="slotProps.data"
-            @click="handleClick(slotProps.data)"
+            @click="showHandler(slotProps.data)"
             class="cursor-pointer "
         >
           {{ slotProps.data.title }}

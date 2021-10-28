@@ -154,6 +154,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'resource_node:read',
         'user_json:read',
         'message:read',
+        'page:read',
         'user_rel_user:read',
     ])]
     protected string $username;

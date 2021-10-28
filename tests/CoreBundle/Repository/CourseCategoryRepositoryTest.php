@@ -27,6 +27,10 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
         $item = (new CourseCategory())
             ->setCode('Course cat')
             ->setName('Course cat')
+            ->setDescription('desc')
+            ->setTreePos(1)
+            ->setChildrenCount(0)
+            ->setAuthCourseChild('auth')
         ;
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);
@@ -38,6 +42,16 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $this->assertSame('Course cat', $item->getCode());
         $this->assertSame('Course cat (Course cat)', (string) $item);
+        $this->assertSame('desc', $item->getDescription());
+        $this->assertSame('Course cat', $item->getName());
+
+        $this->assertFalse($item->hasAsset());
+        $accessUrl = $this->getAccessUrl();
+        $this->assertFalse($item->hasUrl($accessUrl));
+
+        $item->addUrl($accessUrl);
+        $repo->update($item);
+        $this->assertTrue($item->hasUrl($accessUrl));
     }
 
     public function testCreateWithParent(): void

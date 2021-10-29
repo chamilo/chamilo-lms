@@ -271,7 +271,6 @@ switch ($action) {
         }
         break;
     case 'lp_stats_to_export_pdf':
-
         $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
         $categoryTest = new CLpCategory();
         $categoryTest->setId(0);

@@ -26,8 +26,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testCreateMessage(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $messageRepo = self::getContainer()->get(MessageRepository::class);
@@ -81,8 +79,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testCreateMessageWithTags(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
@@ -166,8 +162,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testCreateMessageWithAttachment(): void
     {
-        self::bootKernel();
-
         $user1 = $this->getUser('admin');
         $user2 = $this->createUser('user2');
 
@@ -252,8 +246,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testDeleteMessage(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $messageAttachmentRepo = self::getContainer()->get(MessageAttachmentRepository::class);
@@ -326,8 +318,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testCreateMessageWithCc(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $messageRepo = self::getContainer()->get(MessageRepository::class);
@@ -379,8 +369,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testCreateMessageWithApi(): void
     {
-        self::bootKernel();
-
         $fromUser = $this->createUser('from');
         $toUser = $this->createUser('to');
         $messageRepo = self::getContainer()->get(MessageRepository::class);
@@ -540,8 +528,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testDeleteMessageWithApi(): void
     {
-        self::bootKernel();
-
         $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
         $messageRepo = self::getContainer()->get(MessageRepository::class);
         $userRepo = self::getContainer()->get(UserRepository::class);

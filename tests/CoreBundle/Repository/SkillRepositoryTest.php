@@ -31,7 +31,6 @@ class SkillRepositoryTest extends AbstractApiTest
     public function testCreateSkill(): void
     {
         $skillRepo = self::getContainer()->get(SkillRepository::class);
-
         $accessUrl = $this->getAccessUrl();
 
         $skill = (new Skill())

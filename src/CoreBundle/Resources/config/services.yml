@@ -46,6 +46,7 @@ services:
         arguments: ['@translator', '@router']
 
     Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer: ~
+    Chamilo\CoreBundle\Component\Utils\CreateDefaultPages: ~
     Chamilo\CoreBundle\Component\Utils\NameConvention: ~
     Chamilo\CoreBundle\Component\Utils\Glide:
         arguments:

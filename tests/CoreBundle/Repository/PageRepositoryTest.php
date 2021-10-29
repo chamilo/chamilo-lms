@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Component\Utils\CreateDefaultPages;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Page;
 use Chamilo\CoreBundle\Entity\PageCategory;
+use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -279,5 +281,40 @@ class PageRepositoryTest extends AbstractApiTest
 
         $iri = $this->findIriBy(Page::class, ['id' => $page->getId()]);
         $this->assertNull($iri);
+    }
+
+    public function testDeleteAll(): void
+    {
+        $pageRepo = self::getContainer()->get(PageRepository::class);
+        $pageCategoryRepo = self::getContainer()->get(PageCategoryRepository::class);
+        foreach ($pageRepo->findAll() as $page) {
+            $pageRepo->delete($page);
+        }
+
+        foreach ($pageCategoryRepo->findAll() as $pageCategory) {
+            $pageCategoryRepo->delete($pageCategory);
+        }
+
+        $this->assertSame(0, $pageRepo->count([]));
+        $this->assertSame(0, $pageCategoryRepo->count([]));
+    }
+
+    public function testCreateDefaultPages(): void
+    {
+        $this->testDeleteAll();
+
+        $pageCategoryRepo = self::getContainer()->get(PageCategoryRepository::class);
+        $pageRepo = self::getContainer()->get(PageRepository::class);
+        $createDefaultPages = self::getContainer()->get(CreateDefaultPages::class);
+
+        $admin = $this->getAdmin();
+
+        $result = $createDefaultPages->createDefaultPages($admin, $this->getAccessUrl(), 'en_US');
+        $this->assertTrue($result);
+        $this->assertSame(2, $pageRepo->count([]));
+        $this->assertSame(2, $pageCategoryRepo->count([]));
+
+        $result = $createDefaultPages->createDefaultPages($admin, $this->getAccessUrl(), 'en_US');
+        $this->assertFalse($result);
     }
 }

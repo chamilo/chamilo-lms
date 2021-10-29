@@ -6,8 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataFixtures;
 
-use Chamilo\CoreBundle\Entity\Page;
-use Chamilo\CoreBundle\Entity\PageCategory;
+use Chamilo\CoreBundle\Component\Utils\CreateDefaultPages;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -29,44 +28,10 @@ class PageFixtures extends Fixture implements ContainerAwareInterface
         $admin = $this->getReference(AccessUserFixtures::ADMIN_USER_REFERENCE);
         $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
 
-        $category = (new PageCategory())
-            ->setTitle('home')
-            ->setType('grid')
-            ->setCreator($admin)
-        ;
-        $manager->persist($category);
+        /** @var CreateDefaultPages $createDefaultPages */
+        $createDefaultPages = $this->container->get(CreateDefaultPages::class);
 
         $locale = $this->container->get('translator')->getLocale();
-
-        $page = (new Page())
-            ->setTitle('Welcome')
-            ->setContent('Welcome to Chamilo')
-            ->setCategory($category)
-            ->setCreator($admin)
-            ->setLocale($locale)
-            ->setEnabled(true)
-            ->setUrl($url)
-        ;
-        $manager->persist($page);
-
-        $indexCategory = (new PageCategory())
-            ->setTitle('index')
-            ->setType('grid')
-            ->setCreator($admin)
-        ;
-        $manager->persist($indexCategory);
-
-        $indexPage = (new Page())
-            ->setTitle('Welcome')
-            ->setContent('<img src="/img/document/images/mr_chamilo/svg/teaching.svg" />')
-            ->setCategory($indexCategory)
-            ->setCreator($admin)
-            ->setLocale($locale)
-            ->setEnabled(true)
-            ->setUrl($url)
-        ;
-        $manager->persist($indexPage);
-
-        $manager->flush();
+        $createDefaultPages->createDefaultPages($admin, $url, $locale);
     }
 }

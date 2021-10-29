@@ -425,7 +425,7 @@ class Rest extends WebService
                         'action' => self::VIEW_COURSE_HOME,
                         'api_key' => $this->apiKey,
                         'username' => $this->user->getUsername(),
-                        'course' => $course->getId()
+                        'course' => $course->getId(),
                     ]
                 ),
             ];

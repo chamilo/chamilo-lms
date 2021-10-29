@@ -62,6 +62,11 @@ $interbreadcrumb[] = [
     'name' => get_lang('Fields'),
 ];
 
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?action=edit&type='.$type.'&id='.$fieldId,
+    'name' => $extraField->getDisplayText(),
+];
+
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     foreach ($languages as $language) {

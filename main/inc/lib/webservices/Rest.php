@@ -37,6 +37,7 @@ class Rest extends WebService
     const GET_USER_COURSES = 'user_courses';
     const GET_USER_SESSIONS = 'user_sessions';
 
+    const VIEW_PROFILE = 'view_user_profile';
     const GET_PROFILE = 'user_profile';
 
     const VIEW_COURSE_HOME = 'view_course_home';
@@ -2937,6 +2938,18 @@ class Rest extends WebService
             },
             $userList
         );
+    }
+
+    public function viewUserProfile(int $userId)
+    {
+        $url = api_get_path(WEB_CODE_PATH).'social/profile.php';
+
+        if ($userId) {
+            $url .= '?'.http_build_query(['u' => $userId]);
+        }
+
+        header("Location: $url");
+        exit;
     }
 
     public function viewCourseHome()

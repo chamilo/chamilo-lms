@@ -167,6 +167,11 @@ try {
             $restResponse->setData($courses);
             break;
 
+        case Rest::VIEW_PROFILE:
+            $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+
+            $restApi->viewUserProfile($userId);
+            break;
         case Rest::GET_PROFILE:
             $userInfo = $restApi->getUserProfile();
             $restResponse->setData($userInfo);

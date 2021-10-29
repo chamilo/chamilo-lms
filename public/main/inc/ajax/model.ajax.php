@@ -2365,7 +2365,7 @@ switch ($action) {
                 get_lang('No')
             );
             foreach ($result as $item) {
-                $item['display_text'] = ExtraField::translateDisplayName($item['variable'], $item['displayText']);
+                $item['display_text'] = $item['displayText'];
                 $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
                 $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;
                 $item['visible_to_self'] = $item['visibleToSelf'] ? $checkIcon : $timesIcon;
@@ -2482,9 +2482,9 @@ switch ($action) {
         $columns = ['display_text', 'option_value', 'option_order'];
         $sidx = in_array($sidx, $columns) ? $sidx : 'display_text';
         $result = $obj->get_all([
-                'where' => ['field_id = ? ' => $field_id],
-                'order' => "$sidx $sord",
-                'LIMIT' => "$start , $limit",
+            'where' => ['field_id = ? ' => $field_id],
+            'order' => "$sidx $sord",
+            'LIMIT' => "$start , $limit",
         ]);
         break;
     case 'get_usergroups_teacher':

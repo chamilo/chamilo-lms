@@ -640,16 +640,17 @@ class ExtraField extends Model
                     variable = '$variable' AND
                     extra_field_type = $this->extraFieldType";
         $result = Database::query($sql);
+        $extraFieldRepo = Container::getExtraFieldRepository();
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
-            $row['display_text'] = $this->translateDisplayName(
-                $row['variable'],
-                $row['display_text']
-            );
+            $extraFieldId = $row['id'];
+            /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+            $extraField = $extraFieldRepo->find($extraFieldId);
+            $row['display_text'] = $extraField->getDisplayText();
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag
-                    WHERE field_id='".intval($row['id'])."'
+                    WHERE field_id='".$extraFieldId."'
                     ORDER BY id ASC";
             $result = Database::query($sql);
             while ($option = Database::fetch_array($result, 'ASSOC')) {
@@ -657,34 +658,9 @@ class ExtraField extends Model
             }
 
             return $row;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Translate the display text for a extra field.
-     *
-     * @param string $variable
-     * @param string $defaultDisplayText
-     *
-     * @return string
-     */
-    public static function translateDisplayName($variable, $defaultDisplayText): string
-    {
-        // 1st priority variable.
-        $translatedVariable = get_lang($variable);
-        if ($variable !== $translatedVariable) {
-            return $translatedVariable;
         }
 
-        // 2nd priority display text.
-        $translatedDisplayText = get_lang($defaultDisplayText);
-        if ($defaultDisplayText !== $translatedDisplayText) {
-            return $translatedVariable;
-        }
-
-        return $defaultDisplayText;
+        return false;
     }
 
     /**
@@ -947,10 +923,14 @@ class ExtraField extends Model
         $result = Database::query($sql);
         $extraFields = Database::store_result($result, 'ASSOC');
 
+        $extraFieldRepo = Container::getExtraFieldRepository();
         $option = new ExtraFieldOption($this->type);
         if (!empty($extraFields)) {
             foreach ($extraFields as &$extraField) {
-                $extraField['display_text'] = self::translateDisplayName($extraField['variable'], $extraField['display_text']);
+                $extraFieldId = $extraField['id'];
+                /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+                $field = $extraFieldRepo->find($extraFieldId);
+                $extraField['display_text'] = $field->getDisplayText();
                 $extraField['options'] = $option->get_field_options_by_field(
                     $extraField['id'],
                     false,
@@ -2013,13 +1993,17 @@ class ExtraField extends Model
                     extra_field_type = $this->extraFieldType";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
+            $extraFieldRepo = Container::getExtraFieldRepository();
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row) {
-                $row['display_text'] = $this->translateDisplayName($row['variable'], $row['display_text']);
+                $extraFieldId = $row['id'];
+                /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+                $field = $extraFieldRepo->find($extraFieldId);
+                $row['display_text'] = $field->getDisplayText();
 
                 // All the options of the field
                 $sql = "SELECT * FROM $this->table_field_options
-                        WHERE field_id='".intval($row['id'])."'
+                        WHERE field_id='".$extraFieldId."'
                         ORDER BY option_order ASC";
                 $result = Database::query($sql);
                 while ($option = Database::fetch_array($result)) {
@@ -2279,7 +2263,12 @@ class ExtraField extends Model
 
         if ('edit' === $action) {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query(['id' => $id]);
-            $translateButton = Display::toolbarButton(get_lang('Translate this term'), $translateUrl, 'language', 'link');
+            $translateButton = Display::toolbarButton(
+                get_lang('Translate this term'),
+                $translateUrl,
+                'language',
+                'link'
+            );
 
             $form->addText(
                 'display_text',
@@ -2319,18 +2308,20 @@ class ExtraField extends Model
             self::FIELD_TYPE_TRIPLE_SELECT,
         ];
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             if (in_array($defaults['field_type'], $fieldWithOptions)) {
                 $url = Display::url(
                     get_lang('Edit extra field options'),
-                    'extra_field_options.php?type='.$this->type.'&field_id='.$id
+                    'extra_field_options.php?type='.$this->type.'&field_id='.$id,
+                    ['class' => 'btn']
                 );
                 $form->addElement('label', null, $url);
 
                 if (self::FIELD_TYPE_SELECT == $defaults['field_type']) {
                     $urlWorkFlow = Display::url(
                         get_lang('Edit this field\'s workflow'),
-                        'extra_field_workflow.php?type='.$this->type.'&field_id='.$id
+                        'extra_field_workflow.php?type='.$this->type.'&field_id='.$id,
+                        ['class' => 'btn']
                     );
                     $form->addElement('label', null, $urlWorkFlow);
                 }
@@ -2414,7 +2405,10 @@ class ExtraField extends Model
         $info = parent::get($id);
 
         if ($translateDisplayText) {
-            $info['display_text'] = self::translateDisplayName($info['variable'], $info['display_text']);
+            $extraFieldRepo = Container::getExtraFieldRepository();
+            /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+            $field = $extraFieldRepo->find($id);
+            $info['display_text'] = $field->getDisplayText();
         }
 
         return $info;

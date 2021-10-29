@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -33,7 +34,7 @@ $extra_field_info = $extra_field->get($field_id);
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-if ('add' == $action) {
+if ('add' === $action) {
     $interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName];
     $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
@@ -44,7 +45,7 @@ if ('add' == $action) {
         'name' => get_lang('Edit extra field options'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
-} elseif ('edit' == $action) {
+} elseif ('edit' === $action) {
     $interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName];
     $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
@@ -336,6 +337,11 @@ class Container
     public static function getExtraFieldRepository(): ExtraFieldRepository
     {
         return self::$container->get(ExtraFieldRepository::class);
+    }
+
+    public static function getExtraFieldOptionsRepository(): ExtraFieldOptionsRepository
+    {
+        return self::$container->get(ExtraFieldOptionsRepository::class);
     }
 
     public static function getGlossaryRepository(): CGlossaryRepository

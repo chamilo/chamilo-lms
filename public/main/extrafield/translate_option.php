@@ -16,16 +16,19 @@ api_protect_admin_script();
 $em = Database::getManager();
 
 $extraFieldRepo = Container::getExtraFieldRepository();
+$extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
 $languageRepo = Container::getLanguageRepository();
 
 $fieldId = (int) ($_REQUEST['id'] ?? 0);
 
-/** @var ExtraField|null $extraField */
-$extraField = $extraFieldRepo->find($fieldId);
+/** @var \Chamilo\CoreBundle\Entity\ExtraFieldOptions|null $extraFieldOption */
+$extraFieldOption = $extraFieldOptionsRepo->find($fieldId);
 
-if (null === $extraField) {
+if (null === $extraFieldOption) {
     api_not_allowed(true);
 }
+
+$extraField = $extraFieldOption->getField();
 
 $currentUrl = api_get_self().'?id='.$fieldId;
 $qb = $languageRepo->getAllAvailable();
@@ -33,13 +36,12 @@ $languages = $qb->getQuery()->getResult();
 
 $form = new FormValidator('translate', 'POST', $currentUrl);
 $form->addHidden('id', $fieldId);
-$form->addHeader($extraField->getDisplayText());
+$form->addHeader($extraFieldOption->getDisplayText());
 
 $repository = $em->getRepository(Translation::class);
-$translations = $repository->findTranslations($extraField);
+$translations = $repository->findTranslations($extraFieldOption);
 
 $defaults = [];
-
 /** @var Language $language */
 foreach ($languages as $language) {
     $iso = $language->getIsocode();
@@ -87,12 +89,12 @@ if ($form->validate()) {
             continue;
         }
 
-        $extraField = $extraFieldRepo->find($fieldId);
-        $extraField
+        $extraFieldOption = $extraFieldOptionsRepo->find($fieldId);
+        $extraFieldOption
             ->setTranslatableLocale($language->getIsocode())
             ->setDisplayText($translation)
         ;
-        $em->persist($extraField);
+        $em->persist($extraFieldOption);
         $em->flush();
     }
 

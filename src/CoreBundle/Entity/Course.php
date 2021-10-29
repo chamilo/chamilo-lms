@@ -263,6 +263,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ORM\Column(name="course_language", type="string", length=20, nullable=false, unique=false)
      */
     #[Groups(['course:read'])]
+    #[Assert\NotBlank]
     protected string $courseLanguage;
 
     /**
@@ -368,11 +369,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @ORM\Column(name="subscribe", type="boolean", nullable=false, unique=false)
      */
+    #[Assert\NotNull]
     protected bool $subscribe;
 
     /**
      * @ORM\Column(name="unsubscribe", type="boolean", nullable=false, unique=false)
      */
+    #[Assert\NotNull]
     protected bool $unsubscribe;
 
     /**

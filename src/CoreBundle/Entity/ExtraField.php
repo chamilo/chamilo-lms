@@ -71,9 +71,16 @@ class ExtraField
     protected ?string $description;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="display_text", type="string", length=255, nullable=true, unique=false)
      */
+    #[Assert\NotBlank]
     protected ?string $displayText = null;
+
+    /**
+     * @Gedmo\Locale
+     */
+    protected ?string $locale = null;
 
     /**
      * @ORM\Column(name="helper_text", type="text", nullable=true, unique=false)
@@ -138,6 +145,7 @@ class ExtraField
         $this->visibleToOthers = false;
         $this->visibleToSelf = false;
         $this->changeable = false;
+        $this->filter = false;
     }
 
     /**
@@ -361,5 +369,17 @@ class ExtraField
         $this->helperText = $helperText;
 
         return $this;
+    }
+
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    public function getTranslatableLocale()
+    {
+        return $this->locale;
     }
 }

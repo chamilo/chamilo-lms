@@ -1001,6 +1001,8 @@ class ExtraField extends Model
         $jquery_ready_content = null;
 
         $assetRepo = Container::getAssetRepository();
+        $extraFieldRepo = Container::getExtraFieldRepository();
+
         if (!empty($extra)) {
             $newOrder = [];
             if (!empty($orderFields)) {
@@ -1062,11 +1064,16 @@ class ExtraField extends Model
                     $freezeElement = 0 == $field_details['visible_to_self'] || 0 == $field_details['changeable'];
                 }
 
-                $translatedDisplayText = get_lang($field_details['display_text']);
+                //$translatedDisplayText = $field_details['display_text'];
+                /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+                $extraField = $extraFieldRepo->find($field_details['id']);
+                $translatedDisplayText = $extraField->getDisplayText();
+
                 $translatedDisplayHelpText = '';
                 if ($help) {
                     $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
                 }
+
                 if (!empty($translatedDisplayText)) {
                     if (!empty($translatedDisplayHelpText)) {
                         // In this case, exceptionally, display_text is an array
@@ -2271,8 +2278,7 @@ class ExtraField extends Model
         $form->addElement('header', $header);
 
         if ('edit' === $action) {
-            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
-                .http_build_query(['extra_field' => $id]);
+            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query(['id' => $id]);
             $translateButton = Display::toolbarButton(get_lang('Translate this term'), $translateUrl, 'language', 'link');
 
             $form->addText(

@@ -2,10 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
-exit;
-
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Framework\Container;
+use Gedmo\Translatable\Entity\Translation;
 
 $cidReset = true;
 
@@ -16,73 +16,45 @@ api_protect_admin_script();
 $em = Database::getManager();
 
 $extraField = null;
-$extraFieldOption = null;
-$variableLanguage = null;
 $originalName = null;
 
-if (isset($_GET['extra_field'])) {
-    $extraField = $em->find('ChamiloCoreBundle:ExtraField', intval($_GET['extra_field']));
-    $variableLanguage = '$'.api_underscore_to_camel_case($extraField->getVariable());
-    $originalName = $extraField->getDisplayText(false);
-} elseif (isset($_GET['extra_field_option'])) {
-    $extraFieldOption = $em->find('ChamiloCoreBundle:ExtraFieldOptions', intval($_GET['extra_field_option']));
-    $extraField = $extraFieldOption->getField();
-    //$variableLanguage = '$'.ExtraFieldOption::getLanguageVariable($extraFieldOption->getDisplayText());
-    $originalName = $extraFieldOption->getDisplayText();
-}
+$extraFieldRepo = Container::getExtraFieldRepository();
+$languageRepo = Container::getLanguageRepository();
 
-if (!$extraField || empty($variableLanguage) || empty($originalName)) {
+$fieldId = (int) ($_REQUEST['id'] ?? 0);
+
+/** @var ExtraField|null $extraField */
+$extraField = $extraFieldRepo->find($fieldId);
+
+if (null === $extraField) {
     api_not_allowed(true);
 }
 
-$languageId = isset($_GET['sub_language']) ? (int) $_GET['sub_language'] : 0;
+$currentUrl = api_get_self().'?id='.$fieldId;
+$qb = $languageRepo->getAllAvailable();
+$languages = $qb->getQuery()->getResult();
 
-$languages = $em->getRepository(Language::class)->findAllSubLanguages();
-$languagesOptions = [0 => get_lang('none')];
+$form = new FormValidator('translate', 'POST', $currentUrl);
+$form->addHidden('id', $fieldId);
+$form->addHeader($extraField->getDisplayText());
 
+$repository = $em->getRepository(Translation::class);
+$translations = $repository->findTranslations($extraField);
+
+$defaults = [];
+
+/** @var Language $language */
 foreach ($languages as $language) {
-    $languagesOptions[$language->getId()] = $language->getOriginalName();
+    $iso = $language->getIsocode();
+    $variable = 'variable['.$iso.']';
+    $form->addText($variable, $language->getOriginalName().' ('.$iso.')', false);
+    if (isset($translations[$iso]) && $translations[$iso]['displayText']) {
+        $defaults['variable['.$iso.']'] = $translations[$iso]['displayText'];
+    }
 }
 
-$translateUrl = api_get_path(WEB_CODE_PATH).'admin/sub_language_ajax.inc.php';
-
-$form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
-$form->addHeader(get_lang('Add terms to the sub-language'));
-$form->addText('variable_language', get_lang('Language variable'), false);
-$form->addText('original_name', get_lang('Original name'), false);
-$form->addSelect(
-    'sub_language',
-    [get_lang('Sub-language'), get_lang('OnlyActiveSub-languagesAreListed')],
-    $languagesOptions
-);
-
-if ($languageId) {
-    $languageInfo = api_get_language_info($languageId);
-    $form->addText(
-        'new_language',
-        [
-            get_lang('Translation'),
-            get_lang(
-                'If this term has already been translated, this operation will replace its translation for this sub-language.'
-            ),
-        ]
-    );
-    $form->addHidden('file_id', 0);
-    $form->addHidden('id', $languageInfo['parent_id']);
-    $form->addHidden('sub', $languageInfo['id']);
-    $form->addHidden('sub_language_id', $languageInfo['id']);
-    $form->addHidden('redirect', true);
-    $form->addHidden('extra_field_type', $extraField->getExtraFieldType());
-    $form->addButtonSave(get_lang('Save'));
-}
-
-$form->setDefaults([
-    'variable_language' => $variableLanguage,
-    'original_name' => $originalName,
-    'sub_language' => $languageId,
-]);
-$form->addRule('sub_language', get_lang('Required'), 'required');
-$form->freeze(['variable_language', 'original_name']);
+$form->setDefaults($defaults);
+$form->addButtonSave(get_lang('Save'));
 
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin', 'name' => get_lang('Administration')];
 
@@ -107,9 +79,33 @@ switch ($extraField->getExtraFieldType()) {
         break;
 }
 
-$view = new Template(get_lang('Add terms to the sub-language'));
-$view->assign('form', $form->returnForm());
-$template = $view->get_template('extrafield/translate.tpl');
-$content = $view->fetch($template);
-$view->assign('content', $content);
-$view->display_one_col_template();
+if ($form->validate()) {
+    $values = $form->getSubmitValues();
+    foreach ($languages as $language) {
+        if (!isset($values['variable'][$language->getIsocode()])) {
+            continue;
+        }
+        $translation = $values['variable'][$language->getIsocode()];
+        if (empty($translation)) {
+            continue;
+        }
+
+        $extraField = $extraFieldRepo->find($fieldId);
+        $extraField
+            ->setTranslatableLocale($language->getIsocode())
+            ->setDisplayText($translation)
+        ;
+        $em->persist($extraField);
+        $em->flush();
+    }
+
+    Display::addFlash(Display::return_message(get_lang('Updated')));
+    api_location($currentUrl);
+}
+
+$tpl = new Template(get_lang('Translations'));
+$tpl->assign('form', $form->returnForm());
+$template = $tpl->get_template('extrafield/translate.html.twig');
+$content = $tpl->fetch($template);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

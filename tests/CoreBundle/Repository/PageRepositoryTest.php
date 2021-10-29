@@ -179,10 +179,10 @@ class PageRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/Page',
             '@id' => '/api/pages',
             '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 4,
+            'hydra:totalItems' => 2,
         ]);
 
-        $this->assertCount(4, $response->toArray()['hydra:member']);
+        $this->assertCount(2, $response->toArray()['hydra:member']);
         $this->assertMatchesResourceCollectionJsonSchema(Page::class);
 
         $response = $this->createClientWithCredentials($token)->request(

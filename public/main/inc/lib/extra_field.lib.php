@@ -98,75 +98,58 @@ class ExtraField extends Model
         $this->table_field_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $this->table_field_rel_tag = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
         $this->handler_id = 'item_id';
+        $this->extraFieldType = self::getExtraFieldTypeFromString($this->type);
 
         switch ($this->type) {
-            case 'calendar_event':
-                $this->extraFieldType = EntityExtraField::CALENDAR_FIELD_TYPE;
-                break;
-            case 'course':
-                $this->extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
-                $this->primaryKey = 'id';
-                break;
-            case 'user':
-                $this->extraFieldType = EntityExtraField::USER_FIELD_TYPE;
-                $this->primaryKey = 'id';
-                break;
             case 'session':
-                $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;
+            case 'user':
+            case 'calendar_event':
+            case 'course':
                 $this->primaryKey = 'id';
                 break;
-            case 'exercise':
-                $this->extraFieldType = EntityExtraField::EXERCISE_FIELD_TYPE;
-                break;
-            case 'question':
-                $this->extraFieldType = EntityExtraField::QUESTION_FIELD_TYPE;
-                break;
-            case 'lp':
-                $this->extraFieldType = EntityExtraField::LP_FIELD_TYPE;
-                break;
-            case 'lp_item':
-                $this->extraFieldType = EntityExtraField::LP_ITEM_FIELD_TYPE;
-                break;
-            case 'skill':
-                $this->extraFieldType = EntityExtraField::SKILL_FIELD_TYPE;
-                break;
-            case 'work':
-                $this->extraFieldType = EntityExtraField::WORK_FIELD_TYPE;
-                break;
-            case 'career':
-                $this->extraFieldType = EntityExtraField::CAREER_FIELD_TYPE;
-                break;
-            case 'user_certificate':
-                $this->extraFieldType = EntityExtraField::USER_CERTIFICATE;
-                break;
-            case 'survey':
-                $this->extraFieldType = EntityExtraField::SURVEY_FIELD_TYPE;
-                break;
-            case 'scheduled_announcement':
-                $this->extraFieldType = EntityExtraField::SCHEDULED_ANNOUNCEMENT;
-                break;
-            case 'terms_and_condition':
-                $this->extraFieldType = EntityExtraField::TERMS_AND_CONDITION_TYPE;
-                break;
-            case 'forum_category':
-                $this->extraFieldType = EntityExtraField::FORUM_CATEGORY_TYPE;
-                break;
-            case 'forum_post':
-                $this->extraFieldType = EntityExtraField::FORUM_POST_TYPE;
-                break;
-            case 'track_exercise':
-                $this->extraFieldType = EntityExtraField::TRACK_EXERCISE_FIELD_TYPE;
-                break;
-            case 'portfolio':
-                $this->extraFieldType = EntityExtraField::PORTFOLIO_TYPE;
-                break;
-            case 'lp_view':
-                $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
         $this->pageName = ucwords($this->type).'Fields';
+    }
+
+    public static function getTypeList(): array
+    {
+        return [
+            'calendar_event' => EntityExtraField::CALENDAR_FIELD_TYPE,
+            'course' => EntityExtraField::COURSE_FIELD_TYPE,
+            'user' => EntityExtraField::USER_FIELD_TYPE,
+            'session' => EntityExtraField::SESSION_FIELD_TYPE,
+            'exercise' => EntityExtraField::EXERCISE_FIELD_TYPE,
+            'question' => EntityExtraField::QUESTION_FIELD_TYPE,
+            'lp' => EntityExtraField::LP_FIELD_TYPE,
+            'lp_item' => EntityExtraField::LP_ITEM_FIELD_TYPE,
+            'skill' => EntityExtraField::SKILL_FIELD_TYPE,
+            'work' => EntityExtraField::WORK_FIELD_TYPE,
+            'career' => EntityExtraField::CAREER_FIELD_TYPE,
+            'user_certificate' => EntityExtraField::USER_CERTIFICATE,
+            'survey' => EntityExtraField::SURVEY_FIELD_TYPE,
+            'scheduled_announcement' => EntityExtraField::SCHEDULED_ANNOUNCEMENT,
+            'terms_and_condition' => EntityExtraField::TERMS_AND_CONDITION_TYPE,
+            'forum_category' => EntityExtraField::FORUM_CATEGORY_TYPE,
+            'forum_post' => EntityExtraField::FORUM_POST_TYPE,
+            'track_exercise' => EntityExtraField::TRACK_EXERCISE_FIELD_TYPE,
+            'portfolio' => EntityExtraField::PORTFOLIO_TYPE,
+            'lp_view' => EntityExtraField::LP_VIEW_TYPE,
+        ];
+    }
+
+    public static function getExtraFieldTypeFromString($extraFieldTypeInString): string
+    {
+        return self::getTypeList()[$extraFieldTypeInString];
+    }
+
+    public static function getExtraFieldTypeFromInt($extraFieldTypeInt)
+    {
+        $reversed = array_flip(self::getTypeList());
+
+        return $reversed[$extraFieldTypeInt];
     }
 
     /**
@@ -928,7 +911,7 @@ class ExtraField extends Model
         if (!empty($extraFields)) {
             foreach ($extraFields as &$extraField) {
                 $extraFieldId = $extraField['id'];
-                /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+                /** @var \Chamilo\CoreBundle\Entity\ExtraField $field */
                 $field = $extraFieldRepo->find($extraFieldId);
                 $extraField['display_text'] = $field->getDisplayText();
                 $extraField['options'] = $option->get_field_options_by_field(

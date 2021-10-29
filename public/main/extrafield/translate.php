@@ -55,26 +55,12 @@ $form->addButtonSave(get_lang('Save'));
 
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin', 'name' => get_lang('Administration')];
 
-switch ($extraField->getExtraFieldType()) {
-    case ExtraField::USER_FIELD_TYPE:
-        $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type=user',
-            'name' => get_lang('Profile attributes'),
-        ];
-        break;
-    case ExtraField::COURSE_FIELD_TYPE:
-        $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type=course',
-            'name' => get_lang('Course fields'),
-        ];
-        break;
-    case ExtraField::SESSION_FIELD_TYPE:
-        $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type=session',
-            'name' => get_lang('Session fields'),
-        ];
-        break;
-}
+$type = \ExtraField::getExtraFieldTypeFromInt($extraField->getExtraFieldType());
+
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type='.$type,
+    'name' => get_lang('Fields'),
+];
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();

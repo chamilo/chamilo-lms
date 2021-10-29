@@ -56,7 +56,7 @@ services:
 
     # Locale listener
     Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
-        arguments: ['%kernel.default_locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']
+        arguments: ['%locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']
 
 cocur_slugify:
     lowercase: true

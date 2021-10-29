@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelTag;
 use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -57,6 +58,7 @@ class TagRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(TagRepository::class);
+        $extraFieldRepo = self::getContainer()->get(ExtraFieldRepository::class);
 
         $extraField = (new ExtraField())
             ->setDisplayText('test')
@@ -99,6 +101,9 @@ class TagRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $tag->getUserRelTags()->count());
         $user = $this->getUser('test');
         $this->assertSame(1, $user->getUserRelTags()->count());
+
+        $extraField = $extraFieldRepo->find($extraField->getId());
+        $this->assertTrue($extraField->hasTag('php'));
     }
 
     public function testCreateExtraFieldRelTag(): void

@@ -39,6 +39,7 @@ class Rest extends WebService
 
     const GET_PROFILE = 'user_profile';
 
+    const VIEW_COURSE_HOME = 'view_course_home';
     const GET_COURSE_INFO = 'course_info';
     const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
     const GET_COURSE_DOCUMENTS = 'course_documents';
@@ -401,6 +402,8 @@ class Rest extends WebService
         $courses = CourseManager::get_courses_list_by_user_id($userId);
         $data = [];
 
+        $webCodePath = api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?';
+
         foreach ($courses as $courseInfo) {
             /** @var Course $course */
             $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
@@ -416,6 +419,14 @@ class Rest extends WebService
                 'urlPicture' => $picturePath,
                 'teachers' => $teachers,
                 'isSpecial' => !empty($courseInfo['special_course']),
+                'url' => $webCodePath.http_build_query(
+                    [
+                        'action' => self::VIEW_COURSE_HOME,
+                        'api_key' => $this->apiKey,
+                        'username' => $this->user->getUsername(),
+                        'course' => $course->getId()
+                    ]
+                ),
             ];
         }
 
@@ -1189,6 +1200,8 @@ class Rest extends WebService
         $data = [];
         $sessionsByCategory = UserManager::get_sessions_by_category($this->user->getId(), false);
 
+        $webCodePath = api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?';
+
         foreach ($sessionsByCategory as $category) {
             $categorySessions = [];
 
@@ -1210,6 +1223,15 @@ class Rest extends WebService
                         'pictureUrl' => $courseInfo['course_image_large'],
                         'urlPicture' => $courseInfo['course_image_large'],
                         'teachers' => $teachers,
+                        'url' => $webCodePath.http_build_query(
+                            [
+                                'action' => self::VIEW_COURSE_HOME,
+                                'api_key' => $this->apiKey,
+                                'username' => $this->user->getUsername(),
+                                'course' => $courseInfo['real_id'],
+                                'session' => $sessions['session_id'],
+                            ]
+                        ),
                     ];
                 }
 
@@ -2915,6 +2937,14 @@ class Rest extends WebService
             },
             $userList
         );
+    }
+
+    public function viewCourseHome()
+    {
+        $url = api_get_course_url($this->course->getCode(), $this->session ? $this->session->getId() : 0);
+
+        header("Location: $url");
+        exit;
     }
 
     public function viewDocumentInFrame(int $documentId)

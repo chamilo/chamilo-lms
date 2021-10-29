@@ -172,6 +172,9 @@ try {
             $restResponse->setData($userInfo);
             break;
 
+        case Rest::VIEW_COURSE_HOME:
+            $restApi->viewCourseHome();
+            break;
         case Rest::GET_COURSE_INFO:
             $courseInfo = $restApi->getCourseInfo();
             $restResponse->setData($courseInfo);

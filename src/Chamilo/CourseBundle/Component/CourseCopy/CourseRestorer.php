@@ -2219,38 +2219,51 @@ class CourseRestorer
                         }
                     }
                 } else {
-                    $new_options = [];
-                    if (isset($question->question_options)) {
-                        foreach ($question->question_options as $obj) {
-                            $item = [];
-                            $item['question_id'] = $new_id;
-                            $item['c_id'] = $this->destination_course_id;
-                            $item['name'] = $obj->obj->name;
-                            $item['position'] = $obj->obj->position;
-                            $question_option_id = Database::insert($table_options, $item);
-
-                            if ($question_option_id) {
-                                $new_options[$obj->obj->id] = $question_option_id;
-                                $sql = "UPDATE $table_options SET id = iid WHERE iid = $question_option_id";
-                                Database::query($sql);
-                            }
-                        }
-
-                        foreach ($correctAnswers as $answer_id => $correct_answer) {
-                            $params = [];
-                            $params['correct'] = isset($new_options[$correct_answer]) ? $new_options[$correct_answer] : '';
-                            Database::update(
-                                $table_ans,
-                                $params,
-                                [
-                                    'iid = ? AND c_id = ? AND question_id = ? ' => [
-                                        $answer_id,
-                                        $this->destination_course_id,
-                                        $new_id,
-                                    ],
-                                ],
-                                false
+                    if (count($question->question_options) < 3) {
+                        $options = [1 => 'True', 2 => 'False', 3 => 'DoubtScore'];
+                        for ($i = 1; $i <= 3; $i++) {
+                            $lastId = Question::saveQuestionOption(
+                                $new_id,
+                                $options[$i],
+                                $this->destination_course_id,
+                                $i
                             );
+                            $correct[$i] = $lastId;
+                        }
+                    } else {
+                        $new_options = [];
+                        if (isset($question->question_options)) {
+                            foreach ($question->question_options as $obj) {
+                                $item = [];
+                                $item['question_id'] = $new_id;
+                                $item['c_id'] = $this->destination_course_id;
+                                $item['name'] = $obj->obj->name;
+                                $item['position'] = $obj->obj->position;
+                                $question_option_id = Database::insert($table_options, $item);
+
+                                if ($question_option_id) {
+                                    $new_options[$obj->obj->id] = $question_option_id;
+                                    $sql = "UPDATE $table_options SET id = iid WHERE iid = $question_option_id";
+                                    Database::query($sql);
+                                }
+                            }
+
+                            foreach ($correctAnswers as $answer_id => $correct_answer) {
+                                $params = [];
+                                $params['correct'] = isset($new_options[$correct_answer]) ? $new_options[$correct_answer] : '';
+                                Database::update(
+                                    $table_ans,
+                                    $params,
+                                    [
+                                        'iid = ? AND c_id = ? AND question_id = ? ' => [
+                                            $answer_id,
+                                            $this->destination_course_id,
+                                            $new_id,
+                                        ],
+                                    ],
+                                    false
+                                );
+                            }
                         }
                     }
                 }

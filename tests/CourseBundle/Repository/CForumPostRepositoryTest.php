@@ -46,11 +46,11 @@ class CForumPostRepositoryTest extends AbstractApiTest
             ->setCreator($teacher)
         ;
         $threadRepo->create($thread);
-
+        $date = new DateTime();
         $post = (new CForumPost())
             ->setPostTitle('post')
             ->setPostText('text')
-            ->setPostDate(new DateTime())
+            ->setPostDate($date)
             ->setPostNotification(true)
             ->setVisible(true)
             ->setStatus(1)
@@ -63,6 +63,13 @@ class CForumPostRepositoryTest extends AbstractApiTest
             ->addCourseLink($course)
         ;
         $postRepo->create($post);
+
+        $this->assertSame('text', $post->getPostText());
+        $this->assertSame($date, $post->getPostDate());
+        $this->assertTrue($post->getVisible());
+        $this->assertTrue($post->getPostNotification());
+        $this->assertSame(1, $post->getStatus());
+        $this->assertSame($post->getIid(), $post->getResourceIdentifier());
 
         $file = $this->getUploadedFile();
 

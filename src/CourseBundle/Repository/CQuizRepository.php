@@ -58,22 +58,6 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return $router->generate('legacy_main', $params);
     }
 
-    public function deleteAllByCourse(Course $course): void
-    {
-        $qb = $this->getResourcesByCourse($course);
-        $resources = $qb->getQuery()->getResult();
-        $em = $this->getEntityManager();
-
-        /*foreach ($resources as $quiz) {
-            $questions = $quiz->getQuestions();
-            foreach ($questions as $question) {
-                //$em->remove($question);
-            }
-            $em->remove($quiz);
-        }*/
-        //$em->flush();
-    }
-
     private function addDateFilterQueryBuilder(DateTime $dateTime, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);

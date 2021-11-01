@@ -39,6 +39,11 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($category);
         $categoryRepo->create($category);
 
+        $this->assertSame($category->getIid(), $category->getResourceIdentifier());
+        $this->assertSame(1, $category->getLocked());
+        $this->assertSame(1, $category->getCatOrder());
+        $this->assertSame('comment', $category->getCatComment());
+
         $this->assertSame('cat 1', (string) $category);
 
         $forum = (new CForum())

@@ -12,9 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
-use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -78,6 +76,7 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function countUserPublications(User $user, Course $course, Session $session = null, CGroup $group = null): int
     {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+        $qb->andWhere('resource.publicationParent IS NOT NULL');
 
         return $this->getCount($qb);
     }
@@ -94,35 +93,13 @@ final class CStudentPublicationRepository extends ResourceRepository
     /**
      * Find all the works registered by a teacher.
      */
-    public function findWorksByTeacher(User $user, Course $course, Session $session = null, int $groupId = 0): array
+    public function findWorksByTeacher(User $user, Course $course, Session $session = null)
     {
-        $qb = $this->createQueryBuilder('w');
+        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+        $qb->andWhere('resource.publicationParent IS NOT NULL');
 
         return $qb
-            ->leftJoin(
-                CStudentPublicationAssignment::class,
-                'a',
-                Join::WITH,
-                'a.publicationId = w.iid AND a.cId = w.cId'
-            )
-            ->where(
-                $qb->expr()->andX(
-                    $qb->expr()->eq('w.cId', ':course'),
-                    $qb->expr()->eq('w.session', ':session'),
-                    $qb->expr()->in('w.active', [0, 1]),
-                    $qb->expr()->eq('w.parentId', 0),
-                    $qb->expr()->eq('w.postGroupId', ':group'),
-                    $qb->expr()->eq('w.userId', ':user')
-                )
-            )
-
-            ->orderBy('w.sentDate', Criteria::ASC)
-            ->setParameters([
-                'course' => $course->getId(),
-                'session' => $session,
-                'group' => $groupId,
-                'user' => $user->getId(),
-            ])
+            ->orderBy('resource.sentDate', Criteria::ASC)
             ->getQuery()
             ->getResult()
         ;

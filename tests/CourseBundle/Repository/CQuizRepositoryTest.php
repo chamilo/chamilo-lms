@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -91,18 +92,34 @@ class CQuizRepositoryTest extends AbstractApiTest
         /** @var CQuiz $newExercise */
         $newExercise = $repo->find($item->getIid());
         $this->assertSame('exercise modified', $newExercise->getTitle());
+        $this->assertSame(0, $repo->count([]));
     }
 
     public function testFindAllByCourse(): void
     {
+        $em = $this->getEntityManager();
+
         $repo = self::getContainer()->get(CQuizRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
+        $category = (new CExerciseCategory())
+            ->setName('cat')
+            ->setDescription('desc')
+            ->setCourse($course)
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->setPosition(1)
+        ;
+        $this->assertHasNoEntityViolations($category);
+        $em->persist($category);
+        $em->flush();
+
         $exercise = (new CQuiz())
             ->setTitle('exercise 1')
             ->setParent($course)
+            ->setExerciseCategory($category)
             ->setCreator($teacher)
             ->addCourseLink($course)
         ;
@@ -120,6 +137,18 @@ class CQuizRepositoryTest extends AbstractApiTest
 
         $qb = $repo->findAllByCourse($course);
         $this->assertCount(2, $qb->getQuery()->getResult());
+
+        $qb = $repo->findAllByCourse($course, null, 'exercise 1');
+        $this->assertCount(2, $qb->getQuery()->getResult());
+
+        $qb = $repo->findAllByCourse($course, null, null, 0);
+        $this->assertCount(0, $qb->getQuery()->getResult());
+
+        $qb = $repo->findAllByCourse($course, null, null, 1);
+        $this->assertCount(2, $qb->getQuery()->getResult());
+
+        $qb = $repo->findAllByCourse($course, null, null, null, true, $category->getId());
+        $this->assertCount(1, $qb->getQuery()->getResult());
 
         $found = $repo->findCourseResourceByTitle('exercise 1', $course->getResourceNode(), $course);
         $this->assertNotNull($found);

@@ -25,16 +25,21 @@ class CExerciseCategoryRepositoryTest extends AbstractApiTest
 
         $item = (new CExerciseCategory())
             ->setName('cat')
-            ->setDescription('des')
+            ->setDescription('desc')
             ->setCourse($course)
             ->setParent($course)
             ->setCreator($teacher)
+            ->setPosition(1)
         ;
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);
         $em->flush();
 
         $this->assertSame('cat', (string) $item);
+        $this->assertSame($item->getId(), $item->getResourceIdentifier());
+        $this->assertSame('desc', $item->getDescription());
+        $this->assertSame('cat', $item->getName());
+
         $this->assertSame(1, $repo->count([]));
         $this->assertCount(1, $repo->getCategories($course->getId()));
     }

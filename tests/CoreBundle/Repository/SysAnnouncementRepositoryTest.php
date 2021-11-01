@@ -83,6 +83,8 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $items = $repo->getAnnouncements($user, $this->getAccessUrl(), '');
         $this->assertCount(1, $items);
 
+        $session = $this->createSession('session');
+
         $career = (new Career())
             ->setName('Doctor')
         ;
@@ -93,8 +95,13 @@ class SysAnnouncementRepositoryTest extends WebTestCase
             ->setCareer($career)
             ->setStatus(1)
         ;
+
+        $promotion->getSessions()->add($session);
+
         $em->persist($promotion);
         $em->flush();
+
+        $this->assertSame(1, $promotion->getSessions()->count());
 
         $sysAnnouncement = (new SysAnnouncement())
             ->setTitle('Welcome to Chamilo!')
@@ -111,6 +118,6 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $em->flush();
 
         $items = $repo->getAnnouncements($user, $this->getAccessUrl(), '');
-        $this->assertSame(1, \count($items));
+        $this->assertCount(1, $items);
     }
 }

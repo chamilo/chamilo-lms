@@ -178,8 +178,8 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         $qb = $repo->getStudentAssignments($item, $course);
         $this->assertCount(1, $qb->getQuery()->getResult());
 
-        //$this->assertSame(1, $repo->countUserPublications($student, $course));
-        //$this->assertSame(1, $repo->findWorksByTeacher($teacher, $course));
+        $this->assertSame(1, $repo->countUserPublications($student, $course));
+        $this->assertCount(1, $repo->findWorksByTeacher($teacher, $course));
     }
 
     public function testGetStudentPublicationByUser(): void

@@ -48,6 +48,10 @@ class CGlossaryRepositoryTest extends AbstractApiTest
         $link = $glossaryRepo->getLink($glossary, $router);
 
         $this->assertSame($link, '/main/glossary/index.php?glossary_id='.$glossary->getIid());
+
+        $link = $glossaryRepo->getLink($glossary, $router, ['extra' => 'extra']);
+        $this->assertSame($link, '/main/glossary/index.php?glossary_id='.$glossary->getIid().'&extra=extra');
+
         $this->assertSame(1, $glossaryRepo->count([]));
 
         $courseRepo->delete($course);

@@ -21,13 +21,14 @@ class CForumThreadRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
+        $em = $this->getEntityManager();
+
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
         $forumRepo = self::getContainer()->get(CForumRepository::class);
         $threadRepo = self::getContainer()->get(CForumThreadRepository::class);
-
-        $em = $this->getEntityManager();
+        $qualifyRepo = $em->getRepository(CForumThreadQualify::class);
 
         $forum = (new CForum())
             ->setForumTitle('forum')
@@ -54,6 +55,7 @@ class CForumThreadRepositoryTest extends AbstractApiTest
             ->setCreator($teacher)
             ->addCourseLink($course)
         ;
+        $this->assertHasNoEntityViolations($thread);
         $threadRepo->create($thread);
 
         $qualify = (new CForumThreadQualify())
@@ -87,5 +89,51 @@ class CForumThreadRepositoryTest extends AbstractApiTest
 
         $this->assertSame(0, $threadRepo->count([]));
         $this->assertSame(0, $forumRepo->count([]));
+        $this->assertSame(0, $qualifyRepo->count([]));
+    }
+
+    public function testDelete(): void
+    {
+        $em = $this->getEntityManager();
+        $course = $this->createCourse('new');
+        $teacher = $this->createUser('teacher');
+
+        $qualifyRepo = $em->getRepository(CForumThreadQualify::class);
+        $forumRepo = self::getContainer()->get(CForumRepository::class);
+        $threadRepo = self::getContainer()->get(CForumThreadRepository::class);
+
+        $forum = (new CForum())
+            ->setForumTitle('forum')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $forumRepo->create($forum);
+
+        $thread = (new CForumThread())
+            ->setThreadTitle('thread title')
+            ->setForum($forum)
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $threadRepo->create($thread);
+
+        $qualify = (new CForumThreadQualify())
+            ->setQualify(100)
+            ->setQualifyTime(new DateTime())
+            ->setThread($thread)
+            ->setCId($course->getId())
+        ;
+        $em->persist($qualify);
+        $em->flush();
+
+        $thread = $threadRepo->find($thread->getIid());
+
+        $threadRepo->delete($thread);
+
+        $this->assertSame(0, $qualifyRepo->count([]));
+        $this->assertSame(0, $threadRepo->count([]));
+        $this->assertSame(1, $forumRepo->count([]));
     }
 }

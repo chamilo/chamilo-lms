@@ -226,11 +226,47 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(422);
     }
 
+    public function testAddUserToSessionInactive(): void
+    {
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+        $userRepo = self::getContainer()->get(UserRepository::class);
+
+        // Add session
+        $session = $this->createSession('session');
+        $course = $this->createCourse('new');
+
+        $student = $this->createUser('student');
+        $sessionAdmin = $this->createUser('session_admin');
+        $generalCoach = $this->createUser('general_coach');
+
+        // Add session admin + add course to session.
+        $session
+            ->setAccessStartDate(new DateTime('now +30 days'))
+            ->addCourse($course)
+            ->addSessionAdmin($sessionAdmin)
+            ->addGeneralCoach($generalCoach)
+        ;
+
+        $sessionRepo->update($session);
+
+        $this->assertSame(1, $session->getCourses()->count());
+
+        $this->expectException(Exception::class);
+        $sessionRepo->addUserInCourse(Session::STUDENT, $student, $course, $session);
+
+        $session->setAccessStartDate(new DateTime());
+        $sessionRepo->update($session);
+        $student->setActive(false);
+        $userRepo->update($student);
+
+        $this->expectException(Exception::class);
+        $sessionRepo->addUserInCourse(Session::STUDENT, $student, $course, $session);
+    }
+
     public function testAddUserToSession(): void
     {
         $em = $this->getEntityManager();
         $sessionRepo = self::getContainer()->get(SessionRepository::class);
-        $courseRepo = self::getContainer()->get(CourseRepository::class);
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         // Add session

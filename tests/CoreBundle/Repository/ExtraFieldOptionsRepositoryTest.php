@@ -64,7 +64,6 @@ class ExtraFieldOptionsRepositoryTest extends AbstractApiTest
         $this->testCreate();
         $em = $this->getEntityManager();
 
-        $extraFieldRepo = static::getContainer()->get(ExtraFieldRepository::class);
         $extraFieldOptionsRepo = static::getContainer()->get(ExtraFieldOptionsRepository::class);
 
         /** @var ExtraFieldOptions $extraFieldOption */

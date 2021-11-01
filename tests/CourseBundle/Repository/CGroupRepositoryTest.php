@@ -202,5 +202,8 @@ class CGroupRepositoryTest extends AbstractApiTest
 
         $qb = $repo->findAllByCourse($course);
         $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $qb = $repo->findAllByCourse($course, null, null, 1);
+        $this->assertCount(1, $qb->getQuery()->getResult());
     }
 }

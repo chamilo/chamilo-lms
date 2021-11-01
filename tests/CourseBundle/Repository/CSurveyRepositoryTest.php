@@ -66,8 +66,18 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $qb = $surveyRepo->findAllByCourse($course);
         $this->assertCount(1, $qb->getQuery()->getResult());
 
+        $qb = $surveyRepo->findAllByCourse($course, null, 'survey');
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $qb = $surveyRepo->findAllByCourse($course, null, null, 'lang');
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $qb = $surveyRepo->findAllByCourse($course, null, null, null, $teacher);
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
         $courseRepo->delete($course);
         $this->assertSame(0, $surveyRepo->count([]));
+        $this->assertSame(0, $courseRepo->count([]));
     }
 
     public function testCreateWithQuestions(): void

@@ -61,7 +61,7 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         $this->assertSame('desc', $item->getDescription());
 
         $count = $repo->countUserPublications($teacher, $course);
-        $this->assertSame(1, $count);
+        $this->assertSame(0, $count);
 
         $count = $repo->countCoursePublications($course);
         $this->assertSame(1, $count);

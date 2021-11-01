@@ -1,6 +1,8 @@
 ignore:
   - "src/Kernel.php"
   - "src/CoreBundle/DependencyInjection"
+  - "src/CoreBundle/Component/Editor"
+  - "src/CoreBundle/Component/HTMLPurifier"
   - "src/CoreBundle/Component/Utils/ChamiloApi.php"
   - "src/CoreBundle/Component/Utils/ScriptHandler.php"
   - "src/CoreBundle/Framework/Container.php"

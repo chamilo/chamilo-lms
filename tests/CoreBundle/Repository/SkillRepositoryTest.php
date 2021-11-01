@@ -92,7 +92,6 @@ class SkillRepositoryTest extends AbstractApiTest
         ;
         $em->persist($level);
 
-
         $skill = (new Skill())
             ->setName('Dev')
             ->setShortCode('Dev')

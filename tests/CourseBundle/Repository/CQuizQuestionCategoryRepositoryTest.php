@@ -35,5 +35,9 @@ class CQuizQuestionCategoryRepositoryTest extends AbstractApiTest
 
         $this->assertSame(0, $category->getQuestions()->count());
         $this->assertSame(1, $categoryRepo->count([]));
+
+        $categoryRepo->delete($category);
+
+        $this->assertSame(0, $categoryRepo->count([]));
     }
 }

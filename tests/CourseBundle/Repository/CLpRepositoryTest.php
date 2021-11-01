@@ -150,8 +150,6 @@ class CLpRepositoryTest extends AbstractApiTest
 
     public function testFindAllByCourse(): void
     {
-        self::bootKernel();
-
         $repo = self::getContainer()->get(CLpRepository::class);
 
         $course = $this->createCourse('new');

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -23,6 +24,7 @@ class CLpItemRepositoryTest extends AbstractApiTest
     {
         $lpRepo = self::getContainer()->get(CLpRepository::class);
         $lpItemRepo = self::getContainer()->get(CLpItemRepository::class);
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -117,5 +119,11 @@ class CLpItemRepositoryTest extends AbstractApiTest
         $this->assertNotEmpty((string) $lpItem);
         $this->assertSame(1, $lpRepo->count([]));
         $this->assertSame(2, $lpItemRepo->count([]));
+
+        $lpRepo->delete($lp);
+
+        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame(0, $lpRepo->count([]));
+        $this->assertSame(0, $lpItemRepo->count([]));
     }
 }

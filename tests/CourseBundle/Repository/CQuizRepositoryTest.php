@@ -92,7 +92,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         /** @var CQuiz $newExercise */
         $newExercise = $repo->find($item->getIid());
         $this->assertSame('exercise modified', $newExercise->getTitle());
-        $this->assertSame(0, $repo->count([]));
+        $this->assertSame(1, $repo->count([]));
     }
 
     public function testFindAllByCourse(): void

@@ -67,7 +67,7 @@
 <!--            </q-td>-->
 
 <!--            <q-td key="resourceNode.updatedAt" :props="props">-->
-<!--              {{$luxonDateTime.fromISO(props.row.resourceNode.updatedAt).toRelative() }}-->
+<!--              {{ $filters.relativeDatetime(props.row.resourceNode.updatedAt) }}-->
 <!--            </q-td>-->
 
 <!--            <q-td key="resourceNode.resourceFile.size" :props="props">-->
@@ -199,7 +199,7 @@
 
     <Column field="resourceNode.updatedAt" :header="$t('Modified')" :sortable="true">
       <template #body="slotProps">
-        {{$luxonDateTime.fromISO(slotProps.data.resourceNode.updatedAt).toRelative() }}
+        {{ $filters.relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
       </template>
     </Column>
 

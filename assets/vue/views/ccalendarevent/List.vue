@@ -54,13 +54,13 @@
           <div v-if="sessionAsEvent.start">
             <q-icon name="event"/>
             {{ $t('From:') }}
-            {{ $luxonDateTime.fromISO(sessionAsEvent.start).toLocaleString($luxonDateTime.DATETIME_MED) }}
+            {{ $filters.abbreviatedDatetime(sessionAsEvent.start) }}
           </div>
 
           <div v-if="sessionAsEvent.end">
             <q-icon name="event"/>
             {{ $t('Until:') }}
-            {{ $luxonDateTime.fromISO(sessionAsEvent.end).toLocaleString($luxonDateTime.DATETIME_MED) }}
+            {{ $filters.abbreviatedDatetime(sessionAsEvent.end) }}
           </div>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">

@@ -70,7 +70,7 @@
             <img :src="item.sender['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
           </q-avatar>
           {{ item.sender['username'] }}
-          {{ $luxonDateTime.fromISO(item['sendDate']).toRelative() }}
+          {{ $filters.relativeDatetime(item['sendDate']) }}
         </div>
       </q-card-section>
 

@@ -238,8 +238,21 @@ app.config.globalProperties.axios = axios;
 const prettyBytes = require('pretty-bytes');
 const { DateTime } = require("luxon");
 
-app.config.globalProperties.$luxonDateTime = DateTime;
 app.config.globalProperties.$filters = {
+    /**
+     * @param {string} datetime
+     * @returns {string}
+     */
+    abbreviatedDatetime(datetime) {
+        return DateTime.fromISO(datetime).toLocaleString({ ...DateTime.DATETIME_MED, month: 'long' });
+    },
+    /**
+     * @param {string} datetime
+     * @returns {string}
+     */
+    relativeDatetime(datetime) {
+        return DateTime.fromISO(datetime).toRelative();
+    },
     prettyBytes(num) {
         return prettyBytes(num);
     },

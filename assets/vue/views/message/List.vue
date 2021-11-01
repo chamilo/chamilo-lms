@@ -183,7 +183,7 @@
 
         <Column :header="$t('Send date')" :sortable="false" field="sendDate">
           <template #body="slotProps">
-            {{ $luxonDateTime.fromISO(slotProps.data.sendDate).toRelative() }}
+            {{ $filters.relativeDatetime(slotProps.data.sendDate) }}
           </template>
         </Column>
 

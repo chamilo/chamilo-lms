@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\Messenger\MessageBusInterface;

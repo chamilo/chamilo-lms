@@ -68,10 +68,7 @@ class SettingsManager implements SettingsManagerInterface
         $this->schemaList = [];
     }
 
-    /**
-     * @return AccessUrl
-     */
-    public function getUrl()
+    public function getUrl(): ?AccessUrl
     {
         return $this->url;
     }
@@ -119,35 +116,35 @@ class SettingsManager implements SettingsManagerInterface
         return str_replace('chamilo_core.settings.', '', $category);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function getSetting(string $name)
+    public function updateSetting(string $name, $value): void
     {
-        if (!str_contains($name, '.')) {
-            //throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
-
-            // This code allows the possibility of calling
-            // api_get_setting('allow_skills_tool') instead of
-            // the "correct" way api_get_setting('platform.allow_skills_tool')
-            $items = $this->getVariablesAndCategories();
-
-            if (isset($items[$name])) {
-                $originalName = $name;
-                $name = $this->renameVariable($name);
-                $category = $this->fixCategory(
-                    strtolower($name),
-                    strtolower($items[$originalName])
-                );
-                $name = $category.'.'.$name;
-            } else {
-                $message = sprintf('Parameter must be in format "category.name", "%s" given.', $name);
-
-                throw new InvalidArgumentException($message);
-            }
-        }
+        $name = $this->validateSetting($name);
 
         [$category, $name] = explode('.', $name);
+        $settings = $this->load($category);
+
+        if (!$settings->has($name)) {
+            $message = sprintf("Parameter %s doesn't exists.", $name);
+
+            throw new InvalidArgumentException($message);
+        }
+
+        $settings->set($name, $value);
+        $this->update($settings);
+    }
+
+    public function getSetting(string $name, bool $loadFromDb = false)
+    {
+        $name = $this->validateSetting($name);
+
+        [$category, $name] = explode('.', $name);
+
+        if ($loadFromDb) {
+            $settings = $this->load($category, $name);
+
+            return $settings->get($name);
+        }
+
         $this->loadAll();
 
         if (!empty($this->schemaList)) {
@@ -172,7 +169,6 @@ class SettingsManager implements SettingsManagerInterface
 
     public function loadAll(): void
     {
-        //$loadFromSession = true;
         $session = null;
         if ($this->request->getCurrentRequest()) {
             $session = $this->request->getCurrentRequest()->getSession();
@@ -185,13 +181,15 @@ class SettingsManager implements SettingsManagerInterface
             $schemaList = [];
             $settingsBuilder = new SettingsBuilder();
             $all = $this->getAllParametersByCategory();
+
             foreach ($schemas as $schema) {
                 $schemaRegister = $this->schemaRegistry->get($schema);
                 $schemaRegister->buildSettings($settingsBuilder);
                 $name = $this->convertServiceToNameSpace($schema);
                 $settings = new Settings();
-                $parameters = isset($all[$name]) ? $all[$name] : [];
-                foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+                $parameters = $all[$name] ?? [];
+                $transformers = $settingsBuilder->getTransformers();
+                foreach ($transformers as $parameter => $transformer) {
                     if (\array_key_exists($parameter, $parameters)) {
                         if ('course_creation_use_template' === $parameter) {
                             if (empty($parameters[$parameter])) {
@@ -279,6 +277,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
             }
         }
+
         $settings->setParameters($parameters);
         $category = $this->convertServiceToNameSpace($settings->getSchemaAlias());
         $persistedParameters = $this->repository->findBy([
@@ -457,10 +456,8 @@ class SettingsManager implements SettingsManagerInterface
 
     /**
      * @param string $keyword
-     *
-     * @return array
      */
-    public function getParametersFromKeywordOrderedByCategory($keyword)
+    public function getParametersFromKeywordOrderedByCategory($keyword): array
     {
         $query = $this->repository->createQueryBuilder('s')
             ->where('s.variable LIKE :keyword OR s.title LIKE :keyword')
@@ -510,6 +507,34 @@ class SettingsManager implements SettingsManagerInterface
         return $parameters;
     }
 
+    private function validateSetting(string $name): string
+    {
+        if (!str_contains($name, '.')) {
+            //throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
+
+            // This code allows the possibility of calling
+            // api_get_setting('allow_skills_tool') instead of
+            // the "correct" way api_get_setting('platform.allow_skills_tool')
+            $items = $this->getVariablesAndCategories();
+
+            if (isset($items[$name])) {
+                $originalName = $name;
+                $name = $this->renameVariable($name);
+                $category = $this->fixCategory(
+                    strtolower($name),
+                    strtolower($items[$originalName])
+                );
+                $name = $category.'.'.$name;
+            } else {
+                $message = sprintf('Parameter must be in format "category.name", "%s" given.', $name);
+
+                throw new InvalidArgumentException($message);
+            }
+        }
+
+        return $name;
+    }
+
     /**
      * Load parameter from database.
      *
@@ -520,10 +545,9 @@ class SettingsManager implements SettingsManagerInterface
     private function getParameters($namespace)
     {
         $parameters = [];
+        $category = $this->repository->findBy(['category' => $namespace]);
         /** @var SettingsCurrent $parameter */
-        foreach ($this->repository->findBy([
-            'category' => $namespace,
-        ]) as $parameter) {
+        foreach ($category as $parameter) {
             $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
         }
 

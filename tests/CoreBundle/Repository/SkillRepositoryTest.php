@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
@@ -196,6 +197,8 @@ class SkillRepositoryTest extends AbstractApiTest
     public function testGetLastByUser(): void
     {
         $skillRepo = self::getContainer()->get(SkillRepository::class);
+        $settingsManager = self::getContainer()->get(SettingsManager::class);
+        $settingsManager->updateSetting('skill.badge_assignation_notification', 'true');
 
         $accessUrl = $this->getAccessUrl();
 
@@ -238,12 +241,17 @@ class SkillRepositoryTest extends AbstractApiTest
         $skillRepo = self::getContainer()->get(SkillRepository::class);
         $accessUrl = $this->getAccessUrl();
 
+        // Root skill.
+        $this->assertSame(1, $skillRepo->count([]));
+
         $skill = (new Skill())
             ->setName('php')
             ->setShortCode('php')
             ->setAccessUrlId($accessUrl->getId())
         ;
         $skillRepo->update($skill);
+
+        $this->assertSame(2, $skillRepo->count([]));
 
         $skillRepo->delete($skill);
 

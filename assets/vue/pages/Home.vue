@@ -6,8 +6,12 @@
             v-for="announcement in announcements"
             :key="announcement.id"
         >
+
+          <v-card-header>
+            <v-card-title>{{ announcement.title }}</v-card-title>
+          </v-card-header>
+
           <v-card-text>
-            <h4>{{ announcement.title }}</h4>
             <p v-html="announcement.content" ></p>
           </v-card-text>
 

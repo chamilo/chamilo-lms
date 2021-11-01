@@ -25,28 +25,28 @@
                     {{ $t('Sign in') }}
                   </h2>
                 </div>
-
                 <Login />
               </div>
             </div>
           </div>
 
           <div class="md:row-start-1 md:col-start-1 md:col-end-1">
-            <div class="flex justify-center lg:mt-16">
-
               <div
+                  class="pt-4"
                   v-for="page in pages"
               >
                 <v-card
                     elevation="2"
                 >
-                  <p class="text-h5 text--primary">
-                    {{ page.title }}
-                  </p>
-                  <p v-html="page.content"/>
+                  <v-card-header>
+                    <v-card-title>{{ page.title }}</v-card-title>
+                  </v-card-header>
+
+                  <v-card-text>
+                    <p v-html="page.content"/>
+                  </v-card-text>
                 </v-card>
               </div>
-            </div>
           </div>
         </div>
       </q-page>

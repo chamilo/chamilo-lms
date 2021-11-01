@@ -20,16 +20,6 @@ class MessageListener
         $this->bus = $bus;
     }
 
-    /**
-     * This code is executed when a new course is created.
-     *
-     * new object : prePersist
-     * edited object: preUpdate
-     */
-    public function prePersist(Message $message, LifecycleEventArgs $args): void
-    {
-    }
-
     public function postPersist(Message $message, LifecycleEventArgs $args): void
     {
         if ($message) {
@@ -48,9 +38,5 @@ class MessageListener
                 $this->bus->dispatch($message);
             }
         }
-    }
-
-    public function preUpdate(Message $message, LifecycleEventArgs $args): void
-    {
     }
 }

@@ -68,6 +68,21 @@ class CLpItemRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($lpItem);
         $lpItemRepo->create($lpItem);
 
+        $this->assertSame('lp item', $lpItem->getTitle());
+        $this->assertSame('ref', $lpItem->getRef());
+        $this->assertSame(100.0, $lpItem->getMinScore());
+        $this->assertSame(100.0, $lpItem->getMaxScore());
+        $this->assertSame(1, $lpItem->getDisplayOrder());
+        $this->assertSame(100.0, $lpItem->getPrerequisiteMaxScore());
+        $this->assertSame(100.0, $lpItem->getPrerequisiteMinScore());
+        $this->assertSame('', $lpItem->getLaunchData());
+        $this->assertSame('', $lpItem->getPrerequisite());
+        $this->assertSame('', $lpItem->getParameters());
+        $this->assertSame('', $lpItem->getAudio());
+        $this->assertSame(0, $lpItem->getSearchDid());
+
+        $this->assertSame(0, $lpItem->getLvl());
+
         $em = $this->getEntityManager();
         $view = (new CLpView())
             ->setUser($student)

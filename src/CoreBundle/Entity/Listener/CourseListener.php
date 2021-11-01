@@ -74,14 +74,11 @@ class CourseListener
         $this->checkLimit($repo, $course, $url);*/
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function checkLimit(CourseRepository $repo, Course $course, AccessUrl $url): void
+    /*protected function checkLimit(CourseRepository $repo, Course $course, AccessUrl $url): void
     {
-        //$limit = $url->getLimitCourses();
+        $limit = $url->getLimitCourses();
 
-        /*if (!empty($limit)) {
+        if (!empty($limit)) {
             $count = $repo->getCountCoursesByUrl($url);
             if ($count >= $limit) {
                 api_warn_hosting_contact('hosting_limit_courses', $limit);
@@ -101,6 +98,6 @@ class CourseListener
                     throw new \Exception('PortalActiveCoursesLimitReached');
                 }
             }
-        }*/
-    }
+        }
+    }*/
 }

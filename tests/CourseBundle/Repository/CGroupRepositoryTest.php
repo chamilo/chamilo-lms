@@ -28,7 +28,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
-        $item = (new CGroup())
+        $group = (new CGroup())
             ->setName('Group')
             ->setParent($course)
             ->setCreator($teacher)
@@ -46,18 +46,32 @@ class CGroupRepositoryTest extends AbstractApiTest
             ->setMaxStudent(100)
         ;
 
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
+        $this->assertHasNoEntityViolations($group);
+        $em->persist($group);
         $em->flush();
 
-        $this->assertTrue($item->getSelfRegistrationAllowed());
-        $this->assertTrue($item->getSelfUnregistrationAllowed());
+        $this->assertTrue($group->getSelfRegistrationAllowed());
+        $this->assertTrue($group->getSelfUnregistrationAllowed());
+
+        $this->assertFalse($group->hasTutors());
+        $this->assertFalse($group->hasMembers());
+        $this->assertTrue($group->getStatus());
+        $this->assertSame('desc', $group->getDescription());
+        $this->assertSame(100, $group->getMaxStudent());
+        $this->assertSame(0, $group->getAnnouncementsState());
+        $this->assertSame(0, $group->getChatState());
+        $this->assertSame(0, $group->getDocState());
+        $this->assertSame(0, $group->getDocumentAccess());
+        $this->assertSame(0, $group->getCalendarState());
+        $this->assertSame(0, $group->getWikiState());
+        $this->assertSame(0, $group->getWorkState());
+        $this->assertSame($group->getResourceIdentifier(), $group->getIid());
 
         $this->assertSame(1, $repo->count([]));
 
         $this->assertNotNull($repo->findOneByTitle('Group'));
 
-        $repo->delete($item);
+        $repo->delete($group);
         $this->assertSame(0, $repo->count([]));
     }
 
@@ -147,6 +161,8 @@ class CGroupRepositoryTest extends AbstractApiTest
         /** @var CGroup $group */
         $group = $groupRepo->find($group->getIid());
 
+        $this->assertSame($groupRelTutor->getCId(), $courseId);
+
         $this->assertSame($group->getResourceIdentifier(), $group->getIid());
         $this->assertSame(1, $group->getMembers()->count());
         $this->assertSame(1, $group->getTutors()->count());
@@ -175,14 +191,14 @@ class CGroupRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
-        $item = (new CGroup())
+        $group = (new CGroup())
             ->setName('Group')
             ->setParent($course)
             ->setCreator($teacher)
             ->setMaxStudent(100)
             ->addCourseLink($course)
         ;
-        $repo->create($item);
+        $repo->create($group);
 
         $qb = $repo->findAllByCourse($course);
         $this->assertCount(1, $qb->getQuery()->getResult());

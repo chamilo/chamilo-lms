@@ -82,6 +82,8 @@ class CForumPostRepositoryTest extends AbstractApiTest
         $attachmentRepo->addFile($attachment, $file);
         $attachmentRepo->update($attachment);
 
+        $this->assertSame($attachment->getResourceIdentifier(), $attachment->getIid());
+        $this->assertSame($file->getFilename(), (string) $attachment);
         $this->assertNotNull($attachment->getResourceNode());
         $this->assertNotNull($attachment->getResourceNode()->getResourceFile());
 

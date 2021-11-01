@@ -47,6 +47,22 @@ class CGroupCategoryRepositoryTest extends AbstractApiTest
         $em->persist($category);
         $em->flush();
 
+        $this->assertSame('category', (string) $category);
+        $this->assertSame('desc', $category->getDescription());
+        $this->assertTrue($category->getSelfRegAllowed());
+        $this->assertTrue($category->getSelfUnregAllowed());
+        $this->assertTrue($category->getAnnouncementsState());
+        $this->assertTrue($category->getCalendarState());
+        $this->assertTrue($category->getChatState());
+        $this->assertTrue($category->getForumState());
+        $this->assertTrue($category->getWikiState());
+        $this->assertTrue($category->getWorkState());
+        $this->assertSame(1, $category->getDocumentAccess());
+        $this->assertSame(10, $category->getGroupsPerUser());
+        $this->assertSame(100, $category->getMaxStudent());
+        $this->assertSame('desc', $category->getDescription());
+
+        $this->assertSame($category->getResourceIdentifier(), $category->getIid());
         $this->assertSame(1, $categoryRepo->count([]));
 
         $categoryRepo->delete($category);

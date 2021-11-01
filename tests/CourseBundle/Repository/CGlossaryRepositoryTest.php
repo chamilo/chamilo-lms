@@ -39,6 +39,8 @@ class CGlossaryRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame('glossary', (string) $glossary);
+        $this->assertSame('desc', $glossary->getDescription());
+        $this->assertSame(1, $glossary->getDisplayOrder());
         $this->assertSame($glossary->getResourceIdentifier(), $glossary->getIid());
 
         $router = $this->getContainer()->get(RouterInterface::class);

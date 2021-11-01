@@ -51,6 +51,13 @@ class CLpRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($lp);
         $repo->createLp($lp);
 
+        $this->assertSame('lp', $lp->getName());
+        $this->assertSame('desc', $lp->getDescription());
+        $this->assertSame('chamilo', $lp->getTheme());
+        $this->assertSame('author', $lp->getAuthor());
+        $this->assertSame('local', $lp->getContentLocal());
+        $this->assertSame('maker', $lp->getContentMaker());
+
         $this->assertNotNull($lp->getResourceNode());
         $this->assertSame(1, $lp->getItems()->count());
         $this->assertFalse($lp->hasCategory());

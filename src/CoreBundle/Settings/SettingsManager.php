@@ -301,8 +301,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameter->setCategory($simpleCategoryName);
                 $this->manager->persist($parameter);
             } else {
-                $parameter = new SettingsCurrent();
-                $parameter
+                $parameter = (new SettingsCurrent())
                     ->setVariable($name)
                     ->setCategory($simpleCategoryName)
                     ->setTitle($name)
@@ -348,11 +347,9 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
         $settings->setParameters($parameters);
-        $persistedParameters = $this->repository->findBy(
-            [
-                'category' => $this->convertServiceToNameSpace($settings->getSchemaAlias()),
-            ]
-        );
+        $persistedParameters = $this->repository->findBy([
+            'category' => $this->convertServiceToNameSpace($settings->getSchemaAlias()),
+        ]);
         $persistedParametersMap = [];
         foreach ($persistedParameters as $parameter) {
             $persistedParametersMap[$parameter->getTitle()] = $parameter;
@@ -372,8 +369,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameter = $persistedParametersMap[$name];
                 $parameter->setSelectedValue($value);
             } else {
-                $parameter = new SettingsCurrent();
-                $parameter
+                $parameter = (new SettingsCurrent())
                     ->setVariable($name)
                     ->setCategory($simpleCategoryName)
                     ->setTitle($name)

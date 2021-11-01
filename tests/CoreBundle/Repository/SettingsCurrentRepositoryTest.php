@@ -27,12 +27,13 @@ class SettingsCurrentRepositoryTest extends AbstractApiTest
             ->setVariable('test')
             ->setUrl($this->getAccessUrl())
             ->setCategory('cat')
+            ->setAccessUrlLocked(1)
             ->setAccessUrlChangeable(1)
             ->setSubkey('sub')
             ->setType('type')
             ->setComment('comment')
             ->setSubkeytext('setSubkeytext')
-            ->setAccessUrlLocked(1)
+            ->setScope('scope')
         ;
         $this->assertHasNoEntityViolations($setting);
         $em->persist($setting);
@@ -42,9 +43,23 @@ class SettingsCurrentRepositoryTest extends AbstractApiTest
             ->setDisplayText('option1')
             ->setVariable('variable')
         ;
-        $em->persist($option);
         $this->assertHasNoEntityViolations($option);
+        $em->persist($option);
         $em->flush();
+
+        $this->assertNotNull($setting->getId());
+        $this->assertSame('test', $setting->getTitle());
+        $this->assertSame('sub', $setting->getSubkey());
+        $this->assertSame('type', $setting->getType());
+        $this->assertSame('comment', $setting->getComment());
+        $this->assertSame('scope', $setting->getScope());
+        $this->assertSame(1, $setting->getAccessUrlChangeable());
+        $this->assertSame(1, $setting->getAccessUrlLocked());
+
+        $this->assertNotNull($option->getId());
+        $this->assertSame('variable', $option->getVariable());
+        $this->assertSame('value', $option->getValue());
+        $this->assertSame('option1', $option->getDisplayText());
 
         // By default, there's a root branch.
         $this->assertSame($count + 1, $repo->count([]));

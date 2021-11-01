@@ -24,7 +24,7 @@ class IndexControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testLogin(): void
+    public function testLoginPage(): void
     {
         $client = static::createClient();
         $client->request('GET', '/login');

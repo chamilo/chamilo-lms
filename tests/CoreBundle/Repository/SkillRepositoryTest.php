@@ -92,6 +92,7 @@ class SkillRepositoryTest extends AbstractApiTest
         ;
         $em->persist($level);
 
+
         $skill = (new Skill())
             ->setName('Dev')
             ->setShortCode('Dev')
@@ -186,6 +187,8 @@ class SkillRepositoryTest extends AbstractApiTest
 
         $this->assertTrue($skill->hasCourseAndSession($skillRelCourse));
 
+        $this->assertSame('profile', $profile->getName());
+        $this->assertSame('profile', (string) $profile);
         $this->assertSame(1, $profile->getLevels()->count());
         $this->assertSame(1, $profile->getSkills()->count());
 

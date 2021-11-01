@@ -253,9 +253,7 @@ app.config.globalProperties.$filters = {
     relativeDatetime(datetime) {
         return DateTime.fromISO(datetime).toRelative();
     },
-    prettyBytes(num) {
-        return prettyBytes(num);
-    },
+    prettyBytes,
 }
 
 import Alpine from 'alpinejs'

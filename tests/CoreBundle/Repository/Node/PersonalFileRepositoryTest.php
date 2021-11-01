@@ -80,7 +80,6 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
     public function testFileUploadAndShare(): void
     {
-        self::bootKernel();
         $username = 'sender';
         $password = 'sender';
         $visibilityPublished = ResourceLink::VISIBILITY_PUBLISHED;
@@ -227,7 +226,6 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
     public function testUserUploadFileAsAnotherUser(): void
     {
-        self::bootKernel();
         $username = 'sender';
         $password = 'sender';
 

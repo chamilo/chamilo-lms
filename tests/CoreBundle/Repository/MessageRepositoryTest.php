@@ -45,11 +45,15 @@ class MessageRepositoryTest extends AbstractApiTest
             ->setSendDate(new DateTime())
             ->setVotes(0)
             ->setGroup(null)
+            ->setUpdateDate(new DateTime())
+            ->setParent(null)
         ;
 
         $this->assertHasNoEntityViolations($message);
         $messageRepo->update($message);
 
+        $this->assertNotNull($message->getUpdateDate());
+        $this->assertNull($message->getParent());
         $this->assertTrue($message->hasReceiver($testUser));
 
         $transport = $this->getContainer()->get('messenger.transport.sync_priority_high');
@@ -416,7 +420,7 @@ class MessageRepositoryTest extends AbstractApiTest
         // No attachments.
         $this->assertSame(0, $messageAttachmentRepo->count([]));
         // 2 tags still exists.
-        $this->assertSame(1, $messageTagRepo->count([]));
+        $this->assertSame(0, $messageTagRepo->count([]));
     }
 
     public function testCreateMessageWithCc(): void
@@ -631,9 +635,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testDeleteMessageWithApi(): void
     {
-        $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
         $messageRepo = self::getContainer()->get(MessageRepository::class);
-        $userRepo = self::getContainer()->get(UserRepository::class);
 
         $fromUser = $this->createUser('from');
         $toUser = $this->createUser('to');

@@ -962,6 +962,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testSeparateUsersGroups(): void
     {
+        $usersAndGroupsSeparated = CDocument::separateUsersGroups([]);
+        $this->assertSame(['groups' => [], 'users' => []], $usersAndGroupsSeparated);
+
         $usersAndGroupsSeparated = CDocument::separateUsersGroups(['USER:1']);
 
         $this->assertCount(1, $usersAndGroupsSeparated['users']);

@@ -24,4 +24,10 @@ class MessageTagRepository extends SortableRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function delete(MessageTag $messageTag): void
+    {
+        $this->getEntityManager()->remove($messageTag);
+        $this->getEntityManager()->flush();
+    }
 }

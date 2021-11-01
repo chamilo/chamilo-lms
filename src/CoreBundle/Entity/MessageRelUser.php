@@ -86,7 +86,7 @@ class MessageRelUser
     /**
      * @var Collection|MessageTag[]
      *
-     * @ORM\ManyToMany(targetEntity="MessageTag", inversedBy="messageRelUsers", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="MessageTag", inversedBy="messageRelUsers", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="message_rel_user_rel_tags")
      */
     #[Assert\Valid]

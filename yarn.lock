@@ -6613,7 +6613,7 @@ __metadata:
     eslint-plugin-vue: 7.18.0
     file-loader: ^6.2.0
     filemanager-webpack-plugin: ^5.0.0
-    flag-icon-css: ^4.1.3
+    flag-icon-css: ^4.1.4
     free-jqgrid: "https://github.com/chamilo/jqGrid.git#bs4"
     full-icu: ^1.4.0
     glob-all: ^3.2.1
@@ -6664,7 +6664,7 @@ __metadata:
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
     sweetalert2: ^11.1.9
-    tailwindcss: ^2.2.17
+    tailwindcss: ^2.2.19
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
     textcomplete: ^0.18.2
@@ -10065,10 +10065,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flag-icon-css@npm:^4.1.3":
-  version: 4.1.3
-  resolution: "flag-icon-css@npm:4.1.3"
-  checksum: 40797a44ed60d104cbc8c08b68737f9e4692ac457d897bb648232be02d9d2c92b6677ff7762a9fdb5b45b80be6df67d36a19311561786c137ee25fee5e47f825
+"flag-icon-css@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "flag-icon-css@npm:4.1.4"
+  checksum: db71f62f739914d6645e4ac89cacfebdc3738d9189f1d46a71dc3828810a4c24fd81c5f6e0fb97baaad2747a2a8193dc277dc16e14198eb237548daba7a81f1d
   languageName: node
   linkType: hard
 
@@ -19032,9 +19032,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^2.2.17":
-  version: 2.2.17
-  resolution: "tailwindcss@npm:2.2.17"
+"tailwindcss@npm:^2.2.19":
+  version: 2.2.19
+  resolution: "tailwindcss@npm:2.2.19"
   dependencies:
     arg: ^5.0.1
     bytes: ^3.0.0
@@ -19074,7 +19074,7 @@ fsevents@~2.3.2:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: 1e1e019c8952af013c9b02aad420f73ed13b4ef729d2aa4c86735a2cfcffb725060006827145edb5792f7361c646072e22f2e1af31faeef8beaec03bf3353800
+  checksum: 6de47bb0ecc3246e84e48684a368380b11e3e5c41fef23c6041db69e10bfd852eaa57a713b55b215fe95a761169b585908413a1efceb6d8f3d9643e414f73c8c
   languageName: node
   linkType: hard
 

@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -862,7 +863,7 @@ class TicketManager
         ";
 
         $projectId = (int) $_GET['project_id'];
-        $userIsAllowInProject = self::userIsAllowInProject($userInfo, $projectId);
+        $userIsAllowInProject = self::userIsAllowInProject(api_get_user_entity($userId), $projectId);
 
         // Check if a role was set to the project
         if (false == $userIsAllowInProject) {
@@ -1058,7 +1059,8 @@ class TicketManager
 
         // Check if a role was set to the project
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            if (!in_array($userInfo['status'], $allowRoleList)) {
+            $allowed = self::userIsAllowInProject(api_get_user_entity(), $projectId);
+            if (!$allowed) {
                 $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
             }
         } else {
@@ -2421,25 +2423,28 @@ class TicketManager
     }
 
     /**
-     * @param array $userInfo
      * @param int   $projectId
-     *
-     * @return bool
      */
-    public static function userIsAllowInProject($userInfo, $projectId)
+    public static function userIsAllowInProject(User $user, $projectId): bool
     {
-        if (api_is_platform_admin()) {
+        if ($user->hasRole('ROLE_ADMIN')) {
             return true;
         }
 
         $allowRoleList = self::getAllowedRolesFromProject($projectId);
 
-        // Check if a role was set to the project
+        // Check if a role was set to the project.
         // Project 1 is considered the default and is accessible to all users
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            if (in_array($userInfo['status'], $allowRoleList)) {
-                return true;
+            $result = false;
+            foreach ($allowRoleList as $role) {
+                if ($user->hasRole($role)) {
+                    $result = true;
+                    break;
+                }
             }
+
+            return $result;
         }
 
         return false;

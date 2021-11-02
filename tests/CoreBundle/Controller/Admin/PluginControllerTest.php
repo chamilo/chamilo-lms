@@ -20,7 +20,6 @@ class PluginControllerTest extends WebTestCase
         $client->loginUser($admin);
 
         $client->request('GET', '/plugins/');
-        $this->assertResponseIsSuccessful();
 
         $content = (string) $client->getResponse()->getContent();
 

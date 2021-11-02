@@ -55,7 +55,7 @@ class TwigListener
                     'groups' => ['user_json:read'],
                 ]);
                 $isAuth = true;
-                $userIsAllowedInProject = TicketManager::userIsAllowInProject(['status' => $userClone->getStatus()], 1);
+                $userIsAllowedInProject = TicketManager::userIsAllowInProject($userClone, 1);
             }
         }
 

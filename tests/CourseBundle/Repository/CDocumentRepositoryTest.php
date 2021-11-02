@@ -701,15 +701,13 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertSame($file->getSize(), $size);
 
         $docs = $documentRepo->findDocumentsByAuthor($this->getUser('admin')->getId());
-        $this->assertSame(0, \count($docs));
+        $this->assertCount(0, $docs);
     }
 
     public function testAddFileFromString(): void
     {
-        self::bootKernel();
-
-        $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $course = $this->createCourse('Test');
         $admin = $this->getUser('admin');
 
         $document = (new CDocument())
@@ -742,8 +740,6 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testAddFileFromPath(): void
     {
-        self::bootKernel();
-
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
         $admin = $this->getUser('admin');
@@ -772,8 +768,6 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testAddFileFromFileRequest(): void
     {
-        self::bootKernel();
-
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
         $admin = $this->getUser('admin');
@@ -806,8 +800,6 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testCreateWithAddResourceNode(): void
     {
-        self::bootKernel();
-
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
         $admin = $this->getUser('admin');
@@ -832,8 +824,6 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testCreateDocumentWithLinks(): void
     {
-        self::bootKernel();
-
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
         $admin = $this->getUser('admin');
@@ -978,8 +968,6 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testSetVisibility(): void
     {
-        self::bootKernel();
-
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
         $admin = $this->getUser('admin');

@@ -22,19 +22,10 @@ class SettingsController extends BaseController
 {
     use ControllerTrait;
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings', name: 'admin_settings')]
     public function indexAction(): Response
     {
-        $manager = $this->getSettingsManager();
-        $schemas = $manager->getSchemas();
-
-        return $this->render(
-            '@ChamiloCore/Admin/Settings/index.html.twig',
-            [
-                'schemas' => $schemas,
-            ]
-        );
+        return $this->redirectToRoute('chamilo_platform_settings', ['namespace' => 'platform']);
     }
 
     /**
@@ -184,7 +175,7 @@ class SettingsController extends BaseController
      * Sync settings from classes with the database.
      */
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/settings_sync', name: 'admin_settings')]
+    #[Route('/settings_sync', name: 'sync_settings')]
     public function syncSettings(): Response
     {
         $manager = $this->getSettingsManager();

@@ -243,9 +243,8 @@ class CourseController extends ToolBaseController
         return $this->redirect($url);
     }
 
-    public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
+    /*public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
     {
-        /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
             'name' => $toolName,
         ]);
@@ -265,7 +264,7 @@ class CourseController extends ToolBaseController
         $url = $link.'?'.$this->getCourseUrlQuery();
 
         return $this->redirect($url);
-    }
+    }*/
 
     /**
      * Edit configuration with given namespace.

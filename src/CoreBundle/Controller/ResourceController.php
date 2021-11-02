@@ -254,7 +254,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
-        //$resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException($this->trans('Resource not found'));
@@ -286,6 +285,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $qb = $resourceNodeRepo->getChildrenQueryBuilder($resourceNode);
         $qb->addCriteria($criteria);
+
         /** @var ArrayCollection|ResourceNode[] $children */
         $children = $qb->getQuery()->getResult();
         $count = \count($children);

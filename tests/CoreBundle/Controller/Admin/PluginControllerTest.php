@@ -26,4 +26,18 @@ class PluginControllerTest extends WebTestCase
 
         $this->assertStringContainsString('Plugin', $content);
     }
+
+    public function testAdd(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $client->loginUser($admin);
+
+        $client->request('GET', '/plugins/add');
+        $this->assertResponseIsSuccessful();
+
+        $content = (string) $client->getResponse()->getContent();
+
+        $this->assertStringContainsString('Add', $content);
+    }
 }

@@ -74,7 +74,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $folderName = 'folder1';
         $token = $this->getUserToken([]);
-        $response = $this->createClientWithCredentials($token)->request(
+        $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/documents',
             [
@@ -1032,7 +1032,6 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testGetTotalSpaceByCourse(): void
     {
-        self::bootKernel();
         $course = $this->createCourse('Test');
         $admin = $this->getUser('admin');
         $em = $this->getEntityManager();
@@ -1058,5 +1057,55 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $documentRepo->delete($document);
 
         $this->assertSame(0, $documentRepo->count([]));
+    }
+
+    public function testToggleVisibility(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $course = $this->createCourse('Test');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title123')
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+
+        $link = $document->getFirstResourceLink();
+        $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $link->getVisibility());
+
+        $documentId = $document->getIid();
+        $url = '/api/documents/'.$documentId.'/toggle_visibility';
+
+        // Not logged in.
+        $client->request('PUT', $url);
+        $this->assertResponseStatusCodeSame(401);
+
+        // Another user.
+        $this->createUser('another');
+        $client = $this->getClientWithGuiCredentials('another', 'another');
+        $client->request('PUT', $url);
+
+        // Admin.
+        $token = $this->getUserToken([]);
+        $this->createClientWithCredentials($token)->request(
+            'PUT',
+            $url,
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+
+        $document = $documentRepo->find($document->getIid());
+        $link = $document->getFirstResourceLink();
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $link->getVisibility());
     }
 }

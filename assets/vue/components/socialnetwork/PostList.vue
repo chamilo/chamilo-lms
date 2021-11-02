@@ -4,17 +4,20 @@
     :key="message.id"
     :message="message"
   />
+
+  <Loading :visible="isLoading" />
 </template>
 
 <script>
 import {MESSAGE_TYPE_WALL} from "../message/msgType";
 import SocialNetworkPost from "./Post";
 import {useStore} from "vuex";
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
+import Loading from "../Loading";
 
 export default {
   name: "SocialNetworkPostList",
-  components: {SocialNetworkPost},
+  components: {Loading, SocialNetworkPost},
   props: {
     user: {
       type: Object,
@@ -22,21 +25,19 @@ export default {
     }
   },
   setup(props) {
-    console.log(props.user,  '<<<<<<');
     const store = useStore();
 
     let messageList = ref([]);
 
-    function listMessage(user) {
+    async function listMessage(user) {
       store.state.message.resetList = true;
 
-      store.dispatch('message/fetchAll', {
+      await store.dispatch('message/fetchAll', {
         msgType: MESSAGE_TYPE_WALL,
         'receivers.receiver': user['@id'],
         'order[sendDate]': 'desc',
-      }).then(() => {
-        messageList.value = store.getters['message/list'];
       });
+      messageList.value = store.getters['message/list'];
     }
 
     watch(() => props.user, (current) => {listMessage(current)});
@@ -44,7 +45,8 @@ export default {
     listMessage(props.user);
 
     return {
-      messageList
+      messageList,
+      isLoading: computed(() => store.state.message.isLoading)
     }
   }
 }

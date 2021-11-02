@@ -1,7 +1,7 @@
 <template>
   <div class="row q-col-gutter-md">
     <div class="col-8">
-      <SocialNetworkHome
+      <SocialNetworkWall
         :user="user"
         v-if="user && user['@id']"
       />
@@ -24,11 +24,11 @@
 <script>
 import {useStore} from "vuex";
 import {ref, watch} from "vue";
-import SocialNetworkHome from "./Home";
+import SocialNetworkWall from "./Wall";
 
 export default {
   name: "SocialNetworkLayout",
-  components: {SocialNetworkHome},
+  components: {SocialNetworkWall},
   props: {
     uid: {
       type: String,

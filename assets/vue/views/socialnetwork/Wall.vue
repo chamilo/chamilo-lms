@@ -12,7 +12,7 @@ import SocialNetworkPostList from "../../components/socialnetwork/PostList";
 import {useRoute} from "vue-router";
 
 export default {
-  name: "SocialNetworkHome",
+  name: "SocialNetworkWall",
   components: {SocialNetworkPostList, SocialNetworkForm},
   props: {
     user: {

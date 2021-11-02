@@ -13,17 +13,17 @@
 
       <q-item-section>
         <q-item-label v-if="message.sender['@id'] === message.firstReceiver.receiver['@id']">
-          <router-link :to="{ name: 'SocialNetworkHome', query: { id: message.sender['@id']} }">
+          <router-link :to="{ name: 'SocialNetworkWall', query: { id: message.sender['@id']} }">
             {{ message.sender.username }}
           </router-link>
         </q-item-label>
 
         <q-item-label v-else>
-          <router-link :to="{ name: 'SocialNetworkHome', query: { id: message.sender['@id']} }">
+          <router-link :to="{ name: 'SocialNetworkWall', query: { id: message.sender['@id']} }">
             {{ message.sender.username }}
           </router-link>
           &raquo;
-          <router-link :to="{ name: 'SocialNetworkHome', query: { id: message.firstReceiver.receiver['@id']} }">
+          <router-link :to="{ name: 'SocialNetworkWall', query: { id: message.firstReceiver.receiver['@id']} }">
             {{ message.firstReceiver.receiver.username }}
           </router-link>
         </q-item-label>

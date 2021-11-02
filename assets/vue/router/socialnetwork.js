@@ -6,9 +6,9 @@ export default {
     props: route => ({uid: route.query.id}),
     children: [
         {
-            name: 'SocialNetworkHome',
+            name: 'SocialNetworkWall',
             path: '',
-            component: () => import('../views/socialnetwork/Home.vue')
+            component: () => import('../views/socialnetwork/Wall.vue')
         },
     ]
 }

@@ -41,8 +41,8 @@ if (php_sapi_name() !== 'cli') {
 }
 
 require $chamiloRoot.'/cli-config.php';
-require_once $chamiloRoot.'/app/config/auth.conf.php';
 require_once $chamiloRoot.'/main/inc/lib/api.lib.php';
+require_once $chamiloRoot.'/app/config/auth.conf.php';
 require_once $chamiloRoot.'/main/inc/lib/database.constants.inc.php';
 
 ini_set('memory_limit', -1);
@@ -56,6 +56,7 @@ $ldapAttributes = [];
 $generalTableFieldMap = $extldap_user_correspondance;
 $extraFieldMap = [];
 $multipleUrlLDAPConfig = false;
+$allLdapUsers = [];
 const EXTRA_ARRAY_KEY = 'extra';
 
 // read all users from the internal database
@@ -80,13 +81,17 @@ if (api_is_multiple_url_enabled()) {
         $multipleUrlLDAPConfig = false;
     }    
 }
+if ($debug) {
+    echo "accessUrls = $accessUrls \n";
+}
 
 if (!$multipleUrlLDAPConfig) {
     $accessUrls['id'] = 0;
     $generalTableFieldMap[0] = $generalTableFieldMap;
 }
 
-foreach ($accessUrls['id'] as $accessUrlId) {
+foreach ($accessUrls as $accessUrl) {
+    $accessUrlId = $accessUrl['id'];
     if (array_key_exists($accessUrlId, $generalTableFieldMap) && is_array($generalTableFieldMap[$accessUrlId])) {
         $tableFieldMap = $generalTableFieldMap[$accessUrlId];
         if (array_key_exists(EXTRA_ARRAY_KEY, $tableFieldMap) and is_array($tableFieldMap[EXTRA_ARRAY_KEY])) {
@@ -140,186 +145,188 @@ foreach ($accessUrls['id'] as $accessUrlId) {
     // Retrieve source information from LDAP
         
     $ldap = false;
-    foreach ($extldap_config[$accessUrlId]['host'] as $ldapHost) {
-        $ldap = array_key_exists('port', $extldap_config)
-            ? ldap_connect($ldapHost, $extldap_config['port'])
-            : ldap_connect($ldapHost);
-        if (false !== $ldap) {
-            break;
+    if (array_key_exists($accessUrlId, $extldap_config) && is_array($extldap_config[$accessUrlId])) { 
+        foreach ($extldap_config[$accessUrlId]['host'] as $ldapHost) {
+            $ldap = array_key_exists('port', $extldap_config)
+                ? ldap_connect($ldapHost, $extldap_config['port'])
+                : ldap_connect($ldapHost);
+            if (false !== $ldap) {
+                break;
+            }
         }
-    }
-    if (false === $ldap) {
-        die("ldap_connect() failed\n");
-    }
-    if ($debug) {
-        echo "Connected to LDAP server $ldapHost.\n";
-    }
-
-    ldap_set_option(
-        $ldap,
-        LDAP_OPT_PROTOCOL_VERSION,
-        array_key_exists('protocol_version', $extldap_config[$accessUrlId]) ? $extldap_config[$accessUrlId]['protocol_version'] : 2
-    );
-
-    ldap_set_option(
-        $ldap,
-        LDAP_OPT_REFERRALS,
-        array_key_exists('referrals', $extldap_config[$accessUrlId]) ? $extldap_config[$accessUrlId]['referrals'] : false
-    );
-
-    ldap_bind($ldap, $extldap_config['admin_dn'], $extldap_config['admin_password'])
-    or die('ldap_bind() failed: ' . ldap_error($ldap) . "\n");
-    if ($debug) {
-        echo "Bound to LDAP server as ${extldap_config['admin_dn']}.\n";
-    }
-
-    $baseDn = $extldap_config[$accessUrlId]['base_dn']
-    or die("cannot read the LDAP directory base DN where to search for user entries\n");
-
-    $ldapUsernameAttribute = $extldap_user_correspondance[$accessUrlId]['username']
-    or die("cannot read the name of the LDAP attribute where to find the username\n");
-
-    $filter = "$ldapUsernameAttribute=*";
-
-    if (array_key_exists('filter', $extldap_config[$accessUrlId])) {
-        $filter = '(&('.$filter.')('.$extldap_config[$accessUrlId]['filter'].'))';
-    }
-
-    $searchResult = ldap_search($ldap, $baseDn, $filter, $ldapAttributes)
-    or die("ldap_search(\$ldap, '$baseDn', '$filter', [".join(',', $ldapAttributes).']) failed: '.ldap_error($ldap)."\n");
-
-    if ($debug) {
-        echo ldap_count_entries($ldap, $searchResult) . " LDAP entries found\n";
-    }
-
-    $ldapUsers[$accessUrlId] = [];
-    $entry = ldap_first_entry($ldap, $searchResult);
-    while (false !== $entry) {
+        if (false === $ldap) {
+            die("ldap_connect() failed\n");
+        }
+        if ($debug) {
+            echo "Connected to LDAP server $ldapHost.\n";
+        }
+    
+        ldap_set_option(
+            $ldap,
+            LDAP_OPT_PROTOCOL_VERSION,
+            array_key_exists('protocol_version', $extldap_config[$accessUrlId]) ? $extldap_config[$accessUrlId]['protocol_version'] : 2
+        );
+    
+        ldap_set_option(
+            $ldap,
+            LDAP_OPT_REFERRALS,
+            array_key_exists('referrals', $extldap_config[$accessUrlId]) ? $extldap_config[$accessUrlId]['referrals'] : false
+        );
+    
+        ldap_bind($ldap, $extldap_config[$accessUrlId]['admin_dn'], $extldap_config[$accessUrlId]['admin_password'])
+        or die('ldap_bind() failed: ' . ldap_error($ldap) . "\n");
+	if ($debug) {
+            $adminDn = $extldap_config[$accessUrlId]['admin_dn'];
+            echo "Bound to LDAP server as $adminDn .\n";
+        }
+    
+        $baseDn = $extldap_config[$accessUrlId]['base_dn']
+        or die("cannot read the LDAP directory base DN where to search for user entries\n");
+    
+        $ldapUsernameAttribute = $extldap_user_correspondance[$accessUrlId]['username']
+        or die("cannot read the name of the LDAP attribute where to find the username\n");
+    
+        $filter = "$ldapUsernameAttribute=*";
+    
+        if (array_key_exists('filter', $extldap_config[$accessUrlId])) {
+            $filter = '(&('.$filter.')('.$extldap_config[$accessUrlId]['filter'].'))';
+        }
+    
+        $searchResult = ldap_search($ldap, $baseDn, $filter, $ldapAttributes)
+        or die("ldap_search(\$ldap, '$baseDn', '$filter', [".join(',', $ldapAttributes).']) failed: '.ldap_error($ldap)."\n");
+    
+        if ($debug) {
+            echo ldap_count_entries($ldap, $searchResult) . " LDAP entries found\n";
+        }
+    
+        $ldapUsers = [];
+        $entry = ldap_first_entry($ldap, $searchResult);
+        while (false !== $entry) {
         $attributes = ldap_get_attributes($ldap, $entry);
-        $ldapUser = [];
-        foreach ($allFields as $userField) {
-            if (!is_null($userField->constant)) {
-                $value = $userField->constant;
-            } elseif ($userField->function) {
-                switch ($userField->name) {
-                    case 'status':
-                        $value = STUDENT;
-                        break;
-                    case 'admin':
-                        $value = false;
-                        break;
-                    default:
-                        die("'func' not implemented for $userField->name\n");
-                }
-            } else {
-                if (array_key_exists($userField->ldapAttribute, $attributes)) {
-                    $values = ldap_get_values($ldap, $entry, $userField->ldapAttribute)
-                    or die(
-                        'could not read value of attribute ' . $userField->ldapAttribute
-                        . ' of entry ' . ldap_get_dn($ldap, $entry)
-                        . "\n"
-                    );
-                    (1 === $values['count'])
-                    or die(
-                        $values['count'] . ' values found (expected only one)'
-                        . ' in attribute ' . $userField->ldapAttribute
-                        . ' of entry ' . ldap_get_dn($ldap, $entry)
-                        . "\n"
-                    );
-                    $value = $values[0];
+            $ldapUser = [];
+            foreach ($allFields as $userField) {
+                if (!is_null($userField->constant)) {
+                    $value = $userField->constant;
+                } elseif ($userField->function) {
+                    switch ($userField->name) {
+                        case 'status':
+                            $value = STUDENT;
+                            break;
+                        case 'admin':
+                            $value = false;
+                            break;
+                        default:
+                            die("'func' not implemented for $userField->name\n");
+                    }
                 } else {
-                    $value = '';
-                }
-            }
-            $ldapUser[$userField->name] = $value;
-        }
-        $username = strtolower($ldapUser['username']);
-        array_key_exists($username, $ldapUsers) and die("duplicate username '$username' found in LDAP\n");
-        $ldapUsers[$accessUrlId][$username] = $ldapUser;
-        $entry = ldap_next_entry($ldap, $entry);
-    }
-
-    ldap_close($ldap);
-
-    // create new user accounts found in the LDAP directory and update the existing ones, re-enabling them if disabled
-
-    foreach ($ldapUsers as $username => $ldapUser) {
-        if (array_key_exists($username, $dbUsers)) {
-            $user = $dbUsers[$username];
-        } else {
-            $user = new User();
-            $dbUsers[$username] = $user;
-            if ($debug) {
-                echo 'Created ' . $username . "\n";
-            }
-        }
-        foreach ($tableFields as $userField) {
-            $value = $ldapUser[$userField->name];
-            if ($userField->getter->invoke($user) !== $value) {
-                $userField->setter->invoke($user, $value);
-                if ($debug) {
-                    echo 'Updated ' . $username . ' field '.$userField->name."\n";
-                }
-            }
-        }
-        if (!$user->isActive()) {
-            $user->setActive(true);
-        }
-	UserManager::getManager()->save($user, false);
-        if ($multipleUrlLDAPConfig) {
-            UrlManager::add_user_to_url($user->getId(), $accessUrlId);
-        } elseif (!api_is_multiple_url_enabled()) {
-            //we are adding by default the access_url_user table with access_url_id = 1
-            UrlManager::add_user_to_url($user->getId(), 1);
-        }
-    }
-    try {
-        Database::getManager()->flush();
-    } catch (OptimisticLockException $exception) {
-        die($exception->getMessage()."\n");
-    }
-
-
-    // also update extra field values
-
-    foreach ($ldapUsers as $username => $ldapUser) {
-        $user = $dbUsers[$username];
-        foreach ($extraFields as $userField) {
-            $value = $ldapUser[$userField->name];
-            if (array_key_exists($user->getId(), $userField->extraFieldValues)) {
-                /**
-                 * @var ExtraFieldValues $extraFieldValue
-                 */
-                $extraFieldValue = $userField->extraFieldValues[$user->getId()];
-                if ($extraFieldValue->getValue() !== $value) {
-                    $extraFieldValue->setValue($value);
-                    Database::getManager()->persist($extraFieldValue);
-                    if ($debug) {
-                        echo 'Updated ' . $username . ' extra field ' . $userField->name . "\n";
+                    if (array_key_exists($userField->ldapAttribute, $attributes)) {
+                        $values = ldap_get_values($ldap, $entry, $userField->ldapAttribute)
+                        or die(
+                            'could not read value of attribute ' . $userField->ldapAttribute
+                            . ' of entry ' . ldap_get_dn($ldap, $entry)
+                            . "\n"
+                        );
+                        (1 === $values['count'])
+                        or die(
+                            $values['count'] . ' values found (expected only one)'
+                            . ' in attribute ' . $userField->ldapAttribute
+                            . ' of entry ' . ldap_get_dn($ldap, $entry)
+                            . "\n"
+                        );
+                        $value = $values[0];
+                    } else {
+                        $value = '';
                     }
                 }
+                $ldapUser[$userField->name] = $value;
+            }
+            $username = strtolower($ldapUser['username']);
+            array_key_exists($username, $ldapUsers) and die("duplicate username '$username' found in LDAP\n");
+            $ldapUsers[$username] = $ldapUser;
+            $entry = ldap_next_entry($ldap, $entry);
+        }
+    
+        ldap_close($ldap);
+
+        // create new user accounts found in the LDAP directory and update the existing ones, re-enabling them if disabled
+        foreach ($ldapUsers as $username => $ldapUser) {
+            if (array_key_exists($username, $dbUsers)) {
+                $user = $dbUsers[$username];
             } else {
-                $extraFieldValue = new ExtraFieldValues();
-                $extraFieldValue->setValue($value);
-                $extraFieldValue->setField($userField->extraField);
-                $extraFieldValue->setItemId($user->getId());
-                Database::getManager()->persist($extraFieldValue);
-                $userField->extraFieldValues[$user->getId()] = $extraFieldValue;
+                $user = new User();
+                $dbUsers[$username] = $user;
                 if ($debug) {
-                    echo 'Created ' . $username . ' extra field ' . $userField->name . "\n";
+                    echo 'Created ' . $username . "\n";
+                    echo "ldapUser = " . print_r ($ldapUser,1) . "\n";
+                }
+            }
+            foreach ($tableFields as $userField) {
+                $value = $ldapUser[$userField->name];
+                if ($userField->getter->invoke($user) !== $value) {
+                    $userField->setter->invoke($user, $value);
+                    if ($debug) {
+                        echo 'Updated ' . $username . ' field '.$userField->name."\n";
+                    }
+                }
+            }
+            if (!$user->isActive()) {
+                $user->setActive(true);
+            }
+            UserManager::getManager()->save($user, false);
+            if ($multipleUrlLDAPConfig) {
+                UrlManager::add_user_to_url($user->getId(), $accessUrlId);
+            } elseif (!api_is_multiple_url_enabled()) {
+                //we are adding by default the access_url_user table with access_url_id = 1
+                UrlManager::add_user_to_url($user->getId(), 1);
+            }
+        }
+        try {
+            Database::getManager()->flush();
+        } catch (OptimisticLockException $exception) {
+            die($exception->getMessage()."\n");
+        }
+
+
+        // also update extra field values
+
+        foreach ($ldapUsers as $username => $ldapUser) {
+            $user = $dbUsers[$username];
+            foreach ($extraFields as $userField) {
+                $value = $ldapUser[$userField->name];
+                if (array_key_exists($user->getId(), $userField->extraFieldValues)) {
+                    /**
+                     * @var ExtraFieldValues $extraFieldValue
+                     */
+                    $extraFieldValue = $userField->extraFieldValues[$user->getId()];
+                    if ($extraFieldValue->getValue() !== $value) {
+                        $extraFieldValue->setValue($value);
+                        Database::getManager()->persist($extraFieldValue);
+                        if ($debug) {
+                            echo 'Updated ' . $username . ' extra field ' . $userField->name . "\n";
+                        }
+                    }
+                } else {
+                    $extraFieldValue = new ExtraFieldValues();
+                    $extraFieldValue->setValue($value);
+                    $extraFieldValue->setField($userField->extraField);
+                    $extraFieldValue->setItemId($user->getId());
+                    Database::getManager()->persist($extraFieldValue);
+                    $userField->extraFieldValues[$user->getId()] = $extraFieldValue;
+                    if ($debug) {
+                        echo 'Created ' . $username . ' extra field ' . $userField->name . "\n";
+                    }
                 }
             }
         }
-    }
-    try {
-        Database::getManager()->flush();
-    } catch (OptimisticLockException $exception) {
-        die($exception->getMessage()."\n");
-    }
+        try {
+            Database::getManager()->flush();
+        } catch (OptimisticLockException $exception) {
+            die($exception->getMessage()."\n");
+        }
 
-    $allLdapUsers = array_merge($allLdapUsers, $ldapUsers);
+        $allLdapUsers = array_merge($allLdapUsers, $ldapUsers);
+    }
 }
-
 // disable user accounts not found in the LDAP directories
 
 $now = new DateTime();

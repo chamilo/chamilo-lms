@@ -54,19 +54,19 @@ use UserManager;
             'security' => "is_granted('ROLE_USER')", // @todo increase security
         ],
         'post' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('CREATE', object)",
         ],
     ],
     iri: 'http://schema.org/Person',
     itemOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('VIEW', object)",
         ],
         'put' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('EDIT', object)",
         ],
         'delete' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('DELETE', object)",
         ],
     ],
     attributes: [
@@ -2132,13 +2132,16 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param int $relationType Example: UserRelUser::USER_RELATION_TYPE_BOSS
      *
-     * @return UserRelUser[]|Collection
+     * @return Collection<int, UserRelUser>
      */
-    public function getFriendsByRelationType(int $relationType)
+    public function getFriendsByRelationType(int $relationType): Collection
     {
-        return $this->friends->filter(function (UserRelUser $userRelUser) use ($relationType) {
-            return $relationType === $userRelUser->getRelationType();
-        });
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('relationType', $relationType)
+        );
+
+        return $this->friends->matching($criteria);
     }
 
     /**
@@ -2490,5 +2493,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->fullName = $fullName;
 
         return $this;
+    }
+
+    public function hasFriendWithRelationType(self $friend, int $relationType): bool
+    {
+        $friends = $this->getFriendsByRelationType($relationType);
+
+        return $friends->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
     }
 }

@@ -179,7 +179,6 @@ class SessionRepositoryTest extends AbstractApiTest
         $session = $this->createSession('test session');
 
         $sessionRepo = self::getContainer()->get(SessionRepository::class);
-
         $session->addCourse($course);
         $sessionRepo->update($session);
 

@@ -6,10 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Form\Type\ResourceCommentType;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
@@ -19,7 +16,6 @@ use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,91 +110,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'data' => $data,
             ]
         );
-    }
-
-    /**
-     * Shows resource information.
-     *
-     * @Route("/{tool}/{type}/{id}/info", methods={"GET", "POST"}, name="chamilo_core_resource_info")
-     */
-    public function infoAction(Request $request): Response
-    {
-        $nodeId = (int) $request->get('id');
-        $repository = $this->getRepositoryFromRequest($request);
-
-        $resource = $repository->getResourceFromResourceNode($nodeId);
-        $this->denyAccessUnlessValidResource($resource);
-
-        $resourceNode = $resource->getResourceNode();
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $resourceNode,
-            $this->trans(sprintf('Unauthorised access to resource #%s', $nodeId))
-        );
-
-        //$this->setBreadCrumb($request, $resourceNode);
-
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-
-        $form = $this->createForm(ResourceCommentType::class, null);
-
-        $params = [
-            'resource' => $resource,
-            'course' => $this->getCourse(),
-            'tool' => $tool,
-            'type' => $type,
-            'comment_form' => $form->createView(),
-        ];
-
-        return $this->render(
-            '@ChamiloCore/Resource/info.html.twig',
-            $params
-        );
-    }
-
-    /**
-     * @deprecated use vue
-     *
-     * @Route("/{tool}/{type}/{id}/change_visibility", name="chamilo_core_resource_change_visibility")
-     */
-    public function changeVisibilityAction(Request $request): Response
-    {
-        $id = (int) $request->get('id');
-
-        $repository = $this->getRepositoryFromRequest($request);
-
-        $resource = $repository->getResourceFromResourceNode($id);
-        $this->denyAccessUnlessValidResource($resource);
-        /** @var AbstractResource $resource */
-        $resourceNode = $resource->getResourceNode();
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::EDIT,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        if ($this->hasCourse()) {
-            $link = $resource->getFirstResourceLinkFromCourseSession($this->getCourse(), $this->getSession());
-        } else {
-            $link = $resource->getFirstResourceLink();
-        }
-
-        // Use repository to change settings easily.
-        if ($link && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-            $repository->setVisibilityDraft($resource);
-        } else {
-            $repository->setVisibilityPublished($resource);
-        }
-
-        $result = [
-            'visibility' => $link->getVisibility(),
-            'ok' => true,
-        ];
-
-        return new JsonResponse($result);
     }
 
     /**

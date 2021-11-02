@@ -24,6 +24,26 @@ class IndexControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testLoginJsonWrongFormat(): void
+    {
+        $client = static::createClient();
+
+        $params = [
+            'username' => 'admin',
+            'password' => 'admin',
+        ];
+
+        $client->request(
+            'POST',
+            '/login_json',
+            [
+                'headers' => ['Content-Type' => 'application/test'],
+                'body' => json_encode($params),
+            ]
+        );
+        $this->assertResponseStatusCodeSame(400);
+    }
+
     public function testLoginPage(): void
     {
         $client = static::createClient();

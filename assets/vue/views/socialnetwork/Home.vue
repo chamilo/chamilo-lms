@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SocialNetworkForm />
+    <SocialNetworkForm :user="user" />
 
     <SocialNetworkPostList :user="user" />
   </div>

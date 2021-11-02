@@ -7,7 +7,7 @@
         <q-input
           v-model="content"
           :error="v$.content.$error"
-          :label="$t('What are you thinking about?')"
+          :label="textPlaceholder"
           autogrow
         />
 
@@ -37,23 +37,38 @@
 </template>
 
 <script>
-import {reactive, toRefs} from "vue";
+import {reactive, toRefs, watch} from "vue";
 import {useStore} from "vuex";
-import {MESSAGE_TYPE_WALL} from "../message/msgType";
+import {MESSAGE_REL_USER_TYPE_TO, MESSAGE_TYPE_WALL} from "../message/msgType";
 import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
+import {useI18n} from "vue-i18n";
 
 export default {
   name: "SocialNetworkForm",
-  setup() {
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
     const store = useStore();
+    const {t} = useI18n();
 
     const currentUser = store.getters['security/getUser'];
 
     const postState = reactive({
       content: '',
       attachment: null,
+      textPlaceholder: '',
     });
+
+    function setTextPlaceholder(user) {
+      postState.textPlaceholder = currentUser['@id'] === user['@id']
+        ? t('What are you thinking about?')
+        : t('Write something to {0}', [user.fullName]);
+    }
 
     const v$ = useVuelidate({
       content: {required},
@@ -70,11 +85,11 @@ export default {
         title: 'Post',
         content: postState.content,
         msgType: MESSAGE_TYPE_WALL,
-        sender: `/api/users/${currentUser.id}`,
+        sender: currentUser['@id'],
         receivers: [
           {
-            receiver: `/api/users/${currentUser.id}`,
-            receiverType: 1
+            receiver: props.user['@id'],
+            receiverType: MESSAGE_REL_USER_TYPE_TO
           }
         ]
       };
@@ -94,6 +109,10 @@ export default {
       postState.content = '';
       postState.attachment = null;
     }
+
+    watch(() => props.user, (current) => {setTextPlaceholder(current)});
+
+    setTextPlaceholder(props.user);
 
     return {
       ...toRefs(postState),

@@ -31,22 +31,13 @@
           </div>
 
           <div class="md:row-start-1 md:col-start-1 md:col-end-1">
-              <div
-                  class="pt-4"
-                  v-for="page in pages"
-              >
-                <v-card
-                    elevation="2"
-                >
-                  <v-card-header>
-                    <v-card-title>{{ page.title }}</v-card-title>
-                  </v-card-header>
-
-                  <v-card-text>
-                    <p v-html="page.content"/>
-                  </v-card-text>
-                </v-card>
-              </div>
+            <div
+                v-if="pages.length"
+                class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 mt-2">
+              <PageCardList
+                  :pages="pages"
+              />
+            </div>
           </div>
         </div>
       </q-page>
@@ -55,15 +46,18 @@
 </template>
 
 <script>
+
 import Login from '../components/Login';
 import {reactive, toRefs} from 'vue'
 import {useStore} from "vuex";
 import {useI18n} from "vue-i18n";
+import PageCardList from "../components/page/PageCardList";
 
 export default {
-  name: "Index",
+  name: 'Index',
   components: {
-    Login
+    PageCardList,
+    Login,
   },
   setup() {
     const store = useStore();

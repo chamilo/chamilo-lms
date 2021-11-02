@@ -1,50 +1,20 @@
 <template>
   <q-page class="q-layout-padding">
-    <div class="flex justify-center">
-        <v-card
-            elevation="2"
-            v-for="announcement in announcements"
-            :key="announcement.id"
-        >
-
-          <v-card-header>
-            <v-card-title>{{ announcement.title }}</v-card-title>
-          </v-card-header>
-
-          <v-card-text>
-            <p v-html="announcement.content" ></p>
-          </v-card-text>
-
-          <v-card-actions v-if="isAdmin">
-            <q-btn flat label="Edit" color="primary" v-close-popup @click="handleAnnouncementClick(announcement)"/>
-          </v-card-actions>
-
-        </v-card>
-    </div>
-
-    <div v-if="pages"
-         class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2"
+    <div
+        v-if="announcements.length"
     >
-      <div
-          v-for="page in pages"
-      >
-        <v-card
-            elevation="2"
-        >
-          <v-card-text>
-            <p class="text-h5 text--primary">
-              {{ page.title }}
-            </p>
-            <p v-html="page.content"/>
-          </v-card-text>
-
-          <v-card-actions v-if="isAdmin">
-            <q-btn flat label="Edit" color="primary" v-close-popup @click="handleClick(page)"/>
-          </v-card-actions>
-        </v-card>
-      </div>
+      <SystemAnnouncementCardList
+          :announcements="announcements"
+      />
     </div>
 
+    <div
+        v-if="pages.length"
+        class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 mt-2">
+      <PageCardList
+          :pages="pages"
+      />
+    </div>
   </q-page>
 </template>
 
@@ -52,31 +22,23 @@
 
 import axios from "axios";
 import {reactive, toRefs} from 'vue'
-import {ENTRYPOINT} from "../config/entrypoint";
 import {mapGetters, useStore} from "vuex";
 import {useRouter} from "vue-router";
 import {useI18n} from "vue-i18n";
+import PageCardList from "../components/page/PageCardList";
+import SystemAnnouncementCardList from "../components/systemannouncement/SystemAnnouncementCardList";
 
 export default {
-  name: "Home",
+  name: 'Home',
+  components: {
+    SystemAnnouncementCardList,
+    PageCardList
+  },
   setup() {
-    const router = useRouter();
     const store = useStore();
     const state = reactive({
       announcements: [],
       pages: [],
-      handleClick: function (page) {
-        router
-            .push({name: `PageUpdate`, params: {id: page['@id']}})
-            .catch(() => {
-            });
-      },
-      handleAnnouncementClick: function(announcement) {
-        router
-            .push({path: `/main/admin/system_announcements.php?`, query: {id: announcement['id'], action: 'edit'}})
-            .catch(() => {
-            });
-      }
     });
 
     axios.get('/news/list').then(response => {

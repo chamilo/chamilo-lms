@@ -56,6 +56,9 @@ export default {
         'MySessionsPast',
         'Home',
         'MessageList',
+        'MessageNew',
+        'MessageShow',
+        'MessageCreate',
       ];
 
       if (!isEmpty(this.$route.name) && this.$route.name.includes('Page')) {

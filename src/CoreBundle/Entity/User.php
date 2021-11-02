@@ -54,7 +54,7 @@ use UserManager;
             'security' => "is_granted('ROLE_USER')", // @todo increase security
         ],
         'post' => [
-            'security' => "is_granted('CREATE', object)",
+            'security' => "is_granted('ROLE_ADMIN')",
         ],
     ],
     iri: 'http://schema.org/Person',

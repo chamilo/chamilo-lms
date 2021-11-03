@@ -109,7 +109,11 @@
     {% for extra_field in extra_fields %}
         <tr>
             <td>{{ extra_field.text }}</td>
-            <td>{{ extra_field.value }}</td>
+            {% if  extra_field.value is iterable %}
+                <td>{{ extra_field.value.value }}</td>
+            {% else %}
+                <td>{{ extra_field.value }}</td>
+            {% endif %}
         </tr>
     {% endfor %}
 

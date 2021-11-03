@@ -68,7 +68,8 @@ class TwigListener
 
             'editor.enabled_mathjax',
             'editor.translate_html',
-
+            'platform.load_term_conditions_section',
+            'registration.allow_terms_conditions',
             'agenda.personal_calendar_show_sessions_occupation',
         ];
 

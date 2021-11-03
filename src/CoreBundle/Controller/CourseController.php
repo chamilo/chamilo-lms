@@ -86,6 +86,8 @@ class CourseController extends ToolBaseController
             }
         }
 
+        $courseSession = $this->getCourseSession();
+
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
         if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) &&
@@ -189,6 +191,7 @@ class CourseController extends ToolBaseController
         }
         $responseData = [
             'course' => $course,
+            'session' => $courseSession,
             'shortcuts' => $shortcuts,
             'diagram' => $diagram,
             'tools' => $tools,

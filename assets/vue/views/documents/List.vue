@@ -358,6 +358,12 @@ export default {
     let courseIri = '/api/courses/' + cid;
     store.dispatch('course/findCourse', { id: courseIri });
     store.dispatch('resourcenode/findResourceNode', { id: '/api/resource_nodes/' + nodeId});
+
+    let sid = toInteger(route.query.sid);
+    if (sid) {
+      let sessionIri = '/api/sessions/' + sid;
+      store.dispatch('session/findSession', { id: sessionIri });
+    }
   },
   data() {
     return {

@@ -37,6 +37,9 @@ export default {
     ...mapGetters('course', {
       course: 'getCourse',
     }),
+    ...mapGetters('session', {
+      session: 'getSession',
+    }),
     items() {
       console.log('Breadcrumb.vue');
       console.log(this.$route.name);
@@ -119,8 +122,14 @@ export default {
 
       // course is set in documents/List.vue
       if (this.course) {
+
+        let sessionTitle = '';
+        if (this.session) {
+          sessionTitle = ' (' + this.session.name + ') ';
+        }
+
         items.push({
-          text:  this.course.title,
+          text:  this.course.title + sessionTitle,
           href: '/course/' + this.course.id + '/home?'+queryParams
         });
       }

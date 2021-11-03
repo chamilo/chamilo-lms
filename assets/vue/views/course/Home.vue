@@ -3,6 +3,9 @@
     <div class="flex flex-row justify-between border-b-2 border-gray-200 ">
       <div class="line-clamp-1 text-2xl font-bold">
         {{ course.title }}
+        <span v-if="session">
+          ({{ session.name }})
+        </span>
       </div>
 
       <div>
@@ -190,6 +193,7 @@ export default {
   setup() {
     const state = reactive({
       course: [],
+      session: [],
       tools: [],
       shortcuts: [],
       dropdownOpen: false,
@@ -212,6 +216,7 @@ export default {
 
     axios.get(ENTRYPOINT + '../course/' + courseId + '/home.json?sid=' + sessionId).then(response => {
       state.course = response.data.course;
+      state.session = response.data.session;
       state.tools = response.data.tools;
       state.shortcuts = response.data.shortcuts;
       getIntro();

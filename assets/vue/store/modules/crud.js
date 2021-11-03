@@ -19,6 +19,7 @@ const initialState = () => ({
   violations: null,
   resourceNode: null,
   course: null,
+  session: null,
 });
 
 const handleError = (commit, e) => {
@@ -59,7 +60,8 @@ export const ACTIONS = {
   SET_VIOLATIONS: 'SET_VIOLATIONS',
   TOGGLE_LOADING: 'TOGGLE_LOADING',
   ADD_RESOURCE_NODE: 'ADD_RESOURCE_NODE',
-  ADD_COURSE: 'ADD_COURSE'
+  ADD_COURSE: 'ADD_COURSE',
+  ADD_SESSION: 'ADD_SESSION'
 };
 
 export default function makeCrudModule({
@@ -272,6 +274,28 @@ export default function makeCrudModule({
             })
             .catch(e => handleError(commit, e));
       },
+      findSession: ({ commit }, params) => {
+        const id = params['id'];
+        delete params['id'];
+        if (!service) throw new Error('No service specified!');
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        return service
+            .find(id, params)
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
+
+            .then(item => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD_SESSION, item);
+
+              return item;
+            })
+            .catch(e => handleError(commit, e));
+      },
       findResourceNode: ({ commit }, params) => {
         const id = params['id'];
         delete params['id'];
@@ -352,11 +376,20 @@ export default function makeCrudModule({
       getCourse: (state) => {
         return state.course;
       },
+      getSession: (state) => {
+        return state.session;
+      },
     },
     mutations: {
       updateField,
       [ACTIONS.ADD_COURSE]: (state, item) => {
         state.course = item;
+        state.isLoading = false;
+        //this.$set(state, 'resourceNode', item);
+        //this.$set(state, 'isLoading', false);
+      },
+      [ACTIONS.ADD_SESSION]: (state, item) => {
+        state.session = item;
         state.isLoading = false;
         //this.$set(state, 'resourceNode', item);
         //this.$set(state, 'isLoading', false);

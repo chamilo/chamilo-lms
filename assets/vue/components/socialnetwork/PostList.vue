@@ -12,41 +12,49 @@
 import {MESSAGE_TYPE_WALL} from "../message/constants";
 import SocialNetworkPost from "./Post";
 import {useStore} from "vuex";
-import {computed, ref, watch} from "vue";
+import {inject, onMounted, ref, watch} from "vue";
 import Loading from "../Loading";
 
 export default {
   name: "SocialNetworkPostList",
   components: {Loading, SocialNetworkPost},
-  props: {
-    user: {
-      type: Object,
-      required: true
-    }
-  },
-  setup(props) {
+  setup() {
+    const user = inject('social-user');
     const store = useStore();
 
-    let messageList = ref([]);
+    const messageList = ref([]);
+    const isLoading = ref(false);
 
-    async function listMessage(user) {
+    async function listMessage() {
+      if (!user.value['@id']) {
+        return;
+      }
+
+      isLoading.value = true;
+
       store.state.message.resetList = true;
 
-      await store.dispatch('message/fetchAll', {
-        msgType: MESSAGE_TYPE_WALL,
-        'receivers.receiver': user['@id'],
-        'order[sendDate]': 'desc',
-      });
-      messageList.value = store.getters['message/list'];
+      try {
+        await store.dispatch('message/fetchAll', {
+          msgType: MESSAGE_TYPE_WALL,
+          'receivers.receiver': user.value['@id'],
+          'order[sendDate]': 'desc',
+        });
+        messageList.value = store.getters['message/list'];
+      } catch (e) {
+        messageList.value = [];
+      }
+
+      isLoading.value = false;
     }
 
-    watch(() => props.user, (current) => {listMessage(current)});
+    watch(() => user.value, listMessage)
 
-    listMessage(props.user);
+    onMounted(listMessage)
 
     return {
       messageList,
-      isLoading: computed(() => store.state.message.isLoading)
+      isLoading
     }
   }
 }

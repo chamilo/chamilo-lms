@@ -37,22 +37,18 @@
 </template>
 
 <script>
-import {reactive, toRefs, watch} from "vue";
+import {inject, onMounted, reactive, toRefs, watch} from "vue";
 import {useStore} from "vuex";
-import {MESSAGE_TYPE_WALL, MESSAGE_REL_USER_TYPE_TO} from "../message/constants";
+import {MESSAGE_REL_USER_TYPE_TO, MESSAGE_TYPE_WALL} from "../message/constants";
 import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
 import {useI18n} from "vue-i18n";
 
 export default {
   name: "SocialNetworkForm",
-  props: {
-    user: {
-      type: Object,
-      required: true
-    }
-  },
-  setup(props) {
+  setup() {
+    const user = inject('social-user');
+
     const store = useStore();
     const {t} = useI18n();
 
@@ -64,10 +60,10 @@ export default {
       textPlaceholder: '',
     });
 
-    function setTextPlaceholder(user) {
-      postState.textPlaceholder = currentUser['@id'] === user['@id']
+    function showTextPlaceholder() {
+      postState.textPlaceholder = currentUser['@id'] === user.value['@id']
         ? t('What are you thinking about?')
-        : t('Write something to {0}', [user.fullName]);
+        : t('Write something to {0}', [user.value.fullName]);
     }
 
     const v$ = useVuelidate({
@@ -88,7 +84,7 @@ export default {
         sender: currentUser['@id'],
         receivers: [
           {
-            receiver: props.user['@id'],
+            receiver: user.value['@id'],
             receiverType: MESSAGE_REL_USER_TYPE_TO
           }
         ]
@@ -110,9 +106,9 @@ export default {
       postState.attachment = null;
     }
 
-    watch(() => props.user, (current) => {setTextPlaceholder(current)});
+    watch(() => user.value, () => showTextPlaceholder())
 
-    setTextPlaceholder(props.user);
+    onMounted(showTextPlaceholder);
 
     return {
       ...toRefs(postState),

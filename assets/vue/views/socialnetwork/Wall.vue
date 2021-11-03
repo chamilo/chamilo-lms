@@ -1,24 +1,17 @@
 <template>
   <div>
-    <SocialNetworkForm :user="user" />
+    <SocialNetworkForm />
 
-    <SocialNetworkPostList :user="user" />
+    <SocialNetworkPostList />
   </div>
 </template>
 
 <script>
 import SocialNetworkForm from "../../components/socialnetwork/Form";
 import SocialNetworkPostList from "../../components/socialnetwork/PostList";
-import {useRoute} from "vue-router";
 
 export default {
   name: "SocialNetworkWall",
   components: {SocialNetworkPostList, SocialNetworkForm},
-  props: {
-    user: {
-      type: Object,
-      required: true
-    }
-  }
 }
 </script>

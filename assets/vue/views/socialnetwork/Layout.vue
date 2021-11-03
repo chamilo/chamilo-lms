@@ -1,13 +1,10 @@
 <template>
   <div class="row q-col-gutter-md">
     <div class="col-8">
-      <SocialNetworkWall
-        :user="user"
-        v-if="user && user['@id']"
-      />
+      <SocialNetworkWall />
     </div>
     <div class="col-4">
-      <q-card flat bordered>
+      <q-card bordered flat>
         <img
           :src="user.illustrationUrl"
         />
@@ -23,40 +20,34 @@
 
 <script>
 import {useStore} from "vuex";
-import {ref, watch} from "vue";
+import {onMounted, provide, readonly, ref, watch} from "vue";
 import SocialNetworkWall from "./Wall";
+import {useRoute} from "vue-router";
 
 export default {
   name: "SocialNetworkLayout",
   components: {SocialNetworkWall},
-  props: {
-    uid: {
-      type: String,
-      default: ''
-    }
-  },
-  setup(props) {
+  setup() {
     const store = useStore();
+    const route = useRoute();
 
     const user = ref({});
 
-    const currentUser = store.getters['security/getUser'];
+    provide('social-user', readonly(user));
 
-    async function setUser(uid) {
-      if (uid) {
-        try {
-          user.value = await store.dispatch('user/load', uid);
-        } catch (e) {
-          user.value = {};
-        }
-      } else {
-        user.value = currentUser;
+    async function loadUser() {
+      try {
+        user.value = route.query.id
+          ? await store.dispatch('user/load', route.query.id)
+          : store.getters['security/getUser'];
+      } catch (e) {
+        user.value = {};
       }
     }
 
-    setUser(props.uid);
+    onMounted(loadUser);
 
-    watch(() => props.uid, (uid, old) => setUser(uid));
+    watch(() => route.query, loadUser);
 
     return {
       user

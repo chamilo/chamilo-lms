@@ -214,6 +214,9 @@ export default {
     let courseId = route.params.id;
     let sessionId = route.query.sid ?? 0;
 
+    // Remove the course session state.
+    store.dispatch('session/cleanSession');
+
     axios.get(ENTRYPOINT + '../course/' + courseId + '/home.json?sid=' + sessionId).then(response => {
       state.course = response.data.course;
       state.session = response.data.session;

@@ -61,7 +61,8 @@ export const ACTIONS = {
   TOGGLE_LOADING: 'TOGGLE_LOADING',
   ADD_RESOURCE_NODE: 'ADD_RESOURCE_NODE',
   ADD_COURSE: 'ADD_COURSE',
-  ADD_SESSION: 'ADD_SESSION'
+  ADD_SESSION: 'ADD_SESSION',
+  REMOVE_SESSION: 'REMOVE_SESSION'
 };
 
 export default function makeCrudModule({
@@ -274,6 +275,9 @@ export default function makeCrudModule({
             })
             .catch(e => handleError(commit, e));
       },
+      cleanSession: ({ commit }) => {
+        commit(ACTIONS.REMOVE_SESSION);
+      },
       findSession: ({ commit }, params) => {
         const id = params['id'];
         delete params['id'];
@@ -390,6 +394,12 @@ export default function makeCrudModule({
       },
       [ACTIONS.ADD_SESSION]: (state, item) => {
         state.session = item;
+        state.isLoading = false;
+        //this.$set(state, 'resourceNode', item);
+        //this.$set(state, 'isLoading', false);
+      },
+      [ACTIONS.REMOVE_SESSION]: (state) => {
+        state.session = null;
         state.isLoading = false;
         //this.$set(state, 'resourceNode', item);
         //this.$set(state, 'isLoading', false);

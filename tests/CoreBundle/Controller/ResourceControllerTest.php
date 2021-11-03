@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -16,6 +17,49 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class ResourceControllerTest extends WebTestCase
 {
     use ChamiloTestTrait;
+
+    public function testDiskSpaceAction(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $client->loginUser($admin);
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $diskQuota = 2042;
+        $course = $this->createCourse('Test');
+        $course->setDiskQuota($diskQuota);
+        $courseRepo->update($course);
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('title 123')
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+        $documentRepo->addFileFromString($document, 'test', 'text/html', 'my file', true);
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+        $resourceFile = $document->getResourceNode()->getResourceFile();
+        $this->assertNotNull($resourceFile);
+
+        $nodeId = $course->getResourceNode()->getId();
+
+        // Test course disk_space.
+        $url = '/r/document/files/'.$nodeId.'/disk_space?cid='.$course->getId();
+        $client->request('GET', $url);
+        $this->assertResponseIsSuccessful();
+        $content = (string) $client->getResponse()->getContent();
+        $fileSize = $resourceFile->getSize();
+
+        //$this->assertStringContainsString((string) $diskQuota, $content);
+        $this->assertStringContainsString((string) $fileSize, $content);
+        $this->assertStringContainsString((string) ($diskQuota - $fileSize), $content);
+    }
 
     public function testDownloadAction(): void
     {
@@ -77,13 +121,15 @@ class ResourceControllerTest extends WebTestCase
         ;
 
         $documentRepo->create($document);
-        $documentRepo->addFileFromString($document, 'test', 'text/html', 'my file', true);
+        $content = '<html><p>HTML TEXT<p></html>';
+        $documentRepo->addFileFromString($document, 'test', 'text/html', $content, true);
 
         /** @var CDocument $document */
         $document = $documentRepo->find($document->getIid());
         $node = $document->getResourceNode();
         $this->assertTrue($node->hasResourceFile());
         $id = $document->getResourceNode()->getUuid()->toRfc4122();
+        $this->assertSame('text/html', $node->getResourceFile()->getMimeType());
 
         // View HTML document.
         $url = '/r/document/files/'.$id.'/view';
@@ -107,21 +153,20 @@ class ResourceControllerTest extends WebTestCase
         $this->assertTrue($node->hasResourceFile());
         $id = $document->getResourceNode()->getUuid()->toRfc4122();
 
-        // View image document.
+        // View image.
         $url = '/r/document/files/'.$id.'/view';
         $client->request('GET', $url);
         $this->assertResponseIsSuccessful();
 
-        // View image document with params.
+        // View image with params.
         $url = '/r/document/files/'.$id.'/view';
-        $client->request('GET', $url);
+        $client->request('GET', $url, ['filter' => 'resource_show_preview']);
         $this->assertResponseIsSuccessful();
     }
 
     public function testLinkAction(): void
     {
         $client = static::createClient();
-        $em = $this->getEntityManager();
         $admin = $this->getUser('admin');
         $client->loginUser($admin);
 

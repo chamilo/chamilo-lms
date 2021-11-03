@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {MESSAGE_TYPE_WALL} from "../message/msgType";
+import {MESSAGE_TYPE_WALL} from "../message/constants";
 import SocialNetworkPost from "./Post";
 import {useStore} from "vuex";
 import {computed, ref, watch} from "vue";

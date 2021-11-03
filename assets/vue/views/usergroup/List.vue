@@ -267,7 +267,7 @@ import useState from "../../hooks/useState";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
-import {MESSAGE_TYPE_INBOX, MESSAGE_TYPE_OUTBOX} from "../../components/message/msgType";
+import {MESSAGE_TYPE_INBOX, MESSAGE_TYPE_OUTBOX} from "../../components/message/constants";
 
 export default {
   name: 'UserGroupList',

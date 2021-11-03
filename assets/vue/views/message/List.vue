@@ -304,7 +304,7 @@ import {ref} from 'vue';
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
-import {MESSAGE_TYPE_INBOX} from "../../components/message/msgType";
+import {MESSAGE_TYPE_INBOX} from "../../components/message/constants";
 import useNotification from "../../components/Notification";
 
 import {useI18n} from "vue-i18n";

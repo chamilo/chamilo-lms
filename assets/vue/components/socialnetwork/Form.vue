@@ -39,7 +39,7 @@
 <script>
 import {reactive, toRefs, watch} from "vue";
 import {useStore} from "vuex";
-import {MESSAGE_REL_USER_TYPE_TO, MESSAGE_TYPE_WALL} from "../message/msgType";
+import {MESSAGE_TYPE_WALL, MESSAGE_REL_USER_TYPE_TO} from "../message/constants";
 import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
 import {useI18n} from "vue-i18n";

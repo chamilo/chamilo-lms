@@ -74,7 +74,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM gradebook_category WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
 
         if (false === $table->hasForeignKey('FK_96A4C705727ACA70')) {
-            $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705727ACA70 FOREIGN KEY (parent_id) REFERENCES gradebook_category (id);');
+            $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705727ACA70 FOREIGN KEY (parent_id) REFERENCES gradebook_category (id) ON DELETE CASCADE');
         }
 
         if (false === $table->hasForeignKey('FK_96A4C705613FECDF')) {
@@ -139,12 +139,12 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
         // Evaluation.
         $table = $schema->getTable('gradebook_evaluation');
-        if (false === $table->hasColumn('c_id')) {
+        if (!$table->hasColumn('c_id')) {
             $this->addSql('ALTER TABLE gradebook_evaluation ADD c_id INT DEFAULT NULL');
             $this->addSql('UPDATE gradebook_evaluation SET c_id = (SELECT id FROM course WHERE code = course_code)');
             $this->addSql('ALTER TABLE gradebook_evaluation DROP course_code');
             $this->addSql(
-                'ALTER TABLE gradebook_evaluation ADD CONSTRAINT FK_DDDED80491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);'
+                'ALTER TABLE gradebook_evaluation ADD CONSTRAINT FK_DDDED80491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
             );
             $this->addSql('CREATE INDEX IDX_DDDED80491D79BD3 ON gradebook_evaluation (c_id)');
             //$this->addSql('ALTER TABLE gradebook_evaluation RENAME INDEX fk_ddded80491d79bd3 TO IDX_DDDED80491D79BD3;');
@@ -155,7 +155,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
         $this->addSql('DELETE FROM gradebook_evaluation WHERE category_id NOT IN (SELECT id FROM gradebook_category) ');
 
-        if (false === $table->hasForeignKey('FK_DDDED80412469DE2')) {
+        if (!$table->hasForeignKey('FK_DDDED80412469DE2')) {
             $this->addSql('ALTER TABLE gradebook_evaluation ADD CONSTRAINT FK_DDDED80412469DE2 FOREIGN KEY (category_id) REFERENCES gradebook_category (id) ON DELETE CASCADE');
         }
 
@@ -191,7 +191,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('UPDATE gradebook_link SET c_id = (SELECT id FROM course WHERE code = course_code)');
             $this->addSql('ALTER TABLE gradebook_link DROP course_code');
             $this->addSql(
-                'ALTER TABLE gradebook_link ADD CONSTRAINT FK_4F0F595F91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);'
+                'ALTER TABLE gradebook_link ADD CONSTRAINT FK_4F0F595F91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
             );
             $this->addSql('CREATE INDEX IDX_4F0F595F91D79BD3 ON gradebook_link (c_id);');
         }

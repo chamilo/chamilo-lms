@@ -787,7 +787,7 @@ class Rest extends WebService
             /** @var ExtraFieldValues $extraValue */
             $extraValue = $extra['value'];
             $result['extra'][] = [
-                'title' => $extraValue->getField()->getDisplayText(true),
+                'title' => $extraValue->getField()->getDisplayText(),
                 'value' => $extraValue->getValue(),
             ];
         }

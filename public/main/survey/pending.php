@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $currentUser = api_get_user_entity(api_get_user_id());
-$pendingList = Container::getUserRepository()->getUserPendingInvitations($currentUser);
+$pendingList = Container::getSurveyInvitationRepository()->getUserPendingInvitations($currentUser);
 
 $surveysData = [];
 

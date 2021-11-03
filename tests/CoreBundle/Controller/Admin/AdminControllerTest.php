@@ -16,11 +16,7 @@ class AdminControllerTest extends WebTestCase
     public function testIndex(): void
     {
         $client = static::createClient();
-
-        // retrieve the admin
         $admin = $this->getUser('admin');
-
-        // simulate $testUser being logged in
         $client->loginUser($admin);
 
         $client->request('GET', '/main/admin/index.php');

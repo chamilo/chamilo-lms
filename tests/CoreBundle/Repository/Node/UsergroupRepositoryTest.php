@@ -125,6 +125,7 @@ class UsergroupRepositoryTest extends KernelTestCase
         $em->persist($group);
         $em->flush();
 
+        $this->assertNotNull($userGroupRelCourse->getId());
         $this->assertSame(1, $group->getCourses()->count());
         $this->assertSame(1, $group->getQuestions()->count());
         $this->assertSame(1, $group->getSessions()->count());

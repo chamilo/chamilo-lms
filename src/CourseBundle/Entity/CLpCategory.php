@@ -143,10 +143,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         }
     }
 
-    /**
-     * @return bool
-     */
-    public function hasUser(CLpCategoryUser $categoryUser)
+    public function hasUser(CLpCategoryUser $categoryUser): bool
     {
         if (0 !== $this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -163,10 +160,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasUserAdded(User $user)
+    public function hasUserAdded(User $user): bool
     {
         if (0 !== $this->getUsers()->count()) {
             $categoryUser = new CLpCategoryUser();

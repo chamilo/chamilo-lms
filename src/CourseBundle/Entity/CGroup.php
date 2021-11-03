@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -415,20 +414,28 @@ class CGroup extends AbstractResource implements ResourceInterface
 
     public function hasMember(User $user): bool
     {
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('user', $user)
-        );
+        if (!$this->hasMembers()) {
+            return false;
+        }
 
-        return $this->members->matching($criteria)->count() > 0;
+        $list = $this->members->filter(function (CGroupRelUser $member) use ($user) {
+            return $member->getUser()->getId() === $user->getId();
+        });
+
+        return $list->count() > 0;
     }
 
     public function hasTutor(User $user): bool
     {
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('user', $user)
-        );
+        if (!$this->hasTutors()) {
+            return false;
+        }
 
-        return $this->tutors->matching($criteria)->count() > 0;
+        $list = $this->tutors->filter(function (CGroupRelTutor $tutor) use ($user) {
+            return $tutor->getUser()->getId() === $user->getId();
+        });
+
+        return $list->count() > 0;
     }
 
     /**
@@ -452,27 +459,6 @@ class CGroup extends AbstractResource implements ResourceInterface
     public function hasTutors(): bool
     {
         return $this->tutors->count() > 0;
-    }
-
-    public function userIsTutor(User $user = null): bool
-    {
-        if (null === $user) {
-            return false;
-        }
-
-        if (0 === $this->tutors->count()) {
-            return false;
-        }
-
-        $criteria = Criteria::create()
-            ->andWhere(
-                Criteria::expr()->eq('user', $user)
-            )
-        ;
-
-        $relation = $this->tutors->matching($criteria);
-
-        return $relation->count() > 0;
     }
 
     public function getCategory(): ?CGroupCategory

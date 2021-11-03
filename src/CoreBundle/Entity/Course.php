@@ -68,7 +68,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
 
-class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface
+class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface
 {
     public const CLOSED = 0;
     public const REGISTERED = 1; // Only registered users in the course.
@@ -263,6 +263,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ORM\Column(name="course_language", type="string", length=20, nullable=false, unique=false)
      */
     #[Groups(['course:read'])]
+    #[Assert\NotBlank]
     protected string $courseLanguage;
 
     /**
@@ -368,11 +369,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @ORM\Column(name="subscribe", type="boolean", nullable=false, unique=false)
      */
+    #[Assert\NotNull]
     protected bool $subscribe;
 
     /**
      * @ORM\Column(name="unsubscribe", type="boolean", nullable=false, unique=false)
      */
+    #[Assert\NotNull]
     protected bool $unsubscribe;
 
     /**
@@ -579,6 +582,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function hasUser(User $user): bool
     {
+        if (0 === $this->getUsers()->count()) {
+            return false;
+        }
+
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('user', $user)
         );

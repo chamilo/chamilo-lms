@@ -20,11 +20,19 @@ class SettingsControllerTest extends WebTestCase
         $admin = $this->getUser('admin');
         $client->loginUser($admin);
 
+        $client->request('GET', '/admin/settings');
+        $this->assertResponseRedirects('/admin/settings/platform');
+    }
+
+    public function testAdminSettings(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $client->loginUser($admin);
+
         $client->request('GET', '/admin/settings/admin');
         $this->assertResponseIsSuccessful();
-
         $this->assertSelectorTextContains('#sectionMainContent', 'Administrator email');
-        //$this->assertStringContainsString('Administrator email', $client->getResponse()->getContent());
     }
 
     public function testSearchSettingAction(): void
@@ -42,10 +50,7 @@ class SettingsControllerTest extends WebTestCase
             'search[keyword]' => 'allow_message_tool',
         ]);
 
-        $this->assertStringContainsString(
-            'Allow message tool',
-            $client->getResponse()->getContent()
-        );
+        $this->assertStringContainsString('Allow message tool', $client->getResponse()->getContent());
     }
 
     public function testUpdateSettingAction(): void

@@ -32,9 +32,13 @@ class CourseRepositoryTest extends AbstractApiTest
             ->setTitle('test')
             ->setCode('test')
             ->setVisualCode('test')
+            ->setDepartmentUrl('https://chamilo.org')
             ->addAccessUrl($this->getAccessUrl())
         ;
         $courseRepo->create($course);
+
+        $this->assertTrue($course->isActive());
+        $this->assertIsArray(Course::getStatusList());
     }
 
     public function testCreateEntity(): void
@@ -45,11 +49,16 @@ class CourseRepositoryTest extends AbstractApiTest
         $category = (new CourseCategory())
             ->setCode('Course cat')
             ->setName('Course cat')
+            ->setDescription('desc')
+            ->setAuthCatChild('cat')
+            ->setAuthCourseChild('cat')
+            ->setChildrenCount(0)
+            ->setTreePos(0)
         ;
         $em->persist($category);
         $em->flush();
 
-        $this->assertIsArray(Course::getStatusList());
+        $this->assertFalse($category->hasAsset());
 
         $course = (new Course())
             ->setTitle('test julio')
@@ -75,8 +84,8 @@ class CourseRepositoryTest extends AbstractApiTest
         ;
         $courseRepo->create($course);
 
-        /** @var Course $course */
-        $course = $courseRepo->find($course->getId());
+        $course = $this->getCourse($course->getId());
+
         $this->assertSame('test julio', $course->getName());
         $this->assertSame('test julio (TESTJULIO)', $course->getTitleAndCode());
         $this->assertSame('TESTJULIO', $course->getCode());
@@ -121,6 +130,67 @@ class CourseRepositoryTest extends AbstractApiTest
 
         // The course should be connected with the current Access URL.
         $this->assertSame(1, $course->getUrls()->count());
+    }
+
+    public function testDeleteCourse(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $course = $this->createCourse('Test course');
+
+        $courseRepo->deleteCourse($course);
+
+        $this->assertSame(0, $courseRepo->count([]));
+    }
+
+    public function testGetCoursesByUser(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $student = $this->createUser('student');
+        $course = $this->createCourse('Test course');
+
+        $courses = $courseRepo->getCoursesByUser($student, $this->getAccessUrl());
+        $this->assertCount(0, $courses);
+
+        $course->addUser($student, 0, '', CourseRelUser::STUDENT);
+        $courseRepo->update($course);
+
+        $this->assertTrue($course->hasUser($student));
+        $this->assertTrue($course->hasStudent($student));
+        $this->assertFalse($course->hasTeacher($student));
+
+        $courses = $courseRepo->getCoursesByUser($student, $this->getAccessUrl());
+        $this->assertCount(1, $courses);
+    }
+
+    public function testGetSubscribedUsers(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $student = $this->createUser('student');
+        $course = $this->createCourse('Test course');
+
+        $qb = $courseRepo->getSubscribedUsers($course);
+        $this->assertCount(0, $qb->getQuery()->getResult());
+
+        $course->addUser($student, 0, '', CourseRelUser::STUDENT);
+        $courseRepo->update($course);
+
+        $qb = $courseRepo->getSubscribedUsers($course);
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $qb = $courseRepo->getSubscribedStudents($course);
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $qb = $courseRepo->getSubscribedCoaches($course);
+        $this->assertCount(1, $qb->getQuery()->getResult());
+
+        $qb = $courseRepo->getSubscribedTeachers($course);
+        $this->assertCount(0, $qb->getQuery()->getResult());
     }
 
     public function testCourseStudentSubscription(): void

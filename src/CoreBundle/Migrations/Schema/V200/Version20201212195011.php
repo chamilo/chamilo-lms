@@ -83,15 +83,16 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         $result = $connection->executeQuery($sql);
         $extraFieldId = $result->fetchOne();
 
-        $specialCourses = '';
+        $specialCourses = [];
         if (!empty($extraFieldId)) {
-            $sql = 'SELECT DISTINCT(item_id)
+            $extraFieldId = (int) $extraFieldId;
+            $sql = "SELECT DISTINCT(item_id)
                     FROM extra_field_values
-                    WHERE field_id = '.$extraFieldId." AND value = '1'";
+                    WHERE field_id = $extraFieldId AND value = 1 ";
             $result = $connection->executeQuery($sql);
             $specialCourses = $result->fetchAllAssociative();
             if (!empty($specialCourses)) {
-                $specialCourses = array_column($specialCourses, 'item_id');
+                $specialCourses = array_map('intval', array_column($specialCourses, 'item_id'));
             }
         }
 
@@ -101,7 +102,6 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         foreach ($q->toIterable() as $course) {
             $counter = 1;
             $courseId = $course->getId();
-
             if (!empty($specialCourses) && \in_array($courseId, $specialCourses, true)) {
                 $this->addSql("UPDATE course SET sticky = 1 WHERE id = $courseId ");
             }

@@ -36,6 +36,7 @@ class CToolRepositoryTest extends AbstractApiTest
             ->setCourse($course)
             ->setTool($tool)
             ->setParent($course)
+            ->setPosition(1)
             ->setCreator($admin)
             ->addCourseLink($course)
         ;
@@ -43,6 +44,8 @@ class CToolRepositoryTest extends AbstractApiTest
         $em->persist($cTool);
         $em->flush();
 
+        $this->assertSame('test', (string) $cTool);
+        $this->assertSame(1, $cTool->getPosition());
         $this->assertSame($defaultCount + 1, $repo->count([]));
     }
 

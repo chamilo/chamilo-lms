@@ -12,8 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CourseRequest.
- *
  * @ORM\Table(name="course_request", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="code", columns={"code"})
  * })

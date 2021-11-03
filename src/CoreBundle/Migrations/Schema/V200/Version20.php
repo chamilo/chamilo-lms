@@ -370,6 +370,8 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE templates ADD CONSTRAINT FK_6F287D8EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         }
 
+        $this->addSql('CREATE TABLE IF NOT EXISTS ext_translations (id INT AUTO_INCREMENT NOT NULL, locale VARCHAR(8) NOT NULL, object_class VARCHAR(191) NOT NULL, field VARCHAR(32) NOT NULL, foreign_key VARCHAR(64) NOT NULL, content LONGTEXT DEFAULT NULL, INDEX translations_lookup_idx (locale, object_class, foreign_key), UNIQUE INDEX lookup_unique_idx (locale, object_class, field, foreign_key), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+
         // Drop unused columns
         $dropColumnsAndIndex = [
             'track_e_uploads' => [
@@ -388,22 +390,39 @@ class Version20 extends AbstractMigrationChamilo
                 'columns' => ['hotspot_course_code'],
                 'index' => [],
             ],
+            'c_item_property' => [
+                'fks' => [
+                    'FK_1D84C18129F6EE60',
+                    'FK_1D84C181330D47E9',
+                    'FK_1D84C181613FECDF',
+                    'FK_1D84C18191D79BD3',
+                    'FK_1D84C1819C859CC3',
+                ],
+            ],
         ];
 
         foreach ($dropColumnsAndIndex as $tableName => $data) {
             if ($schema->hasTable($tableName)) {
-                $indexList = $data['index'];
+                $table = $schema->getTable($tableName);
+
+                $indexList = $data['index'] ?? [];
                 foreach ($indexList as $index) {
                     if ($table->hasIndex($index)) {
                         $table->dropIndex($index);
                     }
                 }
 
-                $columns = $data['columns'];
-                $table = $schema->getTable($tableName);
+                $columns = $data['columns'] ?? [];
                 foreach ($columns as $column) {
                     if ($table->hasColumn($column)) {
                         $table->dropColumn($column);
+                    }
+                }
+
+                $fks = $data['fks'] ?? [];
+                foreach ($fks as $fk) {
+                    if ($table->hasForeignKey($fk)) {
+                        $table->removeForeignKey($fk);
                     }
                 }
             }

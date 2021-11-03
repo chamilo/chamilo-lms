@@ -18,8 +18,6 @@ class UserRelUserTest extends AbstractApiTest
 
     public function testAddFriend(): void
     {
-        self::bootKernel();
-
         $user = $this->createUser('user');
         $friend = $this->createUser('friend');
 
@@ -135,8 +133,6 @@ class UserRelUserTest extends AbstractApiTest
 
     public function testAddFriendAccess(): void
     {
-        self::bootKernel();
-
         $user = $this->createUser('user');
         $friend = $this->createUser('friend');
         $friend2 = $this->createUser('friend2');

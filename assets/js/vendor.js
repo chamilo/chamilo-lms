@@ -4,7 +4,7 @@
 require('image-map-resizer/js/imageMapResizer.js');
 require('cropper');
 // require('jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon');
-//import('select2');
+import('select2');
 require('timeago');
 //require('sweetalert2');
 //import('bootstrap-select');

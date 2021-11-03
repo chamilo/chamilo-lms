@@ -11,8 +11,10 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -63,6 +65,7 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use Chamilo\CourseBundle\Repository\CSurveyInvitationRepository;
 use Chamilo\CourseBundle\Repository\CSurveyQuestionRepository;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
@@ -336,6 +339,11 @@ class Container
         return self::$container->get(ExtraFieldRepository::class);
     }
 
+    public static function getExtraFieldOptionsRepository(): ExtraFieldOptionsRepository
+    {
+        return self::$container->get(ExtraFieldOptionsRepository::class);
+    }
+
     public static function getGlossaryRepository(): CGlossaryRepository
     {
         return self::$container->get(CGlossaryRepository::class);
@@ -399,6 +407,11 @@ class Container
     public static function getQuestionCategoryRepository(): CQuizQuestionCategoryRepository
     {
         return self::$container->get(CQuizQuestionCategoryRepository::class);
+    }
+
+    public static function getLanguageRepository(): LanguageRepository
+    {
+        return self::$container->get(LanguageRepository::class);
     }
 
     public static function getLinkRepository(): CLinkRepository
@@ -514,6 +527,11 @@ class Container
     public static function getSurveyRepository(): CSurveyRepository
     {
         return self::$container->get(CSurveyRepository::class);
+    }
+
+    public static function getSurveyInvitationRepository(): CSurveyInvitationRepository
+    {
+        return self::$container->get(CSurveyInvitationRepository::class);
     }
 
     public static function getSurveyQuestionRepository(): CSurveyQuestionRepository

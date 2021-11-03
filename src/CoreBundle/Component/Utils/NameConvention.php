@@ -22,11 +22,15 @@ class NameConvention
     {
         $format = $this->getFormat()['format'];
 
-        return str_replace(
+        $personName = str_replace(
             ['title ', 'first_name', 'last_name'],
             ['', $user->getFirstname(), $user->getLastname()],
             $format
         );
+
+        $user->setFullName($personName);
+
+        return $personName;
     }
 
     public function getFormat(): array

@@ -8,10 +8,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Ticket.
- *
  * @ORM\Table(name="ticket_ticket")
  * @ORM\Entity
  */
@@ -59,19 +58,20 @@ class Ticket
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Course $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Session $session;
 
     /**
      * @ORM\Column(name="personal_email", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
     protected string $personalEmail;
 
     /**
@@ -79,7 +79,7 @@ class Ticket
      */
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="assigned_last_user", referencedColumnName="id")
+     * @ORM\JoinColumn(name="assigned_last_user", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ?User $assignedLastUser = null;
 
@@ -133,6 +133,12 @@ class Ticket
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
     protected DateTime $lastEditDateTime;
+
+    public function __construct()
+    {
+        $this->totalMessages = 0;
+        $this->insertDateTime = new DateTime();
+    }
 
     /**
      * @return int
@@ -195,6 +201,42 @@ class Ticket
     public function setAssignedLastUser(?User $assignedLastUser): self
     {
         $this->assignedLastUser = $assignedLastUser;
+
+        return $this;
+    }
+
+    public function getPersonalEmail(): string
+    {
+        return $this->personalEmail;
+    }
+
+    public function setPersonalEmail(string $personalEmail): self
+    {
+        $this->personalEmail = $personalEmail;
+
+        return $this;
+    }
+
+    public function getTotalMessages(): int
+    {
+        return $this->totalMessages;
+    }
+
+    public function setTotalMessages(int $totalMessages): self
+    {
+        $this->totalMessages = $totalMessages;
+
+        return $this;
+    }
+
+    public function getInsertUserId(): int
+    {
+        return $this->insertUserId;
+    }
+
+    public function setInsertUserId(int $insertUserId): self
+    {
+        $this->insertUserId = $insertUserId;
 
         return $this;
     }

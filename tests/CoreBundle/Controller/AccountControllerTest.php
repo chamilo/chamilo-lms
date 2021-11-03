@@ -34,4 +34,12 @@ class AccountControllerTest extends WebTestCase
         $client->request('GET', '/account/edit');
         $this->assertStringContainsString('admin firstname', $client->getResponse()->getContent());
     }
+
+    public function testEditNoLogin(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/account/edit');
+        $this->assertResponseStatusCodeSame(302);
+    }
 }

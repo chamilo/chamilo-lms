@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class TicketSettingsSchema extends AbstractSettingsSchema
@@ -22,6 +23,7 @@ class TicketSettingsSchema extends AbstractSettingsSchema
                     'ticket_allow_student_add' => 'false',
                     'ticket_send_warning_to_all_admins' => 'false',
                     'ticket_warn_admin_no_user_in_category' => 'false',
+                    'ticket_project_user_roles' => '',
                 ]
             )
         ;
@@ -40,6 +42,7 @@ class TicketSettingsSchema extends AbstractSettingsSchema
             ->add('ticket_allow_student_add')
             ->add('ticket_send_warning_to_all_admins', YesNoType::class)
             ->add('ticket_warn_admin_no_user_in_category', YesNoType::class)
+            ->add('ticket_project_user_roles', TextareaType::class)
         ;
     }
 }

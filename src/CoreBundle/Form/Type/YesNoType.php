@@ -28,9 +28,4 @@ class YesNoType extends AbstractType
     {
         return ChoiceType::class;
     }
-
-    public function getName(): string
-    {
-        return 'yes_no';
-    }
 }

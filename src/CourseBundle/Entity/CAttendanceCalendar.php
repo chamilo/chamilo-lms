@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +43,13 @@ class CAttendanceCalendar
      * @ORM\Column(name="done_attendance", type="boolean", nullable=false)
      */
     protected bool $doneAttendance;
+
+    /**
+     * @var Collection|CAttendanceSheet[]
+     *
+     * @ORM\OneToMany(targetEntity="CAttendanceSheet", mappedBy="attendanceCalendar", cascade={"persist", "remove"})
+     */
+    protected Collection $sheets;
 
     public function getIid(): int
     {
@@ -87,5 +95,23 @@ class CAttendanceCalendar
     public function getDoneAttendance(): bool
     {
         return $this->doneAttendance;
+    }
+
+    /**
+     * @return CAttendanceSheet[]|Collection
+     */
+    public function getSheets()
+    {
+        return $this->sheets;
+    }
+
+    /**
+     * @param CAttendanceSheet[]|Collection $sheets
+     */
+    public function setSheets(Collection $sheets): self
+    {
+        $this->sheets = $sheets;
+
+        return $this;
     }
 }

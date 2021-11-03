@@ -52,11 +52,21 @@ export default {
         'CourseHome',
         'MyCourses',
         'MySessions',
-        'MySessionListUpcoming',
-        'MySessionListPast',
+        'MySessionsUpcoming',
+        'MySessionsPast',
         'Home',
         'MessageList',
+        'MessageNew',
+        'MessageShow',
+        'MessageCreate',
       ];
+
+      if (!isEmpty(this.$route.name) && this.$route.name.includes('Page')) {
+        items.push({
+          text: this.$t('Pages'),
+          href: '/resources/pages'
+        });
+      }
 
       if (!isEmpty(this.$route.name) && this.$route.name.includes('Message')) {
         items.push({
@@ -65,6 +75,7 @@ export default {
           href: '/resources/messages'
         });
       }
+
 
       if (list.includes(this.$route.name)) {
         return items;

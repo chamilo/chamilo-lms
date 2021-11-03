@@ -53,9 +53,23 @@ class CQuizRelQuestionCategory
         return $this->category;
     }
 
+    public function setCategory(CQuizQuestionCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
     public function getQuiz(): CQuiz
     {
         return $this->quiz;
+    }
+
+    public function setQuiz(CQuiz $quiz): self
+    {
+        $this->quiz = $quiz;
+
+        return $this;
     }
 
     public function getCountQuestions(): int

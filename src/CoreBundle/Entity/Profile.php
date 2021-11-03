@@ -11,8 +11,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Profile.
- *
  * @ORM\Table(name="skill_level_profile")
  * @ORM\Entity
  */

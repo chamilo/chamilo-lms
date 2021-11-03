@@ -8,10 +8,9 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CAttendanceResult.
- *
  * @ORM\Table(
  *     name="c_attendance_result",
  *     indexes={
@@ -35,14 +34,15 @@ class CAttendanceResult
     protected User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance")
-     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance", inversedBy="results")
+     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CAttendance $attendance;
 
     /**
      * @ORM\Column(name="score", type="integer", nullable=false)
      */
+    #[Assert\NotNull]
     protected int $score;
 
     public function getUser(): User

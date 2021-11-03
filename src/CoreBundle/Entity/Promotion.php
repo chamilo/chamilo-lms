@@ -13,8 +13,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Promotion.
- *
  * @ORM\Table(name="promotion")
  * @ORM\Entity
  */

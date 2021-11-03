@@ -10,8 +10,6 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CourseRelUserCatalogue.
- *
  * @ORM\Table(
  *     name="course_rel_user_catalogue",
  *     indexes={

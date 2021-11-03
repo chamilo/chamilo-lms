@@ -19,7 +19,6 @@ class MessageTagRepositoryTest extends AbstractApiTest
 
     public function testCreateTagAndDeleteUser(): void
     {
-        self::bootKernel();
         $tagRepo = self::getContainer()->get(MessageTagRepository::class);
 
         $testUser = $this->createUser('test');
@@ -113,8 +112,6 @@ class MessageTagRepositoryTest extends AbstractApiTest
 
     public function testCreateTagWithApi(): void
     {
-        self::bootKernel();
-
         $testUser = $this->createUser('test');
         $token = $this->getUserToken(
             [

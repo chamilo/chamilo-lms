@@ -32,13 +32,6 @@ class CourseControllerTest extends WebTestCase
             '/course/'.$course->getId().'/home.json'
         );
         $this->assertResponseIsSuccessful();
-        /*$this->assertJsonContains(
-            [
-                'course' => [
-                    'code' => $course->getCode(),
-                ],
-            ]
-        );*/
 
         // Test as registered user (course is open).
         $test = $this->createUser('test');
@@ -64,10 +57,7 @@ class CourseControllerTest extends WebTestCase
         $userTest1 = $this->createUser('test1');
         $client->loginUser($userTest1);
 
-        $client->request(
-            'GET',
-            '/course/'.$course->getId().'/home.json'
-        );
+        $client->request('GET', '/course/'.$course->getId().'/home.json');
         $this->assertResponseStatusCodeSame(403);
     }
 
@@ -95,13 +85,6 @@ class CourseControllerTest extends WebTestCase
             '/course/'.$course->getId().'/home.json'
         );
         $this->assertResponseIsSuccessful();
-        /*$this->assertJsonContains(
-            [
-                'course' => [
-                    'code' => $course->getCode(),
-                ],
-            ]
-        );*/
     }
 
     public function testRedirectTool(): void

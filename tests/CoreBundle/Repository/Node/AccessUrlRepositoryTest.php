@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -66,6 +67,9 @@ class AccessUrlRepositoryTest extends KernelTestCase
             ->setLimitTeachers(1000)
             ->setLimitUsers(1000)
             ->setLimitActiveCourses(1000)
+            ->setTms(new DateTime())
+            ->setCreatedBy(1)
+            ->setUrlType(true)
         ;
 
         $this->assertHasNoEntityViolations($accessUrl);
@@ -77,9 +81,19 @@ class AccessUrlRepositoryTest extends KernelTestCase
         /** @var AccessUrl $accessUrl */
         $accessUrl = $repo->find($accessUrl->getId());
 
+        $this->assertNotNull($accessUrl->getTms());
         $this->assertSame(1, $accessUrl->getLft());
         $this->assertSame(2, $accessUrl->getRgt());
         $this->assertSame(0, $accessUrl->getLvl());
+        $this->assertSame(1, $accessUrl->getCreatedBy());
+        $this->assertTrue($accessUrl->getUrlType());
+
+        $this->assertSame(1000, $accessUrl->getLimitActiveCourses());
+        $this->assertSame(1000, $accessUrl->getLimitCourses());
+        $this->assertSame(1000, $accessUrl->getLimitSessions());
+        $this->assertSame(1000, $accessUrl->getLimitTeachers());
+        $this->assertSame(1000, $accessUrl->getLimitUsers());
+        $this->assertSame(1000, $accessUrl->getLimitDiskSpace());
 
         $this->assertTrue($accessUrl->hasUser($user));
         $this->assertSame($accessUrl->getId(), $accessUrl->getResourceIdentifier());
@@ -87,8 +101,6 @@ class AccessUrlRepositoryTest extends KernelTestCase
         $this->assertSame('test', $accessUrl->getDescription());
         $this->assertSame('https://example.org', (string) $accessUrl);
         $this->assertSame('test@example.com', $accessUrl->getEmail());
-        $this->assertSame(1000, $accessUrl->getLimitDiskSpace());
-        $this->assertSame(1000, $accessUrl->getLimitCourses());
         $this->assertSame(2, $repo->count([]));
         $this->assertSame(0, $accessUrl->getSettings()->count());
     }

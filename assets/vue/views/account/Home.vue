@@ -1,11 +1,17 @@
 <template>
   <v-card>
 
-    <q-avatar size="64px">
-      <img :src="user.illustrationUrl + '?w=80&h=80&fit=crop'" />
-    </q-avatar>
-
-    <h6>{{ user.firstname }} {{ user.lastname }} </h6>
+    <q-item>
+      <q-item-section side>
+        <q-avatar size="64px">
+          <img :src="user.illustrationUrl + '?w=80&h=80&fit=crop'" />
+        </q-avatar>
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ user.fullName }}</q-item-label>
+        <q-item-label caption>{{ user.username }}</q-item-label>
+      </q-item-section>
+    </q-item>
 
     <q-tabs align="left" dense inline-label no-caps>
       <q-route-tab to="/resources/friends" label="My friends" />

@@ -38,12 +38,15 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $this->assertSame(1, $count);
 
         $em = $this->getEntityManager();
+
         $sysAnnouncement = (new SysAnnouncement())
             ->setTitle('Welcome to Chamilo!')
             ->setContent('content')
+            ->setLang('lang')
             ->setUrl($this->getAccessUrl())
             ->setDateStart(new DateTime())
             ->setDateEnd(new DateTime('now +30 days'))
+            ->setRoles(['ROLE_ANOTHER'])
             ->addRole('ROLE_ANONYMOUS')
             ->addRole('ROLE_USER') // connected users
         ;
@@ -52,6 +55,11 @@ class SysAnnouncementRepositoryTest extends WebTestCase
 
         $repo->update($sysAnnouncement);
 
+        $this->assertNotNull($sysAnnouncement->getDateStart());
+        $this->assertNotNull($sysAnnouncement->getDateEnd());
+        $this->assertNotNull($sysAnnouncement->getLang());
+        $this->assertCount(3, $sysAnnouncement->getRoles());
+        $this->assertTrue($sysAnnouncement->isVisible());
         $this->assertSame(2, $repo->count([]));
 
         $repo->delete($sysAnnouncement->getId());
@@ -73,20 +81,14 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $repo = self::getContainer()->get(SysAnnouncementRepository::class);
         $user = $this->getUser('admin');
         $items = $repo->getAnnouncements($user, $this->getAccessUrl(), '');
-        $this->assertSame(1, \count($items));
+        $this->assertCount(1, $items);
+
+        $session = $this->createSession('session');
 
         $career = (new Career())
             ->setName('Doctor')
         ;
         $em->persist($career);
-        $promotion = (new Promotion())
-            ->setName('2000')
-            ->setDescription('Promotion of 2000')
-            ->setCareer($career)
-            ->setStatus(1)
-        ;
-        $em->persist($promotion);
-        $em->flush();
 
         $sysAnnouncement = (new SysAnnouncement())
             ->setTitle('Welcome to Chamilo!')
@@ -101,7 +103,32 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $em->persist($sysAnnouncement);
         $em->flush();
 
+        // Test with no promotions.
         $items = $repo->getAnnouncements($user, $this->getAccessUrl(), '');
-        $this->assertSame(1, \count($items));
+        $this->assertCount(1, $items);
+
+        $promotion = (new Promotion())
+            ->setName('2000')
+            ->setDescription('Promotion of 2000')
+            ->setCareer($career)
+            ->setStatus(1)
+        ;
+        $em->persist($promotion);
+        $em->flush();
+
+        $sysAnnouncement = $repo->find($sysAnnouncement->getId());
+
+        $sysAnnouncement->setPromotion($promotion);
+        $em->persist($sysAnnouncement);
+        $em->flush();
+        $promotion->getSessions()->add($session);
+
+        $em->persist($promotion);
+        $em->flush();
+        $this->assertSame(1, $promotion->getSessions()->count());
+
+        // Test with promotions.
+        $items = $repo->getAnnouncements($user, $this->getAccessUrl(), '');
+        $this->assertCount(1, $items);
     }
 }

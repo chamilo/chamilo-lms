@@ -27,6 +27,7 @@ import axios from 'axios'
 import { ENTRYPOINT } from '../../config/entrypoint'
 import useNotification from "../../components/Notification";
 import {useI18n} from "vue-i18n";
+import toInteger from "lodash/toInteger";
 const servicePrefix = 'ctoolintro';
 
 const { mapFields } = createHelpers({
@@ -51,10 +52,17 @@ export default {
     const router = useRouter();
     const {showNotification} = useNotification();
     const { t } = useI18n();
+    const store = useStore();
 
     let id = route.params.id;
     if (isEmpty(id)) {
       id = route.query.id;
+    }
+
+    const cid = toInteger(route.query.cid);
+    if (cid) {
+      let courseIri = '/api/courses/' + cid;
+      store.dispatch('course/findCourse', { id: courseIri });
     }
 
     let toolId = route.params.courseTool;

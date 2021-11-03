@@ -10,8 +10,6 @@ use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CStudentPublicationRelUser.
- *
  * @ORM\Table(
  *     name="c_student_publication_rel_user",
  *     indexes={

@@ -74,11 +74,7 @@ export default {
     const selectedUsers = ref([]);
     const isLoading = ref(false);
     const store = useStore();
-
     const { showShareWithUser } = toRefs(props);
-
-    console.log(showShareWithUser.value);
-
 
     function addUser(userResult) {
       if (isEmpty(props.item.resourceLinkListFromEntity)) {

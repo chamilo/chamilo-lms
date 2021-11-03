@@ -38,6 +38,7 @@ class UserLocaleSubscriber implements EventSubscriberInterface
         $session = $this->requestStack->getSession();
 
         if (null !== $user->getLocale()) {
+            $session->set('check_locale_from_db', true); // After login, get the locale in LocaleSubscriber.php
             //$session->set('_locale', $user->getLocale());
             $session->set('_locale_user', $user->getLocale());
         }

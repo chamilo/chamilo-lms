@@ -8,10 +8,9 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CAttendanceSheet.
- *
  * @ORM\Table(
  *     name="c_attendance_sheet",
  *     indexes={
@@ -32,6 +31,7 @@ class CAttendanceSheet
     /**
      * @ORM\Column(name="presence", type="boolean", nullable=false)
      */
+    #[Assert\NotNull]
     protected bool $presence;
 
     /**
@@ -41,8 +41,8 @@ class CAttendanceSheet
     protected User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceCalendar")
-     * @ORM\JoinColumn(name="attendance_calendar_id", referencedColumnName="iid")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceCalendar", inversedBy="sheets")
+     * @ORM\JoinColumn(name="attendance_calendar_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CAttendanceCalendar $attendanceCalendar;
 
@@ -53,12 +53,7 @@ class CAttendanceSheet
         return $this;
     }
 
-    /**
-     * Get presence.
-     *
-     * @return bool
-     */
-    public function getPresence()
+    public function getPresence(): bool
     {
         return $this->presence;
     }

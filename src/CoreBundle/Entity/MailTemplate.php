@@ -10,8 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * MailTemplate.
- *
  * @ORM\Table(name="mail_template")
  * @ORM\Entity
  */

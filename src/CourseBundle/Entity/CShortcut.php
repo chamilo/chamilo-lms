@@ -27,32 +27,25 @@ class CShortcut extends AbstractResource implements ResourceInterface
     protected int $id;
 
     /**
-     * @Groups({"cshortcut:read"})
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     #[Assert\NotBlank]
+    #[Groups(['cshortcut:read'])]
     protected string $name;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="shortCut")
-     * @ORM\JoinColumn(name="shortcut_node_id", referencedColumnName="id" )
+     * @ORM\JoinColumn(name="shortcut_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ResourceNode $shortCutNode;
 
-    /**
-     * @Groups({"cshortcut:read"})
-     */
+    #[Groups(['cshortcut:read'])]
     protected string $url;
 
-    /**
-     * @Groups({"cshortcut:read"})
-     */
+    #[Groups(['cshortcut:read'])]
     protected string $tool;
 
-    /**
-     * @Groups({"cshortcut:read"})
-     */
+    #[Groups(['cshortcut:read'])]
     protected string $type;
 
     public function __toString(): string

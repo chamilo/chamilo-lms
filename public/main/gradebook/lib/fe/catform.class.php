@@ -5,8 +5,6 @@
 use Chamilo\CourseBundle\Entity\CDocument;
 
 /**
- * Class CatForm.
- *
  * @author Stijn Konings
  */
 class CatForm extends FormValidator
@@ -281,7 +279,7 @@ class CatForm extends FormValidator
             $defaultCertification = $this->category_object->getCertificateMinScore();
         }
 
-        if (isset($this->category_object) &&
+        if (!empty($this->category_object) &&
             0 == $this->category_object->get_parent_id()
         ) {
             $model = ExerciseLib::getCourseScoreModel();
@@ -341,7 +339,7 @@ class CatForm extends FormValidator
             get_lang('Description')
         );
 
-        if (isset($this->category_object) &&
+        if (!empty($this->category_object) &&
             0 == $this->category_object->get_parent_id() &&
             (api_is_platform_admin() || 'true' === api_get_setting('teachers_can_change_grade_model_settings'))
         ) {

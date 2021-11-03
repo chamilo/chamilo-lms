@@ -91,6 +91,8 @@ class ToolChainTest extends AbstractApiTest
             $this->assertNotEmpty($name);
 
             $link = $tool->getLink();
+            $this->assertNotEmpty($tool->getCategory());
+            $this->assertNotEmpty($tool->getIcon());
             $this->assertNotEmpty($link, sprintf('Link for tool %s is empty', $name));
 
             $types = $tool->getResourceTypes();
@@ -168,6 +170,7 @@ class ToolChainTest extends AbstractApiTest
         ;
         $this->assertHasNoEntityViolations($resourceType);
         $em->persist($resourceType);
+
         $collection = new ArrayCollection();
         $collection->add($resourceType);
 
@@ -178,5 +181,7 @@ class ToolChainTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($tool);
         $em->persist($tool);
         $em->flush();
+
+        $this->assertNotNull($resourceType->getId());
     }
 }

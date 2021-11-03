@@ -252,7 +252,7 @@ class MatchingDraggable extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="matching '.$this->question_table_class.'"><tr>';
+        $header .= '<table class="matching '.$this->questionTableClass.'"><tr>';
         $header .= '<th>'.get_lang('Elements list').'</th>';
         if (!in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -260,15 +260,13 @@ class MatchingDraggable extends Question
         ])
         ) {
             $header .= '<th>'.get_lang('Your choice').'</th>';
-        }
-
-        if ($exercise->showExpectedChoice()) {
             if ($exercise->showExpectedChoiceColumn()) {
                 $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
-            $header .= '<th>'.get_lang('Status').'</th>';
-        } else {
-            $header .= '<th>'.get_lang('Corresponds to').'</th>';
+        }
+
+        if ($exercise->showExpectedChoice()) {
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
         $header .= '</tr>';
 

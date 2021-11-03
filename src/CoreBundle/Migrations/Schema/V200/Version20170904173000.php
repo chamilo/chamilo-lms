@@ -78,7 +78,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
         }
         if (false === $table->hasForeignKey('FK_F6FF71ABFE54D947')) {
             $this->addSql(
-                'ALTER TABLE c_group_rel_tutor ADD CONSTRAINT FK_F6FF71ABFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid)'
+                'ALTER TABLE c_group_rel_tutor ADD CONSTRAINT FK_F6FF71ABFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE'
             );
         }
         if (false === $table->hasIndex('IDX_F6FF71ABA76ED395')) {

@@ -8,10 +8,10 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
+use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
@@ -243,9 +243,8 @@ class CourseController extends ToolBaseController
         return $this->redirect($url);
     }
 
-    public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
+    /*public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
     {
-        /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
             'name' => $toolName,
         ]);
@@ -265,7 +264,7 @@ class CourseController extends ToolBaseController
         $url = $link.'?'.$this->getCourseUrlQuery();
 
         return $this->redirect($url);
-    }
+    }*/
 
     /**
      * Edit configuration with given namespace.
@@ -324,8 +323,8 @@ class CourseController extends ToolBaseController
 
         /** @var EntityRepository $fieldsRepo */
         $fieldsRepo = $em->getRepository(ExtraField::class);
-        /** @var ExtraFieldRelTagRepository $fieldTagsRepo */
-        $fieldTagsRepo = $em->getRepository(ExtraFieldRelTag::class);
+        /** @var TagRepository $tagRepo */
+        $tagRepo = $em->getRepository(Tag::class);
 
         $courseDescriptions = $courseDescriptionRepository->getResourcesByCourse($course)->getQuery()->getResult();
 
@@ -354,7 +353,7 @@ class CourseController extends ToolBaseController
 
         $courseTags = [];
         if (null !== $tagField) {
-            $courseTags = $fieldTagsRepo->getTags($tagField, $courseId);
+            $courseTags = $tagRepo->getTagsByItem($tagField, $courseId);
         }
 
         $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = '';

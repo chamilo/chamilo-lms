@@ -35,6 +35,11 @@ class IllustrationRepositoryTest extends WebTestCase
             $url
         );
         $this->assertResponseIsSuccessful();
+        $this->assertSame(1, $repo->count([]));
+        $this->assertTrue($repo->hasIllustration($course));
+
+        $repo->deleteIllustration($course);
+        $this->assertSame(0, $repo->count([]));
     }
 
     public function testCreateUserIllustration(): void
@@ -65,6 +70,7 @@ class IllustrationRepositoryTest extends WebTestCase
 
         $illustration = (new Illustration())
             ->setName('test')
+            ->setResourceName('test')
             ->setCreator($user)
             ->setParent($user)
         ;
@@ -72,5 +78,7 @@ class IllustrationRepositoryTest extends WebTestCase
         $repo->update($illustration);
 
         $this->assertSame('test', (string) $illustration);
+        $this->assertNotNull($illustration->getId());
+        $this->assertSame($illustration->getId(), $illustration->getResourceIdentifier());
     }
 }

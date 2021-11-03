@@ -79,7 +79,7 @@ class Version20180928172830 extends AbstractMigrationChamilo
 
         if (!$table->hasForeignKey('FK_84566580613FECDF')) {
             $this->addSql(
-                'ALTER TABLE c_tool ADD CONSTRAINT FK_84566580613FECDF FOREIGN KEY (session_id) REFERENCES session (id)'
+                'ALTER TABLE c_tool ADD CONSTRAINT FK_84566580613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE'
             );
         }
 

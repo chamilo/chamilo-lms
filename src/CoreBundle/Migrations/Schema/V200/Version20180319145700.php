@@ -78,7 +78,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasForeignKey('FK_8A897DD1E27F6BF')) {
-            $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DD1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid);');
+            $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DD1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid) ON DELETE CASCADE');
         }
 
         /*if (!$table->hasForeignKey('FK_8A897DDA7C41D6F')) {

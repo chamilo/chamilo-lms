@@ -160,10 +160,10 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
 
                     if (null !== $file) {
                         $em = Database::getManager();
-                        $correction = new CStudentPublicationCorrection();
-                        $correction
+                        $correction = (new CStudentPublicationCorrection())
                             ->setParent($work)
-                            ->setTitle($file->getClientOriginalName());
+                            ->setTitle($file->getClientOriginalName())
+                        ;
                         // @todo improve file upload.
                         $correctionRepo = Container::getStudentPublicationCorrectionRepository();
                         $correctionRepo->create($correction);

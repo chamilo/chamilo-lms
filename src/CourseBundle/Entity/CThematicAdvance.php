@@ -13,8 +13,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CThematicAdvance.
- *
  * @ORM\Table(
  *     name="c_thematic_advance",
  *     indexes={
@@ -39,7 +37,7 @@ class CThematicAdvance //extends AbstractResource implements ResourceInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance")
-     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CAttendance $attendance;
 

@@ -39,24 +39,23 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
-use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManager;
 use SocialManager;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class UserToJsonNormalizer
 {
     private EntityManager $em;
     private UserRepository $userRepository;
+    private SerializerInterface $serializer;
 
-    public function __construct(EntityManager $em, UserRepository $userRepository)
+    public function __construct(EntityManager $em, UserRepository $userRepository, SerializerInterface $serializer)
     {
         $this->em = $em;
         $this->userRepository = $userRepository;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -74,10 +73,10 @@ final class UserToJsonNormalizer
         /** @var User $user */
         $user = $this->userRepository->find($userId);
 
-        $user->setPassword($substitutionTerms['password']);
-        $user->setSalt($substitutionTerms['salt']);
+        $user->setPassword($substitutionTerms['password'] ?? '');
+        $user->setSalt($substitutionTerms['salt'] ?? '');
 
-        $noDataLabel = $substitutionTerms['empty'];
+        $noDataLabel = $substitutionTerms['empty'] ?? '';
 
         // Dummy content
         $user->setDateOfBirth(null);
@@ -99,22 +98,22 @@ final class UserToJsonNormalizer
         $user->setWebsite($noDataLabel);
         //$user->setToken($noDataLabel);
 
-        $friends = SocialManager::get_friends($userId);
+        /*$friends = SocialManager::get_friends($userId);
         $friendList = [];
         if (!empty($friends)) {
             foreach ($friends as $friend) {
                 $friendList[] = $friend['user_info']['complete_name'];
             }
-        }
+        }*/
 
-        $agenda = new Agenda('personal');
+        /*$agenda = new Agenda('personal');
         $events = $agenda->getEvents(0, 0, 0, 0, $userId, 'array');
         $eventList = [];
         if (!empty($events)) {
             foreach ($events as $event) {
                 $eventList[] = $event['title'].' '.$event['start_date_localtime'].' / '.$event['end_date_localtime'];
             }
-        }
+        }*/
 
         // GradebookCertificate
         $result = $em->getRepository(GradebookCertificate::class)->findBy([
@@ -134,7 +133,7 @@ final class UserToJsonNormalizer
 
         // TrackEExercises
         $criteria = [
-            'exeUserId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(TrackExercise::class)->findBy($criteria);
         $trackEExercises = [];
@@ -189,7 +188,7 @@ final class UserToJsonNormalizer
         }
 
         $checkEntities = [
-            TrackELogin::class => 'loginUserId',
+            TrackELogin::class => 'user',
             TrackEAccess::class => 'accessUserId',
             TrackEOnline::class => 'loginUserId',
             TrackEDefault::class => 'defaultUserId',
@@ -383,7 +382,6 @@ final class UserToJsonNormalizer
             ];
             $cForumThreadList[] = implode(', ', $list);
         }
-
         // CForumAttachment
         /*$criteria = [
             'threadPosterId' => $userId,
@@ -758,18 +756,13 @@ final class UserToJsonNormalizer
         //$extraFieldValues = new \ExtraFieldValue('user');
 
         $lastLogin = $user->getLastLogin();
-        if (null === $lastLogin) {
+        /*if (null === $lastLogin) {
             $login = $this->userRepository->getLastLogin($user);
             if (null !== $login) {
                 $lastLogin = $login->getLoginDate();
             }
-        }
+        }*/
         $user->setLastLogin($lastLogin);
-
-        /*$dateNormalizer = new GetSetMethodNormalizer();
-        $dateNormalizer->setCircularReferenceHandler(function ($object) {
-            return get_class($object);
-        });*/
 
         $ignore = [
             'twoStepVerificationCode',
@@ -805,30 +798,9 @@ final class UserToJsonNormalizer
             'resourceNode',
         ];
 
-        $callback = function ($dateTime) {
-            return $dateTime instanceof DateTime ? $dateTime->format(DateTimeInterface::ATOM) : '';
-        };
-
-        $defaultContext = [
-            AbstractNormalizer::CALLBACKS => [
-                'createdAt' => $callback,
-                'lastLogin' => $callback,
-                'registrationDate' => $callback,
-                'memberSince' => $callback,
-            ],
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return \get_class($object);
-            },
-        ];
-
-        $normalizer = new GetSetMethodNormalizer(null, null, null, null, null, $defaultContext);
-        $serializer = new Serializer(
-            [$normalizer],
-            [new JsonEncoder()]
-        );
-
-        return $serializer->serialize($user, 'json', [
+        return $this->serializer->serialize($user, 'json', [
             AbstractNormalizer::IGNORED_ATTRIBUTES => $ignore,
+            'groups' => ['user_export'],
         ]);
     }
 }

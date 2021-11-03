@@ -130,8 +130,8 @@ $ticket = TicketManager::get_ticket_detail_by_id($ticket_id);
 if (empty($ticket)) {
     api_not_allowed(true);
 }
-$projectId = $ticket['ticket']['project_id'];
-$userIsAllowInProject = TicketManager::userIsAllowInProject($userInfo, $projectId);
+$projectId = (int) $ticket['ticket']['project_id'];
+$userIsAllowInProject = TicketManager::userIsAllowInProject(api_get_user_entity(), $projectId);
 $allowEdition = $ticket['ticket']['assigned_last_user'] == $user_id
     || $ticket['ticket']['sys_insert_user_id']
     == $user_id

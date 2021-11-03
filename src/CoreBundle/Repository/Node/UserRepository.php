@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Datetime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -417,11 +416,11 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     public function getCountUsersByUrl(AccessUrl $url)
     {
         return $this->createQueryBuilder('u')
-            ->select('COUNT(a)')
-            ->innerJoin('a.portals', 'p')
-            ->where('p.portal = :p')
+            ->select('COUNT(u)')
+            ->innerJoin('u.portals', 'p')
+            ->where('p.url = :url')
             ->setParameters([
-                'p' => $url,
+                'url' => $url,
             ])
             ->getQuery()
             ->getSingleScalarResult()
@@ -437,17 +436,18 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     {
         $qb = $this->createQueryBuilder('u');
 
-        return $qb
+        $qb
             ->select('COUNT(u)')
-            ->innerJoin('a.portals', 'p')
-            ->where('p.portal = :p')
-            ->andWhere($qb->expr()->in('u.roles', ['ROLE_TEACHER']))
+            ->innerJoin('u.portals', 'p')
+            ->where('p.url = :url')
             ->setParameters([
-                'p' => $url,
+                'url' => $url,
             ])
-            ->getQuery()
-            ->getSingleScalarResult()
         ;
+
+        $this->addRoleListQueryBuilder(['ROLE_TEACHER'], $qb);
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -605,28 +605,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
 
         return $qb;
-    }
-
-    /**
-     * @return CSurveyInvitation[]
-     */
-    public function getUserPendingInvitations(User $user)
-    {
-        $qb = $this->createQueryBuilder('u');
-        $qb
-            ->select('s')
-            ->innerJoin('u.surveyInvitations', 's')
-            ->andWhere('s.user = :u')
-            ->andWhere('s.availFrom <= :now AND s.availTill >= :now')
-            ->andWhere('s.answered = 0')
-            ->setParameters([
-                'now' => new Datetime(),
-                'u' => $user,
-            ])
-            ->orderBy('s.availTill', Criteria::ASC)
-        ;
-
-        return $qb->getQuery()->getResult();
     }
 
     private function addRoleQueryBuilder(string $role, QueryBuilder $qb = null): QueryBuilder

@@ -14,23 +14,10 @@ class IllustrationType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver): void
     {
-        /*$resolver->setDefaults(
-            [
-                'choices' => [
-                    'Yes' => 'true',
-                    'No' => 'false',
-                ],
-            ]
-        );*/
     }
 
     public function getParent()
     {
         return FileType::class;
-    }
-
-    public function getName(): string
-    {
-        return 'illustration';
     }
 }

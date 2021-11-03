@@ -386,12 +386,6 @@ $_configuration['send_all_emails_to'] = [
         'admin2@example.com',
     ]
 ];*/
-// Allow ticket projects to be access by specific chamilo roles
-/*$_configuration['ticket_project_user_roles'] = [
-    'permissions' => [
-        1 => [17] // project_id = 1, STUDENT_BOSS = 17
-    ]
-];*/
 // Allow additional data (exercise and learningpath) in the ticket
 // - Required DB change
 // ALTER TABLE ticket_ticket ADD exercise_id INT DEFAULT NULL AFTER course_id;

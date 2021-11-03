@@ -35,21 +35,47 @@ switch ($action) {
             );
         }
         break;
-    case 'search_tags':
+    case 'delete_tag':
         header('Content-Type: application/json');
-        $tag = isset($_REQUEST['q']) ? (string) $_REQUEST['q'] : '';
+        $tagId = $_REQUEST['tag_id'] ?? 0;
+        $tagRepo = Container::getTagRepository();
+        $extraFieldRepo = Container::getExtraFieldRepository();
+        $tag = $tagRepo->find($tagId);
 
         if (empty($tag)) {
             echo json_encode(['items' => []]);
             exit;
         }
 
+        $user = api_get_user_entity();
         $tagRepo = Container::getTagRepository();
-        $tags = $tagRepo->findTagsByField($tag, $fieldId);
+        $deleted = $tagRepo->deleteTagFromUser($user, $tag);
+        if ($deleted) {
+            echo json_encode(['ok' => 1]);
+            exit;
+        } else {
+            echo json_encode(['error' => 1]);
+            exit;
+        }
+        break;
+    case 'search_tags':
+        header('Content-Type: application/json');
+        $tag = isset($_REQUEST['q']) ? (string) $_REQUEST['q'] : '';
+
+        $extraFieldRepo = Container::getExtraFieldRepository();
+        $field = $extraFieldRepo->find($fieldId);
+
+        if (empty($tag || null === $field)) {
+            echo json_encode(['items' => []]);
+            exit;
+        }
+
+        $tagRepo = Container::getTagRepository();
+        $tags = $tagRepo->findTagsByField($tag, $field);
         $result = [];
         foreach ($tags as $tag) {
             $result[] = [
-                'id' => $tag->getTag(),
+                'id' => $tag->getId(),
                 'text' => $tag->getTag(),
             ];
         }

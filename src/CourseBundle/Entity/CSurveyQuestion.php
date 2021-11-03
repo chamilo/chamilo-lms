@@ -12,8 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CSurveyQuestion.
- *
  * @ORM\Table(
  *     name="c_survey_question",
  *     indexes={

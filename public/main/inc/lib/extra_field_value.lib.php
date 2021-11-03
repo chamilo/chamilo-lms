@@ -551,6 +551,24 @@ class ExtraFieldValue extends Model
                                 $result['value'] .= $result_second['display_text'];
                             }
                             break;
+                        case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
+                            $optionIds = explode(';', $result['value']);
+                            $optionValues = [];
+                            $objEfOption = new ExtraFieldOption($this->type);
+                            $options = $objEfOption->get_field_options_by_field($result['field_id']);
+                            if (!empty($options)) {
+                                $options = array_column($options, 'display_text', 'option_value');
+                            }
+                            foreach ($optionIds as $option) {
+                                if (!empty($options) && isset($options[$option])) {
+                                    $optionValues[] = $options[$option];
+                                    continue;
+                                }
+                                $optionValues[] = $option;
+                            }
+
+                            $result['value'] = implode(' <br /> ', $optionValues);
+                            break;
                         case ExtraField::FIELD_TYPE_SELECT:
                             $field_option = new ExtraFieldOption($this->type);
                             $extra_field_option_result = $field_option->get_field_option_by_field_and_option(
@@ -561,27 +579,23 @@ class ExtraFieldValue extends Model
                             if (isset($extra_field_option_result[0])) {
                                 $result['value'] = $extra_field_option_result[0]['display_text'];
                             }
+
                             break;
                         case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                             $options = explode('::', $result['value']);
-
                             $field_option = new ExtraFieldOption($this->type);
                             $result = $field_option->get($options[0]);
 
                             if (!empty($result)) {
-                                $result['value'] = $result['display_text']
-                                    .'&rarr;'
-                                    .$options[1];
+                                $result['value'] = $result['display_text'].'&rarr;'.$options[1];
                             }
                             break;
                         case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
                             $optionIds = explode(';', $result['value']);
                             $optionValues = [];
-
                             foreach ($optionIds as $optionId) {
-                                $objEfOption = new ExtraFieldOption('user');
+                                $objEfOption = new ExtraFieldOption($this->type);
                                 $optionInfo = $objEfOption->get($optionId);
-
                                 $optionValues[] = $optionInfo['display_text'];
                             }
 

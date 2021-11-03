@@ -7,7 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use ExtraFieldOption;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository")
@@ -28,6 +29,7 @@ class ExtraFieldOptions
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField", inversedBy="options")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
+    #[Assert\NotNull]
     protected ExtraField $field;
 
     /**
@@ -36,9 +38,15 @@ class ExtraFieldOptions
     protected ?string $value = null;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(name="display_text", type="string", length=255, nullable=true)
      */
     protected ?string $displayText = null;
+
+    /**
+     * @Gedmo\Locale
+     */
+    protected ?string $locale = null;
 
     /**
      * @ORM\Column(name="priority", type="string", length=255, nullable=true)
@@ -106,16 +114,10 @@ class ExtraFieldOptions
     }
 
     /**
-     * @param bool $translated Optional. Whether translate the display text
-     *
      * @return string
      */
-    public function getDisplayText(bool $translated = true)
+    public function getDisplayText()
     {
-        if ($translated) {
-            return ExtraFieldOption::translateDisplayName($this->displayText);
-        }
-
         return $this->displayText;
     }
 
@@ -126,10 +128,7 @@ class ExtraFieldOptions
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getPriority()
+    public function getPriority(): ?string
     {
         return $this->priority;
     }
@@ -141,10 +140,7 @@ class ExtraFieldOptions
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getPriorityMessage()
+    public function getPriorityMessage(): ?string
     {
         return $this->priorityMessage;
     }
@@ -154,5 +150,17 @@ class ExtraFieldOptions
         $this->priorityMessage = $priorityMessage;
 
         return $this;
+    }
+
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    public function getTranslatableLocale()
+    {
+        return $this->locale;
     }
 }

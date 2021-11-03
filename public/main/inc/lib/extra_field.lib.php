@@ -98,75 +98,58 @@ class ExtraField extends Model
         $this->table_field_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $this->table_field_rel_tag = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
         $this->handler_id = 'item_id';
+        $this->extraFieldType = self::getExtraFieldTypeFromString($this->type);
 
         switch ($this->type) {
-            case 'calendar_event':
-                $this->extraFieldType = EntityExtraField::CALENDAR_FIELD_TYPE;
-                break;
-            case 'course':
-                $this->extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
-                $this->primaryKey = 'id';
-                break;
-            case 'user':
-                $this->extraFieldType = EntityExtraField::USER_FIELD_TYPE;
-                $this->primaryKey = 'id';
-                break;
             case 'session':
-                $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;
+            case 'user':
+            case 'calendar_event':
+            case 'course':
                 $this->primaryKey = 'id';
                 break;
-            case 'exercise':
-                $this->extraFieldType = EntityExtraField::EXERCISE_FIELD_TYPE;
-                break;
-            case 'question':
-                $this->extraFieldType = EntityExtraField::QUESTION_FIELD_TYPE;
-                break;
-            case 'lp':
-                $this->extraFieldType = EntityExtraField::LP_FIELD_TYPE;
-                break;
-            case 'lp_item':
-                $this->extraFieldType = EntityExtraField::LP_ITEM_FIELD_TYPE;
-                break;
-            case 'skill':
-                $this->extraFieldType = EntityExtraField::SKILL_FIELD_TYPE;
-                break;
-            case 'work':
-                $this->extraFieldType = EntityExtraField::WORK_FIELD_TYPE;
-                break;
-            case 'career':
-                $this->extraFieldType = EntityExtraField::CAREER_FIELD_TYPE;
-                break;
-            case 'user_certificate':
-                $this->extraFieldType = EntityExtraField::USER_CERTIFICATE;
-                break;
-            case 'survey':
-                $this->extraFieldType = EntityExtraField::SURVEY_FIELD_TYPE;
-                break;
-            case 'scheduled_announcement':
-                $this->extraFieldType = EntityExtraField::SCHEDULED_ANNOUNCEMENT;
-                break;
-            case 'terms_and_condition':
-                $this->extraFieldType = EntityExtraField::TERMS_AND_CONDITION_TYPE;
-                break;
-            case 'forum_category':
-                $this->extraFieldType = EntityExtraField::FORUM_CATEGORY_TYPE;
-                break;
-            case 'forum_post':
-                $this->extraFieldType = EntityExtraField::FORUM_POST_TYPE;
-                break;
-            case 'track_exercise':
-                $this->extraFieldType = EntityExtraField::TRACK_EXERCISE_FIELD_TYPE;
-                break;
-            case 'portfolio':
-                $this->extraFieldType = EntityExtraField::PORTFOLIO_TYPE;
-                break;
-            case 'lp_view':
-                $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
         $this->pageName = ucwords($this->type).'Fields';
+    }
+
+    public static function getTypeList(): array
+    {
+        return [
+            'calendar_event' => EntityExtraField::CALENDAR_FIELD_TYPE,
+            'course' => EntityExtraField::COURSE_FIELD_TYPE,
+            'user' => EntityExtraField::USER_FIELD_TYPE,
+            'session' => EntityExtraField::SESSION_FIELD_TYPE,
+            'exercise' => EntityExtraField::EXERCISE_FIELD_TYPE,
+            'question' => EntityExtraField::QUESTION_FIELD_TYPE,
+            'lp' => EntityExtraField::LP_FIELD_TYPE,
+            'lp_item' => EntityExtraField::LP_ITEM_FIELD_TYPE,
+            'skill' => EntityExtraField::SKILL_FIELD_TYPE,
+            'work' => EntityExtraField::WORK_FIELD_TYPE,
+            'career' => EntityExtraField::CAREER_FIELD_TYPE,
+            'user_certificate' => EntityExtraField::USER_CERTIFICATE,
+            'survey' => EntityExtraField::SURVEY_FIELD_TYPE,
+            'scheduled_announcement' => EntityExtraField::SCHEDULED_ANNOUNCEMENT,
+            'terms_and_condition' => EntityExtraField::TERMS_AND_CONDITION_TYPE,
+            'forum_category' => EntityExtraField::FORUM_CATEGORY_TYPE,
+            'forum_post' => EntityExtraField::FORUM_POST_TYPE,
+            'track_exercise' => EntityExtraField::TRACK_EXERCISE_FIELD_TYPE,
+            'portfolio' => EntityExtraField::PORTFOLIO_TYPE,
+            'lp_view' => EntityExtraField::LP_VIEW_TYPE,
+        ];
+    }
+
+    public static function getExtraFieldTypeFromString($extraFieldTypeInString): string
+    {
+        return self::getTypeList()[$extraFieldTypeInString];
+    }
+
+    public static function getExtraFieldTypeFromInt($extraFieldTypeInt)
+    {
+        $reversed = array_flip(self::getTypeList());
+
+        return $reversed[$extraFieldTypeInt];
     }
 
     /**
@@ -640,16 +623,17 @@ class ExtraField extends Model
                     variable = '$variable' AND
                     extra_field_type = $this->extraFieldType";
         $result = Database::query($sql);
+        $extraFieldRepo = Container::getExtraFieldRepository();
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
-            $row['display_text'] = $this->translateDisplayName(
-                    $row['variable'],
-                    $row['display_text']
-                );
+            $extraFieldId = $row['id'];
+            /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+            $extraField = $extraFieldRepo->find($extraFieldId);
+            $row['display_text'] = $extraField->getDisplayText();
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag
-                    WHERE field_id='".intval($row['id'])."'
+                    WHERE field_id='".$extraFieldId."'
                     ORDER BY id ASC";
             $result = Database::query($sql);
             while ($option = Database::fetch_array($result, 'ASSOC')) {
@@ -657,24 +641,9 @@ class ExtraField extends Model
             }
 
             return $row;
-        } else {
-            return false;
         }
-    }
 
-    /**
-     * Translate the display text for a extra field.
-     *
-     * @param string $variable
-     * @param string $defaultDisplayText
-     *
-     * @return string
-     */
-    public static function translateDisplayName($variable, $defaultDisplayText)
-    {
-        $camelCase = api_underscore_to_camel_case($variable);
-
-        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+        return false;
     }
 
     /**
@@ -937,13 +906,14 @@ class ExtraField extends Model
         $result = Database::query($sql);
         $extraFields = Database::store_result($result, 'ASSOC');
 
+        $extraFieldRepo = Container::getExtraFieldRepository();
         $option = new ExtraFieldOption($this->type);
         if (!empty($extraFields)) {
             foreach ($extraFields as &$extraField) {
-                $extraField['display_text'] = $this->translateDisplayName(
-                    $extraField['variable'],
-                    $extraField['display_text']
-                );
+                $extraFieldId = $extraField['id'];
+                /** @var \Chamilo\CoreBundle\Entity\ExtraField $field */
+                $field = $extraFieldRepo->find($extraFieldId);
+                $extraField['display_text'] = $field->getDisplayText();
                 $extraField['options'] = $option->get_field_options_by_field(
                     $extraField['id'],
                     false,
@@ -994,6 +964,8 @@ class ExtraField extends Model
         $jquery_ready_content = null;
 
         $assetRepo = Container::getAssetRepository();
+        $extraFieldRepo = Container::getExtraFieldRepository();
+
         if (!empty($extra)) {
             $newOrder = [];
             if (!empty($orderFields)) {
@@ -1055,11 +1027,16 @@ class ExtraField extends Model
                     $freezeElement = 0 == $field_details['visible_to_self'] || 0 == $field_details['changeable'];
                 }
 
-                $translatedDisplayText = get_lang($field_details['display_text']);
+                //$translatedDisplayText = $field_details['display_text'];
+                /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+                $extraField = $extraFieldRepo->find($field_details['id']);
+                $translatedDisplayText = $extraField->getDisplayText();
+
                 $translatedDisplayHelpText = '';
                 if ($help) {
                     $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
                 }
+
                 if (!empty($translatedDisplayText)) {
                     if (!empty($translatedDisplayHelpText)) {
                         // In this case, exceptionally, display_text is an array
@@ -1999,17 +1976,18 @@ class ExtraField extends Model
                     extra_field_type = $this->extraFieldType";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
+            $extraFieldRepo = Container::getExtraFieldRepository();
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row) {
-                $row['display_text'] = $this->translateDisplayName(
-                    $row['variable'],
-                    $row['display_text']
-                );
+                $extraFieldId = $row['id'];
+                /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+                $field = $extraFieldRepo->find($extraFieldId);
+                $row['display_text'] = $field->getDisplayText();
 
                 // All the options of the field
                 $sql = "SELECT * FROM $this->table_field_options
-                    WHERE field_id='".intval($row['id'])."'
-                    ORDER BY option_order ASC";
+                        WHERE field_id='".$extraFieldId."'
+                        ORDER BY option_order ASC";
                 $result = Database::query($sql);
                 while ($option = Database::fetch_array($result)) {
                     $row['options'][$option['id']] = $option;
@@ -2267,9 +2245,13 @@ class ExtraField extends Model
         $form->addElement('header', $header);
 
         if ('edit' === $action) {
-            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
-                .http_build_query(['extra_field' => $id]);
-            $translateButton = Display::toolbarButton(get_lang('Translate this term'), $translateUrl, 'language', 'link');
+            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query(['id' => $id]);
+            $translateButton = Display::toolbarButton(
+                get_lang('Translate this term'),
+                $translateUrl,
+                'language',
+                'link'
+            );
 
             $form->addText(
                 'display_text',
@@ -2309,18 +2291,20 @@ class ExtraField extends Model
             self::FIELD_TYPE_TRIPLE_SELECT,
         ];
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             if (in_array($defaults['field_type'], $fieldWithOptions)) {
                 $url = Display::url(
                     get_lang('Edit extra field options'),
-                    'extra_field_options.php?type='.$this->type.'&field_id='.$id
+                    'extra_field_options.php?type='.$this->type.'&field_id='.$id,
+                    ['class' => 'btn']
                 );
                 $form->addElement('label', null, $url);
 
                 if (self::FIELD_TYPE_SELECT == $defaults['field_type']) {
                     $urlWorkFlow = Display::url(
                         get_lang('Edit this field\'s workflow'),
-                        'extra_field_workflow.php?type='.$this->type.'&field_id='.$id
+                        'extra_field_workflow.php?type='.$this->type.'&field_id='.$id,
+                        ['class' => 'btn']
                     );
                     $form->addElement('label', null, $urlWorkFlow);
                 }
@@ -2404,7 +2388,10 @@ class ExtraField extends Model
         $info = parent::get($id);
 
         if ($translateDisplayText) {
-            $info['display_text'] = self::translateDisplayName($info['variable'], $info['display_text']);
+            $extraFieldRepo = Container::getExtraFieldRepository();
+            /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+            $field = $extraFieldRepo->find($id);
+            $info['display_text'] = $field->getDisplayText();
         }
 
         return $info;
@@ -2998,11 +2985,7 @@ JAVASCRIPT;
 
             $valueAsArray = [];
             $fieldValue = new ExtraFieldValue($this->type);
-            $valueData = $fieldValue->get_values_by_handler_and_field_id(
-                $itemId,
-                $field['id'],
-                true
-            );
+            $valueData = $fieldValue->get_values_by_handler_and_field_id($itemId, $field['id'], true);
 
             $fieldType = (int) $field['field_type'];
             if (self::FIELD_TYPE_TAG === $fieldType) {
@@ -3025,10 +3008,9 @@ JAVASCRIPT;
             $displayedValue = get_lang('None');
             switch ($fieldType) {
                 case self::FIELD_TYPE_CHECKBOX:
+                    $displayedValue = get_lang('No');
                     if (false !== $valueData && '1' == $valueData['value']) {
                         $displayedValue = get_lang('Yes');
-                    } else {
-                        $displayedValue = get_lang('No');
                     }
                     break;
                 case self::FIELD_TYPE_DATE:
@@ -3048,7 +3030,7 @@ JAVASCRIPT;
                     }
                     $assetId = $valueData['asset_id'];
                     $assetRepo = Container::getAssetRepository();
-                    /** @var Asset $asset */
+                    /** @var Asset|null $asset */
                     $asset = $assetRepo->find($assetId);
 
                     if (null === $asset) {

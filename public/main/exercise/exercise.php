@@ -89,7 +89,8 @@ if ($is_allowedToEdit && !empty($action)) {
         case 'add_shortcut':
             $repo = Container::getShortcutRepository();
             $courseEntity = api_get_course_entity(api_get_course_int_id());
-            $repo->addShortCut($exerciseEntity, $courseEntity, $courseEntity, api_get_session_entity());
+            $user = api_get_user_entity();
+            $repo->addShortCut($exerciseEntity, $user, $courseEntity, api_get_session_entity());
 
             Display::addFlash(Display::return_message(get_lang('Updated')));
 

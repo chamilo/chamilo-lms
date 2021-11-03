@@ -10,8 +10,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class AssignedLog.
- *
  * @ORM\Table(
  *     name="ticket_assigned_log",
  * )
@@ -28,7 +26,7 @@ class TicketAssignedLog
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Ticket $ticket;
 

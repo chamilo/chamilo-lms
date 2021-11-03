@@ -42,21 +42,6 @@ final class CSurveyRepository extends ResourceRepository
         return $qb;
     }
 
-    public function getTreeByCourse(Course $course, Session $session = null): void
-    {
-        /*$qb = $this->getResourcesByCourse($course, $session);
-
-        $this->getEntityManager()->getConfiguration()->addCustomHydrationMode(
-            'tree',
-            TreeObjectHydrator::class
-        );
-
-        /*$options = ['decorate' => true,   'html' => false];
-        $tree = $this->buildTree($qb->getQuery()->getArrayResult(), $options);*/
-
-        //return $qb->getQuery()->setHint(Query::HINT_INCLUDE_META_COLUMNS, true)->getResult('tree');
-    }
-
     protected function addTitleQueryBuilder(?string $title, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);

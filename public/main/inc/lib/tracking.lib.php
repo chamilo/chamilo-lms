@@ -5131,7 +5131,11 @@ class Tracking
 
                     /** @var CQuiz[] $exercises */
                     $exercises = $qb->getQuery()->getResult();
-                    $count_exercises = count($exerciseList);
+                    $count_exercises = 0;
+                    if (!empty($exercises)) {
+                        $count_exercises = count($exercises);
+                    }
+
                     $answered_exercises = 0;
                     foreach ($exercises as $exercise_item) {
                         $attempts = Event::count_exercise_attempts_by_user(
@@ -5390,8 +5394,9 @@ class Tracking
         if (!empty($exercises)) {
             $weighting = $exe_id = 0;
             foreach ($exercises as $exercise) {
+                $exerciseId = $exercise->getIid();
                 $exercise_obj = new Exercise($courseId);
-                $exercise_obj->read($exercise->getIid());
+                $exercise_obj->read($exerciseId);
                 $visible_return = $exercise_obj->is_visible();
                 $score = $weighting = $attempts = 0;
 
@@ -5405,31 +5410,32 @@ class Tracking
 
                 $html .= '<tr class="row_even">';
                 $url = api_get_path(WEB_CODE_PATH).
-                    "exercise/overview.php?cid={$courseId}&sid=$sessionId&exerciseId={$exercices['id']}";
+                    "exercise/overview.php?cid={$courseId}&sid=$sessionId&exerciseId={$exerciseId}";
 
                 if (true == $visible_return['value']) {
-                    $exercices['title'] = Display::url(
-                        $exercices['title'],
+                    $exerciseTitle = Display::url(
+                        $exercise->getTitle(),
                         $url,
                         ['target' => SESSION_LINK_TARGET]
                     );
-                } elseif (-1 == $exercices['active']) {
-                    $exercices['title'] = sprintf(get_lang('%s (deleted)'), $exercices['title']);
+                } elseif (-1 == $exercise->getActive()) {
+                    $exerciseTitle = sprintf(get_lang('%s (deleted)'), $exercise->getTitle());
                 }
 
-                $html .= Display::tag('td', $exercices['title']);
+                $html .= Display::tag('td', $exerciseTitle);
+                $resultsDisabled = $exercise->getResultsDisabled();
 
                 // Exercise configuration show results or show only score
-                if (0 == $exercices['results_disabled'] || 2 == $exercices['results_disabled']) {
+                if (0 == $resultsDisabled || 2 == $resultsDisabled) {
                     //For graphics
                     $best_exercise_stats = Event::get_best_exercise_results_by_user(
-                        $exercices['id'],
+                        $exerciseId,
                         $courseId,
                         $sessionId
                     );
 
-                    $to_graph_exercise_result[$exercices['id']] = [
-                        'title' => $exercices['title'],
+                    $to_graph_exercise_result[$exerciseId] = [
+                        'title' => $exerciseTitle,
                         'data' => $best_exercise_stats,
                     ];
 
@@ -5439,7 +5445,7 @@ class Tracking
 
                     // Getting best results
                     $best_score_data = ExerciseLib::get_best_attempt_in_course(
-                        $exercices['id'],
+                        $exerciseId,
                         $courseId,
                         $sessionId
                     );
@@ -5455,7 +5461,7 @@ class Tracking
                     if ($attempts > 0) {
                         $exercise_stat = ExerciseLib::get_best_attempt_by_user(
                             api_get_user_id(),
-                            $exercices['id'],
+                            $exerciseId,
                             $courseId,
                             $sessionId
                         );
@@ -5482,24 +5488,24 @@ class Tracking
                             $position = ExerciseLib::get_exercise_result_ranking(
                                 $my_score,
                                 $exe_id,
-                                $exercices['id'],
+                                $exerciseId,
                                 $courseCode,
                                 $sessionId,
                                 $user_list
                             );
 
                             $graph = self::generate_exercise_result_thumbnail_graph(
-                                $to_graph_exercise_result[$exercices['id']]
+                                $to_graph_exercise_result[$exerciseId]
                             );
                             $normal_graph = self::generate_exercise_result_graph(
-                                $to_graph_exercise_result[$exercices['id']]
+                                $to_graph_exercise_result[$exerciseId]
                             );
                         }
                     }
                     $html .= Display::div(
                         $normal_graph,
                         [
-                            'id' => 'main_graph_'.$exercices['id'],
+                            'id' => 'main_graph_'.$exerciseId,
                             'class' => 'dialog',
                             'style' => 'display:none',
                         ]
@@ -5512,7 +5518,7 @@ class Tracking
                             '<img src="'.$graph.'" >',
                             $normal_graph,
                             [
-                                'id' => $exercices['id'],
+                                'id' => $exerciseId,
                                 'class' => 'expand-image',
                             ]
                         );
@@ -5560,7 +5566,7 @@ class Tracking
         }
 
         $columnHeadersKeys = array_keys($columnHeaders);
-        foreach ($columnHeaders as $key => $columnName) {
+        foreach ($columnHeaders as $columnName) {
             $headers .= Display::tag(
                 'th',
                 $columnName

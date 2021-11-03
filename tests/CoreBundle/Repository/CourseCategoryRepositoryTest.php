@@ -20,8 +20,6 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CourseCategoryRepository::class);
         $defaultCount = $repo->count([]);
@@ -29,6 +27,10 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
         $item = (new CourseCategory())
             ->setCode('Course cat')
             ->setName('Course cat')
+            ->setDescription('desc')
+            ->setTreePos(1)
+            ->setChildrenCount(0)
+            ->setAuthCourseChild('auth')
         ;
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);
@@ -40,12 +42,20 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $this->assertSame('Course cat', $item->getCode());
         $this->assertSame('Course cat (Course cat)', (string) $item);
+        $this->assertSame('desc', $item->getDescription());
+        $this->assertSame('Course cat', $item->getName());
+
+        $this->assertFalse($item->hasAsset());
+        $accessUrl = $this->getAccessUrl();
+        $this->assertFalse($item->hasUrl($accessUrl));
+
+        $item->addUrl($accessUrl);
+        $repo->update($item);
+        $this->assertTrue($item->hasUrl($accessUrl));
     }
 
     public function testCreateWithParent(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CourseCategoryRepository::class);
         $defaultCount = $repo->count([]);
@@ -71,8 +81,6 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
     public function testCreateWithAsset(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         /** @var CourseCategoryRepository $repoCourseCategory */
@@ -164,8 +172,6 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
     public function testEditAndDeleteAsset(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $repoCourseCategory = self::getContainer()->get(CourseCategoryRepository::class);
@@ -209,13 +215,13 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $categories = $repoCourseCategory->findAllInAccessUrl($urlId);
 
-        $this->assertSame(3, \count($categories));
+        $this->assertCount(3, $categories);
 
         $categories = $repoCourseCategory->findAllInAccessUrl($urlId, false);
-        $this->assertSame(3, \count($categories));
+        $this->assertCount(3, $categories);
 
         $categories = $repoCourseCategory->findAllInAccessUrl($urlId, false, 99);
-        $this->assertSame(0, \count($categories));
+        $this->assertCount(0, $categories);
     }
 
     public function testGetCategoriesByCourseIdAndAccessUrlId(): void
@@ -245,9 +251,9 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $categories = $repoCourseCategory->getCategoriesByCourseIdAndAccessUrlId($urlId, $course->getId());
-        $this->assertSame(1, \count($categories));
+        $this->assertCount(1, $categories);
 
         $categories = $repoCourseCategory->getCategoriesByCourseIdAndAccessUrlId($urlId, $course->getId(), true);
-        $this->assertSame(1, \count($categories));
+        $this->assertCount(1, $categories);
     }
 }

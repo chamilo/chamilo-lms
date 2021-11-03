@@ -81,12 +81,12 @@ class SettingsCurrent
     /**
      * @ORM\Column(name="scope", type="string", length=50, nullable=true)
      */
-    protected string $scope;
+    protected ?string $scope = null;
 
     /**
      * @ORM\Column(name="subkeytext", type="string", length=255, nullable=true)
      */
-    protected string $subkeytext;
+    protected ?string $subkeytext = null;
 
     /**
      * @ORM\Column(name="access_url_changeable", type="integer", nullable=false)
@@ -103,6 +103,7 @@ class SettingsCurrent
     public function __construct()
     {
         $this->accessUrlLocked = 0;
+        $this->scope = '';
     }
 
     public function setVariable(string $variable): self

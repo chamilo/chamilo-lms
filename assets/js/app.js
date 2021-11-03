@@ -1,8 +1,5 @@
 /* For licensing terms, see /license.txt */
 
-// Load symfony routes in order to use it in a js
- //const routes = require('../../public/js/fos_js_routes.json');
-//import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
 const $ = require('jquery');
 
 window.jQuery = $;

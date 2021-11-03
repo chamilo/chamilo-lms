@@ -66,6 +66,7 @@
   @apply p-4 flex flex-row gap-1;
 }
 
+/* Quuestion types */
 .question_options {
   /** Question unique answer image */
   &.type-17 {
@@ -172,6 +173,63 @@
           @apply p-3 pl-5;
         }
       }
+    }
+  }
+}
+
+/* Answer results */
+.question-answer-result {
+  @apply p-4;
+
+  &__header {
+    @apply mb-4;
+
+    &-ribbon {
+      @apply mb-4 flex border bg-gray-100 rounded-md;
+
+      &-title {
+        @apply font-bold p-3 rounded-l-md;
+
+        &--error {
+          @apply bg-ch-error text-ch-text-error;
+        }
+
+        &--warning {
+          @apply bg-ch-warning text-ch-text-warning;
+        }
+
+        &--success {
+          @apply bg-ch-success text-ch-text-success;
+        }
+
+        &--info {
+          @apply bg-ch-info text-ch-text-info;
+        }
+      }
+
+      &-detail {
+        @apply font-bold p-3;
+      }
+
+      &-description {
+        @apply mb-4;
+      }
+
+      &--no-ribbon {
+        @apply border-l-8;
+
+        img {
+          @apply inline;
+        }
+      }
+    }
+  }
+
+  &__detail {
+    @apply mb-4;
+
+    th {
+      @apply text-left;
     }
   }
 }

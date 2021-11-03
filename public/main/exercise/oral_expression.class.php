@@ -57,7 +57,7 @@ class OralExpression extends Question
     {
         $score['revised'] = $this->isQuestionWaitingReview($score);
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'">
+        $header .= '<table class="'.$this->questionTableClass.'">
             <tr>
                 <th>'.get_lang('Answer').'</th>
             </tr>';

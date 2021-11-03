@@ -21,6 +21,12 @@ class CourseCategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, CourseCategory::class);
     }
 
+    public function update(CourseCategory $category): void
+    {
+        $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+    }
+
     /**
      * Get all course categories in an access url.
      *

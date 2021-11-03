@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -331,14 +332,12 @@ class TicketManager
             }
         }
 
-        if (!empty($category_id)) {
-            if (empty($assignedUserId)) {
-                $usersInCategory = self::getUsersInCategory($category_id);
-                if (!empty($usersInCategory) && count($usersInCategory) > 0) {
-                    $userCategoryInfo = $usersInCategory[0];
-                    if (isset($userCategoryInfo['user_id'])) {
-                        $assignedUserId = $userCategoryInfo['user_id'];
-                    }
+        if (empty($assignedUserId)) {
+            $usersInCategory = self::getUsersInCategory($category_id);
+            if (!empty($usersInCategory) && count($usersInCategory) > 0) {
+                $userCategoryInfo = $usersInCategory[0];
+                if (isset($userCategoryInfo['user_id'])) {
+                    $assignedUserId = $userCategoryInfo['user_id'];
                 }
             }
         }
@@ -489,78 +488,76 @@ class TicketManager
                 );
             }
 
-            if (empty($category_id)) {
-                if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
-                    $warningSubject = sprintf(
-                        get_lang('Ticket %s createdWithNoCategory'),
-                        $ticket_code
-                    );
-                    Display::addFlash(Display::return_message($warningSubject));
+            if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
+                $warningSubject = sprintf(
+                    get_lang('Ticket %s createdWithNoCategory'),
+                    $ticket_code
+                );
+                Display::addFlash(Display::return_message($warningSubject));
 
-                    $admins = UserManager::get_all_administrators();
-                    foreach ($admins as $userId => $data) {
-                        if ($data['active']) {
-                            MessageManager::send_message_simple(
-                                $userId,
-                                $warningSubject,
-                                $helpDeskMessage
-                            );
-                        }
-                    }
-                }
-            } else {
-                $categoryInfo = self::getCategory($category_id);
-                $usersInCategory = self::getUsersInCategory($category_id);
-                $message = '<h2>'.get_lang('Ticket info').'</h2><br />'.$helpDeskMessage;
-
-                if ('true' === api_get_setting('ticket_warn_admin_no_user_in_category')) {
-                    $usersInCategory = self::getUsersInCategory($category_id);
-                    if (empty($usersInCategory)) {
-                        $subject = sprintf(
-                            get_lang('Warning: No one has been assigned to category %s'),
-                            $categoryInfo['name']
+                $admins = UserManager::get_all_administrators();
+                foreach ($admins as $userId => $data) {
+                    if ($data['active']) {
+                        MessageManager::send_message_simple(
+                            $userId,
+                            $warningSubject,
+                            $helpDeskMessage
                         );
-
-                        if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
-                            Display::addFlash(Display::return_message(
-                                sprintf(
-                                    get_lang(
-                                        'A notification was sent to the administrators to report this category has no user assigned'
-                                    ),
-                                    $categoryInfo['name']
-                                ),
-                                null,
-                                false
-                            ));
-
-                            $admins = UserManager::get_all_administrators();
-                            foreach ($admins as $userId => $data) {
-                                if ($data['active']) {
-                                    self::sendNotification(
-                                        $ticketId,
-                                        $subject,
-                                        $message,
-                                        $userId
-                                    );
-                                }
-                            }
-                        } else {
-                            Display::addFlash(Display::return_message($subject));
-                        }
                     }
                 }
+            }
 
-                // Send notification to all users
-                if (!empty($usersInCategory)) {
-                    foreach ($usersInCategory as $data) {
-                        if ($data['user_id']) {
-                            self::sendNotification(
-                                $ticketId,
-                                $subject,
-                                $message,
-                                $data['user_id']
-                            );
+            $categoryInfo = self::getCategory($category_id);
+            $usersInCategory = self::getUsersInCategory($category_id);
+            $message = '<h2>'.get_lang('Ticket info').'</h2><br />'.$helpDeskMessage;
+
+            if ('true' === api_get_setting('ticket_warn_admin_no_user_in_category')) {
+                $usersInCategory = self::getUsersInCategory($category_id);
+                if (empty($usersInCategory)) {
+                    $subject = sprintf(
+                        get_lang('Warning: No one has been assigned to category %s'),
+                        $categoryInfo['name']
+                    );
+
+                    if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
+                        Display::addFlash(Display::return_message(
+                            sprintf(
+                                get_lang(
+                                    'A notification was sent to the administrators to report this category has no user assigned'
+                                ),
+                                $categoryInfo['name']
+                            ),
+                            null,
+                            false
+                        ));
+
+                        $admins = UserManager::get_all_administrators();
+                        foreach ($admins as $userId => $data) {
+                            if ($data['active']) {
+                                self::sendNotification(
+                                    $ticketId,
+                                    $subject,
+                                    $message,
+                                    $userId
+                                );
+                            }
                         }
+                    } else {
+                        Display::addFlash(Display::return_message($subject));
+                    }
+                }
+            }
+
+            // Send notification to all users
+            if (!empty($usersInCategory)) {
+                foreach ($usersInCategory as $data) {
+                    if ($data['user_id']) {
+                        self::sendNotification(
+                            $ticketId,
+                            $subject,
+                            $message,
+                            $data['user_id']
+                        );
                     }
                 }
             }
@@ -866,7 +863,7 @@ class TicketManager
         ";
 
         $projectId = (int) $_GET['project_id'];
-        $userIsAllowInProject = self::userIsAllowInProject($userInfo, $projectId);
+        $userIsAllowInProject = self::userIsAllowInProject(api_get_user_entity($userId), $projectId);
 
         // Check if a role was set to the project
         if (false == $userIsAllowInProject) {
@@ -1062,7 +1059,8 @@ class TicketManager
 
         // Check if a role was set to the project
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            if (!in_array($userInfo['status'], $allowRoleList)) {
+            $allowed = self::userIsAllowInProject(api_get_user_entity(), $projectId);
+            if (!$allowed) {
                 $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
             }
         } else {
@@ -2425,44 +2423,60 @@ class TicketManager
     }
 
     /**
-     * @param array $userInfo
      * @param int   $projectId
-     *
-     * @return bool
      */
-    public static function userIsAllowInProject($userInfo, $projectId)
+    public static function userIsAllowInProject(User $user, $projectId): bool
     {
-        if (api_is_platform_admin()) {
+        if ($user->hasRole('ROLE_ADMIN')) {
             return true;
         }
 
         $allowRoleList = self::getAllowedRolesFromProject($projectId);
 
-        // Check if a role was set to the project
+        // Check if a role was set to the project.
         // Project 1 is considered the default and is accessible to all users
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            if (in_array($userInfo['status'], $allowRoleList)) {
-                return true;
+            $result = false;
+            foreach ($allowRoleList as $role) {
+                if ($user->hasRole($role)) {
+                    $result = true;
+                    break;
+                }
             }
+
+            return $result;
         }
 
         return false;
     }
 
-    /**
-     * @param int $projectId
-     *
-     * @todo load from database instead of configuration.php setting
-     *
-     * @return array
-     */
-    public static function getAllowedRolesFromProject($projectId)
+    public static function getAllowedRolesFromProject(int $projectId): array
     {
-        $options = api_get_configuration_value('ticket_project_user_roles');
-        if ($options) {
-            if (isset($options['permissions'][$projectId])) {
-                return $options['permissions'][$projectId];
+        if ('' === $options = Container::getSettingsManager()->getSetting('ticket.ticket_project_user_roles')) {
+            return [];
+        }
+
+        if ([] === $permissionsLines = explode(PHP_EOL, $options)) {
+            return [];
+        }
+
+        foreach ($permissionsLines as $permissionsLine) {
+            [$id, $rolesLine] = explode(':', $permissionsLine, 2);
+
+            if (empty($rolesLine)) {
+                continue;
             }
+
+            $roles = explode(',', $rolesLine);
+
+            if ($projectId !== (int) $id) {
+                continue;
+            }
+
+            return array_map(
+                fn($role) => (int) $role,
+                $roles
+            );
         }
 
         return [];

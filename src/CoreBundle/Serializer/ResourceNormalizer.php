@@ -42,23 +42,28 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
         $context[self::ALREADY_CALLED] = true;
 
         $request = $this->requestStack->getCurrentRequest();
+        $getFile = false;
+        $courseId = 0;
+        $sessionId = 0;
+        $groupId = 0;
 
-        $getFile = $request->get('getFile');
+        if ($request) {
+            $getFile = $request->get('getFile');
+            $courseId = (int) $request->get('cid');
+            if (empty($courseId)) {
+                // Try with cid from session
+                $courseId = (int) $request->getSession()->get('cid');
+            }
 
-        $courseId = (int) $request->get('cid');
-        if (empty($courseId)) {
-            // Try with cid from session
-            $courseId = (int) $request->getSession()->get('cid');
-        }
+            $sessionId = (int) $request->get('sid');
+            if (empty($sessionId)) {
+                $sessionId = (int) $request->getSession()->get('sid');
+            }
 
-        $sessionId = (int) $request->get('sid');
-        if (empty($sessionId)) {
-            $sessionId = (int) $request->getSession()->get('sid');
-        }
-
-        $groupId = (int) $request->get('gid');
-        if (empty($groupId)) {
-            $groupId = (int) $request->getSession()->get('gid');
+            $groupId = (int) $request->get('gid');
+            if (empty($groupId)) {
+                $groupId = (int) $request->getSession()->get('gid');
+            }
         }
 
         if ($object->hasResourceNode()) {

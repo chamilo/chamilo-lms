@@ -138,5 +138,15 @@ class GroupVoterTest extends WebTestCase
         yield 'student no access to reg course status=true' => [$denied, $student, $group2];
         yield 'student no access to group 2' => [$granted, $studentWithAccess, $group2];
         yield 'student access to reg course group status=true' => [$granted, $studentInGroup2IsMember, $group2];
+
+        $registeredCourse->setVisibility(Course::HIDDEN);
+        $em->persist($registeredCourse);
+        $em->flush();
+
+        yield 'admin access to reg course hidden' => [$granted, $admin, $group2];
+        yield 'teacher access to reg course hidden' => [$denied, $teacherWithAccess, $group2];
+        yield 'teacher no access to reg course hidden' => [$denied, $teacher, $group2];
+        yield 'studentWithAccess no access reg course hidden' => [$denied, $studentWithAccess, $group2];
+        yield 'studentInGroup2IsMember to reg course hidden' => [$denied, $studentInGroup2IsMember, $group2];
     }
 }

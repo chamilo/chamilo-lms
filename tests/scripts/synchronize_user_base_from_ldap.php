@@ -22,13 +22,12 @@ defined in app/config/auth.conf.php or overriden in app/config/configuration.php
 username field is used to identify and match LDAP and Chamilo accounts together.
 ($extldap_user_correspondance['username'])
 */
-//exit;
+exit;
 // Change this to the absolute path to chamilo root folder if you move the script out of tests/scripts
 $chamiloRoot = __DIR__.'/../..';
 
 // Set to true in order to get a trace of changes made by this script
-//$debug = false;
-$debug = true;
+$debug = false;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ExtraField;

@@ -149,7 +149,7 @@ class LegalRepository extends ServiceEntityRepository
             ;
         if (!empty($result)) {
             $version = explode(':', $result);
-            return $version[0];
+            return (int) $version[0];
         }
 
         return false;

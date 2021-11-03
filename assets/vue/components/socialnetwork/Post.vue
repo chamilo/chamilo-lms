@@ -12,7 +12,9 @@
       </q-item-section>
 
       <q-item-section>
-        <q-item-label v-if="message.sender['@id'] === message.firstReceiver.receiver['@id']">
+        <q-item-label
+          v-if="!message.firstReceiver || (message.firstReceiver && message.sender['@id'] === message.firstReceiver.receiver['@id'])"
+        >
           <router-link :to="{ name: 'SocialNetworkWall', query: { id: message.sender['@id']} }">
             {{ message.sender.username }}
           </router-link>

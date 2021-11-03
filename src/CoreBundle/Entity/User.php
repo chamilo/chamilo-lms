@@ -117,6 +117,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ApiProperty(iri="http://schema.org/contentUrl")
      */
     #[Groups([
+        'user_export',
         'user:read',
         'resource_node:read',
         'document:read',
@@ -148,6 +149,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     #[Assert\NotBlank]
     #[Groups([
+        'user_export',
         'user:read',
         'user:write',
         'course:read',
@@ -836,6 +838,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->friends = new ArrayCollection();
         $this->friendsWithMe = new ArrayCollection();
         $this->gradeBookLinkEvalLogs = new ArrayCollection();
+        $this->messageTags = new ArrayCollection();
         $this->sequenceValues = new ArrayCollection();
         $this->trackEExerciseConfirmations = new ArrayCollection();
         $this->trackEAccessCompleteList = new ArrayCollection();

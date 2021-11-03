@@ -51,7 +51,7 @@
     </p>
 
     <p class="text-lg">
-      {{ $luxonDateTime.fromISO(item['sendDate']).toRelative() }}
+      {{ $filters.relativeDatetime(item['sendDate']) }}
     </p>
 
     <p class="text-lg">

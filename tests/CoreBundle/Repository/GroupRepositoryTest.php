@@ -20,14 +20,34 @@ class GroupRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(GroupRepository::class);
         $defaultGroups = $repo->count([]);
-        $item = (new Group('new_group'))
+
+        $roles = [
+            'ROLE_TEST',
+            'ROLE_TEST2',
+        ];
+
+        $group = (new Group('new_group'))
             ->setCode('new_group')
+            ->setRoles($roles)
+            ->addRole('ROLE_TEST3')
         ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
+        $this->assertHasNoEntityViolations($group);
+        $em->persist($group);
         $em->flush();
 
+        $this->assertSame('new_group', (string) $group);
+        $this->assertSame('new_group', $group->getCode());
+        $this->assertNotNull($group->getId());
+
+        $this->assertCount(3, $group->getRoles());
+
         $this->assertSame($defaultGroups + 1, $repo->count([]));
+
+        $group->removeRole('role');
+        $this->assertCount(3, $group->getRoles());
+
+        $group->removeRole('ROLE_TEST3');
+        $this->assertCount(2, $group->getRoles());
     }
 
     public function testGetAdmins(): void

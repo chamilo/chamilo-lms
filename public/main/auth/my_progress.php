@@ -39,6 +39,7 @@ $dates = $issues = '';
 $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
 $courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
 
+/*
 if (!empty($courseUserList)) {
     $items = MySpace::get_connections_from_course_list(
         $user_id,
@@ -76,10 +77,12 @@ if (!empty($courseUserList)) {
         $count++;
     }
 }
+*/
 
 $content = Tracking::show_user_progress($user_id, $sessionId);
 $content .= Tracking::show_course_detail($user_id, $courseId, $sessionId);
 
+/*
 if (!empty($dates)) {
     if (!empty($content)) {
         $content .= '';
@@ -96,6 +99,7 @@ if (!empty($dates)) {
     $content .= '<a href="#" id="next"></a>';
     $content .= '</div></div>';
 }
+*/
 
 if (api_get_configuration_value('private_messages_about_user_visible_to_user')) {
     $allowMessages = api_get_configuration_value('private_messages_about_user');

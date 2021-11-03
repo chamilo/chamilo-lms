@@ -36,6 +36,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         },
  *         "put_toggle_visibility" = {
  *             "method" = "PUT",
+ *             "deserialize"=false,
+ *             "security" = "is_granted('EDIT', object.resourceNode)",
  *             "path"="/documents/{iid}/toggle_visibility",
  *             "controller"=UpdateVisibilityDocument::class,
  *         },

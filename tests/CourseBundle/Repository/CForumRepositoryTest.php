@@ -6,12 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 
 class CForumRepositoryTest extends AbstractApiTest
 {
@@ -19,29 +21,70 @@ class CForumRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $forumRepo = self::getContainer()->get(CForumRepository::class);
 
+        $course = $this->createCourse('new');
+        $teacher = $this->createUser('teacher');
+
+        $forum = (new CForum())
+            ->setForumTitle('forum')
+            ->setForumComment('comment')
+            ->setForumThreads(0)
+            ->setForumPosts(0)
+            ->setAllowAnonymous(1)
+            ->setAllowEdit(1)
+            ->setApprovalDirectPost('1')
+            ->setAllowAttachments(1)
+            ->setAllowNewThreads(1)
+            ->setDefaultView('default')
+            ->setForumOfGroup('1')
+            ->setForumGroupPublicPrivate('1')
+            ->setLocked(1)
+            ->setForumImage('')
+            ->setStartTime(new DateTime())
+            ->setEndTime(new DateTime())
+            ->setModerated(true)
+            ->setResourceName('forum')
+            ->setParent($course)
+            ->setCreator($teacher)
+        ;
+        $this->assertHasNoEntityViolations($forum);
+        $forumRepo->create($forum);
+
+        $this->assertSame('forum', (string) $forum);
+
+        $this->assertSame($forum->getIid(), $forum->getResourceIdentifier());
+        $this->assertSame(1, $forum->getAllowAnonymous());
+        $this->assertSame(1, $forumRepo->count([]));
+
+        $this->assertSame(0, $forum->getForumPosts());
+
+        $courseRepo->delete($course);
+
+        $this->assertSame(0, $forumRepo->count([]));
+        $this->assertSame(0, $courseRepo->count([]));
+    }
+
+    public function testCreateWithAttachment(): void
+    {
         $repo = self::getContainer()->get(CForumRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
-        $item = (new CForum())
+        $forum = (new CForum())
             ->setForumTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
         ;
-        $this->assertHasNoEntityViolations($item);
-        $repo->create($item);
 
-        $this->assertSame('forum', (string) $item);
-        $this->assertSame(1, $repo->count([]));
+        $this->assertHasNoEntityViolations($forum);
+        $repo->create($forum);
     }
 
     public function testCreateWithLp(): void
     {
-        self::bootKernel();
-
         $repo = self::getContainer()->get(CForumRepository::class);
         $lpRepo = self::getContainer()->get(CLpRepository::class);
 

@@ -21,7 +21,7 @@ final class Version20211008133540 extends AbstractMigrationChamilo
         if ($table->hasColumn('c_tool_id')) {
             if (!$table->hasForeignKey('FK_D705267B1DF6B517')) {
                 $this->addSql(
-                    'ALTER TABLE c_tool_intro ADD CONSTRAINT FK_D705267B1DF6B517 FOREIGN KEY (c_tool_id) REFERENCES c_tool (iid);'
+                    'ALTER TABLE c_tool_intro ADD CONSTRAINT FK_D705267B1DF6B517 FOREIGN KEY (c_tool_id) REFERENCES c_tool (iid) ON DELETE CASCADE'
                 );
             }
             if (!$table->hasIndex('IDX_D705267B1DF6B517')) {

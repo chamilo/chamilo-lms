@@ -149,7 +149,7 @@ class MultipleAnswerTrueFalse extends Question
             }
             // show comment when feedback is enable
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
-                $txtComment = $form->addHtmlEditor(
+                $form->addHtmlEditor(
                     'comment['.$i.']',
                     null,
                     true,
@@ -161,7 +161,7 @@ class MultipleAnswerTrueFalse extends Question
                     ]
                 );
                 if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
-                    $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));
+                    $form->getElement("comment[$i]")->setValue(Security::remove_XSS($_POST['comment'][$i]));
                 }
             }
 
@@ -302,7 +302,7 @@ class MultipleAnswerTrueFalse extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<table class="'.$this->questionTableClass.'"><tr>';
 
         if (!in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -317,7 +317,7 @@ class MultipleAnswerTrueFalse extends Question
         $header .= '<th>'.get_lang('Answer').'</th>';
 
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
+            $header .= '<th class="text-center">'.get_lang('Status').'</th>';
         }
         if (EXERCISE_FEEDBACK_TYPE_EXAM != $exercise->getFeedbackType() ||
             in_array(

@@ -29,12 +29,20 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
 
         $category = (new CForumCategory())
             ->setCatTitle('cat 1')
+            ->setCatComment('comment')
+            ->setCatOrder(1)
+            ->setLocked(1)
             ->setParent($course)
             ->setCreator($teacher)
             ->addCourseLink($course)
         ;
         $this->assertHasNoEntityViolations($category);
         $categoryRepo->create($category);
+
+        $this->assertSame($category->getIid(), $category->getResourceIdentifier());
+        $this->assertSame(1, $category->getLocked());
+        $this->assertSame(1, $category->getCatOrder());
+        $this->assertSame('comment', $category->getCatComment());
 
         $this->assertSame('cat 1', (string) $category);
 

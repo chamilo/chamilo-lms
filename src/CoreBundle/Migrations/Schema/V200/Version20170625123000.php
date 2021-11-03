@@ -76,7 +76,7 @@ class Version20170625123000 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasForeignKey('FK_AD1394FA19EA43C3')) {
-            $this->addSql('ALTER TABLE c_attendance_sheet ADD CONSTRAINT FK_AD1394FA19EA43C3 FOREIGN KEY (attendance_calendar_id) REFERENCES c_attendance_calendar (iid);');
+            $this->addSql('ALTER TABLE c_attendance_sheet ADD CONSTRAINT FK_AD1394FA19EA43C3 FOREIGN KEY (attendance_calendar_id) REFERENCES c_attendance_calendar (iid) ON DELETE CASCADE');
         }
 
         if (false === $table->hasIndex('IDX_AD1394FA19EA43C3')) {
@@ -148,7 +148,7 @@ class Version20170625123000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_attendance_result ADD CONSTRAINT FK_2C7640A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
         }
         if (false === $table->hasForeignKey('FK_2C7640163DDA15')) {
-            $this->addSql('ALTER TABLE c_attendance_result ADD CONSTRAINT FK_2C7640163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid);');
+            $this->addSql('ALTER TABLE c_attendance_result ADD CONSTRAINT FK_2C7640163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid) ON DELETE CASCADE');
         }
         if (false === $table->hasIndex('IDX_2C7640A76ED395')) {
             $this->addSql('CREATE INDEX IDX_2C7640A76ED395 ON c_attendance_result (user_id);');

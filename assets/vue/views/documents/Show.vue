@@ -73,14 +73,14 @@
           <tr>
             <td><strong>{{ $t('Created at') }}</strong></td>
             <td>
-              {{ item['resourceNode'] ? $luxonDateTime.fromISO(item['resourceNode'].createdAt).toRelative() : '' }}
+              {{ item['resourceNode'] ? $filters.relativeDatetime(item['resourceNode'].createdAt) : '' }}
             </td>
             <td/>
           </tr>
           <tr>
             <td><strong>{{ $t('Updated at') }}</strong></td>
             <td>
-              {{ item['resourceNode'] ? $luxonDateTime.fromISO(item['resourceNode'].updatedAt).toRelative() : '' }}
+              {{ item['resourceNode'] ? $filters.relativeDatetime(item['resourceNode'].updatedAt) : '' }}
             </td>
             <td/>
           </tr>

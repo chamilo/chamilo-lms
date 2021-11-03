@@ -49,7 +49,6 @@ export default {
     const { currentRoute } = useRouter();
     const route = useRoute();
     const showBreadcrumb = ref(true);
-
     const layout = computed(
         () => {
             let queryParams = new URLSearchParams(window.location.href);
@@ -64,7 +63,7 @@ export default {
         }
     );
 
-    provide(DefaultApolloClient, apolloClient)
+    provide(DefaultApolloClient, apolloClient);
 
     watch(
         () => route.meta,

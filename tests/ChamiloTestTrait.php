@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -97,6 +98,23 @@ trait ChamiloTestTrait
         return $group;
     }
 
+    public function createUserGroup(string $title): ?Usergroup
+    {
+        $em = $this->getEntityManager();
+        $creator = $this->createUser('usergroup_creator');
+
+        $group = (new Usergroup())
+            ->setName($title)
+            ->setDescription('desc')
+            ->setCreator($creator)
+            ->addAccessUrl($this->getAccessUrl())
+        ;
+        $em->persist($group);
+        $em->flush();
+
+        return $group;
+    }
+
     /**
      * Finds a user registered in the test DB, added by the DataFixtures classes.
      */
@@ -106,6 +124,11 @@ trait ChamiloTestTrait
         $repo = static::getContainer()->get(UserRepository::class);
 
         return $repo->findByUsername($username);
+    }
+
+    public function getAdmin(): User
+    {
+        return $this->getUser('admin');
     }
 
     public function getCourse($courseId): ?Course

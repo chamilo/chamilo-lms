@@ -111,7 +111,6 @@ security:
                 path: /logout
                 target: /
             switch_user: true
-            #            access_denied_handler: Chamilo\CoreBundle\Security\AccessDeniedHandler
             json_login:
                 check_path: /login_json
                 # username_path: security.credentials.login

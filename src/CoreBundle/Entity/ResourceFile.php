@@ -242,6 +242,9 @@ class ResourceFile
         return $this->crop;
     }
 
+    /**
+     * $crop example: 100,100,100,100 = width,height,x,y.
+     */
     public function setCrop(string $crop): self
     {
         $this->crop = $crop;

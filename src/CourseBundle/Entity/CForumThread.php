@@ -42,7 +42,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForum", inversedBy="threads")
-     * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
     protected ?CForum $forum = null;
 

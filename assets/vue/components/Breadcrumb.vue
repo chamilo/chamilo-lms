@@ -37,6 +37,9 @@ export default {
     ...mapGetters('course', {
       course: 'getCourse',
     }),
+    ...mapGetters('session', {
+      session: 'getSession',
+    }),
     items() {
       console.log('Breadcrumb.vue');
       console.log(this.$route.name);
@@ -52,11 +55,21 @@ export default {
         'CourseHome',
         'MyCourses',
         'MySessions',
-        'MySessionListUpcoming',
-        'MySessionListPast',
+        'MySessionsUpcoming',
+        'MySessionsPast',
         'Home',
         'MessageList',
+        'MessageNew',
+        'MessageShow',
+        'MessageCreate',
       ];
+
+      if (!isEmpty(this.$route.name) && this.$route.name.includes('Page')) {
+        items.push({
+          text: this.$t('Pages'),
+          href: '/resources/pages'
+        });
+      }
 
       if (!isEmpty(this.$route.name) && this.$route.name.includes('Message')) {
         items.push({
@@ -65,6 +78,7 @@ export default {
           href: '/resources/messages'
         });
       }
+
 
       if (list.includes(this.$route.name)) {
         return items;
@@ -108,8 +122,14 @@ export default {
 
       // course is set in documents/List.vue
       if (this.course) {
+
+        let sessionTitle = '';
+        if (this.session) {
+          sessionTitle = ' (' + this.session.name + ') ';
+        }
+
         items.push({
-          text:  this.course.title,
+          text:  this.course.title + sessionTitle,
           href: '/course/' + this.course.id + '/home?'+queryParams
         });
       }

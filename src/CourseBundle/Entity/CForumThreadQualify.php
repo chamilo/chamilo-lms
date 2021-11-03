@@ -11,8 +11,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumThreadQualify.
- *
  * @ORM\Table(
  *     name="c_forum_thread_qualify",
  *     indexes={
@@ -118,5 +116,17 @@ class CForumThreadQualify
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function getThread(): CForumThread
+    {
+        return $this->thread;
+    }
+
+    public function setThread(CForumThread $thread): self
+    {
+        $this->thread = $thread;
+
+        return $this;
     }
 }

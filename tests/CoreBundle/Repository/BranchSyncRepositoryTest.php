@@ -17,8 +17,6 @@ class BranchSyncRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(BranchSyncRepository::class);
 
@@ -49,6 +47,6 @@ class BranchSyncRepositoryTest extends AbstractApiTest
 
         $items = $repo->searchByKeyword('Branch');
 
-        $this->assertSame(1, \count($items));
+        $this->assertCount(1, $items);
     }
 }

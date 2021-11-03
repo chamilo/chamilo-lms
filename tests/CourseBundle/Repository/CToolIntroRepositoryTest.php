@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CToolIntroRepository;
@@ -19,12 +20,50 @@ class CToolIntroRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
+
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
         $repo = self::getContainer()->get(CToolIntroRepository::class);
 
         $this->assertSame(0, $repo->count([]));
+
+        $course = $this->createCourse('new');
+        $teacher = $this->createUser('teacher');
+
+        /** @var CTool $courseTool */
+        $courseTool = $course->getTools()->first();
+
+        $intro = (new CToolIntro())
+            ->setIntroText('test')
+            ->setResourceName('test')
+            ->setCourseTool($courseTool)
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $this->assertHasNoEntityViolations($intro);
+        $em->persist($intro);
+        $em->flush();
+
+        $this->assertSame('test', (string) $intro);
+        $this->assertSame($intro->getIid(), $intro->getResourceIdentifier());
+        $this->assertNotEmpty($intro->getIntroText());
+        $this->assertNotNull($intro->getIid());
+        $this->assertNotEmpty($intro->getResourceName());
+        $this->assertSame(1, $repo->count([]));
+
+        // Delete intro.
+        $repo->delete($intro);
+        $this->assertSame(0, $repo->count([]));
+        $this->assertSame(1, $courseRepo->count([]));
+    }
+
+    public function testCreateAndDeleteCourse(): void
+    {
+        $em = $this->getEntityManager();
+
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $repo = self::getContainer()->get(CToolIntroRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -43,19 +82,17 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em->persist($intro);
         $em->flush();
 
-        $this->assertNotEmpty($intro->getIntroText());
-        $this->assertNotNull($intro->getIid());
-        $this->assertNotEmpty($intro->getResourceName());
-
+        $this->assertSame(1, $courseRepo->count([]));
         $this->assertSame(1, $repo->count([]));
-        $repo->delete($intro);
+
+        // Delete course.
+        $courseRepo->delete($course);
         $this->assertSame(0, $repo->count([]));
+        $this->assertSame(0, $courseRepo->count([]));
     }
 
     public function testCreateInSession(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CToolIntroRepository::class);
 
@@ -84,7 +121,6 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $repo->count([]));
 
         // Create intro in session.
-
         $intro2 = (new CToolIntro())
             ->setIntroText('test in session')
             ->setCourseTool($courseTool)
@@ -218,7 +254,6 @@ class CToolIntroRepositoryTest extends AbstractApiTest
     public function testUpdateIntroApi(): void
     {
         $course = $this->createCourse('new');
-
         $token = $this->getUserToken();
 
         $resourceNodeId = $course->getResourceNode()->getId();

@@ -40,12 +40,13 @@ services:
     # Custom yes/no form type, use in the platform settings
     Chamilo\CoreBundle\Form\Type\YesNoType:
         tags:
-            - {name: form.type, alias: yes_no}
+            - {name: form.type}
 
     Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor:
         arguments: ['@translator', '@router']
 
     Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer: ~
+    Chamilo\CoreBundle\Component\Utils\CreateDefaultPages: ~
     Chamilo\CoreBundle\Component\Utils\NameConvention: ~
     Chamilo\CoreBundle\Component\Utils\Glide:
         arguments:

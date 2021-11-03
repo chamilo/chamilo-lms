@@ -8,16 +8,16 @@ namespace Chamilo\CoreBundle\Controller;
 
 use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use CourseDescription;
 use Doctrine\ORM\EntityRepository;
@@ -51,8 +51,8 @@ class SessionController extends AbstractController
 
         /** @var EntityRepository $fieldsRepo */
         $fieldsRepo = $em->getRepository(ExtraField::class);
-        /** @var ExtraFieldRelTagRepository $fieldTagsRepo */
-        $fieldTagsRepo = $em->getRepository(ExtraFieldRelTag::class);
+        /** @var TagRepository $tagRepo */
+        $tagRepo = $em->getRepository(Tag::class);
 
         /** @var SequenceRepository $sequenceResourceRepo */
         $sequenceResourceRepo = $em->getRepository(SequenceResource::class);
@@ -73,7 +73,7 @@ class SessionController extends AbstractController
             $courseTags = [];
 
             if (null !== $tagField) {
-                $courseTags = $fieldTagsRepo->getTags($tagField, $sessionCourse->getId());
+                $courseTags = $tagRepo->getTagsByItem($tagField, $sessionCourse->getId());
             }
 
             $courseCoaches = $userRepo->getCoachesForSessionCourse($session, $sessionCourse);

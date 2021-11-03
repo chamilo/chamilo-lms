@@ -61,7 +61,7 @@
 
     <Column field="resourceNode.updatedAt" :header="$t('Modified')" :sortable="true">
       <template #body="slotProps">
-        {{$luxonDateTime.fromISO(slotProps.data.resourceNode.updatedAt).toRelative() }}
+        {{ $filters.relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
       </template>
     </Column>
 

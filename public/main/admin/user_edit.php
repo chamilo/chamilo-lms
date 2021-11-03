@@ -277,13 +277,15 @@ $form->addGroup($group, 'mail', get_lang('Send mail to new user'), null, false);
 
 // Registration User and Date
 $creatorInfo = api_get_user_info($user_data['creator_id']);
-$date = sprintf(
-    get_lang('Create by <a href="%s">%s</a> on %s'),
-    'user_information.php?user_id='.$user_data['creator_id'],
-    $creatorInfo['username'],
-    $user_data['registration_date']
-);
-$form->addElement('label', get_lang('Registration date'), $date);
+if (!empty($creatorInfo)) {
+    $date = sprintf(
+        get_lang('Create by <a href="%s">%s</a> on %s'),
+        'user_information.php?user_id='.$user_data['creator_id'],
+        $creatorInfo['username'],
+        $user_data['registration_date']
+    );
+    $form->addElement('label', get_lang('Registration date'), $date);
+}
 
 if (!$user_data['platform_admin']) {
     // Expiration Date

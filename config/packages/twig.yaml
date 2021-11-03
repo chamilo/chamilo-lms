@@ -7,6 +7,7 @@ twig:
         - '%kernel.project_dir%/public/plugin'
         - '%kernel.project_dir%/src/CoreBundle/Resources/views/Layout'
     form_themes:
+        - '@OhGoogleMapFormType/Form/fields.html.twig'
         - 'form-theme.html.twig'
 
     globals:

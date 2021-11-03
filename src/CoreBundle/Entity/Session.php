@@ -80,7 +80,7 @@ class Session implements ResourceWithAccessUrlInterface
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
+    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read', 'course:read'])]
     protected ?int $id = null;
 
     /**
@@ -152,7 +152,14 @@ class Session implements ResourceWithAccessUrlInterface
      * @ORM\Column(name="name", type="string", length=150)
      */
     #[Assert\NotBlank]
-    #[Groups(['session:read', 'session:write', 'session_rel_course_rel_user:read', 'document:read', 'session_rel_user:read'])]
+    #[Groups([
+        'session:read',
+        'session:write',
+        'session_rel_course_rel_user:read',
+        'document:read',
+        'session_rel_user:read',
+        'course:read',
+    ])]
     protected string $name;
 
     /**

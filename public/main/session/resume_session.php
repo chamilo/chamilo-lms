@@ -122,6 +122,7 @@ $sessionTitle = Display::page_subheader(get_lang('General properties').$url);
 
 $sessionField = new ExtraField('session');
 $extraFieldData = $sessionField->getDataAndFormattedValues($sessionId);
+
 $urlList = [];
 $isMultipleUrl = api_is_multiple_url_enabled();
 if ($isMultipleUrl) {

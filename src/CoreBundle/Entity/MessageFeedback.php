@@ -13,8 +13,6 @@ use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Class MessageFeedback.
- *
  * @ORM\Table(
  *     name="message_feedback",
  *     indexes={

@@ -7,10 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use SessionManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -81,7 +83,7 @@ class SessionVoter extends Voter
         $currentCourse = $session->getCurrentCourse();
 
         // Course checks.
-        if ($currentCourse->isHidden()) {
+        if ($currentCourse && $currentCourse->isHidden()) {
             return false;
         }
 
@@ -161,25 +163,23 @@ class SessionVoter extends Voter
     private function sessionIsAvailableByDuration(Session $session, User $user): bool
     {
         $duration = $session->getDuration() * 24 * 60 * 60;
-        $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
-            $session->getId(),
-            $user->getId()
-        );
 
-        // If there is a session duration but there is no previous
-        // access by the user, then the session is still available
-        if (0 === \count($courseAccess)) {
+        if (0 === $user->getTrackECourseAccess()->count()) {
             return true;
         }
+
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('session', $session)
+        );
+
+        /** @var TrackECourseAccess|null $trackECourseAccess */
+        $trackECourseAccess = $user->getTrackECourseAccess()->matching($criteria)->first();
 
         $currentTime = time();
         $firstAccess = 0;
 
-        if (isset($courseAccess['login_course_date'])) {
-            $firstAccess = api_strtotime(
-                $courseAccess['login_course_date'],
-                'UTC'
-            );
+        if (null !== $trackECourseAccess) {
+            $firstAccess = $trackECourseAccess->getLoginCourseDate()->getTimestamp();
         }
 
         $userDurationData = SessionManager::getUserSession(

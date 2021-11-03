@@ -18,8 +18,6 @@ class PromotionRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(PromotionRepository::class);
         $defaultCount = $repo->count([]);
@@ -40,6 +38,9 @@ class PromotionRepositoryTest extends AbstractApiTest
         $em->persist($promotion);
         $em->flush();
 
+        $this->assertSame('2000', $promotion->getName());
+        $this->assertSame('Promotion of 2000', $promotion->getDescription());
+        $this->assertNotNull($promotion->getId());
         $this->assertSame(0, $promotion->getAnnouncements()->count());
         $this->assertSame(0, $promotion->getSessions()->count());
 

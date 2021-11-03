@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
+use Chamilo\CoreBundle\Entity\MessageFeedback;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\MessageTag;
 use Chamilo\CoreBundle\Entity\User;
@@ -26,8 +27,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testCreateMessage(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $messageRepo = self::getContainer()->get(MessageRepository::class);
@@ -46,11 +45,15 @@ class MessageRepositoryTest extends AbstractApiTest
             ->setSendDate(new DateTime())
             ->setVotes(0)
             ->setGroup(null)
+            ->setUpdateDate(new DateTime())
+            ->setParent(null)
         ;
 
         $this->assertHasNoEntityViolations($message);
         $messageRepo->update($message);
 
+        $this->assertNotNull($message->getUpdateDate());
+        $this->assertNull($message->getParent());
         $this->assertTrue($message->hasReceiver($testUser));
 
         $transport = $this->getContainer()->get('messenger.transport.sync_priority_high');
@@ -79,10 +82,59 @@ class MessageRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $testUser->getReceivedMessages()->count());
     }
 
-    public function testCreateMessageWithTags(): void
+    public function testCreateMessageWithFeedback(): void
     {
-        self::bootKernel();
+        $em = $this->getEntityManager();
 
+        $messageRepo = self::getContainer()->get(MessageRepository::class);
+        $messageFeedbackRepo = $em->getRepository(MessageFeedback::class);
+
+        $admin = $this->getUser('admin');
+        $testUser = $this->createUser('test');
+
+        $message = (new Message())
+            ->setTitle('hello')
+            ->setContent('content')
+            ->setMsgType(Message::MESSAGE_TYPE_INBOX)
+            ->setSender($admin)
+            ->addReceiver($testUser)
+            ->setSendDate(new DateTime())
+            ->setVotes(0)
+            ->setGroup(null)
+        ;
+        $messageRepo->update($message);
+
+        // 1. Message exists in the inbox.
+        $this->assertSame(1, $messageRepo->count([]));
+
+        $feedback = (new MessageFeedback())
+            ->setMessage($message)
+            ->setUser($testUser)
+            ->setUpdatedAt(new DateTime())
+            ->setDisliked(true)
+            ->setLiked(true)
+        ;
+        $em->persist($feedback);
+        $em->flush();
+        $em->clear();
+
+        $this->assertSame(1, $messageFeedbackRepo->count([]));
+        $this->assertNotNull($feedback->getUser());
+        $this->assertNotNull($feedback->getUpdatedAt());
+        $this->assertNotNull($feedback->getMessage());
+
+        /** @var Message $message */
+        $message = $messageRepo->find($message->getId());
+        $this->assertSame(1, $message->getLikes()->count());
+
+        $messageRepo->delete($message);
+
+        $this->assertSame(0, $messageRepo->count([]));
+        $this->assertSame(0, $messageFeedbackRepo->count([]));
+    }
+
+    public function testCreateMessageWithTags(): Message
+    {
         $em = $this->getEntityManager();
 
         $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
@@ -139,9 +191,6 @@ class MessageRepositoryTest extends AbstractApiTest
             ->addMessage($receivedMessage)
         ;
         $this->assertSame(1, $this->getViolations($tag)->count());
-        /*$this->assertHasNoEntityViolations($tag);
-        $tagRepo->update($tag);*/
-
         $em->clear();
 
         /** @var User $testUser */
@@ -149,7 +198,7 @@ class MessageRepositoryTest extends AbstractApiTest
         /** @var MessageRelUser $receivedMessage */
         $receivedMessage = $testUser->getReceivedMessages()->first();
 
-        // Add new tag.
+        // Add second tag.
         $tag = (new MessageTag())
             ->setTag('my tag 2')
             ->setUser($testUser)
@@ -158,16 +207,68 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $this->assertHasNoEntityViolations($tag);
         $messageTagRepo->update($tag);
-        $this->assertSame(2, $receivedMessage->getTags()->count());
 
-        // Tag exists
+        $this->assertSame(2, $receivedMessage->getTags()->count());
+        $this->assertSame(1, $messageRepo->count([]));
+        $this->assertSame(1, $messageRelUserRepo->count([]));
         $this->assertSame(2, $messageTagRepo->count([]));
+
+        return $message;
+    }
+
+    public function testDeleteMessageTag(): void
+    {
+        $em = $this->getEntityManager();
+        $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
+        $messageRepo = self::getContainer()->get(MessageRepository::class);
+        $messageRelUserRepo = $em->getRepository(MessageRelUser::class);
+
+        $message = $this->testCreateMessageWithTags();
+
+        /** @var Message $message */
+        $message = $messageRepo->find($message->getId());
+        $this->assertSame(1, $message->getReceivers()->count());
+
+        /** @var MessageRelUser $messageRelUser */
+        $messageRelUser = $message->getReceivers()->first();
+        $tag = $messageTagRepo->find($messageRelUser->getTags()->first());
+
+        $messageTagRepo->delete($tag);
+
+        /** @var Message $message */
+        $message = $messageRepo->find($message->getId());
+
+        $this->assertSame(1, $message->getReceivers()->count());
+        $this->assertSame(1, $messageRepo->count([]));
+        $this->assertSame(1, $messageRelUserRepo->count([]));
+        $this->assertSame(1, $messageTagRepo->count([]));
+    }
+
+    public function testDeleteMessageWithTag(): void
+    {
+        $em = $this->getEntityManager();
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
+        $messageRepo = self::getContainer()->get(MessageRepository::class);
+        $messageRelUserRepo = $em->getRepository(MessageRelUser::class);
+
+        $message = $this->testCreateMessageWithTags();
+
+        /** @var Message $message */
+        $message = $messageRepo->find($message->getId());
+
+        $messageRepo->delete($message);
+
+        $this->assertSame(0, $messageRepo->count([]));
+        $this->assertSame(0, $messageRelUserRepo->count([]));
+        $this->assertSame(0, $messageTagRepo->count([]));
+
+        $this->assertNotNull($this->getUser('admin'));
+        $this->assertNotNull($this->getUser('test'));
     }
 
     public function testCreateMessageWithAttachment(): void
     {
-        self::bootKernel();
-
         $user1 = $this->getUser('admin');
         $user2 = $this->createUser('user2');
 
@@ -252,8 +353,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testDeleteMessage(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $messageAttachmentRepo = self::getContainer()->get(MessageAttachmentRepository::class);
@@ -321,13 +420,11 @@ class MessageRepositoryTest extends AbstractApiTest
         // No attachments.
         $this->assertSame(0, $messageAttachmentRepo->count([]));
         // 2 tags still exists.
-        $this->assertSame(1, $messageTagRepo->count([]));
+        $this->assertSame(0, $messageTagRepo->count([]));
     }
 
     public function testCreateMessageWithCc(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
 
         $messageRepo = self::getContainer()->get(MessageRepository::class);
@@ -379,8 +476,6 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testCreateMessageWithApi(): void
     {
-        self::bootKernel();
-
         $fromUser = $this->createUser('from');
         $toUser = $this->createUser('to');
         $messageRepo = self::getContainer()->get(MessageRepository::class);
@@ -540,11 +635,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testDeleteMessageWithApi(): void
     {
-        self::bootKernel();
-
-        $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
         $messageRepo = self::getContainer()->get(MessageRepository::class);
-        $userRepo = self::getContainer()->get(UserRepository::class);
 
         $fromUser = $this->createUser('from');
         $toUser = $this->createUser('to');

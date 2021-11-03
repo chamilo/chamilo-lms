@@ -155,7 +155,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 $form->addElement('radio', 'correct['.$i.']', null, null, 2);
             }
 
-            $txtAnswer = $form->addHtmlEditor(
+            $form->addHtmlEditor(
                 'answer['.$i.']',
                 null,
                 true,
@@ -166,11 +166,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
             if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
-                $txtAnswer->setValue(Security::remove_XSS($_POST['answer'][$i]));
+                $form->getElement("answer[$i]")->setValue(Security::remove_XSS($_POST['answer'][$i]));
             }
             // show comment when feedback is enable
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
-                $txtComment = $form->addHtmlEditor(
+                $form->addHtmlEditor(
                     'comment['.$i.']',
                     null,
                     false,
@@ -179,7 +179,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     ['style' => 'vertical-align:middle;'],
                 );
                 if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
-                    $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));
+                    $form->getElement("comment[$i]")->setValue(Security::remove_XSS($_POST['comment'][$i]));
                 }
             }
             $form->addElement('html', '</tr>');
@@ -300,7 +300,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<table class="'.$this->questionTableClass.'"><tr>';
         $header .= '<th>'.get_lang('Your choice').'</th>';
 
         if ($exercise->showExpectedChoiceColumn()) {

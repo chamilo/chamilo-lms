@@ -107,6 +107,7 @@ class Skill
     /**
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
+    #[Assert\NotNull]
     protected int $accessUrlId;
 
     /**

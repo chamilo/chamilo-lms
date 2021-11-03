@@ -131,7 +131,7 @@ if (empty($projectId)) {
 }
 
 $currentUrl = api_get_self().'?project_id='.$projectId;
-$isAllow = TicketManager::userIsAllowInProject(api_get_user_info(), $projectId);
+$isAllow = TicketManager::userIsAllowInProject(api_get_user_entity(), $projectId);
 $actionRight = '';
 
 Display::display_header(get_lang('My tickets'));

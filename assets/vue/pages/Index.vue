@@ -25,15 +25,18 @@
                     {{ $t('Sign in') }}
                   </h2>
                 </div>
-
                 <Login />
               </div>
             </div>
           </div>
 
           <div class="md:row-start-1 md:col-start-1 md:col-end-1">
-            <div class="flex justify-center lg:mt-16">
-              <img src="/img/document/images/mr_chamilo/svg/teaching.svg" />
+            <div
+                v-if="pages.length"
+                class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 mt-2">
+              <PageCardList
+                  :pages="pages"
+              />
             </div>
           </div>
         </div>
@@ -43,11 +46,39 @@
 </template>
 
 <script>
+
 import Login from '../components/Login';
+import {reactive, toRefs} from 'vue'
+import {useStore} from "vuex";
+import {useI18n} from "vue-i18n";
+import PageCardList from "../components/page/PageCardList";
+
 export default {
+  name: 'Index',
   components: {
-    Login
+    PageCardList,
+    Login,
   },
-  name: "Index"
+  setup() {
+    const store = useStore();
+    const { locale } = useI18n();
+    const state = reactive({
+      announcements: [],
+      pages: [],
+    });
+
+    let params = {
+      'category.title' : 'index',
+      'enabled' : '1',
+      'locale':  locale.value
+    }
+
+    const pages = store.dispatch('page/findAll', params);
+    pages.then((response) => {
+      state.pages = response;
+    });
+
+    return toRefs(state);
+  }
 }
 </script>

@@ -45,7 +45,7 @@ cd ~
 sudo mv composer.phar /usr/local/bin/composer
 # optionally, you might want this:
 sudo apt install libapache2-mod-xsendfile
-sudo a2enmode rewrite ssl headers expires
+sudo a2enmod rewrite ssl headers expires
 sudo systemctl restart apache2
 ~~~~
 

@@ -17,25 +17,30 @@ class CLinkCategoryRepositoryTest extends AbstractApiTest
 
     public function testCreate(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CLinkCategoryRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
-        $item = (new CLinkCategory())
+        $category = (new CLinkCategory())
             ->setCategoryTitle('cat')
+            ->setDescription('desc')
+            ->setDisplayOrder(1)
             ->setParent($course)
             ->setCreator($teacher)
         ;
 
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
+        $this->assertHasNoEntityViolations($category);
+        $em->persist($category);
         $em->flush();
 
-        $this->assertSame('cat', (string) $item);
+        $this->assertSame($category->getResourceIdentifier(), $category->getIid());
+        $this->assertSame('cat', (string) $category);
+        $this->assertSame('desc', $category->getDescription());
+        $this->assertSame('cat', $category->getCategoryTitle());
+        $this->assertSame(1, $category->getDisplayOrder());
+
         $this->assertSame(1, $repo->count([]));
     }
 }

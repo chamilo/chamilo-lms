@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CourseType.
- *
  * @ORM\Table(name="course_type")
  * @ORM\Entity
  */

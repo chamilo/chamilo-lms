@@ -330,6 +330,23 @@ class Version20170627122900 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE settings_current SET category = LOWER(category)');
+
+        // ticket configuration
+        $ticketProjectUserRoles = $this->getConfigurationValue('ticket_project_user_roles');
+
+        if ($ticketProjectUserRoles && isset($ticketProjectUserRoles['permissions'])) {
+            $selectedValue = array_map(
+                fn ($projectId, $roles) => "$projectId:".implode(',', $roles),
+                array_keys($ticketProjectUserRoles['permissions']),
+                array_values($ticketProjectUserRoles['permissions'])
+            );
+
+            $selectedValue = implode(PHP_EOL, $selectedValue);
+
+            $this->addSql(
+                "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'ticket_project_user_roles', 'Ticket', '$selectedValue', 'ticket_project_user_roles', 1, 1)"
+            );
+        }
     }
 
     public function down(Schema $schema): void

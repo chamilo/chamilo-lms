@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -23,19 +22,10 @@ class SettingsController extends BaseController
 {
     use ControllerTrait;
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings', name: 'admin_settings')]
     public function indexAction(): Response
     {
-        $manager = $this->getSettingsManager();
-        $schemas = $manager->getSchemas();
-
-        return $this->render(
-            '@ChamiloCore/Admin/Settings/index.html.twig',
-            [
-                'schemas' => $schemas,
-            ]
-        );
+        return $this->redirectToRoute('chamilo_platform_settings', ['namespace' => 'platform']);
     }
 
     /**
@@ -106,9 +96,7 @@ class SettingsController extends BaseController
     public function updateSettingAction(Request $request, string $namespace): Response
     {
         $manager = $this->getSettingsManager();
-        // @todo improve get the current url entity
-        $urlId = $request->getSession()->get('access_url_id');
-        $url = $this->getDoctrine()->getRepository(AccessUrl::class)->find($urlId);
+        $url = $this->getAccessUrl();
         $manager->setUrl($url);
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $searchForm = $this->getSearchForm();
@@ -187,13 +175,11 @@ class SettingsController extends BaseController
      * Sync settings from classes with the database.
      */
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/settings_sync', name: 'admin_settings')]
-    public function syncSettings(Request $request): Response
+    #[Route('/settings_sync', name: 'sync_settings')]
+    public function syncSettings(): Response
     {
         $manager = $this->getSettingsManager();
-        // @todo improve get the current url entity
-        $urlId = $request->getSession()->get('access_url_id');
-        $url = $this->getDoctrine()->getRepository(AccessUrl::class)->find($urlId);
+        $url = $this->getAccessUrl();
         $manager->setUrl($url);
         $manager->installSchemas($url);
 

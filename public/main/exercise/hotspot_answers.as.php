@@ -167,18 +167,17 @@ if (!$hideExpectedAnswer) {
     $qb = $em->createQueryBuilder();
     $qb
         ->select('a')
-        ->from('ChamiloCourseBundle:CQuizAnswer', 'a');
+        ->from(CQuizAnswer::class, 'a')
+        ->where($qb->expr()->eq('a.cId', $courseId));
 
     if (HOT_SPOT_DELINEATION == $objQuestion->getType()) {
         $qb
-            ->where($qb->expr()->eq('a.cId', $courseId))
-            ->andWhere($qb->expr()->eq('a.questionId', $questionId))
+            ->andWhere($qb->expr()->eq('a.question', $questionId))
             ->andWhere($qb->expr()->neq('a.hotspotType', 'noerror'))
             ->orderBy('a.id', 'ASC');
     } else {
         $qb
-            ->where($qb->expr()->eq('a.cId', $courseId))
-            ->andWhere($qb->expr()->eq('a.questionId', $questionId))
+            ->andWhere($qb->expr()->eq('a.question', $questionId))
             ->orderBy('a.position', 'ASC');
     }
 

@@ -119,11 +119,12 @@ export default {
       let redirect = route.query.redirect;
       await store.dispatch("security/login", payload);
       if (!store.getters["security/hasError"]) {
-        isSidebarOpen.value = true;
+        //isSidebarOpen.value = true;
         if (typeof redirect !== "undefined") {
           router.push({path: redirect});
         } else {
-          router.push({path: "/home"});
+          // router.replace({path: "/home"});
+          window.location.href = '/home';
         }
       }
     }

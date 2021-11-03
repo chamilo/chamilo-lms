@@ -17,8 +17,6 @@ class AssetRepositoryTest extends AbstractApiTest
 
     public function testCreateAsset(): void
     {
-        self::bootKernel();
-
         $em = $this->getEntityManager();
         $assetRepo = self::getContainer()->get(AssetRepository::class);
         $file = $this->getUploadedFile();
@@ -142,8 +140,6 @@ class AssetRepositoryTest extends AbstractApiTest
 
     public function testDelete(): void
     {
-        self::bootKernel();
-
         $assetRepo = self::getContainer()->get(AssetRepository::class);
 
         $file = $this->getUploadedFile();

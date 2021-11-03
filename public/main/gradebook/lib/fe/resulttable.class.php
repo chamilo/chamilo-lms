@@ -89,7 +89,7 @@ class ResultTable extends SortableTable
      */
     public function get_table_data(
         $from = 1,
-        $per_page = null,
+        $perPage = null,
         $column = null,
         $direction = null,
         $sort = null

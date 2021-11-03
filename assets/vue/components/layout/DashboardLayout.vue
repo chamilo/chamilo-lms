@@ -106,7 +106,7 @@
               <q-list dense>
                 <q-item class="GL__menu-link-signed-in">
                   <q-item-section>
-                    <div>{{ $t('Signed in as') }} <strong>{{ currentUser.username }}</strong></div>
+                    <div>{{ $t('Signed in as') }} <strong>{{ currentUser.fullName }}</strong></div>
                   </q-item-section>
                 </q-item>
                 <!--                <q-separator />-->
@@ -287,6 +287,7 @@ export default {
       //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
       //{ icon: 'compass', url: '/catalog', text: 'Explore' },
       // { icon: 'star_border', url: '/news', text: 'News' },
+      {icon: 'mdi-network', url: '/socialnetwork', text: t('Social network')},
     ];
 
     linksAdmin.value = [

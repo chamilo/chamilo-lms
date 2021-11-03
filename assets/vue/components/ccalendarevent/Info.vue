@@ -1,10 +1,9 @@
 <template>
   <h5 class="text-xl font-semibold">{{ event.title }}</h5>
-
-  {{ $luxonDateTime.fromISO(event.startDate).toRelative() }} ({{ $luxonDateTime.fromISO(event.startDate).toLocaleString($luxonDateTime.DATETIME_MED) }})
+  {{ $filters.abbreviatedDatetime(event.startDate) }}
     
   <p v-if="event.endDate">
-    {{ event.endDate }}
+    {{ $filters.abbreviatedDatetime(event.endDate) }}
   </p>
 
   <hr class="my-2">

@@ -3,9 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
- * Class ExtraFieldOption
  * Handles the extra fields for various objects (users, sessions, courses).
  */
 class ExtraFieldOption extends Model
@@ -534,9 +534,8 @@ class ExtraFieldOption extends Model
                 break;
         }
 
-        $result = Database::getManager()
-            ->getRepository(ExtraFieldOptions::class)
-            ->findBy(['field' => $field_id], $orderBy);
+        $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
+        $result = $extraFieldOptionsRepo->findBy(['field' => $field_id], $orderBy);
 
         if (!$result) {
             return false;
@@ -549,7 +548,7 @@ class ExtraFieldOption extends Model
                 'id' => $row->getId(),
                 'field_id' => $row->getField()->getId(),
                 'option_value' => $row->getValue(),
-                'display_text' => self::translateDisplayName($row->getDisplayText()),
+                'display_text' => $row->getDisplayText(),
                 'priority' => $row->getPriority(),
                 'priority_message' => $row->getPriorityMessage(),
                 'option_order' => $row->getOptionOrder(),
@@ -575,16 +574,16 @@ class ExtraFieldOption extends Model
      */
     public function get_second_select_field_options_by_field($option_value_id, $to_json = false)
     {
-        $em = Database::getManager();
-        $option = $em->find(ExtraFieldOptions::class, $option_value_id);
+        $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
+        $option = $extraFieldOptionsRepo->find($option_value_id);
 
         if (!$option) {
             return !$to_json ? [] : '{}';
         }
 
-        $subOptions = $em->getRepository(ExtraFieldOptions::class)->findSecondaryOptions($option);
-
+        $subOptions = $extraFieldOptionsRepo->findSecondaryOptions($option);
         $optionsInfo = [];
+
         /** @var ExtraFieldOptions $subOption */
         foreach ($subOptions as $subOption) {
             $optionsInfo[] = [
@@ -749,10 +748,10 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'type', $this->type);
         $form->addElement('hidden', 'field_id', $this->fieldId);
 
-        if ('edit' == $action) {
-            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
-                'extra_field_option' => $id,
-            ]);
+        if ('edit' === $action) {
+            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate_option.php?'.http_build_query(
+                ['id' => $id]
+            );
             $translateButton = Display::toolbarButton(
                 get_lang('Translate this term'),
                 $translateUrl,
@@ -775,7 +774,7 @@ class ExtraFieldOption extends Model
 
         $defaults = [];
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             // Setting the defaults
             $defaults = $this->get($id, false);
             $form->freeze('option_value');
@@ -786,7 +785,6 @@ class ExtraFieldOption extends Model
 
         $form->setDefaults($defaults);
 
-        // Setting the rules
         $form->addRule('display_text', get_lang('Required field'), 'required');
         $form->addRule('option_value', get_lang('Required field'), 'required');
 
@@ -860,39 +858,13 @@ class ExtraFieldOption extends Model
     {
         $info = parent::get($id);
 
-        if ($translateDisplayText) {
-            $info['display_text'] = self::translateDisplayName($info['display_text']);
+        if ($info && $translateDisplayText) {
+            $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
+            $option = $extraFieldOptionsRepo->find($id);
+            $info['display_text'] = $option->getDisplayText();
         }
 
         return $info;
-    }
-
-    /**
-     * Translate the display text for a extra field option.
-     *
-     * @param string $defaultDisplayText
-     *
-     * @return string
-     */
-    public static function translateDisplayName($defaultDisplayText)
-    {
-        $variableLanguage = self::getLanguageVariable($defaultDisplayText);
-
-        return isset($GLOBALS[$variableLanguage]) ? $GLOBALS[$variableLanguage] : $defaultDisplayText;
-    }
-
-    /**
-     * @param $defaultDisplayText
-     *
-     * @return mixed|string
-     */
-    public static function getLanguageVariable($defaultDisplayText)
-    {
-        $variableLanguage = api_replace_dangerous_char($defaultDisplayText);
-        $variableLanguage = str_replace('-', '_', $variableLanguage);
-        $variableLanguage = api_underscore_to_camel_case($variableLanguage);
-
-        return $variableLanguage;
     }
 
     /**
@@ -905,7 +877,9 @@ class ExtraFieldOption extends Model
         $result = parent::get_all($options);
 
         foreach ($result as &$row) {
-            $row['display_text'] = self::translateDisplayName($row['display_text']);
+            $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
+            $option = $extraFieldOptionsRepo->find($row['id']);
+            $row['display_text'] = $option->getDisplayText();
         }
 
         return $result;

@@ -8,12 +8,15 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,12 +33,18 @@ class LegacyListener
     private Environment $twig;
     private TokenStorageInterface $tokenStorage;
     private UserRepository $userRepository;
+    private AccessUrlRepository $accessUrlRepository;
+    private RouterInterface $router;
+    private ParameterBagInterface $parameterBag;
 
-    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UserRepository $userRepository)
+    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UserRepository $userRepository, AccessUrlRepository $accessUrlRepository, RouterInterface $router, ParameterBagInterface $parameterBag)
     {
         $this->twig = $twig;
         $this->tokenStorage = $tokenStorage;
         $this->userRepository = $userRepository;
+        $this->accessUrlRepository = $accessUrlRepository;
+        $this->router = $router;
+        $this->parameterBag = $parameterBag;
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -69,7 +78,6 @@ class LegacyListener
         // Legacy way of detect current access_url
         $installed = $container->getParameter('installed');
 
-        $urlId = 1;
         if (empty($installed)) {
             throw new Exception('Chamilo is not installed');
         }
@@ -134,6 +142,17 @@ class LegacyListener
         } else {
             $session->set('cid_reset', false);
         }
+
+        $urlId = $this->accessUrlRepository->getFirstId();
+
+        if (1 === (int) $this->parameterBag->get('multiple_access_url')) {
+            $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);
+            if (null !== $accessUrl) {
+                $urlId = $accessUrl->getId();
+            }
+        }
+
         $session->set('access_url_id', $urlId);
     }
 

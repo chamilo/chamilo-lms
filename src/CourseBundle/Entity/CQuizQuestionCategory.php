@@ -11,13 +11,10 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CQuizQuestionCategory.
- *
  * @ORM\Table(
  *     name="c_quiz_question_category",
  *     indexes={
@@ -114,17 +111,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * @ORM\PostPersist()
-     */
-    public function postPersist(LifecycleEventArgs $args): void
-    {
-        // Update id with iid value
-        /*$em = $args->getEntityManager();
-        $em->persist($this);
-        $em->flush();*/
     }
 
     /**

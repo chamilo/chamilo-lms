@@ -62,7 +62,7 @@ if (!empty($group_id)) {
 
     if (false === $allowToEdit) {
         // Check if user is tutor group
-        $isTutor = $groupEntity->userIsTutor(api_get_user_entity());
+        $isTutor = $groupEntity->hasTutor(api_get_user_entity());
         if ($isTutor) {
             $allowToEdit = true;
         }

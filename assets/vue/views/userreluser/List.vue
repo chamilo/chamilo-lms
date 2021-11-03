@@ -103,7 +103,7 @@
 
       <Column field="createdAt" :header="$t('Sent date')" :sortable="true">
         <template #body="slotProps">
-          {{$luxonDateTime.fromISO(slotProps.data.createdAt).toRelative() }}
+          {{ $filters.relativeDatetime(slotProps.data.createdAt) }}
         </template>
       </Column>
 

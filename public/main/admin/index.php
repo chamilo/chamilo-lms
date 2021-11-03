@@ -339,6 +339,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'settings.php?category=Plugins', 'label' => get_lang('Plugins')];
     $items[] = ['url' => 'settings.php?category=Regions', 'label' => get_lang('Regions')];
     $items[] = ['url' => 'system_announcements.php', 'label' => get_lang('Portal news')];
+    $items[] = ['url' => '/resources/pages', 'label' => get_lang('Pages')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin',
         'label' => get_lang('Global agenda'),

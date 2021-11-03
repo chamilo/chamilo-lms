@@ -11,8 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Ticket messages.
- *
  * @ORM\Table(name="ticket_message")
  * @ORM\Entity
  */
@@ -47,7 +45,7 @@ class TicketMessage
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Ticket $ticket;
 

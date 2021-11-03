@@ -1,6 +1,7 @@
 <template>
   <SessionTabs/>
-  <SessionListWrapper :sessions="sessions"/>
+<!--  <SessionListWrapper :sessions="sessions"/>-->
+  <SessionCategoryView :result-sessions="resultSessions"/>
 </template>
 
 <script>
@@ -10,13 +11,13 @@ import {useStore} from 'vuex';
 import {useQuery, useResult} from '@vue/apollo-composable'
 import {GET_SESSION_REL_USER} from "../../../graphql/queries/SessionRelUser.js";
 import {DateTime} from "luxon";
-import SessionListWrapper from '../../../components/session/SessionListWrapper';
+import SessionCategoryView from '../../../components/session/SessionCategoryView';
 import SessionTabs from '../../../components/session/Tabs';
 
 export default {
   name: 'SessionListUpcoming',
   components: {
-    SessionListWrapper,
+    SessionCategoryView,
     SessionTabs
   },
   setup() {
@@ -25,31 +26,15 @@ export default {
 
     if (user.value) {
       let userId = user.value.id;
-
       let start = DateTime.local().toISO();
 
-      const {result, loading} = useQuery(GET_SESSION_REL_USER, {
+      const {result: resultSessions, loading} = useQuery(GET_SESSION_REL_USER, {
         user: "/api/users/" + userId,
         afterStartDate: start,
       });
 
-      const sessions = useResult(result, [], ({sessionRelUsers}) => {
-        let sessionList = [];
-        sessionRelUsers.edges.map(({node}) => {
-          const sessionExists = sessionList.findIndex(suSession => suSession._id === node.session._id) >= 0;
-          if (!sessionExists) {
-            sessionList.push(node.session);
-          }
-
-          return sessionExists ? null : node.session;
-        });
-
-        return sessionList;
-      });
-
-      console.log(sessions);
       return {
-        sessions,
+        resultSessions,
         loading
       }
     }

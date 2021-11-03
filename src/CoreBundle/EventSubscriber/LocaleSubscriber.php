@@ -82,6 +82,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         if (!empty($platformLocale)) {
             $localeList['platform_lang'] = $platformLocale;
         }
+
         // 2. Check user locale
         // _locale_user is set when user logins the system check UserLocaleListener
         $userLocale = $request->getSession()->get('_locale_user');
@@ -112,16 +113,16 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
 
         $priorityList = [
-            'language_priority_4',
-            'language_priority_3',
-            'language_priority_2',
             'language_priority_1',
+            'language_priority_2',
+            'language_priority_3',
+            'language_priority_4',
         ];
 
         $locale = '';
         foreach ($priorityList as $setting) {
             $priority = $this->settingsManager->getSetting(sprintf('language.%s', $setting));
-            if (!empty($priority) && isset($localeList[$priority])) {
+            if (!empty($priority) && isset($localeList[$priority]) && !empty($localeList[$priority])) {
                 $locale = $localeList[$priority];
 
                 break;
@@ -137,7 +138,7 @@ class LocaleSubscriber implements EventSubscriberInterface
                 'user_selected_lang',
             ];
             foreach ($priorityList as $setting) {
-                if (isset($localeList[$setting])) {
+                if (isset($localeList[$setting]) && !empty($localeList[$setting])) {
                     $locale = $localeList[$setting];
                 }
             }

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Level.
+ * Skill level.
  *
  * @ORM\Table(name="skill_level")
  * @ORM\Entity

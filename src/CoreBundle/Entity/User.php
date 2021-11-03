@@ -60,13 +60,13 @@ use UserManager;
     iri: 'http://schema.org/Person',
     itemOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('VIEW', object)",
         ],
         'put' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('EDIT', object)",
         ],
         'delete' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('DELETE', object)",
         ],
     ],
     attributes: [
@@ -85,7 +85,7 @@ use UserManager;
     'lastname' => 'partial',
 ])]
 #[ApiFilter(BooleanFilter::class, properties: ['isActive'])]
-class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface
+class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface
 {
     use TimestampableEntity;
     use UserCreatorTrait;
@@ -117,6 +117,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ApiProperty(iri="http://schema.org/contentUrl")
      */
     #[Groups([
+        'user_export',
         'user:read',
         'resource_node:read',
         'document:read',
@@ -148,12 +149,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     #[Assert\NotBlank]
     #[Groups([
+        'user_export',
         'user:read',
         'user:write',
         'course:read',
         'resource_node:read',
         'user_json:read',
         'message:read',
+        'page:read',
         'user_rel_user:read',
     ])]
     protected string $username;
@@ -790,6 +793,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     // Property used only during installation.
     protected bool $skipResourceNode = false;
 
+    #[Groups(['user:read', 'user_json:read'])]
+    protected string $fullName;
+
     public function __construct()
     {
         $this->skipResourceNode = false;
@@ -832,6 +838,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->friends = new ArrayCollection();
         $this->friendsWithMe = new ArrayCollection();
         $this->gradeBookLinkEvalLogs = new ArrayCollection();
+        $this->messageTags = new ArrayCollection();
         $this->sequenceValues = new ArrayCollection();
         $this->trackEExerciseConfirmations = new ArrayCollection();
         $this->trackEAccessCompleteList = new ArrayCollection();
@@ -1451,7 +1458,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getFullname(): string
     {
-        return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+        if (empty($this->fullName)) {
+            return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+        }
+
+        return $this->fullName;
     }
 
     public function getFirstname(): ?string
@@ -2124,13 +2135,16 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @param int $relationType Example: UserRelUser::USER_RELATION_TYPE_BOSS
      *
-     * @return UserRelUser[]|Collection
+     * @return Collection<int, UserRelUser>
      */
-    public function getFriendsByRelationType(int $relationType)
+    public function getFriendsByRelationType(int $relationType): Collection
     {
-        return $this->friends->filter(function (UserRelUser $userRelUser) use ($relationType) {
-            return $relationType === $userRelUser->getRelationType();
-        });
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('relationType', $relationType)
+        );
+
+        return $this->friends->matching($criteria);
     }
 
     /**
@@ -2475,5 +2489,19 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
                     }
                 )->toArray()
             );
+    }
+
+    public function setFullName(string $fullName): self
+    {
+        $this->fullName = $fullName;
+
+        return $this;
+    }
+
+    public function hasFriendWithRelationType(self $friend, int $relationType): bool
+    {
+        $friends = $this->getFriendsByRelationType($relationType);
+
+        return $friends->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
     }
 }

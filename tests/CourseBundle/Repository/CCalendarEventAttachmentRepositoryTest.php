@@ -20,7 +20,6 @@ class CCalendarEventAttachmentRepositoryTest extends AbstractApiTest
 
     public function testCreateEvent(): void
     {
-        self::bootKernel();
         $user = $this->createUser('test');
         $course = $this->createCourse('new');
 
@@ -54,6 +53,8 @@ class CCalendarEventAttachmentRepositoryTest extends AbstractApiTest
             ->setCreator($user)
             ->addCourseLink($course)
         ;
+
+        $event->addAttachment($attachment);
 
         $this->assertHasNoEntityViolations($attachment);
 

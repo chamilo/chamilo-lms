@@ -78,7 +78,7 @@ class CToolIntro extends AbstractResource implements ResourceInterface, Resource
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CTool")
-     * @ORM\JoinColumn(name="c_tool_id", referencedColumnName="iid", nullable=false)
+     * @ORM\JoinColumn(name="c_tool_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
      */
     #[Assert\NotNull]
     #[Groups(['c_tool_intro:read', 'c_tool_intro:write'])]

@@ -21,6 +21,9 @@ import userGroupService from './services/usergroup';
 import userRelUserService from './services/userreluser';
 import calendarEventService from './services/ccalendarevent';
 import toolIntroService from './services/ctoolintro';
+import pageService from './services/page';
+import pageCategoryService from './services/pagecategory';
+import sessionService from './services/session';
 
 import makeCrudModule from './store/modules/crud';
 //import vuetify from './plugins/vuetify' // path to vuetify export
@@ -74,6 +77,27 @@ store.registerModule(
   makeCrudModule({
     service: toolIntroService
   })
+);
+
+store.registerModule(
+    'page',
+    makeCrudModule({
+        service: pageService
+    })
+);
+
+store.registerModule(
+    'pagecategory',
+    makeCrudModule({
+        service: pageCategoryService
+    })
+);
+
+store.registerModule(
+    'session',
+    makeCrudModule({
+        service: sessionService
+    })
 );
 
 store.registerModule(
@@ -221,11 +245,22 @@ app.config.globalProperties.axios = axios;
 const prettyBytes = require('pretty-bytes');
 const { DateTime } = require("luxon");
 
-app.config.globalProperties.$luxonDateTime = DateTime;
 app.config.globalProperties.$filters = {
-    prettyBytes(num) {
-        return prettyBytes(num);
+    /**
+     * @param {string} datetime
+     * @returns {string}
+     */
+    abbreviatedDatetime(datetime) {
+        return DateTime.fromISO(datetime).toLocaleString({ ...DateTime.DATETIME_MED, month: 'long' });
     },
+    /**
+     * @param {string} datetime
+     * @returns {string}
+     */
+    relativeDatetime(datetime) {
+        return DateTime.fromISO(datetime).toRelative();
+    },
+    prettyBytes,
 }
 
 import Alpine from 'alpinejs'

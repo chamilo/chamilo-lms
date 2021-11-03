@@ -53,7 +53,7 @@ class CForumPostRepository extends ResourceRepository
         if (
             (empty($group) && $isAllowedToEdit) ||
             (
-                (null !== $group ? $group->userIsTutor($currentUser) : false) ||
+                (null !== $group ? $group->hasTutor($currentUser) : false) ||
                 !$onlyVisible
             )
         ) {

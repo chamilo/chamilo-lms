@@ -168,7 +168,7 @@ class Version20170525122900 extends AbstractMigrationChamilo
                 'CREATE TABLE IF NOT EXISTS c_shortcut (id INT AUTO_INCREMENT NOT NULL, shortcut_node_id BIGINT DEFAULT NULL, resource_node_id BIGINT DEFAULT NULL, name VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_3F6BB957937100BE (shortcut_node_id), UNIQUE INDEX UNIQ_3F6BB9571BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
             $this->addSql(
-                'ALTER TABLE c_shortcut ADD CONSTRAINT FK_3F6BB957937100BE FOREIGN KEY (shortcut_node_id) REFERENCES resource_node (id);'
+                'ALTER TABLE c_shortcut ADD CONSTRAINT FK_3F6BB957937100BE FOREIGN KEY (shortcut_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
             $this->addSql(
                 'ALTER TABLE c_shortcut ADD CONSTRAINT FK_3F6BB9571BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'

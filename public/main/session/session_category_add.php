@@ -79,8 +79,9 @@ if (!empty($return)) {
                 <div class="col-md-3"></div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-6">
-                    <?php echo get_lang('The time limit of a category is referential, will not affect the boundaries of a training session'); ?> <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('Add time limit'); ?></a>
+                <div class="col-sm-offset-3 col-sm-6 my-2">
+                    <?php echo get_lang('The time limit of a category is referential, will not affect the boundaries of a training session'); ?> <br />
+                    <a class="text-blue" href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('Add time limit'); ?></a>
                 </div>
                 <div class="col-md-3"></div>
             </div>
@@ -300,7 +301,7 @@ if (!empty($return)) {
                     ?>
                 </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 my-2">
 
                 </div>
             </div>

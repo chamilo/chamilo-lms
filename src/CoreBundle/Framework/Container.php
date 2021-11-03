@@ -585,11 +585,6 @@ class Container
         return self::$container->get(LegalRepository::class);
     }
 
-    public static function getLanguageRepository(): LanguageRepository
-    {
-        return self::$container->get(LanguageRepository::class);
-    }
-
     public static function getFormFactory(): FormFactory
     {
         return self::$container->get('form.factory');

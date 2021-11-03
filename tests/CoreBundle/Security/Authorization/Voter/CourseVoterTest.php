@@ -41,7 +41,7 @@ class CourseVoterTest extends WebTestCase
         $teacher = $this->createUser('teacher', '', '', 'ROLE_TEACHER');
         $teacherWithAccess = $this->createUser('teacher_with_access', '', '', 'ROLE_TEACHER');
 
-        // Group in public course.
+        // Public course.
         $publicCourse = $this->createCourse('public');
         $publicCourse->addUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
         $publicCourse->addUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);

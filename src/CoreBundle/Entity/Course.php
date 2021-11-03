@@ -582,6 +582,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function hasUser(User $user): bool
     {
+        if (0 === $this->getUsers()->count()) {
+            return false;
+        }
+
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('user', $user)
         );

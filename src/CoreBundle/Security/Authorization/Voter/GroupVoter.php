@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -66,13 +67,33 @@ class GroupVoter extends Voter
             return false;
         }
 
-        // Admins have access to everything
+        // Admins have access to everything.
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
         /** @var CGroup $group */
         $group = $subject;
+
+        // The group's parent is the course.
+        /** @var Course $course */
+        $course = $group->getParent();
+
+        if ($course->isHidden()) {
+            return false;
+        }
+
+        if (Course::REGISTERED === $course->getVisibility()) {
+            if (!$course->hasUser($user)) {
+                return false;
+            }
+        }
+
+        if ($course->hasTeacher($user)) {
+            $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
+
+            return true;
+        }
 
         // Legacy
         //\GroupManager::userHasAccessToBrowse($user->getId(), $group);
@@ -96,9 +117,12 @@ class GroupVoter extends Voter
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_STUDENT);
                 }
 
+                $requestUri = '';
                 // Check if user has access in legacy tool.
                 $request = $this->requestStack->getCurrentRequest();
-                $requestUri = $request->getRequestUri();
+                if ($request) {
+                    $requestUri = $request->getRequestUri();
+                }
 
                 $tools = [
                     '/main/forum/' => $group->getForumState(),
@@ -115,7 +139,7 @@ class GroupVoter extends Voter
 
                 $toolStatus = GroupManager::TOOL_PUBLIC;
                 foreach ($tools as $path => $status) {
-                    if (false !== strpos($requestUri, $path)) {
+                    if (str_contains($requestUri, $path)) {
                         $toolStatus = $status;
 
                         break;

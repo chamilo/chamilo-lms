@@ -158,6 +158,10 @@ class CourseRepositoryTest extends AbstractApiTest
         $course->addUser($student, 0, '', CourseRelUser::STUDENT);
         $courseRepo->update($course);
 
+        $this->assertTrue($course->hasUser($student));
+        $this->assertTrue($course->hasStudent($student));
+        $this->assertFalse($course->hasTeacher($student));
+
         $courses = $courseRepo->getCoursesByUser($student, $this->getAccessUrl());
         $this->assertCount(1, $courses);
     }

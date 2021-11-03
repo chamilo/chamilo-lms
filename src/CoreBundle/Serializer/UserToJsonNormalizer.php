@@ -39,12 +39,10 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
-use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManager;
 use SocialManager;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class UserToJsonNormalizer

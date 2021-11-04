@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManager;
@@ -26,9 +27,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
-use Chamilo\CoreBundle\Repository\LegalRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class CourseListener.
@@ -49,7 +47,7 @@ class CourseListener
     ) {
         $this->twig = $twig;
         $this->authorizationChecker = $authorizationChecker;
-        $this->settingsManager= $settingsManager;
+        $this->settingsManager = $settingsManager;
     }
 
     /**

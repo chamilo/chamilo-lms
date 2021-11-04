@@ -81,15 +81,14 @@ if (api_is_multiple_url_enabled()) {
         $multipleUrlLDAPConfig = false;
     }    
 }
-if ($debug) {
-    echo "accessUrls = $accessUrls \n";
-}
 
 if (!$multipleUrlLDAPConfig) {
     $accessUrls['id'] = 0;
     $generalTableFieldMap[0] = $generalTableFieldMap;
 }
-
+if ($debug) {
+    echo "accessUrls = " . print_r($accessUrls,1);
+}
 foreach ($accessUrls as $accessUrl) {
     $accessUrlId = $accessUrl['id'];
     if (array_key_exists($accessUrlId, $generalTableFieldMap) && is_array($generalTableFieldMap[$accessUrlId])) {
@@ -145,7 +144,7 @@ foreach ($accessUrls as $accessUrl) {
     // Retrieve source information from LDAP
         
     $ldap = false;
-    if (array_key_exists($accessUrlId, $extldap_config) && is_array($extldap_config[$accessUrlId])) { 
+    if (array_key_exists($accessUrlId, $extldap_config) && is_array($extldap_config[$accessUrlId])) {
         foreach ($extldap_config[$accessUrlId]['host'] as $ldapHost) {
             $ldap = array_key_exists('port', $extldap_config)
                 ? ldap_connect($ldapHost, $extldap_config['port'])
@@ -160,7 +159,7 @@ foreach ($accessUrls as $accessUrl) {
         if ($debug) {
             echo "Connected to LDAP server $ldapHost.\n";
         }
-    
+
         ldap_set_option(
             $ldap,
             LDAP_OPT_PROTOCOL_VERSION,
@@ -172,37 +171,37 @@ foreach ($accessUrls as $accessUrl) {
             LDAP_OPT_REFERRALS,
             array_key_exists('referrals', $extldap_config[$accessUrlId]) ? $extldap_config[$accessUrlId]['referrals'] : false
         );
-    
+
         ldap_bind($ldap, $extldap_config[$accessUrlId]['admin_dn'], $extldap_config[$accessUrlId]['admin_password'])
         or die('ldap_bind() failed: ' . ldap_error($ldap) . "\n");
-	if ($debug) {
+        if ($debug) {
             $adminDn = $extldap_config[$accessUrlId]['admin_dn'];
             echo "Bound to LDAP server as $adminDn .\n";
         }
-    
+
         $baseDn = $extldap_config[$accessUrlId]['base_dn']
         or die("cannot read the LDAP directory base DN where to search for user entries\n");
-    
+
         $ldapUsernameAttribute = $extldap_user_correspondance[$accessUrlId]['username']
         or die("cannot read the name of the LDAP attribute where to find the username\n");
-    
+
         $filter = "$ldapUsernameAttribute=*";
-    
+
         if (array_key_exists('filter', $extldap_config[$accessUrlId])) {
             $filter = '(&('.$filter.')('.$extldap_config[$accessUrlId]['filter'].'))';
         }
-    
+
         $searchResult = ldap_search($ldap, $baseDn, $filter, $ldapAttributes)
         or die("ldap_search(\$ldap, '$baseDn', '$filter', [".join(',', $ldapAttributes).']) failed: '.ldap_error($ldap)."\n");
-    
+
         if ($debug) {
             echo ldap_count_entries($ldap, $searchResult) . " LDAP entries found\n";
         }
-    
+
         $ldapUsers = [];
         $entry = ldap_first_entry($ldap, $searchResult);
         while (false !== $entry) {
-        $attributes = ldap_get_attributes($ldap, $entry);
+            $attributes = ldap_get_attributes($ldap, $entry);
             $ldapUser = [];
             foreach ($allFields as $userField) {
                 if (!is_null($userField->constant)) {
@@ -252,12 +251,14 @@ foreach ($accessUrls as $accessUrl) {
         foreach ($ldapUsers as $username => $ldapUser) {
             if (array_key_exists($username, $dbUsers)) {
                 $user = $dbUsers[$username];
+                echo "User in DB = " . $username . " and user id = " . $user->getId() . "\n";
             } else {
                 $user = new User();
                 $dbUsers[$username] = $user;
+                $user->setUsernameCanonical($username);
                 if ($debug) {
                     echo 'Created ' . $username . "\n";
-                    echo "ldapUser = " . print_r ($ldapUser,1) . "\n";
+                    echo "ldapUser = " . print_r($ldapUser,1) . "\n";
                 }
             }
             foreach ($tableFields as $userField) {
@@ -267,23 +268,29 @@ foreach ($accessUrls as $accessUrl) {
                     if ($debug) {
                         echo 'Updated ' . $username . ' field '.$userField->name."\n";
                     }
+                    if ($userField->name == 'email') {
+                        $user->setEmailCanonical($value);
+                    }
                 }
             }
             if (!$user->isActive()) {
                 $user->setActive(true);
             }
-            UserManager::getManager()->save($user, false);
+            Database::getManager()->persist($user);
+            try {
+                Database::getManager()->flush();
+            } catch (OptimisticLockException $exception) {
+                die($exception->getMessage()."\n");
+            }
+            if($debug) {
+                echo 'Sent to DB ' . $username . " with user id = " . $user->getId() . "\n";
+            }
             if ($multipleUrlLDAPConfig) {
                 UrlManager::add_user_to_url($user->getId(), $accessUrlId);
             } elseif (!api_is_multiple_url_enabled()) {
                 //we are adding by default the access_url_user table with access_url_id = 1
                 UrlManager::add_user_to_url($user->getId(), 1);
             }
-        }
-        try {
-            Database::getManager()->flush();
-        } catch (OptimisticLockException $exception) {
-            die($exception->getMessage()."\n");
         }
 
 
@@ -327,6 +334,7 @@ foreach ($accessUrls as $accessUrl) {
         $allLdapUsers = array_merge($allLdapUsers, $ldapUsers);
     }
 }
+
 // disable user accounts not found in the LDAP directories
 
 $now = new DateTime();
@@ -336,7 +344,7 @@ foreach (array_diff(array_keys($dbUsers), array_keys($allLdapUsers)) as $usernam
         // In order to avoid slow individual SQL updates, we do not call
         // UserManager::disable($user->getId());
         $user->setActive(false);
-        UserManager::getManager()->save($user, false);
+        Database::getManager()->persist($user);
         // In order to avoid slow individual SQL updates, we do not call
         // Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $user->getId());
         $trackEDefault = new TrackEDefault();

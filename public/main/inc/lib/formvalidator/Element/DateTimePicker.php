@@ -93,7 +93,10 @@ class DateTimePicker extends HTML_QuickForm_text
                     enableTime: true,
                     dateFormat: 'Y-m-d H:i',
                     time_24hr: true,
-                    wrap: true
+                    wrap: true,
+                    locale: {
+                      firstDayOfWeek: 1
+                    }
                 };
                 $('#{$id}').flatpickr(config);
 

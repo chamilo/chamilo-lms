@@ -151,14 +151,14 @@ if (api_is_western_name_order()) {
     $table->set_header($col++, get_lang('First name'));
 }
 
-if ('true' == api_get_setting('show_email_addresses')) {
+if ('true' === api_get_setting('show_email_addresses')) {
     $table->set_header($col++, get_lang('e-mail'));
     $table->set_column_filter($col - 1, 'email_filter');
 }
 $table->set_header($col++, get_lang('active'), false);
 $table->set_column_filter($col - 1, 'active_filter');
 $table->set_header($col++, get_lang('Detail'), false);
-$table->set_column_filter($col - 1, 'Register_filter');
+$table->set_column_filter($col - 1, 'registerFilter');
 $table->set_form_actions(['subscribe' => get_lang('Register')], 'user');
 
 if (!empty($_POST['keyword'])) {
@@ -166,7 +166,7 @@ if (!empty($_POST['keyword'])) {
     echo '<br/>'.get_lang('Search resultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-Display :: display_header($tool_name, 'User');
+Display::display_header($tool_name, 'User');
 
 // Build search-form
 switch ($type) {
@@ -214,8 +214,6 @@ echo UserManager::getUserSubscriptionTab($option);
 $table->display();
 Display::display_footer();
 
-/*		SHOW LIST OF USERS  */
-
 /**
  ** Get the users to display on the current page.
  */
@@ -231,7 +229,19 @@ function get_number_of_users()
     $sessionId = api_get_session_id();
     $courseId = api_get_course_int_id();
 
-    if (isset($_REQUEST['type']) && COURSEMANAGER === $_REQUEST['type']) {
+    $studentRoleFilter = " AND ( 
+        u.roles LIKE '%ROLE_STUDENT%'
+        ) 
+    ";
+
+    $teacherRoleFilter = " AND ( 
+        u.roles LIKE '%ROLE_TEACHER%' OR
+        u.roles LIKE '%ROLE_ADMIN%' OR
+        u.roles LIKE '%ROLE_SESSION_MANAGER%'
+        ) 
+    ";
+
+    if (isset($_REQUEST['type']) && COURSEMANAGER == $_REQUEST['type']) {
         if (0 != api_get_session_id()) {
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
@@ -241,8 +251,8 @@ function get_number_of_users()
                         c_id = $courseId AND
                         session_id = $sessionId
                     WHERE
-                        cu.user_id IS NULL AND
-                        u.status IN (1,3,10,11,12,13,16) AND
+                        cu.user_id IS NULL
+                        $teacherRoleFilter AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
             if (api_is_multiple_url_enabled()) {
@@ -259,8 +269,8 @@ function get_number_of_users()
                             ON (url_rel_user.user_id = u.id)
                             WHERE
                                 cu.user_id IS NULL AND
-                                access_url_id = $url_access_id AND
-                                u.status  IN (1,3,10,11,12,13,16) AND
+                                access_url_id = $url_access_id
+                                $teacherRoleFilter AND
                                 (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
                             ";
                 }
@@ -270,7 +280,9 @@ function get_number_of_users()
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
                     ON u.id = cu.user_id and c_id = $courseId
-                    WHERE cu.user_id IS NULL AND u.status in (1,3,10,11,12,13,16) ";
+                    WHERE 
+                          cu.user_id IS NULL 
+                          $teacherRoleFilter  ";
 
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
@@ -283,9 +295,10 @@ function get_number_of_users()
                         ON u.id = cu.user_id AND c_id = $courseId
                         INNER JOIN  $tbl_url_rel_user as url_rel_user
                         ON (url_rel_user.user_id = u.id)
-                        WHERE cu.user_id IS NULL
-                          AND u.status IN (1,3,10,11,12,13,16)
-                          AND access_url_id = $url_access_id ";
+                        WHERE 
+                            cu.user_id IS NULL
+                            $teacherRoleFilter AND
+                            access_url_id = $url_access_id ";
                 }
             }
         }
@@ -300,8 +313,8 @@ function get_number_of_users()
                         c_id = $courseId AND
                         session_id = $sessionId
                     WHERE
-                        cu.user_id IS NULL AND
-                        u.status <> ".DRH." AND
+                        cu.user_id IS NULL 
+                        $studentRoleFilter AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
             if (api_is_multiple_url_enabled()) {
@@ -318,8 +331,8 @@ function get_number_of_users()
                             INNER JOIN $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id)
                             WHERE
-                                cu.user_id IS NULL AND
-                                u.status <> ".DRH." AND
+                                cu.user_id IS NULL 
+                                $studentRoleFilter AND
                                 access_url_id = $url_access_id AND
                                 (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
                 }
@@ -340,13 +353,13 @@ function get_number_of_users()
                     LEFT JOIN $table_user_field_values field_values
                     ON field_values.item_id = u.id
                     WHERE
-                        cu.user_id IS NULL AND
-                        u.status <> ".DRH." AND
+                        cu.user_id IS NULL 
+                        $studentRoleFilter AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'
                     ";
             } else {
-                $sql .= " WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
+                $sql .= " WHERE cu.user_id IS NULL $studentRoleFilter ";
             }
 
             if (api_is_multiple_url_enabled()) {
@@ -360,7 +373,10 @@ function get_number_of_users()
                             ON u.id = cu.user_id AND c_id = $courseId
                             INNER JOIN $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id)
-                            WHERE cu.user_id IS NULL AND access_url_id = $url_access_id AND u.status <> ".DRH." ";
+                            WHERE 
+                                  cu.user_id IS NULL AND 
+                                  access_url_id = $url_access_id  
+                                  $studentRoleFilter ";
                 }
             }
         }
@@ -394,11 +410,12 @@ function get_number_of_users()
                 0
             );
         }
-        foreach ($a_course_users as $user_id => $course_user) {
+        foreach ($a_course_users as $course_user) {
             $users_of_course[] = $course_user['user_id'];
         }
     }
     $sql .= " AND u.status <> ".ANONYMOUS." ";
+    var_dump($sql);
     $res = Database::query($sql);
     $count_user = 0;
 
@@ -409,6 +426,7 @@ function get_number_of_users()
 
     return $count_user;
 }
+
 /**
  * Get the users to display on the current page.
  */
@@ -451,6 +469,19 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 u.active               AS col4,
                 u.id              AS col5";
     }
+
+    $studentRoleFilter = " AND ( 
+        u.roles LIKE '%ROLE_STUDENT%'
+        ) 
+    ";
+
+    $teacherRoleFilter = " AND ( 
+        u.roles LIKE '%ROLE_TEACHER%' OR
+        u.roles LIKE '%ROLE_ADMIN%' OR
+        u.roles LIKE '%ROLE_SESSION_MANAGER%'
+        ) 
+    ";
+
     if (isset($_REQUEST['type']) && COURSEMANAGER == $_REQUEST['type']) {
         // adding a teacher through a session
         if (!empty($sessionId)) {
@@ -461,26 +492,29 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         u.id = cu.user_id AND
                         c_id = $courseId AND
                         session_id = $sessionId
-                    INNER JOIN  $tbl_url_rel_user as url_rel_user
+                    INNER JOIN $tbl_url_rel_user as url_rel_user
                     ON (url_rel_user.user_id = u.id) ";
 
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
-                'true' == api_get_setting('ProfilingFilterAddingUsers')
+                'true' === api_get_setting('ProfilingFilterAddingUsers')
             ) {
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
                     LEFT JOIN $table_user_field_values field_values
                         ON field_values.item_id = u.id
                     WHERE
-                        cu.user_id IS NULL AND
-                        u.status = 1 AND
+                        cu.user_id IS NULL
+                        $studentRoleFilter AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= " WHERE cu.user_id IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+                $sql .= " WHERE 
+                            cu.user_id IS NULL 
+                            $teacherRoleFilter AND
+                            (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
             $sql .= " AND access_url_id = $url_access_id";
         } else {
@@ -492,48 +526,50 @@ function get_user_data($from, $number_of_items, $column, $direction)
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
-                'true' == api_get_setting('ProfilingFilterAddingUsers')
+                'true' === api_get_setting('ProfilingFilterAddingUsers')
             ) {
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
                     LEFT JOIN $table_user_field_values field_values
                         ON field_values.item_id = u.id
                     WHERE
-                        cu.user_id IS NULL AND u.status<>".DRH." AND
+                        cu.user_id IS NULL 
+                        $studentRoleFilter AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= " WHERE cu.user_id IS NULL AND u.status  IN (1,3,10,11,12,13,16)";
+                $sql .= " WHERE cu.user_id IS NULL $teacherRoleFilter";
             }
 
-            // adding a teacher NOT trough a session on a portal with multiple URLs
+            // adding a teacher NOT through a session on a portal with multiple URLs
             if (api_is_multiple_url_enabled()) {
                 if (-1 != $url_access_id) {
                     $sql = "SELECT $select_fields
                             FROM $user_table u
                             LEFT JOIN $course_user_table cu
-                            ON u.id = cu.user_id and c_id = $courseId
-                            INNER JOIN  $tbl_url_rel_user as url_rel_user
+                            ON (u.id = cu.user_id AND c_id = $courseId)
+                            INNER JOIN $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id) ";
 
                     // applying the filter of the additional user profile fields
                     if (isset($_GET['subscribe_user_filter_value']) &&
                         !empty($_GET['subscribe_user_filter_value']) &&
-                        'true' == api_get_setting('ProfilingFilterAddingUsers')
+                        'true' === api_get_setting('ProfilingFilterAddingUsers')
                     ) {
                         $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                         $sql .= "
                             LEFT JOIN $table_user_field_values field_values
                                 ON field_values.item_id = u.id
                             WHERE
-                                cu.user_id IS NULL AND
-                                u.status IN (1,3,10,11,12,13,16) AND
+                                cu.user_id IS NULL
+                                $teacherRoleFilter AND
                                 field_values.field_id = '".intval($field_identification[0])."' AND
                                 field_values.value = '".Database::escape_string($field_identification[1])."'";
                     } else {
-                        $sql .= " WHERE cu.user_id IS NULL
-                            AND u.status IN (1,3,10,11,12,13,16)
-                            AND access_url_id = $url_access_id ";
+                        $sql .= " WHERE 
+                                    cu.user_id IS NULL
+                                    $teacherRoleFilter AND
+                                    access_url_id = $url_access_id ";
                     }
                 }
             }
@@ -550,7 +586,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         session_id = $sessionId ";
 
             if (api_is_multiple_url_enabled()) {
-                $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.id) ";
+                $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user 
+                          ON (url_rel_user.user_id = u.id) ";
             }
 
             // applying the filter of the additional user profile fields
@@ -562,19 +599,19 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $table_user_field_values field_values
                         ON field_values.item_id = u.id
                     WHERE
-                        cu.user_id IS NULL AND
-                        u.status<>".DRH." AND
+                        cu.user_id IS NULL 
+                        $studentRoleFilter AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
                 $sql .= " WHERE
-                            cu.user_id IS NULL AND
-                            u.status <> ".DRH." AND
+                            cu.user_id IS NULL
+                            $studentRoleFilter AND
                             (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
             if (api_is_multiple_url_enabled()) {
-                $sql .= "AND access_url_id = $url_access_id";
+                $sql .= " AND access_url_id = $url_access_id";
             }
         } else {
             $sql = "SELECT $select_fields
@@ -591,12 +628,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $table_user_field_values field_values
                         ON field_values.item_id = u.id
                     WHERE
-                        cu.user_id IS NULL AND
-                        u.status <> ".DRH." AND
+                        cu.user_id IS NULL
+                        $studentRoleFilter AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= " WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
+                $sql .= " WHERE cu.user_id IS NULL $studentRoleFilter ";
             }
 
             //showing only the courses of the current Chamilo access_url_id
@@ -606,27 +643,30 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         FROM $user_table u
                         LEFT JOIN $course_user_table cu
                         ON u.id = cu.user_id AND c_id = $courseId
-                        INNER JOIN  $tbl_url_rel_user as url_rel_user
+                        INNER JOIN $tbl_url_rel_user as url_rel_user
                         ON (url_rel_user.user_id = u.id) ";
 
                     // applying the filter of the additional user profile fields
                     if (isset($_GET['subscribe_user_filter_value']) &&
                         !empty($_GET['subscribe_user_filter_value']) &&
-                        'true' == api_get_setting('ProfilingFilterAddingUsers')
+                        'true' === api_get_setting('ProfilingFilterAddingUsers')
                     ) {
                         $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                         $sql .= "
                             LEFT JOIN $table_user_field_values field_values
-                                ON field_values.item_id = u.id
+                            ON field_values.item_id = u.id
                             WHERE
-                                cu.user_id IS NULL AND
-                                u.status<>".DRH." AND
+                                cu.user_id IS NULL
+                                $studentRoleFilter AND
                                 field_values.field_id = '".intval($field_identification[0])."' AND
                                 field_values.value = '".Database::escape_string($field_identification[1])."' AND
                                 access_url_id = $url_access_id
                             ";
                     } else {
-                        $sql .= " WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id = $url_access_id ";
+                        $sql .= " WHERE 
+                            cu.user_id IS NULL 
+                            $studentRoleFilter AND 
+                            access_url_id = $url_access_id ";
                     }
                 }
             }
@@ -654,11 +694,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
         // getting all the users of the course (to make sure that we do not
         // display users that are already in the course)
         if (!empty($sessionId)) {
-            $a_course_users = CourseManager :: get_user_list_from_course_code($course_code, $sessionId);
+            $a_course_users = CourseManager::get_user_list_from_course_code($course_code, $sessionId);
         } else {
-            $a_course_users = CourseManager :: get_user_list_from_course_code($course_code, 0);
+            $a_course_users = CourseManager::get_user_list_from_course_code($course_code, 0);
         }
-        foreach ($a_course_users as $user_id => $course_user) {
+        foreach ($a_course_users as $course_user) {
             $users_of_course[] = $course_user['user_id'];
         }
     }
@@ -698,7 +738,7 @@ function email_filter($email)
  *
  * @return string Some HTML-code
  */
-function Register_filter($user_id)
+function registerFilter($user_id)
 {
     if (isset($_REQUEST['type']) && COURSEMANAGER == $_REQUEST['type']) {
         $type = COURSEMANAGER;

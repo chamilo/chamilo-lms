@@ -93,6 +93,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     'sender' => 'exact',
     'receivers.receiver' => 'exact',
     'receivers.tags.tag' => 'exact',
+    'parent' => 'exact',
 ])]
 class Message
 {
@@ -216,6 +217,7 @@ class Message
      * @ORM\ManyToOne(targetEntity="Message", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
+    #[Groups(['message:write'])]
     protected ?Message $parent = null;
 
     /**

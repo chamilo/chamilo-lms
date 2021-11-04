@@ -48,12 +48,36 @@
       :src="attachment.contentUrl"
     />
     <q-card-section v-html="message.content" />
+
+    <q-separator />
+
+    <q-list
+      v-if="comments.length"
+    >
+      <q-item-label header>{{ $t('Comments') }}</q-item-label>
+
+      <SocialNetworkPostComment
+        v-for="(comment, index) in comments"
+        :key="index"
+        :comment="comment"
+        @deleted="onDeletedComment(index)"
+      />
+    </q-list>
+
+    <SocialNetworkPostForm :post="message" />
   </q-card>
 </template>
 
 <script>
+import SocialNetworkPostForm from "./PostForm";
+import {onMounted, reactive} from "vue";
+import SocialNetworkPostComment from "./PostComment";
+import {MESSAGE_TYPE_WALL} from "../message/constants";
+import {useStore} from "vuex";
+
 export default {
   name: "SocialNetworkPost",
+  components: {SocialNetworkPostComment, SocialNetworkPostForm},
   props: {
     message: {
       type: Object,
@@ -62,14 +86,38 @@ export default {
   },
   setup(props) {
     const attachment = props.message.attachments.length ? props.message.attachments[0] : null;
+    let comments = reactive([]);
 
     const containsImage = attachment && attachment.resourceNode.resourceFile.mimeType.includes('image/');
     const containsVideo = attachment && attachment.resourceNode.resourceFile.mimeType.includes('video/');
 
+    function loadComments() {
+      const store = useStore();
+
+      store
+        .dispatch(
+          'message/findAll',
+          {
+            parent: props.message['@id'],
+            msgType: MESSAGE_TYPE_WALL,
+            'order[sendDate]': 'desc',
+          }
+        )
+        .then(response => comments.push(...response));
+    }
+
+    function onDeletedComment(index) {
+      comments.splice(index, 1);
+    }
+
+    onMounted(loadComments);
+
     return {
       attachment,
       containsImage,
-      containsVideo
+      containsVideo,
+      comments,
+      onDeletedComment,
     }
   }
 }

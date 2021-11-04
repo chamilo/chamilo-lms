@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import SocialNetworkForm from "../../components/socialnetwork/Form";
+import SocialNetworkForm from "../../components/socialnetwork/WallForm";
 import SocialNetworkPostList from "../../components/socialnetwork/PostList";
 
 export default {

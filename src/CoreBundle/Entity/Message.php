@@ -93,6 +93,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     'sender' => 'exact',
     'receivers.receiver' => 'exact',
     'receivers.tags.tag' => 'exact',
+    'parent' => 'exact',
 ])]
 class Message
 {
@@ -216,6 +217,7 @@ class Message
      * @ORM\ManyToOne(targetEntity="Message", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
+    #[Groups(['message:write'])]
     protected ?Message $parent = null;
 
     /**
@@ -238,11 +240,16 @@ class Message
     protected Collection $attachments;
 
     /**
-     * @var Collection|MessageFeedback[]
+     * @var Collection<int, MessageFeedback>
      *
      * @ORM\OneToMany(targetEntity="MessageFeedback", mappedBy="message", orphanRemoval=true)
      */
     protected Collection $likes;
+
+    #[Groups(['message:read'])]
+    protected int $countLikes = 0;
+    #[Groups(['message:read'])]
+    protected int $countDislikes = 0;
 
     public function __construct()
     {
@@ -542,5 +549,25 @@ class Message
         $this->status = $status;
 
         return $this;
+    }
+
+    public function getCountLikes(): int
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('liked', true)
+        );
+
+        return $this->likes->matching($criteria)->count();
+    }
+
+    public function getCountDislikes(): int
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('disliked', true)
+        );
+
+        return $this->likes->matching($criteria)->count();
     }
 }

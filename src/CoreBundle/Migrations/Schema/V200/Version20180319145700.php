@@ -34,6 +34,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_survey ADD COLUMN is_mandatory TINYINT(1) DEFAULT "0" NOT NULL');
         }
 
+        $this->addSql('ALTER TABLE c_survey CHANGE code code varchar(40) DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey CHANGE parent_id parent_id INT DEFAULT NULL');
         $this->addSql('UPDATE c_survey SET parent_id = NULL WHERE parent_id = 0');
 

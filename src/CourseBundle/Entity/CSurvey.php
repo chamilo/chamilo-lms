@@ -35,7 +35,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected int $iid;
 
     /**
-     * @ORM\Column(name="code", type="string", length=20, nullable=true)
+     * @ORM\Column(name="code", type="string", length=40, nullable=true)
      */
     #[Assert\NotBlank]
     protected ?string $code = null;

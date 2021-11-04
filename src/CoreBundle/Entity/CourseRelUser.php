@@ -81,7 +81,7 @@ class CourseRelUser
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     #[MaxDepth(1)]
-    #[Groups(['course:read', 'user:read'])]
+    #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
     protected User $user;
 
     /**

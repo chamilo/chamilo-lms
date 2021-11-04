@@ -55,37 +55,15 @@ final class CourseExtension implements QueryCollectionExtensionInterface
             throw new AccessDeniedException('Access Denied.');
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-
         $rootAlias = $queryBuilder->getRootAliases()[0];
 
         $queryBuilder
-            ->innerJoin("$rootAlias.resourceNode", 'node')
-            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere(sprintf('%s.visibility <> :visibility_hidden', $rootAlias))
+            ->setParameter('visibility_hidden', Course::HIDDEN)
         ;
-
-        // Do not show deleted resources.
         $queryBuilder
-            ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
+            ->andWhere(sprintf('%s.visibility <> :visibility_closed', $rootAlias))
+            ->setParameter('visibility_closed', Course::CLOSED)
         ;
-
-        $allowDraft =
-            $this->security->isGranted('ROLE_ADMIN') ||
-            $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-        ;
-
-        if (!$allowDraft) {
-            $queryBuilder
-                ->andWhere('links.visibility != :visibilityDraft')
-                ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
-            ;
-        }
-
-        /*$queryBuilder->
-            andWhere('node.creator = :current_user')
-        ;*/
-        //$queryBuilder->andWhere(sprintf('%s.node.creator = :current_user', $rootAlias));
-        //$queryBuilder->setParameter('current_user', $user->getId());
     }
 }

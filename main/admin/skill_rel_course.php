@@ -33,13 +33,9 @@ if (!empty($sessionId)) {
 }
 
 $form->addHeader(get_lang('AddSkills').$sessionName);
-
-$selectedSkills = Skill::setSkillsToCourse($form, $courseId, $sessionId);
-$courseInfo['skills'] = array_keys($selectedSkills);
+Skill::setSkillsToCourse($form, $courseId, $sessionId);
 
 $form->addButtonSave(get_lang('Save'));
-
-$form->setDefaults(['skills' => array_keys($selectedSkills)]);
 
 if ($form->validate()) {
     $result = Skill::saveSkillsToCourseFromForm($form);

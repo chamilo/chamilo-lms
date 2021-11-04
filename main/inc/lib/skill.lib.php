@@ -2887,7 +2887,7 @@ class Skill extends Model
         $selectedSkills = [];
         /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skillRelCourse */
         foreach ($items as $skillRelCourse) {
-            $selectedSkills[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getName();
+            $selectedSkills[] = $skillRelCourse->getSkill()->getId();
         }
 
         if (!empty($skillList)) {
@@ -2896,12 +2896,18 @@ class Skill extends Model
 
         $elements = [];
         foreach ($skillList as $skillId => $skill) {
-            $elements[] = $form->createElement(
+            $element = $form->createElement(
                 'checkbox',
                 "skills[$skillId]",
                 null,
                 $skill
             );
+
+            if (in_array($skillId, $selectedSkills)) {
+                $element->setValue(1);
+            }
+
+            $elements[] = $element;
         }
         $form->addGroup($elements, '', get_lang('Skills'));
 
@@ -2947,6 +2953,7 @@ class Skill extends Model
         if (empty($course)) {
             return false;
         }
+
         $session = null;
         if (!empty($sessionId)) {
             $session = api_get_session_entity($sessionId);
@@ -2974,9 +2981,10 @@ class Skill extends Model
         // Add new one
         if (!empty($skills)) {
             foreach ($skills as $skillId) {
-                $item = new SkillRelCourse();
-                $item->setCourse($course);
-                $item->setSession($session);
+                $item = (new SkillRelCourse())
+                    ->setCourse($course)
+                    ->setSession($session)
+                ;
 
                 /** @var SkillEntity $skill */
                 $skill = $em->getRepository('ChamiloCoreBundle:Skill')->find($skillId);

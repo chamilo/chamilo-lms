@@ -387,13 +387,16 @@ class LegalManager
     public static function sendLegal(int $userId, int $coachId)
     {
         $subject = get_lang('Your terms and conditions are ready to be signed');
-        // Note: Translated string has 3 replacement markers, not just one.
         $studentDetails = api_get_user_info($userId);
         $coachDetails = api_get_user_info($coachId);
+        $link = trim(
+            api_get_setting('course_validation_terms_and_conditions_url')
+        );
+        // Note: Translated string has 3 replacement markers, not just one as the original string suggests.
         $content = sprintf(
             get_lang('Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s'),
             $studentDetails['firstname'],
-            api_get_path(WEB_PATH),
+            $link,
             $coachDetails['complete_name']
         );
         MessageManager::send_message_simple($userId, $subject, $content);

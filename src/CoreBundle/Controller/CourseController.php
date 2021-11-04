@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\ExtraFieldRelTagRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -93,7 +92,7 @@ class CourseController extends ToolBaseController
                 $condArray = explode(':', $request->get('legal_accept_type'));
                 if (!empty($condArray[0]) && !empty($condArray[1])) {
                     $time = time();
-                    $conditionToSave = intval($condArray[0]).':'.intval($condArray[1]).':'.$time;
+                    $conditionToSave = (int) ($condArray[0]).':'.(int) ($condArray[1]).':'.$time;
                     UserManager::update_extra_field_value(
                         $userId,
                         'legal_accept',
@@ -106,7 +105,7 @@ class CourseController extends ToolBaseController
             $allow = api_get_configuration_value('allow_public_course_with_no_terms_conditions');
             if (true === $allow &&
                 null !== $course->getVisibility() &&
-                COURSE_VISIBILITY_OPEN_WORLD == $course->getVisibility()
+                COURSE_VISIBILITY_OPEN_WORLD === $course->getVisibility()
             ) {
                 $redirect = false;
             }

@@ -13,6 +13,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use ExtraFieldValue;
 
 class LegalRepository extends ServiceEntityRepository
 {
@@ -89,11 +90,11 @@ class LegalRepository extends ServiceEntityRepository
     {
         if ('true' === api_get_setting('allow_terms_conditions')) {
             // Check if exists terms and conditions
-            if (0 == $this->countTerms()) {
+            if (0 === $this->countTerms()) {
                 return true;
             }
 
-            $extraFieldValue = new \ExtraFieldValue('user');
+            $extraFieldValue = new ExtraFieldValue('user');
             $data = $extraFieldValue->get_values_by_handler_and_field_variable(
                 $user->getId(),
                 'legal_accept'
@@ -149,6 +150,7 @@ class LegalRepository extends ServiceEntityRepository
             ;
         if (!empty($result)) {
             $version = explode(':', $result);
+
             return (int) $version[0];
         }
 

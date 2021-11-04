@@ -199,16 +199,17 @@ class ExtraFieldType extends AbstractType
 
                     break;
                 case \ExtraField::FIELD_TYPE_CHECKBOX:
-                    $defaultOptions['data'] = (int) $value === 1;
+                    $defaultOptions['data'] = 1 === (int) $value;
 
                     $builder->add($variable, CheckboxType::class, $defaultOptions);
+
                     break;
                 case \ExtraField::FIELD_TYPE_RADIO:
                 case \ExtraField::FIELD_TYPE_SELECT:
                 case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     if (empty($value)) {
                         $defaultOptions['data'] = null;
-                        if ($extraField->getFieldType() === \ExtraField::FIELD_TYPE_CHECKBOX) {
+                        if (\ExtraField::FIELD_TYPE_CHECKBOX === $extraField->getFieldType()) {
                             $defaultOptions['data'] = [];
                         }
                     }

@@ -95,7 +95,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         $extraFieldValue = new ExtraFieldValue('quiz');
         $extraFieldValue->save(
             [
-                'item_id' => $exercise->iId,
+                'item_id' => $exercise->iid,
                 'variable' => self::EXTRAFIELD_FORMULA,
                 'value' => $formula,
             ]

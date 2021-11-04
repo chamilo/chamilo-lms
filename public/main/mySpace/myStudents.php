@@ -559,7 +559,7 @@ switch ($action) {
     case 'send_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
         if ($isBoss || api_is_platform_admin()) {
-            LegalManager::sendLegal($studentId);
+            LegalManager::sendLegal($studentId, api_get_user_id());
             /*
                 $currentUserInfo = api_get_user_info();
                 $subject = get_lang('SendLegalSubject');

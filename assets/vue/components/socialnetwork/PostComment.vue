@@ -12,14 +12,28 @@
       <q-item-label caption>{{ $filters.relativeDatetime(comment.sendDate) }}</q-item-label>
     </q-item-section>
 
-    <q-item-section
-      v-if="isOwner"
-      side
-      top
-    >
+    <q-item-section side top>
       <q-btn
-        :aria-label="$t('Delete comment')"
+        v-if="enableMessagesFeedbackConfig"
+        :label="comment.countLikes"
+        :title="$t('Like')"
         dense
+        flat
+        icon="mdi-heart-plus"
+      />
+      <q-btn
+        v-if="enableMessagesFeedbackConfig && !disableDislikeOption"
+        :label="comment.countDislikes"
+        :title="$t('Dislike')"
+        dense
+        flat
+        icon="mdi-heart-remove"
+      />
+      <q-btn
+        v-if="isOwner"
+        :title="$t('Delete comment')"
+        dense
+        flat
         icon="delete"
         @click="deleteComment"
       />
@@ -29,6 +43,7 @@
 
 <script>
 import {useStore} from "vuex";
+import {ref} from "vue";
 
 export default {
   name: "SocialNetworkPostComment",
@@ -50,9 +65,14 @@ export default {
         .then(() => context.emit('deleted'));
     }
 
+    const enableMessagesFeedbackConfig = ref(window.config['social.social_enable_messages_feedback'] === 'true');
+    const disableDislikeOption = ref(window.config['social.disable_dislike_option'] === 'true');
+
     return {
       deleteComment,
       isOwner: currentUser['@id'] === props.comment.sender['@id'],
+      enableMessagesFeedbackConfig,
+      disableDislikeOption,
     };
   }
 }

@@ -71,6 +71,9 @@ class TwigListener
             'platform.load_term_conditions_section',
             'registration.allow_terms_conditions',
             'agenda.personal_calendar_show_sessions_occupation',
+
+            'social.social_enable_messages_feedback',
+            'social.disable_dislike_option',
         ];
 
         // @todo get variables in 1 query.

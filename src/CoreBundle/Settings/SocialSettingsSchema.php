@@ -19,12 +19,16 @@ class SocialSettingsSchema extends AbstractSettingsSchema
                 [
                     'allow_social_tool' => 'true',
                     'allow_students_to_create_groups_in_social' => 'false',
+                    'social_enable_messages_feedback' => 'false',
+                    'disable_dislike_option' => 'false',
                 ]
             )
         ;
         $allowedTypes = [
             'allow_social_tool' => ['string'],
             'allow_students_to_create_groups_in_social' => ['string'],
+            'social_enable_messages_feedback' => ['string'],
+            'disable_dislike_option' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -34,6 +38,8 @@ class SocialSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('allow_social_tool', YesNoType::class)
             ->add('allow_students_to_create_groups_in_social', YesNoType::class)
+            ->add('social_enable_messages_feedback', YesNoType::class)
+            ->add('disable_dislike_option', YesNoType::class)
         ;
     }
 }

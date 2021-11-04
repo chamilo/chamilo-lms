@@ -347,6 +347,19 @@ class Version20170627122900 extends AbstractMigrationChamilo
                 "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'ticket_project_user_roles', 'Ticket', '$selectedValue', 'ticket_project_user_roles', 1, 1)"
             );
         }
+
+        // social configurations
+        if ($this->getConfigurationValue('social_enable_messages_feedback')) {
+            $this->addSql(
+                "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'social_enable_messages_feedback', 'Social', 'true', 'social_enable_messages_feedback', 1, 1)"
+            );
+        }
+
+        if ($this->getConfigurationValue('disable_dislike_option')) {
+            $this->addSql(
+                "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'disable_dislike_option', 'Social', 'true', 'disable_dislike_option', 1, 1)"
+            );
+        }
     }
 
     public function down(Schema $schema): void

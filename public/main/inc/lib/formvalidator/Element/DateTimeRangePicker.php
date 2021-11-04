@@ -180,10 +180,13 @@ class DateTimeRangePicker extends DateRangePicker
                     altFormat: '".get_lang('F d, Y')."',
                     enableTime: false,
                     dateFormat: 'Y-m-d',
-                    wrap: true
+                    wrap: true,
+                    locale: {
+                      firstDayOfWeek: 1
+                    }
                 };
                 $('#{$id}').flatpickr(config);
-                                
+
 
                 $('#".$id."_time_range .time').timepicker({
                     'showDuration': true,

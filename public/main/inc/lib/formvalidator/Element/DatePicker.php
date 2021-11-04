@@ -91,7 +91,10 @@ class DatePicker extends HTML_QuickForm_text
                     altFormat: '".get_lang('F d, Y')."',
                     enableTime: false,
                     dateFormat: 'Y-m-d',
-                    wrap: true
+                    wrap: true,
+                    locale: {
+                      firstDayOfWeek: 1
+                    }
                 };
                 $('#{$id}').flatpickr(config);
              });

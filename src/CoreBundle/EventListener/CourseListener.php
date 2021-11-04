@@ -190,6 +190,8 @@ class CourseListener
                     throw new NotFoundHttpException($translator->trans('Group not found'));
                 }
 
+                $group->setParent($course);
+
                 if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
                     throw new AccessDeniedException($translator->trans('You\'re not allowed in this group'));
                 }

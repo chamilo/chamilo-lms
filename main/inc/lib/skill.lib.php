@@ -2883,9 +2883,9 @@ class Skill extends Model
         $skillRelCourseRepo = $em->getRepository('ChamiloSkillBundle:SkillRelCourse');
         $skills = $em->getRepository('ChamiloCoreBundle:Skill')->findAll();
 
-        foreach ($selectedSkills as $skillId) {
+        /*foreach ($selectedSkills as $skillId) {
             $skillCountList[$skillId] = $skillRelCourseRepo->count(['skill' => $skillId]);
-        }
+        }*/
 
         $skillList = [];
         /** @var \Chamilo\CoreBundle\Entity\Skill $skill */
@@ -2900,8 +2900,9 @@ class Skill extends Model
         $elements = [];
         foreach ($skillList as $skillId => $skill) {
             $countLabel = '';
-            if (isset($skillCountList[$skillId])) {
-                $countLabel = '&nbsp;'.Display::badge($skillCountList[$skillId], 'info');
+            $count = $skillRelCourseRepo->count(['skill' => $skillId]);
+            if (!empty($count)) {
+                $countLabel = '&nbsp;'.Display::badge($count, 'info');
             }
             $element = $form->createElement(
                 'checkbox',

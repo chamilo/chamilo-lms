@@ -215,7 +215,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 $form->addElement('html', '</div>');
 
-$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
 
 if (!empty($threadData)) {
     $defaults['thread_qualify_gradebook'] = $gradeThisThread;
@@ -232,8 +232,6 @@ if (!empty($threadData)) {
     $defaults['weight_calification'] = 0;
     $defaults['thread_peer_qualify'] = 0;
 }
-
-$defaults['skills'] = array_keys($skillList);
 
 $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
 

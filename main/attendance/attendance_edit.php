@@ -82,7 +82,7 @@ if (Gradebook::is_active()) {
     );
     $form->applyFilter('attendance_weight', 'html_filter');
     $form->addElement('html', '</div>');
-    $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_ATTENDANCE, $attendance_id);
+    Skill::addSkillsToForm($form, ITEM_TYPE_ATTENDANCE, $attendance_id);
     $form->addElement('html', '</div>');
 }
 $form->addButtonUpdate(get_lang('Save'));
@@ -92,7 +92,6 @@ $default['title'] = Security::remove_XSS($title);
 $default['description'] = Security::remove_XSS($description, STUDENT);
 $default['attendance_qualify_title'] = $attendance_qualify_title;
 $default['attendance_weight'] = $attendance_weight;
-$default['skills'] = array_keys($skillList);
 
 $linkInfo = GradebookUtils::isResourceInCourseGradebook(
     api_get_course_id(),

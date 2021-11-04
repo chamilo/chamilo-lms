@@ -285,7 +285,7 @@ if ($form->hasElement('extra_authors')) {
     $author->setOptions($options);
 }
 
-$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
+Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 
 // Submit button
 $form->addButtonSave(get_lang('SaveLPSettings'));
@@ -309,7 +309,6 @@ $defaults['expired_on'] = (!empty($expired_on))
     ? api_get_local_time($expired_on)
     : date('Y-m-d 12:00:00', time() + 84600);
 $defaults['subscribe_users'] = $learnPath->getSubscribeUsers();
-$defaults['skills'] = array_keys($skillList);
 $form->setDefaults($defaults);
 
 Display::display_header(get_lang('CourseSettings'), 'Path');

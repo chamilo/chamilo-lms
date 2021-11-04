@@ -2607,24 +2607,11 @@ class Skill extends Model
             );
             /** @var SkillRelItem $skillRelItem */
             foreach ($items as $skillRelItem) {
-                $skillList[$skillRelItem->getSkill()->getId()] = $skillRelItem->getSkill()->getName();
+                $skillList[] = $skillRelItem->getSkill()->getId();
             }
         }
 
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-
-        $url = api_get_path(WEB_AJAX_PATH).
-            'skill.ajax.php?a=search_skills_in_course&course_id='.$courseId.'&session_id='.$sessionId;
-        $form->addSelectAjax(
-            'skills',
-            get_lang('Skills'),
-            $skillList,
-            [
-                'url' => $url,
-                'multiple' => 'multiple',
-            ]
-        );
+        self::skillsToCheckbox($form, $skillList);
 
         return $skillList;
     }
@@ -2836,13 +2823,15 @@ class Skill extends Model
 
             // Add new one
             if (!empty($skills)) {
+                $skills = array_keys($skills);
+                $skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
+
                 foreach ($skills as $skillId) {
                     /** @var SkillEntity $skill */
-                    $skill = $em->getRepository('ChamiloCoreBundle:Skill')->find($skillId);
-                    if ($skill) {
+                    $skill = $skillRepo->find($skillId);
+                    if (null !== $skill) {
                         if (!$skill->hasItem($typeId, $itemId)) {
-                            $skillRelItem = new SkillRelItem();
-                            $skillRelItem
+                            $skillRelItem = (new SkillRelItem())
                                 ->setItemType($typeId)
                                 ->setItemId($itemId)
                                 ->setCourseId($courseId)
@@ -2874,23 +2863,34 @@ class Skill extends Model
 
         $em = Database::getManager();
         $skillRelCourseRepo = $em->getRepository('ChamiloSkillBundle:SkillRelCourse');
-
         $items = $skillRelCourseRepo->findBy(['course' => $courseId, 'session' => $sessionId]);
+
+        $selectedSkills = [];
+        /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skillRelCourse */
+        foreach ($items as $skillRelCourse) {
+            $skillId = $skillRelCourse->getSkill()->getId();
+            $selectedSkills[] = $skillId;
+        }
+
+        self::skillsToCheckbox($form, $selectedSkills);
+
+        return $selectedSkills;
+    }
+
+    public static function skillsToCheckbox(FormValidator $form, $selectedSkills = [])
+    {
+        $em = Database::getManager();
+        $skillRelCourseRepo = $em->getRepository('ChamiloSkillBundle:SkillRelCourse');
         $skills = $em->getRepository('ChamiloCoreBundle:Skill')->findAll();
+
+        foreach ($selectedSkills as $skillId) {
+            $skillCountList[$skillId] = $skillRelCourseRepo->count(['skill' => $skillId]);
+        }
 
         $skillList = [];
         /** @var \Chamilo\CoreBundle\Entity\Skill $skill */
         foreach ($skills as $skill) {
             $skillList[$skill->getId()] = $skill->getName();
-        }
-
-        $selectedSkills = [];
-        $skillCountList = [];
-        /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skillRelCourse */
-        foreach ($items as $skillRelCourse) {
-            $skillId = $skillRelCourse->getSkill()->getId();
-            $selectedSkills[] = $skillId;
-            $skillCountList[$skillId] = $skillRelCourseRepo->count(['skill' => $skillId]);
         }
 
         if (!empty($skillList)) {
@@ -2917,8 +2917,6 @@ class Skill extends Model
             $elements[] = $element;
         }
         $form->addGroup($elements, '', get_lang('Skills'));
-
-        return $selectedSkills;
     }
 
     /**

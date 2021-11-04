@@ -2492,7 +2492,7 @@ class Exercise
                 }
             }
 
-            $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iid);
+            Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iid);
 
             $extraField = new ExtraField('exercise');
             $extraField->addElements(
@@ -2634,7 +2634,6 @@ class Exercise
                 } else {
                     $defaults['enabletimercontroltotalminutes'] = 0;
                 }
-                $defaults['skills'] = array_keys($skillList);
                 $defaults['notifications'] = $this->getNotifications();
             } else {
                 $defaults['exerciseType'] = 2;

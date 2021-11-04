@@ -230,19 +230,24 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         $this->load($opts);
 
         // add multiple selection attribute by default if missing
-        $this->updateAttributes(array('multiple' => 'multiple'));
+        $class = '
+                block appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none 
+                focus:bg-white focus:border-gray-500 w-full mt-1 overflow-auto w-full border 
+                bg-white rounded px-3 py-2 outline-none text-gray-700';
+
+        $this->updateAttributes(['multiple' => 'multiple']);
 
         if (is_null($this->getAttribute('size'))) {
             // default size is ten item on each select box (left and right)
-            $this->updateAttributes(array('size' => 10));
+            $this->updateAttributes(['size' => 10]);
         }
         if (is_null($this->getAttribute('class'))) {
             // default width of each select box
-            $this->updateAttributes(array('class' => 'form-control w-full'));
+            $this->updateAttributes(['class' => $class]);
         }
 
         $this->removeAttribute('class');
-        $this->setAttribute('class','form-control w-full');
+        $this->setAttribute('class', $class);
 
         // set default add button attributes
         $this->setButtonAttributes('add');

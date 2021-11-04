@@ -15,6 +15,7 @@ use DateTime;
 use GoogleMapsPlugin;
 use Oh\GoogleMapFormTypeBundle\Form\Type\GoogleMapType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -198,11 +199,18 @@ class ExtraFieldType extends AbstractType
 
                     break;
                 case \ExtraField::FIELD_TYPE_CHECKBOX:
+                    $defaultOptions['data'] = (int) $value === 1;
+
+                    $builder->add($variable, CheckboxType::class, $defaultOptions);
+                    break;
                 case \ExtraField::FIELD_TYPE_RADIO:
                 case \ExtraField::FIELD_TYPE_SELECT:
                 case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     if (empty($value)) {
                         $defaultOptions['data'] = null;
+                        if ($extraField->getFieldType() === \ExtraField::FIELD_TYPE_CHECKBOX) {
+                            $defaultOptions['data'] = [];
+                        }
                     }
                     $options = $extraField->getOptions();
                     $choices = [];
@@ -211,10 +219,6 @@ class ExtraFieldType extends AbstractType
                     }
                     $defaultOptions['choices'] = $choices;
 
-                    if (\ExtraField::FIELD_TYPE_CHECKBOX === $extraField->getFieldType()) {
-                        $defaultOptions['expanded'] = true;
-                        $defaultOptions['multiple'] = true;
-                    }
                     if (\ExtraField::FIELD_TYPE_SELECT === $extraField->getFieldType()) {
                         $defaultOptions['expanded'] = false;
                         $defaultOptions['multiple'] = false;
@@ -266,15 +270,14 @@ class ExtraFieldType extends AbstractType
                             $options['choices'] = $newValue;
                             $event->getForm()->add($extraField->getVariable(), ChoiceType::class, $options);
 
-                            foreach ($newValue as $tag) {
-                                $this->tagRepository->addTagToUser($extraField, $item, $tag);
+                            if (!empty($newValue)) {
+                                foreach ($newValue as $tag) {
+                                    $this->tagRepository->addTagToUser($extraField, $item, $tag);
+                                }
                             }
 
                             break;
                         default:
-                            if (empty($newValue)) {
-                                break;
-                            }
                             $this->extraFieldValuesRepository->updateItemData($extraField, $item, $newValue);
 
                             break;

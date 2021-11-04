@@ -330,30 +330,8 @@ if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')
 }
 $allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
 if ($allowSkillRelItem) {
-    $skillList = [];
-    $em = Database::getManager();
-    $items = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
-        ['course' => $courseId, 'session' => null]
-    );
-
-    $form->addHidden('course_id', $courseId);
-    $form->addHidden('session_id', 0);
-
-    /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skillRelCourse */
-    foreach ($items as $skillRelCourse) {
-        $skillList[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getName();
-    }
-    $form->addSelectAjax(
-        'skills',
-        get_lang('Skills'),
-        $skillList,
-        [
-            'url' => api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=search_skills',
-            'multiple' => 'multiple',
-        ]
-    );
-
-    $courseInfo['skills'] = array_keys($skillList);
+    $selectedSkills = Skill::setSkillsToCourse($form, $courseId);
+    $courseInfo['skills'] = array_keys($selectedSkills);
 }
 
 $htmlHeadXtra[] = '
@@ -368,7 +346,7 @@ $form->addButtonUpdate(get_lang('ModifyCourseInfo'));
 // Set some default values
 $courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
 $courseInfo['real_code'] = $courseInfo['code'];
-$courseInfo['add_teachers_to_sessions_courses'] = isset($courseInfo['add_teachers_to_sessions_courses']) ? $courseInfo['add_teachers_to_sessions_courses'] : 0;
+$courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_sessions_courses'] ?? 0;
 $form->setDefaults($courseInfo);
 
 // Validate form

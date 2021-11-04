@@ -34,32 +34,12 @@ if (!empty($sessionId)) {
 
 $form->addHeader(get_lang('AddSkills').$sessionName);
 
-$skillList = [];
-$em = Database::getManager();
-$items = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
-    ['course' => $courseId, 'session' => $sessionId]
-);
-/** @var SkillRelCourse $skillRelCourse */
-foreach ($items as $skillRelCourse) {
-    $skillList[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getName();
-}
-
-$form->addHidden('course_id', $courseId);
-$form->addHidden('session_id', $sessionId);
-
-$form->addSelectAjax(
-    'skills',
-    get_lang('Skills'),
-    $skillList,
-    [
-        'url' => api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=search_skills',
-        'multiple' => 'multiple',
-    ]
-);
+$selectedSkills = Skill::setSkillsToCourse($form, $courseId, $sessionId);
+$courseInfo['skills'] = array_keys($selectedSkills);
 
 $form->addButtonSave(get_lang('Save'));
 
-$form->setDefaults(['skills' => array_keys($skillList)]);
+$form->setDefaults(['skills' => array_keys($selectedSkills)]);
 
 if ($form->validate()) {
     $result = Skill::saveSkillsToCourseFromForm($form);

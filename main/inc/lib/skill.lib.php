@@ -2860,6 +2860,54 @@ class Skill extends Model
         }
     }
 
+    public static function setSkillsToCourse(FormValidator $form, $courseId, $sessionId = 0)
+    {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+
+        $form->addHidden('course_id', $courseId);
+        $form->addHidden('session_id', $sessionId);
+
+        if (empty($sessionId)) {
+            $sessionId = null;
+        }
+
+        $em = Database::getManager();
+        $items = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
+            ['course' => $courseId, 'session' => $sessionId]
+        );
+        $skills = $em->getRepository('ChamiloCoreBundle:Skill')->findAll();
+
+        $skillList = [];
+        /** @var \Chamilo\CoreBundle\Entity\Skill $skill */
+        foreach ($skills as $skill) {
+            $skillList[$skill->getId()] = $skill->getName();
+        }
+
+        $selectedSkills = [];
+        /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skillRelCourse */
+        foreach ($items as $skillRelCourse) {
+            $selectedSkills[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getName();
+        }
+
+        if (!empty($skillList)) {
+            asort($skillList);
+        }
+
+        $elements = [];
+        foreach ($skillList as $skillId => $skill) {
+            $elements[] = $form->createElement(
+                'checkbox',
+                "skills[$skillId]",
+                null,
+                $skill
+            );
+        }
+        $form->addGroup($elements, '', get_lang('Skills'));
+
+        return $selectedSkills;
+    }
+
     /**
      * Relate skill with an item (exercise, gradebook, lp, etc).
      *
@@ -2870,6 +2918,10 @@ class Skill extends Model
         $skills = (array) $form->getSubmitValue('skills');
         $courseId = (int) $form->getSubmitValue('course_id');
         $sessionId = (int) $form->getSubmitValue('session_id');
+
+        if (!empty($skills)) {
+            $skills = array_keys($skills);
+        }
 
         return self::saveSkillsToCourse($skills, $courseId, $sessionId);
     }

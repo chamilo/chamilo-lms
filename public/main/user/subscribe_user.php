@@ -415,7 +415,6 @@ function get_number_of_users()
         }
     }
     $sql .= " AND u.status <> ".ANONYMOUS." ";
-    var_dump($sql);
     $res = Database::query($sql);
     $count_user = 0;
 

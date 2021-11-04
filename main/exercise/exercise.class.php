@@ -1686,8 +1686,9 @@ class Exercise
             if ($showHideConfiguration) {
                 $paramsExtra['hide_question_number'] = $this->hideQuestionNumber;
             }
-
-            $paramsExtra['hide_attempts_table'] = $this->getHideAttemptsTableOnStartPage();
+            if (true === api_get_configuration_value('quiz_hide_attempts_table_on_start_page')) {
+                $paramsExtra['hide_attempts_table'] = $this->getHideAttemptsTableOnStartPage();
+            }
 
             $params = array_merge($params, $paramsExtra);
 

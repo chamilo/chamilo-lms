@@ -29,15 +29,17 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface 
             return;
         }
 
-        // Blocks a ROLE_USER to access CourseRelUsers from another User.
-        if ('collection_query' === $operationName) {
-            if (null === $user = $this->security->getUser()) {
-                throw new AccessDeniedException('Access Denied.');
-            }
+        if (CourseRelUser::class === $resourceClass) {
+            // Blocks a ROLE_USER to access CourseRelUsers from another User.
+            if ('collection_query' === $operationName) {
+                if (null === $user = $this->security->getUser()) {
+                    throw new AccessDeniedException('Access Denied.');
+                }
 
-            $rootAlias = $queryBuilder->getRootAliases()[0];
-            $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
-            $queryBuilder->setParameter('current_user', $user);
+                $rootAlias = $queryBuilder->getRootAliases()[0];
+                $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
+                $queryBuilder->setParameter('current_user', $user);
+            }
         }
 
         $this->addWhere($queryBuilder, $resourceClass);

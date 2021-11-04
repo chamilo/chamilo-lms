@@ -311,6 +311,39 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertCount(1, $users);
     }
 
+    public function testFindByRoleList(): void
+    {
+        $userRepo = self::getContainer()->get(UserRepository::class);
+
+        // Create user.
+        $user = $this->createUser('session_manager', 'session_manager');
+        $user->addRole('ROLE_SESSION_MANAGER');
+        $userRepo->update($user);
+
+        $user = $this->createUser('question_manager', 'question_manager');
+        $user->addRole('ROLE_QUESTION_MANAGER');
+        $userRepo->update($user);
+
+        $urlId = $this->getAccessUrl()->getId();
+
+        $users = $userRepo->findByRoleList(['ROLE_SESSION_MANAGER'], '', $urlId);
+        $this->assertNotNull($users);
+        $this->assertCount(1, $users);
+
+        $users = $userRepo->findByRoleList(['ROLE_SESSION_MANAGER'], 'session_manager', $urlId);
+        $this->assertNotNull($users);
+        $this->assertCount(1, $users);
+
+        $users = $userRepo->findByRoleList(['ROLE_QUESTION_MANAGER'], 'question_manager', $urlId);
+        $this->assertCount(1, $users);
+
+        $users = $userRepo->findByRoleList(['ROLE_QUESTION_MANAGER'], 'abc', $urlId);
+        $this->assertCount(0, $users);
+
+        $users = $userRepo->findByRoleList(['ROLE_QUESTION_MANAGER', 'ROLE_SESSION_MANAGER'], '', $urlId);
+        $this->assertCount(2, $users);
+    }
+
     public function testAddFriendToUser(): void
     {
         $em = $this->getEntityManager();

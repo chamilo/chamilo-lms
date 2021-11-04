@@ -166,14 +166,16 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $resourceNode;
     }
 
-    public function addRoleListQueryBuilder(array $roleList, QueryBuilder $qb = null): QueryBuilder
+    public function addRoleListQueryBuilder(array $roles, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-        if (!empty($roleList)) {
-            $qb
-                ->andWhere('u.roles IN (:roles)')
-                ->setParameter('roles', $roleList, Types::ARRAY)
-            ;
+        if (!empty($roles)) {
+            $orX = $qb->expr()->orX();
+            foreach ($roles as $role) {
+                $orX->add($qb->expr()->like('u.roles', ':'.$role));
+                $qb->setParameter($role, '%'.$role.'%');
+            }
+            $qb->andWhere($orX);
         }
 
         return $qb;
@@ -207,6 +209,18 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $this->addActiveAndNotAnonUserQueryBuilder($qb);
         $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
         $this->addRoleQueryBuilder($role, $qb);
+        $this->addSearchByKeywordQueryBuilder($keyword, $qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByRoleList(array $roleList, string $keyword, int $accessUrlId = 0)
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $this->addActiveAndNotAnonUserQueryBuilder($qb);
+        $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
+        $this->addRoleListQueryBuilder($roleList, $qb);
         $this->addSearchByKeywordQueryBuilder($keyword, $qb);
 
         return $qb->getQuery()->getResult();

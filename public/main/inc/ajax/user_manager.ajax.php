@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
@@ -249,7 +250,6 @@ switch ($action) {
         $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
 
         $role = User::getRoleFromStatus($status);
-
         $users = Container::getUserRepository()->findByRole($role, $_REQUEST['q'], api_get_current_access_url_id());
 
         if (empty($users)) {
@@ -272,34 +272,15 @@ switch ($action) {
     case 'teacher_to_basis_course':
         api_block_anonymous_users(false);
 
-        $sortByFirstName = api_sort_by_first_name();
         $urlId = api_get_current_access_url_id();
 
-        $qb = UserManager::getRepository()->createQueryBuilder('u');
-        $qb->where(
-            $qb->expr()->orX(
-                $qb->expr()->like('u.username', ':q'),
-                $qb->expr()->like('u.firstname', ':q'),
-                $qb->expr()->like('u.lastname', ':q')
-            )
+        $roleList = ['ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
+        
+        $users = Container::getUserRepository()->findByRoleList(
+            $roleList,
+            $_REQUEST['q'],
+            $urlId
         );
-
-        if (api_is_multiple_url_enabled()) {
-            $qb
-                ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'uru', Join::WITH, 'u.id = uru.user')
-                ->andWhere('uru.url = '.$urlId);
-        }
-
-        $qb
-            ->andWhere('u.status != '.DRH.' AND u.status != '.ANONYMOUS)
-            ->orderBy(
-                $sortByFirstName
-                    ? 'u.firstname, u.firstname'
-                    : 'u.firstname, u.lastname'
-            )
-            ->setParameter('q', '%'.$_REQUEST['q'].'%');
-
-        $users = $qb->getQuery()->getResult();
 
         if (!$users) {
             echo json_encode([]);

@@ -77,30 +77,30 @@ class CourseRelUser
     protected ?int $id = null;
 
     /**
-     * @Groups({"course:read", "user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     #[MaxDepth(1)]
+    #[Groups(['course:read', 'user:read'])]
     protected User $user;
 
     /**
-     * @Groups({"user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
+    #[Groups(['user:read'])]
     protected Course $course;
 
     /**
-     * @Groups({"course:read", "user:read"})
      * @ORM\Column(name="relation_type", type="integer")
      */
+    #[Groups(['course:read', 'user:read'])]
     protected int $relationType;
 
     /**
-     * @Groups({"user:read"})
      * @ORM\Column(name="status", type="integer")
      */
+    #[Groups(['user:read'])]
     protected int $status;
 
     /**
@@ -124,7 +124,6 @@ class CourseRelUser
     protected ?int $legalAgreement = null;
 
     /**
-     * @Groups({"course:read", "user:read"})
      * @Assert\Range(
      *     min = 0,
      *     max = 100,
@@ -132,6 +131,7 @@ class CourseRelUser
      * )
      * @ORM\Column(name="progress", type="integer")
      */
+    #[Groups(['course:read', 'user:read'])]
     protected int $progress;
 
     public function __construct()

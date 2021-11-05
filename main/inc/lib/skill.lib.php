@@ -2983,15 +2983,37 @@ class Skill extends Model
             $em = Database::getManager();
             $skills = (array) $form->getSubmitValue('skills');
 
+            $skillRelItemRelUserRepo = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser');
+
             // Delete old ones
             $items = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
+
             if (!empty($items)) {
                 /** @var SkillRelItem $skillRelItem */
                 foreach ($items as $skillRelItem) {
-                    if (!in_array($skillRelItem->getSkill()->getId(), $skills)) {
-                        $em->remove($skillRelItem);
+                    $skill = $skillRelItem->getSkill();
+                    $skillId = $skill->getId();
+                    $skillRelItemId = $skillRelItem->getId();
+                    if (!in_array($skillId, $skills)) {
+                        // Check if SkillRelItemRelUser is empty
+                        /** @var SkillRelItem[] $skillRelItemList */
+                        $skillRelItemRelUserList = $skillRelItemRelUserRepo->findBy(['skillRelItem' => $skillRelItemId]);
+                        if (empty($skillRelItemRelUserList)) {
+                            $em->remove($skillRelItem);
+                        } else {
+                            /** @var \Chamilo\SkillBundle\Entity\SkillRelItemRelUser $skillRelItemRelUser */
+                            foreach ($skillRelItemRelUserList as $skillRelItemRelUser) {
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('CannotDeleteSkill').
+                                        get_lang('User').': '.$skillRelItemRelUser->getUser()->getUsername().
+                                        get_lang('Skill').': '.$skillRelItemRelUser->getSkillRelItem()->getSkill()->getName()
+                                    )
+                                );
+                            }
+                        }
                     }
                 }
                 $em->flush();

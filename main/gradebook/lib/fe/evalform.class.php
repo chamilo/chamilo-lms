@@ -496,9 +496,8 @@ class EvalForm extends FormValidator
         }
         $weight = $weight_mask = $this->evaluation_object->get_weight();
 
-        $this->addHidden('hid_id');
-
         $evaluationId = $this->evaluation_object->get_id();
+        $this->addHidden('hid_id', $evaluationId);
 
         $this->setDefaults([
             'hid_id' => $evaluationId,

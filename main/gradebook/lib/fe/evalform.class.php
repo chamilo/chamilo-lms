@@ -509,8 +509,13 @@ class EvalForm extends FormValidator
             'max' => $this->evaluation_object->get_max(),
             'visible' => $this->evaluation_object->is_visible(),
         ]);
-        $id_current = isset($this->id) ? $this->id : null;
-        $this->addElement('hidden', 'hid_id', $id_current);
+        $id = $this->id ?? null;
+
+        if (!empty($id)) {
+            Skill::addSkillsToForm($this, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_GRADEBOOK_EVALUATION, $id);
+        }
+
+        $this->addElement('hidden', 'hid_id', $id);
         $this->build_basic_form(1);
         $this->addButtonSave(get_lang('ModifyEvaluation'), 'submit');
     }

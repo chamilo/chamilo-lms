@@ -133,13 +133,13 @@ switch ($action) {
         }
         break;
     case 'session_info':
-        $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
+        $sessionId = $_GET['session_id'] ?? '';
         $sessionInfo = api_get_session_info($sessionId);
 
         $extraFieldValues = new ExtraFieldValue('session');
         $extraField = new ExtraField('session');
         $values = $extraFieldValues->getAllValuesByItem($sessionId);
-        $load = isset($_GET['load_empty_extra_fields']) ? true : false;
+        $load = isset($_GET['load_empty_extra_fields']);
 
         if ($load) {
             $allExtraFields = $extraField->get_all();

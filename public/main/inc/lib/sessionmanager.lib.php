@@ -78,16 +78,9 @@ class SessionManager
             'coach_access_start_date' => $session->getCoachAccessStartDate()?->format('Y-m-d H:i:s'),
             'coach_access_end_date' => $session->getCoachAccessEndDate()?->format('Y-m-d H:i:s'),
             'send_subscription_notification' => $session->getSendSubscriptionNotification(),
+            'status' => $session->getStatus(),
+            'status_label' => self::getStatusLabel($session->getStatus()),
         ];
-
-        if (api_get_configuration_value('allow_session_status')) {
-            $table = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sql = "SELECT status FROM $table WHERE id = $id";
-            $resultQuery = Database::query($sql);
-            $row = Database::fetch_array($resultQuery);
-            $result['status'] = $row['status'];
-            $result['status_label'] = self::getStatusLabel($row['status']);
-        }
 
         // Converted to local values
         $variables = [

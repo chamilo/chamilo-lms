@@ -149,24 +149,27 @@ $(function() {
             url: '".$url."',
             data: 'a=session_info&load_empty_extra_fields=true&session_id=' + sessionId,
             success: function(data) {
-                if (data.session_category_id > 0) {
+                /*if (data.session_category_id > 0) {
                     $('#session_category').val(data.session_category_id);
                     $('#session_category').selectpicker('render');
                 } else {
                     $('#session_category').val(0);
                     $('#session_category').selectpicker('render');
-                }
-
-                CKEDITOR.instances.description.setData(data.description);
+                }*/
+                                
+                $('#session_category').val(data.session_category_id);
+                $('#session_category').trigger('change');
+                
+                setContentFromEditor('description', data.description);
 
                 if (data.duration > 0) {
                     $('#access').val(0);
-                    $('#access').selectpicker('render');
+                    $('#access').trigger('change');
                     accessSwitcher(0);
                     $('#duration').val(parseInt(data.duration));
                 } else {
                     $('#access').val(1);
-                    $('#access').selectpicker('render');
+                    $('#access').trigger('change');
                     accessSwitcher(1);
 
                     var variables = [
@@ -180,11 +183,13 @@ $(function() {
                     variables.forEach(function(variable) {
                         var variableName = variable + '_to_local_time';
                         if (data[variableName]) {
-                            var parsedDate = $.datepicker.parseDateTime(
+                            console.log(data[variableName]);
+                            let parsedDate = data[variableName];
+                            /*var parsedDate = $.datepicker.parseDateTime(
                                 'yy-mm-dd',
                                 'hh:mm:ss',
                                 data[variableName]
-                            );
+                            );*/
                             if (parsedDate) {
                                 $('#'+variable).datetimepicker('setDate', parsedDate);
                             }
@@ -238,8 +243,8 @@ $(function() {
                         case '21': // alphanum
                             $('input[name='+fieldName+']').val(item.value);
                             break;
-                        case '2': // textarea
-                            CKEDITOR.instances[fieldName].setData(item.value);
+                        case '2': // textarea                            
+                            setContentFromEditor(fieldName, item.value);
                             break;
                         case '3': // radio
                             var radio = fieldName+'['+fieldName+']';

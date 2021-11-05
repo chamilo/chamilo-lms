@@ -68,6 +68,8 @@ if ($form->validate()) {
     ];
     Event::registerLog($logInfo);
 
+    Skill::saveSkills($form, ITEM_TYPE_GRADEBOOK_EVALUATION, $eval->get_id());
+
     if (null == $eval->get_course_code()) {
         if (1 == $values['adduser']) {
             //Disabling code when course code is null see issue #2705

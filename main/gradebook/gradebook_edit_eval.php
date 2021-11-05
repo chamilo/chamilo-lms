@@ -51,7 +51,6 @@ if ($form->validate()) {
     ];
     Event::registerLog($logInfo);
 
-
     Skill::saveSkills($form, ITEM_TYPE_GRADEBOOK_EVALUATION, $values['hid_id']);
 
     header('Location: '.Category::getUrl().'editeval=&selectcat='.$eval->get_category_id());

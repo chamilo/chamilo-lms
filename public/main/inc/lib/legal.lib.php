@@ -381,6 +381,7 @@ class LegalManager
 
     /**
      * Send a message to a student with the legal terms link to validate
+     *
      * @param int $userId The user to send legal terms to
      * @param int $coachId The user who sends the legal terms
      */

@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Responses to AJAX calls.
@@ -275,7 +274,7 @@ switch ($action) {
         $urlId = api_get_current_access_url_id();
 
         $roleList = ['ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
-        
+
         $users = Container::getUserRepository()->findByRoleList(
             $roleList,
             $_REQUEST['q'],

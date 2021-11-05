@@ -2492,7 +2492,7 @@ class Exercise
                 }
             }
 
-            Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iid);
+            Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_EXERCISE, $this->iid);
 
             $extraField = new ExtraField('exercise');
             $extraField->addElements(

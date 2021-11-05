@@ -1681,7 +1681,7 @@ class Link extends Model
             }
         }
 
-        Skill::addSkillsToForm($form, ITEM_TYPE_LINK, $linkId);
+        Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_LINK, $linkId);
         $form->addHidden('lp_id', $lpId);
         $form->addButtonSave(get_lang('SaveLink'), 'submitLink');
         $form->setDefaults($defaults);

@@ -215,7 +215,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 $form->addElement('html', '</div>');
 
-Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_FORUM_THREAD, $threadId);
 
 if (!empty($threadData)) {
     $defaults['thread_qualify_gradebook'] = $gradeThisThread;

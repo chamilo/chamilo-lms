@@ -285,7 +285,7 @@ if ($form->hasElement('extra_authors')) {
     $author->setOptions($options);
 }
 
-Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
+Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_LEARNPATH, $lpId);
 
 // Submit button
 $form->addButtonSave(get_lang('SaveLPSettings'));

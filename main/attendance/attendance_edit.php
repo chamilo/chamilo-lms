@@ -82,7 +82,7 @@ if (Gradebook::is_active()) {
     );
     $form->applyFilter('attendance_weight', 'html_filter');
     $form->addElement('html', '</div>');
-    Skill::addSkillsToForm($form, ITEM_TYPE_ATTENDANCE, $attendance_id);
+    Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_ATTENDANCE, $attendance_id);
     $form->addElement('html', '</div>');
 }
 $form->addButtonUpdate(get_lang('Save'));

@@ -326,7 +326,7 @@ if ($action === 'edit' && !empty($survey_id)) {
     }
 }
 
-Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
+Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_SURVEY, $survey_id);
 
 $form->addElement('html', '</div><br />');
 

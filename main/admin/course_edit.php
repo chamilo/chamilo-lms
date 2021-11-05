@@ -353,9 +353,9 @@ if ($form->validate()) {
     $course = $form->getSubmitValues();
     $visibility = $course['visibility'];
 
-    if ($allowSkillRelItem) {
+    /*if ($allowSkillRelItem) {
         $result = Skill::saveSkillsToCourseFromForm($form);
-    }
+    }*/
 
     global $_configuration;
 

@@ -757,7 +757,7 @@ class SessionManager
 
                 // Cleaning double selects.
                 foreach ($session as $key => &$value) {
-                    if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
+                    if (isset($options_by_double) && (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second']))) {
                         $options = explode('::', $value);
                     }
                     $original_key = $key;
@@ -766,7 +766,7 @@ class SessionManager
                         $key = str_replace('_second', '', $key);
                     }
 
-                    if (isset($options_by_double[$key])) {
+                    if (isset($options_by_double) && isset($options_by_double[$key])) {
                         if (isset($options[0])) {
                             if (isset($options_by_double[$key][$options[0]])) {
                                 if (strpos($original_key, '_second') === false) {

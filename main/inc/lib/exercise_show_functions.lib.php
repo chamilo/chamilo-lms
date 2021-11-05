@@ -564,8 +564,8 @@ class ExerciseShowFunctions
             $course_id = api_get_course_int_id();
             $new_options = Question::readQuestionOption($questionId, $course_id);
             // Your choice
-            if (isset($new_options[$studentChoice])) {
-                $content .= get_lang($new_options[$studentChoice]['name']);
+            if (isset($new_options[$studentChoice - 1])) {
+                $content .= get_lang($new_options[$studentChoice - 1]['name']);
             } else {
                 $content .= '-';
             }
@@ -576,8 +576,8 @@ class ExerciseShowFunctions
         if ($exercise->showExpectedChoiceColumn()) {
             if (!$hide_expected_answer) {
                 $content .= '<td width="5%">';
-                if (isset($new_options[$answerCorrect])) {
-                    $content .= get_lang($new_options[$answerCorrect]['name']);
+                if (isset($new_options[$answerCorrect - 1])) {
+                    $content .= get_lang($new_options[$answerCorrect - 1]['name']);
                 } else {
                     $content .= '-';
                 }
@@ -605,7 +605,7 @@ class ExerciseShowFunctions
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
                 $content .= '<td width="20%">';
                 $color = 'black';
-                if (isset($new_options[$studentChoice]) || in_array(
+                if (isset($new_options[$studentChoice - 1]) || in_array(
                         $exercise->results_disabled,
                         [
                             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,

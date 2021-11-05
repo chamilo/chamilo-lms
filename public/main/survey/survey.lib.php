@@ -401,7 +401,6 @@ class SurveyManager
             /** @var CSurvey $survey */
             $survey = $repo->find($values['survey_id']);
 
-            $extraParams = [];
             $survey->setOneQuestionPerPage(isset($values['one_question_per_page']) ? $values['one_question_per_page'] : 0);
             $survey->setShuffle(isset($values['shuffle']) ? $values['shuffle'] : 0);
 

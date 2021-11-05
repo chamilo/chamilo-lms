@@ -113,8 +113,8 @@ if ($form->validate()) {
             $start = $name.'_time_range_start';
             $end = $name.'_time_range_end';
 
-            $start = $values[$start];
-            $end = $values[$end];
+            $start = $values[$start] ?? '';
+            $end = $values[$end] ?? '';
 
             $start = api_get_utc_datetime($values[$name].' '.$start, true);
             $end = api_get_utc_datetime($values[$name].' '.$end, true);
@@ -131,7 +131,7 @@ if ($form->validate()) {
 
     $questionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
     $counter = 1;
-    if (!empty($surveyData['iid'])) {
+    if (!empty($surveyData['id'])) {
         foreach ($dates as $date) {
             $params = [
                 'survey_id' => $surveyData['id'],

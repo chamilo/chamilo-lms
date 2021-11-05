@@ -35,7 +35,7 @@ if (!empty($sessionId)) {
 $form->addHeader(get_lang('AddSkills').$sessionName);
 Skill::setSkillsToCourse($form, $courseId, $sessionId);
 
-$form->addButtonSave(get_lang('Save'));
+/*$form->addButtonSave(get_lang('Save'));
 
 if ($form->validate()) {
     $result = Skill::saveSkillsToCourseFromForm($form);
@@ -44,7 +44,7 @@ if ($form->validate()) {
     }
     header('Location: '.$url);
     exit;
-}
+}*/
 $content = $form->returnForm();
 
 $interbreadcrumb[] = [

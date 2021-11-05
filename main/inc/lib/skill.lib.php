@@ -2601,6 +2601,10 @@ class Skill extends Model
             return [];
         }
 
+        if (empty($sessionId)) {
+            $sessionId = null;
+        }
+
         $em = Database::getManager();
         $skillRelCourseRepo = $em->getRepository('ChamiloSkillBundle:SkillRelCourse');
         $items = $skillRelCourseRepo->findBy(['course' => $courseId, 'session' => $sessionId]);
@@ -2608,7 +2612,6 @@ class Skill extends Model
         $skills = [];
         /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skillRelCourse */
         foreach ($items as $skillRelCourse) {
-            //$skillId = $skillRelCourse->getSkill()->getId();
             $skills[] = $skillRelCourse->getSkill();
         }
 
@@ -2838,6 +2841,10 @@ class Skill extends Model
             asort($skillList);
         }
 
+        if (empty($sessionId)) {
+            $sessionId = null;
+        }
+
         $elements = [];
         foreach ($skillList as $skillId => $skill) {
             $countLabel = '';
@@ -2920,16 +2927,11 @@ class Skill extends Model
         );
 
         if (!empty($items)) {
-            $skillRelItemRepo = $em->getRepository('ChamiloSkillBundle:SkillRelItem');
-
             /** @var SkillRelCourse $item */
             foreach ($items as $item) {
                 if (!in_array($item->getSkill()->getId(), $skills)) {
                     $em->remove($item);
                 }
-                $items = $skillRelItemRepo->findBy(
-                    ['itemId' => $itemId, 'itemType' => $typeId]
-                );
             }
             $em->flush();
         }

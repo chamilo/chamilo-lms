@@ -3009,7 +3009,9 @@ class Skill extends Model
                                     Display::return_message(
                                         get_lang('CannotDeleteSkillBlockedByUser').'<br />'.
                                         get_lang('User').': '.UserManager::formatUserFullName($skillRelItemRelUser->getUser()).'<br />'.
-                                        get_lang('Skill').': '.$skillRelItemRelUser->getSkillRelItem()->getSkill()->getName()
+                                        get_lang('Skill').': '.$skillRelItemRelUser->getSkillRelItem()->getSkill()->getName(),
+                                        'warning',
+                                        false
                                     )
                                 );
                             }

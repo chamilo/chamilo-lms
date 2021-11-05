@@ -2492,7 +2492,7 @@ class Skill extends Model
         }
         $type = 'success';
         if (empty($skillRelItemRelUser)) {
-            $type = 'danger';
+            $type = '';
         }
         $label = '';
         $skill = $skillRelItem->getSkill();

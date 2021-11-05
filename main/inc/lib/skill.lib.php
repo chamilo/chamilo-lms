@@ -2608,8 +2608,8 @@ class Skill extends Model
         $skills = [];
         /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skillRelCourse */
         foreach ($items as $skillRelCourse) {
-            $skillId = $skillRelCourse->getSkill()->getId();
-            $skills[] = $skillId;
+            //$skillId = $skillRelCourse->getSkill()->getId();
+            $skills[] = $skillRelCourse->getSkill();
         }
 
         $selectedSkills = [];
@@ -2809,14 +2809,16 @@ class Skill extends Model
         $skillRelCourseRepo = $em->getRepository('ChamiloSkillBundle:SkillRelCourse');
         $items = $skillRelCourseRepo->findBy(['course' => $courseId, 'session' => $sessionId]);
 
+        $skillsIdList = [];
         $skills = [];
         /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skillRelCourse */
         foreach ($items as $skillRelCourse) {
             $skillId = $skillRelCourse->getSkill()->getId();
-            $skills[] = $skillId;
+            $skills[] = $skillRelCourse->getSkill();
+            $skillsIdList[] = $skillId;
         }
 
-        $group = self::skillsToCheckbox($form, $skills, $courseId, $sessionId, $skills);
+        $group = self::skillsToCheckbox($form, $skills, $courseId, $sessionId, $skillsIdList);
         $group->freeze();
 
         return [];
@@ -2825,11 +2827,7 @@ class Skill extends Model
     public static function skillsToCheckbox(FormValidator $form, $skills, $courseId, $sessionId, $selectedSkills = [])
     {
         $em = Database::getManager();
-        $skillRelCourseRepo = $em->getRepository('ChamiloSkillBundle:SkillRelCourse');
         $skillRelItemRepo = $em->getRepository('ChamiloSkillBundle:SkillRelItem');
-
-        //$skills = $em->getRepository('ChamiloCoreBundle:Skill')->findAll();
-
         $skillList = [];
         /** @var \Chamilo\CoreBundle\Entity\Skill $skill */
         foreach ($skills as $skill) {

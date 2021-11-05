@@ -334,7 +334,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
             get_lang('Code'),
             ['size' => 40]
         );
-        if ('true' == api_get_setting('registration', 'officialcode')) {
+        if ('true' === api_get_setting('registration', 'officialcode')) {
             $form->addRule(
                 'official_code',
                 get_lang('Required field'),
@@ -344,22 +344,18 @@ if (false === $userAlreadyRegisteredShowTerms &&
     }
 
     // STUDENT/TEACHER
-    if ('false' != api_get_setting('allow_registration_as_teacher')) {
+    if ('false' !== api_get_setting('allow_registration_as_teacher')) {
         if (in_array('status', $allowedFields)) {
-            $form->addElement(
-                'radio',
+            $form->addRadio(
                 'status',
-                get_lang('Profile'),
-                get_lang('RegStudent'),
-                STUDENT
+                get_lang('RegistrationRoleWhatDoYouWantToDo'),
+                [
+                    STUDENT => '<p class="caption">'.get_lang('RegistrationRoleFollowCourses').'</p>',
+                    COURSEMANAGER => '<p class="caption">'.get_lang('RegistrationRoleTeachCourses').'</p>',
+                ],
+                ['class' => 'register-profile']
             );
-            $form->addElement(
-                'radio',
-                'status',
-                null,
-                get_lang('RegAdmin'),
-                COURSEMANAGER
-            );
+            $form->addRule('status', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
 
@@ -857,10 +853,10 @@ if ($form->validate()) {
             }
         }
 
-        $status = isset($values['status']) ? $values['status'] : STUDENT;
-        $phone = isset($values['phone']) ? $values['phone'] : null;
+        $status = $values['status'] ?? STUDENT;
+        $phone = $values['phone'] ?? null;
         $values['language'] = isset($values['language']) ? $values['language'] : api_get_language_isocode();
-        $values['address'] = isset($values['address']) ? $values['address'] : '';
+        $values['address'] = $values['address'] ?? '';
 
         // It gets a creator id when user is not logged
         $creatorId = 0;

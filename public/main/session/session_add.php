@@ -184,14 +184,11 @@ $(function() {
                         var variableName = variable + '_to_local_time';
                         if (data[variableName]) {
                             console.log(data[variableName]);
-                            let parsedDate = data[variableName];
-                            /*var parsedDate = $.datepicker.parseDateTime(
-                                'yy-mm-dd',
-                                'hh:mm:ss',
-                                data[variableName]
-                            );*/
+                            let parsedDate = data[variableName];                     
                             if (parsedDate) {
-                                $('#'+variable).datetimepicker('setDate', parsedDate);
+                                 var item = $('#'+variable);
+                                 flatpickr = item[0]._flatpickr;                       
+                                 flatpickr.setDate(parsedDate);
                             }
                         }
                     });

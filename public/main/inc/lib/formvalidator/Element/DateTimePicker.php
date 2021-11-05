@@ -51,7 +51,7 @@ class DateTimePicker extends HTML_QuickForm_text
         //$resetFieldX = sprintf(get_lang('Reset %s'), $label);
 
         return '
-            <div id="'.$id.'" class="flex flex-row mt-1">
+            <div id="div_'.$id.'" class="flex flex-row mt-1">
                 <input '.$this->_getAttrString($this->_attributes).'
                     class="form-control" type="text" value="'.$value.'" data-input>
                 <div class="ml-1" id="button-addon3">
@@ -93,7 +93,7 @@ class DateTimePicker extends HTML_QuickForm_text
                     enableTime: true,
                     dateFormat: 'Y-m-d H:i',
                     time_24hr: true,
-                    wrap: true,
+                    wrap: false,
                     locale: {
                       firstDayOfWeek: 1
                     }

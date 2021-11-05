@@ -3007,8 +3007,8 @@ class Skill extends Model
                             foreach ($skillRelItemRelUserList as $skillRelItemRelUser) {
                                 Display::addFlash(
                                     Display::return_message(
-                                        get_lang('CannotDeleteSkill').
-                                        get_lang('User').': '.$skillRelItemRelUser->getUser()->getUsername().
+                                        get_lang('CannotDeleteSkillBlockedByUser').'<br />'.
+                                        get_lang('User').': '.UserManager::formatUserFullName($skillRelItemRelUser->getUser()).'<br />'.
                                         get_lang('Skill').': '.$skillRelItemRelUser->getSkillRelItem()->getSkill()->getName()
                                     )
                                 );

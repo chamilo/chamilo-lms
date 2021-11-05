@@ -211,7 +211,6 @@ if ($form->validate()) {
                 Database::query($sql);
             } else {
                 $params = [
-                    'c_id' => api_get_course_int_id(),
                     'survey_id' => $surveyData['iid'],
                     'survey_question' => $formattedDate,
                     'survey_question_comment' => '',
@@ -219,14 +218,12 @@ if ($form->validate()) {
                     'display' => 'horizontal',
                     'sort' => $counter,
                     'shared_question_id' => '0',
+                    'survey_group_pri' => 0,
+                    'survey_group_sec1'  => 0,
+                    'survey_group_sec2'  => 0,
                     'max_value' => 0,
                 ];
-                $questionId = Database::insert($questionTable, $params);
-                if ($questionId) {
-                    $sql = "UPDATE $questionTable SET question_id = $questionId
-                            WHERE iid = $questionId";
-                    Database::query($sql);
-                }
+                Database::insert($questionTable, $params);
                 $counter++;
             }
         }

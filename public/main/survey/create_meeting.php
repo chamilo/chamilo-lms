@@ -134,7 +134,6 @@ if ($form->validate()) {
     if (!empty($surveyData['iid'])) {
         foreach ($dates as $date) {
             $params = [
-                'c_id' => api_get_course_int_id(),
                 'survey_id' => $surveyData['id'],
                 'survey_question' => $date['start'].'@@'.$date['end'],
                 'survey_question_comment' => '',
@@ -143,6 +142,9 @@ if ($form->validate()) {
                 'sort' => $counter,
                 'shared_question_id' => '0',
                 'max_value' => 0,
+                'survey_group_pri' => 0,
+                'survey_group_sec1'  => 0,
+                'survey_group_sec2'  => 0,
             ];
             Database::insert($questionTable, $params);
             $counter++;

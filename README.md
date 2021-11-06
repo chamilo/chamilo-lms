@@ -15,7 +15,7 @@ Chamilo is an e-learning platform, also called "LMS", published under the GNU/GP
 
 **Chamilo 2.0 is still in development. This installation procedure is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch's README.md for details.**
 
-We assume you already have: 
+We assume you already have:
 
 - composer 2.x - https://getcomposer.org/download/
 - yarn 2.x - https://yarnpkg.com/getting-started/install
@@ -86,12 +86,19 @@ composer update
 
 # Database update
 php bin/console doctrine:schema:update --force
-    
+
 # js/css update
 yarn install
 yarn run encore dev
 ~~~~
 This will update the JS (yarn) and PHP (composer) dependencies in the public/build folder.
+
+### Refresh configuration settings
+
+In case you believe some settings in Chamilo might not have been processed correctly based on an incomplete migration
+or a migration that was added after you installed your development version of Chamilo, the URL /admin/settings_sync is
+built to try and fix that automatically by updating PHP classes based on the database state.
+This issue rarely happens, though.
 
 ## Quick re-install
 
@@ -106,16 +113,16 @@ If, for some reason, you have issues with either composer or yarn, a good first 
 
 ## Development setup (Dev environment, stable environment not yet available)
 
-If you are a developer and want to contribute to Chamilo in the current development branch (not stable yet), 
-then please follow the instructions below. Please bear in mind that the development version is NOT COMPLETE at this time, 
+If you are a developer and want to contribute to Chamilo in the current development branch (not stable yet),
+then please follow the instructions below. Please bear in mind that the development version is NOT COMPLETE at this time,
 and many features are just not working yet. This is because we are working on root components that require massive changes to the structure of the code, files and database. As such, to get a working version, you might need to completely uninstall and re-install from time to time. You've been warned.
 
 First, apply the procedure described here: [Managing CSS and JavaScript in Chamilo](assets/README.md) (in particular, make sure you follow the given links to install all the necessary components on your computer).
 
 Then make sure your database supports large prefixes (see [this Stack Overflow thread](https://stackoverflow.com/questions/43379717/how-to-enable-large-index-in-mariadb-10/43403017#43403017) if you use MySQL < 5.7 or MariaDB < 10.2.2).
 
-Load the (your-domain)/main/install/index.php URL to start the installer (which is very similar to the installer in previous versions). 
-If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully. 
+Load the (your-domain)/main/install/index.php URL to start the installer (which is very similar to the installer in previous versions).
+If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully.
 Go back to the beginning of this section and try again.
 
 ### Supporting PHP 7.4 and 8.0 in parallel
@@ -174,9 +181,9 @@ systemctl reload php8.0-fpm
 * Plugins templates use asset() function instead of using "_p.web_plugin"
 * Remove main/inc/local.inc.php
 
-Libraries 
+Libraries
 
-* Integration with Symfony 5 
+* Integration with Symfony 5
 * PHPMailer replaced with Symfony Mailer
 * bower replaced by [yarn](https://yarnpkg.com)
 

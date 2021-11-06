@@ -2587,7 +2587,7 @@ class Skill extends Model
      *
      * @param int $courseId
      * @param int $sessionId
-     * @param int $typeId see ITEM_TYPE_* constants
+     * @param int $typeId    see ITEM_TYPE_* constants
      * @param int $itemId
      *
      * @throws Exception

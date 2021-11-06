@@ -378,7 +378,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         Session::write('_user', $_user);
                         Event::eventLogin($_user['user_id']);
                         $logging_in = true;
-
                     } else {
                         phpCAS::logout();
                         header(

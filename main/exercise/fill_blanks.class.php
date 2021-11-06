@@ -593,25 +593,26 @@ class FillBlanks extends Question
      *
      * @return string
      */
-    public static function replaceSpecialCharsForMenuValues($value) {
-
+    public static function replaceSpecialCharsForMenuValues($value)
+    {
         // It replaces supscript numbers
         $value = preg_replace('/<sup>([0-9]+)<\/sup>/is', "&sub$1;", $value);
 
         // It replaces subscript numbers
         $value = preg_replace_callback(
             "/<sub>([0-9]+)<\/sub>/is",
-            function($m) {
+            function ($m) {
                 $precode = '&#832';
                 $nb = $m[1];
                 $code = '';
                 if (is_numeric($nb) && strlen($nb) > 1) {
-                    for ($i = 0 ; $i < strlen($nb) ; $i++) {
+                    for ($i = 0; $i < strlen($nb); $i++) {
                         $code .= $precode.$nb[$i].';';
                     }
                 } else {
                     $code = $precode.$m[1].';';
                 }
+
                 return $code;
             },
             $value);

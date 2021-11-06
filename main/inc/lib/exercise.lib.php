@@ -744,7 +744,7 @@ class ExerciseLib
                                     }
 
                                     if ($debug_mark_answer) {
-                                        if ($id == $answerCorrect) {
+                                        if ($id + 1 == $answerCorrect) {
                                             $attributes['checked'] = 1;
                                             $attributes['selected'] = 1;
                                         }

@@ -87,7 +87,7 @@ class ChamiloSession extends System\Session
         //session ID in the cookie is only readable by the server
         ini_set('session.cookie_httponly', 1);
 
-        if (api_get_configuration_value('allow_session_samesite_none_cookie_parameter')) {
+        if (api_get_configuration_value('security_session_cookie_samesite_none')) {
             if (PHP_VERSION_ID < 70300) {
                 $sessionCookieParams = session_get_cookie_params();
                 session_set_cookie_params($sessionCookieParams['lifetime'], '/; samesite=None',

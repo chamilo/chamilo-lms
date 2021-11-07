@@ -37,8 +37,10 @@ class Rest extends WebService
     const GET_USER_COURSES = 'user_courses';
     const GET_USER_SESSIONS = 'user_sessions';
 
+    const VIEW_PROFILE = 'view_user_profile';
     const GET_PROFILE = 'user_profile';
 
+    const VIEW_COURSE_HOME = 'view_course_home';
     const GET_COURSE_INFO = 'course_info';
     const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
     const GET_COURSE_DOCUMENTS = 'course_documents';
@@ -86,8 +88,10 @@ class Rest extends WebService
     const GET_USERS = 'get_users';
     const USERNAME_EXIST = 'username_exist';
     const SAVE_USER = 'save_user';
+    const SAVE_USER_GET_APIKEY = 'save_user_get_apikey';
     const SAVE_USER_JSON = 'save_user_json';
     const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
+    const UPDATE_USER_APIKEY = 'update_user_apikey';
     const DELETE_USER = 'delete_user';
 
     const GET_COURSES = 'get_courses';
@@ -399,6 +403,8 @@ class Rest extends WebService
         $courses = CourseManager::get_courses_list_by_user_id($userId);
         $data = [];
 
+        $webCodePath = api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?';
+
         foreach ($courses as $courseInfo) {
             /** @var Course $course */
             $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
@@ -414,6 +420,14 @@ class Rest extends WebService
                 'urlPicture' => $picturePath,
                 'teachers' => $teachers,
                 'isSpecial' => !empty($courseInfo['special_course']),
+                'url' => $webCodePath.http_build_query(
+                    [
+                        'action' => self::VIEW_COURSE_HOME,
+                        'api_key' => $this->apiKey,
+                        'username' => $this->user->getUsername(),
+                        'course' => $course->getId(),
+                    ]
+                ),
             ];
         }
 
@@ -1187,6 +1201,8 @@ class Rest extends WebService
         $data = [];
         $sessionsByCategory = UserManager::get_sessions_by_category($this->user->getId(), false);
 
+        $webCodePath = api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?';
+
         foreach ($sessionsByCategory as $category) {
             $categorySessions = [];
 
@@ -1208,6 +1224,15 @@ class Rest extends WebService
                         'pictureUrl' => $courseInfo['course_image_large'],
                         'urlPicture' => $courseInfo['course_image_large'],
                         'teachers' => $teachers,
+                        'url' => $webCodePath.http_build_query(
+                            [
+                                'action' => self::VIEW_COURSE_HOME,
+                                'api_key' => $this->apiKey,
+                                'username' => $this->user->getUsername(),
+                                'course' => $courseInfo['real_id'],
+                                'session' => $sessions['session_id'],
+                            ]
+                        ),
                     ];
                 }
 
@@ -1610,6 +1635,45 @@ class Rest extends WebService
         }
 
         return [$userId];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addUserGetApikey(array $userParams): array
+    {
+        list($userId) = $this->addUser($userParams);
+
+        UserManager::add_api_key($userId, self::SERVICE_NAME);
+
+        $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return [
+            'id' => $userId,
+            'api_key' => current($apiKey),
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateUserApiKey(int $userId, string $oldApiKey): array
+    {
+        if (false === $currentApiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME)) {
+            throw new Exception(get_lang('NotAllowed'));
+        }
+
+        if (current($currentApiKeys) !== $oldApiKey) {
+            throw new Exception(get_lang('NotAllowed'));
+        }
+
+        UserManager::update_api_key($userId, self::SERVICE_NAME);
+
+        $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return [
+            'api_key' => current($apiKey),
+        ];
     }
 
     /**
@@ -2874,6 +2938,26 @@ class Rest extends WebService
             },
             $userList
         );
+    }
+
+    public function viewUserProfile(int $userId)
+    {
+        $url = api_get_path(WEB_CODE_PATH).'social/profile.php';
+
+        if ($userId) {
+            $url .= '?'.http_build_query(['u' => $userId]);
+        }
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewCourseHome()
+    {
+        $url = api_get_course_url($this->course->getCode(), $this->session ? $this->session->getId() : 0);
+
+        header("Location: $url");
+        exit;
     }
 
     public function viewDocumentInFrame(int $documentId)

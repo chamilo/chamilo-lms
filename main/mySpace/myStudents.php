@@ -270,6 +270,93 @@ switch ($action) {
             Security::clear_token();
         }
         break;
+    case 'lp_stats_to_export_pdf':
+        $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
+        $categoryTest = new CLpCategory();
+        $categoryTest->setId(0);
+        $categoryTest->setName(get_lang('WithOutCategory'));
+        $categoryTest->setPosition(0);
+        $categories = [
+            $categoryTest,
+        ];
+
+        if (!empty($categoriesTempList)) {
+            $categories = array_merge($categories, $categoriesTempList);
+        }
+
+        $userEntity = api_get_user_entity($student_id);
+        $courseTable = '';
+        /** @var CLpCategory $item */
+        foreach ($categories as $item) {
+            $categoryId = $item->getId();
+            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity, $courseInfo['real_id'], $sessionId)) {
+                continue;
+            }
+
+            $list = new LearnpathList(
+                $student_id,
+                $courseInfo,
+                $sessionId,
+                null,
+                false,
+                $categoryId,
+                false,
+                true
+            );
+            $flatList = $list->get_flat_list();
+            foreach ($flatList as $learnpath) {
+                $lpId = $learnpath['lp_old_id'];
+                $output = Tracking::getLpStatsContentToPdf(
+                    $student_id,
+                    $courseInfo,
+                    $sessionId,
+                    $lpId,
+                    $learnpath['lp_name']
+                );
+                $courseTable .= $output;
+            }
+        }
+
+        $pdfTitle = get_lang('TestResult');
+        $sessionInfo = api_get_session_info($sessionId);
+        $studentInfo = api_get_user_info($student_id);
+        $tpl = new Template('', false, false, false, true, false, false);
+        $tpl->assign('title', $pdfTitle);
+        $tpl->assign('session_title', $sessionInfo['name']);
+        $tpl->assign('session_info', $sessionInfo);
+        $tpl->assign('table_course', $courseTable);
+
+        $content = $tpl->fetch($tpl->get_template('my_space/pdf_lp_stats.tpl'));
+
+        $params = [
+            'pdf_title' => $pdfTitle,
+            'session_info' => $sessionInfo,
+            'course_info' => '',
+            'pdf_date' => '',
+            'student_info' => $studentInfo,
+            'show_grade_generated_date' => true,
+            'show_real_course_teachers' => false,
+            'show_teacher_as_myself' => false,
+            'orientation' => 'P',
+        ];
+        @$pdf = new PDF('A4', $params['orientation'], $params);
+        $pdf->setBackground($tpl->theme);
+        $mode = 'D';
+        $pdfName = $sessionInfo['name'].'_'.$studentInfo['complete_name'];
+        $pdf->set_footer();
+        $result = @$pdf->content_to_pdf(
+            $content,
+            '',
+            $pdfName,
+            null,
+            $mode,
+            false,
+            null,
+            false,
+            true,
+            false
+        );
+        break;
     default:
         break;
 }
@@ -1298,6 +1385,18 @@ if (empty($details)) {
                         'data-size' => 'sm',
                         'data-title' => get_lang('CertificateOfAchievement'),
                     ]
+                );
+                $sessionAction .= Display::url(
+                    Display::return_icon('pdf.png', get_lang('TestResult'), [], ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'lp_stats_to_export_pdf',
+                            'student' => $student_id,
+                            'id_session' => $sId,
+                            'course' => $courseInfoItem['code'],
+                        ]
+                    )
                 );
             }
             echo $sessionAction;

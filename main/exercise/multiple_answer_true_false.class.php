@@ -112,14 +112,15 @@ class MultipleAnswerTrueFalse extends Question
             $answer_number->freeze();
 
             if (is_object($answer)) {
-                $defaults['answer['.$i.']'] = $answer->answer[$i];
-                $defaults['comment['.$i.']'] = $answer->comment[$i];
-                $correct = $answer->correct[$i];
+                $defaults['answer['.$i.']'] = $answer->answer[$i] ?? '';
+                $defaults['comment['.$i.']'] = $answer->comment[$i] ?? '';
+                $correct = $answer->correct[$i] ?? 0;
                 $defaults['correct['.$i.']'] = $correct;
 
                 $j = 1;
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
+                        $id++;
                         $rdoCorrect = $form->addElement('radio', 'correct['.$i.']', null, null, $id);
 
                         if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $id == $_POST['correct'][$i]) {
@@ -298,7 +299,7 @@ class MultipleAnswerTrueFalse extends Question
             if (empty($options)) {
                 //If this is the first time that the question is created when
                 // change the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['iid'] : '';
+                // $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['iid'] : '';
             }
             $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);

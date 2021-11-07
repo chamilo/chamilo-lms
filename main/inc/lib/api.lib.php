@@ -548,6 +548,7 @@ define('ITEM_TYPE_ATTENDANCE', 8);
 define('ITEM_TYPE_SURVEY', 9);
 define('ITEM_TYPE_FORUM_THREAD', 10);
 define('ITEM_TYPE_PORTFOLIO', 11);
+define('ITEM_TYPE_GRADEBOOK_EVALUATION', 12);
 
 // one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
 define(

@@ -2492,7 +2492,7 @@ class Exercise
                 }
             }
 
-            $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iid);
+            Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_EXERCISE, $this->iid);
 
             $extraField = new ExtraField('exercise');
             $extraField->addElements(
@@ -2634,7 +2634,6 @@ class Exercise
                 } else {
                     $defaults['enabletimercontroltotalminutes'] = 0;
                 }
-                $defaults['skills'] = array_keys($skillList);
                 $defaults['notifications'] = $this->getNotifications();
             } else {
                 $defaults['exerciseType'] = 2;
@@ -3955,8 +3954,8 @@ class Exercise
                         if ($studentChoice == $answerCorrect) {
                             $questionScore += $true_score;
                         } else {
-                            if ($quiz_question_options[$studentChoice]['name'] === "Don't know" ||
-                                $quiz_question_options[$studentChoice]['name'] === "DoubtScore"
+                            if ($quiz_question_options[$studentChoice - 1]['name'] === "Don't know" ||
+                                $quiz_question_options[$studentChoice - 1]['name'] === "DoubtScore"
                             ) {
                                 $questionScore += $doubt_score;
                             } else {

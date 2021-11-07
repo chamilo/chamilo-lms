@@ -103,6 +103,7 @@ class CourseBuilder
     to be added in the course obj (only works with LPs) */
     public $specific_id_list = [];
     public $documentsAddedInText = [];
+    public $itemListToAdd = [];
 
     /**
      * Create a new CourseBuilder.
@@ -1479,6 +1480,7 @@ class CourseBuilder
                     $item['launch_data'] = $obj_item->launch_data;
                     $item['audio'] = $obj_item->audio;
                     $items[] = $item;
+                    $this->itemListToAdd[$obj_item->item_type][] = $obj_item->path;
                 }
 
                 $sql = "SELECT id FROM $table_tool
@@ -1562,6 +1564,156 @@ class CourseBuilder
                 }
                 closedir($dir);
             }
+        }
+    }
+
+    /**
+     * It builds the resources used in a LP , also it adds the documents related.
+     */
+    public function exportToCourseBuildFormat()
+    {
+        if (empty($this->itemListToAdd)) {
+            return false;
+        }
+        $itemList = $this->itemListToAdd;
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (isset($itemList['document'])) {
+            // Get parents
+            foreach ($itemList['document'] as $documentId) {
+                $documentInfo = \DocumentManager::get_document_data_by_id($documentId, $courseInfo['code'], true);
+                if (!empty($documentInfo['parents'])) {
+                    foreach ($documentInfo['parents'] as $parentInfo) {
+                        if (in_array($parentInfo['iid'], $itemList['document'])) {
+                            continue;
+                        }
+                        $itemList['document'][] = $parentInfo['iid'];
+                    }
+                }
+            }
+
+            foreach ($itemList['document'] as $documentId) {
+                $documentInfo = \DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
+                $items = \DocumentManager::get_resources_from_source_html(
+                    $documentInfo['absolute_path'],
+                    true,
+                    TOOL_DOCUMENT
+                );
+
+                if (!empty($items)) {
+                    foreach ($items as $item) {
+                        // Get information about source url
+                        $url = $item[0]; // url
+                        $scope = $item[1]; // scope (local, remote)
+                        $type = $item[2]; // type (rel, abs, url)
+
+                        $origParseUrl = parse_url($url);
+                        $realOrigPath = isset($origParseUrl['path']) ? $origParseUrl['path'] : null;
+
+                        if ($scope == 'local') {
+                            if ($type == 'abs' || $type == 'rel') {
+                                $documentFile = strstr($realOrigPath, 'document');
+                                $documentFile = (string) $documentFile;
+                                $realOrigPath = (string) $realOrigPath;
+                                if (!empty($documentFile) && false !== strpos($realOrigPath, $documentFile)) {
+                                    $documentFile = str_replace('document', '', $documentFile);
+                                    $itemDocumentId = \DocumentManager::get_document_id($courseInfo, $documentFile);
+                                    // Document found! Add it to the list
+                                    if ($itemDocumentId) {
+                                        $itemList['document'][] = $itemDocumentId;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $this->build_documents(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['document']
+            );
+        }
+
+        if (isset($itemList['quiz'])) {
+            $this->build_quizzes(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['quiz']
+            );
+        }
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        if (!empty($itemList['thread'])) {
+            $threadList = [];
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+            foreach ($itemList['thread'] as $threadId) {
+                /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                $thread = $repo->find($threadId);
+                if ($thread) {
+                    $itemList['forum'][] = $thread->getForumId();
+                    $threadList[] = $thread->getIid();
+                }
+            }
+
+            if (!empty($threadList)) {
+                $this->build_forum_topics(
+                    $sessionId,
+                    $courseId,
+                    null,
+                    $threadList
+                );
+            }
+        }
+
+        $forumCategoryList = [];
+        if (isset($itemList['forum'])) {
+            foreach ($itemList['forum'] as $forumId) {
+                $forumInfo = get_forums($forumId);
+                $forumCategoryList[] = $forumInfo['forum_category'];
+            }
+        }
+
+        if (!empty($forumCategoryList)) {
+            $this->build_forum_category(
+                $sessionId,
+                $courseId,
+                true,
+                $forumCategoryList
+            );
+        }
+
+        if (!empty($itemList['forum'])) {
+            $this->build_forums(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['forum']
+            );
+        }
+
+        if (isset($itemList['link'])) {
+            $this->build_links(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['link']
+            );
+        }
+
+        if (!empty($itemList['student_publication'])) {
+            $this->build_works(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['student_publication']
+            );
         }
     }
 
@@ -1869,6 +2021,7 @@ class CourseBuilder
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $obj = new Work($row);
+            $this->findAndSetDocumentsInText($row['description']);
             $this->course->add_resource($obj);
         }
     }

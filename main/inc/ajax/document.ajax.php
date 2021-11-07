@@ -184,10 +184,11 @@ switch ($action) {
                 'files'
             );
             if ($result) {
+                $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $result['direct_url']);
                 $data = [
                     'uploaded' => 1,
                     'fileName' => $fileUpload['name'],
-                    'url' => $result['direct_url'],
+                    'url' => $relativeUrl,
                 ];
             }
         } else {
@@ -206,10 +207,11 @@ switch ($action) {
             }
             if (move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUploadName)) {
                 $url = $webpath.$fileUploadName;
+                $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $url);
                 $data = [
                     'uploaded' => 1,
                     'fileName' => $fileUploadName,
-                    'url' => $url,
+                    'url' => $relativeUrl,
                 ];
             }
         }

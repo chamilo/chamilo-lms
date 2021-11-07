@@ -1,3 +1,7 @@
+v7.1 - 2021-10-26
+====
+Fix install issue with DB field type.
+
 v7.0 - 2021-08-12
 ====
 Added support for discount coupons.

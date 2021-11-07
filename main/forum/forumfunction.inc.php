@@ -3276,7 +3276,7 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
     }
 
     if ($action === 'newthread') {
-        Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
+        Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_FORUM_THREAD, 0);
     }
 
     if (api_is_allowed_to_edit(null, true) && $action == 'newthread') {

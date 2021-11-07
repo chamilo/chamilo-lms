@@ -5626,10 +5626,9 @@ function getFormWork($form, $defaults = [], $workId = 0)
 
     $form->addHtml('</div>');
 
-    $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workId);
+    Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_STUDENT_PUBLICATION, $workId);
 
     if (!empty($defaults)) {
-        $defaults['skills'] = array_keys($skillList);
         $form->setDefaults($defaults);
     }
 

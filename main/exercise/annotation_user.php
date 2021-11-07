@@ -50,15 +50,15 @@ if (!empty($questionAttempt['answer'])) {
                     $points[] = Geometry::decodePoint($partPoint);
                 }
                 $data['answers']['paths'][] = [
-                    'color' => $properties[1] ?? null,
+                    'color' => $properties[1] ?? '#FF0000',
                     'points' => $points,
                 ];
                 break;
             case 'T':
                 $text = [
                     'text' => array_shift($parts),
-                    'color' => $properties[1] ?? null,
-                    'fontSize' => $properties[2] ?? null,
+                    'color' => $properties[1] ?? '#FF0000',
+                    'fontSize' => $properties[2] ?? '20',
                 ];
 
                 $data['answers']['texts'][] = $text + Geometry::decodePoint($parts[0]);

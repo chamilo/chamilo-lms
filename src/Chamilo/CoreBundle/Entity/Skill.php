@@ -110,6 +110,11 @@ class Skill
      */
     protected $updatedAt;
 
+    public function __construct()
+    {
+        $this->courses = new ArrayCollection();
+    }
+
     /**
      * @return string
      */
@@ -413,6 +418,11 @@ class Skill
     {
         $skillRelItem->setSkill($this);
         $this->items[] = $skillRelItem;
+    }
+
+    public function hasCourses()
+    {
+        return null !== $this->courses;
     }
 
     /**

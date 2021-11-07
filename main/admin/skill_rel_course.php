@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\SkillBundle\Entity\SkillRelCourse;
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -33,33 +31,9 @@ if (!empty($sessionId)) {
 }
 
 $form->addHeader(get_lang('AddSkills').$sessionName);
+Skill::setSkillsToCourse($form, $courseId, $sessionId);
 
-$skillList = [];
-$em = Database::getManager();
-$items = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
-    ['course' => $courseId, 'session' => $sessionId]
-);
-/** @var SkillRelCourse $skillRelCourse */
-foreach ($items as $skillRelCourse) {
-    $skillList[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getName();
-}
-
-$form->addHidden('course_id', $courseId);
-$form->addHidden('session_id', $sessionId);
-
-$form->addSelectAjax(
-    'skills',
-    get_lang('Skills'),
-    $skillList,
-    [
-        'url' => api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=search_skills',
-        'multiple' => 'multiple',
-    ]
-);
-
-$form->addButtonSave(get_lang('Save'));
-
-$form->setDefaults(['skills' => array_keys($skillList)]);
+/*$form->addButtonSave(get_lang('Save'));
 
 if ($form->validate()) {
     $result = Skill::saveSkillsToCourseFromForm($form);
@@ -68,7 +42,7 @@ if ($form->validate()) {
     }
     header('Location: '.$url);
     exit;
-}
+}*/
 $content = $form->returnForm();
 
 $interbreadcrumb[] = [

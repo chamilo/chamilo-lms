@@ -4,6 +4,10 @@
 /**
  * Configuration file for all authentication methods.
  * Uncomment and configure only the section(s) you need.
+ * For MultiURL configuration you can override the configuration
+ * of every variable by defining the same variable in app/config/configuration.php
+ * The configuration in app/config/configuration.php will replace
+ * the configuration in this file.
  * @package chamilo.conf.auth
  */
 
@@ -22,12 +26,21 @@
     'return_url' => api_get_path(WEB_PATH).'?action=fbconnect',
 );*/
 
+$facebookConfig = api_get_configuration_value('facebook_config');
+if (!empty($facebookConfig)) {
+    $facebook_config = $facebookConfig;
+}
 
 /**
  * Shibboleth
  */
 
 // $shibb_login = ...;
+
+$shibbLogin = api_get_configuration_value('shibb_login');
+if (!empty($shibbLogin)) {
+    $shibb_login = $shibbLogin;
+}
 
 /**
  * LDAP
@@ -116,6 +129,11 @@ $extldap_user_correspondance = array(
     ) */
 );
 
+$ldapUserCorrespondance = api_get_configuration_value('extldap_user_correspondance');
+if (!empty($ldapUserCorrespondance)) {
+    $extldap_user_correspondance = $ldapUserCorrespondance;
+}
+
 /**
  * Example method to get whether the user is an admin or not. Please implement your logic inside.
  */
@@ -146,3 +164,8 @@ $cas = [
     // 'fixedServiceURL' => false, // false by default, set to either true or to the service URL string if needed
     // sites might also need proxy_settings in configuration.php
 ];
+
+$casConfig = api_get_configuration_value('cas');
+if (!empty($casConfig)) {
+    $cas = $casConfig;
+}

@@ -4982,6 +4982,49 @@ class learnpath
     }
 
     /**
+     * Update the last progress only in case.
+     */
+    public function updateLpProgress()
+    {
+        $debug = $this->debug;
+        if ($debug) {
+            error_log('In learnpath::updateLpProgress()', 0);
+        }
+        $sessionCondition = api_get_session_condition(
+            api_get_session_id(),
+            true,
+            false
+        );
+        $courseId = api_get_course_int_id();
+        $userId = $this->get_user_id();
+        $table = Database::get_course_table(TABLE_LP_VIEW);
+
+        [$progress] = $this->get_progress_bar_text('%');
+        if ($progress >= 0 && $progress <= 100) {
+            // Check database.
+            $progress = (int) $progress;
+            $sql = "UPDATE $table SET
+                            progress = $progress
+                        WHERE
+                            c_id = $courseId AND
+                            lp_id = ".$this->get_id()." AND
+                            user_id = ".$userId." ".$sessionCondition;
+            // Ignore errors as some tables might not have the progress field just yet.
+            Database::query($sql);
+            if ($debug) {
+                error_log($sql);
+            }
+            $this->progress_db = $progress;
+
+            if (100 == $progress) {
+                HookLearningPathEnd::create()
+                    ->setEventData(['lp_view_id' => $this->lp_view_id])
+                    ->hookLearningPathEnd();
+            }
+        }
+    }
+
+    /**
      * Saves the last item seen's ID only in case.
      */
     public function save_last($score = null)

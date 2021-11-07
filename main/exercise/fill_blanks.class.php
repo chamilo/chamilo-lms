@@ -543,7 +543,7 @@ class FillBlanks extends Question
 
                 $resultOptions = ['' => '--'];
                 foreach ($listMenu as $item) {
-                    $resultOptions[sha1($item)] = $item;
+                    $resultOptions[sha1($item)] = self::replaceSpecialCharsForMenuValues($item);
                 }
 
                 foreach ($resultOptions as $key => $value) {
@@ -584,6 +584,40 @@ class FillBlanks extends Question
         }
 
         return $result;
+    }
+
+    /*
+     * It searchs and replaces special chars to show in menu values
+     *
+     * @param string $value The value to parse
+     *
+     * @return string
+     */
+    public static function replaceSpecialCharsForMenuValues($value)
+    {
+        // It replaces supscript numbers
+        $value = preg_replace('/<sup>([0-9]+)<\/sup>/is', "&sub$1;", $value);
+
+        // It replaces subscript numbers
+        $value = preg_replace_callback(
+            "/<sub>([0-9]+)<\/sub>/is",
+            function ($m) {
+                $precode = '&#832';
+                $nb = $m[1];
+                $code = '';
+                if (is_numeric($nb) && strlen($nb) > 1) {
+                    for ($i = 0; $i < strlen($nb); $i++) {
+                        $code .= $precode.$nb[$i].';';
+                    }
+                } else {
+                    $code = $precode.$m[1].';';
+                }
+
+                return $code;
+            },
+            $value);
+
+        return $value;
     }
 
     /**

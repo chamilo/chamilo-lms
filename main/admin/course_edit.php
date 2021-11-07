@@ -328,6 +328,10 @@ if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')
     }
     $form->addLabel('URLs', $urlToString);
 }
+$allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
+if ($allowSkillRelItem) {
+    Skill::setSkillsToCourse($form, $courseId);
+}
 
 $htmlHeadXtra[] = '
 <script>
@@ -341,13 +345,17 @@ $form->addButtonUpdate(get_lang('ModifyCourseInfo'));
 // Set some default values
 $courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
 $courseInfo['real_code'] = $courseInfo['code'];
-$courseInfo['add_teachers_to_sessions_courses'] = isset($courseInfo['add_teachers_to_sessions_courses']) ? $courseInfo['add_teachers_to_sessions_courses'] : 0;
+$courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_sessions_courses'] ?? 0;
 $form->setDefaults($courseInfo);
 
 // Validate form
 if ($form->validate()) {
     $course = $form->getSubmitValues();
     $visibility = $course['visibility'];
+
+    /*if ($allowSkillRelItem) {
+        $result = Skill::saveSkillsToCourseFromForm($form);
+    }*/
 
     global $_configuration;
 

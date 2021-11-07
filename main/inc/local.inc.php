@@ -338,15 +338,67 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             break;
                     }
                 }
-
                 // $login is set and the user exists in the database
 
+                // Check if the account is active (not locked)
+                if ($_user['active'] == '1') {
+                    // Check if the expiration date has not been reached
+                    if ($_user['expiration_date'] > date('Y-m-d H:i:s')
+                        || empty($_user['expiration_date'])
+                    ) {
+                        global $_configuration;
+
+                        if (api_is_multiple_url_enabled()) {
+                            // Check if user is an admin
+                            $my_user_is_admin = UserManager::is_admin($_user['user_id']);
+
+                            // This user is subscribed in these sites => $my_url_list
+                            $my_url_list = api_get_access_url_from_user($_user['user_id']);
+
+                            //Check the access_url configuration setting if
+                            // the user is registered in the access_url_rel_user table
+                            //Getting the current access_url_id of the platform
+                            $current_access_url_id = api_get_current_access_url_id();
+
+                            // the user have the permissions to enter at this site
+                            if (is_array($my_url_list) &&
+                                in_array($current_access_url_id, $my_url_list)
+                            ) {
+                                Session::write('_user', $_user);
+                                Event::eventLogin($_user['user_id']);
+                                $logging_in = true;
+                            } else {
+                                phpCAS::logout();
+                                $location = api_get_path(WEB_PATH)
+                                    .'index.php?loginFailed=1&error=access_url_inactive';
+                                header('Location: '.$location);
+                                exit;
+                            }
+                        }
+                        Session::write('_user', $_user);
+                        Event::eventLogin($_user['user_id']);
+                        $logging_in = true;
+                    } else {
+                        phpCAS::logout();
+                        header(
+                            'Location: '.api_get_path(WEB_PATH)
+                            .'index.php?loginFailed=1&error=account_expired'
+                        );
+                        exit;
+                    }
+                } else {
+                    phpCAS::logout();
+                    header(
+                        'Location: '.api_get_path(WEB_PATH)
+                        .'index.php?loginFailed=1&error=account_inactive'
+                    );
+                    exit;
+                }
                 // update the user record from LDAP if so required by settings
                 if ('true' === api_get_setting("update_user_info_cas_with_ldap")) {
                     UserManager::updateUserFromLDAP($login);
                 }
 
-                Session::write('_user', $_user);
                 $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
             }
         }

@@ -744,7 +744,7 @@ class ExerciseLib
                                     }
 
                                     if ($debug_mark_answer) {
-                                        if ($id == $answerCorrect) {
+                                        if ($id + 1 == $answerCorrect) {
                                             $attributes['checked'] = 1;
                                             $attributes['selected'] = 1;
                                         }
@@ -754,7 +754,7 @@ class ExerciseLib
                                         Display::input(
                                             'radio',
                                             'choice['.$questionId.']['.$numAnswer.']',
-                                            $id,
+                                            $id + 1,
                                             $attributes
                                         ),
                                         ['style' => '']
@@ -1729,6 +1729,18 @@ HOTSPOT;
                                             <span class="fa fa-times-rectangle fa-fw" aria-hidden="true"></span>
                                         </button>
                                     </div>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default"
+                                            title="'.get_lang('Undo').'"
+                                            id="btn-undo-'.$questionId.'">
+                                            <span class="fa fa-undo fa-fw" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default"
+                                            title="'.get_lang('Redo').'"
+                                            id="btn-redo-'.$questionId.'">
+                                            <span class="fa fa-repeat fa-fw" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2168,6 +2180,108 @@ HOTSPOT;
     }
 
     /**
+     * Export the pending attempts to excel.
+     *
+     * @params $values
+     */
+    public static function exportPendingAttemptsToExcel($values)
+    {
+        $headers = [
+            get_lang('Course'),
+            get_lang('Exercise'),
+            get_lang('FirstName'),
+            get_lang('LastName'),
+            get_lang('LoginName'),
+            get_lang('Duration').' ('.get_lang('MinMinute').')',
+            get_lang('StartDate'),
+            get_lang('EndDate'),
+            get_lang('Score'),
+            get_lang('IP'),
+            get_lang('Status'),
+            get_lang('Corrector'),
+            get_lang('CorrectionDate'),
+        ];
+        $tableXls[] = $headers;
+
+        $courseId = $values['course_id'] ?? 0;
+        $exerciseId = $values['exercise_id'] ?? 0;
+        $status = $values['status'] ?? 0;
+        $whereCondition = '';
+        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
+            $filter_user = (int) $_GET['filter_by_user'];
+            if (empty($whereCondition)) {
+                $whereCondition .= " te.exe_user_id  = '$filter_user'";
+            } else {
+                $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
+            }
+        }
+
+        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
+            $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
+            if (!empty($groupIdFromToolbar)) {
+                if (empty($whereCondition)) {
+                    $whereCondition .= " te.group_id  = '$groupIdFromToolbar'";
+                } else {
+                    $whereCondition .= " AND group_id  = '$groupIdFromToolbar'";
+                }
+            }
+        }
+
+        if (!empty($whereCondition)) {
+            $whereCondition = " AND $whereCondition";
+        }
+
+        if (!empty($courseId)) {
+            $whereCondition .= " AND te.c_id = $courseId";
+        }
+
+        $result = ExerciseLib::get_exam_results_data(
+            0,
+            10000000,
+            'c_id',
+            'asc',
+            $exerciseId,
+            $whereCondition,
+            false,
+            null,
+            false,
+            false,
+            [],
+            false,
+            false,
+            false,
+            true,
+            $status
+        );
+
+        if (!empty($result)) {
+            foreach ($result as $attempt) {
+                $data = [
+                    $attempt['course'],
+                    $attempt['exercise'],
+                    $attempt['firstname'],
+                    $attempt['lastname'],
+                    $attempt['username'],
+                    $attempt['exe_duration'],
+                    $attempt['start_date'],
+                    $attempt['exe_date'],
+                    strip_tags($attempt['score']),
+                    $attempt['user_ip'],
+                    strip_tags($attempt['status']),
+                    $attempt['qualificator_fullname'],
+                    $attempt['date_of_qualification'],
+                ];
+                $tableXls[] = $data;
+            }
+        }
+
+        $fileName = get_lang('PendingAttempts').'_'.api_get_local_time();
+        Export::arrayToXls($tableXls, $fileName);
+
+        return true;
+    }
+
+    /**
      * Gets exercise results.
      *
      * @todo this function should be moved in a library  + no global calls
@@ -2287,6 +2401,21 @@ HOTSPOT;
             $sessionCondition = '';
         }
 
+        $showAttemptsInSessions = api_get_configuration_value('show_exercise_attempts_in_all_user_sessions');
+        if ($showAttemptsInSessions) {
+            $sessions = SessionManager::get_sessions_by_general_coach(api_get_user_id());
+            if (!empty($sessions)) {
+                $sessionIds = [];
+                foreach ($sessions as $session) {
+                    $sessionIds[] = $session['id'];
+                }
+                $session_id_and = " AND te.session_id IN(".implode(',', $sessionIds).")";
+                $sessionCondition = " AND ttte.session_id IN(".implode(',', $sessionIds).")";
+            } else {
+                return false;
+            }
+        }
+
         $exercise_where = '';
         $exerciseFilter = '';
         if (!empty($exercise_id)) {
@@ -2303,7 +2432,7 @@ HOTSPOT;
         // sql for chamilo-type tests for teacher / tutor view
         $sql_inner_join_tbl_track_exercices = "
         (
-            SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
+            SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised, tr.author as corrector, tr.insert_date as correction_date
             FROM $TBL_TRACK_EXERCICES ttte
             LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
             ON (ttte.exe_id = tr.exe_id)
@@ -2448,7 +2577,9 @@ HOTSPOT;
                     group_name,
                     group_id,
                     orig_lp_id,
-                    te.user_ip";
+                    te.user_ip,
+                    corrector,
+                    correction_date";
             }
 
             $sql = " $sql_select
@@ -2612,6 +2743,21 @@ HOTSPOT;
                                 $revised = 2; // mark as "unclosed"
                             }
                         }
+                    }
+
+                    if (4 == $status && 2 != $revised) {
+                        // Filter by status "unclosed"
+                        continue;
+                    }
+
+                    if (5 == $status && 3 != $revised) {
+                        // Filter by status "ongoing"
+                        continue;
+                    }
+
+                    if (3 == $status && in_array($revised, [1, 2, 3])) {
+                        // Filter by status "not validated"
+                        continue;
                     }
 
                     if ($from_gradebook && ($is_allowedToEdit)) {
@@ -2972,6 +3118,15 @@ HOTSPOT;
                             $attempt['session_access_start_date'] = $sessionStartAccessDate;
                             $attempt['status'] = $revisedLabel;
                             $attempt['score'] = $score;
+                            $attempt['qualificator_fullname'] = '';
+                            $attempt['date_of_qualification'] = '';
+                            if (!empty($attempt['corrector'])) {
+                                $qualificatorAuthor = api_get_user_info($attempt['corrector']);
+                                $attempt['qualificator_fullname'] = api_get_person_name($qualificatorAuthor['firstname'], $qualificatorAuthor['lastname']);
+                            }
+                            if (!empty($attempt['correction_date'])) {
+                                $attempt['date_of_qualification'] = api_convert_and_format_date($attempt['correction_date'], DATE_TIME_FORMAT_SHORT);
+                            }
                             $attempt['score_percentage'] = self::show_score(
                                 $my_res,
                                 $my_total,

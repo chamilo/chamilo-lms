@@ -167,11 +167,19 @@ try {
             $restResponse->setData($courses);
             break;
 
+        case Rest::VIEW_PROFILE:
+            $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+
+            $restApi->viewUserProfile($userId);
+            break;
         case Rest::GET_PROFILE:
             $userInfo = $restApi->getUserProfile();
             $restResponse->setData($userInfo);
             break;
 
+        case Rest::VIEW_COURSE_HOME:
+            $restApi->viewCourseHome();
+            break;
         case Rest::GET_COURSE_INFO:
             $courseInfo = $restApi->getCourseInfo();
             $restResponse->setData($courseInfo);
@@ -464,6 +472,10 @@ try {
             $data = $restApi->addUser($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::SAVE_USER_GET_APIKEY:
+            $data = $restApi->addUserGetApikey($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::SAVE_USER_JSON:
             if (!array_key_exists('json', $_POST)) {
                 throw new Exception(get_lang('NoData'));
@@ -478,6 +490,17 @@ try {
         case Rest::UPDATE_USER_FROM_USERNAME:
             $data = $restApi->updateUserFromUserName($_POST);
             $restResponse->setData([$data]);
+            break;
+        case Rest::UPDATE_USER_APIKEY:
+            $userId = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
+            $currentApiKey = $_POST['current_api_key'] ?? '';
+
+            if (empty($userId) || empty($currentApiKey)) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
+            $data = $restApi->updateUserApiKey($userId, $currentApiKey);
+            $restResponse->setData($data);
             break;
         case Rest::DELETE_USER:
             $result = UserManager::delete_user($_REQUEST['user_id']);

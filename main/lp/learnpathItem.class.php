@@ -4070,6 +4070,9 @@ class learnpathItem
             }
         }
 
+        // It updates the last progress only in case.
+        $_SESSION['oLP']->updateLpProgress();
+
         if ($debug) {
             error_log('End of learnpathItem::write_to_db()', 0);
         }

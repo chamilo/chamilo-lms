@@ -121,13 +121,16 @@ if ($action == 'thematic_list') {
     // Display thematic data
     if (!empty($thematic_data)) {
         // display progress
+        $displayOrder = 1;
+        $maxThematicItem = count($thematic_data);
         foreach ($thematic_data as $thematic) {
             $list['id'] = $thematic['id'];
             $list['id_course'] = $thematic['c_id'];
             $list['id_session'] = $thematic['session_id'];
             $list['title'] = Security::remove_XSS($thematic['title'], STUDENT);
             $list['content'] = Security::remove_XSS($thematic['content'], STUDENT);
-            $list['display_orden'] = $thematic['display_order'];
+            $thematic['display_order'] = $displayOrder;
+            $thematic['max_thematic_item'] = $maxThematicItem;
             $list['active'] = $thematic['active'];
             $my_thematic_id = $thematic['id'];
 
@@ -214,6 +217,7 @@ if ($action == 'thematic_list') {
             $listThematic[] = $list;
 
             $tpl->assign('data', $listThematic);
+            $displayOrder++;
         } //End for
     }
     $thematicLayout = $tpl->get_template('course_progress/progress.tpl');

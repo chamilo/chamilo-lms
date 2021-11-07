@@ -906,7 +906,7 @@ ALTER TABLE skill_rel_item_rel_user ADD CONSTRAINT FK_D1133E0DA76ED395 FOREIGN K
 ALTER TABLE skill_rel_item ADD CONSTRAINT FK_EB5B2A0D5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);
 ALTER TABLE skill_rel_item_rel_user ADD result_id INT DEFAULT NULL;
 
-CREATE TABLE skill_rel_course (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, c_id INT NOT NULL, session_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_E7CEC7FA5585C142 (skill_id), INDEX IDX_E7CEC7FA91D79BD3 (c_id), INDEX IDX_E7CEC7FA613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE skill_rel_course (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, c_id INT NOT NULL, session_id INT, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_E7CEC7FA5585C142 (skill_id), INDEX IDX_E7CEC7FA91D79BD3 (c_id), INDEX IDX_E7CEC7FA613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
@@ -1899,6 +1899,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Shows exercise session attempts in the base course.
 // $_configuration['show_exercise_session_attempts_in_base_course'] = false;
 
+// Shows exercise attempts in sessions where user is general coach
+// $_configuration['show_exercise_attempts_in_all_user_sessions'] = true;
+
 // Allow coach users to always edit announcements inside active/past sessions.
 // $_configuration['allow_coach_to_edit_announcements'] = false;
 
@@ -2001,7 +2004,7 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 //$_configuration['enable_uploadimage_editor'] = false;
 
 // Ckeditor settings.
-//$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true]];
+//$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true, 'image_responsive' => true]];
 
 // Overwrites the app/config/auth.conf.php settings
 //$_configuration['extldap_config'] = ['host' => '', 'port' => ''];

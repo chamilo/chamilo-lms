@@ -171,7 +171,6 @@
         });
         this.model.on('destroy', function () {
             self.el.remove();
-            self.model = null;
         });
     };
 
@@ -240,7 +239,6 @@
         });
         this.model.on('destroy', function () {
             self.el.remove();
-            self.model = null;
         });
 
         var elChoice = (function () {
@@ -264,18 +262,18 @@
             input.type = 'text';
             input.className = 'form-control';
             input.disabled = self.model instanceof SvgPathModel;
-            input.value = self.model instanceof SvgTextModel ? self.model.get('text') : '——————————';
 
             return input;
         })();
         elText.addEventListener('change', function () {
+            commandsHistory.add(new TextElementCommand(self.model, this.value));
+
             self.model.set('text', this.value);
         })
 
         var txtColor = (function () {
             var input = document.createElement('input');
             input.type = 'color';
-            input.value = self.model.get('color');
             input.style.border = '0 none';
             input.style.padding = '0';
             input.style.margin = '0';
@@ -287,6 +285,8 @@
             return input;
         })();
         txtColor.addEventListener('change', function () {
+            commandsHistory.add(new ColorElementCommand(self.model, this.value));
+
             self.model.set('color', this.value);
         })
 
@@ -302,7 +302,6 @@
         var txtSize = (function () {
             var input = document.createElement('input');
             input.type = 'number';
-            input.value = self.model.get('fontSize');
             input.step = '1';
             input.min = '15';
             input.max = '30';
@@ -318,6 +317,8 @@
             return input;
         })();
         txtSize.addEventListener('change', function () {
+            commandsHistory.add(new SizeElementCommand(self.model, this.value));
+
             self.model.set('fontSize', this.value);
         })
 
@@ -330,28 +331,28 @@
         })();
         spanAddonSize.appendChild(txtSize);
 
-        var btnRemove = (function () {
-            var button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'btn btn-default';
-            button.innerHTML = '<span class="fa fa-trash text-danger" aria-hidden="true"></span>';
-
-            return button;
-        })();
-        btnRemove.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            self.model.destroy();
-        });
-
-        var spanGroupBtn = (function () {
-            var span = document.createElement('span');
-            span.className = 'input-group-btn';
-
-            return span;
-        })();
-        spanGroupBtn.appendChild(btnRemove);
+        // var btnRemove = (function () {
+        //     var button = document.createElement('button');
+        //     button.type = 'button';
+        //     button.className = 'btn btn-default';
+        //     button.innerHTML = '<span class="fa fa-trash text-danger" aria-hidden="true"></span>';
+        //
+        //     return button;
+        // })();
+        // btnRemove.addEventListener('click', function (e) {
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //
+        //     self.model.destroy();
+        // });
+        //
+        // var spanGroupBtn = (function () {
+        //     var span = document.createElement('span');
+        //     span.className = 'input-group-btn';
+        //
+        //     return span;
+        // })();
+        // spanGroupBtn.appendChild(btnRemove);
 
         this.el = (function () {
             var div = document.createElement('div');
@@ -365,11 +366,14 @@
         this.el.appendChild(elChoice);
         this.el.appendChild(spanAddonColor);
         this.el.appendChild(spanAddonSize);
-        this.el.appendChild(spanGroupBtn);
+        // this.el.appendChild(spanGroupBtn);
 
         this.render = function () {
             elChoice.value = this.model.encode();
             elHotspot.value = this.model.encode();
+            elText.value = self.model instanceof SvgTextModel ? self.model.get('text') : '——————————';
+            txtColor.value = this.model.get('color');
+            txtSize.value = this.model.get('fontSize');
 
             return this;
         }
@@ -475,10 +479,14 @@
 
         var $rdbOptions = null;
         var $btnReset = null;
+        var $btnUndo = null;
+        var $btnRedo = null;
 
         this.render = function () {
             $rdbOptions = $('[name="' + this.questionId + '-options"]');
             $btnReset = $('#btn-reset-' + this.questionId);
+            $btnUndo = $('#btn-undo-' + this.questionId);
+            $btnRedo = $('#btn-redo-' + this.questionId);
 
             setEvents();
 
@@ -503,7 +511,11 @@
                     var point = getPointOnImage(self.el, e.clientX, e.clientY);
                     elementModel = new SvgTextModel({x: point.x, y: point.y, text: ''});
                     elementModel.questionId = self.questionId;
+
+                    commandsHistory.add(new AddElementCommand(self.elementsCollection, elementModel));
+
                     self.elementsCollection.add(elementModel);
+
                     elementModel = null;
                     isMoving = false;
                 })
@@ -537,6 +549,8 @@
                         return;
                     }
 
+                    commandsHistory.add(new AddElementCommand(self.elementsCollection, elementModel));
+
                     elementModel = null;
                     isMoving = false;
                 });
@@ -544,10 +558,182 @@
             $btnReset.on('click', function (e) {
                 e.preventDefault();
 
+                commandsHistory.add(new ResetCommand(self.elementsCollection));
+
                 self.elementsCollection.reset();
+            });
+
+            $btnUndo.on('click', function () {
+                commandsHistory.undo();
+            });
+            $btnRedo.on('click', function () {
+                commandsHistory.redo();
             });
         }
     };
+
+    /**
+     * @constructor
+     * @abstract
+     */
+    function Command() {}
+    /**
+     * @abstract
+     */
+    Command.prototype.before = function () {
+        throw new Error('Implement');
+    }
+    /**
+     * @abstract
+     */
+    Command.prototype.after = function () {
+        throw new Error('Implement');
+    }
+
+    /**
+     * @param {ElementsCollection} collection
+     * @param {SvgElementModel} model
+     * @constructor
+     */
+    function AddElementCommand(collection, model) {
+        Command.call(this);
+
+        this.collection = collection;
+        this.model = model;
+    }
+    AddElementCommand.prototype = Object.create(Command.prototype);
+    AddElementCommand.prototype.after = function () {
+        this.collection.add(this.model);
+    };
+    AddElementCommand.prototype.before = function () {
+        this.model.destroy();
+    };
+
+    /**
+     * @param {SvgElementModel} model
+     * @param {string} attribute
+     * @param {*} newValue
+     * @constructor
+     * @abstract
+     * @extends Command
+     */
+    function ElementCommand(model, attribute, newValue) {
+        Command.call(this);
+
+        this.model = model;
+        this.attribute = attribute;
+        this.oldValue = this.model.get(this.attribute);
+        this.newValue = newValue;
+    }
+    ElementCommand.prototype = Object.create(Command.prototype);
+    ElementCommand.prototype.after = function () {
+        this.model.set(this.attribute, this.newValue);
+    };
+    ElementCommand.prototype.before = function () {
+        this.model.set(this.attribute, this.oldValue);
+    };
+
+    /**
+     * @param {SvgElementModel} model
+     * @param {*} newValue
+     * @constructor
+     * @extends ElementCommand
+     */
+    function TextElementCommand(model, newValue) {
+        ElementCommand.call(this, model, 'text', newValue);
+    }
+    TextElementCommand.prototype = Object.create(ElementCommand.prototype);
+
+    /**
+     * @param {SvgElementModel} model
+     * @param {*} newValue
+     * @constructor
+     * @extends ElementCommand
+     */
+    function ColorElementCommand(model, newValue) {
+        ElementCommand.call(this, model, 'color', newValue);
+    }
+    ColorElementCommand.prototype = Object.create(ElementCommand.prototype);
+
+    /**
+     * @param {SvgElementModel} model
+     * @param {*} newValue
+     * @constructor
+     * @extends ElementCommand
+     */
+    function SizeElementCommand(model, newValue) {
+        ElementCommand.call(this, model, 'fontSize', newValue);
+    }
+    SizeElementCommand.prototype = Object.create(ElementCommand.prototype);
+
+    /**
+     *
+     * @param {ElementsCollection} collection
+     * @constructor
+     * @extends Command
+     */
+    function ResetCommand(collection) {
+        Command.call(this);
+
+        this.collection = collection;
+        this.oldModels = collection.models;
+    }
+    ResetCommand.prototype = Object.create(Command.prototype);
+    ResetCommand.prototype.after = function () {
+        this.collection.reset();
+    };
+    ResetCommand.prototype.before = function () {
+        var self = this;
+
+        this.oldModels.forEach(function (model) {
+            self.collection.add(model);
+        });
+    };
+
+    function CommandHistory() {
+        var index = -1;
+        /**
+         * @type {Command[]}
+         */
+        var commands = [];
+
+        /**
+         * @param {Command} command
+         */
+        this.add = function (command) {
+            if (index > -1) {
+                commands = commands.slice(0, index + 1);
+            } else {
+                commands = [];
+            }
+
+            commands.push(command);
+            ++index;
+        }
+        this.undo = function () {
+            (commands, index);
+            if (-1 === index) {
+                return;
+            }
+
+            var command = commands[index];
+            command.before();
+
+            --index;
+        };
+        this.redo = function () {
+            if (index + 1 === commands.length) {
+                return;
+            }
+
+            ++index;
+
+            var command = commands[index];
+            command.after();
+        };
+    };
+
+    var commandsHistory = new CommandHistory();
 
     window.AnnotationQuestion = function (userSettings) {
         $(function () {

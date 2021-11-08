@@ -2164,71 +2164,105 @@ class CourseRestorer
 
             // Moving quiz_question_options
             if ($question->quiz_type == MULTIPLE_ANSWER_TRUE_FALSE) {
-                $question_option_list = Question::readQuestionOption($id, $course_id);
-
-                // Question copied from the current platform
-                if ($question_option_list) {
-                    $old_option_ids = [];
-                    foreach ($question_option_list as $item) {
-                        if (isset($item['iid'])) {
-                            $old_id = $item['iid'];
-                            unset($item['iid']);
-                            unset($item['id']);
-                        } else {
-                            $old_id = $item['id'];
-                            unset($item['id']);
-                        }
-                        $item['question_id'] = $new_id;
-                        $item['c_id'] = $this->destination_course_id;
-                        $question_option_id = Database::insert($table_options, $item);
-                        if ($question_option_id && $idColumn) {
-                            $old_option_ids[$old_id] = $question_option_id;
-                            $sql = "UPDATE $table_options SET id = iid WHERE iid = $question_option_id";
-                            Database::query($sql);
-                        }
-                    }
-                    /*if ($old_option_ids) {
-                        $new_answers = Database::select(
-                            'iid, correct',
-                            $table_ans,
-                            [
-                                'WHERE' => [
-                                    'question_id = ? AND c_id = ? ' => [
-                                        $new_id,
-                                        $this->destination_course_id,
-                                    ],
-                                ],
-                            ]
+                if (count($question->question_options) < 3) {
+                    $options = [1 => 'True', 2 => 'False', 3 => 'DoubtScore'];
+                    $correct = [];
+                    for ($i = 1; $i <= 3; $i++) {
+                        $lastId = Question::saveQuestionOption(
+                            $new_id,
+                            $options[$i],
+                            $this->destination_course_id,
+                            $i
                         );
+                        $correct[$i] = $lastId;
+                    }
 
-                        foreach ($new_answers as $answer_item) {
-                            $params = [];
-                            $params['correct'] = $old_option_ids[$answer_item['correct']];
-                            Database::update(
-                                $table_ans,
-                                $params,
-                                [
-                                    'iid = ? AND c_id = ? AND question_id = ? ' => [
-                                        $answer_item['iid'],
-                                        $this->destination_course_id,
-                                        $new_id,
-                                    ],
+                    $correctAnswerValues = Database::select(
+                        'DISTINCT(correct)',
+                        $table_ans,
+                        [
+                            'WHERE' => [
+                                'question_id = ? AND c_id = ? ' => [
+                                    $new_id,
+                                    $this->destination_course_id,
                                 ],
-                                false
-                            );
-                        }
-                    }*/
+                            ],
+                            'ORDER' => 'correct ASC',
+                        ]
+                    );
+                    $i = 1;
+                    foreach ($correctAnswerValues as $correctAnswer) {
+                        $params = [];
+                        $params['correct'] = $correct[$i];
+                        Database::update(
+                            $table_ans,
+                            $params,
+                            [
+                                'question_id = ? AND c_id = ? AND correct = ? ' => [
+                                    $new_id,
+                                    $this->destination_course_id,
+                                    $correctAnswer['correct'],
+                                ],
+                            ],
+                            false
+                        );
+                        $i++;
+                    }
+
                 } else {
-                    if (count($question->question_options) < 3) {
-                        $options = [1 => 'True', 2 => 'False', 3 => 'DoubtScore'];
-                        for ($i = 1; $i <= 3; $i++) {
-                            $lastId = Question::saveQuestionOption(
-                                $new_id,
-                                $options[$i],
-                                $this->destination_course_id,
-                                $i
+                    $question_option_list = Question::readQuestionOption($id, $course_id);
+
+                    // Question copied from the current platform
+                    if ($question_option_list) {
+                        $old_option_ids = [];
+                        foreach ($question_option_list as $item) {
+                            if (isset($item['iid'])) {
+                                $old_id = $item['iid'];
+                                unset($item['iid']);
+                                unset($item['id']);
+                            } else {
+                                $old_id = $item['id'];
+                                unset($item['id']);
+                            }
+                            $item['question_id'] = $new_id;
+                            $item['c_id'] = $this->destination_course_id;
+                            $question_option_id = Database::insert($table_options, $item);
+                            if ($question_option_id && $idColumn) {
+                                $old_option_ids[$old_id] = $question_option_id;
+                                $sql = "UPDATE $table_options SET id = iid WHERE iid = $question_option_id";
+                                Database::query($sql);
+                            }
+                        }
+                        if ($old_option_ids) {
+                            $new_answers = Database::select(
+                                'iid, correct',
+                                $table_ans,
+                                [
+                                    'WHERE' => [
+                                        'question_id = ? AND c_id = ? ' => [
+                                            $new_id,
+                                            $this->destination_course_id,
+                                        ],
+                                    ],
+                                ]
                             );
-                            $correct[$i] = $lastId;
+
+                            foreach ($new_answers as $answer_item) {
+                                $params = [];
+                                $params['correct'] = $old_option_ids[$answer_item['correct']];
+                                Database::update(
+                                    $table_ans,
+                                    $params,
+                                    [
+                                        'iid = ? AND c_id = ? AND question_id = ? ' => [
+                                            $answer_item['iid'],
+                                            $this->destination_course_id,
+                                            $new_id,
+                                        ],
+                                    ],
+                                    false
+                                );
+                            }
                         }
                     } else {
                         $new_options = [];
@@ -2247,7 +2281,7 @@ class CourseRestorer
                                     Database::query($sql);
                                 }
                             }
-                            /*
+
                             foreach ($correctAnswers as $answer_id => $correct_answer) {
                                 $params = [];
                                 $params['correct'] = isset($new_options[$correct_answer]) ? $new_options[$correct_answer] : '';
@@ -2264,7 +2298,6 @@ class CourseRestorer
                                     false
                                 );
                             }
-                            */
                         }
                     }
                 }

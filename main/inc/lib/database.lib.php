@@ -620,7 +620,9 @@ class Database
         $array = [];
         if ($type_result === 'all') {
             while ($row = self::fetch_array($result, $option)) {
-                if (isset($row['id'])) {
+                if (isset($row['iid'])) {
+                    $array[$row['iid']] = $row;
+                } elseif (isset($row['id'])) {
                     $array[$row['id']] = $row;
                 } else {
                     $array[] = $row;

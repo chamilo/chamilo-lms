@@ -754,7 +754,7 @@ class ExerciseLib
                                         Display::input(
                                             'radio',
                                             'choice['.$questionId.']['.$numAnswer.']',
-                                            $id + 1,
+                                            $id,
                                             $attributes
                                         ),
                                         ['style' => '']

@@ -2187,7 +2187,7 @@ class CourseRestorer
                             Database::query($sql);
                         }
                     }
-                    if ($old_option_ids) {
+                    /*if ($old_option_ids) {
                         $new_answers = Database::select(
                             'iid, correct',
                             $table_ans,
@@ -2217,7 +2217,7 @@ class CourseRestorer
                                 false
                             );
                         }
-                    }
+                    }*/
                 } else {
                     if (count($question->question_options) < 3) {
                         $options = [1 => 'True', 2 => 'False', 3 => 'DoubtScore'];
@@ -2247,7 +2247,7 @@ class CourseRestorer
                                     Database::query($sql);
                                 }
                             }
-
+                            /*
                             foreach ($correctAnswers as $answer_id => $correct_answer) {
                                 $params = [];
                                 $params['correct'] = isset($new_options[$correct_answer]) ? $new_options[$correct_answer] : '';
@@ -2264,6 +2264,7 @@ class CourseRestorer
                                     false
                                 );
                             }
+                            */
                         }
                     }
                 }

@@ -2440,6 +2440,8 @@ HOTSPOT;
                 $courseCondition
                 $exerciseFilter
                 $sessionCondition
+            ORDER BY tr.insert_date DESC
+            LIMIT 1
         )";
 
         if ($is_allowedToEdit) {

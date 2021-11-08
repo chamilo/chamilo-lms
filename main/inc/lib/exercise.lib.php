@@ -744,7 +744,7 @@ class ExerciseLib
                                     }
 
                                     if ($debug_mark_answer) {
-                                        if ($id + 1 == $answerCorrect) {
+                                        if ($id == $answerCorrect) {
                                             $attributes['checked'] = 1;
                                             $attributes['selected'] = 1;
                                         }
@@ -754,7 +754,7 @@ class ExerciseLib
                                         Display::input(
                                             'radio',
                                             'choice['.$questionId.']['.$numAnswer.']',
-                                            $id + 1,
+                                            $id,
                                             $attributes
                                         ),
                                         ['style' => '']

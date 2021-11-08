@@ -545,7 +545,8 @@ class FillBlanks extends Question
                 foreach ($listMenu as $item) {
                     $resultOptions[sha1($item)] = self::replaceSpecialCharsForMenuValues($item);
                 }
-
+                // It is checked special chars used in menu
+                $correctItem = self::replaceSpecialCharsForMenuValues($correctItem);
                 foreach ($resultOptions as $key => $value) {
                     if ($correctItem == $value) {
                         $selected = $key;

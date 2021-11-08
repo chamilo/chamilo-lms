@@ -6791,4 +6791,21 @@ EOT;
 
         return $scorePassed;
     }
+
+    public static function logPingForCheckingConnection()
+    {
+        $action = $_REQUEST['a'] ?? '';
+
+        if ('ping' !== $action) {
+            return;
+        }
+
+        if (!empty(api_get_user_id())) {
+            return;
+        }
+
+        $exeId = $_REQUEST['exe_id'] ?? 0;
+
+        error_log("Exercise ping received: exe_id = $exeId. _user not found in session.");
+    }
 }

@@ -2432,7 +2432,7 @@ HOTSPOT;
         // sql for chamilo-type tests for teacher / tutor view
         $sql_inner_join_tbl_track_exercices = "
         (
-            SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised, tr.author as corrector, tr.insert_date as correction_date
+            SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised, tr.author as corrector, MAX(tr.insert_date) as correction_date
             FROM $TBL_TRACK_EXERCICES ttte
             LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
             ON (ttte.exe_id = tr.exe_id)
@@ -2440,6 +2440,7 @@ HOTSPOT;
                 $courseCondition
                 $exerciseFilter
                 $sessionCondition
+            GROUP BY ttte.exe_id
         )";
 
         if ($is_allowedToEdit) {

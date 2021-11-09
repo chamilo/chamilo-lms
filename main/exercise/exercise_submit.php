@@ -1011,6 +1011,18 @@ if ($allowTimePerQuestion && $objExercise->type == ONE_PER_PAGE) {
     }
 }
 
+$quizKeepAlivePingInterval = api_get_configuration_value('quiz_keep_alive_ping_interval');
+
+if (false !== $quizKeepAlivePingInterval) {
+    $quizKeepAlivePingInterval *= 1000;
+
+    $htmlHeadXtra[] = "<script>$(function () {
+        window.setInterval(function () {
+            $.post(_p.web_ajax + 'exercise.ajax.php', {a: 'ping', exe_id: '{$objExercise->iid}'});
+        }, $quizKeepAlivePingInterval);
+    })</script>";
+}
+
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     //so we are not in learnpath tool
     SessionManager::addFlashSessionReadOnly();

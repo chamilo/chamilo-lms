@@ -3954,8 +3954,8 @@ class Exercise
                         if ($studentChoice == $answerCorrect) {
                             $questionScore += $true_score;
                         } else {
-                            if ($quiz_question_options[$studentChoice - 1]['name'] === "Don't know" ||
-                                $quiz_question_options[$studentChoice - 1]['name'] === "DoubtScore"
+                            if ($quiz_question_options[$studentChoice]['name'] === "Don't know" ||
+                                $quiz_question_options[$studentChoice]['name'] === "DoubtScore"
                             ) {
                                 $questionScore += $doubt_score;
                             } else {

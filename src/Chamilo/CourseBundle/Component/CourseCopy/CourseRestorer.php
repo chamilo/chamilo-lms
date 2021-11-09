@@ -2208,7 +2208,6 @@ class CourseRestorer
                         );
                         $i++;
                     }
-
                 } else {
                     $question_option_list = Question::readQuestionOption($id, $course_id);
 

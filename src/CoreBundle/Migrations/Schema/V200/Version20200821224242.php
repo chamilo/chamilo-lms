@@ -70,7 +70,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)');
 
         if (!$table->hasForeignKey('FK_B6BD307FFE54D947')) {
-            $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE');
+            $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FFE54D947 FOREIGN KEY (group_id) REFERENCES usergroup (id) ON DELETE CASCADE;');
         }
 
         if (!$table->hasForeignKey('FK_B6BD307F727ACA70')) {

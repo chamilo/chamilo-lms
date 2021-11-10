@@ -282,12 +282,14 @@ class MessageManager
                 }
                 $messageId = $editMessageId;
             } else {
+                $group = Container::getUsergroupRepository()->find($group_id);
+
                 $message = (new Message())
                     ->setSender($userSender)
                     ->addReceiver($userRecipient)
                     ->setTitle($subject)
                     ->setContent($content)
-                    ->setGroup(api_get_group_entity($group_id))
+                    ->setGroup($group)
                     ->setParent($parent)
                 ;
                 $em->persist($message);

@@ -12,7 +12,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -202,10 +201,10 @@ class Message
     protected ?MessageRelUser $firstReceiver;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected ?CGroup $group = null;
+    protected ?Usergroup $group = null;
 
     /**
      * @var Collection|Message[]
@@ -518,20 +517,12 @@ class Message
         return $this;
     }
 
-    /**
-     * @return MessageFeedback[]|Collection
-     */
-    public function getLikes()
-    {
-        return $this->likes;
-    }
-
-    public function getGroup(): ?CGroup
+    public function getGroup(): ?Usergroup
     {
         return $this->group;
     }
 
-    public function setGroup(?CGroup $group): self
+    public function setGroup(?Usergroup $group): self
     {
 //        $this->msgType = self::MESSAGE_TYPE_GROUP;
         $this->group = $group;

@@ -29,6 +29,7 @@ $sortByFirstName = api_sort_by_first_name();
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 $origin = api_get_origin();
+$lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
@@ -682,10 +683,12 @@ if ($nbStudents > 0) {
         false
     );
     $headers['training_time'] = get_lang('TrainingTime');
+
+    $courseProgressHeadTitle = ($lpShowMaxProgress ? get_lang('ScormAndLPMaxProgress'): get_lang('ScormAndLPProgressTotalAverage'));
     $table->set_header(
         $headerCounter++,
         get_lang('CourseProgress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), [], ICON_SIZE_TINY),
+        Display::return_icon('info3.gif', $courseProgressHeadTitle, [], ICON_SIZE_TINY),
         false
     );
     $headers['course_progress'] = get_lang('CourseProgress');

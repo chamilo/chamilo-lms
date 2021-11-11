@@ -8745,4 +8745,5 @@ $UploadAnswer = "Uploader la réponse";
 $TokenExpiredActionAlreadyRealized = "Token expiré, action déjà réalisée";
 $Corrector = "Correcteur";
 $CorrectionDate = "Date de correction";
+$HideAttemptsTableOnStartPage = "Masquer le tableau des tentatives sur la page de démarrage";
 ?>

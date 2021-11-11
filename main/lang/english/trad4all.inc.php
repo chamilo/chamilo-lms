@@ -8813,4 +8813,5 @@ $UploadAnswer = "Upload answer";
 $TokenExpiredActionAlreadyRealized = "Token expired, action already realized";
 $Corrector = "Corrector";
 $CorrectionDate = "Correction date";
+$HideAttemptsTableOnStartPage = "Hide attempts table on start page";
 ?>

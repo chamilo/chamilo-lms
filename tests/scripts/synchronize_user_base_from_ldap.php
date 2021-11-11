@@ -50,11 +50,7 @@ ini_set('memory_limit', -1);
 // Retreive information from $extldap_user_correspondance and extra fields
 // into $tableFields, $extraFields, $allFields and $ldapAttributes
 
-$tableFields = [];
-$extraFields = [];
-$ldapAttributes = [];
 $generalTableFieldMap = $extldap_user_correspondance;
-$extraFieldMap = [];
 $multipleUrlLDAPConfig = false;
 $allLdapUsers = [];
 const EXTRA_ARRAY_KEY = 'extra';
@@ -90,6 +86,10 @@ if ($debug) {
     echo "accessUrls = " . print_r($accessUrls,1);
 }
 foreach ($accessUrls as $accessUrl) {
+    $tableFields = [];
+    $extraFields = [];
+    $ldapAttributes = [];
+    $extraFieldMap = [];   
     $accessUrlId = $accessUrl['id'];
     if (array_key_exists($accessUrlId, $generalTableFieldMap) && is_array($generalTableFieldMap[$accessUrlId])) {
         $tableFieldMap = $generalTableFieldMap[$accessUrlId];

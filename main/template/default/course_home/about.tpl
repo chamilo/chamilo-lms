@@ -1,14 +1,16 @@
 <div id="about-course">
     <div id="course-info-top">
         <h2 class="session-title">{{ course.title }}</h2>
-        <div class="course-short">
-            <ul>
-                <li class="author">{{ "Professors"|get_lang }}</li>
-                {%  for teacher in course.teachers %}
-                    <li>{{ teacher.complete_name }} | </li>
-                {% endfor %}
-            </ul>
-        </div>
+        {% if not 'hide_teachers_name_from_course_about_info'|api_get_configuration_value %}
+            <div class="course-short">
+                <ul>
+                    <li class="author">{{ "Professors"|get_lang }}</li>
+                    {%  for teacher in course.teachers %}
+                        <li>{{ teacher.complete_name }} | </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </div>
 
     {% set course_video = '' %}
@@ -176,7 +178,7 @@
                     </div>
                 </div>
                 {% endif %}
-                {% if course.teachers %}
+                {% if course.teachers and not 'hide_teachers_name_from_course_about_info'|api_get_configuration_value %}
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="panel-teachers">

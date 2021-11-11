@@ -684,7 +684,7 @@ if ($nbStudents > 0) {
     );
     $headers['training_time'] = get_lang('TrainingTime');
 
-    $courseProgressHeadTitle = ($lpShowMaxProgress ? get_lang('ScormAndLPMaxProgress'): get_lang('ScormAndLPProgressTotalAverage'));
+    $courseProgressHeadTitle = ($lpShowMaxProgress ? get_lang('ScormAndLPMaxProgress') : get_lang('ScormAndLPProgressTotalAverage'));
     $table->set_header(
         $headerCounter++,
         get_lang('CourseProgress').'&nbsp;'.

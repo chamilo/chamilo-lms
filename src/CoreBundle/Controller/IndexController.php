@@ -25,7 +25,7 @@ class IndexController extends BaseController
      * @Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager")
      * @Route("/account/home", name="account", options={"expose"=true}, name="chamilo_core_account_home")
      *
-     * @Route("/socialnetwork", name="socialnetwork", options={"expose"=true}, name="chamilo_core_socialnetwork")
+     * @Route("/social", name="social", options={"expose"=true}, name="chamilo_core_socialnetwork")
      */
     #[Route('/sessions', name: 'sessions')]
     #[Route('/sessions/{extra}', name: 'sessions_options')]

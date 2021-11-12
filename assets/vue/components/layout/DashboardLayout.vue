@@ -287,7 +287,7 @@ export default {
       //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
       //{ icon: 'compass', url: '/catalog', text: 'Explore' },
       // { icon: 'star_border', url: '/news', text: 'News' },
-      {icon: 'mdi-network', url: '/socialnetwork', text: t('Social network')},
+      {icon: 'mdi-network', url: '/social', text: t('Social network')},
     ];
 
     linksAdmin.value = [

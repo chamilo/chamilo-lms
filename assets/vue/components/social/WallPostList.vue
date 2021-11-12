@@ -1,5 +1,5 @@
 <template>
-  <SocialNetworkPost
+  <WallPost
     v-for="message in messageList"
     :key="message.id"
     :message="message"
@@ -10,14 +10,14 @@
 
 <script>
 import {MESSAGE_TYPE_WALL} from "../message/constants";
-import SocialNetworkPost from "./Post";
+import WallPost from "./WallPost";
 import {useStore} from "vuex";
 import {inject, onMounted, ref, watch} from "vue";
 import Loading from "../Loading";
 
 export default {
-  name: "SocialNetworkPostList",
-  components: {Loading, SocialNetworkPost},
+  name: "WallPostList",
+  components: {Loading, WallPost},
   setup() {
     const user = inject('social-user');
     const store = useStore();

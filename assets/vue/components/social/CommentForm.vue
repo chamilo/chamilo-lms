@@ -21,7 +21,7 @@ import {useStore} from "vuex";
 import {MESSAGE_TYPE_WALL} from "../message/constants";
 
 export default {
-  name: "SocialNetworkPostForm",
+  name: "WallCommentForm",
   props: {
     post: {
       type: Object,

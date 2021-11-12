@@ -46,7 +46,7 @@ import {useStore} from "vuex";
 import {ref} from "vue";
 
 export default {
-  name: "SocialNetworkPostComment",
+  name: "WallComment",
   props: {
     comment: {
       type: Object,

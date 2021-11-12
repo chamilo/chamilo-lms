@@ -45,7 +45,7 @@ import {required} from "@vuelidate/validators";
 import {useI18n} from "vue-i18n";
 
 export default {
-  name: "SocialNetworkForm",
+  name: "WallPostForm",
   setup() {
     const user = inject('social-user');
 

@@ -9,7 +9,7 @@ import userRelUserRoutes from './userreluser';
 import calendarEventRoutes from './ccalendarevent';
 import toolIntroRoutes from './ctoolintro';
 import pageRoutes from './page';
-import socialNetworkRoutes from './socialnetwork';
+import socialNetworkRoutes from './social';
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';

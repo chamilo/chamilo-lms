@@ -15,17 +15,17 @@
         <q-item-label
           v-if="!message.firstReceiver || (message.firstReceiver && message.sender['@id'] === message.firstReceiver.receiver['@id'])"
         >
-          <router-link :to="{ name: 'SocialNetworkWall', query: { id: message.sender['@id']} }">
+          <router-link :to="{ name: 'SocialkWall', query: { id: message.sender['@id']} }">
             {{ message.sender.username }}
           </router-link>
         </q-item-label>
 
         <q-item-label v-else>
-          <router-link :to="{ name: 'SocialNetworkWall', query: { id: message.sender['@id']} }">
+          <router-link :to="{ name: 'SocialWall', query: { id: message.sender['@id']} }">
             {{ message.sender.username }}
           </router-link>
           &raquo;
-          <router-link :to="{ name: 'SocialNetworkWall', query: { id: message.firstReceiver.receiver['@id']} }">
+          <router-link :to="{ name: 'SocialkWall', query: { id: message.firstReceiver.receiver['@id']} }">
             {{ message.firstReceiver.receiver.username }}
           </router-link>
         </q-item-label>
@@ -56,7 +56,7 @@
     >
       <q-item-label header>{{ $t('Comments') }}</q-item-label>
 
-      <SocialNetworkPostComment
+      <WallComment
         v-for="(comment, index) in comments"
         :key="index"
         :comment="comment"
@@ -64,20 +64,20 @@
       />
     </q-list>
 
-    <SocialNetworkPostForm :post="message" />
+    <WallCommentForm :post="message" />
   </q-card>
 </template>
 
 <script>
-import SocialNetworkPostForm from "./PostForm";
+import WallCommentForm from "./CommentForm";
 import {onMounted, reactive} from "vue";
-import SocialNetworkPostComment from "./PostComment";
+import WallComment from "./WallComment";
 import {MESSAGE_TYPE_WALL} from "../message/constants";
 import {useStore} from "vuex";
 
 export default {
-  name: "SocialNetworkPost",
-  components: {SocialNetworkPostComment, SocialNetworkPostForm},
+  name: "WallPost",
+  components: {WallComment, WallCommentForm},
   props: {
     message: {
       type: Object,

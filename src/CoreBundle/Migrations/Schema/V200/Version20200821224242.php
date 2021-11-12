@@ -74,10 +74,10 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasForeignKey('FK_B6BD307F727ACA70')) {
+            $this->addSql('CREATE INDEX IDX_B6BD307F727ACA70 ON message (parent_id)');
             $this->addSql(
                 'ALTER TABLE message ADD CONSTRAINT FK_B6BD307F727ACA70 FOREIGN KEY (parent_id) REFERENCES message (id);'
             );
-            $this->addSql('CREATE INDEX IDX_B6BD307F727ACA70 ON message (parent_id)');
         }
         $this->addSql('DELETE FROM message WHERE user_sender_id IS NULL OR user_sender_id = 0');
 
@@ -159,25 +159,86 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX idx_message_user_sender_user_receiver ON message');
         }
 
-        //ALTER TABLE message DROP user_receiver_id;
         if (!$table->hasIndex('idx_message_type')) {
             $this->addSql('CREATE INDEX idx_message_type ON message (msg_type)');
         }
 
         //$this->addSql('ALTER TABLE message CHANGE msg_status msg_status SMALLINT NOT NULL;');
 
-        $table = $schema->hasTable('message_feedback');
-        if (false === $table) {
-            $this->addSql(
-                'CREATE TABLE message_feedback (id BIGINT AUTO_INCREMENT NOT NULL, message_id BIGINT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT 0 NOT NULL, disliked TINYINT(1) DEFAULT 0 NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_DB0F8049537A1329 (message_id), INDEX IDX_DB0F8049A76ED395 (user_id), INDEX idx_message_feedback_uid_mid (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
-            );
-            $this->addSql(
-                'ALTER TABLE message_feedback ADD CONSTRAINT FK_DB0F8049537A1329 FOREIGN KEY (message_id) REFERENCES message (id) ON DELETE CASCADE'
-            );
-            $this->addSql(
-                'ALTER TABLE message_feedback ADD CONSTRAINT FK_DB0F8049A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;'
-            );
+        $this->addSql("CREATE TABLE social_post (id BIGINT AUTO_INCREMENT NOT NULL, sender_id INT NOT NULL, user_receiver_id INT DEFAULT NULL, group_receiver_id INT DEFAULT NULL, parent_id BIGINT DEFAULT NULL, content LONGTEXT NOT NULL, type SMALLINT NOT NULL, status SMALLINT NOT NULL, send_date DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_159BBFE9727ACA70 (parent_id), INDEX idx_social_post_sender (sender_id), INDEX idx_social_post_user (user_receiver_id), INDEX idx_social_post_group (group_receiver_id), INDEX idx_social_post_type (type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+
+        $sql = "INSERT INTO social_post (id, sender_id, user_receiver_id, group_receiver_id, parent_id, content, type, status, send_date, updated_at)
+            SELECT DISTINCT m.id,
+               m.user_sender_id,
+               m.user_receiver_id,
+               m.group_id,
+               m.parent_id,
+               m.content,
+               CASE m.msg_type
+                   WHEN 1 THEN 3
+                   WHEN 8 THEN 2
+                   WHEN 9 THEN 1
+                   WHEN 10 THEN 1
+                   WHEN 13 THEN 4
+                   ELSE 1
+               END AS type,
+               CASE m.msg_type
+                   WHEN 1 THEN 1
+                   WHEN 8 THEN 1
+                   WHEN 10 THEN 1
+                   WHEN 13 THEN 1
+                   WHEN 9 THEN 2
+                   ELSE 2
+               END AS status,
+               m.send_date,
+               m.update_date
+            FROM message m
+            INNER JOIN message_feedback mf ON m.id = mf.message_id
+            WHERE m.msg_type IN (1, 8, 9, 10, 13)";
+        $this->addSql($sql);
+
+        $this->addSql('DELETE FROM social_post WHERE parent_id NOT IN (SELECT id FROM social_post)');
+
+        $this->addSql("ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE9F624B39D FOREIGN KEY (sender_id) REFERENCES user (id)");
+        $this->addSql("ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE964482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)");
+        $this->addSql("ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE9E8EBF277 FOREIGN KEY (group_receiver_id) REFERENCES usergroup (id) ON DELETE CASCADE");
+        $this->addSql("ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE9727ACA70 FOREIGN KEY (parent_id) REFERENCES social_post (id) ON DELETE CASCADE");
+
+        if ($schema->hasTable('message_feedback')) {
+            $this->addSql('DELETE FROM message_feedback WHERE user_id IS NULL OR user_id = 0');
+
+            $table = $schema->getTable('message_feedback');
+
+            if ($table->hasForeignKey('FK_DB0F8049537A1329')) {
+                $this->addSql('ALTER TABLE message_feedback DROP FOREIGN KEY FK_DB0F8049537A1329');
+            }
+            if ($table->hasIndex('IDX_DB0F8049537A1329')) {
+                $this->addSql('DROP INDEX IDX_DB0F8049537A1329 ON message_feedback');
+            }
+            if ($table->hasForeignKey('FK_DB0F8049A76ED395')) {
+                $this->addSql('ALTER TABLE message_feedback DROP FOREIGN KEY FK_DB0F8049A76ED395');
+            }
+            if ($table->hasIndex('IDX_DB0F8049A76ED395')) {
+                $this->addSql('DROP INDEX IDX_DB0F8049A76ED395 ON message_feedback');
+            }
+            if ($table->hasIndex('idx_message_feedback_uid_mid')) {
+                $this->addSql('DROP INDEX idx_message_feedback_uid_mid ON message_feedback');
+            }
+
+            $this->addSql('ALTER TABLE message_feedback CHANGE message_id social_post_id BIGINT NOT NULL');
+            $this->addSql('RENAME TABLE message_feedback TO social_post_feedback');
+            $this->addSql("DELETE FROM social_post_feedback WHERE social_post_id NOT IN (SELECT id FROM social_post)");
+        } else {
+            $this->addSql("CREATE TABLE social_post_feedback (id BIGINT AUTO_INCREMENT NOT NULL, social_post_id BIGINT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT '0' NOT NULL, disliked TINYINT(1) DEFAULT '0' NOT NULL, updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_DB7E436DC4F2D6B1 (social_post_id), INDEX IDX_DB7E436DA76ED395 (user_id), INDEX idx_social_post_uid_spid (social_post_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
         }
+
+        $this->addSql('CREATE INDEX IDX_DB7E436DA76ED395 ON social_post_feedback (user_id)');
+        $this->addSql('ALTER TABLE social_post_feedback ADD CONSTRAINT FK_DB7E436DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        $this->addSql('CREATE INDEX IDX_DB7E436DC4F2D6B1 ON social_post_feedback (social_post_id)');
+        $this->addSql('ALTER TABLE social_post_feedback ADD CONSTRAINT FK_DB7E436DC4F2D6B1 FOREIGN KEY (social_post_id) REFERENCES social_post (id) ON DELETE CASCADE');
+        $this->addSql('CREATE INDEX idx_social_post_uid_spid ON social_post_feedback (social_post_id, user_id)');
+
+        //ALTER TABLE message DROP user_receiver_id;
 
         $this->addSql('DELETE FROM message_attachment WHERE message_id NOT IN (SELECT id FROM message)');
 

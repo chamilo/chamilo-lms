@@ -238,18 +238,6 @@ class Message
     #[Groups(['message:read'])]
     protected Collection $attachments;
 
-    /**
-     * @var Collection<int, MessageFeedback>
-     *
-     * @ORM\OneToMany(targetEntity="MessageFeedback", mappedBy="message", orphanRemoval=true)
-     */
-    protected Collection $likes;
-
-    #[Groups(['message:read'])]
-    protected int $countLikes = 0;
-    #[Groups(['message:read'])]
-    protected int $countDislikes = 0;
-
     public function __construct()
     {
         $this->sendDate = new DateTime('now');
@@ -258,7 +246,6 @@ class Message
         $this->content = '';
         $this->attachments = new ArrayCollection();
         $this->children = new ArrayCollection();
-        $this->likes = new ArrayCollection();
         $this->receivers = new ArrayCollection();
         $this->receiversCc = new ArrayCollection();
         $this->receiversTo = new ArrayCollection();
@@ -540,25 +527,5 @@ class Message
         $this->status = $status;
 
         return $this;
-    }
-
-    public function getCountLikes(): int
-    {
-        $criteria = Criteria::create();
-        $criteria->where(
-            Criteria::expr()->eq('liked', true)
-        );
-
-        return $this->likes->matching($criteria)->count();
-    }
-
-    public function getCountDislikes(): int
-    {
-        $criteria = Criteria::create();
-        $criteria->where(
-            Criteria::expr()->eq('disliked', true)
-        );
-
-        return $this->likes->matching($criteria)->count();
     }
 }

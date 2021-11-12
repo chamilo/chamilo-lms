@@ -796,6 +796,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[Groups(['user:read', 'user_json:read'])]
     protected string $fullName;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SocialPost", mappedBy="sender", orphanRemoval=true)
+     */
+    private Collection $sentSocialPosts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SocialPost", mappedBy="userReceiver")
+     */
+    private Collection $receivedSocialPosts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SocialPostFeedback", mappedBy="user", orphanRemoval=true)
+     */
+    private Collection $socialPostsFeedbacks;
+
     public function __construct()
     {
         $this->skipResourceNode = false;
@@ -866,6 +881,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->dateOfBirth = new DateTime();
         $this->expiresAt = new DateTime();
         $this->passwordRequestedAt = new DateTime();
+        $this->sentSocialPosts = new ArrayCollection();
+        $this->receivedSocialPosts = new ArrayCollection();
+        $this->socialPostsFeedbacks = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -2503,5 +2521,84 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $friends = $this->getFriendsByRelationType($relationType);
 
         return $friends->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
+    }
+
+    /**
+     * @return Collection<int, SocialPost>
+     */
+    public function getSentSocialPosts(): Collection
+    {
+        return $this->sentSocialPosts;
+    }
+
+    public function addSentSocialPost(SocialPost $sentSocialPost): self
+    {
+        if (!$this->sentSocialPosts->contains($sentSocialPost)) {
+            $this->sentSocialPosts[] = $sentSocialPost;
+            $sentSocialPost->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSentSocialPost(SocialPost $sentSocialPost): self
+    {
+        if ($this->sentSocialPosts->removeElement($sentSocialPost)) {
+            // set the owning side to null (unless already changed)
+            if ($sentSocialPost->getSender() === $this) {
+                $sentSocialPost->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SocialPost>
+     */
+    public function getReceivedSocialPosts(): Collection
+    {
+        return $this->receivedSocialPosts;
+    }
+
+    public function addReceivedSocialPost(SocialPost $receivedSocialPost): self
+    {
+        if (!$this->receivedSocialPosts->contains($receivedSocialPost)) {
+            $this->receivedSocialPosts[] = $receivedSocialPost;
+            $receivedSocialPost->setUserReceiver($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SocialPostFeedback>
+     */
+    public function getSocialPostsFeedbacks(): Collection
+    {
+        return $this->socialPostsFeedbacks;
+    }
+
+    public function getSocialPostFeedbackBySocialPost(SocialPost $post): ?SocialPostFeedback
+    {
+        $filtered = $this
+            ->getSocialPostsFeedbacks()
+            ->filter(fn(SocialPostFeedback $postFeedback) => $postFeedback->getSocialPost() === $post);
+
+        if ($filtered->count() > 0) {
+            return $filtered->first();
+        }
+
+        return null;
+    }
+
+    public function addSocialPostFeedback(SocialPostFeedback $socialPostFeedback): self
+    {
+        if (!$this->socialPostsFeedbacks->contains($socialPostFeedback)) {
+            $this->socialPostsFeedbacks[] = $socialPostFeedback;
+            $socialPostFeedback->setUser($this);
+        }
+
+        return $this;
     }
 }

@@ -1,8 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
-
-/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -14,14 +13,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Table(
- *     name="message_feedback",
+ *     name="social_post_feedback",
  *     indexes={
- *         @Index(name="idx_message_feedback_uid_mid", columns={"message_id", "user_id"})
+ *         @Index(name="idx_social_post_uid_spid", columns={"social_post_id", "user_id"})
  *     }
  * )
  * @ORM\Entity()
  */
-class MessageFeedback
+class SocialPostFeedback
 {
     use UserTrait;
 
@@ -33,13 +32,13 @@ class MessageFeedback
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="likes")
-     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SocialPost", inversedBy="feedbacks")
+     * @ORM\JoinColumn(name="social_post_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected Message $message;
+    protected SocialPost $socialPost;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="socialPostsFeedbacks")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected User $user;
@@ -61,22 +60,19 @@ class MessageFeedback
      */
     protected DateTime $updatedAt;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getMessage(): Message
+    public function getSocialPost(): SocialPost
     {
-        return $this->message;
+        return $this->socialPost;
     }
 
-    public function setMessage(Message $message): self
+    public function setSocialPost(SocialPost $socialPost): self
     {
-        $this->message = $message;
+        $this->socialPost = $socialPost;
 
         return $this;
     }
@@ -105,10 +101,7 @@ class MessageFeedback
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }

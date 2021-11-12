@@ -5,7 +5,8 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
-use Chamilo\CoreBundle\Entity\MessageFeedback;
+use Chamilo\CoreBundle\Entity\SocialPost;
+use Chamilo\CoreBundle\Entity\SocialPostFeedback;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
@@ -1648,36 +1649,20 @@ class MessageManager
      *
      * @return array
      */
-    public static function countLikesAndDislikes($messageId, $userId)
+    public static function countLikesAndDislikes($messageId, $userId): array
     {
         if (!api_get_configuration_value('social_enable_messages_feedback')) {
             return [];
         }
 
-        $messageId = (int) $messageId;
-        $userId = (int) $userId;
+        $user = Container::getUserRepository()->find($userId);
+        $socialPost = Container::getSocialPostRepository()->find($messageId);
 
-        $em = Database::getManager();
-        $query = $em
-            ->createQuery('
-                SELECT SUM(l.liked) AS likes, SUM(l.disliked) AS dislikes FROM ChamiloCoreBundle:MessageFeedback l
-                WHERE l.message = :message
-            ')
-            ->setParameters(['message' => $messageId]);
-
-        try {
-            $counts = $query->getSingleResult();
-        } catch (Exception $e) {
-            $counts = ['likes' => 0, 'dislikes' => 0];
-        }
-
-        $userLike = $em
-            ->getRepository(MessageFeedback::class)
-            ->findOneBy(['message' => $messageId, 'user' => $userId]);
+        $userLike = $user->getSocialPostFeedbackBySocialPost($socialPost);
 
         return [
-            'likes' => (int) $counts['likes'],
-            'dislikes' => (int) $counts['dislikes'],
+            'likes' => $socialPost->getCountFeedbackLikes(),
+            'dislikes' => $socialPost->getCountFeedbackDislikes(),
             'user_liked' => $userLike ? $userLike->isLiked() : false,
             'user_disliked' => $userLike ? $userLike->isDisliked() : false,
         ];

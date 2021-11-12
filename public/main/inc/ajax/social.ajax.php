@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Message;
-use Chamilo\CoreBundle\Entity\MessageFeedback;
+use Chamilo\CoreBundle\Entity\SocialPost;
+use Chamilo\CoreBundle\Entity\SocialPostFeedback;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
@@ -225,10 +225,9 @@ switch ($action) {
         }
 
         $em = Database::getManager();
-        $messageRepo = $em->getRepository(Message::class);
-        $messageLikesRepo = $em->getRepository(MessageFeedback::class);
+        $messageRepo = $em->getRepository(SocialPost::class);
+        $messageLikesRepo = $em->getRepository(SocialPostFeedback::class);
 
-        /** @var Message $message */
         $message = $messageRepo->find($messageId);
 
         if (empty($message)) {
@@ -236,12 +235,12 @@ switch ($action) {
             exit;
         }
 
-        if ((int) $message->getGroupId() !== $groupId) {
-            echo json_encode(false);
-            exit;
-        }
+        if (!empty($message->getGroupReceiver())) {
+            if ($message->getGroupReceiver()->getId() !== $groupId) {
+                echo json_encode(false);
+                exit;
+            }
 
-        if (!empty($message->getGroupId())) {
             $usergroup = new UserGroupModel();
             $groupInfo = $usergroup->get($groupId);
 
@@ -260,12 +259,12 @@ switch ($action) {
 
         $user = api_get_user_entity($current_user_id);
 
-        $userLike = $messageLikesRepo->findOneBy(['message' => $message, 'user' => $user]);
+        $userLike = $messageLikesRepo->findOneBy(['post' => $message, 'user' => $user]);
 
         if (empty($userLike)) {
-            $userLike = new MessageFeedback();
+            $userLike = new SocialPostFeedback();
             $userLike
-                ->setMessage($message)
+                ->setSocialPost($message)
                 ->setUser($user);
         }
 

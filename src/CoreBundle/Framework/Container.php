@@ -30,6 +30,7 @@ use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
+use Chamilo\CoreBundle\Repository\SocialPostRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Repository\TrackExerciseRepository;
@@ -616,5 +617,10 @@ class Container
         /** @var EntityManager $em */
         $em = $doctrine->getManager();
         Database::setManager($em);
+    }
+
+    public static function getSocialPostRepository(): SocialPostRepository
+    {
+        return self::$container->get(SocialPostRepository::class);
     }
 }

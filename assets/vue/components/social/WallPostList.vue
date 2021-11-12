@@ -1,15 +1,16 @@
 <template>
   <WallPost
-    v-for="message in messageList"
-    :key="message.id"
-    :message="message"
+    v-for="socialPost in postList"
+    :key="socialPost.id"
+    :post="socialPost"
   />
 
   <Loading :visible="isLoading" />
 </template>
 
 <script>
-import {MESSAGE_TYPE_WALL} from "../message/constants";
+import {SOCIAL_TYPE_WALL_POST} from "./constants";
+
 import WallPost from "./WallPost";
 import {useStore} from "vuex";
 import {inject, onMounted, ref, watch} from "vue";
@@ -22,38 +23,38 @@ export default {
     const user = inject('social-user');
     const store = useStore();
 
-    const messageList = ref([]);
+    const postList = ref([]);
     const isLoading = ref(false);
 
-    async function listMessage() {
+    async function listPosts() {
       if (!user.value['@id']) {
         return;
       }
 
       isLoading.value = true;
 
-      store.state.message.resetList = true;
+      store.state.socialpost.resetList = true;
 
       try {
-        await store.dispatch('message/fetchAll', {
-          msgType: MESSAGE_TYPE_WALL,
-          'receivers.receiver': user.value['@id'],
+        postList.value = await store.dispatch('socialpost/findAll', {
+          type: SOCIAL_TYPE_WALL_POST,
+          sender: user.value['@id'],
           'order[sendDate]': 'desc',
+          groupReceiver: null
         });
-        messageList.value = store.getters['message/list'];
       } catch (e) {
-        messageList.value = [];
+        postList.value = [];
       }
 
       isLoading.value = false;
     }
 
-    watch(() => user.value, listMessage)
+    watch(() => user.value, listPosts)
 
-    onMounted(listMessage)
+    onMounted(listPosts)
 
     return {
-      messageList,
+      postList,
       isLoading
     }
   }

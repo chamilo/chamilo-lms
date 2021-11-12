@@ -127,6 +127,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'user_json:read',
         'message:read',
         'user_rel_user:read',
+        'social_post:read',
     ])]
     public ?string $illustrationUrl = null;
 
@@ -158,6 +159,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'message:read',
         'page:read',
         'user_rel_user:read',
+        'social_post:read',
     ])]
     protected string $username;
 
@@ -793,7 +795,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     // Property used only during installation.
     protected bool $skipResourceNode = false;
 
-    #[Groups(['user:read', 'user_json:read'])]
+    #[Groups(['user:read', 'user_json:read', 'social_post:read'])]
     protected string $fullName;
 
     /**

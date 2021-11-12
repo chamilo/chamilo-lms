@@ -1,4 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -54,19 +57,20 @@ class SocialPost
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentSocialPosts")
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['social_post:read'])]
+    #[Groups(['social_post:read', 'social_post:write'])]
     protected User $sender;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="receivedSocialPosts")
+     * @ORM\JoinColumn(nullable=true)
      */
-    #[Groups(['social_post:read'])]
+    #[Groups(['social_post:read', 'social_post:write'])]
     protected User $userReceiver;
 
     /**
      * @ORM\Column(type="text")
      */
-    #[Groups(['social_post:read'])]
+    #[Groups(['social_post:read', 'social_post:write'])]
     protected string $content;
 
     /**
@@ -80,6 +84,7 @@ class SocialPost
      * )
      * @ORM\Column(type="smallint")
      */
+    #[Groups(['social_post:write', 'social_post:read'])]
     protected int $type;
 
     /**
@@ -102,7 +107,6 @@ class SocialPost
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    #[Groups(['social_post:read'])]
     protected DateTime $updatedAt;
 
     /**
@@ -125,6 +129,7 @@ class SocialPost
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SocialPost", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    #[Groups(['social_post:write'])]
     protected ?SocialPost $parent = null;
 
     #[Groups(['social_post:read'])]
@@ -139,6 +144,7 @@ class SocialPost
         $this->updatedAt = $this->sendDate;
         $this->status = self::STATUS_SENT;
         $this->feedbacks = new ArrayCollection();
+        $this->type = self::TYPE_WALL_POST;
     }
 
     public function getId(): int

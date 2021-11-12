@@ -1,0 +1,6 @@
+export const SOCIAL_TYPE_WALL_POST = 1;
+export const SOCIAL_TYPE_WALL_COMMENT = 2;
+export const SOCIAL_TYPE_GROUP_MESSAGE = 3;
+export const SOCIAL_TYPE_PROMOTED_MESSAGE = 4;
+export const SOCIAL_STATUS_DELETED = 2;
+export const SOCIAL_STATUS_SENT = 1;

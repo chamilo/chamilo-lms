@@ -39,7 +39,7 @@
 <script>
 import {inject, onMounted, reactive, toRefs, watch} from "vue";
 import {useStore} from "vuex";
-import {MESSAGE_REL_USER_TYPE_TO, MESSAGE_TYPE_WALL} from "../message/constants";
+import {SOCIAL_TYPE_WALL_POST} from "./constants";
 import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
 import {useI18n} from "vue-i18n";
@@ -77,25 +77,19 @@ export default {
         return;
       }
 
-      const messagePayload = {
-        title: 'Post',
+      const createPostPayload = {
         content: postState.content,
-        msgType: MESSAGE_TYPE_WALL,
+        type: SOCIAL_TYPE_WALL_POST,
         sender: currentUser['@id'],
-        receivers: [
-          {
-            receiver: user.value['@id'],
-            receiverType: MESSAGE_REL_USER_TYPE_TO
-          }
-        ]
+        userReceiver: user.value['@id']
       };
 
-      await store.dispatch('message/create', messagePayload);
+      await store.dispatch('socialpost/create', createPostPayload);
 
       if (postState.attachment) {
-        const message = store.state.message.created;
+        const post = store.state.socialpost.created;
         const attachmentPayload = {
-          messageId: message.id,
+          postId: post.id,
           file: postState.attachment
         };
 

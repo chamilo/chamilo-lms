@@ -24,6 +24,7 @@ import toolIntroService from './services/ctoolintro';
 import pageService from './services/page';
 import pageCategoryService from './services/pagecategory';
 import sessionService from './services/session';
+import socialPostService from './services/socialpost';
 
 import makeCrudModule from './store/modules/crud';
 //import vuetify from './plugins/vuetify' // path to vuetify export
@@ -160,6 +161,13 @@ store.registerModule(
     'usergroup',
     makeCrudModule({
         service: userGroupService
+    })
+);
+
+store.registerModule(
+    'socialpost',
+    makeCrudModule({
+        service: socialPostService
     })
 );
 

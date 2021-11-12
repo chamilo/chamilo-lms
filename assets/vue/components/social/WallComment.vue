@@ -14,16 +14,16 @@
 
     <q-item-section side top>
       <q-btn
-        v-if="enableMessagesFeedbackConfig"
-        :label="comment.countLikes"
+        v-if="enableFeedback"
+        :label="comment.countFeedbackLikes"
         :title="$t('Like')"
         dense
         flat
         icon="mdi-heart-plus"
       />
       <q-btn
-        v-if="enableMessagesFeedbackConfig && !disableDislikeOption"
-        :label="comment.countDislikes"
+        v-if="enableFeedback && !disableDislike"
+        :label="comment.countFeedbackDislikes"
         :title="$t('Dislike')"
         dense
         flat
@@ -61,18 +61,18 @@ export default {
 
     function deleteComment() {
       store
-        .dispatch('message/del', props.comment)
+        .dispatch('socialpost/del', props.comment)
         .then(() => context.emit('deleted'));
     }
 
-    const enableMessagesFeedbackConfig = ref(window.config['social.social_enable_messages_feedback'] === 'true');
-    const disableDislikeOption = ref(window.config['social.disable_dislike_option'] === 'true');
+    const enableFeedback = ref(window.config['social.social_enable_messages_feedback'] === 'true');
+    const disableDislike = ref(window.config['social.disable_dislike_option'] === 'true');
 
     return {
       deleteComment,
       isOwner: currentUser['@id'] === props.comment.sender['@id'],
-      enableMessagesFeedbackConfig,
-      disableDislikeOption,
+      enableFeedback,
+      disableDislike,
     };
   }
 }

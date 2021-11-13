@@ -7452,11 +7452,15 @@ class Exercise
             foreach ($teacher_answer_list as $teacher_item) {
                 // Cleaning student answer list
                 $value = strip_tags($teacher_item);
-                $value = api_substr($value, 1, api_strlen($value) - 2);
-                $value = explode('/', $value);
-                if (!empty($value[0])) {
-                    $value = trim($value[0]);
-                    $value = str_replace('&nbsp;', '', $value);
+                if (strlen($value) > 2 && false !== strpos($value, '/')) {
+                    $value = api_substr($value, 1, api_strlen($value) - 2);
+                    $value = explode('/', $value);
+                    if (!empty($value[0])) {
+                        $value = trim($value[0]);
+                        $value = str_replace('&nbsp;', '', $value);
+                        $result .= $value;
+                    }
+                } else {
                     $result .= $value;
                 }
             }
@@ -10547,7 +10551,7 @@ class Exercise
                     }
                 }
 
-                if (!empty($option['answer'])) {
+                if ('' !== $option['answer']) { // the answer can be a value 0
                     $exerciseResult[] = $questionId;
 
                     break;

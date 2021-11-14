@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\SocialPost;
@@ -19,7 +21,7 @@ class SocialPostRepository extends ServiceEntityRepository
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function update(SocialPost $post)
+    public function update(SocialPost $post): void
     {
         $em = $this->getEntityManager();
         $em->persist($post);
@@ -30,7 +32,7 @@ class SocialPostRepository extends ServiceEntityRepository
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function delete(SocialPost $post)
+    public function delete(SocialPost $post): void
     {
         $em = $this->getEntityManager();
         $em->remove($post);

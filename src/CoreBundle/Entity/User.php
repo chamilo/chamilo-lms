@@ -2585,7 +2585,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $filtered = $this
             ->getSocialPostsFeedbacks()
-            ->filter(fn(SocialPostFeedback $postFeedback) => $postFeedback->getSocialPost() === $post);
+            ->filter(fn (SocialPostFeedback $postFeedback) => $postFeedback->getSocialPost() === $post)
+        ;
 
         if ($filtered->count() > 0) {
             return $filtered->first();

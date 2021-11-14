@@ -30,7 +30,8 @@ class SocialPostRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $socialPostRepo = self::getContainer()
-            ->get(SocialPostRepository::class);
+            ->get(SocialPostRepository::class)
+        ;
         $socialPostFeedbackRepo = $em->getRepository(SocialPostFeedback::class);
 
         $admin = $this->getUser('admin');
@@ -39,7 +40,8 @@ class SocialPostRepositoryTest extends AbstractApiTest
         $post = (new SocialPost())
             ->setContent('content')
             ->setSender($admin)
-            ->setUserReceiver($testUser);
+            ->setUserReceiver($testUser)
+        ;
         $socialPostRepo->update($post);
 
         // 1. Message exists in the inbox.
@@ -50,7 +52,8 @@ class SocialPostRepositoryTest extends AbstractApiTest
             ->setUser($testUser)
             ->setUpdatedAt(new DateTime())
             ->setDisliked(true)
-            ->setLiked(true);
+            ->setLiked(true)
+        ;
         $em->persist($feedback);
         $em->flush();
         $em->clear();

@@ -167,7 +167,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
         $this->addSql("CREATE TABLE social_post (id BIGINT AUTO_INCREMENT NOT NULL, sender_id INT NOT NULL, user_receiver_id INT DEFAULT NULL, group_receiver_id INT DEFAULT NULL, parent_id BIGINT DEFAULT NULL, content LONGTEXT NOT NULL, type SMALLINT NOT NULL, status SMALLINT NOT NULL, send_date DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_159BBFE9727ACA70 (parent_id), INDEX idx_social_post_sender (sender_id), INDEX idx_social_post_user (user_receiver_id), INDEX idx_social_post_group (group_receiver_id), INDEX idx_social_post_type (type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
 
-        $sql = "INSERT INTO social_post (id, sender_id, user_receiver_id, group_receiver_id, parent_id, content, type, status, send_date, updated_at)
+        $sql = 'INSERT INTO social_post (id, sender_id, user_receiver_id, group_receiver_id, parent_id, content, type, status, send_date, updated_at)
             SELECT DISTINCT m.id,
                m.user_sender_id,
                m.user_receiver_id,
@@ -194,15 +194,15 @@ final class Version20200821224242 extends AbstractMigrationChamilo
                m.update_date
             FROM message m
             INNER JOIN message_feedback mf ON m.id = mf.message_id
-            WHERE m.msg_type IN (1, 8, 9, 10, 13)";
+            WHERE m.msg_type IN (1, 8, 9, 10, 13)';
         $this->addSql($sql);
 
         $this->addSql('DELETE FROM social_post WHERE parent_id NOT IN (SELECT id FROM social_post)');
 
-        $this->addSql("ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE9F624B39D FOREIGN KEY (sender_id) REFERENCES user (id)");
-        $this->addSql("ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE964482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)");
-        $this->addSql("ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE9E8EBF277 FOREIGN KEY (group_receiver_id) REFERENCES usergroup (id) ON DELETE CASCADE");
-        $this->addSql("ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE9727ACA70 FOREIGN KEY (parent_id) REFERENCES social_post (id) ON DELETE CASCADE");
+        $this->addSql('ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE9F624B39D FOREIGN KEY (sender_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE964482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE9E8EBF277 FOREIGN KEY (group_receiver_id) REFERENCES usergroup (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE social_post ADD CONSTRAINT FK_159BBFE9727ACA70 FOREIGN KEY (parent_id) REFERENCES social_post (id) ON DELETE CASCADE');
 
         if ($schema->hasTable('message_feedback')) {
             $this->addSql('DELETE FROM message_feedback WHERE user_id IS NULL OR user_id = 0');
@@ -227,7 +227,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
             $this->addSql('ALTER TABLE message_feedback CHANGE message_id social_post_id BIGINT NOT NULL');
             $this->addSql('RENAME TABLE message_feedback TO social_post_feedback');
-            $this->addSql("DELETE FROM social_post_feedback WHERE social_post_id NOT IN (SELECT id FROM social_post)");
+            $this->addSql('DELETE FROM social_post_feedback WHERE social_post_id NOT IN (SELECT id FROM social_post)');
         } else {
             $this->addSql("CREATE TABLE social_post_feedback (id BIGINT AUTO_INCREMENT NOT NULL, social_post_id BIGINT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT '0' NOT NULL, disliked TINYINT(1) DEFAULT '0' NOT NULL, updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_DB7E436DC4F2D6B1 (social_post_id), INDEX IDX_DB7E436DA76ED395 (user_id), INDEX idx_social_post_uid_spid (social_post_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
         }

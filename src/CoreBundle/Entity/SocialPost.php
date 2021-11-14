@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -26,6 +27,25 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=SocialPostRepository::class)
  */
 #[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_USER')",
+        ],
+        'post' => [
+            'security_post_denormalize' => "is_granted('CREATE', object)",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('VIEW', object)",
+        ],
+        'put' => [
+            'security' => "is_granted('EDIT', object)",
+        ],
+        'delete' => [
+            'security' => "is_granted('DELETE', object)",
+        ],
+    ],
     attributes: [
         'security' => "is_granted('ROLE_USER')",
     ],
@@ -65,7 +85,7 @@ class SocialPost
      * @ORM\JoinColumn(nullable=true)
      */
     #[Groups(['social_post:read', 'social_post:write'])]
-    protected User $userReceiver;
+    protected ?User $userReceiver;
 
     /**
      * @ORM\Column(type="text")
@@ -84,7 +104,7 @@ class SocialPost
      * )
      * @ORM\Column(type="smallint")
      */
-    #[Groups(['social_post:write', 'social_post:read'])]
+    #[Groups(['social_post:write'])]
     protected int $type;
 
     /**
@@ -118,6 +138,7 @@ class SocialPost
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(['social_post:read', 'social_post:write'])]
     protected ?Usergroup $groupReceiver = null;
 
     /**
@@ -130,21 +151,26 @@ class SocialPost
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     #[Groups(['social_post:write'])]
-    protected ?SocialPost $parent = null;
+    protected ?SocialPost $parent;
 
     #[Groups(['social_post:read'])]
-    protected int $countFeedbackLikes = 0;
+    protected int $countFeedbackLikes;
 
     #[Groups(['social_post:read'])]
-    protected int $countFeedbackDislikes = 0;
+    protected int $countFeedbackDislikes;
 
     public function __construct()
     {
+        $this->userReceiver = null;
+        $this->groupReceiver = null;
+        $this->parent = null;
         $this->sendDate = new DateTime();
         $this->updatedAt = $this->sendDate;
         $this->status = self::STATUS_SENT;
         $this->feedbacks = new ArrayCollection();
         $this->type = self::TYPE_WALL_POST;
+        $this->countFeedbackLikes = 0;
+        $this->countFeedbackDislikes = 0;
     }
 
     public function getId(): int
@@ -152,7 +178,7 @@ class SocialPost
         return $this->id;
     }
 
-    public function setId(int $id): SocialPost
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -164,19 +190,19 @@ class SocialPost
         return $this->sender;
     }
 
-    public function setSender(User $sender): SocialPost
+    public function setSender(User $sender): self
     {
         $this->sender = $sender;
 
         return $this;
     }
 
-    public function getUserReceiver(): User
+    public function getUserReceiver(): ?User
     {
         return $this->userReceiver;
     }
 
-    public function setUserReceiver(User $userReceiver): SocialPost
+    public function setUserReceiver(?User $userReceiver): self
     {
         $this->userReceiver = $userReceiver;
 
@@ -188,7 +214,7 @@ class SocialPost
         return $this->status;
     }
 
-    public function setStatus(int $status): SocialPost
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -200,7 +226,7 @@ class SocialPost
         return $this->sendDate;
     }
 
-    public function setSendDate(DateTime $sendDate): SocialPost
+    public function setSendDate(DateTime $sendDate): self
     {
         $this->sendDate = $sendDate;
 
@@ -212,7 +238,7 @@ class SocialPost
         return $this->content;
     }
 
-    public function setContent(string $content): SocialPost
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -224,7 +250,7 @@ class SocialPost
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt): SocialPost
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -236,7 +262,7 @@ class SocialPost
         return $this->feedbacks;
     }
 
-    public function setFeedbacks(Collection $feedbacks): SocialPost
+    public function setFeedbacks(Collection $feedbacks): self
     {
         $this->feedbacks = $feedbacks;
 
@@ -315,6 +341,18 @@ class SocialPost
     public function setGroupReceiver(?Usergroup $groupReceiver): self
     {
         $this->groupReceiver = $groupReceiver;
+
+        return $this;
+    }
+
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

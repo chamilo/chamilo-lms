@@ -63,11 +63,15 @@ class SocialPostRepositoryTest extends AbstractApiTest
         $this->assertNotNull($feedback->getUpdatedAt());
         $this->assertNotNull($feedback->getSocialPost());
 
+        /** @var SocialPost $post */
         $post = $socialPostRepo->find($post->getId());
         $this->assertSame(
             1,
-            $post->getLikes()
-                ->count()
+            $post->getCountFeedbackLikes()
+        );
+        $this->assertSame(
+            1,
+            $post->getCountFeedbackDislikes()
         );
 
         $socialPostRepo->delete($post);

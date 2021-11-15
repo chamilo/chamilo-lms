@@ -230,8 +230,6 @@ class CourseRepositoryTest extends AbstractApiTest
 
     public function testCourseTeacherSubscription(): void
     {
-        $client = static::createClient();
-
         /** @var CourseRepository $courseRepo */
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
@@ -275,8 +273,6 @@ class CourseRepositoryTest extends AbstractApiTest
 
     public function testCourseRegisteredVisibility(): void
     {
-        $client = static::createClient();
-
         /** @var CourseRepository $courseRepo */
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
@@ -303,7 +299,7 @@ class CourseRepositoryTest extends AbstractApiTest
 
     public function testGetCourses(): void
     {
-        $course = $this->createCourse('new');
+        $this->createCourse('new');
 
         // Test as admin.
         $token = $this->getUserToken([]);
@@ -326,8 +322,8 @@ class CourseRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/Course',
             '@id' => '/api/courses',
             '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 0,
+            'hydra:totalItems' => 1,
         ]);
-        $this->assertCount(0, $response->toArray()['hydra:member']);
+        $this->assertCount(1, $response->toArray()['hydra:member']);
     }
 }

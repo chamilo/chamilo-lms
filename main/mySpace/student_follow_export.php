@@ -76,6 +76,7 @@ function generateForm(int $studentId, array $coursesInSessions): FormValidator
     );
     // Option to hide the column Time in lp tables
     $form->addCheckBox('hide_connection_time', null, get_lang('HideConnectionTime'));
+    $form->addCheckBox('hide_skills', null, get_lang('HideSkills'));
     foreach ($coursesInSessions as $sId => $courses) {
         if (empty($courses)) {
             continue;
@@ -510,6 +511,7 @@ if ($form->validate()) {
 
     $coursesInfo = [];
     $hideConnectionTime = isset($values['hide_connection_time']);
+    $hideSkills = isset($values['hide_skills']);
     if (!empty($values['sc'])) {
         foreach ($values['sc'] as $courseKey) {
             [$sessionId, $courseId] = explode('_', $courseKey);
@@ -518,10 +520,14 @@ if ($form->validate()) {
         }
     }
 
+    $skills = Tracking::displayUserSkills($studentInfo['id']);
+    if ($hideSkills) {
+        $skills = '';
+    }
     $view = new Template('', false, false, false, true, false, false);
     $view->assign('user_info', $studentInfo);
     $view->assign('careers', MyStudents::userCareersTable($studentInfo['id']));
-    $view->assign('skills', Tracking::displayUserSkills($studentInfo['id']));
+    $view->assign('skills', $skills);
     $view->assign('classes', MyStudents::getBlockForClasses($studentInfo['id']));
     $view->assign('courses_info', $coursesInfo);
 

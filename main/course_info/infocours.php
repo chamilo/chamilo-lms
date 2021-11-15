@@ -908,10 +908,16 @@ $addUsers = [
     $form->createElement('radio', 'subscribe_users_to_forum_notifications', null, get_lang('No'), 2),
 ];
 
+$forumsInSessions = [
+    $form->createElement('radio', 'share_forums_in_sessions', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'share_forums_in_sessions', null, get_lang('No'), 2),
+];
+
 $globalGroup = [
     get_lang('EnableForumAutoLaunch') => $group,
     get_lang('HideForumNotifications') => $groupNotification,
     get_lang('SubscribeUsersToAllForumNotifications') => $addUsers,
+    get_lang('ShareForumsInSessions') => $forumsInSessions,
     '' => $myButton,
 ];
 

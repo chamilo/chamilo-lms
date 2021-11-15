@@ -738,6 +738,7 @@ class SessionManager
                             $field['id']
                         );
                         $fieldDataArray = [];
+                        $fieldDataToString = '';
                         if (!empty($fieldData)) {
                             foreach ($fieldData as $data) {
                                 $fieldDataArray[] = $data['value'];
@@ -748,31 +749,7 @@ class SessionManager
                     }
                 }
 
-                // Cleaning double selects.
-                foreach ($session as $key => &$value) {
-                    if (isset($options_by_double) && (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second']))) {
-                        $options = explode('::', $value);
-                    }
-                    $original_key = $key;
-                    if (strpos($key, '_second') === false) {
-                    } else {
-                        $key = str_replace('_second', '', $key);
-                    }
-
-                    if (isset($options_by_double) && isset($options_by_double[$key])) {
-                        if (isset($options[0])) {
-                            if (isset($options_by_double[$key][$options[0]])) {
-                                if (strpos($original_key, '_second') === false) {
-                                    $value = $options_by_double[$key][$options[0]]['option_display_text'];
-                                } else {
-                                    $value = $options_by_double[$key][$options[1]]['option_display_text'];
-                                }
-                            }
-                        }
-                    }
-                }
-
-                $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
+                $categoryName = $orderedCategories[$session['session_category_id']] ?? '';
                 $session['category_name'] = $categoryName;
                 if (isset($session['status'])) {
                     $session['status'] = self::getStatusLabel($session['status']);

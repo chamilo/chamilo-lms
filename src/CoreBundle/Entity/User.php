@@ -2543,18 +2543,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function removeSentSocialPost(SocialPost $sentSocialPost): self
-    {
-        if ($this->sentSocialPosts->removeElement($sentSocialPost)) {
-            // set the owning side to null (unless already changed)
-            if ($sentSocialPost->getSender() === $this) {
-                $sentSocialPost->setSender(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, SocialPost>
      */

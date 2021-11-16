@@ -558,6 +558,11 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 // information the browser includes with navigation away from a document
 // and should be set by all sites.
 //$_configuration['security_referrer_policy'] = 'origin-when-cross-origin';
+//
+// Enable samesite:None parameter for session cookie.
+// More info: https://www.chromium.org/updates/same-site
+// Also: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure
+//$_configuration['security_session_cookie_samesite_none'] = false;
 // ------ HTTP headers security section ends here
 //
 // ------ Survey configuration settings

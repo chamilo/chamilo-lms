@@ -1,7 +1,7 @@
 <div id="about-course">
     <div id="course-info-top">
         <h2 class="session-title">{{ course.title }}</h2>
-        {% if not 'course_about_teacher_name_hiden'|api_get_configuration_value %}
+        {% if not 'course_about_teacher_name_hide'|api_get_configuration_value %}
             <div class="course-short">
                 <ul>
                     <li class="author">{{ "Professors"|get_lang }}</li>
@@ -178,7 +178,7 @@
                     </div>
                 </div>
                 {% endif %}
-                {% if course.teachers and not 'course_about_teacher_name_hiden'|api_get_configuration_value %}
+                {% if course.teachers and not 'course_about_teacher_name_hide'|api_get_configuration_value %}
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="panel-teachers">

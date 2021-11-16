@@ -3146,12 +3146,12 @@ class Tracking
         $average = 0;
         $sum = 0;
         if (!empty($newProgress)) {
-            $sum = array_sum($newProgress);
-            $average = $sum / $total;
-
-            // It will return the max progress instead the average
             if ($maxInsteadAvg) {
+                // It will return the max progress instead the average
                 return max($newProgress);
+            } else {
+                $sum = array_sum($newProgress);
+                $average = $sum / $total;
             }
         }
 

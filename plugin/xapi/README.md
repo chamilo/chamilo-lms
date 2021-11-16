@@ -70,10 +70,20 @@ CREATE TABLE xapi_activity_profile (id INT AUTO_INCREMENT NOT NULL, profile_id V
 ```
 
 **From 0.2 (beta) [2021-10-15]**
-With the LRS an internal log is registered based on the actor mbox's email or the actor account's name coming from the statement
+- With the LRS an internal log is registered based on the actor mbox's email or the actor account's name coming from the statement
 To update, execute this queries:
 
 ```sql
 CREATE TABLE xapi_internal_log (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, statement_id VARCHAR(255) NOT NULL, verb VARCHAR(255) NOT NULL, object_id VARCHAR(255) NOT NULL, activity_name VARCHAR(255) DEFAULT NULL, activity_description VARCHAR(255) DEFAULT NULL, score_scaled DOUBLE PRECISION DEFAULT NULL, score_raw DOUBLE PRECISION DEFAULT NULL, score_min DOUBLE PRECISION DEFAULT NULL, score_max DOUBLE PRECISION DEFAULT NULL, created_at DATETIME DEFAULT NULL, INDEX IDX_C1C667ACA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 ALTER TABLE xapi_internal_log ADD CONSTRAINT FK_C1C667ACA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
+```
+- asda
+
+**From 0.3 (beta) [2021-11-11]**
+
+- Fix: Add foreign keys with course/session in tool_launch table and foreign key with user in internal_log table.
+```sql
+ALTER TABLE xapi_internal_log ADD CONSTRAINT FK_C1C667ACA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB58391D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
+ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB583613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
 ```

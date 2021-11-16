@@ -510,11 +510,13 @@ if ($isLimitReached) {
     );
 }
 
-$html .= Display::tag(
-    'div',
-    $table_content,
-    ['class' => 'table-responsive']
-);
+if (0 == $objExercise->getHideAttemptsTableOnStartPage()) {
+    $html .= Display::tag(
+        'div',
+        $table_content,
+        ['class' => 'table-responsive']
+    );
+}
 $html .= '</div>';
 
 if ($certificateBlock) {

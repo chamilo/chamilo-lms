@@ -74,8 +74,12 @@ function generateForm(int $studentId, array $coursesInSessions): FormValidator
         [],
         FormValidator::LAYOUT_BOX
     );
-    // Option to hide the column Time in lp tables
-    $form->addCheckBox('hide_connection_time', null, get_lang('HideConnectionTime'));
+    // Options to hide columns or blocks in export pdf
+    $hideOptionsExport['connection_time'] = get_lang('HideConnectionTime');
+    $hideOptionsExport['skills'] = get_lang('HideSkills');
+    $hideOptionsExport['assignment'] = get_lang('HideAssignment');
+    $form->addCheckBoxGroup("hide_options", get_lang('OptionsToHideInExport'), $hideOptionsExport);
+
     foreach ($coursesInSessions as $sId => $courses) {
         if (empty($courses)) {
             continue;
@@ -459,7 +463,7 @@ function generateHtmlForTasks(int $studentId, array $courseInfo, int $sessionId)
         .Export::convert_array_to_html($taskTable);
 }
 
-function generateHtmlForCourse(int $studentId, array $coursesInSessions, int $courseId, int $sessionId, bool $hideConnectionTime = false): ?string
+function generateHtmlForCourse(int $studentId, array $coursesInSessions, int $courseId, int $sessionId, bool $hideConnectionTime = false, bool $hideAssignment = false): ?string
 {
     if (empty($coursesInSessions[$sessionId]) || !in_array($courseId, $coursesInSessions[$sessionId])) {
         return null;
@@ -484,7 +488,9 @@ function generateHtmlForCourse(int $studentId, array $coursesInSessions, int $co
 
     $courseHtml[] = generateHtmlForLearningPaths($studentId, $courseInfo, $sessionId, $hideConnectionTime);
     $courseHtml[] = generateHtmlForQuizzes($studentId, $courseInfo, $sessionId);
-    $courseHtml[] = generateHtmlForTasks($studentId, $courseInfo, $sessionId);
+    if (!$hideAssignment) {
+        $courseHtml[] = generateHtmlForTasks($studentId, $courseInfo, $sessionId);
+    }
 
     return implode(PHP_EOL, $courseHtml);
 }
@@ -509,19 +515,25 @@ if ($form->validate()) {
     );
 
     $coursesInfo = [];
-    $hideConnectionTime = isset($values['hide_connection_time']);
+    $hideConnectionTime = isset($values['hide_options']['connection_time']);
+    $hideSkills = isset($values['hide_options']['skills']);
+    $hideAssignment = isset($values['hide_options']['assignment']);
     if (!empty($values['sc'])) {
         foreach ($values['sc'] as $courseKey) {
             [$sessionId, $courseId] = explode('_', $courseKey);
 
-            $coursesInfo[] = generateHtmlForCourse($studentInfo['id'], $coursesInSessions, $courseId, $sessionId, $hideConnectionTime);
+            $coursesInfo[] = generateHtmlForCourse($studentInfo['id'], $coursesInSessions, $courseId, $sessionId, $hideConnectionTime, $hideAssignment);
         }
     }
 
+    $skills = Tracking::displayUserSkills($studentInfo['id']);
+    if ($hideSkills) {
+        $skills = '';
+    }
     $view = new Template('', false, false, false, true, false, false);
     $view->assign('user_info', $studentInfo);
     $view->assign('careers', MyStudents::userCareersTable($studentInfo['id']));
-    $view->assign('skills', Tracking::displayUserSkills($studentInfo['id']));
+    $view->assign('skills', $skills);
     $view->assign('classes', MyStudents::getBlockForClasses($studentInfo['id']));
     $view->assign('courses_info', $coursesInfo);
 

@@ -65,7 +65,7 @@ if ($formEvaluation->validate()) {
     exit;
 }
 
-$formEvaluation->setDefaults(['formula' => $plugin->getFormulaForExercise($exercise->iId)]);
+$formEvaluation->setDefaults(['formula' => $plugin->getFormulaForExercise($exercise->iid)]);
 
 echo Display::return_message(
     $plugin->get_lang('QuizQuestionsScoreRulesTitleConfirm'),

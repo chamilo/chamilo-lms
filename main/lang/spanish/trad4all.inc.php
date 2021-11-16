@@ -8843,7 +8843,7 @@ $Corrector = "Corrector";
 $CorrectionDate = "Fecha de corrección";
 $HideAttemptsTableOnStartPage = "Ocultar la tabla de intentos en la página de inicio";
 $ScormAndLPMaxProgress = "Progreso máximo en lecciones";
-$ HideSkills = "Ocultar competencias";
+$HideSkills = "Ocultar competencias";
 $OptionsToHideInExport = "Opciones para esconder en el reporte";
 $HideAssignment = "Esconder tareas";
 ?>

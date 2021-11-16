@@ -2015,7 +2015,7 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 //$_configuration['extldap_config'] = ['host' => '', 'port' => ''];
 
 // Option to hide the teachers info on courses about info page.
-//$_configuration['hide_teachers_name_from_course_about_info'] = false;
+//$_configuration['course_about_teacher_name_hiden'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

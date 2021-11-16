@@ -538,9 +538,9 @@ if ($form->validate()) {
     $view->assign('courses_info', $coursesInfo);
 
     $template = $view->get_template('my_space/student_follow_pdf.tpl');
-
+    $filename = $studentInfo['firstname'].' '.$studentInfo['lastname'];
     $params = [
-        'filename' => get_lang('StudentDetails'),
+        'filename' => $filename,
         'format' => 'A4',
         'orientation' => 'P',
     ];
@@ -556,7 +556,7 @@ if ($form->validate()) {
         $pdf->content_to_pdf(
             $view->fetch($template),
             $css,
-            get_lang('StudentDetails'),
+            $filename,
             null,
             'D',
             false,

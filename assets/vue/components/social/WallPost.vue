@@ -64,11 +64,14 @@
         v-for="(comment, index) in comments"
         :key="index"
         :comment="comment"
-        @comment-deleted="onCommentDeleted(index, $event)"
+        @comment-deleted="onCommentDeleted(index)"
       />
     </q-list>
 
-    <WallCommentForm :post="post" @comment-posted="onCommentPosted" />
+    <WallCommentForm
+      :post="post"
+      @comment-posted="onCommentPosted"
+    />
   </q-card>
 </template>
 
@@ -108,7 +111,7 @@ export default {
       ;
     }
 
-    function onCommentDeleted(index, event) {
+    function onCommentDeleted(index) {
       comments.splice(index, 1);
     }
 

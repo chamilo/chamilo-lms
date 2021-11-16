@@ -10,6 +10,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInter
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SocialPostExtension implements QueryCollectionExtensionInterface
 {
@@ -25,7 +26,7 @@ class SocialPostExtension implements QueryCollectionExtensionInterface
         string $operationName = null
     ): void {
         if ('true' !== $this->settingsManager->getSetting('social.allow_social_tool')) {
-            $queryBuilder->andWhere('1 = 0');
+            throw new AccessDeniedException();
         }
     }
 }

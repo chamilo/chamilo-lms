@@ -64,11 +64,11 @@
         v-for="(comment, index) in comments"
         :key="index"
         :comment="comment"
-        @deleted="onDeletedComment(index)"
+        @comment-deleted="onCommentDeleted(index, $event)"
       />
     </q-list>
 
-    <WallCommentForm :post="post" />
+    <WallCommentForm :post="post" @comment-posted="onCommentPosted" />
   </q-card>
 </template>
 
@@ -104,11 +104,16 @@ export default {
             itemsPerPage: 3,
           }
         })
-        .then(response => comments.push(...response.data['hydra:member']));
+        .then(response => comments.push(...response.data['hydra:member']))
+      ;
     }
 
-    function onDeletedComment(index) {
+    function onCommentDeleted(index, event) {
       comments.splice(index, 1);
+    }
+
+    function onCommentPosted(newComment) {
+      comments.unshift(newComment);
     }
 
     onMounted(loadComments);
@@ -118,7 +123,8 @@ export default {
       containsImage,
       containsVideo,
       comments,
-      onDeletedComment,
+      onCommentDeleted,
+      onCommentPosted,
     }
   }
 }

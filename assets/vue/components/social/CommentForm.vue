@@ -8,6 +8,7 @@
     <div class="row justify-end">
       <q-btn
         :label="$t('Post')"
+        :loading="isLoading"
         icon="send"
         @click="sendComment"
       />
@@ -18,7 +19,9 @@
 <script>
 import {ref} from "vue";
 import {useStore} from "vuex";
-import {MESSAGE_TYPE_WALL} from "../message/constants";
+import axios from "axios";
+import {ENTRYPOINT} from "../../config/entrypoint";
+import {SOCIAL_TYPE_WALL_COMMENT} from "./constants";
 
 export default {
   name: "WallCommentForm",
@@ -28,28 +31,40 @@ export default {
       required: true,
     }
   },
-  setup(props) {
+  emits: ["comment-posted"],
+  setup(props, {emit}) {
     const store = useStore();
 
     const currentUser = store.getters['security/getUser'];
 
     const comment = ref('');
+    const isLoading = ref(false);
 
-    async function sendComment() {
-      await store.dispatch('message/create', {
-        title: 'Comment',
-        content: comment.value,
-        msgType: MESSAGE_TYPE_WALL,
-        sender: currentUser['@id'],
-        parent: props.post['@id'],
-      });
+    function sendComment() {
+      isLoading.value = true;
 
-      comment.value = '';
+      axios
+        .post(ENTRYPOINT + 'social_posts', {
+          content: comment.value,
+          type: SOCIAL_TYPE_WALL_COMMENT,
+          sender: currentUser['@id'],
+          parent: props.post['@id'],
+        })
+        .then(response => {
+          emit('comment-posted', response.data);
+
+          comment.value = '';
+        })
+        .finally(() => {
+          isLoading.value = false
+        })
+      ;
     }
 
     return {
       sendComment,
-      comment
+      comment,
+      isLoading,
     };
   }
 }

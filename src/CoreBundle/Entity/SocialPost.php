@@ -6,7 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CoreBundle\Filter\SocialWallFilter;
 use Chamilo\CoreBundle\Repository\SocialPostRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -56,6 +61,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['social_post:read'],
     ],
 )]
+#[ApiFilter(SearchFilter::class, properties: ['parent' => SearchFilterInterface::STRATEGY_EXACT])]
+#[ApiFilter(OrderFilter::class, properties: ['sendDate'])]
 class SocialPost
 {
     public const TYPE_WALL_POST = 1;
@@ -158,6 +165,9 @@ class SocialPost
 
     #[Groups(['social_post:read'])]
     protected int $countFeedbackDislikes;
+
+    #[ApiFilter(SocialWallFilter::class)]
+    protected User $wallOwner;
 
     public function __construct()
     {

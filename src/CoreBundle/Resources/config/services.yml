@@ -95,3 +95,6 @@ services:
     Chamilo\CoreBundle\Tool\HandlerCollection:
         arguments:
             - !tagged_iterator chamilo_core.tool_handler
+
+    Chamilo\CoreBundle\Filter\SocialWallFilter:
+        tags: [ 'api_platform.filter' ]

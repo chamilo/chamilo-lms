@@ -16,22 +16,25 @@
           v-if="null === post.userReceiver || post.sender['@id'] === post.userReceiver['@id']"
         >
           <router-link :to="{ name: 'SocialWall', query: { id: post.sender['@id']} }">
-            {{ post.sender.username }}
+            {{ post.sender.fullName }}
           </router-link>
         </q-item-label>
 
         <q-item-label v-else>
           <router-link :to="{ name: 'SocialWall', query: { id: post.sender['@id']} }">
-            {{ post.sender.username }}
+            {{ post.sender.fullName }}
           </router-link>
           &raquo;
           <router-link :to="{ name: 'SocialWall', query: { id: post.userReceiver['@id']} }">
-            {{ post.userReceiver.username }}
+            {{ post.userReceiver.fullName }}
           </router-link>
         </q-item-label>
 
-        <q-item-label caption>
-          {{ $filters.abbreviatedDatetime(post.sendDate) }}
+        <q-item-label
+          :title="$filters.abbreviatedDatetime(post.sendDate)"
+          caption
+        >
+          {{ $filters.relativeDatetime(post.sendDate) }}
         </q-item-label>
       </q-item-section>
     </q-item>
@@ -53,6 +56,7 @@
 
     <q-list
       v-if="comments.length"
+      bordered
     >
       <q-item-label header>{{ $t('Comments') }}</q-item-label>
 
@@ -72,8 +76,8 @@
 import WallCommentForm from "./CommentForm";
 import {onMounted, reactive} from "vue";
 import WallComment from "./WallComment";
-import {SOCIAL_TYPE_WALL_COMMENT} from "./constants";
-import {useStore} from "vuex";
+import axios from "axios";
+import {ENTRYPOINT} from "../../config/entrypoint";
 
 export default {
   name: "WallPost",
@@ -92,19 +96,15 @@ export default {
     const containsVideo = false; //attachment && attachment.resourceNode.resourceFile.mimeType.includes('video/');
 
     function loadComments() {
-      const store = useStore();
-
-      store
-        .dispatch(
-          'socialpost/findAll',
-          {
+      axios
+        .get(ENTRYPOINT + 'social_posts', {
+          params: {
             parent: props.post['@id'],
-            type: SOCIAL_TYPE_WALL_COMMENT,
             'order[sendDate]': 'desc',
-            itemsPerPage: 3
+            itemsPerPage: 3,
           }
-        )
-        .then(response => comments.push(...response));
+        })
+        .then(response => comments.push(...response.data['hydra:member']));
     }
 
     function onDeletedComment(index) {

@@ -9,47 +9,47 @@
 </template>
 
 <script>
-import {SOCIAL_TYPE_WALL_POST} from "./constants";
-
 import WallPost from "./WallPost";
-import {useStore} from "vuex";
 import {inject, onMounted, ref, watch} from "vue";
 import Loading from "../Loading";
+import axios from "axios";
+import {ENTRYPOINT} from "../../config/entrypoint";
 
 export default {
   name: "WallPostList",
   components: {Loading, WallPost},
   setup() {
     const user = inject('social-user');
-    const store = useStore();
 
     const postList = ref([]);
     const isLoading = ref(false);
 
-    async function listPosts() {
+    function listPosts() {
       if (!user.value['@id']) {
         return;
       }
 
       isLoading.value = true;
 
-      store.state.socialpost.resetList = true;
-
-      try {
-        postList.value = await store.dispatch('socialpost/findAll', {
-          type: SOCIAL_TYPE_WALL_POST,
-          sender: user.value['@id'],
-          'order[sendDate]': 'desc',
-          groupReceiver: null
+      axios
+        .get(ENTRYPOINT + 'social_posts', {
+          params: {
+            socialwall_wallOwner: user.value['id'],
+            'order[sendDate]': 'desc',
+          }
+        })
+        .then(response => {
+          postList.value = response.data['hydra:member'];
+        })
+        .catch(() => {
+          postList.value = [];
+        })
+        .finally(() => {
+          isLoading.value = false;
         });
-      } catch (e) {
-        postList.value = [];
-      }
-
-      isLoading.value = false;
     }
 
-    watch(() => user.value, listPosts)
+    watch(() => user.value, () => {listPosts()});
 
     onMounted(listPosts)
 

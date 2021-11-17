@@ -24,26 +24,30 @@
         <q-btn
           v-if="enableFeedback"
           :label="comment.countFeedbackLikes"
+          :loading="isLoading.like"
           :title="$t('Like')"
           class="gt-xs"
           dense
           flat
           icon="mdi-heart-plus"
           size="12px"
+          @click="likeComment"
         />
         <q-btn
           v-if="enableFeedback && !disableDislike"
           :label="comment.countFeedbackDislikes"
+          :loading="isLoading.dislike"
           :title="$t('Dislike')"
           class="gt-xs"
           dense
           flat
           icon="mdi-heart-remove"
           size="12px"
+          @click="dislikeComment"
         />
         <q-btn
           v-if="isOwner"
-          :loading="isLoading"
+          :loading="isLoading.delete"
           :title="$t('Delete comment')"
           class="gt-xs"
           dense
@@ -59,7 +63,7 @@
 
 <script>
 import {useStore} from "vuex";
-import {computed, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import axios from "axios";
 
 export default {
@@ -74,16 +78,46 @@ export default {
   setup(props, context) {
     const store = useStore();
 
-    const isLoading = ref(false);
+    const isLoading = reactive({
+      like: false,
+      dislike: false,
+      delete: false,
+    });
     const currentUser = store.getters['security/getUser'];
 
     function deleteComment() {
-      isLoading.value = true;
+      isLoading.delete = true;
 
       axios
         .delete(props.comment['@id'])
         .then(() => context.emit('comment-deleted', props.comment))
-        .finally(() => isLoading.value = false)
+        .finally(() => isLoading.delete = false)
+      ;
+    }
+
+    function likeComment() {
+      isLoading.like = true;
+
+      axios
+        .post(props.comment['@id'] + '/like', {})
+        .then(({data}) => {
+          props.comment.countFeedbackLikes = data.countFeedbackLikes;
+          props.comment.countFeedbackDislikes = data.countFeedbackDislikes;
+        })
+        .finally(() => isLoading.like = false)
+      ;
+    }
+
+    function dislikeComment() {
+      isLoading.dislike = true;
+
+      axios
+        .post(props.comment['@id'] + '/dislike', {})
+        .then(({data}) => {
+          props.comment.countFeedbackLikes = data.countFeedbackLikes;
+          props.comment.countFeedbackDislikes = data.countFeedbackDislikes;
+        })
+        .finally(() => isLoading.dislike = false)
       ;
     }
 
@@ -91,6 +125,8 @@ export default {
     const disableDislike = ref(window.config['social.disable_dislike_option'] === 'true');
 
     return {
+      likeComment,
+      dislikeComment,
       deleteComment,
       isOwner: computed(() => currentUser['@id'] === props.comment.sender['@id']),
       enableFeedback,

@@ -11,6 +11,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Common\Filter\SearchFilterInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CoreBundle\Controller\Api\DislikeSocialPostController;
+use Chamilo\CoreBundle\Controller\Api\LikeSocialPostController;
 use Chamilo\CoreBundle\Filter\SocialWallFilter;
 use Chamilo\CoreBundle\Repository\SocialPostRepository;
 use DateTime;
@@ -49,6 +51,20 @@ use Symfony\Component\Validator\Constraints as Assert;
         ],
         'delete' => [
             'security' => "is_granted('DELETE', object)",
+        ],
+        'post_like' => [
+            'method' => 'POST',
+            'path' => '/social_posts/{id}/like',
+            'controller' => LikeSocialPostController::class,
+            'denormalization_context' => ['groups' => []],
+            'normalization_context' => ['groups' => ['social_post_feedback']],
+        ],
+        'post_dislike' => [
+            'method' => 'POST',
+            'path' => '/social_posts/{id}/dislike',
+            'controller' => DislikeSocialPostController::class,
+            'denormalization_context' => ['groups' => []],
+            'normalization_context' => ['groups' => ['social_post_feedback']],
         ],
     ],
     attributes: [
@@ -160,10 +176,10 @@ class SocialPost
     #[Groups(['social_post:write'])]
     protected ?SocialPost $parent;
 
-    #[Groups(['social_post:read'])]
+    #[Groups(['social_post:read', 'social_post_feedback'])]
     protected int $countFeedbackLikes;
 
-    #[Groups(['social_post:read'])]
+    #[Groups(['social_post:read', 'social_post_feedback'])]
     protected int $countFeedbackDislikes;
 
     #[ApiFilter(SocialWallFilter::class)]

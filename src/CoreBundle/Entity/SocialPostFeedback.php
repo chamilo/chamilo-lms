@@ -61,6 +61,12 @@ class SocialPostFeedback
      */
     protected DateTime $updatedAt;
 
+    public function __construct()
+    {
+        $this->liked = false;
+        $this->disliked = false;
+    }
+
     public function getId(): int
     {
         return $this->id;

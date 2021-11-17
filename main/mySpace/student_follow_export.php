@@ -346,7 +346,7 @@ function generateHtmlForQuizzes(int $studentId, array $courseInfo, int $sessionI
     $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
     $sessionCondition = api_get_session_condition($sessionId, true, true, 'quiz.session_id');
 
-    $sql = "SELECT quiz.title, id
+    $sql = "SELECT quiz.title, iid
         FROM $tblQuiz AS quiz
         WHERE
             quiz.c_id = ".$courseInfo['real_id']."
@@ -357,7 +357,7 @@ function generateHtmlForQuizzes(int $studentId, array $courseInfo, int $sessionI
 
     if (Database::num_rows($resultExercices) > 0) {
         while ($exercices = Database::fetch_array($resultExercices)) {
-            $exerciseId = (int) $exercices['id'];
+            $exerciseId = (int) $exercices['iid'];
             $countAttempts = Tracking::count_student_exercise_attempts(
                 $studentId,
                 $courseInfo['real_id'],

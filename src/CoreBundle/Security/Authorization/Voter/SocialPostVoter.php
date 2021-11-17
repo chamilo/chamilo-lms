@@ -68,11 +68,15 @@ class SocialPostVoter extends Voter
         /** @var SocialPost $post */
         $post = $subject;
         $sender = $post->getSender();
+        $userReceiver = $post->getUserReceiver();
 
         switch ($attribute) {
             case self::CREATE:
-                if ($currentUser->hasFriendWithRelationType($sender, UserRelUser::USER_RELATION_TYPE_FRIEND)) {
-                    return true;
+                if (
+                    $userReceiver &&
+                    !$sender->hasFriendWithRelationType($userReceiver, UserRelUser::USER_RELATION_TYPE_FRIEND)
+                ) {
+                    return false;
                 }
                 // no break
             case self::EDIT:
@@ -86,6 +90,6 @@ class SocialPostVoter extends Voter
                 return true;
         }
 
-        return true;
+        return false;
     }
 }

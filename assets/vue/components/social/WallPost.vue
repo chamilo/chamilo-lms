@@ -37,6 +37,14 @@
           {{ $filters.relativeDatetime(post.sendDate) }}
         </q-item-label>
       </q-item-section>
+
+      <q-item-section side top>
+        <WallActions
+          :is-owner="isOwner"
+          :social-post="post"
+          @post-deleted="onPostDeleted(post)"
+        />
+      </q-item-section>
     </q-item>
 
     <q-img
@@ -64,7 +72,7 @@
         v-for="(comment, index) in comments"
         :key="index"
         :comment="comment"
-        @comment-deleted="onCommentDeleted(index)"
+        @comment-deleted="onCommentDeleted($event)"
       />
     </q-list>
 
@@ -77,21 +85,28 @@
 
 <script>
 import WallCommentForm from "./CommentForm";
-import {onMounted, reactive} from "vue";
+import {computed, onMounted, reactive} from "vue";
 import WallComment from "./WallComment";
+import WallActions from "./Actions";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
+import {useStore} from "vuex";
 
 export default {
   name: "WallPost",
-  components: {WallComment, WallCommentForm},
+  components: {WallComment, WallCommentForm, WallActions},
   props: {
     post: {
       type: Object,
       required: true
     }
   },
-  setup(props) {
+  emits: ["post-deleted"],
+  setup(props, {emit}) {
+    const store = useStore();
+
+    const currentUser = store.getters['security/getUser'];
+
     const attachment = null;//props.post.attachments.length ? props.post.attachments[0] : null;
     let comments = reactive([]);
 
@@ -111,12 +126,20 @@ export default {
       ;
     }
 
-    function onCommentDeleted(index) {
-      comments.splice(index, 1);
+    function onCommentDeleted(event) {
+      const index = comments.findIndex(comment => comment['@id'] === event.comment['@id']);
+
+      if (-1 !== index) {
+        comments.splice(index, 1);
+      }
     }
 
     function onCommentPosted(newComment) {
       comments.unshift(newComment);
+    }
+
+    function onPostDeleted(post) {
+      emit('post-deleted', post);
     }
 
     onMounted(loadComments);
@@ -128,6 +151,8 @@ export default {
       comments,
       onCommentDeleted,
       onCommentPosted,
+      onPostDeleted,
+      isOwner: computed(() => currentUser['@id'] === props.post.sender['@id']),
     }
   }
 }

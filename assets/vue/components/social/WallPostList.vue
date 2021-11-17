@@ -1,8 +1,9 @@
 <template>
   <WallPost
-    v-for="socialPost in postList"
+    v-for="(socialPost, index) in postList"
     :key="socialPost.id"
     :post="socialPost"
+    @post-deleted="onPostDeleted($event)"
   />
 
   <Loading :visible="isLoading" />
@@ -10,7 +11,7 @@
 
 <script>
 import WallPost from "./WallPost";
-import {inject, onMounted, ref, watch} from "vue";
+import {inject, onMounted, reactive, ref, watch} from "vue";
 import Loading from "../Loading";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
@@ -21,10 +22,12 @@ export default {
   setup() {
     const user = inject('social-user');
 
-    const postList = ref([]);
+    const postList = reactive([]);
     const isLoading = ref(false);
 
     function listPosts() {
+      postList.splice(0, postList.length);
+
       if (!user.value['@id']) {
         return;
       }
@@ -39,14 +42,19 @@ export default {
           }
         })
         .then(response => {
-          postList.value = response.data['hydra:member'];
-        })
-        .catch(() => {
-          postList.value = [];
+          postList.push(...response.data['hydra:member']);
         })
         .finally(() => {
           isLoading.value = false;
         });
+    }
+
+    function onPostDeleted(event) {
+      const index = postList.findIndex(post => post['@id'] === event['@id']);
+
+      if (index >= 0) {
+        postList.splice(index, 1);
+      }
     }
 
     watch(() => user.value, () => {listPosts()});
@@ -55,7 +63,8 @@ export default {
 
     return {
       postList,
-      isLoading
+      isLoading,
+      onPostDeleted,
     }
   }
 }

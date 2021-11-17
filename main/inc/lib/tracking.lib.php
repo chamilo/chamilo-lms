@@ -2729,7 +2729,7 @@ class Tracking
             $condition_quiz = "";
             if (!empty($exercise_id)) {
                 $exercise_id = intval($exercise_id);
-                $condition_quiz = " AND id = $exercise_id ";
+                $condition_quiz = " AND iid = $exercise_id ";
             }
 
             // Compose a filter based on optional session id given

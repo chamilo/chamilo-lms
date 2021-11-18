@@ -133,7 +133,9 @@ class RemedialCoursePlugin extends Plugin
             $objExercise->iid,
             self::EXTRAFIELD_REMEDIAL_VARIABLE
         );
-        $remedialCourseIds = explode(';', $remedialExcerciseField['value']);
+        $remedialCourseIds = isset($remedialExcerciseField['value'])
+            ? explode(';', $remedialExcerciseField['value'])
+            : [];
 
         if (empty($remedialExcerciseField['value']) || count($remedialCourseIds) == 0) {
             return null;

@@ -81,7 +81,7 @@ export default {
         content: postState.content,
         type: SOCIAL_TYPE_WALL_POST,
         sender: currentUser['@id'],
-        userReceiver: user.value['@id']
+        userReceiver: currentUser['@id'] === user.value['@id'] ? null : user.value['@id'],
       };
 
       await store.dispatch('socialpost/create', createPostPayload);

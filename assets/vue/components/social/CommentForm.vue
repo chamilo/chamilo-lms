@@ -1,5 +1,5 @@
 <template>
-  <q-form class="q-gutter-md p-4 pt-0">
+  <q-form class="q-gutter-md p-4">
     <q-input
       v-model="comment"
       :label="$t('Write new comment')"

@@ -111,6 +111,11 @@ class SocialPost
     protected ?User $userReceiver;
 
     /**
+     * @ORM\Column(name="subject", type="text", nullable=true)
+     */
+    protected ?string $subject;
+
+    /**
      * @ORM\Column(type="text")
      */
     #[Groups(['social_post:read', 'social_post:write'])]
@@ -127,7 +132,7 @@ class SocialPost
      * )
      * @ORM\Column(type="smallint")
      */
-    #[Groups(['social_post:write'])]
+    #[Groups(['social_post:write', 'social_post:read'])]
     protected int $type;
 
     /**
@@ -255,6 +260,18 @@ class SocialPost
     public function setSendDate(DateTime $sendDate): self
     {
         $this->sendDate = $sendDate;
+
+        return $this;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?string $subject): self
+    {
+        $this->subject = $subject;
 
         return $this;
     }

@@ -165,14 +165,15 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
         //$this->addSql('ALTER TABLE message CHANGE msg_status msg_status SMALLINT NOT NULL;');
 
-        $this->addSql("CREATE TABLE social_post (id BIGINT AUTO_INCREMENT NOT NULL, sender_id INT NOT NULL, user_receiver_id INT DEFAULT NULL, group_receiver_id INT DEFAULT NULL, parent_id BIGINT DEFAULT NULL, content LONGTEXT NOT NULL, type SMALLINT NOT NULL, status SMALLINT NOT NULL, send_date DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_159BBFE9727ACA70 (parent_id), INDEX idx_social_post_sender (sender_id), INDEX idx_social_post_user (user_receiver_id), INDEX idx_social_post_group (group_receiver_id), INDEX idx_social_post_type (type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        $this->addSql("CREATE TABLE social_post (id BIGINT AUTO_INCREMENT NOT NULL, sender_id INT NOT NULL, user_receiver_id INT DEFAULT NULL, group_receiver_id INT DEFAULT NULL, parent_id BIGINT DEFAULT NULL, subject LONGTEXT DEFAULT NULL, content LONGTEXT NOT NULL, type SMALLINT NOT NULL, status SMALLINT NOT NULL, send_date DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_159BBFE9727ACA70 (parent_id), INDEX idx_social_post_sender (sender_id), INDEX idx_social_post_user (user_receiver_id), INDEX idx_social_post_group (group_receiver_id), INDEX idx_social_post_type (type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
 
-        $sql = 'INSERT INTO social_post (id, sender_id, user_receiver_id, group_receiver_id, parent_id, content, type, status, send_date, updated_at)
+        $sql = 'INSERT INTO social_post (id, sender_id, user_receiver_id, group_receiver_id, parent_id, subject, content, type, status, send_date, updated_at)
             SELECT DISTINCT m.id,
                m.user_sender_id,
                m.user_receiver_id,
                m.group_id,
                m.parent_id,
+               m.title,
                m.content,
                CASE m.msg_type
                    WHEN 1 THEN 3

@@ -47,14 +47,19 @@ class SocialWallFilter extends AbstractContextAwareFilter
         $rootAlias = $queryBuilder->getRootAliases()[0];
 
         $queryBuilder
-            ->andWhere(sprintf('%1$s.sender = :owner OR %1$s.userReceiver = :owner', $rootAlias))
-            ->andWhere(sprintf('%s.type = :type', $rootAlias))
-            ->setParameters(
-                [
-                    'owner' => $value,
-                    'type' => SocialPost::TYPE_WALL_POST,
-                ]
+            ->andWhere(
+                $queryBuilder->expr()->andX(
+                    $queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->eq("$rootAlias.sender", ':owner'),
+                        $queryBuilder->expr()->eq("$rootAlias.userReceiver", ':owner')
+                    ),
+                    $queryBuilder->expr()->eq("$rootAlias.type", SocialPost::TYPE_WALL_POST)
+                )
             )
+            ->orWhere(
+                $queryBuilder->expr()->eq("$rootAlias.type", SocialPost::TYPE_PROMOTED_MESSAGE)
+            )
+            ->setParameter('owner', $value)
         ;
     }
 }

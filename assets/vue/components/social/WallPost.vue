@@ -1,8 +1,9 @@
 <template>
   <q-card
+    :class="{ 'border-green-400': post.type === 4 }"
+    :flat="post.type !== 4"
     bordered
     class="mb-4"
-    flat
   >
     <q-item>
       <q-item-section side>
@@ -60,11 +61,14 @@
     />
     <q-card-section v-html="post.content" />
 
-    <q-separator />
+    <q-separator :color="post.type === 4 ? 'green-400' : false" />
 
     <q-list
       v-if="comments.length"
+      :class="{ 'border-green-400': post.type === 4 }"
       bordered
+      class="border-t-0"
+      separator
     >
       <q-item-label header>{{ $t('Comments') }}</q-item-label>
 

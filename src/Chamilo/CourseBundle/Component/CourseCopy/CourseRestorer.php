@@ -899,6 +899,13 @@ class CourseRestorer
                     } // end switch
                 } else {
                     // end if file exists
+
+                    // it creates folder images if it doesn't exist , used for hotspot pictures.
+                    if (false !== strpos($document->path, '/images/') && !is_dir(dirname($path.$document->path))) {
+                        $perm = api_get_permissions_for_new_directories();
+                        mkdir(dirname($path.$document->path), $perm, true);
+                    }
+
                     //make sure the source file actually exists
                     if (is_file($this->course->backup_path.'/'.$document->path) &&
                         is_readable($this->course->backup_path.'/'.$document->path) &&

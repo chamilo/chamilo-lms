@@ -490,7 +490,8 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 //$_configuration['tracking_skip_generic_data'] = false;
 // Show view accordion lp_category
 //$_configuration['lp_category_accordion'] = false;
-//
+// Show the best progress instead of averages in reporting of learnpaths
+// $_configuration['lp_show_max_progress_instead_of_average'] = false;
 // Show view accordion lp_item_view
 // $_configuration['lp_view_accordion'] = false;
 // Allow export learning paths to students

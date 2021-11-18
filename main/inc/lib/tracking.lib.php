@@ -3011,8 +3011,9 @@ class Tracking
      * @param bool      $returnArray     Will return an array of the type:
      *                                   [sum_of_progresses, number] if it is set to true
      * @param bool      $onlySeriousGame Optional. Limit average to lp on seriousgame mode
+     * @param bool      $maxInsteadAvg   Optional. It will return the max progress instead the average
      *
-     * @return float Average progress of the user in this course from 0 to 100
+     * @return float Average or max progress of the user in this course from 0 to 100
      */
     public static function get_avg_student_progress(
         $studentId,
@@ -3020,7 +3021,8 @@ class Tracking
         $lpIdList = [],
         $sessionId = null,
         $returnArray = false,
-        $onlySeriousGame = false
+        $onlySeriousGame = false,
+        $maxInsteadAvg = false
     ) {
         // If there is at least one learning path and one student.
         if (empty($studentId)) {
@@ -3144,8 +3146,13 @@ class Tracking
         $average = 0;
         $sum = 0;
         if (!empty($newProgress)) {
-            $sum = array_sum($newProgress);
-            $average = $sum / $total;
+            if ($maxInsteadAvg) {
+                // It will return the max progress instead the average
+                return max($newProgress);
+            } else {
+                $sum = array_sum($newProgress);
+                $average = $sum / $total;
+            }
         }
 
         if ($returnArray) {
@@ -5230,6 +5237,7 @@ class Tracking
         if (!empty($session_id)) {
             $sessionCondition = " AND s.id = $session_id";
         }
+        $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
 
         // Get the list of sessions where the user is subscribed as student
         if (api_is_multiple_url_enabled()) {
@@ -5345,7 +5353,12 @@ class Tracking
                     $time = api_time_to_hms($total_time_login);
                     $progress = self::get_avg_student_progress(
                         $user_id,
-                        $course_code
+                        $course_code,
+                        [],
+                        null,
+                        false,
+                        false,
+                        $lpShowMaxProgress
                     );
                     $bestScore = self::get_avg_student_score(
                         $user_id,
@@ -5786,7 +5799,10 @@ class Tracking
                         $user_id,
                         $course_code,
                         [],
-                        $session_id_from_get
+                        $session_id_from_get,
+                        false,
+                        false,
+                        $lpShowMaxProgress
                     );
 
                     $total_time_login = self::get_time_spent_on_the_course(
@@ -8990,11 +9006,15 @@ class TrackingCourseLog
                 true
             );
 
+            $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
             $avg_student_progress = Tracking::get_avg_student_progress(
                 $user['user_id'],
                 $course_code,
                 [],
-                $session_id
+                $session_id,
+                false,
+                false,
+                $lpShowMaxProgress
             );
 
             if (empty($avg_student_progress)) {

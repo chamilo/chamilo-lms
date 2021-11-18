@@ -25,6 +25,13 @@
             </template>
           </q-file>
 
+          <q-checkbox
+            v-model="isPromoted"
+            v-if="allowCreatePromoted"
+            :label="$t('Mark as promoted message')"
+            left-label
+          />
+
           <q-btn
             :label="$t('Post')"
             icon="send"
@@ -37,9 +44,9 @@
 </template>
 
 <script>
-import {inject, onMounted, reactive, toRefs, watch} from "vue";
+import {computed, inject, onMounted, reactive, ref, toRefs, watch} from "vue";
 import {useStore} from "vuex";
-import {SOCIAL_TYPE_WALL_POST} from "./constants";
+import {SOCIAL_TYPE_PROMOTED_MESSAGE, SOCIAL_TYPE_WALL_POST} from "./constants";
 import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
 import {useI18n} from "vue-i18n";
@@ -53,10 +60,12 @@ export default {
     const {t} = useI18n();
 
     const currentUser = store.getters['security/getUser'];
+    const userIsAdmin = store.getters['security/isAdmin'];
 
     const postState = reactive({
       content: '',
       attachment: null,
+      isPromoted: false,
       textPlaceholder: '',
     });
 
@@ -64,6 +73,12 @@ export default {
       postState.textPlaceholder = currentUser['@id'] === user.value['@id']
         ? t('What are you thinking about?')
         : t('Write something to {0}', [user.value.fullName]);
+    }
+
+    const allowCreatePromoted = ref(false);
+
+    function showCheckboxPromoted() {
+      allowCreatePromoted.value = userIsAdmin && currentUser['@id'] === user.value['@id'];
     }
 
     const v$ = useVuelidate({
@@ -79,7 +94,7 @@ export default {
 
       const createPostPayload = {
         content: postState.content,
-        type: SOCIAL_TYPE_WALL_POST,
+        type: postState.isPromoted ? SOCIAL_TYPE_PROMOTED_MESSAGE : SOCIAL_TYPE_WALL_POST,
         sender: currentUser['@id'],
         userReceiver: currentUser['@id'] === user.value['@id'] ? null : user.value['@id'],
       };
@@ -98,13 +113,23 @@ export default {
 
       postState.content = '';
       postState.attachment = null;
+      postState.isPromoted = false;
     }
 
-    watch(() => user.value, () => showTextPlaceholder())
+    watch(() => user.value, () => {
+      showTextPlaceholder();
 
-    onMounted(showTextPlaceholder);
+      showCheckboxPromoted();
+    });
+
+    onMounted(() => {
+      showTextPlaceholder();
+
+      showCheckboxPromoted();
+    });
 
     return {
+      allowCreatePromoted,
       ...toRefs(postState),
       sendPost,
       v$

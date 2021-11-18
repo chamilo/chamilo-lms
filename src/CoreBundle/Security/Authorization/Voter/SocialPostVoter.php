@@ -12,8 +12,6 @@ use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class SocialPostVoter extends Voter
 {
@@ -23,7 +21,6 @@ class SocialPostVoter extends Voter
     public const DELETE = 'DELETE';
 
     public function __construct(
-        private Security $security,
         private SettingsManager $settingsManager
     ) {
     }
@@ -57,12 +54,8 @@ class SocialPostVoter extends Voter
         /** @var User $currentUser */
         $currentUser = $token->getUser();
 
-        if (!$currentUser instanceof UserInterface) {
+        if (null === $currentUser) {
             return false;
-        }
-
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
         }
 
         /** @var SocialPost $post */
@@ -72,13 +65,22 @@ class SocialPostVoter extends Voter
 
         switch ($attribute) {
             case self::CREATE:
+                if ($currentUser !== $sender) {
+                    return false;
+                }
+
                 if (
                     $userReceiver &&
-                    !$sender->hasFriendWithRelationType($userReceiver, UserRelUser::USER_RELATION_TYPE_FRIEND)
+                    !$currentUser->hasFriendWithRelationType($userReceiver, UserRelUser::USER_RELATION_TYPE_FRIEND)
                 ) {
                     return false;
                 }
-                // no break
+
+                if ($post->getType() === SocialPost::TYPE_PROMOTED_MESSAGE && !$currentUser->isAdmin()) {
+                    return false;
+                }
+
+                return true;
             case self::EDIT:
             case self::DELETE:
                 if ($sender === $currentUser) {

@@ -274,6 +274,13 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
                 'confirmation'
             );
             break;
+        case TOOL_SURVEY:
+            echo $learnPath->display_manipulate($new_item_id, $type);
+            echo Display::return_message(
+                get_lang('NewSurveyCreated'),
+                'confirmation'
+            );
+            break;
     }
 } else {
     switch ($type) {
@@ -302,6 +309,9 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
             break;
         case TOOL_FORUM:
             echo $learnPath->display_forum_form('add', 0, $_GET['forum_id']);
+            break;
+        case TOOL_SURVEY:
+            echo $learnPath->displaySurveyForm('add', 0, $_GET['survey_id']);
             break;
         case 'thread':
             echo $learnPath->display_thread_form('add', 0, $_GET['thread_id']);

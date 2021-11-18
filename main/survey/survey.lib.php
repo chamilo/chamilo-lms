@@ -911,7 +911,7 @@ class SurveyManager
      *
      * @version February 2007
      */
-    public static function update_survey_answered($survey_data, $user, $survey_code)
+    public static function update_survey_answered($survey_data, $user, $survey_code, $lpItemId = 0)
     {
         if (empty($survey_data)) {
             return false;
@@ -923,7 +923,7 @@ class SurveyManager
 
         $survey_id = (int) $survey_data['survey_id'];
         $course_id = (int) $survey_data['c_id'];
-        $session_id = $survey_data['session_id'];
+        $sessionId = api_get_session_id();
 
         // Getting a list with all the people who have filled the survey
         /*$people_filled = self::get_people_who_filled_survey($survey_id, false, $course_id);
@@ -945,14 +945,24 @@ class SurveyManager
             $answeredAt = "answered_at = '".api_get_utc_datetime()."',";
         }
 
+        $lpItemCondition = '';
+        if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
+            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+        }
+        $sessionCondition = '';
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $sessionCondition = api_get_session_condition($sessionId);
+        }
+
         // Storing that the user has finished the survey.
         $sql = "UPDATE $table_survey_invitation
                 SET $answeredAt answered = 1
                 WHERE
                     c_id = $course_id AND
-                    session_id = $session_id AND
                     user ='".Database::escape_string($user)."' AND
-                    survey_code='".Database::escape_string($survey_code)."'";
+                    survey_code='".Database::escape_string($survey_code)."'
+                    $sessionCondition
+                    $lpItemCondition";
         Database::query($sql);
     }
 
@@ -2862,16 +2872,41 @@ class SurveyManager
         $surveyCode,
         $courseId,
         $sessionId = 0,
-        $groupId = 0
+        $groupId = 0,
+        $lpItemId = 0
+    ) {
+        $invitationRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CSurveyInvitation');
+
+        $params = [
+            'user' => $userId,
+            'cId' => $courseId,
+            'sessionId' => $sessionId,
+            'groupId' => $groupId,
+            'surveyCode' => $surveyCode,
+        ];
+
+        if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
+            $params['lpItemId'] = $lpItemId;
+        }
+
+        return $invitationRepo->findBy(
+            $params,
+            ['invitationDate' => 'DESC']
+        );
+    }
+
+    public static function getInvitationsAnswered(
+        $surveyCode,
+        $courseId,
+        $sessionId = 0
     ) {
         $invitationRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CSurveyInvitation');
 
         return $invitationRepo->findBy(
             [
-                'user' => $userId,
                 'cId' => $courseId,
                 'sessionId' => $sessionId,
-                'groupId' => $groupId,
+                'answered' => true,
                 'surveyCode' => $surveyCode,
             ],
             ['invitationDate' => 'DESC']

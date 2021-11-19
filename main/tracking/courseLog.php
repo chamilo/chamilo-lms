@@ -782,10 +782,12 @@ if ($nbStudents > 0) {
         }
     }
     if (isset($defaultExtraFields)) {
-        foreach ($defaultExtraInfo as $field) {
-            $table->set_header($counter, $field['display_text'], false);
-            $headers[$field['variable']] = $field['display_text'];
-            $counter++;
+        if (!empty($defaultExtraInfo)) {
+            foreach ($defaultExtraInfo as $field) {
+                $table->set_header($counter, $field['display_text'], false);
+                $headers[$field['variable']] = $field['display_text'];
+                $counter++;
+            }
         }
     }
     $table->set_header($counter, get_lang('Details'), false);

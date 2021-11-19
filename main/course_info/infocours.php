@@ -710,6 +710,26 @@ if ($allowLPReturnLink === 'true') {
     $form->addGroup($group, '', [get_lang('LpReturnLink')]);
 }
 
+if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
+    $group = [
+        $form->createElement(
+            'radio',
+            'lp_show_max_or_average_progress',
+            null,
+            get_lang('LpMaxProgress'),
+            'max'
+        ),
+        $form->createElement(
+            'radio',
+            'lp_show_max_or_average_progress',
+            null,
+            get_lang('LpAverageProgress'),
+            'average'
+        ),
+    ];
+    $form->addGroup($group, '', [get_lang('lpShowMaxProgressOrAverage')]);
+}
+
 $exerciseInvisible = api_get_setting('exercise_invisible_in_session');
 $configureExerciseVisibility = api_get_setting('configure_exercise_visibility_in_course');
 

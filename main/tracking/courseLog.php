@@ -30,6 +30,9 @@ $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 $origin = api_get_origin();
 $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
+if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
+    $lpShowMaxProgress = ('max' === api_get_course_setting('lp_show_max_or_average_progress'));
+}
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;

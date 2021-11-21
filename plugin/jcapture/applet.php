@@ -86,7 +86,7 @@ Java 2 Standard Edition v 1.7 or above is required for this applet.<br/>
 <APPLET CODE = "com.hammurapi.jcapture.JCaptureApplet.class" ARCHIVE = "<?php echo DOKU_BASE; ?>/lib/plugins/jcapture/lib/jcapture.jar" NAME = "jCapture">
 <PARAM NAME = "dokuBase" VALUE="<?php echo bin2hex(DOKU_BASE); ?>">
 <PARAM NAME = "sectok" VALUE="<?php echo getSecurityToken(); ?>">
-<PARAM NAME = "cookies" VALUE="<?php echo $cookies; ?>">
+<PARAM NAME = "cookies" VALUE="<?php echo Security::remove_XSS($cookies); ?>">
 <PARAM NAME = "host" VALUE="<?php echo $hostName; ?>">
 Java 2 Standard Edition v 1.7 or above is required for this applet.<br/>
 		Download it from <a href="http://java.sun.com">http://java.sun.com</a>.

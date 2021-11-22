@@ -100,7 +100,7 @@ class CSurveyInvitation
     /**
      * @var int
      *
-     * @ORM\Column(name="c_lp_item_id", type="integer", nullable=false)
+     * ORM\Column(name="c_lp_item_id", type="integer", nullable=false)
      */
     protected $lpItemId;
 

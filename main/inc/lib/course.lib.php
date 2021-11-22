@@ -5802,6 +5802,7 @@ class CourseManager
             'quiz_question_limit_per_day',
             'subscribe_users_to_forum_notifications',
             'share_forums_in_sessions',
+            'agenda_share_events_in_sessions',
         ];
 
         $courseModels = ExerciseLib::getScoreModels();

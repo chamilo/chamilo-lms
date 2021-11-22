@@ -1794,18 +1794,16 @@ class Agenda
         $tlb_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        if (empty($sessionId)) {
-            $sessionCondition = "
-            (
-                agenda.session_id = 0 AND (ip.session_id IS NULL OR ip.session_id = 0)
-            ) ";
-        } else {
-            $sessionCondition = "
-            (
-                agenda.session_id = $sessionId AND
-                ip.session_id = $sessionId
-            ) ";
-        }
+        $shareEventsInSessions = 1 == api_get_course_setting('agenda_share_events_in_sessions', $courseInfo);
+
+        $agendaSessionCondition = str_replace(
+            ' AND ',
+            '',
+            api_get_session_condition($sessionId, true, $shareEventsInSessions, 'agenda.session_id')
+        );
+        $ipSessionCondition = api_get_session_condition($sessionId, true, $shareEventsInSessions, 'ip.session_id');
+
+        $sessionCondition = "($agendaSessionCondition $ipSessionCondition)";
 
         if ($isAllowToEdit) {
             // No group filter was asked
@@ -1992,6 +1990,9 @@ class Agenda
                         }
                         if ($isAllowToEditByHrm) {
                             $event['editable'] = true;
+                        }
+                        if ($sessionId != $row['session_id']) {
+                            $event['editable'] = false;
                         }
                     }
                     // if user is author then he can edit the item

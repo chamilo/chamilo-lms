@@ -4408,7 +4408,8 @@ class Exercise
                                         if (FillBlanks::isStudentAnswerGood(
                                             $studentAnswer,
                                             $correctAnswer,
-                                            $from_database
+                                            $from_database,
+                                            true
                                         )) {
                                             $questionScore += $answerWeighting[$i];
                                             $totalScore += $answerWeighting[$i];
@@ -4422,7 +4423,9 @@ class Exercise
                                         $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
                                         if (!empty($studentAnswer)) {
                                             foreach ($listMenu as $key => $item) {
-                                                if ($key == $correctAnswer) {
+                                                if ((!$found && $key == $j)
+                                                    || ($found && sha1($item) === $studentAnswer)
+                                                ) {
                                                     $studentAnswerToShow = $item;
                                                     break;
                                                 }

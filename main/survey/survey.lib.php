@@ -944,11 +944,12 @@ class SurveyManager
         if ($allow) {
             $answeredAt = "answered_at = '".api_get_utc_datetime()."',";
         }
-
+        // To select the answers by Lp Item
         $lpItemCondition = '';
         if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
             $lpItemCondition = " AND c_lp_item_id = $lpItemId";
         }
+        // To select the answers by session
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionCondition = api_get_session_condition($sessionId);

@@ -7573,6 +7573,10 @@ class learnpath
                 $return .= $this->display_manipulate($item_id, $row['item_type']);
                 $return .= $this->display_thread_form('edit', $item_id, $row);
                 break;
+            case TOOL_SURVEY:
+                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                $return .= $this->displaySurveyForm('edit', $item_id, $row);
+                break;
         }
 
         return $return;

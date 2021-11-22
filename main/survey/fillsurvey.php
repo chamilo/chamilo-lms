@@ -207,7 +207,12 @@ $sql = "SELECT * FROM $table_survey
         WHERE
             c_id = $course_id AND
             code = '".Database::escape_string($survey_invitation['survey_code'])."'";
-$sql .= api_get_session_condition($sessionId, true, true);
+if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+    // It lists the surveys base too
+    $sql .= api_get_session_condition($sessionId, true, true);
+} else {
+    $sql .= api_get_session_condition($sessionId);
+}
 $result = Database::query($sql);
 
 if (Database::num_rows($result) > 1) {
@@ -773,10 +778,12 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 // Get the user into survey answer table (user or anonymus)
                 $my_user_id = $survey_data['anonymous'] == 1 ? $surveyUserFromSession : api_get_user_id();
 
+                // To show the answers by lp item
                 $lpItemCondition = '';
                 if ($allowSurveyInLp) {
                     $lpItemCondition = " AND sa.c_lp_item_id = $lpItemId";
                 }
+                // To show the answers by session
                 $sessionCondition = '';
                 if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
                     $sessionCondition = api_get_session_condition($sessionId, true, false, 'sa.session_id');
@@ -886,10 +893,12 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
             // Get current user results
             $results = [];
 
+            // To display de answers by Lp Item
             $lpItemCondition = '';
             if ($allowSurveyInLp) {
                 $lpItemCondition = " AND survey_answer.c_lp_item_id = $lpItemId";
             }
+            // To display the answers by session
             $sessionCondition = '';
             if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
                 $sessionCondition = api_get_session_condition($sessionId, true, false, 'survey_answer.session_id');

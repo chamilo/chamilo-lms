@@ -70,10 +70,12 @@ class SurveyUtil
         // table definition
         $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
+        // To select the answers by lp Item
         $lpItemCondition = '';
         if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
             $lpItemCondition = " AND c_lp_item_id = $lpItemId";
         }
+        // To select the answers by session
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionCondition = api_get_session_condition($sessionId);
@@ -141,11 +143,12 @@ class SurveyUtil
         if (!empty($otherOption)) {
             $option_id = $option_id.'@:@'.$otherOption;
         }
-
+        // To select the answers by Lp Item
         $lpItemCondition = '';
         if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
             $lpItemCondition = " , c_lp_item_id = $lpItemId";
         }
+        // To select the answers by session
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionCondition = " , session_id = $sessionId";
@@ -323,6 +326,7 @@ class SurveyUtil
 
         if (!empty($survey_id) && !empty($user_id)) {
 
+            // To delete or update the answer by session
             $sessionCondition = '';
             if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
                 $sessionId = api_get_session_id();
@@ -466,7 +470,7 @@ class SurveyUtil
                     $questions[$row['sort']]['options'][$row['question_option_id']] = Security::remove_XSS($row['option_text']);
                 }
             }
-
+            // To select the answers by session
             $sessionCondition = '';
             if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
                 $sessionId = api_get_session_id();
@@ -622,6 +626,7 @@ class SurveyUtil
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
         $course_id = api_get_course_int_id();
 
+        // To select the answers by session
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionId = api_get_session_id();
@@ -926,6 +931,7 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
         $surveyId = $survey_data['survey_id'];
 
+        // To select the answers by session
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionId = api_get_session_id();
@@ -1059,6 +1065,7 @@ class SurveyUtil
         $surveyId = (int) $survey_data['survey_id'];
         $course_id = (int) $survey_data['c_id'];
 
+        // To select the answers by session
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionId = api_get_session_id();
@@ -1515,6 +1522,7 @@ class SurveyUtil
         $course = api_get_course_info();
         $course_id = $course['real_id'];
 
+        // To select the answers by session
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionId = api_get_session_id();
@@ -1899,6 +1907,7 @@ class SurveyUtil
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
+        // To select the answers by session
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionId = api_get_session_id();
@@ -2446,11 +2455,13 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
+        // To select the answers by session
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionId = api_get_session_id();
             $sessionCondition = api_get_session_condition($sessionId);
         }
+        // To select the answers by Lp item
         $lpItemCondition = '';
         if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
             $lpItemCondition = " AND c_lp_item_id = $lpItemId";
@@ -3495,7 +3506,7 @@ class SurveyUtil
         } else {
             $search_restriction = "WHERE c_id = $course_id";
         }
-
+        // To list the surveys base too
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionCondition = api_get_session_condition(api_get_session_id(), true, true);
@@ -3561,7 +3572,7 @@ class SurveyUtil
             $direction = 'asc';
         }
 
-        // Condition for the session
+        // To list the surveys base too
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionId = api_get_session_id();
@@ -3813,6 +3824,7 @@ class SurveyUtil
         $now = api_get_utc_datetime(null, false, true);
         $filterDate = $allowSurveyAvailabilityDatetime ? $now->format('Y-m-d H:i') : $now->format('Y-m-d');
 
+        // To list the surveys base too
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionCondition = api_get_session_condition($sessionId, true, true, 'survey.session_id');
@@ -4217,6 +4229,7 @@ class SurveyUtil
             return false;
         }
 
+        // To select the answers by session
         $sessionId = api_get_session_id();
         $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {

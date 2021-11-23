@@ -4404,32 +4404,30 @@ class Exercise
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
                                     $correctAnswer = $listTeacherAnswerTemp[$j];
 
-                                    if (!$found) {
-                                        if (FillBlanks::isStudentAnswerGood(
-                                            $studentAnswer,
-                                            $correctAnswer,
-                                            $from_database,
-                                            true
-                                        )) {
-                                            $questionScore += $answerWeighting[$i];
-                                            $totalScore += $answerWeighting[$i];
-                                            $listTeacherAnswerTemp[$j] = '';
-                                            $found = true;
-                                        }
+                                    if (empty($correctAnswer)) {
+                                        continue;
                                     }
 
-                                    $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
-                                    if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
-                                        $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
-                                        if (!empty($studentAnswer)) {
-                                            foreach ($listMenu as $key => $item) {
-                                                if ((!$found && $key == $j)
-                                                    || ($found && sha1($item) === $studentAnswer)
-                                                ) {
-                                                    $studentAnswerToShow = $item;
-                                                    break;
-                                                }
-                                            }
+                                    if (FillBlanks::isStudentAnswerGood(
+                                        $studentAnswer,
+                                        $correctAnswer,
+                                        $from_database,
+                                        true
+                                    )) {
+                                        $questionScore += $answerWeighting[$i];
+                                        $totalScore += $answerWeighting[$i];
+                                        $listTeacherAnswerTemp[$j] = null;
+                                        $found = true;
+                                    }
+
+                                    if (FillBlanks::FILL_THE_BLANK_MENU != $listCorrectAnswers['words_types'][$j]) {
+                                        continue;
+                                    }
+
+                                    $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
+                                    foreach ($listMenu as $item) {
+                                        if (sha1($item) === $studentAnswer) {
+                                            $studentAnswerToShow = $item;
                                         }
                                     }
                                 }

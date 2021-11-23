@@ -885,6 +885,12 @@ class FillBlanks extends Question
             $commonWords = api_preg_replace("/::::::/", '::', $commonWords);
         }
         $listAnswerResults['common_words'] = explode('::', $commonWords);
+        $listAnswerResults['words_types'] = array_map(
+            function ($word): int {
+                return FillBlanks::getFillTheBlankAnswerType($word);
+            },
+            $listAnswerResults['words']
+        );
 
         return $listAnswerResults;
     }

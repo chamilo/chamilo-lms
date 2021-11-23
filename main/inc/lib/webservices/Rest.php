@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Class RestApi.
@@ -1915,13 +1916,14 @@ class Rest extends WebService
      *
      * @throws Exception
      */
-    public function createSessionFromModel(
-        int $modelSessionId,
-        string $sessionName,
-        string $startDate,
-        string $endDate,
-        array $extraFields = []
-    ): int {
+    public function createSessionFromModel(HttpRequest $request): int
+    {
+        $modelSessionId = $request->request->getInt('modelSessionId');
+        $sessionName = $request->request->get('sessionName');
+        $startDate = $request->request->get('startDate');
+        $endDate = $request->request->get('endDate');
+        $extraFields = $request->request->get('extraFields');
+
         if (empty($modelSessionId) || empty($sessionName) || empty($startDate) || empty($endDate)) {
             throw new Exception(get_lang('NoData'));
         }

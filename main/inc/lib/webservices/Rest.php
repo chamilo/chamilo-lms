@@ -1913,17 +1913,15 @@ class Rest extends WebService
     /**
      * Creates a session from a model session.
      *
-     * @param $modelSessionId
-     * @param $sessionName
-     * @param $startDate
-     * @param $endDate
-     *
      * @throws Exception
-     *
-     * @return int, the id of the new session
      */
-    public function createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, array $extraFields = [])
-    {
+    public function createSessionFromModel(
+        int $modelSessionId,
+        string $sessionName,
+        string $startDate,
+        string $endDate,
+        array $extraFields = []
+    ): int {
         if (empty($modelSessionId) || empty($sessionName) || empty($startDate) || empty($endDate)) {
             throw new Exception(get_lang('NoData'));
         }

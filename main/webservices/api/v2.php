@@ -579,11 +579,12 @@ try {
             break;
         case Rest::CREATE_SESSION_FROM_MODEL:
             $newSessionId = $restApi->createSessionFromModel(
-                $_POST['modelSessionId'],
+                (int) ($_POST['modelSessionId'] ?? 0),
                 $_POST['sessionName'],
                 $_POST['startDate'],
                 $_POST['endDate'],
-                isset($_POST['extraFields']) ? $_POST['extraFields'] : []);
+                $_POST['extraFields'] ?? []
+            );
             $restResponse->setData([$newSessionId]);
             break;
         case Rest::UPDATE_SESSION:

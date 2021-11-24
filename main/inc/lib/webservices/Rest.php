@@ -1923,6 +1923,7 @@ class Rest extends WebService
         $startDate = $request->request->get('startDate');
         $endDate = $request->request->get('endDate');
         $extraFields = $request->request->get('extraFields');
+        $duplicateAgendaContent = $request->request->getBoolean('duplicateAgendaContent');
 
         if (empty($modelSessionId) || empty($sessionName) || empty($startDate) || empty($endDate)) {
             throw new Exception(get_lang('NoData'));
@@ -1997,6 +1998,12 @@ class Rest extends WebService
             && !empty($courseList)
             && !SessionManager::add_courses_to_session($newSessionId, $courseList)) {
             throw new Exception(get_lang('CoursesNotAddedToSession'));
+        }
+
+        if ($duplicateAgendaContent) {
+            foreach ($courseList as $courseId) {
+                SessionManager::importAgendaFromSessionModel($modelSessionId, $newSessionId, $courseId);
+            }
         }
 
         if (api_is_multiple_url_enabled()) {

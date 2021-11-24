@@ -241,7 +241,6 @@ class AppPlugin
             'h5p',
             'hello_world',
             'ims_lti',
-            'jcapture',
             'justification',
             'kannelsms',
             'keycloak',

@@ -8813,4 +8813,9 @@ $UploadAnswer = "Upload answer";
 $TokenExpiredActionAlreadyRealized = "Token expired, action already realized";
 $Corrector = "Corrector";
 $CorrectionDate = "Correction date";
+$HideAttemptsTableOnStartPage = "Hide attempts table on start page";
+$ScormAndLPMaxProgress = "Maximum progress in learning paths";
+$HideSkills = "Hide skills";
+$OptionsToHideInExport = "Options for hiding in export";
+$HideAssignment = "Hide assignments";
 ?>

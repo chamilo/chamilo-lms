@@ -1566,13 +1566,17 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
     $session_id = $sessionId ?: api_get_session_id();
     $course_id = $courseId ?: api_get_course_int_id();
 
-    $condition_session = api_get_session_condition(
-        $session_id,
-        true,
-        true,
-        'forum_categories.session_id'
-    );
-    $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $conditionSession = '';
+    if (!$shareForumInSessions) {
+        $conditionSession = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'forum_categories.session_id'
+        );
+    }
+    $conditionSession .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if (empty($id)) {
         $sql = "SELECT *
@@ -1585,7 +1589,7 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
                 WHERE
                     item_properties.visibility = 1 AND
                     item_properties.tool = '".TOOL_FORUM_CATEGORY."'
-                    $condition_session
+                    $conditionSession
                 ORDER BY forum_categories.cat_order ASC";
         if (api_is_allowed_to_edit()) {
             $sql = "SELECT *
@@ -1598,7 +1602,7 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
                     WHERE
                         item_properties.visibility<>2 AND
                         item_properties.tool='".TOOL_FORUM_CATEGORY."'
-                        $condition_session
+                        $conditionSession
                     ORDER BY forum_categories.cat_order ASC";
         }
     } else {
@@ -1612,7 +1616,7 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
                 WHERE
                     item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
                     forum_categories.cat_id = ".intval($id)."
-                    $condition_session
+                    $conditionSession
                 ORDER BY forum_categories.cat_order ASC";
     }
 
@@ -1719,12 +1723,16 @@ function get_forums(
     $session_id = intval($sessionId) ?: api_get_session_id();
     $sessionIdLink = $session_id === 0 ? '' : ' AND threads.session_id = item_properties.session_id';
 
-    $condition_session = api_get_session_condition(
-        $session_id,
-        true,
-        false,
-        'item_properties.session_id'
-    );
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $conditionSession = '';
+    if (!$shareForumInSessions) {
+        $conditionSession = api_get_session_condition(
+            $session_id,
+            true,
+            false,
+            'item_properties.session_id'
+        );
+    }
 
     $course_id = $course_info['real_id'];
 
@@ -1749,7 +1757,7 @@ function get_forums(
                 WHERE
                     item_properties.visibility = 1 AND
                     item_properties.tool = '".TOOL_FORUM."'
-                    $condition_session AND
+                    $conditionSession AND
                     forum.c_id = $course_id AND
                     item_properties.c_id = $course_id
                     $includeGroupsForumSelect
@@ -1784,7 +1792,7 @@ function get_forums(
                     WHERE
                         item_properties.visibility <> 2 AND
                         item_properties.tool = '".TOOL_FORUM."'
-                        $condition_session AND
+                        $conditionSession AND
                         forum.c_id = $course_id AND
                         item_properties.c_id = $course_id
                         $includeGroupsForumSelect
@@ -2082,12 +2090,16 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
         $groupCondition = " AND item_properties.to_group_id = '$groupIid' ";
     }
 
-    $sessionCondition = api_get_session_condition(
-        $sessionId,
-        true,
-        false,
-        'item_properties.session_id'
-    );
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $sessionCondition = '';
+    if (!$shareForumInSessions) {
+        $sessionCondition = api_get_session_condition(
+            $sessionId,
+            true,
+            false,
+            'item_properties.session_id'
+        );
+    }
 
     // important note:  it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
     // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
@@ -2370,12 +2382,16 @@ function get_thread_information($forumId, $thread_id, $sessionId = null)
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $thread_id = intval($thread_id);
     $sessionId = $sessionId !== null ? intval($sessionId) : api_get_session_id();
-    $sessionCondition = api_get_session_condition(
-        $sessionId,
-        true,
-        false,
-        'threads.session_id'
-    );
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $sessionCondition = '';
+    if (!$shareForumInSessions) {
+        $sessionCondition = api_get_session_condition(
+            $sessionId,
+            true,
+            false,
+            'threads.session_id'
+        );
+    }
     $forumCondition = '';
     if (!empty($forumId)) {
         $forumId = (int) $forumId;
@@ -5081,13 +5097,16 @@ function display_forum_search_results($search_term)
             posts.post_text LIKE '%".Database::escape_string(trim($value))."%'
         )";
     }
-
-    $sessionCondition = api_get_session_condition(
-        $session_id,
-        true,
-        false,
-        'item_property.session_id'
-    );
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $sessionCondition = '';
+    if (!$shareForumInSessions) {
+        $sessionCondition = api_get_session_condition(
+            $session_id,
+            true,
+            false,
+            'item_property.session_id'
+        );
+    }
 
     $sql = "SELECT posts.*
             FROM $table_posts posts

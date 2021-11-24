@@ -97,6 +97,7 @@ class Exercise
     public $hideExpectedAnswer;
     public $forceShowExpectedChoiceColumn;
     public $disableHideCorrectAnsweredQuestions;
+    public $hideAttemptsTableOnStartPage;
 
     /**
      * Constructor of the class.
@@ -142,6 +143,7 @@ class Exercise
         $this->hideNoAnswer = false;
         $this->hideExpectedAnswer = false;
         $this->disableHideCorrectAnsweredQuestions = false;
+        $this->hideAttemptsTableOnStartPage = 0;
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -225,6 +227,10 @@ class Exercise
 
             if (isset($object->hide_question_number)) {
                 $this->hideQuestionNumber = $object->hide_question_number == 1;
+            }
+
+            if (isset($object->hide_attempts_table)) {
+                $this->hideAttemptsTableOnStartPage = $object->hide_attempts_table == 1;
             }
 
             if (isset($object->show_previous_button)) {
@@ -1680,6 +1686,9 @@ class Exercise
             if ($showHideConfiguration) {
                 $paramsExtra['hide_question_number'] = $this->hideQuestionNumber;
             }
+            if (true === api_get_configuration_value('quiz_hide_attempts_table_on_start_page')) {
+                $paramsExtra['hide_attempts_table'] = $this->getHideAttemptsTableOnStartPage();
+            }
 
             $params = array_merge($params, $paramsExtra);
 
@@ -2466,6 +2475,15 @@ class Exercise
                 get_lang('UpdateTitleInLps')
             );
 
+            $allowHideAttempts = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
+            if ($allowHideAttempts) {
+                $group = [
+                    $form->createElement('radio', 'hide_attempts_table', null, get_lang('Yes'), '1'),
+                    $form->createElement('radio', 'hide_attempts_table', null, get_lang('No'), '0'),
+                ];
+                $form->addGroup($group, null, get_lang('HideAttemptsTableOnStartPage'));
+            }
+
             $defaults = [];
             if (api_get_setting('search_enabled') === 'true') {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -2667,6 +2685,7 @@ class Exercise
 
         $this->setPageResultConfigurationDefaults($defaults);
         $this->setHideQuestionNumberDefaults($defaults);
+        $this->setHideAttemptsTableOnStartPageDefaults($defaults);
         $form->setDefaults($defaults);
 
         // Freeze some elements.
@@ -2840,6 +2859,9 @@ class Exercise
         if ($showHideConfiguration) {
             $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
         }
+
+        $this->setHideAttemptsTableOnStartPage($form->getSubmitValue('hide_attempts_table'));
+
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 
         $this->start_time = null;
@@ -3954,8 +3976,8 @@ class Exercise
                         if ($studentChoice == $answerCorrect) {
                             $questionScore += $true_score;
                         } else {
-                            if ($quiz_question_options[$studentChoice - 1]['name'] === "Don't know" ||
-                                $quiz_question_options[$studentChoice - 1]['name'] === "DoubtScore"
+                            if ($quiz_question_options[$studentChoice]['name'] === "Don't know" ||
+                                $quiz_question_options[$studentChoice]['name'] === "DoubtScore"
                             ) {
                                 $questionScore += $doubt_score;
                             } else {
@@ -4382,29 +4404,30 @@ class Exercise
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
                                     $correctAnswer = $listTeacherAnswerTemp[$j];
 
-                                    if (!$found) {
-                                        if (FillBlanks::isStudentAnswerGood(
-                                            $studentAnswer,
-                                            $correctAnswer,
-                                            $from_database
-                                        )) {
-                                            $questionScore += $answerWeighting[$i];
-                                            $totalScore += $answerWeighting[$i];
-                                            $listTeacherAnswerTemp[$j] = '';
-                                            $found = true;
-                                        }
+                                    if (empty($correctAnswer)) {
+                                        continue;
                                     }
 
-                                    $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
-                                    if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
-                                        $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
-                                        if (!empty($studentAnswer)) {
-                                            foreach ($listMenu as $key => $item) {
-                                                if ($key == $correctAnswer) {
-                                                    $studentAnswerToShow = $item;
-                                                    break;
-                                                }
-                                            }
+                                    if (FillBlanks::isStudentAnswerGood(
+                                        $studentAnswer,
+                                        $correctAnswer,
+                                        $from_database,
+                                        true
+                                    )) {
+                                        $questionScore += $answerWeighting[$i];
+                                        $totalScore += $answerWeighting[$i];
+                                        $listTeacherAnswerTemp[$j] = null;
+                                        $found = true;
+                                    }
+
+                                    if (FillBlanks::FILL_THE_BLANK_MENU != $listCorrectAnswers['words_types'][$j]) {
+                                        continue;
+                                    }
+
+                                    $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
+                                    foreach ($listMenu as $item) {
+                                        if (sha1($item) === $studentAnswer) {
+                                            $studentAnswerToShow = $item;
                                         }
                                     }
                                 }
@@ -7452,11 +7475,15 @@ class Exercise
             foreach ($teacher_answer_list as $teacher_item) {
                 // Cleaning student answer list
                 $value = strip_tags($teacher_item);
-                $value = api_substr($value, 1, api_strlen($value) - 2);
-                $value = explode('/', $value);
-                if (!empty($value[0])) {
-                    $value = trim($value[0]);
-                    $value = str_replace('&nbsp;', '', $value);
+                if (strlen($value) > 2 && false !== strpos($value, '/')) {
+                    $value = api_substr($value, 1, api_strlen($value) - 2);
+                    $value = explode('/', $value);
+                    if (!empty($value[0])) {
+                        $value = trim($value[0]);
+                        $value = str_replace('&nbsp;', '', $value);
+                        $result .= $value;
+                    }
+                } else {
                     $result .= $value;
                 }
             }
@@ -8553,6 +8580,34 @@ class Exercise
     }
 
     /**
+     * Set the value to 1 to hide the attempts table on start page.
+     *
+     * @param int $value
+     */
+    public function setHideAttemptsTableOnStartPage($value = 0)
+    {
+        $showHideAttemptsTableOnStartPage = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
+        if ($showHideAttemptsTableOnStartPage) {
+            $this->hideAttemptsTableOnStartPage = (int) $value;
+        }
+    }
+
+    /**
+     * Gets the value to hide or show the attempts table on start page. If it does not exist, it is set to 0.
+     *
+     * @return int 1 if the attempts table must be hidden
+     */
+    public function getHideAttemptsTableOnStartPage()
+    {
+        $showHideAttemptsTableOnStartPage = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
+        if ($showHideAttemptsTableOnStartPage) {
+            return (int) $this->hideAttemptsTableOnStartPage;
+        }
+
+        return 0;
+    }
+
+    /**
      * @param array $values
      */
     public function setPageResultConfiguration($values)
@@ -8597,6 +8652,19 @@ class Exercise
     }
 
     /**
+     * Sets the value to show or hide the attempts table on start page in the default settings of the forms.
+     *
+     * @param array $defaults
+     */
+    public function setHideAttemptsTableOnStartPageDefaults(&$defaults)
+    {
+        $configuration = $this->getHideAttemptsTableOnStartPageConfiguration();
+        if (!empty($configuration) && !empty($defaults)) {
+            $defaults = array_merge($defaults, $configuration);
+        }
+    }
+
+    /**
      * @return array
      */
     public function getPageResultConfiguration()
@@ -8622,6 +8690,21 @@ class Exercise
         $pageConfig = api_get_configuration_value('quiz_hide_question_number');
         if ($pageConfig) {
             return ['hide_question_number' => $this->hideQuestionNumber];
+        }
+
+        return [];
+    }
+
+    /**
+     * Get the value to show or hide the attempts table on start page in the default settings of the forms.
+     *
+     * @return array
+     */
+    public function getHideAttemptsTableOnStartPageConfiguration()
+    {
+        $pageConfig = api_get_configuration_value('quiz_hide_attempts_table_on_start_page');
+        if ($pageConfig) {
+            return ['hide_attempts_table' => $this->hideAttemptsTableOnStartPage];
         }
 
         return [];
@@ -10547,7 +10630,7 @@ class Exercise
                     }
                 }
 
-                if (!empty($option['answer'])) {
+                if ('' !== $option['answer']) { // the answer can be a value 0
                     $exerciseResult[] = $questionId;
 
                     break;

@@ -8745,4 +8745,9 @@ $UploadAnswer = "Uploader la réponse";
 $TokenExpiredActionAlreadyRealized = "Token expiré, action déjà réalisée";
 $Corrector = "Correcteur";
 $CorrectionDate = "Date de correction";
+$HideAttemptsTableOnStartPage = "Masquer le tableau des tentatives sur la page de démarrage";
+$ScormAndLPMaxProgress = "Progrès maximum dans les parcours";
+$HideSkills = "Masquer les compétences";
+$OptionsToHideInExport = "Options pour masquer dans l'export";
+$HideAssignment = "Masquer les travaux";
 ?>

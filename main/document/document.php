@@ -83,23 +83,6 @@ Session::erase('draw_dir');
 Session::erase('paint_dir');
 Session::erase('temp_audio_nanogong');
 
-$plugin = new AppPlugin();
-$pluginList = $plugin->getInstalledPlugins();
-$capturePluginInstalled = in_array('jcapture', $pluginList);
-
-if ($capturePluginInstalled) {
-    $jcapturePath = api_get_path(WEB_PLUGIN_PATH).'jcapture/plugin_applet.php';
-    $htmlHeadXtra[]
-        = '<script>
-        $(function() {
-            $("#jcapture").click(function(){
-                $("#appletplace").load("'.$jcapturePath.'");
-            });
-        });
-        </script>
-    ';
-}
-
 if (empty($courseInfo)) {
     api_not_allowed(true);
 }
@@ -1800,15 +1783,6 @@ if ($isAllowedToEdit ||
         $actionsLeft .= Display::url(
             Display::return_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'document/upload.php?'.api_get_cidreq().'&id='.$current_folder_id
-        );
-    }
-
-    if ($capturePluginInstalled && !$is_certificate_mode) {
-        $actionsLeft .= '<span id="appletplace"></span>';
-        $actionsLeft .= Display::url(
-            Display::return_icon('capture.png', get_lang('CatchScreenCasts'), '', ICON_SIZE_MEDIUM),
-            '#',
-            ['id' => 'jcapture']
         );
     }
 

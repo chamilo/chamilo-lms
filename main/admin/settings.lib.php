@@ -267,6 +267,10 @@ function handlePlugins()
 
     $unknownLabel = get_lang('Unknown');
     foreach ($all_plugins as $pluginName) {
+        if (in_array($pluginName, ['jcapture'])) {
+            continue;
+        }
+
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
             $plugin_info = [

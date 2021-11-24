@@ -45,7 +45,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     protected function __construct()
     {
-        $version = '0.2 (beta)';
+        $version = '0.3 (beta)';
         $author = [
             'Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>',
         ];

@@ -490,7 +490,8 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 //$_configuration['tracking_skip_generic_data'] = false;
 // Show view accordion lp_category
 //$_configuration['lp_category_accordion'] = false;
-//
+// Show the best progress instead of averages in reporting of learnpaths
+// $_configuration['lp_show_max_progress_instead_of_average'] = false;
 // Show view accordion lp_item_view
 // $_configuration['lp_view_accordion'] = false;
 // Allow export learning paths to students
@@ -558,6 +559,11 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 // information the browser includes with navigation away from a document
 // and should be set by all sites.
 //$_configuration['security_referrer_policy'] = 'origin-when-cross-origin';
+//
+// Enable samesite:None parameter for session cookie.
+// More info: https://www.chromium.org/updates/same-site
+// Also: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure
+//$_configuration['security_session_cookie_samesite_none'] = false;
 // ------ HTTP headers security section ends here
 //
 // ------ Survey configuration settings
@@ -663,7 +669,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['quiz_confirm_saved_answers'] = false;
 // Allow reuse of questions between courses
 // $_configuration['quiz_question_allow_inter_course_linking'] = false;
-
+// Define how many seconds an AJAX request should be started to avoid loss of connection.
+//$_configuration['quiz_keep_alive_ping_interval'] = 0;
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
 // Allow exchange of messages from teachers/bosses about a user.
@@ -1362,6 +1369,10 @@ $_configuration['required_extra_fields_in_profile'] = [
 // ALTER TABLE c_quiz ADD COLUMN hide_question_number int NULL DEFAULT 0 COMMENT 'Show/Hide question number in quiz';
 //$_configuration['quiz_hide_question_number'] = false;
 
+// Allows you to show or hide the attempts table of an exercise on start page
+// ALTER TABLE c_quiz ADD COLUMN hide_attempts_table int NULL DEFAULT 0 COMMENT 'Show/Hide attempts table of an exercise on start page';
+//$_configuration['quiz_hide_attempts_table_on_start_page'] = false;
+
 // Allow multiple options for the exercise "save answer" option
 // ALTER TABLE c_quiz MODIFY COLUMN save_correct_answers INT NULL DEFAULT NULL;
 //$_configuration['allow_quiz_save_correct_options'] = false;
@@ -2008,6 +2019,9 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 
 // Overwrites the app/config/auth.conf.php settings
 //$_configuration['extldap_config'] = ['host' => '', 'port' => ''];
+
+// Option to hide the teachers info on courses about info page.
+//$_configuration['course_about_teacher_name_hide'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

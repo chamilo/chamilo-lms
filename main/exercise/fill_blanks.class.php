@@ -545,7 +545,8 @@ class FillBlanks extends Question
                 foreach ($listMenu as $item) {
                     $resultOptions[sha1($item)] = self::replaceSpecialCharsForMenuValues($item);
                 }
-
+                // It is checked special chars used in menu
+                $correctItem = self::replaceSpecialCharsForMenuValues($correctItem);
                 foreach ($resultOptions as $key => $value) {
                     if ($correctItem == $value) {
                         $selected = $key;
@@ -683,14 +684,19 @@ class FillBlanks extends Question
      * it is not as simple as equality, because of the type of Fill The Blank question
      * eg : studentAnswer = 'Un' and correctAnswer = 'Un||1||un'.
      *
-     * @param string $studentAnswer [student_answer] of the info array of the answer field
-     * @param string $correctAnswer [words] of the info array of the answer field
-     * @param bool   $fromDatabase
+     * @param string $studentAnswer       [student_answer] of the info array of the answer field
+     * @param string $correctAnswer       [words] of the info array of the answer field
+     * @param bool   $fromDatabase        Optional
+     * @param bool   $studentAnswerIsHash Optional.
      *
      * @return bool
      */
-    public static function isStudentAnswerGood($studentAnswer, $correctAnswer, $fromDatabase = false)
-    {
+    public static function isStudentAnswerGood(
+        string $studentAnswer,
+        string $correctAnswer,
+        bool $fromDatabase = false,
+        bool $studentAnswerIsHash = false
+    ): bool {
         $result = false;
         switch (self::getFillTheBlankAnswerType($correctAnswer)) {
             case self::FILL_THE_BLANK_MENU:
@@ -700,7 +706,10 @@ class FillBlanks extends Question
                     $item = $listMenu[0];
                     if (!$fromDatabase) {
                         $item = sha1($item);
-                        $studentAnswer = sha1($studentAnswer);
+
+                        if (!$studentAnswerIsHash) {
+                            $studentAnswer = sha1($studentAnswer);
+                        }
                     }
                     if ($item === $studentAnswer) {
                         $result = true;
@@ -876,6 +885,12 @@ class FillBlanks extends Question
             $commonWords = api_preg_replace("/::::::/", '::', $commonWords);
         }
         $listAnswerResults['common_words'] = explode('::', $commonWords);
+        $listAnswerResults['words_types'] = array_map(
+            function ($word): int {
+                return FillBlanks::getFillTheBlankAnswerType($word);
+            },
+            $listAnswerResults['words']
+        );
 
         return $listAnswerResults;
     }

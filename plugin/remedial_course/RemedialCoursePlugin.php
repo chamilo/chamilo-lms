@@ -130,10 +130,12 @@ class RemedialCoursePlugin extends Plugin
 
         $extraFieldValue = new ExtraFieldValue('exercise');
         $remedialExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $objExercise->iId,
+            $objExercise->iid,
             self::EXTRAFIELD_REMEDIAL_VARIABLE
         );
-        $remedialCourseIds = explode(';', $remedialExcerciseField['value']);
+        $remedialCourseIds = isset($remedialExcerciseField['value'])
+            ? explode(';', $remedialExcerciseField['value'])
+            : [];
 
         if (empty($remedialExcerciseField['value']) || count($remedialCourseIds) == 0) {
             return null;
@@ -149,7 +151,7 @@ class RemedialCoursePlugin extends Plugin
 
         $exerciseStatInfo = Event::getExerciseResultsByUser(
             $userId,
-            $objExercise->iId,
+            $objExercise->iid,
             $objExercise->course_id,
             $sessionId,
             $lpId,
@@ -157,7 +159,7 @@ class RemedialCoursePlugin extends Plugin
         );
         $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
             $userId,
-            $objExercise->iId,
+            $objExercise->iid,
             $objExercise->course_id,
             $sessionId
         );
@@ -180,7 +182,7 @@ class RemedialCoursePlugin extends Plugin
                 }
 
                 $score = $attempt['exe_result'];
-                $comments = Event::get_comments($objExercise->iId, $questionId);
+                $comments = Event::get_comments($objExercise->iid, $questionId);
 
                 if (empty($comments) || $score == 0) {
                     return null;
@@ -274,7 +276,7 @@ class RemedialCoursePlugin extends Plugin
         $userId = empty($userId) ? api_get_user_id() : $userId;
         $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
             $userId,
-            $objExercise->iId,
+            $objExercise->iid,
             $objExercise->course_id,
             $sessionId
         );
@@ -284,7 +286,7 @@ class RemedialCoursePlugin extends Plugin
             // for that this block is used
             $exerciseStatInfo = Event::getExerciseResultsByUser(
                 $userId,
-                $objExercise->iId,
+                $objExercise->iid,
                 $objExercise->course_id,
                 $sessionId,
                 $lpId,
@@ -323,7 +325,7 @@ class RemedialCoursePlugin extends Plugin
         // Advance Course
         $extraFieldValue = new ExtraFieldValue('exercise');
         $advanceCourseExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $objExercise->iId,
+            $objExercise->iid,
             self::EXTRAFIELD_ADVACED_VARIABLE
         );
 

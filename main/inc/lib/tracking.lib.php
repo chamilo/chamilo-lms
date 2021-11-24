@@ -5347,7 +5347,10 @@ class Tracking
                     $courseId = $courseInfo['real_id'];
 
                     if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
-                        $lpShowMaxProgress = ('max' === api_get_course_setting('lp_show_max_or_average_progress', $courseInfo, true));
+                        $lpShowProgressCourseSetting = api_get_course_setting('lp_show_max_or_average_progress', $courseInfo, true);
+                        if (in_array($lpShowProgressCourseSetting, ['max', 'average'])) {
+                            $lpShowMaxProgress = ('max' === $lpShowProgressCourseSetting);
+                        }
                     }
 
                     $total_time_login = self::get_time_spent_on_the_course(
@@ -8983,7 +8986,10 @@ class TrackingCourseLog
 
         $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
         if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
-            $lpShowMaxProgress = ('max' === api_get_course_setting('lp_show_max_or_average_progress', $courseInfo, true));
+            $lpShowProgressCourseSetting = api_get_course_setting('lp_show_max_or_average_progress', $courseInfo, true);
+            if (in_array($lpShowProgressCourseSetting, ['max', 'average'])) {
+                $lpShowMaxProgress = ('max' === $lpShowProgressCourseSetting);
+            }
         }
 
         while ($user = Database::fetch_array($res, 'ASSOC')) {

@@ -814,10 +814,8 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                                 SELECT sa.question_id
                                 FROM ".$table_survey_answer." sa
                                 WHERE
-                                    sa.user='".$my_user_id."') AND
+                                    sa.user='".$my_user_id."' $sessionCondition $lpItemCondition) AND
                                     survey_question.c_id =  $course_id
-                                    $sessionCondition
-                                    $lpItemCondition
                                 ORDER BY survey_question.sort, survey_question_option.sort ASC";
             } else {
                 $sql = "SELECT

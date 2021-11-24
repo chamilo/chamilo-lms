@@ -8095,7 +8095,7 @@ class learnpath
         } elseif (is_numeric($extraInfo)) {
             $sql = "SELECT title, intro as comment
                     FROM $tblSurvey
-                    WHERE c_id = $courseId AND survey_id = ".$extraInfo;
+                    WHERE c_id = $courseId AND survey_id = ".(int) $extraInfo;
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -13804,7 +13804,7 @@ EOD;
                     ."?id=$id&$extraParams";
             case TOOL_SURVEY:
                 $table = Database::get_course_table(TABLE_SURVEY);
-                $sql = "SELECT code FROM $table WHERE c_id = $course_id AND survey_id = $id";
+                $sql = "SELECT code FROM $table WHERE c_id = $course_id AND survey_id =".(int) $id;
                 $result = Database::query($sql);
                 $surveyCode = Database::result($result, 0, 0);
                 $autoSurveyLink = SurveyUtil::generateFillSurveyLink(

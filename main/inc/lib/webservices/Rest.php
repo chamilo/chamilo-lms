@@ -2325,7 +2325,7 @@ class Rest extends WebService
         $json['modules'] = array_map(
             function (array $exercise) use ($quizIcon) {
                 return [
-                    'id' => $exercise['id'],
+                    'id' => (int) $exercise['id'],
                     'url' => $exercise['url'],
                     'name' => $exercise['name'],
                     'instance' => 1,

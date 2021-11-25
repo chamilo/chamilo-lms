@@ -6,11 +6,26 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20200821224243 extends AbstractMigrationChamilo
 {
+    private const OLD_MESSAGE_STATUS_NEW = 0;
+    private const OLD_MESSAGE_STATUS_UNREAD = 1;
+    private const OLD_MESSAGE_STATUS_DELETED = 3;
+    private const OLD_MESSAGE_STATUS_OUTBOX = 4;
+    private const OLD_MESSAGE_STATUS_INVITATION_PENDING = 5;
+    private const OLD_MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
+    private const OLD_MESSAGE_STATUS_INVITATION_DENIED = 7;
+    private const OLD_MESSAGE_STATUS_WALL = 8;
+    private const OLD_MESSAGE_STATUS_WALL_DELETE = 9;
+    private const OLD_MESSAGE_STATUS_WALL_POST = 10;
+    private const OLD_MESSAGE_STATUS_CONVERSATION = 11;
+    private const OLD_MESSAGE_STATUS_FORUM = 12;
+    private const OLD_MESSAGE_STATUS_PROMOTED = 13;
+
     public function getDescription(): string
     {
         return 'Post Message update';
@@ -36,6 +51,56 @@ final class Version20200821224243 extends AbstractMigrationChamilo
                 }
                 //$this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
             }
+        }
+
+        $newTypeQueries = [];
+
+        $newTypeQueries[] = sprintf(
+            'UPDATE message SET status = %d WHERE msg_type = %d',
+            Message::MESSAGE_STATUS_DELETED,
+            self::OLD_MESSAGE_STATUS_DELETED
+        );
+        $newTypeQueries[] = sprintf(
+            'UPDATE message SET msg_type = %d WHERE msg_type = %d',
+            Message::MESSAGE_TYPE_INBOX, self::OLD_MESSAGE_STATUS_OUTBOX
+        );
+
+        $newTypeQueries[] = sprintf(
+            'UPDATE message SET status = %d WHERE msg_type = %d',
+            Message::MESSAGE_STATUS_INVITATION_PENDING,
+            self::OLD_MESSAGE_STATUS_INVITATION_PENDING
+        );
+        $newTypeQueries[] = sprintf(
+            'UPDATE message SET status = %d WHERE msg_type = %d',
+            Message::MESSAGE_STATUS_INVITATION_ACCEPTED,
+            self::OLD_MESSAGE_STATUS_INVITATION_ACCEPTED
+        );
+        $newTypeQueries[] = sprintf(
+            'UPDATE message SET status = %d WHERE msg_type = %d',
+            Message::MESSAGE_STATUS_INVITATION_DENIED,
+            self::OLD_MESSAGE_STATUS_INVITATION_DENIED
+        );
+        $newTypeQueries[] = sprintf(
+            'UPDATE message SET msg_type = %d WHERE status IN (%d, %d, %d)',
+            Message::MESSAGE_TYPE_INVITATION,
+            Message::MESSAGE_STATUS_INVITATION_PENDING,
+            Message::MESSAGE_STATUS_INVITATION_ACCEPTED,
+            Message::MESSAGE_STATUS_INVITATION_DENIED
+        );
+
+        $newTypeQueries[] = sprintf(
+            'UPDATE message SET msg_type = %d WHERE msg_type = %d',
+            Message::MESSAGE_TYPE_INBOX,
+            self::OLD_MESSAGE_STATUS_NEW
+        );
+
+        $newTypeQueries[] = sprintf(
+            'UPDATE message SET msg_type = %d WHERE group_id IS NOT NULL',
+            Message::MESSAGE_TYPE_GROUP
+        );
+
+        foreach ($newTypeQueries as $sql) {
+            $this->addSql($sql);
         }
     }
 

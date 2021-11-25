@@ -87,8 +87,6 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
                 ($alias.sender <> :current AND r.receiver = :current AND (
                     ($alias.msgType = :inbox) OR
                     ($alias.msgType = :invitation) OR
-                    ($alias.msgType = :promoted) OR
-                    ($alias.msgType = :wallPost) OR
                     ($alias.msgType = :conversation)
                 ) 
             )
@@ -101,8 +99,6 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
             'inbox' => Message::MESSAGE_TYPE_INBOX,
             //'outbox' => Message::MESSAGE_TYPE_OUTBOX,
             'invitation' => Message::MESSAGE_TYPE_INVITATION,
-            'promoted' => Message::MESSAGE_TYPE_PROMOTED,
-            'wallPost' => Message::MESSAGE_TYPE_WALL,
             'conversation' => Message::MESSAGE_TYPE_CONVERSATION,
         ]);
     }

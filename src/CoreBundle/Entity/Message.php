@@ -97,9 +97,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Message
 {
     public const MESSAGE_TYPE_INBOX = 1;
-    public const MESSAGE_TYPE_OUTBOX = 2;
-    public const MESSAGE_TYPE_PROMOTED = 3;
-    public const MESSAGE_TYPE_WALL = 4;
     public const MESSAGE_TYPE_GROUP = 5;
     public const MESSAGE_TYPE_INVITATION = 6;
     public const MESSAGE_TYPE_CONVERSATION = 7;
@@ -110,7 +107,6 @@ class Message
     public const MESSAGE_STATUS_INVITATION_PENDING = 5;
     public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
     public const MESSAGE_STATUS_INVITATION_DENIED = 7;
-    public const MESSAGE_STATUS_PROMOTED = 13;
 
     /**
      * @ORM\Column(name="id", type="bigint")

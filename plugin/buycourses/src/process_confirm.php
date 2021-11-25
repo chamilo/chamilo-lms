@@ -412,7 +412,6 @@ switch ($sale['payment_type']) {
             $stripeParams = $plugin->getStripeParams();
             $currency = $plugin->getCurrency($sale['currency_id']);
 
-            require_once '../gateways/stripe-php/init.php';
             \Stripe\Stripe::setApiKey($stripeParams['secret_key']);
             \Stripe\Stripe::setAppInfo("ChamiloBuyCoursesPlugin");
 

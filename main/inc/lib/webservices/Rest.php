@@ -1922,7 +1922,7 @@ class Rest extends WebService
         $sessionName = $request->request->get('sessionName');
         $startDate = $request->request->get('startDate');
         $endDate = $request->request->get('endDate');
-        $extraFields = $request->request->get('extraFields');
+        $extraFields = $request->request->get('extraFields', []);
         $duplicateAgendaContent = $request->request->getBoolean('duplicateAgendaContent');
 
         if (empty($modelSessionId) || empty($sessionName) || empty($startDate) || empty($endDate)) {

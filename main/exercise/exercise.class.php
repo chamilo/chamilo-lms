@@ -4404,32 +4404,30 @@ class Exercise
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
                                     $correctAnswer = $listTeacherAnswerTemp[$j];
 
-                                    if (!$found) {
-                                        if (FillBlanks::isStudentAnswerGood(
-                                            $studentAnswer,
-                                            $correctAnswer,
-                                            $from_database,
-                                            true
-                                        )) {
-                                            $questionScore += $answerWeighting[$i];
-                                            $totalScore += $answerWeighting[$i];
-                                            $listTeacherAnswerTemp[$j] = '';
-                                            $found = true;
-                                        }
+                                    if (empty($correctAnswer)) {
+                                        continue;
                                     }
 
-                                    $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
-                                    if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
-                                        $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
-                                        if (!empty($studentAnswer)) {
-                                            foreach ($listMenu as $key => $item) {
-                                                if ((!$found && $key == $j)
-                                                    || ($found && sha1($item) === $studentAnswer)
-                                                ) {
-                                                    $studentAnswerToShow = $item;
-                                                    break;
-                                                }
-                                            }
+                                    if (FillBlanks::isStudentAnswerGood(
+                                        $studentAnswer,
+                                        $correctAnswer,
+                                        $from_database,
+                                        true
+                                    )) {
+                                        $questionScore += $answerWeighting[$i];
+                                        $totalScore += $answerWeighting[$i];
+                                        $listTeacherAnswerTemp[$j] = null;
+                                        $found = true;
+                                    }
+
+                                    if (FillBlanks::FILL_THE_BLANK_MENU != $listCorrectAnswers['words_types'][$j]) {
+                                        continue;
+                                    }
+
+                                    $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
+                                    foreach ($listMenu as $item) {
+                                        if (sha1($item) === $studentAnswer) {
+                                            $studentAnswerToShow = $item;
                                         }
                                     }
                                 }
@@ -9512,6 +9510,10 @@ class Exercise
 
                         $currentRow['title'] = $url.' '.$session_img.$lp_blocked;
 
+                        if ($returnData) {
+                            $currentRow['title'] = $exercise->getUnformattedTitle();
+                        }
+
                         // Count number exercise - teacher
                         $sql = "SELECT count(*) count FROM $TBL_EXERCISE_QUESTION
                                 WHERE c_id = $courseId AND exercice_id = $my_exercise_id";
@@ -9983,15 +9985,25 @@ class Exercise
                             $actions = $myActions($row);
                         }
 
+                        $rowTitle = $currentRow['title'];
                         $currentRow = [
                             $row['iid'],
-                            $currentRow['title'],
+                            $rowTitle,
                             $currentRow['count_questions'],
                             $actions,
                         ];
+
+                        if ($returnData) {
+                            $currentRow['id'] = $exercise->iid;
+                            $currentRow['url'] = $webPath.'exercise/overview.php?'
+                                .api_get_cidreq_params($courseInfo['code'], $sessionId).'&'
+                                ."$mylpid$mylpitemid&exerciseId={$row['iid']}";
+                            $currentRow['name'] = $rowTitle;
+                        }
                     } else {
+                        $rowTitle = $currentRow['title'];
                         $currentRow = [
-                            $currentRow['title'],
+                            $rowTitle,
                             $currentRow['attempt'],
                         ];
 
@@ -10005,7 +10017,7 @@ class Exercise
                             $currentRow['url'] = $webPath.'exercise/overview.php?'
                                 .api_get_cidreq_params($courseInfo['code'], $sessionId).'&'
                                 ."$mylpid$mylpitemid&exerciseId={$row['iid']}";
-                            $currentRow['name'] = $currentRow[0];
+                            $currentRow['name'] = $rowTitle;
                         }
                     }
 

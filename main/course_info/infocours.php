@@ -950,6 +950,34 @@ $form->addPanelOption(
     $globalGroup
 );
 
+// Agenda settings -->
+$group = [];
+$group[] = $form->createElement(
+    'radio',
+    'agenda_share_events_in_sessions',
+    null,
+    get_lang('AgendaEventsInBaseCourseWillBeVisibleInCourseSessions'),
+    1
+);
+$group[] = $form->createElement(
+    'radio',
+    'agenda_share_events_in_sessions',
+    null,
+    get_lang('AgendaEventsOnlyVisibleInCurrentCourse'), 0
+);
+
+$globalGroup = [
+    get_lang('ShareEventsInSessions') => $group,
+    '' => $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true),
+];
+
+$form->addPanelOption(
+    'agenda',
+    Display::return_icon('agenda.png', get_lang('Agenda')).' '.get_lang('Agenda'),
+    $globalGroup
+);
+// <-- end of agenda settings
+
 if ($allowPortfolioTool) {
     $globalGroup = [
         get_lang('QualifyPortfolioItems') => [

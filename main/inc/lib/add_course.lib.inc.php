@@ -663,6 +663,7 @@ class AddCourse
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
             'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
             'email_alert_teachers_new_post' => ['default' => 2, 'category' => 'portfolio'],
+            'agenda_share_events_in_sessions' => ['default' => 0, 'category' => 'agenda'],
         ];
 
         $counter = 1;

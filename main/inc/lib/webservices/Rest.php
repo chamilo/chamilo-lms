@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Class RestApi.
@@ -1913,17 +1914,17 @@ class Rest extends WebService
     /**
      * Creates a session from a model session.
      *
-     * @param $modelSessionId
-     * @param $sessionName
-     * @param $startDate
-     * @param $endDate
-     *
      * @throws Exception
-     *
-     * @return int, the id of the new session
      */
-    public function createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, array $extraFields = [])
+    public function createSessionFromModel(HttpRequest $request): int
     {
+        $modelSessionId = $request->request->getInt('modelSessionId');
+        $sessionName = $request->request->get('sessionName');
+        $startDate = $request->request->get('startDate');
+        $endDate = $request->request->get('endDate');
+        $extraFields = $request->request->get('extraFields', []);
+        $duplicateAgendaContent = $request->request->getBoolean('duplicateAgendaContent');
+
         if (empty($modelSessionId) || empty($sessionName) || empty($startDate) || empty($endDate)) {
             throw new Exception(get_lang('NoData'));
         }
@@ -1997,6 +1998,12 @@ class Rest extends WebService
             && !empty($courseList)
             && !SessionManager::add_courses_to_session($newSessionId, $courseList)) {
             throw new Exception(get_lang('CoursesNotAddedToSession'));
+        }
+
+        if ($duplicateAgendaContent) {
+            foreach ($courseList as $courseId) {
+                SessionManager::importAgendaFromSessionModel($modelSessionId, $newSessionId, $courseId);
+            }
         }
 
         if (api_is_multiple_url_enabled()) {

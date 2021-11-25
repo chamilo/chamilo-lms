@@ -14,26 +14,31 @@
  * You can store the API key on an external system (it will remain the same),
  * although it is not recommended to do so (for security reasons).
  */
+
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 require_once __DIR__.'/../../inc/global.inc.php';
 
 api_protect_webservices();
 
-$hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
+$httpRequest = HttpRequest::createFromGlobals();
+
+$hash = $httpRequest->query->get('hash');
 
 if ($hash) {
     $hashParams = Rest::decodeParams($hash);
     if (!empty($hashParams)) {
         foreach ($hashParams as $key => $value) {
-            $_REQUEST[$key] = Security::remove_XSS($value);
+            $httpRequest->query->set($key, Security::remove_XSS($value));
         }
     }
 }
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$username = isset($_REQUEST['username']) ? Security::remove_XSS($_REQUEST['username']) : null;
-$apiKey = isset($_REQUEST['api_key']) ? Security::remove_XSS($_REQUEST['api_key']) : null;
-$course = !empty($_REQUEST['course']) ? (int) $_REQUEST['course'] : null;
-$session = !empty($_REQUEST['session']) ? (int) $_REQUEST['session'] : null;
+$action = $httpRequest->get('action');
+$username = Security::remove_XSS($httpRequest->get('username'));
+$apiKey = Security::remove_XSS($httpRequest->get('api_key'));
+$course = (int) $httpRequest->get('course', 0);
+$session = (int) $httpRequest->get('session', 0);
 
 $restResponse = new RestResponse();
 
@@ -578,12 +583,7 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::CREATE_SESSION_FROM_MODEL:
-            $newSessionId = $restApi->createSessionFromModel(
-                $_POST['modelSessionId'],
-                $_POST['sessionName'],
-                $_POST['startDate'],
-                $_POST['endDate'],
-                isset($_POST['extraFields']) ? $_POST['extraFields'] : []);
+            $newSessionId = $restApi->createSessionFromModel($httpRequest);
             $restResponse->setData([$newSessionId]);
             break;
         case Rest::UPDATE_SESSION:

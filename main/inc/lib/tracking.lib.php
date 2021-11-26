@@ -407,14 +407,14 @@ class Tracking
                             } else {
                                 $scoreItem .= $score == 0 ? '/' : ($maxscore == 0 ? $score : $score.'/'.$maxscore);
                             }
-                            $timeRow = '<td>'.$time.'</td>';
+                            $timeRow = '<td style="width:20%" align="center">'.$time.'</td>';
                             if ($hideTime) {
                                 $timeRow = '';
                             }
                             $output .= '
-                                <td>'.$title.'</td>
-                                <td>'.learnpathitem::humanize_status($lesson_status).'</td>
-                                <td>'.$scoreItem.'</td>
+                                <td style="width:35%">'.$title.'</td>
+                                <td style="width:25%" align="center"><div class="btn btn-primary boldTitle">'.learnpathitem::humanize_status($lesson_status, false).'</div></td>
+                                <td style="width:20%" align="center">'.$scoreItem.'</td>
                                 '.$timeRow.'
                              ';
                             $output .= '</tr>';
@@ -510,18 +510,18 @@ class Tracking
                                         }
                                         $myLessonStatus = $rowAttempts['status'];
                                         if ($myLessonStatus == '') {
-                                            $myLessonStatus = learnpathitem::humanize_status('completed');
+                                            $myLessonStatus = learnpathitem::humanize_status('completed', false);
                                         } elseif ($myLessonStatus == 'incomplete') {
-                                            $myLessonStatus = learnpathitem::humanize_status('incomplete');
+                                            $myLessonStatus = learnpathitem::humanize_status('incomplete', false);
                                         }
-                                        $timeRow = '<td>'.$timeAttempt.'</td>';
+                                        $timeRow = '<td align="center">'.$timeAttempt.'</td>';
                                         if ($hideTime) {
                                             $timeRow = '';
                                         }
                                         $output .= '<tr>
                                         <td><em>'.get_lang('Attempt').' '.$n.'</em></td>
-                                        <td>'.$myLessonStatus.'</td>
-                                        <td>'.$viewScore.'</td>
+                                        <td align="center"><div class="btn btn-primary boldTitle">'.$myLessonStatus.'</div></td>
+                                        <td align="center">'.$viewScore.'</td>
                                         '.$timeRow;
                                         $output .= '</tr>';
                                         $n++;
@@ -537,7 +537,7 @@ class Tracking
 
         $totalScore = self::get_avg_student_score(
             $userId,
-            $courseId,
+            $courseInfo['code'],
             [$lpId],
             $sessionId,
             false,
@@ -557,15 +557,15 @@ class Tracking
             }
         }
         $progress = learnpath::getProgress($lpId, $userId, $courseId, $sessionId);
-        $timeTotal = '<th>'.$totalTime.'</th>';
+        $timeTotal = '<th align="center">'.$totalTime.'</th>';
         if ($hideTime) {
             $timeTotal = '';
         }
 
         $output .= '<tr>
                 <th><i>'.get_lang('AccomplishedStepsTotal').'</i></th>
-                <th>'.$progress.'%</th>
-                <th>'.$finalScore.'</th>
+                <th align="center">'.$progress.'%</th>
+                <th align="center">'.$finalScore.'</th>
                 '.$timeTotal.'
            </tr></tbody></table>';
 

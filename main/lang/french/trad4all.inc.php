@@ -8757,4 +8757,5 @@ $AgendaEventsInBaseCourseWillBeVisibleInCourseSessions = "Les événnements du c
 $AgendaEventsOnlyVisibleInCurrentCourse = "Les événnements du cours ne sont visibles que dans le cours de base";
 $testResult = "Résultat du test";
 $FilterByLp = "Filtrer par parcours";
+$ShareForumsInSessions = "Partager les forums avec toutes les sessions";
 ?>

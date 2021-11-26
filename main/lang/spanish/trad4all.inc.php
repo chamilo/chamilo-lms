@@ -8853,4 +8853,5 @@ $AgendaEventsInBaseCourseWillBeVisibleInCourseSessions = "Eventos de la agenda d
 $AgendaEventsOnlyVisibleInCurrentCourse = "Eventos de la agenda solo visibles en el curso actual";
 $testResult = "Resultado del examen";
 $FilterByLp = "Filtrar por lecciones";
+$ShareForumsInSessions = "Compartir los foros con todas las sesiones";
 ?>

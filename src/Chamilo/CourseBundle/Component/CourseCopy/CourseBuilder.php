@@ -845,6 +845,22 @@ class CourseBuilder
             );
 
             $this->findAndSetDocumentsInText($obj->description);
+            // It searches images from hotspot to build
+            if (HOT_SPOT == $obj->type) {
+                if (is_numeric($obj->picture)) {
+                    $itemDocumentId = (int) $obj->picture;
+                    $document = \DocumentManager::get_document_data_by_id($itemDocumentId, api_get_course_id());
+                    if (file_exists($document['absolute_path'])) {
+                        $directUrl = $document['direct_url'];
+                        $path = str_replace(api_get_path(WEB_PATH), '/', $directUrl);
+                        $this->documentsAddedInText[] = [
+                            0 => $path,
+                            1 => 'local',
+                            2 => 'rel',
+                        ];
+                    }
+                }
+            }
 
             // build the backup resource question object
             $question = new QuizQuestion(

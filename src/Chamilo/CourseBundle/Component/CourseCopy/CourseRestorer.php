@@ -403,6 +403,11 @@ class CourseRestorer
                 $dir_to_create = dirname($document->path);
                 $originalFolderNameList[basename($document->path)] = $document->title;
                 if (!empty($dir_to_create) && $dir_to_create != 'document' && $dir_to_create != '/') {
+                    // it creates folder images if it doesn't exist , used for hotspot pictures.
+                    if (false !== strpos($document->path, '/images/') && !is_dir(dirname($path.$document->path))) {
+                        $perm = api_get_permissions_for_new_directories();
+                        mkdir(dirname($path.$document->path), $perm, true);
+                    }
                     if (is_dir($path.dirname($document->path))) {
                         $sql = "SELECT id FROM $table
                                 WHERE
@@ -411,13 +416,9 @@ class CourseRestorer
                         $res = Database::query($sql);
 
                         if (Database::num_rows($res) == 0) {
-                            //continue;
-                            $visibility = $document->item_properties[0]['visibility'];
                             $new = '/'.substr(dirname($document->path), 9);
-                            $title = $document->title;
-                            if (empty($title)) {
-                                $title = str_replace('/', '', $new);
-                            }
+                            // It adds the folder name as title
+                            $title = str_replace('/', '', $new);
 
                             // This code fixes the possibility for a file without a directory entry to be
                             $document_id = add_document(
@@ -899,6 +900,7 @@ class CourseRestorer
                     } // end switch
                 } else {
                     // end if file exists
+
                     //make sure the source file actually exists
                     if (is_file($this->course->backup_path.'/'.$document->path) &&
                         is_readable($this->course->backup_path.'/'.$document->path) &&

@@ -154,6 +154,7 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
                 'user' => $userid,
                 'invitation_code' => $autoInvitationcode,
                 'invitation_date' => $now,
+                'session_id' => $sessionId,
             ];
             if ($allowSurveyInLp) {
                 $params['c_lp_item_id'] = $lpItemId;

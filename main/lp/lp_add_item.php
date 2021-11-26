@@ -277,7 +277,7 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
         case TOOL_SURVEY:
             echo $learnPath->display_manipulate($new_item_id, $type);
             echo Display::return_message(
-                get_lang('NewSurveyCreated'),
+                get_lang('SurveyAdded'),
                 'confirmation'
             );
             break;

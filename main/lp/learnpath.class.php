@@ -8113,11 +8113,11 @@ class learnpath
         unset($this->arrMenu);
 
         if ($action == 'add') {
-            $legend = get_lang('CreateTheSurvey');
+            $legend = get_lang('CreateSurvey');
         } elseif ($action == 'move') {
             $legend = get_lang('MoveTheCurrentSurvey');
         } else {
-            $legend = get_lang('EditCurrentSurvey');
+            $legend = get_lang('ModifySurveyInformation');
         }
 
         $form = new FormValidator(

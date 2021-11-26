@@ -57,6 +57,8 @@ if (empty($courseInfo)) {
 
 $userInfo = api_get_user_info();
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_session_id();
+$lpItemId = isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : 0;
+$allowSurveyInLp = api_get_configuration_value('allow_survey_tool_in_lp');
 
 // Breadcrumbs
 if (!empty($userInfo)) {
@@ -91,6 +93,15 @@ if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET
 }
 
 $invitationcode = $_GET['invitationcode'];
+$lpItemCondition = '';
+if ($allowSurveyInLp) {
+    $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+}
+
+$sessionCondition = '';
+if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+    $sessionCondition = api_get_session_condition($sessionId);
+}
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
 if ('auto' === $invitationcode && isset($_GET['scode'])) {
@@ -104,7 +115,8 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
             $userid,
             $surveyCode,
             $courseInfo['real_id'],
-            $sessionId
+            $sessionId,
+            $lpItemId
         );
         $lastInvitation = current($invitations);
 
@@ -130,7 +142,9 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
                 FROM $table_survey_invitation
                 WHERE
                     c_id = $course_id AND
-                    invitation_code = '".Database::escape_string($autoInvitationcode)."'";
+                    invitation_code = '".Database::escape_string($autoInvitationcode)."'
+                    $sessionCondition
+                    $lpItemCondition";
         $result = Database::query($sql);
         $now = api_get_utc_datetime();
         if (0 == Database :: num_rows($result)) {
@@ -140,7 +154,11 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
                 'user' => $userid,
                 'invitation_code' => $autoInvitationcode,
                 'invitation_date' => $now,
+                'session_id' => $sessionId,
             ];
+            if ($allowSurveyInLp) {
+                $params['c_lp_item_id'] = $lpItemId;
+            }
             Database::insert($table_survey_invitation, $params);
         }
         // From here we use the new invitationcode auto-userid-surveycode string
@@ -154,7 +172,9 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
 $sql = "SELECT * FROM $table_survey_invitation
         WHERE
             c_id = $course_id AND
-            invitation_code = '".Database::escape_string($invitationcode)."'";
+            invitation_code = '".Database::escape_string($invitationcode)."'
+            $sessionCondition
+            $lpItemCondition";
 $result = Database::query($sql);
 if (Database::num_rows($result) < 1) {
     api_not_allowed(true, get_lang('WrongInvitationCode'));
@@ -188,7 +208,12 @@ $sql = "SELECT * FROM $table_survey
         WHERE
             c_id = $course_id AND
             code = '".Database::escape_string($survey_invitation['survey_code'])."'";
-$sql .= api_get_session_condition($sessionId);
+if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+    // It lists the surveys base too
+    $sql .= api_get_session_condition($sessionId, true, true);
+} else {
+    $sql .= api_get_session_condition($sessionId);
+}
 $result = Database::query($sql);
 
 if (Database::num_rows($result) > 1) {
@@ -284,7 +309,9 @@ if (count($_POST) > 0) {
                         $survey_invitation['user'],
                         $survey_invitation['survey_id'],
                         $survey_question_id,
-                        $course_id
+                        $course_id,
+                        $sessionId,
+                        $lpItemId
                     );
 
                     foreach ($value as $answer_key => &$answer_value) {
@@ -302,7 +329,10 @@ if (count($_POST) > 0) {
                             $survey_question_id,
                             $option_id,
                             $option_value,
-                            $survey_data
+                            $survey_data,
+                            '',
+                            $sessionId,
+                            $lpItemId
                         );
                     }
                 } else {
@@ -330,7 +360,9 @@ if (count($_POST) > 0) {
                         $survey_invitation['user'],
                         $survey_invitation['survey_id'],
                         $survey_question_id,
-                        $course_id
+                        $course_id,
+                        $sessionId,
+                        $lpItemId
                     );
 
                     SurveyUtil::store_answer(
@@ -340,7 +372,9 @@ if (count($_POST) > 0) {
                         $value,
                         $option_value,
                         $survey_data,
-                        $other
+                        $other,
+                        $sessionId,
+                        $lpItemId
                     );
                 }
             }
@@ -388,7 +422,9 @@ if (count($_POST) > 0) {
                     $survey_invitation['user'],
                     $survey_invitation['survey_id'],
                     $survey_question_id,
-                    $course_id
+                    $course_id,
+                    $sessionId,
+                    $lpItemId
                 );
 
                 SurveyUtil::store_answer(
@@ -397,7 +433,10 @@ if (count($_POST) > 0) {
                     $survey_question_id,
                     $value,
                     $option_value,
-                    $survey_data
+                    $survey_data,
+                    '',
+                    $sessionId,
+                    $lpItemId
                 );
             }
         }
@@ -435,6 +474,9 @@ if ($survey_data['form_fields'] != '' &&
     $listQueryParams = preg_split('/&/', $_SERVER['QUERY_STRING']);
     foreach ($listQueryParams as $param) {
         $url .= '&'.Security::remove_XSS($param);
+    }
+    if (!empty($lpItemId) && $allowSurveyInLp) {
+        $url .= '&lp_item_id='.$lpItemId.'&origin=learnpath';
     }
 
     // We use the same form as in auth/profile.php
@@ -650,7 +692,8 @@ if (isset($_POST['finish_survey'])) {
     SurveyManager::update_survey_answered(
         $survey_data,
         $survey_invitation['user'],
-        $survey_invitation['survey_code']
+        $survey_invitation['survey_code'],
+        $lpItemId
     );
 
     SurveyUtil::flagSurveyAsAnswered(
@@ -658,7 +701,7 @@ if (isset($_POST['finish_survey'])) {
         $survey_invitation['c_id']
     );
 
-    if ($courseInfo && !api_is_anonymous()) {
+    if ($courseInfo && !api_is_anonymous() && empty($lpItemId)) {
         echo '<br /><br />';
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
@@ -736,6 +779,17 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 // Get the user into survey answer table (user or anonymus)
                 $my_user_id = $survey_data['anonymous'] == 1 ? $surveyUserFromSession : api_get_user_id();
 
+                // To show the answers by lp item
+                $lpItemCondition = '';
+                if ($allowSurveyInLp) {
+                    $lpItemCondition = " AND sa.c_lp_item_id = $lpItemId";
+                }
+                // To show the answers by session
+                $sessionCondition = '';
+                if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+                    $sessionCondition = api_get_session_condition($sessionId, true, false, 'sa.session_id');
+                }
+
                 $sql = "SELECT
                             survey_question.survey_group_sec1,
                             survey_question.survey_group_sec2,
@@ -761,7 +815,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                                 SELECT sa.question_id
                                 FROM ".$table_survey_answer." sa
                                 WHERE
-                                    sa.user='".$my_user_id."') AND
+                                    sa.user='".$my_user_id."' $sessionCondition $lpItemCondition) AND
                                     survey_question.c_id =  $course_id
                                 ORDER BY survey_question.sort, survey_question_option.sort ASC";
             } else {
@@ -837,6 +891,18 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
             $answer_list = [];
             // Get current user results
             $results = [];
+
+            // To display de answers by Lp Item
+            $lpItemCondition = '';
+            if ($allowSurveyInLp) {
+                $lpItemCondition = " AND survey_answer.c_lp_item_id = $lpItemId";
+            }
+            // To display the answers by session
+            $sessionCondition = '';
+            if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+                $sessionCondition = api_get_session_condition($sessionId, true, false, 'survey_answer.session_id');
+            }
+
             $sql = "SELECT
                       survey_group_pri,
                       user,
@@ -848,7 +914,9 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                         survey_answer.survey_id='".$my_survey_id."' AND
                         survey_answer.user='".$current_user."' AND
                         survey_answer.c_id = $course_id AND
-                        survey_question.c_id = $course_id AND
+                        survey_question.c_id = $course_id
+                        $sessionCondition
+                        $lpItemCondition
                     GROUP BY survey_group_pri
                     ORDER BY survey_group_pri
                     ";
@@ -1272,6 +1340,9 @@ if (!empty($_GET['language'])) {
     $lang = Security::remove_XSS($_GET['language']);
     $url .= '&language='.$lang;
 }
+if (!empty($lpItemId) && $allowSurveyInLp) {
+    $url .= '&lp_item_id='.$lpItemId.'&origin=learnpath';
+}
 $form = new FormValidator(
     'question',
     'post',
@@ -1340,7 +1411,7 @@ if (isset($questions) && is_array($questions)) {
         }
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div>');
 
-        $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
+        $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id'], $lpItemId);
         $finalAnswer = null;
 
         if (!empty($userAnswerData[$user_id])) {

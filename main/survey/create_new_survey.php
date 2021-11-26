@@ -372,6 +372,22 @@ if ($form->validate()) {
 } else {
     // Displaying the header
     Display::display_header($tool_name);
+    $actionLeft = null;
+    //if is called from learning path
+    if (isset($_GET['lp_id'])) {
+        $lpId = (int) $_GET['lp_id'];
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$lpId.'#resource_tab-6';
+        $actionLeft .= Display::url(
+            Display::return_icon(
+                'back.png',
+                get_lang("BackTo").' '.get_lang("LearningPaths"),
+                null,
+                ICON_SIZE_MEDIUM
+            ),
+            $url
+        );
+        echo Display::toolbarAction('toolbar-forum', [$actionLeft]);
+    }
     $form->display();
 }
 

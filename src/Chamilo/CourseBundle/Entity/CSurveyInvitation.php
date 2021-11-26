@@ -98,6 +98,13 @@ class CSurveyInvitation
     protected $groupId;
 
     /**
+     * @var int
+     *
+     * ORM\Column(name="c_lp_item_id", type="integer", nullable=false)
+     */
+    protected $lpItemId;
+
+    /**
      * Set surveyCode.
      *
      * @param string $surveyCode
@@ -287,6 +294,30 @@ class CSurveyInvitation
     public function getGroupId()
     {
         return $this->groupId;
+    }
+
+    /**
+     * Set LpItemId.
+     *
+     * @param int $lpItemId
+     *
+     * @return CSurveyInvitation
+     */
+    public function setLpItemId($lpItemId)
+    {
+        $this->lpItemId = $lpItemId;
+
+        return $this;
+    }
+
+    /**
+     * Get LpItemId.
+     *
+     * @return int
+     */
+    public function getLpItemId()
+    {
+        return $this->lpItemId;
     }
 
     /**

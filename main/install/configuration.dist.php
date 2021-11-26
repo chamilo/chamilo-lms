@@ -497,6 +497,17 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 // Allow export learning paths to students
 //$_configuration['lp_allow_export_to_students'] = false;
 //
+// Allow survey tool in learnpath
+// ALTER TABLE c_survey_answer ADD COLUMN c_lp_item_id INT(11) DEFAULT 0;
+// Edit src/Chamilo/CourseBundle/Entity/CSurveyAnswer.php and add a '@' character in front of 'ORM\Column(name="c_lp_item_id"
+// ALTER TABLE c_survey_invitation ADD COLUMN c_lp_item_id int(11) DEFAULT 0;
+// Edit src/Chamilo/CourseBundle/Entity/CSurveyInvitation.php and add a '@' character in front of 'ORM\Column(name="c_lp_item_id"
+//$_configuration['allow_survey_tool_in_lp'] = false;
+// Show surveys from main course in all course sessions
+// ALTER TABLE c_survey_answer ADD COLUMN session_id INT(11) DEFAULT 0;
+// Edit src/Chamilo/CourseBundle/Entity/CSurveyAnswer.php and add a '@' character in front of 'ORM\Column(name="session_id"
+//$_configuration['show_surveys_base_in_sessions'] = false;
+//
 // ------ HTTP headers security
 // This section relates to options to increase the security of your Chamilo
 // portal against attacks specifically focused on HTTP headers vulnerabilities

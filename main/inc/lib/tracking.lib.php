@@ -5237,7 +5237,6 @@ class Tracking
         if (!empty($session_id)) {
             $sessionCondition = " AND s.id = $session_id";
         }
-        $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
 
         // Get the list of sessions where the user is subscribed as student
         if (api_is_multiple_url_enabled()) {
@@ -5345,8 +5344,8 @@ class Tracking
                 foreach ($courses as $course_code => $course_title) {
                     $courseInfo = api_get_course_info($course_code);
                     $courseId = $courseInfo['real_id'];
-
-                    if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
+                    $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
+                    if ($lpShowMaxProgress && api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
                         $lpShowProgressCourseSetting = api_get_course_setting('lp_show_max_or_average_progress', $courseInfo, true);
                         if (in_array($lpShowProgressCourseSetting, ['max', 'average'])) {
                             $lpShowMaxProgress = ('max' === $lpShowProgressCourseSetting);
@@ -8985,7 +8984,7 @@ class TrackingCourseLog
         }
 
         $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
-        if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
+        if ($lpShowMaxProgress && api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
             $lpShowProgressCourseSetting = api_get_course_setting('lp_show_max_or_average_progress', $courseInfo, true);
             if (in_array($lpShowProgressCourseSetting, ['max', 'average'])) {
                 $lpShowMaxProgress = ('max' === $lpShowProgressCourseSetting);

@@ -30,7 +30,7 @@ $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 $origin = api_get_origin();
 $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
-if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
+if ($lpShowMaxProgress && api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
     $lpShowProgressCourseSetting = api_get_course_setting('lp_show_max_or_average_progress');
     if (in_array($lpShowProgressCourseSetting, ['max', 'average'])) {
         $lpShowMaxProgress = ('max' === $lpShowProgressCourseSetting);

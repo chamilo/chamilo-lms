@@ -8818,4 +8818,11 @@ $ScormAndLPMaxProgress = "Maximum progress in learning paths";
 $HideSkills = "Hide skills";
 $OptionsToHideInExport = "Options for hiding in export";
 $HideAssignment = "Hide assignments";
+$AddSurveyToCourse = "Add survey to course";
+$MoveTheCurrentSurvey = "Move the current survey";
+$ShareEventsInSessions = "Share events in course sessions";
+$AgendaEventsInBaseCourseWillBeVisibleInCourseSessions = "Agenda events in the course will be visible in sessions";
+$AgendaEventsOnlyVisibleInCurrentCourse = "Agenda events only visible in current course";
+$testResult = "Test result";
+$FilterByLp = "Filter by Learning Path";
 ?>

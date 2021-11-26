@@ -8846,4 +8846,11 @@ $ScormAndLPMaxProgress = "Progreso máximo en lecciones";
 $HideSkills = "Ocultar competencias";
 $OptionsToHideInExport = "Opciones para esconder en el reporte";
 $HideAssignment = "Esconder tareas";
+$AddSurveyToCourse = "Agregar la encuesta a la lección";
+$MoveTheCurrentSurvey = "Mover la encueta actual";
+$ShareEventsInSessions = "Compartir eventos en sesiones";
+$AgendaEventsInBaseCourseWillBeVisibleInCourseSessions = "Eventos de la agenda del curso serán visibles en sesiones";
+$AgendaEventsOnlyVisibleInCurrentCourse = "Eventos de la agenda solo visibles en el curso actual";
+$testResult = "Resultado del examen";
+$FilterByLp = "Filtrar por lecciones";
 ?>

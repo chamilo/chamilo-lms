@@ -8750,4 +8750,11 @@ $ScormAndLPMaxProgress = "Progrès maximum dans les parcours";
 $HideSkills = "Masquer les compétences";
 $OptionsToHideInExport = "Options pour masquer dans l'export";
 $HideAssignment = "Masquer les travaux";
+$AddSurveyToCourse = "Ajouter l'enquête au cours";
+$MoveTheCurrentSurvey = "Aller à l'enquête suivante";
+$ShareEventsInSessions = "Partager les événnements dans les sessions";
+$AgendaEventsInBaseCourseWillBeVisibleInCourseSessions = "Les événnements du cours seront visibles dans toutes les sessions";
+$AgendaEventsOnlyVisibleInCurrentCourse = "Les événnements du cours ne sont visibles que dans le cours de base";
+$testResult = "Résultat du test";
+$FilterByLp = "Filtrer par parcours";
 ?>

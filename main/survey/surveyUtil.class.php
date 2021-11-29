@@ -151,7 +151,7 @@ class SurveyUtil
         }
         // To select the answers by session
         $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
             $sessionCondition = " , session_id = $sessionId";
         }
 
@@ -340,7 +340,7 @@ class SurveyUtil
 
             // To delete or update the answer by session
             $sessionCondition = '';
-            if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            if (api_get_configuration_value('show_surveys_base_in_sessions')) {
                 $sessionId = api_get_session_id();
                 $sessionCondition = api_get_session_condition($sessionId);
             }
@@ -484,9 +484,11 @@ class SurveyUtil
             }
             // To select the answers by session
             $sessionCondition = '';
-            if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-                $sessionId = api_get_session_id();
-                $sessionCondition = api_get_session_condition($sessionId);
+            $sessionId = api_get_session_id();
+            if (api_get_configuration_value('show_surveys_base_in_sessions')) {
+                if (!empty($sessionId)) {
+                    $sessionCondition = api_get_session_condition($sessionId);
+                }
             }
 
             // To select the answers by Lp item
@@ -723,10 +725,13 @@ class SurveyUtil
 
         // To select the answers by session
         $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionCondition = api_get_session_condition($sessionId);
+        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
+            if (!empty($sessionId)) {
+                $sessionCondition = api_get_session_condition($sessionId);
+            }
         }
 
+        // To select the aswers by lp item
         $lpItemCondition = '';
         $urlParams = '';
         if (api_get_configuration_value('allow_survey_tool_in_lp')) {
@@ -1038,12 +1043,14 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $course_id = api_get_course_int_id();
         $surveyId = $survey_data['survey_id'];
+        $sessionId = api_get_session_id();
 
         // To select the answers by session
         $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
+        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
+            if (!empty($sessionId)) {
+                $sessionCondition = api_get_session_condition($sessionId);
+            }
         }
 
         // Getting the options
@@ -1172,13 +1179,17 @@ class SurveyUtil
 
         $surveyId = (int) $survey_data['survey_id'];
         $course_id = (int) $survey_data['c_id'];
+        $sessionId = api_get_session_id();
 
         // To select the answers by session
         $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
+        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
+            if (!empty($sessionId)) {
+                $sessionCondition = api_get_session_condition($sessionId);
+            }
         }
+
+        // To select the answers by lp item
         $lpItemCondition = '';
         if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
             $lpItemCondition = " AND c_lp_item_id = $lpItemId";
@@ -1629,12 +1640,14 @@ class SurveyUtil
 
         $course = api_get_course_info();
         $course_id = $course['real_id'];
+        $sessionId = api_get_session_id();
 
         // To select the answers by session
         $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
+        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
+            if (!empty($sessionId)) {
+                $sessionCondition = api_get_session_condition($sessionId);
+            }
         }
 
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
@@ -2016,10 +2029,12 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         // To select the answers by session
+        $sessionId = api_get_session_id();
         $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
+        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
+            if (!empty($sessionId)) {
+                $sessionCondition = api_get_session_condition($sessionId);
+            }
         }
 
         // First line (questions)
@@ -2575,7 +2590,9 @@ class SurveyUtil
         // To select the answers by session
         $sessionCondition = '';
         if (api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionCondition = api_get_session_condition($sessionId);
+            if (!empty($sessionId)) {
+                $sessionCondition = api_get_session_condition($sessionId);
+            }
         }
         // To select the answers by Lp item
         $lpItemCondition = '';
@@ -3623,10 +3640,8 @@ class SurveyUtil
             $search_restriction = "WHERE c_id = $course_id";
         }
         // To list the surveys base too
-        $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionCondition = api_get_session_condition(api_get_session_id(), true, true);
-        }
+        $showSurveysBase = api_get_configuration_value('show_surveys_base_in_sessions');
+        $sessionCondition = api_get_session_condition(api_get_session_id(), true, $showSurveysBase);
 
         $sql = "SELECT count(survey_id) AS total_number_of_items
 		        FROM $table_survey $search_restriction $sessionCondition";
@@ -3689,11 +3704,9 @@ class SurveyUtil
         }
 
         // To list the surveys base too
-        $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId, true, true);
-        }
+        $showSurveysBase = api_get_configuration_value('show_surveys_base_in_sessions');
+        $sessionId = api_get_session_id();
+        $sessionCondition = api_get_session_condition($sessionId, true, $showSurveysBase);
         $course_id = api_get_course_int_id();
 
         $sql = "
@@ -3941,10 +3954,8 @@ class SurveyUtil
         $filterDate = $allowSurveyAvailabilityDatetime ? $now->format('Y-m-d H:i') : $now->format('Y-m-d');
 
         // To list the surveys base too
-        $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionCondition = api_get_session_condition($sessionId, true, true, 'survey.session_id');
-        }
+        $showSurveysBase = api_get_configuration_value('show_surveys_base_in_sessions');
+        $sessionCondition = api_get_session_condition($sessionId, true, $showSurveysBase, 'survey.session_id');
 
         $sql = "SELECT survey_invitation.answered,
                     survey_invitation.invitation_code,

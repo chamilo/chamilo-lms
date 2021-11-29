@@ -485,7 +485,7 @@ class SurveyUtil
             // To select the answers by session
             $sessionCondition = '';
             $sessionId = api_get_session_id();
-            if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            if (api_get_configuration_value('show_surveys_base_in_sessions')) {
                 if (!empty($sessionId)) {
                     $sessionCondition = api_get_session_condition($sessionId);
                 }
@@ -3640,10 +3640,8 @@ class SurveyUtil
             $search_restriction = "WHERE c_id = $course_id";
         }
         // To list the surveys base too
-        $sessionCondition = '';
-        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionCondition = api_get_session_condition(api_get_session_id(), true, true);
-        }
+        $showSurveysBase = api_get_configuration_value('show_surveys_base_in_sessions');
+        $sessionCondition = api_get_session_condition(api_get_session_id(), true, $showSurveysBase);
 
         $sql = "SELECT count(survey_id) AS total_number_of_items
 		        FROM $table_survey $search_restriction $sessionCondition";
@@ -3706,11 +3704,9 @@ class SurveyUtil
         }
 
         // To list the surveys base too
-        $sessionCondition = '';
+        $showSurveysBase = api_get_configuration_value('show_surveys_base_in_sessions');
         $sessionId = api_get_session_id();
-        if (api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionCondition = api_get_session_condition($sessionId, true, true);
-        }
+        $sessionCondition = api_get_session_condition($sessionId, true, $showSurveysBase);
         $course_id = api_get_course_int_id();
 
         $sql = "
@@ -3958,10 +3954,8 @@ class SurveyUtil
         $filterDate = $allowSurveyAvailabilityDatetime ? $now->format('Y-m-d H:i') : $now->format('Y-m-d');
 
         // To list the surveys base too
-        $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionCondition = api_get_session_condition($sessionId, true, true, 'survey.session_id');
-        }
+        $showSurveysBase = api_get_configuration_value('show_surveys_base_in_sessions');
+        $sessionCondition = api_get_session_condition($sessionId, true, $showSurveysBase, 'survey.session_id');
 
         $sql = "SELECT survey_invitation.answered,
                     survey_invitation.invitation_code,

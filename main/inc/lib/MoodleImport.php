@@ -389,7 +389,7 @@ class MoodleImport
      *
      * @param resource $moduleXml XML file
      *
-     * @return mixed | array if is a valid xml file, false otherwise
+     * @return mixed|array if is a valid xml file, false otherwise
      */
     public function readForumModule($moduleXml)
     {
@@ -416,7 +416,7 @@ class MoodleImport
      *
      * @param resource $moduleXml XML file
      *
-     * @return mixed | array if is a valid xml file, false otherwise
+     * @return mixed|array if is a valid xml file, false otherwise
      */
     public function readResourceModule($moduleXml)
     {
@@ -447,7 +447,7 @@ class MoodleImport
      *
      * @param resource $moduleXml XML file
      *
-     * @return mixed | array if is a valid xml file, false otherwise
+     * @return mixed|array if is a valid xml file, false otherwise
      */
     public function readUrlModule($moduleXml)
     {
@@ -474,7 +474,7 @@ class MoodleImport
      *
      * @param resource $moduleXml XML file
      *
-     * @return mixed | array if is a valid xml file, false otherwise
+     * @return mixed|array if is a valid xml file, false otherwise
      */
     public function readQuizModule($moduleXml)
     {
@@ -516,7 +516,7 @@ class MoodleImport
      * @param resource $filesXml  XML file
      * @param int      $contextId
      *
-     * @return mixed | array if is a valid xml file, false otherwise
+     * @return mixed|array if is a valid xml file, false otherwise
      */
     public function readMainFilesXml($filesXml, $contextId)
     {
@@ -578,7 +578,7 @@ class MoodleImport
      * @param resource $questionsXml XML file
      * @param int      $questionId
      *
-     * @return mixed | array if is a valid xml file, false otherwise
+     * @return mixed|array if is a valid xml file, false otherwise
      */
     public function readMainQuestionsXml($questionsXml, $questionId)
     {

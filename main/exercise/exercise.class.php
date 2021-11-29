@@ -4405,7 +4405,7 @@ class Exercise
                                     $correctAnswer = $listTeacherAnswerTemp[$j];
 
                                     if (empty($correctAnswer)) {
-                                        continue;
+                                        break;
                                     }
 
                                     if (FillBlanks::isStudentAnswerGood(
@@ -4421,7 +4421,7 @@ class Exercise
                                     }
 
                                     if (FillBlanks::FILL_THE_BLANK_MENU != $listCorrectAnswers['words_types'][$j]) {
-                                        continue;
+                                        break;
                                     }
 
                                     $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);

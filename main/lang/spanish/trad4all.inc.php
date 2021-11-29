@@ -8851,7 +8851,7 @@ $MoveTheCurrentSurvey = "Mover la encueta actual";
 $ShareEventsInSessions = "Compartir eventos en sesiones";
 $AgendaEventsInBaseCourseWillBeVisibleInCourseSessions = "Eventos de la agenda del curso serán visibles en sesiones";
 $AgendaEventsOnlyVisibleInCurrentCourse = "Eventos de la agenda solo visibles en el curso actual";
-$testResult = "Resultado del examen";
+$TestResult = "Resultado del examen";
 $FilterByLp = "Filtrar por lecciones";
 $ShareForumsInSessions = "Compartir los foros con todas las sesiones";
 ?>

@@ -4754,7 +4754,7 @@ class SessionManager
      * @param int  $id
      * @param bool $checkSession
      *
-     * @return mixed | bool true if pass the check, api_not_allowed otherwise
+     * @return mixed|bool true if pass the check, api_not_allowed otherwise
      */
     public static function protectSession($id, $checkSession = true)
     {
@@ -9776,6 +9776,46 @@ class SessionManager
         return $content;
     }
 
+    public static function importAgendaFromSessionModel(int $modelSessionId, int $sessionId, int $courseId)
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CCalendarEvent');
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $session = api_get_session_entity($sessionId);
+        $modelSession = api_get_session_entity($modelSessionId);
+
+        $sessionDateDiff = $modelSession->getAccessStartDate()->diff($session->getAccessStartDate());
+
+        $events = $repo->findBy(
+            ['cId' => $courseId, 'sessionId' => $modelSessionId]
+        );
+
+        $agenda = new Agenda('course');
+        $agenda->set_course($courseInfo);
+        $agenda->setSessionId($sessionId);
+
+        foreach ($events as $event) {
+            $startDate = $event->getStartDate()->add($sessionDateDiff);
+            $endDate = $event->getEndDate()->add($sessionDateDiff);
+
+            $agenda->addEvent(
+                $startDate->format('Y-m-d H:i:s'),
+                $endDate->format('Y-m-d H:i:s'),
+                'false',
+                $event->getTitle(),
+                $event->getContent(),
+                ['GROUP:0'],
+                false,
+                null,
+                [],
+                [],
+                $event->getComment(),
+                $event->getColor()
+            );
+        }
+    }
+
     /**
      * @param int $id
      *
@@ -9911,46 +9951,6 @@ class SessionManager
             return 1;
         } else {
             return -1;
-        }
-    }
-
-    public static function importAgendaFromSessionModel(int $modelSessionId, int $sessionId, int $courseId)
-    {
-        $em = Database::getManager();
-        $repo = $em->getRepository('ChamiloCourseBundle:CCalendarEvent');
-
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $session = api_get_session_entity($sessionId);
-        $modelSession = api_get_session_entity($modelSessionId);
-
-        $sessionDateDiff = $modelSession->getAccessStartDate()->diff($session->getAccessStartDate());
-
-        $events = $repo->findBy(
-            ['cId' => $courseId, 'sessionId' => $modelSessionId]
-        );
-
-        $agenda = new Agenda('course');
-        $agenda->set_course($courseInfo);
-        $agenda->setSessionId($sessionId);
-
-        foreach ($events as $event) {
-            $startDate = $event->getStartDate()->add($sessionDateDiff);
-            $endDate = $event->getEndDate()->add($sessionDateDiff);
-
-            $agenda->addEvent(
-                $startDate->format('Y-m-d H:i:s'),
-                $endDate->format('Y-m-d H:i:s'),
-                'false',
-                $event->getTitle(),
-                $event->getContent(),
-                ['GROUP:0'],
-                false,
-                null,
-                [],
-                [],
-                $event->getComment(),
-                $event->getColor()
-            );
         }
     }
 }

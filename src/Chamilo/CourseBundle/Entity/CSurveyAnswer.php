@@ -259,7 +259,7 @@ class CSurveyAnswer
     }
 
     /**
-     * Get session Id
+     * Get session Id.
      *
      * @return int
      */
@@ -269,7 +269,7 @@ class CSurveyAnswer
     }
 
     /**
-     * Set session Id
+     * Set session Id.
      *
      * @param int $sessionId
      *
@@ -283,7 +283,7 @@ class CSurveyAnswer
     }
 
     /**
-     * Get the lp item Id
+     * Get the lp item Id.
      *
      * @return int
      */
@@ -293,9 +293,7 @@ class CSurveyAnswer
     }
 
     /**
-     * Set lp item Id
-     *
-     * @param int $lpItemId
+     * Set lp item Id.
      *
      * @return CSurveyAnswer
      */

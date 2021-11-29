@@ -8823,7 +8823,7 @@ $MoveTheCurrentSurvey = "Move the current survey";
 $ShareEventsInSessions = "Share events in course sessions";
 $AgendaEventsInBaseCourseWillBeVisibleInCourseSessions = "Agenda events in the course will be visible in sessions";
 $AgendaEventsOnlyVisibleInCurrentCourse = "Agenda events only visible in current course";
-$testResult = "Test result";
+$TestResult = "Test result";
 $FilterByLp = "Filter by Learning Path";
 $ShareForumsInSessions = "Share forums in all sessions";
 ?>

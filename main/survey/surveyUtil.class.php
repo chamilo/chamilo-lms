@@ -155,7 +155,7 @@ class SurveyUtil
             $sessionCondition = " , session_id = $sessionId";
         }
 
-        $sql =  "INSERT INTO $table_survey_answer SET
+        $sql = "INSERT INTO $table_survey_answer SET
                     c_id = $course_id,
                     user = '".Database::escape_string($user)."',
                     survey_id = '".Database::escape_string($survey_id)."',
@@ -684,7 +684,7 @@ class SurveyUtil
             }
             $form->setDefaults(['lp_item' => $lpItemId]);
             echo $form->returnForm();
-        } else if ('comparativereport' == $actionReport) {
+        } elseif ('comparativereport' == $actionReport) {
             $form->addSelect('lp_item', get_lang('FilterByLp'), $options);
         }
     }
@@ -2352,7 +2352,6 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
         $lpItemId = isset($_REQUEST['lp_item']) ? (int) $_REQUEST['lp_item'] : '';
         $sessionId = api_get_session_id();
-
 
         $url = api_get_self().'?'.api_get_cidreq().'&action='.Security::remove_XSS($_GET['action'])
             .'&survey_id='.$surveyId.'&xaxis='.$xAxis.'&y='.$yAxis;

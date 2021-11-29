@@ -688,8 +688,6 @@ class FillBlanks extends Question
      * @param string $correctAnswer       [words] of the info array of the answer field
      * @param bool   $fromDatabase        Optional
      * @param bool   $studentAnswerIsHash Optional.
-     *
-     * @return bool
      */
     public static function isStudentAnswerGood(
         string $studentAnswer,

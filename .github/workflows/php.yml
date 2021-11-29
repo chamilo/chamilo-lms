@@ -46,6 +46,7 @@ jobs:
                   php-version: ${{ matrix.php-versions }}
                   extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
                   ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
+                  tools: composer:v2
 
             - name: Get composer cache directory
               id: composer-cache-v1

@@ -12,7 +12,7 @@ $rules = [
         'header' => $header,
     ],*/
     'blank_line_after_opening_tag' => false,
-    'no_extra_consecutive_blank_lines' => true,
+    'no_extra_blank_lines' => true,
     'multiline_comment_opening_closing' => true,
     'yoda_style' => false,
     'phpdoc_to_comment' => false,
@@ -38,6 +38,7 @@ $rules = [
 
 $finder = PhpCsFixer\Finder::create()
     ->exclude('app/')
+    ->exclude('node_modules/')
     ->exclude('assets')
     ->exclude('bin')
     ->exclude('documentation')
@@ -89,8 +90,8 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
 ;
 
-return PhpCsFixer\Config::create()
-    ->setRules(
+$config = new PhpCsFixer\Config();
+return $config->setRules(
         $rules
     )
     ->setFinder($finder);

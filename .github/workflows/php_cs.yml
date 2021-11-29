@@ -1,0 +1,51 @@
+name: PHP-CS-Fixer
+
+on: [ push, pull_request ]
+
+jobs:
+  composer_install:
+    runs-on: ubuntu-18.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['7.1']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
+          ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer downloads
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Run composer install
+        run: composer install --prefer-dist --no-progress
+
+      - name: Download PHP-CS-Fixer
+        run: |
+          wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.19.3/php-cs-fixer.phar
+
+      - name: Run PHP-CS-Fixer
+        run: |
+          IFS='
+          '
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRTUXB "HEAD~..HEAD")
+          if ! echo "${CHANGED_FILES}" | grep -qE "^(\\.php-cs-fixer(\\.dist)?\\.php|composer\\.lock)$"; then EXTRA_ARGS=$(printf -- '--path-mode=intersection\n--\n%s' "${CHANGED_FILES}"); else EXTRA_ARGS=''; fi
+          php ./php-cs-fixer.phar fix --config=.php-cs-fixer.php -v --dry-run --using-cache=no --diff ${EXTRA_ARGS}

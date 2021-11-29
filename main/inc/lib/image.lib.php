@@ -439,7 +439,7 @@ class GDWrapper extends ImageWrapper
             }
             $deltaw = (int) (($thumbw - $width) / 2);
             $deltah = (int) (($thumbh - $height) / 2);
-            $dst_img = @ImageCreateTrueColor($thumbw, $thumbh);
+            $dst_img = @imagecreatetruecolor($thumbw, $thumbh);
             @imagealphablending($dst_img, false);
             @imagesavealpha($dst_img, true);
 
@@ -459,14 +459,14 @@ class GDWrapper extends ImageWrapper
             }
             $deltaw = 0;
             $deltah = 0;
-            $dst_img = @ImageCreateTrueColor($width, $height);
+            $dst_img = @imagecreatetruecolor($width, $height);
             @imagealphablending($dst_img, false);
             @imagesavealpha($dst_img, true);
             $this->width = $width;
             $this->height = $height;
         }
         $src_img = $this->bg;
-        @ImageCopyResampled(
+        @imagecopyresampled(
             $dst_img,
             $src_img,
             $deltaw,
@@ -475,8 +475,8 @@ class GDWrapper extends ImageWrapper
             0,
             $width,
             $height,
-            ImageSX($src_img),
-            ImageSY($src_img)
+            imagesx($src_img),
+            imagesy($src_img)
         );
         $this->bg = $dst_img;
         @imagedestroy($src_img);

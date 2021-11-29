@@ -8075,9 +8075,6 @@ class learnpath
         return $return;
     }
 
-    /**
-     *
-     */
     public function displaySurveyForm(
       $action = 'add',
       $id = 0,
@@ -13818,6 +13815,7 @@ EOD;
                     'lp_item_id' => $id_in_path,
                     'origin' => 'learnpath',
                 ];
+
                 return $autoSurveyLink.'&'.http_build_query($lpParams);
         }
 

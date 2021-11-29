@@ -235,7 +235,7 @@ class LegalManager
      *
      * @param int $language language id
      *
-     * @return bool | int the version or false if does not exist
+     * @return bool|int the version or false if does not exist
      */
     public static function get_last_version($language)
     {

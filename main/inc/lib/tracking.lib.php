@@ -6669,8 +6669,8 @@ class Tracking
     }
 
     /**
-     * @param string              $tool
-     * @param sessionEntity |null $session Optional
+     * @param string             $tool
+     * @param sessionEntity|null $session Optional
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *

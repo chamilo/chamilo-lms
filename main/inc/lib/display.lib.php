@@ -2866,13 +2866,11 @@ HTML;
         return $content;
     }
 
-    /**
-     * @param string $frameName
-     *
-     * @return string
-     */
-    public static function getFrameReadyBlock($frameName, $itemType = '')
-    {
+    public static function getFrameReadyBlock(
+        string $frameName,
+        string $itemType = '',
+        string $jsConditionalFunction = 'function () { return false; }'
+    ): string {
         $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
         $webJsPath = api_get_path(WEB_LIBRARY_JS_PATH);
 
@@ -2980,7 +2978,7 @@ HTML;
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},
             {type:"stylesheet", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.css"},
-        ]);';
+        ], '.$jsConditionalFunction.');';
 
         return $frameReady;
     }

@@ -620,7 +620,15 @@ $template->assign(
     )
 );
 
-$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank', $itemType);
+$frameReady = Display::getFrameReadyBlock(
+    '#content_id, #content_id_blank',
+    $itemType,
+    'function () {
+        var arr = ["link", "sco", "xapi"];
+
+        return $.inArray(olms.lms_item_type, arr) !== -1;
+    }'
+);
 $template->assign('frame_ready', $frameReady);
 
 $view = $template->get_template('learnpath/view.tpl');

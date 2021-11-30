@@ -5822,6 +5822,10 @@ class CourseManager
             $courseSettings[] = 'portfolio_max_score';
         }
 
+        if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
+            $courseSettings[] = 'lp_show_max_or_average_progress';
+        }
+
         if (!empty($pluginCourseSettings)) {
             $courseSettings = array_merge(
                 $courseSettings,

@@ -182,7 +182,7 @@ if (api_is_allowed_to_edit()) {
                 }
             }
         }
-    	$filesToZip[]= $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'];
+        $filesToZip[]= $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'];
     }
     $zip->add(
         $filesToZip,
@@ -327,7 +327,7 @@ if (api_is_allowed_to_edit()) {
 
     // Add all files in our final array to the zipfile
     for ($i = 0; $i < count($files_for_zipfile); $i++) {
-    	$filesToZip[] = $sysCoursePath.$courseInfo['path'].'/document'.$files_for_zipfile[$i];
+        $filesToZip[] = $sysCoursePath.$courseInfo['path'].'/document'.$files_for_zipfile[$i];
     }
     $zip->add(
         $filesToZip,

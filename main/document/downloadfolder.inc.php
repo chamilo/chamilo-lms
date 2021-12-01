@@ -127,7 +127,7 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
     $courseInfo['code']
 );
 
-$filesToZip=[];
+$filesToZip = [];
 
 // Admins are allowed to download invisible files
 if (api_is_allowed_to_edit()) {
@@ -182,7 +182,7 @@ if (api_is_allowed_to_edit()) {
                 }
             }
         }
-        $filesToZip[]= $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'];
+        $filesToZip[] = $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'];
     }
     $zip->add(
         $filesToZip,

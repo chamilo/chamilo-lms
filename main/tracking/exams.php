@@ -41,7 +41,7 @@ if ($global) {
 $sessionId = api_get_session_id();
 
 if (empty($sessionId)) {
-    $sessionCondition = ' AND session_id = 0';
+    $sessionCondition = ' AND (session_id = 0 OR session_id IS NULL)';
 } else {
     $sessionCondition = api_get_session_condition($sessionId, true, true);
 }

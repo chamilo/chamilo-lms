@@ -84,6 +84,10 @@ class Notification extends Model
                 );
             }
         }
+        // If email is admin@example.com use the admin email
+        if ($this->adminEmail=='admin@example.com') {
+            $this->adminEmail = api_get_setting('emailAdministrator');
+        }
     }
 
     /**

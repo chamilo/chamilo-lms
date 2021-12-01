@@ -33,6 +33,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
     $select_type = (int) ($_POST['select_type']);
     $file_type = $_POST['file_type'];
+    $includeUsers = (empty($_POST['include_users']) ? false : true);
 
     if (2 == $select_type) {
         // Get selected courses from courses list in form sent
@@ -59,10 +60,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             'CourseCategoryName',
             'Teacher',
             'Language',
-            'Users',
-            'OtherTeachers',
         ];
-
+        if ($includeUsers) {
+            $listToExport[0][] = 'Users';
+            $listToExport[0][] = 'OtherTeachers';
+        }
         $dataToExport = [];
         foreach ($courses as $course) {
             $dataToExport['code'] = str_replace(';', ',', $course['code']);
@@ -76,22 +78,23 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             }
             $dataToExport['tutor_name'] = str_replace(';', ',', $course['tutor_name']);
             $dataToExport['course_language'] = str_replace(';', ',', $course['course_language']);
-            $dataToExport['students'] = '';
-            $dataToExport['teachers'] = '';
-            $usersInCourse = CourseManager::get_user_list_from_course_code($course['code']);
+            if ($includeUsers) {
+                $dataToExport['students'] = '';
+                $dataToExport['teachers'] = '';
+                $usersInCourse = CourseManager::get_user_list_from_course_code($course['code']);
 
-            if (is_array($usersInCourse) && !empty($usersInCourse)) {
-                foreach ($usersInCourse as $user) {
-                    if ($user['status_rel'] == COURSEMANAGER) {
-                        $dataToExport['teachers'] .= $user['username'].'|';
-                    } else {
-                        $dataToExport['students'] .= $user['username'].'|';
+                if (is_array($usersInCourse) && !empty($usersInCourse)) {
+                    foreach ($usersInCourse as $user) {
+                        if ($user['status_rel'] == COURSEMANAGER) {
+                            $dataToExport['teachers'] .= $user['username'].'|';
+                        } else {
+                            $dataToExport['students'] .= $user['username'].'|';
+                        }
                     }
                 }
+                $dataToExport['students'] = substr($dataToExport['students'], 0, -1);
+                $dataToExport['teachers'] = substr($dataToExport['teachers'], 0, -1);
             }
-            $dataToExport['students'] = substr($dataToExport['students'], 0, -1);
-            $dataToExport['teachers'] = substr($dataToExport['teachers'], 0, -1);
-
             $listToExport[] = $dataToExport;
         }
 
@@ -161,7 +164,9 @@ $form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv'
 $form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
 $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file_type_xml']);
 
-$form->setDefaults(['select_type' => '1', 'file_type' => 'csv']);
+$form->addElement('checkbox', 'include_users', get_lang('ExportUsers'), '', '1');
+
+$form->setDefaults(['select_type' => '1', 'file_type' => 'csv', 'include_users' => '1']);
 
 $form->addButtonExport(get_lang('ExportCourses'));
 $form->display();

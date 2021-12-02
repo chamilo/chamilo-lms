@@ -12,7 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Add @ to the next lineactivating the agenda_collective_invitations configuration setting.
- * ORM\Entity()
+ * ORM\Entity().
+ *
  * @ORM\Table(name="agenda_event_invitation")
  */
 class AgendaEventInvitation
@@ -48,29 +49,20 @@ class AgendaEventInvitation
         $this->invitees = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return Collection
-     */
     public function getInvitees(): Collection
     {
         return $this->invitees;
     }
 
-    /**
-     * @param Collection $invitees
-     * @return AgendaEventInvitation
-     */
     public function setInvitees(Collection $invitees): AgendaEventInvitation
     {
         $this->invitees = $invitees;
+
         return $this;
     }
 
@@ -95,27 +87,20 @@ class AgendaEventInvitation
         if ($invitee) {
             $this->invitees->removeElement($invitee);
             $invitee->setInvitation(null);
-
         }
 
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getCreator(): User
     {
         return $this->creator;
     }
 
-    /**
-     * @param User $creator
-     * @return AgendaEventInvitation
-     */
     public function setCreator(User $creator): AgendaEventInvitation
     {
         $this->creator = $creator;
+
         return $this;
     }
 }

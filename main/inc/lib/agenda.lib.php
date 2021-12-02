@@ -707,18 +707,6 @@ class Agenda
         return -1;
     }
 
-    private static function isUserInvitedInEvent(int $id, int $userId): bool
-    {
-        $user = api_get_user_entity($userId);
-
-        $event = Database::getManager()
-            ->getRepository('ChamiloCoreBundle:PersonalAgenda')
-            ->findOneByIdAndInvitee($id, $user)
-        ;
-
-        return null !== $event;
-    }
-
     /**
      * Edits an event.
      *
@@ -1072,6 +1060,7 @@ class Agenda
     /**
      * @param int  $id
      * @param bool $deleteAllItemsFromSerie
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -1666,7 +1655,7 @@ class Agenda
 
                         $event['invitees'][] = [
                             'id' => $inviteeUser->getId(),
-                            'name' => $inviteeUser->getCompleteNameWithUsername()
+                            'name' => $inviteeUser->getCompleteNameWithUsername(),
                         ];
                     }
                 }
@@ -1700,56 +1689,6 @@ class Agenda
         }
 
         return $my_events;
-    }
-
-    private function loadEventsAsInvitee(User $user, ?DateTime $startDate, ?DateTime $endDate)
-    {
-        $em = Database::getManager();
-        $eventRepo = $em->getRepository('ChamiloCoreBundle:PersonalAgenda');
-        $events = $eventRepo->getEventsForInvitee($user, $startDate, $endDate);
-
-        foreach ($events as $event) {
-            $eventInfo = [];
-            $eventInfo['id'] = 'personal_'.$event->getId();
-            $eventInfo['title'] = $event->getTitle();
-            $eventInfo['className'] = 'personal';
-            $eventInfo['borderColor'] = $eventInfo['backgroundColor'] = $this->event_personal_color;
-            $eventInfo['editable'] = $event->isCollective();
-            $eventInfo['sent_to'] = get_lang('Me');
-            $eventInfo['type'] = 'personal';
-
-            if ($event->getDate()) {
-                $eventInfo['start'] = $this->formatEventDate($event->getDate()->format('Y-m-d H:i:s'));
-                $eventInfo['start_date_localtime'] = api_get_local_time($event->getDate());
-            }
-
-            if ($event->getEnddate()) {
-                $eventInfo['end'] = $this->formatEventDate($event->getEnddate()->format('Y-m-d H:i:s'));
-                $eventInfo['end_date_localtime'] = api_get_local_time($event->getEnddate());
-            }
-
-            $eventInfo['description'] = $event->getText();
-            $eventInfo['allDay'] = $event->getAllDay();
-            $eventInfo['parent_event_id'] = 0;
-            $eventInfo['has_children'] = 0;
-            $eventInfo['collective'] = $event->isCollective();
-            $eventInfo['invitees'] = [];
-
-            $invitation = $event->getInvitation();
-
-            if ($invitation) {
-                foreach ($invitation->getInvitees() as $invitee) {
-                    $inviteeUser = $invitee->getUser();
-
-                    $eventInfo['invitees'][] = [
-                        'id' => $inviteeUser->getId(),
-                        'name' => $inviteeUser->getCompleteNameWithUsername()
-                    ];
-                }
-            }
-
-            $this->events[] = $eventInfo;
-        }
     }
 
     /**
@@ -4353,6 +4292,68 @@ class Agenda
         $em->flush();
     }
 
+    private static function isUserInvitedInEvent(int $id, int $userId): bool
+    {
+        $user = api_get_user_entity($userId);
+
+        $event = Database::getManager()
+            ->getRepository('ChamiloCoreBundle:PersonalAgenda')
+            ->findOneByIdAndInvitee($id, $user)
+        ;
+
+        return null !== $event;
+    }
+
+    private function loadEventsAsInvitee(User $user, ?DateTime $startDate, ?DateTime $endDate)
+    {
+        $em = Database::getManager();
+        $eventRepo = $em->getRepository('ChamiloCoreBundle:PersonalAgenda');
+        $events = $eventRepo->getEventsForInvitee($user, $startDate, $endDate);
+
+        foreach ($events as $event) {
+            $eventInfo = [];
+            $eventInfo['id'] = 'personal_'.$event->getId();
+            $eventInfo['title'] = $event->getTitle();
+            $eventInfo['className'] = 'personal';
+            $eventInfo['borderColor'] = $eventInfo['backgroundColor'] = $this->event_personal_color;
+            $eventInfo['editable'] = $event->isCollective();
+            $eventInfo['sent_to'] = get_lang('Me');
+            $eventInfo['type'] = 'personal';
+
+            if ($event->getDate()) {
+                $eventInfo['start'] = $this->formatEventDate($event->getDate()->format('Y-m-d H:i:s'));
+                $eventInfo['start_date_localtime'] = api_get_local_time($event->getDate());
+            }
+
+            if ($event->getEnddate()) {
+                $eventInfo['end'] = $this->formatEventDate($event->getEnddate()->format('Y-m-d H:i:s'));
+                $eventInfo['end_date_localtime'] = api_get_local_time($event->getEnddate());
+            }
+
+            $eventInfo['description'] = $event->getText();
+            $eventInfo['allDay'] = $event->getAllDay();
+            $eventInfo['parent_event_id'] = 0;
+            $eventInfo['has_children'] = 0;
+            $eventInfo['collective'] = $event->isCollective();
+            $eventInfo['invitees'] = [];
+
+            $invitation = $event->getInvitation();
+
+            if ($invitation) {
+                foreach ($invitation->getInvitees() as $invitee) {
+                    $inviteeUser = $invitee->getUser();
+
+                    $eventInfo['invitees'][] = [
+                        'id' => $inviteeUser->getId(),
+                        'name' => $inviteeUser->getCompleteNameWithUsername(),
+                    ];
+                }
+            }
+
+            $this->events[] = $eventInfo;
+        }
+    }
+
     private function loadSessionsAsEvents(int $start, int $end)
     {
         if (false === api_get_configuration_value('personal_calendar_show_sessions_occupation')) {
@@ -4377,7 +4378,7 @@ class Agenda
 
                 $firstAccessDate = new DateTime($courseAccess['login_course_date'], new DateTimeZone('UTC'));
                 $lastAccessDate = clone $firstAccessDate;
-                $lastAccessDate->modify('+'.$sessionInfo['duration'].' days');
+                $lastAccessDate->modify('+' . $sessionInfo['duration'] . ' days');
 
                 if ($firstAccessDate->format('Y-m-d H:i:s') > $start
                     && $lastAccessDate->format('Y-m-d H:i:s') < $end
@@ -4389,7 +4390,7 @@ class Agenda
                 $firstCourse = current($courseList);
 
                 $this->events[] = [
-                    'id' => 'session_'.$sessionInfo['id'],
+                    'id' => 'session_' . $sessionInfo['id'],
                     'session_id' => $sessionInfo['id'],
                     'title' => $sessionInfo['name'],
                     'description' => $sessionInfo['show_description'] ? $sessionInfo['description'] : '',
@@ -4422,7 +4423,7 @@ class Agenda
             $firstCourse = current($courseList);
 
             $this->events[] = [
-                'id' => 'session_'.$sessionInfo['id'],
+                'id' => 'session_' . $sessionInfo['id'],
                 'session_id' => $sessionInfo['id'],
                 'title' => $sessionInfo['name'],
                 'description' => $sessionInfo['show_description'] ? $sessionInfo['description'] : '',

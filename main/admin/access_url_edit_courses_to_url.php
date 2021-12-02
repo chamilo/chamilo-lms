@@ -197,7 +197,7 @@ $url_list = UrlManager::get_url_data();
                             <?php
                             foreach ($no_course_list as $no_course) {
                                 ?>
-                                <option value="<?php echo $no_course['id']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
+                                <option value="<?php echo $no_course['id']; ?>" title="<?php echo $no_course['title'].' ('.$no_course['code'].')'; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
                             <?php
                             }
                         unset($no_course_list); ?>
@@ -234,7 +234,7 @@ $url_list = UrlManager::get_url_data();
                     <?php
                     foreach ($course_list as $course) {
                         $courseInfo = api_get_course_info_by_id($course['id']); ?>
-                        <option value="<?php echo $course['id']; ?>">
+                        <option value="<?php echo $course['id']; ?>" title="<?php echo $course['title'].' ('.$courseInfo['code'].')'; ?>">
                             <?php echo $course['title'].' ('.$courseInfo['code'].')'; ?>
                         </option>
                     <?php

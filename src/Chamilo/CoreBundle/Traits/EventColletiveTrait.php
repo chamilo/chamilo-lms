@@ -37,7 +37,6 @@ trait EventColletiveTrait
     }
 
     /**
-     * @param AgendaEventInvitation $invitation
      * @return $this
      */
     public function setInvitation(AgendaEventInvitation $invitation)
@@ -53,7 +52,6 @@ trait EventColletiveTrait
     }
 
     /**
-     * @param bool $collective
      * @return $this
      */
     public function setCollective(bool $collective)

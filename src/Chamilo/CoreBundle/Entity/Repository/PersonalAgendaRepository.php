@@ -12,7 +12,6 @@ use Doctrine\ORM\NonUniqueResultException;
 class PersonalAgendaRepository extends EntityRepository
 {
     /**
-     * @param User $user
      * @return array<int, PersonalAgenda>
      */
     public function getEventsForInvitee(User $user, ?\DateTime $startDate, ?\DateTime $endDate): array
@@ -25,7 +24,6 @@ class PersonalAgendaRepository extends EntityRepository
                 $qb->expr()->eq('iu.user', ':user')
             )
         ;
-
 
         $params = [
             'user' => $user,

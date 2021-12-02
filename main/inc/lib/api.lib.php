@@ -10041,22 +10041,6 @@ function api_get_language_translate_html()
         return '';
     }
 
-    $languageList = api_get_languages();
-    $hideAll = '';
-    foreach ($languageList['all'] as $language) {
-        $hideAll .= '
-        $("span:lang('.$language['isocode'].')").filter(
-            function(e, val) {
-                // Only find the spans if they have set the lang
-                if ($(this).attr("lang") == null) {
-                    return false;
-                }
-
-                // Ignore ckeditor classes
-                return !this.className.match(/cke(.*)/);
-        }).hide();'."\n";
-    }
-
     $userInfo = api_get_user_info();
     $languageId = 0;
     if (!empty($userInfo['language'])) {
@@ -10073,14 +10057,12 @@ function api_get_language_translate_html()
 
     return '
             $(function() {
-                '.$hideAll.'
+                if ($("span[dir][lang]").length > 0) {
+                    $("span[dir][lang]").hide();
+                }
                 var defaultLanguageFromUser = "'.$isoCode.'";
 
-                $("span:lang('.$isoCode.')").filter(
-                    function() {
-                        // Ignore ckeditor classes
-                        return !this.className.match(/cke(.*)/);
-                }).show();
+                $("span:lang('.$isoCode.')").show();
 
                 var defaultLanguage = "";
                 var langFromUserFound = false;
@@ -10101,11 +10083,7 @@ function api_get_language_translate_html()
 
                 // Show default language
                 if (langFromUserFound == false && defaultLanguage) {
-                    $("span:lang("+defaultLanguage+")").filter(
-                    function() {
-                            // Ignore ckeditor classes
-                            return !this.className.match(/cke(.*)/);
-                    }).show();
+                    $("span:lang("+defaultLanguage+")").show();
                 }
             });
     ';

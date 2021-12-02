@@ -23,3 +23,6 @@
     padding: 0 5px;
     position: relative;
 }
+span[dir][lang] {
+    display:none;
+}

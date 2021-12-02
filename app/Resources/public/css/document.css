@@ -59,3 +59,7 @@ blockquote:before {
 blockquote p {
     display: inline;
 }
+
+span[dir][lang] {
+    display:none;
+}

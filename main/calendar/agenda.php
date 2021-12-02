@@ -71,7 +71,7 @@ function add_image_form() {
 	}
 	var elem1 = document.createElement("div");
 	elem1.setAttribute("id","filepath_"+counter_image);
-	
+
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
@@ -116,6 +116,10 @@ if ($event_type === 'course') {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?&type='.$event_type;
 }
 $course_info = api_get_course_info();
+
+$this_section = $course_info ? SECTION_COURSES : SECTION_MYAGENDA;
+
+$em = Database::getManager();
 
 $content = null;
 if ($allowToEdit) {
@@ -177,7 +181,7 @@ if ($allowToEdit) {
             break;
         case 'edit':
             $actionName = get_lang('Edit');
-            $event = $agenda->get_event($eventId);
+            $event = $agenda->get_event((int) $eventId);
 
             if (empty($event)) {
                 api_not_allowed(true);
@@ -263,6 +267,15 @@ if ($allowToEdit) {
                             $agenda->course
                         );
                     }
+                }
+
+                if (api_get_configuration_value('agenda_collective_invitations')) {
+                    Agenda::saveCollectiveProperties(
+                        $values['invitees'],
+                        isset($values['collective']),
+                        $eventId,
+                        $agenda->getType()
+                    );
                 }
 
                 $message = Display::return_message(get_lang('Updated'), 'confirmation');

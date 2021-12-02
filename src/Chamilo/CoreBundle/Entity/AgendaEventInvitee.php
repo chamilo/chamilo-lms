@@ -1,0 +1,88 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Entity;
+
+use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Add @ to the next lineactivating the agenda_collective_invitations configuration setting.
+ * ORM\Entity()
+ * @ORM\Table(name="agenda_event_invitee")
+ */
+class AgendaEventInvitee
+{
+    use TimestampableTypedEntity;
+
+    /**
+     * @var int
+     *
+     * @ORM\Id()
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue
+     */
+    protected $id;
+
+    /**
+     * @var AgendaEventInvitation|null
+     *
+     * @ORM\ManyToOne(targetEntity="AgendaEventInvitation", inversedBy="invitees")
+     * @ORM\JoinColumn(name="invitation_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $invitation;
+
+    /**
+     * @var User|null
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $user;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return AgendaEventInvitation|null
+     */
+    public function getInvitation(): ?AgendaEventInvitation
+    {
+        return $this->invitation;
+    }
+
+    /**
+     * @param AgendaEventInvitation|null $invitation
+     * @return AgendaEventInvitee
+     */
+    public function setInvitation(?AgendaEventInvitation $invitation): AgendaEventInvitee
+    {
+        $this->invitation = $invitation;
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User|null $user
+     * @return AgendaEventInvitee
+     */
+    public function setUser(?User $user): AgendaEventInvitee
+    {
+        $this->user = $user;
+        return $this;
+    }
+}

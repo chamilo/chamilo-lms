@@ -1,3 +1,5 @@
+{% set agenda_collective_invitations = 'agenda_collective_invitations'|api_get_configuration_value %}
+
 <style>
 .fc-day-grid-event > .fc-content {
     white-space: normal;
@@ -318,6 +320,13 @@ $(document).ready(function() {
                 $('#cke_content').show();
                 //It Fixing a minor bug with textarea ckeditor.remplace
                 $('#content').css('display','none');
+
+                {% if agenda_collective_invitations and 'personal' == type %}
+                    $("#form_invitees").show().next().show();
+                    $('#form_invitees_edit').hide();
+                    $('#collective').prop('checked', false).show();
+                {% endif %}
+
                 //Reset the CKEditor content that persist in memory
                 CKEDITOR.instances['content'].setData('');
 				allFields.removeClass("ui-state-error");
@@ -367,6 +376,11 @@ $(document).ready(function() {
                                     $("#content").val('');
                                     $("#comment").val('');
 
+                                    {% if agenda_collective_invitations and 'personal' == type %}
+                                        $("#form_invitees").val(null).trigger('change');
+                                        $('#collective').prop('checked', false);
+                                    {% endif %}
+
                                     calendar.fullCalendar('refetchEvents');
                                     calendar.fullCalendar('rerenderEvents');
 
@@ -379,6 +393,11 @@ $(document).ready(function() {
                         $("#title").val('');
                         $("#content").val('');
                         $("#comment").val('');
+
+                        {% if agenda_collective_invitations and 'personal' == type %}
+                            $("#form_invitees").val(null).trigger('change');
+                            $('#collective').prop('checked', false);
+                        {% endif %}
 					}
 				});
 
@@ -531,13 +550,47 @@ $(document).ready(function() {
                     $("#calendar_session_info").html('');
                 }
 
-                $("#comment_edit").html(calEvent.comment);
+                if (calEvent.comment != '') {
+                    $("#comment_edit").html(calEvent.comment);
+                    $("#comment_edit").show();
+                }
+
+                if (calEvent.attachment != '') {
+                    $("#attachment_text").html(calEvent.attachment);
+                    $("#attachment_block").show();
+                    $("#attachment_text").show();
+                }
+
+                {% if agenda_collective_invitations and 'personal' == type %}
+                    if ($("#form_invitees").parent().find('#form_invitees_edit').length == 0) {
+                        $("#form_invitees").parent().append('<div id="form_invitees_edit"></div>');
+                    }
+
+                    if ($("#collective").parent().find('#collective_edit').length == 0) {
+                        $("#collective").parent().append('<div id="collective_edit"></div>');
+                    }
+                {% endif %}
+
                 $("#title_edit").show();
                 $("#content_edit").show();
-                $("#comment_edit").show();
+                {% if agenda_collective_invitations and 'personal' == type %}
+                    $('#form_invitees_edit')
+                        .html(function () {
+                            return calEvent.invitees
+                                .map(function (invitee) { return invitee.name; })
+                                .join('<br>');
+                        })
+                        .show();
+                {% endif %}
+
                 $("#title").hide();
                 $("#content").hide();
                 $("#comment").hide();
+
+                {% if agenda_collective_invitations and 'personal' == type %}
+                    $("#form_invitees").hide().next().hide();
+                    $('#collective').hide();
+                {% endif %}
 
 				allFields.removeClass( "ui-state-error" );
 				$("#dialog-form").dialog("open");
@@ -659,10 +712,20 @@ $(document).ready(function() {
                         $("#title_edit").hide();
                         $("#content_edit").hide();
                         $("#comment_edit").hide();
+                        $("#attachment_block").hide();
+                        $("#attachment_text").hide();
+                        {% if agenda_collective_invitations and 'personal' == type %}
+                            $('#form_invitees_edit').hide();
+                            $('#collective_edit').hide();
+                        {% endif %}
 
                         $("#title").show();
                         $("#content").show();
                         $("#comment").show();
+                        {% if agenda_collective_invitations and 'personal' == type %}
+                            $("#form_invitees").show().next().show();
+                            $('#collective').show();
+                        {% endif %}
 
 						$("#title_edit").html('');
 						$("#content_edit").html('');
@@ -671,6 +734,10 @@ $(document).ready(function() {
                         $("#title").val('');
                         $("#content").val('');
                         $("#comment").val('');
+                        {% if agenda_collective_invitations and 'personal' == type %}
+                            $("#form_invitees").val(null).trigger('change');
+                            $('#collective').prop('checked', false);
+                        {% endif %}
 					}
 				});
 			} else {
@@ -710,6 +777,13 @@ $(document).ready(function() {
                 $("#simple_content").html(calEvent.description);
                 $("#simple_comment").html(calEvent.comment);
                 $("#simple_attachment").html(calEvent.attachment);
+                {% if agenda_collective_invitations and 'personal' == type %}
+                    $('#simple_invitees').html(function () {
+                        return calEvent.invitees
+                            .map(function (invitee) { return invitee.name; })
+                            .join('<br>');
+                    });
+                {% endif %}
 
                 var buttons = {
                     '{{"ExportiCalConfidential"|get_lang}}' : function() {
@@ -815,6 +889,22 @@ $(document).ready(function() {
                     <div id="simple_comment"></div>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">
+                    <b>{{ "Attachment" |get_lang}}</b>
+                </label>
+                <div class="col-sm-9">
+                    <div id="simple_attachment"></div>
+                </div>
+            </div>
+
+            {% if agenda_collective_invitations and 'personal' == type %}
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{ 'Invitees' }}</label>
+                    <div class="col-sm-9" id="simple_invitees"></div>
+                </div>
+            {% endif %}
         </form>
     </div>
 </div>

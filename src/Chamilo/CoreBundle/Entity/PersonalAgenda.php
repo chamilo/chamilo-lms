@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\EventColletiveTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,10 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="personal_agenda", indexes={@ORM\Index(name="idx_personal_agenda_user", columns={"user"}),
  * @ORM\Index(name="idx_personal_agenda_parent", columns={"parent_event_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PersonalAgendaRepository")
  */
 class PersonalAgenda
 {
+    // Uncomment next line when activating the agenda_collective_invitations configuration setting.
+    //use EventColletiveTrait;
+
     /**
      * @var int
      *

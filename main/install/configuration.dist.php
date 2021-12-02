@@ -830,6 +830,9 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 // 4. Set "allow_skill_rel_items" to true
 //$_configuration['allow_skill_rel_items'] = false;
 
+// Allows to send a notification when a user has achieved a skill
+//$_configuration['badge_assignation_notification'] = false;
+
 // Generate random login when importing users
 //$_configuration['generate_random_login'] = false;
 

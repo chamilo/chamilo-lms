@@ -257,7 +257,7 @@ class SkillRelSkill extends Model
     public function getDirectParents($skillId)
     {
         $skillId = (int) $skillId;
-        $sql = 'SELECT parent_id as skill_id 
+        $sql = 'SELECT parent_id as skill_id
                 FROM '.$this->table.'
                 WHERE skill_id = '.$skillId;
         $result = Database::query($sql);
@@ -1820,7 +1820,7 @@ class Skill extends Model
     public function getUserSkillRanking($user_id)
     {
         $user_id = (int) $user_id;
-        $sql = "SELECT count(skill_id) count 
+        $sql = "SELECT count(skill_id) count
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} su
                 ON (s.id = su.skill_id)
@@ -2566,8 +2566,8 @@ class Skill extends Model
                                 success: function(result) {
                                     $("#" +skillId+ ".user_skill").html(result);
                                 }
-                            });                            
-                        });                        
+                            });
+                        });
                     });
                 </script>
                 ';
@@ -2978,7 +2978,8 @@ class Skill extends Model
      */
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {
-        $showLevels = api_get_configuration_value('hide_skill_levels') === false;
+        $showLevels = false === api_get_configuration_value('hide_skill_levels');
+        $badgeAssignationNotification = api_get_configuration_value('badge_assignation_notification');
 
         $entityManager = Database::getManager();
 
@@ -3008,6 +3009,23 @@ class Skill extends Model
 
         $entityManager->persist($skillUser);
         $entityManager->flush();
+
+        if ($badgeAssignationNotification) {
+            $url = SkillRelUser::getIssueUrlAll($skillUser);
+
+            $message = sprintf(
+                get_lang('YouXHaveAchievedTheSkillYToSeeFollowLinkZ'),
+                $user->getFirstname(),
+                $skill->getName(),
+                Display::url($url, $url, ['target' => '_blank'])
+            );
+
+            MessageManager::send_message(
+                $user->getId(),
+                get_lang('YouHaveAchievedANewSkill'),
+                $message
+            );
+        }
 
         return $skillUser;
     }

@@ -8856,5 +8856,5 @@ $FilterByLp = "Filtrar por lecciones";
 $ShareForumsInSessions = "Compartir los foros con todas las sesiones";
 $YouHaveAchievedANewSkill = "Has logrado una nueva competencia";
 $YouXHaveAchievedTheSkillYToSeeFollowLinkZ = "Hola, %s. Has logrado la competencia \"%s\". Para ver los detalles haz clic aquí: %s";
-$ToAssignNewSkillToUserClickLinkX = "Para asignar una nueva competencia a este usuario, haga clic <a href=\\"%s\\">aquí</a>";
+$ToAssignNewSkillToUserClickLinkX = "Para asignar una nueva competencia a este usuario, haga clic <a href=\"%s\">aquí</a>";
 ?>

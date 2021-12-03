@@ -3087,6 +3087,7 @@ class Skill extends Model
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {
         $showLevels = false === api_get_configuration_value('hide_skill_levels');
+        $badgeAssignationNotification = api_get_configuration_value('badge_assignation_notification');
 
         $entityManager = Database::getManager();
 
@@ -3116,6 +3117,23 @@ class Skill extends Model
 
         $entityManager->persist($skillUser);
         $entityManager->flush();
+
+        if ($badgeAssignationNotification) {
+            $url = SkillRelUser::getIssueUrlAll($skillUser);
+
+            $message = sprintf(
+                get_lang('YouXHaveAchievedTheSkillYToSeeFollowLinkZ'),
+                $user->getFirstname(),
+                $skill->getName(),
+                Display::url($url, $url, ['target' => '_blank'])
+            );
+
+            MessageManager::send_message(
+                $user->getId(),
+                get_lang('YouHaveAchievedANewSkill'),
+                $message
+            );
+        }
 
         return $skillUser;
     }

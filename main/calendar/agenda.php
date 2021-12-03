@@ -145,7 +145,10 @@ if ($allowToEdit) {
                     null,
                     $attachmentList,
                     $attachmentCommentList,
-                    $comment
+                    $comment,
+                    '',
+                    $values['invitees'] ?? [],
+                    $values['collective'] ?? false
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -213,7 +216,10 @@ if ($allowToEdit) {
                         null,
                         $attachmentList,
                         $attachmentCommentList,
-                        $comment
+                        $comment,
+                        '',
+                        $values['invitees'] ?? [],
+                        $values['collective'] ?? false
                     );
 
                     $message = Display::return_message(get_lang('Updated'), 'confirmation');
@@ -237,7 +243,11 @@ if ($allowToEdit) {
                     $attachmentCommentList,
                     $comment,
                     '',
-                    $sendEmail
+                    $sendEmail,
+                    true,
+                    0,
+                    $values['invitees'] ?? [],
+                    $values['collective'] ?? false
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -260,15 +270,6 @@ if ($allowToEdit) {
                             $agenda->course
                         );
                     }
-                }
-
-                if (api_get_configuration_value('agenda_collective_invitations')) {
-                    Agenda::saveCollectiveProperties(
-                        $values['invitees'],
-                        isset($values['collective']),
-                        $eventId,
-                        $agenda->getType()
-                    );
                 }
 
                 $message = Display::return_message(get_lang('Updated'), 'confirmation');

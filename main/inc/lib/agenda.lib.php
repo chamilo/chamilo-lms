@@ -248,7 +248,9 @@ class Agenda
         $attachmentArray = [],
         $attachmentCommentList = [],
         $eventComment = null,
-        $color = ''
+        $color = '',
+        array $inviteesList = [],
+        bool $isCollective = false
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -271,6 +273,10 @@ class Agenda
                     $this->tbl_personal_agenda,
                     $attributes
                 );
+
+                if (api_get_configuration_value('agenda_collective_invitations')) {
+                    Agenda::saveCollectiveProperties($inviteesList, $isCollective, $id);
+                }
                 break;
             case 'course':
                 $attributes = [
@@ -749,7 +755,9 @@ class Agenda
         $color = '',
         $addAnnouncement = false,
         $updateContent = true,
-        $authorId = 0
+        $authorId = 0,
+        array $inviteesList = [],
+        bool $isCollective = false
     ) {
         $id = (int) $id;
         $start = api_get_utc_datetime($start);
@@ -789,6 +797,10 @@ class Agenda
                     $attributes,
                     ['id = ?' => $id]
                 );
+
+                if (api_get_configuration_value('agenda_collective_invitations')) {
+                    Agenda::saveCollectiveProperties($inviteesList, $isCollective, $id);
+                }
                 break;
             case 'course':
                 $eventInfo = $this->get_event($id);
@@ -4280,13 +4292,9 @@ class Agenda
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public static function saveCollectiveProperties(array $inviteeUserList, bool $isCollective, int $eventId, string $type)
+    public static function saveCollectiveProperties(array $inviteeUserList, bool $isCollective, int $eventId)
     {
         $em = Database::getManager();
-
-        if ('personal' !== $type) {
-            return;
-        }
 
         $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $eventId);
 

@@ -9,10 +9,9 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Add @ to the next lineactivating the agenda_collective_invitations configuration setting.
- * ORM\Entity().
- *
  * @ORM\Table(name="agenda_event_invitee")
+ * Add @ to the next lineactivating the agenda_collective_invitations configuration setting.
+ * ORM\Entity()
  */
 class AgendaEventInvitee
 {

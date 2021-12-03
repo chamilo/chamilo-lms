@@ -8758,4 +8758,7 @@ $AgendaEventsOnlyVisibleInCurrentCourse = "Les événnements du cours ne sont vi
 $TestResult = "Résultat du test";
 $FilterByLp = "Filtrer par parcours";
 $ShareForumsInSessions = "Partager les forums avec toutes les sessions";
+$YouHaveAchievedANewSkill = "Vous avez obtenu une nouvelle compétence.";
+$YouXHaveAchievedTheSkillYToSeeFollowLinkZ = "Bonjour, %s. Vous avez obtenu la compétence \"%s\". Pour en voir les détails aller sur : %s";
+$ToAssignNewSkillToUserClickLinkX = "Pour assigner une nouvelle compétence à cet utilisateur, cliquer <a href=\\"%s\\"> ici</a>";
 ?>

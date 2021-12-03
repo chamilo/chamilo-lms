@@ -8826,4 +8826,7 @@ $AgendaEventsOnlyVisibleInCurrentCourse = "Agenda events only visible in current
 $TestResult = "Test result";
 $FilterByLp = "Filter by Learning Path";
 $ShareForumsInSessions = "Share forums in all sessions";
+$YouHaveAchievedANewSkill = "You have achieved a new skill.";
+$YouXHaveAchievedTheSkillYToSeeFollowLinkZ = "Hi, %s. You have achieved the skill \"%s\". To see the details go here: %s.";
+$ToAssignNewSkillToUserClickLinkX = "To assign a new skill to this user, click <a href=\\"%s\\">here</a>";
 ?>

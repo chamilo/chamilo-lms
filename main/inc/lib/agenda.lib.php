@@ -2639,20 +2639,23 @@ class Agenda
         if ($agendaCollectiveInvitations && 'personal' === $this->type) {
             $em = Database::getManager();
 
-            $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $id);
-            $eventInvitation = $event->getInvitation();
-
             $invitees = [];
+            $isCollective = false;
 
-            if ($eventInvitation) {
-                foreach ($eventInvitation->getInvitees() as $invitee) {
-                    $inviteeUser = $invitee->getUser();
+            if ($id) {
+                $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $id);
+                $eventInvitation = $event->getInvitation();
 
-                    $invitees[$inviteeUser->getId()] = $inviteeUser->getCompleteNameWithUsername();
+                if ($eventInvitation) {
+                    foreach ($eventInvitation->getInvitees() as $invitee) {
+                        $inviteeUser = $invitee->getUser();
+
+                        $invitees[$inviteeUser->getId()] = $inviteeUser->getCompleteNameWithUsername();
+                    }
                 }
-            }
 
-            $isCollective = $event->isCollective();
+                $isCollective = $event->isCollective();
+            }
 
             $form->addSelectAjax(
                 'invitees',

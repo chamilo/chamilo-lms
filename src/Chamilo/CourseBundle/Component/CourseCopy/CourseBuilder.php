@@ -262,6 +262,9 @@ class CourseBuilder
                     $buildOrphanQuestions
                 );
             } else {
+                if (!empty($toolsFromPost[RESOURCE_LEARNPATH]) && 'learnpaths' === $tool) {
+                    $specificIdList = array_keys($toolsFromPost[RESOURCE_LEARNPATH]);
+                }
                 $this->$function_build(
                     $session_id,
                     $courseId,

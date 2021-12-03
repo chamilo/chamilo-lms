@@ -450,6 +450,7 @@ ALTER TABLE personal_agenda ADD CONSTRAINT FK_D8612460AF68C6B FOREIGN KEY (agend
 CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invitation_id);
 */
 // Then add the "@" symbol to AgendaEventInvitation and AgendaEventInvitee classes in the ORM\Entity() line.
+// Then uncomment the "use EventColletiveTrait;" line in the PersonalAgenda class.
 //$_configuration['agenda_collective_invitations'] = false;
 // ------
 //

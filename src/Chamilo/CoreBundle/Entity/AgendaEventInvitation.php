@@ -11,10 +11,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Add @ to the next lineactivating the agenda_collective_invitations configuration setting.
- * ORM\Entity().
- *
  * @ORM\Table(name="agenda_event_invitation")
+ * Add @ to the next lineactivating the agenda_collective_invitations configuration setting.
+ * ORM\Entity()
  */
 class AgendaEventInvitation
 {

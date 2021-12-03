@@ -45,7 +45,7 @@ switch ($action) {
         $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
-        $inviteesId = $_REQUEST['invitees'] ?? [];
+        $inviteesList = $_REQUEST['invitees'] ?? [];
         $isCollective = isset($_REQUEST['collective']);
 
         $eventId = $agenda->addEvent(
@@ -59,12 +59,11 @@ switch ($action) {
             null,
             [],
             null,
-            $comment
+            $comment,
+            '',
+            $inviteesList,
+            $isCollective
         );
-
-        if (api_get_configuration_value('agenda_collective_invitations')) {
-            Agenda::saveCollectiveProperties($inviteesId, $isCollective, $eventId, $type);
-        }
 
         echo $eventId;
         break;

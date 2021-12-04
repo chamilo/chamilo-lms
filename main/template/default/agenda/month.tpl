@@ -709,22 +709,32 @@ $(document).ready(function() {
                 $("#simple_title").html(calEvent.title);
                 $("#simple_content").html(calEvent.description);
                 $("#simple_comment").html(calEvent.comment);
+                $("#simple_attachment").html(calEvent.attachment);
+
+                var buttons = {
+                    '{{"ExportiCalConfidential"|get_lang}}' : function() {
+                        url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
+                        window.location.href = url;
+                    },
+                    '{{"ExportiCalPrivate"|get_lang}}': function() {
+                        url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
+                        window.location.href = url;
+                    },
+                    '{{"ExportiCalPublic"|get_lang}}': function() {
+                        url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
+                        window.location.href = url;
+                    }
+                };
+
+                if ('session' === calEvent.type) {
+                    buttons['{{ "GoToCourse"|get_lang }}'] = function() {
+                        window.location.href = calEvent.course_url;
+                    };
+                }
+
                 $("#simple-dialog-form").dialog("open");
                 $("#simple-dialog-form").dialog({
-					buttons: {
-						'{{"ExportiCalConfidential"|get_lang}}' : function() {
-                            url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
-                            window.location.href = url;
-						},
-						'{{"ExportiCalPrivate"|get_lang}}': function() {
-                            url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
-                            window.location.href = url;
-						},
-                        '{{"ExportiCalPublic"|get_lang}}': function() {
-                            url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
-                            window.location.href = url;
-						}
-					}
+					buttons: buttons
 				});
             }
 		},

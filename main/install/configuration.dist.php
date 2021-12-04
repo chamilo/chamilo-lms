@@ -385,6 +385,8 @@ $_configuration['agenda_colors'] = [
     'student_publication' => '#FF8C00'
 ];
 */
+// Display sessions ocuppations in personal agenda
+//$_configuration['personal_calendar_show_sessions_occupation'] = false;
 // ------
 //
 // Save some tool titles with HTML editor. Require DB changes:

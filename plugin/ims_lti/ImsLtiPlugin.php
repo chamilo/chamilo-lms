@@ -368,6 +368,36 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
+     * Add the course session tool.
+     *
+     * @param Course     $course
+     * @param Session    $session
+     * @param ImsLtiTool $ltiTool
+     * @param bool       $isVisible
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function addCourseSessionTool(Course $course, Session $session, ImsLtiTool $ltiTool, $isVisible = true)
+    {
+        $cTool = $this->createLinkToCourseTool(
+            $ltiTool->getName(),
+            $course->getId(),
+            null,
+            self::generateToolLink($ltiTool),
+            $session->getId()
+        );
+        $cTool
+            ->setTarget(
+                $ltiTool->getDocumentTarget() === 'iframe' ? '_self' : '_blank'
+            )
+            ->setVisibility($isVisible);
+
+        $em = Database::getManager();
+        $em->persist($cTool);
+        $em->flush();
+    }
+
+    /**
      * @return string
      */
     protected function getConfigExtraText()

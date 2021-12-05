@@ -4,6 +4,7 @@
 namespace Chamilo\PluginBundle\Entity\ImsLti;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -87,6 +88,13 @@ class ImsLtiTool
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     private $course = null;
+    /**
+     * @var Session|null
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     */
+    private $session = null;
     /**
      * @var GradebookEvaluation|null
      *
@@ -431,6 +439,30 @@ class ImsLtiTool
     public function setCourse(Course $course = null)
     {
         $this->course = $course;
+
+        return $this;
+    }
+
+    /**
+     * Get session.
+     *
+     * @return Session|null
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * Set session.
+     *
+     * @param Session|null $course
+     *
+     * @return ImsLtiTool
+     */
+    public function setSession(Session $session = null)
+    {
+        $this->session = $session;
 
         return $this;
     }

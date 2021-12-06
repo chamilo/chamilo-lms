@@ -628,16 +628,14 @@ switch ($action) {
         $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('SendAnnouncementCopyToMyself'));
         $defaults['send_me_a_copy_by_email'] = true;
 
-        if (empty($id)) {
-            $form->addButtonAdvancedSettings(
-                'add_event',
-                get_lang('AddEventInCourseCalendar')
-            );
-            $form->addHtml('<div id="add_event_options" style="display:none;">');
-            $form->addDateTimePicker('event_date_start', get_lang('Date start'));
-            $form->addDateTimePicker('event_date_end', get_lang('Date end'));
-            $form->addHtml('</div>');
-        }
+        $form->addButtonAdvancedSettings(
+            'add_event',
+            get_lang('AddEventInCourseCalendar')
+        );
+        $form->addHtml('<div id="add_event_options" style="display:none;">');
+        $form->addDateTimePicker('event_date_start', get_lang('DateStart'));
+        $form->addDateTimePicker('event_date_end', get_lang('DateEnd'));
+        $form->addHtml('</div>');
 
         if ($showSubmitButton) {
             $form->addLabel('',
@@ -674,6 +672,15 @@ switch ($action) {
                         $file_comment,
                         $sendToUsersInSession
                     );
+
+                    if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
+                        AnnouncementManager::createEvent(
+                            $id,
+                            $data['event_date_start'],
+                            $data['event_date_end'],
+                            empty($data['users']) ? ['everyone'] : $data['users']
+                        );
+                    }
 
                     // Send mail
                     $messageSentTo = [];

@@ -114,7 +114,7 @@ switch ($action) {
             }
 
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
-                    FROM $tbl_announcement announcement 
+                    FROM $tbl_announcement announcement
                     INNER JOIN $tbl_item_property itemproperty
                     ON (announcement.c_id = itemproperty.c_id)
                     WHERE
@@ -526,22 +526,22 @@ switch ($action) {
         $form->addHtml("
             <script>
                 $(function () {
-                    $('#announcement_preview').on('click', function() {  
+                    $('#announcement_preview').on('click', function() {
                         var users = [];
                         $('#users_to option').each(function() {
-                            users.push($(this).val());                            
+                            users.push($(this).val());
                         });
-                        
+
                         var form = $('#announcement').serialize();
                         $.ajax({
                             type: 'POST',
                             dataType: 'json',
                             url: '".$ajaxUrl."',
-                            data: {users : JSON.stringify(users), form: form},  
+                            data: {users : JSON.stringify(users), form: form},
                             beforeSend: function() {
                                 $('#announcement_preview_result').html('<i class=\"fa fa-spinner\"></i>');
                                 $('#send_button').hide();
-                            },  
+                            },
                             success: function(result) {
                                 var resultToString = '';
                                 $.each(result, function(index, value) {
@@ -551,7 +551,7 @@ switch ($action) {
                                     '".addslashes(get_lang('AnnouncementWillBeSentTo'))."<br/>' + resultToString
                                 );
                                 $('#announcement_preview_result').show();
-                                $('#send_button').show();                                
+                                $('#send_button').show();
                             }
                         });
                     });
@@ -627,6 +627,17 @@ switch ($action) {
 
         $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('SendAnnouncementCopyToMyself'));
         $defaults['send_me_a_copy_by_email'] = true;
+
+        if (empty($id)) {
+            $form->addButtonAdvancedSettings(
+                'add_event',
+                get_lang('AddEventInCourseCalendar')
+            );
+            $form->addHtml('<div id="add_event_options" style="display:none;">');
+            $form->addDateTimePicker('event_date_start', get_lang('Date start'));
+            $form->addDateTimePicker('event_date_end', get_lang('Date end'));
+            $form->addHtml('</div>');
+        }
 
         if ($showSubmitButton) {
             $form->addLabel('',
@@ -722,6 +733,15 @@ switch ($action) {
                     }
 
                     if ($insert_id) {
+                        if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
+                            AnnouncementManager::createEvent(
+                                $insert_id,
+                                $data['event_date_start'],
+                                $data['event_date_end'],
+                                empty($data['users']) ? ['everyone'] : $data['users']
+                            );
+                        }
+
                         Display::addFlash(
                             Display::return_message(
                                 get_lang('AnnouncementAdded'),

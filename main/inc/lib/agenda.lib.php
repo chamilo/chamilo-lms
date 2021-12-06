@@ -4148,6 +4148,8 @@ class Agenda
             return;
         }
 
+        $start = api_get_utc_datetime($start, false, true);
+        $end = api_get_utc_datetime($end, false, true);
         $userInfo = api_get_user_info();
         $sessionList = SessionManager::getSessionsFollowedByUser($userInfo['id'], $userInfo['status']);
 

@@ -312,9 +312,9 @@ if ($allowEdition &&
             $message
         );
 
-        TicketManager::sendNotification(
+        TicketManager::notifiyTicketUpdated(
             $ticket_id,
-            get_lang('TicketUpdated'),
+            (int) $ticket['ticket']['category_id'],
             $messageToSend
         );
 

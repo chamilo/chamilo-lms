@@ -725,6 +725,17 @@ switch ($action) {
             </script>');
         }
 
+        if (empty($id)) {
+            $form->addButtonAdvancedSettings(
+                'add_event',
+                get_lang('AddEventInCourseCalendar')
+            );
+            $form->addHtml('<div id="add_event_options" style="display:none;">');
+            $form->addDateTimePicker('event_date_start', get_lang('Date start'));
+            $form->addDateTimePicker('event_date_end', get_lang('Date end'));
+            $form->addHtml('</div>');
+        }
+
         if ($showSubmitButton) {
             $form->addLabel('',
                 Display::url(
@@ -844,6 +855,15 @@ switch ($action) {
                     }
 
                     if ($insert_id) {
+                        if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
+                            AnnouncementManager::createEvent(
+                                $insert_id,
+                                $data['event_date_start'],
+                                $data['event_date_end'],
+                                empty($data['users']) ? ['everyone'] : $data['users']
+                            );
+                        }
+
                         Display::addFlash(
                             Display::return_message(
                                 get_lang('AnnouncementAdded'),

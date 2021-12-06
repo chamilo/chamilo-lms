@@ -21,15 +21,16 @@ try {
         throw new Exception(get_lang('NotAllowed'));
     }
 
-    $sessionId = isset($_REQUEST['session']);
+    $request = Request::createFromGlobals();
+    $ltiToolId = $request->query->getInt('id');
+    $sessionId = $request->query->getInt('session_id');
 
     if (empty($sessionId)) {
         api_not_allowed();
     }
 
-    $request = Request::createFromGlobals();
     /** @var ImsLtiTool $tool */
-    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $request->query->getInt('id'));
+    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolId);
 
     if (!$tool) {
         throw new Exception($plugin->get_lang('NoTool'));
@@ -52,7 +53,7 @@ try {
 
     $selectedCoursesIds = array_keys($slctCourses);
 
-    $form = new FormValidator('frm_multiply', 'post', api_get_self().'?id='.$tool->getId());
+    $form = new FormValidator('frm_multiply', 'post', api_get_self().'?id='.$tool->getId().'&session_id='.$sessionId);
     $form->addLabel($plugin->get_lang('Tool'), $tool->getName());
     $form->addSelectAjax(
         'courses',
@@ -61,7 +62,7 @@ try {
         [
             'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query(
                 [
-                    'a' => 'search_course_by_session',
+                    'a' => 'search_course_by_session_all',
                     'session_id' => $sessionId
                 ]
             ),

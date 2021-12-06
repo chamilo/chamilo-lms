@@ -14,6 +14,9 @@ api_protect_admin_script(false);
 $plugin = ImsLtiPlugin::create();
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
 
+$request = Request::createFromGlobals();
+$ltiToolId = $request->query->getInt('id');
+
 $em = Database::getManager();
 
 try {
@@ -21,9 +24,8 @@ try {
         throw new Exception(get_lang('NotAllowed'));
     }
 
-    $request = Request::createFromGlobals();
     /** @var ImsLtiTool $tool */
-    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $request->query->getInt('id'));
+    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool',$ltiToolId);
 
     if (!$tool) {
         throw new Exception($plugin->get_lang('NoTool'));
@@ -50,6 +52,7 @@ try {
             'multiple' => false
         ]        
     );
+    $form->addHidden('tool_id', $tool->getId());
     $form->addButtonExport(get_lang('Next'));
 
     if ($form->validate()) {
@@ -65,7 +68,7 @@ try {
             exit;
         }
 
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/multiply_session.php?'.$formValues['sessions'][0]);
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/multiply_session.php?id='.$formValues['tool_id'].'&session_id='.$formValues['sessions']);
 
         exit;
     }

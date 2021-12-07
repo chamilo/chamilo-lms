@@ -245,6 +245,7 @@ class CourseBuilder
             $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
             $buildOrphanQuestions = true;
             if ($tool === 'quizzes') {
+                $specificIdList = array_keys($toolsFromPost['quiz']);
                 if (!isset($toolsFromPost[RESOURCE_QUIZ][-1])) {
                     $buildOrphanQuestions = false;
                 }

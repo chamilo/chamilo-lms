@@ -485,6 +485,8 @@ $(document).ready(function() {
             }
             var startDateToString = start.format("{{ js_format_date }}");
 
+            var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
+
 			// Edit event.
 			if (calEvent.editable) {
 				$('#visible_to_input').hide();
@@ -596,7 +598,6 @@ $(document).ready(function() {
 				$("#dialog-form").dialog("open");
 
 				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
-				var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
 
 				$("#dialog-form").dialog({
 					buttons: {
@@ -799,6 +800,22 @@ $(document).ready(function() {
                         window.location.href = url;
                     }
                 };
+
+                {% if agenda_collective_invitations and 'personal' == type %}
+                    buttons['{{ "Delete"|get_lang }}'] = function () {
+                        $.ajax({
+                            url: delete_url,
+                            success:function() {
+                                calendar.fullCalendar('removeEvents',
+                                    calEvent
+                                );
+                                calendar.fullCalendar('refetchEvents');
+                                calendar.fullCalendar('rerenderEvents');
+                                $("#simple-dialog-form").dialog('close');
+                            }
+                        });
+                    };
+                {% endif %}
 
                 if ('session' === calEvent.type) {
                     buttons['{{ "GoToCourse"|get_lang }}'] = function() {

@@ -2,6 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AgendaEventInvitation;
+use Chamilo\CoreBundle\Entity\AgendaEventInvitee;
+use Chamilo\UserBundle\Entity\User;
+
 /**
  * Class Agenda.
  *
@@ -244,7 +248,9 @@ class Agenda
         $attachmentArray = [],
         $attachmentCommentList = [],
         $eventComment = null,
-        $color = ''
+        $color = '',
+        array $inviteesList = [],
+        bool $isCollective = false
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -267,6 +273,10 @@ class Agenda
                     $this->tbl_personal_agenda,
                     $attributes
                 );
+
+                if (api_get_configuration_value('agenda_collective_invitations')) {
+                    Agenda::saveCollectiveProperties($inviteesList, $isCollective, $id);
+                }
                 break;
             case 'course':
                 $attributes = [
@@ -745,17 +755,26 @@ class Agenda
         $color = '',
         $addAnnouncement = false,
         $updateContent = true,
-        $authorId = 0
+        $authorId = 0,
+        array $inviteesList = [],
+        bool $isCollective = false
     ) {
+        $id = (int) $id;
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
-        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
+        $currentUserId = api_get_user_id();
+        $authorId = empty($authorId) ? $currentUserId : (int) $authorId;
 
         switch ($this->type) {
             case 'personal':
                 $eventInfo = $this->get_event($id);
-                if ($eventInfo['user'] != api_get_user_id()) {
+                if ($eventInfo['user'] != $currentUserId
+                    && (
+                        api_get_configuration_value('agenda_collective_invitations')
+                            && !self::isUserInvitedInEvent($id, $currentUserId)
+                    )
+                ) {
                     break;
                 }
                 $attributes = [
@@ -778,6 +797,10 @@ class Agenda
                     $attributes,
                     ['id = ?' => $id]
                 );
+
+                if (api_get_configuration_value('agenda_collective_invitations')) {
+                    Agenda::saveCollectiveProperties($inviteesList, $isCollective, $id);
+                }
                 break;
             case 'course':
                 $eventInfo = $this->get_event($id);
@@ -1057,9 +1080,14 @@ class Agenda
     /**
      * @param int  $id
      * @param bool $deleteAllItemsFromSerie
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteEvent($id, $deleteAllItemsFromSerie = false)
     {
+        $em = Database::getManager();
+
         switch ($this->type) {
             case 'personal':
                 $eventInfo = $this->get_event($id);
@@ -1068,6 +1096,19 @@ class Agenda
                         $this->tbl_personal_agenda,
                         ['id = ?' => $id]
                     );
+                } elseif (api_get_configuration_value('agenda_collective_invitations')) {
+                    $currentUser = api_get_user_entity(api_get_user_id());
+
+                    $eventRepo = $em->getRepository('ChamiloCoreBundle:PersonalAgenda');
+                    $event = $eventRepo->findOneByIdAndInvitee($id, $currentUser);
+                    $invitation = $event ? $event->getInvitation() : null;
+
+                    if ($invitation) {
+                        $invitation->removeInviteeUser($currentUser);
+
+                        $em->persist($invitation);
+                        $em->flush();
+                    }
                 }
                 break;
             case 'course':
@@ -1466,10 +1507,13 @@ class Agenda
         // make sure events of the personal agenda can only be seen by the user himself
         $id = (int) $id;
         $event = null;
+        $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
+
         switch ($this->type) {
             case 'personal':
+                $user = api_get_user_entity(api_get_user_id());
                 $sql = "SELECT * FROM ".$this->tbl_personal_agenda."
-                        WHERE id = $id AND user = ".api_get_user_id();
+                        WHERE id = $id AND user = ".$user->getId();
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
                     $event = Database::fetch_array($result, 'ASSOC');
@@ -1478,7 +1522,38 @@ class Agenda
                     $event['start_date'] = $event['date'];
                     $event['end_date'] = $event['enddate'];
                 }
-                break;
+
+                if (null !== $event) {
+                    return $event;
+                }
+
+                if ($agendaCollectiveInvitations) {
+                    $eventRepo = Database::getManager()->getRepository('ChamiloCoreBundle:PersonalAgenda');
+                    $event = $eventRepo->findOneByIdAndInvitee($id, $user);
+
+                    if ($event && $event->isCollective()) {
+                        return [
+                            'id' => $event->getId(),
+                            'user' => $event->getUser(),
+                            'title' => $event->getTitle(),
+                            'text' => $event->getText(),
+                            'date' => $event->getDate()->format('Y-m-d H:i:s'),
+                            'enddate' => $event->getEndDate()->format('Y-m-d H:i:s'),
+                            'course' => null,
+                            'parent_event_id' => $event->getParentEventId(),
+                            'all_day' => $event->getAllDay(),
+                            'color' => $event->getColor(),
+                            'agenda_event_invitation_id' => $event->getInvitation()->getId(),
+                            'collective' => $event->isCollective(),
+                            'description' => $event->getText(),
+                            'content' => $event->getText(),
+                            'start_date' => $event->getDate()->format('Y-m-d H:i:s'),
+                            'end_date' => $event->getEndDate()->format('Y-m-d H:i:s'),
+                        ];
+                    }
+                }
+
+                return null;
             case 'course':
                 if (!empty($this->course['real_id'])) {
                     $sql = "SELECT * FROM ".$this->tbl_course_agenda."
@@ -1539,16 +1614,24 @@ class Agenda
     {
         $start = (int) $start;
         $end = (int) $end;
+        $startDate = null;
+        $endDate = null;
         $startCondition = '';
         $endCondition = '';
 
+        $em = Database::getManager();
+        $inviteeRepo = $em->getRepository('ChamiloCoreBundle:AgendaEventInvitee');
+
         if ($start !== 0) {
-            $startCondition = "AND date >= '".api_get_utc_datetime($start)."'";
+            $startDate = api_get_utc_datetime($start, true, true);
+            $startCondition = "AND date >= '".$startDate->format('Y-m-d H:i:s')."'";
         }
         if ($start !== 0) {
-            $endCondition = "AND (enddate <= '".api_get_utc_datetime($end)."' OR enddate IS NULL)";
+            $endDate = api_get_utc_datetime($end, false, true);
+            $endCondition = "AND (enddate <= '".$endDate->format('Y-m-d H:i:s')."' OR enddate IS NULL)";
         }
         $user_id = api_get_user_id();
+        $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
 
         $sql = "SELECT * FROM ".$this->tbl_personal_agenda."
                 WHERE user = $user_id $startCondition $endCondition";
@@ -1581,9 +1664,33 @@ class Agenda
                 $event['parent_event_id'] = 0;
                 $event['has_children'] = 0;
 
+                if ($agendaCollectiveInvitations) {
+                    $event['collective'] = (bool) $row['collective'];
+                    $event['invitees'] = [];
+
+                    $invitees = $inviteeRepo->findBy(['invitation' => $row['agenda_event_invitation_id']]);
+
+                    foreach ($invitees as $invitee) {
+                        $inviteeUser = $invitee->getUser();
+
+                        $event['invitees'][] = [
+                            'id' => $inviteeUser->getId(),
+                            'name' => $inviteeUser->getCompleteNameWithUsername(),
+                        ];
+                    }
+                }
+
                 $my_events[] = $event;
                 $this->events[] = $event;
             }
+        }
+
+        if ($agendaCollectiveInvitations) {
+            $this->loadEventsAsInvitee(
+                api_get_user_entity($user_id),
+                $startDate,
+                $endDate
+            );
         }
 
         // Add plugin personal events
@@ -2537,6 +2644,44 @@ class Agenda
                 null,
                 get_lang('AddAnnouncement').'&nbsp('.get_lang('SendMail').')'
             );
+        }
+
+        $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
+
+        if ($agendaCollectiveInvitations && 'personal' === $this->type) {
+            $em = Database::getManager();
+
+            $invitees = [];
+            $isCollective = false;
+
+            if ($id) {
+                $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $id);
+                $eventInvitation = $event->getInvitation();
+
+                if ($eventInvitation) {
+                    foreach ($eventInvitation->getInvitees() as $invitee) {
+                        $inviteeUser = $invitee->getUser();
+
+                        $invitees[$inviteeUser->getId()] = $inviteeUser->getCompleteNameWithUsername();
+                    }
+                }
+
+                $isCollective = $event->isCollective();
+            }
+
+            $form->addSelectAjax(
+                'invitees',
+                get_lang('Invitees'),
+                $invitees,
+                [
+                    'multiple' => 'multiple',
+                    'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
+                ]
+            );
+            $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+
+            $params['invitees'] = array_keys($invitees);
+            $params['collective'] = $isCollective;
         }
 
         if ($id) {
@@ -4140,6 +4285,102 @@ class Agenda
         $eventDate->setTimezone($platformTimeZone);
 
         return $eventDate->format(DateTime::ISO8601);
+    }
+
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function saveCollectiveProperties(array $inviteeUserList, bool $isCollective, int $eventId)
+    {
+        $em = Database::getManager();
+
+        $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $eventId);
+
+        $invitation = new AgendaEventInvitation();
+        $invitation->setCreator(api_get_user_entity(api_get_user_id()));
+
+        $event
+            ->setCollective($isCollective)
+            ->setInvitation($invitation)
+        ;
+
+        $em->persist($event);
+
+        foreach ($inviteeUserList as $inviteeId) {
+            $invitee = new AgendaEventInvitee();
+            $invitee
+                ->setUser(api_get_user_entity($inviteeId))
+                ->setInvitation($invitation)
+            ;
+
+            $em->persist($invitee);
+        }
+
+        $em->flush();
+    }
+
+    private static function isUserInvitedInEvent(int $id, int $userId): bool
+    {
+        $user = api_get_user_entity($userId);
+
+        $event = Database::getManager()
+            ->getRepository('ChamiloCoreBundle:PersonalAgenda')
+            ->findOneByIdAndInvitee($id, $user)
+        ;
+
+        return null !== $event;
+    }
+
+    private function loadEventsAsInvitee(User $user, ?DateTime $startDate, ?DateTime $endDate)
+    {
+        $em = Database::getManager();
+        $eventRepo = $em->getRepository('ChamiloCoreBundle:PersonalAgenda');
+        $events = $eventRepo->getEventsForInvitee($user, $startDate, $endDate);
+
+        foreach ($events as $event) {
+            $eventInfo = [];
+            $eventInfo['id'] = 'personal_'.$event->getId();
+            $eventInfo['title'] = $event->getTitle();
+            $eventInfo['className'] = 'personal';
+            $eventInfo['borderColor'] = $eventInfo['backgroundColor'] = $this->event_personal_color;
+            $eventInfo['editable'] = $event->isCollective();
+            $eventInfo['sent_to'] = get_lang('Me');
+            $eventInfo['type'] = 'personal';
+
+            if ($event->getDate()) {
+                $eventInfo['start'] = $this->formatEventDate($event->getDate()->format('Y-m-d H:i:s'));
+                $eventInfo['start_date_localtime'] = api_get_local_time($event->getDate());
+            }
+
+            if ($event->getEnddate()) {
+                $eventInfo['end'] = $this->formatEventDate($event->getEnddate()->format('Y-m-d H:i:s'));
+                $eventInfo['end_date_localtime'] = api_get_local_time($event->getEnddate());
+            }
+
+            $eventInfo['description'] = $event->getText();
+            $eventInfo['allDay'] = $event->getAllDay();
+            $eventInfo['parent_event_id'] = 0;
+            $eventInfo['has_children'] = 0;
+            $eventInfo['collective'] = $event->isCollective();
+            $eventInfo['invitees'] = [];
+
+            $invitation = $event->getInvitation();
+
+            if ($invitation) {
+                foreach ($invitation->getInvitees() as $invitee) {
+                    $inviteeUser = $invitee->getUser();
+
+                    $eventInfo['invitees'][] = [
+                        'id' => $inviteeUser->getId(),
+                        'name' => $inviteeUser->getCompleteNameWithUsername(),
+                    ];
+                }
+            }
+
+            $this->events[] = $eventInfo;
+        }
     }
 
     private function loadSessionsAsEvents(int $start, int $end)

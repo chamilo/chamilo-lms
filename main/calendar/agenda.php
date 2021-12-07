@@ -112,6 +112,8 @@ $course_info = api_get_course_info();
 
 $this_section = $course_info ? SECTION_COURSES : SECTION_MYAGENDA;
 
+$em = Database::getManager();
+
 $content = null;
 if ($allowToEdit) {
     switch ($action) {
@@ -143,7 +145,10 @@ if ($allowToEdit) {
                     null,
                     $attachmentList,
                     $attachmentCommentList,
-                    $comment
+                    $comment,
+                    '',
+                    $values['invitees'] ?? [],
+                    $values['collective'] ?? false
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -172,7 +177,7 @@ if ($allowToEdit) {
             break;
         case 'edit':
             $actionName = get_lang('Edit');
-            $event = $agenda->get_event($eventId);
+            $event = $agenda->get_event((int) $eventId);
 
             if (empty($event)) {
                 api_not_allowed(true);
@@ -211,7 +216,10 @@ if ($allowToEdit) {
                         null,
                         $attachmentList,
                         $attachmentCommentList,
-                        $comment
+                        $comment,
+                        '',
+                        $values['invitees'] ?? [],
+                        $values['collective'] ?? false
                     );
 
                     $message = Display::return_message(get_lang('Updated'), 'confirmation');
@@ -235,7 +243,11 @@ if ($allowToEdit) {
                     $attachmentCommentList,
                     $comment,
                     '',
-                    $sendEmail
+                    $sendEmail,
+                    true,
+                    0,
+                    $values['invitees'] ?? [],
+                    $values['collective'] ?? false
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {

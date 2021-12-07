@@ -446,7 +446,13 @@ function api_get_utc_datetime(
     if (is_numeric($time)) {
         $time = (int) $time;
 
-        return gmdate('Y-m-d H:i:s', $time);
+        $gmDate = gmdate('Y-m-d H:i:s', $time);
+
+        if ($returnObj) {
+            return new DateTime($gmDate, new DateTimeZone('UTC'));
+        }
+
+        return $gmDate;
     }
     try {
         $fromTimezone = api_get_timezone();

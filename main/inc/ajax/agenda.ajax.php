@@ -30,6 +30,8 @@ $agenda = new Agenda($type);
 // get filtered type
 $type = $agenda->getType();
 
+$em = Database::getManager();
+
 switch ($action) {
     case 'add_event':
         if (!$agenda->getIsAllowedToEdit()) {
@@ -43,8 +45,10 @@ switch ($action) {
         $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
+        $inviteesList = $_REQUEST['invitees'] ?? [];
+        $isCollective = isset($_REQUEST['collective']);
 
-        echo $agenda->addEvent(
+        $eventId = $agenda->addEvent(
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],
@@ -55,8 +59,13 @@ switch ($action) {
             null,
             [],
             null,
-            $comment
+            $comment,
+            '',
+            $inviteesList,
+            $isCollective
         );
+
+        echo $eventId;
         break;
     case 'edit_event':
         if (!$agenda->getIsAllowedToEdit()) {

@@ -51,7 +51,7 @@ if ($showGlossary) {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 
-$js = '<script>'.api_get_language_translate_html().'</script>';
+$js = '<style>'.api_get_language_translate_html().'</style>';
 $htmlHeadXtra[] = $js;
 
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
@@ -1241,7 +1241,7 @@ if (!empty($error)) {
 
             //3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
-            
+
             //4. choice for degree of certainty
             var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
 

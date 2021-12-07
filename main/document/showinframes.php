@@ -431,13 +431,14 @@ if ($execute_iframe) {
         if ($translate) {
             $display = ' display:none ';
             echo "<script>
-                    function waitToLoad() {
-                        $('#mainFrame').css('display', 'block');
-                        updateContentHeight();
-                    }
-                    $(function() {
-                        setTimeout(waitToLoad, 3500);
+                $(function () {
+                    var iframe = $('#mainFrame');
+                    iframe.on('load', function () {
+                        setTimeout(function () {
+                            iframe.show();
+                        }, 1650);
                     });
+                });
             </script>";
         }
 

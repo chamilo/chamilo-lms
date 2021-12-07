@@ -32,7 +32,7 @@ use Fhaculty\Graph\Graph;
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$js = '<script>'.api_get_language_translate_html().'</script>';
+$js = '<style>'.api_get_language_translate_html().'</style>';
 $htmlHeadXtra[] = $js;
 
 $htmlHeadXtra[] = '<script>
@@ -43,13 +43,13 @@ $(function() {
         $(".btn-show-thematic").show(); //show using class
         $("#pross").fadeToggle(); //Not working collapse for Chrome
     });
-    
+
     $("#thematic-hide").click(function(){
         $(".btn-show-thematic").hide(); //show using class
         $(".btn-hide-thematic").show();
         $("#pross").fadeToggle(); //Not working collapse for Chrome
     });
-    
+
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
 	$(".make_visible_and_invisible > img").click(function () {
 		make_visible = "visible.gif";

@@ -54,7 +54,7 @@ if (empty($objExercise)) {
     api_not_allowed(true);
 }
 
-$js = '<script>'.api_get_language_translate_html().'</script>';
+$js = '<style>'.api_get_language_translate_html().'</style>';
 $htmlHeadXtra[] = $js;
 
 if (api_is_in_gradebook()) {

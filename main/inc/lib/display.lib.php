@@ -2956,6 +2956,10 @@ HTML;
                     },
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
+
+                window.setTimeout(function () {
+                    window.top.document.getElementById("mainFrame").style.display = "";
+                }, 1500);
             });
         },
         "'.$frameName.'",

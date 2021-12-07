@@ -429,29 +429,19 @@ if ($execute_iframe) {
         $translate = api_get_configuration_value('translate_html');
         $display = '';
         if ($translate) {
-            $display = ' display:none ';
-            echo "<script>
-                $(function () {
-                    var iframe = $('#mainFrame');
-                    iframe.on('load', function () {
-                        setTimeout(function () {
-                            iframe.show();
-                        }, 1650);
-                    });
-                });
-            </script>";
+            $display = ' display:none;';
         }
 
+        echo '<div class="embed-responsive embed-responsive-16by9">';
         echo '<iframe
             id="mainFrame"
             name="mainFrame"
             border="0"
-            frameborder="0"
-            scrolling="no"
-            style="width:100%; '.$display.'"
-            height="600"
+            class="embed-responsive-item"
+            style="'.$display.'"
             src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"
             height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+        echo '</div>';
     }
 }
 Display::display_footer();

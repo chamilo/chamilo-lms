@@ -3,7 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Traits\EventColletiveTrait;
+use Chamilo\CoreBundle\Traits\EventCollectiveTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class PersonalAgenda
 {
     // Uncomment next line when activating the agenda_collective_invitations configuration setting.
-    //use EventColletiveTrait;
+    //use EventCollectiveTrait;
 
     /**
      * @var int

@@ -515,7 +515,6 @@ class TicketManager
                 $message = '<h2>'.get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
 
                 if (api_get_setting('ticket_warn_admin_no_user_in_category') === 'true') {
-                    $usersInCategory = self::getUsersInCategory($category_id);
                     if (empty($usersInCategory)) {
                         $subject = sprintf(
                             get_lang('WarningCategoryXDoesntHaveUsers'),
@@ -1357,7 +1356,7 @@ class TicketManager
         $titleEmail = "[$ticketCode] $title";
 
         // Content
-        $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticketId;
+        $href = api_get_path(WEB_CODE_PATH).'ticket/ticket_details.php?ticket_id='.$ticketId;
         $ticketUrl = Display::url($ticketCode, $href);
         $messageEmail = get_lang('TicketNum').": $ticketUrl <br />";
         $messageEmail .= get_lang('Status').": $status <br />";
@@ -2498,5 +2497,48 @@ class TicketManager
         }
 
         return [];
+    }
+
+    public static function notifiyTicketUpdated(int $ticketId, int $categoryId, string $message)
+    {
+        $subject = get_lang('TicketUpdated');
+
+        TicketManager::sendNotification($ticketId, $subject, $message);
+
+        if (empty($categoryId)) {
+            return;
+        }
+
+        $usersInCategory = self::getUsersInCategory($categoryId);
+
+        if (!empty($usersInCategory)) {
+            foreach ($usersInCategory as $data) {
+                if ($data['user_id']) {
+                    self::sendNotification($ticketId, $subject, $message, $data['user_id']);
+                }
+            }
+
+            return;
+        }
+
+        if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
+            $categoryInfo = self::getCategory($categoryId);
+
+            $warningNoUsers = sprintf(
+                get_lang('WarningCategoryXDoesntHaveUsers'),
+                $categoryInfo['name']
+            );
+
+            $message = Display::return_message($warningNoUsers, 'warning')
+                .$message;
+
+            $adminsToNotify = UserManager::get_all_administrators();
+
+            foreach ($adminsToNotify as $userId => $data) {
+                if ($data['active']) {
+                    self::sendNotification($ticketId, $subject, $message, $userId);
+                }
+            }
+        }
     }
 }

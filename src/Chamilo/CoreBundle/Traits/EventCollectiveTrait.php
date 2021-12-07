@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\Traits;
 use Chamilo\CoreBundle\Entity\AgendaEventInvitation;
 use Doctrine\ORM\Mapping as ORM;
 
-trait EventColletiveTrait
+trait EventCollectiveTrait
 {
     /**
      * @var AgendaEventInvitation|null

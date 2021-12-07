@@ -4389,7 +4389,7 @@ class Agenda
 
                 $firstAccessDate = new DateTime($courseAccess['login_course_date'], new DateTimeZone('UTC'));
                 $lastAccessDate = clone $firstAccessDate;
-                $lastAccessDate->modify('+' . $sessionInfo['duration'] . ' days');
+                $lastAccessDate->modify('+'.$sessionInfo['duration'].' days');
 
                 if ($firstAccessDate->format('Y-m-d H:i:s') > $start
                     && $lastAccessDate->format('Y-m-d H:i:s') < $end
@@ -4401,7 +4401,7 @@ class Agenda
                 $firstCourse = current($courseList);
 
                 $this->events[] = [
-                    'id' => 'session_' . $sessionInfo['id'],
+                    'id' => 'session_'.$sessionInfo['id'],
                     'session_id' => $sessionInfo['id'],
                     'title' => $sessionInfo['name'],
                     'description' => $sessionInfo['show_description'] ? $sessionInfo['description'] : '',
@@ -4434,7 +4434,7 @@ class Agenda
             $firstCourse = current($courseList);
 
             $this->events[] = [
-                'id' => 'session_' . $sessionInfo['id'],
+                'id' => 'session_'.$sessionInfo['id'],
                 'session_id' => $sessionInfo['id'],
                 'title' => $sessionInfo['name'],
                 'description' => $sessionInfo['show_description'] ? $sessionInfo['description'] : '',

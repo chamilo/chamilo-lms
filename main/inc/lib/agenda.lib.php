@@ -1619,9 +1619,11 @@ class Agenda
         $startCondition = '';
         $endCondition = '';
 
-        $em = Database::getManager();
-        $inviteeRepo = $em->getRepository('ChamiloCoreBundle:AgendaEventInvitee');
-
+	$em = Database::getManager();
+	$agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
+        if ($agendaCollectiveInvitations) {
+            $inviteeRepo = $em->getRepository('ChamiloCoreBundle:AgendaEventInvitee');
+        }
         if ($start !== 0) {
             $startDate = api_get_utc_datetime($start, true, true);
             $startCondition = "AND date >= '".$startDate->format('Y-m-d H:i:s')."'";
@@ -1631,7 +1633,6 @@ class Agenda
             $endCondition = "AND (enddate <= '".$endDate->format('Y-m-d H:i:s')."' OR enddate IS NULL)";
         }
         $user_id = api_get_user_id();
-        $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
 
         $sql = "SELECT * FROM ".$this->tbl_personal_agenda."
                 WHERE user = $user_id $startCondition $endCondition";

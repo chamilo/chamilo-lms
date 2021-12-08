@@ -1611,8 +1611,9 @@ class Agenda
         $startCondition = '';
         $endCondition = '';
 
-	$em = Database::getManager();
-	$agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
+        $em = Database::getManager();
+        $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
+        $inviteeRepo = null;
         if ($agendaCollectiveInvitations) {
             $inviteeRepo = $em->getRepository('ChamiloCoreBundle:AgendaEventInvitee');
         }

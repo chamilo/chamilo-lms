@@ -7011,7 +7011,7 @@ class CourseManager
         $course = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
-        $visibilityCondition = self::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('course', true, false);
 
         // Secondly we select the courses that are in a category (user_course_cat<>0) and
         // sort these according to the sort of the category

@@ -62,7 +62,7 @@ class MessageManager
 
         $sql = "SELECT COUNT(id) as number_messages
                 FROM $table
-                WHERE 
+                WHERE
                     $conditions
                 ";
         $result = Database::query($sql);
@@ -182,10 +182,10 @@ class MessageManager
         }
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT 
-                    id as col0, 
-                    title as col1, 
-                    send_date as col2, 
+        $sql = "SELECT
+                    id as col0,
+                    title as col1,
+                    send_date as col2,
                     msg_status as col3,
                     user_sender_id,
                     user_receiver_id
@@ -343,9 +343,9 @@ class MessageManager
         if (!empty($aboutUserInfo)) {
             $table = Database::get_main_table(TABLE_MESSAGE);
             $sql = 'SELECT id FROM '.$table.'
-                    WHERE 
-                      user_receiver_id = '.$aboutUserInfo['id'].' AND 
-                      msg_status = '.MESSAGE_STATUS_CONVERSATION.'                    
+                    WHERE
+                      user_receiver_id = '.$aboutUserInfo['id'].' AND
+                      msg_status = '.MESSAGE_STATUS_CONVERSATION.'
                     ';
             $result = Database::query($sql);
             $messages = [];
@@ -422,12 +422,12 @@ class MessageManager
         $message = Database::escape_string($message);
 
         $sql = "SELECT * FROM $table
-                WHERE 
+                WHERE
                     user_sender_id = $senderId AND
-                    user_receiver_id = $receiverId AND 
-                    title = '$subject' AND 
+                    user_receiver_id = $receiverId AND
+                    title = '$subject' AND
                     content = '$message' AND
-                    (msg_status = ".MESSAGE_STATUS_UNREAD." OR msg_status = ".MESSAGE_STATUS_NEW.")                    
+                    (msg_status = ".MESSAGE_STATUS_UNREAD." OR msg_status = ".MESSAGE_STATUS_NEW.")
                 ";
         $result = Database::query($sql);
 
@@ -855,8 +855,8 @@ class MessageManager
         }
 
         $sql = "SELECT * FROM $table
-                WHERE 
-                    id = $id AND 
+                WHERE
+                    id = $id AND
                     user_receiver_id = $user_receiver_id AND
                     msg_status <> ".MESSAGE_STATUS_OUTBOX;
         $rs = Database::query($sql);
@@ -865,10 +865,10 @@ class MessageManager
             // Delete attachment file.
             self::delete_message_attachment_file($id, $user_receiver_id);
             // Soft delete message.
-            $query = "UPDATE $table 
+            $query = "UPDATE $table
                       SET msg_status = ".MESSAGE_STATUS_DELETED."
                       WHERE
-                        id = $id AND 
+                        id = $id AND
                         user_receiver_id = $user_receiver_id ";
             Database::query($query);
 
@@ -1047,7 +1047,7 @@ class MessageManager
             $path_message_attach = $path_user_info['dir'].'message_attachments/';
             if (is_file($path_message_attach.$path)) {
                 if (rename($path_message_attach.$path, $path_message_attach.$new_path)) {
-                    $sql = "UPDATE $table_message_attach 
+                    $sql = "UPDATE $table_message_attach
                             SET path = '$new_path'
                             WHERE id = $attach_id ";
                     Database::query($sql);
@@ -1358,8 +1358,8 @@ class MessageManager
         }
 
         $query = "SELECT * FROM $table
-                  WHERE                            
-                    id = $messageId AND 
+                  WHERE
+                    id = $messageId AND
                     $userCondition
                     msg_status = $status";
         $result = Database::query($query);
@@ -1463,10 +1463,16 @@ class MessageManager
             $social_link = 'f=social';
         }
 
+        $eventLink = Display::url(
+            Display::return_icon('new_event.png', get_lang('New event')),
+            api_get_path(WEB_CODE_PATH).'calendar/agenda.php?action=add&type=personal&m='.$messageId
+        ).PHP_EOL;
+
         switch ($type) {
             case self::MESSAGE_TYPE_OUTBOX:
                 $message_content .= '<a href="outbox.php?'.$social_link.'">'.
                     Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
+                $message_content .= $eventLink;
                 $message_content .= '<a href="outbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
                     Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
                 break;
@@ -1474,7 +1480,8 @@ class MessageManager
                 $message_content .= '<a href="inbox.php?'.$social_link.'">'.
                     Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
                 $message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
-                    Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
+                    Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a>&nbsp;';
+                $message_content .= $eventLink;
                 $message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
                     Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
                 break;
@@ -2096,8 +2103,8 @@ class MessageManager
         $table = Database::get_main_table(TABLE_MESSAGE);
         $messageId = (int) $messageId;
         $sql = "SELECT * FROM $table
-                WHERE 
-                    id = '$messageId' AND 
+                WHERE
+                    id = '$messageId' AND
                     msg_status <> '".MESSAGE_STATUS_DELETED."' ";
         $res = Database::query($sql);
         $item = [];
@@ -2482,7 +2489,7 @@ class MessageManager
         }
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri 
+        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri
                 FROM $messagesTable as m
                 INNER JOIN $userTable as u
                 ON m.user_sender_id = u.user_id
@@ -2526,13 +2533,13 @@ class MessageManager
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
-        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri 
+        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri
                 FROM $messagesTable as m
                 INNER JOIN $userTable as u
                 ON m.user_receiver_id = u.user_id
                 WHERE
-                    m.user_sender_id = $userId 
-                    AND m.msg_status = ".MESSAGE_STATUS_OUTBOX." 
+                    m.user_sender_id = $userId
+                    AND m.msg_status = ".MESSAGE_STATUS_OUTBOX."
                     AND m.id > $lastId
                 ORDER BY m.send_date DESC";
 
@@ -2890,7 +2897,7 @@ class MessageManager
             return [];
         }
 
-        $sql = "SELECT DISTINCT * 
+        $sql = "SELECT DISTINCT *
                 FROM $messagesTable
                 WHERE
                     (user_receiver_id = $userId AND user_sender_id = $otherUserId) OR
@@ -3087,7 +3094,7 @@ class MessageManager
         }
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT COUNT(id) as count 
+        $sql = "SELECT COUNT(id) as count
                 FROM $table
                 WHERE
                     user_receiver_id = $userId AND
@@ -3096,5 +3103,110 @@ class MessageManager
         $row = Database::fetch_assoc($result);
 
         return (int) $row['count'];
+    }
+
+    public static function getMessagesCountForUser(int $userId): array
+    {
+        // Setting notifications
+        $countUnreadMessage = 0;
+
+        if (api_get_setting('allow_message_tool') === 'true') {
+            // get count unread message and total invitations
+            $countUnreadMessage = MessageManager::getCountNewMessagesFromDB($userId);
+        }
+
+        if (api_get_setting('allow_social_tool') === 'true') {
+            $numberOfNewMessagesOfFriend = SocialManager::get_message_number_invitation_by_user_id(
+                $userId
+            );
+            $usergroup = new UserGroup();
+            $groupPendingInvitations = $usergroup->get_groups_by_user(
+                $userId,
+                GROUP_USER_PERMISSION_PENDING_INVITATION
+            );
+
+            if (!empty($groupPendingInvitations)) {
+                $groupPendingInvitations = count($groupPendingInvitations);
+            } else {
+                $groupPendingInvitations = 0;
+            }
+
+            return [
+                'ms_friends' => $numberOfNewMessagesOfFriend,
+                'ms_groups' => $groupPendingInvitations,
+                'ms_inbox' => $countUnreadMessage,
+            ];
+        }
+
+        return [];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function setDefaultValuesInFormFromMessageInfo(array $messageInfo, FormValidator $form)
+    {
+        $currentUserId = api_get_user_id();
+        $contentMatch = [];
+        preg_match('/<body>(.*?)<\/body>/s', $messageInfo['content'], $contentMatch);
+
+        $defaults = [
+            'title' => $messageInfo['title'],
+            'content' => $contentMatch[1] ?? '',
+        ];
+
+        if (api_get_configuration_value('agenda_collective_invitations')) {
+            $defaults['invitees'] = [];
+
+            if ($currentUserId != $messageInfo['user_sender_id']) {
+                $senderInfo = api_get_user_info($messageInfo['user_sender_id']);
+                $form->getElement('invitees')->addOption(
+                    $senderInfo['complete_name_with_username'],
+                    $senderInfo['id']
+                );
+                $defaults['invitees'][] = $senderInfo['id'];
+            }
+
+            $messageCopies = MessageManager::getCopiesFromMessageInfo($messageInfo);
+
+            foreach ($messageCopies as $messageCopy) {
+                if ($currentUserId == $messageCopy->getUserReceiverId()) {
+                    continue;
+                }
+
+                $receiverInfo = api_get_user_info($messageCopy->getUserReceiverId());
+                $form->getElement('invitees')->addOption(
+                    $receiverInfo['complete_name_with_username'],
+                    $receiverInfo['id']
+                );
+
+                $defaults['invitees'][] = $receiverInfo['id'];
+            }
+        }
+
+        $form->setDefaults($defaults);
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @return array<Message>
+     */
+    public static function getCopiesFromMessageInfo(array $messageInfo): array
+    {
+        $em = Database::getManager();
+        $messageRepo = $em->getRepository('ChamiloCoreBundle:Message');
+
+        return $messageRepo->findBy(
+            [
+                'userSenderId' => $messageInfo['user_sender_id'],
+                'msgStatus' => MESSAGE_STATUS_OUTBOX,
+                'sendDate' => new DateTime($messageInfo['send_date'], new DateTimeZone('UTC')),
+                'title' => $messageInfo['title'],
+                'content' => $messageInfo['content'],
+                'groupId' => $messageInfo['group_id'],
+                'parentId' => $messageInfo['parent_id'],
+            ]
+        );
     }
 }

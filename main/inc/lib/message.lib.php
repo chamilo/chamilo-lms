@@ -1496,10 +1496,16 @@ class MessageManager
             $social_link = 'f=social';
         }
 
+        $eventLink = Display::url(
+            Display::return_icon('new_event.png', get_lang('New event')),
+            api_get_path(WEB_CODE_PATH).'calendar/agenda.php?action=add&type=personal&m='.$messageId
+        ).PHP_EOL;
+
         switch ($type) {
             case self::MESSAGE_TYPE_OUTBOX:
                 $message_content .= '<a href="outbox.php?'.$social_link.'">'.
                     Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
+                $message_content .= $eventLink;
                 $message_content .= '<a href="outbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
                     Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
                 break;
@@ -1508,6 +1514,7 @@ class MessageManager
                     Display::return_icon('icons/22/arrow_up.png', get_lang('ReturnToInbox')).'</a>&nbsp;';
                 $message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
                     Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a>&nbsp;';
+                $message_content .= $eventLink;
                 $message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
                     Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp;';
                 if ($idPrevMessage != 0) {
@@ -3192,5 +3199,74 @@ class MessageManager
         }
 
         return [];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function setDefaultValuesInFormFromMessageInfo(array $messageInfo, FormValidator $form)
+    {
+        $currentUserId = api_get_user_id();
+        $contentMatch = [];
+        preg_match('/<body>(.*?)<\/body>/s', $messageInfo['content'], $contentMatch);
+
+        $defaults = [
+            'title' => $messageInfo['title'],
+            'content' => $contentMatch[1] ?? '',
+        ];
+
+        if (api_get_configuration_value('agenda_collective_invitations')) {
+            $defaults['invitees'] = [];
+
+            if ($currentUserId != $messageInfo['user_sender_id']) {
+                $senderInfo = api_get_user_info($messageInfo['user_sender_id']);
+                $form->getElement('invitees')->addOption(
+                    $senderInfo['complete_name_with_username'],
+                    $senderInfo['id']
+                );
+                $defaults['invitees'][] = $senderInfo['id'];
+            }
+
+            $messageCopies = MessageManager::getCopiesFromMessageInfo($messageInfo);
+
+            foreach ($messageCopies as $messageCopy) {
+                if ($currentUserId == $messageCopy->getUserReceiverId()) {
+                    continue;
+                }
+
+                $receiverInfo = api_get_user_info($messageCopy->getUserReceiverId());
+                $form->getElement('invitees')->addOption(
+                    $receiverInfo['complete_name_with_username'],
+                    $receiverInfo['id']
+                );
+
+                $defaults['invitees'][] = $receiverInfo['id'];
+            }
+        }
+
+        $form->setDefaults($defaults);
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @return array<Message>
+     */
+    public static function getCopiesFromMessageInfo(array $messageInfo): array
+    {
+        $em = Database::getManager();
+        $messageRepo = $em->getRepository('ChamiloCoreBundle:Message');
+
+        return $messageRepo->findBy(
+            [
+                'userSenderId' => $messageInfo['user_sender_id'],
+                'msgStatus' => MESSAGE_STATUS_OUTBOX,
+                'sendDate' => new DateTime($messageInfo['send_date'], new DateTimeZone('UTC')),
+                'title' => $messageInfo['title'],
+                'content' => $messageInfo['content'],
+                'groupId' => $messageInfo['group_id'],
+                'parentId' => $messageInfo['parent_id'],
+            ]
+        );
     }
 }

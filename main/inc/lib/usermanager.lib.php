@@ -5561,6 +5561,7 @@ class UserManager
             if (!empty($column) && !empty($direction)) {
                 // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
+                $column = trim($column);
                 $orderBy = " ORDER BY `$column` $direction ";
             }
         }

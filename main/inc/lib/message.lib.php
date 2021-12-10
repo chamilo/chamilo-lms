@@ -3209,8 +3209,17 @@ class MessageManager
 
         $defaults = [
             'title' => $messageInfo['title'],
-            'content' => $contentMatch[1] ?? '',
         ];
+
+        if (empty($contentMatch[1])) {
+            $defaults['content'] = strip_tags_blacklist(
+                $messageInfo['content'],
+                ['link', 'script', 'title', 'head', 'body']
+            );
+            $defaults['content'] = preg_replace('#(<link(.*?)>)#msi', '', $defaults['content']);
+        } else {
+            $defaults['content'] = $contentMatch[1];
+        }
 
         if (api_get_configuration_value('agenda_collective_invitations')) {
             $defaults['invitees'] = [];

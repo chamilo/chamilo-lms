@@ -35,6 +35,20 @@ $group_id = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
 $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
+$messageId = (int) ($_GET['m'] ?? 0);
+$messageInfo = [];
+
+$currentUserId = api_get_user_id();
+
+if ($messageId) {
+    $event_type = 'personal';
+
+    $messageInfo = MessageManager::get_message_by_id($messageId);
+
+    if (!in_array($currentUserId, [$messageInfo['user_receiver_id'], $messageInfo['user_sender_id']])) {
+        api_not_allowed(true);
+    }
+}
 
 $htmlHeadXtra[] = "<script>
 function plus_repeated_event() {
@@ -172,6 +186,10 @@ if ($allowToEdit) {
                 header("Location: $agendaUrl");
                 exit;
             } else {
+                if (!empty($messageInfo)) {
+                    MessageManager::setDefaultValuesInFormFromMessageInfo($messageInfo, $form);
+                }
+
                 $content = $form->returnForm();
             }
             break;

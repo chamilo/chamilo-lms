@@ -202,8 +202,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         'content',
         get_lang('Message'),
         false,
-        false,
-        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250', 'style' => true]
+        true,
+        ['ToolbarSet' => 'Messages']
     );
 
     if (isset($_GET['re_id'])) {

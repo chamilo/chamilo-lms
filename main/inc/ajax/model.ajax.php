@@ -785,8 +785,13 @@ switch ($action) {
             }
         }
 
-        if ($list_type === 'custom') {
-            $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
+        if (api_get_configuration_value('allow_session_status') && isset($filters->filter_status)) {
+            $sStatus = (int) $filters->filter_status;
+            $whereCondition .= ' AND s.status = '.$sStatus;
+        } else {
+            if ($list_type === 'custom') {
+                $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
+            }
         }
 
         if ($list_type === 'simple' || $list_type === 'custom') {
@@ -1846,12 +1851,13 @@ switch ($action) {
         $columns = $session_columns['simple_column_name'];
 
         $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+        $orderBy = 'display_start_date DESC';
 
         if ($list_type === 'simple' || $list_type === 'custom') {
             $result = SessionManager::get_sessions_admin(
                 [
                     'where' => $whereCondition,
-                    'order' => "$sidx $sord, s.name",
+                    'order' => $orderBy,
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ],
@@ -1866,7 +1872,7 @@ switch ($action) {
             $result = SessionManager::get_sessions_admin_complete(
                 [
                     'where' => $whereCondition,
-                    'order' => "$sidx $sord, s.name",
+                    'order' => $orderBy,
                     'extra' => $extra_fields,
                     'limit' => "$start , $limit",
                 ]

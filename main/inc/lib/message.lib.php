@@ -1487,10 +1487,7 @@ class MessageManager
                 break;
         }
 
-        $message_content .= '</div></td>
-		      <td width=10></td>
-		    </tr>
-		</table>';
+        $message_content .= '</div>';
 
         return $message_content;
     }

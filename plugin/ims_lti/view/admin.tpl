@@ -16,6 +16,9 @@
             {% if tool.course is not empty %}
                 {{ tool.course.title }}
             {% endif %}
+            {% if tool.session is not empty %}
+                ({{ tool.session.name }})
+            {% endif %}
         </td>
         <td class="text-right">
             {% if not is_child and tool.version == 'lti1p3' %}
@@ -28,6 +31,12 @@
             {% if not is_child %}
                 <a href="{{ _p.web_plugin }}ims_lti/multiply.php?{{ url_params }}">
                     {{ 'multiplicate_survey.png'|img(22, 'AddInCourses'|get_plugin_lang('ImsLtiPlugin')) }}
+                </a>
+            {% endif %}
+
+            {% if not is_child %}
+                <a href="{{ _p.web_plugin }}ims_lti/session.php?{{ url_params }}">
+                    {{ 'session.png'|img(22, 'AddInSessions'|get_plugin_lang('ImsLtiPlugin')) }}
                 </a>
             {% endif %}
 

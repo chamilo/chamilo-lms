@@ -817,7 +817,7 @@ $(function() {
                 {% endif %}
 
                 if ('session' === calEvent.type) {
-                    buttons['{{ "GoToCourse"|get_lang }}'] = function() {
+                    buttons["{{ "GoToCourse"|get_lang }}"] = function() {
                         window.location.href = calEvent.course_url;
                     };
                 }

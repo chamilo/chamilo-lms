@@ -145,7 +145,7 @@ if ($allowToEdit) {
             if ($form->validate()) {
                 $values = $form->getSubmitValues();
 
-                $sendEmail = isset($values['add_announcement']) ? true : false;
+                $addAsAnnouncement = isset($values['add_announcement']) ? true : false;
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
                 $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
                 $attachmentList = $sendAttachment ? $_FILES : null;
@@ -162,7 +162,7 @@ if ($allowToEdit) {
                     $values['title'],
                     $values['content'],
                     $usersToSend,
-                    $sendEmail,
+                    $addAsAnnouncement,
                     null,
                     $attachmentList,
                     $attachmentCommentList,
@@ -183,7 +183,7 @@ if ($allowToEdit) {
                     );
                 }
                 $message = Display::return_message(get_lang('AddSuccess'), 'confirmation');
-                if ($sendEmail) {
+                if ($addAsAnnouncement) {
                     $message .= Display::return_message(
                         get_lang('AdditionalMailWasSentToSelectedUsers'),
                         'confirmation'
@@ -217,7 +217,7 @@ if ($allowToEdit) {
                 $values = $form->getSubmitValues();
 
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
-                $sendEmail = isset($values['add_announcement']) ? true : false;
+                $addAsAnnouncement = isset($values['add_announcement']) ? true : false;
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
@@ -268,7 +268,7 @@ if ($allowToEdit) {
                     $attachmentCommentList,
                     $comment,
                     '',
-                    $sendEmail,
+                    $addAsAnnouncement,
                     true,
                     0,
                     $values['invitees'] ?? [],

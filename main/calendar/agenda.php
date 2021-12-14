@@ -40,8 +40,8 @@ Event::registerLog($logInfo);
 
 $group_id = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
-$eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-$type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
+$eventId = $_REQUEST['id'] ?? null;
+$type = $event_type = $_GET['type'] ?? null;
 $messageId = (int) ($_GET['m'] ?? 0);
 $messageInfo = [];
 
@@ -59,7 +59,7 @@ if ($messageId) {
 
 $htmlHeadXtra[] = "<script>
 function plus_repeated_event() {
-    if (document.getElementById('options2').style.display == 'none') {
+    if (document.getElementById('options2').style.display === 'none') {
         document.getElementById('options2').style.display = 'block';
     } else {
         document.getElementById('options2').style.display = 'none';
@@ -145,13 +145,13 @@ if ($allowToEdit) {
             if ($form->validate()) {
                 $values = $form->getSubmitValues();
 
-                $addAsAnnouncement = isset($values['add_announcement']) ? true : false;
+                $addAsAnnouncement = isset($values['add_announcement']);
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
-                $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
+                $sendAttachment = isset($_FILES) && !empty($_FILES);
                 $attachmentList = $sendAttachment ? $_FILES : null;
-                $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
-                $comment = isset($values['comment']) ? $values['comment'] : null;
-                $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
+                $attachmentCommentList = $values['legend'] ?? null;
+                $comment = $values['comment'] ?? null;
+                $usersToSend = $values['users_to_send'] ?? '';
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
@@ -217,14 +217,14 @@ if ($allowToEdit) {
                 $values = $form->getSubmitValues();
 
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
-                $addAsAnnouncement = isset($values['add_announcement']) ? true : false;
+                $addAsAnnouncement = isset($values['add_announcement']);
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
-                $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
+                $sendAttachment = isset($_FILES) && !empty($_FILES);
                 $attachmentList = $sendAttachment ? $_FILES : null;
-                $attachmentCommentList = isset($values['legend']) ? $values['legend'] : '';
-                $comment = isset($values['comment']) ? $values['comment'] : '';
+                $attachmentCommentList = $values['legend'] ?? '';
+                $comment = $values['comment'] ?? '';
 
                 // This is a sub event. Delete the current and create another BT#7803
                 if (!empty($event['parent_event_id'])) {
@@ -253,7 +253,7 @@ if ($allowToEdit) {
                     exit;
                 }
 
-                $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
+                $usersToSend = $values['users_to_send'] ?? '';
 
                 // Editing normal event.
                 $agenda->editEvent(
@@ -286,7 +286,7 @@ if ($allowToEdit) {
                     );
                 }
 
-                $deleteAttachmentList = isset($values['delete_attachment']) ? $values['delete_attachment'] : [];
+                $deleteAttachmentList = $values['delete_attachment'] ?? [];
 
                 if (!empty($deleteAttachmentList)) {
                     foreach ($deleteAttachmentList as $deleteAttachmentId => $value) {

@@ -1850,8 +1850,15 @@ switch ($action) {
         $session_columns = SessionManager::getGridColumns($list_type);
         $columns = $session_columns['simple_column_name'];
 
-        $sidx = in_array($sidx, $columns) ? $sidx : 'name';
-        $orderBy = 'display_start_date DESC';
+        if ($_REQUEST['origin'] == 'load_search') {
+            if (!in_array($sidx, $columns)) {
+                $sidx = 'display_start_date';
+                $sord = 'DESC';
+            }
+        } else {
+            $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+        }
+        $orderBy = "$sidx $sord";
 
         if ($list_type === 'simple' || $list_type === 'custom') {
             $result = SessionManager::get_sessions_admin(

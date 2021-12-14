@@ -2630,7 +2630,7 @@ class Agenda
             );
         }
 
-        if (empty($id)) {
+        if (empty($id) && 'course' === $this->type) {
             $form->addElement(
                 'checkbox',
                 'add_announcement',

@@ -23,9 +23,9 @@ $searchYear = isset($_GET['year']) ? (int) $_GET['year'] : $currentYear;
 $currentOrder = isset($_GET['order']) && 'desc' === $_GET['order'] ? 'desc' : 'asc';
 
 if (api_is_western_name_order()) {
-    $orderBy = " firstname ";
+    $orderBy = "firstname";
 } else {
-    $orderBy = " lastname ";
+    $orderBy = "lastname";
 }
 
 $students = UserManager::getUsersFollowedByUser(

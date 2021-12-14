@@ -35,7 +35,7 @@ $group_id = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
 $eventId = $_REQUEST['id'] ?? null;
 $type = $event_type = $_GET['type'] ?? null;
-$messageId = (int) ($_GET['m'] ?? 0);
+$messageId = (int) ($_REQUEST['m'] ?? 0);
 $messageInfo = [];
 
 $currentUserId = api_get_user_id();
@@ -121,6 +121,16 @@ if ('course' === $event_type) {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().'&type=course';
 } else {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?&type='.$event_type;
+
+    if ($messageInfo) {
+        $agendaUrl = api_get_path(WEB_CODE_PATH).'messages/view_message.php?'
+            .http_build_query(
+                [
+                    'type' => $messageInfo['msg_status'] === MESSAGE_STATUS_OUTBOX ? 2 : 1,
+                    'id' => $messageInfo['id'],
+                ]
+            );
+    }
 }
 $course_info = api_get_course_info();
 
@@ -134,6 +144,10 @@ if ($allowToEdit) {
         case 'add':
             $actionName = get_lang('Add');
             $form = $agenda->getForm(['action' => 'add']);
+
+            if ($messageInfo) {
+                $form->addHidden('m', $messageInfo['id']);
+            }
 
             if ($form->validate()) {
                 $values = $form->getSubmitValues();

@@ -193,7 +193,7 @@ class DateRangePicker extends HTML_QuickForm_text
                 $('#$id').daterangepicker({
                     timePicker: $timePicker,
                     timePickerIncrement: $timeIncrement,
-                    timePicker12Hour: false,
+                    timePicker24Hour: true,
                     $defaultDates
                     $maxDate
                     $minDate

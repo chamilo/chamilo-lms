@@ -2932,9 +2932,18 @@ HTML;
         }
 
         $translateHtml = '';
+        $translateLoadFrame = '';
         $translate = api_get_configuration_value('translate_html');
         if ($translate) {
             $translateHtml = '{type:"stylesheet", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+            $iframeId = 'mainFrame';
+            if (isset($_REQUEST['lp_id'])) {
+                // If it is iframe from lp view
+                $iframeId = 'content_id';
+            }
+            $translateLoadFrame = 'window.setTimeout(function () {
+                window.top.document.getElementById("'.$iframeId.'").style.display = "";
+            }, 1500);';
         }
 
         $customCss = api_get_visual_theme();
@@ -2956,10 +2965,7 @@ HTML;
                     },
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
-
-                window.setTimeout(function () {
-                    window.top.document.getElementById("mainFrame").style.display = "";
-                }, 1500);
+                '.$translateLoadFrame.'
             });
         },
         "'.$frameName.'",

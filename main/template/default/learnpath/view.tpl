@@ -197,7 +197,7 @@
 
                 <div id="tab-iframe" class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="lp-view-content">
-                        <div id="wrapper-iframe">
+                        <div id="wrapper-iframe" class="embed-responsive embed-responsive-16by9">
                         {% if lp_mode == 'fullscreen' %}
                             <iframe
                                 id="content_id_blank"

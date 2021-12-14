@@ -433,6 +433,7 @@ if ($execute_iframe) {
         }
 
         echo '<div class="embed-responsive embed-responsive-16by9">';
+        echo '<span aria-hidden="true" class="fa fa-spinner fa-spin fa-3x"></span>';
         echo '<iframe
             id="mainFrame"
             name="mainFrame"

@@ -576,6 +576,10 @@ $(function() {
                 {% if agenda_collective_invitations and 'personal' == type %}
                     $('#form_invitees_edit')
                         .html(function () {
+                            if (!calEvent.invitees) {
+                                return '';
+                            }
+
                             return calEvent.invitees
                                 .map(function (invitee) { return invitee.name; })
                                 .join('<br>');
@@ -779,6 +783,10 @@ $(function() {
                 $("#simple_attachment").html(calEvent.attachment);
                 {% if agenda_collective_invitations and 'personal' == type %}
                     $('#simple_invitees').html(function () {
+                        if (!calEvent.invitees) {
+                            return '';
+                        }
+
                         return calEvent.invitees
                             .map(function (invitee) { return invitee.name; })
                             .join('<br>');

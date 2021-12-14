@@ -157,6 +157,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                         'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
                     ]
                 );
+                $form->addRule('users', get_lang('ThisFieldIsRequired'), 'required');
             } else {
                 $form->addElement('hidden', 'hidden_user', $default['users'][0], ['id' => 'hidden_user']);
             }
@@ -251,8 +252,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     $form->addLabel(
         '',
-        '<iframe 
-            frameborder="0" height="200" width="100%" scrolling="no" 
+        '<iframe
+            frameborder="0" height="200" width="100%" scrolling="no"
             src="'.api_get_path(WEB_CODE_PATH).'messages/record_audio.php"></iframe>'
     );
 
@@ -427,10 +428,10 @@ if (!isset($_POST['compose'])) {
             if (isset($_POST['hidden_user'])) {
                 $default['users'] = [$_POST['hidden_user']];
             }
-            $social_right_content .= manageForm($default, null, null, $tpl);
-        } else {
+        } /*else {
             $social_right_content .= Display::return_message(get_lang('ErrorSendingMessage'), 'error');
-        }
+        }*/
+        $social_right_content .= manageForm($default, null, null, $tpl);
     }
 }
 

@@ -213,6 +213,10 @@ $user_id = isset($_GET['user_id']) && !empty($_GET['user_id']) ? (int) $_GET['us
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
+    case 'delete_msg':
+        $messageId = (int) $_GET['msg_id'];
+        MessageManager::delete_message_by_user_sender(api_get_user_id(), $messageId);
+        break;
     case 'export_to_pdf':
         $sessionToExport = $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
         $sessionInfo = api_get_session_info($sessionToExport);
@@ -1822,12 +1826,12 @@ if (empty($details)) {
             'quiz.session_id'
         );
 
-        $sql = "SELECT quiz.title, id 
+        $sql = "SELECT quiz.title, id
                 FROM $t_quiz AS quiz
                 WHERE
                     quiz.c_id = ".$courseInfo['real_id']." AND
                     active IN (0, 1)
-                    $sessionCondition                    
+                    $sessionCondition
                 ORDER BY quiz.title ASC ";
 
         $result_exercices = Database::query($sql);
@@ -2170,7 +2174,7 @@ if ($allowAll) {
 if ($allowMessages === true) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));
-    echo MessageManager::getMessagesAboutUserToString($user_info);
+    echo MessageManager::getMessagesAboutUserToString($user_info, 'my_space');
     echo Display::url(
         get_lang('NewMessage'),
         'javascript: void(0);',

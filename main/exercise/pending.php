@@ -132,7 +132,40 @@ $htmlHeadXtra[] = '<script>
             }
             $("#pending").submit();
         });
+
+        $("select#course_id").on("change", function () {
+            var courseId = parseInt(this.value, 10);
+            updateExerciseList(courseId);
+        });
     });
+    function updateExerciseList(courseId) {
+        if (courseId == 0) {
+            return;
+        }
+        var $selectExercise = $("select#exercise_id");
+        $selectExercise.empty();
+
+        $.get("'.api_get_self().'", {
+            a: "get_exercise_by_course",
+            course_id: courseId,
+        }, function (exerciseList) {
+            $("<option>", {
+                value: 0,
+                text: "'.get_lang('All').'"
+            }).appendTo($selectExercise);
+
+            if (exerciseList.length > 0) {
+                $.each(exerciseList, function (index, exercise) {
+                    $("<option>", {
+                        value: exercise.id,
+                        text: exercise.text
+                    }).appendTo($selectExercise);
+                });
+                $selectExercise.find("option[value=\''.$exerciseId.'\']").attr("selected",true);
+            }
+            $selectExercise.selectpicker("refresh");
+        }, "json");
+    }
 </script>';
 
 if ($exportXls) {
@@ -404,35 +437,6 @@ $gridJs = Display::grid_js(
 
 ?>
     <script>
-    function updateExerciseList(courseId) {
-        if (courseId == 0) {
-            return;
-        }
-        var $selectExercise = $("select#exercise_id");
-        $selectExercise.empty();
-
-        $.get("<?php echo api_get_self(); ?>", {
-            a: "get_exercise_by_course",
-            course_id: courseId,
-        }, function (exerciseList) {
-            $("<option>", {
-                value: 0,
-                text: "<?php echo get_lang('All'); ?>"
-            }).appendTo($selectExercise);
-
-            if (exerciseList.length > 0) {
-                $.each(exerciseList, function (index, exercise) {
-                    $("<option>", {
-                        value: exercise.id,
-                        text: exercise.text
-                    }).appendTo($selectExercise);
-                });
-                $selectExercise.find("option[value=\'<?php echo $exerciseId; ?>\']").attr("selected",true);
-            }
-            $selectExercise.selectpicker("refresh");
-        }, "json");
-    }
-
     function exportExcel()
     {
         var mya = $("#results").getDataIDs();  // Get All IDs

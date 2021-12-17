@@ -12834,10 +12834,10 @@ EOD;
 
             // Delete link tool
             $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-            $link = 'lp/lp_controller.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&gidReq=0&gradebook=0&origin=&action=view_category&id='.$id;
+            $linkLikeValue = "lp/lp_controller.php?%&action=view_category&id=$id%";
             // Delete tools
             $sql = "DELETE FROM $tbl_tool
-                    WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image='lp_category.gif')";
+                    WHERE c_id = ".$courseId." AND (link LIKE '$linkLikeValue' AND image='lp_category.gif')";
             Database::query($sql);
 
             return true;

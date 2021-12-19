@@ -913,6 +913,11 @@ class CourseBuilder
             $this->course->add_resource($question);
         }
 
+        // Check if a global setting has been set to avoid copying orphan questions
+        if (true === api_get_configuration_value('quiz_discard_orphan_in_course_export')) {
+            $buildOrphanQuestions = false;
+        }
+
         if ($buildOrphanQuestions) {
             // Building a fictional test for collecting orphan questions.
             // When a course is emptied this option should be activated (true).

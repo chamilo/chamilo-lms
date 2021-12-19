@@ -1882,6 +1882,9 @@ $_configuration['auth_password_links'] = [
 //ALTER TABLE c_quiz_question_rel_category ADD COLUMN mandatory INT DEFAULT 0;
 //$_configuration['allow_mandatory_question_in_category'] = false;
 
+// Discard orphan questions from course copies/backups
+//$_configuration['quiz_discard_orphan_in_course_export'] = false;
+
 // Resource sequence: Validate course in the same session.
 //$_configuration['course_sequence_valid_only_in_same_session'] = false;
 

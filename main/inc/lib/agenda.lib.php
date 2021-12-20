@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\AgendaEventInvitation;
 use Chamilo\CoreBundle\Entity\AgendaEventInvitee;
+use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -250,7 +251,8 @@ class Agenda
         $eventComment = null,
         $color = '',
         array $inviteesList = [],
-        bool $isCollective = false
+        bool $isCollective = false,
+        array $reminders = []
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -452,7 +454,47 @@ class Agenda
                 break;
         }
 
+        if (api_get_configuration_value('agenda_reminders')) {
+            foreach ($reminders as $reminder) {
+                $this->addReminder($id, $reminder[0], $reminder[1]);
+            }
+        }
+
         return $id;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addReminder($eventId, $count, $period)
+    {
+        switch ($period) {
+            case 'i':
+                $dateInterval = DateInterval::createFromDateString("$count minutes");
+                break;
+            case 'h':
+                $dateInterval = DateInterval::createFromDateString("$count hours");
+                break;
+            case 'd':
+                $dateInterval = DateInterval::createFromDateString("$count days");
+                break;
+            case 'w':
+                $dateInterval = DateInterval::createFromDateString("$count weeks");
+                break;
+            default:
+                return null;
+        }
+
+        $agendaReminder = new AgendaReminder();
+        $agendaReminder
+            ->setType($this->type)
+            ->setEventId($eventId)
+            ->setDateInterval($dateInterval)
+        ;
+
+        $em = Database::getManager();
+        $em->persist($agendaReminder);
+        $em->flush();
     }
 
     /**
@@ -2697,6 +2739,11 @@ class Agenda
 
             $params['invitees'] = array_keys($invitees);
             $params['collective'] = $isCollective;
+        }
+
+        if (api_get_configuration_value('agenda_reminders') && 'add' === $params['action']) {
+            $form->addHtml('<hr><div id="notification_list"></div>');
+            $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
         }
 
         if ($id) {

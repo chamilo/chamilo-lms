@@ -862,6 +862,39 @@ $(function() {
 			else $('#loading').hide();
 		}
 	});
+
+    {% if 'agenda_reminders'|api_get_configuration_value %}
+        var template = '<div class="form-group">' +
+            '<div class="col-sm-offset-2 col-sm-3">' +
+            '<input min="0" step="1" id="notification_count[]" type="number" class=" form-control" name="notification_count[]">' +
+            '</div>' +
+            '<div class="col-sm-3">' +
+            '<select class="form-control" name="notification_period[]" id="form_notification_period[]">' +
+            '<option value="i">{{ 'Minutes'|get_lang }}</option>' +
+            '<option value="h">{{ 'Hours'|get_lang }}</option>' +
+            '<option value="d">{{ 'Days'|get_lang }}</option>' +
+            '<option value="w">{{ 'Weeks'|get_lang }}</option>' +
+            '</select>' +
+            '</div>' +
+            '<div class="col-sm-2"><p class="form-control-static">{{ 'Before'|get_lang }}</p></div>' +
+            '<div class="text-right col-sm-2">' +
+            '<button class="btn btn-default delete-notification" type="button" aria-label="{{ 'Delete'|get_lang }}"><em class="fa fa-times"></em></button>' +
+            '</div>' +
+            '</div>';
+
+        $('#form_add_notification').on('click', function (e) {
+            e.preventDefault();
+
+            $(template).appendTo('#notification_list');
+            $('#notification_list select').selectpicker('refresh');
+        });
+
+        $('#notification_list').on('click', '.delete-notification', function (e) {
+            e.preventDefault();
+
+            $(this).parents('.form-group').remove();
+        });
+    {% endif %}
 });
 </script>
 {{ actions_div }}

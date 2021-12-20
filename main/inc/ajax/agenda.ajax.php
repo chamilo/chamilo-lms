@@ -47,6 +47,10 @@ switch ($action) {
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
         $inviteesList = $_REQUEST['invitees'] ?? [];
         $isCollective = isset($_REQUEST['collective']);
+        $notificationCount = $_REQUEST['notification_count'] ?? [];
+        $notificationPeriod = $_REQUEST['notification_period'] ?? [];
+
+        $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
         $eventId = $agenda->addEvent(
             $_REQUEST['start'],
@@ -62,7 +66,8 @@ switch ($action) {
             $comment,
             '',
             $inviteesList,
-            $isCollective
+            $isCollective,
+            $reminders
         );
 
         echo $eventId;

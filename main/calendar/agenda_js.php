@@ -292,6 +292,11 @@ if (api_get_configuration_value('agenda_collective_invitations') && 'personal' =
     $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
 }
 
+if (api_get_configuration_value('agenda_reminders')) {
+    $form->addHtml('<hr><div id="notification_list"></div>');
+    $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+}
+
 $form->addHtml('<div id="attachment_block" style="display: none">');
 $form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="display: none"></div>');
 $form->addHtml('</div>');

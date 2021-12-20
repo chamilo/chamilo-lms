@@ -1668,18 +1668,7 @@ class Agenda
 
                 if ($agendaCollectiveInvitations) {
                     $event['collective'] = (bool) $row['collective'];
-                    $event['invitees'] = [];
-
-                    $invitees = $inviteeRepo->findBy(['invitation' => $row['agenda_event_invitation_id']]);
-
-                    foreach ($invitees as $invitee) {
-                        $inviteeUser = $invitee->getUser();
-
-                        $event['invitees'][] = [
-                            'id' => $inviteeUser->getId(),
-                            'name' => $inviteeUser->getCompleteNameWithUsername(),
-                        ];
-                    }
+                    $event['invitees'] = self::getInviteesForPersonalEvent($row['id']);
                 }
 
                 $my_events[] = $event;
@@ -1711,6 +1700,28 @@ class Agenda
         }
 
         return $my_events;
+    }
+
+    public static function getInviteesForPersonalEvent($eventId): array
+    {
+        $em = Database::getManager();
+        $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $eventId);
+
+        $inviteeRepo = $em->getRepository('ChamiloCoreBundle:AgendaEventInvitee');
+        $invitees = $inviteeRepo->findByInvitation($event->getInvitation());
+
+        $inviteeList = [];
+
+        foreach ($invitees as $invitee) {
+            $inviteeUser = $invitee->getUser();
+
+            $inviteeList[] = [
+                'id' => $inviteeUser->getId(),
+                'name' => $inviteeUser->getCompleteNameWithUsername(),
+            ];
+        }
+
+        return $inviteeList;
     }
 
     /**

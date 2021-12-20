@@ -92,6 +92,45 @@ function add_image_form() {
 }
 </script>';
 
+$agendaRemindersEnabled = api_get_configuration_value('agenda_reminders');
+
+if ($agendaRemindersEnabled) {
+    $htmlHeadXtra[] = '<script>
+    $(function () {
+        var template = \'<div class="form-group">\' +
+            \'<div class="col-sm-offset-2 col-sm-3">\' +
+            \'<input min="0" step="1" id="notification_count[]" type="number" class=" form-control" name="notification_count[]">\' +
+            \'</div>\' +
+            \'<div class="col-sm-3">\' +
+            \'<select class="form-control" name="notification_period[]" id="form_notification_period[]">\' +
+            \'<option value="i">'.get_lang('Minutes').'</option>\' +
+            \'<option value="h">'.get_lang('Hours').'</option>\' +
+            \'<option value="d">'.get_lang('Days').'</option>\' +
+            \'<option value="w">'.get_lang('Weeks').'</option>\' +
+            \'</select>\' +
+            \'</div>\' +
+            \'<div class="col-sm-2"><p class="form-control-static">'.get_lang('Before').'</p></div>\' +
+            \'<div class="text-right col-sm-2">\' +
+            \'<button class="btn btn-default delete-notification" type="button" aria-label="'.get_lang('Delete').'"><em class="fa fa-times"></em></button>\' +
+            \'</div>\' +
+            \'</div>\';
+
+        $("#add_event_add_notification").on("click", function (e) {
+            e.preventDefault();
+
+            $(template).appendTo("#notification_list");
+            $("#notification_list select").selectpicker("refresh");
+        });
+
+        $("#notification_list").on("click", ".delete-notification", function (e) {
+            e.preventDefault();
+
+            $(this).parents(".form-group").remove();
+        });
+    });
+    </script>';
+}
+
 // setting the name of the tool
 $nameTools = get_lang('Agenda');
 
@@ -161,6 +200,10 @@ if ($allowToEdit) {
                 $usersToSend = $values['users_to_send'] ?? '';
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
+                $notificationCount = $_REQUEST['notification_count'] ?? [];
+                $notificationPeriod = $_REQUEST['notification_period'] ?? [];
+
+                $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
                 $eventId = $agenda->addEvent(
                     $startDate,
@@ -176,7 +219,8 @@ if ($allowToEdit) {
                     $comment,
                     '',
                     $values['invitees'] ?? [],
-                    $values['collective'] ?? false
+                    $values['collective'] ?? false,
+                    $reminders
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {

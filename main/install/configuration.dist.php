@@ -452,6 +452,12 @@ CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invita
 // Then add the "@" symbol to AgendaEventInvitation and AgendaEventInvitee classes in the ORM\Entity() line.
 // Then uncomment the "use EventCollectiveTrait;" line in the PersonalAgenda class.
 //$_configuration['agenda_collective_invitations'] = false;
+// Enable reminders for agenda events. Requires database changes:
+/*
+ CREATE TABLE agenda_reminder (id BIGINT AUTO_INCREMENT NOT NULL, type VARCHAR(255) NOT NULL, event_id INT NOT NULL, date_interval VARCHAR(255) NOT NULL COMMENT '(DC2Type:dateinterval)', sent TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+*/
+// Then add the "@" symbol to AgendaReminder class in the ORM\Entity() line.
+//$_configuration['agenda_reminders'] = false;
 // ------
 //
 // Save some tool titles with HTML editor. Require DB changes:

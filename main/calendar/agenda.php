@@ -283,6 +283,10 @@ if ($allowToEdit) {
                 $attachmentList = $sendAttachment ? $_FILES : null;
                 $attachmentCommentList = $values['legend'] ?? '';
                 $comment = $values['comment'] ?? '';
+                $notificationCount = $_REQUEST['notification_count'] ?? [];
+                $notificationPeriod = $_REQUEST['notification_period'] ?? [];
+
+                $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
                 // This is a sub event. Delete the current and create another BT#7803
                 if (!empty($event['parent_event_id'])) {
@@ -302,7 +306,8 @@ if ($allowToEdit) {
                         $comment,
                         '',
                         $values['invitees'] ?? [],
-                        $values['collective'] ?? false
+                        $values['collective'] ?? false,
+                        $reminders
                     );
 
                     $message = Display::return_message(get_lang('Updated'), 'confirmation');
@@ -330,7 +335,8 @@ if ($allowToEdit) {
                     true,
                     0,
                     $values['invitees'] ?? [],
-                    $values['collective'] ?? false
+                    $values['collective'] ?? false,
+                    $reminders
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {

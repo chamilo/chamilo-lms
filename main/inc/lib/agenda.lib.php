@@ -1417,6 +1417,21 @@ class Agenda
                 break;
         }
 
+        if (api_get_configuration_value('agenda_reminders')) {
+            $this->events = array_map(
+                function (array $eventInfo) {
+                    $id = str_replace(['personal_', 'course_', 'session_'], '', $eventInfo['id']);
+
+                    $eventInfo['reminders'] = $this->parseEventReminders(
+                        $this->getEventReminders($id, $eventInfo['type'])
+                    );
+
+                    return $eventInfo;
+                },
+                $this->events
+            );
+        }
+
         $this->cleanEvents();
 
         switch ($format) {
@@ -1672,12 +1687,8 @@ class Agenda
         $startCondition = '';
         $endCondition = '';
 
-        $em = Database::getManager();
         $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
-        $inviteeRepo = null;
-        if ($agendaCollectiveInvitations) {
-            $inviteeRepo = $em->getRepository('ChamiloCoreBundle:AgendaEventInvitee');
-        }
+
         if ($start !== 0) {
             $startDate = api_get_utc_datetime($start, true, true);
             $startCondition = "AND date >= '".$startDate->format('Y-m-d H:i:s')."'";
@@ -2490,12 +2501,17 @@ class Agenda
         return $sendTo;
     }
 
-    public function getEventReminders($eventId): array
+    public function getEventReminders($eventId, $type = null): array
     {
         $em = Database::getManager();
         $remindersRepo = $em->getRepository('ChamiloCoreBundle:AgendaReminder');
 
-        return $remindersRepo->findBy(['eventId' => $eventId, 'type' => $this->type]);
+        return $remindersRepo->findBy(
+            [
+                'eventId' => $eventId,
+                'type' => $type ?: $this->type
+            ]
+        );
     }
 
     public function parseEventReminders(array $eventReminders): array

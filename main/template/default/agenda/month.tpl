@@ -1,4 +1,5 @@
 {% set agenda_collective_invitations = 'agenda_collective_invitations'|api_get_configuration_value %}
+{% set agenda_reminders = 'agenda_reminders'|api_get_configuration_value %}
 
 <style>
 .fc-day-grid-event > .fc-content {
@@ -571,6 +572,33 @@ $(function() {
                     }
                 {% endif %}
 
+                {% if agenda_reminders %}
+                    $('#notification_list').html('').next('.form-group').hide();
+
+                    $('#notification_list').append("<strong>{{ 'NotifyBeforeTheEventStarts'|get_lang }}</strong><br>");
+
+                    calEvent.reminders.forEach(function (reminder) {
+                        var reminderText = '<span class="fa fa-bell-o" aria-hidden="true"></span> ' + reminder.date_interval[0] + ' ';
+
+                        switch (reminder.date_interval[1]) {
+                            case 'i':
+                                reminderText += "{{ 'Minutes'|get_lang }}";
+                                break;
+                            case 'h':
+                                reminderText += "{{ 'Hours'|get_lang }}";
+                                break;
+                            case 'd':
+                            default:
+                                reminderText += "{{ 'Days'|get_lang }}";
+                                break;
+                        }
+
+                        reminderText += '<br>';
+
+                        $('#notification_list').append(reminderText);
+                    });
+                {% endif %}
+
                 $("#title_edit").show();
                 $("#content_edit").show();
                 {% if agenda_collective_invitations and 'personal' == type %}
@@ -742,6 +770,8 @@ $(function() {
                             $("#form_invitees").val(null).trigger('change');
                             $('#collective').prop('checked', false);
                         {% endif %}
+
+                        $('#notification_list').html('').next('.form-group').show();
 					}
 				});
 			} else {
@@ -781,6 +811,32 @@ $(function() {
                 $("#simple_content").html(calEvent.description);
                 $("#simple_comment").html(calEvent.comment);
                 $("#simple_attachment").html(calEvent.attachment);
+
+                {% if agenda_reminders %}
+                $('#simple_notification_list').html('').append("<strong>{{ 'NotifyBeforeTheEventStarts'|get_lang }}</strong><br>");
+
+                calEvent.reminders.forEach(function (reminder) {
+                    var reminderText = '<span class="fa fa-bell-o" aria-hidden="true"></span> ' + reminder.date_interval[0] + ' ';
+
+                    switch (reminder.date_interval[1]) {
+                        case 'i':
+                            reminderText += "{{ 'Minutes'|get_lang }}";
+                            break;
+                        case 'h':
+                            reminderText += "{{ 'Hours'|get_lang }}";
+                            break;
+                        case 'd':
+                        default:
+                            reminderText += "{{ 'Days'|get_lang }}";
+                            break;
+                    }
+
+                    reminderText += '<br>';
+
+                    $('#simple_notification_list').append(reminderText);
+                });
+                {% endif %}
+
                 {% if agenda_collective_invitations and 'personal' == type %}
                     $('#simple_invitees').html(function () {
                         if (!calEvent.invitees) {
@@ -960,6 +1016,12 @@ $(function() {
                 <div class="form-group">
                     <label class="col-sm-3 control-label">{{ 'Invitees' }}</label>
                     <div class="col-sm-9" id="simple_invitees"></div>
+                </div>
+            {% endif %}
+
+            {% if agenda_reminders %}
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9" id="simple_notification_list"></div>
                 </div>
             {% endif %}
         </form>

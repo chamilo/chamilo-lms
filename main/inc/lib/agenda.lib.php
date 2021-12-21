@@ -2509,7 +2509,7 @@ class Agenda
         return $remindersRepo->findBy(
             [
                 'eventId' => $eventId,
-                'type' => $type ?: $this->type
+                'type' => $type ?: $this->type,
             ]
         );
     }

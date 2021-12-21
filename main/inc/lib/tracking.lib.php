@@ -418,50 +418,6 @@ class Tracking
                                 '.$timeRow.'
                              ';
                             $output .= '</tr>';
-                            // It list test results by category questions
-                            if ('quiz' === $row['item_type']) {
-                                $categoriesQuestios = TestCategory::getQuestionsByCat($row['path'], [], [], false, $courseId);
-                                $categories = TestCategory::getListOfCategoriesIDForTest($row['path'], $courseId);
-                                $objExercise = new Exercise($courseId);
-                                $objExercise->read($row['path']);
-                                if (!empty($categoriesQuestios)) {
-                                    foreach ($categoriesQuestios as $catId => $questions) {
-                                        $catScore = 0;
-                                        $catWeight = 0;
-                                        if (!empty($questions)) {
-                                            foreach ($questions as $questionId) {
-                                                $questionResult = $objExercise->manage_answer(
-                                                    $idLastAttempt,
-                                                    $questionId,
-                                                    '',
-                                                    'exercise_show',
-                                                    [],
-                                                    false,
-                                                    true,
-                                                    false,
-                                                    $objExercise->selectPropagateNeg()
-                                                );
-                                                $catScore += $questionResult['score'];
-                                                $catWeight += $questionResult['weight'];
-                                            }
-                                        }
-                                        $timeCatRow = '';
-                                        if (!$hideTime) {
-                                            $timeCatRow = '<td></td>';
-                                        }
-                                        $catTitle = $categories[$catId]['title'];
-                                        $catScoreDisplay = ($catWeight > 0)? round(($catScore * 100) / $catWeight).'% ('.$catScore.'/'.$catWeight.')':'';
-                                        $output .= "<tr style='background-color: grey;'>";
-                                        $output .= '
-                                            <td style="width:35%">'.$catTitle.'</td>
-                                            <td style="width:25%;"></td>
-                                            <td style="width:20%;text-align:center;">'.$catScoreDisplay.'</td>
-                                            '.$timeCatRow.'
-                                         ';
-                                        $output .= '</tr>';
-                                    }
-                                }
-                            }
                         }
                     }
 
@@ -510,7 +466,6 @@ class Tracking
                                         lp_id = '$lpId'";
                             $resPath = Database::query($sql);
                             $rowPath = Database::fetch_array($resPath);
-
                             if (Database::num_rows($resPath) > 0) {
                                 $sql = 'SELECT * FROM '.$tblStatsExercises.'
                                         WHERE
@@ -563,11 +518,54 @@ class Tracking
                                             $timeRow = '';
                                         }
                                         $output .= '<tr>
-                                        <td><em>'.get_lang('Attempt').' '.$n.'</em></td>
+                                        <td>&mdash; <em>'.get_lang('Attempt').' '.$n.'</em></td>
                                         <td style="text-align:center;"><div class="btn btn-primary boldTitle">'.$myLessonStatus.'</div></td>
                                         <td style="text-align:center;">'.$viewScore.'</td>
                                         '.$timeRow;
                                         $output .= '</tr>';
+
+                                        // It displays categories questions by attempts
+                                        $categoriesQuestions = TestCategory::getQuestionsByCat($rowAttempts['exe_exo_id'], [], [], false, $courseId);
+                                        $categories = TestCategory::getListOfCategoriesIDForTest($rowAttempts['exe_exo_id'], $courseId);
+                                        $objExercise = new Exercise($courseId);
+                                        $objExercise->read($rowAttempts['exe_exo_id']);
+                                        if (!empty($categoriesQuestions)) {
+                                            foreach ($categoriesQuestions as $catId => $questions) {
+                                                $catScore = 0;
+                                                $catWeight = 0;
+                                                if (!empty($questions)) {
+                                                    foreach ($questions as $questionId) {
+                                                        $questionResult = $objExercise->manage_answer(
+                                                            $rowAttempts['exe_id'],
+                                                            $questionId,
+                                                            '',
+                                                            'exercise_show',
+                                                            [],
+                                                            false,
+                                                            true,
+                                                            false,
+                                                            $objExercise->selectPropagateNeg()
+                                                        );
+                                                        $catScore += $questionResult['score'];
+                                                        $catWeight += $questionResult['weight'];
+                                                    }
+                                                }
+                                                $timeCatRow = '';
+                                                if (!$hideTime) {
+                                                    $timeCatRow = '<td></td>';
+                                                }
+                                                $catTitle = $categories[$catId]['title'];
+                                                $catScoreDisplay = ($catWeight > 0)? round(($catScore * 100) / $catWeight).'% ('.$catScore.'/'.$catWeight.')':'';
+                                                $output .= "<tr>";
+                                                $output .= '
+                                                    <td style="width:35%">&mdash;&mdash; '.$catTitle.'</td>
+                                                    <td style="width:25%;"></td>
+                                                    <td style="width:20%;text-align:center;">'.$catScoreDisplay.'</td>
+                                                    '.$timeCatRow.'
+                                                 ';
+                                                $output .= '</tr>';
+                                            }
+                                        }
                                         $n++;
                                     }
                                 }

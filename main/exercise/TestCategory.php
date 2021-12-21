@@ -520,15 +520,17 @@ class TestCategory
         $exerciseId,
         $check_in_question_list = [],
         $categoriesAddedInExercise = [],
-        $onlyMandatory = false
+        $onlyMandatory = false,
+        $courseId = null
     ) {
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $exerciseId = (int) $exerciseId;
-        $courseId = api_get_course_int_id();
-
+        if (!isset($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
         $mandatoryCondition = '';
         if ($onlyMandatory) {
             $mandatoryCondition = ' AND qrc.mandatory = 1';

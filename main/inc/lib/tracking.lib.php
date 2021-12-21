@@ -412,7 +412,7 @@ class Tracking
                                 $timeRow = '';
                             }
                             $output .= '
-                                <td style="width:35%">'.$title.'</td>
+                                <td style="width:35%;font-weight:bold;">'.$title.'</td>
                                 <td style="width:25%;text-align:center;"><div class="btn btn-primary boldTitle">'.learnpathitem::humanize_status($lesson_status, false).'</div></td>
                                 <td style="width:20%;text-align:center;">'.$scoreItem.'</td>
                                 '.$timeRow.'

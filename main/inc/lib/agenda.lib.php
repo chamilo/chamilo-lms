@@ -497,6 +497,16 @@ class Agenda
         $em->flush();
     }
 
+    public function removeReminders(int $eventId)
+    {
+        Database::getManager()
+            ->createQuery(
+                'DELETE FROM ChamiloCoreBundle:AgendaReminder ar WHERE ar.eventId = :eventId AND ar.type = :type'
+            )
+            ->setParameters(['eventId' => $eventId, 'type' => $this->type])
+            ->execute();
+    }
+
     /**
      * @param int $eventId
      * @param int $courseId
@@ -799,7 +809,8 @@ class Agenda
         $updateContent = true,
         $authorId = 0,
         array $inviteesList = [],
-        bool $isCollective = false
+        bool $isCollective = false,
+        array $reminders = []
     ) {
         $id = (int) $id;
         $start = api_get_utc_datetime($start);
@@ -1116,6 +1127,14 @@ class Agenda
                     );
                 }
                 break;
+        }
+
+        if (api_get_configuration_value('agenda_reminders')) {
+            $this->removeReminders($id);
+
+            foreach ($reminders as $reminder) {
+                $this->addReminder($id, $reminder[0], $reminder[1]);
+            }
         }
     }
 
@@ -2482,6 +2501,41 @@ class Agenda
         return $sendTo;
     }
 
+    public function getEventReminders($eventId): array
+    {
+        $em = Database::getManager();
+        $remindersRepo = $em->getRepository('ChamiloCoreBundle:AgendaReminder');
+
+        return $remindersRepo->findBy(['eventId' => $eventId, 'type' => $this->type]);
+    }
+
+    public function parseEventReminders(array $eventReminders): array
+    {
+        return array_map(
+            function (AgendaReminder $reminder) {
+                $interval = $reminder->getDateInterval();
+
+                $reminderInfo = [
+                    'id' => $reminder->getId(),
+                    'type' => $reminder->getType(),
+                    'sent' => $reminder->isSent(),
+                    'date_interval' => [$interval->format('%a'), 'd'],
+                ];
+
+                if ($interval->i) {
+                    $reminderInfo['date_interval'] = [$interval->i, 'i'];
+                } elseif ($interval->h) {
+                    $reminderInfo['date_interval'] = [$interval->h, 'h'];
+                } elseif ($interval->d) {
+                    $reminderInfo['date_interval'] = [$interval->d, 'd'];
+                }
+
+                return $reminderInfo;
+            },
+            $eventReminders
+        );
+    }
+
     /**
      * @param array $params
      *
@@ -2741,9 +2795,16 @@ class Agenda
             $params['collective'] = $isCollective;
         }
 
-        if (api_get_configuration_value('agenda_reminders') && 'add' === $params['action']) {
-            $form->addHtml('<hr><div id="notification_list"></div>');
+        if (api_get_configuration_value('agenda_reminders')) {
+            $form->addHtml('<hr><div id="notification_list">');
+
+            if ($id) {
+                $this->addFieldsForRemindersToForm($id, $form);
+            }
+
+            $form->addHtml('</div>');
             $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+            $form->addHtml('<hr>');
         }
 
         if ($id) {
@@ -2761,6 +2822,51 @@ class Agenda
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
         return $form;
+    }
+
+    public function addFieldsForRemindersToForm(int $eventId, FormValidator $form)
+    {
+        $remindersList = $this->parseEventReminders(
+            $this->getEventReminders($eventId)
+        );
+
+        foreach ($remindersList as $reminderInfo) {
+            $form->addHtml('<div class="form-group">');
+            $form
+                ->addNumeric('notification_count[]', '', ['step' => 1, 'min' => 0])
+                ->setValue($reminderInfo['date_interval'][0])
+            ;
+            $form
+                ->addSelect(
+                'notification_period[]',
+                '',
+                    [
+                        'i' => get_lang('Minutes'),
+                        'h' => get_lang('Hours'),
+                        'd' => get_lang('Days'),
+                        'w' => get_lang('Weeks'),
+                    ]
+                )
+                ->setValue($reminderInfo['date_interval'][1])
+            ;
+            $form->addHtml('<div class="col-sm-2"><p class="form-control-static">'.get_lang('Before').'</p></div>');
+            $form->addHtml(
+                '<div class="text-right col-sm-2">'
+                .'<button class="btn btn-default delete-notification" type="button" aria-label="'.get_lang('Delete').'"><em class="fa fa-times"></em></button>'
+                .'</div>'
+            );
+            $form->addHtml('</div>');
+        }
+
+        $renderer = $form->defaultRenderer();
+        $renderer->setElementTemplate(
+            '<div class="col-sm-offset-2 col-sm-3">{element}</div>',
+            'notification_count[]'
+        );
+        $renderer->setElementTemplate(
+            '<div class="col-sm-3">{element}</div>',
+            'notification_period[]'
+        );
     }
 
     /**

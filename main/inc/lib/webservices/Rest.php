@@ -2096,6 +2096,9 @@ class Rest extends WebService
                 /*$learningPath->setSession($session);*/
                 $learningPath->setSessionId($sessionId);
             }
+	}
+        if (isset($spec['autolaunch']) && $spec['autolaunch']) {
+            $learningPath->setAutolaunch(1);
         }
         if (array_key_exists('lp_cat_id', $spec)) {
             $categoryId = $spec['lp_cat_id'];
@@ -2191,7 +2194,7 @@ class Rest extends WebService
                     }
                 }
             }
-        }
+	}
         Database::getManager()->flush();
 
         return $learningPath;

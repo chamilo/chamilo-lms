@@ -5,7 +5,6 @@
 /**
  * This script send notification messages to users that have reminders from an event in their agenda.
  */
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 exit;
@@ -161,7 +160,7 @@ foreach ($reminders as $reminder) {
 
     $em->persist($reminder);
 
-    ++$batchCounter;
+    $batchCounter++;
 
     if (($batchCounter % $batchSize) === 0) {
         $em->flush();

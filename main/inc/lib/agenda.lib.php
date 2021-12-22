@@ -1456,7 +1456,9 @@ class Agenda
                     }
                 }
 
-                $this->loadSessionsAsEvents($start, $end);
+		if (api_get_configuration_value('personal_calendar_show_sessions_occupation')) {
+                    $this->loadSessionsAsEvents($start, $end);
+                }
 
                 break;
         }

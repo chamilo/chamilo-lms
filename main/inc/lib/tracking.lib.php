@@ -555,7 +555,7 @@ class Tracking
                                                     $timeCatRow = '<td></td>';
                                                 }
                                                 $catTitle = $categories[$catId]['title'];
-                                                $catScoreDisplay = ($catWeight > 0)? round(($catScore * 100) / $catWeight).'% ('.$catScore.'/'.$catWeight.')':'';
+                                                $catScoreDisplay = ($catWeight > 0) ? round(($catScore * 100) / $catWeight).'% ('.$catScore.'/'.$catWeight.')' : '';
                                                 $output .= "<tr>";
                                                 $output .= '
                                                     <td style="width:35%">&mdash;&mdash; '.$catTitle.'</td>

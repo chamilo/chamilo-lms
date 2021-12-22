@@ -8761,4 +8761,9 @@ $ShareForumsInSessions = "Partager les forums avec toutes les sessions";
 $YouHaveAchievedANewSkill = "Vous avez obtenu une nouvelle compétence.";
 $YouXHaveAchievedTheSkillYToSeeFollowLinkZ = "Bonjour, %s. Vous avez obtenu la compétence \"%s\". Pour en voir les détails aller sur : %s";
 $ToAssignNewSkillToUserClickLinkX = "Pour assigner une nouvelle compétence à cet utilisateur, cliquer <a href=\"%s\"> ici</a>";
+$AddEventInCourseCalendar = "Ajouter l'événement au calendrier du cours";
+$Hours = "Heures";
+$ReminderXEvent = "Rappel pour l'événement : %s";
+$AddNotification = "Ajouter un rappel";
+$NotifyBeforeTheEventStarts = "Notification de rappel de l'événement";
 ?>

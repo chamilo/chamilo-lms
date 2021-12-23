@@ -478,9 +478,6 @@ class Agenda
             case 'd':
                 $dateInterval = DateInterval::createFromDateString("$count days");
                 break;
-            case 'w':
-                $dateInterval = DateInterval::createFromDateString("$count weeks");
-                break;
             default:
                 return null;
         }
@@ -497,14 +494,63 @@ class Agenda
         $em->flush();
     }
 
-    public function removeReminders(int $eventId)
+    public function removeReminders(int $eventId, int $count, string $period)
     {
+        switch ($period) {
+            case 'i':
+                $dateInterval = DateInterval::createFromDateString("$count minutes");
+                break;
+            case 'h':
+                $dateInterval = DateInterval::createFromDateString("$count hours");
+                break;
+            case 'd':
+                $dateInterval = DateInterval::createFromDateString("$count days");
+                break;
+            default:
+                return null;
+        }
+
         Database::getManager()
             ->createQuery(
-                'DELETE FROM ChamiloCoreBundle:AgendaReminder ar WHERE ar.eventId = :eventId AND ar.type = :type'
+                'DELETE FROM ChamiloCoreBundle:AgendaReminder ar
+                WHERE ar.eventId = :eventId AND ar.type = :type AND ar.dateInterval = :dateInterval'
             )
-            ->setParameters(['eventId' => $eventId, 'type' => $this->type])
+            ->setParameters(
+                [
+                    'eventId' => $eventId,
+                    'type' => $this->type,
+                    'dateInterval' => $dateInterval,
+                ]
+            )
             ->execute();
+    }
+
+    public function getReminder(int $eventId, int $count, string $period)
+    {
+        switch ($period) {
+            case 'i':
+                $dateInterval = DateInterval::createFromDateString("$count minutes");
+                break;
+            case 'h':
+                $dateInterval = DateInterval::createFromDateString("$count hours");
+                break;
+            case 'd':
+                $dateInterval = DateInterval::createFromDateString("$count days");
+                break;
+            default:
+                return null;
+        }
+
+        $em = Database::getManager();
+        $remindersRepo = $em->getRepository('ChamiloCoreBundle:AgendaReminder');
+
+        return $remindersRepo->findOneBy(
+            [
+                'type' => $this->type,
+                'dateInterval' => $dateInterval,
+                'eventId' => $eventId,
+            ]
+        );
     }
 
     /**
@@ -810,7 +856,7 @@ class Agenda
         $authorId = 0,
         array $inviteesList = [],
         bool $isCollective = false,
-        array $reminders = []
+        array $remindersList = []
     ) {
         $id = (int) $id;
         $start = api_get_utc_datetime($start);
@@ -1129,13 +1175,7 @@ class Agenda
                 break;
         }
 
-        if (api_get_configuration_value('agenda_reminders')) {
-            $this->removeReminders($id);
-
-            foreach ($reminders as $reminder) {
-                $this->addReminder($id, $reminder[0], $reminder[1]);
-            }
-        }
+        $this->editReminders($id, $remindersList);
     }
 
     /**
@@ -2512,6 +2552,12 @@ class Agenda
         return $sendTo;
     }
 
+    /**
+     * @param int    $eventId
+     * @param string $type
+     *
+     * @return array<int, AgendaReminder>
+     */
     public function getEventReminders($eventId, $type = null): array
     {
         $em = Database::getManager();
@@ -2860,7 +2906,6 @@ class Agenda
                         'i' => get_lang('Minutes'),
                         'h' => get_lang('Hours'),
                         'd' => get_lang('Days'),
-                        'w' => get_lang('Weeks'),
                     ]
                 )
                 ->setValue($reminderInfo['date_interval'][1])
@@ -4503,6 +4548,30 @@ class Agenda
         }
 
         $em->flush();
+    }
+
+    private function editReminders(int $eventId, array $reminderList = [])
+    {
+        if (false === api_get_configuration_value('agenda_reminders')) {
+            return;
+        }
+
+        $eventReminders = $this->parseEventReminders(
+            $this->getEventReminders($eventId)
+        );
+        $eventIntervalList = array_column($eventReminders, 'date_interval');
+
+        foreach ($eventIntervalList as $eventIntervalInfo) {
+            if (!in_array($eventIntervalInfo, $reminderList)) {
+                $this->removeReminders($eventId, $eventIntervalInfo[0], $eventIntervalInfo[1]);
+            }
+        }
+
+        foreach ($reminderList as $reminderInfo) {
+            if (!in_array($reminderInfo, $eventIntervalList)) {
+                $this->addReminder($eventId, $reminderInfo[0], $reminderInfo[1]);
+            }
+        }
     }
 
     private static function isUserInvitedInEvent(int $id, int $userId): bool

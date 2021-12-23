@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\AgendaEventInvitation;
 use Chamilo\CoreBundle\Entity\AgendaEventInvitee;
+use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -250,7 +251,8 @@ class Agenda
         $eventComment = null,
         $color = '',
         array $inviteesList = [],
-        bool $isCollective = false
+        bool $isCollective = false,
+        array $reminders = []
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -452,7 +454,103 @@ class Agenda
                 break;
         }
 
+        if (api_get_configuration_value('agenda_reminders')) {
+            foreach ($reminders as $reminder) {
+                $this->addReminder($id, $reminder[0], $reminder[1]);
+            }
+        }
+
         return $id;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addReminder($eventId, $count, $period)
+    {
+        switch ($period) {
+            case 'i':
+                $dateInterval = DateInterval::createFromDateString("$count minutes");
+                break;
+            case 'h':
+                $dateInterval = DateInterval::createFromDateString("$count hours");
+                break;
+            case 'd':
+                $dateInterval = DateInterval::createFromDateString("$count days");
+                break;
+            default:
+                return null;
+        }
+
+        $agendaReminder = new AgendaReminder();
+        $agendaReminder
+            ->setType($this->type)
+            ->setEventId($eventId)
+            ->setDateInterval($dateInterval)
+        ;
+
+        $em = Database::getManager();
+        $em->persist($agendaReminder);
+        $em->flush();
+    }
+
+    public function removeReminders(int $eventId, int $count, string $period)
+    {
+        switch ($period) {
+            case 'i':
+                $dateInterval = DateInterval::createFromDateString("$count minutes");
+                break;
+            case 'h':
+                $dateInterval = DateInterval::createFromDateString("$count hours");
+                break;
+            case 'd':
+                $dateInterval = DateInterval::createFromDateString("$count days");
+                break;
+            default:
+                return null;
+        }
+
+        Database::getManager()
+            ->createQuery(
+                'DELETE FROM ChamiloCoreBundle:AgendaReminder ar
+                WHERE ar.eventId = :eventId AND ar.type = :type AND ar.dateInterval = :dateInterval'
+            )
+            ->setParameters(
+                [
+                    'eventId' => $eventId,
+                    'type' => $this->type,
+                    'dateInterval' => $dateInterval,
+                ]
+            )
+            ->execute();
+    }
+
+    public function getReminder(int $eventId, int $count, string $period)
+    {
+        switch ($period) {
+            case 'i':
+                $dateInterval = DateInterval::createFromDateString("$count minutes");
+                break;
+            case 'h':
+                $dateInterval = DateInterval::createFromDateString("$count hours");
+                break;
+            case 'd':
+                $dateInterval = DateInterval::createFromDateString("$count days");
+                break;
+            default:
+                return null;
+        }
+
+        $em = Database::getManager();
+        $remindersRepo = $em->getRepository('ChamiloCoreBundle:AgendaReminder');
+
+        return $remindersRepo->findOneBy(
+            [
+                'type' => $this->type,
+                'dateInterval' => $dateInterval,
+                'eventId' => $eventId,
+            ]
+        );
     }
 
     /**
@@ -757,7 +855,8 @@ class Agenda
         $updateContent = true,
         $authorId = 0,
         array $inviteesList = [],
-        bool $isCollective = false
+        bool $isCollective = false,
+        array $remindersList = []
     ) {
         $id = (int) $id;
         $start = api_get_utc_datetime($start);
@@ -1075,6 +1174,8 @@ class Agenda
                 }
                 break;
         }
+
+        $this->editReminders($id, $remindersList);
     }
 
     /**
@@ -1366,6 +1467,21 @@ class Agenda
                 break;
         }
 
+        if (api_get_configuration_value('agenda_reminders')) {
+            $this->events = array_map(
+                function (array $eventInfo) {
+                    $id = str_replace(['personal_', 'course_', 'session_'], '', $eventInfo['id']);
+
+                    $eventInfo['reminders'] = $this->parseEventReminders(
+                        $this->getEventReminders($id, $eventInfo['type'])
+                    );
+
+                    return $eventInfo;
+                },
+                $this->events
+            );
+        }
+
         $this->cleanEvents();
 
         switch ($format) {
@@ -1621,12 +1737,8 @@ class Agenda
         $startCondition = '';
         $endCondition = '';
 
-        $em = Database::getManager();
         $agendaCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations');
-        $inviteeRepo = null;
-        if ($agendaCollectiveInvitations) {
-            $inviteeRepo = $em->getRepository('ChamiloCoreBundle:AgendaEventInvitee');
-        }
+
         if ($start !== 0) {
             $startDate = api_get_utc_datetime($start, true, true);
             $startCondition = "AND date >= '".$startDate->format('Y-m-d H:i:s')."'";
@@ -1670,18 +1782,7 @@ class Agenda
 
                 if ($agendaCollectiveInvitations) {
                     $event['collective'] = (bool) $row['collective'];
-                    $event['invitees'] = [];
-
-                    $invitees = $inviteeRepo->findBy(['invitation' => $row['agenda_event_invitation_id']]);
-
-                    foreach ($invitees as $invitee) {
-                        $inviteeUser = $invitee->getUser();
-
-                        $event['invitees'][] = [
-                            'id' => $inviteeUser->getId(),
-                            'name' => $inviteeUser->getCompleteNameWithUsername(),
-                        ];
-                    }
+                    $event['invitees'] = self::getInviteesForPersonalEvent($row['id']);
                 }
 
                 $my_events[] = $event;
@@ -1713,6 +1814,28 @@ class Agenda
         }
 
         return $my_events;
+    }
+
+    public static function getInviteesForPersonalEvent($eventId): array
+    {
+        $em = Database::getManager();
+        $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $eventId);
+
+        $inviteeRepo = $em->getRepository('ChamiloCoreBundle:AgendaEventInvitee');
+        $invitees = $inviteeRepo->findByInvitation($event->getInvitation());
+
+        $inviteeList = [];
+
+        foreach ($invitees as $invitee) {
+            $inviteeUser = $invitee->getUser();
+
+            $inviteeList[] = [
+                'id' => $inviteeUser->getId(),
+                'name' => $inviteeUser->getCompleteNameWithUsername(),
+            ];
+        }
+
+        return $inviteeList;
     }
 
     /**
@@ -2430,6 +2553,52 @@ class Agenda
     }
 
     /**
+     * @param int    $eventId
+     * @param string $type
+     *
+     * @return array<int, AgendaReminder>
+     */
+    public function getEventReminders($eventId, $type = null): array
+    {
+        $em = Database::getManager();
+        $remindersRepo = $em->getRepository('ChamiloCoreBundle:AgendaReminder');
+
+        return $remindersRepo->findBy(
+            [
+                'eventId' => $eventId,
+                'type' => $type ?: $this->type,
+            ]
+        );
+    }
+
+    public function parseEventReminders(array $eventReminders): array
+    {
+        return array_map(
+            function (AgendaReminder $reminder) {
+                $interval = $reminder->getDateInterval();
+
+                $reminderInfo = [
+                    'id' => $reminder->getId(),
+                    'type' => $reminder->getType(),
+                    'sent' => $reminder->isSent(),
+                    'date_interval' => [$interval->format('%a'), 'd'],
+                ];
+
+                if ($interval->i) {
+                    $reminderInfo['date_interval'] = [$interval->i, 'i'];
+                } elseif ($interval->h) {
+                    $reminderInfo['date_interval'] = [$interval->h, 'h'];
+                } elseif ($interval->d) {
+                    $reminderInfo['date_interval'] = [$interval->d, 'd'];
+                }
+
+                return $reminderInfo;
+            },
+            $eventReminders
+        );
+    }
+
+    /**
      * @param array $params
      *
      * @return FormValidator
@@ -2688,6 +2857,18 @@ class Agenda
             $params['collective'] = $isCollective;
         }
 
+        if (api_get_configuration_value('agenda_reminders')) {
+            $form->addHtml('<hr><div id="notification_list">');
+
+            if ($id) {
+                $this->addFieldsForRemindersToForm($id, $form);
+            }
+
+            $form->addHtml('</div>');
+            $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+            $form->addHtml('<hr>');
+        }
+
         if ($id) {
             $form->addButtonUpdate(get_lang('ModifyEvent'));
         } else {
@@ -2703,6 +2884,50 @@ class Agenda
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
         return $form;
+    }
+
+    public function addFieldsForRemindersToForm(int $eventId, FormValidator $form)
+    {
+        $remindersList = $this->parseEventReminders(
+            $this->getEventReminders($eventId)
+        );
+
+        foreach ($remindersList as $reminderInfo) {
+            $form->addHtml('<div class="form-group">');
+            $form
+                ->addNumeric('notification_count[]', '', ['step' => 1, 'min' => 0])
+                ->setValue($reminderInfo['date_interval'][0])
+            ;
+            $form
+                ->addSelect(
+                'notification_period[]',
+                '',
+                    [
+                        'i' => get_lang('Minutes'),
+                        'h' => get_lang('Hours'),
+                        'd' => get_lang('Days'),
+                    ]
+                )
+                ->setValue($reminderInfo['date_interval'][1])
+            ;
+            $form->addHtml('<div class="col-sm-2"><p class="form-control-static">'.get_lang('Before').'</p></div>');
+            $form->addHtml(
+                '<div class="text-right col-sm-2">'
+                .'<button class="btn btn-default delete-notification" type="button" aria-label="'.get_lang('Delete').'"><em class="fa fa-times"></em></button>'
+                .'</div>'
+            );
+            $form->addHtml('</div>');
+        }
+
+        $renderer = $form->defaultRenderer();
+        $renderer->setElementTemplate(
+            '<div class="col-sm-offset-2 col-sm-3">{element}</div>',
+            'notification_count[]'
+        );
+        $renderer->setElementTemplate(
+            '<div class="col-sm-3">{element}</div>',
+            'notification_period[]'
+        );
     }
 
     /**
@@ -4323,6 +4548,30 @@ class Agenda
         }
 
         $em->flush();
+    }
+
+    private function editReminders(int $eventId, array $reminderList = [])
+    {
+        if (false === api_get_configuration_value('agenda_reminders')) {
+            return;
+        }
+
+        $eventReminders = $this->parseEventReminders(
+            $this->getEventReminders($eventId)
+        );
+        $eventIntervalList = array_column($eventReminders, 'date_interval');
+
+        foreach ($eventIntervalList as $eventIntervalInfo) {
+            if (!in_array($eventIntervalInfo, $reminderList)) {
+                $this->removeReminders($eventId, $eventIntervalInfo[0], $eventIntervalInfo[1]);
+            }
+        }
+
+        foreach ($reminderList as $reminderInfo) {
+            if (!in_array($reminderInfo, $eventIntervalList)) {
+                $this->addReminder($eventId, $reminderInfo[0], $reminderInfo[1]);
+            }
+        }
     }
 
     private static function isUserInvitedInEvent(int $id, int $userId): bool

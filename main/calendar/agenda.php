@@ -113,7 +113,6 @@ if ($agendaRemindersEnabled) {
             \'<option value="i">'.get_lang('Minutes').'</option>\' +
             \'<option value="h">'.get_lang('Hours').'</option>\' +
             \'<option value="d">'.get_lang('Days').'</option>\' +
-            \'<option value="w">'.get_lang('Weeks').'</option>\' +
             \'</select>\' +
             \'</div>\' +
             \'<div class="col-sm-2"><p class="form-control-static">'.get_lang('Before').'</p></div>\' +

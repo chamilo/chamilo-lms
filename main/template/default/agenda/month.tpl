@@ -938,7 +938,6 @@ $(document).ready(function() {
             '<option value="i">{{ 'Minutes'|get_lang }}</option>' +
             '<option value="h">{{ 'Hours'|get_lang }}</option>' +
             '<option value="d">{{ 'Days'|get_lang }}</option>' +
-            '<option value="w">{{ 'Weeks'|get_lang }}</option>' +
             '</select>' +
             '</div>' +
             '<div class="col-sm-2"><p class="form-control-static">{{ 'Before'|get_lang }}</p></div>' +

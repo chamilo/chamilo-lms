@@ -47,23 +47,9 @@ if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) &&
 
 function get_count_users()
 {
-    $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
-    $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
-    $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+    $users = get_users(null, null, 0, 3);
 
-    $lastConnectionDate = null;
-    if (!empty($sleepingDays)) {
-        $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
-    }
-
-    return SessionManager::getCountUserTracking(
-        $keyword,
-        $active,
-        $lastConnectionDate,
-        null,
-        null,
-        api_is_student_boss() ? null : STUDENT
-    );
+    return count($users);
 }
 
 function get_users($from, $limit, $column, $direction)
@@ -424,12 +410,11 @@ if ($export_csv) {
         $users = isset($_POST['uid']) ? $_POST['uid'] : '';
         if (!empty($subject) && !empty($message) && !empty($users)) {
             foreach ($users as $uid) {
-                $userInfo = api_get_user_info($uid);
-                MessageManager::sendMessageAboutUser(
-                    $userInfo,
-                    api_get_user_info(),
+                MessageManager::send_message_simple(
+                    $uid,
                     $subject,
-                    $message
+                    $message,
+                    api_get_user_id()
                 );
             }
             Display::addFlash(Display::return_message(get_lang('MessageSent')));

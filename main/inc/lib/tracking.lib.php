@@ -6435,7 +6435,7 @@ class Tracking
 
         if ($displayExtraFields) {
             $extraField = new ExtraField('user');
-            $extraField->addElements($form, 0, [], true, false);
+            $extraField->addElements($form, 0, [], true, false, [], [], [], false, true);
         }
 
         $form->addButtonSearch(get_lang('Search'));

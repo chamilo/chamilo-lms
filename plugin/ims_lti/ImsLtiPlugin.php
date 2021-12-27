@@ -185,6 +185,7 @@ class ImsLtiPlugin extends Plugin
                     version VARCHAR(255) DEFAULT 'lti1p1' NOT NULL,
                     launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
                     replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
+                    session_id INT DEFAULT NULL,
                     INDEX IDX_C5E47F7C91D79BD3 (c_id),
                     INDEX IDX_C5E47F7C82F80D8B (gradebook_eval_id),
                     INDEX IDX_C5E47F7C727ACA70 (parent_id),

@@ -1,7 +1,7 @@
 IMS/LTI plugin
 ===
 
-Version 1.8.0
+Version 1.9.0
 
 > This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -24,6 +24,10 @@ Settings tool. Then select a previously tool registered or register a new
 external tool.
 
 # Changelog
+
+## v1.9
+> Requires DB changes to upgrade, see [v1.9](#to-v190).
+* Add option to add LTI tool to sessions
 
 ## v1.8
 > Requires DB changes to upgrade, see [v1.8](#to-v180).
@@ -73,6 +77,11 @@ external tool.
 # Upgrading
 
 Run this changes on database:
+
+## To v1.9.0
+```sql
+ALTER TABLE plugin_ims_lti_tool ADD session_id INT;
+```
 
 ## To v1.8.0
 ```sql

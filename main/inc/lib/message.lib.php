@@ -1485,14 +1485,21 @@ class MessageManager
         }
 
         $message_content .= '
-		        <hr style="color:#ddd" />
+		        <hr>
 		        <table width="100%">
 		            <tr>
 		              <td valign=top class="view-message-content">'.str_replace("\\", "", $content).'</td>
 		            </tr>
 		        </table>
 		        <div id="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>
-		        <div style="padding: 15px 0px 5px 0px">';
+		        <hr>';
+
+        if (api_get_configuration_value('enable_message_tags')) {
+            $message_content .= self::addTagsForm($messageId, $type);
+        }
+
+        $message_content .= '<div style="padding: 15px 0 5px 0;">';
+
         $social_link = '';
         if (isset($_GET['f']) && $_GET['f'] == 'social') {
             $social_link = 'f=social';
@@ -3276,5 +3283,37 @@ class MessageManager
                 'parentId' => $messageInfo['parent_id'],
             ]
         );
+    }
+
+    private static function addTagsForm(int $messageId, string $type): string
+    {
+        $url = api_get_self()."?id=$messageId&type=$type";
+        $form = new FormValidator('frm_tags', 'post', $url);
+
+        $extrafield = new ExtraField('message');
+        $extraHtml = $extrafield->addElements($form, $messageId, [], true, false, ['tags']);
+
+        $form->addButtonSave(get_lang('Save'));
+        $form->protect();
+
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $values['item_id'] = $messageId;
+
+            $extraFieldValues = new ExtraFieldValue('message');
+            $extraFieldValues->saveFieldValues($values);
+
+            Display::addFlash(
+                Display::return_message(get_lang('ItemUpdated'), 'success')
+            );
+
+            header("Location: $url");
+            exit;
+        }
+
+        $messageContent = $form->returnForm();
+        $messageContent .= '<script>$(function () { '.$extraHtml['jquery_ready_content'].' });</script>';
+
+        return $messageContent;
     }
 }

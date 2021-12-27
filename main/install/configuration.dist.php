@@ -1925,6 +1925,12 @@ $_configuration['auth_password_links'] = [
 // For a student: Shows only the list of teachers from my courses in the Chamilo inbox.
 // $_configuration['send_only_messages_to_teachers'] = true;
 
+// Allows add tag to filter messages in inbox. Requires add an tag type extrafield for messages.
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (22, 10, 'tags', 'Tags', '', 0, 1,	0, 1, 1, NOW());
+*/
+//$_configuration['enable_message_tags'] = false;
+
 // Survey duplicate: Order survey questions by student name
 // $_configuration['survey_duplicate_order_by_name'] = true;
 

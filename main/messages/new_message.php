@@ -242,6 +242,9 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         $default['content'] = '<p><br/></p>'.$forwardMessage.'<br />'.Security::filter_terms($message_reply_info['content']);
     }
 
+    $extrafield = new ExtraField('message');
+    $extraHtml = $extrafield->addElements($form);
+
     if (empty($group_id)) {
         $form->addLabel(
             '',
@@ -307,6 +310,16 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             $forwardId = isset($_POST['forward_id']) ? $_POST['forward_id'] : false;
 
             if (is_array($user_list) && count($user_list) > 0) {
+                $extraParams = [];
+
+                foreach ($form->exportValues() as $key => $value) {
+                    if (!str_contains($key, 'extra_')) {
+                        continue;
+                    }
+
+                    $extraParams[$key] = $value;
+                }
+
                 // All is well, send the message
                 foreach ($user_list as $userId) {
                     $res = MessageManager::send_message(
@@ -323,7 +336,10 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                         false,
                         $forwardId,
                         [],
-                        true
+                        true,
+                        false,
+                        0,
+                        $extraParams
                     );
 
                     if ($res) {
@@ -349,6 +365,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         $form->setConstants(['sec_token' => $token]);
         $html .= $form->returnForm();
     }
+
+    $html .= '<script>$(function () { '.$extraHtml['jquery_ready_content'].' });</script>';
 
     return $html;
 }

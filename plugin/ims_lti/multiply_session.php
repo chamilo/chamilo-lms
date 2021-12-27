@@ -67,7 +67,7 @@ try {
                 ]
             ),
             'multiple' => true
-        ]        
+        ]
     );
     $form->addCheckBox('tool_visible', get_lang('SetVisible'), get_lang('ToolIsNowVisible'));
     $form->addButtonExport(get_lang('Save'));

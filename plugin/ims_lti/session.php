@@ -50,7 +50,7 @@ try {
                 ]
             ),
             'multiple' => false
-        ]        
+        ]
     );
     $form->addHidden('tool_id', $tool->getId());
     $form->addButtonExport(get_lang('Next'));

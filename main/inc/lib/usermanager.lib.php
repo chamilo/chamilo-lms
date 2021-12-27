@@ -5788,6 +5788,7 @@ class UserManager
                     ON sru.user_id=u.id
                     WHERE
                         sru.c_id="'.$courseId.'" AND
+                        sru.session_id="'.$session.'" AND
                         sru.status = '.SessionEntity::COACH;
         }
 

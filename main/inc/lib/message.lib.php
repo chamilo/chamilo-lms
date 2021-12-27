@@ -480,7 +480,8 @@ class MessageManager
         $smsParameters = [],
         $checkCurrentAudioId = false,
         $forceTitleWhenSendingEmail = false,
-        $status = 0
+        $status = 0,
+        array $extraParams = []
     ) {
         $table = Database::get_main_table(TABLE_MESSAGE);
         $group_id = (int) $group_id;
@@ -645,6 +646,12 @@ class MessageManager
                     'update_date' => $now,
                 ];
                 $outbox_last_id = Database::insert($table, $params);
+
+                if ($extraParams) {
+                    $extraParams['item_id'] = $outbox_last_id;
+                    $extraFieldValues = new ExtraFieldValue('message');
+                    $extraFieldValues->saveFieldValues($extraParams);
+                }
 
                 // save attachment file for outbox messages
                 if (is_array($attachmentList)) {
@@ -1407,10 +1414,7 @@ class MessageManager
             $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
         }
 
-        $message_content .= '<tr>';
-        if (api_get_setting('allow_social_tool') === 'true') {
-            $message_content .= '<div class="row">';
-            $message_content .= '<div class="col-md-12">';
+        if ('true' === api_get_setting('allow_social_tool')) {
             $message_content .= '<ul class="list-message">';
 
             if (!empty($user_sender_id)) {
@@ -1442,8 +1446,6 @@ class MessageManager
 
             $message_content .= '&nbsp;<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
             $message_content .= '</ul>';
-            $message_content .= '</div>';
-            $message_content .= '</div>';
         } else {
             switch ($type) {
                 case self::MESSAGE_TYPE_INBOX:

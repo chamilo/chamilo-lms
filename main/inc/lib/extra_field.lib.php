@@ -163,6 +163,13 @@ class ExtraField extends Model
                 break;
             case 'lp_view':
                 $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
+                break;
+            case 'course_announcement':
+                $this->extraFieldType = EntityExtraField::COURSE_ANNOUNCEMENT;
+                break;
+            case 'message':
+                $this->extraFieldType = EntityExtraField::MESSAGE_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -194,6 +201,8 @@ class ExtraField extends Model
             'exercise',
             'track_exercise',
             'lp_view',
+            'course_announcement',
+            'message',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {

@@ -1973,6 +1973,13 @@ class ExtraField extends Model
         return false;
     }
 
+    public function getHandlerEntityByFieldVariable(string $variable)
+    {
+        return Database::getManager()
+            ->getRepository('ChamiloCoreBundle:ExtraField')
+            ->findOneBy(['variable' => $variable, 'extraFieldType' => $this->extraFieldType]);
+    }
+
     /**
      * @param array $params
      *

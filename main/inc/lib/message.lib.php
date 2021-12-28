@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\Tag as TagEntity;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 
@@ -202,6 +203,11 @@ class MessageManager
 
         $actions = $extraParams['actions'];
         $url = api_get_self();
+
+        $objExtraField = new ExtraField('message');
+        $extrafieldTags = $objExtraField->getHandlerEntityByFieldVariable('tags');
+        $efrtRepo = Database::getManager()->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $messageId = $row['col0'];
             $title = $row['col1'];
@@ -225,7 +231,7 @@ class MessageManager
             $message[3] = '';
             if (!empty($senderId) && !empty($userInfo)) {
                 $message[1] = '<a '.$class.' href="'.$viewUrl.'&id='.$messageId.'">'.$title.'</a><br />';
-                $message[1] .= $userInfo['complete_name_with_username'];
+                $message[1] .= Display::tag('small', $userInfo['complete_name_with_username']);
                 if (in_array('reply', $actions)) {
                     $message[3] =
                         Display::url(
@@ -245,6 +251,21 @@ class MessageManager
                             ['title' => get_lang('ReplyToMessage')]
                         );
                 }
+            }
+
+            if (in_array($type, [self::MESSAGE_TYPE_INBOX, self::MESSAGE_TYPE_OUTBOX])
+                && api_get_configuration_value('enable_message_tags')
+                && $extrafieldTags
+            ) {
+                $tags = $efrtRepo->getTags($extrafieldTags, $messageId);
+                $tagsBadges = array_map(
+                    function (TagEntity $tag) {
+                        return Display::badge($tag->getTag(), 'default');
+                    },
+                    $tags
+                );
+
+                $message[1] .= Display::badge_group($tagsBadges);
             }
 
             $message[0] = $messageId;
@@ -2326,7 +2347,10 @@ class MessageManager
 
         $actions = ['reply', 'mark_as_unread', 'mark_as_read', 'forward', 'delete'];
 
-        return self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions);
+        $html = self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions);
+        $html .= self::addTagsFormToInbox();
+
+        return $html;
     }
 
     /**
@@ -2410,6 +2434,7 @@ class MessageManager
         }
 
         $html = self::getMessageGrid(self::MESSAGE_TYPE_OUTBOX, $keyword, $actions);
+        $html .= self::addTagsFormToInbox();
 
         return $html;
     }
@@ -3283,6 +3308,26 @@ class MessageManager
                 'parentId' => $messageInfo['parent_id'],
             ]
         );
+    }
+
+    private static function addTagsFormToInbox(): string
+    {
+        if (false === api_get_configuration_value('enable_message_tags')) {
+            return '';
+        }
+
+        $form = new FormValidator('frm_inbox_tags', 'post');
+
+        $extrafield = new ExtraField('message');
+        $extraHtml = $extrafield->addElements($form, 0, [], true, false, ['tags']);
+
+        $form->addButtonSave(get_lang('Save'));
+        $form->protect();
+
+        $html = $form->returnForm();
+        $html .= '<script>$(function () { '.$extraHtml['jquery_ready_content'].' });</script>';
+
+        return $html;
     }
 
     private static function addTagsForm(int $messageId, string $type): string

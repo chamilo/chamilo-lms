@@ -62,8 +62,19 @@ class MessageManager
         $table = Database::get_main_table(TABLE_MESSAGE);
         $conditions = self::getWhereConditions($params);
 
-        $sql = "SELECT COUNT(id) as number_messages
-                FROM $table
+        $sql = "SELECT COUNT(DISTINCT m.id) as number_messages
+                FROM $table m";
+
+        if (true === api_get_configuration_value('enable_message_tags')) {
+            $tblExtraFielRelTag = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
+            $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+
+            $sql .= "
+                LEFT JOIN $tblExtraFielRelTag efrt ON efrt.item_id = m.id
+                LEFT JOIN $tblExtraField ef ON ef.id = efrt.field_id AND ef.variable = 'tags'";
+        }
+
+        $sql .= "
                 WHERE
                     $conditions
                 ";
@@ -88,6 +99,7 @@ class MessageManager
 
         $keyword = isset($extraParams['keyword']) && !empty($extraParams['keyword']) ? $extraParams['keyword'] : '';
         $type = isset($extraParams['type']) && !empty($extraParams['type']) ? $extraParams['type'] : '';
+        $tags = $extraParams['tags'] ?? [];
 
         if (empty($type)) {
             return '';
@@ -96,15 +108,15 @@ class MessageManager
         switch ($type) {
             case self::MESSAGE_TYPE_INBOX:
                 $statusList = [MESSAGE_STATUS_NEW, MESSAGE_STATUS_UNREAD];
-                $userCondition = " user_receiver_id = $userId AND";
+                $userCondition = " m.user_receiver_id = $userId AND";
                 break;
             case self::MESSAGE_TYPE_OUTBOX:
                 $statusList = [MESSAGE_STATUS_OUTBOX];
-                $userCondition = " user_sender_id = $userId AND";
+                $userCondition = " m.user_sender_id = $userId AND";
                 break;
             case self::MESSAGE_TYPE_PROMOTED:
                 $statusList = [MESSAGE_STATUS_PROMOTED];
-                $userCondition = " user_receiver_id = $userId AND";
+                $userCondition = " m.user_receiver_id = $userId AND";
                 break;
         }
 
@@ -115,13 +127,20 @@ class MessageManager
         $keywordCondition = '';
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
-            $keywordCondition = " AND (title like '%$keyword%' OR content LIKE '%$keyword%') ";
+            $keywordCondition = " AND (m.title like '%$keyword%' OR m.content LIKE '%$keyword%') ";
         }
         $messageStatusCondition = implode("','", $statusList);
 
+        $tagsCondition = '';
+
+        if (true === api_get_configuration_value('enable_message_tags') && !empty($tags)) {
+            $tagsCondition = ' AND efrt.tag_id IN ('.implode(', ', $tags).") ";
+        }
+
         return " $userCondition
-                 msg_status IN ('$messageStatusCondition')
-                 $keywordCondition";
+                 m.msg_status IN ('$messageStatusCondition')
+                 $keywordCondition
+                 $tagsCondition";
     }
 
     /**
@@ -184,14 +203,25 @@ class MessageManager
         }
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT
-                    id as col0,
-                    title as col1,
-                    send_date as col2,
-                    msg_status as col3,
-                    user_sender_id,
-                    user_receiver_id
-                FROM $table
+        $sql = "SELECT DISTINCT
+                    m.id as col0,
+                    m.title as col1,
+                    m.send_date as col2,
+                    m.msg_status as col3,
+                    m.user_sender_id,
+                    m.user_receiver_id
+                FROM $table m";
+
+        if (true === api_get_configuration_value('enable_message_tags')) {
+            $tblExtraFielRelTag = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
+            $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+
+            $sql .= "
+                LEFT JOIN $tblExtraFielRelTag efrt ON efrt.item_id = m.id
+                LEFT JOIN $tblExtraField ef ON ef.id = efrt.field_id AND ef.variable = 'tags'";
+        }
+
+        $sql .= "
                 WHERE
                     $whereConditions
                 ORDER BY col$column $direction
@@ -2224,7 +2254,7 @@ class MessageManager
      *
      * @return string
      */
-    public static function getMessageGrid($type, $keyword, $actions = [])
+    public static function getMessageGrid($type, $keyword, $actions = [], array $searchTags = [])
     {
         $html = '';
         // display sortable table with messages of the current user
@@ -2237,7 +2267,7 @@ class MessageManager
             'DESC'
         );
         $table->setDataFunctionParams(
-            ['keyword' => $keyword, 'type' => $type, 'actions' => $actions]
+            ['keyword' => $keyword, 'type' => $type, 'actions' => $actions, 'tags' => $searchTags]
         );
         $table->set_header(0, '', false, ['style' => 'width:15px;']);
         $table->set_header(1, get_lang('Messages'), false);
@@ -2277,7 +2307,7 @@ class MessageManager
      *
      * @return string
      */
-    public static function inboxDisplay($keyword = '')
+    public static function inboxDisplay($keyword = '', array $searchTags = [])
     {
         $success = get_lang('SelectedMessagesDeleted');
         $success_read = get_lang('SelectedMessagesRead');
@@ -2347,7 +2377,7 @@ class MessageManager
 
         $actions = ['reply', 'mark_as_unread', 'mark_as_read', 'forward', 'delete'];
 
-        $html = self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions);
+        $html = self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions, $searchTags);
         $html .= self::addTagsFormToInbox();
 
         return $html;
@@ -2400,7 +2430,7 @@ class MessageManager
      *
      * @return string
      */
-    public static function outBoxDisplay($keyword)
+    public static function outBoxDisplay($keyword, array $searchTags = [])
     {
         $actions = ['delete'];
 
@@ -2433,7 +2463,7 @@ class MessageManager
             exit;
         }
 
-        $html = self::getMessageGrid(self::MESSAGE_TYPE_OUTBOX, $keyword, $actions);
+        $html = self::getMessageGrid(self::MESSAGE_TYPE_OUTBOX, $keyword, $actions, $searchTags);
         $html .= self::addTagsFormToInbox();
 
         return $html;
@@ -2714,6 +2744,8 @@ class MessageManager
             [],
             FormValidator::LAYOUT_INLINE
         );
+
+        self::addTagsFormToSearch($form);
 
         $form->addElement(
             'text',
@@ -3360,5 +3392,31 @@ class MessageManager
         $messageContent .= '<script>$(function () { '.$extraHtml['jquery_ready_content'].' });</script>';
 
         return $messageContent;
+    }
+
+    private static function addTagsFormToSearch(FormValidator $form)
+    {
+        if (false === api_get_configuration_value('enable_message_tags')) {
+            return;
+        }
+
+        $userId = api_get_user_id();
+
+        $em = Database::getManager();
+        $tags = $em
+            ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+            ->getTagsByUserMessages($userId)
+        ;
+
+        $tagsOptions = [];
+
+        foreach ($tags as $tag) {
+            $tagsOptions[$tag->getId()] = $tag->getTag();
+        }
+
+        $form
+            ->addSelect('tags', get_lang('Tags'), $tagsOptions, ['class' => 'inbox-search-tags'])
+            ->setMultiple(true)
+        ;
     }
 }

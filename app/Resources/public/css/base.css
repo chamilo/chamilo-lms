@@ -5258,6 +5258,15 @@ i.size-32.icon-new-work {
     width: 300px;
 }
 
+.actions .form-inline  .bootstrap-select.inbox-search-tags .dropdown-toggle .filter-option-inner-inner {
+    margin-right: 15px;
+    overflow: hidden;
+    min-width: 150px;
+    text-overflow: ellipsis;
+    width: 300px;
+}
+
+
 ul.holder {
     list-style: none;
     margin: 0;

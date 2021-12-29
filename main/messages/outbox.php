@@ -57,6 +57,7 @@ if ($allowMessage) {
 
 $keyword = '';
 $social_right_content = '';
+$searchTags = [];
 if ($allowSocial) {
     // Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
@@ -67,15 +68,17 @@ if ($allowSocial) {
     if ($form->validate()) {
         $values = $form->getSubmitValues();
         $keyword = $values['keyword'];
+        $searchTags = $values['tags'] ?? [];
     }
     $actionsRight = $form->returnForm();
     $social_right_content .= Display::toolbarAction(
         'toolbar',
-        [$actionsLeft, $actionsRight]
+        [$actionsLeft, $actionsRight],
+        [2, 10]
     );
 }
 
-$social_right_content .= MessageManager::outBoxDisplay($keyword);
+$social_right_content .= MessageManager::outBoxDisplay($keyword, $searchTags);
 
 $tpl = new Template(get_lang('Outbox'));
 // Block Social Avatar

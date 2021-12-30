@@ -2349,7 +2349,10 @@ class MessageManager
         $actions = ['reply', 'mark_as_unread', 'mark_as_read', 'forward', 'delete'];
 
         $html = self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions, $searchTags);
-        $html .= self::addTagsFormToInbox();
+
+        if (!empty($html)) {
+            $html .= self::addTagsFormToInbox();
+        }
 
         return $html;
     }
@@ -2435,7 +2438,10 @@ class MessageManager
         }
 
         $html = self::getMessageGrid(self::MESSAGE_TYPE_OUTBOX, $keyword, $actions, $searchTags);
-        $html .= self::addTagsFormToInbox();
+
+        if (!empty($html)) {
+            $html .= self::addTagsFormToInbox();
+        }
 
         return $html;
     }
@@ -3301,7 +3307,7 @@ class MessageManager
         $extrafield = new ExtraField('message');
         $extraHtml = $extrafield->addElements($form, 0, [], true, false, ['tags']);
 
-        $form->addButtonSave(get_lang('Save'));
+        $form->addButton('submit', get_lang('AddTags'), 'plus', 'primary');
         $form->protect();
 
         $html = $form->returnForm();
@@ -3363,7 +3369,12 @@ class MessageManager
         }
 
         $form
-            ->addSelect('tags', get_lang('Tags'), $tagsOptions, ['class' => 'inbox-search-tags'])
+            ->addSelect(
+                'tags',
+                get_lang('Tags'),
+                $tagsOptions,
+                ['class' => 'inbox-search-tags', 'title' => get_lang('FilterByTags')]
+            )
             ->setMultiple(true)
         ;
     }

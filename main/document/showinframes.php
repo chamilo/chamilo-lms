@@ -426,19 +426,12 @@ if ($execute_iframe) {
 
         echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
 
-        $translate = api_get_configuration_value('translate_html');
-        $display = '';
-        if ($translate) {
-            $display = ' display:none;';
-        }
-
         echo '<div class="embed-responsive embed-responsive-16by9">';
         echo '<iframe
             id="mainFrame"
             name="mainFrame"
             border="0"
             class="embed-responsive-item"
-            style="'.$display.'"
             src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"
             height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
         echo '</div>';

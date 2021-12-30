@@ -2946,6 +2946,12 @@ HTML;
 
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
+
+        var $iframe = $("'.$frameName.'");
+        var $iframeSpinner = $("<span aria-hidden=\"true\" class=\"fa fa-spinner fa-spin fa-3x\"></span>");
+
+        $iframe.hide().parent().append($iframeSpinner);
+
         $.frameReady(function() {
              $(function () {
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
@@ -2957,9 +2963,9 @@ HTML;
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
 
-                window.setTimeout(function () {
-                    window.top.document.getElementById("mainFrame").style.display = "";
-                }, 1500);
+                var iframe = window.top.document.querySelector("'.$frameName.'");
+                iframe.parentNode.querySelector(".fa").remove()
+                iframe.style.display = "block";
             });
         },
         "'.$frameName.'",

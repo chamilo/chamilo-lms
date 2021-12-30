@@ -5465,6 +5465,22 @@ EOT;
     }
 
     /**
+     * @param int $exerciseId
+     */
+    public static function getExerciseTitleById($exerciseId)
+    {
+        $em = Database::getManager();
+
+        return $em
+            ->createQuery('SELECT cq.title
+                FROM ChamiloCourseBundle:CQuiz cq
+                WHERE cq.iid = :iid'
+            )
+            ->setParameter('iid', $exerciseId)
+            ->getSingleScalarResult();
+    }
+
+    /**
      * @param int $exeId      ID from track_e_exercises
      * @param int $userId     User ID
      * @param int $exerciseId Exercise ID

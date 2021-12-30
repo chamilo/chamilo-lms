@@ -187,7 +187,7 @@ switch ($action) {
                 'extra_tags' => $tagList,
             ];
 
-            $extraFieldValues->saveFieldValues($extraParams);
+            $extraFieldValues->saveFieldValues($extraParams, false, false, ['tags'], [], false, false);
         }
         break;
     default:

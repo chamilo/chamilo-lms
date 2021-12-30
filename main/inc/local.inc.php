@@ -1235,100 +1235,6 @@ $is_courseTutor = false;
 $is_courseMember = false;
 
 if ((isset($uidReset) && $uidReset) || $cidReset) {
-    if (isset($_cid) && $_cid) {
-        $my_user_id = isset($user_id) ? (int) $user_id : 0;
-        $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
-
-        $user_pass_open_course = false;
-        if (api_check_user_access_to_legal($_course) && Session::read($variable)) {
-            $user_pass_open_course = true;
-        }
-
-        // Checking if the user filled the course legal agreement
-        if ($_course['activate_legal'] == 1 && !api_is_platform_admin() && !api_is_anonymous()) {
-            $user_is_subscribed = CourseManager::is_user_accepted_legal(
-                $user_id,
-                $_course['id'],
-                $session_id
-            ) || $user_pass_open_course;
-            if (!$user_is_subscribed) {
-                $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
-                header('Location: '.$url);
-                exit;
-            }
-        }
-
-        // Platform legal terms and conditions
-        if (api_get_setting('allow_terms_conditions') === 'true' &&
-            api_get_setting('load_term_conditions_section') === 'course'
-        ) {
-            $termAndConditionStatus = api_check_term_condition($user_id);
-            // @todo not sure why we need the login password and update_term_status
-            if ($termAndConditionStatus === false) {
-                Session::write('term_and_condition', ['user_id' => $user_id]);
-            } else {
-                Session::erase('term_and_condition');
-            }
-
-            $termsAndCondition = Session::read('term_and_condition');
-
-            if (isset($termsAndCondition['user_id'])) {
-                // user id
-                $user_id = $termsAndCondition['user_id'];
-                // Update the terms & conditions
-                $legal_type = null;
-                // Verify type of terms and conditions
-                if (isset($_POST['legal_info'])) {
-                    $info_legal = explode(':', $_POST['legal_info']);
-                    $legal_type = LegalManager::get_type_of_terms_and_conditions(
-                        $info_legal[0],
-                        $info_legal[1]
-                    );
-                }
-
-                // is necessary verify check
-                if ($legal_type === 1) {
-                    if (isset($_POST['legal_accept']) && $_POST['legal_accept'] == '1') {
-                        $legal_option = true;
-                    } else {
-                        $legal_option = false;
-                    }
-                }
-
-                // no is check option
-                if ($legal_type == 0) {
-                    $legal_option = true;
-                }
-
-                if (isset($_POST['legal_accept_type']) && $legal_option === true) {
-                    $cond_array = explode(':', $_POST['legal_accept_type']);
-                    if (!empty($cond_array[0]) && !empty($cond_array[1])) {
-                        $time = time();
-                        $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
-                        UserManager::update_extra_field_value(
-                            $user_id,
-                            'legal_accept',
-                            $condition_to_save
-                        );
-                    }
-                }
-
-                $redirect = true;
-                $allow = api_get_configuration_value('allow_public_course_with_no_terms_conditions');
-                if ($allow === true &&
-                    isset($_course['visibility']) &&
-                    $_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
-                ) {
-                    $redirect = false;
-                }
-                if ($redirect && !api_is_platform_admin()) {
-                    $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
-                    header('Location:'.$url);
-                    exit;
-                }
-            }
-        }
-    }
 
     if (isset($user_id) && $user_id && isset($_real_cid) && $_real_cid) {
         // Check if user is subscribed in a course
@@ -1579,6 +1485,101 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
         $is_courseTutor = false;
         $is_session_general_coach = false;
         $is_sessionAdmin = false;
+    }
+
+    if (isset($_cid) && $_cid) {
+        $my_user_id = isset($user_id) ? (int) $user_id : 0;
+        $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
+
+        $user_pass_open_course = false;
+        if (api_check_user_access_to_legal($_course) && Session::read($variable)) {
+            $user_pass_open_course = true;
+        }
+
+        // Checking if the user filled the course legal agreement
+        if ($_course['activate_legal'] == 1 && !api_is_platform_admin() && !api_is_anonymous()) {
+            $user_is_subscribed = CourseManager::is_user_accepted_legal(
+                $user_id,
+                $_course['id'],
+                $session_id
+            ) || $user_pass_open_course;
+            if (!$user_is_subscribed) {
+                $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
+                header('Location: '.$url);
+                exit;
+            }
+        }
+
+        // Platform legal terms and conditions
+        if (api_get_setting('allow_terms_conditions') === 'true' &&
+            api_get_setting('load_term_conditions_section') === 'course'
+        ) {
+            $termAndConditionStatus = api_check_term_condition($user_id);
+            // @todo not sure why we need the login password and update_term_status
+            if ($termAndConditionStatus === false) {
+                Session::write('term_and_condition', ['user_id' => $user_id]);
+            } else {
+                Session::erase('term_and_condition');
+            }
+
+            $termsAndCondition = Session::read('term_and_condition');
+
+            if (isset($termsAndCondition['user_id'])) {
+                // user id
+                $user_id = $termsAndCondition['user_id'];
+                // Update the terms & conditions
+                $legal_type = null;
+                // Verify type of terms and conditions
+                if (isset($_POST['legal_info'])) {
+                    $info_legal = explode(':', $_POST['legal_info']);
+                    $legal_type = LegalManager::get_type_of_terms_and_conditions(
+                        $info_legal[0],
+                        $info_legal[1]
+                    );
+                }
+
+                // is necessary verify check
+                if ($legal_type === 1) {
+                    if (isset($_POST['legal_accept']) && $_POST['legal_accept'] == '1') {
+                        $legal_option = true;
+                    } else {
+                        $legal_option = false;
+                    }
+                }
+
+                // no is check option
+                if ($legal_type == 0) {
+                    $legal_option = true;
+                }
+
+                if (isset($_POST['legal_accept_type']) && $legal_option === true) {
+                    $cond_array = explode(':', $_POST['legal_accept_type']);
+                    if (!empty($cond_array[0]) && !empty($cond_array[1])) {
+                        $time = time();
+                        $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
+                        UserManager::update_extra_field_value(
+                            $user_id,
+                            'legal_accept',
+                            $condition_to_save
+                        );
+                    }
+                }
+
+                $redirect = true;
+                $allow = api_get_configuration_value('allow_public_course_with_no_terms_conditions');
+                if ($allow === true &&
+                    isset($_course['visibility']) &&
+                    $_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
+                ) {
+                    $redirect = false;
+                }
+                if ($redirect && !api_is_platform_admin()) {
+                    $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
+                    header('Location:'.$url);
+                    exit;
+                }
+            }
+        }
     }
 
     // Checking the course access

@@ -51,7 +51,7 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
         $tool = $this->createLinkToCourseTool(
             $link->getTitle(),
             $courseId,
-            null,
+            'external_link.png',
             'toplinks/start.php?'.http_build_query(['link' => $link->getId()])
         );
 

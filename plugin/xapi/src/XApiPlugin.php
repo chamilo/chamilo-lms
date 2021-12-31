@@ -322,7 +322,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $this->createLinkToCourseTool(
             $this->get_lang('ToolTinCan'),
             $courseId,
-            null,
+            'sessions_category.png',
             'xapi/start.php'
         );
     }

@@ -8834,4 +8834,5 @@ $Hours = "Hours";
 $ReminderXEvent = "Reminder for event : %s";
 $AddNotification = "Add notification";
 $NotifyBeforeTheEventStarts = "Notification to remind the event";
+$AddTags = "Add tags";
 ?>

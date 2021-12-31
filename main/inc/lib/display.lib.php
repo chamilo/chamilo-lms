@@ -2934,7 +2934,7 @@ HTML;
         $translateHtml = '';
         $translate = api_get_configuration_value('translate_html');
         if ($translate) {
-            $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+            $translateHtml = '{type:"stylesheet", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
         $customCss = api_get_visual_theme();
@@ -2946,6 +2946,12 @@ HTML;
 
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
+
+        var $iframe = $("'.$frameName.'");
+        var $iframeSpinner = $("<span aria-hidden=\"true\" class=\"fa fa-spinner fa-spin fa-3x\"></span>");
+
+        $iframe.hide().parent().append($iframeSpinner);
+
         $.frameReady(function() {
              $(function () {
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
@@ -2956,6 +2962,10 @@ HTML;
                     },
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
+
+                var iframe = window.top.document.querySelector("'.$frameName.'");
+                iframe.parentNode.querySelector(".fa").remove()
+                iframe.style.display = "block";
             });
         },
         "'.$frameName.'",
@@ -2969,8 +2979,7 @@ HTML;
                     {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
                     {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
                     '.$videoPluginFiles.'
-                ]},
-                '.$translateHtml.'
+                ]}
             ]},
             '.$videoPluginCssFiles.'
             {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
@@ -2980,6 +2989,7 @@ HTML;
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
             '.$fileCustomCssMedia.',
+            '.$translateHtml.'
         ]);';
 
         return $frameReady;

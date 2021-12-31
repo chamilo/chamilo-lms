@@ -9638,22 +9638,6 @@ function api_get_language_translate_html()
         return '';
     }
 
-    $languageList = api_get_languages();
-    $hideAll = '';
-    foreach ($languageList['all'] as $language) {
-        $hideAll .= '
-        $("span:lang('.$language['isocode'].')").filter(
-            function(e, val) {
-                // Only find the spans if they have set the lang
-                if ($(this).attr("lang") == null) {
-                    return false;
-                }
-
-                // Ignore ckeditor classes
-                return !this.className.match(/cke(.*)/);
-        }).hide();'."\n";
-    }
-
     $userInfo = api_get_user_info();
     $languageId = api_get_language_id($userInfo['language']);
     $languageInfo = api_get_language_info($languageId);
@@ -9663,42 +9647,11 @@ function api_get_language_translate_html()
         $isoCode = $languageInfo['isocode'];
     }
 
-    return '
-            $(function() {
-                '.$hideAll.'
-                var defaultLanguageFromUser = "'.$isoCode.'";
-
-                $("span:lang('.$isoCode.')").filter(
-                    function() {
-                        // Ignore ckeditor classes
-                        return !this.className.match(/cke(.*)/);
-                }).show();
-
-                var defaultLanguage = "";
-                var langFromUserFound = false;
-
-                $(this).find("span").filter(
-                    function() {
-                        // Ignore ckeditor classes
-                        return !this.className.match(/cke(.*)/);
-                }).each(function() {
-                    defaultLanguage = $(this).attr("lang");
-                    if (defaultLanguage) {
-                        $(this).before().next("br").remove();
-                        if (defaultLanguageFromUser == defaultLanguage) {
-                            langFromUserFound = true;
-                        }
-                    }
-                });
-
-                // Show default language
-                if (langFromUserFound == false && defaultLanguage) {
-                    $("span:lang("+defaultLanguage+")").filter(
-                    function() {
-                            // Ignore ckeditor classes
-                            return !this.className.match(/cke(.*)/);
-                    }).show();
-                }
-            });
-    ';
+    return 'span[lang] {
+            display: none;
+        }
+        span[class^="cke"],
+        span[lang="'.$isoCode.'"] {
+            display: inline;
+        }';
 }

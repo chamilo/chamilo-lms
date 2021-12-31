@@ -146,7 +146,7 @@ if ($is_allowedToEdit && in_array($action, ['qualify', 'edit', 'export'])) {
 }
 
 if ($showTranslateJs) {
-    $js = '<script>'.api_get_language_translate_html().'</script>';
+    $js = '<style>'.api_get_language_translate_html().'</style>';
     $htmlHeadXtra[] = $js;
 }
 

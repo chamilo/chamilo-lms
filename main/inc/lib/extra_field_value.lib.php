@@ -93,7 +93,8 @@ class ExtraFieldValue extends Model
         $showQuery = false,
         $saveOnlyThisFields = [],
         $avoidFields = [],
-        $forceSave = false
+        $forceSave = false,
+        $deleteOldValues = true
     ) {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
@@ -208,8 +209,10 @@ class ExtraFieldValue extends Model
                             'itemId' => $params['item_id'],
                         ]);
 
-                    foreach ($currentTags as $extraFieldtag) {
-                        $em->remove($extraFieldtag);
+                    if ($deleteOldValues) {
+                        foreach ($currentTags as $extraFieldtag) {
+                            $em->remove($extraFieldtag);
+                        }
                     }
                     $em->flush();
                     $tagValues = is_array($value) ? $value : [$value];

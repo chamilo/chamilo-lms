@@ -1235,7 +1235,6 @@ $is_courseTutor = false;
 $is_courseMember = false;
 
 if ((isset($uidReset) && $uidReset) || $cidReset) {
-
     if (isset($user_id) && $user_id && isset($_real_cid) && $_real_cid) {
         // Check if user is subscribed in a course
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);

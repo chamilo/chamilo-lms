@@ -1105,12 +1105,10 @@ class Plugin
             ]);
 
         if (!$tool) {
-            $cToolId = AddCourse::generateToolId($courseId);
             $pluginName = $this->get_name();
 
             $tool = new CTool();
             $tool
-                ->setId($cToolId)
                 ->setCId($courseId)
                 ->setName($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")
@@ -1122,6 +1120,13 @@ class Plugin
                 ->setTarget('_self')
                 ->setCategory('plugin')
                 ->setSessionId(0);
+
+            $em->persist($tool);
+            $em->flush();
+
+            $tool->setId(
+                $tool->getIid()
+            );
 
             $em->persist($tool);
             $em->flush();

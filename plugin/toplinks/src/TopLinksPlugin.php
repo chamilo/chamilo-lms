@@ -112,6 +112,8 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
         $schemaTool->dropSchema(array_values($tableReferences));
 
         $this->uninstallHook();
+
+        $this->deleteCourseTools();
     }
 
     public function uninstallHook(): int
@@ -120,5 +122,12 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
         HookCreateCourse::create()->detach($createCourseObserver);
 
         return 1;
+    }
+
+    private function deleteCourseTools()
+    {
+        Database::getManager()
+            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
+            ->execute(['category' => 'authoring', 'link' => '../plugin/toplinks/start.php%']);
     }
 }

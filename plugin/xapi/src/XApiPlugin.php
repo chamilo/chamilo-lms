@@ -323,7 +323,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $this->get_lang('ToolTinCan'),
             $courseId,
             'sessions_category.png',
-            'xapi/start.php'
+            '../plugin/xapi/start.php',
+            'authoring'
         );
     }
 
@@ -602,6 +603,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'xapi/start.php%']);
+            ->execute(['category' => 'authoring', 'link' => '../plugin/xapi/start.php%']);
     }
 }

@@ -52,7 +52,8 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
             $link->getTitle(),
             $courseId,
             'external_link.png',
-            'toplinks/start.php?'.http_build_query(['link' => $link->getId()])
+            '../plugin/toplinks/start.php?'.http_build_query(['link' => $link->getId()]),
+            'authoring'
         );
 
         if (null === $tool) {

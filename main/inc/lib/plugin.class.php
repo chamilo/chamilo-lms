@@ -1084,7 +1084,8 @@ class Plugin
         $name,
         $courseId,
         $iconName = null,
-        $link = null
+        $link = null,
+        $category = 'plugin'
     ) {
         if (!$this->addCourseTool) {
             return null;
@@ -1101,7 +1102,7 @@ class Plugin
             ->findOneBy([
                 'name' => $name,
                 'cId' => $courseId,
-                'category' => 'plugin',
+                'category' => $category,
             ]);
 
         if (!$tool) {
@@ -1118,7 +1119,7 @@ class Plugin
                 ->setAddress('squaregrey.gif')
                 ->setAddedTool(false)
                 ->setTarget('_self')
-                ->setCategory('plugin')
+                ->setCategory($category)
                 ->setSessionId(0);
 
             $em->persist($tool);

@@ -15,17 +15,16 @@ exit;
 
 require __DIR__.'/../../main/inc/global.inc.php';
 
-$user = Database::get_main_table(TABLE_MAIN_USER);
+$dql = "SELECT u FROM ChamiloUserBundle:User u WHERE (u.officialCode is not null AND u.officialCode != '')";
+$qb = Database::getManager()->createQuery($dql);
+$users = $qb->execute();
 
-$sql = "SELECT id, username, official_code FROM $user WHERE (official_code is not null AND official_code != '') AND user_id = 65";
-$rs = Database::query($sql);
-if (Database::num_rows($rs) > 0) {
+if (count($users) > 0) {
     $userManager = UserManager::getManager();
-    while ($row = Database::fetch_assoc($rs)) {
-        $user = api_get_user_entity($row['id']);
-        $loginName = $row['official_code'];
-        $password = $row['username'];
-        echo 'Updating official_code "'.$row['official_code'].'": username: '.$row['username'].'<br />';
+    foreach ($users as $user) {
+        $loginName = $user->getOfficialCode();
+        $password = $user->getUsername();
+        echo 'Updating official_code "'.$user->getOfficialCode().'": username: '.$user->getUsername().'<br />';
         $user
             ->setUsername($loginName)
             ->setPlainPassword($password)

@@ -14,8 +14,8 @@
  */
 class HotSpot extends Question
 {
-    public static $typePicture = 'hotspot.png';
-    public static $explanationLangVar = 'HotSpot';
+    public $typePicture = 'hotspot.png';
+    public $explanationLangVar = 'HotSpot';
 
     /**
      * HotSpot constructor.
@@ -103,52 +103,5 @@ class HotSpot extends Question
     public function processAnswersCreation($form, $exercise)
     {
         // nothing
-    }
-}
-
-/**
- * Class HotSpotDelineation.
- */
-class HotSpotDelineation extends HotSpot
-{
-    public static $typePicture = 'hotspot-delineation.png';
-    public static $explanationLangVar = 'HotspotDelineation';
-
-    /**
-     * HotSpotDelineation constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->type = HOT_SPOT_DELINEATION;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createForm(&$form, $exercise)
-    {
-        parent::createForm($form, $exercise);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function processCreation($form, $exercise)
-    {
-        parent::processCreation($form, $exercise);
-    }
-
-    public function createAnswersForm($form)
-    {
-        parent::createAnswersForm($form);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function processAnswersCreation($form, $exercise)
-    {
-        parent::processAnswersCreation($form, $exercise);
     }
 }

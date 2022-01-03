@@ -10140,6 +10140,13 @@ ul.dropdown-menu.inner > li > a {
     width:120px
 }
 
+#iframe-spinner {
+    margin-top: 42px;
+    position: relative;
+    left: 50%;
+    margin-left: -21px;
+}
+
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
         clear: left;

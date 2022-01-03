@@ -1680,8 +1680,10 @@ function switch_item(current_item, next_item)
         ?>
             log_in_log('loading '+mysrc+' in frame');
 
-            var $iframeSpinner = $('<span aria-hidden="true" class="fa fa-spinner fa-spin fa-3x"></span>');
-            cont_f.hide().parent().append($iframeSpinner);
+            if ($.inArray(olms.lms_item_type, ['link', 'sco', 'xapi']) == -1) {
+                var $iframeSpinner = $('<span aria-hidden="true" id="iframe-spinner" class="fa fa-spinner fa-spin fa-3x"></span>');
+                cont_f.hide().parent().append($iframeSpinner);
+            }
 
             cont_f.attr("src",mysrc);
     <?php

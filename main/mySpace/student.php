@@ -121,6 +121,9 @@ function get_users($from, $limit, $column, $direction)
         if (substr($key, 0, 6) == 'extra_') {
             $variable = substr($key, 6);
             if (UserManager::is_extra_field_available($variable) && !empty($value)) {
+                if (is_array($value)) {
+                    $value = $value[$key];
+                }
                 $useExtraFields = true;
                 $extraFieldResult[] = UserManager::get_extra_user_data_by_value(
                     $variable,

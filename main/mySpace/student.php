@@ -424,7 +424,7 @@ if ($export_csv) {
         }
     }
 
-    $script =  '<script>
+    $script = '<script>
         $(function() {
           $("#form_tracking_student_id input[type=\"checkbox\"]").on("click", function() {
             $("#compose_message").hide();
@@ -487,7 +487,6 @@ if ($export_csv) {
     $frmMessage->display();
 
     echo $script;
-
 }
 
 Display::display_footer();

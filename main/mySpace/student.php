@@ -474,7 +474,7 @@ if ($export_csv) {
     $frmMessage = new FormValidator(
         'students_messages',
         'post',
-        api_get_self(),
+        api_get_self()
     );
     $frmMessage->addHtml('<div id="compose_message" style="display:none;">');
     $frmMessage->addText('subject', get_lang('Subject'));

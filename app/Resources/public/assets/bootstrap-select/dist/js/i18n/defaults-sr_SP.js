@@ -24,16 +24,23 @@
 
 (function ($) {
   $.fn.selectpicker.defaults = {
-    noneSelectedText: '沒有選取任何項目',
-    noneResultsText: '沒有找到符合的結果',
-    countSelectedText: '已經選取{0}個項目',
-    maxOptionsText: ['超過限制 (最多選擇{n}項)', '超過限制(最多選擇{n}組)'],
-    selectAllText: '選取全部',
-    deselectAllText: '全部取消',
+    noneSelectedText: 'Izaberite',
+    noneResultsText: 'Nema rezultata za {0}',
+    countSelectedText: function (numSelected, numTotal) {
+      return (numSelected == 1) ? '{0} izabrana' : '{0} izabrane';
+    },
+    maxOptionsText: function (numAll, numGroup) {
+      return [
+        (numAll == 1) ? 'Limit je dostignut ({n} stvar maximalno)' : 'Limit je dostignut ({n} stavke maksimalno)',
+        (numGroup == 1) ? 'Grupni limit je dostignut ({n} stvar maksimalno)' : 'Grupni limit je dostignut ({n} stavke maksimalno)'
+      ];
+    },
+    selectAllText: 'Izaberi sve',
+    deselectAllText: 'Obrisi sve',
     multipleSeparator: ', '
   };
 })(jQuery);
 
 
 }));
-//# sourceMappingURL=defaults-zh_TW.js.map
+//# sourceMappingURL=defaults-sr_SP.js.map

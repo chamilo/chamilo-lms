@@ -24,16 +24,23 @@
 
 (function ($) {
   $.fn.selectpicker.defaults = {
-    noneSelectedText: '沒有選取任何項目',
-    noneResultsText: '沒有找到符合的結果',
-    countSelectedText: '已經選取{0}個項目',
-    maxOptionsText: ['超過限制 (最多選擇{n}項)', '超過限制(最多選擇{n}組)'],
-    selectAllText: '選取全部',
-    deselectAllText: '全部取消',
+    noneSelectedText: 'Nekas nav atzīmēts',
+    noneResultsText: 'Nav neviena rezultāta {0}',
+    countSelectedText: function (numSelected, numTotal) {
+      return (numSelected == 1) ? '{0} ieraksts atzīmēts' : '{0} ieraksti atzīmēts';
+    },
+    maxOptionsText: function (numAll, numGroup) {
+      return [
+        (numAll == 1) ? 'Sasniegts limits ({n} ieraksts maksimums)' : 'Sasniegts limits ({n} ieraksti maksimums)',
+        (numGroup == 1) ? 'Sasniegts grupas limits ({n} ieraksts maksimums)' : 'Sasniegts grupas limits ({n} ieraksti maksimums)'
+      ];
+    },
+    selectAllText: 'Atzīmēt visu',
+    deselectAllText: 'Neatzīmēt nevienu',
     multipleSeparator: ', '
   };
 })(jQuery);
 
 
 }));
-//# sourceMappingURL=defaults-zh_TW.js.map
+//# sourceMappingURL=defaults-lv_LV.js.map

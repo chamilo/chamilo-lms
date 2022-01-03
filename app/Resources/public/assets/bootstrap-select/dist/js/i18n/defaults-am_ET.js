@@ -24,16 +24,23 @@
 
 (function ($) {
   $.fn.selectpicker.defaults = {
-    noneSelectedText: '沒有選取任何項目',
-    noneResultsText: '沒有找到符合的結果',
-    countSelectedText: '已經選取{0}個項目',
-    maxOptionsText: ['超過限制 (最多選擇{n}項)', '超過限制(最多選擇{n}組)'],
-    selectAllText: '選取全部',
-    deselectAllText: '全部取消',
-    multipleSeparator: ', '
+    noneSelectedText: 'ምንም አልተመረጠም',
+    noneResultsText: 'ከ{0} ጋር ተመሳሳይ ውጤት የለም',
+    countSelectedText: function (numSelected, numTotal) {
+      return (numSelected == 1) ? '{0} ምርጫ ተመርጧል' : '{0} ምርጫዎች ተመርጠዋል';
+    },
+    maxOptionsText: function (numAll, numGroup) {
+      return [
+        (numAll == 1) ? 'ገደብ ላይ ተደርሷል  (ቢበዛ {n} ምርጫ)' : 'ገደብ ላይ ተደርሷል  (ቢበዛ {n} ምርጫዎች)',
+        (numGroup == 1) ? 'የቡድን ገደብ ላይ ተደርሷል (ቢበዛ {n} ምርጫ)' : 'የቡድን ገደብ ላይ ተደርሷል (ቢበዛ {n} ምርጫዎች)'
+      ];
+    },
+    selectAllText: 'ሁሉም ይመረጥ',
+    deselectAllText: 'ሁሉም አይመረጥ',
+    multipleSeparator: ' ፣ '
   };
 })(jQuery);
 
 
 }));
-//# sourceMappingURL=defaults-zh_TW.js.map
+//# sourceMappingURL=defaults-am_ET.js.map

@@ -6448,7 +6448,7 @@ class Tracking
      *
      * @return mixed
      */
-    public static function setUserSearchForm($form)
+    public static function setUserSearchForm($form, $displayExtraFields = false)
     {
         global $_configuration;
         $form->addElement('text', 'keyword', get_lang('Keyword'));
@@ -6474,6 +6474,11 @@ class Tracking
                 120 => 120,
             ]
         );
+
+        if ($displayExtraFields) {
+            $extraField = new ExtraField('user');
+            $extraField->addElements($form, 0, [], true, false, [], [], [], false, true);
+        }
 
         $form->addButtonSearch(get_lang('Search'));
 

@@ -80,7 +80,9 @@ Run this changes on database:
 
 ## To v1.9.0
 ```sql
-ALTER TABLE plugin_ims_lti_tool ADD session_id INT;
+ALTER TABLE plugin_ims_lti_tool ADD session_id INT DEFAULT NULL;
+ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
+CREATE INDEX IDX_C5E47F7C613FECDF ON plugin_ims_lti_tool (session_id);
 ```
 
 ## To v1.8.0

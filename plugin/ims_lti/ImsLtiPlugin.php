@@ -189,6 +189,7 @@ class ImsLtiPlugin extends Plugin
                     INDEX IDX_C5E47F7C91D79BD3 (c_id),
                     INDEX IDX_C5E47F7C82F80D8B (gradebook_eval_id),
                     INDEX IDX_C5E47F7C727ACA70 (parent_id),
+                    INDEX IDX_C5E47F7C613FECDF (session_id),
                     PRIMARY KEY(id)
                 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
             "CREATE TABLE plugin_ims_lti_platform (
@@ -234,7 +235,9 @@ class ImsLtiPlugin extends Plugin
             "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF08F7B22CC FOREIGN KEY (tool_id)
                 REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE",
             "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation)
-                REFERENCES gradebook_evaluation (id) ON DELETE CASCADE "
+                REFERENCES gradebook_evaluation (id) ON DELETE CASCADE ",
+            "ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C613FECDF FOREIGN KEY (session_id)
+                REFERENCES session (id)",
         ];
 
         foreach ($queries as $query) {

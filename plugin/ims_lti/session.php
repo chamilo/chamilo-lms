@@ -79,8 +79,8 @@ try {
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
     $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];
 
-    $template = new Template($plugin->get_lang('AddInCourses'));
-    $template->assign('header', $plugin->get_lang('AddInCourses'));
+    $template = new Template($plugin->get_lang('AddInSessions'));
+    $template->assign('header', $plugin->get_lang('AddInSessions'));
     $template->assign('content', $content);
     $template->display_one_col_template();
 } catch (Exception $exception) {

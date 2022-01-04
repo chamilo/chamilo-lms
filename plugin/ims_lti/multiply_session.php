@@ -25,10 +25,6 @@ try {
     $ltiToolId = $request->query->getInt('id');
     $sessionId = $request->query->getInt('session_id');
 
-    if (empty($sessionId)) {
-        api_not_allowed();
-    }
-
     /** @var ImsLtiTool $tool */
     $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolId);
 
@@ -38,6 +34,12 @@ try {
 
     if ($tool->getParent()) {
         throw new Exception($plugin->get_lang('NoAllowed'));
+    }
+
+    $session = api_get_session_entity($sessionId);
+
+    if (!$session) {
+        api_not_allowed(true);
     }
 
     $content = '';
@@ -54,6 +56,7 @@ try {
     $selectedCoursesIds = array_keys($slctCourses);
 
     $form = new FormValidator('frm_multiply', 'post', api_get_self().'?id='.$tool->getId().'&session_id='.$sessionId);
+    $form->addLabel(get_lang('SessionName'), $session);
     $form->addLabel($plugin->get_lang('Tool'), $tool->getName());
     $form->addSelectAjax(
         'courses',
@@ -105,7 +108,6 @@ try {
         if ($newSelectedCourseIds) {
             foreach ($newSelectedCourseIds as $newSelectedCourseId) {
                 $newSelectedCourse = api_get_course_entity($newSelectedCourseId);
-                $session = api_get_session_entity($sessionId);
 
                 $newTool = clone $tool;
                 $newTool->setParent($tool);

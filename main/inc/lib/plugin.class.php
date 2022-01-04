@@ -1084,7 +1084,8 @@ class Plugin
         $name,
         $courseId,
         $iconName = null,
-        $link = null
+        $link = null,
+        $category = 'plugin'
     ) {
         if (!$this->addCourseTool) {
             return null;
@@ -1101,16 +1102,14 @@ class Plugin
             ->findOneBy([
                 'name' => $name,
                 'cId' => $courseId,
-                'category' => 'plugin',
+                'category' => $category,
             ]);
 
         if (!$tool) {
-            $cToolId = AddCourse::generateToolId($courseId);
             $pluginName = $this->get_name();
 
             $tool = new CTool();
             $tool
-                ->setId($cToolId)
                 ->setCId($courseId)
                 ->setName($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")
@@ -1120,8 +1119,15 @@ class Plugin
                 ->setAddress('squaregrey.gif')
                 ->setAddedTool(false)
                 ->setTarget('_self')
-                ->setCategory('plugin')
+                ->setCategory($category)
                 ->setSessionId(0);
+
+            $em->persist($tool);
+            $em->flush();
+
+            $tool->setId(
+                $tool->getIid()
+            );
 
             $em->persist($tool);
             $em->flush();

@@ -924,237 +924,235 @@ class Agenda
                     return false;
                 }
 
-                if ($this->getIsAllowedToEdit()) {
-                    $attributes = [
-                        'title' => $title,
-                        'start_date' => $start,
-                        'end_date' => $end,
-                        'all_day' => $allDay,
-                        'comment' => $comment,
-                    ];
+                if (!$this->getIsAllowedToEdit()) {
+                    return false;
+                }
 
-                    if ($updateContent) {
-                        $attributes['content'] = $content;
-                    }
+                $attributes = [
+                    'title' => $title,
+                    'start_date' => $start,
+                    'end_date' => $end,
+                    'all_day' => $allDay,
+                    'comment' => $comment,
+                ];
 
-                    if (!empty($color)) {
-                        $attributes['color'] = $color;
-                    }
+                if ($updateContent) {
+                    $attributes['content'] = $content;
+                }
 
-                    Database::update(
-                        $this->tbl_course_agenda,
-                        $attributes,
-                        [
-                            'id = ? AND c_id = ? AND session_id = ? ' => [
-                                $id,
-                                $courseId,
-                                $this->sessionId,
-                            ],
-                        ]
+                if (!empty($color)) {
+                    $attributes['color'] = $color;
+                }
+
+                Database::update(
+                    $this->tbl_course_agenda,
+                    $attributes,
+                    [
+                        'id = ? AND c_id = ? AND session_id = ? ' => [
+                            $id,
+                            $courseId,
+                            $this->sessionId,
+                        ],
+                    ]
+                );
+
+                if (!empty($usersToSend)) {
+                    $sendTo = $this->parseSendToArray($usersToSend);
+
+                    $usersToDelete = array_diff(
+                        $eventInfo['send_to']['users'],
+                        $sendTo['users']
+                    );
+                    $usersToAdd = array_diff(
+                        $sendTo['users'],
+                        $eventInfo['send_to']['users']
                     );
 
-                    if (!empty($usersToSend)) {
-                        $sendTo = $this->parseSendToArray($usersToSend);
+                    $groupsToDelete = array_diff(
+                        $eventInfo['send_to']['groups'],
+                        $sendTo['groups']
+                    );
+                    $groupToAdd = array_diff(
+                        $sendTo['groups'],
+                        $eventInfo['send_to']['groups']
+                    );
 
-                        $usersToDelete = array_diff(
-                            $eventInfo['send_to']['users'],
-                            $sendTo['users']
-                        );
-                        $usersToAdd = array_diff(
-                            $sendTo['users'],
-                            $eventInfo['send_to']['users']
-                        );
-
-                        $groupsToDelete = array_diff(
-                            $eventInfo['send_to']['groups'],
-                            $sendTo['groups']
-                        );
-                        $groupToAdd = array_diff(
-                            $sendTo['groups'],
-                            $eventInfo['send_to']['groups']
-                        );
-
-                        if ($sendTo['everyone']) {
-                            // Delete all from group
-                            if (isset($eventInfo['send_to']['groups']) &&
-                                !empty($eventInfo['send_to']['groups'])
-                            ) {
-                                foreach ($eventInfo['send_to']['groups'] as $group) {
-                                    $groupIidItem = 0;
-                                    if ($group) {
-                                        $groupInfoItem = GroupManager::get_group_properties(
-                                            $group
-                                        );
-                                        if ($groupInfoItem) {
-                                            $groupIidItem = $groupInfoItem['iid'];
-                                        }
+                    if ($sendTo['everyone']) {
+                        // Delete all from group
+                        if (isset($eventInfo['send_to']['groups']) &&
+                            !empty($eventInfo['send_to']['groups'])
+                        ) {
+                            foreach ($eventInfo['send_to']['groups'] as $group) {
+                                $groupIidItem = 0;
+                                if ($group) {
+                                    $groupInfoItem = GroupManager::get_group_properties(
+                                        $group
+                                    );
+                                    if ($groupInfoItem) {
+                                        $groupIidItem = $groupInfoItem['iid'];
                                     }
-
-                                    api_item_property_delete(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        0,
-                                        $groupIidItem,
-                                        $this->sessionId
-                                    );
                                 }
-                            }
 
-                            // Storing the selected users.
-                            if (isset($eventInfo['send_to']['users']) &&
-                                !empty($eventInfo['send_to']['users'])
-                            ) {
-                                foreach ($eventInfo['send_to']['users'] as $userId) {
-                                    api_item_property_delete(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        $userId,
-                                        $groupIid,
-                                        $this->sessionId
-                                    );
-                                }
-                            }
-
-                            // Add to everyone only.
-                            api_item_property_update(
-                                $this->course,
-                                TOOL_CALENDAR_EVENT,
-                                $id,
-                                'visible',
-                                $authorId,
-                                $groupInfo,
-                                null,
-                                $start,
-                                $end,
-                                $this->sessionId
-                            );
-                        } else {
-                            // Delete "everyone".
-                            api_item_property_delete(
-                                $this->course,
-                                TOOL_CALENDAR_EVENT,
-                                $id,
-                                0,
-                                0,
-                                $this->sessionId
-                            );
-
-                            // Add groups
-                            if (!empty($groupToAdd)) {
-                                foreach ($groupToAdd as $group) {
-                                    $groupInfoItem = [];
-                                    if ($group) {
-                                        $groupInfoItem = GroupManager::get_group_properties(
-                                            $group
-                                        );
-                                    }
-
-                                    api_item_property_update(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        'visible',
-                                        $authorId,
-                                        $groupInfoItem,
-                                        0,
-                                        $start,
-                                        $end,
-                                        $this->sessionId
-                                    );
-                                }
-                            }
-
-                            // Delete groups.
-                            if (!empty($groupsToDelete)) {
-                                foreach ($groupsToDelete as $group) {
-                                    $groupIidItem = 0;
-                                    $groupInfoItem = [];
-                                    if ($group) {
-                                        $groupInfoItem = GroupManager::get_group_properties(
-                                            $group
-                                        );
-                                        if ($groupInfoItem) {
-                                            $groupIidItem = $groupInfoItem['iid'];
-                                        }
-                                    }
-
-                                    api_item_property_delete(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        0,
-                                        $groupIidItem,
-                                        $this->sessionId
-                                    );
-                                }
-                            }
-
-                            // Add users.
-                            if (!empty($usersToAdd)) {
-                                foreach ($usersToAdd as $userId) {
-                                    api_item_property_update(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        'visible',
-                                        $authorId,
-                                        $groupInfo,
-                                        $userId,
-                                        $start,
-                                        $end,
-                                        $this->sessionId
-                                    );
-                                }
-                            }
-
-                            // Delete users.
-                            if (!empty($usersToDelete)) {
-                                foreach ($usersToDelete as $userId) {
-                                    api_item_property_delete(
-                                        $this->course,
-                                        TOOL_CALENDAR_EVENT,
-                                        $id,
-                                        $userId,
-                                        $groupInfo,
-                                        $this->sessionId
-                                    );
-                                }
+                                api_item_property_delete(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    0,
+                                    $groupIidItem,
+                                    $this->sessionId
+                                );
                             }
                         }
-                    }
 
-                    // Add announcement.
-                    if (isset($addAnnouncement) && !empty($addAnnouncement)) {
-                        $this->storeAgendaEventAsAnnouncement(
+                        // Storing the selected users.
+                        if (isset($eventInfo['send_to']['users']) &&
+                            !empty($eventInfo['send_to']['users'])
+                        ) {
+                            foreach ($eventInfo['send_to']['users'] as $userId) {
+                                api_item_property_delete(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    $userId,
+                                    $groupIid,
+                                    $this->sessionId
+                                );
+                            }
+                        }
+
+                        // Add to everyone only.
+                        api_item_property_update(
+                            $this->course,
+                            TOOL_CALENDAR_EVENT,
                             $id,
-                            $usersToSend
+                            'visible',
+                            $authorId,
+                            $groupInfo,
+                            null,
+                            $start,
+                            $end,
+                            $this->sessionId
                         );
-                    }
+                    } else {
+                        // Delete "everyone".
+                        api_item_property_delete(
+                            $this->course,
+                            TOOL_CALENDAR_EVENT,
+                            $id,
+                            0,
+                            0,
+                            $this->sessionId
+                        );
 
-                    // Add attachment.
-                    if (isset($attachmentArray) && !empty($attachmentArray)) {
-                        $counter = 0;
-                        foreach ($attachmentArray as $attachmentItem) {
-                            if (empty($attachmentItems['id'])) {
-                                continue;
+                        // Add groups
+                        if (!empty($groupToAdd)) {
+                            foreach ($groupToAdd as $group) {
+                                $groupInfoItem = [];
+                                if ($group) {
+                                    $groupInfoItem = GroupManager::get_group_properties(
+                                        $group
+                                    );
+                                }
+
+                                api_item_property_update(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    'visible',
+                                    $authorId,
+                                    $groupInfoItem,
+                                    0,
+                                    $start,
+                                    $end,
+                                    $this->sessionId
+                                );
                             }
+                        }
 
-                            $this->updateAttachment(
-                                $attachmentItem['id'],
-                                $id,
-                                $attachmentItem,
-                                $attachmentCommentList[$counter],
-                                $this->course
-                            );
-                            $counter++;
+                        // Delete groups.
+                        if (!empty($groupsToDelete)) {
+                            foreach ($groupsToDelete as $group) {
+                                $groupIidItem = 0;
+                                $groupInfoItem = [];
+                                if ($group) {
+                                    $groupInfoItem = GroupManager::get_group_properties(
+                                        $group
+                                    );
+                                    if ($groupInfoItem) {
+                                        $groupIidItem = $groupInfoItem['iid'];
+                                    }
+                                }
+
+                                api_item_property_delete(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    0,
+                                    $groupIidItem,
+                                    $this->sessionId
+                                );
+                            }
+                        }
+
+                        // Add users.
+                        if (!empty($usersToAdd)) {
+                            foreach ($usersToAdd as $userId) {
+                                api_item_property_update(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    'visible',
+                                    $authorId,
+                                    $groupInfo,
+                                    $userId,
+                                    $start,
+                                    $end,
+                                    $this->sessionId
+                                );
+                            }
+                        }
+
+                        // Delete users.
+                        if (!empty($usersToDelete)) {
+                            foreach ($usersToDelete as $userId) {
+                                api_item_property_delete(
+                                    $this->course,
+                                    TOOL_CALENDAR_EVENT,
+                                    $id,
+                                    $userId,
+                                    $groupInfo,
+                                    $this->sessionId
+                                );
+                            }
                         }
                     }
+                }
 
-                    return true;
-                } else {
-                    return false;
+                // Add announcement.
+                if (isset($addAnnouncement) && !empty($addAnnouncement)) {
+                    $this->storeAgendaEventAsAnnouncement(
+                        $id,
+                        $usersToSend
+                    );
+                }
+
+                // Add attachment.
+                if (isset($attachmentArray) && !empty($attachmentArray)) {
+                    $counter = 0;
+                    foreach ($attachmentArray as $attachmentItem) {
+                        if (empty($attachmentItems['id'])) {
+                            continue;
+                        }
+
+                        $this->updateAttachment(
+                            $attachmentItem['id'],
+                            $id,
+                            $attachmentItem,
+                            $attachmentCommentList[$counter],
+                            $this->course
+                        );
+                        $counter++;
+                    }
                 }
                 break;
             case 'admin':
@@ -1180,6 +1178,8 @@ class Agenda
         }
 
         $this->editReminders($id, $remindersList);
+
+        return true;
     }
 
     /**

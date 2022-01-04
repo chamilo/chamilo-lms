@@ -42,7 +42,7 @@ try {
     $form->addSelectAjax(
         'sessions',
         get_lang('Sessions'),
-        $slctCourses,
+        [],
         [
             'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?'.http_build_query(
                 [

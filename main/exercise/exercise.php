@@ -738,7 +738,6 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
     echo Exercise::exerciseGrid(0, $keyword);
 } else {
     if (empty($categoryId)) {
-        echo Display::page_subheader(get_lang('NoCategory'));
         echo Exercise::exerciseGrid(0, $keyword);
         $counter = 0;
         $manager = new ExerciseCategoryManager();

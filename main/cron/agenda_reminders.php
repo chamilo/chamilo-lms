@@ -29,6 +29,10 @@ foreach ($reminders as $reminder) {
     if ('personal' === $reminder->getType()) {
         $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $reminder->getEventId());
 
+        if (null === $event) {
+            continue;
+        }
+
         $notificationDate = clone $event->getDate();
         $notificationDate->sub($reminder->getDateInterval());
 
@@ -86,6 +90,11 @@ foreach ($reminders as $reminder) {
 
     if ('course' === $reminder->getType()) {
         $event = $em->find('ChamiloCourseBundle:CCalendarEvent', $reminder->getEventId());
+
+        if (null === $event) {
+            continue;
+        }
+
         $agenda = new Agenda('course');
 
         $notificationDate = clone $event->getStartDate();

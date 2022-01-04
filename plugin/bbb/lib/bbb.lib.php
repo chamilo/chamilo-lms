@@ -372,7 +372,7 @@ class bbb
         $moderatorPassword = $params['moderator_pw'];
 
         $params['record'] = api_get_course_plugin_setting('bbb', 'big_blue_button_record_and_store') == 1;
-        $max = api_get_course_plugin_setting('bbb', 'big_blue_button_max_students_allowed');
+        $max = api_get_course_plugin_setting('bbb', 'max_users_limit');
         $max = isset($max) ? $max : -1;
 
         $params['status'] = 1;

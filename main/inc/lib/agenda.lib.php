@@ -1137,6 +1137,10 @@ class Agenda
                     if (isset($attachmentArray) && !empty($attachmentArray)) {
                         $counter = 0;
                         foreach ($attachmentArray as $attachmentItem) {
+                            if (empty($attachmentItems['id'])) {
+                                continue;
+                            }
+
                             $this->updateAttachment(
                                 $attachmentItem['id'],
                                 $id,

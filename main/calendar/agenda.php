@@ -272,7 +272,7 @@ if ($allowToEdit) {
                 $endDate = $values['date_range_end'];
 
                 $sendAttachment = isset($_FILES) && !empty($_FILES);
-                $attachmentList = $sendAttachment ? $_FILES : null;
+                $attachmentList = $sendAttachment ? $_FILES : [];
                 $attachmentCommentList = $values['legend'] ?? '';
                 $comment = $values['comment'] ?? '';
                 $notificationCount = $_REQUEST['notification_count'] ?? [];

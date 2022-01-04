@@ -25,6 +25,8 @@ $remindersRepo = $em->getRepository('ChamiloCoreBundle:AgendaReminder');
 
 $reminders = $remindersRepo->findBySent(false);
 
+$firstAdmin = current(UserManager::get_all_administrators());
+
 foreach ($reminders as $reminder) {
     if ('personal' === $reminder->getType()) {
         $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $reminder->getEventId());
@@ -148,19 +150,34 @@ foreach ($reminders as $reminder) {
             }
 
             foreach ($userIdList as $userId) {
-                MessageManager::send_message_simple($userId, $messageSubject, $messageContent);
+                MessageManager::send_message_simple(
+                    $userId,
+                    $messageSubject,
+                    $messageContent,
+                    $firstAdmin['user_id']
+                );
             }
         } else {
             foreach ($sendTo['groups'] as $groupId) {
                 $groupUserList = GroupManager::get_users($groupId, false, null, null, false, $event->getSessionId());
 
                 foreach ($groupUserList as $groupUserId) {
-                    MessageManager::send_message_simple($groupUserId, $messageSubject, $messageContent);
+                    MessageManager::send_message_simple(
+                        $groupUserId,
+                        $messageSubject,
+                        $messageContent,
+                        $firstAdmin['user_id']
+                    );
                 }
             }
 
             foreach ($sendTo['users'] as $userId) {
-                MessageManager::send_message_simple($userId, $messageSubject, $messageContent);
+                MessageManager::send_message_simple(
+                    $userId,
+                    $messageSubject,
+                    $messageContent,
+                    $firstAdmin['user_id']
+                );
             }
         }
     }

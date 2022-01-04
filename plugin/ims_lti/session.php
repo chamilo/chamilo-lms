@@ -48,8 +48,7 @@ try {
                 [
                     'a' => 'search_session'
                 ]
-            ),
-            'multiple' => false
+            )
         ]
     );
     $form->addHidden('tool_id', $tool->getId());

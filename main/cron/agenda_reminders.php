@@ -25,9 +25,15 @@ $remindersRepo = $em->getRepository('ChamiloCoreBundle:AgendaReminder');
 
 $reminders = $remindersRepo->findBySent(false);
 
+$firstAdmin = current(UserManager::get_all_administrators());
+
 foreach ($reminders as $reminder) {
     if ('personal' === $reminder->getType()) {
         $event = $em->find('ChamiloCoreBundle:PersonalAgenda', $reminder->getEventId());
+
+        if (null === $event) {
+            continue;
+        }
 
         $notificationDate = clone $event->getDate();
         $notificationDate->sub($reminder->getDateInterval());
@@ -37,19 +43,19 @@ foreach ($reminders as $reminder) {
         }
 
         $eventDetails = [];
-        $eventDetails[] = '<strong>'.$event->getTitle().'</strong>';
+        $eventDetails[] = '<p><strong>'.$event->getTitle().'</strong></p>';
 
         if ($event->getAllDay()) {
-            $eventDetails[] = get_lang('AllDay');
+            $eventDetails[] = '<p class="small">'.get_lang('AllDay').'</p>';
         } else {
             $eventDetails[] = sprintf(
-                get_lang('FromDateX'),
+                '<p class="small">'.get_lang('FromDateX').'</p>',
                 api_get_local_time($event->getDate(), null, null, false, true, true)
             );
 
             if (!empty($event->getEnddate())) {
                 $eventDetails[] = sprintf(
-                    get_lang('UntilDateX'),
+                    '<p class="small">'.get_lang('UntilDateX').'</p>',
                     api_get_local_time($event->getEnddate(), null, null, false, true, true)
                 );
             }
@@ -60,7 +66,7 @@ foreach ($reminders as $reminder) {
         }
 
         $messageSubject = sprintf(get_lang('ReminderXEvent'), $event->getTitle());
-        $messageContent = implode('<br />', $eventDetails);
+        $messageContent = implode(PHP_EOL, $eventDetails);
 
         MessageManager::send_message_simple(
             $event->getUser(),
@@ -86,6 +92,11 @@ foreach ($reminders as $reminder) {
 
     if ('course' === $reminder->getType()) {
         $event = $em->find('ChamiloCourseBundle:CCalendarEvent', $reminder->getEventId());
+
+        if (null === $event) {
+            continue;
+        }
+
         $agenda = new Agenda('course');
 
         $notificationDate = clone $event->getStartDate();
@@ -96,19 +107,19 @@ foreach ($reminders as $reminder) {
         }
 
         $eventDetails = [];
-        $eventDetails[] = '<strong>'.$event->getTitle().'</strong>';
+        $eventDetails[] = '<p><strong>'.$event->getTitle().'</strong></p>';
 
         if ($event->getAllDay()) {
-            $eventDetails[] = get_lang('AllDay');
+            $eventDetails[] = '<p class="small">'.get_lang('AllDay').'</p>';
         } else {
             $eventDetails[] = sprintf(
-                get_lang('FromDateX'),
+                '<p class="small">'.get_lang('FromDateX').'</p>',
                 api_get_local_time($event->getStartDate(), null, null, false, true, true)
             );
 
             if (!empty($event->getEndDate())) {
                 $eventDetails[] = sprintf(
-                    get_lang('UntilDateX'),
+                    '<p class="small">'.get_lang('UntilDateX').'</p>',
                     api_get_local_time($event->getEndDate(), null, null, false, true, true)
                 );
             }
@@ -118,8 +129,12 @@ foreach ($reminders as $reminder) {
             $eventDetails[] = $event->getContent();
         }
 
+        if (!empty($event->getComment())) {
+            $eventDetails[] = '<p class="small">'.$event->getComment().'</p>';
+        }
+
         $messageSubject = sprintf(get_lang('ReminderXEvent'), $event->getTitle());
-        $messageContent = implode('<br />', $eventDetails);
+        $messageContent = implode(PHP_EOL, $eventDetails);
 
         $courseInfo = api_get_course_info_by_id($event->getCId());
 
@@ -139,19 +154,34 @@ foreach ($reminders as $reminder) {
             }
 
             foreach ($userIdList as $userId) {
-                MessageManager::send_message_simple($userId, $messageSubject, $messageContent);
+                MessageManager::send_message_simple(
+                    $userId,
+                    $messageSubject,
+                    $messageContent,
+                    $firstAdmin['user_id']
+                );
             }
         } else {
             foreach ($sendTo['groups'] as $groupId) {
                 $groupUserList = GroupManager::get_users($groupId, false, null, null, false, $event->getSessionId());
 
                 foreach ($groupUserList as $groupUserId) {
-                    MessageManager::send_message_simple($groupUserId, $messageSubject, $messageContent);
+                    MessageManager::send_message_simple(
+                        $groupUserId,
+                        $messageSubject,
+                        $messageContent,
+                        $firstAdmin['user_id']
+                    );
                 }
             }
 
             foreach ($sendTo['users'] as $userId) {
-                MessageManager::send_message_simple($userId, $messageSubject, $messageContent);
+                MessageManager::send_message_simple(
+                    $userId,
+                    $messageSubject,
+                    $messageContent,
+                    $firstAdmin['user_id']
+                );
             }
         }
     }

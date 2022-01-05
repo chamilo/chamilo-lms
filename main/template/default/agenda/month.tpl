@@ -881,7 +881,7 @@ $(document).ready(function() {
                     };
                 {% endif %}
 
-                if ('session' === calEvent.type) {
+                if ('session_subscription' === calEvent.type) {
                     buttons["{{ "GoToCourse"|get_lang }}"] = function() {
                         window.location.href = calEvent.course_url;
                     };

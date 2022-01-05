@@ -4721,7 +4721,7 @@ class Agenda
                 'backgroundColor' => $this->event_personal_color,
                 'editable' => false,
                 'sent_to' => get_lang('Me'),
-                'type' => 'session',
+                'type' => 'session_subscription',
                 'start' => $sessionInfo['display_start_date'],
                 'start_date_localtime' => $sessionInfo['display_start_date']
                     ? $this->formatEventDate($sessionInfo['display_start_date'])

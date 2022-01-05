@@ -1467,7 +1467,10 @@ class Agenda
                     $id = str_replace(['personal_', 'course_', 'session_'], '', $eventInfo['id']);
 
                     $eventInfo['reminders'] = $this->parseEventReminders(
-                        $this->getEventReminders($id, $eventInfo['type'])
+                        $this->getEventReminders(
+                            $id,
+                            'session' === $eventInfo['type'] ? 'course' : $eventInfo['type']
+                        )
                     );
 
                     return $eventInfo;

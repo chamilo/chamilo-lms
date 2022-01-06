@@ -441,7 +441,7 @@ class MessageManager
                 $senderId = $message->getUserSenderId();
                 $senderInfo = api_get_user_info($senderId);
                 $deleteLink = '';
-                if ('my_space' == $origin &&  api_get_user_id() == $senderId) {
+                if ('my_space' == $origin && api_get_user_id() == $senderId) {
                     $deleteLink = '<a title="'.addslashes(
                             get_lang('DeleteMessage')
                         ).'" href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userInfo['id'].'&action=delete_msg&msg_id='.$message->getId().'"  onclick="javascript:if(!confirm('."'".addslashes(

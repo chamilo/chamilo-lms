@@ -48,6 +48,8 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
 
     public function addToolInCourse(int $courseId, TopLink $link)
     {
+        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
+        // Otherwise, the link en the course tool will link to "/main/" URL.
         $tool = $this->createLinkToCourseTool(
             $link->getTitle(),
             $courseId,

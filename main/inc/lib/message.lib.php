@@ -418,7 +418,7 @@ class MessageManager
      *
      * @return string
      */
-    public static function getMessagesAboutUserToString($userInfo)
+    public static function getMessagesAboutUserToString($userInfo, $origin = null)
     {
         $messages = self::getMessagesAboutUser($userInfo);
         $html = '';
@@ -440,8 +440,17 @@ class MessageManager
                 );
                 $senderId = $message->getUserSenderId();
                 $senderInfo = api_get_user_info($senderId);
+                $deleteLink = '';
+                if ('my_space' == $origin && api_get_user_id() == $senderId) {
+                    $deleteLink = '<a title="'.addslashes(
+                            get_lang('DeleteMessage')
+                        ).'" href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userInfo['id'].'&action=delete_msg&msg_id='.$message->getId().'"  onclick="javascript:if(!confirm('."'".addslashes(
+                            api_htmlentities(get_lang('ConfirmDeleteMessage'))
+                        )."'".')) return false;" >&nbsp;&nbsp;&nbsp;&nbsp;'.
+                        Display::returnFontAwesomeIcon('trash', 1).'</a>';
+                }
                 $html .= Display::panelCollapse(
-                    $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle(),
+                    $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle().$deleteLink,
                     $message->getContent().'<br />'.$date.'<br />'.get_lang(
                         'Author'
                     ).': '.$senderInfo['complete_name_with_message_link'],

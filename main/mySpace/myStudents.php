@@ -114,6 +114,10 @@ $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 switch ($action) {
+    case 'delete_msg':
+        $messageId = (int) $_GET['msg_id'];
+        MessageManager::delete_message_by_user_sender(api_get_user_id(), $messageId);
+        break;
     case 'add_work_time':
         if (false === $workingTimeEdit) {
             api_not_allowed(true);
@@ -2160,7 +2164,7 @@ if (empty($details)) {
 if ($allowMessages === true) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));
-    echo MessageManager::getMessagesAboutUserToString($user_info);
+    echo MessageManager::getMessagesAboutUserToString($user_info, 'my_space');
     echo Display::url(
         get_lang('NewMessage'),
         'javascript: void(0);',

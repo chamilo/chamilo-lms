@@ -59,6 +59,9 @@ switch ($action) {
                 )
                 ->setCustomParams(
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
+		)
+                ->setReplacementForUserId(
+                    empty($formValues['replacement_user_id']) ? [] : $formValues['replacement_user_id']
                 )
                 ->setDocumenTarget($formValues['document_target'])
                 ->setCourse($course)
@@ -189,6 +192,9 @@ switch ($action) {
                 )
                 ->setCustomParams(
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
+		)
+                ->setReplacementForUserId(
+                    empty($formValues['replacement_user_id']) ? [] : $formValues['replacement_user_id']
                 )
                 ->setDocumenTarget($formValues['document_target'])
                 ->setPrivacy(

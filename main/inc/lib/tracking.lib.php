@@ -465,108 +465,109 @@ class Tracking
                                         c_id = $courseId AND
                                         lp_id = '$lpId'";
                             $resPath = Database::query($sql);
-                            $rowPath = Database::fetch_array($resPath);
                             if (Database::num_rows($resPath) > 0) {
-                                $sql = 'SELECT * FROM '.$tblStatsExercises.'
-                                        WHERE
-                                            exe_exo_id="'.(int) $rowPath['path'].'" AND
-                                            status <> "incomplete" AND
-                                            exe_user_id="'.$userId.'" AND
-                                            orig_lp_id = "'.$lpId.'" AND
-                                            orig_lp_item_id = "'.$myItemId.'" AND
-                                            c_id = '.$courseId.'  AND
-                                            session_id = '.$sessionId.'
-                                        ORDER BY exe_date';
-                                $resAttempts = Database::query($sql);
-                                if (Database::num_rows($resAttempts) > 0) {
-                                    $n = 1;
-                                    while ($rowAttempts = Database::fetch_array($resAttempts)) {
-                                        $myScore = $rowAttempts['exe_result'];
-                                        $myMaxscore = $rowAttempts['exe_weighting'];
-                                        $mktimeStartDate = api_strtotime($rowAttempts['start_date'], 'UTC');
-                                        $mktimeExeDate = api_strtotime($rowAttempts['exe_date'], 'UTC');
-                                        $timeAttempt = ' - ';
-                                        if ($mktimeStartDate && $mktimeExeDate) {
-                                            $timeAttempt = api_format_time($rowAttempts['exe_duration'], 'js');
-                                        }
-                                        // Show only float when need it
-                                        if ($myScore == 0) {
-                                            $viewScore = ExerciseLib::show_score(
-                                                0,
-                                                $myMaxscore,
-                                                false
-                                            );
-                                        } else {
-                                            if ($myMaxscore == 0) {
-                                                $viewScore = $myScore;
-                                            } else {
+                                while ($rowPath = Database::fetch_array($resPath)) {
+                                    $sql = 'SELECT * FROM '.$tblStatsExercises.'
+                                            WHERE
+                                                exe_exo_id="'.(int) $rowPath['path'].'" AND
+                                                status <> "incomplete" AND
+                                                exe_user_id="'.$userId.'" AND
+                                                orig_lp_id = "'.$lpId.'" AND
+                                                orig_lp_item_id = "'.$myItemId.'" AND
+                                                c_id = '.$courseId.'  AND
+                                                session_id = '.$sessionId.'
+                                            ORDER BY exe_date';
+                                    $resAttempts = Database::query($sql);
+                                    if (Database::num_rows($resAttempts) > 0) {
+                                        $n = 1;
+                                        while ($rowAttempts = Database::fetch_array($resAttempts)) {
+                                            $myScore = $rowAttempts['exe_result'];
+                                            $myMaxscore = $rowAttempts['exe_weighting'];
+                                            $mktimeStartDate = api_strtotime($rowAttempts['start_date'], 'UTC');
+                                            $mktimeExeDate = api_strtotime($rowAttempts['exe_date'], 'UTC');
+                                            $timeAttempt = ' - ';
+                                            if ($mktimeStartDate && $mktimeExeDate) {
+                                                $timeAttempt = api_format_time($rowAttempts['exe_duration'], 'js');
+                                            }
+                                            // Show only float when need it
+                                            if ($myScore == 0) {
                                                 $viewScore = ExerciseLib::show_score(
-                                                    $myScore,
+                                                    0,
                                                     $myMaxscore,
                                                     false
                                                 );
+                                            } else {
+                                                if ($myMaxscore == 0) {
+                                                    $viewScore = $myScore;
+                                                } else {
+                                                    $viewScore = ExerciseLib::show_score(
+                                                        $myScore,
+                                                        $myMaxscore,
+                                                        false
+                                                    );
+                                                }
                                             }
-                                        }
-                                        $myLessonStatus = $rowAttempts['status'];
-                                        if ($myLessonStatus == '') {
-                                            $myLessonStatus = learnpathitem::humanize_status('completed', false);
-                                        } elseif ($myLessonStatus == 'incomplete') {
-                                            $myLessonStatus = learnpathitem::humanize_status('incomplete', false);
-                                        }
-                                        $timeRow = '<td style="text-align:center;">'.$timeAttempt.'</td>';
-                                        if ($hideTime) {
-                                            $timeRow = '';
-                                        }
-                                        $output .= '<tr>
-                                        <td>&mdash; <em>'.get_lang('Attempt').' '.$n.'</em></td>
-                                        <td style="text-align:center;"><div class="btn btn-primary boldTitle">'.$myLessonStatus.'</div></td>
-                                        <td style="text-align:center;">'.$viewScore.'</td>
-                                        '.$timeRow;
-                                        $output .= '</tr>';
+                                            $myLessonStatus = $rowAttempts['status'];
+                                            if ($myLessonStatus == '') {
+                                                $myLessonStatus = learnpathitem::humanize_status('completed', false);
+                                            } elseif ($myLessonStatus == 'incomplete') {
+                                                $myLessonStatus = learnpathitem::humanize_status('incomplete', false);
+                                            }
+                                            $timeRow = '<td style="text-align:center;">'.$timeAttempt.'</td>';
+                                            if ($hideTime) {
+                                                $timeRow = '';
+                                            }
+                                            $output .= '<tr>
+                                            <td>&mdash; <em>'.get_lang('Attempt').' '.$n.'</em></td>
+                                            <td style="text-align:center;"><div class="btn btn-primary boldTitle">'.$myLessonStatus.'</div></td>
+                                            <td style="text-align:center;">'.$viewScore.'</td>
+                                            '.$timeRow;
+                                            $output .= '</tr>';
 
-                                        // It displays categories questions by attempts
-                                        $categoriesQuestions = TestCategory::getQuestionsByCat($rowAttempts['exe_exo_id'], [], [], false, $courseId);
-                                        $categories = TestCategory::getListOfCategoriesIDForTest($rowAttempts['exe_exo_id'], $courseId);
-                                        $objExercise = new Exercise($courseId);
-                                        $objExercise->read($rowAttempts['exe_exo_id']);
-                                        if (!empty($categoriesQuestions)) {
-                                            foreach ($categoriesQuestions as $catId => $questions) {
-                                                $catScore = 0;
-                                                $catWeight = 0;
-                                                if (!empty($questions)) {
-                                                    foreach ($questions as $questionId) {
-                                                        $questionResult = $objExercise->manage_answer(
-                                                            $rowAttempts['exe_id'],
-                                                            $questionId,
-                                                            '',
-                                                            'exercise_show',
-                                                            [],
-                                                            false,
-                                                            true,
-                                                            false,
-                                                            $objExercise->selectPropagateNeg()
-                                                        );
-                                                        $catScore += $questionResult['score'];
-                                                        $catWeight += $questionResult['weight'];
+                                            // It displays categories questions by attempts
+                                            $categoriesQuestions = TestCategory::getQuestionsByCat($rowAttempts['exe_exo_id'], [], [], false, $courseId);
+                                            $categories = TestCategory::getListOfCategoriesIDForTest($rowAttempts['exe_exo_id'], $courseId);
+                                            $objExercise = new Exercise($courseId);
+                                            $objExercise->read($rowAttempts['exe_exo_id']);
+                                            if (!empty($categoriesQuestions)) {
+                                                foreach ($categoriesQuestions as $catId => $questions) {
+                                                    $catScore = 0;
+                                                    $catWeight = 0;
+                                                    if (!empty($questions)) {
+                                                        foreach ($questions as $questionId) {
+                                                            $questionResult = $objExercise->manage_answer(
+                                                                $rowAttempts['exe_id'],
+                                                                $questionId,
+                                                                '',
+                                                                'exercise_show',
+                                                                [],
+                                                                false,
+                                                                true,
+                                                                false,
+                                                                $objExercise->selectPropagateNeg()
+                                                            );
+                                                            $catScore += $questionResult['score'];
+                                                            $catWeight += $questionResult['weight'];
+                                                        }
                                                     }
+                                                    $timeCatRow = '';
+                                                    if (!$hideTime) {
+                                                        $timeCatRow = '<td></td>';
+                                                    }
+                                                    $catTitle = $categories[$catId]['title'];
+                                                    $catScoreDisplay = ($catWeight > 0) ? round(($catScore * 100) / $catWeight).'% ('.$catScore.'/'.$catWeight.')' : '';
+                                                    $output .= "<tr>";
+                                                    $output .= '
+                                                        <td style="width:35%">&mdash;&mdash; '.$catTitle.'</td>
+                                                        <td style="width:25%;"></td>
+                                                        <td style="width:20%;text-align:center;">'.$catScoreDisplay.'</td>
+                                                        '.$timeCatRow.'
+                                                     ';
+                                                    $output .= '</tr>';
                                                 }
-                                                $timeCatRow = '';
-                                                if (!$hideTime) {
-                                                    $timeCatRow = '<td></td>';
-                                                }
-                                                $catTitle = $categories[$catId]['title'];
-                                                $catScoreDisplay = ($catWeight > 0) ? round(($catScore * 100) / $catWeight).'% ('.$catScore.'/'.$catWeight.')' : '';
-                                                $output .= "<tr>";
-                                                $output .= '
-                                                    <td style="width:35%">&mdash;&mdash; '.$catTitle.'</td>
-                                                    <td style="width:25%;"></td>
-                                                    <td style="width:20%;text-align:center;">'.$catScoreDisplay.'</td>
-                                                    '.$timeCatRow.'
-                                                 ';
-                                                $output .= '</tr>';
                                             }
+                                            $n++;
                                         }
-                                        $n++;
                                     }
                                 }
                             }

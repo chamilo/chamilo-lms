@@ -469,7 +469,7 @@ class Tracking
                                 while ($rowPath = Database::fetch_array($resPath)) {
                                     $sql = 'SELECT * FROM '.$tblStatsExercises.'
                                             WHERE
-                                                exe_exo_id="'.(int)$rowPath['path'].'" AND
+                                                exe_exo_id="'.(int) $rowPath['path'].'" AND
                                                 status <> "incomplete" AND
                                                 exe_user_id="'.$userId.'" AND
                                                 orig_lp_id = "'.$lpId.'" AND

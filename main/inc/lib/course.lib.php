@@ -2912,6 +2912,39 @@ class CourseManager
         }
     }
 
+    public static function getCourseMultiLanguageList($cid)
+    {
+        if (!api_get_configuration_value('allow_course_multiple_languages')) {
+            return false;
+        }
+
+        $tblCourseField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tblCourseFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+        $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
+        // Set the return list
+        $courseLanguageList = [];
+
+        // Get special course field
+        $sql = "SELECT id FROM $tblCourseField
+                WHERE extra_field_type = $extraFieldType AND variable = 'multiple_language'";
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs) > 0) {
+            $fieldId = Database::result($rs, 0, 0);
+            $sql = "SELECT value
+                    FROM $tblCourseFieldValue
+                    WHERE field_id = ".$fieldId." AND item_id = '".$cid."'";
+            $result = Database::query($sql);
+            while ($row = Database::fetch_assoc($result)) {
+                if (!empty($row['value'])) {
+                    $courseLanguageList = explode(';', $row['value']);
+                }
+            }
+        }
+
+        return $courseLanguageList;
+    }
+
     /**
      * Get the list of course IDs with the special_course field
      * set to 1. This function is access_url aware.

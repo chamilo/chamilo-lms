@@ -32,6 +32,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\XapiTool;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use CourseManager;
 use Database;
@@ -104,6 +105,8 @@ class CourseBuilder
     public $specific_id_list = [];
     public $documentsAddedInText = [];
     public $itemListToAdd = [];
+
+    public $isXapiEnabled = false;
 
     /**
      * Create a new CourseBuilder.
@@ -237,6 +240,14 @@ class CourseBuilder
     ) {
         $course = api_get_course_info($courseCode);
         $courseId = $course['real_id'];
+
+        $xapiEnabled = \XApiPlugin::create()->isEnabled();
+        if ($xapiEnabled) {
+            $this->tools_to_build[] = 'xapi_tool';
+            $this->toolToName['xapi_tool'] = RESOURCE_XAPI_TOOL;
+            $this->isXapiEnabled = $xapiEnabled;
+        }
+
         foreach ($this->tools_to_build as $tool) {
             if (!empty($parseOnlyToolList) && !in_array($this->toolToName[$tool], $parseOnlyToolList)) {
                 continue;
@@ -245,7 +256,9 @@ class CourseBuilder
             $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
             $buildOrphanQuestions = true;
             if ($tool === 'quizzes') {
-                $specificIdList = array_keys($toolsFromPost['quiz']);
+                if (!empty($toolsFromPost['quiz'])) {
+                    $specificIdList = array_keys($toolsFromPost['quiz']);
+                }
                 if (!isset($toolsFromPost[RESOURCE_QUIZ][-1])) {
                     $buildOrphanQuestions = false;
                 }
@@ -1732,6 +1745,15 @@ class CourseBuilder
             );
         }
 
+        if (isset($itemList['xapi']) && $this->isXapiEnabled) {
+            $this->build_xapi_tool(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['xapi']
+            );
+        }
+
         if (!empty($itemList['student_publication'])) {
             $this->build_works(
                 $sessionId,
@@ -1894,6 +1916,47 @@ class CourseBuilder
             );
             $this->course->add_resource($wiki);
         }
+    }
+
+    /**
+     * Build the xapi tool
+     */
+    public function build_xapi_tool(
+        $sessionId = 0,
+        $courseId = 0,
+        $withBaseContent = false,
+        $idList = []
+    ) {
+
+        if (!$this->isXapiEnabled) {
+            return false;
+        }
+
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        if ($withBaseContent) {
+            $sessionCondition = api_get_session_condition(
+                $sessionId,
+                true,
+                true
+            );
+        } else {
+            $sessionCondition = api_get_session_condition($sessionId, true);
+        }
+
+        $idCondition = '';
+        if (!empty($idList)) {
+            $idList = array_map('intval', $idList);
+            $idCondition = ' AND id IN ("'.implode('","', $idList).'") ';
+        }
+
+        $sql = "SELECT * FROM xapi_tool_launch WHERE c_id = $courseId $sessionCondition $idCondition";
+        $rs = Database::query($sql);
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            $xapiTool = new XapiTool($row);
+            $this->course->add_resource($xapiTool);
+        }
+
     }
 
     /**

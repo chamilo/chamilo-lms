@@ -336,7 +336,7 @@ class ZoomPlugin extends Plugin
         if ($form->validate()) {
             if ($meeting->requiresDateAndDuration()) {
                 $meetingInfoGet->start_time = (new DateTime($form->getSubmitValue('startTime')))->format(
-                    DateTimeInterface::ISO8601
+                    DATE_ATOM
                 );
                 $meetingInfoGet->timezone = date_default_timezone_get();
                 $meetingInfoGet->duration = (int) $form->getSubmitValue('duration');
@@ -1379,7 +1379,7 @@ class ZoomPlugin extends Plugin
             $this->get_lang('GlobalMeeting'),
             MeetingInfoGet::TYPE_SCHEDULED
         );
-        $meetingInfoGet->start_time = (new DateTime())->format(DateTimeInterface::ISO8601);
+        $meetingInfoGet->start_time = (new DateTime())->format(DATE_ATOM);
         $meetingInfoGet->duration = 60;
         $meetingInfoGet->settings->approval_type =
             ('true' === $this->get('enableParticipantRegistration'))
@@ -1420,7 +1420,7 @@ class ZoomPlugin extends Plugin
     ) {
         $meetingInfoGet = MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_SCHEDULED);
         $meetingInfoGet->duration = $duration;
-        $meetingInfoGet->start_time = $startTime->format(DateTimeInterface::ISO8601);
+        $meetingInfoGet->start_time = $startTime->format(DATE_ATOM);
         $meetingInfoGet->agenda = $agenda;
         $meetingInfoGet->password = $password;
         $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;

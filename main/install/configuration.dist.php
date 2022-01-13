@@ -2070,6 +2070,14 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 // Option to hide the teachers info on courses about info page.
 //$_configuration['course_about_teacher_name_hide'] = false;
 
+// Allow multiple languages to a course
+// Requires DB change:
+/*
+INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `display_text`, `default_value`, `field_order`, `visible_to_self`, `visible_to_others`, `changeable`, `filter`, `created_at`) VALUES
+(2,     5,      'multiple_language',    'Multiple Language', '',        0,      1,      0,      1,      0,      NOW());
+*/
+//$_configuration['allow_course_multiple_languages'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

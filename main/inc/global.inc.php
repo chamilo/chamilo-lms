@@ -488,11 +488,6 @@ if (!empty($valid_languages)) {
         }
     }
 
-    $courseLanguages = [];
-    if (isset($_course['real_id'])) {
-        $courseLanguages = CourseManager::getCourseMultiLanguageList($_course['real_id']);
-    }
-
     // If language is set via browser ignore the priority
     if (isset($_GET['language'])) {
         $language_interface = $user_language;
@@ -555,21 +550,6 @@ $language_interface_initial_value = $language_interface;
  * Include the trad4all language file.
  */
 $languageFilesToLoad = api_get_language_files_to_load($language_interface);
-
-// It adds the langs with course selected multilanguages
-$courseLanguagesFilesToLoad = [];
-if (!empty($courseLanguages)) {
-    foreach ($courseLanguages as $courseLanguage) {
-        $fileToLoad = api_get_language_files_to_load($courseLanguage);
-        if (!empty($fileToLoad)) {
-            $courseLanguagesFilesToLoad = array_merge($courseLanguagesFilesToLoad, $fileToLoad);
-        }
-    }
-}
-if (!empty($courseLanguagesFilesToLoad)) {
-    $languageFilesToLoad = array_merge($languageFilesToLoad, $courseLanguagesFilesToLoad);
-    $languageFilesToLoad = array_unique($languageFilesToLoad);
-}
 
 foreach ($languageFilesToLoad as $languageFile) {
     include $languageFile;

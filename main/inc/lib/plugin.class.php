@@ -1085,7 +1085,7 @@ class Plugin
         $courseId,
         $iconName = null,
         $link = null,
-        $sessionId = 0
+        $sessionId = 0,
         $category = 'plugin'
     ) {
         if (!$this->addCourseTool) {

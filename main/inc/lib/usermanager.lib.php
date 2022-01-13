@@ -5561,6 +5561,7 @@ class UserManager
             if (!empty($column) && !empty($direction)) {
                 // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
+                $column = trim($column);
                 $orderBy = " ORDER BY `$column` $direction ";
             }
         }
@@ -5787,6 +5788,7 @@ class UserManager
                     ON sru.user_id=u.id
                     WHERE
                         sru.c_id="'.$courseId.'" AND
+                        sru.session_id="'.$session.'" AND
                         sru.status = '.SessionEntity::COACH;
         }
 

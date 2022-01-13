@@ -10212,6 +10212,11 @@ class Exercise
             if (empty($tableRows)) {
                 return '';
             }
+
+            if (true === api_get_configuration_value('allow_exercise_categories') && empty($categoryId)) {
+                echo Display::page_subheader(get_lang('NoCategory'));
+            }
+
             $table->setTableData($tableRows);
             $table->setTotalNumberOfItems($total);
             $table->set_additional_parameters([

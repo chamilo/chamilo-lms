@@ -245,6 +245,7 @@ class CourseBuilder
             $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
             $buildOrphanQuestions = true;
             if ($tool === 'quizzes') {
+                $specificIdList = array_keys($toolsFromPost['quiz']);
                 if (!isset($toolsFromPost[RESOURCE_QUIZ][-1])) {
                     $buildOrphanQuestions = false;
                 }
@@ -910,6 +911,11 @@ class CourseBuilder
                 }
             }
             $this->course->add_resource($question);
+        }
+
+        // Check if a global setting has been set to avoid copying orphan questions
+        if (true === api_get_configuration_value('quiz_discard_orphan_in_course_export')) {
+            $buildOrphanQuestions = false;
         }
 
         if ($buildOrphanQuestions) {

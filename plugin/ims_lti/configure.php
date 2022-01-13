@@ -68,6 +68,10 @@ switch ($action) {
                     !empty($formValues['share_picture'])
                 );
 
+            if (!empty($formValues['replacement_user_id'])) {
+                $tool->setReplacementForUserId($formValues['replacement_user_id']);
+            }
+
             if (!$baseTool) {
                 if (ImsLti::V_1P3 === $formValues['version']) {
                     $tool
@@ -189,13 +193,17 @@ switch ($action) {
                 )
                 ->setCustomParams(
                     empty($formValues['custom_params']) ? null : $formValues['custom_params']
-                )
+		        )
                 ->setDocumenTarget($formValues['document_target'])
                 ->setPrivacy(
                     !empty($formValues['share_name']),
                     !empty($formValues['share_email']),
                     !empty($formValues['share_picture'])
                 );
+
+            if (!empty($formValues['replacement_user_id'])) {
+                $tool->setReplacementForUserId($formValues['replacement_user_id']);
+            }
 
             if (null === $tool->getParent()) {
                 if ($tool->getVersion() === ImsLti::V_1P3) {

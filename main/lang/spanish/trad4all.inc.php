@@ -8857,4 +8857,10 @@ $ShareForumsInSessions = "Compartir los foros con todas las sesiones";
 $YouHaveAchievedANewSkill = "Has logrado una nueva competencia";
 $YouXHaveAchievedTheSkillYToSeeFollowLinkZ = "Hola, %s. Has logrado la competencia \"%s\". Para ver los detalles haz clic aquí: %s";
 $ToAssignNewSkillToUserClickLinkX = "Para asignar una nueva competencia a este usuario, haga clic <a href=\"%s\">aquí</a>";
+$AddEventInCourseCalendar = "Agregar evento en la agenda del curso";
+$Hours = "Horas";
+$ReminderXEvent = "Recordatorio para el evento : %s";
+$AddNotification = "Agregar un recordatorio";
+$NotifyBeforeTheEventStarts = "Notificaciones de recordatorio del evento";
+$AddTags = "Agregar etiquetas";
 ?>

@@ -320,6 +320,17 @@ $extra = $extra_field->addElements(
     true
 );
 
+if (api_get_configuration_value('allow_course_multiple_languages')) {
+    // Course Multiple language.
+    $languages = api_get_languages();
+    $cbMultiLanguage = $form->getElementByName('extra_multiple_language');
+    if (isset($cbMultiLanguage)) {
+        foreach ($languages['folder'] as $langFolder) {
+            $cbMultiLanguage->addOption($langFolder, $langFolder);
+        }
+    }
+}
+
 if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')) {
     $urls = UrlManager::get_access_url_from_course($courseId);
     $urlToString = '';

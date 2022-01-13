@@ -319,11 +319,14 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public function addCourseToolForTinCan($courseId)
     {
+        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
+        // Otherwise, the link en the course tool will link to "/main/" URL.
         $this->createLinkToCourseTool(
             $this->get_lang('ToolTinCan'),
             $courseId,
-            null,
-            'xapi/start.php'
+            'sessions_category.png',
+            '../plugin/xapi/start.php',
+            'authoring'
         );
     }
 
@@ -602,6 +605,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'xapi/start.php%']);
+            ->execute(['category' => 'authoring', 'link' => '../plugin/xapi/start.php%']);
     }
 }

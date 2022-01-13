@@ -281,6 +281,25 @@ if ('course' === $agenda->type) {
     $form->addElement('textarea', 'comment', get_lang('Comment'), ['id' => 'comment']);
 }
 
+if (api_get_configuration_value('agenda_collective_invitations') && 'personal' === $agenda->type) {
+    $form->addSelectAjax(
+        'invitees',
+        get_lang('Invitees'),
+        [],
+        [
+            'multiple' => 'multiple',
+            'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
+        ]
+    );
+    $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+}
+
+if (api_get_configuration_value('agenda_reminders')) {
+    $form->addHtml('<hr><div id="notification_list"></div>');
+    $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+    $form->addHtml('<hr>');
+}
+
 $form->addHtml('<div id="attachment_block" style="display: none">');
 $form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="display: none"></div>');
 $form->addHtml('</div>');

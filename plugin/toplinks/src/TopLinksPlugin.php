@@ -48,11 +48,14 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
 
     public function addToolInCourse(int $courseId, TopLink $link)
     {
+        // The $link param is set to "../plugin" as a hack to link correctly to the plugin URL in course tool.
+        // Otherwise, the link en the course tool will link to "/main/" URL.
         $tool = $this->createLinkToCourseTool(
             $link->getTitle(),
             $courseId,
-            null,
-            'toplinks/start.php?'.http_build_query(['link' => $link->getId()])
+            'external_link.png',
+            '../plugin/toplinks/start.php?'.http_build_query(['link' => $link->getId()]),
+            'authoring'
         );
 
         if (null === $tool) {
@@ -111,6 +114,8 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
         $schemaTool->dropSchema(array_values($tableReferences));
 
         $this->uninstallHook();
+
+        $this->deleteCourseTools();
     }
 
     public function uninstallHook(): int
@@ -119,5 +124,12 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
         HookCreateCourse::create()->detach($createCourseObserver);
 
         return 1;
+    }
+
+    private function deleteCourseTools()
+    {
+        Database::getManager()
+            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
+            ->execute(['category' => 'authoring', 'link' => '../plugin/toplinks/start.php%']);
     }
 }

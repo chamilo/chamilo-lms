@@ -7,7 +7,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\XapiTool;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use CourseManager;
@@ -3376,17 +3375,15 @@ class CourseRestorer
     }
 
     /**
-     * Restore xapi tool
+     * Restore xapi tool.
      *
      * @param int $sessionId
      */
-
     public function restore_xapi_tool()
     {
         if ($this->course->has_resources(RESOURCE_XAPI_TOOL) && $this->isXapiEnabled) {
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_XAPI_TOOL] as $id => $xapiTool) {
-
                 $launchPath = str_replace(
                     api_get_path(WEB_COURSE_PATH).$this->course->info['path'].'/',
                     '',

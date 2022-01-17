@@ -1919,7 +1919,7 @@ class CourseBuilder
     }
 
     /**
-     * Build the xapi tool
+     * Build the xapi tool.
      */
     public function build_xapi_tool(
         $sessionId = 0,
@@ -1927,7 +1927,6 @@ class CourseBuilder
         $withBaseContent = false,
         $idList = []
     ) {
-
         if (!$this->isXapiEnabled) {
             return false;
         }
@@ -1956,7 +1955,6 @@ class CourseBuilder
             $xapiTool = new XapiTool($row);
             $this->course->add_resource($xapiTool);
         }
-
     }
 
     /**

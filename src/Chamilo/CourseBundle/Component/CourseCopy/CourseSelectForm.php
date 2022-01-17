@@ -6,7 +6,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\XapiTool;
 use Database;
 use Display;
 

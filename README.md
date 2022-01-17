@@ -18,8 +18,8 @@ Chamilo is an e-learning platform, also called "LMS", published under the GNU/GP
 We assume you already have:
 
 - composer 2.x - https://getcomposer.org/download/
-- yarn 2.x - https://yarnpkg.com/getting-started/install
-- Node >= v14 - https://github.com/nodesource/distributions/blob/master/README.md
+- yarn +2.x - https://yarnpkg.com/getting-started/install
+- Node >= v16+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
 - Configuring a virtualhost in a domain, not in a sub folder inside a domain.
 - A working LAMP/WAMP server with PHP 8.0+
 
@@ -36,10 +36,10 @@ sudo add-apt-repository ppa:ondrej/php
 sudo apt update
 sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath php-soap git unzip
 cd ~
-curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
 sudo bash nodesource_setup.sh
 sudo apt install nodejs
-sudo npm install -f yarn
+sudo corepack enable
 cd ~
 # follow the instructions at https://getcomposer.org/download/
 sudo mv composer.phar /usr/local/bin/composer
@@ -59,7 +59,7 @@ composer install
 # not recommended to do this as the root user!
 # when asked whether you want to execute the recipes for some of the components, you can safely say no.
 
-yarn set version 2.4.2
+yarn set version stable
 yarn install
 yarn run encore dev
 chmod -R 777 .

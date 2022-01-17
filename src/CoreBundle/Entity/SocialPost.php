@@ -58,6 +58,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             'controller' => LikeSocialPostController::class,
             'denormalization_context' => ['groups' => []],
             'normalization_context' => ['groups' => ['social_post_feedback']],
+            'security' => "is_granted('ROLE_USER')",
         ],
         'post_dislike' => [
             'method' => 'POST',
@@ -65,6 +66,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             'controller' => DislikeSocialPostController::class,
             'denormalization_context' => ['groups' => []],
             'normalization_context' => ['groups' => ['social_post_feedback']],
+            'security' => "is_granted('ROLE_USER')",
         ],
     ],
     attributes: [

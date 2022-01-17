@@ -29,10 +29,6 @@ abstract class AbstractFeedbackSocialPostController extends AbstractController
     ) {
         $this->currentUser = $this->security->getUser();
 
-        if (null === $this->currentUser) {
-            throw new AccessDeniedException();
-        }
-
         if ('true' !== $this->settingsManager->getSetting('social.allow_social_tool')) {
             throw new AccessDeniedException();
         }

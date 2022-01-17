@@ -62,7 +62,8 @@ final class Version20200821224243 extends AbstractMigrationChamilo
         );
         $newTypeQueries[] = sprintf(
             'UPDATE message SET msg_type = %d WHERE msg_type = %d',
-            Message::MESSAGE_TYPE_INBOX, self::OLD_MESSAGE_STATUS_OUTBOX
+            Message::MESSAGE_TYPE_INBOX,
+            self::OLD_MESSAGE_STATUS_OUTBOX
         );
 
         $newTypeQueries[] = sprintf(

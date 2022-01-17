@@ -76,7 +76,7 @@ class SocialPostVoter extends Voter
                     return false;
                 }
 
-                if ($post->getType() === SocialPost::TYPE_PROMOTED_MESSAGE && !$currentUser->isAdmin()) {
+                if (SocialPost::TYPE_PROMOTED_MESSAGE === $post->getType() && !$currentUser->isAdmin()) {
                     return false;
                 }
 

@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\XapiTool;
 use Database;
 use Display;
 
@@ -47,6 +48,9 @@ class CourseSelectForm
         $list[RESOURCE_THEMATIC] = get_lang('Thematic');
         $list[RESOURCE_ATTENDANCE] = get_lang('Attendance');
         $list[RESOURCE_WORK] = get_lang('ToolStudentPublication');
+        if (\XApiPlugin::create()->isEnabled()) {
+            $list[RESOURCE_XAPI_TOOL] = get_lang('ToolXapiActivity');
+        }
 
         return $list;
     }

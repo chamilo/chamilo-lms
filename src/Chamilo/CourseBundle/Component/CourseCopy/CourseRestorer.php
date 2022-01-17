@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Component\CourseCopy;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\XapiTool;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use CourseManager;
@@ -54,6 +55,7 @@ class CourseRestorer
         'test_category',
         'links',
         'works',
+        'xapi_tool',
         'surveys',
         'learnpath_category',
         'learnpaths',
@@ -67,6 +69,7 @@ class CourseRestorer
 
     /** Setting per tool */
     public $tool_copy_settings = [];
+    public $isXapiEnabled = false;
 
     /**
      * If true adds the text "copy" in the title of an item (only for LPs right now).
@@ -153,6 +156,7 @@ class CourseRestorer
         // Getting first teacher (for the forums)
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
         $this->first_teacher_id = api_get_user_id();
+        $this->isXapiEnabled = \XApiPlugin::create()->isEnabled();
 
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -189,6 +193,9 @@ class CourseRestorer
         $this->course->to_system_encoding();
 
         foreach ($this->tools_to_restore as $tool) {
+            if ('xapi_tool' == $tool && !$this->isXapiEnabled) {
+                continue;
+            }
             $function_build = 'restore_'.$tool;
             $this->$function_build(
                 $session_id,
@@ -3207,6 +3214,10 @@ class CourseRestorer
             $tool = RESOURCE_WORK;
         }
 
+        if ('xapi' === $tool && $this->isXapiEnabled) {
+            $tool = RESOURCE_XAPI_TOOL;
+        }
+
         if (isset($this->course->resources[$tool][$ref]) &&
             isset($this->course->resources[$tool][$ref]->destination_id) &&
             !empty($this->course->resources[$tool][$ref]->destination_id)
@@ -3358,6 +3369,45 @@ class CourseRestorer
                     ];
 
                     Database::insert($table_wiki_conf, $params);
+                }
+            }
+        }
+    }
+
+    /**
+     * Restore xapi tool
+     *
+     * @param int $sessionId
+     */
+
+    public function restore_xapi_tool()
+    {
+        if ($this->course->has_resources(RESOURCE_XAPI_TOOL) && $this->isXapiEnabled) {
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_XAPI_TOOL] as $id => $xapiTool) {
+
+                $launchPath = str_replace(
+                    api_get_path(WEB_COURSE_PATH).$this->course->info['path'].'/',
+                    '',
+                    dirname($xapiTool->params['launch_url'])
+                );
+
+                $originPath = $this->course->backup_path.'/'.$launchPath;
+                $destinationPath = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/'.$launchPath;
+                $xapiDir = dirname($destinationPath);
+                @mkdir($xapiDir, api_get_permissions_for_new_directories(), true);
+                if (copyDirTo($originPath, $destinationPath, false)) {
+                    $xapiTool->params['launch_url'] = str_replace(
+                        '/'.$this->course->info['path'].'/',
+                        '/'.$this->course->destination_path.'/',
+                        $xapiTool->params['launch_url']
+                    );
+                    $ref = $xapiTool->params['id'];
+                    $xapiTool->params['c_id'] = $this->destination_course_id;
+                    unset($xapiTool->params['id']);
+
+                    $lastId = Database::insert('xapi_tool_launch', $xapiTool->params, false);
+                    $this->course->resources[RESOURCE_XAPI_TOOL][$ref]->destination_id = $lastId;
                 }
             }
         }

@@ -24,7 +24,7 @@ $criteria = Criteria::create()
 
 $tools = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')->matching($criteria);
 
-$categoriesGradeBook = array();
+$categoriesGradeBook = [];
 foreach($tools as $tool) {
     foreach($tool->getChildren() as $childTool) {
         $categories = [];

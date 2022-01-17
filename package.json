@@ -113,7 +113,7 @@
     "tinymce": "^5.10.1",
     "ts-loader": "^9.2.6",
     "video.js": "^7.16.0",
-    "vue": "3.2.11",
+    "vue": "3.2.27",
     "vue-eslint-parser": "7.11.0",
     "vue-flatpickr-component": "^9.0.5",
     "vue-i18n": "9.1.9",
@@ -134,7 +134,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.0",
     "@mdi/font": "^6.4.95",
-    "@symfony/webpack-encore": "1.6.1",
+    "@symfony/webpack-encore": "^1.7.0",
     "@vue/cli-plugin-babel": "4.5.13",
     "@vue/cli-plugin-eslint": "4.5.13",
     "@vue/cli-service": "4.5.13",
@@ -154,5 +154,5 @@
     "webpack-notifier": "^1.14.1"
   },
   "license": "GPL-3.0",
-  "packageManager": "yarn@2.4.2"
+  "packageManager": "yarn@3.1.1"
 }

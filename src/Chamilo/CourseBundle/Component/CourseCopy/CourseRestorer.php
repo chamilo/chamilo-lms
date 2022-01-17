@@ -41,6 +41,7 @@ class CourseRestorer
     public $file_option;
     public $set_tools_invisible_by_default;
     public $skip_content;
+    // Restoration is done in the order listed for $tools_to_restore
     public $tools_to_restore = [
         'documents', // first restore documents
         'announcements',

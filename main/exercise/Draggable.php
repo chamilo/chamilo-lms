@@ -223,6 +223,8 @@ class Draggable extends Question
             }
         } else {
             $header .= '<th>'.get_lang('ElementList').'</th>';
+            $header .= '<th>'.get_lang('YourChoice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
         }
         $header .= '<th>'.get_lang('Status').'</th>';
         $header .= '</tr>';

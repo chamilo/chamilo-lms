@@ -8332,7 +8332,7 @@ $TimeSpentInLp = "Time spent in the learning path";
 $StudentXFinishedLp = "Student %s has completed his/her learning paths.";
 $IHaveFinishedTheLessonsNotifyTheTeacher = "I have finished the lessons, notify the teacher";
 $TheStudentXHasFinishedTheCourseYLearningPaths = "The student <b>%s</b> has finished the learning paths from the course <b>%s</b>";
-$ThisQuestionExistsInAnotherExercisesWarning = "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.";
+$ThisQuestionExistsInAnotherExercisesWarning = "This question is used in at least one other exercise. If you continue its edition, the changes will affect all exercises that contain this question.";
 $TimeSpentTimeRequired = "Time spent / Time required";
 $ProgressSpentInLp = "Progress";
 $InSessionXYouHadTheFollowingResults = "In session %s, you had the following results";
@@ -8835,4 +8835,6 @@ $ReminderXEvent = "Reminder for event : %s";
 $AddNotification = "Add notification";
 $NotifyBeforeTheEventStarts = "Notification to remind the event";
 $AddTags = "Add tags";
+$IsItEditableByTheInvitees = "Event editable by the invitees";
+$Invitees = "Invitees";
 ?>

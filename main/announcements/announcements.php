@@ -635,6 +635,18 @@ switch ($action) {
         $form->addHtml('<div id="add_event_options" style="display:none;">');
         $form->addDateTimePicker('event_date_start', get_lang('DateStart'));
         $form->addDateTimePicker('event_date_end', get_lang('DateEnd'));
+
+        if (true === api_get_configuration_value('agenda_reminders')) {
+            $form->addHtml('<hr><div id="notification_list"></div>');
+            $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+            $form->addHtml('<hr>');
+
+            $htmlHeadXtra[] = '<script>$(function () {'
+                .Agenda::getJsForReminders('#announcement_add_notification')
+                .'});</script>'
+            ;
+        }
+
         $form->addHtml('</div>');
 
         if ($showSubmitButton) {
@@ -657,6 +669,11 @@ switch ($action) {
             $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
             $sendMeCopy = isset($data['send_me_a_copy_by_email']) ? true : false;
 
+            $notificationCount = $data['notification_count'] ?? [];
+            $notificationPeriod = $data['notification_period'] ?? [];
+
+            $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
+
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
                 if (Security::check_token('post')) {
@@ -678,7 +695,8 @@ switch ($action) {
                             $id,
                             $data['event_date_start'],
                             $data['event_date_end'],
-                            empty($data['users']) ? ['everyone'] : $data['users']
+                            empty($data['users']) ? ['everyone'] : $data['users'],
+                            $reminders
                         );
                     }
 
@@ -745,7 +763,8 @@ switch ($action) {
                                 $insert_id,
                                 $data['event_date_start'],
                                 $data['event_date_end'],
-                                empty($data['users']) ? ['everyone'] : $data['users']
+                                empty($data['users']) ? ['everyone'] : $data['users'],
+                                $reminders
                             );
                         }
 

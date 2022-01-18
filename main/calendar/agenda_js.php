@@ -277,6 +277,11 @@ if ('course' === $agenda->type) {
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
     $form->addHtml('</div>');
     $form->addElement('textarea', 'comment', get_lang('Comment'), ['id' => 'comment']);
+
+    $tpl->assign(
+        'agenda_reminders_js',
+        Agenda::getJsForReminders('#form_add_notification')
+    );
 }
 
 if (api_get_configuration_value('agenda_collective_invitations') && 'personal' === $agenda->type) {

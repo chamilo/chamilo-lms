@@ -4537,6 +4537,40 @@ class Agenda
         $em->flush();
     }
 
+    public static function getJsForReminders(string $cssSelectorBtnAdd): string
+    {
+        return '
+            var template = \'<div class="form-group">\' +
+                \'<div class="col-sm-offset-2 col-sm-3">\' +
+                \'<input min="0" step="1" id="notification_count[]" type="number" class=" form-control" name="notification_count[]">\' +
+                \'</div>\' +
+                \'<div class="col-sm-3">\' +
+                \'<select class="form-control" name="notification_period[]" id="form_notification_period[]">\' +
+                \'<option value="i">'.get_lang('Minutes').'</option>\' +
+                \'<option value="h">'.get_lang('Hours').'</option>\' +
+                \'<option value="d">'.get_lang('Days').'</option>\' +
+                \'</select>\' +
+                \'</div>\' +
+                \'<div class="col-sm-2"><p class="form-control-static">'.get_lang('Before').'</p></div>\' +
+                \'<div class="text-right col-sm-2">\' +
+                \'<button class="btn btn-default delete-notification" type="button" aria-label="'.get_lang('Delete').'"><em class="fa fa-times"></em></button>\' +
+                \'</div>\' +
+                \'</div>\';
+
+            $("'.$cssSelectorBtnAdd.'").on("click", function (e) {
+                e.preventDefault();
+
+                $(template).appendTo("#notification_list");
+                $("#notification_list select").selectpicker("refresh");
+            });
+
+            $("#notification_list").on("click", ".delete-notification", function (e) {
+                e.preventDefault();
+
+                $(this).parents(".form-group").remove();
+            });';
+    }
+
     private function editReminders(int $eventId, array $reminderList = [])
     {
         if (false === api_get_configuration_value('agenda_reminders')) {

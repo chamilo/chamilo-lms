@@ -188,6 +188,16 @@ $obj->fill_grade_model_select_in_form($form);
 $extra_field = new ExtraField('course');
 $extra = $extra_field->addElements($form);
 
+if (api_get_configuration_value('allow_course_multiple_languages')) {
+    // Course Multiple language.
+    $cbMultiLanguage = $form->getElementByName('extra_multiple_language');
+    if (isset($cbMultiLanguage)) {
+        foreach ($languages['folder'] as $langFolder) {
+            $cbMultiLanguage->addOption($langFolder, $langFolder);
+        }
+    }
+}
+
 $htmlHeadXtra[] = '
 <script>
 

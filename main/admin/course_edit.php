@@ -295,6 +295,17 @@ $extra = $extra_field->addElements(
     true
 );
 
+if (api_get_configuration_value('allow_course_multiple_languages')) {
+    // Course Multiple language.
+    $languages = api_get_languages();
+    $cbMultiLanguage = $form->getElementByName('extra_multiple_language');
+    if (isset($cbMultiLanguage)) {
+        foreach ($languages['folder'] as $langFolder) {
+            $cbMultiLanguage->addOption($langFolder, $langFolder);
+        }
+    }
+}
+
 $htmlHeadXtra[] = '
 <script>
 $(function() {

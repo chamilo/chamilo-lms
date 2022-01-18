@@ -458,6 +458,8 @@ CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invita
 */
 // Then add the "@" symbol to AgendaReminder class in the ORM\Entity() line.
 //$_configuration['agenda_reminders'] = false;
+// Sets the sender ID when using the cron main/cron/agenda_reminders.php to send reminders in course events.
+//$_configuration['agenda_reminders_sender_id'] = 0;
 // ------
 //
 // Save some tool titles with HTML editor. Require DB changes:

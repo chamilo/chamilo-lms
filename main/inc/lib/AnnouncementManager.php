@@ -2238,7 +2238,8 @@ class AnnouncementManager
         int $announcementId,
         string $startDate,
         string $endDate,
-        array $choosenUsers = []
+        array $choosenUsers = [],
+        array $reminders = []
     ): ?CCalendarEvent {
         $em = Database::getManager();
         $announcement = $em->find('ChamiloCourseBundle:CAnnouncement', $announcementId);
@@ -2256,7 +2257,10 @@ class AnnouncementManager
             [],
             [],
             null,
-            ''
+            '',
+            [],
+            false,
+            $reminders
         );
 
         if ($eventId) {

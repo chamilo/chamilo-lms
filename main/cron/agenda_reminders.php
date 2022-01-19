@@ -25,7 +25,12 @@ $remindersRepo = $em->getRepository('ChamiloCoreBundle:AgendaReminder');
 
 $reminders = $remindersRepo->findBySent(false);
 
-$firstAdmin = current(UserManager::get_all_administrators());
+$senderId = api_get_configuration_value('agenda_reminders_sender_id');
+
+if (empty($senderId)) {
+    $firstAdmin = current(UserManager::get_all_administrators());
+    $senderId = $firstAdmin['user_id'];
+}
 
 foreach ($reminders as $reminder) {
     if ('personal' === $reminder->getType()) {
@@ -158,7 +163,7 @@ foreach ($reminders as $reminder) {
                     $userId,
                     $messageSubject,
                     $messageContent,
-                    $firstAdmin['user_id']
+                    $senderId
                 );
             }
         } else {
@@ -170,7 +175,7 @@ foreach ($reminders as $reminder) {
                         $groupUserId,
                         $messageSubject,
                         $messageContent,
-                        $firstAdmin['user_id']
+                        $senderId
                     );
                 }
             }
@@ -180,7 +185,7 @@ foreach ($reminders as $reminder) {
                     $userId,
                     $messageSubject,
                     $messageContent,
-                    $firstAdmin['user_id']
+                    $senderId
                 );
             }
         }

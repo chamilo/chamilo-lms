@@ -121,6 +121,10 @@ switch ($action) {
         $iconsTools .= Display::page_header(get_lang('CustomizeIcons'), null, 'h4');
         $iconsTools .= '<div class="row">';
         foreach ($toolList as $tool) {
+            if (str_contains($tool['link'], '../plugin/')) {
+                continue;
+            }
+
             $tool['name'] = Security::remove_XSS(stripslashes($tool['name']));
             $toolIconName = 'Tool'.api_underscore_to_camel_case($tool['name']);
             $toolIconName = isset($$toolIconName) ? get_lang($toolIconName) : $tool['name'];

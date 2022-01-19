@@ -1669,3 +1669,16 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 
 //Allows to add increment in minutes to the date range component timepicker, example: 5,10,30 minutes
 //$_configuration['timepicker_increment'] = 5;
+
+// Allow multiple languages to a course
+// as a selection bar for languages used in the course.
+// Add another field "multilingual" to be used separately as a true/false
+// field to represent the fact that the course can have content in multiple
+// languages (without precision).
+// Requires DB change:
+/*
+INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `display_text`, `default_value`, `field_order`, `visible_to_self`, `visible_to_others`, `changeable`, `filter`, `created_at`) VALUES
+(2,     5,      'multiple_language',    'Multiple Language', '',        0,      1,      0,      1,      0,      NOW());
+*/
+//$_configuration['allow_course_multiple_languages'] = false;
+

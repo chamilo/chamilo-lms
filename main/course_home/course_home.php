@@ -103,7 +103,12 @@ $htmlHeadXtra[] = '<script>
                         //eyes
                         $("#linktool_"+item.id).attr("class", item.fclass);
                         //tool
-                        $("#toolimage_" + item.id).attr("src", item.image);
+                        var $toolImage = $("#toolimage_" + item.id);
+
+                        if (!$toolImage.data("forced-src")) {
+                            $toolImage.attr("src", item.image);
+                        }
+
                         //class
                         $("#tooldesc_" + item.id).attr("class", item.tclass);
                         $("#istooldesc_" + item.id).attr("class", item.tclass);
@@ -165,7 +170,12 @@ $htmlHeadXtra[] = '<script>
                      $("#linktool_"+my_tool_id).attr("title", info.label);
 
                     //tool
-                    $("#toolimage_" + my_tool_id).attr("src", new_current_tool_image);
+                    var $toolImage = $("#toolimage_" + my_tool_id);
+
+                    if (!$toolImage.data("forced-src")) {
+                        $toolImage.attr("src", new_current_tool_image);
+                    }
+
                     //clase
                     $("#tooldesc_" + my_tool_id).attr("class", info.tclass);
                     $("#istooldesc_" + my_tool_id).attr("class", info.tclass);

@@ -34,7 +34,7 @@ if ('/main/course_home/course_home.php' === $httpRequest->getScriptName()) {
                 var $toolImg = $toolA.find('img#toolimage_' + iconTool.id);
 
                 if (iconTool.img) {
-                    $toolImg.prop('src', iconTool.img);
+                    $toolImg.prop('src', iconTool.img).data('forced-src', iconTool.img);
                 }
 
                 var $block = $toolA.parents('.course-tool').parent();

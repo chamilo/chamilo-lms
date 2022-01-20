@@ -60,9 +60,13 @@ class Meeting
      *
      * @return MeetingInfoGet meeting
      */
-    public function create()
+    public function create($userId = null)
     {
-        return MeetingInfoGet::fromJson(Client::getInstance()->send('POST', 'users/me/meetings', [], $this));
+        $userId = empty($userId) ? 'me' : $userId;
+
+        return MeetingInfoGet::fromJson(
+            Client::getInstance()->send('POST', "users/$userId/meetings", [], $this)
+        );
     }
 
     /**

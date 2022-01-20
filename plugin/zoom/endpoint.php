@@ -78,6 +78,11 @@ switch ($objectType) {
         }
         $em->flush();
         break;
+    case 'webinar':
+        $meeting->addActivity($activity);
+        $em->persist($meeting);
+        $em->flush();
+        break;
     case 'recording':
         $recordingRepository = $em->getRepository(Recording::class);
 

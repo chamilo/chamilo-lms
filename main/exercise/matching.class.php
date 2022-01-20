@@ -293,6 +293,9 @@ class Matching extends Question
         }
 
         if ($exercise->showExpectedChoice()) {
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            }
             $header .= '<th>'.get_lang('Status').'</th>';
         } else {
             if ($exercise->showExpectedChoiceColumn()) {

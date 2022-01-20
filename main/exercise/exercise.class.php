@@ -4705,12 +4705,17 @@ class Exercise
 
                             if (!empty($s_user_answer)) {
                                 if (DRAGGABLE == $answerType) {
+                                    $sql = "SELECT answer FROM $table_ans WHERE iid = $s_user_answer";
+                                    $rsDragAnswer = Database::query($sql);
+                                    $dragAns = Database::result($rsDragAnswer, 0, 0);
                                     if ($s_user_answer == $i_answer_correct_answer) {
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
                                         if ($this->showExpectedChoice() && !empty($i_answer_id)) {
                                             $user_answer = $answerMatching[$i_answer_id];
+                                        } else {
+                                            $user_answer = $dragAns;
                                         }
                                         $status = Display::label(get_lang('Correct'), 'success');
                                     } else {
@@ -4719,6 +4724,8 @@ class Exercise
                                             /*$data = $options[$real_list[$s_user_answer] - 1];
                                             $user_answer = $data['answer'];*/
                                             $user_answer = $correctAnswers[$s_user_answer] ?? '';
+                                        } else {
+                                            $user_answer = $dragAns;
                                         }
                                     }
                                 } else {
@@ -4866,6 +4873,8 @@ class Exercise
                                         } else {
                                             echo '<td>'.$s_answer_label.'</td>';
                                             echo '<td>'.$user_answer.'</td>';
+                                            echo '<td>'.$counterAnswer.'</td>';
+                                            echo '<td>'.$status.'</td>';
                                             echo '<td>';
                                             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&

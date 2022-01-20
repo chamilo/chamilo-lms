@@ -326,7 +326,7 @@ if (api_get_configuration_value('allow_course_multiple_languages')) {
     $cbMultiLanguage = $form->getElementByName('extra_multiple_language');
     if (isset($cbMultiLanguage)) {
         foreach ($languages['folder'] as $langFolder) {
-            $cbMultiLanguage->addOption($langFolder, $langFolder);
+            $cbMultiLanguage->addOption(get_lang($langFolder), $langFolder);
         }
     }
 }

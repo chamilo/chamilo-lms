@@ -1,0 +1,260 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+/**
+ * New lp reminder.
+ * To add this extra field for lp option number_of_days_for_completion
+ * INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(6,	1,	'number_of_days_for_completion',	'NumberOfDaysForCompletion',	'',	0,	1,	0,	1,	0,	NOW());
+ * @package chamilo.cron
+ *
+ */
+
+define('NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION', 3);
+require_once __DIR__.'/../inc/global.inc.php';
+
+
+// 24-hour format of an hour without leading zeros (in UTC timezone) to execute and search learning paths
+$timeSlots = [
+    7,
+    16,
+    20,
+];
+
+/**
+ * Initialization.
+ */
+if ('cli' != php_sapi_name()) {
+    exit; //do not run from browser
+}
+
+notifyUsersForCheckingLpCompletion();
+
+
+/**
+ * Send the message to the intended user, manage the corresponding template and send through
+ * MessageManager::send_message_simple, using this for the option of human resources managers.
+ *
+ * @param $toUserId
+ * @param $courseId
+ * @param $lpProgress
+ * @param $registrationDate
+ * @param $nbRemind
+ * @return bool|int
+ */
+function sendMessage(
+    $toUserId,
+    $courseId,
+    $lpProgress,
+    $registrationDate,
+    $nbRemind
+) {
+
+    $subjectTemplate = new Template(
+        null,
+        false,
+        false,
+        false,
+        false,
+        false
+    );
+
+    $courseInfo = api_get_course_info_by_id($courseId);
+    $courseName = $courseInfo['title'];
+    $subjectTemplate->assign('nbRemind', $nbRemind);
+    $subjectTemplate->assign('courseName', $courseName);
+
+    $subjectLayout = $subjectTemplate->get_template(
+        'mail/lp_progress_reminder_subject.tpl'
+    );
+
+    $bodyTemplate = new Template(
+        null,
+        false,
+        false,
+        false,
+        false,
+        false
+    );
+
+    $userInfo = api_get_user_info($toUserId);
+    $userFullName = api_get_person_name($userInfo['FirstName'], $userInfo['LastName']);
+
+    $teachersListString = '';
+    $teachers = CourseManager::getTeachersFromCourse($courseId);
+    if (!empty($teachers)) {
+        $teachersList = [];
+        foreach ($teachers as $value) {
+            $teachersList[] = api_get_person_name(
+                $value['firstname'],
+                $value['lastname'],
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
+        }
+        $teachersListString = implode('<br/>', $teachersList);
+    }
+
+    $bodyTemplate->assign('courseName', $courseName);
+    $bodyTemplate->assign('userFullName', $userFullName);
+    $bodyTemplate->assign('username', $userInfo['username']);
+    $bodyTemplate->assign('lpProgress', $lpProgress);
+    $bodyTemplate->assign('registerDate', $registrationDate);
+    $bodyTemplate->assign('trainers', $teachersListString);
+    $bodyTemplate->assign('urlChamilo', api_get_path(WEB_PATH));
+    $bodyTemplate->assign('urlLostPw', api_get_path(WEB_CODE_PATH).'auth/lostPassword.php');
+    $bodyTemplate->assign('logoPortal', '');
+
+    $bodyLayout = $bodyTemplate->get_template(
+        'mail/lp_progress_reminder_body.tpl'
+    );
+    $tittle = $subjectTemplate->fetch($subjectLayout);
+    $content = $bodyTemplate->fetch($bodyLayout);
+
+    return MessageManager::send_message_simple(
+        $toUserId,
+        $tittle,
+        $content,
+        1,
+        true
+    );
+}
+
+/**
+ * Number of reminder checking the frequency from NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION
+ *
+ * @param $registrationDate
+ * @param $nbDaysForLpCompletion
+ * @return false|float|int
+ * @throws Exception
+ */
+function getNbReminder($registrationDate, $nbDaysForLpCompletion):int
+{
+    $date1 = new DateTime($registrationDate);
+    $date1->modify("+$nbDaysForLpCompletion day");
+
+    $date2 = new DateTime('now', new DateTimeZone('UTC'));
+
+    $interval = $date1->diff($date2);
+    $diffDays = (int) $interval->format('%a');
+
+    $nbRemind =  ceil($diffDays / NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION) + 1;
+
+    return $nbRemind;
+}
+
+/**
+ * It checks if user has to be notified checking the current registration date and nbDaysForLpCompletion value
+ *
+ * @param $registrationDate
+ * @param $nbDaysForLpCompletion
+ * @return bool
+ * @throws Exception
+ */
+function isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion):bool
+{
+
+    $date1 = new DateTime($registrationDate);
+    $date1->modify("+$nbDaysForLpCompletion day");
+    $startDate = $date1->format('Y-m-d');
+
+    $date2 = new DateTime('now', new DateTimeZone('UTC'));
+    $now = $date2->format('Y-m-d');
+
+    $reminder = false;
+    if ($startDate < $now) {
+        $interval = $date1->diff($date2);
+        $diffDays = (int) $interval->format('%a');
+        $reminder = (0 === $diffDays % NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION);
+    } else {
+        $reminder = $startDate === $now;
+    }
+
+    return $reminder;
+}
+
+/**
+ * Notify users for checking Learning path completion
+ *
+ * @return null
+ * @throws Exception
+ */
+function notifyUsersForCheckingLpCompletion()
+{
+
+    $lpItems = getLpIdWithDaysForCompletion();
+    if (count($lpItems) == 0) {
+        return null;
+    }
+
+    $tblTrackDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+    $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+    $lpItemsString = implode(',', array_keys($lpItems));
+
+    $sql = "SELECT
+            td.default_date as register_date,
+            lp.id as lp_id,
+            lp.c_id,
+            td.session_id,
+            td.default_value
+        FROM
+             $tblTrackDefault td
+            INNER JOIN $lpTable lp ON (lp.c_id = td.c_id)
+        WHERE
+             td.default_event_type = 'user_subscribed' AND
+             td.default_value_type = 'user_object' AND
+             lp.id IN($lpItemsString)";
+
+
+    $rs = Database::query($sql);
+    if (Database::num_rows($rs) > 0) {
+        while ($row = Database::fetch_assoc($rs)) {
+
+            //@todo To get the users registered in the course and checking the lp progress
+
+            $isLpProgress100 = false;
+            $registrationDate = '';
+            $courseId = '';
+            $toUserId = '';
+            $lpProgress = '';
+            $nbDaysForLpCompletion = $lpItems[$row['lp_id']];
+            $notify = isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion);
+            if ($notify && !$isLpProgress100) {
+                $nbRemind = getNbReminder($registrationDate, $nbDaysForLpCompletion);
+                sendMessage($toUserId, $courseId, $lpProgress, $registrationDate, $nbRemind);
+            }
+
+        }
+    }
+
+}
+
+/**
+ * Returns the id of the LPs that have days for completion the progress through the extra
+ * field 'number_of_days_for_completion'.
+ */
+function getLpIdWithDaysForCompletion(): array
+{
+    $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+    $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+    $sql = "SELECT
+            tblExtraFieldValues.item_id as lp_id,
+            tblExtraFieldValues.value as ndays
+        FROM
+            $extraFieldValuesTable AS tblExtraFieldValues
+        INNER JOIN $extraFieldTable AS tblExtraField ON (
+            tblExtraFieldValues.field_id = tblExtraField.id AND
+            tblExtraField.variable = 'number_of_days_for_completion'
+            )
+        where
+              tblExtraFieldValues.value > 0";
+    $result = Database::query($sql);
+    $return = [];
+    while ($element = Database::fetch_array($result)) {
+        $return[$element['lp_id']] = $element['ndays'];
+    }
+
+    return $return;
+}
+
+exit();

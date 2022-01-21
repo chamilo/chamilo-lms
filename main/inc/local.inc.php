@@ -401,6 +401,45 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                 $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
             }
+	}
+    //If plugin oauth2 is activated with force_redirect and user isn't logged in
+    } elseif ('true' === api_get_plugin_setting('oauth2', 'enable')
+        && 'true' === api_get_plugin_setting('oauth2', 'force_redirect')
+        && !isset($_user['user_id'])
+        && !isset($_POST['login'])
+        && !$logout
+    ) {
+        $skipFolderOauth = [];
+        $skipFolderOauth = explode(',',api_get_plugin_setting('oauth2', 'skip_force_redirect_in'));
+        $load = true;
+        foreach ($skipFolderOauth as $folder) {
+            if (false !== strpos($_SERVER['REQUEST_URI'], $folder)) {
+                $load = false;
+                break;
+            }
+        }
+        if ($load) {
+            $plugin = OAuth2::create();
+            $provider = $plugin->getProvider();
+            // If we don't have an authorization code then get one
+            if (!array_key_exists('code', $_GET)) {
+                // Fetch the authorization URL from the provider; this returns the
+                // urlAuthorize option and generates and applies any necessary parameters
+                // (e.g. state).
+                $authorizationUrl = $provider->getAuthorizationUrl();
+
+                // Get the state generated for you and store it to the session.
+                ChamiloSession::write('oauth2state', $provider->getState());
+
+                // Redirect the user to the authorization URL.
+                header('Location: '.$authorizationUrl);
+                exit;
+            }
+            // Check given state against previously stored one to mitigate CSRF attack
+            if (!array_key_exists('state', $_GET) || ($_GET['state'] !== ChamiloSession::read('oauth2state'))) {
+                ChamiloSession::erase('oauth2state');
+                exit('Invalid state');
+            }
         }
     } elseif (isset($_POST['login']) && isset($_POST['password'])) {
         // $login && $password are given to log in

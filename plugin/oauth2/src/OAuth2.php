@@ -20,6 +20,9 @@ class OAuth2 extends Plugin
 
     const SETTING_ENABLE = 'enable';
 
+    const SETTING_FORCE_REDIRECT = 'force_redirect';
+    const SETTING_SKIP_FORCE_REDIRECT_IN = 'skip_force_redirect_in';
+
     const SETTING_CLIENT_ID = 'client_id';
     const SETTING_CLIENT_SECRET = 'client_secret';
 
@@ -64,7 +67,10 @@ class OAuth2 extends Plugin
             [
                 self::SETTING_ENABLE => 'boolean',
 
-                self::SETTING_CLIENT_ID => 'text',
+		self::SETTING_FORCE_REDIRECT => 'boolean',
+                self::SETTING_SKIP_FORCE_REDIRECT_IN => 'text',
+
+		self::SETTING_CLIENT_ID => 'text',
                 self::SETTING_CLIENT_SECRET => 'text',
 
                 self::SETTING_AUTHORIZE_URL => 'text',

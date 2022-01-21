@@ -13,6 +13,11 @@ $strings['plugin_comment'] = 'Allow authentication with an <em>OAuth2</em> serve
 
 $strings['enable'] = 'Enable';
 
+$strings['force_redirect'] = 'Force redirect';
+$strings['force_redirect_help'] = 'If set to yes, then if the user is not yet logged in it will be redirected automatically to the SSO server';
+$strings['skip_force_redirect_in'] = 'Skip folders for force redirect';
+$strings['skip_force_redirect_in_help'] = "If force redirect is set to yes, then all pages will redirect unlogged user to the SSO server except from the one defined here in a list separated by commas in the form /main/webservices,/plugin/oauth2";
+
 $strings['client_id'] = 'Client ID';
 $strings['client_id_help'] = '<strong>The <em>OAuth2</em> client identifier</strong>
 the <em>OAuth2</em> server administrator assigned to this Chamilo instance.

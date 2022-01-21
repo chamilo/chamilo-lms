@@ -3,7 +3,6 @@
 
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 $cidReset = true;
 
@@ -66,10 +65,10 @@ try {
             'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query(
                 [
                     'a' => 'search_course_by_session_all',
-                    'session_id' => $sessionId
+                    'session_id' => $sessionId,
                 ]
             ),
-            'multiple' => true
+            'multiple' => true,
         ]
     );
     $form->addCheckBox('tool_visible', get_lang('SetVisible'), get_lang('ToolIsNowVisible'));

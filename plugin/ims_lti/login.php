@@ -32,10 +32,10 @@ $params = [
 ?>
 <!DOCTYPE html>
 <body>
-<form action="<?php echo $tool->getLoginUrl() ?>" method="post" name="lti_1p3_login" id="lti_1p3_login"
+<form action="<?php echo $tool->getLoginUrl(); ?>" method="post" name="lti_1p3_login" id="lti_1p3_login"
       enctype="application/x-www-form-urlencoded" class="form-horizontal">
     <?php foreach ($params as $name => $value) { ?>
-        <input type="hidden" name="<?php echo $name ?>" value="<?php echo $value ?>">
+        <input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>">
     <?php } ?>
 </form>
 

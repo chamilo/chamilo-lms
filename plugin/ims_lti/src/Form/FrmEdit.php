@@ -26,9 +26,8 @@ class FrmEdit extends FormValidator
     /**
      * FrmAdd constructor.
      *
-     * @param string          $name
-     * @param array           $attributes
-     * @param ImsLtiTool|null $tool
+     * @param string $name
+     * @param array  $attributes
      */
     public function __construct(
         $name,

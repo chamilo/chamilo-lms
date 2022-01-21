@@ -7,9 +7,8 @@
 class ImsLtiServiceResponseFactory
 {
     /**
-     * @param string                      $type
-     * @param ImsLtiServiceResponseStatus $statusInfo
-     * @param mixed                       $bodyParam
+     * @param string $type
+     * @param mixed  $bodyParam
      *
      * @return ImsLtiServiceResponse|null
      */

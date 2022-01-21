@@ -33,8 +33,6 @@ abstract class ImsLtiServiceRequest
 
     /**
      * ImsLtiServiceRequest constructor.
-     *
-     * @param SimpleXMLElement $xml
      */
     public function __construct(SimpleXMLElement $xml)
     {
@@ -42,6 +40,17 @@ abstract class ImsLtiServiceRequest
 
         $this->xmlHeaderInfo = $xml->imsx_POXHeader->imsx_POXRequestHeaderInfo;
         $this->xmlRequest = $xml->imsx_POXBody->children();
+    }
+
+    /**
+     * @return ImsLtiServiceResponse|null
+     */
+    public function process()
+    {
+        $this->processHeader();
+        $this->processBody();
+
+        return $this->generateResponse();
     }
 
     protected function processHeader()
@@ -67,16 +76,5 @@ abstract class ImsLtiServiceRequest
         );
 
         return $response;
-    }
-
-    /**
-     * @return ImsLtiServiceResponse|null
-     */
-    public function process()
-    {
-        $this->processHeader();
-        $this->processBody();
-
-        return $this->generateResponse();
     }
 }

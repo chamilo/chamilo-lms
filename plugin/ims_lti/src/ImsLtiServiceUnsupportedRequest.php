@@ -9,8 +9,7 @@ class ImsLtiServiceUnsupportedRequest extends ImsLtiServiceRequest
     /**
      * ImsLtiDeleteServiceRequest constructor.
      *
-     * @param SimpleXMLElement $xml
-     * @param string           $name
+     * @param string $name
      */
     public function __construct(SimpleXMLElement $xml, $name)
     {

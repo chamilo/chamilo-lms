@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\Entity\ImsLti;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Platform
+ * Class Platform.
  *
  * @package Chamilo\PluginBundle\Entity\ImsLti
  *
@@ -67,7 +67,6 @@ class Platform
     }
 
     /**
-     *
      * Get kid.
      *
      * @return string

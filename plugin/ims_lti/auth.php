@@ -185,7 +185,6 @@ try {
             'data' => "tool:{$tool->getId()}",
             'deep_link_return_url' => $webPluginPath.'ims_lti/item_return2.php',
         ];
-
     } else {
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiResourceLinkRequest';
 
@@ -293,9 +292,9 @@ $formActionUrl = $tool->isActiveDeepLinking() ? $tool->getRedirectUrl() : $tool-
 ?>
 <!DOCTYPE html>
 <html>
-<form action="<?php echo $formActionUrl ?>" name="ltiLaunchForm" method="post">
+<form action="<?php echo $formActionUrl; ?>" name="ltiLaunchForm" method="post">
     <?php foreach ($params as $name => $value) { ?>
-    <input type="hidden" name="<?php echo $name ?>" value="<?php echo $value ?>">
+    <input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>">
     <?php } ?>
 </form>
 <script>document.ltiLaunchForm.submit();</script>

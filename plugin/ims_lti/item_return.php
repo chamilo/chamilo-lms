@@ -68,7 +68,7 @@ $currentUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/start.php?id='.$ltiTool->ge
 </head>
 <body>
     <script>
-        window.parent.location.href = '<?php echo $currentUrl ?>';
+        window.parent.location.href = '<?php echo $currentUrl; ?>';
     </script>
 </body>
 </html>

@@ -29,9 +29,8 @@ class FrmAdd extends FormValidator
     /**
      * FrmAdd constructor.
      *
-     * @param string          $name
-     * @param array           $attributes
-     * @param ImsLtiTool|null $tool
+     * @param string $name
+     * @param array  $attributes
      */
     public function __construct(
         $name,
@@ -49,7 +48,7 @@ class FrmAdd extends FormValidator
     }
 
     /**
-     * Build the form
+     * Build the form.
      */
     public function build()
     {

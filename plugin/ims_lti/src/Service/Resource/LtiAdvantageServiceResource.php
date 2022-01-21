@@ -55,8 +55,6 @@ abstract class LtiAdvantageServiceResource
     }
 
     /**
-     * @param Request $request
-     *
      * @return LtiAdvantageServiceResource
      */
     public function setRequest(Request $request)
@@ -67,8 +65,6 @@ abstract class LtiAdvantageServiceResource
     }
 
     /**
-     * @param JsonResponse $response
-     *
      * @return LtiAdvantageServiceResource
      */
     public function setResponse(JsonResponse $response)
@@ -89,8 +85,6 @@ abstract class LtiAdvantageServiceResource
     abstract public function process();
 
     /**
-     * @param array $allowedScopes
-     *
      * @throws HttpException
      */
     protected function validateToken(array $allowedScopes)

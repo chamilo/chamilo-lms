@@ -60,8 +60,9 @@ try {
         switch ($contentItemClaim->type) {
             case 'ltiResourceLink':
                 $contentItem = new LtiResourceLink($contentItemClaim);
+                // no break
             default:
-                continue;
+                break;
         }
 
         $contentItem->save($ltiTool, $course);

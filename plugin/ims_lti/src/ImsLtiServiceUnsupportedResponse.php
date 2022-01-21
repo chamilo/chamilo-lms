@@ -9,8 +9,7 @@ class ImsLtiServiceUnsupportedResponse extends ImsLtiServiceResponse
     /**
      * ImsLtiServiceUnsupportedResponse constructor.
      *
-     * @param ImsLtiServiceResponseStatus $statusInfo
-     * @param string                      $type
+     * @param string $type
      */
     public function __construct(ImsLtiServiceResponseStatus $statusInfo, $type)
     {
@@ -19,9 +18,6 @@ class ImsLtiServiceUnsupportedResponse extends ImsLtiServiceResponse
         parent::__construct($statusInfo);
     }
 
-    /**
-     * @param SimpleXMLElement $xmlBody
-     */
     protected function generateBody(SimpleXMLElement $xmlBody)
     {
     }

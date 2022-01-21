@@ -11,8 +11,6 @@ class ImsLtiServiceReplaceRequest extends ImsLtiServiceRequest
 {
     /**
      * ImsLtiReplaceServiceRequest constructor.
-     *
-     * @param SimpleXMLElement $xml
      */
     public function __construct(SimpleXMLElement $xml)
     {

@@ -15,8 +15,6 @@ class ImsLti
     const V_1P3 = 'lti1p3';
 
     /**
-     * @param User         $user
-     * @param Course       $course
      * @param Session|null $session    Optional.
      * @param string       $domain     Optional. Institution domain.
      * @param string       $ltiVersion Optional. Default is lti1p1.
@@ -85,8 +83,6 @@ class ImsLti
     /**
      * @param array        $launchParams All params for launch.
      * @param array        $customParams Custom params where search variables to substitute.
-     * @param User         $user
-     * @param Course       $course
      * @param Session|null $session      Optional.
      * @param string       $domain       Optional. Institution domain.
      * @param string       $ltiVersion   Optional. Default is lti1p1.
@@ -150,7 +146,6 @@ class ImsLti
      * Generate a user sourced ID for LIS.
      *
      * @param string $domain
-     * @param User   $user
      *
      * @return string
      */
@@ -165,7 +160,6 @@ class ImsLti
      * Generate a course sourced ID for LIS.
      *
      * @param string  $domain
-     * @param Course  $course
      * @param Session $session Optional.
      *
      * @return string
@@ -183,8 +177,6 @@ class ImsLti
 
     /**
      * Get instances for LTI Advantage services.
-     *
-     * @param ImsLtiTool $tool
      *
      * @return array
      */
@@ -227,7 +219,7 @@ class ImsLti
     /**
      * Validate the format ISO 8601 for date strings coming from JSON or JavaScript.
      *
-     * @link https://www.myintervals.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/ Pattern source.
+     * @see https://www.myintervals.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/ Pattern source.
      *
      * @param string $strDate
      *

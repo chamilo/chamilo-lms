@@ -69,7 +69,7 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
             case Request::METHOD_POST:
                 $this->validateToken(
                     [
-                        LtiAssignmentGradesService::SCOPE_LINE_ITEM
+                        LtiAssignmentGradesService::SCOPE_LINE_ITEM,
                     ]
                 );
                 $this->processPost();
@@ -89,35 +89,6 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
     }
 
     /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
-     */
-    private function processPost()
-    {
-        $data = json_decode($this->request->getContent(), true);
-
-        if (empty($data) || empty($data['label']) || empty($data['scoreMaximum'])) {
-            throw new BadRequestHttpException('Missing data to create line item.');
-        }
-
-        $lineItem = $this->createLineItem($data);
-
-        $data['id'] = LtiAssignmentGradesService::getLineItemUrl(
-            $this->course->getId(),
-            $lineItem->getId(),
-            $this->tool->getId()
-        );
-
-        $this->response->headers->set('Content-Type', LtiAssignmentGradesService::TYPE_LINE_ITEM);
-        $this->response->setEncodingOptions(JSON_UNESCAPED_SLASHES);
-        $this->response->setStatusCode(Response::HTTP_CREATED);
-        $this->response->setData($data);
-    }
-
-    /**
-     * @param array $data
-     *
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
@@ -172,6 +143,33 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
         return $lineItem;
     }
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
+     */
+    private function processPost()
+    {
+        $data = json_decode($this->request->getContent(), true);
+
+        if (empty($data) || empty($data['label']) || empty($data['scoreMaximum'])) {
+            throw new BadRequestHttpException('Missing data to create line item.');
+        }
+
+        $lineItem = $this->createLineItem($data);
+
+        $data['id'] = LtiAssignmentGradesService::getLineItemUrl(
+            $this->course->getId(),
+            $lineItem->getId(),
+            $this->tool->getId()
+        );
+
+        $this->response->headers->set('Content-Type', LtiAssignmentGradesService::TYPE_LINE_ITEM);
+        $this->response->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+        $this->response->setStatusCode(Response::HTTP_CREATED);
+        $this->response->setData($data);
+    }
+
     private function processGet()
     {
         $resourceLinkId = $this->request->query->get('resource_link_id');
@@ -191,12 +189,11 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
     }
 
     /**
-     * @param ArrayCollection $lineItems
-     * @param int             $resourceLinkId
-     * @param int             $resourceId
-     * @param int             $tag
-     * @param int             $limit
-     * @param int             $page
+     * @param int $resourceLinkId
+     * @param int $resourceId
+     * @param int $tag
+     * @param int $limit
+     * @param int $page
      */
     private function setLinkHeaderToGet(ArrayCollection $lineItems, $resourceLinkId, $resourceId, $tag, $limit, $page)
     {
@@ -214,7 +211,7 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
             $links['prev'] = $page - 1;
         }
 
-        if ($page + 1  <= $lineItems->count() / $limit) {
+        if ($page + 1 <= $lineItems->count() / $limit) {
             $links['next'] = $page + 1;
         }
 
@@ -241,8 +238,6 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
     }
 
     /**
-     * @param ArrayCollection $lineItems
-     *
      * @return array
      */
     private function getGetData(ArrayCollection $lineItems)

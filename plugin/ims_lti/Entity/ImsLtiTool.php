@@ -4,15 +4,14 @@
 namespace Chamilo\PluginBundle\Entity\ImsLti;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use PHPExiftool\Driver\Tag\MXF\ViewportAspectRatio;
 
 /**
- * Class ImsLtiTool
+ * Class ImsLtiTool.
  *
  * @ORM\Table(name="plugin_ims_lti_tool")
  * @ORM\Entity()
@@ -26,7 +25,7 @@ class ImsLtiTool
      */
     public $publicKey;
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -76,7 +75,7 @@ class ImsLtiTool
      */
     private $activeDeepLinking = false;
     /**
-     * @var null|string
+     * @var string|null
      *
      * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
      */
@@ -220,7 +219,7 @@ class ImsLtiTool
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -228,7 +227,7 @@ class ImsLtiTool
     }
 
     /**
-     * @param null|string $description
+     * @param string|null $description
      *
      * @return ImsLtiTool
      */
@@ -260,7 +259,7 @@ class ImsLtiTool
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getCustomParams()
     {
@@ -268,7 +267,7 @@ class ImsLtiTool
     }
 
     /**
-     * @param null|string $customParams
+     * @param string|null $customParams
      *
      * @return ImsLtiTool
      */
@@ -288,9 +287,7 @@ class ImsLtiTool
     }
 
     /**
-     * @param array $params
-     *
-     * @return null|string
+     * @return string|null
      */
     public function encodeCustomParams(array $params)
     {
@@ -326,46 +323,6 @@ class ImsLtiTool
         }
 
         return $params;
-    }
-
-    /**
-     * Map the key from custom param.
-     *
-     * @param string $key
-     *
-     * @return string
-     */
-    private static function filterSpecialChars($key)
-    {
-        $newKey = '';
-        $key = strtolower($key);
-        $split = str_split($key);
-
-        foreach ($split as $char) {
-            if (
-                ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
-            ) {
-                $newKey .= $char;
-
-                continue;
-            }
-
-            $newKey .= '_';
-        }
-
-        return $newKey;
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    private static function filterSpaces($value)
-    {
-        $newValue = preg_replace('/\s+/', ' ', $value);
-
-        return trim($newValue);
     }
 
     /**
@@ -431,8 +388,6 @@ class ImsLtiTool
 
     /**
      * Set course.
-     *
-     * @param Course|null $course
      *
      * @return ImsLtiTool
      */
@@ -538,8 +493,6 @@ class ImsLtiTool
     }
 
     /**
-     * @param ImsLtiTool $parent
-     *
      * @return ImsLtiTool
      */
     public function setParent(ImsLtiTool $parent)
@@ -596,7 +549,7 @@ class ImsLtiTool
     /**
      * Get privacy.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPrivacy()
     {
@@ -628,7 +581,7 @@ class ImsLtiTool
     /**
      * Get loginUrl.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getLoginUrl()
     {
@@ -734,8 +687,6 @@ class ImsLtiTool
     /**
      * Add LineItem to lineItems.
      *
-     * @param LineItem $lineItem
-     *
      * @return $this
      */
     public function addLineItem(LineItem $lineItem)
@@ -788,8 +739,6 @@ class ImsLtiTool
 
     /**
      * Set lineItems.
-     *
-     * @param ArrayCollection $lineItems
      *
      * @return $this
      */
@@ -897,8 +846,6 @@ class ImsLtiTool
     }
 
     /**
-     * @param array $coursesId
-     *
      * @return ArrayCollection
      */
     public function getChildrenInCourses(array $coursesId)
@@ -908,5 +855,45 @@ class ImsLtiTool
                 return in_array($child->getCourse()->getId(), $coursesId);
             }
         );
+    }
+
+    /**
+     * Map the key from custom param.
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    private static function filterSpecialChars($key)
+    {
+        $newKey = '';
+        $key = strtolower($key);
+        $split = str_split($key);
+
+        foreach ($split as $char) {
+            if (
+                ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
+            ) {
+                $newKey .= $char;
+
+                continue;
+            }
+
+            $newKey .= '_';
+        }
+
+        return $newKey;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    private static function filterSpaces($value)
+    {
+        $newValue = preg_replace('/\s+/', ' ', $value);
+
+        return trim($newValue);
     }
 }

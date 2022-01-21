@@ -152,10 +152,10 @@ $imsLtiPlugin->removeUrlParamsFromLaunchParams($tool, $params);
     <title>title</title>
 </head>
 <body>
-<form action="<?php echo $tool->getLaunchUrl() ?>" name="ltiLaunchForm" method="post"
+<form action="<?php echo $tool->getLaunchUrl(); ?>" name="ltiLaunchForm" method="post"
       encType="application/x-www-form-urlencoded">
     <?php foreach ($params as $key => $value) { ?>
-        <input type="hidden" name="<?php echo $key ?>" value="<?php echo htmlspecialchars($value) ?>">
+        <input type="hidden" name="<?php echo $key; ?>" value="<?php echo htmlspecialchars($value); ?>">
     <?php } ?>
 </form>
 <script>document.ltiLaunchForm.submit();</script>

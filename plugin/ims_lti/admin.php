@@ -25,16 +25,15 @@ $criteria = Criteria::create()
 $tools = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')->matching($criteria);
 
 $categoriesGradeBook = [];
-foreach($tools as $tool) {
-    foreach($tool->getChildren() as $childTool) {
+foreach ($tools as $tool) {
+    foreach ($tool->getChildren() as $childTool) {
         $categories = [];
-        if($childTool->getSession() != null) {
+        if ($childTool->getSession() != null) {
             $categories = Category::load(null, null, $childTool->getCourse()->getCode(), null, null, $childTool->getSession()->getId());
-        }
-        else {
+        } else {
             $categories = Category::load(null, null, $childTool->getCourse()->getCode());
         }
-        if ($categories != null){
+        if ($categories != null) {
             array_push($categoriesGradeBook, $categories[0]);
         }
     }

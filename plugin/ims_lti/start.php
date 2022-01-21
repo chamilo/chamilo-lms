@@ -23,7 +23,6 @@ $imsLtiPlugin = ImsLtiPlugin::create();
 
 $pageTitle = Security::remove_XSS($tool->getName());
 
-
 $is1p3 = !empty($tool->publicKey) && !empty($tool->getClientId()) &&
     !empty($tool->getLoginUrl()) && !empty($tool->getRedirectUrl());
 

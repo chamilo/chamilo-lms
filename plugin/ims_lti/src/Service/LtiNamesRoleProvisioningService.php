@@ -21,7 +21,7 @@ class LtiNamesRoleProvisioningService extends LtiAdvantageService
     const USER_STATUS_INACTIVE = 'Inactive';
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getAllowedScopes()
     {
@@ -31,9 +31,10 @@ class LtiNamesRoleProvisioningService extends LtiAdvantageService
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public static function getResource(Request $request, JsonResponse $response) {
+    public static function getResource(Request $request, JsonResponse $response)
+    {
         $parts = explode('/', $request->getPathInfo());
         $parts = array_filter($parts);
 

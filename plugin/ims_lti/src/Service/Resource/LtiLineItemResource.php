@@ -68,13 +68,47 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
                 $this->processDelete();
                 break;
             default:
-                throw new MethodNotAllowedHttpException(
-                    [
-                        Request::METHOD_GET,
-                        Request::METHOD_PUT,
-                        Request::METHOD_DELETE,
-                    ]
-                );
+                throw new MethodNotAllowedHttpException([Request::METHOD_GET, Request::METHOD_PUT, Request::METHOD_DELETE]);
+        }
+    }
+
+    /**
+     * Validate the values for the resource URL.
+     */
+    public function validate()
+    {
+        if (!$this->course) {
+            throw new BadRequestHttpException('Course not found.');
+        }
+
+        if (!$this->tool) {
+            throw new BadRequestHttpException('Tool not found.');
+        }
+
+        if ($this->tool->getCourse()->getId() !== $this->course->getId()) {
+            throw new AccessDeniedHttpException('Tool not found in course.');
+        }
+
+        if ($this->request->server->get('HTTP_ACCEPT') !== LtiAssignmentGradesService::TYPE_LINE_ITEM) {
+            throw new UnsupportedMediaTypeHttpException('Unsupported media type.');
+        }
+
+        $parentTool = $this->tool->getParent();
+
+        if ($parentTool) {
+            $advServices = $parentTool->getAdvantageServices();
+
+            if (LtiAssignmentGradesService::AGS_NONE === $advServices['ags']) {
+                throw new AccessDeniedHttpException('Assigment and grade service is not enabled for this tool.');
+            }
+        }
+
+        if (!$this->lineItem) {
+            throw new NotFoundHttpException('Line item not found');
+        }
+
+        if ($this->lineItem->getTool()->getId() !== $this->tool->getId()) {
+            throw new AccessDeniedHttpException('Line item not found for the tool.');
         }
     }
 
@@ -117,8 +151,6 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
     }
 
     /**
-     * @param array $data
-     *
      * @throws OptimisticLockException
      */
     private function updateLineItem(array $data)
@@ -186,45 +218,5 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
         $em->flush();
 
         $evaluation->delete_with_results();
-    }
-
-    /**
-     * Validate the values for the resource URL.
-     */
-    public function validate()
-    {
-        if (!$this->course) {
-            throw new BadRequestHttpException('Course not found.');
-        }
-
-        if (!$this->tool) {
-            throw new BadRequestHttpException('Tool not found.');
-        }
-
-        if ($this->tool->getCourse()->getId() !== $this->course->getId()) {
-            throw new AccessDeniedHttpException('Tool not found in course.');
-        }
-
-        if ($this->request->server->get('HTTP_ACCEPT') !== LtiAssignmentGradesService::TYPE_LINE_ITEM) {
-            throw new UnsupportedMediaTypeHttpException('Unsupported media type.');
-        }
-
-        $parentTool = $this->tool->getParent();
-
-        if ($parentTool) {
-            $advServices = $parentTool->getAdvantageServices();
-
-            if (LtiAssignmentGradesService::AGS_NONE === $advServices['ags']) {
-                throw new AccessDeniedHttpException('Assigment and grade service is not enabled for this tool.');
-            }
-        }
-
-        if (!$this->lineItem) {
-            throw new NotFoundHttpException('Line item not found');
-        }
-
-        if ($this->lineItem->getTool()->getId() !== $this->tool->getId()) {
-            throw new AccessDeniedHttpException('Line item not found for the tool.');
-        }
     }
 }

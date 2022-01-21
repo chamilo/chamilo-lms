@@ -98,8 +98,6 @@ class LtiTokenRequest
     }
 
     /**
-     * @param array $allowedScopes
-     *
      * @return Token
      */
     public function generateToken(array $allowedScopes)

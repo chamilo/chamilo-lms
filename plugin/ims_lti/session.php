@@ -3,7 +3,6 @@
 
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 $cidReset = true;
 
@@ -25,7 +24,7 @@ try {
     }
 
     /** @var ImsLtiTool $tool */
-    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool',$ltiToolId);
+    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolId);
 
     if (!$tool) {
         throw new Exception($plugin->get_lang('NoTool'));
@@ -46,9 +45,9 @@ try {
         [
             'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?'.http_build_query(
                 [
-                    'a' => 'search_session'
+                    'a' => 'search_session',
                 ]
-            )
+            ),
         ]
     );
     $form->addHidden('tool_id', $tool->getId());

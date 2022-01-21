@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Local login form.
- *
  */
 require_once '../../../main/inc/global.inc.php';
 

@@ -401,8 +401,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                 $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
             }
-	}
-    //If plugin oauth2 is activated with force_redirect and user isn't logged in
+        }
+        //If plugin oauth2 is activated with force_redirect and user isn't logged in
     } elseif ('true' === api_get_plugin_setting('oauth2', 'enable')
         && 'true' === api_get_plugin_setting('oauth2', 'force_redirect')
         && !isset($_user['user_id'])
@@ -410,7 +410,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         && !$logout
     ) {
         $skipFolderOauth = [];
-        $skipFolderOauth = explode(',',api_get_plugin_setting('oauth2', 'skip_force_redirect_in'));
+        $skipFolderOauth = explode(',', api_get_plugin_setting('oauth2', 'skip_force_redirect_in'));
         $load = true;
         foreach ($skipFolderOauth as $folder) {
             if (false !== strpos($_SERVER['REQUEST_URI'], $folder)) {

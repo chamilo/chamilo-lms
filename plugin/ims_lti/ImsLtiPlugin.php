@@ -185,9 +185,11 @@ class ImsLtiPlugin extends Plugin
                     version VARCHAR(255) DEFAULT 'lti1p1' NOT NULL,
                     launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
                     replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
+                    session_id INT DEFAULT NULL,
                     INDEX IDX_C5E47F7C91D79BD3 (c_id),
                     INDEX IDX_C5E47F7C82F80D8B (gradebook_eval_id),
                     INDEX IDX_C5E47F7C727ACA70 (parent_id),
+                    INDEX IDX_C5E47F7C613FECDF (session_id),
                     PRIMARY KEY(id)
                 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
             "CREATE TABLE plugin_ims_lti_platform (
@@ -233,7 +235,9 @@ class ImsLtiPlugin extends Plugin
             "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF08F7B22CC FOREIGN KEY (tool_id)
                 REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE",
             "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation)
-                REFERENCES gradebook_evaluation (id) ON DELETE CASCADE "
+                REFERENCES gradebook_evaluation (id) ON DELETE CASCADE ",
+            "ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C613FECDF FOREIGN KEY (session_id)
+                REFERENCES session (id)",
         ];
 
         foreach ($queries as $query) {
@@ -355,6 +359,36 @@ class ImsLtiPlugin extends Plugin
             $course->getId(),
             null,
             self::generateToolLink($ltiTool)
+        );
+        $cTool
+            ->setTarget(
+                $ltiTool->getDocumentTarget() === 'iframe' ? '_self' : '_blank'
+            )
+            ->setVisibility($isVisible);
+
+        $em = Database::getManager();
+        $em->persist($cTool);
+        $em->flush();
+    }
+
+    /**
+     * Add the course session tool.
+     *
+     * @param Course     $course
+     * @param Session    $session
+     * @param ImsLtiTool $ltiTool
+     * @param bool       $isVisible
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function addCourseSessionTool(Course $course, Session $session, ImsLtiTool $ltiTool, $isVisible = true)
+    {
+        $cTool = $this->createLinkToCourseTool(
+            $ltiTool->getName(),
+            $course->getId(),
+            null,
+            self::generateToolLink($ltiTool),
+            $session->getId()
         );
         $cTool
             ->setTarget(

@@ -24,6 +24,22 @@ $criteria = Criteria::create()
 
 $tools = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')->matching($criteria);
 
+$categoriesGradeBook = [];
+foreach($tools as $tool) {
+    foreach($tool->getChildren() as $childTool) {
+        $categories = [];
+        if($childTool->getSession() != null) {
+            $categories = Category::load(null, null, $childTool->getCourse()->getCode(), null, null, $childTool->getSession()->getId());
+        }
+        else {
+            $categories = Category::load(null, null, $childTool->getCourse()->getCode());
+        }
+        if ($categories != null){
+            array_push($categoriesGradeBook, $categories[0]);
+        }
+    }
+}
+
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = api_get_css(
@@ -32,6 +48,7 @@ $htmlHeadXtra[] = api_get_css(
 
 $template = new Template($plugin->get_title());
 $template->assign('tools', $tools);
+$template->assign('categories', $categoriesGradeBook);
 
 $content = $template->fetch('ims_lti/view/admin.tpl');
 

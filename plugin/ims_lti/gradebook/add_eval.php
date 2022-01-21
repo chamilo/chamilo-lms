@@ -17,6 +17,7 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $select_cat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : null;
 $is_allowedToEdit = $is_courseAdmin;
 
 $em = Database::getManager();
@@ -24,7 +25,7 @@ $em = Database::getManager();
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 
-$categories = Category::load(null, null, $course->getCode());
+$categories = Category::load(null, null, $course->getCode(), null, null, $sessionId);
 
 if (empty($categories)) {
     $message = Display::return_message(

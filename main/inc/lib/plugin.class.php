@@ -1085,6 +1085,7 @@ class Plugin
         $courseId,
         $iconName = null,
         $link = null,
+        $sessionId = 0,
         $category = 'plugin'
     ) {
         if (!$this->addCourseTool) {
@@ -1120,7 +1121,7 @@ class Plugin
                 ->setAddedTool(false)
                 ->setTarget('_self')
                 ->setCategory($category)
-                ->setSessionId(0);
+                ->setSessionId($sessionId);
 
             $em->persist($tool);
             $em->flush();

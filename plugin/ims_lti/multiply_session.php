@@ -43,7 +43,7 @@ try {
 
     $content = '';
 
-    $courses = ImsLtiPlugin::getCoursesForParentTool($tool);
+    $courses = ImsLtiPlugin::getCoursesForParentTool($tool, $session);
 
     $slctCourses = [];
 

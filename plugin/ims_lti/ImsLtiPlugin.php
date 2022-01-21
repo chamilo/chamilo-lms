@@ -584,16 +584,31 @@ class ImsLtiPlugin extends Plugin
         return trim($webPath, " /");
     }
 
-    public static function getCoursesForParentTool(ImsLtiTool $tool)
+    public static function getCoursesForParentTool(ImsLtiTool $tool, Session $session = null)
     {
-        $coursesId = [];
-        if (!$tool->getParent()) {
-            $coursesId = $tool->getChildren()->map(function (ImsLtiTool $tool) {
-                return $tool->getCourse();
+        if ($tool->getParent()) {
+            return [];
+        }
+
+        $children = $tool->getChildren();
+
+        if ($session) {
+            $children = $children->filter(function (ImsLtiTool $tool) use ($session) {
+                if (null === $tool->getSession()) {
+                    return false;
+                }
+
+                if ($tool->getSession()->getId() !== $session->getId()) {
+                    return false;
+                }
+
+                return true;
             });
         }
 
-        return $coursesId;
+        return $children->map(function (ImsLtiTool $tool) {
+            return $tool->getCourse();
+        });
     }
 
     /**

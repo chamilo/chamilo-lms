@@ -78,7 +78,7 @@ function sendMessage(
     );
 
     $userInfo = api_get_user_info($toUserId);
-    $userFullName = api_get_person_name($userInfo['FirstName'], $userInfo['LastName']);
+    $userFullName = api_get_person_name($userInfo['firstname'], $userInfo['lastname']);
 
     $teachersListString = '';
     $teachers = CourseManager::getTeachersFromCourse($courseId);
@@ -187,46 +187,133 @@ function notifyUsersForCheckingLpCompletion()
         return null;
     }
 
-    $tblTrackDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-    $lpTable = Database::get_course_table(TABLE_LP_MAIN);
-    $lpItemsString = implode(',', array_keys($lpItems));
+    $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 
-    $sql = "SELECT
-            td.default_date as register_date,
-            lp.id as lp_id,
-            lp.c_id,
-            td.session_id,
-            td.default_value
-        FROM
-             $tblTrackDefault td
-            INNER JOIN $lpTable lp ON (lp.c_id = td.c_id)
-        WHERE
-             td.default_event_type = 'user_subscribed' AND
-             td.default_value_type = 'user_object' AND
-             lp.id IN($lpItemsString)";
-
-
+    $sql = "SELECT id FROM $tblCourse";
     $rs = Database::query($sql);
     if (Database::num_rows($rs) > 0) {
-        while ($row = Database::fetch_assoc($rs)) {
+        while ($row = Database::fetch_array($rs)) {
+            $courseId = $row['id'];
 
-            //@todo To get the users registered in the course and checking the lp progress
+            // It checks users in main course
+            $courseUsers = getCourseUsers($courseId);
+            if (!empty($courseUsers)) {
+                foreach ($courseUsers as $user) {
+                    $toUserId = $user['user_id'];
+                    $lpProgress = $user['progress'];
+                    $nbDaysForLpCompletion = $lpItems[$user['lp_id']];
+                    $registrationDate = getUserCourseRegistrationAt($courseId, $toUserId);
+                    $notify = isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion);
+                    if ($notify) {
+                        $nbRemind = getNbReminder($registrationDate, $nbDaysForLpCompletion);
+                        sendMessage($toUserId, $courseId, $lpProgress, $registrationDate, $nbRemind);
+                    }
+                }
+            }
 
-            $isLpProgress100 = false;
-            $registrationDate = '';
-            $courseId = '';
-            $toUserId = '';
-            $lpProgress = '';
-            $nbDaysForLpCompletion = $lpItems[$row['lp_id']];
-            $notify = isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion);
-            if ($notify && !$isLpProgress100) {
-                $nbRemind = getNbReminder($registrationDate, $nbDaysForLpCompletion);
-                sendMessage($toUserId, $courseId, $lpProgress, $registrationDate, $nbRemind);
+            // It checks users in session course
+            $sessionCourseUsers = getCourseUsers($courseId, true);
+            if (!empty($sessionCourseUsers)) {
+                foreach ($sessionCourseUsers as $user) {
+                    $toUserId = $user['user_id'];
+                    $lpProgress = $user['progress'];
+                    $nbDaysForLpCompletion = $lpItems[$user['lp_id']];
+                    $registrationDate = getUserCourseRegistrationAt($courseId, $toUserId, $user['session_id']);
+                    $notify = isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion);
+                    if ($notify) {
+                        $nbRemind = getNbReminder($registrationDate, $nbDaysForLpCompletion);
+                        sendMessage($toUserId, $courseId, $lpProgress, $registrationDate, $nbRemind);
+                    }
+                }
             }
 
         }
     }
 
+}
+
+function getCourseUsers($courseId, $checkSession = false)
+{
+    $lpItems = getLpIdWithDaysForCompletion();
+    if (count($lpItems) == 0) {
+        return null;
+    }
+
+    $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+    $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+
+    $lpItemsString = implode(',', array_keys($lpItems));
+
+    if ($checkSession) {
+        $sql = "SELECT
+                scu.user_id,
+                scu.c_id,
+                lp.id as lp_id,
+                lpv.progress,
+                scu.session_id
+            FROM
+                $tblSessionCourseUser scu
+                INNER JOIN $tblLp lp ON lp.c_id = scu.c_id
+                LEFT JOIN $tblLpView lpv ON lpv.lp_id = lp.id AND lpv.user_id = scu.user_id
+            WHERE
+                scu.c_id = $courseId AND
+                (lpv.progress < 100 OR lpv.progress is null) AND
+                lp.id IN($lpItemsString)";
+    } else {
+        $sql = "SELECT
+                cu.user_id,
+                cu.c_id,
+                lp.id as lp_id,
+                lpv.progress
+            FROM
+                $tblCourseUser cu
+                INNER JOIN $tblLp lp ON (lp.c_id = cu.c_id)
+                LEFT JOIN $tblLpView lpv ON (lpv.lp_id = lp.id AND lpv.user_id = cu.user_id)
+            WHERE
+                cu.c_id = $courseId AND
+                (lpv.progress < 100 OR lpv.progress is null) AND
+                lp.id IN($lpItemsString)";
+    }
+
+    $rs = Database::query($sql);
+    $users = [];
+    if (Database::num_rows($rs) > 0) {
+        while ($row = Database::fetch_assoc($rs)) {
+            $users[] = $row;
+        }
+    }
+
+    return $users;
+}
+
+/**
+ * It returns the register date of a user in a course or session from track_e_default
+ *
+ * @param int $courseId
+ * @param int $userId
+ * @param int $sessionId
+ * @return false|mixed|string|null
+ */
+function getUserCourseRegistrationAt($courseId, $userId, $sessionId = 0)
+{
+    $tblTrackDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+    $sql = "SELECT
+            default_date
+        FROM $tblTrackDefault
+        WHERE c_id = $courseId AND
+              default_value_type = 'user_object' AND
+              default_event_type = '".LOG_SUBSCRIBE_USER_TO_COURSE."' AND
+              default_value LIKE CONCAT('%s:2:\\\\\\\\\"id\\\\\\\\\";i:', $userId, ';%') AND
+              session_id = $sessionId";
+    $rs = Database::query($sql);
+    $registerDate = '';
+    if (Database::num_rows($rs) > 0) {
+        $registerDate = Database::result($rs, 0, 0);
+    }
+
+    return $registerDate;
 }
 
 /**

@@ -4,7 +4,7 @@
 
 <p>
     {{'YouAreRegCourseXFromDateX'|get_lang|format(courseName,registerDate)}}<br />
-    {{'ThisMessageIsAboutX'}|get_lang|format(lpProgress)}}
+    {{'ThisMessageIsAboutX'|get_lang|format(lpProgress)}}
 </p>
 
 <p>

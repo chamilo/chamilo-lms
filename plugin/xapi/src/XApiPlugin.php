@@ -326,6 +326,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $courseId,
             'sessions_category.png',
             '../plugin/xapi/start.php',
+            0,
             'authoring'
         );
     }

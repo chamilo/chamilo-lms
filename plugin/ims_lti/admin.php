@@ -33,8 +33,8 @@ foreach ($tools as $tool) {
         } else {
             $categories = Category::load(null, null, $childTool->getCourse()->getCode());
         }
-        if ($categories != null) {
-            array_push($categoriesGradeBook, $categories[0]);
+        if (!empty($categories) && !in_array($categories[0], $categoriesGradeBook)) {
+            $categoriesGradeBook[] = $categories[0];
         }
     }
 }

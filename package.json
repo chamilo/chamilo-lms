@@ -87,7 +87,7 @@
     "mxgraph": "^4.2.2",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
     "path": "^0.12.7",
-    "postcss": "^8.3.9",
+    "postcss": "^8.4.5",
     "postcss-loader": "^6.1.1",
     "postcss-prefix-selector": "^1.13.0",
     "pretty-bytes": "^5.6.0",
@@ -134,7 +134,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.0",
     "@mdi/font": "^6.4.95",
-    "@symfony/webpack-encore": "^1.7.0",
+    "@symfony/webpack-encore": "^1.8.1",
     "@vue/cli-plugin-babel": "4.5.13",
     "@vue/cli-plugin-eslint": "4.5.13",
     "@vue/cli-service": "4.5.13",

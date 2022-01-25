@@ -219,24 +219,7 @@ $form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 // Status
-$status = [];
-if (true === api_get_configuration_value('hide_user_status_options_enabled')) {
-    $userStatusConfig = api_get_configuration_value('user_status_hide_option');
-    $statusLang = api_get_status_langvars();
-    foreach ($userStatusConfig as $rol => $enabled) {
-        if ($enabled) {
-            $constStatus = constant($rol);
-            $status[$constStatus] = $statusLang[$constStatus];
-        }
-    }
-} else {
-    $status[COURSEMANAGER] = get_lang('Teacher');
-    $status[STUDENT] = get_lang('Learner');
-    $status[DRH] = get_lang('Drh');
-    $status[SESSIONADMIN] = get_lang('SessionsAdmin');
-    $status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
-    $status[INVITEE] = get_lang('Invitee');
-}
+$status = UserManager::getUserStatusList();
 
 $form->addElement(
     'select',

@@ -70,6 +70,9 @@ external tool.
 
 # Installation
 
+*Prior to installing/uninstalling this plugin, you will need to make sure the src/Chamilo/PluginBundle/Entity folder is
+temporarily writeable by the web server.*
+
 1. Install the plugin from the Plugins page
 2. Enable the plugin from the IMS/LTI Plugin Settings page
 3. Assign to the Administrator region (in the regions management page)

@@ -2096,6 +2096,19 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => false
 ];*/
 
+// Enables to hide user status when option is true visible only for admins from $_configuration['user_status_option_show_only_for_admin']
+//$_configuration['user_status_option_only_for_admin_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_option_only_for_admin_enabled'] = true
+/*$_configuration['user_status_option_show_only_for_admin'] = [
+        'COURSEMANAGER' => false,
+        'STUDENT' => false,
+        'DRH' => false,
+        'SESSIONADMIN' => true,
+        'STUDENT_BOSS' => false,
+        'INVITEE' => false
+];*/
+
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

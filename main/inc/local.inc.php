@@ -714,6 +714,25 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     exit;
                 }
 
+                // update user expiration date when the login is the first time
+                if (isset($_user['status']) && STUDENT == $_user['status']) {
+                    $userExpirationXDate = api_get_configuration_value('update_student_expiration_x_date');
+                    $userSpentTime = Tracking::get_time_spent_on_the_platform($_user['user_id']);
+                    if (false !== $userExpirationXDate && empty($userSpentTime)) {
+                        $expDays = (int) $userExpirationXDate['days'];
+                        $expMonths = (int) $userExpirationXDate['months'];
+                        $newTime = mktime(
+                                        date('H'),
+                                        date('i'),
+                                        date('s'),
+                                        date('m') + $expMonths,
+                                        date('d') + $expDays,
+                                        date('Y'));
+                        $newExpirationDate = date('Y-m-d H:i:s', $newTime);
+                        UserManager::updateExpirationDate($_user['user_id'], $newExpirationDate);
+                    }
+                }
+
                 if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
                     //first login for a not self registred
                     //e.g. registered by a teacher

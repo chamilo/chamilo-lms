@@ -2084,6 +2084,12 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 */
 //$_configuration['allow_course_multiple_languages'] = false;
 
+// Update user expiration in x days or months when login the first time
+/*$_configuration['update_student_expiration_x_date'] = [
+    'days' => 0,
+    'months' => 0,
+];*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

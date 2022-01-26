@@ -157,7 +157,7 @@ class UserManager
     }
 
     /**
-     * Updates user expiration date
+     * Updates user expiration date.
      *
      * @param int    $userId
      * @param string $expirationDate

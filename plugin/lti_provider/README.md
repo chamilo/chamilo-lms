@@ -11,6 +11,9 @@ In this case, Chamilo is used as provider , and this plugin allows a student ins
 
 # Installation
 
+*Prior to installing/uninstalling this plugin, you will need to make sure the src/Chamilo/PluginBundle/Entity folder is
+temporarily writeable by the web server.*
+
 1. Install the plugin from the Plugins page
 2. Enable the plugin from the Lti Provider Plugin Settings page
 3. Assign to the Administrator region (will appear on the management page)

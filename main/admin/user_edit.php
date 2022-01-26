@@ -240,13 +240,7 @@ $form->addGroup($group, 'password', null, null, false);
 $form->addPasswordRule('password', 'password');
 
 // Status
-$status = [];
-$status[COURSEMANAGER] = get_lang('Teacher');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Drh');
-$status[SESSIONADMIN] = get_lang('SessionsAdmin');
-$status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
-$status[INVITEE] = get_lang('Invitee');
+$status = UserManager::getUserStatusList();
 
 $form->addElement(
     'select',

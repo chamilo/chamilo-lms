@@ -7277,6 +7277,35 @@ SQL;
     }
 
     /**
+     * It returns the list of user status available
+     *
+     * @return array
+     */
+    public static function getUserStatusList()
+    {
+        $status = [];
+        if (true === api_get_configuration_value('hide_user_status_options_enabled')) {
+            $userStatusConfig = api_get_configuration_value('user_status_hide_option');
+            $statusLang = api_get_status_langvars();
+            foreach ($userStatusConfig as $role => $enabled) {
+                if ($enabled) {
+                    $constStatus = constant($role);
+                    $status[$constStatus] = $statusLang[$constStatus];
+                }
+            }
+        } else {
+            $status[COURSEMANAGER] = get_lang('Teacher');
+            $status[STUDENT] = get_lang('Learner');
+            $status[DRH] = get_lang('Drh');
+            $status[SESSIONADMIN] = get_lang('SessionsAdmin');
+            $status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
+            $status[INVITEE] = get_lang('Invitee');
+        }
+
+        return $status;
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()

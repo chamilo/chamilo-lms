@@ -253,18 +253,35 @@ $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1, 
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0, ['id' => 'send_mail_no']);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 // Expiration Date
-$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-$group = [];
-$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-$group[] = $form->createElement(
-    'DateTimePicker',
-    'expiration_date',
-    null,
-    [
-        'onchange' => 'javascript: enable_expiration_date();',
-    ]
-);
-$form->addGroup($group, 'max_member_group', null, null, false);
+$hideNeverExpiresOpt = api_get_configuration_value('user_hide_never_expire_option');
+$lblExpiration = '';
+$defaultExpiration = 0;
+if ($hideNeverExpiresOpt) {
+    $lblExpiration = get_lang('ExpirationDate');
+    $defaultExpiration = 1;
+    $group = [];
+    $group[] = $form->createElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('Enabled'), 1);
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+    );
+} else {
+    $defaultExpiration = 0;
+    $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
+    $group = [];
+    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+        [
+            'onchange' => 'javascript: enable_expiration_date();',
+        ]
+    );
+}
+$form->addGroup($group, 'max_member_group', $lblExpiration, null, false);
+
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
@@ -313,7 +330,7 @@ $defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
-$defaults['radio_expiration_date'] = 0;
+$defaults['radio_expiration_date'] = $defaultExpiration;
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);
 

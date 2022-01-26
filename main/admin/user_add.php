@@ -219,13 +219,7 @@ $form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 // Status
-$status = [];
-$status[COURSEMANAGER] = get_lang('Teacher');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Drh');
-$status[SESSIONADMIN] = get_lang('SessionsAdmin');
-$status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
-$status[INVITEE] = get_lang('Invitee');
+$status = UserManager::getUserStatusList();
 
 $form->addElement(
     'select',

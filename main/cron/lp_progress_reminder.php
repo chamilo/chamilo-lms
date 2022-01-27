@@ -3,10 +3,9 @@
 
 /**
  * New lp reminder.
- * @package chamilo.cron
  *
+ * @package chamilo.cron
  */
-
 define('NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION', 3);
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -19,7 +18,6 @@ if ('cli' != php_sapi_name()) {
 
 notifyUsersForCheckingLpCompletion();
 
-
 /**
  * Send the message to the intended user, manage the corresponding template and send through
  * MessageManager::send_message_simple, using this for the option of human resources managers.
@@ -29,6 +27,7 @@ notifyUsersForCheckingLpCompletion();
  * @param $lpProgress
  * @param $registrationDate
  * @param $nbRemind
+ *
  * @return bool|int
  */
 function sendMessage(
@@ -38,7 +37,6 @@ function sendMessage(
     $registrationDate,
     $nbRemind
 ) {
-
     $subjectTemplate = new Template(
         null,
         false,
@@ -110,14 +108,14 @@ function sendMessage(
 }
 
 /**
- * Number of reminder checking the frequency from NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION
+ * Number of reminder checking the frequency from NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION.
  *
  * @param $registrationDate
  * @param $nbDaysForLpCompletion
+ *
  * @return false|float|int
- * @throws Exception
  */
-function getNbReminder($registrationDate, $nbDaysForLpCompletion):int
+function getNbReminder($registrationDate, $nbDaysForLpCompletion): int
 {
     $date1 = new DateTime($registrationDate);
     $date1->modify("+$nbDaysForLpCompletion day");
@@ -127,22 +125,21 @@ function getNbReminder($registrationDate, $nbDaysForLpCompletion):int
     $interval = $date1->diff($date2);
     $diffDays = (int) $interval->format('%a');
 
-    $nbRemind =  ceil($diffDays / NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION) + 1;
+    $nbRemind = ceil($diffDays / NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION) + 1;
 
     return $nbRemind;
 }
 
 /**
- * It checks if user has to be notified checking the current registration date and nbDaysForLpCompletion value
+ * It checks if user has to be notified checking the current registration date and nbDaysForLpCompletion value.
  *
  * @param $registrationDate
  * @param $nbDaysForLpCompletion
+ *
  * @return bool
- * @throws Exception
  */
-function isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion):bool
+function isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion): bool
 {
-
     $date1 = new DateTime($registrationDate);
     $date1->modify("+$nbDaysForLpCompletion day");
     $startDate = $date1->format('Y-m-d');
@@ -163,14 +160,12 @@ function isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion):bool
 }
 
 /**
- * Notify users for checking Learning path completion
+ * Notify users for checking Learning path completion.
  *
  * @return null
- * @throws Exception
  */
 function notifyUsersForCheckingLpCompletion()
 {
-
     $lpItems = getLpIdWithDaysForCompletion();
     if (count($lpItems) == 0) {
         return null;
@@ -218,9 +213,16 @@ function notifyUsersForCheckingLpCompletion()
 
         }
     }
-
 }
 
+/**
+ * Get the users in a course also checking the session
+ *
+ * @param int $courseId
+ * @param false $checkSession
+ *
+ * @return array|null
+ */
 function getCourseUsers($courseId, $checkSession = false)
 {
     $lpItems = getLpIdWithDaysForCompletion();
@@ -278,11 +280,12 @@ function getCourseUsers($courseId, $checkSession = false)
 }
 
 /**
- * It returns the register date of a user in a course or session from track_e_default
+ * It returns the register date of a user in a course or session from track_e_default.
  *
  * @param int $courseId
  * @param int $userId
  * @param int $sessionId
+ *
  * @return false|mixed|string|null
  */
 function getUserCourseRegistrationAt($courseId, $userId, $sessionId = 0)

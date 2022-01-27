@@ -2084,6 +2084,12 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 */
 //$_configuration['allow_course_multiple_languages'] = false;
 
+// Update user expiration in x days or months when login the first time
+/*$_configuration['update_student_expiration_x_date'] = [
+    'days' => 0,
+    'months' => 0,
+];*/
+
 // Enables to define which user status to show when option is true from $_configuration['user_status_show_option']
 //$_configuration['user_status_show_options_enabled'] = false;
 // The user status is hidden when is false, it requires $_configuration['user_status_show_options_enabled'] = true

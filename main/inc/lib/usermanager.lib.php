@@ -157,6 +157,23 @@ class UserManager
     }
 
     /**
+     * Updates user expiration date.
+     *
+     * @param int    $userId
+     * @param string $expirationDate
+     */
+    public static function updateExpirationDate($userId, $expirationDate)
+    {
+        $repository = self::getRepository();
+        /** @var User $user */
+        $user = $repository->find($userId);
+        $userManager = self::getManager();
+        $expirationDate = api_get_utc_datetime($expirationDate, false, true);
+        $user->setExpirationDate($expirationDate);
+        $userManager->updateUser($user, true);
+    }
+
+    /**
      * Creates a new user for the platform.
      *
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,

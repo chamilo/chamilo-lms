@@ -2090,14 +2090,26 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
     'months' => 0,
 ];*/
 
-// Enables to hide user status when option is true from $_configuration['user_status_hide_opcion']
-//$_configuration['hide_user_status_options_enabled'] = false;
-// The user status is hidden when is false, it requires $_configuration['hide_user_status_options_enabled'] = true
-/*$_configuration['user_status_hide_option'] = [
+// Enables to define which user status to show when option is true from $_configuration['user_status_show_option']
+//$_configuration['user_status_show_options_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_show_options_enabled'] = true
+/*$_configuration['user_status_show_option'] = [
         'COURSEMANAGER' => true,
         'STUDENT' => true,
         'DRH' => false,
         'SESSIONADMIN' => false,
+        'STUDENT_BOSS' => false,
+        'INVITEE' => false
+];*/
+
+// Enables to hide user status when option is true visible only for admins from $_configuration['user_status_option_show_only_for_admin']
+//$_configuration['user_status_option_only_for_admin_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_option_only_for_admin_enabled'] = true
+/*$_configuration['user_status_option_show_only_for_admin'] = [
+        'COURSEMANAGER' => false,
+        'STUDENT' => false,
+        'DRH' => false,
+        'SESSIONADMIN' => true,
         'STUDENT_BOSS' => false,
         'INVITEE' => false
 ];*/

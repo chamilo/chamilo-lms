@@ -2108,7 +2108,6 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => false
 ];*/
 
-
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

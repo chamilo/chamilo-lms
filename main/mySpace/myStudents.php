@@ -1028,8 +1028,10 @@ if (!empty($courseInfo)) {
     $details = false;
 }
 
+$hideLpTestAverageIcon = api_get_configuration_value('student_follow_page_hide_lp_tests_average');
 $tpl->assign('user', $userInfo);
 $tpl->assign('details', $details);
+$tpl->assign('hide_lp_test_average', $hideLpTestAverageIcon);
 $templateName = $tpl->get_template('my_space/user_details.tpl');
 $content = $tpl->fetch($templateName);
 

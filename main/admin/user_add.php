@@ -14,7 +14,7 @@ api_protect_admin_script(true);
 api_protect_limit_for_session_admin();
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
-
+$setExpirationDateByRole = (false !== api_get_configuration_value('user_number_of_days_for_default_expiration_date_per_role'));
 $message = null;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
@@ -41,20 +41,38 @@ function password_switch_radio_button() {
 }
 
 var is_platform_id = "'.$is_platform_admin.'";
-
-function updateStatus(){
-    if (document.getElementById("status_select").value=='.STUDENT.') {
+var setExpirationDateByRole = "'.$setExpirationDateByRole.'";
+function updateStatus() {
+    var status = document.getElementById("status_select").value;
+    if (status == '.STUDENT.') {
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
 
-    } else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
+    } else if (status == '.COURSEMANAGER.') {
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="block";
     } else {
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
     }
+
+    if (setExpirationDateByRole) {
+        setExpirationDatePicker(status);
+    }
 }
+
+function setExpirationDatePicker(status) {
+    $.getJSON("../inc/ajax/user_manager.ajax.php?a=set_expiration_date&status="+status, function(json) {
+        if (json.formatted) {
+            $("#expiration_date_alt_text").text(json.formatted);
+        }
+        if (json.date) {
+            $("#expiration_date").val(json.date);
+            $("#expiration_date_alt").val(json.date);
+        }
+    });
+}
+
 </script>';
 
 if (!empty($_GET['message'])) {
@@ -309,7 +327,14 @@ $defaults['mail']['send_mail'] = 1;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
 $days = api_get_setting('account_valid_duration');
-$defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
+
+$expirationDateDefault = UserManager::getExpirationDateByRole(STUDENT);
+if (!empty($expirationDateDefault)) {
+    $defaults['expiration_date'] = $expirationDateDefault['date'];
+} else {
+    $defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
+}
+
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;

@@ -2096,6 +2096,16 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => false
 ];*/
 
+// Set the default expiration date when a user is created by role and days
+/*$_configuration['user_number_of_days_for_default_expiration_date_per_role'] = [
+        'COURSEMANAGER' => 365,
+        'STUDENT' => 31,
+        'DRH' => 31,
+        'SESSIONADMIN' => 60,
+        'STUDENT_BOSS' => 60,
+        'INVITEE' => 31
+];*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -17,6 +17,11 @@ $isRequestByAjax = $request->isXmlHttpRequest();
 $action = $_GET['a'];
 
 switch ($action) {
+    case 'set_expiration_date':
+        $status = (int) $_REQUEST['status'];
+        $dates = UserManager::getExpirationDateByRole($status);
+        echo json_encode($dates);
+        break;
     case 'get_user_like':
         if (api_is_platform_admin() || api_is_drh()) {
             $query = $_REQUEST['q'];

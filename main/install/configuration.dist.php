@@ -2084,10 +2084,10 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 */
 //$_configuration['allow_course_multiple_languages'] = false;
 
-// Enables to hide user status when option is true from $_configuration['user_status_hide_opcion']
-//$_configuration['hide_user_status_options_enabled'] = false;
-// The user status is hidden when is false, it requires $_configuration['hide_user_status_options_enabled'] = true
-/*$_configuration['user_status_hide_option'] = [
+// Enables to define which user status to show when option is true from $_configuration['user_status_show_option']
+//$_configuration['user_status_show_options_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_show_options_enabled'] = true
+/*$_configuration['user_status_show_option'] = [
         'COURSEMANAGER' => true,
         'STUDENT' => true,
         'DRH' => false,

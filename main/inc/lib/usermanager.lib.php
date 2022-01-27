@@ -7265,8 +7265,8 @@ SQL;
     {
         $userStatusConfig = [];
         // it gets the roles to show in creation/edition user
-        if (true === api_get_configuration_value('hide_user_status_options_enabled')) {
-            $userStatusConfig = api_get_configuration_value('user_status_hide_option');
+        if (true === api_get_configuration_value('user_status_show_options_enabled')) {
+            $userStatusConfig = api_get_configuration_value('user_status_show_option');
         }
         // it gets the roles to show in creation/edition user (only for admins)
         if (true === api_get_configuration_value('user_status_option_only_for_admin_enabled') && api_is_platform_admin()) {

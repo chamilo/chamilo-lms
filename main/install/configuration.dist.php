@@ -2096,6 +2096,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => false
 ];*/
 
+// Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+//$_configuration['lp_prerequisit_on quiz_unblock_if_max_attempt_reached'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

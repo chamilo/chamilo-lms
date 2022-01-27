@@ -7312,6 +7312,35 @@ SQL;
     }
 
     /**
+     * Get the expiration date by user status from configuration value.
+     *
+     * @param $status
+     * @return array
+     * @throws Exception
+     */
+    public static function getExpirationDateByRole($status)
+    {
+        $status = (int) $status;
+        $nbDaysByRole = api_get_configuration_value('user_number_of_days_for_default_expiration_date_per_role');
+        $dates = [];
+        if (!empty($nbDaysByRole)) {
+            $date = new DateTime();
+            foreach ($nbDaysByRole as $strVariable => $nDays) {
+                $constStatus = constant($strVariable);
+                if ($status == $constStatus) {
+                    $duration = "P{$nDays}D";
+                    $date->add(new DateInterval($duration));
+                    $newExpirationDate = $date->format('Y-m-d H:i');
+                    $formatted = api_format_date($newExpirationDate, DATE_TIME_FORMAT_LONG_24H);
+                    $dates = ['formatted' => $formatted, 'date' => $newExpirationDate];
+                }
+            }
+        }
+
+        return $dates;
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()

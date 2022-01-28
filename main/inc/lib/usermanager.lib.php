@@ -7315,8 +7315,10 @@ SQL;
      * Get the expiration date by user status from configuration value.
      *
      * @param $status
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
     public static function getExpirationDateByRole($status)
     {

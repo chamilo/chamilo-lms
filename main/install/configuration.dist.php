@@ -2084,10 +2084,16 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 */
 //$_configuration['allow_course_multiple_languages'] = false;
 
-// Enables to hide user status when option is true from $_configuration['user_status_hide_opcion']
-//$_configuration['hide_user_status_options_enabled'] = false;
-// The user status is hidden when is false, it requires $_configuration['hide_user_status_options_enabled'] = true
-/*$_configuration['user_status_hide_option'] = [
+// Update user expiration in x days or months when login the first time
+/*$_configuration['update_student_expiration_x_date'] = [
+    'days' => 0,
+    'months' => 0,
+];*/
+
+// Enables to define which user status to show when option is true from $_configuration['user_status_show_option']
+//$_configuration['user_status_show_options_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_show_options_enabled'] = true
+/*$_configuration['user_status_show_option'] = [
         'COURSEMANAGER' => true,
         'STUDENT' => true,
         'DRH' => false,
@@ -2095,6 +2101,30 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'STUDENT_BOSS' => false,
         'INVITEE' => false
 ];*/
+
+// Enables to hide user status when option is true visible only for admins from $_configuration['user_status_option_show_only_for_admin']
+//$_configuration['user_status_option_only_for_admin_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_option_only_for_admin_enabled'] = true
+/*$_configuration['user_status_option_show_only_for_admin'] = [
+        'COURSEMANAGER' => false,
+        'STUDENT' => false,
+        'DRH' => false,
+        'SESSIONADMIN' => true,
+        'STUDENT_BOSS' => false,
+        'INVITEE' => false
+
+// Set the default expiration date when a user is created by role and days
+/*$_configuration['user_number_of_days_for_default_expiration_date_per_role'] = [
+        'COURSEMANAGER' => 365,
+        'STUDENT' => 31,
+        'DRH' => 31,
+        'SESSIONADMIN' => 60,
+        'STUDENT_BOSS' => 60,
+        'INVITEE' => 31
+];*/
+
+// Hides the icon of percentage in "Average of tests in Learning Paths" indication on a student tracking
+// $_configuration['student_follow_page_hide_lp_tests_average'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

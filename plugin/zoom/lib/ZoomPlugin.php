@@ -18,6 +18,7 @@ use Chamilo\PluginBundle\Zoom\Recording;
 use Chamilo\PluginBundle\Zoom\RecordingRepository;
 use Chamilo\PluginBundle\Zoom\Registrant;
 use Chamilo\PluginBundle\Zoom\RegistrantRepository;
+use Chamilo\PluginBundle\Zoom\Signature;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -47,8 +48,8 @@ class ZoomPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '0.3',
-            'Sébastien Ducoulombier, Julio Montoya',
+            '0.4',
+            'Sébastien Ducoulombier, Julio Montoya, Angel Fernando Quiroz Campos',
             [
                 'tool_enable' => 'boolean',
                 'apiKey' => 'text',
@@ -155,11 +156,12 @@ class ZoomPlugin extends Plugin
         $items = [];
         foreach ($meetings as $registrant) {
             $meeting = $registrant->getMeeting();
+            $meetingInfoGet = $meeting->getMeetingInfoGet();
             $items[sprintf(
                 $this->get_lang('DateMeetingTitle'),
                 $meeting->formattedStartTime,
-                $meeting->getMeetingInfoGet()->topic
-            )] = sprintf($linkTemplate, $meeting->getId());
+                $meetingInfoGet->topic
+            )] = sprintf($linkTemplate, $meetingInfoGet->id);
         }
 
         return $items;
@@ -189,6 +191,7 @@ class ZoomPlugin extends Plugin
                 'plugin_zoom_meeting_activity',
                 'plugin_zoom_recording',
                 'plugin_zoom_registrant',
+                'plugin_zoom_signature',
             ]
         );
 
@@ -196,12 +199,15 @@ class ZoomPlugin extends Plugin
             return;
         }
 
-        (new SchemaTool(Database::getManager()))->createSchema(
+        $em = Database::getManager();
+
+        (new SchemaTool($em))->createSchema(
             [
-                Database::getManager()->getClassMetadata(Meeting::class),
-                Database::getManager()->getClassMetadata(MeetingActivity::class),
-                Database::getManager()->getClassMetadata(Recording::class),
-                Database::getManager()->getClassMetadata(Registrant::class),
+                $em->getClassMetadata(Meeting::class),
+                $em->getClassMetadata(MeetingActivity::class),
+                $em->getClassMetadata(Recording::class),
+                $em->getClassMetadata(Registrant::class),
+                $em->getClassMetadata(Signature::class),
             ]
         );
 
@@ -232,12 +238,15 @@ class ZoomPlugin extends Plugin
      */
     public function uninstall()
     {
-        (new SchemaTool(Database::getManager()))->dropSchema(
+        $em = Database::getManager();
+
+        (new SchemaTool($em))->dropSchema(
             [
-                Database::getManager()->getClassMetadata(Meeting::class),
-                Database::getManager()->getClassMetadata(MeetingActivity::class),
-                Database::getManager()->getClassMetadata(Recording::class),
-                Database::getManager()->getClassMetadata(Registrant::class),
+                $em->getClassMetadata(Meeting::class),
+                $em->getClassMetadata(MeetingActivity::class),
+                $em->getClassMetadata(Recording::class),
+                $em->getClassMetadata(Registrant::class),
+                $em->getClassMetadata(Signature::class),
             ]
         );
         $this->uninstall_course_fields_in_all_courses();
@@ -332,17 +341,25 @@ class ZoomPlugin extends Plugin
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
         //$form->addLabel(get_lang('Password'), $meeting->getMeetingInfoGet()->password);
         // $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
+        $form->addCheckBox('sign_attendance', $this->get_lang('SignAttendance'), get_lang('Yes'));
+        $form->addTextarea('reason_to_sign', $this->get_lang('ReasonToSign'), ['rows' => 5]);
         $form->addButtonUpdate(get_lang('Update'));
         if ($form->validate()) {
+            $values = $form->exportValues();
+
             if ($meeting->requiresDateAndDuration()) {
-                $meetingInfoGet->start_time = (new DateTime($form->getSubmitValue('startTime')))->format(
+                $meetingInfoGet->start_time = (new DateTime($values['startTime']))->format(
                     DATE_ATOM
                 );
                 $meetingInfoGet->timezone = date_default_timezone_get();
-                $meetingInfoGet->duration = (int) $form->getSubmitValue('duration');
+                $meetingInfoGet->duration = (int) $values['duration'];
             }
-            $meetingInfoGet->topic = $form->getSubmitValue('topic');
-            $meetingInfoGet->agenda = $form->getSubmitValue('agenda');
+            $meetingInfoGet->topic = $values['topic'];
+            $meetingInfoGet->agenda = $values['agenda'];
+            $meeting
+                ->setSignAttendance(isset($values['sign_attendance']))
+                ->setReasonToSignAttendance($values['reason_to_sign']);
+
             try {
                 $meetingInfoGet->update();
                 $meeting->setMeetingInfoGet($meetingInfoGet);
@@ -365,6 +382,8 @@ class ZoomPlugin extends Plugin
             $defaults['startTime'] = $meeting->startDateTime->format('Y-m-d H:i');
             $defaults['duration'] = $meetingInfoGet->duration;
         }
+        $defaults['sign_attendance'] = $meeting->isSignAttendance();
+        $defaults['reason_to_sign'] = $meeting->getReasonToSignAttendance();
         $form->setDefaults($defaults);
 
         return $form;
@@ -829,9 +848,13 @@ class ZoomPlugin extends Plugin
            }
        }*/
 
+        $form->addCheckBox('sign_attendance', $this->get_lang('SignAttendance'), get_lang('Yes'));
+        $form->addTextarea('reason_to_sign', $this->get_lang('ReasonToSign'), ['rows' => 5]);
+
         $form->addButtonCreate(get_lang('Save'));
 
         if ($form->validate()) {
+            $formValues = $form->exportValues();
             $type = $form->getSubmitValue('type');
 
             switch ($type) {
@@ -866,7 +889,9 @@ class ZoomPlugin extends Plugin
                     $form->getSubmitValue('duration'),
                     $form->getSubmitValue('topic'),
                     $form->getSubmitValue('agenda'),
-                    substr(uniqid('z', true), 0, 10)
+                    substr(uniqid('z', true), 0, 10),
+                    isset($formValues['sign_attendance']),
+                    $formValues['reason_to_sign']
                 );
 
                 Display::addFlash(
@@ -1194,6 +1219,111 @@ class ZoomPlugin extends Plugin
     }
 
     /**
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function saveSignature(Registrant $registrant, string $file): bool
+    {
+        if (empty($file)) {
+            return false;
+        }
+
+        $signature = $registrant->getSignature();
+
+        if (null !== $signature) {
+            return false;
+        }
+
+        $signature = new Signature();
+        $signature
+            ->setFile($file)
+            ->setRegisteredAt(api_get_utc_datetime(null, false, true))
+        ;
+
+        $registrant->setSignature($signature);
+
+        $em = Database::getManager();
+        $em->persist($signature);
+        $em->flush();
+
+        return true;
+    }
+
+    public function getSignature(int $userId, Meeting $meeting): ?Signature
+    {
+        $signatureRepo = Database::getManager()
+            ->getRepository(Signature::class)
+        ;
+
+        return $signatureRepo->findOneBy(['user' => $userId, 'meeting' => $meeting]);
+    }
+
+    public function exportSignatures(Meeting $meeting, $formatToExport)
+    {
+        $signatures = array_map(
+            function (Registrant $registrant) use ($formatToExport) {
+                $signature = $registrant->getSignature();
+
+                $item = [
+                    $registrant->getUser()->getLastname(),
+                    $registrant->getUser()->getFirstname(),
+                    $signature
+                        ? api_convert_and_format_date($signature->getRegisteredAt(), DATE_TIME_FORMAT_LONG)
+                        : '-',
+                ];
+
+                if ('pdf' === $formatToExport) {
+                    $item[] = $signature
+                        ? Display::img($signature->getFile(), '', ['style' => 'width: 150px;'], false)
+                        : '-';
+                }
+
+                return $item;
+            },
+            $meeting->getRegistrants()->toArray()
+        );
+
+        $data = array_merge(
+            [
+                [
+                    get_lang('LastName'),
+                    get_lang('FirstName'),
+                    get_lang('DateTime'),
+                    'pdf' === $formatToExport ? get_lang('File') : null,
+                ],
+            ],
+            $signatures
+        );
+
+        if ('pdf' === $formatToExport) {
+            $params = [
+                'filename' => get_lang('Attendance'),
+                'pdf_title' => get_lang('Attendance'),
+                'pdf_description' => $meeting->getIntroduction(),
+                'show_teacher_as_myself' => false,
+            ];
+
+            Export::export_table_pdf($data, $params);
+        }
+
+        if ('xls' === $formatToExport) {
+            $introduction = array_map(
+                function ($line) {
+                    return [
+                        strip_tags(trim($line)),
+                    ];
+                },
+                explode(PHP_EOL, $meeting->getIntroduction())
+            );
+
+            Export::arrayToXls(
+                array_merge($introduction, $data),
+                get_lang('Attendance')
+            );
+        }
+    }
+
+    /**
      * Updates meeting registrants list. Adds the missing registrants and removes the extra.
      *
      * @param Meeting $meeting
@@ -1416,7 +1546,9 @@ class ZoomPlugin extends Plugin
         $duration,
         $topic,
         $agenda,
-        $password
+        $password,
+        bool $signAttendance = false,
+        string $reasonToSignAttendance = ''
     ) {
         $meetingInfoGet = MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_SCHEDULED);
         $meetingInfoGet->duration = $duration;
@@ -1435,6 +1567,8 @@ class ZoomPlugin extends Plugin
                 ->setCourse($course)
                 ->setGroup($group)
                 ->setSession($session)
+                ->setSignAttendance($signAttendance)
+                ->setReasonToSignAttendance($reasonToSignAttendance)
         );
     }
 

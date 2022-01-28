@@ -29,7 +29,14 @@ required to authenticate with JWT. To get them, create a JWT App:
      - Recording transcript files have completed
     
      Then click on Done then on Save and copy your Verification Token to the field below.
-11. click on Continue
+10. click on Continue
+
+## Changelog
+
+**v0.4**
+
+Added signed attendance to allow you to configure an attendance sheet where participants register their signature. The
+signed attendance functionality is similar to that found in the Exercise Signature plugin but does not reuse it.
 
 ## Meetings
 
@@ -62,6 +69,14 @@ Recordings and user registration are only available to paying Zoom customers.
 For a non-paying Zoom user, this plugin still works but participants will join anonymously.
 
 The user that starts the meeting will be identified as the Zoom account that is defined in the plugin. Socreate a generic account that works for all the users that start meetings.
+
+# Upgrade database to v0.4
+
+```sql
+CREATE TABLE plugin_zoom_signature (id INT AUTO_INCREMENT NOT NULL, registrant_id INT DEFAULT NULL, signature LONGTEXT NOT NULL, registered_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D41895893304A716 (registrant_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE plugin_zoom_signature ADD CONSTRAINT FK_D41895893304A716 FOREIGN KEY (registrant_id) REFERENCES plugin_zoom_registrant (id);
+ALTER TABLE plugin_zoom_meeting ADD sign_attendance TINYINT(1) NOT NULL, ADD reason_to_sign_attendance LONGTEXT DEFAULT NULL;
+```
 
 # Contributing
 

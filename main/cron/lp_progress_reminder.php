@@ -4,6 +4,10 @@
 /**
  * New lp reminder.
  *
+ * To add this extra field for lp option number_of_days_for_completion
+ * INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+* (6,	1,	'number_of_days_for_completion',	'NumberOfDaysForCompletion',	'',	0,	1,	0,	1,	0,	NOW());
+ *
  * @package chamilo.cron
  */
 define('NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION', 3);

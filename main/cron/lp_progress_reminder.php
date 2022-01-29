@@ -36,7 +36,8 @@ function sendMessage(
     $lpProgress,
     $registrationDate,
     $nbRemind
-) {
+)
+{
     $subjectTemplate = new Template(
         null,
         false,
@@ -48,8 +49,10 @@ function sendMessage(
 
     $courseInfo = api_get_course_info_by_id($courseId);
     $courseName = $courseInfo['title'];
-    $subjectTemplate->assign('nbRemind', $nbRemind);
-    $subjectTemplate->assign('courseName', $courseName);
+    $userInfo = api_get_user_info($toUserId);
+    $language = $userInfo['language'];
+
+    $subjectTemplate->assign('RemindXLpCourseX', sprintf(getUserLang('RemindXLpCourseX', $language), $nbRemind, $courseName));
 
     $subjectLayout = $subjectTemplate->get_template(
         'mail/lp_progress_reminder_subject.tpl'
@@ -64,47 +67,65 @@ function sendMessage(
         false
     );
 
-    $userInfo = api_get_user_info($toUserId);
-    $userFullName = api_get_person_name($userInfo['firstname'], $userInfo['lastname']);
-
     $teachersListString = '';
     $teachers = CourseManager::getTeachersFromCourse($courseId);
     if (!empty($teachers)) {
         $teachersList = [];
         foreach ($teachers as $value) {
-            $teachersList[] = api_get_person_name(
-                $value['firstname'],
-                $value['lastname'],
-                null,
-                PERSON_NAME_EMAIL_ADDRESS
-            );
+            $teacherName = api_get_person_name($value['firstname'], $value['lastname']);
+            $teachersList[] = strtoupper($teacherName).': '.$value['email'];
         }
         $teachersListString = implode('<br/>', $teachersList);
     }
 
-    $bodyTemplate->assign('courseName', $courseName);
-    $bodyTemplate->assign('userFullName', $userFullName);
-    $bodyTemplate->assign('username', $userInfo['username']);
-    $bodyTemplate->assign('lpProgress', $lpProgress);
-    $bodyTemplate->assign('registerDate', $registrationDate);
-    $bodyTemplate->assign('trainers', $teachersListString);
-    $bodyTemplate->assign('urlChamilo', api_get_path(WEB_PATH));
-    $bodyTemplate->assign('urlLostPw', api_get_path(WEB_CODE_PATH).'auth/lostPassword.php');
-    $bodyTemplate->assign('logoPortal', '');
+    $userFullName = api_get_person_name($userInfo['firstname'], $userInfo['lastname']);
+    $urlChamilo = api_get_path(WEB_CODE_PATH);
+    $urlLostPw = api_get_path(WEB_CODE_PATH).'auth/lostPassword.php';
+    $logoPortal = return_logo();
+    $bodyTemplate->assign('HelloX', sprintf(getUserLang('HelloX', $language), $userFullName));
+    $bodyTemplate->assign('YouAreRegCourseXFromDateX', sprintf(getUserLang('YouAreRegCourseXFromDateX', $language), $courseName, $registrationDate));
+    $bodyTemplate->assign('ThisMessageIsAboutX', sprintf(getUserLang('ThisMessageIsAboutX', $language), $lpProgress));
+    $bodyTemplate->assign('StepsToRemindX', sprintf(getUserLang('StepsToRemindX', $language), $urlChamilo, $userInfo['username'], $urlLostPw));
+    $bodyTemplate->assign('LpRemindFooterX', sprintf(getUserLang('LpRemindFooterX', $language), $logoPortal, $teachersListString));
 
     $bodyLayout = $bodyTemplate->get_template(
         'mail/lp_progress_reminder_body.tpl'
     );
-    $tittle = $subjectTemplate->fetch($subjectLayout);
+
+    $title = $subjectTemplate->fetch($subjectLayout);
     $content = $bodyTemplate->fetch($bodyLayout);
 
     return MessageManager::send_message_simple(
         $toUserId,
-        $tittle,
+        $title,
         $content,
         1,
         true
     );
+}
+
+/**
+ * Returns a translated (localized) string by user language.
+ *
+ * @param $variable
+ * @param $language
+ *
+ * @return mixed
+ */
+function getUserLang($variable, $language)
+{
+    $languageFilesToLoad = api_get_language_files_to_load($language);
+    foreach ($languageFilesToLoad as $languageFile) {
+        include $languageFile;
+    }
+
+    $translate = $variable;
+    if (isset($$variable)) {
+        $langVariable = $$variable;
+        $translate = $langVariable;
+    }
+
+    return $translate;
 }
 
 /**
@@ -200,7 +221,7 @@ function notifyUsersForCheckingLpCompletion()
             if (!empty($sessionCourseUsers)) {
                 foreach ($sessionCourseUsers as $user) {
                     $toUserId = $user['user_id'];
-                    $lpProgress = $user['progress'];
+                    $lpProgress = (int) $user['progress'];
                     $nbDaysForLpCompletion = $lpItems[$user['lp_id']];
                     $registrationDate = getUserCourseRegistrationAt($courseId, $toUserId, $user['session_id']);
                     $notify = isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion);

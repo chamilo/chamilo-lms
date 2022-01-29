@@ -1,1 +1,1 @@
-{{'RemindXLpCourseX'|get_lang|format(nbRemind,courseName)}}
+{{RemindXLpCourseX}}

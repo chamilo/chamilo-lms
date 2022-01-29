@@ -1,16 +1,16 @@
 <p>
-    {{'HelloX'|get_lang|format(userFullName)}}
+    {{HelloX}}
 </p>
 
 <p>
-    {{'YouAreRegCourseXFromDateX'|get_lang|format(courseName,registerDate)}}<br />
-    {{'ThisMessageIsAboutX'|get_lang|format(lpProgress)}}
+    {{YouAreRegCourseXFromDateX}}<br />
+    {{ThisMessageIsAboutX}}
 </p>
 
 <p>
-    {{'StepsToRemindX'|get_lang|format(urlChamilo,username,urlLostPw)}}
+    {{StepsToRemindX}}
 </p>
 
 <p>
-    {{'LpRemindFooterX'|get_lang|format(logoPortal, trainers)}}
+    {{LpRemindFooterX}}
 </p>

@@ -9597,7 +9597,7 @@ class Exercise
                             );
 
                             // Link to embed the quiz
-                            $urlEmbed = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&origin=embeddable&exerciseId='.$row['iid'];
+                            $urlEmbed = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&origin=iframe&exerciseId='.$row['iid'];
                             $actions .= Display::url(
                                 Display::return_icon('new_link.png', get_lang('Embed')),
                                 '',
@@ -11824,7 +11824,7 @@ class Exercise
             $msg = str_replace("#mail#", $user_info['email'], $msg1);
             $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
-            if (!in_array($origin, ['learnpath', 'embeddable'])) {
+            if (!in_array($origin, ['learnpath', 'embeddable', 'iframe'])) {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             }
             $msg1 = str_replace("#url#", $url_email, $msg);

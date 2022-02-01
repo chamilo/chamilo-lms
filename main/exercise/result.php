@@ -17,7 +17,7 @@ $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $origin = api_get_origin();
 
-if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp', 'iframe'])) {
     $show_headers = false;
 }
 

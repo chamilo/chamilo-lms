@@ -3041,6 +3041,7 @@ class Skill extends Model
                             ;
                             $skill->addItem($skillRelItem);
                             $em->persist($skill);
+                            $em->persist($skillRelItem);
                             $em->flush();
                         }
                     }

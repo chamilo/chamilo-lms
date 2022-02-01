@@ -398,17 +398,19 @@ class Skill
      */
     public function hasItem($typeId, $itemId)
     {
-        if ($this->getItems()->count()) {
-            $found = false;
-            /** @var SkillRelItem $item */
-            foreach ($this->getItems() as $item) {
-                if ($item->getItemId() == $itemId && $item->getItemType() == $typeId) {
-                    $found = true;
-                    break;
+        if (null !== $this->getItems()) {
+            if ($this->getItems()->count()) {
+                $found = false;
+                /** @var SkillRelItem $item */
+                foreach ($this->getItems() as $item) {
+                    if ($item->getItemId() == $itemId && $item->getItemType() == $typeId) {
+                        $found = true;
+                        break;
+                    }
                 }
-            }
 
-            return $found;
+                return $found;
+            }
         }
 
         return false;

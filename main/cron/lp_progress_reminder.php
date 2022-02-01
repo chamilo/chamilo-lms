@@ -209,7 +209,7 @@ function notifyUsersForCheckingLpCompletion()
             if (!empty($courseUsers)) {
                 foreach ($courseUsers as $user) {
                     $toUserId = $user['user_id'];
-                    $lpProgress = $user['progress'];
+                    $lpProgress = (int) $user['progress'];
                     $nbDaysForLpCompletion = $lpItems[$user['lp_id']];
                     $registrationDate = getUserCourseRegistrationAt($courseId, $toUserId);
                     $notify = isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion);

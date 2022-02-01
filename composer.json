@@ -63,6 +63,7 @@
         "chamilo/settings-bundle": "dev-master",
         "clue/graph": "^0.9.2",
         "cocur/slugify": "^4.0",
+        "doctrine/cache": "1.12.1",
         "doctrine/doctrine-bundle": "~2.3",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "doctrine/doctrine-migrations-bundle": "~3.1",

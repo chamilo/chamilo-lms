@@ -2072,6 +2072,9 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 // Option to hide the teachers info on courses about info page.
 //$_configuration['course_about_teacher_name_hide'] = false;
 
+// Hides the option "Never expire" for expiration date in add/edit user page
+//$_configuration['user_hide_never_expire_option'] = false;
+
 // Allow multiple languages to a course
 // as a selection bar for languages used in the course.
 // Add another field "multilingual" to be used separately as a true/false

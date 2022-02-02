@@ -2404,8 +2404,8 @@ class learnpathItem
                                                         }
                                                     }
                                                     // Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
-                                                    if (true === api_get_configuration_value('lp_prerequisit_on quiz_unblock_if_max_attempt_reached')) {
-                                                        $isQuizMaxAttemptReached = $this->isQuizMaxAttemptReached($items[$refs_list[$prereqs_string]]->path, $user_id,$courseId, $this->lp_id, $prereqs_string);
+                                                    if (true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached')) {
+                                                        $isQuizMaxAttemptReached = $this->isQuizMaxAttemptReached($items[$refs_list[$prereqs_string]]->path, $user_id, $courseId, $this->lp_id, $prereqs_string);
                                                         if ($isQuizMaxAttemptReached) {
                                                             $returnstatus = true;
                                                         }
@@ -2467,6 +2467,14 @@ class learnpathItem
                                                         } else {
                                                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                             $returnstatus = false;
+                                                        }
+                                                    }
+
+                                                    // Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+                                                    if (true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached')) {
+                                                        $isQuizMaxAttemptReached = $this->isQuizMaxAttemptReached($items[$refs_list[$prereqs_string]]->path, $user_id, $courseId, $this->lp_id, $prereqs_string);
+                                                        if ($isQuizMaxAttemptReached) {
+                                                            $returnstatus = true;
                                                         }
                                                     }
                                                 }
@@ -2668,8 +2676,7 @@ class learnpathItem
             api_get_session_id()
         );
 
-        $isMaxAttemptReached = ($nbAttempts > 0 && $nbAttempts == $countAttempts);
-
+        $isMaxAttemptReached = ($nbAttempts > 0 && $countAttempts >= $nbAttempts);
         return $isMaxAttemptReached;
     }
 

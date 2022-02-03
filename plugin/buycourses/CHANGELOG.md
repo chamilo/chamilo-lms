@@ -1,3 +1,10 @@
+v7.2 - 2021-11-22
+====
+Add Strype payments support.
+
+The file update.php must be executed to update the structure of the tables
+ in the database.
+
 v7.1 - 2021-10-26
 ====
 Fix install issue with DB field type.

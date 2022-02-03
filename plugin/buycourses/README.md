@@ -30,4 +30,4 @@ enable new features.
 Please note that updating Chamilo does *NOT* automatically update the plugins
 structure.
 
-You can find a history of changes in the [CHANGELOG.md file](./CHANGELOG.md)
+You can find a history of changes in the [CHANGELOG.md file](../../plugin/buycourses/CHANGELOG.md)

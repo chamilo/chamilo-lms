@@ -1,3 +1,9 @@
+v7.2 - 2021-11-22
+====
+Add Stripe payments support.
+
+If the plugin has already been installed, the update.php script must be executed (load plugin/buycourses/update.php in your browser) to update the structure of the tables in the database.
+
 v7.1 - 2021-10-26
 ====
 Fix install issue with DB field type.

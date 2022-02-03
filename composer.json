@@ -123,7 +123,8 @@
         "zendframework/zend-config": "~3.0",
         "zendframework/zend-feed": "~2.6|^3.0",
         "zendframework/zend-http": "~2.6|^3.0",
-        "zendframework/zend-soap": "~2.6|^3.0"
+        "zendframework/zend-soap": "~2.6|^3.0",
+        "stripe/stripe-php": "*"
     },
     "require-dev": {
         "behat/behat": "~3.5",

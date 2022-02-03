@@ -285,6 +285,8 @@ $(function() {
         $("#" + inputId).filterByText($("#" + inputId + "-filter"));
     });
 
+    {% set video_context_menu_hidden = 'video_context_menu_hidden'|api_get_configuration_value %}
+
     // Mediaelement
     if ( {{ show_media_element }} == 1) {
         $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
@@ -292,11 +294,22 @@ $(function() {
             //renderers: ['html5', 'flash_video', 'native_flv'],
             features: ['{{ video_features }}'],
             success: function(mediaElement, originalNode, instance) {
+                {% if video_context_menu_hidden %}
+                    $('.mejs__container').on('contextmenu', function(e) {
+                        e.preventDefault();
+                    });
+                {% endif %}
+
                 {{ quiz_markers_rolls_js }}
             },
             vrPath: _p.web + 'web/assets/vrview/build/vrview.js'
         });
     }
+    {% if video_context_menu_hidden %}
+        $('video').on('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    {% endif %}
 
     // Table highlight.
     $("form .data_table input:checkbox").click(function () {

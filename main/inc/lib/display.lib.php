@@ -2921,15 +2921,28 @@ HTML;
             $fixLink = '{type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'fixlinks.js"},';
         }
 
+        $videoContextMenyHiddenNative = '';
+        $videoContextMenyHiddenMejs = '';
+        if (api_get_configuration_value('video_context_menu_hidden')) {
+            $videoContextMenyHiddenNative = '$("video").on("contextmenu", function(e) {
+                e.preventDefault();
+            });';
+            $videoContextMenyHiddenMejs = '$(".mejs__container").on("contextmenu", function(e) {
+                e.preventDefault();
+            });';
+        }
+
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
         $.frameReady(function() {
              $(function () {
+                '.$videoContextMenyHiddenNative.'
+
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
                     pluginPath: "'.$webJsPath.'mediaelement/plugins/",
                     features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
-                        '.ChamiloApi::getQuizMarkersRollsJS().'
+                        '.$videoContextMenyHiddenMejs.PHP_EOL.ChamiloApi::getQuizMarkersRollsJS().'
                     },
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });

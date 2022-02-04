@@ -441,7 +441,6 @@ class Template
             //'bootstrap-daterangepicker/daterangepicker.css',
             'bootstrap-select/dist/css/bootstrap-select.min.css',
             'select2/dist/css/select2.min.css',
-            'flag-icon-css/css/flag-icon.min.css',
             'mediaelement/plugins/vrview/vrview.css',
         ];
 

@@ -35,18 +35,9 @@
                         {% if show_language_flag %}
                             <!-- Language flag -->
                             <div class="avatar-lm">
-                                {% if user.language %}
-                                    {% if user.language.code == 'fr' %}
-                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
-                                    {% elseif user.language.code == 'de' %}
-                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/de.svg" width="36px">
-                                    {% elseif user.language.code == 'es' %}
-                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/es.svg" width="36px">
-                                    {% elseif user.language.code == 'it' %}
-                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/it.svg" width="36px">
-                                    {% elseif user.language.code == 'pl' %}
-                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/pl.svg" width="36px">
-                                    {% endif %}
+                                {% set lang_flags = ['fr', 'de', 'es', 'it', 'pl'] %}
+                                {% if user.language and user.language.code in lang_flags %}
+                                    <span class="fi fi-{{ user.language.code }}"></span>
                                 {% endif %}
                             </div>
                             <!-- End language flag -->
@@ -56,17 +47,17 @@
                                 {% for item in extra_info %}
                                     {% if item.variable == 'langue_cible' %}
                                         {% if item.value == 'French2' %}
-                                            <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
+                                            <span class="fi fi-fr"></span>
                                         {% elseif item.value == 'German2' %}
-                                            <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/de.svg" width="36px">
+                                            <span class="fi fi-de"></span>
                                         {% elseif item.value == 'Spanish' %}
-                                            <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/es.svg" width="36px">
+                                            <span class="fi fi-es"></span>
                                         {% elseif item.value == 'Italian' %}
-                                            <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/it.svg" width="36px">
+                                            <span class="fi fi-it"></span>
                                         {% elseif item.value == 'Polish' %}
-                                            <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/pl.svg" width="36px">
+                                            <span class="fi fi-pl"></span>
                                         {% elseif item.value == 'English' %}
-                                            <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/gb.svg" width="36px">
+                                            <span class="fi fi-gb"></span>
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}

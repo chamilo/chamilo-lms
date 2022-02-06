@@ -1,8 +1,6 @@
 module.exports = {
-  content: [
-    './public/**/*.html',
-    './assets/**/*.{js,jsx,ts,tsx,vue}',
-  ],
+  purge: [],
+  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       fontFamily: {
@@ -60,6 +58,11 @@ module.exports = {
           'light': '#4fadff',
         }
       }
+    },
+  },
+  variants: {
+    extend: {
+      opacity: ['disabled'],
     },
   },
   plugins: [

@@ -97,14 +97,14 @@ class TrackEAttempt
     /**
      * @var Collection|AttemptFile[]
      *
-     * @ORM\OneToMany(targetEntity="AttemptFile", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AttemptFile", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
      */
     protected Collection $attemptFiles;
 
     /**
      * @var Collection|AttemptFeedback[]
      *
-     * @ORM\OneToMany(targetEntity="AttemptFeedback", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AttemptFeedback", mappedBy="attempt", cascade={"persist"}, orphanRemoval=true)
      */
     protected Collection $attemptFeedbacks;
 

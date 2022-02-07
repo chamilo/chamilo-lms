@@ -83,7 +83,7 @@ class SessionRelUser
     protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     #[Assert\NotNull]
@@ -91,7 +91,7 @@ class SessionRelUser
     protected Session $session;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsRelUser", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionsRelUser", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     #[Assert\NotNull]

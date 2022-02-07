@@ -57,7 +57,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * @var Collection<int, CAnnouncementAttachment>
      *
      * @ORM\OneToMany(
-     *     targetEntity="CAnnouncementAttachment",
+     *     targetEntity="Chamilo\CourseBundle\Entity\CAnnouncementAttachment",
      *     mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */

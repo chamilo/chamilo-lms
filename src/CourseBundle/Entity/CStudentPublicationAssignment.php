@@ -49,7 +49,7 @@ class CStudentPublicationAssignment
     protected bool $enableQualification;
 
     /**
-     * @ORM\OneToOne(targetEntity="CStudentPublication", inversedBy="assignment")
+     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", inversedBy="assignment")
      * @ORM\JoinColumn(name="publication_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CStudentPublication $publication;

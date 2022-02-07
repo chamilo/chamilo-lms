@@ -74,7 +74,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CAttendanceCalendar[]
      *
-     * @ORM\OneToMany(targetEntity="CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"})
      */
     protected Collection $calendars;
 
@@ -88,7 +88,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CAttendanceSheetLog[]
      *
-     * @ORM\OneToMany(targetEntity="CAttendanceSheetLog", mappedBy="attendance", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceSheetLog", mappedBy="attendance", cascade={"persist", "remove"})
      */
     protected Collection $logs;
 

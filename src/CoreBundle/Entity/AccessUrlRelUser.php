@@ -38,7 +38,7 @@ class AccessUrlRelUser implements EntityAccessUrlInterface
     protected User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="users", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected AccessUrl $url;

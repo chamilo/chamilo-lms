@@ -47,21 +47,21 @@ class Skill
     protected ?Profile $profile = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="SkillRelUser", mappedBy="skill", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
      *
      * @var SkillRelUser[]|Collection
      */
     protected Collection $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="SkillRelItem", mappedBy="skill", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
      *
      * @var Collection|SkillRelItem[]
      */
     protected Collection $items;
 
     /**
-     * @ORM\OneToMany(targetEntity="SkillRelSkill", mappedBy="skill", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelSkill", mappedBy="skill", cascade={"persist"})
      *
      * @var Collection|SkillRelSkill[]
      */

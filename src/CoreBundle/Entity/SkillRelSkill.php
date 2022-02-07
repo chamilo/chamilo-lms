@@ -29,7 +29,7 @@ class SkillRelSkill
     protected Skill $skill;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Skill")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected ?Skill $parent = null;

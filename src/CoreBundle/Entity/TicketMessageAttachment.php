@@ -29,7 +29,7 @@ class TicketMessageAttachment extends AbstractResource implements ResourceInterf
     protected Ticket $ticket;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TicketMessage")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketMessage")
      * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected TicketMessage $message;

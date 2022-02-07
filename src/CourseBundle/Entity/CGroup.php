@@ -64,7 +64,7 @@ class CGroup extends AbstractResource implements ResourceInterface
     protected bool $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CGroupCategory", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected ?CGroupCategory $category = null;
@@ -133,14 +133,14 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * @var CGroupRelUser[]|Collection<int, CGroupRelUser>
      *
-     * @ORM\OneToMany(targetEntity="CGroupRelUser", mappedBy="group")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="group")
      */
     protected Collection $members;
 
     /**
      * @var CGroupRelTutor[]|Collection<int, CGroupRelTutor>
      *
-     * @ORM\OneToMany(targetEntity="CGroupRelTutor", mappedBy="group")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="group")
      */
     protected Collection $tutors;
 

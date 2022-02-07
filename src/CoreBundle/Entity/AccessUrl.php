@@ -43,40 +43,40 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @var AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse>
      *
-     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
     protected Collection $courses;
 
     /**
      * @var AccessUrlRelSession[]|Collection<int, AccessUrlRelSession>
      *
-     * @ORM\OneToMany(targetEntity="AccessUrlRelSession", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelSession", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
     protected Collection $sessions;
 
     /**
-     * @ORM\OneToMany(targetEntity="AccessUrlRelUser", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      *
      * @var AccessUrlRelUser[]|Collection<int, AccessUrlRelUser>
      */
     protected Collection $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      *
      * @var Collection<int, SettingsCurrent>|SettingsCurrent[]
      */
     protected Collection $settings;
 
     /**
-     * @ORM\OneToMany(targetEntity="SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      *
      * @var Collection<int, SessionCategory>|SessionCategory[]
      */
     protected Collection $sessionCategories;
 
     /**
-     * @ORM\OneToMany(targetEntity="AccessUrlRelCourseCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      *
      * @var AccessUrlRelCourseCategory[]|Collection<int, AccessUrlRelCourseCategory>
      */
@@ -126,7 +126,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * @Gedmo\TreeRoot
-     * @ORM\ManyToOne(targetEntity="AccessUrl")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
      * @ORM\JoinColumn(name="tree_root", onDelete="CASCADE")
      */
     protected ?AccessUrl $root = null;

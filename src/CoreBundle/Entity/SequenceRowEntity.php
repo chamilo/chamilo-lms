@@ -44,7 +44,7 @@ class SequenceRowEntity
     protected string $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceTypeEntity")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceTypeEntity")
      * @ORM\JoinColumn(name="sequence_type_entity_id", referencedColumnName="id")
      */
     protected ?SequenceTypeEntity $type = null;

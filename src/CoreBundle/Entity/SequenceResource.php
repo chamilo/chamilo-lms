@@ -27,7 +27,7 @@ class SequenceResource
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Sequence")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Sequence")
      * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected Sequence $sequence;

@@ -29,31 +29,31 @@ class CSurveyQuestion
     protected int $iid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurveyQuestion", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected ?CSurveyQuestion $parent = null;
 
     /**
      * @var Collection|CSurveyQuestion[]
-     * @ORM\OneToMany(targetEntity="CSurveyQuestion", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="parent")
      */
     protected Collection $children;
 
     /**
      * @var Collection|CSurveyQuestionOption[]
-     * @ORM\OneToMany(targetEntity="CSurveyQuestionOption", mappedBy="question", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", mappedBy="question", cascade={"remove"})
      */
     protected Collection $options;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurveyQuestionOption", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", cascade={"remove"})
      * @ORM\JoinColumn(name="parent_option_id", referencedColumnName="iid")
      */
     protected ?CSurveyQuestionOption $parentOption = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="questions")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="questions")
      * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CSurvey $survey;

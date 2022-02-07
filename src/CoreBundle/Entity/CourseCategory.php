@@ -50,7 +50,7 @@ class CourseCategory
     protected ?int $id = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", mappedBy="parent")
      *
      * @var Collection|CourseCategory[]
      */
@@ -71,7 +71,7 @@ class CourseCategory
     protected string $code;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CourseCategory", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ?CourseCategory $parent = null;
@@ -120,7 +120,7 @@ class CourseCategory
 
     /**
      * @var Course[]|Collection
-     * @ORM\ManyToMany(targetEntity="Course", mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="categories")
      */
     protected Collection $courses;
 

@@ -24,7 +24,7 @@ class AccessUrlRelCourseCategory implements EntityAccessUrlInterface
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="courseCategory", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="courseCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected AccessUrl $url;

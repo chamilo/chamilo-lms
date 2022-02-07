@@ -63,7 +63,7 @@ class SessionRelCourse
     protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
     #[Groups(['session_rel_course:read', 'session_rel_course:write'])]

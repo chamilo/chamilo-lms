@@ -36,7 +36,7 @@ class SettingsCurrent
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="settings", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="settings", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url", referencedColumnName="id")
      */
     protected AccessUrl $url;

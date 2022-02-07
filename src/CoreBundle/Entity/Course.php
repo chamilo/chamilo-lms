@@ -146,7 +146,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
      *
-     * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
     #[Groups(['course:read', 'user:read'])]
     #[ApiSubresource]
@@ -165,14 +165,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var Collection|SessionRelCourse[]
      *
-     * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
     protected Collection $sessions;
 
     /**
      * @var Collection|SessionRelCourseRelUser[]
      *
-     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
     protected Collection $sessionRelCourseRelUsers;
 
@@ -191,42 +191,42 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var Collection|SkillRelCourse[]
      *
-     * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
     protected Collection $skills;
 
     /**
      * @var Collection|SkillRelUser[]
      *
-     * @ORM\OneToMany(targetEntity="SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
     protected Collection $issuedSkills;
 
     /**
      * @var Collection|GradebookCategory[]
      *
-     * @ORM\OneToMany(targetEntity="GradebookCategory", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="course", cascade={"persist", "remove"})
      */
     protected Collection $gradebookCategories;
 
     /**
      * @var Collection|GradebookEvaluation[]
      *
-     * @ORM\OneToMany(targetEntity="GradebookEvaluation", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="course", cascade={"persist", "remove"})
      */
     protected Collection $gradebookEvaluations;
 
     /**
      * @var Collection|GradebookLink[]
      *
-     * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="course", cascade={"persist", "remove"})
      */
     protected Collection $gradebookLinks;
 
     /**
      * @var Collection|TrackEHotspot[]
      *
-     * @ORM\OneToMany(targetEntity="TrackEHotspot", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEHotspot", mappedBy="course", cascade={"persist", "remove"})
      */
     protected Collection $trackEHotspots;
 
@@ -409,7 +409,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     //protected $curriculumCategories;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Room")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
     protected ?Room $room;

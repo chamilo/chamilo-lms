@@ -27,13 +27,13 @@ class CSurveyQuestionOption
     protected int $iid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurveyQuestion", inversedBy="options")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", inversedBy="options")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CSurveyQuestion $question;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="options")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="options")
      * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CSurvey $survey;

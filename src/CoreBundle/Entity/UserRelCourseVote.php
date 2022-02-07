@@ -49,7 +49,7 @@ class UserRelCourseVote
     protected ?Session $session = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="courses")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="courses")
      * @ORM\JoinColumn(name="url_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected AccessUrl $url;

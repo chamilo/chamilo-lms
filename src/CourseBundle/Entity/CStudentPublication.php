@@ -100,7 +100,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
 
     /**
      * @var Collection|CStudentPublication[]
-     * @ORM\OneToMany(targetEntity="CStudentPublication", mappedBy="publicationParent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="publicationParent")
      */
     protected Collection $children;
 

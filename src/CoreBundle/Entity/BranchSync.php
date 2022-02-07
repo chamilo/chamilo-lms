@@ -29,7 +29,7 @@ class BranchSync
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected AccessUrl $url;
@@ -145,13 +145,13 @@ class BranchSync
 
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="BranchSync", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchSync", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected ?BranchSync $parent = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="BranchSync", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\BranchSync", mappedBy="parent")
      * @ORM\OrderBy({"lft"="ASC"})
      *
      * @var BranchSync[]|Collection

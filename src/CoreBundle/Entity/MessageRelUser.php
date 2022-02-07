@@ -52,7 +52,7 @@ class MessageRelUser
     protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Message", inversedBy="receivers", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="receivers", cascade={"persist"})
      * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
      */
     protected Message $message;
@@ -86,7 +86,7 @@ class MessageRelUser
     /**
      * @var Collection|MessageTag[]
      *
-     * @ORM\ManyToMany(targetEntity="MessageTag", inversedBy="messageRelUsers", cascade={"persist", "remove"})
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageTag", inversedBy="messageRelUsers", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="message_rel_user_rel_tags")
      */
     #[Assert\Valid]

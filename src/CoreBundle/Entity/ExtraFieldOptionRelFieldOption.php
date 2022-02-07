@@ -27,13 +27,13 @@ class ExtraFieldOptionRelFieldOption
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ExtraFieldOptions")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions")
      * @ORM\JoinColumn(name="field_option_id", referencedColumnName="id")
      */
     protected ExtraFieldOptions $extraFieldOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ExtraFieldOptions")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions")
      * @ORM\JoinColumn(name="related_field_option_id", referencedColumnName="id")
      */
     protected ExtraFieldOptions $relatedFieldOption;

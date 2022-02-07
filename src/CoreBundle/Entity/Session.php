@@ -87,7 +87,7 @@ class Session implements ResourceWithAccessUrlInterface
      * @var Collection|SessionRelCourse[]
      *
      * @ORM\OrderBy({"position"="ASC"})
-     * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
     #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
     protected Collection $courses;
@@ -95,7 +95,7 @@ class Session implements ResourceWithAccessUrlInterface
     /**
      * @var Collection|SessionRelUser[]
      *
-     * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
     #[Groups(['session:read', 'session_rel_user:read'])]
     protected Collection $users;
@@ -104,7 +104,7 @@ class Session implements ResourceWithAccessUrlInterface
      * @var Collection|SessionRelCourseRelUser[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="SessionRelCourseRelUser",
+     *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser",
      *     mappedBy="session",
      *     cascade={"persist"},
      *     orphanRemoval=true
@@ -115,7 +115,7 @@ class Session implements ResourceWithAccessUrlInterface
 
     /**
      * @var Collection|SkillRelCourse[]
-     * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
      */
     protected Collection $skills;
 
@@ -140,7 +140,7 @@ class Session implements ResourceWithAccessUrlInterface
     /**
      * @var Collection|ResourceLink[]
      *
-     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
      */
     protected Collection $resourceLinks;
 
@@ -258,7 +258,7 @@ class Session implements ResourceWithAccessUrlInterface
     protected int $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SessionCategory", inversedBy="sessions")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", inversedBy="sessions")
      * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
      */
     #[Groups(['session:read', 'session:write', 'session_rel_user:read'])]

@@ -41,7 +41,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     protected int $size;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CAnnouncement", inversedBy="attachments", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncement", inversedBy="attachments", cascade={"persist"})
      * @ORM\JoinColumn(name="announcement_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CAnnouncement $announcement;

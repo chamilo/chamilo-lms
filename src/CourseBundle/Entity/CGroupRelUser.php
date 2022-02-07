@@ -44,7 +44,7 @@ class CGroupRelUser
     protected User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup", inversedBy="members")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
      */
     protected CGroup $group;

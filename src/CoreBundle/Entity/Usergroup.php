@@ -87,25 +87,25 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
     /**
      * @var Collection|UsergroupRelUser[]
-     * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="usergroup", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="usergroup", cascade={"persist"})
      */
     protected Collection $users;
 
     /**
      * @var Collection|UsergroupRelCourse[]
-     * @ORM\OneToMany(targetEntity="UsergroupRelCourse", mappedBy="usergroup", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelCourse", mappedBy="usergroup", cascade={"persist"})
      */
     protected Collection $courses;
 
     /**
      * @var Collection|UsergroupRelSession[]
-     * @ORM\OneToMany(targetEntity="UsergroupRelSession", mappedBy="usergroup", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelSession", mappedBy="usergroup", cascade={"persist"})
      */
     protected Collection $sessions;
 
     /**
      * @var Collection|UsergroupRelQuestion[]
-     * @ORM\OneToMany(targetEntity="UsergroupRelQuestion", mappedBy="usergroup", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelQuestion", mappedBy="usergroup", cascade={"persist"})
      */
     protected Collection $questions;
 

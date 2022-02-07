@@ -49,7 +49,7 @@ class CSurveyInvitation
     protected ?CGroup $group = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="invitations")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="invitations")
      * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
      */
     protected CSurvey $survey;

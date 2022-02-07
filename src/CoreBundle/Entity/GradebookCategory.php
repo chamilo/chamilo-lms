@@ -83,14 +83,14 @@ class GradebookCategory
     /**
      * @var Collection|GradebookEvaluation[]
      *
-     * @ORM\OneToMany(targetEntity="GradebookEvaluation", mappedBy="category", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="category", cascade={"persist", "remove"})
      */
     protected Collection $evaluations;
 
     /**
      * @var Collection|GradebookLink[]
      *
-     * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="category", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="category", cascade={"persist", "remove"})
      */
     protected Collection $links;
 

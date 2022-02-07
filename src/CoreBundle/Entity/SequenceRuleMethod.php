@@ -29,13 +29,13 @@ class SequenceRuleMethod
     protected string $methodOrder;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceRule")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
      */
     protected ?SequenceRule $rule = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceMethod")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceMethod")
      * @ORM\JoinColumn(name="sequence_method_id", referencedColumnName="id")
      */
     protected ?SequenceMethod $method = null;

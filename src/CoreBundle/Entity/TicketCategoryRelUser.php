@@ -24,7 +24,7 @@ class TicketCategoryRelUser
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TicketCategory")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected TicketCategory $category;

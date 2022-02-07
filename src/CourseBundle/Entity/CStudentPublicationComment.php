@@ -33,7 +33,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     protected int $iid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CStudentPublication", inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", inversedBy="comments")
      * @ORM\JoinColumn(name="work_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CStudentPublication $publication;

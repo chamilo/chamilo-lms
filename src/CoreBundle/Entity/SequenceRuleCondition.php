@@ -24,13 +24,13 @@ class SequenceRuleCondition
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceRule")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceRule")
      * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
      */
     protected ?SequenceRule $rule = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceCondition")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceCondition")
      * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
      */
     protected ?SequenceCondition $condition = null;

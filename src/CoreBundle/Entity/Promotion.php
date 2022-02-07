@@ -50,14 +50,14 @@ class Promotion
     /**
      * @var Collection|Session[]
      *
-     * @ORM\OneToMany(targetEntity="Session", mappedBy="promotion", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="promotion", cascade={"persist"})
      */
     protected Collection $sessions;
 
     /**
      * @var Collection|SysAnnouncement[]
      *
-     * @ORM\OneToMany(targetEntity="SysAnnouncement", mappedBy="promotion", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SysAnnouncement", mappedBy="promotion", cascade={"persist"})
      */
     protected Collection $announcements;
 

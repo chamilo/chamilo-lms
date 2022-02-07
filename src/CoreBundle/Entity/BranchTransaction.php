@@ -25,7 +25,7 @@ class BranchTransaction
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="BranchTransactionStatus")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\BranchTransactionStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected Room $branchTransactionStatus;

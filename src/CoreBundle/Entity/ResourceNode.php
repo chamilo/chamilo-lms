@@ -93,7 +93,7 @@ class ResourceNode
     protected string $slug;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ResourceType", inversedBy="resourceNodes")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceType", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
     #[Assert\NotNull]
@@ -102,7 +102,7 @@ class ResourceNode
     /**
      * @var Collection|ResourceLink[]
      *
-     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
     #[ApiSubresource]
     #[Groups(['ctool:read', 'c_tool_intro:read'])]
@@ -111,7 +111,7 @@ class ResourceNode
     /**
      * ResourceFile available file for this node.
      *
-     * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
@@ -127,7 +127,7 @@ class ResourceNode
 
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="ResourceNode", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="children")
      * @ORM\JoinColumns({
      *     @ORM\JoinColumn(name="parent_id", onDelete="CASCADE")
      * })
@@ -138,7 +138,7 @@ class ResourceNode
     /**
      * @var Collection|ResourceNode[]
      *
-     * @ORM\OneToMany(targetEntity="ResourceNode", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="parent")
      * @ORM\OrderBy({"id"="ASC"})
      */
     protected Collection $children;
@@ -169,7 +169,7 @@ class ResourceNode
     /**
      * @var Collection|ResourceComment[]
      *
-     * @ORM\OneToMany(targetEntity="ResourceComment", mappedBy="resourceNode", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceComment", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
     protected Collection $comments;
 

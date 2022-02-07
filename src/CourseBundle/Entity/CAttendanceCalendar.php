@@ -29,7 +29,7 @@ class CAttendanceCalendar
     protected int $iid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CAttendance", inversedBy="calendars", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance", inversedBy="calendars", cascade={"remove"})
      * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CAttendance $attendance;
@@ -47,7 +47,7 @@ class CAttendanceCalendar
     /**
      * @var Collection|CAttendanceSheet[]
      *
-     * @ORM\OneToMany(targetEntity="CAttendanceSheet", mappedBy="attendanceCalendar", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAttendanceSheet", mappedBy="attendanceCalendar", cascade={"persist", "remove"})
      */
     protected Collection $sheets;
 

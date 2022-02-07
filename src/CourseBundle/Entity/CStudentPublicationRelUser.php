@@ -27,7 +27,7 @@ class CStudentPublicationRelUser
     protected int $iid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CStudentPublication")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication")
      * @ORM\JoinColumn(name="work_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CStudentPublication $publication;

@@ -67,7 +67,7 @@ class ResourceComment
      * @Gedmo\TreeParent
      *
      * @ORM\ManyToOne(
-     *     targetEntity="ResourceComment",
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceComment",
      *     inversedBy="children"
      * )
      * @ORM\JoinColumns({
@@ -94,7 +94,7 @@ class ResourceComment
      * @var Collection|ResourceComment[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="ResourceComment",
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceComment",
      *     mappedBy="parent"
      * )
      * @ORM\OrderBy({"id"="ASC"})

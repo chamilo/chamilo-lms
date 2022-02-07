@@ -205,14 +205,14 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     /**
      * @var Collection|CLpItem[]
      *
-     * @ORM\OneToMany(targetEntity="CLpItem", mappedBy="lp", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpItem", mappedBy="lp", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $items;
 
     /**
      * @var Collection|CForum[]
      *
-     * @ORM\OneToMany(targetEntity="CForum", mappedBy="lp", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForum", mappedBy="lp", cascade={"persist", "remove"})
      */
     protected Collection $forums;
 

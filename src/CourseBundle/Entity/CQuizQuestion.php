@@ -102,21 +102,21 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CQuizRelQuestion[]
      *
-     * @ORM\OneToMany(targetEntity="CQuizRelQuestion", mappedBy="question", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="question", cascade={"persist"})
      */
     protected Collection $relQuizzes;
 
     /**
      * @var Collection|CQuizAnswer[]
      *
-     * @ORM\OneToMany(targetEntity="CQuizAnswer", mappedBy="question", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizAnswer", mappedBy="question", cascade={"persist"})
      */
     protected Collection $answers;
 
     /**
      * @var Collection|CQuizQuestionOption[]
      *
-     * @ORM\OneToMany(targetEntity="CQuizQuestionOption", mappedBy="question", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionOption", mappedBy="question", cascade={"persist"})
      */
     protected Collection $options;
 

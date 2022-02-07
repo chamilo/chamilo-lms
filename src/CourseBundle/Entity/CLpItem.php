@@ -135,14 +135,14 @@ class CLpItem
 
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="CLpItem", inversedBy="children", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItem", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_item_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected ?CLpItem $parent = null;
 
     /**
      * @var Collection|CLpItem[]
-     * @ORM\OneToMany(targetEntity="CLpItem", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpItem", mappedBy="parent")
      */
     protected Collection $children;
 

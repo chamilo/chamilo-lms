@@ -75,21 +75,21 @@ class SessionRelCourseRelUser
     protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     #[Groups(['session:read', 'session_rel_course_rel_user:read'])]
     protected User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Session", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
     #[Groups(['session_rel_course_rel_user:read'])]
     protected Session $session;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Course", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     #[Groups(['session:read', 'session_rel_course_rel_user:read', 'session_rel_user:read'])]

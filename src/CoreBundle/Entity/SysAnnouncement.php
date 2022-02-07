@@ -53,7 +53,7 @@ class SysAnnouncement
     protected ?string $lang = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected AccessUrl $url;

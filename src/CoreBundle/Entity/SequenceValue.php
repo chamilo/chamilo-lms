@@ -34,7 +34,7 @@ class SequenceValue
     protected User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceRowEntity")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceRowEntity")
      * @ORM\JoinColumn(name="sequence_row_entity_id", referencedColumnName="id")
      */
     protected ?SequenceRowEntity $entity = null;

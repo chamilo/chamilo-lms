@@ -67,14 +67,14 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CForumPost[]
      *
-     * @ORM\OneToMany(targetEntity="CForumPost", mappedBy="thread", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="thread", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $posts;
 
     /**
      * @var Collection|CForumThreadQualify[]
      *
-     * @ORM\OneToMany(targetEntity="CForumThreadQualify", mappedBy="thread", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThreadQualify", mappedBy="thread", cascade={"persist", "remove"})
      */
     protected Collection $qualifications;
 

@@ -39,19 +39,19 @@ class Ticket
     protected ?string $message = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TicketProject")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketProject")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
     protected TicketProject $project;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TicketCategory")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected TicketCategory $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TicketPriority")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketPriority")
      * @ORM\JoinColumn(name="priority_id", referencedColumnName="id")
      */
     protected TicketPriority $priority;
@@ -84,7 +84,7 @@ class Ticket
     protected ?User $assignedLastUser = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TicketStatus")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     protected TicketStatus $status;

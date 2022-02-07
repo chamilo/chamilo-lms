@@ -101,14 +101,14 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     /**
      * @var Collection|CForumPost[]
-     * @ORM\OneToMany(targetEntity="CForumPost", mappedBy="postParent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="postParent")
      */
     protected Collection $children;
 
     /**
      * @var Collection|CForumAttachment[]
      *
-     * @ORM\OneToMany(targetEntity="CForumAttachment", mappedBy="post", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumAttachment", mappedBy="post", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $attachments;
 

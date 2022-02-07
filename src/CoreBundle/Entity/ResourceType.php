@@ -40,7 +40,7 @@ class ResourceType
     protected Tool $tool;
 
     /**
-     * @ORM\OneToMany(targetEntity="ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
      *
      * @var ResourceNode[]|Collection
      */

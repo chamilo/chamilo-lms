@@ -467,7 +467,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @var Collection<int, GradebookCertificate>|GradebookCertificate[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="GradebookCertificate", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookCertificate", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
     protected Collection $gradeBookCertificates;
@@ -481,7 +481,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="GradebookEvaluation", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      *
      * @var Collection<int, GradebookEvaluation>|GradebookEvaluation[]
@@ -489,14 +489,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $gradeBookEvaluations;
 
     /**
-     * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      *
      * @var Collection<int, GradebookLink>|GradebookLink[]
      */
     protected Collection $gradeBookLinks;
 
     /**
-     * @ORM\OneToMany(targetEntity="GradebookResult", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookResult", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      *
      * @var Collection<int, GradebookResult>|GradebookResult[]
      */
@@ -504,7 +504,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="GradebookResultLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookResultLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      *
      * @var Collection<int, GradebookResultLog>|GradebookResultLog[]
@@ -513,7 +513,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="GradebookScoreLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookScoreLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      *
      * @var Collection<int, GradebookScoreLog>|GradebookScoreLog[]
@@ -522,20 +522,20 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @var Collection<int, UserRelUser>|UserRelUser[]
-     * @ORM\OneToMany(targetEntity="UserRelUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     protected Collection $friends;
 
     /**
      * @var Collection<int, UserRelUser>|UserRelUser[]
-     * @ORM\OneToMany(targetEntity="UserRelUser", mappedBy="friend", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelUser", mappedBy="friend", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
     protected Collection $friendsWithMe;
 
     /**
      * @var Collection<int, GradebookLinkevalLog>|GradebookLinkevalLog[]
      * @ORM\OneToMany(
-     *     targetEntity="GradebookLinkevalLog",
+     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookLinkevalLog",
      *     mappedBy="user",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
@@ -545,7 +545,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @var Collection<int, SequenceValue>|SequenceValue[]
-     * @ORM\OneToMany(targetEntity="SequenceValue", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SequenceValue", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $sequenceValues;
 
@@ -563,20 +563,20 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var Collection<int, TrackEAttempt>|TrackEAttempt[]
      * @ORM\OneToMany(
-     *     targetEntity="TrackEAccessComplete", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackEAccessComplete", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
     protected Collection $trackEAccessCompleteList;
 
     /**
      * @var Collection<int, Templates>|Templates[]
-     * @ORM\OneToMany(targetEntity="Templates", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Templates", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $templates;
 
     /**
      * @var Collection<int, TrackEAttempt>|TrackEAttempt[]
-     * @ORM\OneToMany(targetEntity="TrackEAttempt", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $trackEAttempts;
 
@@ -596,7 +596,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @var Collection<int, UserCourseCategory>|UserCourseCategory[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="UserCourseCategory",
+     *     targetEntity="Chamilo\CoreBundle\Entity\UserCourseCategory",
      *     mappedBy="user",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
@@ -606,19 +606,19 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @var Collection<int, UserRelCourseVote>|UserRelCourseVote[]
-     * @ORM\OneToMany(targetEntity="UserRelCourseVote", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelCourseVote", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $userRelCourseVotes;
 
     /**
      * @var Collection<int, UserRelTag>|UserRelTag[]
-     * @ORM\OneToMany(targetEntity="UserRelTag", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserRelTag", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $userRelTags;
 
     /**
      * @var Collection<int, PersonalAgenda>|PersonalAgenda[]
-     * @ORM\OneToMany(targetEntity="PersonalAgenda", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\PersonalAgenda", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $personalAgendas;
 
@@ -739,7 +739,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @var Collection<int, Message>|Message[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="Message",
+     *     targetEntity="Chamilo\CoreBundle\Entity\Message",
      *     mappedBy="sender",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
@@ -773,7 +773,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @var Collection<int, TrackELogin>|TrackELogin[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="TrackELogin",
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackELogin",
      *     mappedBy = "user",
      *     cascade={"remove"}
      * )
@@ -781,7 +781,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $logins;
 
     /**
-     * @ORM\OneToOne(targetEntity="Admin", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Admin", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected ?Admin $admin = null;
 

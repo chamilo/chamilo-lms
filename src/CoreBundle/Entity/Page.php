@@ -113,7 +113,7 @@ class Page
     protected string $locale;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id", onDelete="CASCADE")
      */
     #[Assert\NotNull]

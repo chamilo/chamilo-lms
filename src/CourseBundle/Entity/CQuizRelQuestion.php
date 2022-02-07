@@ -36,14 +36,14 @@ class CQuizRelQuestion
     protected int $questionOrder;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CQuizQuestion", inversedBy="relQuizzes", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", inversedBy="relQuizzes", cascade={"persist"})
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     #[Assert\NotBlank]
     protected CQuizQuestion $question;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CQuiz", inversedBy="questions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuiz", inversedBy="questions", cascade={"persist"})
      * @ORM\JoinColumn(name="quiz_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     #[Assert\NotBlank]

@@ -118,7 +118,7 @@ class Message
     protected ?int $id = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="sentMessages")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
      */
     #[Assert\NotBlank]
@@ -128,7 +128,7 @@ class Message
     /**
      * @var Collection|MessageRelUser[]
      *
-     * @ORM\OneToMany(targetEntity="MessageRelUser", mappedBy="message", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageRelUser", mappedBy="message", cascade={"persist", "remove"})
      */
     #[Assert\Valid]
     #[Groups(['message:read', 'message:write'])]
@@ -204,12 +204,12 @@ class Message
 
     /**
      * @var Collection|Message[]
-     * @ORM\OneToMany(targetEntity="Message", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="parent")
      */
     protected Collection $children;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Message", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     #[Groups(['message:write'])]
@@ -229,7 +229,7 @@ class Message
     /**
      * @var Collection|MessageAttachment[]
      *
-     * @ORM\OneToMany(targetEntity="MessageAttachment", mappedBy="message", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageAttachment", mappedBy="message", cascade={"remove", "persist"})
      */
     #[Groups(['message:read'])]
     protected Collection $attachments;

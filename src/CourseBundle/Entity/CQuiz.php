@@ -192,14 +192,14 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     /**
      * @var Collection|CQuizRelQuestion[]
      *
-     * @ORM\OneToMany(targetEntity="CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
      */
     protected Collection $questions;
 
     /**
      * @var Collection|CQuizRelQuestionCategory[]
      *
-     * @ORM\OneToMany(targetEntity="CQuizRelQuestionCategory", mappedBy="quiz", cascade={"persist"}))
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory", mappedBy="quiz", cascade={"persist"}))
      */
     protected Collection $questionsCategories;
 

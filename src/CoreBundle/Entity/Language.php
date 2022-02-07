@@ -53,13 +53,13 @@ class Language
     protected bool $available;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Language", inversedBy="subLanguages")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Language", inversedBy="subLanguages")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
     protected ?Language $parent = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Language", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Language", mappedBy="parent")
      */
     protected Collection $subLanguages;
 

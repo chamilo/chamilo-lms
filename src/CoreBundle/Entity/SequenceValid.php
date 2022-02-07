@@ -22,13 +22,13 @@ class SequenceValid
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceVariable")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceVariable")
      * @ORM\JoinColumn(name="sequence_variable_id", referencedColumnName="id")
      */
     protected ?SequenceVariable $variable = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceCondition")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SequenceCondition")
      * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
      */
     protected ?SequenceCondition $condition = null;

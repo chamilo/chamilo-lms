@@ -45,7 +45,7 @@ class TicketCategory
     protected bool $courseRequired;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TicketProject")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TicketProject")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
     protected TicketProject $project;

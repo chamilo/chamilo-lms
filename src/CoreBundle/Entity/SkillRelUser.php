@@ -63,7 +63,7 @@ class SkillRelUser
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="SkillRelUserComment", mappedBy="skillRelUser",
+     *     targetEntity="Chamilo\CoreBundle\Entity\SkillRelUserComment", mappedBy="skillRelUser",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
      * )

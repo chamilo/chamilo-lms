@@ -40,6 +40,7 @@ class BuyCoursesPlugin extends Plugin
     const TABLE_COUPON_SALE = 'plugin_buycourses_coupon_rel_sale';
     const TABLE_COUPON_SERVICE_SALE = 'plugin_buycourses_coupon_rel_service_sale';
     const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
+    const TABLE_TPV_CECABANK = 'plugin_buycourses_cecabank_account';
     const PRODUCT_TYPE_COURSE = 1;
     const PRODUCT_TYPE_SESSION = 2;
     const PRODUCT_TYPE_SERVICE = 3;
@@ -48,6 +49,7 @@ class BuyCoursesPlugin extends Plugin
     const PAYMENT_TYPE_CULQI = 3;
     const PAYMENT_TYPE_TPV_REDSYS = 4;
     const PAYMENT_TYPE_STRIPE = 5;
+    const PAYMENT_TYPE_TPV_CECABANK = 6;
     const PAYOUT_STATUS_CANCELED = 2;
     const PAYOUT_STATUS_PENDING = 0;
     const PAYOUT_STATUS_COMPLETED = 1;
@@ -107,6 +109,7 @@ class BuyCoursesPlugin extends Plugin
                 'use_currency_symbol' => 'boolean',
                 'tpv_redsys_enable' => 'boolean',
                 'stripe_enable' => 'boolean',
+                'cecabank_enable' => 'boolean',
             ]
         );
     }
@@ -130,7 +133,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function isEnabled($checkEnabled = false)
     {
-        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable');
+        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
     }
 
     /**
@@ -159,6 +162,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_COUPON_SALE,
             self::TABLE_COUPON_SERVICE_SALE,
             self::TABLE_STRIPE,
+            self::TABLE_TPV_CECABANK,
         ];
         $em = Database::getManager();
         $cn = $em->getConnection();
@@ -436,6 +440,21 @@ class BuyCoursesPlugin extends Plugin
                 'endpoint_secret' => '',
             ]);
         }
+
+        $table = self::TABLE_TPV_CECABANK;
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            crypto_key varchar(255) NOT NULL,
+            merchant_id varchar(255) NOT NULL,
+            acquirer_bin varchar(255) NOT NULL,
+            terminal_id varchar(255) NOT NULL,
+            cypher varchar(255) NOT NULL,
+            exponent varchar(255) NOT NULL,
+            supported_payment varchar(255) NOT NULL,
+            url varchar(255) NOT NULL,
+            PRIMARY KEY (id)
+        )";
+        Database::query($sql);
 
         Display::addFlash(
             Display::return_message(
@@ -1177,6 +1196,7 @@ class BuyCoursesPlugin extends Plugin
                     self::PAYMENT_TYPE_CULQI,
                     self::PAYMENT_TYPE_TPV_REDSYS,
                     self::PAYMENT_TYPE_STRIPE,
+                    self::PAYMENT_TYPE_TPV_CECABANK,
                 ]
             )
         ) {
@@ -1512,6 +1532,7 @@ class BuyCoursesPlugin extends Plugin
             self::PAYMENT_TYPE_CULQI => 'Culqi',
             self::PAYMENT_TYPE_TPV_REDSYS => $this->get_lang('TpvPayment'),
             self::PAYMENT_TYPE_STRIPE => 'Stripe',
+            self::PAYMENT_TYPE_TPV_CECABANK => $this->get_lang('TpvCecabank'),
         ];
     }
 
@@ -3111,6 +3132,44 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Save Cecabank configuration params.
+     *
+     * @return array
+     */
+    public function saveCecabankParameters($params)
+    {
+        return Database::update(
+            Database::get_main_table(self::TABLE_TPV_CECABANK),
+            [
+                'crypto_key' => $params['crypto_key'],
+                'merchant_id' => $params['merchart_id'],
+                'acquirer_bin' => $params['acquirer_bin'],
+                'terminal_id' => $params['terminal_id'],
+                'cypher' => $params['cypher'],
+                'exponent' => $params['exponent'],
+                'supported_payment' => $params['supported_payment'],
+                'url' => $params['url'],
+            ],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
+     * Gets the stored Cecabank params.
+     *
+     * @return array
+     */
+    public function getCecabankParams()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_TPV_CECABANK),
+            ['id = ?' => 1],
+            'first'
+        );
+    }
+
+    /**
      * Save Global Parameters.
      *
      * @param array $params
@@ -3538,6 +3597,33 @@ class BuyCoursesPlugin extends Plugin
         );
 
         return $couponCode['code'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getCecabankSignature($saleReference, $price)
+    {
+        $urlOk = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_success.php';
+        $urlKo = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_cancel.php';
+
+        $cecabankParams = $this->getCecabankParams();
+        $signature = $cecabankParams['crypto_key']
+        .$cecabankParams['merchant_id']
+        .$cecabankParams['acquirer_bin']
+        .$cecabankParams['terminal_id']
+        .$saleReference
+        .$price * 100
+        .'978'
+        .$cecabankParams['exponent']
+        .$cecabankParams['cypher']
+        .$urlOk
+        .$urlKo;
+
+        $sha256 = hash('sha256', $signature);
+        $signature = strtolower($sha256);
+
+        return $signature;
     }
 
     /**

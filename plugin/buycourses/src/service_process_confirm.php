@@ -300,4 +300,86 @@ switch ($serviceSale['payment_type']) {
         $template->assign('content', $content);
         $template->display_one_col_template();
         break;
+
+    case BuyCoursesPlugin::PAYMENT_TYPE_TPV_CECABANK:
+        $cecabankParams = $plugin->getcecabankParams();
+        $currency = $plugin->getCurrency($sale['currency_id']);
+
+        $form = new FormValidator(
+            'success',
+            'POST',
+            api_get_self(),
+            null,
+            null,
+            FormValidator::LAYOUT_INLINE
+        );
+
+        if ($form->validate()) {
+            $formValues = $form->getSubmitValues();
+
+            if (isset($formValues['cancel'])) {
+                $plugin->cancelServiceSale($sale['id']);
+
+                unset($_SESSION['bc_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
+
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
+                exit;
+            }
+
+            $urlTpv = $cecabankParams['merchart_id'];
+            $currency = $plugin->getCurrency($sale['currency_id']);
+            $signature = $plugin->getCecabankSignature($sale['reference'], $sale['price']);
+
+            echo '<form name="tpv_chamilo" action="'.$urlTpv.'" method="POST">';
+            echo '<input type="hidden" name="MerchantID" value="'.$cecabankParams['merchant_id'].'" />';
+            echo '<input type="hidden" name="AcquirerBIN" value="'.$cecabankParams['acquirer_bin'].'" />';
+            echo '<input type="hidden" name="TerminalID" value="'.$cecabankParams['terminal_id'].'" />';
+            echo '<input type="hidden" name="URL_OK" value="'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_success.php'.'" />';
+            echo '<input type="hidden" name="URL_NOK" value="'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_cancel.php'.'" />';
+            echo '<input type="hidden" name="Firma" value="'.$signature.'" />';
+            echo '<input type="hidden" name="Cifrado" value="'.$cecabankParams['cypher'].'" />';
+            echo '<input type="hidden" name="Num_operacion" value="'.$sale['reference'].'" />';
+            echo '<input type="hidden" name="Importe" value="'.($sale['price'] * 100).'" />';
+            echo '<input type="hidden" name="TipoMoneda" value="'.$cecabankParams['currency'].'" />';
+            echo '<input type="hidden" name="Exponente" value="'.$cecabankParams['exponent'].'" />';
+            echo '<input type="hidden" name="Pago_soportado" value="'.$cecabankParams['supported_payment'].'" />';
+            echo '</form>';
+
+            echo '<SCRIPT language=javascript>';
+            echo 'document.tpv_chamilo.submit();';
+            echo '</script>';
+
+            exit;
+        }
+
+        $form->addButton(
+            'confirm',
+            $plugin->get_lang('ConfirmOrder'),
+            'check',
+            'success',
+            'default',
+            null,
+            ['id' => 'confirm']
+        );
+        $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
+
+        $template = new Template();
+        $template->assign('terms', $globalParameters['terms_and_conditions']);
+        $template->assign('title', $serviceSale['service']['name']);
+        $template->assign('price', $serviceSale['price']);
+        $template->assign('currency', $serviceSale['currency_id']);
+        $template->assign('buying_service', $serviceSale);
+        $template->assign('user', $userInfo);
+        $template->assign('service', $serviceSale['service']);
+        $template->assign('service_item', $serviceSale['item']);
+        $template->assign('transfer_accounts', $transferAccounts);
+        $template->assign('form', $form->returnForm());
+
+        $content = $template->fetch('buycourses/view/process_confirm.tpl');
+
+        $template->assign('content', $content);
+        $template->display_one_col_template();
+
+        break;
 }

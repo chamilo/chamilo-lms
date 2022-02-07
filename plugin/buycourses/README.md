@@ -13,6 +13,7 @@ Currently, the plugin allows users to pay through:
  - Bank payments (requires manual confirmation of payments' reception)
  - RedSys payments (Spanish payment gateway) (requires the download of an external file)
  - Stripe payments (requieres a merchant account oin Stripe at configuration time)
+ - Cecabank payments (Spanish payment gateway)
 
 The user receives an e-mail confirming the purchase and she/he can immediately 
 access to the course or session.

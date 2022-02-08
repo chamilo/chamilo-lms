@@ -8779,4 +8779,7 @@ Votre mot de passe : Celui ci vous a été communiqué par mail<br/>
 si vous l'avez oublié et ne le retrouvez pas vous pouvez le récupérer en allant sur %s<br/><br/>
 Merci de faire le nécessaire.";
 $LpRemindFooterX = "Le centre de formation<p>%s</p><br/>%s";
+$Embed = "Obtenir le lien d'intégration";
+$EmbedExerciseLink = "Lien pour intégrer l'exercice dans une iframe";
+$CopyUrlToIncludeInIframe = "Copiez cette URL pour inclure cet exercice dans une iframe :";
 ?>

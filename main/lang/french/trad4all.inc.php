@@ -7952,7 +7952,7 @@ $ScheduledAnnouncements = "Annonces programmées";
 $SpecificDate = "Date spécifique d'envoi";
 $BaseDate = "Envoi sur base des dates de début/fin de la session";
 $AfterOrBefore = "Avant ou après";
-$Before = "Avant le";
+$Before = "Avant";
 $ScheduleAnnouncementDescription = "Ce formulaire permet de programmer l'envoi automatique d'annonces aux étudiants qui réalisent le cours dans une session. Il existe deux types d'annonces programmées: l'envoi à une date spécifique: dans ce cas, on sélectionne un jour en particulier pour procéder à l'envoi du mail; et l'envoi sur base des dates de début ou de fin de la session: dans ce cas, il faut indiquer le nombre de jours de différence avec la date de début ou de fin, auquel l'e-mail doit être envoyé. Par exemple: 3 jours avant la fin de la session.";
 $MandatorySurveyNoAnswered = "Une enquête obligatoire est en attente de votre réponse. Pour entrer dans le cours, il est nécessaire de la compléter d'abord.";
 $ShowPreviousButton = "Montrer le bouton 'Précédent'";
@@ -8767,4 +8767,16 @@ $ReminderXEvent = "Rappel pour l'événement : %s";
 $AddNotification = "Ajouter un rappel";
 $NotifyBeforeTheEventStarts = "Notification de rappel de l'événement";
 $AddTags = "Ajouter les tags";
+$IsItEditableByTheInvitees = "Événement éditable par les invités";
+$Invitees = "Invités";
+$RemindXLpCourseX = "Relance numéro %s pour le cours %s";
+$HelloX = "Bonjour %s,";
+$YouAreRegCourseXFromDateX = "Vous êtes inscrit au module de formation %s depuis le %s.";
+$ThisMessageIsAboutX = "Vous recevez ce message car vous avez réalisé %s% de votre formation. <br/> Votre parcours de formation doit être de 100% pour considérer que la formation est réalisée. <br/> Si vous rencontrez le moindre problème, vous devez prendre contact avec le centre de formation.";
+$StepsToRemindX = "Pour rappel, pour accéder à la plateforme de formation :<br/>1. Connectez-vous à la plateforme à l’adresse : %s <br/> 2. Renseignez ensuite :<br/>
+Votre identifiant : %s<br/>
+Votre mot de passe : Celui ci vous a été communiqué par mail<br/>
+si vous l'avez oublié et ne le retrouvez pas vous pouvez le récupérer en allant sur %s<br/><br/>
+Merci de faire le nécessaire.";
+$LpRemindFooterX = "Le centre de formation<p>%s</p><br/>%s";
 ?>

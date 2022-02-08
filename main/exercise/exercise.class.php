@@ -9605,7 +9605,7 @@ class Exercise
                                     'class' => 'ajax',
                                     'data-title' => get_lang('EmbedExerciseLink'),
                                     'title' => get_lang('EmbedExerciseLink'),
-                                    'data-content' => get_lang('CopyUrlToIncludeIfra').'<br>'.$urlEmbed,
+                                    'data-content' => get_lang('CopyUrlToIncludeInIframe').'<br>'.$urlEmbed,
                                     'href' => 'javascript:void(0);',
                                 ]
                             );

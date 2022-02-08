@@ -6,7 +6,7 @@
  *
  * To add this extra field for lp option number_of_days_for_completion
  * INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
-* (6,	1,	'number_of_days_for_completion',	'NumberOfDaysForCompletion',	'',	0,	1,	0,	1,	0,	NOW());
+ * (6,	1,	'number_of_days_for_completion',	'NumberOfDaysForCompletion',	'',	0,	1,	0,	1,	0,	NOW());
  *
  * @package chamilo.cron
  */
@@ -40,8 +40,7 @@ function sendMessage(
     $lpProgress,
     $registrationDate,
     $nbRemind
-)
-{
+) {
     $subjectTemplate = new Template(
         null,
         false,
@@ -160,8 +159,6 @@ function getNbReminder($registrationDate, $nbDaysForLpCompletion): int
  *
  * @param $registrationDate
  * @param $nbDaysForLpCompletion
- *
- * @return bool
  */
 function isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion): bool
 {
@@ -235,15 +232,14 @@ function notifyUsersForCheckingLpCompletion()
                     }
                 }
             }
-
         }
     }
 }
 
 /**
- * Get the users in a course also checking the session
+ * Get the users in a course also checking the session.
  *
- * @param int $courseId
+ * @param int   $courseId
  * @param false $checkSession
  *
  * @return array|null

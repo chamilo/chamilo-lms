@@ -1275,7 +1275,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Update the sale reference.
      *
-     * @param int $saleId    The sale ID
+     * @param int $saleId        The sale ID
      * @param int $saleReference The new saleReference
      *
      * @return bool

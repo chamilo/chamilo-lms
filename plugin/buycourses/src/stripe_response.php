@@ -19,10 +19,10 @@ try {
     $event = \Stripe\Webhook::constructEvent(
         $payload, $sig_header, $stripeParams['endpoint_secret']
     );
-} catch(\UnexpectedValueException $e) {
+} catch (\UnexpectedValueException $e) {
     http_response_code(400);
     exit();
-} catch(\Stripe\Exception\SignatureVerificationException $e) {
+} catch (\Stripe\Exception\SignatureVerificationException $e) {
     http_response_code(400);
     exit();
 }
@@ -33,7 +33,7 @@ switch ($event->type) {
 
         $sale = $plugin->getSaleFromReference($paymentIntent->id);
 
-        if (empty($sale) ) {
+        if (empty($sale)) {
             api_not_allowed(true);
         }
 
@@ -57,8 +57,9 @@ switch ($event->type) {
             $plugin->storePayouts($sale['id']);
         }
 
+        // no break
     default:
-        echo 'Received unknown event type ' . $event->type;
+        echo 'Received unknown event type '.$event->type;
 }
 
 http_response_code(200);

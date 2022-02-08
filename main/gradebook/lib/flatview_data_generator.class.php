@@ -163,15 +163,22 @@ class FlatViewDataGenerator
                     $links = $sub_cat->get_links();
                     $evaluations = $sub_cat->get_evaluations();
 
-                    /** @var ExerciseLink $link */
                     $linkNameList = [];
+                    /** @var ExerciseLink $link */
                     foreach ($links as $link) {
-                        $linkNameList[] = $link->get_name();
+                        $linkNameList[] = Display::returnHeaderWithPercentage(
+                            $link->get_name(),
+                            $link->get_weight()
+                        );
                     }
 
                     $evalNameList = [];
+                    /** @var Evaluation $evaluation */
                     foreach ($evaluations as $evaluation) {
-                        $evalNameList[] = $evaluation->get_name();
+                        $linkNameList[] = Display::returnHeaderWithPercentage(
+                            $evaluation->get_name(),
+                            $evaluation->get_weight()
+                        );
                     }
 
                     $finalList = array_merge($linkNameList, $evalNameList);
@@ -451,7 +458,7 @@ class FlatViewDataGenerator
             );
 
             $evaluationsAdded = [];
-            $detailAdminView = api_get_setting('gradebook_detailed_admin_view');
+            $detailAdminView = 'true' === api_get_setting('gradebook_detailed_admin_view');
             $style = api_get_configuration_value('gradebook_report_score_style');
             $defaultStyle = SCORE_DIV_SIMPLE_WITH_CUSTOM;
             if (!empty($style)) {
@@ -466,7 +473,7 @@ class FlatViewDataGenerator
                 /** @var Category $sub_cat */
                 foreach ($allcat as $sub_cat) {
                     $score = $sub_cat->calc_score($user_id);
-                    if ('true' === $detailAdminView) {
+                    if ($detailAdminView) {
                         $links = $sub_cat->get_links();
                         /** @var ExerciseLink $link */
                         $linkScoreList = [];
@@ -546,12 +553,12 @@ class FlatViewDataGenerator
                             false == $this->params['only_total_category'])
                     ) {
                         if (!$show_all) {
-                            if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
+                            if ($detailAdminView) {
                                 $finalList = array_merge($linkScoreList, $evalScoreList);
                                 if (empty($finalList)) {
                                     $average = 0;
                                 } else {
-                                    $average = array_sum($finalList) / count($finalList);
+                                    $average = $item_value / count($finalList);
                                 }
                                 $finalList[] = round($average, 2);
                                 foreach ($finalList as $finalValue) {

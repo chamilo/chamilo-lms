@@ -3018,4 +3018,14 @@ HTML;
     {
         return self::return_icon($image, $name, [], $size);
     }
+
+    public static function returnHeaderWithPercentage($header, $percentage)
+    {
+        $percentHtml = sprintf(
+            get_lang('XPercent'),
+            round($percentage, 2)
+        );
+
+        return "$header<br><small>$percentHtml</small>";
+    }
 }

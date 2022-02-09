@@ -6,10 +6,11 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
 use Chamilo\PluginBundle\Entity\ImsLti\Platform;
+use Chamilo\PluginBundle\Entity\ImsLti\Token;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\DBAL\DBALException;
-use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * Description of MsiLti.
@@ -63,25 +64,11 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * Install the plugin. Setup the database.
+     *
+     * @throws \Doctrine\ORM\Tools\ToolsException
      */
     public function install()
     {
-        $pluginEntityPath = $this->getEntityPath();
-
-        if (!is_dir($pluginEntityPath)) {
-            if (!is_writable(dirname($pluginEntityPath))) {
-                $message = get_lang('ErrorCreatingDir').': '.$pluginEntityPath;
-                Display::addFlash(Display::return_message($message, 'error'));
-
-                return false;
-            }
-
-            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
-        }
-
-        $fs = new Filesystem();
-        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
-
         $this->createPluginTables();
     }
 
@@ -131,17 +118,10 @@ class ImsLtiPlugin extends Plugin
      */
     public function uninstall()
     {
-        $pluginEntityPath = $this->getEntityPath();
-        $fs = new Filesystem();
-
-        if ($fs->exists($pluginEntityPath)) {
-            $fs->remove($pluginEntityPath);
-        }
-
         try {
             $this->dropPluginTables();
             $this->removeTools();
-        } catch (DBALException $e) {
+        } catch (Exception $e) {
             error_log('Error while uninstalling IMS/LTI plugin: '.$e->getMessage());
         }
     }
@@ -235,14 +215,6 @@ class ImsLtiPlugin extends Plugin
         $em = Database::getManager();
         $em->persist($cTool);
         $em->flush();
-    }
-
-    /**
-     * @return string
-     */
-    public function getEntityPath()
-    {
-        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
     }
 
     public static function isInstructor()
@@ -628,116 +600,47 @@ class ImsLtiPlugin extends Plugin
     /**
      * Creates the plugin tables on database.
      *
-     * @throws DBALException
-     *
-     * @return bool
+     * @throws \Doctrine\ORM\Tools\ToolsException
      */
     private function createPluginTables()
     {
-        $entityManager = Database::getManager();
-        $connection = $entityManager->getConnection();
+        $em = Database::getManager();
 
-        if ($connection->getSchemaManager()->tablesExist(self::TABLE_TOOL)) {
-            return true;
-        }
+        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+            return;
+        };
 
-        $queries = [
-            "CREATE TABLE plugin_ims_lti_tool (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    c_id INT DEFAULT NULL,
-                    gradebook_eval_id INT DEFAULT NULL,
-                    parent_id INT DEFAULT NULL,
-                    name VARCHAR(255) NOT NULL,
-                    description LONGTEXT DEFAULT NULL,
-                    launch_url VARCHAR(255) NOT NULL,
-                    consumer_key VARCHAR(255) DEFAULT NULL,
-                    shared_secret VARCHAR(255) DEFAULT NULL,
-                    custom_params LONGTEXT DEFAULT NULL,
-                    active_deep_linking TINYINT(1) DEFAULT '0' NOT NULL,
-                    privacy LONGTEXT DEFAULT NULL,
-                    client_id VARCHAR(255) DEFAULT NULL,
-                    public_key LONGTEXT DEFAULT NULL,
-                    login_url VARCHAR(255) DEFAULT NULL,
-                    redirect_url VARCHAR(255) DEFAULT NULL,
-                    advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)',
-                    version VARCHAR(255) DEFAULT 'lti1p1' NOT NULL,
-                    launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
-                    replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
-                    session_id INT DEFAULT NULL,
-                    INDEX IDX_C5E47F7C91D79BD3 (c_id),
-                    INDEX IDX_C5E47F7C82F80D8B (gradebook_eval_id),
-                    INDEX IDX_C5E47F7C727ACA70 (parent_id),
-                    INDEX IDX_C5E47F7C613FECDF (session_id),
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "CREATE TABLE plugin_ims_lti_platform (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    kid VARCHAR(255) NOT NULL,
-                    public_key LONGTEXT NOT NULL,
-                    private_key LONGTEXT NOT NULL,
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "CREATE TABLE plugin_ims_lti_token (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    tool_id INT DEFAULT NULL,
-                    scope LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
-                    hash VARCHAR(255) NOT NULL,
-                    created_at INT NOT NULL,
-                    expires_at INT NOT NULL,
-                    INDEX IDX_F7B5692F8F7B22CC (tool_id),
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "ALTER TABLE plugin_ims_lti_tool
-                ADD CONSTRAINT FK_C5E47F7C91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)",
-            "ALTER TABLE plugin_ims_lti_tool
-                ADD CONSTRAINT FK_C5E47F7C82F80D8B FOREIGN KEY (gradebook_eval_id)
-                REFERENCES gradebook_evaluation (id) ON DELETE SET NULL",
-            "ALTER TABLE plugin_ims_lti_tool
-                ADD CONSTRAINT FK_C5E47F7C727ACA70 FOREIGN KEY (parent_id)
-                REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE",
-            "ALTER TABLE plugin_ims_lti_token
-                ADD CONSTRAINT FK_F7B5692F8F7B22CC FOREIGN KEY (tool_id)
-                REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE",
-            "CREATE TABLE plugin_ims_lti_lineitem (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    tool_id INT NOT NULL,
-                    evaluation INT NOT NULL,
-                    resource_id VARCHAR(255) DEFAULT NULL,
-                    tag VARCHAR(255) DEFAULT NULL,
-                    start_date DATETIME DEFAULT NULL,
-                    end_date DATETIME DEFAULT NULL,
-                    INDEX IDX_BA81BBF08F7B22CC (tool_id),
-                    UNIQUE INDEX UNIQ_BA81BBF01323A575 (evaluation),
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF08F7B22CC FOREIGN KEY (tool_id)
-                REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE",
-            "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation)
-                REFERENCES gradebook_evaluation (id) ON DELETE CASCADE ",
-            "ALTER TABLE plugin_ims_lti_tool ADD CONSTRAINT FK_C5E47F7C613FECDF FOREIGN KEY (session_id)
-                REFERENCES session (id)",
-        ];
-
-        foreach ($queries as $query) {
-            Database::query($query);
-        }
-
-        return true;
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(ImsLtiTool::class),
+                $em->getClassMetadata(LineItem::class),
+                $em->getClassMetadata(Platform::class),
+                $em->getClassMetadata(Token::class),
+            ]
+        );
     }
 
     /**
      * Drops the plugin tables on database.
-     *
-     * @return bool
      */
     private function dropPluginTables()
     {
-        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_lineitem");
-        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_token");
-        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_platform");
-        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_tool");
+        $em = Database::getManager();
 
-        return true;
+        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+            return;
+        };
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(ImsLtiTool::class),
+                $em->getClassMetadata(LineItem::class),
+                $em->getClassMetadata(Platform::class),
+                $em->getClassMetadata(Token::class),
+            ]
+        );
     }
 
     private function removeTools()

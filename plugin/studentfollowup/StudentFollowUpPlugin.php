@@ -45,7 +45,7 @@ class StudentFollowUpPlugin extends Plugin
 
         if ($em->getConnection()->getSchemaManager()->tablesExist(['sfu_post'])) {
             return;
-        };
+        }
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(
@@ -61,7 +61,7 @@ class StudentFollowUpPlugin extends Plugin
 
         if (!$em->getConnection()->getSchemaManager()->tablesExist(['sfu_post'])) {
             return;
-        };
+        }
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(

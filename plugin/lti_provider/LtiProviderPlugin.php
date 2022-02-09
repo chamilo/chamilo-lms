@@ -174,7 +174,7 @@ class LtiProviderPlugin extends Plugin
 
         if ($em->getConnection()->getSchemaManager()->tablesExist(['sfu_post'])) {
             return;
-        };
+        }
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(
@@ -236,7 +236,7 @@ class LtiProviderPlugin extends Plugin
 
         if (!$em->getConnection()->getSchemaManager()->tablesExist(['sfu_post'])) {
             return;
-        };
+        }
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(

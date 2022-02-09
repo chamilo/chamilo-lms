@@ -50,7 +50,7 @@ class CourseHomeNotifyPlugin extends Plugin
 
         if ($em->getConnection()->getSchemaManager()->tablesExist(['course_home_notify_notification'])) {
             return;
-        };
+        }
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(
@@ -70,7 +70,7 @@ class CourseHomeNotifyPlugin extends Plugin
         $em = Database::getManager();
 
         if (!$em->getConnection()->getSchemaManager()->tablesExist(['course_home_notify_notification'])) {
-           return;
+            return;
         }
 
         $schemaTool = new SchemaTool($em);

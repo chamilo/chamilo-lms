@@ -721,6 +721,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 
     /**
      * Install the Doctrine's entities.
+     *
      * @throws \Doctrine\ORM\Tools\ToolsException
      */
     private function installEntities()

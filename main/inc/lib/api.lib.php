@@ -9650,7 +9650,6 @@ function api_get_language_translate_html()
     return 'span[lang] {
             display: none;
         }
-        span[class^="cke"],
         span[lang="'.$isoCode.'"] {
             display: inline;
         }';

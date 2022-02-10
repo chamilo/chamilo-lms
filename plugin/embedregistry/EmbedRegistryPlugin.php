@@ -4,7 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\Entity\EmbedRegistry\Embed;
-use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * Class EmbedRegistryPlugin.
@@ -60,41 +60,39 @@ class EmbedRegistryPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * @throws \Doctrine\ORM\Tools\ToolsException
+     */
     public function install()
     {
-        $entityPath = $this->getEntityPath();
+        $em = Database::getManager();
 
-        if (!is_dir($entityPath)) {
-            if (!is_writable(dirname($entityPath))) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('ErrorCreatingDir').' '.$entityPath,
-                        'error'
-                    )
-                );
-
-                return false;
-            }
-
-            mkdir($entityPath, api_get_permissions_for_new_directories());
+        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TBL_EMBED])) {
+            return;
         }
 
-        $fs = new Filesystem();
-        $fs->mirror(__DIR__.'/Entity/', $entityPath, null, ['override']);
-
-        $this->createPluginTables();
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(Embed::class),
+            ]
+        );
     }
 
     public function uninstall()
     {
-        $entityPath = $this->getEntityPath();
-        $fs = new Filesystem();
+        $em = Database::getManager();
 
-        if ($fs->exists($entityPath)) {
-            $fs->remove($entityPath);
+        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TBL_EMBED])) {
+            return;
         }
 
-        Database::query('DROP TABLE IF EXISTS '.self::TBL_EMBED);
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(Embed::class),
+            ]
+        );
     }
 
     /**
@@ -241,33 +239,6 @@ class EmbedRegistryPlugin extends Plugin
             'user_ip' => api_get_real_ip(),
         ];
         Database::insert($tableAccess, $params);
-    }
-
-    private function createPluginTables()
-    {
-        $connection = Database::getManager()->getConnection();
-
-        if ($connection->getSchemaManager()->tablesExist(self::TBL_EMBED)) {
-            return;
-        }
-
-        $queries = [
-            'CREATE TABLE plugin_embed_registry_embed (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, title LONGTEXT NOT NULL, display_start_date DATETIME NOT NULL, display_end_date DATETIME NOT NULL, html_code LONGTEXT NOT NULL, INDEX IDX_5236D25991D79BD3 (c_id), INDEX IDX_5236D259613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB',
-            'ALTER TABLE plugin_embed_registry_embed ADD CONSTRAINT FK_5236D25991D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)',
-            'ALTER TABLE plugin_embed_registry_embed ADD CONSTRAINT FK_5236D259613FECDF FOREIGN KEY (session_id) REFERENCES session (id)',
-        ];
-
-        foreach ($queries as $query) {
-            Database::query($query);
-        }
-    }
-
-    /**
-     * @return string
-     */
-    private function getEntityPath()
-    {
-        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
     }
 
     private function deleteCourseToolLinks()

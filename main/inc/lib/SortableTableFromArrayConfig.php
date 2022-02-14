@@ -35,10 +35,10 @@ class SortableTableFromArrayConfig extends SortableTable
      * @param int    $column       Default column that will be used in the sort functions
      * @param int    $itemsPerPage Number of items per pages that we are going to see
      * @param string $tableName    Name of the table
-     * @param array  $columnShow  An array with binary values: 1 = show column, 2 = don't show it
-     * @param array  $columnOrder An array of integers that let us decide how the columns are going to be sort
+     * @param array  $columnShow   An array with binary values: 1 = show column, 2 = don't show it
+     * @param array  $columnOrder  An array of integers that let us decide how the columns are going to be sort
      * @param string $direction    ASC/DESC
-     * @param bool   $docFilter   special modification to fix the document name order
+     * @param bool   $docFilter    special modification to fix the document name order
      */
     public function __construct(
         $data,

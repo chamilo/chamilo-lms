@@ -309,7 +309,7 @@ select {
 }
 
 .carousel-indicators {
-    bottom: 0;
+    bottom: -20px;
 }
 
 .form-group .freeze {

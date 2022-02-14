@@ -1,9 +1,15 @@
 <style>
     .announcement_short {
-        height: 310px;
-        white-space: nowrap;
+        height: 300px;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    .carousel-inner {
+        position: relative;
+        width: 90%;
+        overflow: hidden;
+        margin: auto;
+        padding-bottom: 25px;
     }
 </style>
 

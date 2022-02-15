@@ -4,13 +4,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .carousel-inner {
-        position: relative;
-        width: 90%;
-        overflow: hidden;
-        margin: auto;
-        padding-bottom: 25px;
-    }
 </style>
 
 <div id="carousel-announcement" class="carousel slide" data-ride="carousel">

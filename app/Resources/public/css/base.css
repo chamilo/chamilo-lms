@@ -298,6 +298,14 @@ select {
     background: #2C5B8E;
 }
 
+#carousel-announcement .carousel-inner {
+    position: relative;
+    width: 90%;
+    overflow: hidden;
+    margin: auto;
+    padding-bottom: 25px;
+}
+
 .carousel-control {
     width: 5%;
 }
@@ -309,7 +317,7 @@ select {
 }
 
 .carousel-indicators {
-    bottom: 0;
+    bottom: -20px;
 }
 
 .form-group .freeze {

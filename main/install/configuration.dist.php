@@ -2133,10 +2133,10 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 
 // Relation to prefill course extra field with user extra field on course creacion on main/create_course/add_course.php and main/admin/course_add.php
 /*$_configuration['course_creation_user_course_extra_field_relation_to_prefill'] = [
-        'fields' => [
-			'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',
-			'CourseExtrafieldLabel2' => 'UserExtrafieldLabel2',
-        ]
+    'fields' => [
+        'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',
+        'CourseExtrafieldLabel2' => 'UserExtrafieldLabel2',
+    ]
 ];*/
 
 // Hides the icon of percentage in "Average of tests in Learning Paths" indication on a student tracking

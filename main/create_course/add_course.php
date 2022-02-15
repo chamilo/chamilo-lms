@@ -282,6 +282,28 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
     );
 }
 
+//Extra fields to show
+$extraFieldsToShow = api_get_configuration_value('course_creation_by_teacher_extra_fields_to_show');
+$fillExtraField = api_get_configuration_value('course_creation_user_course_extra_field_relation_to_prefill');
+if (false !== $extraFieldsToShow && !empty($extraFieldsToShow['fields'])) {
+    $extra_field = new ExtraField('course');
+    $extra = $extra_field->addElements($form, 0, [], false, false, $extraFieldsToShow['fields']);
+
+    // Relation to prefill course extra field with user extra field
+    if (false !== $fillExtraField && !empty($fillExtraField['fields'])) {
+        foreach ($fillExtraField['fields'] as $courseVariable => $userVariable) {
+            $extraValue = UserManager::get_extra_user_data_by_field(api_get_user_id(), $userVariable);
+            $values['extra_'.$courseVariable] = $extraValue[$userVariable];
+        }
+    }
+    $htmlHeadXtra[] = '
+    <script>
+    $(function() {
+        '.$extra['jquery_ready_content'].'
+    });
+    </script>';
+}
+
 $form->addElement('html', '</div>');
 
 // Submit button.

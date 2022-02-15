@@ -77,12 +77,41 @@ For a non-paying Zoom user, this plugin still works but participants will join a
 The user that starts the meeting/webinar will be identified as the Zoom account that is defined in the plugin. Socreate
 a generic account that works for all the users that start meetings.
 
-# Upgrade database to v0.4
+# Changelog
+
+## v0.4
+
+* The creation of webinars is now allowed.
+* Allows you to use multiple accounts and subaccounts to create meetings/webinars
+
+**Updating to v0.4 from v0.3**
+
+Please, execute this queries in your database:
 
 ```sql
-CREATE TABLE plugin_zoom_signature (id INT AUTO_INCREMENT NOT NULL, registrant_id INT DEFAULT NULL, signature LONGTEXT NOT NULL, registered_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D41895893304A716 (registrant_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-ALTER TABLE plugin_zoom_signature ADD CONSTRAINT FK_D41895893304A716 FOREIGN KEY (registrant_id) REFERENCES plugin_zoom_registrant (id);
-ALTER TABLE plugin_zoom_meeting ADD sign_attendance TINYINT(1) NOT NULL, ADD reason_to_sign_attendance LONGTEXT DEFAULT NULL;
+ALTER TABLE plugin_zoom_meeting
+   ADD account_email       VARCHAR(255) DEFAULT NULL,
+   ADD type                VARCHAR(255) NOT NULL,
+   ADD webinar_schema_json LONGTEXT     DEFAULT NULL;
+
+CREATE TABLE plugin_zoom_signature (
+      id            INT AUTO_INCREMENT NOT NULL,
+      registrant_id INT DEFAULT NULL,
+      signature     LONGTEXT           NOT NULL,
+      registered_at DATETIME           NOT NULL,
+      UNIQUE INDEX UNIQ_D41895893304A716 (registrant_id),
+      PRIMARY KEY (id)
+   )
+   DEFAULT CHARACTER SET utf8
+   COLLATE `utf8_unicode_ci`
+   ENGINE = InnoDB;
+
+ALTER TABLE plugin_zoom_signature
+   ADD CONSTRAINT FK_D41895893304A716 FOREIGN KEY (registrant_id) REFERENCES plugin_zoom_registrant (id);
+
+ALTER TABLE plugin_zoom_meeting
+   ADD sign_attendance           TINYINT(1) NOT NULL,
+   ADD reason_to_sign_attendance LONGTEXT DEFAULT NULL;
 ```
 
 # Contributing

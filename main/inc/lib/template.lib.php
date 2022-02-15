@@ -342,10 +342,10 @@ class Template
     /**
      * Shortcut to display a 1 col layout (index.php).
      * */
-    public function display_one_col_template()
+    public function display_one_col_template(bool $clearFlashMessages = true)
     {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
-        $this->display($tpl);
+        $this->display($tpl, $clearFlashMessages);
     }
 
     /**

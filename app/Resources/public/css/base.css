@@ -6466,6 +6466,18 @@ div#chat-remote-video video {
 #about-course #course-info-top .session-title{
     margin-top: 10px;
 }
+
+#about-course .about-course--btn-details {
+    padding-left: 0;
+    padding-right: 25px;
+}
+#about-course .about-course--btn-details {
+    background: url("../../main/img/icons/22/arrow-up-collapse.png") no-repeat right center;
+}
+#about-course .about-course--btn-details.collapsed{
+    background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat right center;
+}
+
 /* list courses classic*/
 .classic-courses .list-teachers {
     font-size: 12px;

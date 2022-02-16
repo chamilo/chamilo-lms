@@ -321,15 +321,15 @@
     $(function () {
         $('.course-information').readmore({
             speed: 100,
-            lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible' | get_lang }}</a>',
-            moreLink: '<a class="read-more" href="#">{{ 'ReadMore' | get_lang }}</a>',
+            lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible'|get_lang|escape('js') }}</a>',
+            moreLink: '<a class="read-more" href="#">{{ 'ReadMore'|get_lang|escape('js') }}</a>',
             collapsedHeight: 500,
             heightMargin: 100
         });
         $('.open-more').readmore({
             speed: 100,
-            lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible' | get_lang }}</a>',
-            moreLink: '<a class="read-more" href="#">{{ 'ReadMore' | get_lang }}</a>',
+            lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible'|get_lang|escape('js') }}</a>',
+            moreLink: '<a class="read-more" href="#">{{ 'ReadMore'|get_lang|escape('js') }}</a>',
             collapsedHeight: 90,
             heightMargin: 20
         });

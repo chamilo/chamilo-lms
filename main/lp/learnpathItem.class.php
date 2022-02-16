@@ -2342,6 +2342,13 @@ class learnpathItem
                                         $status = $itemToCheck->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
+                                        // Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+                                        if (true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached')) {
+                                            $isQuizMaxAttemptReached = $this->isQuizMaxAttemptReached($items[$refs_list[$prereqs_string]]->path, $user_id, $courseId, $this->lp_id, $prereqs_string);
+                                            if ($isQuizMaxAttemptReached) {
+                                                $returnstatus = true;
+                                            }
+                                        }
                                         if (!$returnstatus) {
                                             $explanation = sprintf(
                                                 get_lang('ItemXBlocksThisElement'),
@@ -2403,14 +2410,6 @@ class learnpathItem
                                                             $returnstatus = false;
                                                         }
                                                     }
-                                                    // Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
-                                                    if (true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached')) {
-                                                        $isQuizMaxAttemptReached = $this->isQuizMaxAttemptReached($items[$refs_list[$prereqs_string]]->path, $user_id, $courseId, $this->lp_id, $prereqs_string);
-                                                        if ($isQuizMaxAttemptReached) {
-                                                            $returnstatus = true;
-                                                        }
-                                                    }
-
                                                 } else {
                                                     $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                     $returnstatus = false;
@@ -2469,14 +2468,6 @@ class learnpathItem
                                                             $returnstatus = false;
                                                         }
                                                     }
-
-                                                    // Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
-                                                    if (true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached')) {
-                                                        $isQuizMaxAttemptReached = $this->isQuizMaxAttemptReached($items[$refs_list[$prereqs_string]]->path, $user_id, $courseId, $this->lp_id, $prereqs_string);
-                                                        if ($isQuizMaxAttemptReached) {
-                                                            $returnstatus = true;
-                                                        }
-                                                    }
                                                 }
                                             } else {
                                                 $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
@@ -2493,6 +2484,13 @@ class learnpathItem
                                                     $prereqs_string,
                                                     $refs_list
                                                 );
+                                            }
+                                            // Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+                                            if (true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached')) {
+                                                $isQuizMaxAttemptReached = $this->isQuizMaxAttemptReached($items[$refs_list[$prereqs_string]]->path, $user_id, $courseId, $this->lp_id, $prereqs_string);
+                                                if ($isQuizMaxAttemptReached) {
+                                                    $returnstatus = true;
+                                                }
                                             }
                                         }
 

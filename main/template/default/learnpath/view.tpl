@@ -135,6 +135,7 @@
                     {% endif %}
 
                     {{ teacher_toc_buttons }}
+                    {{ flow_buttons }}
                 </div>
             </div>
             {# TOC layout #}

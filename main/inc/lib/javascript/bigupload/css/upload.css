@@ -1,0 +1,25 @@
+
+.bigUploadContainer{
+    width : 450px;
+    border : solid 1px gray;
+    border-radius: 14px;
+    padding : 20px;
+}
+
+.bigUploadContainer input[type="file"] {
+    appearance: auto;
+    user-select: none;
+    white-space: pre;
+    align-items: flex-start;
+    text-align: center;
+    cursor: default;
+    padding: 1px 6px;
+    margin : 8px;
+    padding : 8px;
+    padding-left : 2px;
+    margin-left : 2px;
+}
+
+.bigUploadButton{
+    margin-left : 16px;
+}

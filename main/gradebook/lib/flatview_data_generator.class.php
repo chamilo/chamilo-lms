@@ -184,7 +184,7 @@ class FlatViewDataGenerator
                     $finalList = array_merge($linkNameList, $evalNameList);
 
                     if (!empty($finalList)) {
-                        $finalList[] = get_lang('Average');
+                        $finalList[] = '<span class="small">'.get_lang('SubTotal').'</span>';
                     }
 
                     $list = [];
@@ -555,18 +555,19 @@ class FlatViewDataGenerator
                         if (!$show_all) {
                             if ($detailAdminView) {
                                 $finalList = array_merge($linkScoreList, $evalScoreList);
-                                if (empty($finalList)) {
-                                    $average = 0;
-                                } else {
-                                    $average = $item_value / count($finalList);
-                                }
-                                $finalList[] = round($average, 2);
+//                                if (empty($finalList)) {
+//                                    $average = 0;
+//                                } else {
+//                                    $average = $item_value / count($finalList);
+//                                }
+//                                $finalList[] = round($average, 2);
                                 foreach ($finalList as $finalValue) {
                                     $row[] = '<span class="text-center">'.$finalValue.'</span>';
                                 }
-                            } else {
-                                $row[] = $temp_score.' ';
+//                            } else {
                             }
+                            $row[] = $temp_score.' ';
+//                            }
                         } else {
                             $row[] = $temp_score;
                         }

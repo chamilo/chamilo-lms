@@ -555,7 +555,9 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 // The provided default is an *example*, please customize.
 // This setting is particularly complicated to set with CKeditor, but if you
 // add all domains that you want to authorize for iframes inclusion in the
-// child-src statement, this example should work for you
+// child-src statement, this example should work for you.
+// You can prevent JavaScript from executing from external sources (including
+// inside SVG images) by using a strict list in the "script-src" argument.
 //$_configuration['security_content_policy'] = 'default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;';
 //$_configuration['security_content_policy_report_only'] = 'default-src \'self\'; script-src *://*.google.com:*';
 //

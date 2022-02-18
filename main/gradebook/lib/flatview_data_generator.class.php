@@ -545,7 +545,7 @@ class FlatViewDataGenerator
                             null,
                             $ignoreScoreColor
                         );
-                        $temp_score = Display::tip($temp_score, $real_score);
+                        $temp_score = Display::tip($temp_score, $real_score, 'div');
                     }
 
                     if (!isset($this->params['only_total_category']) ||
@@ -562,7 +562,7 @@ class FlatViewDataGenerator
 //                                }
 //                                $finalList[] = round($average, 2);
                                 foreach ($finalList as $finalValue) {
-                                    $row[] = '<span class="text-center">'.$finalValue.'</span>';
+                                    $row[] = $finalValue;
                                 }
 //                            } else {
                             }

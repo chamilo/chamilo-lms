@@ -28,6 +28,7 @@
   <li><a href="#8.Disable-webservices">Disable webservices</a></li>
   <li><a href="#9.Change-password-first-login">Change password on first login</a></li>
   <li><a href="#10.Hide-breadcrumb">Hide breadcrumb on unauthorized page load</a></li>
+  <li><a href="#11.SVG-and-XSS">SVG and XSS</a></li>
 </ol>
 
 <h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
@@ -222,6 +223,26 @@ This will prevent direct access to your settings and make it seem totally the sa
     <pre>
     $_configuration['hide_breadcrumb_if_not_allowed'] = true;
     </pre>
+    </p>
+
+<h2><a name="11.SVG-and-XSS">SVG and XSS</a></h2>
+    <p>
+        SVG files and HTML files containing inline SVG are vulnerable to XSS attacks. This is a general fact, not
+        immediately related to Chamilo, but that can affect it.<br />
+        As a general rule of thumb, you should not let your portal open to unauthenticated people, and you should not
+        allow unknown or unreliable people to upload content to your portal.<br />
+        But in case you do, or accesses of reliable people get stolen and abused, you might want to take precautions to
+        avoid as much as possible giving the tools to crackers to damage your portal's reputation.<br />
+        The following are a series of measures you can take to reduce the risk to the maximum when talking about the
+        combination of SVG and XSS.<br />
+    <ul>
+    <li>Disable the SVG editor, in the platform settings</li>
+    <li>In the security section of the platform settings, filter the SVG extension (either through putting it in the blacklist or removing it from the whitelist)</li>
+    <li>Make sure <em>$_configuration['course_introduction_html_strict_filtering'] = true;</em> is commented or is set to true in your configuration.php file</li>
+    <li>Do not make courses "public" if they include student-contributed content</li>
+    <li>Define some Content Security Policies ('security_content_policy') in your configuration.php file</li>
+    <li>Define some XSS Protection clause ('security_xss_protection') in your configuration.php file</li>
+    </ul>
     </p>
 
     <h2>Authors</h2>

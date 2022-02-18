@@ -4498,15 +4498,16 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             break;
         case 2:
             // Only file.
-            $form->addElement(
+            /*$form->addElement(
                 'file',
                 'file',
                 get_lang('UploadADocument'),
                 'size="40" onchange="updateDocumentTitle(this.value)"'
             );
             $form->addProgress();
+            */
+            $form->addElement('BigUpload', 'file', get_lang('UploadADocument'), ['id' => 'bigUploadFile', 'data-origin' => 'work']);
             $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
-            //$form->addElement('BigUpload', 'file', get_lang('UploadADocument'), ['id' => 'bigUploadFile', 'data-origin' => 'work']);
             break;
     }
 

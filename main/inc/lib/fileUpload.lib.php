@@ -759,7 +759,9 @@ function moveUploadedFile($file, $storePath)
     }
 
     if ($copyFile) {
-        return copy($file['tmp_name'], $storePath);
+        $copied = copy($file['tmp_name'], $storePath);
+        unlink($file['tmp_name']);
+        return $copied;
     }
 
     if ($handleFromFile) {

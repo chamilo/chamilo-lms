@@ -225,11 +225,12 @@ class BigUpload
             chmod($tmpFile, '0777');
             $workInfo = get_work_data_by_id($_REQUEST['id']);
             $values = $_REQUEST;
-            $course_info = api_get_course_info();
-            $session_id = api_get_session_id();
-            $group_id = api_get_group_id();
-            $user_id = api_get_user_id();
+            $courseInfo = api_get_course_info();
+            $sessionId = api_get_session_id();
+            $groupId = api_get_group_id();
+            $userId = api_get_user_id();
             $values['contains_file'] = 1;
+            $values['title'] = $finalName;
             $file = [
                 'name' => $finalName,
                 'type' => $_POST['type'],
@@ -243,10 +244,10 @@ class BigUpload
             $result = processWorkForm(
                 $workInfo,
                 $values,
-                $course_info,
-                $session_id,
-                $group_id,
-                $user_id,
+                $courseInfo,
+                $sessionId,
+                $groupId,
+                $userId,
                 $file,
                 api_get_configuration_value('assignment_prevent_duplicate_upload')
             );

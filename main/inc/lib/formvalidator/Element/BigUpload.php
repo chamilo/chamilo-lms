@@ -40,9 +40,11 @@ class BigUpload extends HTML_QuickForm_file
                 formId = uploadForm.attr("id");
                 submitButtonId = uploadForm.find("[type=\'submit\']").attr("id");
                 $("#"+submitButtonId).click(function(e) {
-                    e.preventDefault();
-                    setBigUploadSettings();
-                    bigUpload.fire();
+                    if ($("#'.$id.'").val()) {
+                        e.preventDefault();
+                        setBigUploadSettings();
+                        bigUpload.fire();
+                    }
                 });
             });
             function setBigUploadSettings() {

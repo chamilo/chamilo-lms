@@ -14323,7 +14323,7 @@ EOD;
     }
 
     /**
-     * Get the learnpaths availables for next lp
+     * Get the learnpaths availables for next lp.
      *
      * @param int $courseId
      *
@@ -14347,14 +14347,13 @@ EOD;
                 }
                 $lpsAvailable[$row['iid']] = $row['name'];
             }
-
         }
 
         return $lpsAvailable;
     }
 
     /**
-     * Get The next lp id
+     * Get The next lp id.
      *
      * @param $lpId
      * @param $courseId
@@ -14375,7 +14374,7 @@ EOD;
     }
 
     /**
-     * Get The previous lp id
+     * Get The previous lp id.
      *
      * @param $nextLpId
      * @param $courseId
@@ -14396,7 +14395,7 @@ EOD;
     }
 
     /**
-     * Save the next lp id
+     * Save the next lp id.
      *
      * @param $lpId
      * @param $nextLpId

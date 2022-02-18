@@ -761,6 +761,7 @@ function moveUploadedFile($file, $storePath)
     if ($copyFile) {
         $copied = copy($file['tmp_name'], $storePath);
         unlink($file['tmp_name']);
+
         return $copied;
     }
 

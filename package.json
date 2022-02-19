@@ -144,7 +144,7 @@
     "flag-icons": "^6.0.3",
     "free-jqgrid": "https://github.com/chamilo/jqGrid.git#bs4",
     "graphql-tag": "^2.12.5",
-    "node-sass": "6.0.1",
+    "node-sass": "7.0.0",
     "popper.js": "^1.16.1",
     "postcss-rtl": "^1.7.3",
     "sass": "^1.42.1",

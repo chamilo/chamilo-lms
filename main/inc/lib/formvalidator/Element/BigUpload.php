@@ -25,6 +25,7 @@ class BigUpload extends HTML_QuickForm_file
     {
         $origin = $this->getAttribute('data-origin');
         $id = $this->getAttribute('id');
+        $maxSize = ini_get('upload_max_filesize');
         $html = parent::toHtml();
         $html .= '<div id="'.$id.'-bigUploadProgressBarContainer">
             <div id="'.$id.'-bigUploadProgressBarFilled"></div>
@@ -70,6 +71,8 @@ class BigUpload extends HTML_QuickForm_file
                 bigUpload.settings.origin = "'.$origin.'";
                 //The parameters from the upload form
                 bigUpload.settings.formParams = uploadForm.serialize();
+                //Max file size allowed
+                bigUpload.settings.maxFileSize = "'.$maxSize.'";
             }
         </script>';
 

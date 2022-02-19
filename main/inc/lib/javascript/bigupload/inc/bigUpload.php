@@ -19,9 +19,8 @@ class BigUpload
      * Max allowed filesize. This is for unsupported browsers and
      * as an additional security check in case someone bypasses the js filesize check.
      *
-     * This must match the value specified in main.js
      */
-    const MAX_SIZE = 2147483648;
+    private $maxSize;
 
     /**
      * Temporary directory.
@@ -52,6 +51,7 @@ class BigUpload
         $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
         $this->setTempDirectory($tempDirectory);
         $this->setMainDirectory(self::MAIN_DIRECTORY);
+        $this->maxSize = ini_get('upload_max_filesize');
     }
 
     /**
@@ -129,12 +129,12 @@ class BigUpload
     {
         //Make sure the total file we're writing to hasn't surpassed the file size limit
         if (file_exists($this->getTempDirectory().$this->getTempName())) {
-            if (filesize($this->getTempDirectory().$this->getTempName()) > self::MAX_SIZE) {
+            if (filesize($this->getTempDirectory().$this->getTempName()) > $this->maxSize) {
                 $this->abortUpload();
 
                 return json_encode([
                         'errorStatus' => 1,
-                        'errorText' => 'File is too large.',
+                        'errorText' => get_lang('FileIsTooLarge'),
                     ]);
             }
         }
@@ -166,7 +166,7 @@ class BigUpload
         } else {
             return json_encode([
                 'errorStatus' => 1,
-                'errorText' => 'Unable to delete temporary file.',
+                'errorText' => get_lang('UnableToDeleteTempFile'),
             ]);
         }
     }
@@ -272,14 +272,14 @@ class BigUpload
         $size = $_FILES['bigUploadFile']['size'];
         $tempName = $_FILES['bigUploadFile']['tmp_name'];
 
-        if (filesize($tempName) > self::MAX_SIZE) {
-            return 'File is too large.';
+        if (filesize($tempName) > $this->maxSize) {
+            return get_lang('FileIsTooLarge');
         }
 
         if (move_uploaded_file($tempName, $this->getMainDirectory().$name)) {
-            return 'File uploaded.';
+            return get_lang('FileUploadad');
         } else {
-            return 'There was an error uploading the file';
+            return get_lang('ThereWasAnErrorUploadingTheFile');
         }
     }
 }

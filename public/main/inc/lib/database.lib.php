@@ -3,12 +3,15 @@
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\PsrCachedReader;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class Database
 {
@@ -23,6 +26,9 @@ class Database
      *
      * @param array  $params
      * @param string $entityRootPath
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function connect($params = [], $entityRootPath = '')
     {
@@ -38,12 +44,11 @@ class Database
         $params['charset'] = 'utf8';
         $sysPath = api_get_path(SYMFONY_SYS_PATH);
 
-        $cache = new Doctrine\Common\Cache\ArrayCache();
         // standard annotation reader
         $annotationReader = new Doctrine\Common\Annotations\AnnotationReader();
-        $cachedAnnotationReader = new Doctrine\Common\Annotations\CachedReader(
-            $annotationReader, // use reader
-            $cache // and a cache driver
+        $cachedAnnotationReader = new PsrCachedReader(
+            $annotationReader,
+            new ArrayAdapter()
         );
 
         $evm = new EventManager();
@@ -110,7 +115,7 @@ class Database
         $entityManager = EntityManager::create($params, $config, $evm);
 
         if (false === Type::hasType('uuid')) {
-            Type::addType('uuid', \Symfony\Bridge\Doctrine\Types\UuidType::class);
+            Type::addType('uuid', UuidType::class);
         }
 
         $connection = $entityManager->getConnection();
@@ -484,7 +489,7 @@ class Database
                 }
 
                 if ($result && $statement) {
-                    return $statement->rowCount();
+                    return $result->rowCount();
                 }
             }
         }

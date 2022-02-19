@@ -1331,7 +1331,7 @@ function display_database_settings_form(
                 $dbPortForm
             );
 
-            $schemaManager = $manager->getConnection()->getSchemaManager();
+            $schemaManager = $manager->getConnection()->createSchemaManager();
             $databases = $schemaManager->listDatabases();
             if (in_array($dbNameForm, $databases)) {
                 $databaseExistsText = '<div class="alert alert-warning">'.
@@ -1345,11 +1345,12 @@ function display_database_settings_form(
     }
 
     if ($manager && $manager->getConnection()->isConnected()) {
+        $connectionParams = $manager->getConnection()->getParams();
         echo $databaseExistsText; ?>
         <div id="db_status" class="alert alert-success">
-            Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br/>
-            Database port: <strong><?php echo $manager->getConnection()->getPort(); ?></strong><br/>
-            Database driver: <strong><?php echo $manager->getConnection()->getDriver()->getName(); ?></strong><br/>
+            Database host: <strong><?php echo $connectionParams['host']; ?></strong><br/>
+            Database port: <strong><?php echo $connectionParams['port']; ?></strong><br/>
+            Database driver: <strong><?php echo $connectionParams['driver']; ?></strong><br/>
             <?php
                 if ('update' === $installType) {
                     echo get_lang('CreateTableWorks').' <strong>Ok</strong>';

@@ -221,7 +221,12 @@ function get_users($from, $limit, $column, $direction)
         $string_date = Tracking::get_last_connection_date($student_id, true);
         $first_date = Tracking::get_first_connection_date($student_id);
         $row[] = $first_date;
-        $row[] = $string_date;
+
+        if ($export_csv) {
+            $row[] = strip_tags($string_date);
+        } else {
+            $row[] = $string_date;
+        }
 
         $detailsLink = Display::url(
             Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
@@ -371,6 +376,7 @@ $table->set_form_actions($actionsList);
 if ($export_csv) {
     if ($is_western_name_order) {
         $csv_header[] = [
+            get_lang('Id'),
             get_lang('FirstName'),
             get_lang('LastName'),
             get_lang('FirstLogin'),
@@ -378,6 +384,7 @@ if ($export_csv) {
         ];
     } else {
         $csv_header[] = [
+            get_lang('Id'),
             get_lang('LastName'),
             get_lang('FirstName'),
             get_lang('FirstLogin'),
@@ -398,7 +405,7 @@ if ($export_csv) {
     // send the csv file if asked
     $content = $table->get_table_data();
     foreach ($content as &$row) {
-        unset($row[4]);
+        unset($row[5]);
     }
     $csv_content = array_merge($csv_header, $content);
     ob_end_clean();

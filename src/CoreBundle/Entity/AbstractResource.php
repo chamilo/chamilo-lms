@@ -115,10 +115,7 @@ abstract class AbstractResource
     public array $resourceLinkList = [];
 
     /**
-     * Use when sending request to Chamilo.
-     * Temporal array of objects locates the resource link list that will be filled by CreateDocumentFileAction.php.
-     *
-     * @var ResourceLink[]
+     * @var array<\Chamilo\CoreBundle\Entity\ResourceLink>
      */
     public array $resourceLinkEntityList = [];
 
@@ -126,10 +123,7 @@ abstract class AbstractResource
 
     abstract public function setResourceName(string $name);
 
-    /**
-     * @return ResourceLink[]
-     */
-    public function getResourceLinkEntityList()
+    public function getResourceLinkEntityList(): array
     {
         return $this->resourceLinkEntityList;
     }
@@ -137,7 +131,7 @@ abstract class AbstractResource
     /**
      * $this->resourceLinkEntityList will be loaded in the ResourceListener in the setLinks() function.
      */
-    public function addLink(ResourceLink $link)
+    public function addLink(ResourceLink $link): static
     {
         $this->resourceLinkEntityList[] = $link;
 

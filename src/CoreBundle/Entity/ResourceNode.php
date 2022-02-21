@@ -100,7 +100,7 @@ class ResourceNode
     protected ResourceType $resourceType;
 
     /**
-     * @var Collection|ResourceLink[]
+     * @var Collection<int, ResourceLink>
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
@@ -438,10 +438,7 @@ class ResourceNode
         return $this;
     }
 
-    /**
-     * @return Collection|ResourceLink[]
-     */
-    public function getResourceLinks()
+    public function getResourceLinks(): Collection
     {
         return $this->resourceLinks;
     }
@@ -454,10 +451,7 @@ class ResourceNode
         return $this;
     }
 
-    /**
-     * @param Collection|ResourceLink[] $resourceLinks
-     */
-    public function setResourceLinks($resourceLinks): self
+    public function setResourceLinks(Collection $resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;
 

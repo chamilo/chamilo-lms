@@ -2177,3 +2177,32 @@ function add_all_documents_in_folder_to_database(
         }
     }
 }
+
+/**
+ * Get the uploax max filesize from ini php in bytes.
+ *
+ * @return int
+ */
+function getIniMaxFileSizeInBytes()
+{
+    $maxSize = 0;
+    if (preg_match('/^([0-9]+)([a-zA-Z]*)$/', ini_get('upload_max_filesize'), $matches)) {
+        // see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
+        switch (strtoupper($matches['2'])) {
+            case 'G':
+                $maxSize = $matches['1'] * 1073741824;
+                break;
+            case 'M':
+                $maxSize = $matches['1'] * 1048576;
+                break;
+            case 'K':
+                $maxSize = $matches['1'] * 1024;
+                break;
+            default:
+                $maxSize = $matches['1'];
+        }
+    }
+    $maxSize = (int) $maxSize;
+
+    return $maxSize;
+}

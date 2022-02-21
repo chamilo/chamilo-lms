@@ -25,7 +25,7 @@ class BigUpload extends HTML_QuickForm_file
     {
         $origin = $this->getAttribute('data-origin');
         $id = $this->getAttribute('id');
-        $maxSize = ini_get('upload_max_filesize');
+        $maxSize = getIniMaxFileSizeInBytes();
         $html = parent::toHtml();
         $html .= '<div id="'.$id.'-bigUploadProgressBarContainer">
             <div id="'.$id.'-bigUploadProgressBarFilled"></div>

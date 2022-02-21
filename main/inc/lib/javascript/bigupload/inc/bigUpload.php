@@ -18,7 +18,6 @@ class BigUpload
     /**
      * Max allowed filesize. This is for unsupported browsers and
      * as an additional security check in case someone bypasses the js filesize check.
-     *
      */
     private $maxSize;
 
@@ -51,7 +50,7 @@ class BigUpload
         $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
         $this->setTempDirectory($tempDirectory);
         $this->setMainDirectory(self::MAIN_DIRECTORY);
-        $this->maxSize = ini_get('upload_max_filesize');
+        $this->maxSize = getIniMaxFileSizeInBytes();
     }
 
     /**

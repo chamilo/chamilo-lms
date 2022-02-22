@@ -100,12 +100,7 @@ class Model
         );
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    public function get_all($options = null)
+    public function get_all(array $options = []): array
     {
         return Database::select('*', $this->table, $options);
     }

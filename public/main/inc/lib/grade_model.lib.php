@@ -18,12 +18,7 @@ class GradeModel extends Model
         $this->table = Database::get_main_table(TABLE_GRADE_MODEL);
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    public function get_all($options = [])
+    public function get_all(array $options = []): array
     {
         return Database::select(
             '*',

@@ -71,12 +71,7 @@ class Gradebook extends Model
         return '1' == $item['visibility'];
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    public function get_all($options = [])
+    public function get_all(array $options = []): array
     {
         $gradebooks = parent::get_all($options);
         foreach ($gradebooks as &$gradebook) {

@@ -867,12 +867,7 @@ class ExtraFieldOption extends Model
         return $info;
     }
 
-    /**
-     * @param null $options
-     *
-     * @return array
-     */
-    public function get_all($options = null)
+    public function get_all(array $options = []): array
     {
         $result = parent::get_all($options);
 

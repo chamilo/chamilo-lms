@@ -882,14 +882,15 @@ class ExtraField extends Model
     /**
      * Get an array of all the values from the extra_field and extra_field_options tables
      * based on the current object's type.
-     *
-     * @param array $options
-     * @param null  $order_field_options_by
-     *
-     * @return array
      */
-    public function get_all($options = [], $order_field_options_by = null)
+    public function get_all(array $options = []): array
     {
+        $order_field_options_by = null;
+
+        if (func_num_args() > 1) {
+            $order_field_options_by = func_get_arg(1);
+        }
+
         $options = Database::parse_conditions(['where' => $options]);
 
         if (empty($options)) {

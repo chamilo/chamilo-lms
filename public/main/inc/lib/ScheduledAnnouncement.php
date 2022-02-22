@@ -26,12 +26,7 @@ class ScheduledAnnouncement extends Model
         $this->table = 'scheduled_announcements';
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    public function get_all($options = [])
+    public function get_all(array $options = []): array
     {
         return Database::select(
             '*',

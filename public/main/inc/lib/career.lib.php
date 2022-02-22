@@ -39,12 +39,7 @@ class Career extends Model
         return $row['count'];
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    public function get_all($options = [])
+    public function get_all(array $options = []): array
     {
         return Database::select(
             '*',

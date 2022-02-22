@@ -133,7 +133,7 @@ class BigUpload
 
                 return json_encode([
                         'errorStatus' => 1,
-                        'errorText' => get_lang('FileIsTooLarge'),
+                        'errorText' => get_lang('UplFileTooBig'),
                     ]);
             }
         }
@@ -272,13 +272,13 @@ class BigUpload
         $tempName = $_FILES['bigUploadFile']['tmp_name'];
 
         if (filesize($tempName) > $this->maxSize) {
-            return get_lang('FileIsTooLarge');
+            return get_lang('UplFileTooBig');
         }
 
         if (move_uploaded_file($tempName, $this->getMainDirectory().$name)) {
-            return get_lang('FileUploadad');
+            return get_lang('FileUploadSucces');
         } else {
-            return get_lang('ThereWasAnErrorUploadingTheFile');
+            return get_lang('UplUnableToSaveFile');
         }
     }
 }

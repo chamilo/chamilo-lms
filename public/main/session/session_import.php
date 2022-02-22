@@ -173,11 +173,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
                         // Looking up for the teacher.
                         $username = trim(api_utf8_decode($courseNode->CourseTeacher));
-                        $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
+                        $sql = "SELECT id, lastname, firstname FROM $tbl_user WHERE username='$username'";
                         $rs = Database::query($sql);
-                        [$userId, $lastname, $firstname] = Database::fetch_array($rs);
-
-                        $params['teachers'] = $userId;
+                        if (Database::num_rows($rs) > 0) {
+                            [$userId, $lastname, $firstname] = Database::fetch_array($rs);
+                            $params['teachers'] = $userId;
+                        } else {
+                            $params['teachers'] = api_get_user_id();
+                        }
                         CourseManager::create_course($params);
                     }
                 }
@@ -233,19 +236,35 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             }
                         }
 
-                        $visibility = trim(api_utf8_decode($node_session->Visibility));
+                        // Default visibility
+                        $visibilityAfterExpirationPerSession = 1;
+                        if (isset($node_session->VisibilityAfterExpiration)) {
+                            $visibility = trim(api_utf8_decode($node_session->VisibilityAfterExpiration));
+                            switch ($visibility) {
+                                case 'read_only':
+                                    $visibilityAfterExpirationPerSession = SESSION_VISIBLE_READ_ONLY;
+                                    break;
+                                case 'accessible':
+                                    $visibilityAfterExpirationPerSession = SESSION_VISIBLE;
+                                    break;
+                                case 'not_accessible':
+                                    $visibilityAfterExpirationPerSession = SESSION_INVISIBLE;
+                                    break;
+                            }
+                        }
                         $sessionCategoryId = trim(api_utf8_decode($node_session->SessionCategory));
 
-                        if (!$updatesession) {
+                        if (!$isOverwrite) {
                             // Always create a session.
                             $unique_name = false; // This MUST be initializead.
                             $i = 0;
+                            $suffix = '';
                             // Change session name, verify that session doesn't exist.
                             while (!$unique_name) {
                                 if ($i > 1) {
                                     $suffix = ' - '.$i;
                                 }
-                                $sql = 'SELECT 1 FROM '.$tbl_session.'
+                                $sql = 'SELECT id FROM '.$tbl_session.'
                                         WHERE name="'.Database::escape_string($session_name.$suffix).'"';
                                 $rs = Database::query($sql);
                                 if (Database::result($rs, 0, 0)) {
@@ -261,7 +280,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     name = '".Database::escape_string($session_name)."',
                                     access_start_date = '$date_start',
                                     access_end_date = '$dateEnd',
-                                    visibility = '$visibility',
+                                    visibility = '$visibilityAfterExpirationPerSession',
+                                    nbr_users = 0,
+                                    nbr_courses = 0,
+                                    nbr_classes = 0,
+                                    status = 0,
+                                    duration = 0,
                                     session_category_id = '$sessionCategoryId'";
                             $rs_session = Database::query($sql_session);
                             $sessionId = Database::insert_id();
@@ -295,7 +319,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         name = '".Database::escape_string($session_name)."',
                                         access_start_date = '$date_start',
                                         access_end_date = '$dateEnd',
-                                        visibility = '$visibility',
+                                        visibility = '$visibilityAfterExpirationPerSession',
+                                        nbr_users = 0,
+                                        nbr_courses = 0,
+                                        nbr_classes = 0,
+                                        status = 0,
+                                        duration = 0,
                                         session_category_id = '$sessionCategoryId'";
                                 $rs_session = Database::query($sql_session);
                                 $sessionId = Database::insert_id();
@@ -325,7 +354,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $sql_session = "UPDATE $tbl_session SET
                                         access_start_date = '$date_start',
                                         access_end_date = '$dateEnd',
-                                        visibility = '$visibility',
+                                        visibility = '$visibilityAfterExpirationPerSession',
                                         session_category_id = '$sessionCategoryId'
                                     WHERE name = '$session_name'";
                                 $rs_session = Database::query($sql_session);

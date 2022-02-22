@@ -1077,8 +1077,8 @@ class UserManager
             ->setPhone($phone)
             ->setAddress($address)
             ->setExpirationDate($expiration_date)
-            ->setActive($active)
-            ->setEnabled($active)
+            ->setActive((bool) $active)
+            ->setEnabled((bool) $active)
             ->setHrDeptId((int) $hr_dept_id)
         ;
 

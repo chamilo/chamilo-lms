@@ -2091,7 +2091,7 @@ class Display
         if (empty($tip)) {
             return $text;
         }
-        
+
         return self::tag(
             $tag,
             $text,

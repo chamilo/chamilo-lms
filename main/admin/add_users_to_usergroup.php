@@ -355,7 +355,7 @@ echo Display::input('hidden', 'add_type', null);
     <div class="col-md-5">
         <?php if ($data['group_type'] == UserGroup::SOCIAL_CLASS) {
     ?>
-        <select name="relation" id="relation">
+        <select name="relation" id="relation" class="form-control">
             <option value=""><?php echo get_lang('SelectARelationType'); ?></option>
             <option value="<?php echo GROUP_USER_PERMISSION_ADMIN; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_ADMIN) ? 'selected=selected' : ''; ?> >
                 <?php echo get_lang('Admin'); ?></option>
@@ -375,14 +375,14 @@ echo Display::input('hidden', 'add_type', null);
         <b><?php echo get_lang('UsersInPlatform'); ?> :</b>
             <div class="input-group">
                 <input id="first_letter_user" name="firstLetterUser" type="text" class="form-control"
-                       value="<?php echo Security::remove_XSS($first_letter_user) ?>"
-                       placeholder="<?php echo get_lang('Search') ?>">
+                       value="<?php echo Security::remove_XSS($first_letter_user); ?>"
+                       placeholder="<?php echo get_lang('Search'); ?>">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" onclick="change_select();">
-                        <?php echo get_lang('Filter') ?>
+                        <?php echo get_lang('Filter'); ?>
                     </button>
                     <button class="btn btn-default" type="button" onclick="change_select(true);">
-                        <?php echo get_lang('Reset') ?>
+                        <?php echo get_lang('Reset'); ?>
                     </button>
                 </span>
             </div>

@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$relation = isset($_REQUEST['relation']) ? (int) $_REQUEST['relation'] : '';
+$relation = isset($_REQUEST['relation']) ? (int) $_REQUEST['relation'] : 0;
 $usergroup = new UserGroup();
 $groupInfo = $usergroup->get($id);
 $usergroup->protectScript($groupInfo);
@@ -60,7 +60,7 @@ function validate_filter() {
     document.formulaire.submit();
 }
 
-function checked_in_no_group(checked) 
+function checked_in_no_group(checked)
 {
     $("#relation")
     .find("option")
@@ -73,7 +73,10 @@ function checked_in_no_group(checked)
     document.formulaire.submit();
 }
 
-function change_select(val) {
+function change_select(reset) {
+    if (reset) {
+        document.formulaire["first_letter_user"].value = "";
+    }
     $("#user_with_any_group_id").attr("checked", false);
     document.formulaire.form_sent.value="2";
     document.formulaire.submit();
@@ -218,7 +221,7 @@ if ($orderListByOfficialCode === 'true') {
 }
 
 $conditions = [];
-if (!empty($first_letter_user)) {
+if (!empty($first_letter_user) && strlen($first_letter_user) >= 3) {
     $conditions['lastname'] = $first_letter_user;
 }
 
@@ -234,45 +237,29 @@ if (!empty($filters) && !empty($filterData)) {
 }
 
 $elements_not_in = $elements_in = [];
-$complete_user_list = UserManager::getUserListLike([], $order, false, 'AND');
 
-if (!empty($complete_user_list)) {
-    foreach ($complete_user_list as $item) {
-        if ($use_extra_fields) {
-            if (!in_array($item['user_id'], $final_result)) {
-                continue;
-            }
-        }
+foreach ($list_in as $listedUserId) {
+    $userInfo = api_get_user_info($listedUserId);
 
-        // Avoid anonymous users
-        if ($item['status'] == 6) {
-            continue;
-        }
+    $person_name = $userInfo['complete_name_with_username']." {$userInfo['official_code']}";
 
-        if (in_array($item['user_id'], $list_in)) {
-            $officialCode = !empty($item['official_code']) ? ' - '.$item['official_code'] : null;
-            $person_name = api_get_person_name(
-                $item['firstname'],
-                $item['lastname']
-            ).' ('.$item['username'].') '.$officialCode;
+    if ($orderListByOfficialCode === 'true') {
+        $officialCode = !empty($userInfo['official_code']) ? $userInfo['official_code'].' - ' : '? - ';
 
-            $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
-            if ($orderListByOfficialCode === 'true') {
-                $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
-                $person_name = $officialCode.api_get_person_name(
-                    $item['firstname'],
-                    $item['lastname']
-                ).' ('.$item['username'].') ';
-            }
-
-            $elements_in[$item['user_id']] = $person_name;
-        }
+        $person_name = $officialCode.$userInfo['complete_name_with_username'];
     }
+
+    $elements_in[$listedUserId] = $person_name;
 }
 
 $user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']) ? true : false;
-if ($user_with_any_group) {
+$user_list = [];
+
+if (!empty($conditions)) {
     $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND');
+}
+
+if ($user_with_any_group) {
     $new_user_list = [];
     foreach ($user_list as $item) {
         if (!in_array($item['user_id'], $list_all)) {
@@ -280,8 +267,6 @@ if ($user_with_any_group) {
         }
     }
     $user_list = $new_user_list;
-} else {
-    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND');
 }
 
 if (!empty($user_list)) {
@@ -298,18 +283,11 @@ if (!empty($user_list)) {
         }
 
         $officialCode = !empty($item['official_code']) ? ' - '.$item['official_code'] : null;
-        $person_name = api_get_person_name(
-            $item['firstname'],
-            $item['lastname']
-        ).' ('.$item['username'].') '.$officialCode;
+        $person_name = $item['complete_name_with_username']." $officialCode";
 
-        $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
         if ($orderListByOfficialCode === 'true') {
             $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
-            $person_name = $officialCode.api_get_person_name(
-                $item['firstname'],
-                $item['lastname']
-            ).' ('.$item['username'].') ';
+            $person_name = $officialCode.$item['complete_name_with_username'];
         }
 
         if (!in_array($item['user_id'], $list_in)) {
@@ -395,13 +373,19 @@ echo Display::input('hidden', 'add_type', null);
 
         <div class="multiple_select_header">
         <b><?php echo get_lang('UsersInPlatform'); ?> :</b>
-        <?php echo get_lang('FirstLetterUser'); ?> :
-        <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
-            <option value = "%">--</option>
-            <?php
-            echo Display :: get_alphabet_options($first_letter_user);
-            ?>
-        </select>
+            <div class="input-group">
+                <input id="first_letter_user" name="firstLetterUser" type="text" class="form-control"
+                       value="<?php echo Security::remove_XSS($first_letter_user) ?>"
+                       placeholder="<?php echo get_lang('Search') ?>">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onclick="change_select();">
+                        <?php echo get_lang('Filter') ?>
+                    </button>
+                    <button class="btn btn-default" type="button" onclick="change_select(true);">
+                        <?php echo get_lang('Reset') ?>
+                    </button>
+                </span>
+            </div>
         </div>
     <?php
     echo Display::select(

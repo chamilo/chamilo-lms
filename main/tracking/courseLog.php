@@ -275,10 +275,20 @@ $form_search->addHidden('session_id', $sessionId);
 $form_search->addHidden('id_session', $sessionId);
 $form_search->addHidden('cidReq', $courseCode);
 $form_search->addElement('text', 'user_keyword');
+
+// Filter by active users
+$activeChecked = isset($_GET['user_active']) ? (int) $_GET['user_active'] : '';
+$form_search->addElement('html', '<div class="form-group" style="margin: 0px 10px;">');
+$form_search->addElement('html', '<span>'.get_lang('ActiveAccount').'</span>: <span>
+<input type="radio" name="user_active" value="1" '.(1 === $activeChecked ? 'checked' : '').' /> '.get_lang('Yes').'&nbsp;
+<input type="radio" name="user_active" value="0" '.(0 === $activeChecked ? 'checked' : '').' /> '.get_lang('No').'</span>');
+$form_search->addElement('html', '</div>');
+
 $form_search->addButtonSearch(get_lang('SearchUsers'));
 echo Display::toolbarAction(
     'toolbar-courselog',
-    [$actionsLeft, $form_search->returnForm(), $actionsRight]
+    [$actionsLeft, $form_search->returnForm(), $actionsRight],
+    [4, 6, 2]
 );
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];

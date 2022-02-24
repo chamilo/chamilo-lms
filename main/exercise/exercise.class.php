@@ -11012,14 +11012,13 @@ class Exercise
             }
         }
 
-        $totalUsers = count($userList);
-
         foreach ($exercises as $exercise) {
             $exerciseId = $exercise->iid;
+            $totalResults = ExerciseLib::getNumberStudentsFinishExercise($exerciseId, $courseId, $sessionId);
             $data = [];
             foreach ($labelsWithId as $category_id => $title) {
                 if (isset($tempResult[$exerciseId]) && isset($tempResult[$exerciseId][$category_id])) {
-                    $data[] = round($tempResult[$exerciseId][$category_id] / $totalUsers);
+                    $data[] = round($tempResult[$exerciseId][$category_id] / $totalResults);
                 } else {
                     $data[] = 0;
                 }

@@ -218,14 +218,13 @@ class Database
             return [];
         }
 
-        $i = 0;
+        $return = $data;
 
         foreach ($data as $value) {
-            $data[$i] = $value;
-            $i++;
+            $return[] = $value;
         }
 
-        return $data;
+        return $return;
     }
 
     /**
@@ -297,7 +296,13 @@ class Database
         if ($resource->rowCount() > 0) {
             $result = $resource->fetchAllAssociative();
 
-            return $result[$row][$field];
+            $resultRow = $result[$row];
+
+            foreach ($result[$row] as $value) {
+                $resultRow[] = $value;
+            }
+
+            return $resultRow;
         }
 
         return false;

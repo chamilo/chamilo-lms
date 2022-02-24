@@ -189,27 +189,26 @@ Libraries
 
 ## JWT Authentication
 
-* php bin/console lexik:jwt:generate-keypair
+* Run
+  ```shell
+  php bin/console lexik:jwt:generate-keypair
+  ```
 * In Apache setup Bearer with:
-
-`SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1`
-
-Get the token:
-
-```
-curl -k -X POST -H "Content-Type: application/json" https://example.com/api/authentication_token -d '{"username":"admin","password":"admin"}'
-```
-
-The response should return something like:
-
-`{"token":"MyTokenABC"}`
-
-Go to:
-
-https://example.com/api
-
-Click in "Authorize" and write
-
+  ```apacheconf
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+  ```
+* Get the token:
+  ```shell
+  curl -k -X POST https://example.com/api/authentication_token \
+      -H "Content-Type: application/json" \
+      -d '{"username":"admin","password":"admin"}'
+  ```
+  The response should return something like:
+  ```json
+  {"token":"MyTokenABC"}
+  ```
+* Go to https://example.com/api
+* Click in "Authorize" button and write the value
 `Bearer MyTokenABC`
 
 Then you can make queries using the JWT token.

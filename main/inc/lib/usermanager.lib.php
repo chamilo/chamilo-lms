@@ -3988,6 +3988,11 @@ class UserManager
             }
         }
 
+        $exlearnerCondition = "";
+        if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+            $exlearnerCondition = " AND scu.status NOT IN(".COURSE_EXLEARNER.")";
+        }
+
         /* This query is very similar to the query below, but it will check the
         session_rel_course_user table if there are courses registered
         to our user or not */
@@ -4008,6 +4013,7 @@ class UserManager
                     scu.user_id = $user_id AND
                     scu.session_id = $session_id
                     $where_access_url
+                    $exlearnerCondition
                 ORDER BY sc.position ASC";
 
         $myCourseList = [];
@@ -4051,6 +4057,7 @@ class UserManager
                         s.id_coach = $user_id
                       )
                     $where_access_url
+                    $exlearnerCondition
                     ORDER BY sc.position ASC";
             $result = Database::query($sql);
 
@@ -6056,6 +6063,88 @@ class UserManager
         Database::query($sql);
 
         return true;
+    }
+
+    /**
+     * It updates course relation type as EX-LEARNER if project name (extra field from user_edition_extra_field_to_check) is changed.
+     *
+     * @param $userId
+     * @param $extraValue
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public static function updateCourseRelationTypeExLearner($userId, $extraValue)
+    {
+        if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+            $extraToCheck = api_get_configuration_value('user_edition_extra_field_to_check');
+
+            // Get the old user extra value to check
+            $userExtra = UserManager::get_extra_user_data_by_field($userId, $extraToCheck);
+            if (isset($userExtra[$extraToCheck]) && $userExtra[$extraToCheck] != $extraValue) {
+                // it searchs the courses with the user old extravalue
+                $extraFieldValues = new ExtraFieldValue('course');
+                $extraItems = $extraFieldValues->get_item_id_from_field_variable_and_field_value($extraToCheck, $userExtra[$extraToCheck], false, false, true);
+                $coursesTocheck = [];
+                if (!empty($extraItems)) {
+                    foreach ($extraItems as $items) {
+                        $coursesTocheck[] = $items['item_id'];
+                    }
+                }
+
+                // To check in main course
+                if (!empty($coursesTocheck)) {
+                    $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+                    foreach ($coursesTocheck as $courseId) {
+                        $sql = "SELECT id FROM $tblCourseUser
+                                WHERE user_id = $userId AND c_id = $courseId";
+                        $rs = Database::query($sql);
+                        if (Database::num_rows($rs) > 0) {
+                            $id = Database::result($rs, 0, 0);
+                            $sql = "UPDATE $tblCourseUser SET relation_type = ".COURSE_EXLEARNER."
+                                    WHERE id = $id";
+                            Database::query($sql);
+                        }
+                    }
+                }
+
+                // To check in sessions
+                if (!empty($coursesTocheck)) {
+                    $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+                    $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+                    $sessionsToCheck = [];
+                    foreach ($coursesTocheck as $courseId) {
+                        $sql = "SELECT id, session_id FROM $tblSessionCourseUser
+                                WHERE user_id = $userId AND c_id = $courseId";
+                        $rs = Database::query($sql);
+                        if (Database::num_rows($rs) > 0) {
+                            $row = Database::fetch_array($rs);
+                            $id = $row['id'];
+                            $sessionId = $row['session_id'];
+                            $sql = "UPDATE $tblSessionCourseUser SET status = ".COURSE_EXLEARNER."
+                                    WHERE id = $id";
+                            Database::query($sql);
+                            $sessionsToCheck[] = $sessionId;
+                        }
+                    }
+                    // It checks if user is ex-learner in all courses in the session to update the session relation type
+                    if (!empty($sessionsToCheck)) {
+                        $sessionsToCheck = array_unique($sessionsToCheck);
+                        foreach ($sessionsToCheck as $sessionId) {
+                            $checkAll = Database::query("SELECT count(id) FROM $tblSessionCourseUser WHERE user_id = $userId AND session_id = $sessionId");
+                            $countAll = Database::result($checkAll, 0, 0);
+                            $checkExLearner = Database::query("SELECT count(id) FROM $tblSessionCourseUser WHERE status = ".COURSE_EXLEARNER." AND user_id = $userId AND session_id = $sessionId");
+                            $countExLearner = Database::result($checkExLearner, 0, 0);
+                            if ($countAll > 0 && $countAll == $countExLearner) {
+                                $sql = "UPDATE $tblSessionUser SET relation_type = ".COURSE_EXLEARNER."
+                                    WHERE user_id = $userId AND session_id = $sessionId";
+                                Database::query($sql);
+                            }
+                        }
+                    }
+                }
+                // @todo To check users inside a class
+
+            }
+        }
     }
 
     /**

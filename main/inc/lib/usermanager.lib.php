@@ -6070,6 +6070,7 @@ class UserManager
      *
      * @param $userId
      * @param $extraValue
+     *
      * @throws \Doctrine\DBAL\Exception
      */
     public static function updateCourseRelationTypeExLearner($userId, $extraValue)
@@ -6142,7 +6143,6 @@ class UserManager
                     }
                 }
                 // @todo To check users inside a class
-
             }
         }
     }

@@ -1,6 +1,9 @@
 module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  content: [
+      './assets/**/*.{js,vue}',
+      './public/main/**/*.php',
+      './src/CoreBudnle/Resources/views/**/*.html.twig',
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -60,12 +63,8 @@ module.exports = {
       }
     },
   },
-  variants: {
-    extend: {
-      opacity: ['disabled'],
-    },
-  },
   plugins: [
+    require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/forms'),
     require("@tailwindcss/typography")

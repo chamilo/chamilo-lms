@@ -78,7 +78,6 @@
 
 <script>
 import {mapGetters, useStore} from 'vuex';
-import { LockClosedIcon } from '@heroicons/vue/solid'
 import useState from "../hooks/useState";
 import {ref} from "vue";
 import {useRoute, useRouter} from "vue-router";

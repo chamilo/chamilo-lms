@@ -6,18 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class TrackExerciseRepository extends ServiceEntityRepository
+class TrackEExerciseRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, TrackExercise::class);
+        parent::__construct($registry, TrackEExercise::class);
     }
 
-    public function delete(TrackExercise $track): void
+    public function delete(TrackEExercise $track): void
     {
         $this->getEntityManager()->remove($track);
         $this->getEntityManager()->flush();

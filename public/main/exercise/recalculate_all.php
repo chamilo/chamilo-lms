@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -41,7 +41,7 @@ $result = ExerciseLib::get_exam_results_data(
 );
 
 foreach ($result as $track) {
-    /** @var TrackExercise $trackedExercise */
+    /** @var TrackEExercise $trackedExercise */
     $trackedExercise = ExerciseLib::recalculateResult(
         $track['id'],
         $track['user_id'],

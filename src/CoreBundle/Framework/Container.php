@@ -33,7 +33,7 @@ use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Repository\SocialPostRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
-use Chamilo\CoreBundle\Repository\TrackExerciseRepository;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -566,9 +566,9 @@ class Container
         return self::$container->get(CThematicAdvanceRepository::class);
     }
 
-    public static function getTrackExerciseRepository(): TrackExerciseRepository
+    public static function getTrackEExerciseRepository(): TrackEExerciseRepository
     {
-        return self::$container->get(TrackExerciseRepository::class);
+        return self::$container->get(TrackEExerciseRepository::class);
     }
 
     public static function getWikiRepository(): CWikiRepository

@@ -61,7 +61,6 @@ composer install
 
 yarn set version stable
 yarn install
-yarn run encore dev
 chmod -R 777 .
 ~~~~
 
@@ -89,7 +88,6 @@ php bin/console doctrine:schema:update --force
 
 # js/css update
 yarn install
-yarn run encore dev
 ~~~~
 This will update the JS (yarn) and PHP (composer) dependencies in the public/build folder.
 

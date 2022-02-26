@@ -39,11 +39,11 @@ class TrackEAttempt
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackExercise", inversedBy="attempts")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\TrackEExercise", inversedBy="attempts")
      * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id", nullable=false, onDelete="CASCADE")
      */
     #[Assert\NotNull]
-    protected TrackExercise $trackExercise;
+    protected TrackEExercise $trackExercise;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackEAttempts")
@@ -262,12 +262,12 @@ class TrackEAttempt
         return $this;
     }
 
-    public function getTrackExercise(): TrackExercise
+    public function getTrackEExercise(): TrackEExercise
     {
         return $this->trackExercise;
     }
 
-    public function setTrackExercise(TrackExercise $trackExercise): self
+    public function setTrackEExercise(TrackEExercise $trackExercise): self
     {
         $this->trackExercise = $trackExercise;
 

@@ -1,7 +1,7 @@
 <?php
 /* See license terms in /license.txt */
 
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
 
 class ExerciseShowFunctions
@@ -154,8 +154,8 @@ class ExerciseShowFunctions
         $questionScore = 0,
         $showAlertIfNotCorrected = false
     ) {
-        /** @var TrackExercise $trackExercise */
-        $trackExercise = Container::getTrackExerciseRepository()->find($trackExerciseId);
+        /** @var TrackEExercise $trackExercise */
+        $trackExercise = Container::getTrackEExerciseRepository()->find($trackExerciseId);
 
         if (null === $trackExerciseId) {
             return;

@@ -10,17 +10,17 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\AttemptFeedback;
 use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\Repository\TrackExerciseRepository;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
 
-class TrackExerciseRepositoryTest extends AbstractApiTest
+class TrackEExerciseRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
@@ -34,7 +34,7 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         $student = $this->createUser('student');
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);
-        $trackExerciseRepo = self::getContainer()->get(TrackExerciseRepository::class);
+        $trackExerciseRepo = self::getContainer()->get(TrackEExerciseRepository::class);
         $exerciseRepo = self::getContainer()->get(CQuizRepository::class);
 
         $this->assertSame(1, $courseRepo->count([]));
@@ -47,7 +47,7 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         $em->persist($exercise);
         $em->flush();
 
-        $trackExercise = (new TrackExercise())
+        $trackExercise = (new TrackEExercise())
             ->setQuestionsToCheck('')
             ->setExeDate(new DateTime())
             ->setStartDate(new DateTime())
@@ -100,7 +100,7 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);
         $sessionRepo = self::getContainer()->get(SessionRepository::class);
-        $trackExerciseRepo = self::getContainer()->get(TrackExerciseRepository::class);
+        $trackExerciseRepo = self::getContainer()->get(TrackEExerciseRepository::class);
         $exerciseRepo = self::getContainer()->get(CQuizRepository::class);
 
         $this->assertSame(1, $courseRepo->count([]));
@@ -113,7 +113,7 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         $em->persist($exercise);
         $em->flush();
 
-        $trackExercise = (new TrackExercise())
+        $trackExercise = (new TrackEExercise())
             ->setQuestionsToCheck('')
             ->setExeDate(new DateTime())
             ->setStartDate(new DateTime())
@@ -161,7 +161,7 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);
-        $trackExerciseRepo = self::getContainer()->get(TrackExerciseRepository::class);
+        $trackExerciseRepo = self::getContainer()->get(TrackEExerciseRepository::class);
         $exerciseRepo = self::getContainer()->get(CQuizRepository::class);
 
         $course = $this->createCourse('new');
@@ -188,7 +188,7 @@ class TrackExerciseRepositoryTest extends AbstractApiTest
             ->setUser($student)
         ;
 
-        $trackExercise = (new TrackExercise())
+        $trackExercise = (new TrackEExercise())
             ->setQuestionsToCheck('')
             ->setExeDate(new DateTime())
             ->setStatus('completed')

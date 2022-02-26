@@ -20,7 +20,7 @@ use Chamilo\CoreBundle\Entity\TrackELastaccess;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\TrackEUploads;
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
@@ -135,9 +135,9 @@ final class UserToJsonNormalizer
         $criteria = [
             'user' => $userId,
         ];
-        $result = $em->getRepository(TrackExercise::class)->findBy($criteria);
+        $result = $em->getRepository(TrackEExercise::class)->findBy($criteria);
         $trackEExercises = [];
-        /** @var TrackExercise $item */
+        /** @var TrackEExercise $item */
         foreach ($result as $item) {
             $date = $item->getExeDate()->format($dateFormat);
             $list = [
@@ -160,7 +160,7 @@ final class UserToJsonNormalizer
         foreach ($result as $item) {
             $date = $item->getTms()->format($dateFormat);
             $list = [
-                'Attempt #'.$item->getTrackExercise()->getExeId(),
+                'Attempt #'.$item->getTrackEExercise()->getExeId(),
                 //'Answer: '.$item->getAnswer(),
                 //'Marks: '.$item->getMarks(),
                 'Position: '.$item->getPosition(),

@@ -5,7 +5,7 @@
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
@@ -4830,7 +4830,7 @@ EOT;
     {
         $em = Database::getManager();
 
-        $dql = 'SELECT DISTINCT te.exeUserId FROM ChamiloCoreBundle:TrackExercise te WHERE te.exeExoId = :id AND te.course = :cId';
+        $dql = 'SELECT DISTINCT te.exeUserId FROM ChamiloCoreBundle:TrackEExercise te WHERE te.exeExoId = :id AND te.course = :cId';
         $dql .= api_get_session_condition($sessionId, true, false, 'te.sessionId');
 
         $result = $em
@@ -5118,8 +5118,8 @@ EOT;
      */
     public static function getOralFeedbackAudio($attemptId, $questionId, $userId)
     {
-        /** @var TrackExercise $tExercise */
-        $tExercise = Container::getTrackExerciseRepository()->find($attemptId);
+        /** @var TrackEExercise $tExercise */
+        $tExercise = Container::getTrackEExerciseRepository()->find($attemptId);
 
         if (null === $tExercise) {
             return '';
@@ -5373,7 +5373,7 @@ EOT;
      * @param int $exerciseId Exercise ID
      * @param int $courseId   Optional. Coure ID.
      *
-     * @return TrackExercise|null
+     * @return TrackEExercise|null
      */
     public static function recalculateResult($exeId, $userId, $exerciseId, $courseId = 0)
     {
@@ -5382,8 +5382,8 @@ EOT;
         }
 
         $em = Database::getManager();
-        /** @var TrackExercise $trackedExercise */
-        $trackedExercise = $em->getRepository(TrackExercise::class)->find($exeId);
+        /** @var TrackEExercise $trackedExercise */
+        $trackedExercise = $em->getRepository(TrackEExercise::class)->find($exeId);
 
         if (empty($trackedExercise)) {
             return null;

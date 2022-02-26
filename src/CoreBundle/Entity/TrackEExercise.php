@@ -6,11 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use Chamilo\CoreBundle\Controller\Api\UserTrackExerciseController;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -23,7 +26,88 @@ use Symfony\Component\Validator\Constraints as Assert;
  * })
  * @ORM\Entity
  */
-class TrackExercise
+#[ApiResource(
+      collectionOperations:[
+            'get' => [
+                'normalization_context' => ['groups' => 'track_e_exercises:list'],
+                "security" => "is_granted('ROLE_USER')",
+            ],
+            "get_userid" => [
+                "method" => "GET",
+                "path" => "/track_e_exercises_by_user/{quiz_id}/{user_id}",
+                "openapi_context" => [
+                    "parameters" => [
+                        [
+                            "name" => "quiz_id",
+                            "in" => "path",
+                            "description" => "Exercise ID.",
+                            "required" => true,
+                            "schema" => ["type" => "integer"],
+                            "style" => "simple"
+                        ],
+                        [
+                            "name" => "user_id",
+                            "in" => "path",
+                            "description" => "User ID.",
+                            "required" => true,
+                            "schema" => ["type" => "integer"],
+                            "style" => "simple"
+                        ],
+                    ],
+                ],
+                "controller" => UserTrackExerciseController::class,
+                "read" => false,
+                "normalization_context" => ["groups" => "track_e_exercises:list"],
+                "pagination_enabled" => false,
+                "security" => "is_granted('ROLE_USER')",
+            ],
+            "get_extravalue" => [
+                  "method" => "GET",
+                  "path" => "/track_e_exercises_by_user_extra_field/{quiz_id}/{extra_field_name}/{extra_field_value}",
+                  "openapi_context" => [
+                      "parameters" => [
+                          [
+                              "name" => "quiz_id",
+                              "in" => "path",
+                              "description" => "Exercise ID.",
+                              "required" => true,
+                              "schema" => ["type" => "integer"],
+                              "style" => "simple"
+                          ],
+                          [
+                              "name" => "extra_field_name",
+                              "in" => "path",
+                              "description" => "User extra field variable.",
+                              "required" => true,
+                              "schema" => ["type" => "string"],
+                              "style" => "simple"
+                          ],
+                          [
+                              "name" => "extra_field_value",
+                              "in" => "path",
+                              "description" => "User extra field value.",
+                              "required" => true,
+                              "schema" => ["type" => "string"],
+                              "style" => "simple"
+                          ],
+                      ],
+                ],
+                "controller" => UserTrackExerciseController::class,
+                "read" => false,
+                 "normalization_context" => ["groups" => "track_e_exercises:list"],
+                "pagination_enabled" => false,
+                "security" => "is_granted('ROLE_USER')",
+           ],
+     ],
+     itemOperations:[
+        "get" => [
+            "normalization_context" => ["groups" => "track_e_exercises:item"],
+            "security" => "is_granted('ROLE_USER')",
+        ],
+     ],
+    attributes: ["pagination_enabled" => true],
+)]
+class TrackEExercise
 {
     /**
      * @ORM\Column(name="exe_id", type="integer")
@@ -35,6 +119,8 @@ class TrackExercise
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     #[Assert\NotNull]
     protected User $user;
@@ -42,6 +128,8 @@ class TrackExercise
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     #[Assert\NotNull]
     protected Course $course;
@@ -49,41 +137,55 @@ class TrackExercise
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     protected ?Session $session = null;
 
     /**
      * @ORM\Column(name="exe_date", type="datetime", nullable=false)
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     #[Assert\NotBlank]
     protected DateTime $exeDate;
 
     /**
      * @ORM\Column(name="exe_exo_id", type="integer", nullable=false)
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     #[Assert\NotBlank]
     protected int $exeExoId;
 
     /**
      * @ORM\Column(name="score", type="float", precision=6, scale=2, nullable=false)
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     #[Assert\NotNull]
     protected float $score;
 
     /**
      * @ORM\Column(name="max_score", type="float", precision=6, scale=2, nullable=false)
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     #[Assert\NotNull]
     protected float $maxScore;
 
     /**
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     #[Assert\NotBlank]
     protected string $userIp;
 
     /**
      * @ORM\Column(name="status", type="string", length=20, nullable=false)
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     #[Assert\NotNull]
     protected string $status;
@@ -96,6 +198,8 @@ class TrackExercise
 
     /**
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
+     *
+     * @Groups({"track_e_exercises:list", "track_e_exercises:item"})
      */
     protected DateTime $startDate;
 
@@ -454,7 +558,7 @@ class TrackExercise
     {
         if (!$this->attempts->contains($attempt)) {
             $this->attempts[] = $attempt;
-            $attempt->setTrackExercise($this);
+            $attempt->setTrackEExercise($this);
         }
 
         return $this;

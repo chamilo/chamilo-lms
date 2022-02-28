@@ -46,11 +46,8 @@ Encore
     //.enableVersioning(Encore.isProduction())
 
     // enables @babel/preset-env polyfills
-    .configureBabel((babelConfig) => {
-        babelConfig.plugins.push('@babel/plugin-transform-runtime');
-    }, {
-        useBuiltIns: 'usage',
-        corejs: 3
+    .configureBabel(babelConfig => {
+        babelConfig.presets.push('@vue/cli-plugin-babel/preset');
     })
 
     .enableSassLoader()
@@ -61,9 +58,12 @@ Encore
     })
     .enableVueLoader(() => {}, { version: 3, runtimeCompilerBuild: false})
     .autoProvidejQuery()
-    .enablePostCssLoader(function(options) {
+    .enablePostCssLoader(options => {
         options.postcssOptions = {
-            path: 'postcss.config.js'
+            plugins: {
+                tailwindcss: {},
+                autoprefixer: {},
+            }
         }
     })
     .copyFiles([

@@ -8846,4 +8846,5 @@ $LpRemindFooterX = "The training center<p>%s</p>Trainers:<br/>%s";
 $Embed = "Get embedable link";
 $EmbedExerciseLink = "Link to embed the exercise";
 $CopyUrlToIncludeInIframe = "Copy this url to include this exercise in an iframe:";
+$ExportExtraFields = "Export extra fields";
 ?>

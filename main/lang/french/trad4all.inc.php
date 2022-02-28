@@ -8782,4 +8782,5 @@ $LpRemindFooterX = "Le centre de formation<p>%s</p><br/>%s";
 $Embed = "Obtenir le lien d'intégration";
 $EmbedExerciseLink = "Lien pour intégrer l'exercice dans une iframe";
 $CopyUrlToIncludeInIframe = "Copiez cette URL pour inclure cet exercice dans une iframe :";
+$ExportExtraFields = "Exporter les champs extra";
 ?>

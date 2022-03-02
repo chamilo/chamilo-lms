@@ -354,7 +354,7 @@ if ($form->validate()) {
 
     if ($course_code_ok) {
         if (!$course_validation_feature) {
-            $params = [];
+            $params = $course_values;
             $params['title'] = $title;
             $params['exemplary_content'] = $exemplary_content;
             $params['wanted_code'] = $wanted_code;

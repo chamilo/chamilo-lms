@@ -275,15 +275,6 @@ $form_search->addHidden('session_id', $sessionId);
 $form_search->addHidden('id_session', $sessionId);
 $form_search->addHidden('cidReq', $courseCode);
 $form_search->addElement('text', 'user_keyword');
-
-// Filter by active users
-$activeChecked = isset($_GET['user_active']) ? (int) $_GET['user_active'] : '';
-$form_search->addElement('html', '<div class="form-group" style="margin: 0px 10px;">');
-$form_search->addElement('html', '<span>'.get_lang('ActiveAccount').'</span>: <span>
-<input type="radio" name="user_active" value="1" '.(1 === $activeChecked ? 'checked' : '').' /> '.get_lang('Yes').'&nbsp;
-<input type="radio" name="user_active" value="0" '.(0 === $activeChecked ? 'checked' : '').' /> '.get_lang('No').'</span>');
-$form_search->addElement('html', '</div>');
-
 $form_search->addButtonSearch(get_lang('SearchUsers'));
 echo Display::toolbarAction(
     'toolbar-courselog',
@@ -444,6 +435,19 @@ if ($nbStudents > 0) {
         }
     }
 
+    // Filter by active users
+    $formActiveUsers = new FormValidator(
+        'active_users',
+        'get',
+        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
+    );
+    // Filter by active users
+    $group = [];
+    $group[] = $formActiveUsers->createElement('radio', 'user_active', 'id="user_active1"', get_lang('Yes'), 1);
+    $group[] = $formActiveUsers->createElement('radio', 'user_active', 'id="user_active0"', get_lang('No'), 0);
+    $formActiveUsers->addGroup($group, 'active', get_lang('AccountActive'));
+    $formActiveUsers->addButtonSearch(get_lang('Search'));
+
     $extraField = new ExtraField('user');
     $extraField->addElements($formExtraField, 0, [], true);
     $formExtraField->addButtonSearch(get_lang('Search'));
@@ -493,6 +497,15 @@ if ($nbStudents > 0) {
             $tableGroup = Database::get_course_table(TABLE_GROUP_USER);
             $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
             $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
+        }
+    }
+
+    if ($formActiveUsers->validate()) {
+        $formValue = $formActiveUsers->getSubmitValue('active');
+        if (isset($formValue['user_active'])) {
+            $active = (int) $formValue['user_active'];
+            $whereCondition = " AND user.active = $active ";
+            $conditions = ['where' => $whereCondition, 'inject_joins' => ''];
         }
     }
 
@@ -598,6 +611,7 @@ if ($nbStudents > 0) {
     $mainForm->addHtml('<div id="advanced_search_options" style="display:none;">');
     $mainForm->addHtml($formClass->returnForm());
     $mainForm->addHtml($formExtraField->returnForm());
+    $mainForm->addHtml($formActiveUsers->returnForm());
     $mainForm->addHtml('</div>');
     $html .= $mainForm->returnForm();
 

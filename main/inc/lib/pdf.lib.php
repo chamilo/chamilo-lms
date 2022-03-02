@@ -973,10 +973,24 @@ class PDF
 
         $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
 
+        $notFoundImagePath = Display::return_icon(
+            'closed-circle.png',
+            get_lang('FileNotFound'),
+            [],
+            ICON_SIZE_TINY,
+            false,
+            true
+        );
+
         /** @var \DOMElement $element */
         foreach ($elements as $element) {
             $src = $element->getAttribute('src');
             $src = trim($src);
+
+            if (api_filename_has_blacklisted_stream_wrapper($src)) {
+                $element->setAttribute('src', $notFoundImagePath);
+                continue;
+            }
 
             if (strpos($src, $protocol) !== false) {
                 continue;

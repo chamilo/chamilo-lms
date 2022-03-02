@@ -10197,3 +10197,22 @@ function api_protect_webservices()
         exit;
     }
 }
+
+function api_filename_has_blacklisted_stream_wrapper(string $filename) {
+    if (strpos($filename, '://') > 0) {
+        $wrappers = stream_get_wrappers();
+        $allowedWrappers = ['http', 'https', 'file'];
+
+        foreach ($wrappers as $wrapper) {
+            if (in_array($wrapper, $allowedWrappers)) {
+                continue;
+            }
+
+            if (stripos($filename, $wrapper . '://') === 0) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}

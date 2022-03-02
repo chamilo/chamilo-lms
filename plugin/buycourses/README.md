@@ -12,6 +12,7 @@ Currently, the plugin allows users to pay through:
  - PayPal (requires a merchant account on PayPal at configuration time)
  - Bank payments (requires manual confirmation of payments' reception)
  - RedSys payments (Spanish payment gateway) (requires the download of an external file)
+ - Stripe payments (requieres a merchant account oin Stripe at configuration time)
 
 The user receives an e-mail confirming the purchase and she/he can immediately 
 access to the course or session.
@@ -29,4 +30,4 @@ enable new features.
 Please note that updating Chamilo does *NOT* automatically update the plugins
 structure.
 
-You can find a history of changes in the [CHANGELOG.md file](./CHANGELOG.md)
+You can find a history of changes in the [CHANGELOG.md file](../../plugin/buycourses/CHANGELOG.md)

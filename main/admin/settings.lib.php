@@ -237,6 +237,8 @@ function handlePlugins()
         echo Display::return_message(get_lang('SettingsStored'), 'confirmation');
     }
 
+    AppPlugin::cleanEntitiesInBundle();
+
     $all_plugins = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->getInstalledPlugins();
     $officialPlugins = $plugin_obj->getOfficialPlugins();

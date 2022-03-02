@@ -298,6 +298,14 @@ select {
     background: #2C5B8E;
 }
 
+#carousel-announcement .carousel-inner {
+    position: relative;
+    width: 90%;
+    overflow: hidden;
+    margin: auto;
+    padding-bottom: 25px;
+}
+
 .carousel-control {
     width: 5%;
 }
@@ -309,7 +317,7 @@ select {
 }
 
 .carousel-indicators {
-    bottom: 0;
+    bottom: -20px;
 }
 
 .form-group .freeze {
@@ -4568,7 +4576,7 @@ i.size-32.icon-new-work {
 }
 
 .multiple_select_header {
-    height: 35px;
+    min-height: 35px;
     margin-bottom: 15px;
 }
 
@@ -6458,6 +6466,18 @@ div#chat-remote-video video {
 #about-course #course-info-top .session-title{
     margin-top: 10px;
 }
+
+.collapse-toogle--right,
+#about-course .about-course--btn-details {
+    padding-left: 0;
+    padding-right: 25px;
+    background: url("../../main/img/icons/22/arrow-up-collapse.png") no-repeat right center;
+}
+.collapse-toogle--right.collapsed,
+#about-course .about-course--btn-details.collapsed{
+    background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat right center;
+}
+
 /* list courses classic*/
 .classic-courses .list-teachers {
     font-size: 12px;

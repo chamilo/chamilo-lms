@@ -9596,6 +9596,20 @@ class Exercise
                                 ]
                             );
 
+                            // Link to embed the quiz
+                            $urlEmbed = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&origin=iframe&exerciseId='.$row['iid'];
+                            $actions .= Display::url(
+                                Display::return_icon('new_link.png', get_lang('Embed')),
+                                '',
+                                [
+                                    'class' => 'ajax',
+                                    'data-title' => get_lang('EmbedExerciseLink'),
+                                    'title' => get_lang('EmbedExerciseLink'),
+                                    'data-content' => get_lang('CopyUrlToIncludeInIframe').'<br>'.$urlEmbed,
+                                    'href' => 'javascript:void(0);',
+                                ]
+                            );
+
                             // Clean exercise
                             $clean = '';
                             if (true === $allowClean) {
@@ -10896,6 +10910,7 @@ class Exercise
         $dataSet = [];
         $labels = [];
         $labelsWithId = [];
+        $cutLabelAtChar = 30;
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
             if (empty($labels)) {
@@ -10904,6 +10919,10 @@ class Exercise
                     $labelsWithId = array_column($categoryNameList, 'title', 'iid');
                     asort($labelsWithId);
                     $labels = array_values($labelsWithId);
+                    foreach ($labels as $labelId => $label) {
+                        // Cut if label is too long to maintain chart visibility
+                        $labels[$labelId] = cut($label, $cutLabelAtChar);
+                    }
                 }
             }
 
@@ -10950,7 +10969,7 @@ class Exercise
         $dataSet = [];
         $labels = [];
         $labelsWithId = [];
-
+        $cutLabelAtChar = 30;
         $tempResult = [];
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
@@ -10961,6 +10980,10 @@ class Exercise
                     $labelsWithId = array_column($categoryNameList, 'title', 'iid');
                     asort($labelsWithId);
                     $labels = array_values($labelsWithId);
+                    foreach ($labels as $labelId => $label) {
+                        // Cut if label is too long to maintain chart visibility
+                        $labels[$labelId] = cut($label, $cutLabelAtChar);
+                    }
                 }
             }
 
@@ -11810,7 +11833,7 @@ class Exercise
             $msg = str_replace("#mail#", $user_info['email'], $msg1);
             $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
-            if (!in_array($origin, ['learnpath', 'embeddable'])) {
+            if (!in_array($origin, ['learnpath', 'embeddable', 'iframe'])) {
                 $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             }
             $msg1 = str_replace("#url#", $url_email, $msg);

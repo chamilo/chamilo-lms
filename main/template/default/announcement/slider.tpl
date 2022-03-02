@@ -1,7 +1,6 @@
 <style>
     .announcement_short {
-        height: 310px;
-        white-space: nowrap;
+        height: 300px;
         overflow: hidden;
         text-overflow: ellipsis;
     }

@@ -8863,4 +8863,16 @@ $ReminderXEvent = "Recordatorio para el evento : %s";
 $AddNotification = "Agregar un recordatorio";
 $NotifyBeforeTheEventStarts = "Notificaciones de recordatorio del evento";
 $AddTags = "Agregar etiquetas";
+$IsItEditableByTheInvitees = "Evento editable por los invitados";
+$Invitees = "Invitados";
+$RemindXLpCourseX = "Recordatorio %s del curso %s";
+$HelloX = "Hola %s";
+$YouAreRegCourseXFromDateX = "Estás registrado en la formación %s desde el %s";
+$ThisMessageIsAboutX = "Estás recibiendo este mensaje porque has completado una leccion con %s% de progreso de tu formación.</br>Tu progreso debe ser 100% para considerar que tu formación se llevó a cabo.</br> Si tienes el más mínimo problema, debes contactar con tu profesor.";
+$StepsToRemindX = "Como recordatorio, para acceder a la plataforma de formación:<br/>1. Conéctese a la plataforma en la dirección: %s<br/>2. Luego ingrese:<br/>Su nombre de usuario: %s<br/>Su contraseña: Se le envió por correo electrónico.<br/>si lo olvidó y no puede encontrarlo, puede recuperarlo yendo a %s<br/><br/>Gracias por hacer lo necesario.";
+$LpRemindFooterX = "El centro de capacitación<p>%s</p>Profesores:<br/>%s";
+$Embed = "Obtener enlace insertable";
+$EmbedExerciseLink = "Enlace para insertar el ejercicio";
+$CopyUrlToIncludeInIframe = "Copiar esta URL para incluir este ejercicio en un iframe:";
+$ExportExtraFields = "Exportar campos extra";
 ?>

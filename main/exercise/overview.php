@@ -83,7 +83,7 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left, $exercise_url);
 }
 
-if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp', 'iframe'])) {
     SessionManager::addFlashSessionReadOnly();
     Display::display_header();
 } else {

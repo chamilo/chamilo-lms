@@ -287,18 +287,34 @@ $date = sprintf(
 );
 $form->addElement('label', get_lang('RegistrationDate'), $date);
 
+$defaultExpiration = 0;
 if (!$user_data['platform_admin']) {
-    // Expiration Date
-    $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-    $group = [];
-    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement(
-        'DateTimePicker',
-        'expiration_date',
-        null,
-        ['onchange' => 'javascript: enable_expiration_date();']
-    );
-    $form->addGroup($group, 'max_member_group', null, null, false);
+    $hideNeverExpiresOpt = api_get_configuration_value('user_hide_never_expire_option');
+    $lblExpiration = '';
+    if ($hideNeverExpiresOpt) {
+        $lblExpiration = get_lang('ExpirationDate');
+        $defaultExpiration = 1;
+        $group = [];
+        $group[] = $form->createElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('Enabled'), 1);
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null
+        );
+    } else {
+        $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
+        $group = [];
+        $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null,
+            [
+                'onchange' => 'javascript: enable_expiration_date();',
+            ]
+        );
+    }
+    $form->addGroup($group, 'max_member_group', $lblExpiration, null, false);
 
     // Active account or inactive account
     $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);

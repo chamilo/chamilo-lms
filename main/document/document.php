@@ -572,7 +572,7 @@ switch ($action) {
             $document_id,
             api_get_course_id(),
             true,
-            $session_id
+            $sessionId
         );
         $file = $sys_course_path.$courseInfo['directory'].'/document'.$document_info['path'];
         $fileInfo = pathinfo($file);
@@ -1130,7 +1130,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
         if (!empty($document_to_move)) {
             if ($document_to_move['filetype'] == 'link') {
                 $real_path_target = $base_work_dir.$moveTo.'/';
-                if (!DocumentManager::cloudLinkExists($_course, $moveTo, $document_to_move['comment'])) {
+                if (!DocumentManager::cloudLinkExists($courseInfo, $moveTo, $document_to_move['comment'])) {
                     $doc_id = $moveFile;
                     //DocumentManager::updateDbInfo($document_to_move['path'], $moveTo.'/', $doc_id);
                     DocumentManager::updateDbInfo(
@@ -1143,7 +1143,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
 
                     // Update database item property
                     api_item_property_update(
-                        $_course,
+                        $courseInfo,
                         TOOL_DOCUMENT,
                         $doc_id,
                         'FileMoved',
@@ -1152,7 +1152,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                         null,
                         null,
                         null,
-                        $session_id
+                        $sessionId
                     );
                     Display::addFlash(
                         Display::return_message(
@@ -1356,7 +1356,7 @@ if ($isAllowedToEdit ||
                             }
                         } else {
                             // Cloud Links
-                            if (DocumentManager::deleteCloudLink($_course, $documentId)) {
+                            if (DocumentManager::deleteCloudLink($courseInfo, $documentId)) {
                                 $messages .= Display::return_message(
                                     get_lang('CloudLinkDeleted'),
                                     'confirmation'
@@ -1856,6 +1856,7 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
     api_get_user_id(),
     $courseInfo['code']
 );
+global $charset;
 
 $getSizesURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_dirs_size&'.api_get_cidreq();
 

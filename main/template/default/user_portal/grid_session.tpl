@@ -144,7 +144,7 @@
                     {# Collapsible panel #}
                     {# Foldable #}
                     <a role="button" data-toggle="collapse" data-parent="#page-content" href="#collapse_{{ row.id }}"
-                       aria-expanded="false">
+                       aria-expanded="false" class="collapse-toogle--right collapsed">
                         {{ session_image }} {{ row.title }}
                     </a>
                     {% set collapsable = 'collapse' %}

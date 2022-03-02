@@ -2086,13 +2086,14 @@ class Display
      *
      * @return string
      */
-    public static function tip($text, $tip)
+    public static function tip($text, $tip, string $tag = 'span')
     {
         if (empty($tip)) {
             return $text;
         }
 
-        return self::span(
+        return self::tag(
+            $tag,
             $text,
             ['class' => 'boot-tooltip', 'title' => strip_tags($tip)]
         );
@@ -2921,15 +2922,28 @@ HTML;
             $fixLink = '{type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'fixlinks.js"},';
         }
 
+        $videoContextMenyHiddenNative = '';
+        $videoContextMenyHiddenMejs = '';
+        if (api_get_configuration_value('video_context_menu_hidden')) {
+            $videoContextMenyHiddenNative = '$("video").on("contextmenu", function(e) {
+                e.preventDefault();
+            });';
+            $videoContextMenyHiddenMejs = '$(".mejs__container").on("contextmenu", function(e) {
+                e.preventDefault();
+            });';
+        }
+
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
         $.frameReady(function() {
              $(function () {
+                '.$videoContextMenyHiddenNative.'
+
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
                     pluginPath: "'.$webJsPath.'mediaelement/plugins/",
                     features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
-                        '.ChamiloApi::getQuizMarkersRollsJS().'
+                        '.$videoContextMenyHiddenMejs.PHP_EOL.ChamiloApi::getQuizMarkersRollsJS().'
                     },
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
@@ -3004,5 +3018,15 @@ HTML;
     public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
     {
         return self::return_icon($image, $name, [], $size);
+    }
+
+    public static function returnHeaderWithPercentage($header, $percentage)
+    {
+        $percentHtml = sprintf(
+            get_lang('XPercent'),
+            round($percentage, 2)
+        );
+
+        return "$header<br><small>$percentHtml</small>";
     }
 }

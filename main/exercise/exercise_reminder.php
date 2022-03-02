@@ -79,7 +79,7 @@ if (empty($exercise_stat_info) || empty($question_list)) {
 
 $nameTools = get_lang('Exercises');
 $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
-$hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable']);
+$hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable', 'iframe']);
 
 if (!$hideHeaderAndFooter) {
     Display::display_header($nameTools, get_lang('Exercise'));

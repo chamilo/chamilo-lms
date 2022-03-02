@@ -45,6 +45,7 @@ class PDF
 
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : '';
+        $this->params['pdf_description'] = $params['pdf_description'] ?? '';
         $this->params['course_info'] = isset($params['course_info']) ? $params['course_info'] : api_get_course_info();
         $this->params['session_info'] = isset($params['session_info']) ? $params['session_info'] : api_get_session_info(api_get_session_id());
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
@@ -140,6 +141,7 @@ class PDF
         $tpl->assign('pdf_date_only', $this->params['pdf_date_only']);
         $tpl->assign('pdf_teachers', $teacher_list);
         $tpl->assign('pdf_title', $this->params['pdf_title']);
+        $tpl->assign('pdf_description', $this->params['pdf_description']);
         $tpl->assign('pdf_student_info', $this->params['student_info']);
         $tpl->assign('show_grade_generated_date', $this->params['show_grade_generated_date']);
         $tpl->assign('add_signatures', $this->params['add_signatures']);
@@ -971,10 +973,24 @@ class PDF
 
         $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
 
+        $notFoundImagePath = Display::return_icon(
+            'closed-circle.png',
+            get_lang('FileNotFound'),
+            [],
+            ICON_SIZE_TINY,
+            false,
+            true
+        );
+
         /** @var \DOMElement $element */
         foreach ($elements as $element) {
             $src = $element->getAttribute('src');
             $src = trim($src);
+
+            if (api_filename_has_blacklisted_stream_wrapper($src)) {
+                $element->setAttribute('src', $notFoundImagePath);
+                continue;
+            }
 
             if (strpos($src, $protocol) !== false) {
                 continue;

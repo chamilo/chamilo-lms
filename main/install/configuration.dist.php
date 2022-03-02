@@ -555,7 +555,9 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 // The provided default is an *example*, please customize.
 // This setting is particularly complicated to set with CKeditor, but if you
 // add all domains that you want to authorize for iframes inclusion in the
-// child-src statement, this example should work for you
+// child-src statement, this example should work for you.
+// You can prevent JavaScript from executing from external sources (including
+// inside SVG images) by using a strict list in the "script-src" argument.
 //$_configuration['security_content_policy'] = 'default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;';
 //$_configuration['security_content_policy_report_only'] = 'default-src \'self\'; script-src *://*.google.com:*';
 //
@@ -1050,6 +1052,8 @@ ALTER TABLE portfolio_category ADD parent_id INT(11) NOT NULL DEFAULT 0;
 
 // Enable speed controller in video player
 // $_configuration['video_features'] = ['features' => ['speed']];
+// Hide the context menu on video player
+//$_configuration['video_context_menu_hidden'] = false;
 
 // Disable token verification when sending a message
 // $_configuration['disable_token_in_new_message'] = false;
@@ -2072,6 +2076,9 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 // Option to hide the teachers info on courses about info page.
 //$_configuration['course_about_teacher_name_hide'] = false;
 
+// Hides the option "Never expire" for expiration date in add/edit user page
+//$_configuration['user_hide_never_expire_option'] = false;
+
 // Allow multiple languages to a course
 // as a selection bar for languages used in the course.
 // Add another field "multilingual" to be used separately as a true/false
@@ -2084,10 +2091,16 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 */
 //$_configuration['allow_course_multiple_languages'] = false;
 
-// Enables to hide user status when option is true from $_configuration['user_status_hide_opcion']
-//$_configuration['hide_user_status_options_enabled'] = false;
-// The user status is hidden when is false, it requires $_configuration['hide_user_status_options_enabled'] = true
-/*$_configuration['user_status_hide_option'] = [
+// Update user expiration in x days or months when login the first time
+/*$_configuration['update_student_expiration_x_date'] = [
+    'days' => 0,
+    'months' => 0,
+];*/
+
+// Enables to define which user status to show when option is true from $_configuration['user_status_show_option']
+//$_configuration['user_status_show_options_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_show_options_enabled'] = true
+/*$_configuration['user_status_show_option'] = [
         'COURSEMANAGER' => true,
         'STUDENT' => true,
         'DRH' => false,
@@ -2096,8 +2109,33 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => false
 ];*/
 
+
 // Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
 //$_configuration['lp_prerequisit_on_quiz_unblock_if_max_attempt_reached'] = false;
+
+// Enables to hide user status when option is true visible only for admins from $_configuration['user_status_option_show_only_for_admin']
+//$_configuration['user_status_option_only_for_admin_enabled'] = false;
+// The user status is hidden when is false, it requires $_configuration['user_status_option_only_for_admin_enabled'] = true
+/*$_configuration['user_status_option_show_only_for_admin'] = [
+        'COURSEMANAGER' => false,
+        'STUDENT' => false,
+        'DRH' => false,
+        'SESSIONADMIN' => true,
+        'STUDENT_BOSS' => false,
+        'INVITEE' => false
+
+// Set the default expiration date when a user is created by role and days
+/*$_configuration['user_number_of_days_for_default_expiration_date_per_role'] = [
+        'COURSEMANAGER' => 365,
+        'STUDENT' => 31,
+        'DRH' => 31,
+        'SESSIONADMIN' => 60,
+        'STUDENT_BOSS' => 60,
+        'INVITEE' => 31
+];*/
+
+// Hides the icon of percentage in "Average of tests in Learning Paths" indication on a student tracking
+// $_configuration['student_follow_page_hide_lp_tests_average'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

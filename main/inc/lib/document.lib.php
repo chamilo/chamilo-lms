@@ -1381,6 +1381,23 @@ class DocumentManager
             $sessionId = intval($sessionId);
         }
 
+        // Special case: cache doc ID for 3600s if "/" has already been queried
+        // recently.
+        // This is a hack. Better solutions: use apcu (not always available)
+        // and even better: reduce the amount of calls by not processing
+        // documents that will not be shown (e.g. on other pages of a table)
+        $isSlash = ($path === '/');
+        if ($isSlash) {
+            $cSSlashString = 'docIdSlash2C'.$courseId.'S'.$sessionId;
+            $storedSlashId = Session::read($cSSlashString);
+            $now = time();
+            if (is_array($storedSlashId)) {
+                if ($storedSlashId['t'] >= $now - 3600) {
+                    return $storedSlashId['id'];
+                }
+            }
+        }
+
         $path = Database::escape_string($path);
         if (!empty($courseId) && !empty($path)) {
             $folderCondition = '';
@@ -1398,8 +1415,15 @@ class DocumentManager
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
+                if ($isSlash) {
+                    Session::write($cSSlashString, ['t' => $now, 'id' => intval($row['id'])]);
+                }
 
                 return intval($row['id']);
+            }
+            if ($isSlash) {
+                // Even if there is no "/" document/folder, store a result to avoid querying the database again
+                Session::write($cSSlashString, ['t' => $now, 'id' => false]);
             }
         }
 

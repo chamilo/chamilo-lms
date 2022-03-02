@@ -157,6 +157,23 @@ class UserManager
     }
 
     /**
+     * Updates user expiration date.
+     *
+     * @param int    $userId
+     * @param string $expirationDate
+     */
+    public static function updateExpirationDate($userId, $expirationDate)
+    {
+        $repository = self::getRepository();
+        /** @var User $user */
+        $user = $repository->find($userId);
+        $userManager = self::getManager();
+        $expirationDate = api_get_utc_datetime($expirationDate, false, true);
+        $user->setExpirationDate($expirationDate);
+        $userManager->updateUser($user, true);
+    }
+
+    /**
      * Creates a new user for the platform.
      *
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
@@ -7257,15 +7274,24 @@ SQL;
     }
 
     /**
-     * It returns the list of user status available
+     * It returns the list of user status available.
      *
      * @return array
      */
     public static function getUserStatusList()
     {
+        $userStatusConfig = [];
+        // it gets the roles to show in creation/edition user
+        if (true === api_get_configuration_value('user_status_show_options_enabled')) {
+            $userStatusConfig = api_get_configuration_value('user_status_show_option');
+        }
+        // it gets the roles to show in creation/edition user (only for admins)
+        if (true === api_get_configuration_value('user_status_option_only_for_admin_enabled') && api_is_platform_admin()) {
+            $userStatusConfig = api_get_configuration_value('user_status_option_show_only_for_admin');
+        }
+
         $status = [];
-        if (true === api_get_configuration_value('hide_user_status_options_enabled')) {
-            $userStatusConfig = api_get_configuration_value('user_status_hide_option');
+        if (!empty($userStatusConfig)) {
             $statusLang = api_get_status_langvars();
             foreach ($userStatusConfig as $role => $enabled) {
                 if ($enabled) {
@@ -7283,6 +7309,37 @@ SQL;
         }
 
         return $status;
+    }
+
+    /**
+     * Get the expiration date by user status from configuration value.
+     *
+     * @param $status
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    public static function getExpirationDateByRole($status)
+    {
+        $status = (int) $status;
+        $nbDaysByRole = api_get_configuration_value('user_number_of_days_for_default_expiration_date_per_role');
+        $dates = [];
+        if (!empty($nbDaysByRole)) {
+            $date = new DateTime();
+            foreach ($nbDaysByRole as $strVariable => $nDays) {
+                $constStatus = constant($strVariable);
+                if ($status == $constStatus) {
+                    $duration = "P{$nDays}D";
+                    $date->add(new DateInterval($duration));
+                    $newExpirationDate = $date->format('Y-m-d H:i');
+                    $formatted = api_format_date($newExpirationDate, DATE_TIME_FORMAT_LONG_24H);
+                    $dates = ['formatted' => $formatted, 'date' => $newExpirationDate];
+                }
+            }
+        }
+
+        return $dates;
     }
 
     /**

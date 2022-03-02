@@ -34,6 +34,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $select_type = (int) ($_POST['select_type']);
     $file_type = $_POST['file_type'];
     $includeUsers = (empty($_POST['include_users']) ? false : true);
+    $includeExtraFields = (isset($_POST['include_extrafields']) && 1 === (int) $_POST['include_extrafields']);
 
     if (2 == $select_type) {
         // Get selected courses from courses list in form sent
@@ -65,6 +66,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             $listToExport[0][] = 'Users';
             $listToExport[0][] = 'OtherTeachers';
         }
+        if ($includeExtraFields) {
+            $extraField = new ExtraField('course');
+            $allExtraFields = $extraField->get_all();
+            foreach ($allExtraFields as $extra) {
+                $listToExport[0][] = $extra['display_text'];
+            }
+        }
         $dataToExport = [];
         foreach ($courses as $course) {
             $dataToExport['code'] = str_replace(';', ',', $course['code']);
@@ -94,6 +102,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 }
                 $dataToExport['students'] = substr($dataToExport['students'], 0, -1);
                 $dataToExport['teachers'] = substr($dataToExport['teachers'], 0, -1);
+            }
+            if ($includeExtraFields) {
+                foreach ($allExtraFields as $extra) {
+                    $extraValue = CourseManager::get_course_extra_field_value($extra['variable'], $course['code']);
+                    $dataToExport[$extra['variable']] = isset($extraValue) ? $extraValue : '';
+                }
             }
             $listToExport[] = $dataToExport;
         }
@@ -166,7 +180,9 @@ $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file
 
 $form->addElement('checkbox', 'include_users', get_lang('ExportUsers'), '', '1');
 
-$form->setDefaults(['select_type' => '1', 'file_type' => 'csv', 'include_users' => '1']);
+$form->addElement('checkbox', 'include_extrafields', get_lang('ExportExtraFields'), '', '1');
+
+$form->setDefaults(['select_type' => '1', 'file_type' => 'csv', 'include_users' => '1', 'include_extrafields' => 0]);
 
 $form->addButtonExport(get_lang('ExportCourses'));
 $form->display();

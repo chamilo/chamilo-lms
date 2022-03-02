@@ -19,6 +19,7 @@ $transferEnable = $plugin->get('transfer_enable');
 $tpvRedsysEnable = $plugin->get('tpv_redsys_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $culqiEnable = $plugin->get('culqi_enable');
+$stripeEnable = $plugin->get('stripe_enable') === 'true';
 
 if (isset($_GET['action'], $_GET['id'])) {
     if ($_GET['action'] == 'delete_taccount') {
@@ -395,6 +396,44 @@ $culqiForm->addCheckBox('integration', null, $plugin->get_lang('Sandbox'));
 $culqiForm->addButtonSave(get_lang('Save'));
 $culqiForm->setDefaults($plugin->getCulqiParams());
 
+// Stripe main configuration
+
+$stripeForm = new FormValidator('stripe_config');
+
+if ($stripeForm->validate()) {
+    $stripeFormValues = $stripeForm->getSubmitValues();
+
+    $plugin->saveStripeParameters($stripeFormValues);
+
+    Display::addFlash(
+        Display::return_message(get_lang('Saved'), 'success')
+    );
+
+    header('Location:'.api_get_self());
+    exit;
+}
+
+$stripeForm->addText(
+    'account_id',
+    $plugin->get_lang('StripeAccountId'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$stripeForm->addText(
+    'secret_key',
+    $plugin->get_lang('StripeSecret'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$stripeForm->addText(
+    'endpoint_secret',
+    $plugin->get_lang('StripeEndpointSecret'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$stripeForm->addButtonSave(get_lang('Save'));
+$stripeForm->setDefaults($plugin->getStripeParams());
+
 // breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php',
@@ -419,6 +458,8 @@ $tpl->assign('transfer_enable', $transferEnable);
 $tpl->assign('culqi_enable', $culqiEnable);
 $tpl->assign('tpv_redsys_enable', $tpvRedsysEnable);
 $tpl->assign('tpv_redsys_form', $htmlTpvRedsys);
+$tpl->assign('stripe_enable', $stripeEnable);
+$tpl->assign('stripe_form', $stripeForm->returnForm());
 
 $content = $tpl->fetch('buycourses/view/paymentsetup.tpl');
 

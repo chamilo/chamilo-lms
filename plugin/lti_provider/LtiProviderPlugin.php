@@ -3,9 +3,8 @@
 
 use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
 use Chamilo\PluginBundle\Entity\LtiProvider\PlatformKey;
-use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\OptimisticLockException;
-use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * Description of LtiProvider.
@@ -166,34 +165,24 @@ class LtiProviderPlugin extends Plugin
 
     /**
      * Install the plugin. Set the database up.
+     *
+     * @throws \Doctrine\ORM\Tools\ToolsException
      */
     public function install()
     {
-        $pluginEntityPath = $this->getEntityPath();
+        $em = Database::getManager();
 
-        if (!is_dir($pluginEntityPath)) {
-            if (!is_writable(dirname($pluginEntityPath))) {
-                $message = get_lang('ErrorCreatingDir').': '.$pluginEntityPath;
-                Display::addFlash(Display::return_message($message, 'error'));
-
-                return;
-            }
-
-            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
+        if ($em->getConnection()->getSchemaManager()->tablesExist(['sfu_post'])) {
+            return;
         }
 
-        $fs = new Filesystem();
-        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
-
-        $this->createPluginTables();
-    }
-
-    /**
-     * Get current entity sys path.
-     */
-    public function getEntityPath(): string
-    {
-        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(Platform::class),
+                $em->getClassMetadata(PlatformKey::class),
+            ]
+        );
     }
 
     /**
@@ -243,18 +232,19 @@ class LtiProviderPlugin extends Plugin
      */
     public function uninstall()
     {
-        $pluginEntityPath = $this->getEntityPath();
-        $fs = new Filesystem();
+        $em = Database::getManager();
 
-        if ($fs->exists($pluginEntityPath)) {
-            $fs->remove($pluginEntityPath);
+        if (!$em->getConnection()->getSchemaManager()->tablesExist(['sfu_post'])) {
+            return;
         }
 
-        try {
-            $this->dropPluginTables();
-        } catch (DBALException $e) {
-            error_log('Error while uninstalling IMS/LTI plugin: '.$e->getMessage());
-        }
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(Platform::class),
+                $em->getClassMetadata(PlatformKey::class),
+            ]
+        );
     }
 
     public function trimParams(array &$params)
@@ -262,42 +252,6 @@ class LtiProviderPlugin extends Plugin
         foreach ($params as $key => $value) {
             $newValue = preg_replace('/\s+/', ' ', $value);
             $params[$key] = trim($newValue);
-        }
-    }
-
-    /**
-     * Creates the plugin tables on database.
-     */
-    private function createPluginTables(): void
-    {
-        if ($this->areTablesCreated()) {
-            return;
-        }
-
-        $queries = [
-            "CREATE TABLE plugin_lti_provider_platform (
-                id int NOT NULL AUTO_INCREMENT,
-                issuer varchar(255) NOT NULL,
-                client_id varchar(255) NOT NULL,
-                kid varchar(255) NOT NULL,
-                auth_login_url varchar(255) NOT NULL,
-                auth_token_url varchar(255) NOT NULL,
-                key_set_url varchar(255) NOT NULL,
-                deployment_id varchar(255) NOT NULL,
-                tool_provider varchar(255) NULL,
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "CREATE TABLE plugin_lti_provider_platform_key (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    kid VARCHAR(255) NOT NULL,
-                    public_key LONGTEXT NOT NULL,
-                    private_key LONGTEXT NOT NULL,
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-        ];
-
-        foreach ($queries as $query) {
-            Database::query($query);
         }
     }
 
@@ -337,17 +291,6 @@ class LtiProviderPlugin extends Plugin
             'private' => $privateKey,
             'public' => $publicKey["key"],
         ];
-    }
-
-    /**
-     * Drops the plugin tables on database.
-     */
-    private function dropPluginTables(): bool
-    {
-        Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform");
-        Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform_key");
-
-        return true;
     }
 
     /**

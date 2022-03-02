@@ -501,6 +501,19 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE)) {
     $couponSaleTable->setPrimaryKey(['id']);
 }
 
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_STRIPE)) {
+    $stripeTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_STRIPE);
+    $stripeTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $stripeTable->addColumn('account_id', Types::STRING);
+    $stripeTable->addColumn('secret_key', Types::STRING);
+    $stripeTable->addColumn('endpoint_secret', Types::STRING);
+    $stripeTable->setPrimaryKey(['id']);
+}
+
 $queries = $pluginSchema->toSql($platform);
 
 foreach ($queries as $query) {
@@ -517,6 +530,7 @@ $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
 $culqiTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI);
 $globalTable = Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
 $tpvRedsysTable = Database::get_main_table(BuyCoursesPlugin::TABLE_TPV_REDSYS);
+$stripeTable = Database::get_main_table(BuyCoursesPlugin::TABLE_STRIPE);
 
 $paypalExtraField = Database::select(
     "*",
@@ -583,6 +597,15 @@ Database::insert(
     $commissionTable,
     [
         'commission' => 0,
+    ]
+);
+
+Database::insert(
+    $stripeTable,
+    [
+        'account_id' => '',
+        'secret_key' => '',
+        'endpoint_secret' => '',
     ]
 );
 

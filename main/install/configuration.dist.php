@@ -2109,6 +2109,10 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => false
 ];*/
 
+
+// Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+//$_configuration['lp_prerequisit_on_quiz_unblock_if_max_attempt_reached'] = false;
+
 // Enables to hide user status when option is true visible only for admins from $_configuration['user_status_option_show_only_for_admin']
 //$_configuration['user_status_option_only_for_admin_enabled'] = false;
 // The user status is hidden when is false, it requires $_configuration['user_status_option_only_for_admin_enabled'] = true

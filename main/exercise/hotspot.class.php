@@ -14,8 +14,8 @@
  */
 class HotSpot extends Question
 {
-    public $typePicture = 'hotspot.png';
-    public $explanationLangVar = 'HotSpot';
+    public static $typePicture = 'hotspot.png';
+    public static $explanationLangVar = 'HotSpot';
 
     /**
      * HotSpot constructor.

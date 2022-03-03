@@ -8783,4 +8783,5 @@ $Embed = "Obtenir le lien d'intégration";
 $EmbedExerciseLink = "Lien pour intégrer l'exercice dans une iframe";
 $CopyUrlToIncludeInIframe = "Copiez cette URL pour inclure cet exercice dans une iframe :";
 $ExportExtraFields = "Exporter les champs extra";
+$ToHideExlearners = "Masquer les anciens apprenants";
 ?>

@@ -8875,4 +8875,5 @@ $Embed = "Obtener enlace insertable";
 $EmbedExerciseLink = "Enlace para insertar el ejercicio";
 $CopyUrlToIncludeInIframe = "Copiar esta URL para incluir este ejercicio en un iframe:";
 $ExportExtraFields = "Exportar campos extra";
+$ToHideExlearners = "Ocultar ex-alumnos";
 ?>

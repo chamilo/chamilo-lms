@@ -231,6 +231,15 @@ $values['subscribe'] = 1;
 $values['unsubscribe'] = 0;
 $values['course_teachers'] = [$currentTeacher->getId()];
 
+// Relation to prefill course extra field with user extra field
+$fillExtraField = api_get_configuration_value('course_creation_user_course_extra_field_relation_to_prefill');
+if (false !== $fillExtraField && !empty($fillExtraField['fields'])) {
+    foreach ($fillExtraField['fields'] as $courseVariable => $userVariable) {
+        $extraValue = UserManager::get_extra_user_data_by_field(api_get_user_id(), $userVariable);
+        $values['extra_'.$courseVariable] = $extraValue[$userVariable];
+    }
+}
+
 $form->setDefaults($values);
 
 // Validate the form

@@ -2133,6 +2133,17 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => 31
 ];*/
 
+// Course extra fields to be presented on main/create_course/add_course.php
+//$_configuration['course_creation_by_teacher_extra_fields_to_show'] = ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']];
+
+// Relation to prefill course extra field with user extra field on course creacion on main/create_course/add_course.php and main/admin/course_add.php
+/*$_configuration['course_creation_user_course_extra_field_relation_to_prefill'] = [
+    'fields' => [
+        'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',
+        'CourseExtrafieldLabel2' => 'UserExtrafieldLabel2',
+    ]
+];*/
+
 // Hides the icon of percentage in "Average of tests in Learning Paths" indication on a student tracking
 // $_configuration['student_follow_page_hide_lp_tests_average'] = false;
 

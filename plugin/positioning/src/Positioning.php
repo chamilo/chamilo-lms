@@ -241,7 +241,6 @@ class Positioning extends Plugin
         $result = Database::query($sql.$sqlEnd);
 
         if (Database::num_rows($result) > 0) {
-
             return Database::fetch_array($result, 'ASSOC');
         } elseif (0 !== $sessionId) {
             $sql = "SELECT * FROM $table
@@ -251,7 +250,6 @@ class Positioning extends Plugin
                     ";
             $result = Database::query($sql.$sqlEnd);
             if (Database::num_rows($result) > 0) {
-
                 return Database::fetch_array($result, 'ASSOC');
             }
         }

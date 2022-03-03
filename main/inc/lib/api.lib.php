@@ -10198,7 +10198,8 @@ function api_protect_webservices()
     }
 }
 
-function api_filename_has_blacklisted_stream_wrapper(string $filename) {
+function api_filename_has_blacklisted_stream_wrapper(string $filename)
+{
     if (strpos($filename, '://') > 0) {
         $wrappers = stream_get_wrappers();
         $allowedWrappers = ['http', 'https', 'file'];
@@ -10208,7 +10209,7 @@ function api_filename_has_blacklisted_stream_wrapper(string $filename) {
                 continue;
             }
 
-            if (stripos($filename, $wrapper . '://') === 0) {
+            if (stripos($filename, $wrapper.'://') === 0) {
                 return true;
             }
         }

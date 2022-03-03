@@ -2675,6 +2675,7 @@ class learnpathItem
         );
 
         $isMaxAttemptReached = ($nbAttempts > 0 && $countAttempts >= $nbAttempts);
+
         return $isMaxAttemptReached;
     }
 

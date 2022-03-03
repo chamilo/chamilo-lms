@@ -142,7 +142,7 @@
         "symfony/uid": "5.4.*",
         "symfony/validator": "5.4.*",
         "symfony/web-link": "5.4.*",
-        "symfony/webpack-encore-bundle": "^1.12",
+        "symfony/webpack-encore-bundle": "^1.14",
         "symfony/yaml": "5.4.*",
         "symfonycasts/reset-password-bundle": "^1.8",
         "szymach/c-pchart": "^3.0",

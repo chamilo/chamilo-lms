@@ -6142,7 +6142,65 @@ class UserManager
                         }
                     }
                 }
-                // @todo To check users inside a class
+                // To check users inside a class
+                $tblUserGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+                $tblUserGroupRelCourse = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
+                $tblUserGroupRelSession = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+
+                $rsUser = Database::query("SELECT usergroup_id FROM $tblUserGroupRelUser WHERE user_id = $userId");
+                if (Database::num_rows($rsUser) > 0) {
+                    while ($rowUser = Database::fetch_array($rsUser)) {
+                        $usergroupId = $rowUser['usergroup_id'];
+
+                        // Count courses with exlearners
+                        $sqlC1 = "SELECT count(id) FROM $tblUserGroupRelCourse WHERE usergroup_id = $usergroupId";
+                        $rsCourses = Database::query($sqlC1);
+                        $countGroupCourses = Database::result($rsCourses, 0, 0);
+
+                        $sqlC2 = "SELECT count(cu.id)
+                                FROM $tblCourseUser cu
+                                INNER JOIN $tblUserGroupRelCourse gc
+                                    ON gc.course_id = cu.c_id
+                                WHERE
+                                    cu.user_id = $userId AND
+                                    usergroup_id = $usergroupId AND
+                                    relation_type = ".COURSE_EXLEARNER;
+                        $rsExCourses = Database::query($sqlC2);
+                        $countExCourses = Database::result($rsExCourses, 0, 0);
+                        $checkedExCourses = $countGroupCourses > 0 && ($countExCourses == $countGroupCourses);
+
+                        // Count sessions with exlearners
+                        $sqlS1 = "SELECT count(id) FROM $tblUserGroupRelSession WHERE usergroup_id = $usergroupId";
+                        $rsSessions = Database::query($sqlS1);
+                        $countGroupSessions = Database::result($rsSessions, 0, 0);
+
+                        $sqlS2 = "SELECT count(su.id)
+                                FROM $tblSessionUser su
+                                INNER JOIN $tblUserGroupRelSession gs
+                                    ON gs.session_id = su.session_id
+                                WHERE
+                                    su.user_id = $userId AND
+                                    usergroup_id = $usergroupId AND
+                                    relation_type = ".COURSE_EXLEARNER;
+                        $rsExSessions = Database::query($sqlS2);
+                        $countExSessions = Database::result($rsExSessions, 0, 0);
+                        $checkedExSessions = $countGroupSessions > 0 && ($countExSessions == $countGroupSessions);
+
+                        // it checks if usergroup user should be set to EXLEARNER
+                        $checkedExClassLearner = false;
+                        if ($countGroupCourses > 0 && $countGroupSessions == 0) {
+                            $checkedExClassLearner = $checkedExCourses;
+                        } elseif ($countGroupCourses == 0 && $countGroupSessions > 0) {
+                            $checkedExClassLearner = $checkedExSessions;
+                        } elseif ($countGroupCourses > 0 && $countGroupSessions > 0) {
+                            $checkedExClassLearner = ($checkedExCourses && $checkedExSessions);
+                        }
+
+                        if ($checkedExClassLearner) {
+                            Database::query("UPDATE $tblUserGroupRelUser SET relation_type = ".COURSE_EXLEARNER." WHERE user_id = $userId AND usergroup_id = $usergroupId");
+                        }
+                    }
+                }
             }
         }
     }

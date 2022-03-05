@@ -46,8 +46,10 @@ Encore
     //.enableVersioning(Encore.isProduction())
 
     // enables @babel/preset-env polyfills
-    .configureBabel(babelConfig => {
-        babelConfig.presets.push('@vue/cli-plugin-babel/preset');
+    .configureBabel(() => {})
+    .configureBabelPresetEnv(config => {
+        config.useBuiltIns = 'usage';
+        config.corejs = 3;
     })
 
     .enableSassLoader()

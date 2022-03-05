@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 5
+  version: 6
   cacheKey: 8
 
 "@ampproject/remapping@npm:^2.1.0":
@@ -3389,9 +3389,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001297, caniuse-lite@npm:^1.0.30001312":
-  version: 1.0.30001312
-  resolution: "caniuse-lite@npm:1.0.30001312"
-  checksum: 753fb9ea1e02e999430b323a71b5acab5120f3b5fc0161b01669f54a3ef5c5296240b6ae9b79b12a3742e3aed216aa9ee3d5398a23c16d08625ccd376b79545d
+  version: 1.0.30001313
+  resolution: "caniuse-lite@npm:1.0.30001313"
+  checksum: 49f2dcd1fa493a09a5247dcf3a4da3b9df355131b1fc1fd08b67ae7683c300ed9b9eef6a5424b4ac7e5d1ff0e129d2a0b4adf2a6a5a04ab5c2c0b2c590e935be
   languageName: node
   linkType: hard
 
@@ -4166,9 +4166,9 @@ __metadata:
   linkType: hard
 
 "csstype@npm:^2.6.8":
-  version: 2.6.19
-  resolution: "csstype@npm:2.6.19"
-  checksum: 72b51ddd30ba308d08373cd890e79526efdc19a9762941845040055f75353992f2d8d4cf4db282a8e1d3d9d2a39c989c65fe32b7b2655f08d313660c4048d2d6
+  version: 2.6.20
+  resolution: "csstype@npm:2.6.20"
+  checksum: cb5d5ded49c3390909e93b20b285d4a63d0ba5b10294bdfbc4cf911f80e91d6cf367ea671f99f09570762535c14ea7074a2c7fa73f02008203f01328dea8968b
   languageName: node
   linkType: hard
 
@@ -4529,9 +4529,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.71":
-  version: 1.4.75
-  resolution: "electron-to-chromium@npm:1.4.75"
-  checksum: 38ae5e197a100b9f9931a6112b0791659f736ad88ab3cd5534ed07dcc6001964a99de6757cbb708007bc59b0cd1b7cc36aeb5ea2efbfff6bd36ab53e49decb69
+  version: 1.4.76
+  resolution: "electron-to-chromium@npm:1.4.76"
+  checksum: eef4305665e095610f6e913fad1efc73473b7c383f1cfa5e1e005b19c4133006d5492013b38dbcb1e4cdb0e3cd3d0ff94c4c52630fd088464eb2ebd1e210e0eb
   languageName: node
   linkType: hard
 
@@ -4572,7 +4572,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.0.0, enhanced-resolve@npm:^5.8.3":
+"enhanced-resolve@npm:^5.0.0, enhanced-resolve@npm:^5.9.2":
   version: 5.9.2
   resolution: "enhanced-resolve@npm:5.9.2"
   dependencies:
@@ -6525,9 +6525,9 @@ __metadata:
   linkType: hard
 
 "lru-cache@npm:^7.4.0":
-  version: 7.4.0
-  resolution: "lru-cache@npm:7.4.0"
-  checksum: f966d8b6832ae4b6d454b96b5814a81fdd7312d393208c8ff1456981bafa7c6d5e28f8814813ec196ffac4e33a57c22c7daa24e79192f4c7f0b16acb1b9e7ed1
+  version: 7.4.1
+  resolution: "lru-cache@npm:7.4.1"
+  checksum: de6d8aa83b0a304943a1e1ec2a982d9b44ef36963c20bd01950f13dcb3eb482c57bfa15ab49b1baa15c682d6d33a10842bb7b33d8a449845009ffab6a2faec3c
   languageName: node
   linkType: hard
 
@@ -9638,11 +9638,11 @@ __metadata:
 
 "typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>":
   version: 4.6.2
-  resolution: "typescript@patch:typescript@npm%3A4.6.2#~builtin<compat/typescript>::version=4.6.2&hash=493e53"
+  resolution: "typescript@patch:typescript@npm%3A4.6.2#~builtin<compat/typescript>::version=4.6.2&hash=bda367"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: efb83260a22ee49d4c8bdc59b3cefe54fdf51d6f563f5c3a35aa3d5e46fb12f3f1d33a36d6f9f64171e567ead1847e99cb612d0a9a74e7d44e16cad9d0bbc937
+  checksum: 40b493a71747fb89fa70df104e2c4a5e284b43750af5bea024090a5261cefa387f7a9372411b13030f7bf5555cee4275443d08805642ae5c74ef76740854a4c7
   languageName: node
   linkType: hard
 
@@ -10197,8 +10197,8 @@ __metadata:
   linkType: hard
 
 "webpack@npm:^5.35, webpack@npm:^5.4.0":
-  version: 5.69.1
-  resolution: "webpack@npm:5.69.1"
+  version: 5.70.0
+  resolution: "webpack@npm:5.70.0"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^0.0.51
@@ -10209,7 +10209,7 @@ __metadata:
     acorn-import-assertions: ^1.7.6
     browserslist: ^4.14.5
     chrome-trace-event: ^1.0.2
-    enhanced-resolve: ^5.8.3
+    enhanced-resolve: ^5.9.2
     es-module-lexer: ^0.9.0
     eslint-scope: 5.1.1
     events: ^3.2.0
@@ -10229,7 +10229,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 490a6e9e4cd9d0ed3b6c7ca08015da2628919fda8fcf9c36f0f6c0e3ad71eaaaf4b0d12753109f22a4faf79fe9a9063552d9708e0ee2352cf8568433b8e296a7
+  checksum: 00439884a9cdd5305aed3ce93735635785a15c5464a6d2cfce87e17727a07585de02420913e82aa85ddd2ae7322175d2cfda6ac0878a17f061cb605e6a7db57a
   languageName: node
   linkType: hard
 

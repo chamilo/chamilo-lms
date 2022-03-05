@@ -3,7 +3,10 @@
   "version": "2.0.0",
   "description": "E-learning and collaboration software",
   "scripts": {
-    "start": "vue-cli-service serve --open"
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
   },
   "dependencies": {
     "@apollo/client": "^3.5.9",
@@ -132,5 +135,5 @@
     "webpack-notifier": "^1.15.0"
   },
   "license": "GPL-3.0",
-  "packageManager": "yarn@2.4.2"
+  "packageManager": "yarn@3.2.0"
 }

@@ -80,7 +80,7 @@
         "media-alchemyst/media-alchemyst": "~0.5",
         "michelf/php-markdown": "~1.7",
         "monolog/monolog": "~1.0",
-        "mpdf/mpdf": "6.1.*",
+        "mpdf/mpdf": "^8.0",
         "ocramius/proxy-manager": "~1.0|2.0.*",
         "onelogin/php-saml": "^3.0",
         "packbackbooks/lti-1p3-tool": "^1.1",

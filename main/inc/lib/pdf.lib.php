@@ -2,13 +2,16 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Mpdf\Mpdf;
+use Mpdf\MpdfException;
+use Mpdf\Utils\UtfString;
 
 /**
  * Class PDF.
  */
 class PDF
 {
-    /** @var mPDF */
+    /** @var Mpdf */
     public $pdf;
     public $custom_header = [];
     public $custom_footer = [];
@@ -16,13 +19,15 @@ class PDF
     public $template;
 
     /**
-     * Creates the mPDF object.
+     * Creates the Mpdf object.
      *
      * @param string   $pageFormat  format A4 A4-L see
      *                              http://mpdf1.com/manual/index.php?tid=184&searchstring=format
      * @param string   $orientation orientation "P" = Portrait "L" = Landscape
      * @param array    $params
      * @param Template $template
+     *
+     * @throws MpdfException
      */
     public function __construct(
         $pageFormat = 'A4',
@@ -31,7 +36,7 @@ class PDF
         $template = null
     ) {
         $this->template = $template;
-        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF */
+        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=Mpdf */
         if (!in_array($orientation, ['P', 'L'])) {
             $orientation = 'P';
         }
@@ -58,18 +63,21 @@ class PDF
         $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
-        @$this->pdf = new mPDF(
-            'UTF-8',
-            $pageFormat,
-            '',
-            '',
-            $params['left'],
-            $params['right'],
-            $params['top'],
-            $params['bottom'],
-            8,
-            8,
-            $orientation
+        $this->pdf = new Mpdf(
+            [
+                'mode' => 'UTF-8',
+                'format' => $pageFormat,
+                'default_font_size' => '',
+                'default_font' => '',
+                'margin_left' => $params['left'],
+                'margin_right' => $params['right'],
+                'margin_top' => $params['top'],
+                'margin_bottom' => $params['bottom'],
+                'margin_header' => 8,
+                'margin_footer' => 8,
+                'orientation' => $orientation,
+                'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
+            ]
         );
 
         $this->pdf->margin_footer = $params['margin_footer'];
@@ -92,7 +100,9 @@ class PDF
      * @param bool       $addDefaultCss (bootstrap/default/base.css)
      * @param array
      *
-     * @return string
+     * @throws MpdfException
+     *
+     * @return string|null
      */
     public function html_to_pdf_with_template(
         $content,
@@ -192,7 +202,7 @@ class PDF
      * @param string $mainTitle
      * @param bool   $generateToFile  Optional. When it is TRUE, then the output file is move to app/cache
      *
-     * @throws \MpdfException
+     * @throws MpdfException
      *
      * @return false|null
      */
@@ -342,7 +352,7 @@ class PDF
 
                 $document_html = self::fixImagesPaths($document_html, $course_data, $dirName);
 
-                // The library mPDF expects UTF-8 encoded input data.
+                // The library Mpdf expects UTF-8 encoded input data.
                 api_set_encoding_html($document_html, 'UTF-8');
                 // TODO: Maybe it is better idea the title to be passed through
                 $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');
@@ -394,12 +404,12 @@ class PDF
      * @param bool   $addDefaultCss
      * @param bool   $completeHeader
      *
+     * @throws MpdfException
+     *
      * 'I' (print on standard output),
      * 'D' (download file) (this is the default value),
      * 'F' (save to local file) or
      * 'S' (return as a string)
-     *
-     * @throws MpdfException
      *
      * @return string Web path
      */
@@ -503,7 +513,7 @@ class PDF
         $document_html = str_replace(api_get_path(WEB_UPLOAD_PATH), api_get_path(SYS_UPLOAD_PATH), $document_html);
         $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
 
-        // The library mPDF expects UTF-8 encoded input data.
+        // The library Mpdf expects UTF-8 encoded input data.
         api_set_encoding_html($document_html, 'UTF-8');
         // At the moment the title is retrieved from the html document itself.
         if ($returnHtml) {
@@ -787,7 +797,6 @@ class PDF
         */
         // TODO: To be read from the html document.
         $this->pdf->directionality = api_get_text_direction();
-        $this->pdf->useOnlyCoreFonts = true;
         // Use different Odd/Even headers and footers and mirror margins
         $this->pdf->mirrorMargins = 1;
 
@@ -819,7 +828,7 @@ class PDF
 
                 if (!empty($watermark_text)) {
                     $this->pdf->SetWatermarkText(
-                        strcode2utf($watermark_text),
+                        UtfString::strcode2utf($watermark_text),
                         0.1
                     );
                     $this->pdf->showWatermarkText = true;

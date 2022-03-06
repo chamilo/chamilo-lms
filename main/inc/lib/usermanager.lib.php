@@ -545,7 +545,7 @@ class UserManager
                 $tplContent->assign('mailWebPath', $url);
                 $tplContent->assign('new_user', $user);
                 // Adding this variable but not used in default template, used for task BT19518 with a customized template
-		$tplContent->assign('status_type', $status);
+                $tplContent->assign('status_type', $status);
 
                 $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);
@@ -1655,7 +1655,7 @@ class UserManager
             $tplContent->assign('original_password', $originalPassword);
             $tplContent->assign('portal_url', $url);
             // Adding this variable but not used in default template, used for task BT19518 with a customized template
-	    $tplContent->assign('status_type', $status);
+            $tplContent->assign('status_type', $status);
 
             $layoutContent = $tplContent->get_template('mail/user_edit_content.tpl');
             $emailBody = $tplContent->fetch($layoutContent);

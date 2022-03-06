@@ -42,26 +42,26 @@ class PDF
         }
         //left, right, top, bottom, margin_header, margin footer
 
-        $params['left'] = isset($params['left']) ? $params['left'] : 15;
-        $params['right'] = isset($params['right']) ? $params['right'] : 15;
-        $params['top'] = isset($params['top']) ? $params['top'] : 30;
-        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
-        $params['margin_footer'] = isset($params['margin_footer']) ? $params['margin_footer'] : 8;
+        $params['left'] = $params['left'] ?? 15;
+        $params['right'] = $params['right'] ?? 15;
+        $params['top'] = $params['top'] ?? 30;
+        $params['bottom'] = $params['bottom'] ?? 30;
+        $params['margin_footer'] = $params['margin_footer'] ?? 8;
 
-        $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
-        $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : '';
+        $this->params['filename'] = $params['filename'] ?? api_get_local_time();
+        $this->params['pdf_title'] = $params['pdf_title'] ?? '';
         $this->params['pdf_description'] = $params['pdf_description'] ?? '';
-        $this->params['course_info'] = isset($params['course_info']) ? $params['course_info'] : api_get_course_info();
-        $this->params['session_info'] = isset($params['session_info']) ? $params['session_info'] : api_get_session_info(api_get_session_id());
-        $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
-        $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : [];
-        $this->params['show_real_course_teachers'] = isset($params['show_real_course_teachers']) ? $params['show_real_course_teachers'] : false;
-        $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
-        $this->params['show_grade_generated_date'] = isset($params['show_grade_generated_date']) ? $params['show_grade_generated_date'] : false;
-        $this->params['show_teacher_as_myself'] = isset($params['show_teacher_as_myself']) ? $params['show_teacher_as_myself'] : true;
+        $this->params['course_info'] = $params['course_info'] ?? api_get_course_info();
+        $this->params['session_info'] = $params['session_info'] ?? api_get_session_info(api_get_session_id());
+        $this->params['course_code'] = $params['course_code'] ?? api_get_course_id();
+        $this->params['add_signatures'] = $params['add_signatures'] ?? [];
+        $this->params['show_real_course_teachers'] = $params['show_real_course_teachers'] ?? false;
+        $this->params['student_info'] = $params['student_info'] ?? false;
+        $this->params['show_grade_generated_date'] = $params['show_grade_generated_date'] ?? false;
+        $this->params['show_teacher_as_myself'] = $params['show_teacher_as_myself'] ?? true;
         $localTime = api_get_local_time();
-        $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
-        $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
+        $this->params['pdf_date'] = $params['pdf_date'] ?? api_format_date($localTime, DATE_TIME_FORMAT_LONG);
+        $this->params['pdf_date_only'] = $params['pdf_date'] ?? api_format_date($localTime, DATE_FORMAT_LONG);
 
         $this->pdf = new Mpdf(
             [
@@ -184,7 +184,7 @@ class PDF
     /**
      * Converts HTML files to PDF.
      *
-     * @param mixed  $html_file_array could be an html file path or an array
+     * @param mixed  $html_file_array could be a html file path or an array
      *                                with paths example:
      *                                /var/www/myfile.html or array('/myfile.html','myotherfile.html') or
      *                                even an indexed array with both 'title' and 'path' indexes
@@ -390,7 +390,7 @@ class PDF
     }
 
     /**
-     * Converts an html string to PDF.
+     * Converts a html string to PDF.
      *
      * @param string $document_html  valid html
      * @param string $css            CSS content of a CSS file
@@ -614,7 +614,7 @@ class PDF
      *
      * @return bool
      */
-    public function delete_watermark($course_code = null)
+    public static function delete_watermark($course_code = null)
     {
         $urlId = api_get_current_access_url_id();
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
@@ -643,7 +643,7 @@ class PDF
      *
      * @return mixed web path of the file if sucess, false otherwise
      */
-    public function upload_watermark($filename, $source_file, $course_code = null)
+    public static function upload_watermark($filename, $source_file, $course_code = null)
     {
         $urlId = api_get_current_access_url_id();
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
@@ -810,7 +810,7 @@ class PDF
                     $this->pdf->SetWatermarkImage($watermark_file);
                     $this->pdf->showWatermarkImage = true;
                 } else {
-                    $watermark_file = self::get_watermark(null);
+                    $watermark_file = self::get_watermark();
 
                     if ($watermark_file) {
                         $this->pdf->SetWatermarkImage($watermark_file);
@@ -938,7 +938,7 @@ class PDF
     public function setBackground($theme, $fullPage = false)
     {
         $themeName = empty($theme) ? api_get_visual_theme() : $theme;
-        $themeDir = \Template::getThemeDir($themeName);
+        $themeDir = Template::getThemeDir($themeName);
         $customLetterhead = $themeDir.'images/letterhead.png';
         $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
 
@@ -991,7 +991,7 @@ class PDF
             true
         );
 
-        /** @var \DOMElement $element */
+        /** @var DOMElement $element */
         foreach ($elements as $element) {
             $src = $element->getAttribute('src');
             $src = trim($src);
@@ -1057,11 +1057,10 @@ class PDF
                     $oldSrcFixed = str_replace('courses/'.$courseInfo['path'].'/document/', '', $src);
                 } else {
                     // Try with the dirname if exists
+                    $documentPath = '';
                     if (file_exists($dirName.'/'.$src)) {
-                        $documentPath = '';
                         $oldSrcFixed = $dirName.'/'.$src;
                     } else {
-                        $documentPath = '';
                         $oldSrcFixed = $src;
                     }
                 }

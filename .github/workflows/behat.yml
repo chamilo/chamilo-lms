@@ -60,8 +60,8 @@ jobs:
 
             - name: Install Yarn
               run: |
-                  sudo npm install -g yarn
-                  yarn set version 2.4.2
+                  sudo corepack enable
+                  yarn set version stable
                   yarn --version
 
             - name: Get yarn cache directory

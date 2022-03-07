@@ -47,6 +47,7 @@ define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
 define('STUDENT_BOSS', 17); // student is boss
 define('INVITEE', 20);
 define('HRM_REQUEST', 21); //HRM has request for vinculation with user
+define('COURSE_EXLEARNER', 22);
 
 // Table of status
 $_status_list[COURSEMANAGER] = 'teacher'; // 1

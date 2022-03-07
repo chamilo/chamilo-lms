@@ -2,7 +2,7 @@
 
 namespace Chamilo\CoreBundle\Traits\Repository\ORM;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Gedmo\Tool\Wrapper\EntityWrapper;
 use Gedmo\Tree\RepositoryUtils;
@@ -27,7 +27,7 @@ trait TreeRepositoryTrait
     protected $repoUtils = null;
 
     /**
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     abstract protected function getEntityManager();
 
@@ -55,7 +55,7 @@ trait TreeRepositoryTrait
      * }
      *
      */
-    public function initializeTreeRepository(EntityManager $em, ClassMetadata $class)
+    public function initializeTreeRepository(EntityManagerInterface $em, ClassMetadata $class)
     {
         $treeListener = null;
         foreach ($em->getEventManager()->getListeners() as $listeners) {

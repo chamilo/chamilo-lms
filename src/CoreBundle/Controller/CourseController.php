@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
@@ -27,11 +28,11 @@ use Chamilo\CourseBundle\Settings\SettingsFormFactory;
 use CourseManager;
 use Database;
 use Display;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Event;
 use Exercise;
 use ExtraFieldValue;
-use Fhaculty\Graph\Graph;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +40,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use UnserializeApi;
 use UserManager;
 
 /**
@@ -51,6 +51,7 @@ class CourseController extends ToolBaseController
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
     public function checkTermsAndConditionJson(Request $request, LegalRepository $legalTermsRepo, LanguageRepository $languageRepository): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         $course = $this->getCourse();
         $responseData = [
@@ -153,6 +154,7 @@ class CourseController extends ToolBaseController
         $session = $request->getSession();
 
         $userId = 0;
+        /** @var ?User $user */
         $user = $this->getUser();
         if (null !== $user) {
             $userId = $user->getId();
@@ -407,11 +409,15 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/{id}/about', name: 'chamilo_core_course_about')]
-    public function about(Course $course, IllustrationRepository $illustrationRepository, CCourseDescriptionRepository $courseDescriptionRepository): Response
-    {
+    public function about(
+        Course $course,
+        IllustrationRepository $illustrationRepository,
+        CCourseDescriptionRepository $courseDescriptionRepository,
+        EntityManagerInterface $em
+    ): Response {
         $courseId = $course->getId();
-        $userId = $this->getUser()->getId();
-        $em = $this->getDoctrine()->getManager();
+        /** @var ?User $user */
+        $user = $this->getUser();
 
         /** @var EntityRepository $fieldsRepo */
         $fieldsRepo = $em->getRepository(ExtraField::class);
@@ -498,7 +504,11 @@ class CourseController extends ToolBaseController
             'custom' => array_reverse($courseCustom),
         ];
 
-        $subscriptionUser = CourseManager::is_user_subscribed_in_course($userId, $course->getCode());
+        $subscriptionUser = false;
+
+        if ($user) {
+            $subscriptionUser = CourseManager::is_user_subscribed_in_course($user->getId(), $course->getCode());
+        }
 
         /*$allowSubscribe = false;
         if ($course->getSubscribe() || api_is_platform_admin()) {
@@ -601,7 +611,7 @@ class CourseController extends ToolBaseController
                         LIMIT 1";
                 $result = Database::query($sql);
                 if (Database::num_rows($result) > 0) {
-                    $lp_data = Database::fetch_array($result, 'ASSOC');
+                    $lp_data = Database::fetch_array($result);
                     if (!empty($lp_data['iid'])) {
                         if ($allowAutoLaunchForCourseAdmins) {
                             $showAutoLaunchLpWarning = true;
@@ -686,7 +696,7 @@ class CourseController extends ToolBaseController
                             LIMIT 1";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {
-                        $row = Database::fetch_array($result, 'ASSOC');
+                        $row = Database::fetch_array($result);
                         $exerciseId = $row['iid'];
                         $url = api_get_path(WEB_CODE_PATH).
                             'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();

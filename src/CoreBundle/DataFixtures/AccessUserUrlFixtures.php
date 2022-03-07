@@ -34,7 +34,6 @@ class AccessUserUrlFixtures extends Fixture implements ContainerAwareInterface
         // Login as admin
         $token = new UsernamePasswordToken(
             $admin,
-            $admin->getPassword(),
             'public',
             $admin->getRoles()
         );

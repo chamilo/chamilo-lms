@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\User;
 use Database;
-use Doctrine\DBAL\Cache\ArrayStatement;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -71,7 +70,6 @@ class LogoutListener
                     LIMIT 0,1";
             $loginId = null;
             $connection = $this->em->getConnection();
-            /** @var ArrayStatement $result */
             $result = $connection->executeQuery($sql);
             if ($result->rowCount() > 0) {
                 $row = $result->fetchAssociative();

@@ -51,7 +51,7 @@ class SocialPostVoter extends Voter
             return false;
         }
 
-        /** @var User $currentUser */
+        /** @var ?User $currentUser */
         $currentUser = $token->getUser();
 
         if (null === $currentUser) {

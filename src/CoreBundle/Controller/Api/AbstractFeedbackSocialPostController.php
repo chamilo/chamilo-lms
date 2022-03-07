@@ -20,15 +20,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[AsController]
 abstract class AbstractFeedbackSocialPostController extends AbstractController
 {
-    protected User|UserInterface $currentUser;
-
     public function __construct(
         protected Security $security,
         protected EntityManager $entityManager,
         protected SettingsManager $settingsManager
     ) {
-        $this->currentUser = $this->security->getUser();
-
         if ('true' !== $this->settingsManager->getSetting('social.allow_social_tool')) {
             throw new AccessDeniedException();
         }
@@ -36,18 +32,21 @@ abstract class AbstractFeedbackSocialPostController extends AbstractController
 
     protected function getFeedbackForCurrentUser(SocialPost $socialPost): SocialPostFeedback
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
+
         $feedback = $this->entityManager
             ->getRepository(SocialPostFeedback::class)
             ->findOneBy(
                 [
-                    'user' => $this->currentUser,
+                    'user' => $user,
                     'socialPost' => $socialPost,
                 ]
             )
         ;
 
         if (null === $feedback) {
-            $feedback = (new SocialPostFeedback())->setUser($this->currentUser);
+            $feedback = (new SocialPostFeedback())->setUser($user);
 
             $socialPost->addFeedback($feedback);
         }

@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,7 +27,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class BaseResourceFileAction
 {
-    public static function setLinks(AbstractResource $resource, EntityManager $em): void
+    public static function setLinks(AbstractResource $resource, EntityManagerInterface $em): void
     {
         $resourceNode = $resource->getResourceNode();
         $links = $resource->getResourceLinkArray();

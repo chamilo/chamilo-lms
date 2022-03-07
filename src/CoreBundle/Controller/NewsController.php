@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,6 +24,7 @@ class NewsController extends BaseController
     #[Route('/list', name: 'news_index', methods: ['GET'])]
     public function indexAction(SysAnnouncementRepository $sysAnnouncementRepository): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
 
         $list = [];

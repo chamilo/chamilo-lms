@@ -4,7 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\AttemptFeedback;
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -55,8 +55,8 @@ switch ($type) {
         $attemptFeedback = (new AttemptFeedback())
             ->setAsset($asset);
 
-        /** @var TrackExercise $exeAttempt */
-        $exeAttempt = Container::getTrackExerciseRepository()->find($trackExerciseId);
+        /** @var TrackEExercise $exeAttempt */
+        $exeAttempt = Container::getTrackEExerciseRepository()->find($trackExerciseId);
         $attempt = $exeAttempt->getAttemptByQuestionId($questionId);
 
         if (null === $attempt) {

@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
@@ -1232,10 +1232,10 @@ class Event
                         $sessionCondition
                         ";
             $result = Database::query($sql);
-            $repo = Container::getTrackExerciseRepository();
+            $repo = Container::getTrackEExerciseRepository();
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $exeId = $row['exe_id'];
-                /** @var TrackExercise $track */
+                /** @var TrackEExercise $track */
                 $track = $repo->find($exeId);
 
                 self::addEvent(

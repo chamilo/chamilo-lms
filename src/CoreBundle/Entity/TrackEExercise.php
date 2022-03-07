@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * })
  * @ORM\Entity
  */
-class TrackExercise
+class TrackEExercise
 {
     /**
      * @ORM\Column(name="exe_id", type="integer")
@@ -454,7 +454,7 @@ class TrackExercise
     {
         if (!$this->attempts->contains($attempt)) {
             $this->attempts[] = $attempt;
-            $attempt->setTrackExercise($this);
+            $attempt->setTrackEExercise($this);
         }
 
         return $this;

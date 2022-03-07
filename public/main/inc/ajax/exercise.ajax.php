@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -67,8 +67,8 @@ switch ($action) {
         $onlyUpdateValue = 10;
 
         $em = Database::getManager();
-        /** @var TrackExercise $attempt */
-        $attempt = $em->getRepository(TrackExercise::class)->find($exeId);
+        /** @var TrackEExercise $attempt */
+        $attempt = $em->getRepository(TrackEExercise::class)->find($exeId);
 
         if (null === $attempt) {
             if ($debug) {

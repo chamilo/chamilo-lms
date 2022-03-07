@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
-use Chamilo\CoreBundle\Entity\TrackExercise;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -3087,7 +3087,7 @@ class Exercise
         $questionList = array_map('intval', $questionList);
         $em = Database::getManager();
 
-        $trackExercise = (new TrackExercise())
+        $trackExercise = (new TrackEExercise())
             ->setSession(api_get_session_entity())
             ->setCourse(api_get_course_entity())
             ->setMaxScore($weight)

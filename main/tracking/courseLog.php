@@ -278,7 +278,8 @@ $form_search->addElement('text', 'user_keyword');
 $form_search->addButtonSearch(get_lang('SearchUsers'));
 echo Display::toolbarAction(
     'toolbar-courselog',
-    [$actionsLeft, $form_search->returnForm(), $actionsRight]
+    [$actionsLeft, $form_search->returnForm(), $actionsRight],
+    [4, 6, 2]
 );
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];
@@ -450,6 +451,19 @@ if ($nbStudents > 0) {
         }
     }
 
+    // Filter by active users
+    $formActiveUsers = new FormValidator(
+        'active_users',
+        'get',
+        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
+    );
+    // Filter by active users
+    $group = [];
+    $group[] = $formActiveUsers->createElement('radio', 'user_active', 'id="user_active1"', get_lang('Yes'), 1);
+    $group[] = $formActiveUsers->createElement('radio', 'user_active', 'id="user_active0"', get_lang('No'), 0);
+    $formActiveUsers->addGroup($group, 'active', get_lang('AccountActive'));
+    $formActiveUsers->addButtonSearch(get_lang('Search'));
+
     $extraField = new ExtraField('user');
     $extraField->addElements($formExtraField, 0, [], true);
     $formExtraField->addButtonSearch(get_lang('Search'));
@@ -518,6 +532,15 @@ if ($nbStudents > 0) {
                     $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
                 }
             }
+        }
+    }
+
+    if ($formActiveUsers->validate()) {
+        $formValue = $formActiveUsers->getSubmitValue('active');
+        if (isset($formValue['user_active'])) {
+            $active = (int) $formValue['user_active'];
+            $whereCondition = " AND user.active = $active ";
+            $conditions = ['where' => $whereCondition, 'inject_joins' => ''];
         }
     }
 
@@ -626,6 +649,7 @@ if ($nbStudents > 0) {
     if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
         $mainForm->addHtml($formExLearners->returnForm());
     }
+    $mainForm->addHtml($formActiveUsers->returnForm());
     $mainForm->addHtml('</div>');
     $html .= $mainForm->returnForm();
 

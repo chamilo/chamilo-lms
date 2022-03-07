@@ -8902,6 +8902,13 @@ class TrackingCourseLog
              ) ";
         }
 
+        if (isset($_GET['user_active'])) {
+            $active = (int) $_GET['user_active'];
+            $condition_user .= " AND (
+                user.active = $active
+             ) ";
+        }
+
         $url_table = '';
         $url_condition = '';
         if (api_is_multiple_url_enabled()) {

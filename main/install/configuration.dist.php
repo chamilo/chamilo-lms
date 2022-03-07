@@ -2109,6 +2109,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => false
 ];*/
 
+// Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+//$_configuration['lp_prerequisit_on_quiz_unblock_if_max_attempt_reached'] = false;
+
 // Enables to hide user status when option is true visible only for admins from $_configuration['user_status_option_show_only_for_admin']
 //$_configuration['user_status_option_only_for_admin_enabled'] = false;
 // The user status is hidden when is false, it requires $_configuration['user_status_option_only_for_admin_enabled'] = true
@@ -2128,6 +2131,17 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'SESSIONADMIN' => 60,
         'STUDENT_BOSS' => 60,
         'INVITEE' => 31
+];*/
+
+// Course extra fields to be presented on main/create_course/add_course.php
+//$_configuration['course_creation_by_teacher_extra_fields_to_show'] = ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']];
+
+// Relation to prefill course extra field with user extra field on course creacion on main/create_course/add_course.php and main/admin/course_add.php
+/*$_configuration['course_creation_user_course_extra_field_relation_to_prefill'] = [
+    'fields' => [
+        'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',
+        'CourseExtrafieldLabel2' => 'UserExtrafieldLabel2',
+    ]
 ];*/
 
 // Hides the icon of percentage in "Average of tests in Learning Paths" indication on a student tracking

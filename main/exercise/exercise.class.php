@@ -10910,6 +10910,7 @@ class Exercise
         $dataSet = [];
         $labels = [];
         $labelsWithId = [];
+        $cutLabelAtChar = 30;
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
             if (empty($labels)) {
@@ -10918,6 +10919,10 @@ class Exercise
                     $labelsWithId = array_column($categoryNameList, 'title', 'iid');
                     asort($labelsWithId);
                     $labels = array_values($labelsWithId);
+                    foreach ($labels as $labelId => $label) {
+                        // Cut if label is too long to maintain chart visibility
+                        $labels[$labelId] = cut($label, $cutLabelAtChar);
+                    }
                 }
             }
 
@@ -10964,7 +10969,7 @@ class Exercise
         $dataSet = [];
         $labels = [];
         $labelsWithId = [];
-
+        $cutLabelAtChar = 30;
         $tempResult = [];
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
@@ -10975,6 +10980,10 @@ class Exercise
                     $labelsWithId = array_column($categoryNameList, 'title', 'iid');
                     asort($labelsWithId);
                     $labels = array_values($labelsWithId);
+                    foreach ($labels as $labelId => $label) {
+                        // Cut if label is too long to maintain chart visibility
+                        $labels[$labelId] = cut($label, $cutLabelAtChar);
+                    }
                 }
             }
 

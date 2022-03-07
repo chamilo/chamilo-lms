@@ -295,7 +295,9 @@ class ExerciseLink extends AbstractLink
                 return $result;
             } else {
                 if ($cacheAvailable) {
-                    $cacheDriver->save($key, null);
+                    $cacheItem = $cache->getItem($key);
+                    $cacheItem->set(null);
+                    $cache->save($cacheItem);
                 }
 
                 return null;

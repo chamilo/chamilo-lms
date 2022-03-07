@@ -49,8 +49,9 @@ use UserManager;
 #[Route('/course')]
 class CourseController extends ToolBaseController
 {
-    public function __construct(private SerializerInterface $serializer)
-    {
+    public function __construct(
+        private SerializerInterface $serializer
+    ) {
     }
 
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]

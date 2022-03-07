@@ -2355,7 +2355,7 @@ class TicketManager
     public static function deleteUserFromTicketSystem($userId)
     {
         $userId = (int) $userId;
-        $schema = Database::getManager()->getConnection()->getSchemaManager();
+        $schema = Database::getManager()->getConnection()->createSchemaManager();
 
         if ($schema->tablesExist('ticket_assigned_log')) {
             $sql = "UPDATE ticket_assigned_log SET user_id = NULL WHERE user_id = $userId";

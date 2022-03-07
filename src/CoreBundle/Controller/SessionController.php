@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use CourseDescription;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Essence\Essence;
 use ExtraFieldValue;
@@ -39,11 +40,15 @@ class SessionController extends AbstractController
      *
      * @Entity("session", expr="repository.find(sid)")
      */
-    public function aboutAction(Request $request, Session $session, IllustrationRepository $illustrationRepo, UserRepository $userRepo): Response
-    {
+    public function aboutAction(
+        Request $request,
+        Session $session,
+        IllustrationRepository $illustrationRepo,
+        UserRepository $userRepo,
+        EntityManagerInterface $em
+    ): Response {
         $requestSession = $request->getSession();
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
-        $em = $this->getDoctrine()->getManager();
 
         $sessionId = $session->getId();
         $courses = [];

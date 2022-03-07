@@ -7,6 +7,8 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\ChangePasswordFormType;
 use Chamilo\CoreBundle\Form\ResetPasswordRequestFormType;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,8 +29,11 @@ class ResetPasswordController extends AbstractController
 
     private ResetPasswordHelperInterface $resetPasswordHelper;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
-    {
+    public function __construct(
+        ResetPasswordHelperInterface $resetPasswordHelper,
+        private EntityManagerInterface $entityManager,
+        private UserRepository $userRepository
+    ) {
         $this->resetPasswordHelper = $resetPasswordHelper;
     }
 
@@ -115,7 +120,7 @@ class ResetPasswordController extends AbstractController
             );
 
             $user->setPassword($encodedPassword);
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -130,7 +135,7 @@ class ResetPasswordController extends AbstractController
 
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+        $user = $this->userRepository->findOneBy([
             'email' => $emailFormData,
         ]);
 

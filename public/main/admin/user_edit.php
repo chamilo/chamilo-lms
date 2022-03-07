@@ -321,7 +321,7 @@ if (!empty($studentBossList)) {
     $studentBossList = array_column($studentBossList, 'boss_id');
 }
 
-$user_data['student_boss'] = array_values($studentBossList);
+$user_data['student_boss'] = $studentBossList;
 $form->addMultiSelect('student_boss', get_lang('Superior (n+1)'), $studentBossToSelect);
 
 // EXTRA FIELDS

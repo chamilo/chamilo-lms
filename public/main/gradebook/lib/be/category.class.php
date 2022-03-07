@@ -833,7 +833,7 @@ class Category implements GradebookItem
      * @param string $course_code
      * @param int    $session_id
      *
-     * @return array (score sum, weight sum) or null if no scores available
+     * @return array|null (score sum, weight sum) or null if no scores available
      */
     public function calc_score(
         $studentId = null,
@@ -846,9 +846,9 @@ class Category implements GradebookItem
         $cacheAvailable = api_get_configuration_value('apc') && $useCache;
 
         if ($cacheAvailable) {
-            $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-            if ($cacheDriver->contains($key)) {
-                return $cacheDriver->fetch($key);
+            $cache = new \Symfony\Component\Cache\Adapter\ApcuAdapter();
+            if ($cache->hasItem($key)) {
+                return $cache->getItem($key)->get();
             }
         }
         // Classic
@@ -1092,14 +1092,20 @@ class Category implements GradebookItem
             case 'average':
                 if (empty($ressum)) {
                     if ($cacheAvailable) {
-                        $cacheDriver->save($key, null);
+                        $cacheItem = $cache->getItem($key);
+                        $cacheItem->set(null);
+
+                        $cache->save($cacheItem);
                     }
 
                     return null;
                 }
 
                 if ($cacheAvailable) {
-                    $cacheDriver->save($key, [$ressum, $weightsum]);
+                    $cacheItem = $cache->getItem($key);
+                    $cacheItem->set([$ressum, $weightsum]);
+
+                    $cache->save($cacheItem);
                 }
 
                 return [$ressum, $weightsum];
@@ -1113,11 +1119,13 @@ class Category implements GradebookItem
                 break;
             default:
                 if ($cacheAvailable) {
-                    $cacheDriver->save($key, [$ressum, $weightsum]);
+                    $cacheItem = $cache->getItem($key);
+                    $cacheItem->set([$ressum, $weightsum]);
+
+                    $cache->save($cacheItem);
                 }
 
                 return [$ressum, $weightsum];
-                break;
         }
     }
 

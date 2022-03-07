@@ -59,7 +59,7 @@ $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
             (ev.value LIKE '%::%' OR ev2.value LIKE '%::%')            
 ";
 
-$cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+$cache = new \Symfony\Component\Cache\Adapter\ApcuAdapter();
 $keyDate = 'map_cache_date';
 $keyData = 'map_cache_data';
 
@@ -70,8 +70,8 @@ $now = time();
 $tomorrow = strtotime('+5 minute', $now);
 
 $loadFromDatabase = true;
-if ($cacheDriver->contains($keyData) && $cacheDriver->contains($keyDate)) {
-    $savedDate = $cacheDriver->fetch($keyDate);
+if ($cache->hasItem($keyData) && $cache->hasItem($keyDate)) {
+    $savedDate = $cache->getItem($keyDate)->get();
     $loadFromDatabase = false;
     if ($savedDate < $now) {
         $loadFromDatabase = true;
@@ -83,10 +83,15 @@ if ($loadFromDatabase) {
     $result = Database::query($sql);
     $data = Database::store_result($result, 'ASSOC');
 
-    $cacheDriver->save($keyData, $data);
-    $cacheDriver->save($keyDate, $tomorrow);
+    $cacheItem = $cache->getItem($keyData);
+    $cacheItem->set($data);
+    $cache->save($cacheItem);
+
+    $cacheItem = $cache->getItem($keyDate);
+    $cacheItem->set($tomorrow);
+    $cache->save($cacheItem);
 } else {
-    $data = $cacheDriver->fetch($keyData);
+    $data = $cache->getItem($keyData)->get();
 }
 
 foreach ($data as &$result) {

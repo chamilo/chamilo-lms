@@ -124,7 +124,7 @@ class UrlManager
                 WHERE url = '".Database::escape_string($url)."' ";
         $res = Database::query($sql);
 
-        return (int) Database::num_rows($res);
+        return Database::num_rows($res);
     }
 
     /**
@@ -298,7 +298,7 @@ class UrlManager
                 WHERE c_id = '$courseId'";
         $res = Database::query($sql);
 
-        return (int) Database::num_rows($res);
+        return Database::num_rows($res);
     }
 
     /**

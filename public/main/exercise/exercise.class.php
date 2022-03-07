@@ -609,7 +609,7 @@ class Exercise
     /**
      * @param int    $start
      * @param int    $limit
-     * @param int    $sidx
+     * @param string $sidx
      * @param string $sord
      * @param array  $whereCondition
      * @param array  $extraFields

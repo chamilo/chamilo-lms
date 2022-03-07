@@ -198,9 +198,9 @@ class ExerciseLink extends AbstractLink
         $cacheAvailable = api_get_configuration_value('apc') && $useCache;
         $cacheDriver = null;
         if ($cacheAvailable) {
-            $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-            if ($cacheDriver->contains($key)) {
-                return $cacheDriver->fetch($key);
+            $cache = new \Symfony\Component\Cache\Adapter\ApcuAdapter();
+            if ($cache->hasItem($key)) {
+                return $cache->getItem($key)->get();
             }
         }
 
@@ -287,7 +287,9 @@ class ExerciseLink extends AbstractLink
                 }
                 $result = [$data['score'], $data['max_score'], $data['exe_date'], $counter];
                 if ($cacheAvailable) {
-                    $cacheDriver->save($key, $result);
+                    $cacheItem = $cache->getItem($key);
+                    $cacheItem->set($result);
+                    $cache->save($cacheItem);
                 }
 
                 return $result;

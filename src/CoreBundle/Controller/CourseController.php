@@ -39,6 +39,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use UserManager;
 
@@ -48,6 +49,10 @@ use UserManager;
 #[Route('/course')]
 class CourseController extends ToolBaseController
 {
+    public function __construct(private SerializerInterface $serializer)
+    {
+    }
+
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
     public function checkTermsAndConditionJson(Request $request, LegalRepository $legalTermsRepo, LanguageRepository $languageRepository): Response
     {
@@ -119,7 +124,7 @@ class CourseController extends ToolBaseController
             }
         }
 
-        $json = $this->get('serializer')->serialize(
+        $json = $this->serializer->serialize(
             $responseData,
             'json',
             [
@@ -288,7 +293,7 @@ class CourseController extends ToolBaseController
             'tools' => $tools,
         ];
 
-        $json = $this->get('serializer')->serialize(
+        $json = $this->serializer->serialize(
             $responseData,
             'json',
             [

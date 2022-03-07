@@ -805,7 +805,8 @@ class UserManager
         }
 
         $connection = Database::getManager()->getConnection();
-        $tableExists = $connection->getSchemaManager()->tablesExist(['plugin_bbb_room']);
+        $schemaManager = $connection->createSchemaManager();
+        $tableExists = $schemaManager->tablesExist(['plugin_bbb_room']);
         if ($tableExists) {
             // Delete user from database
             $sql = "DELETE FROM plugin_bbb_room WHERE participant_id = $user_id";
@@ -813,12 +814,12 @@ class UserManager
         }
 
         // Delete user/ticket relationships :(
-        $tableExists = $connection->getSchemaManager()->tablesExist(['ticket_ticket']);
+        $tableExists = $schemaManager->tablesExist(['ticket_ticket']);
         if ($tableExists) {
             TicketManager::deleteUserFromTicketSystem($user_id);
         }
 
-        $tableExists = $connection->getSchemaManager()->tablesExist(['c_lp_category_user']);
+        $tableExists = $schemaManager->tablesExist(['c_lp_category_user']);
         if ($tableExists) {
             $sql = "DELETE FROM c_lp_category_user WHERE user_id = $user_id";
             Database::query($sql);

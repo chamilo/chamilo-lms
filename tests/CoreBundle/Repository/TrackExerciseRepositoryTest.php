@@ -65,7 +65,7 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
             ->setOrigLpItemViewId(0)
             ->setExeDuration(10)
             ->setExpiredTimeControl(new DateTime())
-            ->setExeExoId($exercise->getIid())
+            ->setQuiz($exercise)
         ;
         $em->persist($trackExercise);
         $this->assertHasNoEntityViolations($trackExercise);
@@ -131,7 +131,7 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
             ->setOrigLpItemViewId(0)
             ->setExeDuration(10)
             ->setExpiredTimeControl(new DateTime())
-            ->setExeExoId($exercise->getIid())
+            ->setQuiz($exercise)
         ;
         $em->persist($trackExercise);
         $this->assertHasNoEntityViolations($trackExercise);
@@ -204,7 +204,7 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
             ->setOrigLpItemViewId(0)
             ->setExeDuration(10)
             ->setExpiredTimeControl(new DateTime())
-            ->setExeExoId($exercise->getIid())
+            ->setQuiz($exercise)
             ->addAttempt($attempt)
         ;
         $em->persist($attempt);

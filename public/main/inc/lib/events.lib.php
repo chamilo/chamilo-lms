@@ -1241,7 +1241,7 @@ class Event
                 self::addEvent(
                     LOG_EXERCISE_RESULT_DELETE,
                     LOG_EXERCISE_AND_USER_ID,
-                    $track->getExeExoId().'-'.$track->getUser()->getId(),
+                    ($track->getQuiz()?->getIid()).'-'.$track->getUser()->getId(),
                     null,
                     null,
                     $course_id,

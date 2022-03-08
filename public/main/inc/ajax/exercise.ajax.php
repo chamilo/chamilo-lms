@@ -79,7 +79,7 @@ switch ($action) {
 
         $nowObject = api_get_utc_datetime(null, false, true);
         $now = $nowObject->getTimestamp();
-        $exerciseId = $attempt->getExeExoId();
+        $exerciseId = $attempt->getQuiz()?->getIid();
         $userId = $attempt->getUser()->getId();
 
         if ($userId != $currentUserId) {

@@ -5390,7 +5390,7 @@ EOT;
         }
 
         if ($trackedExercise->getUser()->getId() != $userId ||
-            $trackedExercise->getExeExoId() != $exerciseId
+            $trackedExercise->getQuiz()?->getIid() != $exerciseId
         ) {
             return null;
         }

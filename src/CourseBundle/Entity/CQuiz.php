@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -203,6 +204,13 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
      */
     protected Collection $questionsCategories;
 
+    /**
+     * @var Collection<int, TrackEExercise>
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEExercise", mappedBy="quiz")
+     */
+    protected Collection $attempts;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -227,6 +235,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;
         $this->pageResultConfiguration = [];
+        $this->attempts = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -648,7 +657,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     /**
      * @return int
      */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }

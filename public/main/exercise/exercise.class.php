@@ -4,9 +4,9 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
-use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -3059,12 +3059,16 @@ class Exercise
     /**
      * Saves a test attempt.
      *
-     * @param int $clock_expired_time clock_expired_time
-     * @param int  int lp id
-     * @param int  int lp item id
-     * @param int  int lp item_view id
+     * @param int   $clock_expired_time   clock_expired_time
+     * @param int   $safe_lp_id           lp id
+     * @param int   $safe_lp_item_id      lp item id
+     * @param int   $safe_lp_item_view_id lp item_view id
      * @param array $questionList
      * @param float $weight
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return int
      */
@@ -3087,6 +3091,8 @@ class Exercise
         $questionList = array_map('intval', $questionList);
         $em = Database::getManager();
 
+        $quiz = $em->find(CQuiz::class, $this->getId());
+
         $trackExercise = (new TrackEExercise())
             ->setSession(api_get_session_entity())
             ->setCourse(api_get_course_entity())
@@ -3098,7 +3104,7 @@ class Exercise
             ->setOrigLpItemId($safe_lp_item_id)
             ->setOrigLpItemViewId($safe_lp_item_view_id)
             ->setExpiredTimeControl($clock_expired_time)
-            ->setExeExoId($this->getId())
+            ->setQuiz($quiz)
         ;
         $em->persist($trackExercise);
         $em->flush();

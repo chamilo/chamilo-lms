@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CourseBundle\Entity\CQuiz;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -59,10 +60,10 @@ class TrackEExercise
     protected DateTime $exeDate;
 
     /**
-     * @ORM\Column(name="exe_exo_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuiz", inversedBy="attempts")
+     * @ORM\JoinColumn(name="exe_exo_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    #[Assert\NotBlank]
-    protected int $exeExoId;
+    protected ?CQuiz $quiz;
 
     /**
      * @ORM\Column(name="score", type="float", precision=6, scale=2, nullable=false)
@@ -143,7 +144,7 @@ class TrackEExercise
     protected ?string $blockedCategories;
 
     /**
-     * @var Collection|TrackEAttempt[]
+     * @var Collection<int, TrackEAttempt>
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="trackExercise", cascade={"persist"})
      */
@@ -180,16 +181,16 @@ class TrackEExercise
         return $this->exeDate;
     }
 
-    public function setExeExoId(int $exeExoId): self
+    public function setQuiz(CQuiz $cQuiz): self
     {
-        $this->exeExoId = $exeExoId;
+        $this->quiz = $cQuiz;
 
         return $this;
     }
 
-    public function getExeExoId(): int
+    public function getQuiz(): ?CQuiz
     {
-        return $this->exeExoId;
+        return $this->quiz;
     }
 
     public function setUserIp(string $userIp): self

@@ -306,6 +306,39 @@ select {
     padding-bottom: 25px;
 }
 
+#carousel-announcement .link-more {
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #fff;
+    background-color: #0495c9;
+    border-color: #357ebd;
+}
+
+#carousel-announcement .link-more:hover,
+#carousel-announcement .link-more:focus,
+#carousel-announcement .link-more:active,
+#carousel-announcement .link-more.active {
+    color: #fff;
+    background-color: #00b3db;
+    border-color: #285e8e;
+}
+
 .carousel-control {
     width: 5%;
 }

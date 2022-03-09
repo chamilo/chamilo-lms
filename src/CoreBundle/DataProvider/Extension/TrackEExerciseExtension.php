@@ -25,7 +25,7 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
         string $operationName = null
-    ) {
+    ): void {
         if (TrackEExercise::class !== $resourceClass) {
             return;
         }

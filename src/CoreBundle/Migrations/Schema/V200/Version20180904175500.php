@@ -133,7 +133,7 @@ class Version20180904175500 extends AbstractMigrationChamilo
         }
 
         $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_exo_id exe_exo_id INT DEFAULT NULL');
-        $this->addSql("UPDATE track_e_exercises SET exe_exo_id = NULL WHERE exe_exo_id NOT IN (SELECT iid FROM c_quiz)");
+        $this->addSql('UPDATE track_e_exercises SET exe_exo_id = NULL WHERE exe_exo_id NOT IN (SELECT iid FROM c_quiz)');
 
         if (!$table->hasForeignKey('FK_AA0DA082B9773F9E')) {
             $this->addSql('ALTER TABLE track_e_exercises ADD CONSTRAINT FK_AA0DA082B9773F9E FOREIGN KEY (exe_exo_id) REFERENCES c_quiz (iid) ON DELETE SET NULL');

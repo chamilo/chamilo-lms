@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\TrackEExercise;
@@ -24,7 +26,7 @@ class TrackEExerciseVoter extends Voter
             self::VIEW,
         ];
 
-        return $subject instanceof TrackEExercise && in_array($attribute, $allowed);
+        return $subject instanceof TrackEExercise && \in_array($attribute, $allowed, true);
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool

@@ -656,9 +656,6 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;

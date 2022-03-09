@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CoreBundle\Traits\UserExtraFieldFilterTrait;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -75,6 +76,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class TrackEExercise
 {
+    use UserExtraFieldFilterTrait;
+
     /**
      * @ORM\Column(name="exe_id", type="integer")
      * @ORM\Id

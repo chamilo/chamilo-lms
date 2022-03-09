@@ -11,6 +11,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
 final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
@@ -40,8 +41,12 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
 
         $alias = $queryBuilder->getRootAliases()[0];
 
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->security->getUser();
+
+        if (!$user) {
+            throw new AccessDeniedException();
+        }
 
         if ($user->hasRole('ROLE_STUDENT')) {
             $queryBuilder->andWhere(

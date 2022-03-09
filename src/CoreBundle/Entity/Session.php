@@ -80,7 +80,13 @@ class Session implements ResourceWithAccessUrlInterface
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read', 'course:read'])]
+    #[Groups([
+        'session:read',
+        'session_rel_user:read',
+        'session_rel_course_rel_user:read',
+        'course:read',
+        'track_e_exercise:read',
+    ])]
     protected ?int $id = null;
 
     /**

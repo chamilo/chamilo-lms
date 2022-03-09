@@ -14,6 +14,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -36,6 +37,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
      * @ORM\Id
      * @ORM\GeneratedValue
      */
+    #[Groups(['track_e_exercise:read'])]
     protected int $iid;
 
     /**

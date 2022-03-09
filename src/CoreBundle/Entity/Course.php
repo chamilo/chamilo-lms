@@ -88,6 +88,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'session_rel_course_rel_user:read',
         'session_rel_user:read',
         'session_rel_course:read',
+        'track_e_exercise:read',
     ])]
     protected ?int $id = null;
 

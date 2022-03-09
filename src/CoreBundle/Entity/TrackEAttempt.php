@@ -11,6 +11,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -36,6 +37,7 @@ class TrackEAttempt
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[Groups(['track_e_exercise:read'])]
     protected int $id;
 
     /**
@@ -56,26 +58,31 @@ class TrackEAttempt
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
     #[Assert\NotBlank]
+    #[Groups(['track_e_exercise:read'])]
     protected ?int $questionId = null;
 
     /**
      * @ORM\Column(name="answer", type="text", nullable=false)
      */
+    #[Groups(['track_e_exercise:read'])]
     protected string $answer;
 
     /**
      * @ORM\Column(name="teacher_comment", type="text", nullable=false)
      */
+    #[Groups(['track_e_exercise:read'])]
     protected string $teacherComment;
 
     /**
      * @ORM\Column(name="marks", type="float", precision=6, scale=2, nullable=false)
      */
+    #[Groups(['track_e_exercise:read'])]
     protected float $marks;
 
     /**
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
+    #[Groups(['track_e_exercise:read'])]
     protected ?int $position = null;
 
     /**
@@ -87,11 +94,13 @@ class TrackEAttempt
     /**
      * @ORM\Column(name="filename", type="string", length=255, nullable=true)
      */
+    #[Groups(['track_e_exercise:read'])]
     protected ?string $filename = null;
 
     /**
      * @ORM\Column(name="seconds_spent", type="integer")
      */
+    #[Groups(['track_e_exercise:read'])]
     protected int $secondsSpent;
 
     /**

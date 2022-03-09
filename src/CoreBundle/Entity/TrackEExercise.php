@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use DateTime;
@@ -56,6 +57,20 @@ use Symfony\Component\Validator\Constraints as Assert;
         'quiz' => 'exact',
         'course' => 'exact',
         'session' => 'exact',
+    ]
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'user.username',
+        'user.fisrname',
+        'user.lastname',
+        'startDate',
+        'exeDate',
+        'exeDuration',
+        'score',
+        'status',
+        'userIp',
     ]
 )]
 class TrackEExercise

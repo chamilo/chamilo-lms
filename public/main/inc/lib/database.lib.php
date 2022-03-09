@@ -243,9 +243,13 @@ class Database
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    public static function fetch_object(\Doctrine\DBAL\Result $result): stdClass
+    public static function fetch_object(\Doctrine\DBAL\Result $result): ?stdClass
     {
         $data = $result->fetchAssociative();
+
+        if (empty($data)) {
+            return null;
+        }
 
         $object = new stdClass();
 
@@ -262,9 +266,11 @@ class Database
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    public static function fetch_row(\Doctrine\DBAL\Result $result): array|bool
+    public static function fetch_row(\Doctrine\DBAL\Result $result): array
     {
-        return $result->fetchNumeric();
+        $row = $result->fetchNumeric();
+
+        return empty($row) ? [] : $row;
     }
 
     /**
@@ -291,7 +297,7 @@ class Database
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    public static function result(\Doctrine\DBAL\Result $resource, int $row, string $field = ''): mixed
+    public static function result(\Doctrine\DBAL\Result $resource, int $row, string $field): mixed
     {
         if ($resource->rowCount() > 0) {
             $result = $resource->fetchAllAssociative();
@@ -302,10 +308,10 @@ class Database
                 $resultRow[] = $value;
             }
 
-            return $resultRow;
+            return $resultRow[$field];
         }
 
-        return false;
+        return null;
     }
 
     /**

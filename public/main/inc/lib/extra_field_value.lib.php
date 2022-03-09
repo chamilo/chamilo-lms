@@ -119,7 +119,7 @@ class ExtraFieldValue extends Model
         $type = $this->getExtraField()->getExtraFieldType();
 
         $extraField = new ExtraField($this->type);
-        $extraFields = $extraField->get_all(null, 'option_order');
+        $extraFields = $extraField->get_all([], 'option_order');
         $resultsExist = [];
         $em = Database::getManager();
 

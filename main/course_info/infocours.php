@@ -129,6 +129,10 @@ $form->applyFilter('department_url', 'html_filter');
 $extra_field = new ExtraField('course');
 $extraFieldAdminPermissions = false;
 $showOnlyTheseFields = ['tags', 'video_url', 'course_hours_duration', 'max_subscribed_students'];
+$extraFieldsToShow = api_get_configuration_value('course_configuration_tool_extra_fields_to_show_and_edit');
+if (false !== $extraFieldsToShow && !empty($extraFieldsToShow['fields'])) {
+    $showOnlyTheseFields = array_merge($showOnlyTheseFields, $extraFieldsToShow['fields']);
+}
 $extra = $extra_field->addElements(
     $form,
     $courseId,

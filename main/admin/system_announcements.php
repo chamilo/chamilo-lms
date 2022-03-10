@@ -56,33 +56,6 @@ if (!empty($action)) {
 }
 $url = api_get_path(WEB_AJAX_PATH).'career.ajax.php';
 
-$htmlHeadXtra[] = '<script>
-function showCareer() {
-    $("#promotion").show();
-    var url = "'.$url.'";
-    var id = $(\'#career_id\').val();
-
-    $.getJSON(
-        url, {
-            "career_id" : id,
-            "a" : "get_promotions"
-        }
-    )
-    .done(function(data) {
-        $("#promotion_id").empty();
-        $("#promotion_id").append(
-            $("<option>", {value: "0", text: "'.addslashes(get_lang('All')).'"})
-        );
-        $.each(data, function(index, value) {
-            $("#promotion_id").append(
-                $("<option>", {value: value.id, text: value.name})
-            );
-        });
-        $("#promotion_id").selectpicker("refresh");
-    });
-}
-</script>';
-
 // Displaying the header.
 Display::display_header($tool_name);
 if ($action != 'add' && $action != 'edit') {
@@ -211,36 +184,7 @@ if ($action_todo) {
     );
 
     if ($allowCareers) {
-        $career = new Career();
-        $careerList = $career->get_all();
-        $list = array_column($careerList, 'name', 'id');
-
-        $form->addSelect(
-            'career_id',
-            get_lang('Career'),
-            $list,
-            ['onchange' => 'javascript: showCareer();', 'placeholder' => get_lang('SelectAnOption'), 'id' => 'career_id']
-        );
-
-        $display = 'none;';
-        $options = [];
-        if (isset($values['promotion_id'])) {
-            $promotion = new Promotion();
-            $promotion = $promotion->get($values['promotion_id']);
-            if ($promotion) {
-                $options = [$promotion['id'] => $promotion['name']];
-                $display = 'block';
-            }
-        }
-
-        $form->addHtml('<div id="promotion" style="display:'.$display.';">');
-        $form->addSelect(
-            'promotion_id',
-            get_lang('Promotion'),
-            $options,
-            ['id' => 'promotion_id']
-        );
-        $form->addHtml('</div>');
+        Career::addCareerFieldsToForm($form, $values ?? []);
     }
 
     $group = [];

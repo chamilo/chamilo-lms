@@ -4590,7 +4590,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 
     // If we come from the group tools the groupid will be saved in $work_table
     if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
-        if ($file['copy_file']) {
+        if (isset($file['copy_file'])) {
             $result = copy(
                 $file['tmp_name'],
                 $updir.$curdirpath.'/'.$new_file_name

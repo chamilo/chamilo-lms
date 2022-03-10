@@ -3,7 +3,7 @@
 require_once '../../../../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
-class BigUpload
+class BigUploadResponse
 {
     /**
      * Temporary directory for uploading files.
@@ -284,7 +284,7 @@ class BigUpload
 }
 
 //Instantiate the class
-$bigUpload = new BigUpload();
+$bigUpload = new BigUploadResponse();
 
 //Set the temporary filename
 $tempName = null;

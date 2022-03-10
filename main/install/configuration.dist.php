@@ -2136,6 +2136,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Course extra fields to be presented on main/create_course/add_course.php
 //$_configuration['course_creation_by_teacher_extra_fields_to_show'] = ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']];
 
+// Configuration setting to make some extra field required in course creation form.
+//$_configuration['course_creation_form_set_extra_fields_mandatory'] = ['fields' => ['fieldLabel1','fieldLabel2']];
+
 // Course extra fields to be presented on course settings
 //$_configuration['course_configuration_tool_extra_fields_to_show_and_edit'] = ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']];
 

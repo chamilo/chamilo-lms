@@ -282,12 +282,33 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
     );
 }
 
-//Extra fields to show
+//Extra fields to show and mandatory
+$setExtraFieldsMandatory = api_get_configuration_value('course_creation_form_set_extra_fields_mandatory');
 $extraFieldsToShow = api_get_configuration_value('course_creation_by_teacher_extra_fields_to_show');
 $fillExtraField = api_get_configuration_value('course_creation_user_course_extra_field_relation_to_prefill');
 if (false !== $extraFieldsToShow && !empty($extraFieldsToShow['fields'])) {
+    $fieldsRequired = [];
+    if (false !== $setExtraFieldsMandatory && !empty($setExtraFieldsMandatory['fields'])) {
+        $fieldsRequired = $setExtraFieldsMandatory['fields'];
+    }
     $extra_field = new ExtraField('course');
-    $extra = $extra_field->addElements($form, 0, [], false, false, $extraFieldsToShow['fields']);
+    $extra = $extra_field->addElements(
+        $form,
+        0,
+        [],
+        false,
+        false,
+        $extraFieldsToShow['fields'],
+        [],
+        [],
+        false,
+        false,
+        [],
+        [],
+        false,
+        [],
+        $fieldsRequired
+    );
 
     // Relation to prefill course extra field with user extra field
     if (false !== $fillExtraField && !empty($fillExtraField['fields'])) {

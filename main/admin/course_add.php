@@ -192,8 +192,29 @@ $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
 
 //Extra fields
+$setExtraFieldsMandatory = api_get_configuration_value('course_creation_form_set_extra_fields_mandatory');
+$fieldsRequired = [];
+if (false !== $setExtraFieldsMandatory && !empty($setExtraFieldsMandatory['fields'])) {
+    $fieldsRequired = $setExtraFieldsMandatory['fields'];
+}
 $extra_field = new ExtraField('course');
-$extra = $extra_field->addElements($form);
+$extra = $extra_field->addElements(
+    $form,
+    0,
+    [],
+    false,
+    false,
+    [],
+    [],
+    [],
+    false,
+    false,
+    [],
+    [],
+    false,
+    [],
+    $fieldsRequired
+);
 
 if (api_get_configuration_value('allow_course_multiple_languages')) {
     // Course Multiple language.

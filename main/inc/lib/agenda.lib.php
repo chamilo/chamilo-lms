@@ -3435,7 +3435,7 @@ class Agenda
                         ['id' => 'session_id', 'onchange' => 'submit();']
                     );
 
-                    $form->addButtonReset(get_lang('Reset'));
+                    $form->addButton('reset', get_lang('Reset'), 'eraser');
                     $form = $form->returnForm();
                 }
             }

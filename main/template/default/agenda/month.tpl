@@ -30,8 +30,10 @@ $(function() {
     var defaultStartDate = (cookieData && cookieData.start) || moment.now();
 
     // Reset button.
-    $("button[type=reset]").click(function() {
-        $("#session_id").find('option').removeAttr("selected");
+    $('form#form-search #form-search_reset').on('click', function (e) {
+        e.preventDefault();
+
+        $("#session_id").val('0').selectpicker('refresh').trigger('change');
     });
 
 	$("#dialog-form").dialog({

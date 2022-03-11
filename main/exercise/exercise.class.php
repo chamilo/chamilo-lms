@@ -10672,7 +10672,7 @@ class Exercise
                     }
                 }
 
-                if ('' !== $option['answer']) { // the answer can be a value 0
+                if (!empty($option['answer'])) {
                     $exerciseResult[] = $questionId;
 
                     break;

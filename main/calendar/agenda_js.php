@@ -300,6 +300,11 @@ if (api_get_configuration_value('agenda_reminders')) {
     $form->addHtml('<hr>');
 }
 
+if (api_get_configuration_value('allow_careers_in_global_agenda') && 'admin' === $agenda->type) {
+    Career::addCareerFieldsToForm($form);
+    $form->addHtml('<hr>');
+}
+
 $form->addHtml('<div id="attachment_block" style="display: none">');
 $form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="display: none"></div>');
 $form->addHtml('</div>');

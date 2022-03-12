@@ -49,6 +49,8 @@ switch ($action) {
         $isCollective = isset($_REQUEST['collective']);
         $notificationCount = $_REQUEST['notification_count'] ?? [];
         $notificationPeriod = $_REQUEST['notification_period'] ?? [];
+        $careerId = $_REQUEST['career_id'] ?? 0;
+        $promotionId = $_REQUEST['promotion_id'] ?? 0;
 
         $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -67,7 +69,9 @@ switch ($action) {
             '',
             $inviteesList,
             $isCollective,
-            $reminders
+            $reminders,
+            (int) $careerId,
+            (int) $promotionId
         );
 
         echo $eventId;

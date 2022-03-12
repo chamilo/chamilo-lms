@@ -378,7 +378,19 @@ class SystemAnnouncementManager
                     $date_end,
                     false,
                     $title,
-                    $original_content
+                    $original_content,
+                    [],
+                    false,
+                    null,
+                    [],
+                    [],
+                    null,
+                    '',
+                    [],
+                    false,
+                    [],
+                    $params['career_id'] ?? 0,
+                    $params['promotion_id'] ?? 0
                 );
             }
 

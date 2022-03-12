@@ -1,5 +1,6 @@
 {% set agenda_collective_invitations = 'agenda_collective_invitations'|api_get_configuration_value %}
 {% set agenda_reminders = 'agenda_reminders'|api_get_configuration_value %}
+{% set career_in_global_events = 'allow_careers_in_global_agenda'|api_get_configuration_value %}
 
 <style>
 .fc-day-grid-event > .fc-content {
@@ -331,6 +332,11 @@ $(function() {
                     $('#collective').prop('checked', false).show();
                 {% endif %}
 
+                {% if career_in_global_events %}
+                    $('#career_id, #promotion_id').parent().show();
+                    $('#form_career_id_edit, #form_promotion_id_edit').text('').hide();
+                {% endif %}
+
                 //Reset the CKEditor content that persist in memory
                 CKEDITOR.instances['content'].setData('');
 				allFields.removeClass("ui-state-error");
@@ -603,6 +609,29 @@ $(function() {
                     });
                 {% endif %}
 
+                {% if career_in_global_events %}
+                    $('select#promotion_id').on('refreshed.bs.select', function () {
+                        $('select#promotion_id').val(function () {
+                            if (calEvent.promotion
+                                && calEvent.career
+                                && $('select#career_id').val() == calEvent.career.id
+                            ) {
+                                return calEvent.promotion.id;
+                            }
+
+                            return '0';
+                        }).trigger('change');
+                    });
+
+                    $('select#career_id').val(function () {
+                        if (calEvent.career) {
+                            return calEvent.career.id;
+                        }
+
+                        return '';
+                    }).trigger('change');
+                {% endif %}
+
                 $("#title_edit").show();
                 $("#content_edit").show();
                 {% if agenda_collective_invitations and 'personal' == type %}
@@ -617,6 +646,32 @@ $(function() {
                                 .join('<br>');
                         })
                         .show();
+                {% endif %}
+
+                {% if career_in_global_events %}
+                    var $careerFieldParent = $('#career_id').parents('.col-sm-8');
+                    var $promotionFieldParent = $('#promotion_id').parents('.col-sm-8');
+                    
+                    if ($careerFieldParent.find('#form_career_id_edit').length === 0) {
+                        $careerFieldParent.append('<p id="form_career_id_edit" class="form-control-static"></p>');
+                    }
+
+                    if ($promotionFieldParent.find('#form_promotion_id_edit').length === 0) {
+                        $promotionFieldParent.append('<p id="form_promotion_id_edit" class="form-control-static"></p>');
+                    }
+
+                    $('#form_career_id_edit, #form_promotion_id_edit').text('');
+                    $('#career_id, #promotion_id').parent().hide();
+
+                    if (calEvent.career && 'admin' === calEvent.type) {
+                        $('#form_career_id_edit').text(calEvent.career.name).show();
+                        $('#promotion').show();
+                        $('#form_promotion_id_edit').text('{{ 'All'|get_lang|escape('js') }}').show();
+                    }
+
+                    if (calEvent.promotion && 'admin' === calEvent.type) {
+                        $('#form_promotion_id_edit').text(calEvent.promotion.name);
+                    }
                 {% endif %}
 
                 $("#title").hide();
@@ -841,6 +896,23 @@ $(function() {
                 });
                 {% endif %}
 
+                {% if career_in_global_events %}
+                    $('#simple_career_field').hide();
+                    $('#simple_promotion_field').hide();
+                    $('#simple_career').html();
+                    $('#simple_promotion').html('{{ 'All'|get_lang|escape('js') }}');
+
+                    if (calEvent.career) {
+                        $('#simple_career_field').show();
+                        $('#simple_promotion_field').show();
+                        $('#simple_career').html(calEvent.career.name);
+                    }
+
+                    if (calEvent.promotion) {
+                        $('#simple_promotion').html(calEvent.promotion.name);
+                    }
+                {% endif %}
+
                 {% if agenda_collective_invitations and 'personal' == type %}
                     $('#simple_invitees').html(function () {
                         if (!calEvent.invitees) {
@@ -994,6 +1066,26 @@ $(function() {
         {% if agenda_reminders %}
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9" id="simple_notification_list"></div>
+            </div>
+        {% endif %}
+
+        {% if career_in_global_events %}
+            <div class="form-group" id="simple_career_field">
+                <label class="col-sm-3 control-label">
+                    <b>{{ "Career" |get_lang}}</b>
+                </label>
+                <div class="col-sm-9">
+                    <p class="form-control-static" id="simple_career"></p>
+                </div>
+            </div>
+
+            <div class="form-group" id="simple_promotion_field">
+                <label class="col-sm-3 control-label">
+                    <b>{{ "Promotion" |get_lang}}</b>
+                </label>
+                <div class="col-sm-9">
+                    <p class="form-control-static" id="simple_promotion"></p>
+                </div>
             </div>
         {% endif %}
     </form>

@@ -1549,6 +1549,11 @@ ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_USER FOREIGN KEY (user
 // ALTER TABLE sys_announcement ADD COLUMN promotion_id INT DEFAULT 0;
 //$_configuration['allow_careers_in_global_announcements'] = false;
 
+// Allow career/promotions in global calendar. Require DB changes:
+// ALTER TABLE sys_calendar ADD COLUMN career_id INT DEFAULT 0;
+// ALTER TABLE sys_calendar ADD COLUMN promotion_id INT DEFAULT 0;
+//$_configuration['allow_careers_in_global_agenda'] = false;
+
 // Hide start/end dates in "My courses" page (user_portal.php)
 //$_configuration['hide_session_dates_in_user_portal'] = false;
 

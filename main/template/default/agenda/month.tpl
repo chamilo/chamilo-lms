@@ -41,7 +41,7 @@ $(function() {
 		autoOpen : false,
 		modal : true,
         position: { of: document },
-		width : 600,
+		width : 650,
 		height : 630,
         zIndex : 20000 // added because of qtip2
    	});
@@ -50,7 +50,7 @@ $(function() {
 		autoOpen : false,
         modal : true,
         position: { of: document },
-		width : 600,
+		width : 650,
 		height : 630,
         zIndex : 20000 // added because of qtip2
    	});
@@ -529,18 +529,18 @@ $(function() {
                 }
 
                 if ($("#title").parent().find('#title_edit').length == 0) {
-                    $("#title").parent().append('<div id="title_edit"></div>');
+                    $("#title").parent().append('<p id="title_edit" class="form-control-static"></p>');
                 }
 
                 $("#title_edit").html(calEvent.title);
 
                 if ($("#content").parent().find('#content_edit').length == 0) {
-                    $("#content").parent().append('<div id="content_edit"></div>');
+                    $("#content").parent().append('<div id="content_edit" class="form-control-static"></div>');
                 }
                 $("#content_edit").html(calEvent.description);
 
                 if ($("#comment").parent().find('#comment_edit').length == 0) {
-                    $("#comment").parent().append('<div id="comment_edit"></div>');
+                    $("#comment").parent().append('<p id="comment_edit" class="form-control-static"></p>');
                 }
 
                 if (calEvent.course_name) {
@@ -555,7 +555,7 @@ $(function() {
                 if (calEvent.session_name) {
                     $("#calendar_session_info").html(
                         '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Session' | get_lang }}</label>'+
-                        '<div class="class="col-sm-8">' + calEvent.session_name+"</div></div>"
+                        '<div class="class="col-sm-8"><p class="form-control-static">' + calEvent.session_name + "</p></div></div>"
                     );
                 } else {
                     $("#calendar_session_info").html('');
@@ -851,7 +851,7 @@ $(function() {
                 if (calEvent.course_name) {
                     $("#calendar_course_info_simple").html(
                         '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Course' | get_lang }}</label>' +
-                        '<div class="col-sm-9">' + calEvent.course_name+"</div></div>"
+                        '<div class="col-sm-9"><p class="form-control-static">' + calEvent.course_name+"</p></div></div>"
                     );
                 } else {
                     $("#calendar_course_info_simple").html('');
@@ -1018,8 +1018,10 @@ $(function() {
                 <b>{{ "Date" |get_lang}}</b>
             </label>
             <div class="col-sm-9">
-                <span id="simple_start_date"></span>
-                <span id="simple_end_date"></span>
+                <p class="form-control-static">
+                    <span id="simple_start_date"></span>
+                    <span id="simple_end_date"></span>
+                </p>
             </div>
         </div>
         <div class="form-group">
@@ -1027,7 +1029,7 @@ $(function() {
                 <b>{{ "Title" |get_lang}}</b>
             </label>
             <div class="col-sm-9">
-                <div id="simple_title"></div>
+                <p id="simple_title" class="form-control-static"></p>
             </div>
         </div>
         <div class="form-group">
@@ -1035,7 +1037,7 @@ $(function() {
                 <b>{{ "Description" |get_lang}}</b>
             </label>
             <div class="col-sm-9">
-                <div id="simple_content"></div>
+                <div id="simple_content" class="form-control-static"></div>
             </div>
         </div>
         <div class="form-group">
@@ -1043,7 +1045,7 @@ $(function() {
                 <b>{{ "Comment" |get_lang}}</b>
             </label>
             <div class="col-sm-9">
-                <div id="simple_comment"></div>
+                <p id="simple_comment" class="form-control-static"></p>
             </div>
         </div>
 

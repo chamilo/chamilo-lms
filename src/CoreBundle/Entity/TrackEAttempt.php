@@ -6,6 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,6 +31,33 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'security' => 'is_granted("ROLE_USER")',
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => 'is_granted("VIEW", object)',
+        ],
+    ],
+    attributes: [
+        'security' => 'is_granted("ROLE_USER")',
+    ],
+    normalizationContext: [
+        'groups' => ['track_e_attempt:read'],
+    ],
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'user' => 'exact',
+        'questionId' => 'exact',
+        'answer' => 'exact',
+        'marks' => 'exact',
+    ]
+)]
 class TrackEAttempt
 {
     use UserTrait;
@@ -37,7 +67,6 @@ class TrackEAttempt
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    #[Groups(['track_e_exercise:read'])]
     protected int $id;
 
     /**
@@ -52,37 +81,36 @@ class TrackEAttempt
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     #[Assert\NotNull]
+    #[Groups(['track_e_attempt:read'])]
     protected User $user;
 
     /**
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
     #[Assert\NotBlank]
-    #[Groups(['track_e_exercise:read'])]
+    #[Groups(['track_e_attempt:read'])]
     protected ?int $questionId = null;
 
     /**
      * @ORM\Column(name="answer", type="text", nullable=false)
      */
-    #[Groups(['track_e_exercise:read'])]
+    #[Groups(['track_e_attempt:read'])]
     protected string $answer;
 
     /**
      * @ORM\Column(name="teacher_comment", type="text", nullable=false)
      */
-    #[Groups(['track_e_exercise:read'])]
     protected string $teacherComment;
 
     /**
      * @ORM\Column(name="marks", type="float", precision=6, scale=2, nullable=false)
      */
-    #[Groups(['track_e_exercise:read'])]
+    #[Groups(['track_e_attempt:read'])]
     protected float $marks;
 
     /**
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
-    #[Groups(['track_e_exercise:read'])]
     protected ?int $position = null;
 
     /**
@@ -94,13 +122,11 @@ class TrackEAttempt
     /**
      * @ORM\Column(name="filename", type="string", length=255, nullable=true)
      */
-    #[Groups(['track_e_exercise:read'])]
     protected ?string $filename = null;
 
     /**
      * @ORM\Column(name="seconds_spent", type="integer")
      */
-    #[Groups(['track_e_exercise:read'])]
     protected int $secondsSpent;
 
     /**

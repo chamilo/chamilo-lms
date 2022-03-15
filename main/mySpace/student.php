@@ -21,7 +21,7 @@ if (!$allowToTrack) {
 
 $nameTools = get_lang('Students');
 
-$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
@@ -45,17 +45,17 @@ if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) &&
     $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Tutors')];
 }
 
-function get_count_users()
+function get_count_users(): int
 {
     $users = get_users(null, null, 0, 3);
 
     return count($users);
 }
 
-function get_users($from, $limit, $column, $direction)
+function get_users($from, $limit, $column, $direction): array
 {
     global $export_csv;
-    $active = isset($_GET['active']) ? $_GET['active'] : 1;
+    $active = $_GET['active'] ?? 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -70,6 +70,7 @@ function get_users($from, $limit, $column, $direction)
     $coach_id = api_get_user_id();
     $column = 'u.user_id';
     $drhLoaded = false;
+    $students = [];
 
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
@@ -408,9 +409,9 @@ if ($export_csv) {
 
     // It sends the email to selected users
     if (isset($_POST['action']) && 'send_message' == $_POST['action']) {
-        $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
-        $message = isset($_POST['message']) ? $_POST['message'] : '';
-        $users = isset($_POST['uid']) ? $_POST['uid'] : '';
+        $subject = $_POST['subject'] ?? '';
+        $message = $_POST['message'] ?? '';
+        $users = $_POST['uid'] ?? '';
         if (!empty($subject) && !empty($message) && !empty($users)) {
             foreach ($users as $uid) {
                 MessageManager::send_message_simple(

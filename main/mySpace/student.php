@@ -201,7 +201,9 @@ function get_users($from, $limit, $column, $direction)
         }
 
         $row = [];
-        $row[] = $student_id;
+        if (!$export_csv) {
+            $row[] = $student_id;
+        }
         if ($is_western_name_order) {
             $first = Display::url($student_data['firstname'], $urlDetails);
             $last = Display::url($student_data['lastname'], $urlDetails);
@@ -211,33 +213,35 @@ function get_users($from, $limit, $column, $direction)
         }
 
         if ($export_csv) {
-            $row[] = strip_tags($first);
-            $row[] = strip_tags($last);
-        } else {
-            $row[] = $first;
-            $row[] = $last;
+            $first = strip_tags($first);
+            $last = strip_tags($last);
         }
 
-        $string_date = Tracking::get_last_connection_date($student_id, true);
+        $row[] = $first;
+        $row[] = $last;
+
+        $string_date = Tracking::get_last_connection_date($student_id, !$export_csv);
         $first_date = Tracking::get_first_connection_date($student_id);
         $row[] = $first_date;
         $row[] = $string_date;
 
-        $detailsLink = Display::url(
-            Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
-            $urlDetails,
-            ['id' => 'details_'.$student_data['username']]
-        );
-
-        $lostPasswordLink = '';
-        if (api_is_drh() || api_is_platform_admin()) {
-            $lostPasswordLink = '&nbsp;'.Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
-                    $webCodePath.'mySpace/user_edit.php?user_id='.$student_id
+        if (!$export_csv) {
+            $detailsLink = Display::url(
+                Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
+                $urlDetails,
+                ['id' => 'details_'.$student_data['username']]
             );
-        }
 
-        $row[] = $lostPasswordLink.$detailsLink;
+            $lostPasswordLink = '';
+            if (api_is_drh() || api_is_platform_admin()) {
+                $lostPasswordLink = '&nbsp;'.Display::url(
+                        Display::return_icon('edit.png', get_lang('Edit')),
+                        $webCodePath.'mySpace/user_edit.php?user_id='.$student_id
+                    );
+            }
+
+            $row[] = $lostPasswordLink.$detailsLink;
+        }
         $all_datas[] = $row;
     }
 
@@ -397,11 +401,7 @@ $form->setDefaults($params);
 if ($export_csv) {
     // send the csv file if asked
     $content = $table->get_table_data();
-    foreach ($content as &$row) {
-        unset($row[4]);
-    }
     $csv_content = array_merge($csv_header, $content);
-    ob_end_clean();
     Export::arrayToCsv($csv_content, 'reporting_student_list');
     exit;
 } else {

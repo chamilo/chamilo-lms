@@ -163,7 +163,7 @@ class Tracking
 				WHERE
 				    user.id = '.$userId.' AND
 				    course.id = '.$courseId.' AND
-				    c_lp_item.title LIKE \'Quiz%\' AND
+				    c_lp_item.item_type = \'quiz\' AND
 				    c_lp_view.session_id = '.$sessionId.'
 				GROUP BY quiz_name, lp_name
 				ORDER BY c_lp_item.display_order';

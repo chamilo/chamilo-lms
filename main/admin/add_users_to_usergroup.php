@@ -2,6 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 // resetting the course id
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 $cidReset = true;
 
 // including some necessary files
@@ -74,12 +77,30 @@ function checked_in_no_group(checked)
 }
 
 function change_select(reset) {
+    $("#user_with_any_group_id").attr("checked", false);
+    document.formulaire["form_sent"].value = "2";
+
+    var select = $(document.formulaire["elements_not_in_name"]);
+
+    select.empty();
+
     if (reset) {
         document.formulaire["first_letter_user"].value = "";
+        document.formulaire["form_sent"].value = "1";
+
+        return;
     }
-    $("#user_with_any_group_id").attr("checked", false);
-    document.formulaire.form_sent.value="2";
-    document.formulaire.submit();
+
+    $.post("'.api_get_self().'", $(document.formulaire).serialize(), function(data) {
+        document.formulaire["form_sent"].value = "1";
+
+        $.each(data, function(index, item) {
+            select.append($("<option>", {
+                value: index,
+                text: item
+            }));
+        });
+    });
 }
 
 </script>';
@@ -107,7 +128,7 @@ $first_letter_user = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $elements_posted = isset($_POST['elements_in_name']) ? $_POST['elements_in_name'] : null;
+    $elements_posted = $_POST['elements_in_name'] ?? null;
     $first_letter_user = $_POST['firstLetterUser'];
 
     if (!is_array($elements_posted)) {
@@ -115,7 +136,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 
     // If "social group" you need to select a role
-    if ($groupInfo['group_type'] == 1 && empty($relation)) {
+    if ($groupInfo['group_type'] == UserGroup::SOCIAL_CLASS && empty($relation)) {
         Display::addFlash(Display::return_message(get_lang('SelectRole'), 'warning'));
         header('Location: '.api_get_self().'?id='.$id);
         exit;
@@ -193,18 +214,13 @@ $filters = [
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
-$renderer = &$searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'id', $id);
+$searchForm->addHidden('relation', $relation);
 foreach ($filters as $param) {
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
 }
 $searchForm->addButtonSearch();
-
-$filterData = [];
-if ($searchForm->validate()) {
-    $filterData = $searchForm->getSubmitValues();
-}
 
 $data = $usergroup->get($id);
 $list_in = $usergroup->getUsersByUsergroupAndRelation($id, $relation);
@@ -222,12 +238,17 @@ if ($orderListByOfficialCode === 'true') {
 
 $conditions = [];
 if (!empty($first_letter_user) && strlen($first_letter_user) >= 3) {
-    $conditions['lastname'] = $first_letter_user;
+    foreach ($filters as $filter) {
+        $conditions[$filter['name']] = $first_letter_user;
+    }
 }
 
-if (!empty($filters) && !empty($filterData)) {
+$filterData = [];
+if ($searchForm->validate()) {
+    $filterData = $searchForm->getSubmitValues();
+
     foreach ($filters as $filter) {
-        if (isset($filter['name']) && isset($filterData[$filter['name']])) {
+        if (isset($filterData[$filter['name']])) {
             $value = $filterData[$filter['name']];
             if (!empty($value)) {
                 $conditions[$filter['name']] = $value;
@@ -252,11 +273,11 @@ foreach ($list_in as $listedUserId) {
     $elements_in[$listedUserId] = $person_name;
 }
 
-$user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']) ? true : false;
+$user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']);
 $user_list = [];
 
 if (!empty($conditions)) {
-    $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND');
+    $user_list = UserManager::getUserListLike($conditions, $order, true, 'OR');
 }
 
 if ($user_with_any_group) {
@@ -294,6 +315,11 @@ if (!empty($user_list)) {
             $elements_not_in[$item['user_id']] = $person_name;
         }
     }
+}
+
+if (ChamiloApi::isAjaxRequest()) {
+    JsonResponse::create($elements_not_in)->send();
+    exit;
 }
 
 Display::display_header($tool_name);

@@ -467,6 +467,12 @@ class Statistics
         $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 
+        $urls = api_get_access_url_from_user(api_get_user_id());
+        $whereAccessUrl = '';
+        if (!empty($urls)) {
+            $whereAccessUrl = ' AND access_url_rel_user.access_url_id IN('.implode(',', $urls).')';
+        }
+
         $sql = '
 		    SELECT
 		        DISTINCT access_url.description AS client,
@@ -489,6 +495,7 @@ class Statistics
                 user.status = '.STUDENT.' AND
                 CONCAT(access_user_id,\'-\',access_session_id) NOT IN (SELECT CONCAT(access_user_id,\'-\',access_session_id) FROM '.$tblTrackAccess.' WHERE access_session_id > 0
                 AND access_date LIKE \''.$lastMonth.'%\')
+                '.$whereAccessUrl.'
             GROUP BY
                 user.lastname,code
             ORDER BY

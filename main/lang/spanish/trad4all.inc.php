@@ -8876,4 +8876,9 @@ $EmbedExerciseLink = "Enlace para insertar el ejercicio";
 $CopyUrlToIncludeInIframe = "Copiar esta URL para incluir este ejercicio en un iframe:";
 $ExportExtraFields = "Exportar campos extra";
 $ToHideExlearners = "Ocultar ex-alumnos";
+$CertificateOfAchievement2 = "Certificado de logro por lecciones";
+$YourLpResultsAre = "Ha obtenido los siguientes resultados en las lecciones:";
+$YourLpQuizzesResultsAre = "Ha obtenido los siguientes resultados en los ejercicios:";
+$ExportLpQuizResults = "Exportacion de los resultados de los ejercicios en lecciones";
+$ElearningResults = "Resultados de lecciones";
 ?>

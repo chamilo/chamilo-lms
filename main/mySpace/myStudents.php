@@ -274,6 +274,141 @@ switch ($action) {
             Security::clear_token();
         }
         break;
+    case 'lp_quiz_to_export_pdf':
+
+        $sessionToExport = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
+        $sessionInfo = api_get_session_info($sessionToExport);
+        if (empty($sessionInfo)) {
+            api_not_allowed(true);
+        }
+
+        $studentInfo = api_get_user_info($student_id);
+        $lpQuizTable = Tracking::getLpQuizContentToPdf($student_id, $sessionToExport);
+
+        $tpl = new Template('', false, false, false, true, false, false);
+        $tpl->assign('title', get_lang('ElearningResults'));
+        $tpl->assign('session_title', $sessionInfo['name']);
+        $tpl->assign('student', $studentInfo['complete_name']);
+        $tpl->assign('table_test', $lpQuizTable);
+
+        $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_results.tpl'));
+        $params = [
+            'pdf_title' => get_lang('Resume'),
+            'session_info' => $sessionInfo,
+            'course_info' => '',
+            'pdf_date' => '',
+            'student_info' => $studentInfo,
+            'show_grade_generated_date' => true,
+            'show_real_course_teachers' => false,
+            'show_teacher_as_myself' => false,
+            'orientation' => 'P',
+        ];
+
+        @$pdf = new PDF('A4', $params['orientation'], $params);
+        try {
+            $theme = $tpl->theme;
+            $themeName = empty($theme) ? api_get_visual_theme() : $theme;
+            $themeDir = \Template::getThemeDir($theme);
+            $customLetterhead = $themeDir.'images/letterhead.png';
+            $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
+
+            $urlWebLetterhead = '#FFFFFF';
+            $fullPage = false;
+            if (file_exists($urlPathLetterhead)) {
+                $fullPage = true;
+                $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+            }
+
+            if ($fullPage) {
+                $pdf->pdf->SetDisplayMode('fullpage');
+                $pdf->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
+                $pdf->pdf->SetDefaultBodyCSS('background-image-resize', '6');
+            }
+
+            @$pdf->content_to_pdf($content,
+                $css = '',
+                $pdf_name = '',
+                $course_code = null,
+                $outputMode = 'D',
+                $saveInFile = false,
+                $fileToSave = null,
+                $returnHtml = false,
+                $addDefaultCss = true,
+                $completeHeader = false
+            );
+        } catch (MpdfException $e) {
+            error_log($e);
+        }
+        break;
+    case 'cert_to_export_pdf':
+
+        $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
+        $sessionInfo = api_get_session_info($sId);
+        if (empty($sessionInfo)) {
+            api_not_allowed(true);
+        }
+
+        $studentInfo = api_get_user_info($student_id);
+        $tablesToExport = Tracking::getLpCertificateTablesToPdf($student_id, $sId);
+
+        $tpl = new Template('', false, false, false, true, false, false);
+        $tpl->assign('title', get_lang('AttestationOfAttendance'));
+        $tpl->assign('session_title', $sessionInfo['name']);
+        $tpl->assign('student', $studentInfo['complete_name']);
+        $tpl->assign('table_progress', $tablesToExport['progress_table']);
+        $tpl->assign('subtitle', sprintf(get_lang('InSessionXYouHadTheFollowingResults'), $sessionInfo['name']));
+        $tpl->assign('table_course', $tablesToExport['course_table']);
+        $tpl->assign('table_parcours', $tablesToExport['lp_table']);
+
+        $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_certificate.tpl'));
+        $params = [
+            'pdf_title' => get_lang('Resume'),
+            'session_info' => $sessionInfo,
+            'course_info' => '',
+            'pdf_date' => '',
+            'student_info' => $studentInfo,
+            'show_grade_generated_date' => true,
+            'show_real_course_teachers' => false,
+            'show_teacher_as_myself' => false,
+            'orientation' => 'P',
+        ];
+
+        @$pdf = new PDF('A4', $params['orientation'], $params);
+        try {
+            $theme = $tpl->theme;
+            $themeName = empty($theme) ? api_get_visual_theme() : $theme;
+            $themeDir = \Template::getThemeDir($theme);
+            $customLetterhead = $themeDir.'images/letterhead.png';
+            $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
+
+            $urlWebLetterhead = '#FFFFFF';
+            $fullPage = false;
+            if (file_exists($urlPathLetterhead)) {
+                $fullPage = true;
+                $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+            }
+
+            if ($fullPage) {
+                $pdf->pdf->SetDisplayMode('fullpage');
+                $pdf->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
+                $pdf->pdf->SetDefaultBodyCSS('background-image-resize', '6');
+            }
+
+            @$pdf->content_to_pdf($content,
+                $css = '',
+                $pdf_name = '',
+                $course_code = null,
+                $outputMode = 'D',
+                $saveInFile = false,
+                $fileToSave = null,
+                $returnHtml = false,
+                $addDefaultCss = true,
+                $completeHeader = false
+            );
+        } catch (MpdfException $e) {
+            error_log($e);
+        }
+        break;
     case 'lp_stats_to_export_pdf':
         $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
         $categoryTest = new CLpCategory();
@@ -1400,6 +1535,33 @@ if (empty($details)) {
                             'action' => 'lp_stats_to_export_pdf',
                             'student' => $student_id,
                             'id_session' => $sId,
+                            'course' => $courseInfoItem['code'],
+                        ]
+                    )
+                );
+
+                // New reports from MJTecnoid
+                $sessionAction .= Display::url(
+                    Display::return_icon('pdf.png', get_lang('CertificateOfAchievement2'), [], ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'cert_to_export_pdf',
+                            'student' => $student_id,
+                            'session_to_export' => $sId,
+                            'course' => $courseInfoItem['code'],
+                        ]
+                    )
+                );
+
+                $sessionAction .= Display::url(
+                    Display::return_icon('pdf.png', get_lang('ExportLpQuizResults'), [], ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'lp_quiz_to_export_pdf',
+                            'student' => $student_id,
+                            'session_to_export' => $sId,
                             'course' => $courseInfoItem['code'],
                         ]
                     )

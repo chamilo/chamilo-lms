@@ -468,8 +468,9 @@ class Statistics
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $urls = api_get_access_url_from_user(api_get_user_id());
+        $allowFullUrlAccess = array_search(1, $urls);
         $whereAccessUrl = '';
-        if (!empty($urls)) {
+        if (!empty($urls) && false === $allowFullUrlAccess) {
             $whereAccessUrl = ' AND access_url_rel_user.access_url_id IN('.implode(',', $urls).')';
         }
 

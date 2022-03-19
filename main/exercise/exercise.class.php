@@ -8003,19 +8003,15 @@ class Exercise
 
             // Shows the question + possible answers
             $showTitle = $this->getHideQuestionTitle() == 1 ? false : true;
-            echo $this->showQuestion(
+            echo ExerciseLib::showQuestion(
+                $this,
                 $question_obj,
                 false,
                 $origin,
                 $i,
                 $showTitle,
                 false,
-                $user_choice,
-                false,
-                null,
-                false,
-                $this->getModelType(),
-                $this->categoryMinusOne
+                $user_choice
             );
 
             // Button save and continue

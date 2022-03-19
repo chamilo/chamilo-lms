@@ -8881,4 +8881,5 @@ $YourLpResultsAre = "Ha obtenido los siguientes resultados en las lecciones:";
 $YourLpQuizzesResultsAre = "Ha obtenido los siguientes resultados en los ejercicios:";
 $ExportLpQuizResults = "Exportacion de los resultados de los ejercicios en lecciones";
 $ElearningResults = "Resultados de lecciones";
+$InvoicingByAccessUrl = "Usuarios activos en sesiones por URL";
 ?>

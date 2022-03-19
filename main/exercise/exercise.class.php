@@ -3379,9 +3379,11 @@ class Exercise
         $questions_in_media = [],
         $currentAnswer = '',
         $myRemindList = [],
-        $showPreviousButton = true
+        $showPreviousButton = true,
+        int $lpId = 0,
+        int $lpItemId = 0,
+        int $lpItemViewId = 0
     ) {
-        global $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
         $nbrQuestions = $this->countQuestionsInExercise();
         $buttonList = [];
         $html = $label = '';
@@ -3397,9 +3399,9 @@ class Exercise
 
             $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq();
             $url .= '&'.http_build_query([
-                'learnpath_id' => $safe_lp_id,
-                'learnpath_item_id' => $safe_lp_item_id,
-                'learnpath_item_view_id' => $safe_lp_item_view_id,
+                'learnpath_id' => $lpId,
+                'learnpath_item_id' => $lpItemId,
+                'learnpath_item_view_id' => $lpItemViewId,
                 'hotspot' => $hotspotGet,
                 'nbrQuestions' => $nbrQuestions,
                 'num' => $questionNum,

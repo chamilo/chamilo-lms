@@ -445,6 +445,131 @@ class Statistics
     }
 
     /**
+     * Get the number of users by access url .
+     *
+     * @param $currentmonth
+     * @param $lastmonth
+     * @param $invoicingMonth
+     * @param $invoicingYear
+     *
+     * @return string
+     */
+    public static function printInvoicingByAccessUrl(
+        $currentMonth,
+        $lastMonth,
+        $invoicingMonth,
+        $invoicingYear
+    ) {
+        $tblTrackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $tblAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $tblAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        $urls = api_get_access_url_from_user(api_get_user_id());
+        $allowFullUrlAccess = array_search(1, $urls);
+        $whereAccessUrl = '';
+        if (!empty($urls) && false === $allowFullUrlAccess) {
+            $whereAccessUrl = ' AND access_url_rel_user.access_url_id IN('.implode(',', $urls).')';
+        }
+
+        $sql = '
+		    SELECT
+		        DISTINCT access_url.description AS client,
+		        user.lastname,
+		        user.firstname,
+		        course.code AS course_code,
+		        MIN(DATE_FORMAT(track_e_access.access_date,"%d/%m/%Y")) AS start_date,
+		        access_session_id,
+		        CONCAT(coach.lastname,\' \',coach.firstname) AS trainer
+		    FROM '.$tblTrackAccess.' AS track_e_access
+            JOIN '.$tblAccessUrlUser.' AS access_url_rel_user ON access_url_rel_user.user_id=track_e_access.access_user_id
+            JOIN '.$tblAccessUrl.' AS access_url ON access_url.id=access_url_rel_user.access_url_id
+            JOIN '.$tblUser.' AS user ON user.user_id=access_user_id
+            JOIN '.$tblCourse.' AS course ON course.id=track_e_access.c_id
+            JOIN '.$tblSession.' AS session ON session.id=track_e_access.access_session_id
+            JOIN '.$tblUser.' AS coach ON coach.user_id=session.id_coach
+            WHERE
+                access_session_id > 0 AND
+                access_date LIKE \''.$currentMonth.'%\' AND
+                user.status = '.STUDENT.' AND
+                CONCAT(access_user_id,\'-\',access_session_id) NOT IN (SELECT CONCAT(access_user_id,\'-\',access_session_id) FROM '.$tblTrackAccess.' WHERE access_session_id > 0
+                AND access_date LIKE \''.$lastMonth.'%\')
+                '.$whereAccessUrl.'
+            GROUP BY
+                user.lastname,code
+            ORDER BY
+                access_url.description,
+                user.lastname,
+                user.firstname,
+                track_e_access.access_date
+            DESC,course.code
+		';
+        $result = Database::query($sql);
+
+        $monthList = api_get_months_long();
+        array_unshift($monthList, '');
+
+        $nMonth = (int) $invoicingMonth;
+        $content = '<h2>'.get_lang('NumberOfUsers').' '.strtolower($monthList[$nMonth]).' '.$invoicingYear.'</h2><br>';
+
+        $form = new FormValidator('invoice_month', 'get', api_get_self().'?report=invoicing&invoicing_month='.$invoicingMonth.'&invoicing_year='.$invoicingYear);
+        $form->addSelect('invoicing_month', get_lang('Month'), $monthList);
+        $currentYear = date("Y");
+        $yearList = [''];
+        for ($i = 0; $i < 3; $i++) {
+            $y = $currentYear - $i;
+            $yearList[$y] = $y;
+        }
+        $form->addSelect('invoicing_year', get_lang('Year'), $yearList);
+        $form->addButtonSend(get_lang('Filter'));
+        $form->addHidden('report', 'invoicing');
+        $content .= $form->returnForm();
+
+        $content .= '<br>';
+        $content .= '<table border=1 class="table table-bordered data_table">';
+        $content .= '<tr>
+            <th class="th-header">'.get_lang('Portal').'</th>
+            <th class="th-header">'.get_lang('LastName').'</th>
+            <th class="th-header">'.get_lang('FirstName').'</th>
+            <th class="th-header">'.get_lang('Code').'</th>
+            <th class="th-header">'.get_lang('StartDate').'</th>
+            <th class="th-header">'.get_lang('SessionId').'</th>
+            <th class="th-header">'.get_lang('Trainer').'</th>
+        </tr>';
+        $countusers = 0;
+        $lastname = '';
+        $lastportal = '';
+        while ($row = Database::fetch_array($result)) {
+            if (($row['client'] != $lastportal) && ($countusers > 0)) {
+                $content .= '<tr class="row_odd"><td colspan=7>'.get_lang('TotalUser').' '.$lastportal.' : '.$countusers.'</td></tr>';
+                $countusers = 0;
+            }
+            $content .= '<tr>
+                <td>'.$row['client'].'</td>
+                <td>'.$row['lastname'].'</td>
+                <td>'.$row['firstname'].'</td>
+                <td>'.$row['course_code'].'</td>
+                <td>'.$row['start_date'].'</td>
+                <td>'.$row['access_session_id'].'</td>
+                <td>'.$row['trainer'].'</td>
+            </tr>';
+            if ($lastname != $row['lastname'].$row['firstname']) {
+                $countusers++;
+            }
+            $lastname = $row['lastname'].$row['firstname'];
+            $lastportal = $row['client'];
+        }
+        $content .= '<tr class="row_odd">
+            <td colspan=7>'.get_lang('TotalUser').' '.$lastportal.' : '.$countusers.'</td>
+        </tr>';
+        $content .= '</table>';
+
+        return $content;
+    }
+
+    /**
      * Show statistics.
      *
      * @param string $title      The title

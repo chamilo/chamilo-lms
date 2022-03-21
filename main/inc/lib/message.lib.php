@@ -3191,6 +3191,10 @@ class MessageManager
             ];
         }
 
-        return [];
+        return [
+            'ms_friends' => 0,
+            'ms_groups' => 0,
+            'ms_inbox' => $countUnreadMessage,
+        ];
     }
 }

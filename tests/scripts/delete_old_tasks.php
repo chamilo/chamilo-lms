@@ -2,68 +2,70 @@
 /* For licensing terms, see /license.txt */
 /**
  * This script removes previous tasks from disk to clear space.
- * Configure the date on lines 22-23 to change the dates after/before which
- * to delete.
- * This works based on sessions dates (it will not delete tasks from
- * base courses).
+ * Configure the date on line 22 to change the date before which to delete,
+ * then delete the exit() statement at line 13.
+ * This works based on sessions dates.
  * This script should be located inside the tests/scripts/ folder to work
  * @author Paul Patrocinio <ppatrocino@icpna.edu.pe>
  * @author Percy Santiago <psantiago@icpna.edu.pe>
- * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com> - Cleanup and debug
  */
-exit; //remove this line to execute from the command line
+die();
+require __DIR__.'/../../main/inc/global.inc.php';
+$fromDate = '2017-03-01'; //session start date must be > to be considered
+$expiryDate = '2022-01-01'; //session end date must be < to be considered
+$simulate = false;
+$taskNameFilter = ''; // fill with any value to only delete tasks that contain this text
 if (PHP_SAPI !== 'cli') {
     die('This script can only be executed from the command line');
 }
+echo PHP_EOL."Usage: php ".basename(__FILE__)." [options]".PHP_EOL;
+echo "Where [options] can be ".PHP_EOL;
+echo "  -s         Simulate execution - Do not delete anything, just show numbers".PHP_EOL.PHP_EOL;
+echo "Processing...".PHP_EOL.PHP_EOL;
 
-require __DIR__.'/../../main/inc/conf/configuration.php';
-
-// Dates
-$expiryDate = '2015-06-01'; //session start date must be < to be considered
-$fromDate = '2011-01-01'; //session start date must be > to be considered
+if (!empty($argv[1]) && $argv[1] == '-s') {
+    $simulate = true;
+    echo "Simulation mode is enabled".PHP_EOL;
+}
 
 $sessionCourses = array();
 $coursesCodes = array();
 $coursesDirs = array();
-if (!$conexion = mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password'])) {
-    echo 'Could not connect to database';
-    exit;
-}
-
-if (!mysql_select_db($_configuration['main_database'], $conexion)) {
-    echo 'Could not select database '.$_configuration['main_database'];
-    exit;
-}
 echo "[".time()."] Querying sessions\n";
 $sql = "SELECT id FROM session where access_start_date < '$expiryDate' AND access_start_date > '$fromDate'";
 
-$res = mysql_query($sql, $conexion);
+$res = Database::query($sql);
+
 if ($res === false) {
+    die("Error querying sessions\n");
 }
 
-$countSessions = mysql_num_rows($res);
-$sql = "SELECT count(*) FROM session";
-$resc = mysql_query($sql, $conexion);
+$countSessions = Database::num_rows($res);
+$sql = "SELECT count(*) nbr FROM session";
+$resc = Database::query($sql);
 if ($resc === false) {
+    die("Error querying total sessions\n");
 }
-$countAllSessions = mysql_result($resc, 0, 0);
-echo "[".time()."] Found $countSessions sessions between $fromDate and $expiryDate on a total of $countAllSessions sessions."."\n";
+$countAllSessions = Database::result($resc, 0, 'nbr');
+echo "[".time()."]"
+    ." Found $countSessions sessions between $fromDate and $expiryDate on a total of $countAllSessions sessions."."\n";
 
-while ($session = mysql_fetch_assoc($res)) {
-    $sql2 = "SELECT c.id AS cid, c.code as ccode, c.directory as cdir
-            FROM course c, session_rel_course s 
-            WHERE s.id_session = ".$session['id']." 
-            AND s.course_code = c.code";
-    $res2 = mysql_query($sql2, $conexion); //Database::query($sql2);
+while ($session = Database::fetch_assoc($res)) {
+    $sql2 = "SELECT c.id AS cid, c.code AS ccode, c.directory AS cdir
+            FROM course c, session_rel_course s
+            WHERE s.session_id = ".$session['id']."
+            AND s.c_id = c.id";
+    $res2 = Database::query($sql2);
 
     if ($res2 === false) {
-        die("Error querying courses for session ".$session['id'].": ".mysql_error($res2)."\n");
+        die("Error querying courses for session ".$session['id']."\n");
     }
 
-    if (mysql_num_rows($res2) > 0) {
-        while ($course = mysql_fetch_assoc($res2)) {
+    if (Database::num_rows($res2) > 0) {
+        while ($course = Database::fetch_assoc($res2)) {
             $sessionCourses[$session['id']] = $course['cid'];
-			//$_SESSION['session_course'] = $sessionCourses;
+            //$_SESSION['session_course'] = $sessionCourses;
 
             if (empty($coursesCodes[$course['cid']])) {
                 $coursesCodes[$course['cid']] = $course['ccode'];
@@ -91,39 +93,45 @@ foreach ($sessionCourses as $sid => $cid) {
             AND c_id = $cid
             AND session_id = $sid
             AND active = 1
-            AND url LIKE '%ALP%'";
+            AND url LIKE '%$taskNameFilter%'";
 
-    $resCarpetas = mysql_query($sql, $conexion); //Database::query($sql);
+    $resCarpetas = Database::query($sql);
 
-	if (mysql_num_rows($resCarpetas) > 0) {
-        while ($rowDemo = mysql_fetch_assoc($resCarpetas)) {
+    if (Database::num_rows($resCarpetas) > 0) {
+        while ($rowDemo = Database::fetch_assoc($resCarpetas)) {
 
-            $carpetaAlpElimina = $_configuration['root_sys'].'courses/'.$coursesDirs[$cid].'/work'.$rowDemo['url'];
+            $removableFolder = api_get_path(SYS_COURSE_PATH).$coursesDirs[$cid].'/work'.$rowDemo['url'];
 
-            //echo "rm -rf ".$carpetaAlpElimina."\n";
-            $size = folderSize($carpetaAlpElimina);
+            //echo "rm -rf ".$removableFolder."\n";
+            $size = folderSize($removableFolder);
             $totalSize += $size;
-            echo "Freeing $size of a total $totalSize bytes in $carpetaAlpElimina\n";
-            exec('rm -rf '.$carpetaAlpElimina);
+            echo "Freeing $size summing to a total $totalSize bytes in $removableFolder\n";
+            if ($simulate == false) {
+                exec('rm -rf '.$removableFolder);
+            }
         }
 
-	$sqldel = "DELETE FROM c_student_publication
-		WHERE
-		c_id = $cid
-		AND session_id = $sid AND active = 1;";
-        $resdel = mysql_query($sqldel);
-        if ($resdel === false) {
-            echo "Error querying sessions";
+        if ($simulate == false) {
+            $sqldel = "
+                DELETE FROM c_student_publication
+                WHERE c_id = $cid
+                AND session_id = $sid AND active = 1;
+            ";
+            $resdel = Database::query($sqldel);
+
+            if ($resdel === false) {
+                echo "Error querying sessions\n";
+            }
         }
     }
 }
-echo "[".time()."] Deleted tasks from $countSessions sessions between $fromDate and $expiryDate on a total of $countAllSessions sessions."."\n";
+echo "[".time()."] ".($simulate ? "Would delete" : "Deleted")
+    ." tasks from $countSessions sessions between $fromDate and $expiryDate on a total of $countAllSessions"
+    ." sessions for a total estimated size of "
+    .round($totalSize / (1024 * 1024))." MB."."\n";
 
-/**
- * Helper function to calculate size of a folder
- * @author See php.net comments on filesize()
- */
-function folderSize($dir) {
+function folderSize($dir)
+{
     $size = 0;
     $contents = glob(rtrim($dir, '/').'/*', GLOB_NOSORT);
     foreach ($contents as $contents_value) {
@@ -133,5 +141,6 @@ function folderSize($dir) {
             $size += folderSize($contents_value);
         }
     }
+
     return $size;
 }

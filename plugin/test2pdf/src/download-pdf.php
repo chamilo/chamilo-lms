@@ -55,7 +55,12 @@ if ($_GET['type'] == 'question' || $_GET['type'] == 'all') {
         $pdf->SetTextColor(64);
         $pdf->MultiCell(0, 7, ($key + $j).' - '.$infoQuestion['question'], 0, 'L', false);
         if (!empty($infoQuestion['description'])) {
-            $pdf->WriteHTML(removeQuotes($infoQuestion['description']));
+            $pdf->WriteHTML(
+                PDF::fixImagesPaths(
+                    removeQuotes($infoQuestion['description']),
+                    $infoCourse
+                )
+            );
         }
 
         $infoAnswer = getAnswers($courseId, $value);

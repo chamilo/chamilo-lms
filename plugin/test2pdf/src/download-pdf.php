@@ -32,7 +32,12 @@ $pdf->SetFont('Arial', '', 16);
 $pdf->SetTextColor(64);
 $pdf->MultiCell(0, 7, $infoQuiz['title'], 0, 'L', false);
 if (!empty($infoQuiz['description'])) {
-    $pdf->WriteHTML(removeQuotes($infoQuiz['description']));
+    $pdf->WriteHTML(
+        PDF::fixImagesPaths(
+            removeQuotes($infoQuiz['description']),
+            $infoCourse
+        )
+    );
 }
 
 // Select all questions of the supported types from the given course

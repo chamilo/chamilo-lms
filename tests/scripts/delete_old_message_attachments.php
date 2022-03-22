@@ -78,7 +78,7 @@ while ($message = Database::fetch_assoc($res)) {
                 //echo "  File found".PHP_EOL;
                 $totalSize += filesize($userBasePath.$filePath);
                 if ($simulate == false) {
-                    exec('rm -rf '.$userBasePath.$filePath);
+                    exec('rm '.$userBasePath.$filePath);
                     $res = Database::query($sqlDeleteAttach.$message['maid']);
                 } else {
                     echo "Would delete ".$userBasePath.$filePath.PHP_EOL;
@@ -94,7 +94,7 @@ while ($message = Database::fetch_assoc($res)) {
                 //echo "  File found in receiver's path".PHP_EOL;
                 $totalSize += filesize($userBasePath.$filePath);
                 if ($simulate == false) {
-                    exec('rm -rf '.$userBasePath.$filePath);
+                    exec('rm '.$userBasePath.$filePath);
                     $res = Database::query($sqlDeleteAttach.$message['maid']);
                 } else {
                     echo "Would delete ".$userBasePath.$filePath.PHP_EOL;

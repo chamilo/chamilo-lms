@@ -1501,8 +1501,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Get payment types.
-     *
-     * @return array
      */
     public function getPaymentTypes(bool $onlyActive = false): array
     {

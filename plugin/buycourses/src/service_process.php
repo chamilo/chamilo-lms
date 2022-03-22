@@ -32,11 +32,6 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
 $em = Database::getManager();
 $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');
-$paypalEnabled = $plugin->get('paypal_enable') === 'true';
-$transferEnabled = $plugin->get('transfer_enable') === 'true';
-$culqiEnabled = $plugin->get('culqi_enable') === 'true';
-$tpvRedsysEnable = $plugin->get('tpv_redsys_enable') === 'true';
-$stripeEnable = $plugin->get('stripe_enable') === 'true';
 $additionalQueryString = '';
 if ($includeServices !== 'true') {
     api_not_allowed(true);
@@ -57,26 +52,8 @@ $serviceInfo = $plugin->getService($serviceId, $coupon);
 $userInfo = api_get_user_info($currentUserId);
 
 $form = new FormValidator('confirm_sale');
-$paymentTypesOptions = $plugin->getPaymentTypes();
+$paymentTypesOptions = $plugin->getPaymentTypes(true);
 
-if (!$paypalEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL]);
-}
-
-if (!$transferEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER]);
-}
-
-if (!$culqiEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
-}
-if (!$tpvRedsysEnable || !file_exists(api_get_path(SYS_PLUGIN_PATH).'buycourses/resources/apiRedsys.php')) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TPV_REDSYS]);
-}
-
-if (!$stripeEnable) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_STRIPE]);
-}
 $form->addHtml(
     Display::return_message(
         $plugin->get_lang('PleaseSelectThePaymentMethodBeforeConfirmYourOrder'),

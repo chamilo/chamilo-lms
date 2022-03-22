@@ -61,6 +61,8 @@ $senderMessageSize = 0;
 while ($message = Database::fetch_assoc($res)) {
     switch ($message['msg_status']) {
         case '4':
+            // This message is in status "outbox", meaning it's in the
+            // sender's outbox.
             //echo "Message ".$message['mid']." is in user ".$message['user_sender_id']." outbox".PHP_EOL;
             $usi = $message['user_sender_id'];
             $filePath = substr($usi, 0, 1).'/'.$usi.'/message_attachments/'.$message['path'];
@@ -90,6 +92,7 @@ while ($message = Database::fetch_assoc($res)) {
             //echo "Message ".$message['mid']." can be in two different folders".PHP_EOL;
             $usi = $message['user_receiver_id'];
             $filePath = substr($usi, 0, 1).'/'.$usi.'/message_attachments/'.$message['path'];
+            // Check if this file is on the receiver's side
             if (file_exists($userBasePath.$filePath)) {
                 //echo "  File found in receiver's path".PHP_EOL;
                 $totalSize += filesize($userBasePath.$filePath);
@@ -101,11 +104,22 @@ while ($message = Database::fetch_assoc($res)) {
                     echo "Query: ".$sqlDeleteAttach.$message['maid'].PHP_EOL;
                 }
             } else {
+                // Not on the receiver's side, so must be on the sender's side
                 $usi = $message['user_sender_id'];
                 $filePath = substr($usi, 0, 1).'/'.$usi.'/message_attachments/'.$message['path'];
                 if (file_exists($userBasePath.$filePath)) {
                     //echo "  File found in sender's path".PHP_EOL;
-                    $senderMessageSize += filesize($userBasePath.$filePath);
+                    $totalSize += filesize($userBasePath.$filePath);
+                    if ($simulate == false) {
+                        // Even though we would normally not delete sender files
+                        // indiscriminately, status=3 means the message was
+                        // deleted by the user, so... no mercy!
+                        exec('rm '.$userBasePath.$filePath);
+                        $deleteResult = Database::query($sqlDeleteAttach.$message['maid']);
+                    } else {
+                        echo "Would delete ".$userBasePath.$filePath.PHP_EOL;
+                        echo "Query: ".$sqlDeleteAttach.$message['maid'].PHP_EOL;
+                    }
                 }
             }
             break;

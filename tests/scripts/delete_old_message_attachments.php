@@ -79,7 +79,7 @@ while ($message = Database::fetch_assoc($res)) {
                 $totalSize += filesize($userBasePath.$filePath);
                 if ($simulate == false) {
                     exec('rm '.$userBasePath.$filePath);
-                    $res = Database::query($sqlDeleteAttach.$message['maid']);
+                    $deleteResult = Database::query($sqlDeleteAttach.$message['maid']);
                 } else {
                     echo "Would delete ".$userBasePath.$filePath.PHP_EOL;
                     echo "Query: ".$sqlDeleteAttach.$message['maid'].PHP_EOL;
@@ -95,7 +95,7 @@ while ($message = Database::fetch_assoc($res)) {
                 $totalSize += filesize($userBasePath.$filePath);
                 if ($simulate == false) {
                     exec('rm '.$userBasePath.$filePath);
-                    $res = Database::query($sqlDeleteAttach.$message['maid']);
+                    $deleteResult = Database::query($sqlDeleteAttach.$message['maid']);
                 } else {
                     echo "Would delete ".$userBasePath.$filePath.PHP_EOL;
                     echo "Query: ".$sqlDeleteAttach.$message['maid'].PHP_EOL;

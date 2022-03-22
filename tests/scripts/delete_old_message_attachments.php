@@ -9,7 +9,7 @@
  * This script should be located inside the tests/scripts/ folder to work
  * @author Yannick Warnier <yannick.warnier@beeznest.com> - Cleanup and debug
  */
-die();
+exit;
 require __DIR__.'/../../main/inc/global.inc.php';
 $beforeDate = '2021-08-31'; // message must be older than date to be considered
 $simulate = false;

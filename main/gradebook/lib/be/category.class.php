@@ -2528,7 +2528,7 @@ class Category implements GradebookItem
      *
      * @return string
      */
-    public static function getDownloadCertificateBlock(array $certificate)
+    public static function getDownloadCertificateBlock(array $certificate): string
     {
         if (!isset($certificate['pdf_url'])) {
             return '';

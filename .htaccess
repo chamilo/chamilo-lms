@@ -91,3 +91,12 @@ AddType application/font-woff .woff .woff2
   ExpiresActive On
   ExpiresByType application/font-woff "access plus 1 month"
 </IfModule>
+
+# Force SSL/https - Uncomment if you need it
+# RewriteCond %{HTTPS} !=on
+# RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Resolving insecure site and mixed-content warnings
+# <IfModule mod_headers.c>
+# Header always set Content-Security-Policy "upgrade-insecure-requests;"
+# </IfModule>

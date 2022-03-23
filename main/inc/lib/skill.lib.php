@@ -625,6 +625,25 @@ class SkillRelUser extends Model
     }
 
     /**
+     * Delete a user skill by course.
+     *
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     */
+    public function deleteUserSkill($userId, $courseId, $sessionId = 0)
+    {
+        $whereSession = ($sessionId ? " AND session_id = $sessionId" : " AND session_id IS NULL");
+        $sql = "DELETE FROM {$this->table}
+                WHERE
+                      user_id = $userId AND
+                      course_id = $courseId
+                      $whereSession";
+
+        Database::query($sql);
+    }
+
+    /**
      * Get the URL for the issue.
      *
      * @return string
@@ -1171,10 +1190,18 @@ class Skill extends Model
                 $category->get_course_code(),
                 $category->get_session_id()
             );
+            $scoreSubCategories = $this->getSubCategoryResultScore($category, $userId);
             if (!empty($subCategories)) {
                 /** @var Category $subCategory */
                 foreach ($subCategories as $subCategory) {
-                    $this->addSkillToUser($userId, $subCategory, $courseId, $sessionId);
+                    $scoreChecked = true;
+                    if (!empty($scoreSubCategories[$subCategory->get_id()])) {
+                        $resultScore = $scoreSubCategories[$subCategory->get_id()];
+                        $scoreChecked = ($resultScore['user_score'] >= $resultScore['min_score']);
+                    }
+                    if ($scoreChecked) {
+                        $this->addSkillToUser($userId, $subCategory, $courseId, $sessionId);
+                    }
                 }
             }
         }
@@ -1206,6 +1233,41 @@ class Skill extends Model
         }
 
         return true;
+    }
+
+    /**
+     * Get the results of user in a subCategory.
+     *
+     * @param $category
+     * @param $userId
+     *
+     * @return array
+     */
+    public function getSubCategoryResultScore($category, $userId)
+    {
+        $scoreSubCategories = [];
+        if (true === api_get_configuration_value('gradebook_enable_subcategory_skills_independant_assignement')) {
+            $subCategories = $category->get_subcategories(
+                $userId,
+                $category->get_course_code(),
+                $category->get_session_id()
+            );
+            $alleval = $category->get_evaluations($userId, false, $category->get_course_code(),
+                $category->get_session_id());
+            $alllink = $category->get_links($userId, true, $category->get_course_code(), $category->get_session_id());
+            $datagen = new GradebookDataGenerator($subCategories, $alleval, $alllink);
+            $gradeResult = $datagen->get_data();
+            foreach ($gradeResult as $data) {
+                /** @var AbstractLink $item */
+                $item = $data[0];
+                if ('Category' === get_class($item)) {
+                    $scoreSubCategories[$item->get_id()]['min_score'] = $item->getCertificateMinScore();
+                    $scoreSubCategories[$item->get_id()]['user_score'] = round($data['result_score'][0]);
+                }
+            }
+        }
+
+        return $scoreSubCategories;
     }
 
     /* Deletes a skill */

@@ -2156,6 +2156,11 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // User extra fields to be check on user edition to generate a specific process if it was modified
 //$_configuration['user_edition_extra_field_to_check'] = 'ExtrafieldLabel';
 
+// Enable skills in subcategory to work independant on assignement
+// Require DB changes:
+// ALTER TABLE gradebook_category ADD allow_skills_by_subcategory tinyint(1) NOT NULL DEFAULT '1';
+//$_configuration['gradebook_enable_subcategory_skills_independant_assignement'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

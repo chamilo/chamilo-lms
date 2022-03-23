@@ -714,6 +714,39 @@ class Category implements GradebookItem
     }
 
     /**
+     * Update value to allow user skills by subcategory passed.
+     *
+     * @param $value
+     */
+    public function updateAllowSkillBySubCategory($value)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $value = (int) $value;
+        $upd = 'UPDATE '.$table.' SET allow_skills_by_subcategory = '.$value.' WHERE id = '.intval($this->id);
+        Database::query($upd);
+    }
+
+    /**
+     * Get the value to Allow skill by subcategory.
+     *
+     * @return bool
+     */
+    public function getAllowSkillBySubCategory($parentId = null)
+    {
+        $id = (int) $this->id;
+        if (isset($parentId)) {
+            $id = (int) $parentId;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = 'SELECT allow_skills_by_subcategory FROM '.$table.' WHERE id = '.$id;
+        $rs = Database::query($sql);
+        $value = (bool) Database::result($rs, 0, 0);
+
+        return $value;
+    }
+
+    /**
      * Update link weights see #5168.
      *
      * @param type $new_weight
@@ -2127,6 +2160,11 @@ class Category implements GradebookItem
         $userHasSkills = false;
         if ($skillToolEnabled) {
             $skill = new Skill();
+            $objSkillRelUser = new SkillRelUser();
+
+            // It cleans the previous results to generate the new user skills
+            $objSkillRelUser->deleteUserSkill($user_id, $courseId, $sessionId);
+
             $skill->addSkillToUser(
                 $user_id,
                 $category,
@@ -2134,7 +2172,6 @@ class Category implements GradebookItem
                 $sessionId
             );
 
-            $objSkillRelUser = new SkillRelUser();
             $userSkills = $objSkillRelUser->getUserSkills(
                 $user_id,
                 $courseId,

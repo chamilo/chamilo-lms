@@ -7,7 +7,7 @@
  */
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 
-$isGlobal = isset($_GET['global']);
+$isGlobal = isset($_GET['global']) ? true : false;
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 
 // If global setting is used then we delete the course sessions (cidReq/id_session)
@@ -23,8 +23,9 @@ $roomTable = Database::get_main_table('plugin_bbb_room');
 
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js');
 
-$action = $_GET['action'] ?? '';
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 $userId = api_get_user_id();
+$option = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $groupId = api_get_group_id();
 $sessionId = api_get_session_id();
 $courseInfo = api_get_course_info();
@@ -37,6 +38,9 @@ if ($bbb->isGlobalConference()) {
 } else {
     api_protect_course_script(true);
 }
+$isAdmin = api_is_platform_admin();
+$courseInfo = api_get_course_info();
+$courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
 
 $allowStudentAsConferenceManager = false;
 if (!empty($courseInfo) && !empty($groupId) && !api_is_allowed_to_edit()) {
@@ -313,6 +317,7 @@ if ($conferenceManager && $allowToEdit) {
             error_log("meeting does not exist - remote_id: $remoteId");
         } else {
             $meetingId = $meetingData['id'];
+
             $roomData = Database::select(
                 '*',
                 $roomTable,
@@ -357,14 +362,45 @@ if ($conferenceManager && $allowToEdit) {
     }
 }
 
-$meetings = $bbb->getMeetings(
-    api_get_course_int_id(),
-    api_get_session_id(),
-    $groupId
-);
-if (!empty($meetings)) {
-    $meetings = array_reverse($meetings);
+if(isset($_GET['idpage'])){
+    $idpage = $_GET['idpage'];
+
 }
+
+$courseId = $_GET['courseId'] ?? api_get_course_int_id();
+$sessionId = $_GET['sessionId'] ?? api_get_session_id();
+$idGroup = $_GET['idGroup'] ?? api_get_group_id();
+
+$meetings = $bbb->getMeetings(
+    $courseId,
+    $sessionId,
+    $idGroup
+);
+$number_row = 10;
+$number_page = ceil(sizeof($meetings)/$number_row);
+
+if(!isset($idpage)){
+    $idpage = 1;
+}
+$start = ($idpage-1)*$number_row;
+
+
+$meetings = $bbb->getMeetingsLimit(
+    $start,
+    $number_row,
+    $courseId,
+    $sessionId,
+    $idGroup
+);
+
+if(empty($meetings)){
+    $idpage = 0;
+  }
+
+//if (!empty($meetings)) {
+//   $meetings = array_reverse($meetings);
+// }
+
 $usersOnline = $bbb->getUsersOnlineInCurrentRoom();
 $maxUsers = $bbb->getMaxUsersLimit();
 $status = $bbb->isServerRunning();
@@ -425,6 +461,7 @@ if ($bbb->isGlobalConference() === false &&
     if ($groups) {
         $meetingsInGroup = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
         $meetingsGroup = array_column($meetingsInGroup, 'status', 'group_id');
+
         $groupList[0] = get_lang('Select');
         foreach ($groups as $groupData) {
             $itemGroupId = $groupData['iid'];
@@ -460,6 +497,14 @@ $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
+$tpl->assign('is_admin', $isAdmin);
+
+$tpl->assign('courseId', $courseId);
+$tpl->assign('sessionId', $sessionId);
+$tpl->assign('idGroup', $idGroup);
+
+$tpl->assign('number_page', $number_page);
+$tpl->assign('idpage', $idpage);
 
 $content = $tpl->fetch('bbb/view/listing.tpl');
 

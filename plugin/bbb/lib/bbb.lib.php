@@ -961,8 +961,90 @@ class bbb
             );
         }
 
-        $conditions['order'] = 'created_at ASC';
+        $conditions['order'] = 'created_at DESC';
+        $meetingList = Database::select(
+            '*',
+            $this->table,
+            $conditions
+        );
+        return $meetingList;
 
+    }
+
+     /**
+     * Gets all the course meetings saved in the plugin_bbb_meeting table and
+     * generate actionable links (join/close/delete/etc)
+     *
+     * @param int   $courseId
+     * @param int   $sessionId
+     * @param int   $groupId
+     * @param bool  $isAdminReport Optional. Set to true then the report is for admins
+     * @param array $dateRange     Optional
+     *
+     * @return array Array of current open meeting rooms
+     * @throws Exception
+     */
+    public function getMeetingsLimit(
+        $start,
+        $number_row,
+        $courseId = 0,
+        $sessionId = 0,
+        $groupId = 0,
+        $isAdminReport = false,
+        $dateRange = []
+    ) {
+        $em = Database::getManager();
+        $manager = $this->isConferenceManager();
+
+        $conditions = [];
+        if ($courseId || $sessionId || $groupId) {
+            $conditions = array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? ' => array($courseId, $sessionId),
+                ),
+            );
+
+            if ($this->hasGroupSupport()) {
+                $conditions = array(
+                    'where' => array(
+                        'c_id = ? AND session_id = ? AND group_id = ? ' => array(
+                            $courseId,
+                            $sessionId,
+                            $groupId,
+                        ),
+                    ),
+                );
+            }
+
+            if ($this->isGlobalConferencePerUserEnabled()) {
+                $conditions = array(
+                    'where' => array(
+                        'c_id = ? AND session_id = ? AND user_id = ?' => array(
+                            $courseId,
+                            $sessionId,
+                            $this->userId,
+                        ),
+                    ),
+                );
+            }
+        }
+
+        if (!empty($dateRange)) {
+            $dateStart = date_create($dateRange['search_meeting_start']);
+            $dateStart = date_format($dateStart, 'Y-m-d H:i:s');
+            $dateEnd = date_create($dateRange['search_meeting_end']);
+            $dateEnd = $dateEnd->add(new DateInterval('P1D'));
+            $dateEnd = date_format($dateEnd, 'Y-m-d H:i:s');
+
+            $conditions = array(
+                'where' => array(
+                    'created_at BETWEEN ? AND ? ' => array($dateStart, $dateEnd),
+                ),
+            );
+        }
+
+        $conditions['order'] = 'created_at DESC';
+        $conditions['limit'] =  $start.' , '.$number_row;
         $meetingList = Database::select(
             '*',
             $this->table,
@@ -1053,7 +1135,7 @@ class bbb
                         $this->insertMeetingFormat(intval($meetingDB['id']), $format->type->__toString(), $format->url->__toString());
                         $recordLink['record'][] = 1;
                         $recordLink[] = Display::url(
-                            $this->plugin->get_lang($format->type->__toString()),
+                            $this->plugin->get_lang('ViewRecord'),
                             $format->url->__toString(),
                             ['target' => '_blank', 'class' => 'btn btn-default']
                         );
@@ -1814,8 +1896,7 @@ class bbb
                     $link = new Link();
                     $params['url'] = $url;
                     $params['title'] = $name.' - '.$dateRecord;
-                    $id = $link->save($params);
-                    return $id;
+                    return $link->save($params);
                 }
             }
         }

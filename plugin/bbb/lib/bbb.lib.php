@@ -911,8 +911,8 @@ class bbb
         $isAdminReport = false,
         $dateRange = []
     ) {
-        $em = Database::getManager();
-        $manager = $this->isConferenceManager();
+        //$em = Database::getManager();
+        //$manager = $this->isConferenceManager();
 
         $conditions = [];
         if ($courseId || $sessionId || $groupId) {
@@ -967,6 +967,7 @@ class bbb
             $this->table,
             $conditions
         );
+
         return $meetingList;
 
     }
@@ -1052,11 +1053,20 @@ class bbb
         );
         $isGlobal = $this->isGlobalConference();
         $newMeetingList = array();
+
+       $urlHostPlayer = null;
+        $oldPlayer = $this->plugin->get('use_alternative_old_player') === 'true' ? 1 : 0;
+        if($oldPlayer){
+            $host = $this->plugin->get('host');
+            $urlHostPlayer = str_replace('bigbluebutton/','',$host).'playback/presentation/0.9.0/playback.html?meetingId=';
+        }
+
         foreach ($meetingList as $meetingDB) {
             $item = array();
             $courseId = $meetingDB['c_id'];
             $courseInfo = api_get_course_info_by_id($courseId);
             $courseCode = '';
+
             if (!empty($courseInfo)) {
                 $courseCode = $courseInfo['code'];
             }
@@ -1134,11 +1144,20 @@ class bbb
                     foreach ($record['playbackFormat'] as $format) {
                         $this->insertMeetingFormat(intval($meetingDB['id']), $format->type->__toString(), $format->url->__toString());
                         $recordLink['record'][] = 1;
-                        $recordLink[] = Display::url(
-                            $this->plugin->get_lang('ViewRecord'),
-                            $format->url->__toString(),
-                            ['target' => '_blank', 'class' => 'btn btn-default']
-                        );
+                        if($oldPlayer){
+                            $recordLink[] = Display::url(
+                                $this->plugin->get_lang('ViewRecord'),
+                                $urlHostPlayer.$meetingDB['internal_meeting_id'],
+                                ['target' => '_blank', 'class' => 'btn btn-default']
+                            );
+                        } else {
+                            $recordLink[] = Display::url(
+                                $this->plugin->get_lang('ViewRecord'),
+                                $format->url->__toString(),
+                                ['target' => '_blank', 'class' => 'btn btn-default']
+                            );
+                        }
+
                     }
                 } else {
                     $recordLink = $this->plugin->get_lang('NoRecording');

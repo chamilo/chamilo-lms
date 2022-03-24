@@ -59,3 +59,4 @@ $strings['big_blue_button_students_start_conference_in_groups'] = 'Permitir a lo
 $strings['bbb_force_record_generation'] = 'Forzar la generación de grabación al finalizar la reunión';
 $strings['disable_course_settings'] = 'Deshabilitar la configuración del curso';
 $strings['allow_regenerate_recording'] = 'Permitir regeneración de grabación';
+$strings['use_alternative_old_player'] = 'Usar reproductor antiguo alternativo';

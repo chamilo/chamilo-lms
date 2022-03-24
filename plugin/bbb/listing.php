@@ -376,6 +376,7 @@ $meetings = $bbb->getMeetings(
     $sessionId,
     $idGroup
 );
+
 $number_row = 10;
 $number_page = ceil(sizeof($meetings)/$number_row);
 

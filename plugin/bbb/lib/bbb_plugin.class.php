@@ -139,10 +139,8 @@ class BBBPlugin extends Plugin
         if ($result) {
             $valueConference = $this->get('bbb_enable_conference_in_groups') === 'true' ? 1 : 0;
             self::update_course_field_in_all_courses('bbb_enable_conference_in_groups', $valueConference);
-
             $valueForceRecordGeneration = $this->get('bbb_force_record_generation') === 'true' ? 1 : 0;
             self::update_course_field_in_all_courses('bbb_force_record_generation', $valueForceRecordGeneration);
-
             $valueForceRecordStore = $this->get('big_blue_button_record_and_store') === 'true' ? 1 : 0;
             self::update_course_field_in_all_courses('big_blue_button_record_and_store', $valueForceRecordStore);
         }
@@ -380,10 +378,10 @@ class BBBPlugin extends Plugin
     /**
      * Set the course setting in all courses
      *
-     * @param bool $variable Course setting to update
-     * @param bool $value New values of the course setting
+     * @param string $variable Course setting to update
+     * @param int $value New values of the course setting
      */
-    public function update_course_field_in_all_courses($variable, $value)
+    public function update_course_field_in_all_courses(string $variable, int $value)
     {
         // Update existing courses to add the new course setting value
         $table = Database::get_main_table(TABLE_MAIN_COURSE);

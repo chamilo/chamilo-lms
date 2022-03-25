@@ -3714,9 +3714,7 @@ class Exercise
      * @param bool   $showHotSpotDelineationTable
      * @param int    $questionDuration                          seconds
      *
-     * @todo    reduce parameters of this function
-     *
-     * @return string html code
+     * @return array|false
      */
     public function manage_answer(
         $exeId,
@@ -3950,7 +3948,7 @@ class Exercise
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $answerDestination = $objAnswerTmp->selectDestination($answerId);
-                            $correctAnswerId[] = $answerId;
+                            $correctAnswerId[] = $answerAutoId;
                         }
                     }
                     break;

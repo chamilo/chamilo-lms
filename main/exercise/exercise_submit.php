@@ -487,6 +487,10 @@ if (!isset($questionListInSession)) {
         !empty($exercise_stat_info['data_tracking'])
     ) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
+        $questionList = array_combine(
+            range(1, count($questionList)),
+            $questionList
+        );
         $categoryList = [];
         if ($allowBlockCategory) {
             foreach ($questionList as $question) {

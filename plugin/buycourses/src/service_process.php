@@ -32,9 +32,6 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
 $em = Database::getManager();
 $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');
-$paypalEnabled = $plugin->get('paypal_enable') === 'true';
-$transferEnabled = $plugin->get('transfer_enable') === 'true';
-$culqiEnabled = $plugin->get('culqi_enable') === 'true';
 $additionalQueryString = '';
 if ($includeServices !== 'true') {
     api_not_allowed(true);
@@ -55,19 +52,7 @@ $serviceInfo = $plugin->getService($serviceId, $coupon);
 $userInfo = api_get_user_info($currentUserId);
 
 $form = new FormValidator('confirm_sale');
-$paymentTypesOptions = $plugin->getPaymentTypes();
-
-if (!$paypalEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL]);
-}
-
-if (!$transferEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER]);
-}
-
-if (!$culqiEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
-}
+$paymentTypesOptions = $plugin->getPaymentTypes(true);
 
 $form->addHtml(
     Display::return_message(

@@ -41,8 +41,7 @@ window.setContentFromEditor = function (id, content) {
 };
 
 //require('flatpickr');
-require('webpack-jquery-ui');
-require('webpack-jquery-ui/css');
+import 'jquery-ui-dist/jquery-ui.js';
 
 // const frameReady = require('/public/main/inc/lib/javascript/jquery.frameready.js');
 //

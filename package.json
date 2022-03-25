@@ -57,6 +57,7 @@
     "image-map-resizer": "^1.0.10",
     "jquery": "^3.6.0",
     "jquery-ui": "^1.13.1",
+    "jquery-ui-dist": "^1.13.1",
     "jquery-ui-timepicker-addon": "^1.6.3",
     "jquery-ui-touch-punch": "^0.2.3",
     "js-cookie": "^2.2.1",
@@ -100,8 +101,7 @@
     "vue-toastification": "^2.0.0-rc.5",
     "vuetify": "3.0.0-beta.0",
     "vuex": "^4.0.2",
-    "vuex-map-fields": "^1.4.1",
-    "webpack-jquery-ui": "^2.0.1"
+    "vuex-map-fields": "^1.4.1"
   },
   "devDependencies": {
     "@mdi/font": "^6.6.95",

@@ -7,8 +7,7 @@ window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
 
-import('webpack-jquery-ui');
-import('webpack-jquery-ui/css');
+import 'jquery-ui-dist/jquery-ui.js';
 
 const frameReady = require('/public/main/inc/lib/javascript/jquery.frameready.js');
 

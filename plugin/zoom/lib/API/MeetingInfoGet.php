@@ -49,7 +49,7 @@ class MeetingInfoGet extends MeetingInfo
      *
      * @throws Exception
      */
-    public function update()
+    public function update(): void
     {
         Client::getInstance()->send('PATCH', 'meetings/'.$this->id, [], $this);
     }

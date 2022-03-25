@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\PluginBundle\Zoom\API\BaseMeetingTrait;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\MeetingListItem;
 use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
@@ -402,7 +403,7 @@ class Meeting
     }
 
     /**
-     * @param MeetingInfoGet $meetingInfoGet
+     * @param MeetingInfoGet|BaseMeetingTrait $meetingInfoGet
      *
      * @throws Exception
      *

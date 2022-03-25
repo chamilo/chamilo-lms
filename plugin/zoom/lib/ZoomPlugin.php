@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\PluginBundle\Zoom\API\BaseMeetingTrait;
 use Chamilo\PluginBundle\Zoom\API\JWTClient;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\MeetingRegistrant;
@@ -325,87 +326,21 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * Generates a meeting edit form and updates the meeting on validation.
-     *
-     * @param Meeting $meeting the meeting
-     *
-     * @throws Exception
-     *
-     * @return FormValidator
-     */
-    public function getEditMeetingForm($meeting)
-    {
-        $meetingInfoGet = $meeting->getMeetingInfoGet();
-        $form = new FormValidator('edit', 'post', $_SERVER['REQUEST_URI']);
-        $form->addHeader($this->get_lang('UpdateMeeting'));
-        $form->addText('topic', $this->get_lang('Topic'));
-        if ($meeting->requiresDateAndDuration()) {
-            $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
-            $form->setRequired($startTimeDatePicker);
-            $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
-            $form->setRequired($durationNumeric);
-        }
-        $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
-        //$form->addLabel(get_lang('Password'), $meeting->getMeetingInfoGet()->password);
-        // $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
-        $form->addCheckBox('sign_attendance', $this->get_lang('SignAttendance'), get_lang('Yes'));
-        $form->addTextarea('reason_to_sign', $this->get_lang('ReasonToSign'), ['rows' => 5]);
-        $form->addButtonUpdate(get_lang('Update'));
-        if ($form->validate()) {
-            $values = $form->exportValues();
-
-            if ($meeting->requiresDateAndDuration()) {
-                $meetingInfoGet->start_time = (new DateTime($values['startTime']))->format(
-                    DATE_ATOM
-                );
-                $meetingInfoGet->timezone = date_default_timezone_get();
-                $meetingInfoGet->duration = (int) $values['duration'];
-            }
-            $meetingInfoGet->topic = $values['topic'];
-            $meetingInfoGet->agenda = $values['agenda'];
-            $meeting
-                ->setSignAttendance(isset($values['sign_attendance']))
-                ->setReasonToSignAttendance($values['reason_to_sign']);
-
-            try {
-                $meetingInfoGet->update();
-                $meeting->setMeetingInfoGet($meetingInfoGet);
-                Database::getManager()->persist($meeting);
-                Database::getManager()->flush();
-                Display::addFlash(
-                    Display::return_message($this->get_lang('MeetingUpdated'), 'confirm')
-                );
-            } catch (Exception $exception) {
-                Display::addFlash(
-                    Display::return_message($exception->getMessage(), 'error')
-                );
-            }
-        }
-        $defaults = [
-            'topic' => $meetingInfoGet->topic,
-            'agenda' => $meetingInfoGet->agenda,
-        ];
-        if ($meeting->requiresDateAndDuration()) {
-            $defaults['startTime'] = $meeting->startDateTime->format('Y-m-d H:i');
-            $defaults['duration'] = $meetingInfoGet->duration;
-        }
-        $defaults['sign_attendance'] = $meeting->isSignAttendance();
-        $defaults['reason_to_sign'] = $meeting->getReasonToSignAttendance();
-        $form->setDefaults($defaults);
-
-        return $form;
-    }
-
-    /**
      * @throws Exception
      */
-    public function getEditWebinarForm(Webinar $webinar): FormValidator
+    public function getEditConferenceForm(Meeting $conference): FormValidator
     {
-        $schema = $webinar->getWebinarSchema();
-        $requiresDateAndDuration = $webinar->requiresDateAndDuration();
+        $isWebinar = $conference instanceof Webinar;
+        $requiresDateAndDuration = $conference->requiresDateAndDuration();
+
+        /** @var BaseMeetingTrait $schema */
+        $schema = $isWebinar ? $conference->getWebinarSchema() : $conference->getMeetingInfoGet();
 
         $form = new FormValidator('edit', 'post', $_SERVER['REQUEST_URI']);
-        $form->addHeader($this->get_lang('UpdateWebinar'));
+        $form->addHeader(
+            $isWebinar ? $this->get_lang('UpdateWebinar') : $this->get_lang('UpdateMeeting')
+        );
+        $form->addLabel(get_lang('Type'), $conference->typeName);
         $form->addText('topic', $this->get_lang('Topic'));
 
         if ($requiresDateAndDuration) {
@@ -417,14 +352,17 @@ class ZoomPlugin extends Plugin
         }
 
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
+        $form->addCheckBox('sign_attendance', $this->get_lang('SignAttendance'), get_lang('Yes'));
+        $form->addTextarea('reason_to_sign', $this->get_lang('ReasonToSign'), ['rows' => 5]);
         $form->addButtonUpdate(get_lang('Update'));
 
         if ($form->validate()) {
             $formValues = $form->exportValues();
 
+            $em = Database::getManager();
+
             if ($requiresDateAndDuration) {
-                $schema->start_time = (new DateTime($formValues['startTime']))
-                    ->format(DATE_ATOM);
+                $schema->start_time = (new DateTime($formValues['startTime']))->format(DATE_ATOM);
                 $schema->timezone = date_default_timezone_get();
                 $schema->duration = (int) $formValues['duration'];
             }
@@ -432,16 +370,27 @@ class ZoomPlugin extends Plugin
             $schema->topic = $formValues['topic'];
             $schema->agenda = $formValues['agenda'];
 
+            $conference
+                ->setSignAttendance(isset($formValues['sign_attendance']))
+                ->setReasonToSignAttendance($formValues['reason_to_sign']);
+
             try {
                 $schema->update();
-                $webinar->setWebinarSchema($schema);
 
-                $em = Database::getManager();
-                $em->persist($webinar);
+                if ($isWebinar) {
+                    $conference->setWebinarSchema($schema);
+                } else {
+                    $conference->setMeetingInfoGet($schema);
+                }
+
+                $em->persist($conference);
                 $em->flush();
 
                 Display::addFlash(
-                    Display::return_message($this->get_lang('WebinarUpdated'), 'success')
+                    Display::return_message(
+                        $isWebinar ? $this->get_lang('WebinarUpdated') : $this->get_lang('MeetingUpdated'),
+                        'confirm'
+                    )
                 );
             } catch (Exception $exception) {
                 Display::addFlash(
@@ -456,9 +405,12 @@ class ZoomPlugin extends Plugin
         ];
 
         if ($requiresDateAndDuration) {
-            $defaults['startTime'] = $webinar->startDateTime->format('Y-m-d H:i');
+            $defaults['startTime'] = $conference->startDateTime->format('Y-m-d H:i');
             $defaults['duration'] = $schema->duration;
         }
+
+        $defaults['sign_attendance'] = $conference->isSignAttendance();
+        $defaults['reason_to_sign'] = $conference->getReasonToSignAttendance();
 
         $form->setDefaults($defaults);
 

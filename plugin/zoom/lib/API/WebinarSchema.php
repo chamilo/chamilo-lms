@@ -9,6 +9,7 @@ use stdClass;
 
 class WebinarSchema
 {
+    use BaseMeetingTrait;
     use JsonDeserializableTrait;
 
     const TYPE_WEBINAR = 5;
@@ -18,13 +19,6 @@ class WebinarSchema
     public $uuid;
     public $id;
     public $host_id;
-    public $host_email;
-    public $topic;
-    public $type;
-    public $start_time;
-    public $duration;
-    public $timezone;
-    public $agenda;
     public $created_at;
     public $start_url;
     public $join_url;
@@ -92,7 +86,7 @@ class WebinarSchema
     /**
      * @throws Exception
      */
-    public function update()
+    public function update(): void
     {
         Client::getInstance()->send('PATCH', 'webinars/'.$this->id, [], $this);
     }

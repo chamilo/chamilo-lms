@@ -4,6 +4,7 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
+use Chamilo\PluginBundle\Zoom\API\BaseMeetingTrait;
 use Chamilo\PluginBundle\Zoom\API\WebinarSchema;
 use Chamilo\PluginBundle\Zoom\API\WebinarSettings;
 use DateInterval;
@@ -47,6 +48,8 @@ class Webinar extends Meeting
     }
 
     /**
+     * @param WebinarSchema|BaseMeetingTrait $webinarSchema
+     *
      * @throws Exception
      */
     public function setWebinarSchema(WebinarSchema $webinarSchema): Webinar

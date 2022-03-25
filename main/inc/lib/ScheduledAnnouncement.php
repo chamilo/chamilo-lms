@@ -355,6 +355,7 @@ class ScheduledAnnouncement extends Model
                             // Take original message
                             $message = $result['message'];
                             $userInfo = api_get_user_info($user['user_id']);
+                            $userPicture = UserManager::getUserPicture($user['user_id'], USER_IMAGE_SIZE_ORIGINAL);
 
                             $progress = '';
                             if (!empty($sessionInfo) && !empty($courseInfo)) {
@@ -406,6 +407,7 @@ class ScheduledAnnouncement extends Model
                                 '((user_lastname))' => $userInfo['lastname'],
                                 '((user_first_name))' => $userInfo['firstname'],
                                 '((user_last_name))' => $userInfo['lastname'],
+                                '((user_picture))' => $userPicture,
                                 '((lp_progress))' => $progress,
                             ];
 
@@ -454,6 +456,7 @@ class ScheduledAnnouncement extends Model
             '((user_complete_name))',
             '((user_first_name))',
             '((user_last_name))',
+            '((user_picture))',
             '((lp_progress))',
         ];
 

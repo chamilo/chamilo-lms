@@ -73,7 +73,7 @@ foreach ($sessions as $sessionId => $userIds) {
         INNER JOIN $sessionTable AS session
         ON sessionUser.session_id = session.id
         WHERE
-            session_id = $sessionId$userIds";
+            session_id = $sessionId";
     $result = Database::query($query);
     while ($row = Database::fetch_array($result)) {
         $usersToBeReminded[$row['user_id']][$row['session_id']] = [

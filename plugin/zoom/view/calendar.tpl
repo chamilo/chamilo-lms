@@ -16,9 +16,15 @@
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="form-group">
+                        <label class="col-sm-4 control-label">{{ 'Type' }}</label>
+                        <div class="col-sm-8">
+                            <p id="simple_type"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-4 control-label">{{ "Date"|get_lang }}</label>
                         <div class="col-sm-8">
-                            <p class="form-static-control">
+                            <p>
                                 <span id="simple_start_date"></span>
                                 <span id="simple_end_date"></span>
                             </p>
@@ -27,19 +33,19 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">{{ "Title"|get_lang }}</label>
                         <div class="col-sm-8">
-                            <p class="form-static-control" id="simple_title"></p>
+                            <p id="simple_title"></p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">{{ "Description"|get_lang }}</label>
                         <div class="col-sm-8">
-                            <p class="form-static-control" id="simple_content"></p>
+                            <p id="simple_content"></p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">{{ "AccountEmail"|get_plugin_lang('ZoomPlugin') }}</label>
                         <div class="col-sm-8">
-                            <p class="form-static-control" id="simple_account"></p>
+                            <p id="simple_account"></p>
                         </div>
                     </div>
                 </form>
@@ -277,9 +283,9 @@
                 var startDateToString = start.format("{{ js_format_date }}");
 
                 // Simple form
-                $('#simple_start_date').html(startDateToString);
+                $('#simple_start_date').text(startDateToString);
                 if (diffDays > 1) {
-                    $('#simple_end_date').html(' - ' + endDateMinusOne);
+                    $('#simple_end_date').text(' - ' + endDateMinusOne);
                 } else if (diffDays == 0) {
                     var start_date_value = start.format('ll');
                     var startTime = start.format('LT');
@@ -287,12 +293,18 @@
                     $('#simple_start_date').html('');
                     $('#simple_end_date').html(start_date_value + ' (' + startTime + ' - ' + endTime + ') ');
                 } else {
-                    $('#simple_end_date').html('');
+                    $('#simple_end_date').text('');
                 }
 
-                $('#simple_title').html(calEvent.title);
-                $('#simple_content').html(calEvent.description);
-                $('#simple_account').html(calEvent.accountEmail);
+                $('#simple_type').text(calEvent.typeName);
+                $('#simple_title').text(calEvent.title);
+                $('#simple_content').empty().text(calEvent.description);
+
+                if (calEvent.accountEmail) {
+                    $('#simple_account').text(calEvent.accountEmail).parents('.form-group').show();
+                } else {
+                    $('#simple_account').empty().parents('.form-group').hide();
+                }
 
                 $('#simple-dialog-form').modal('show');
             },

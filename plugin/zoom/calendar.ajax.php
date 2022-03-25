@@ -2,7 +2,9 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\PluginBundle\Zoom\API\BaseMeetingTrait;
 use Chamilo\PluginBundle\Zoom\Meeting;
+use Chamilo\PluginBundle\Zoom\Webinar;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -33,24 +35,27 @@ if ($action == 'get_events') {
         ->periodMeetings($startDate, $endDate);
 
     $meetingsAsEvents = array_map(
-        function (Meeting $meeting) {
-            $meetingInfo = $meeting->getMeetingInfoGet();
+        function (Meeting $conference) {
+            $isWebinar = $conference instanceof Webinar;
+            /** @var BaseMeetingTrait $schema */
+            $schema = $isWebinar ? $conference->getWebinarSchema() : $conference->getMeetingInfoGet();
 
-            $endDate = new DateTime($meeting->formattedStartTime);
-            $endDate->sub($meeting->durationInterval);
+            $endDate = new DateTime($conference->formattedStartTime);
+            $endDate->sub($conference->durationInterval);
 
             return [
-                'id' => 'meeting_'.$meeting->getId(),
-                'title' => $meetingInfo->topic,
+                'id' => 'meeting_'.$conference->getId(),
+                'title' => $schema->topic,
+                'typeName' => $conference->typeName,
                 'editable' => false,
-                'start' => $meeting->formattedStartTime,
-                'start_date_localtime' => $meeting->formattedStartTime,
+                'start' => $conference->formattedStartTime,
+                'start_date_localtime' => $conference->formattedStartTime,
                 'end' => $endDate->format('Y-m-d H:i'),
                 'end_date_localtime' => $endDate->format('Y-m-d H:i'),
-                'duration' => $meeting->formattedDuration,
-                'description' => $meetingInfo->agenda,
+                'duration' => $conference->formattedDuration,
+                'description' => $schema->agenda,
                 'allDay' => false,
-                'accountEmail' => $meeting->getAccountEmail(),
+                'accountEmail' => $conference->getAccountEmail(),
             ];
         },
         $meetings

@@ -1001,7 +1001,7 @@ class ZoomPlugin extends Plugin
                     );
 
                     Display::addFlash(
-                        Display::return_message($this->get_lang('NewWebinarCreated'))
+                        Display::return_message($this->get_lang('NewMeetingCreated'))
                     );
                 } elseif ('webinar' === $conferenceType) {
                     $newMeeting = $this->createScheduleWebinar(
@@ -1020,7 +1020,7 @@ class ZoomPlugin extends Plugin
                     );
 
                     Display::addFlash(
-                        Display::return_message($this->get_lang('NewMeetingCreated'))
+                        Display::return_message($this->get_lang('NewWebinarCreated'))
                     );
                 } else {
                     throw new Exception('Invalid conference type');

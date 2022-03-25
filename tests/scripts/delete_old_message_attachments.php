@@ -30,7 +30,7 @@ if (!empty($argv[1]) && $argv[1] == '-s') {
 
 echo "[".time()."] Querying messages\n";
 $sql = "SELECT m.id mid, m.msg_status, m.user_sender_id,
-          user_receiver_id, ma.id maid, ma.path
+          user_receiver_id, ma.id maid, ma.path, m.send_date
         FROM message m, message_attachment ma
         WHERE m.id = ma.message_id
           AND m.msg_status IN (0,1,3,4)
@@ -57,7 +57,7 @@ $sqlDeleteAttach = "DELETE FROM message_attachment WHERE id = ";
  * Locate and destroy the expired message attachments
  */
 $totalSize = 0;
-$senderMessageSize = 0;
+$senderMessagesList = []; //list of [sender_id][date_of_message][] with all iids
 while ($message = Database::fetch_assoc($res)) {
     switch ($message['msg_status']) {
         case '4':
@@ -68,7 +68,16 @@ while ($message = Database::fetch_assoc($res)) {
             $filePath = substr($usi, 0, 1).'/'.$usi.'/message_attachments/'.$message['path'];
             if (file_exists($userBasePath.$filePath)) {
                 //echo "  File found".PHP_EOL;
-                $senderMessageSize += filesize($userBasePath.$filePath);
+                // Build the $senderMessagesList array to later scan it and remove all those but one
+                if (!isset($senderMessagesList[$message['user_sender_id']])) {
+                    $senderMessagesList[$message['user_sender_id']] = [];
+                }
+                if (!isset($senderMessagesList[$message['user_sender_id']][$message['send_date']])) {
+                    $senderMessagesList[$message['user_sender_id']][$message['send_date']] = [];
+                }
+                if (!isset($senderMessagesList[$message['user_sender_id']][$message['send_date']][$message['maid']])) {
+                    $senderMessagesList[$message['user_sender_id']][$message['send_date']][$message['maid']] = $userBasePath.$filePath;
+                }
             }
             break;
         case '0':
@@ -80,7 +89,7 @@ while ($message = Database::fetch_assoc($res)) {
                 //echo "  File found".PHP_EOL;
                 $totalSize += filesize($userBasePath.$filePath);
                 if ($simulate == false) {
-                    exec('rm '.$userBasePath.$filePath);
+                    exec('rm -f '.$userBasePath.$filePath);
                     $deleteResult = Database::query($sqlDeleteAttach.$message['maid']);
                 } else {
                     echo "Would delete ".$userBasePath.$filePath.PHP_EOL;
@@ -97,7 +106,7 @@ while ($message = Database::fetch_assoc($res)) {
                 //echo "  File found in receiver's path".PHP_EOL;
                 $totalSize += filesize($userBasePath.$filePath);
                 if ($simulate == false) {
-                    exec('rm '.$userBasePath.$filePath);
+                    exec('rm -f '.$userBasePath.$filePath);
                     $deleteResult = Database::query($sqlDeleteAttach.$message['maid']);
                 } else {
                     echo "Would delete ".$userBasePath.$filePath.PHP_EOL;
@@ -114,7 +123,7 @@ while ($message = Database::fetch_assoc($res)) {
                         // Even though we would normally not delete sender files
                         // indiscriminately, status=3 means the message was
                         // deleted by the user, so... no mercy!
-                        exec('rm '.$userBasePath.$filePath);
+                        exec('rm -f '.$userBasePath.$filePath);
                         $deleteResult = Database::query($sqlDeleteAttach.$message['maid']);
                     } else {
                         echo "Would delete ".$userBasePath.$filePath.PHP_EOL;
@@ -125,9 +134,35 @@ while ($message = Database::fetch_assoc($res)) {
             break;
     }
 }
+// Now go through the messages from senders (i.e. in the outbox of the sender)
+// and delete all attachments except one: the one from the latest message.
+//echo "Checking sender messages".PHP_EOL;
+foreach ($senderMessagesList as $usi => $userArray) {
+    foreach ($userArray as $date => $attachmentsList) {
+        $itemsCount = count($attachmentsList);
+        $i = 0;
+        foreach ($attachmentsList as $attachId => $path) {
+            if ($i+1 == $itemsCount) {
+                // we're at the last element, so don't delete it
+                //echo "Not deleting attachment $attachId".PHP_EOL;
+            } else {
+                // not the last, so delete
+                $totalSize += filesize($path);
+                if ($simulate == false) {
+                    exec('rm -f '.$path);
+                    Database::query($sqlDeleteAttach.$attachId);
+                } else {
+                    echo "Would delete $path".PHP_EOL;
+                    echo "Query: ".$sqlDeleteAttach.$attachId.PHP_EOL;
+                }
+            }
+            $i++;
+        }
+    }
+}
+
 echo "[".time()."] ".($simulate ? "Would delete" : "Deleted")
     ." attachments from $countMessages messages before $beforeDate on a total of $countAllMessages"
     ." messages, for a total estimated size of "
     .round($totalSize / (1024 * 1024))." MB.".PHP_EOL;
-echo "A total of ".round($senderMessageSize / (1024 * 1024))." MB could still be freed by removing attachments from senders messages.".PHP_EOL;
 exit;

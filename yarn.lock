@@ -3576,8 +3576,8 @@ __metadata:
     vue-perfect-scrollbar: ^0.2.1
     vue-router: 4.0.14
     vue-toastification: ^2.0.0-rc.5
-    vuetify: 3.0.0-alpha.11
-    vuetify-loader: next
+    vuetify: 3.0.0-beta.0
+    vuetify-loader: ^2.0.0-alpha.0
     vuex: ^4.0.2
     vuex-map-fields: ^1.4.1
     webpack-jquery-ui: ^2.0.1
@@ -9941,7 +9941,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vuetify-loader@npm:next":
+"vuetify-loader@npm:^2.0.0-alpha.0":
   version: 2.0.0-alpha.9
   resolution: "vuetify-loader@npm:2.0.0-alpha.9"
   dependencies:
@@ -9961,12 +9961,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vuetify@npm:3.0.0-alpha.11":
-  version: 3.0.0-alpha.11
-  resolution: "vuetify@npm:3.0.0-alpha.11"
+"vuetify@npm:3.0.0-beta.0":
+  version: 3.0.0-beta.0
+  resolution: "vuetify@npm:3.0.0-beta.0"
   peerDependencies:
-    vue: ^3.2.6
-  checksum: e138a98000e005061571f720f97a8aadf4c79dc3be1d6fd64b4ddc047af68ac34b5aab3ac40fd7e360f75d8f2b3e3741beb098376175d52eda5b70ffad43b731
+    "@formatjs/intl": ^1.0.0 || ^2.0.0
+    vue: ^3.2.19
+    vue-i18n: ^9.0.0
+  peerDependenciesMeta:
+    "@formatjs/intl":
+      optional: true
+    vue-i18n:
+      optional: true
+  checksum: 8620f1f82ea0815ef06d22ad2cb22d9fae725104406956ce998874cc698dfa973478de8dcd04623eabff4091dee815a1d20c6dd42ed8caea46c26d0fb1e77566
   languageName: node
   linkType: hard
 

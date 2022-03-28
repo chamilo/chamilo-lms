@@ -983,6 +983,7 @@ class SurveyManager
             'personality',
             'yesno',
             'multiplechoice',
+            'multiplechoiceother',
             'multipleresponse',
             'open',
             'dropdown',
@@ -990,6 +991,7 @@ class SurveyManager
             'pagebreak',
             'percentage',
             'score',
+            'selectivedisplay',
         ];
 
         // the images array
@@ -997,6 +999,7 @@ class SurveyManager
             'yesno' => 'yesno.png',
             'personality' => 'yesno.png',
             'multiplechoice' => 'mcua.png',
+            'multiplechoiceother' => 'mcma.png',
             'multipleresponse' => 'mcma.png',
             'open' => 'open_answer.png',
             'dropdown' => 'dropdown.png',
@@ -1004,6 +1007,7 @@ class SurveyManager
             'score' => 'scorequestion.png',
             'comment' => 'commentquestion.png',
             'pagebreak' => 'page_end.png',
+            'selectivedisplay' => 'yesno.png',
         ];
 
         if (in_array($type, $possible_types)) {

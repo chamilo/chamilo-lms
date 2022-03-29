@@ -18,57 +18,32 @@ class CoursesAndSessionsCatalog
 
     /**
      * Check the configuration for the courses and sessions catalog.
-     *
-     * @global array $_configuration Configuration
-     *
-     * @param int $value The value to check
-     *
-     * @return bool Whether the configuration is $value
      */
-    public static function is($value = CATALOG_COURSES)
+    public static function is(int $value = CATALOG_COURSES): bool
     {
         $showCoursesSessions = (int) api_get_setting('catalog_show_courses_sessions');
-        if ($showCoursesSessions == $value) {
-            return true;
-        }
 
-        return false;
+        return $showCoursesSessions == $value;
     }
 
     /**
      * Check whether to display the sessions list.
-     *
-     * @global array $_configuration Configuration
-     *
-     * @return bool whether to display
      */
-    public static function showSessions()
+    public static function showSessions(): bool
     {
         $catalogShow = (int) api_get_setting('catalog_show_courses_sessions');
 
-        if ($catalogShow == CATALOG_SESSIONS || $catalogShow == CATALOG_COURSES_SESSIONS) {
-            return true;
-        }
-
-        return false;
+        return $catalogShow == CATALOG_SESSIONS || $catalogShow == CATALOG_COURSES_SESSIONS;
     }
 
     /**
      * Check whether to display the courses list.
-     *
-     * @global array $_configuration Configuration
-     *
-     * @return bool whether to display
      */
-    public static function showCourses()
+    public static function showCourses(): bool
     {
         $catalogShow = (int) api_get_setting('catalog_show_courses_sessions');
 
-        if ($catalogShow == CATALOG_COURSES || $catalogShow == CATALOG_COURSES_SESSIONS) {
-            return true;
-        }
-
-        return false;
+        return $catalogShow == CATALOG_COURSES || $catalogShow == CATALOG_COURSES_SESSIONS;
     }
 
     /**
@@ -1034,40 +1009,29 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Display the course catalog image of a course.
-     *
-     * @param array $course
-     *
-     * @return string HTML string
+     * Get the image of a course for the catalog.
      */
-    public static function returnThumbnail($course)
+    public static function returnThumbnail(array $course): string
     {
         $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
         if (file_exists($course_path.'/course-pic.png')) {
             // redimensioned image 85x85
-            $courseMediumImage = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png';
-        } else {
-            // without picture
-            $courseMediumImage = Display::return_icon(
-                'session_default.png',
-                null,
-                null,
-                null,
-                null,
-                true
-            );
+            return api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png';
         }
 
-        return $courseMediumImage;
+        // without picture
+        return Display::return_icon(
+            'session_default.png',
+            null,
+            null,
+            null,
+            null,
+            true
+        );
     }
 
-    /**
-     * @param array $courseInfo
-     *
-     * @return string
-     */
-    public static function return_teacher($courseInfo)
+    public static function return_teacher(array $courseInfo): string
     {
         $teachers = CourseManager::getTeachersFromCourse($courseInfo['real_id']);
         $length = count($teachers);
@@ -1340,23 +1304,6 @@ class CoursesAndSessionsCatalog
         );
     }
 
-    /**
-     * Get a icon for a session.
-     *
-     * @param string $sessionName The session name
-     *
-     * @return string The icon
-     */
-    public static function getSessionIcon($sessionName)
-    {
-        return Display::return_icon(
-            'window_list.png',
-            $sessionName,
-            null,
-            ICON_SIZE_MEDIUM
-        );
-    }
-
     public static function getSessionPagination($action, $countSessions, $limit)
     {
         $pageTotal = ceil($countSessions / $limit['length']);
@@ -1382,8 +1329,8 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionList($limit = [])
     {
-        $date = isset($_POST['date']) ? $_POST['date'] : '';
-        $limit = isset($limit) ? $limit : self::getLimitArray();
+        $date = $_POST['date'] ?? '';
+        $limit = $limit ?? self::getLimitArray();
 
         $countSessions = self::browseSessions($date, [], false, true);
         $sessions = self::browseSessions($date, $limit);
@@ -1425,7 +1372,7 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionsListByName(array $limit)
     {
-        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
+        $keyword = $_REQUEST['keyword'] ?? null;
         $courseUrl = self::getCatalogUrl(
             1,
             $limit['length'],
@@ -1518,8 +1465,8 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionsListByCoursesTag(array $limit)
     {
-        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
-        $searchDate = isset($_REQUEST['date']) ? $_REQUEST['date'] : date('Y-m-d');
+        $searchTag = $_REQUEST['search_tag'] ?? '';
+        $searchDate = $_REQUEST['date'] ?? date('Y-m-d');
         $courseUrl = self::getCatalogUrl(
             1,
             $limit['length'],
@@ -1672,7 +1619,12 @@ class CoursesAndSessionsCatalog
                 'coach_name' => $coachName,
                 'coach_avatar' => UserManager::getUserPicture($coachId, USER_IMAGE_SIZE_SMALL),
                 'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
-                'icon' => self::getSessionIcon($session->getName()),
+                '' => Display::return_icon(
+                    'window_list.png',
+                    $session->getName(),
+                    [],
+                    ICON_SIZE_MEDIUM
+                ),
                 'date' => $sessionDates['display'],
                 'price' => !empty($isThisSessionOnSale['html']) ? $isThisSessionOnSale['html'] : '',
                 'subscribe_button' => isset($isThisSessionOnSale['buy_button']) ? $isThisSessionOnSale['buy_button'] : self::getRegisteredInSessionButton(
@@ -1863,7 +1815,7 @@ class CoursesAndSessionsCatalog
         $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
         $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
         $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
-        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
+        $searchTag = $_REQUEST['search_tag'] ?? '';
 
         if ($action === 'subscribe_user_with_password') {
             $action = 'subscribe';

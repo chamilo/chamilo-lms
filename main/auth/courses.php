@@ -59,7 +59,6 @@ if (empty($nameTools)) {
 $auth = new Auth();
 $userId = api_get_user_id();
 $currentUrl = api_get_path(WEB_CODE_PATH).'auth/courses.php?category_code='.$categoryCode.'&search_term='.$searchTerm;
-$content = '';
 $toolTitle = get_lang('CourseCatalog');
 
 $courseCatalogSettings = [
@@ -121,7 +120,6 @@ switch ($action) {
 
         header('Location: '.$currentUrl);
         exit;
-        break;
     case 'subscribe_course':
         $courseCodeToSubscribe = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : '';
         if (api_is_anonymous()) {
@@ -182,6 +180,9 @@ switch ($action) {
             exit;
         }
 
+        $template = new Template($toolTitle, true, true, false, false, false);
+        $template->assign('content', $content);
+        $template->display_one_col_template();
         break;
     case 'subscribe':
         if (!$userCanViewPage) {
@@ -189,7 +190,6 @@ switch ($action) {
         }
         header('Location: '.api_get_self());
         exit;
-        break;
     case 'display_random_courses':
     case 'display_courses':
     case 'search_course':
@@ -577,7 +577,6 @@ switch ($action) {
 
         $template->display($template->get_template('catalog/course_catalog.tpl'));
         exit;
-        break;
     case 'display_sessions':
         if (!$userCanViewPage) {
             api_not_allowed(true);
@@ -585,7 +584,6 @@ switch ($action) {
 
         CoursesAndSessionsCatalog::sessionList($limit);
         exit;
-        break;
     case 'subscribe_to_session':
         if (!$userCanViewPage) {
             api_not_allowed(true);
@@ -666,7 +664,6 @@ switch ($action) {
 
         CoursesAndSessionsCatalog::sessionsListByCoursesTag($limit);
         exit;
-        break;
     case 'search_session_title':
         if (!$userCanViewPage) {
             api_not_allowed(true);
@@ -674,9 +671,4 @@ switch ($action) {
 
         CoursesAndSessionsCatalog::sessionsListByName($limit);
         exit;
-        break;
 }
-
-$template = new Template($toolTitle, true, true, false, false, false);
-$template->assign('content', $content);
-$template->display_one_col_template();

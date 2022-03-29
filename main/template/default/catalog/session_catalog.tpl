@@ -8,13 +8,11 @@
             });
         });
     </script>
-    <div class="row">
-        <div class="col-md-12">
-        {{ actions }}
-        <!-- header catalog session -->
-       	<div class="search-session">
-            <div class="row">
-                {% if catalog_settings.sessions.by_title %}
+    {{ actions }}
+    <!-- header catalog session -->
+    <div class="search-session">
+        <div class="row">
+            {% if catalog_settings.sessions.by_title %}
                 <div class="col-md-4">
                     <form method="post" action="{{ _p.web_self }}?action=search_session_title">
                         <label>{{ "Name"|get_lang }}</label>
@@ -29,53 +27,43 @@
                         </div>
                     </form>
                 </div>
-                {% endif %}
+            {% endif %}
 
-                {% if catalog_settings.sessions.by_date %}
-                    {% if show_courses %}
-                        <div class="col-md-4">
-                    {% else %}
-                        <div class="col-md-4">
-                    {% endif %}
-                        <form method="post" action="{{ _p.web_self }}?action=display_sessions">
-                            <div class="form-group">
-                                <label>{{ "ByDate"|get_lang }}</label>
-                                <div class="input-group">
-                                    <input type="date" name="date" id="date" title="{{ 'Date'|get_lang }}"
-                                           class="form-control" value="{{ search_date }}" readonly>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="submit">
-                                            <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
-                                        </button>
-                                    </span>
-                                </div>
+            {% if catalog_settings.sessions.by_date %}
+                <div class="col-md-4">
+                    <form method="post" action="{{ _p.web_self }}?action=display_sessions">
+                        <div class="form-group">
+                            <label>{{ "ByDate"|get_lang }}</label>
+                            <div class="input-group">
+                                <input type="date" name="date" id="date" title="{{ 'Date'|get_lang }}"
+                                       class="form-control" value="{{ search_date }}" readonly>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">
+                                        <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
+                                    </button>
+                                </span>
                             </div>
-                        </form>
-                    </div>
-                {% endif %}
-
-                {% if catalog_settings.sessions.by_tag %}
-                    {% if show_courses %}
-                        <div class="col-md-4">
-                    {% else %}
-                        <div class="col-md-4">
-                    {% endif %}
-                            <form method="post" action="{{ _p.web_self }}?action=search_tag">
-                                <label>{{ "ByTag"|get_lang }}</label>
-                                <div class="input-group">
-                                    <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control"
-                                           value="{{ search_tag }}"/>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="submit">
-                                            <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
-                                        </button>
-                                    </span>
-                                </div>
-                            </form>
                         </div>
-                    </div>
-                {% endif %}
-            </div>
+                    </form>
+                </div>
+            {% endif %}
+
+            {% if catalog_settings.sessions.by_tag %}
+                <div class="col-md-4">
+                    <form method="post" action="{{ _p.web_self }}?action=search_tag">
+                        <label>{{ "ByTag"|get_lang }}</label>
+                        <div class="input-group">
+                            <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control"
+                                   value="{{ search_tag }}"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
         </div>
     </div>
     <!-- new view session grib -->
@@ -87,7 +75,8 @@
                         <div id="session-{{ item.id }}" class="items items-courses items-sessions">
                             <div class="image">
                                 <a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.name }}">
-                                	<img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : 'session_default.png'|icon() }}">
+                                	<img class="img-responsive" src="{{ item.image ? _p.web_upload ~ item.image : 'session_default.png'|icon() }}"
+                                         alt="{{ item.name }}">
                                 </a>
                                 {% if item.category != '' %}
                                     <span class="category">{{ item.category }}</span>
@@ -116,7 +105,7 @@
                             	<div class="block-author">
                                 	<div class="author-card">
                                     	<a href="{{ item.coach_url }}" class="ajax" data-title="{{ item.coach_name }}">
-                                        	<img src="{{ item.coach_avatar }}"/>
+                                        	<img src="{{ item.coach_avatar }}" alt="{{ item.coach_name }}">
                                     	</a>
                                    		<div class="teachers-details">
                                         	<h5>
@@ -180,8 +169,9 @@
                                     html: true,
                                     trigger: 'click',
                                     content: function () {
-                                        var content = '';
                                         {% if item.sequences %}
+                                            var content = '';
+
                                             {% for sequence in item.sequences %}
                                                 content += '<p class="lead">{{ sequence.name }}</p>';
                                                 {% if sequence.requirements %}
@@ -214,11 +204,11 @@
                                                     content += '<hr>';
                                                 {% endif %}
                                             {% endfor %}
-                                        {% else %}
-                                            content = "{{ 'NoDependencies'|get_lang }}";
-                                        {% endif %}
 
-                                        return content;
+                                            return content;
+                                        {% else %}
+                                            return "{{ 'NoDependencies'|get_lang }}";
+                                        {% endif %}
                                     }
                                 });
                             </script>

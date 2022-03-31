@@ -2153,6 +2153,11 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Hides the icon of percentage in "Average of tests in Learning Paths" indication on a student tracking
 // $_configuration['student_follow_page_hide_lp_tests_average'] = false;
 
+// Add navigation to the next or previous lp without going to the list.
+// Requires DB change:
+// ALTER TABLE c_lp ADD next_lp_id int(11) NOT NULL DEFAULT '0';
+//$_configuration['lp_enable_flow'] = false;
+
 // User extra fields to be check on user edition to generate a specific process if it was modified
 //$_configuration['user_edition_extra_field_to_check'] = 'ExtrafieldLabel';
 

@@ -434,7 +434,7 @@ class survey_question
 
         // Adding an answer
         if (isset($_POST['buttons']) && isset($_POST['buttons']['add_answer'])) {
-            if (isset($_REQUEST['type']) && 'multiplechoiceother' === $_REQUEST['type']) {
+            if (isset($_REQUEST['type']) && 'multiplechoiceother' === $_REQUEST['type'] && $counter > 2) {
                 $counter--;
             }
             $counter++;

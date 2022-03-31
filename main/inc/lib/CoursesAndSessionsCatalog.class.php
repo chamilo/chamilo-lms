@@ -1135,7 +1135,7 @@ class CoursesAndSessionsCatalog
         }
 
         return Display::url(
-            Display::returnFontAwesomeIcon('check').' '.$title,
+            Display::returnFontAwesomeIcon('check').PHP_EOL.$title,
             api_get_path(WEB_CODE_PATH).'auth/courses.php'
                 .'?action='.$action.'&sec_token='.$stok
                 .'&course_code='.$course['code'].'&search_term='.$search_term.'&category_code='.$categoryCode,
@@ -1166,9 +1166,9 @@ class CoursesAndSessionsCatalog
             '&search_term='.$search_term.'&category_code='.$categoryCode;
 
         return Display::url(
-            Display::returnFontAwesomeIcon('sign-in').'&nbsp;'.$title,
+            Display::returnFontAwesomeIcon('sign-in').PHP_EOL.$title,
             $url,
-            ['class' => 'btn btn-danger', 'title' => $title, 'aria-label' => $title]
+            ['class' => 'btn btn-danger btn-sm', 'title' => $title, 'aria-label' => $title]
         );
     }
 
@@ -2169,10 +2169,10 @@ class CoursesAndSessionsCatalog
                 // if user registered as student
                 if ($userRegisteredInCourse) {
                     $course['already_registered_formatted'] = Display::url(
-                        Display::returnFontAwesomeIcon('external-link').'&nbsp;'.
+                        Display::returnFontAwesomeIcon('external-link').PHP_EOL.
                         get_lang('GoToCourse'),
                         $courseUrl.$course['directory'].'/index.php?id_session=0',
-                        ['class' => 'btn btn-primary']
+                        ['class' => 'btn btn-primary btn-sm']
                     );
 
                     if (!$courseClosed && $course_unsubscribe_allowed

@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\Tag;
 use Doctrine\ORM\Query\Expr\Join;
+use ExtraField as ExtraFieldModel;
 
 /**
  * @todo change class name
@@ -791,7 +792,7 @@ class CoursesAndSessionsCatalog
         $em = Database::getManager();
         $qb3 = $em->createQueryBuilder();
 
-        $extraField = new \ExtraField('session');
+        $extraField = new ExtraFieldModel('session');
         $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('hide_from_catalog');
         if (!empty($extraFieldInfo)) {
             $qb->andWhere(
@@ -1324,13 +1325,11 @@ class CoursesAndSessionsCatalog
 
     /**
      * Return Session catalog rendered view.
-     *
-     * @param array $limit
      */
-    public static function sessionList($limit = [])
+    public static function sessionList()
     {
         $date = $_POST['date'] ?? '';
-        $limit = $limit ?? self::getLimitArray();
+        $limit = self::getLimitArray();
 
         $countSessions = self::browseSessions($date, [], false, true);
         $sessions = self::browseSessions($date, $limit);
@@ -1360,18 +1359,20 @@ class CoursesAndSessionsCatalog
         $tpl->assign('already_subscribed_label', self::getAlreadyRegisteredInSessionLabel());
         $tpl->assign('catalog_settings', self::getCatalogSearchSettings());
 
-        $contentTemplate = $tpl->get_template('catalog/session_catalog.tpl');
+        $templateContent = $tpl->fetch(
+            $tpl->get_template('catalog/session_catalog.tpl')
+        );
 
-        $tpl->display($contentTemplate);
+        $tpl->assign('content', $templateContent);
+        $tpl->display_one_col_template();
     }
 
     /**
      * Show the Session Catalogue with filtered session by course tags.
-     *
-     * @param array $limit Limit info
      */
-    public static function sessionsListByName(array $limit)
+    public static function sessionsListByName()
     {
+        $limit = self::getLimitArray();
         $keyword = $_REQUEST['keyword'] ?? null;
         $courseUrl = self::getCatalogUrl(
             1,
@@ -1398,9 +1399,12 @@ class CoursesAndSessionsCatalog
         $tpl->assign('sessions', $sessionsBlocks);
         $tpl->assign('catalog_settings', self::getCatalogSearchSettings());
 
-        $contentTemplate = $tpl->get_template('catalog/session_catalog.tpl');
+        $templateContent = $tpl->fetch(
+            $tpl->get_template('catalog/session_catalog.tpl')
+        );
 
-        $tpl->display($contentTemplate);
+        $tpl->assign('content', $templateContent);
+        $tpl->display_one_col_template();
     }
 
     public static function getCatalogSearchSettings()
@@ -1460,11 +1464,10 @@ class CoursesAndSessionsCatalog
 
     /**
      * Show the Session Catalogue with filtered session by course tags.
-     *
-     * @param array $limit Limit info
      */
-    public static function sessionsListByCoursesTag(array $limit)
+    public static function sessionsListByCoursesTag()
     {
+        $limit = self::getLimitArray();
         $searchTag = $_REQUEST['search_tag'] ?? '';
         $searchDate = $_REQUEST['date'] ?? date('Y-m-d');
         $courseUrl = self::getCatalogUrl(
@@ -1492,9 +1495,12 @@ class CoursesAndSessionsCatalog
         $tpl->assign('search_tag', Security::remove_XSS($searchTag));
         $tpl->assign('sessions', $sessionsBlocks);
 
-        $contentTemplate = $tpl->get_template('catalog/session_catalog.tpl');
+        $templateContent = $tpl->fetch(
+            $tpl->get_template('catalog/session_catalog.tpl')
+        );
 
-        $tpl->display($contentTemplate);
+        $tpl->assign('content', $templateContent);
+        $tpl->display_one_col_template();
     }
 
     /**
@@ -1861,5 +1867,383 @@ class CoursesAndSessionsCatalog
         }
 
         return $pageUrl;
+    }
+
+    public static function generateRedirectUrlAfterSubscription(string $coursePublicUrl): string
+    {
+        $settings = api_get_configuration_value('course_catalog_settings');
+
+        $redirectAfterSubscription = 'course_home';
+
+        if (!empty($settings) && isset($settings['redirect_after_subscription'])) {
+            $redirectAfterSubscription = $settings['redirect_after_subscription'];
+        }
+
+        if ('course_home' !== $redirectAfterSubscription) {
+            return api_get_self();
+        }
+
+        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+            $user = api_get_user_entity(api_get_user_id());
+
+            if ($user && $accesibleSessions = $user->getCurrentlyAccessibleSessions()) {
+                return $coursePublicUrl.'?id_session='.$accesibleSessions[0]->getId();
+            }
+        }
+
+        return $coursePublicUrl;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function displayCoursesList(string $action, string $searchTerm, string $categoryCode)
+    {
+        $settings = api_get_configuration_value('course_catalog_settings');
+
+        $courseCatalogSettings = [
+            'info_url' => 'course_description_popup',
+            'title_url' => 'course_home',
+            'image_url' => 'course_about',
+        ];
+        // By default, all extra fields are shown (visible and filterable)
+        $extraFieldsInSearchForm = [];
+        $extraFieldsInCourseBlock = [];
+
+        if (!empty($settings)) {
+            if (isset($settings['link_settings'])) {
+                $courseCatalogSettings = $settings['link_settings'];
+            }
+
+            if (isset($settings['extra_fields_in_search_form'])) {
+                $extraFieldsInSearchForm = $settings['extra_fields_in_search_form'];
+            }
+
+            if (isset($settings['extra_fields_in_course_block'])) {
+                $extraFieldsInCourseBlock = $settings['extra_fields_in_course_block'];
+            }
+        }
+
+        $settings = CoursesAndSessionsCatalog::getCatalogSearchSettings();
+
+        $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_GRID);
+        $form->addHidden('action', 'search_course');
+
+        if (isset($settings['courses']) && true === $settings['courses']['by_title']) {
+            $form->addText('search_term', get_lang('Title'));
+        }
+
+        $select = $form->addSelect(
+            'category_code',
+            get_lang('CourseCategories'),
+            [],
+            ['placeholder' => get_lang('SelectAnOption')]
+        );
+
+        $defaults = [];
+        $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
+
+        foreach ($listCategories as $category) {
+            $countCourse = (int) $category['number_courses'];
+            if (empty($countCourse)) {
+                continue;
+            }
+
+            $categoryCodeItem = Security::remove_XSS($category['code']);
+            $categoryName = Security::remove_XSS($category['name']);
+            $level = $category['level'];
+            $separate = '';
+            if ($level > 0) {
+                $separate = str_repeat('--', $level);
+            }
+            $select->addOption($separate.' '.$categoryName.' ('.$countCourse.')', $categoryCodeItem);
+        }
+
+        $allowExtraFields = api_get_configuration_value('allow_course_extra_field_in_catalog');
+
+        $jqueryReadyContent = '';
+        if ($allowExtraFields) {
+            $extraField = new ExtraFieldModel('course');
+            $returnParams = $extraField->addElements($form, null, [], true, false, $extraFieldsInSearchForm);
+            $jqueryReadyContent = $returnParams['jquery_ready_content'];
+        }
+
+        $sortKeySelect = $form->addSelect(
+            'sortKeys',
+            get_lang('SortKeys'),
+            CoursesAndSessionsCatalog::courseSortOptions(),
+            ['multiple' => true]
+        );
+
+        $sortKeys = isset($_REQUEST['sortKeys']) ? Security::remove_XSS($_REQUEST['sortKeys']) : '';
+        $defaults['sortKeys'] = $sortKeys;
+        $defaults['search_term'] = $searchTerm;
+        $defaults['category_code'] = $categoryCode;
+
+        $conditions = [];
+        $fields = [];
+
+        if ('display_random_courses' === $action) {
+            // Random value is used instead limit filter
+            $courses = CoursesAndSessionsCatalog::getCoursesInCategory(null, 12);
+            $countCoursesInCategory = count($courses);
+        } else {
+            $values = $_REQUEST;
+            if ($allowExtraFields) {
+                $extraResult = $extraField->processExtraFieldSearch($values, $form, 'course', 'AND');
+                $conditions = $extraResult['condition'];
+                $fields = $extraResult['fields'];
+                $defaults = $extraResult['defaults'];
+
+                $defaults['sortKeys'] = $sortKeys;
+                $defaults['search_term'] = $searchTerm;
+                $defaults['category_code'] = $categoryCode;
+            }
+
+            $courses = CoursesAndSessionsCatalog::searchAndSortCourses(
+                $categoryCode,
+                $searchTerm,
+                self::getLimitArray(),
+                true,
+                $conditions,
+                $sortKeySelect->getValue()
+            );
+            $countCoursesInCategory = CourseCategory::countCoursesInCategory(
+                $categoryCode,
+                $searchTerm,
+                true,
+                true,
+                $conditions
+            );
+        }
+
+        $pageCurrent = isset($_GET['pageCurrent']) ? (int) $_GET['pageCurrent'] : 1;
+        $pageLength = isset($_GET['pageLength']) ? (int) $_GET['pageLength'] : CoursesAndSessionsCatalog::PAGE_LENGTH;
+        $pageTotal = (int) ceil($countCoursesInCategory / $pageLength);
+
+        $url = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL', 'search_course', $fields);
+        $urlNoExtraFields = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, 'ALL', 'search_course');
+        $urlNoCategory = CoursesAndSessionsCatalog::getCatalogUrl(1, $pageLength, '', 'search_course', $fields);
+        $urlNoCategory = str_replace('&category_code=ALL', '', $urlNoCategory);
+
+        $form->setAttribute('action', $url);
+        $form->addButtonSearch(get_lang('Search'));
+        $form->setDefaults($defaults);
+
+        $catalogPagination = '';
+
+        if ($pageTotal > 1) {
+            $catalogPagination = CoursesAndSessionsCatalog::getCatalogPagination(
+                $pageCurrent,
+                $pageLength,
+                $pageTotal,
+                $categoryCode,
+                $action,
+                $fields,
+                $sortKeySelect->getValue()
+            );
+        }
+
+        $stok = Security::get_token();
+
+        $showTeacher = 'true' === api_get_setting('display_teacher_in_courselist');
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+        $user_id = api_get_user_id();
+        $categoryListFromDatabase = CourseCategory::getAllCategories();
+
+        $categoryList = [];
+        if (!empty($categoryListFromDatabase)) {
+            foreach ($categoryListFromDatabase as $categoryItem) {
+                $categoryList[$categoryItem['code']] = $categoryItem['name'];
+            }
+        }
+
+        $courseUrl = api_get_path(WEB_COURSE_PATH);
+        $hideRating = api_get_configuration_value('hide_course_rating');
+
+        if (!empty($courses)) {
+            foreach ($courses as &$course) {
+                $courseId = $course['real_id'];
+                if (COURSE_VISIBILITY_HIDDEN == $course['visibility']) {
+                    continue;
+                }
+
+                $aboutPage = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
+                $settingsUrl = [
+                    'course_description_popup' => api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
+                    'course_about' => $aboutPage,
+                    'course_home' => $courseUrl.$course['directory'].'/index.php?id_session=0',
+                ];
+
+                $infoUrl = $settingsUrl[$courseCatalogSettings['info_url']];
+                $course['title_url'] = $settingsUrl[$courseCatalogSettings['title_url']];
+                $course['image_url'] = $settingsUrl[$courseCatalogSettings['image_url']];
+
+                $userRegisteredInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
+                $userRegisteredInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
+
+                $course_private = COURSE_VISIBILITY_REGISTERED == $course['visibility'];
+                $courseClosed = COURSE_VISIBILITY_CLOSED == $course['visibility'];
+                $course_subscribe_allowed = 1 == $course['subscribe'];
+                $course_unsubscribe_allowed = 1 == $course['unsubscribe'];
+
+                // display the course bloc
+                $course['category_title'] = '';
+
+                if (!empty($course['category_code'])) {
+                    $course['category_title'] = $categoryList[$course['category_code']] ?? '';
+                    $course['category_code_link'] = $urlNoCategory.'&category_code='.$course['category_code'];
+                }
+
+                // Display thumbnail
+                $course['thumbnail'] = CoursesAndSessionsCatalog::returnThumbnail($course);
+                $course['description_button'] = CourseManager::returnDescriptionButton($course, $infoUrl);
+                $subscribeButton = CoursesAndSessionsCatalog::return_register_button(
+                    $course,
+                    $stok,
+                    $categoryCode,
+                    $searchTerm
+                );
+
+                // Start buy course validation
+                // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+                $plugin = BuyCoursesPlugin::create();
+                $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator(
+                    $courseId,
+                    BuyCoursesPlugin::PRODUCT_TYPE_COURSE
+                );
+
+                $separator = '';
+
+                if ($isThisCourseInSale) {
+                    // set the Price label
+                    $separator = $isThisCourseInSale['html'];
+                    // set the Buy button instead register.
+                    if ($isThisCourseInSale['verificator']) {
+                        $subscribeButton = $plugin->returnBuyCourseButton(
+                            $courseId,
+                            BuyCoursesPlugin::PRODUCT_TYPE_COURSE
+                        );
+                    }
+                }
+
+                $course['rating'] = '';
+
+                if ($hideRating === false) {
+                    $rating = Display::return_rating_system(
+                        'star_'.$course['real_id'],
+                        $ajax_url.'&course_id='.$course['real_id'],
+                        $course['point_info']
+                    );
+                    $course['rating'] = '<div class="ranking">'.$rating.'</div>';
+                }
+
+                if ($showTeacher) {
+                    $course['teacher_info'] = CoursesAndSessionsCatalog::return_teacher($course);
+                }
+
+                // display button line
+                $course['buy_course'] = $separator;
+                $course['extra_data'] = '';
+
+                if ($allowExtraFields) {
+                    $course['extra_data'] = $extraField->getDataAndFormattedValues(
+                        $courseId,
+                        true,
+                        $extraFieldsInCourseBlock
+                    );
+                }
+
+                // if user registered as student
+                if ($userRegisteredInCourse) {
+                    $course['already_registered_formatted'] = Display::url(
+                        Display::returnFontAwesomeIcon('external-link').'&nbsp;'.
+                        get_lang('GoToCourse'),
+                        $courseUrl.$course['directory'].'/index.php?id_session=0',
+                        ['class' => 'btn btn-primary']
+                    );
+
+                    if (!$courseClosed && $course_unsubscribe_allowed
+                        && false === $userRegisteredInCourseAsTeacher
+                    ) {
+                        $course['unregister_formatted'] = CoursesAndSessionsCatalog::return_unregister_button(
+                            $course,
+                            $stok,
+                            $searchTerm,
+                            $categoryCode
+                        );
+                    }
+                } elseif ($userRegisteredInCourseAsTeacher) {
+                    // if user registered as teacher
+                    // Updated teacher cannot unregister himself.
+                    /*if ($course_unsubscribe_allowed) {
+                        $course['unregister_formatted'] = CoursesAndSessionsCatalog::return_unregister_button(
+                            $course,
+                            $stok,
+                            $searchTerm,
+                            $categoryCode
+                        );
+                    }*/
+                } else {
+                    // if user not registered in the course
+                    if (!$courseClosed && !$course_private && $course_subscribe_allowed) {
+                        $course['subscribe_formatted'] = $subscribeButton;
+                    }
+                }
+            }
+        } else {
+            if (!isset($_REQUEST['subscribe_user_with_password']) &&
+                !isset($_REQUEST['subscribe_course'])
+            ) {
+                Display::addFlash(Display::return_message(get_lang('NoResults'), 'warning'));
+            }
+        }
+
+        if (api_is_course_admin()) {
+            foreach ($courses as &$course) {
+                $course['admin_url'] = api_get_path(WEB_CODE_PATH).'/admin/course_list.php?keyword='.$course['code'];
+            }
+        }
+
+        $toolTitle = get_lang('CourseCatalog');
+
+        $template = new Template($toolTitle, true, true, false, false, false);
+        $template->assign('tabs', CoursesAndSessionsCatalog::getTabList());
+        $template->assign('frm_filter', $form->returnForm());
+        $template->assign('courses', $courses);
+        $template->assign(
+            'total_number_of_courses',
+            CoursesAndSessionsCatalog::countAvailableCoursesToShowInCatalog(
+                api_get_current_access_url_id()
+            )
+        );
+        $template->assign('total_number_of_matching_courses', $countCoursesInCategory);
+        $template->assign('catalog_url_no_extra_fields', $urlNoExtraFields);
+        $template->assign('pagination', $catalogPagination);
+        $template->assign('jquery_ready_content', $jqueryReadyContent);
+
+        $templateContent = $template->fetch(
+            $template->get_template('catalog/course_catalog.tpl')
+        );
+
+        $template->assign('content', $templateContent);
+        $template->display_one_col_template();
+    }
+
+    public static function userCanView(): bool
+    {
+        // For students
+        $userCanViewPage = true;
+
+        if ('false' === api_get_setting('allow_students_to_browse_courses')) {
+            $userCanViewPage = false;
+        }
+
+        //For teachers/admins
+        if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
+            $userCanViewPage = true;
+        }
+
+        return $userCanViewPage;
     }
 }

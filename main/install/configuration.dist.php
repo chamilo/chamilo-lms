@@ -1649,6 +1649,9 @@ $_configuration['course_catalog_settings'] = [
 ];
 */
 
+// Display the course catalog in home page
+//$_configuration['course_catalog_display_in_home'] = false;
+
 // Page "My Courses" shows specific course extra fields (CourseManager::getExtraFieldsToBePresented)
 /*$_configuration['my_course_course_extrafields_to_be_presented'] = [
     'fields' => ['mots_cles', 'duree_en_min', 'format'],

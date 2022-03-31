@@ -11,7 +11,7 @@
     <div class="row">
         {% if catalog_settings.sessions.by_title %}
             <div class="col-md-4">
-                <form method="post" action="{{ _p.web_self }}?action=search_session_title">
+                <form method="post" action="{{ _p.web_main }}auth/courses.php?action=search_session_title">
                     <label>{{ "Name"|get_lang }}</label>
                     <div class="input-group">
                         <input type="text" name="keyword" title="{{ 'Name'|get_lang }}" class="form-control"
@@ -28,7 +28,7 @@
 
         {% if catalog_settings.sessions.by_date %}
             <div class="col-md-4">
-                <form method="post" action="{{ _p.web_self }}?action=display_sessions">
+                <form method="post" action="{{ _p.web_main }}auth/courses.php?action=display_sessions">
                     <div class="form-group">
                         <label>{{ "ByDate"|get_lang }}</label>
                         <div class="input-group">
@@ -47,7 +47,7 @@
 
         {% if catalog_settings.sessions.by_tag %}
             <div class="col-md-4">
-                <form method="post" action="{{ _p.web_self }}?action=search_tag">
+                <form method="post" action="{{ _p.web_main }}auth/courses.php?action=search_tag">
                     <label>{{ "ByTag"|get_lang }}</label>
                     <div class="input-group">
                         <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control"

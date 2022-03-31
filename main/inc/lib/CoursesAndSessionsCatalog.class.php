@@ -1136,8 +1136,9 @@ class CoursesAndSessionsCatalog
 
         return Display::url(
             Display::returnFontAwesomeIcon('check').' '.$title,
-            api_get_self().'?action='.$action.'&sec_token='.$stok.
-            '&course_code='.$course['code'].'&search_term='.$search_term.'&category_code='.$categoryCode,
+            api_get_path(WEB_CODE_PATH).'auth/courses.php'
+                .'?action='.$action.'&sec_token='.$stok
+                .'&course_code='.$course['code'].'&search_term='.$search_term.'&category_code='.$categoryCode,
             ['class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title]
         );
     }
@@ -1160,7 +1161,8 @@ class CoursesAndSessionsCatalog
         $categoryCode = Security::remove_XSS($categoryCode);
         $sessionId = (int) $sessionId;
 
-        $url = api_get_self().'?action=unsubscribe&sec_token='.$stok.'&sid='.$sessionId.'&course_code='.$course['code'].
+        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php'
+            .'?action=unsubscribe&sec_token='.$stok.'&sid='.$sessionId.'&course_code='.$course['code'].
             '&search_term='.$search_term.'&category_code='.$categoryCode;
 
         return Display::url(
@@ -1326,7 +1328,7 @@ class CoursesAndSessionsCatalog
     /**
      * Return Session catalog rendered view.
      */
-    public static function sessionList()
+    public static function sessionList(bool $returnHtml = false): ?string
     {
         $date = $_POST['date'] ?? '';
         $limit = self::getLimitArray();
@@ -1363,8 +1365,14 @@ class CoursesAndSessionsCatalog
             $tpl->get_template('catalog/session_catalog.tpl')
         );
 
+        if ($returnHtml) {
+            return $templateContent;
+        }
+
         $tpl->assign('content', $templateContent);
         $tpl->display_one_col_template();
+
+        return null;
     }
 
     /**
@@ -1442,7 +1450,7 @@ class CoursesAndSessionsCatalog
         $headers = [];
         if (self::showCourses()) {
             $headers[] = [
-                'url' => api_get_self(),
+                'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
                 'content' => get_lang('CourseManagement'),
             ];
         }
@@ -1830,7 +1838,7 @@ class CoursesAndSessionsCatalog
         $categoryCode = !empty($categoryCode) ? Security::remove_XSS($categoryCode) : 'ALL';
 
         // Start URL with params
-        $pageUrl = api_get_self().
+        $pageUrl = api_get_path(WEB_CODE_PATH).'auth/courses.php'.
             '?action='.$action.
             '&search_term='.$searchTerm.
             '&keyword='.$keyword.
@@ -1880,7 +1888,7 @@ class CoursesAndSessionsCatalog
         }
 
         if ('course_home' !== $redirectAfterSubscription) {
-            return api_get_self();
+            return api_get_path(WEB_CODE_PATH).'auth/courses.php';
         }
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
@@ -1897,8 +1905,12 @@ class CoursesAndSessionsCatalog
     /**
      * @throws Exception
      */
-    public static function displayCoursesList(string $action, string $searchTerm, string $categoryCode)
-    {
+    public static function displayCoursesList(
+        string $action = '',
+        string $searchTerm = '',
+        string $categoryCode = '',
+        bool $returnHtml = false
+    ): ?string {
         $settings = api_get_configuration_value('course_catalog_settings');
 
         $courseCatalogSettings = [
@@ -2226,8 +2238,14 @@ class CoursesAndSessionsCatalog
             $template->get_template('catalog/course_catalog.tpl')
         );
 
+        if ($returnHtml) {
+            return $templateContent;
+        }
+
         $template->assign('content', $templateContent);
         $template->display_one_col_template();
+
+        return null;
     }
 
     public static function userCanView(): bool

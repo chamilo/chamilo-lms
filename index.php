@@ -149,6 +149,20 @@ if (!isset($_REQUEST['include'])) {
         }
     }
     $announcements_block = $controller->return_announcements();
+
+    if (api_get_configuration_value('course_catalog_display_in_home')
+        && ('true' === api_get_setting('course_catalog_published') || !api_is_anonymous())
+    ) {
+        $userCanViewPage = CoursesAndSessionsCatalog::userCanView();
+
+        if (CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
+            $announcements_block .= $userCanViewPage ? CoursesAndSessionsCatalog::sessionList(true) : '';
+        } else {
+            $announcements_block .= $userCanViewPage
+                ? CoursesAndSessionsCatalog::displayCoursesList('display_courses', '', '', true)
+                : '';
+        }
+    }
 }
 if (api_get_configuration_value('show_hot_sessions') === true) {
     $hotSessions = SessionManager::getHotSessions();

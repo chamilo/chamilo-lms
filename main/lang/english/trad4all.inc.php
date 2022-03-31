@@ -8854,4 +8854,5 @@ $YourLpQuizzesResultsAre = "You have obtained the following results in the tests
 $ExportLpQuizResults = "Export LP Quiz results";
 $ElearningResults = "Learning path results";
 $InvoicingByAccessUrl = "Active users in sessions per URL";
+$SelectTheNextLp = "Next LP";
 ?>

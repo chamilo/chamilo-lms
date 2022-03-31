@@ -8790,4 +8790,5 @@ $YourLpQuizzesResultsAre = "Vous avez obtenu les résultats suivants aux tests :
 $ExportLpQuizResults = "Export des résultats des exercices des parcours";
 $ElearningResults = "Résultats de parcours";
 $InvoicingByAccessUrl = "Utilisateurs actifs dans les sessions par URL";
+$SelectTheNextLp = "Parcours suivant";
 ?>

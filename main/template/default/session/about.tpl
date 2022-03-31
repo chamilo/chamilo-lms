@@ -171,7 +171,7 @@
         </div>
         <section class="course">
             <div class="row">
-                <div class="col-md-8">
+                <div class="{{ course_data.coaches is empty ? 'col-md-12' : 'col-md-8' }}">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <h3 class="sub-title">{{ "CourseInformation"|get_lang }}</h3>
@@ -269,10 +269,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            {% if course_data.coaches %}
+                {% if course_data.coaches %}
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
                                 <div class="panel-teachers">
                                     <h3 class="sub-title">{{ "Coaches"|get_lang }}</h3>
                                     {% for coach in course_data.coaches %}
@@ -307,10 +307,10 @@
                                         </div>
                                     {% endfor %}
                                 </div>
-                            {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
         </section>
     {% endfor %}
@@ -321,15 +321,15 @@
     $(function () {
         $('.course-information').readmore({
             speed: 100,
-            lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible' | get_lang }}</a>',
-            moreLink: '<a class="read-more" href="#">{{ 'ReadMore' | get_lang }}</a>',
+            lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible'|get_lang|escape('js') }}</a>',
+            moreLink: '<a class="read-more" href="#">{{ 'ReadMore'|get_lang|escape('js') }}</a>',
             collapsedHeight: 500,
             heightMargin: 100
         });
         $('.open-more').readmore({
             speed: 100,
-            lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible' | get_lang }}</a>',
-            moreLink: '<a class="read-more" href="#">{{ 'ReadMore' | get_lang }}</a>',
+            lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible'|get_lang|escape('js') }}</a>',
+            moreLink: '<a class="read-more" href="#">{{ 'ReadMore'|get_lang|escape('js') }}</a>',
             collapsedHeight: 90,
             heightMargin: 20
         });

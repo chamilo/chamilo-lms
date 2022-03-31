@@ -35,6 +35,7 @@ class AnnouncementManager
             '((user_email))',
             '((user_firstname))',
             '((user_lastname))',
+            '((user_picture))',
             '((user_official_code))',
             '((course_title))',
             '((course_link))',
@@ -108,6 +109,7 @@ class AnnouncementManager
             $data['user_official_code'] = $readerInfo['official_code'];
         }
 
+        $data['user_picture'] = UserManager::getUserPicture($userId, USER_IMAGE_SIZE_ORIGINAL);
         $data['course_title'] = $courseInfo['name'] ?? '';
         $courseLink = api_get_course_url($courseCode, $sessionId);
         $data['course_link'] = Display::url($courseLink, $courseLink);

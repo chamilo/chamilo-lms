@@ -2086,13 +2086,14 @@ class Display
      *
      * @return string
      */
-    public static function tip($text, $tip)
+    public static function tip($text, $tip, string $tag = 'span')
     {
         if (empty($tip)) {
             return $text;
         }
 
-        return self::span(
+        return self::tag(
+            $tag,
             $text,
             ['class' => 'boot-tooltip', 'title' => strip_tags($tip)]
         );

@@ -192,8 +192,29 @@ $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
 
 //Extra fields
+$setExtraFieldsMandatory = api_get_configuration_value('course_creation_form_set_extra_fields_mandatory');
+$fieldsRequired = [];
+if (false !== $setExtraFieldsMandatory && !empty($setExtraFieldsMandatory['fields'])) {
+    $fieldsRequired = $setExtraFieldsMandatory['fields'];
+}
 $extra_field = new ExtraField('course');
-$extra = $extra_field->addElements($form);
+$extra = $extra_field->addElements(
+    $form,
+    0,
+    [],
+    false,
+    false,
+    [],
+    [],
+    [],
+    false,
+    false,
+    [],
+    [],
+    false,
+    [],
+    $fieldsRequired
+);
 
 if (api_get_configuration_value('allow_course_multiple_languages')) {
     // Course Multiple language.
@@ -230,6 +251,15 @@ if (isset($default_course_visibility)) {
 $values['subscribe'] = 1;
 $values['unsubscribe'] = 0;
 $values['course_teachers'] = [$currentTeacher->getId()];
+
+// Relation to prefill course extra field with user extra field
+$fillExtraField = api_get_configuration_value('course_creation_user_course_extra_field_relation_to_prefill');
+if (false !== $fillExtraField && !empty($fillExtraField['fields'])) {
+    foreach ($fillExtraField['fields'] as $courseVariable => $userVariable) {
+        $extraValue = UserManager::get_extra_user_data_by_field(api_get_user_id(), $userVariable);
+        $values['extra_'.$courseVariable] = $extraValue[$userVariable];
+    }
+}
 
 $form->setDefaults($values);
 

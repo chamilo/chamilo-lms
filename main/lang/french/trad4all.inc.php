@@ -8782,4 +8782,12 @@ $LpRemindFooterX = "Le centre de formation<p>%s</p><br/>%s";
 $Embed = "Obtenir le lien d'intégration";
 $EmbedExerciseLink = "Lien pour intégrer l'exercice dans une iframe";
 $CopyUrlToIncludeInIframe = "Copiez cette URL pour inclure cet exercice dans une iframe :";
+$ExportExtraFields = "Exporter les champs extra";
+$ToHideExlearners = "Masquer les anciens apprenants";
+$CertificateOfAchievement2 = "Certificat de réalisation par parcours";
+$YourLpResultsAre = "Vous avez obtenu les résultats suivants au parcours de formation :";
+$YourLpQuizzesResultsAre = "Vous avez obtenu les résultats suivants aux tests :";
+$ExportLpQuizResults = "Export des résultats des exercices des parcours";
+$ElearningResults = "Résultats de parcours";
+$InvoicingByAccessUrl = "Utilisateurs actifs dans les sessions par URL";
 ?>

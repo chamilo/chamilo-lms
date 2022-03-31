@@ -555,7 +555,9 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 // The provided default is an *example*, please customize.
 // This setting is particularly complicated to set with CKeditor, but if you
 // add all domains that you want to authorize for iframes inclusion in the
-// child-src statement, this example should work for you
+// child-src statement, this example should work for you.
+// You can prevent JavaScript from executing from external sources (including
+// inside SVG images) by using a strict list in the "script-src" argument.
 //$_configuration['security_content_policy'] = 'default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;';
 //$_configuration['security_content_policy_report_only'] = 'default-src \'self\'; script-src *://*.google.com:*';
 //
@@ -2107,6 +2109,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => false
 ];*/
 
+// Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+//$_configuration['lp_prerequisit_on_quiz_unblock_if_max_attempt_reached'] = false;
+
 // Enables to hide user status when option is true visible only for admins from $_configuration['user_status_option_show_only_for_admin']
 //$_configuration['user_status_option_only_for_admin_enabled'] = false;
 // The user status is hidden when is false, it requires $_configuration['user_status_option_only_for_admin_enabled'] = true
@@ -2128,6 +2133,23 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
         'INVITEE' => 31
 ];*/
 
+// Course extra fields to be presented on main/create_course/add_course.php
+//$_configuration['course_creation_by_teacher_extra_fields_to_show'] = ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']];
+
+// Configuration setting to make some extra field required in course creation form.
+//$_configuration['course_creation_form_set_extra_fields_mandatory'] = ['fields' => ['fieldLabel1','fieldLabel2']];
+
+// Course extra fields to be presented on course settings
+//$_configuration['course_configuration_tool_extra_fields_to_show_and_edit'] = ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']];
+
+// Relation to prefill course extra field with user extra field on course creacion on main/create_course/add_course.php and main/admin/course_add.php
+/*$_configuration['course_creation_user_course_extra_field_relation_to_prefill'] = [
+    'fields' => [
+        'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',
+        'CourseExtrafieldLabel2' => 'UserExtrafieldLabel2',
+    ]
+];*/
+
 // Hides the icon of percentage in "Average of tests in Learning Paths" indication on a student tracking
 // $_configuration['student_follow_page_hide_lp_tests_average'] = false;
 
@@ -2135,6 +2157,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Requires DB change:
 // ALTER TABLE c_lp ADD next_lp_id int(11) NOT NULL DEFAULT '0';
 //$_configuration['lp_enable_flow'] = false;
+
+// User extra fields to be check on user edition to generate a specific process if it was modified
+//$_configuration['user_edition_extra_field_to_check'] = 'ExtrafieldLabel';
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

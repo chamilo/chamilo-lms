@@ -278,7 +278,8 @@ $form_search->addElement('text', 'user_keyword');
 $form_search->addButtonSearch(get_lang('SearchUsers'));
 echo Display::toolbarAction(
     'toolbar-courselog',
-    [$actionsLeft, $form_search->returnForm(), $actionsRight]
+    [$actionsLeft, $form_search->returnForm(), $actionsRight],
+    [4, 6, 2]
 );
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];
@@ -403,6 +404,22 @@ if ($nbStudents > 0) {
     $select->addOptGroup($groupIdList, get_lang('Group'));
     $formClass->addButtonSearch(get_lang('Search'));
 
+    // Filter by ex learners
+    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+        $formExLearners = new FormValidator(
+            'form_exlearners',
+            'get',
+            api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
+        );
+        $group = [];
+        $group[] = $formExLearners->createElement('radio', 'opt_exlearner', 'id="opt_exlearner1"', get_lang('Yes'), 1);
+        $group[] = $formExLearners->createElement('radio', 'opt_exlearner', 'id="opt_exlearner0"', get_lang('No'), 0);
+        $formExLearners->addGroup($group, 'exlearner', get_lang('ToHideExlearners'));
+        $formExLearners->addHidden('cidReq', $courseCode);
+        $formExLearners->addHidden('id_session', $sessionId);
+        $formExLearners->addButtonSearch(get_lang('Search'));
+    }
+
     // Groups
     /*$formGroup = new FormValidator(
         'groups',
@@ -433,6 +450,19 @@ if ($nbStudents > 0) {
             $formClass->addHidden('additional_profile_field[]', $fieldId);
         }
     }
+
+    // Filter by active users
+    $formActiveUsers = new FormValidator(
+        'active_users',
+        'get',
+        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
+    );
+    // Filter by active users
+    $group = [];
+    $group[] = $formActiveUsers->createElement('radio', 'user_active', 'id="user_active1"', get_lang('Yes'), 1);
+    $group[] = $formActiveUsers->createElement('radio', 'user_active', 'id="user_active0"', get_lang('No'), 0);
+    $formActiveUsers->addGroup($group, 'active', get_lang('AccountActive'));
+    $formActiveUsers->addButtonSearch(get_lang('Search'));
 
     $extraField = new ExtraField('user');
     $extraField->addElements($formExtraField, 0, [], true);
@@ -483,6 +513,34 @@ if ($nbStudents > 0) {
             $tableGroup = Database::get_course_table(TABLE_GROUP_USER);
             $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
             $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
+        }
+    }
+    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+        if ($formExLearners->validate()) {
+            $formValue = $formExLearners->getSubmitValue('exlearner');
+            if (isset($formValue['opt_exlearner']) && 1 == $formValue['opt_exlearner']) {
+                $sessionId = api_get_session_id();
+                if (!empty($sessionId)) {
+                    $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+                    $joins = " INNER JOIN $tableSessionCourseUser scu ON scu.user_id = user.id ";
+                    $whereCondition = " AND scu.status !=  ".COURSE_EXLEARNER." AND scu.c_id = '".api_get_course_int_id()."' AND scu.session_id = $sessionId";
+                    $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
+                } else {
+                    $tableCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+                    $joins = " INNER JOIN $tableCourseUser cu ON cu.user_id = user.id ";
+                    $whereCondition = " AND cu.relation_type !=  ".COURSE_EXLEARNER." AND cu.c_id = '".api_get_course_int_id()."'";
+                    $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
+                }
+            }
+        }
+    }
+
+    if ($formActiveUsers->validate()) {
+        $formValue = $formActiveUsers->getSubmitValue('active');
+        if (isset($formValue['user_active'])) {
+            $active = (int) $formValue['user_active'];
+            $whereCondition = " AND user.active = $active ";
+            $conditions = ['where' => $whereCondition, 'inject_joins' => ''];
         }
     }
 
@@ -588,6 +646,10 @@ if ($nbStudents > 0) {
     $mainForm->addHtml('<div id="advanced_search_options" style="display:none;">');
     $mainForm->addHtml($formClass->returnForm());
     $mainForm->addHtml($formExtraField->returnForm());
+    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+        $mainForm->addHtml($formExLearners->returnForm());
+    }
+    $mainForm->addHtml($formActiveUsers->returnForm());
     $mainForm->addHtml('</div>');
     $html .= $mainForm->returnForm();
 

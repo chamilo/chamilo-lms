@@ -36,17 +36,19 @@ $(function() {
 
 	$("#dialog-form").dialog({
 		autoOpen : false,
-		modal : false,
+		modal : true,
+        position: { of: document },
 		width : 600,
-		height : 580,
+		height : 630,
         zIndex : 20000 // added because of qtip2
    	});
 
     $("#simple-dialog-form").dialog({
 		autoOpen : false,
-		modal : false,
+        modal : true,
+        position: { of: document },
 		width : 600,
-		height : 550,
+		height : 630,
         zIndex : 20000 // added because of qtip2
    	});
 
@@ -934,67 +936,65 @@ $(function() {
 {{ toolbar }}
 
 <div id="simple-dialog-form" style="display:none;">
-    <div style="width:500px;">
-        <form name="form-simple" class="form-horizontal">
-            <span id="calendar_course_info_simple"></span>
-            <span id="calendar_session_info"></span>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">
-                    <b>{{ "Date" |get_lang}}</b>
-                </label>
-                <div class="col-sm-9">
-                    <span id="simple_start_date"></span>
-                    <span id="simple_end_date"></span>
-                </div>
+    <form name="form-simple" class="form-horizontal">
+        <span id="calendar_course_info_simple"></span>
+        <span id="calendar_session_info"></span>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">
+                <b>{{ "Date" |get_lang}}</b>
+            </label>
+            <div class="col-sm-9">
+                <span id="simple_start_date"></span>
+                <span id="simple_end_date"></span>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">
-                    <b>{{ "Title" |get_lang}}</b>
-                </label>
-                <div class="col-sm-9">
-                    <div id="simple_title"></div>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">
+                <b>{{ "Title" |get_lang}}</b>
+            </label>
+            <div class="col-sm-9">
+                <div id="simple_title"></div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">
-                    <b>{{ "Description" |get_lang}}</b>
-                </label>
-                <div class="col-sm-9">
-                    <div id="simple_content"></div>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">
+                <b>{{ "Description" |get_lang}}</b>
+            </label>
+            <div class="col-sm-9">
+                <div id="simple_content"></div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">
-                    <b>{{ "Comment" |get_lang}}</b>
-                </label>
-                <div class="col-sm-9">
-                    <div id="simple_comment"></div>
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">
+                <b>{{ "Comment" |get_lang}}</b>
+            </label>
+            <div class="col-sm-9">
+                <div id="simple_comment"></div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label class="col-sm-3 control-label">
-                    <b>{{ "Attachment" |get_lang}}</b>
-                </label>
-                <div class="col-sm-9">
-                    <div id="simple_attachment"></div>
-                </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">
+                <b>{{ "Attachment" |get_lang}}</b>
+            </label>
+            <div class="col-sm-9">
+                <div id="simple_attachment"></div>
             </div>
+        </div>
 
-            {% if agenda_collective_invitations and 'personal' == type %}
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">{{ 'Invitees' }}</label>
-                    <div class="col-sm-9" id="simple_invitees"></div>
-                </div>
-            {% endif %}
+        {% if agenda_collective_invitations and 'personal' == type %}
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ 'Invitees' }}</label>
+                <div class="col-sm-9" id="simple_invitees"></div>
+            </div>
+        {% endif %}
 
-            {% if agenda_reminders %}
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9" id="simple_notification_list"></div>
-                </div>
-            {% endif %}
-        </form>
-    </div>
+        {% if agenda_reminders %}
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9" id="simple_notification_list"></div>
+            </div>
+        {% endif %}
+    </form>
 </div>
 
 <div id="dialog-form" style="display:none;">

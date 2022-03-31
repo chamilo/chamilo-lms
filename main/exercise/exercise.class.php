@@ -3379,9 +3379,11 @@ class Exercise
         $questions_in_media = [],
         $currentAnswer = '',
         $myRemindList = [],
-        $showPreviousButton = true
+        $showPreviousButton = true,
+        int $lpId = 0,
+        int $lpItemId = 0,
+        int $lpItemViewId = 0
     ) {
-        global $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
         $nbrQuestions = $this->countQuestionsInExercise();
         $buttonList = [];
         $html = $label = '';
@@ -3397,9 +3399,9 @@ class Exercise
 
             $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq();
             $url .= '&'.http_build_query([
-                'learnpath_id' => $safe_lp_id,
-                'learnpath_item_id' => $safe_lp_item_id,
-                'learnpath_item_view_id' => $safe_lp_item_view_id,
+                'learnpath_id' => $lpId,
+                'learnpath_item_id' => $lpItemId,
+                'learnpath_item_view_id' => $lpItemViewId,
                 'hotspot' => $hotspotGet,
                 'nbrQuestions' => $nbrQuestions,
                 'num' => $questionNum,
@@ -3712,9 +3714,7 @@ class Exercise
      * @param bool   $showHotSpotDelineationTable
      * @param int    $questionDuration                          seconds
      *
-     * @todo    reduce parameters of this function
-     *
-     * @return string html code
+     * @return array|false
      */
     public function manage_answer(
         $exeId,
@@ -3948,7 +3948,7 @@ class Exercise
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $answerDestination = $objAnswerTmp->selectDestination($answerId);
-                            $correctAnswerId[] = $answerId;
+                            $correctAnswerId[] = $answerAutoId;
                         }
                     }
                     break;
@@ -8003,19 +8003,15 @@ class Exercise
 
             // Shows the question + possible answers
             $showTitle = $this->getHideQuestionTitle() == 1 ? false : true;
-            echo $this->showQuestion(
+            echo ExerciseLib::showQuestion(
+                $this,
                 $question_obj,
                 false,
                 $origin,
                 $i,
                 $showTitle,
                 false,
-                $user_choice,
-                false,
-                null,
-                false,
-                $this->getModelType(),
-                $this->categoryMinusOne
+                $user_choice
             );
 
             // Button save and continue
@@ -10672,7 +10668,7 @@ class Exercise
                     }
                 }
 
-                if ('' !== $option['answer']) { // the answer can be a value 0
+                if (!empty($option['answer'])) {
                     $exerciseResult[] = $questionId;
 
                     break;
@@ -10910,6 +10906,7 @@ class Exercise
         $dataSet = [];
         $labels = [];
         $labelsWithId = [];
+        $cutLabelAtChar = 30;
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
             if (empty($labels)) {
@@ -10918,6 +10915,10 @@ class Exercise
                     $labelsWithId = array_column($categoryNameList, 'title', 'iid');
                     asort($labelsWithId);
                     $labels = array_values($labelsWithId);
+                    foreach ($labels as $labelId => $label) {
+                        // Cut if label is too long to maintain chart visibility
+                        $labels[$labelId] = cut($label, $cutLabelAtChar);
+                    }
                 }
             }
 
@@ -10964,7 +10965,7 @@ class Exercise
         $dataSet = [];
         $labels = [];
         $labelsWithId = [];
-
+        $cutLabelAtChar = 30;
         $tempResult = [];
         /** @var Exercise $exercise */
         foreach ($exercises as $exercise) {
@@ -10975,6 +10976,10 @@ class Exercise
                     $labelsWithId = array_column($categoryNameList, 'title', 'iid');
                     asort($labelsWithId);
                     $labels = array_values($labelsWithId);
+                    foreach ($labels as $labelId => $label) {
+                        // Cut if label is too long to maintain chart visibility
+                        $labels[$labelId] = cut($label, $cutLabelAtChar);
+                    }
                 }
             }
 

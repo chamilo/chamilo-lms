@@ -80,7 +80,7 @@
         "media-alchemyst/media-alchemyst": "~0.5",
         "michelf/php-markdown": "~1.7",
         "monolog/monolog": "~1.0",
-        "mpdf/mpdf": "6.1.*",
+        "mpdf/mpdf": "^8.0",
         "ocramius/proxy-manager": "~1.0|2.0.*",
         "onelogin/php-saml": "^3.0",
         "packbackbooks/lti-1p3-tool": "^1.1",
@@ -101,6 +101,7 @@
         "sonata-project/admin-bundle": "~3.1|~4.0",
         "sonata-project/core-bundle": "~3.1|~4.0",
         "sonata-project/user-bundle": "~3.0|~4.0",
+        "stripe/stripe-php": "*",
         "studio-42/elfinder": "2.1.*",
         "sunra/php-simple-html-dom-parser": "~1.5.0",
         "sylius/attribute": "0.13.0",
@@ -123,8 +124,7 @@
         "zendframework/zend-config": "~3.0",
         "zendframework/zend-feed": "~2.6|^3.0",
         "zendframework/zend-http": "~2.6|^3.0",
-        "zendframework/zend-soap": "~2.6|^3.0",
-        "stripe/stripe-php": "*"
+        "zendframework/zend-soap": "~2.6|^3.0"
     },
     "require-dev": {
         "behat/behat": "~3.5",

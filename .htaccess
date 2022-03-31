@@ -91,3 +91,17 @@ AddType application/font-woff .woff .woff2
   ExpiresActive On
   ExpiresByType application/font-woff "access plus 1 month"
 </IfModule>
+
+# Force SSL/HTTPS
+# We recommend you place this block in your VirtualHost config rather
+# than uncommenting it below. However, if you have no other way,
+# feel free to uncomment it, but please remember that this file will 
+# be overwritten during your next Chamilo update.
+# Also note this will only work if you have an SSL certificate
+# configured elsewhere in your Apache configuration.
+
+#RewriteCond %{HTTPS} !=on
+#RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+#<IfModule mod_headers.c>
+#  Header always set Content-Security-Policy "upgrade-insecure-requests;"
+#</IfModule>

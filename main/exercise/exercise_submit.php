@@ -487,6 +487,10 @@ if (!isset($questionListInSession)) {
         !empty($exercise_stat_info['data_tracking'])
     ) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
+        $questionList = array_combine(
+            range(1, count($questionList)),
+            $questionList
+        );
         $categoryList = [];
         if ($allowBlockCategory) {
             foreach ($questionList as $question) {
@@ -1778,7 +1782,10 @@ foreach ($questionList as $questionId) {
                 [],
                 [],
                 $myRemindList,
-                $showPreviousButton
+                $showPreviousButton,
+                $learnpath_id,
+                $learnpath_item_id,
+                $learnpath_item_view_id
             );
             break;
         case ALL_ON_ONE_PAGE:
@@ -1837,7 +1844,14 @@ foreach ($questionList as $questionId) {
 if ($objExercise->type == ALL_ON_ONE_PAGE) {
     $exerciseActions = $objExercise->show_button(
         $questionId,
-        $current_question
+        $current_question,
+        [],
+        '',
+        [],
+        true,
+        $learnpath_id,
+        $learnpath_item_id,
+        $learnpath_item_view_id
     );
     echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
     echo '<br>';

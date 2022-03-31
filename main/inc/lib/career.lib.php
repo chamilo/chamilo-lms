@@ -1441,4 +1441,74 @@ class Career extends Model
 
         return $footer;
     }
+
+    public static function addCareerFieldsToForm(FormValidator $form, array $values = [])
+    {
+        $career = new self();
+        $careerList = $career->get_all();
+        $list = array_column($careerList, 'name', 'id');
+
+        $url = api_get_path(WEB_AJAX_PATH).'career.ajax.php';
+
+        $form->addHtml('<script>
+                $(function () {
+                    var url = "'.$url.'";
+                    var $txtPromotion = $("#promotion_id");
+
+                    $("#career_id").on("change", function () {
+                        $("#promotion").show();
+
+                        var id = this.value;
+
+                        $txtPromotion.empty().append($("<option>", {
+                            value: 0,
+                            text: "'.get_lang('All').'"
+                        }));
+
+                        $.getJSON(url, {
+                            "career_id": id,
+                            "a": "get_promotions"
+                        }).done(function (data) {
+                            $.each(data, function (index, value) {
+                                $txtPromotion.append($("<option>", {
+                                    value: value.id,
+                                    text: value.name
+                                }));
+                            });
+
+                            $txtPromotion.selectpicker("refresh");
+                        });
+                    });
+                });
+            </script>');
+        $form->addSelect(
+            'career_id',
+            get_lang('Career'),
+            $list,
+            [
+                'placeholder' => get_lang('SelectAnOption'),
+                'id' => 'career_id',
+            ]
+        );
+
+        $display = 'none;';
+        $options = [];
+        if (isset($values['promotion_id'])) {
+            $promotion = new Promotion();
+            $promotion = $promotion->get($values['promotion_id']);
+            if ($promotion) {
+                $options = [$promotion['id'] => $promotion['name']];
+                $display = 'block';
+            }
+        }
+
+        $form->addHtml('<div id="promotion" style="display:'.$display.';">');
+        $form->addSelect(
+            'promotion_id',
+            get_lang('Promotion'),
+            $options,
+            ['id' => 'promotion_id']
+        );
+        $form->addHtml('</div>');
+    }
 }

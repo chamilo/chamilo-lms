@@ -1501,18 +1501,44 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Get payment types.
-     *
-     * @return array
      */
-    public function getPaymentTypes()
+    public function getPaymentTypes(bool $onlyActive = false): array
     {
-        return [
+        $types = [
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
             self::PAYMENT_TYPE_TRANSFER => $this->get_lang('BankTransfer'),
             self::PAYMENT_TYPE_CULQI => 'Culqi',
             self::PAYMENT_TYPE_TPV_REDSYS => $this->get_lang('TpvPayment'),
             self::PAYMENT_TYPE_STRIPE => 'Stripe',
         ];
+
+        if (!$onlyActive) {
+            return $types;
+        }
+
+        if ($this->get('paypal_enable') !== 'true') {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL]);
+        }
+
+        if ($this->get('transfer_enable') !== 'true') {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER]);
+        }
+
+        if ($this->get('culqi_enable') !== 'true') {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
+        }
+
+        if ($this->get('tpv_redsys_enable') !== 'true'
+            || !file_exists(api_get_path(SYS_PLUGIN_PATH).'buycourses/resources/apiRedsys.php')
+        ) {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_TPV_REDSYS]);
+        }
+
+        if ($this->get('stripe_enable') !== 'true') {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_STRIPE]);
+        }
+
+        return $types;
     }
 
     /**

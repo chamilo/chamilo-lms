@@ -4498,13 +4498,15 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             break;
         case 2:
             // Only file.
-            $form->addElement(
+            /*$form->addElement(
                 'file',
                 'file',
                 get_lang('UploadADocument'),
                 'size="40" onchange="updateDocumentTitle(this.value)"'
             );
             $form->addProgress();
+            */
+            $form->addElement('BigUpload', 'file', get_lang('UploadADocument'), ['id' => 'bigUploadFile', 'data-origin' => 'work']);
             $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
             break;
     }
@@ -4588,10 +4590,18 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 
     // If we come from the group tools the groupid will be saved in $work_table
     if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
-        $result = move_uploaded_file(
-            $file['tmp_name'],
-            $updir.$curdirpath.'/'.$new_file_name
-        );
+        if (isset($file['copy_file'])) {
+            $result = copy(
+                $file['tmp_name'],
+                $updir.$curdirpath.'/'.$new_file_name
+            );
+            unlink($file['tmp_name']);
+        } else {
+            $result = move_uploaded_file(
+                $file['tmp_name'],
+                $updir.$curdirpath.'/'.$new_file_name
+            );
+        }
     } else {
         return [
             'error' => Display :: return_message(

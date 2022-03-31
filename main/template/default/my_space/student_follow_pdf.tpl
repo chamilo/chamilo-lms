@@ -1,3 +1,6 @@
+<div style="position: absolute; top: 40px; right: 50px;">
+    {{ logo }}
+</div>
 <h1>{{ 'StudentDetails'|get_lang }}</h1>
 
 <div class="user-info">

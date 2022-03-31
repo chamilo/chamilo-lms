@@ -4055,6 +4055,11 @@ class CourseManager
             }
         }
 
+        $exlearnerCondition = "";
+        if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+            $exlearnerCondition = " AND course_rel_user.relation_type NOT IN(".COURSE_EXLEARNER.")";
+        }
+
         $sql = "SELECT DISTINCT
                     course.id,
                     course_rel_user.status status,
@@ -4071,6 +4076,7 @@ class CourseManager
                     $userCategoryCondition
                     $without_special_courses
                     $languageCondition
+                    $exlearnerCondition
                 ";
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.

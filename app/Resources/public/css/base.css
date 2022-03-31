@@ -306,6 +306,39 @@ select {
     padding-bottom: 25px;
 }
 
+#carousel-announcement .link-more {
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #fff;
+    background-color: #0495c9;
+    border-color: #357ebd;
+}
+
+#carousel-announcement .link-more:hover,
+#carousel-announcement .link-more:focus,
+#carousel-announcement .link-more:active,
+#carousel-announcement .link-more.active {
+    color: #fff;
+    background-color: #00b3db;
+    border-color: #285e8e;
+}
+
 .carousel-control {
     width: 5%;
 }
@@ -4576,7 +4609,7 @@ i.size-32.icon-new-work {
 }
 
 .multiple_select_header {
-    height: 35px;
+    min-height: 35px;
     margin-bottom: 15px;
 }
 
@@ -6466,6 +6499,18 @@ div#chat-remote-video video {
 #about-course #course-info-top .session-title{
     margin-top: 10px;
 }
+
+.collapse-toogle--right,
+#about-course .about-course--btn-details {
+    padding-left: 0;
+    padding-right: 25px;
+    background: url("../../main/img/icons/22/arrow-up-collapse.png") no-repeat right center;
+}
+.collapse-toogle--right.collapsed,
+#about-course .about-course--btn-details.collapsed{
+    background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat right center;
+}
+
 /* list courses classic*/
 .classic-courses .list-teachers {
     font-size: 12px;

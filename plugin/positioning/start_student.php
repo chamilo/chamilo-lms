@@ -80,21 +80,23 @@ if ($finalData) {
 }
 // Set the initial results as second series to make sure it appears on top
 $lpUrlAndProgress = $studentAverage.'%';
+$radars = '';
+
 if (!empty($initialExercise)) {
     $exercisesToRadar[] = $initialExercise;
     $exercisesToRadarLabel[] = $plugin->get_lang('InitialTest');
     if (!empty($initialResults)) {
         $lpUrlAndProgress = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'">'.$studentAverage.'%</a>';
     }
+    $radars = $initialExercise->getRadarsFromUsers(
+        [$currentUserId],
+        $exercisesToRadar,
+        $exercisesToRadarLabel,
+        $courseId,
+        $sessionId
+    );
 }
 
-$radars = $initialExercise->getRadarsFromUsers(
-    [$currentUserId],
-    $exercisesToRadar,
-    $exercisesToRadarLabel,
-    $courseId,
-    $sessionId
-);
 $nameTools = $plugin->get_lang('Positioning');
 
 $template = new Template($nameTools);

@@ -58,10 +58,10 @@
     <div v-if="isCurrentTeacher"
          class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2"
     >
-      <div v-if="intro" class="p-10 text-center">
+      <div v-if="intro.introText" class="p-10 text-center">
         <span v-html="intro.introText" />
 
-        <div v-if="createInSession">
+        <div v-if="intro.createInSession">
           <button
               v-if="introTool"
               class="mt-2 btn btn-info"
@@ -228,43 +228,13 @@ export default {
     });
 
     async function getIntro() {
-      // Searching for the CTool called 'course_homepage'.
-      let introTool = state.course.tools.find(element => element.name === 'course_homepage');
-
-      if (!isEmpty(introTool)) {
-        state.introTool = introTool;
-
-        // Search CToolIntro for this
-        const filter = {
-          courseTool: introTool.iid,
-          cid: courseId,
-        };
-
-        store.dispatch('ctoolintro/findAll', filter).then(response => {
-          if (!isEmpty(response)) {
-            // first item
-            state.intro = response[0];
-            translateHtml();
-          }
-        });
-
-        if (!isEmpty(sessionId)) {
-          state.createInSession = true;
-          const filter = {
-            courseTool: introTool.iid,
-            cid: courseId,
-            sid: sessionId,
-          };
-
-          store.dispatch('ctoolintro/findAll', filter).then(response => {
-            if (!isEmpty(response)) {
-              state.createInSession = false;
-              state.intro = response[0];
-              translateHtml();
-            }
-          });
-        }
-      }
+      axios.get('/course/'+courseId+'/getToolIntro').then(response => {
+        state.intro = response.data;
+        state.introTool = response.data.c_tool;
+        translateHtml();
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
 
     function addIntro(course, introTool) {
@@ -282,11 +252,13 @@ export default {
     function updateIntro(intro) {
       return router.push({
         name: 'ToolIntroUpdate',
-        params: {'id': intro['@id'] },
+        params: {'id': '/api/c_tool_intros/'+intro.iid },
         query: {
           'cid': courseId,
           'sid': sessionId,
-          'id': intro['@id']
+          'ctoolintroIid': intro.iid,
+          'ctoolId': intro.c_tool.iid,
+          'id': '/api/c_tool_intros/'+intro.iid,
         }
       });
     }

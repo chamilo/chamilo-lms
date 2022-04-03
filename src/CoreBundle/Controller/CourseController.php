@@ -8,18 +8,22 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
+use Chamilo\CoreBundle\Repository\ToolRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
@@ -568,6 +572,110 @@ class CourseController extends ToolBaseController
         return $this->render('@ChamiloCore/Course/welcome.html.twig', [
             'course' => $course,
         ]);
+    }
+
+    #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
+    public function getToolIntro(Request $request, Course $course): Response
+    {
+        $session = api_get_session_entity();
+        $em = Database::getManager();
+        $responseData = [];
+        $ctoolRepo = $em->getRepository(CTool::class);
+        $createInSession = false;
+        if ($session) {
+            $ctool = $ctoolRepo->findOneBy(['name' => 'course_homepage', 'course' => $course, 'session' => $session]);
+            if (!$ctool) {
+                $createInSession = true;
+                $ctool = $ctoolRepo->findOneBy(['name' => 'course_homepage', 'course' => $course]);
+            }
+        } else {
+            $ctool = $ctoolRepo->findOneBy(['name' => 'course_homepage', 'course' => $course]);
+        }
+
+        if ($ctool) {
+            $ctoolintroRepo = Container::getToolIntroRepository();
+            /** @var CToolIntro $ctoolintro */
+            $ctoolintro = $ctoolintroRepo->findOneBy(['courseTool' => $ctool]);
+            if ($ctoolintro) {
+                $responseData = [
+                    'iid' => $ctoolintro->getIid(),
+                    'introText' => $ctoolintro->getIntroText(),
+                    'createInSession' => $createInSession
+                ];
+            }
+            $responseData['c_tool'] = $ctool;
+        }
+
+        $json = $this->serializer->serialize(
+            $responseData,
+            'json',
+            [
+                'groups' => ['course:read', 'ctool:read', 'c_tool_intro:read', 'tool:read', 'cshortcut:read'],
+            ]
+        );
+
+        return new Response(
+            $json,
+            Response::HTTP_OK,
+            [
+                'Content-type' => 'application/json',
+            ]
+        );
+    }
+
+    #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
+    public function addToolIntro(Request $request, Course $course): Response
+    {
+        $em = Database::getManager();
+
+        $data = $request->getContent();
+        $data = json_decode($data);
+        $ctoolintroId = $data->iid;
+        $sid = $data->sid;
+        $session = api_get_session_entity($sid);
+
+        $ctool = $em->getRepository(CTool::class);
+        $check = $ctool->findOneBy(['name' => 'course_homepage', 'session' => $session]);
+        if (!$check) {
+            $toolRepo = $em->getRepository(Tool::class);
+            $toolEntity = $toolRepo->findOneBy(['name' => 'course_homepage']);
+            $courseTool = (new CTool())
+                ->setTool($toolEntity)
+                ->setName('course_homepage')
+                ->setCourse($course)
+                ->setPosition(1)
+                ->setVisibility(true)
+                ->setParent($course)
+                ->setCreator($course->getCreator())
+                ->setSession($session)
+                ->addCourseLink($course)
+            ;
+            $em->persist($courseTool);
+            $em->flush();
+            if ($courseTool && !empty($ctoolintroId)) {
+                $ctoolintroRepo = Container::getToolIntroRepository();
+                /** @var CToolIntro $ctoolintro */
+                $ctoolintro = $ctoolintroRepo->find($ctoolintroId);
+                $ctoolintro->setCourseTool($courseTool);
+                $ctoolintroRepo->update($ctoolintro);
+            }
+        }
+        $responseData = [];
+        $json = $this->serializer->serialize(
+            $responseData,
+            'json',
+            [
+                'groups' => ['course:read', 'ctool:read', 'tool:read', 'cshortcut:read'],
+            ]
+        );
+
+        return new Response(
+            $json,
+            Response::HTTP_OK,
+            [
+                'Content-type' => 'application/json',
+            ]
+        );
     }
 
     private function autoLaunch(): void

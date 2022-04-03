@@ -86,6 +86,15 @@ export default {
 
     function onCreated(item) {
       showNotification(t('Updated'));
+      axios.post('/course/'+cid+'/addToolIntro', {
+        iid: item.iid,
+        cid: route.query.cid,
+        sid: route.query.sid
+      }).then(response => {
+
+      }).catch(function (error) {
+        console.log(error);
+      });
       router.go(-1);
     }
 

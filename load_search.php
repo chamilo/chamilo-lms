@@ -556,6 +556,22 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
 $userForm->addHtml('</div></div></div>');
 
 $form->addButtonSave(get_lang('SaveDiagnosticChanges'), 'save');
+
+// Get list of session status
+if (api_get_configuration_value('allow_session_status')) {
+    $statusList = SessionManager::getStatusList();
+    $statusSelectList[0] = ' -- '.get_lang('All').' --';
+    foreach ($statusList as $nro => $name) {
+        $statusSelectList[$nro] = $name;
+    }
+    $form->addSelect(
+        'filter_status',
+        get_lang('SessionStatus'),
+        $statusSelectList,
+        ['id' => 'filter_status']
+    );
+}
+
 $form->addButtonSearch(get_lang('SearchSessions'), 'search');
 
 $extraFieldsToFilter = $extraField->get_all(['variable = ?' => 'temps_de_travail']);
@@ -700,6 +716,10 @@ if ($form->validate()) {
                     $count++;
                 }
             }
+        }
+
+        if (!empty($_REQUEST['filter_status'])) {
+            $filterToSend['filter_status'] = (int) $_REQUEST['filter_status'];
         }
     }
 
@@ -1002,13 +1022,13 @@ if (!empty($filterToSend)) {
 
     $filterToSend = json_encode($filterToSend);
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
-        $extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
+        $extraFieldListToString.'&_force_search=true&rows=20&page=1&origin=load_search&sidx=&sord=desc&filters2='.$filterToSend;
     if (isset($params['search_using_2'])) {
         $url .= '&lang='.$lang;
     }
 } else {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
-        $extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';
+        $extraFieldListToString.'&_force_search=true&rows=20&page=1&origin=load_search&sidx=&sord=desc';
 }
 
 // Autowidth

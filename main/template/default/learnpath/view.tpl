@@ -312,13 +312,19 @@
             LPViewUtils.setHeightLPToc();
         });
 
+        var externalContentItemTypes = ['link', 'sco', 'xapi'];
+
         $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
-            $('.lp-view-tabs').animate({opacity: 0}, 500);
+            if ($.inArray(olms.lms_item_type, externalContentItemTypes) != -1) {
+                $('.lp-view-tabs').animate({opacity: 0}, 500);
+            }
         });
 
         $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
             $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
-            $('.lp-view-tabs').animate({opacity: 1}, 500);
+            if ($.inArray(olms.lms_item_type, externalContentItemTypes) != -1) {
+                $('.lp-view-tabs').animate({opacity: 1}, 500);
+            }
         });
 
         loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
@@ -376,10 +382,7 @@
         {% endif %}
         {% if disable_js_in_lp_view == 0 %}
             $(function() {
-                var arr = ['link', 'sco'];
-                if ($.inArray(olms.lms_item_type, arr) == -1) {
-                    {{ frame_ready }}
-                }
+                {{ frame_ready }}
             });
         {% endif %}
 

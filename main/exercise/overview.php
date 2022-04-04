@@ -19,7 +19,7 @@ Exercise::cleanSessionVariables();
 
 $this_section = SECTION_COURSES;
 
-$js = '<script>'.api_get_language_translate_html().'</script>';
+$js = '<style>'.api_get_language_translate_html().'</style>';
 $htmlHeadXtra[] = $js;
 
 // Notice for unauthorized people.

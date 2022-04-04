@@ -157,6 +157,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                         'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
                     ]
                 );
+                $form->addRule('users', get_lang('ThisFieldIsRequired'), 'required');
             } else {
                 $form->addElement('hidden', 'hidden_user', $default['users'][0], ['id' => 'hidden_user']);
             }
@@ -175,8 +176,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         'content',
         get_lang('Message'),
         false,
-        false,
-        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250', 'style' => true]
+        true,
+        ['ToolbarSet' => 'Messages']
     );
 
     if (isset($_GET['re_id'])) {
@@ -218,6 +219,9 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         $default['content'] = '<p><br/></p>'.$forwardMessage.'<br />'.Security::filter_terms($message_reply_info['content']);
     }
 
+    $extrafield = new ExtraField('message');
+    $extraHtml = $extrafield->addElements($form);
+
     if (empty($group_id)) {
         $form->addLabel(
             '',
@@ -251,8 +255,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     $form->addLabel(
         '',
-        '<iframe 
-            frameborder="0" height="200" width="100%" scrolling="no" 
+        '<iframe
+            frameborder="0" height="200" width="100%" scrolling="no"
             src="'.api_get_path(WEB_CODE_PATH).'messages/record_audio.php"></iframe>'
     );
 
@@ -304,6 +308,16 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             $forwardId = isset($_POST['forward_id']) ? $_POST['forward_id'] : false;
 
             if (is_array($user_list) && count($user_list) > 0) {
+                $extraParams = [];
+
+                foreach ($form->exportValues() as $key => $value) {
+                    if (!str_contains($key, 'extra_')) {
+                        continue;
+                    }
+
+                    $extraParams[$key] = $value;
+                }
+
                 // All is well, send the message
                 foreach ($user_list as $userId) {
                     $res = MessageManager::send_message(
@@ -320,7 +334,10 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                         false,
                         $forwardId,
                         [],
-                        true
+                        true,
+                        false,
+                        0,
+                        $extraParams
                     );
 
                     if ($res) {
@@ -346,6 +363,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         $form->setConstants(['sec_token' => $token]);
         $html .= $form->returnForm();
     }
+
+    $html .= '<script>$(function () { '.$extraHtml['jquery_ready_content'].' });</script>';
 
     return $html;
 }
@@ -449,10 +468,10 @@ if (!isset($_POST['compose'])) {
             if (isset($_POST['hidden_user'])) {
                 $default['users'] = [$_POST['hidden_user']];
             }
-            $social_right_content .= manageForm($default, null, null, $tpl);
-        } else {
+        } /*else {
             $social_right_content .= Display::return_message(get_lang('ErrorSendingMessage'), 'error');
-        }
+        }*/
+        $social_right_content .= manageForm($default, null, null, $tpl);
     }
 }
 

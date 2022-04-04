@@ -2887,13 +2887,11 @@ HTML;
         return $content;
     }
 
-    /**
-     * @param string $frameName
-     *
-     * @return string
-     */
-    public static function getFrameReadyBlock($frameName)
-    {
+    public static function getFrameReadyBlock(
+        string $frameName,
+        string $itemType = '',
+        string $jsConditionalFunction = 'function () { return false; }'
+    ): string {
         $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
 
         $videoFeatures = [
@@ -2934,7 +2932,7 @@ HTML;
         $translateHtml = '';
         $translate = api_get_configuration_value('translate_html');
         if ($translate) {
-            $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+            $translateHtml = '{type:"stylesheet", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
         $customCss = api_get_visual_theme();
@@ -2946,6 +2944,24 @@ HTML;
 
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
+
+        var showSpinner = false;
+
+        if ("undefined" === typeof olms) {
+            showSpinner = true;
+        } else {
+            if (olms.lms_item_type && $.inArray(olms.lms_item_type, ["link", "sco"]) == -1) {
+                showSpinner = true;
+            }
+        }
+
+        if (showSpinner) {
+            var $iframe = $("'.$frameName.'");
+            var $iframeSpinner = $("<span aria-hidden=\"true\"  id=\"iframe-spinner\" class=\"fa fa-spinner fa-spin fa-3x\"></span>");
+
+            $iframe.hide().parent().append($iframeSpinner);
+        }
+
         $.frameReady(function() {
              $(function () {
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
@@ -2956,6 +2972,12 @@ HTML;
                     },
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
+
+                window.top.document.querySelectorAll("'.$frameName.'")
+                    .forEach(function (iframe) {
+                        iframe.parentNode.querySelector(".fa").remove();
+                        iframe.style.display = "block";
+                    });
             });
         },
         "'.$frameName.'",
@@ -2969,8 +2991,7 @@ HTML;
                     {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
                     {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
                     '.$videoPluginFiles.'
-                ]},
-                '.$translateHtml.'
+                ]}
             ]},
             '.$videoPluginCssFiles.'
             {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
@@ -2980,7 +3001,8 @@ HTML;
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
             '.$fileCustomCssMedia.',
-        ]);';
+            '.$translateHtml.',
+        ], '.$jsConditionalFunction.');';
 
         return $frameReady;
     }

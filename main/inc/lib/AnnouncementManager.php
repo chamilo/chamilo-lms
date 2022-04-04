@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 
 /**
@@ -2239,5 +2240,41 @@ class AnnouncementManager
         $result = Database::query($sql);
 
         return Database::num_rows($result);
+    }
+
+    public static function createEvent(
+        int $announcementId,
+        string $startDate,
+        string $endDate,
+        array $choosenUsers = [],
+        array $reminders = []
+    ): ?CCalendarEvent {
+        $em = Database::getManager();
+        $announcement = $em->find('ChamiloCourseBundle:CAnnouncement', $announcementId);
+        $agenda = new Agenda('course');
+
+        $eventId = $agenda->addEvent(
+            $startDate,
+            $endDate,
+            '',
+            $announcement->getTitle(),
+            $announcement->getContent(),
+            $choosenUsers,
+            false,
+            null,
+            [],
+            [],
+            null,
+            '',
+            [],
+            false,
+            $reminders
+        );
+
+        if ($eventId) {
+            return $em->find('ChamiloCourseBundle:CCalendarEvent', $eventId);
+        }
+
+        return null;
     }
 }

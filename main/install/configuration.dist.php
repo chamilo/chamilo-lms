@@ -385,6 +385,30 @@ $_configuration['agenda_colors'] = [
     'student_publication' => '#FF8C00'
 ];
 */
+// Display sessions ocuppations in personal agenda
+//$_configuration['personal_calendar_show_sessions_occupation'] = false;
+// It allows to send invitations to friends for an agenda event. Requires DB changes:
+/*
+CREATE TABLE agenda_event_invitee (id BIGINT AUTO_INCREMENT NOT NULL, invitation_id BIGINT DEFAULT NULL, user_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_4F5757FEA35D7AF0 (invitation_id), INDEX IDX_4F5757FEA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE agenda_event_invitation (id BIGINT AUTO_INCREMENT NOT NULL, creator_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_52A2D5E161220EA6 (creator_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE agenda_event_invitee ADD CONSTRAINT FK_4F5757FEA35D7AF0 FOREIGN KEY (invitation_id) REFERENCES agenda_event_invitation (id) ON DELETE CASCADE;
+ALTER TABLE agenda_event_invitee ADD CONSTRAINT FK_4F5757FEA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL;
+ALTER TABLE agenda_event_invitation ADD CONSTRAINT FK_52A2D5E161220EA6 FOREIGN KEY (creator_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE personal_agenda ADD agenda_event_invitation_id BIGINT DEFAULT NULL, ADD collective TINYINT(1) NOT NULL;
+ALTER TABLE personal_agenda ADD CONSTRAINT FK_D8612460AF68C6B FOREIGN KEY (agenda_event_invitation_id) REFERENCES agenda_event_invitation (id) ON DELETE CASCADE;
+CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invitation_id);
+*/
+// Then add the "@" symbol to AgendaEventInvitation and AgendaEventInvitee classes in the ORM\Entity() line.
+// Then uncomment the "use EventCollectiveTrait;" line in the PersonalAgenda class.
+//$_configuration['agenda_collective_invitations'] = false;
+// Enable reminders for agenda events. Requires database changes:
+/*
+ CREATE TABLE agenda_reminder (id BIGINT AUTO_INCREMENT NOT NULL, type VARCHAR(255) NOT NULL, event_id INT NOT NULL, date_interval VARCHAR(255) NOT NULL COMMENT '(DC2Type:dateinterval)', sent TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+*/
+// Then add the "@" symbol to AgendaReminder class in the ORM\Entity() line.
+//$_configuration['agenda_reminders'] = false;
+// Sets the sender ID when using the cron main/cron/agenda_reminders.php to send reminders in course events.
+//$_configuration['agenda_reminders_sender_id'] = 0;
 // ------
 //
 // Save some tool titles with HTML editor. Require DB changes:
@@ -557,6 +581,14 @@ $_configuration['send_all_emails_to'] = [
         1 => [17] // project_id = 1, STUDENT_BOSS = 17
     ]
 ];*/
+
+// Allow additional data (exercise and learningpath) in the ticket
+// - Required DB change
+// ALTER TABLE ticket_ticket ADD exercise_id INT DEFAULT NULL AFTER course_id;
+// ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EB5B2A0D6285C987 FOREIGN KEY (exercise_id) REFERENCES c_quiz (iid);
+// ALTER TABLE ticket_ticket ADD lp_id INT DEFAULT NULL AFTER exercise_id;
+// ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EB5B2A0D6285C231 FOREIGN KEY (lp_id) REFERENCES c_lp (iid);
+// $_configuration['ticket_lp_quiz_info_add'] = false;
 
 // Exercises configuration settings
 // Send only quiz answer notifications to course coaches and not general coach
@@ -829,6 +861,9 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 */
 // 4. Set "allow_skill_rel_items" to true
 //$_configuration['allow_skill_rel_items'] = false;
+
+// Allows to send a notification when a user has achieved a skill
+//$_configuration['badge_assignation_notification'] = false;
 
 // Generate random login when importing users
 //$_configuration['generate_random_login'] = false;
@@ -1303,6 +1338,329 @@ $_configuration['userportal_session_settings']['status'] = [
 // Default items per page in main/mySpace/users.php
 // $_configuration['my_space_users_items_per_page'] = 10;
 
+// Add teachers column in course list.
+// $_configuration['add_teachers_in_course_list'] = false;
+
+// Allow teachers and admins to see students as friends on social network
+// $_configuration['social_make_teachers_friend_all'] = false;
+
+// Prevent the use of images copy-paste as base64 in the editor to avoid
+// filling the database with images
+//$_configuration['ck_editor_block_image_copy_paste'] = false;
+
+// Shows a link to the "my lps" page in the /index.php and /user_portal.php page.
+// It also enables the main/lp/my_list.php page.
+//$_configuration['show_my_lps_page'] = false;
+
+// Disables access to the main/lp/my_list.php page
+//$_configuration['disable_my_lps_page'] = false;
+
+// When exercise is finished send results by email to users, depending the settings below:
+// Requires a new Exercise Extra field type called with variable = "notifications".
+/*$_configuration['exercise_finished_notification_settings'] = [
+    'notification_teacher' => [ // Notification label
+        'for teacher' => [ // for teacher
+            'send_notification_if_user_in_extra_field' => [
+                'company_variable' => ['Company A', 'Company B'],
+            ],
+            'email' => 'teacher1@example.com,teacher2@example.com', // multiple emails allowed
+            'attempts' => [
+                [
+                    'is_block_by_percentage' => true,
+                    'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
+                    'content' => 'MailAttemptPassed', // exercise extra field
+                    'content_default' => 'Hi, ((user_lastname)) ', // value if MailAttemptPassed is empty
+                    'add_pdf' => 'PdfExerciseExtraField', // exercise extra field
+                ],
+                [
+                    'status' => 'failed',
+                    'content' => 'MailAttemptFailed',
+                ],
+                [
+                    'status' => 'all',
+                    'content' => 'MailAttemptAll',
+                ],
+                [
+                    'status' => 'all',
+                    'attempt' => 1,
+                    'content' => 'MailAttemptAttempt1', // exercise extra field,
+                ],
+                [
+                    'status' => 'failed',
+                    'attempt' => 2,
+                    'content' => 'MailAttemptFailed2', // exercise extra field,
+                    // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
+                    'post_actions' => [
+                        'subscribe_student_to_courses' => ['SECOND_ATTEMPT'],
+                    ],
+                ],
+            ],
+        ],
+        'for admin' => [
+            'email' => 'admin@example.com',
+            'attempts' => [
+                [
+                    'status' => 'failed',
+                    'content' => 'MailAttemptFailed',
+                ],
+            ],
+        ],
+    ],
+    'notification_coach' => [ // Label
+        'for coach ' => [ // for teacher
+            'email' => 'coach@example.com',
+            'attempts' => [
+                [
+                    'status' => 'passed',
+                    'content' => 'MailAttemptPassed', // exercise extra field,
+                ],
+                [
+                    'status' => 'failed',
+                    'content' => 'MailAttemptFailed', // exercise extra field,
+                ],
+            ],
+        ],
+    ],
+];*/
+
+// After a user updates his profile, send notifications.
+/*$_configuration['user_notification_settings'] = [
+    'notification1' => [ // Notification label
+        'email' => 'admin1@example.com,admin2@example.com', // multiple emails allowed
+        'sender_email' => 'sender@example.com',
+        //'if_extra_field_changes' => ['variable1', 'variable2'],
+        'if_field_changes' => ['phone', 'email'],
+        'subject' => 'User profile update',
+        'content' => '/mail/user_profile_update.dist.tpl',
+    ],
+];*/
+
+// Shows a marker if the course was shared in other portals.
+//$_configuration['multiple_access_url_show_shared_course_marker'] = false;
+
+// Add option to copy a session with its course-session content BT#17832
+//$_configuration['duplicate_specific_session_content_on_session_copy'] = false;
+
+// Allow add usergroups to a LP BT#17854
+//CREATE TABLE c_lp_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, lp_id INT NOT NULL, usergroup_id INT NOT NULL, c_id INT NOT NULL, session_id INT, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+//CREATE TABLE c_lp_category_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, lp_category_id INT NOT NULL, usergroup_id INT NOT NULL, c_id INT NOT NULL, session_id INT, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+//$_configuration['allow_lp_subscription_to_usergroups'] = false;
+
+// Gradebook student pdf export settings
+/*$_configuration['gradebook_pdf_export_settings'] = [
+    'hide_score_weight' => true,
+    'hide_feedback_textarea' => true,
+];*/
+
+// Use exercise score in platform settings in gradebook total rows/columns.
+//$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
+
+// Use exercise score in platform settings in gradebook total rows/columns.
+//$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
+
+// Show a link on the results page to download an answers report
+//$_configuration['quiz_results_answers_report'] = false;
+
+// Hide the breadcrumb navigation (for example if you don't want users to go
+// sniffing around a specific course). Should be combined with hiding the menu
+//$_configuration['breadcrumb_hide'] = false;
+
+// Hide the sidebar completely to avoid users navigating away.
+// Warning: this currently leaves a weird empty space where the sidebar should
+// be. We recommend using this only in very specific circumstances.
+//$_configuration['sidebar_hide'] = false;
+
+// Block question categories BT#17789
+//ALTER TABLE track_e_exercises ADD COLUMN blocked_categories LONGTEXT;
+// Requires an exercise extra field "block_category" type checkbox (Yes)
+//$_configuration['block_category_questions'] = false;
+
+// Make questions mandatory selectable when using question select type = 5 (category-random)
+//ALTER TABLE c_quiz_question_rel_category ADD COLUMN mandatory INT DEFAULT 0;
+//$_configuration['allow_mandatory_question_in_category'] = false;
+
+// Discard orphan questions from course copies/backups
+//$_configuration['quiz_discard_orphan_in_course_export'] = false;
+
+// Resource sequence: Validate course in the same session.
+//$_configuration['course_sequence_valid_only_in_same_session'] = false;
+
+// Allow time per question. BT#17791
+// Requires a question text extra field called "time", value in seconds.
+// ALTER TABLE track_e_attempt ADD COLUMN seconds_spent INT;
+//$_configuration['allow_time_per_question'] = true;
+
+// Disable change user visibility tool icon.
+//$_configuration['disable_change_user_visibility_for_public_courses'] = true;
+
+// Add another layer of security by checking if the user is disabled
+// at every page load (might generate considerable extra DB load)
+// $_configuration['security_block_inactive_users_immediately'] = false;
+
+// Allow all office suite documents to be uploaded in the "My files" section of the social network
+//$_configuration['social_myfiles_office_files_upload_allowed'] = false;
+
+// Enable a "Previous question" button in surveys
+// $_configuration['survey_backwards_enable'] = false;
+
+// All courses with category MY_CATEGORY will be used as course templates BT#18083
+// $_configuration['course_category_code_to_use_as_model'] = 'MY_CATEGORY';
+
+// Shows the best exercise score attempt for a student in the reports.
+/*$_configuration['add_exercise_best_attempt_in_report'] = [
+    'courses' => [
+        'ABC' => [88, 89], // Where ABC is the course code and 88 is the exercise id
+    ]
+];*/
+
+// For a student: Shows only the list of teachers from my courses in the Chamilo inbox.
+// $_configuration['send_only_messages_to_teachers'] = true;
+
+// Allows add tag to filter messages in inbox. Requires add an tag type extrafield for messages.
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (22, 10, 'tags', 'Tags', '', 0, 1,	0, 1, 1, NOW());
+*/
+//$_configuration['enable_message_tags'] = false;
+
+// Survey duplicate: Order survey questions by student name
+// $_configuration['survey_duplicate_order_by_name'] = true;
+
+// Allow gradebook_comment
+/*
+CREATE TABLE gradebook_comment (id BIGINT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, gradebook_id INT DEFAULT NULL, comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_C3B70763A76ED395 (user_id), INDEX IDX_C3B70763AD3ED51C (gradebook_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gradebook_id) REFERENCES gradebook_category (id) ON DELETE CASCADE;
+*/
+// $_configuration['allow_gradebook_comments'] = true;
+
+// Allow anon users to send emails to the platform admin.
+// $_configuration['allow_email_editor_for_anonymous'] = true;
+
+// Add certificate footer. Add your template main/template/default/export/pdf_certificate_footer.tpl
+// $_configuration['add_certificate_pdf_footer'] = true;
+
+// Shows a popup with the list of answered/unanswered questions before sending a test.
+// $_configuration['quiz_check_all_answers_before_end_test'] = true;
+
+// Custom cloud link URLS, this requires enable_add_file_link = true
+// $_configuration['documents_custom_cloud_link_list'] = ['links' => ['example.com', 'example2.com']];
+
+// Shows exercise session attempts in the base course.
+// $_configuration['show_exercise_session_attempts_in_base_course'] = false;
+
+// Shows exercise attempts in sessions where user is general coach
+// $_configuration['show_exercise_attempts_in_all_user_sessions'] = true;
+
+// Allow coach users to always edit announcements inside active/past sessions.
+// $_configuration['allow_coach_to_edit_announcements'] = false;
+
+// Show invisible LP in the course home for students. BT#17744
+//$_configuration['show_invisible_lp_in_course_home'] = true;
+
+// Show start/end date in LP list for students.
+//$_configuration['lp_start_and_end_date_visible_in_student_view'] = true;
+
+// Show all student publications (from course and from all sessions) in the work/pending.php page if true. BT#18352
+//$_configuration['assignment_base_course_teacher_access_to_all_session'] = true;
+
+// Show a link to the work/pending.php page in my courses (user_portal)
+//$_configuration['my_courses_show_pending_work'] = true;
+
+// Show exercise report from all courses in a new page: exercise/pending.php
+//$_configuration['my_courses_show_pending_exercise_attempts'] = true;
+
+// Disables the following BBB plugin settings in the plugin form and use them in priority.
+/*$_configuration['plugin_settings'] = [
+    'bbb' => [
+        'tool_enable' => 'true', // string value
+        'host' => 'https://www.example.com',
+        'salt' => 'abc123'
+    ]
+];*/
+
+// Enable X-Sendfile headers on forced download files going through document/download.php
+//$_configuration['enable_x_sendfile_headers'] = false;
+
+// Extra settings for the agenda (FullCalendar v3)
+/*$_configuration['fullcalendar_settings'] = [
+    'settings' => [
+        'businessHours' => [
+            // days of week. an array of zero-based day of week integers (0=Sunday)
+            'dow' => [0, 1, 2, 3, 4], // Sunday - Thursday
+            'start'  => '10:00',
+            'end' => '18:00',
+        ],
+        'firstDay' => 0, // 0 = Sunday, 1 = Monday
+    ]
+];*/
+
+// Allow session admin access to main/admin/user_update_import.php and main/admin/user_export.php
+//$_configuration['allow_session_admin_extra_access'] = true;
+
+// Replace the Chamilo logo URL.
+//$_configuration['platform_logo_url'] = 'https://chamilo.org';
+
+// Hides the session graph in the main/auth/my_progress.php page.
+//$_configuration['hide_session_graph_in_my_progress'] = true;
+
+// Shows only users from active sessions in tracking.
+//$_configuration['show_users_in_active_sessions_in_tracking'] = true;
+
+// Allows a quick question description edition with a selected image from a popup.
+//$_configuration['allow_quick_question_description_popup'] = true;
+
+// Allows the use of the external id instead of the internal id.
+//$_configuration['use_career_external_id_as_identifier_in_diagrams'] = true;
+
+// Add a career legend below the diagram, a variable will be called
+// get_lang('CareerDiagramLegend') and printed below a diagram
+// $_configuration['career_diagram_legend'] = true;
+
+// If true then a variable will be called get_lang('CareerDiagramDisclaimer') and printed below a diagram;
+//$_configuration['career_diagram_disclaimer'] = true;
+
+// Disable webservices.
+//$_configuration['disable_webservices'] = true;
+
+// Ask user to renew password at first login.
+// Requires a user checkbox extra field called "ask_new_password".
+//$_configuration['force_renew_password_at_first_login'] = true;
+
+// If the user is blocked with not allowed (red message), then the breadcrumb is hidden.
+//$_configuration['hide_breadcrumb_if_not_allowed'] = true;
+
+// Configuration setting to disable course code field in course creation form.
+//$_configuration['course_creation_form_hide_course_code'] = false;
+
+// Configuration setting to make required course category in course creation form.
+//$_configuration['course_creation_form_set_course_category_mandatory'] = false;
+
+// Show option to set course announcement date
+// Allow sending notifications at a specific date. Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, field_order, visible_to_self, visible_to_others, changeable, filter, created_at)
+VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a specific date', 0, 1, 0, 0, 0, NOW()),
+       (21, 6, 'date_to_send_notification', 'Date to send notification', 0, 1, 0, 0, 0, NOW()),
+       (21, 13, 'send_to_users_in_session', 'Send to users in session', 0, 1, 0, 0, 0, NOW());
+*/
+//$_configuration['course_announcement_scheduled_by_date'] = false;
+
+// Enable upload of large SCORM files from FTP by uploading them to app/cache/
+// and showing them in the SCORM upload form
+//$_configuration['scorm_upload_from_cache'] = false;
+
+// Enable image upload as file when doing a copy in the content or a drag and drop.
+//$_configuration['enable_uploadimage_editor'] = false;
+
+// Ckeditor settings.
+//$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true, 'image_responsive' => true]];
+
+// Overwrites the app/config/auth.conf.php settings
+//$_configuration['extldap_config'] = ['host' => '', 'port' => ''];
+
+// Option to hide the teachers info on courses about info page.
+//$_configuration['course_about_teacher_name_hide'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email
@@ -1310,3 +1668,19 @@ $_configuration['userportal_session_settings']['status'] = [
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
+
+//Allows to add increment in minutes to the date range component timepicker, example: 5,10,30 minutes
+//$_configuration['timepicker_increment'] = 5;
+
+// Allow multiple languages to a course
+// as a selection bar for languages used in the course.
+// Add another field "multilingual" to be used separately as a true/false
+// field to represent the fact that the course can have content in multiple
+// languages (without precision).
+// Requires DB change:
+/*
+INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `display_text`, `default_value`, `field_order`, `visible_to_self`, `visible_to_others`, `changeable`, `filter`, `created_at`) VALUES
+(2,     5,      'multiple_language',    'Multiple Language', '',        0,      1,      0,      1,      0,      NOW());
+*/
+//$_configuration['allow_course_multiple_languages'] = false;
+

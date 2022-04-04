@@ -53,13 +53,13 @@ class TicketManager
         $order = Database::escape_string($order);
         $projectId = (int) $projectId;
 
-        $sql = "SELECT 
-                    category.*, 
+        $sql = "SELECT
+                    category.*,
                     category.id category_id,
-                    project.other_area, 
+                    project.other_area,
                     project.email
-                FROM 
-                $table_support_category category 
+                FROM
+                $table_support_category category
                 INNER JOIN $table_support_project project
                 ON project.id = category.project_id
                 WHERE project.id  = $projectId
@@ -220,7 +220,7 @@ class TicketManager
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
         $userId = (int) $userId;
         $categoryId = (int) $categoryId;
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE category_id = $categoryId AND user_id = $userId";
         $result = Database::query($sql);
 
@@ -376,6 +376,14 @@ class TicketManager
             $params['lp_id'] = $lpId;
         }
 
+        if (!empty($exerciseId)) {
+            $params['exercise_id'] = $exerciseId;
+        }
+
+        if (!empty($lpId)) {
+            $params['lp_id'] = $lpId;
+        }
+
         if (!empty($course_id)) {
             $params['course_id'] = $course_id;
         }
@@ -383,6 +391,7 @@ class TicketManager
         if (!empty($sessionId)) {
             $params['session_id'] = $sessionId;
         }
+
         $ticketId = Database::insert($table_support_tickets, $params);
 
         if ($ticketId) {
@@ -513,7 +522,6 @@ class TicketManager
                 $message = '<h2>'.get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
 
                 if (api_get_setting('ticket_warn_admin_no_user_in_category') === 'true') {
-                    $usersInCategory = self::getUsersInCategory($category_id);
                     if (empty($usersInCategory)) {
                         $subject = sprintf(
                             get_lang('WarningCategoryXDoesntHaveUsers'),
@@ -681,7 +689,7 @@ class TicketManager
         if ($messageId) {
             // update_total_message
             $sql = "UPDATE $table_support_tickets
-                    SET 
+                    SET
                         sys_lastedit_user_id = $userId,
                         sys_lastedit_datetime = '$now',
                         total_messages = (
@@ -838,26 +846,26 @@ class TicketManager
                 $column = 'ticket_id';
         }
 
-        $sql = "SELECT DISTINCT 
+        $sql = "SELECT DISTINCT
                 ticket.*,
                 ticket.id ticket_id,
                 status.name AS status_name,
                 ticket.start_date,
                 ticket.sys_lastedit_datetime,
                 cat.name AS category_name,
-                priority.name AS priority_name,                           
+                priority.name AS priority_name,
                 ticket.total_messages AS total_messages,
                 ticket.message AS message,
                 ticket.subject AS subject,
                 ticket.assigned_last_user
-            FROM $table_support_tickets ticket 
+            FROM $table_support_tickets ticket
             INNER JOIN $table_support_category cat
             ON (cat.id = ticket.category_id)
             INNER JOIN $table_support_priority priority
             ON (ticket.priority_id = priority.id)
             INNER JOIN $table_support_status status
             ON (ticket.status_id = status.id)
-            WHERE 1=1                                
+            WHERE 1=1
         ";
 
         $projectId = (int) $_GET['project_id'];
@@ -881,7 +889,7 @@ class TicketManager
                       cat.name LIKE '%$keyword%' OR
                       status.name LIKE '%$keyword%' OR
                       priority.name LIKE '%$keyword%' OR
-                      ticket.personal_email LIKE '%$keyword%'                          
+                      ticket.personal_email LIKE '%$keyword%'
             )";
         }
 
@@ -919,11 +927,11 @@ class TicketManager
 
         if ($keyword_course != '') {
             $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql .= " AND ticket.course_id IN ( 
+            $sql .= " AND ticket.course_id IN (
                      SELECT id FROM $course_table
                      WHERE (
-                        title LIKE '%$keyword_course%' OR 
-                        code LIKE '%$keyword_course%' OR 
+                        title LIKE '%$keyword_course%' OR
+                        code LIKE '%$keyword_course%' OR
                         visual_code LIKE '%$keyword_course%'
                      )
             )";
@@ -1102,12 +1110,12 @@ class TicketManager
         }
         if ($keyword_course != '') {
             $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql .= " AND ticket.course_id IN (  
+            $sql .= " AND ticket.course_id IN (
                         SELECT id
                         FROM $course_table
                         WHERE (
-                            title LIKE '%$keyword_course%' OR 
-                            code LIKE '%$keyword_course%' OR 
+                            title LIKE '%$keyword_course%' OR
+                            code LIKE '%$keyword_course%' OR
                             visual_code LIKE '%$keyword_course%'
                         )
                    ) ";
@@ -1170,9 +1178,9 @@ class TicketManager
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $sql = "SELECT
-                    ticket.*, 
+                    ticket.*,
                     cat.name,
-                    status.name as status, 
+                    status.name as status,
                     priority.name priority
                 FROM $table_support_tickets ticket
                 INNER JOIN $table_support_category cat
@@ -1254,8 +1262,8 @@ class TicketManager
                 $ticket['ticket'] = $row;
             }
 
-            $sql = "SELECT *, message.id as message_id 
-                    FROM $table_support_messages message 
+            $sql = "SELECT *, message.id as message_id
+                    FROM $table_support_messages message
                     INNER JOIN $table_main_user user
                     ON (message.sys_insert_user_id = user.user_id)
                     WHERE
@@ -1355,7 +1363,7 @@ class TicketManager
         $titleEmail = "[$ticketCode] $title";
 
         // Content
-        $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticketId;
+        $href = api_get_path(WEB_CODE_PATH).'ticket/ticket_details.php?ticket_id='.$ticketId;
         $ticketUrl = Display::url($ticketCode, $href);
         $messageEmail = get_lang('TicketNum').": $ticketUrl <br />";
         $messageEmail .= get_lang('Status').": $status <br />";
@@ -2496,5 +2504,48 @@ class TicketManager
         }
 
         return [];
+    }
+
+    public static function notifiyTicketUpdated(int $ticketId, int $categoryId, string $message)
+    {
+        $subject = get_lang('TicketUpdated');
+
+        TicketManager::sendNotification($ticketId, $subject, $message);
+
+        if (empty($categoryId)) {
+            return;
+        }
+
+        $usersInCategory = self::getUsersInCategory($categoryId);
+
+        if (!empty($usersInCategory)) {
+            foreach ($usersInCategory as $data) {
+                if ($data['user_id']) {
+                    self::sendNotification($ticketId, $subject, $message, $data['user_id']);
+                }
+            }
+
+            return;
+        }
+
+        if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
+            $categoryInfo = self::getCategory($categoryId);
+
+            $warningNoUsers = sprintf(
+                get_lang('WarningCategoryXDoesntHaveUsers'),
+                $categoryInfo['name']
+            );
+
+            $message = Display::return_message($warningNoUsers, 'warning')
+                .$message;
+
+            $adminsToNotify = UserManager::get_all_administrators();
+
+            foreach ($adminsToNotify as $userId => $data) {
+                if ($data['active']) {
+                    self::sendNotification($ticketId, $subject, $message, $userId);
+                }
+            }
+        }
     }
 }

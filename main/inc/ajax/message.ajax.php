@@ -150,6 +150,46 @@ switch ($action) {
         header('Content-type:application/json');
         echo json_encode($return);
         break;
+    case 'add_tags':
+        $idList = $_POST['id'] ?? [];
+        $tagList = $_POST['tags'] ?? [];
+
+        if (false === api_get_configuration_value('enable_message_tags')
+            || api_is_anonymous()
+            || api_get_setting('allow_message_tool') !== 'true'
+            || empty($idList) || empty($tagList)
+        ) {
+            break;
+        }
+
+        $em = Database::getManager();
+        $userId = api_get_user_id();
+
+        $extraFieldValues = new ExtraFieldValue('message');
+
+        foreach ($idList as $messageId) {
+            $messageInfo = MessageManager::get_message_by_id($messageId);
+
+            if ($messageInfo['msg_status'] == MESSAGE_STATUS_OUTBOX
+                && $messageInfo['user_sender_id'] != $userId
+            ) {
+                continue;
+            }
+
+            if (in_array($messageInfo['msg_status'], [MESSAGE_STATUS_UNREAD, MESSAGE_STATUS_NEW])
+                && $messageInfo['user_receiver_id'] != $userId
+            ) {
+                continue;
+            }
+
+            $extraParams = [
+                'item_id' => $messageInfo['id'],
+                'extra_tags' => $tagList,
+            ];
+
+            $extraFieldValues->saveFieldValues($extraParams, false, false, ['tags'], [], false, false);
+        }
+        break;
     default:
         echo '';
 }

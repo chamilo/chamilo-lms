@@ -114,7 +114,7 @@ switch ($action) {
             }
 
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
-                    FROM $tbl_announcement announcement 
+                    FROM $tbl_announcement announcement
                     INNER JOIN $tbl_item_property itemproperty
                     ON (announcement.c_id = itemproperty.c_id)
                     WHERE
@@ -526,22 +526,22 @@ switch ($action) {
         $form->addHtml("
             <script>
                 $(function () {
-                    $('#announcement_preview').on('click', function() {  
+                    $('#announcement_preview').on('click', function() {
                         var users = [];
                         $('#users_to option').each(function() {
-                            users.push($(this).val());                            
+                            users.push($(this).val());
                         });
-                        
+
                         var form = $('#announcement').serialize();
                         $.ajax({
                             type: 'POST',
                             dataType: 'json',
                             url: '".$ajaxUrl."',
-                            data: {users : JSON.stringify(users), form: form},  
+                            data: {users : JSON.stringify(users), form: form},
                             beforeSend: function() {
                                 $('#announcement_preview_result').html('<i class=\"fa fa-spinner\"></i>');
                                 $('#send_button').hide();
-                            },  
+                            },
                             success: function(result) {
                                 var resultToString = '';
                                 $.each(result, function(index, value) {
@@ -551,7 +551,7 @@ switch ($action) {
                                     '".addslashes(get_lang('AnnouncementWillBeSentTo'))."<br/>' + resultToString
                                 );
                                 $('#announcement_preview_result').show();
-                                $('#send_button').show();                                
+                                $('#send_button').show();
                             }
                         });
                     });
@@ -628,6 +628,27 @@ switch ($action) {
         $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('SendAnnouncementCopyToMyself'));
         $defaults['send_me_a_copy_by_email'] = true;
 
+        $form->addButtonAdvancedSettings(
+            'add_event',
+            get_lang('AddEventInCourseCalendar')
+        );
+        $form->addHtml('<div id="add_event_options" style="display:none;">');
+        $form->addDateTimePicker('event_date_start', get_lang('DateStart'));
+        $form->addDateTimePicker('event_date_end', get_lang('DateEnd'));
+
+        if (true === api_get_configuration_value('agenda_reminders')) {
+            $form->addHtml('<hr><div id="notification_list"></div>');
+            $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+            $form->addHtml('<hr>');
+
+            $htmlHeadXtra[] = '<script>$(function () {'
+                .Agenda::getJsForReminders('#announcement_add_notification')
+                .'});</script>'
+            ;
+        }
+
+        $form->addHtml('</div>');
+
         if ($showSubmitButton) {
             $form->addLabel('',
                 Display::url(
@@ -648,6 +669,11 @@ switch ($action) {
             $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
             $sendMeCopy = isset($data['send_me_a_copy_by_email']) ? true : false;
 
+            $notificationCount = $data['notification_count'] ?? [];
+            $notificationPeriod = $data['notification_period'] ?? [];
+
+            $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
+
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
                 if (Security::check_token('post')) {
@@ -663,6 +689,16 @@ switch ($action) {
                         $file_comment,
                         $sendToUsersInSession
                     );
+
+                    if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
+                        AnnouncementManager::createEvent(
+                            $id,
+                            $data['event_date_start'],
+                            $data['event_date_end'],
+                            empty($data['users']) ? ['everyone'] : $data['users'],
+                            $reminders
+                        );
+                    }
 
                     // Send mail
                     $messageSentTo = [];
@@ -722,6 +758,16 @@ switch ($action) {
                     }
 
                     if ($insert_id) {
+                        if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
+                            AnnouncementManager::createEvent(
+                                $insert_id,
+                                $data['event_date_start'],
+                                $data['event_date_end'],
+                                empty($data['users']) ? ['everyone'] : $data['users'],
+                                $reminders
+                            );
+                        }
+
                         Display::addFlash(
                             Display::return_message(
                                 get_lang('AnnouncementAdded'),

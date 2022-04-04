@@ -163,6 +163,13 @@ class ExtraField extends Model
                 break;
             case 'lp_view':
                 $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
+                break;
+            case 'course_announcement':
+                $this->extraFieldType = EntityExtraField::COURSE_ANNOUNCEMENT;
+                break;
+            case 'message':
+                $this->extraFieldType = EntityExtraField::MESSAGE_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -194,6 +201,8 @@ class ExtraField extends Model
             'exercise',
             'track_exercise',
             'lp_view',
+            'course_announcement',
+            'message',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -728,6 +737,17 @@ class ExtraField extends Model
     }
 
     /**
+     * Gets the set of values of an extra_field searching for the variable name.
+     *
+     * Example:
+     * <code>
+     * <?php
+     * $extraField = new ExtraField('lp_item');
+     * $extraFieldArray =  $extraField->get_handler_field_info_by_field_variable('authorlpitem');
+     * echo "<pre>".var_export($extraFieldArray,true)."</pre>";
+     * ?>
+     * </code>
+     *
      * @param string $variable
      *
      * @return array|bool
@@ -743,10 +763,7 @@ class ExtraField extends Model
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row) {
-                $row['display_text'] = $this->translateDisplayName(
-                    $row['variable'],
-                    $row['display_text']
-                );
+                $row['display_text'] = self::translateDisplayName($row['variable'], $row['display_text']);
 
                 // All the options of the field
                 $sql = "SELECT * FROM $this->table_field_options
@@ -1063,16 +1080,16 @@ class ExtraField extends Model
     }
 
     /**
-     * @param string $field_type
+     * @param string $type
      *
      * @return array
      */
-    public function get_all_extra_field_by_type($field_type)
+    public function get_all_extra_field_by_type($type)
     {
         // all the information of the field
         $sql = "SELECT * FROM {$this->table}
                 WHERE
-                    field_type = '".Database::escape_string($field_type)."' AND
+                    field_type = '".Database::escape_string($type)."' AND
                     extra_field_type = $this->extraFieldType
                 ";
         $result = Database::query($sql);
@@ -1106,10 +1123,6 @@ class ExtraField extends Model
         return null;
     }
 
-
-
-
-
     /**
      * @param array $params
      *
@@ -1121,7 +1134,7 @@ class ExtraField extends Model
             $params['variable'] = $params['display_text'];
         }
 
-        $params['variable'] = trim(strtolower(str_replace(" ", "_", $params['variable'])));
+        $params['variable'] = trim(strtolower(str_replace(' ', '_', $params['variable'])));
 
         if (!isset($params['field_order'])) {
             $max_order = self::get_max_field_order();
@@ -2251,6 +2264,13 @@ class ExtraField extends Model
         return $return;
     }
 
+    public function getHandlerEntityByFieldVariable(string $variable)
+    {
+        return Database::getManager()
+            ->getRepository('ChamiloCoreBundle:ExtraField')
+            ->findOneBy(['variable' => $variable, 'extraFieldType' => $this->extraFieldType]);
+    }
+
     /**
      * @param array $options
      *
@@ -2291,8 +2311,6 @@ class ExtraField extends Model
 
         return ['level1' => $level1, 'level2' => $level2, 'level3' => $level3];
     }
-
-
 
     /**
      * @param $breadcrumb
@@ -3136,6 +3154,7 @@ JAVASCRIPT;
                 continue;
             }
 
+            $valueAsArray = [];
             $fieldValue = new ExtraFieldValue($this->type);
             $valueData = $fieldValue->get_values_by_handler_and_field_id(
                 $itemId,
@@ -3165,6 +3184,7 @@ JAVASCRIPT;
                         $data[] = $tag->getTag();
                     }
                     $valueData = implode(',', $data);
+                    $valueAsArray = $data;
                 }
             }
 

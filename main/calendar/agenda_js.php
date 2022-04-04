@@ -277,6 +277,30 @@ if ('course' === $agenda->type) {
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
     $form->addHtml('</div>');
     $form->addElement('textarea', 'comment', get_lang('Comment'), ['id' => 'comment']);
+
+    $tpl->assign(
+        'agenda_reminders_js',
+        Agenda::getJsForReminders('#form_add_notification')
+    );
+}
+
+if (api_get_configuration_value('agenda_collective_invitations') && 'personal' === $agenda->type) {
+    $form->addSelectAjax(
+        'invitees',
+        get_lang('Invitees'),
+        [],
+        [
+            'multiple' => 'multiple',
+            'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
+        ]
+    );
+    $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+}
+
+if (api_get_configuration_value('agenda_reminders')) {
+    $form->addHtml('<hr><div id="notification_list"></div>');
+    $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+    $form->addHtml('<hr>');
 }
 
 $form->addHtml('<div id="attachment_block" style="display: none">');

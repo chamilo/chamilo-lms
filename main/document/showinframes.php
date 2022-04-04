@@ -426,31 +426,15 @@ if ($execute_iframe) {
 
         echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
 
-        $translate = api_get_configuration_value('translate_html');
-        $display = '';
-        if ($translate) {
-            $display = ' display:none ';
-            echo "<script>
-                    function waitToLoad() {
-                        $('#mainFrame').css('display', 'block');
-                        updateContentHeight();
-                    }
-                    $(function() {
-                        setTimeout(waitToLoad, 3500);
-                    });
-            </script>";
-        }
-
+        echo '<div class="embed-responsive embed-responsive-16by9">';
         echo '<iframe
             id="mainFrame"
             name="mainFrame"
             border="0"
-            frameborder="0"
-            scrolling="no"
-            style="width:100%; '.$display.'"
-            height="600"
+            class="embed-responsive-item"
             src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"
             height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+        echo '</div>';
     }
 }
 Display::display_footer();

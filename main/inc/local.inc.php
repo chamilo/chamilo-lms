@@ -364,9 +364,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             if (is_array($my_url_list) &&
                                 in_array($current_access_url_id, $my_url_list)
                             ) {
-                                Session::write('_user', $_user);
-                                Event::eventLogin($_user['user_id']);
-                                $logging_in = true;
                             } else {
                                 phpCAS::logout();
                                 $location = api_get_path(WEB_PATH)
@@ -377,7 +374,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         }
                         Session::write('_user', $_user);
                         Event::eventLogin($_user['user_id']);
-                        $logging_in = true;
                     } else {
                         phpCAS::logout();
                         header(

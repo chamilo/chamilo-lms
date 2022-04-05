@@ -1849,6 +1849,7 @@ EOT;
                     'width',
                     progress + '%'
                 );
+                $('#progress .progress-bar').text(progress + '%');
             }).on('fileuploaddone', function (e, data) {
                 $.each(data.result.files, function (index, file) {
                     if (file.error) {

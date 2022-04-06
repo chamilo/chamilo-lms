@@ -3097,7 +3097,9 @@ class Rest extends WebService
      */
     public function getAllUsersApiKeys(int $page, int $length, ?int $urlId = null): array
     {
-        if (false === api_get_configuration_value('webservice_enable_adminonly_api')) {
+        if (false === api_get_configuration_value('webservice_enable_adminonly_api')
+            || !UserManager::is_admin($this->user->getId())
+        ) {
             throw new Exception(get_lang('NotAllowed'));
         }
 
@@ -3139,7 +3141,9 @@ class Rest extends WebService
      */
     public function getUserApiKey(string $username): array
     {
-        if (false === api_get_configuration_value('webservice_enable_adminonly_api')) {
+        if (false === api_get_configuration_value('webservice_enable_adminonly_api')
+            || !UserManager::is_admin($this->user->getId())
+        ) {
             throw new Exception(get_lang('NotAllowed'));
         }
 

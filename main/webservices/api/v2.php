@@ -513,6 +513,26 @@ try {
             $result = UserManager::delete_user($_REQUEST['user_id']);
             $restResponse->setData(['status' => $result]);
             break;
+        case Rest::GET_USERS_API_KEYS:
+            $restResponse->setData(
+                $restApi->getAllUsersApiKeys(
+                    $httpRequest->query->getInt('page', 1),
+                    $httpRequest->query->getInt('per_page', 30),
+                    $httpRequest->query->getInt('url_id', 0) ?: null
+                )
+            );
+            break;
+        case Rest::GET_USER_API_KEY:
+            $username = (string) $httpRequest->query->get('user');
+
+            if (empty($username)) {
+                throw new Exception(get_lang('NoData'));
+            }
+
+            $restResponse->setData(
+                $restApi->getUserApiKey($username)
+            );
+            break;
 
         case Rest::GET_COURSES:
             $data = $restApi->getCoursesCampus($_POST);

@@ -18,13 +18,6 @@
         margin-bottom: 0px;
         z-index: auto;
     }
-    .search-courses .form-group label {
-        float: left !important;
-        width: 15% !important;
-    }
-    .search-courses .form-group input[type='text'] {
-        width: 70% !important;
-    }
 </style>
 <div>
     {{ 'TotalNumberOfAvailableCourses'|get_lang }} :

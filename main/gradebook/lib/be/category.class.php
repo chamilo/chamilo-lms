@@ -2525,8 +2525,6 @@ class Category implements GradebookItem
 
     /**
      * Return HTML code with links to download and view certificate.
-     *
-     * @return string
      */
     public static function getDownloadCertificateBlock(array $certificate): string
     {

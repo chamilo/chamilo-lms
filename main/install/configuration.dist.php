@@ -2039,6 +2039,8 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 
 // Disable webservices.
 //$_configuration['disable_webservices'] = true;
+// Enable admin-only APIs: get_users_api_keys, get_user_api_key
+//$_configuration['webservice_enable_adminonly_api'] = false;
 
 // Ask user to renew password at first login.
 // Requires a user checkbox extra field called "ask_new_password".

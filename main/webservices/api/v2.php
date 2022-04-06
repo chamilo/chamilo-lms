@@ -34,11 +34,15 @@ if ($hash) {
     }
 }
 
-$action = $httpRequest->get('action');
-$username = Security::remove_XSS($httpRequest->get('username'));
-$apiKey = Security::remove_XSS($httpRequest->get('api_key'));
-$course = (int) $httpRequest->get('course', 0);
-$session = (int) $httpRequest->get('session', 0);
+$action = $httpRequest->query->get('action') ?: $httpRequest->request->get('action');
+$username = Security::remove_XSS(
+    $httpRequest->query->get('username') ?: $httpRequest->request->get('username')
+);
+$apiKey = Security::remove_XSS(
+    $httpRequest->query->get('api_key') ?: $httpRequest->request->get('api_key')
+);
+$course = $httpRequest->query->getInt('course') ?: $httpRequest->request->getInt('course');
+$session = $httpRequest->query->getInt('session') ?: $httpRequest->request->getInt('session');
 
 $restResponse = new RestResponse();
 
@@ -63,7 +67,7 @@ try {
         case Rest::GET_AUTH:
             Rest::init();
 
-            $password = isset($_POST['password']) ? $_POST['password'] : null;
+            $password = $_POST['password'] ?? null;
             $isValid = Rest::isValidUser($username, $password);
             if (!$isValid) {
                 throw new Exception(get_lang('InvalideUserDetected'));
@@ -91,8 +95,7 @@ try {
             $restResponse->setData($messages);
             break;
         case Rest::GET_USER_MESSAGES_RECEIVED:
-            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
-            $messages = $restApi->getUserReceivedMessages($lastMessageId);
+            $messages = $restApi->getUserReceivedMessages();
             $restResponse->setData($messages);
             break;
         case Rest::DELETE_USER_MESSAGE:
@@ -102,8 +105,7 @@ try {
             $restResponse->setData(['status' => true]);
             break;
         case Rest::GET_USER_MESSAGES_SENT:
-            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
-            $messages = $restApi->getUserSentMessages($lastMessageId);
+            $messages = $restApi->getUserSentMessages();
             $restResponse->setData($messages);
             break;
         case Rest::GET_COUNT_NEW_MESSAGES:
@@ -141,7 +143,7 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::SAVE_USER_MESSAGE:
-            $receivers = isset($_POST['receivers']) ? $_POST['receivers'] : [];
+            $receivers = $_POST['receivers'] ?? [];
             $subject = !empty($_POST['subject']) ? $_POST['subject'] : null;
             $text = !empty($_POST['text']) ? $_POST['text'] : null;
             $data = $restApi->saveUserMessage($subject, $text, $receivers);
@@ -266,9 +268,9 @@ try {
                 throw new Exception(get_lang('NoData'));
             }
 
-            $forumId = isset($_POST['forum']) ? (int) $_POST['forum'] : 0;
-            $notify = !empty($_POST['notify']);
-            $parentId = !empty($_POST['parent']) ? (int) $_POST['parent'] : null;
+            $forumId = $httpRequest->request->getInt('forum');
+            $notify = $httpRequest->request->has('notify');
+            $parentId = $httpRequest->request->getInt('parent') ?: null;
 
             $postValues = [
                 'post_title' => $_POST['title'],
@@ -287,7 +289,7 @@ try {
                 throw new Exception(get_lang('NoData'));
             }
 
-            $forumId = isset($_POST['forum']) ? (int) $_POST['forum'] : 0;
+            $forumId = $httpRequest->request->getInt('forum');
             $notify = !empty($_POST['notify']);
 
             $threadInfo = [
@@ -511,6 +513,26 @@ try {
             $result = UserManager::delete_user($_REQUEST['user_id']);
             $restResponse->setData(['status' => $result]);
             break;
+        case Rest::GET_USERS_API_KEYS:
+            $restResponse->setData(
+                $restApi->getAllUsersApiKeys(
+                    $httpRequest->query->getInt('page', 1),
+                    $httpRequest->query->getInt('per_page', 30),
+                    $httpRequest->query->getInt('url_id', 0) ?: null
+                )
+            );
+            break;
+        case Rest::GET_USER_API_KEY:
+            $username = (string) $httpRequest->query->get('user');
+
+            if (empty($username)) {
+                throw new Exception(get_lang('NoData'));
+            }
+
+            $restResponse->setData(
+                $restApi->getUserApiKey($username)
+            );
+            break;
 
         case Rest::GET_COURSES:
             $data = $restApi->getCoursesCampus($_POST);
@@ -632,7 +654,6 @@ try {
 
             echo json_encode($data, JSON_PRETTY_PRINT);
             exit;
-            break;
 
         case Rest::UPDATE_USER_PAUSE_TRAINING:
             $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';

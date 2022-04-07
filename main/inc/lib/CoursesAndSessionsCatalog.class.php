@@ -1938,11 +1938,11 @@ class CoursesAndSessionsCatalog
 
         $settings = CoursesAndSessionsCatalog::getCatalogSearchSettings();
 
-        $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_GRID);
+        $form = new FormValidator('search', 'get', '', null, null, FormValidator::LAYOUT_HORIZONTAL);
         $form->addHidden('action', 'search_course');
 
         if (isset($settings['courses']) && true === $settings['courses']['by_title']) {
-            $form->addText('search_term', get_lang('Title'));
+            $form->addText('search_term', get_lang('Title'), false);
         }
 
         $select = $form->addSelect(

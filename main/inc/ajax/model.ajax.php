@@ -1638,6 +1638,9 @@ switch ($action) {
                 'status',
                 'lp',
                 'actions',
+                'exe_result',
+                'revised',
+                'orig_lp_id',
             ];
             $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
             if ($officialCodeInList === 'true') {

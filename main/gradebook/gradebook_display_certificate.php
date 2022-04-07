@@ -336,7 +336,6 @@ if (count($certificate_list) == 0) {
             );
             echo $certificateUrl.PHP_EOL;
             if ($hideCertificateExport !== 'true') {
-
                 $url .= '&action=export';
                 $pdf = Display::url(
                     Display::return_icon('pdf.png', get_lang('Download')),

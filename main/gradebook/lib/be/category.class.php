@@ -2148,7 +2148,9 @@ class Category implements GradebookItem
             true
         );
 
-        if (!$userFinishedCourse) {
+        $enableGradeSubCategorySkills = (true === api_get_configuration_value('gradebook_enable_subcategory_skills_independant_assignement'));
+        // it continues if is enabled skills independant of assignment
+        if (!$userFinishedCourse && !$enableGradeSubCategorySkills) {
             return false;
         }
 
@@ -2178,6 +2180,11 @@ class Category implements GradebookItem
                 $sessionId
             );
             $userHasSkills = !empty($userSkills);
+        }
+
+        // certificate is not generated if course is not finished
+        if (!$userFinishedCourse) {
+            return false;
         }
 
         // Block certification links depending gradebook configuration (generate certifications)

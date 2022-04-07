@@ -1209,6 +1209,17 @@ class Skill extends Model
         $gradebookId = $category->get_id();
         $skill_gradebooks = $skill_gradebook->get_all(['where' => ['gradebook_id = ?' => $gradebookId]]);
 
+        // It checks if gradebook is passed to add the skill
+        $userFinished = Category::userFinishedCourse(
+            $userId,
+            $category,
+            true
+        );
+
+        if (!$userFinished) {
+            return false;
+        }
+
         if (!empty($skill_gradebooks)) {
             foreach ($skill_gradebooks as $skill_gradebook) {
                 $hasSkill = $this->userHasSkill(

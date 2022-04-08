@@ -35,7 +35,9 @@ if ($form->validate()) {
     $values['id'] = $id;
     $values['persistent'] = isset($values['persistent']) ? 1 : 0;
     $manager->update($values);
-    Display::addFlash(get_lang('Updated'));
+    Display::addFlash(
+        Display::return_message(get_lang('Updated'), 'success')
+    );
     $url = api_get_path(WEB_CODE_PATH).'notification_event/list.php?';
     header('Location: '.$url);
     exit;

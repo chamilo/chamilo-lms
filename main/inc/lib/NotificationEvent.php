@@ -5,6 +5,7 @@ class NotificationEvent extends Model
 {
     const ACCOUNT_EXPIRATION = 1;
     const JUSTIFICATION_EXPIRATION = 2;
+
     public $table;
     public $columns = [
         'id',
@@ -48,7 +49,7 @@ class NotificationEvent extends Model
         return $eventTypes;
     }
 
-    public function getForm(FormValidator $form, $data = [])
+    public function getForm(FormValidator $form, $data = []): FormValidator
     {
         $options = $this->getEventsForSelect();
         $form->addSelect('event_type', get_lang('EventType'), $options);
@@ -80,7 +81,7 @@ class NotificationEvent extends Model
         return $form;
     }
 
-    public function getAddForm(FormValidator $form)
+    public function getAddForm(FormValidator $form): FormValidator
     {
         $options = $this->getEventsForSelect();
         $eventType = $form->getSubmitValue('event_type');
@@ -123,26 +124,22 @@ class NotificationEvent extends Model
     {
         $data = UserManager::get_extra_user_data_by_field($userId, $this->extraFieldName);
 
-        return isset($data['notification_event']) ? $data['notification_event'] : '';
+        return $data['notification_event'] ?? '';
     }
 
-    public function getNotificationsByUser($userId)
+    /**
+     * @throws Exception
+     */
+    public function getNotificationsByUser(int $userId): array
     {
         $userInfo = api_get_user_info($userId);
         $events = $this->get_all();
-        $extraFieldData = $this->getUserExtraData(api_get_user_id());
-        $allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
-
-        $userJustificationList = [];
-        if ($allowJustification) {
-            $plugin = Justification::create();
-            $userJustificationList = $plugin->getUserJustificationList($userId);
-        }
+        $extraFieldData = $this->getUserExtraData($userId);
 
         $notifications = [];
         foreach ($events as $event) {
             $days = (int) $event['day_diff'];
-            $checkIsRead = $event['persistent'] == 0 ? true : false;
+            $checkIsRead = $event['persistent'] == 0;
             $eventItemId = $event['event_id'];
 
             switch ($event['event_type']) {
@@ -171,45 +168,50 @@ class NotificationEvent extends Model
                     }
                     break;
                 case self::JUSTIFICATION_EXPIRATION:
-                    if (!empty($userJustificationList)) {
-                        foreach ($userJustificationList as $userJustification) {
-                            if (empty($userJustification['date_validity'])) {
-                                continue;
-                            }
+                    if (api_get_plugin_setting('justification', 'tool_enable') !== 'true') {
+                        break;
+                    }
 
-                            if ($eventItemId != $userJustification['justification_document_id']) {
-                                continue;
-                            }
+                    $plugin = Justification::create();
+                    $userJustificationList = $plugin->getUserJustificationList($userId);
 
-                            $showNotification = $this->showNotification($userJustification['date_validity'], $days);
+                    foreach ($userJustificationList as $userJustification) {
+                        if (empty($userJustification['date_validity'])) {
+                            continue;
+                        }
 
-                            $id = 'id_'.self::JUSTIFICATION_EXPIRATION.'_event_'.$event['id'].'_'.$userJustification['id'];
+                        if ($eventItemId != $userJustification['justification_document_id']) {
+                            continue;
+                        }
 
-                            $fieldData = $plugin->getJustification($userJustification['justification_document_id']);
+                        $showNotification = $this->showNotification($userJustification['date_validity'], $days);
 
-                            $read = false;
-                            if ($checkIsRead) {
-                                $read = $this->isRead($id, $extraFieldData);
-                            }
+                        $id = 'id_'.self::JUSTIFICATION_EXPIRATION.'_event_'.$event['id'].'_'.$userJustification['id'];
 
-                            $eventText = $plugin->get_lang('Justification').': '.$fieldData['name'].' <br />';
-                            $eventText .= $plugin->get_lang('JustificationDate').': '.$userJustification['date_validity'];
+                        $fieldData = $plugin->getJustification($userJustification['justification_document_id']);
 
-                            $url = $event['link'];
-                            if (empty($url)) {
-                                $url = api_get_path(WEB_CODE_PATH).'auth/justification.php#'.$fieldData['code'];
-                            }
+                        $read = false;
+                        if ($checkIsRead) {
+                            $read = $this->isRead($id, $extraFieldData);
+                        }
 
-                            if ($showNotification && $read === false) {
-                                $notifications[] = [
-                                    'id' => $id,
-                                    'title' => $event['title'],
-                                    'content' => $event['content'],
-                                    'event_text' => $eventText,
-                                    'link' => $url,
-                                    'persistent' => $event['persistent'],
-                                ];
-                            }
+                        $eventText = $plugin->get_lang('Justification').': '.$fieldData['name'].' <br />';
+                        $eventText .= $plugin->get_lang('JustificationDate').': '.$userJustification['date_validity'];
+
+                        $url = $event['link'];
+                        if (empty($url)) {
+                            $url = api_get_path(WEB_CODE_PATH).'auth/justification.php#'.$fieldData['code'];
+                        }
+
+                        if ($showNotification && $read === false) {
+                            $notifications[] = [
+                                'id' => $id,
+                                'title' => $event['title'],
+                                'content' => $event['content'],
+                                'event_text' => $eventText,
+                                'link' => $url,
+                                'persistent' => $event['persistent'],
+                            ];
                         }
                     }
                     break;
@@ -219,7 +221,7 @@ class NotificationEvent extends Model
         return $notifications;
     }
 
-    public function isRead($id, $extraData)
+    public function isRead($id, $extraData): bool
     {
         $userId = api_get_user_id();
 
@@ -241,7 +243,7 @@ class NotificationEvent extends Model
         return false;
     }
 
-    public function markAsRead($id)
+    public function markAsRead($id): bool
     {
         if (empty($id)) {
             return false;
@@ -261,7 +263,10 @@ class NotificationEvent extends Model
         return true;
     }
 
-    public function showNotification($date, $dayDiff)
+    /**
+     * @throws Exception
+     */
+    public function showNotification($date, $dayDiff): bool
     {
         $today = api_get_utc_datetime();
         $expiration = api_get_utc_datetime($date, false, true);

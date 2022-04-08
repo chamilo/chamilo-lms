@@ -30,17 +30,22 @@ class NotificationEvent extends Model
 
     public function eventTypeToString($eventTypeId)
     {
-        $list = $this->getEventsForSelect();
+        $list = $this->getEventsForSelect(false);
 
         return $list[$eventTypeId];
     }
 
-    public function getEventsForSelect()
+    public function getEventsForSelect($onlyEnabled = true): array
     {
-        return [
+        $eventTypes = [
             self::ACCOUNT_EXPIRATION => get_lang('AccountExpiration'),
-            self::JUSTIFICATION_EXPIRATION => get_lang('JustificationExpiration'),
         ];
+
+        if (!$onlyEnabled || api_get_plugin_setting('justification', 'tool_enable') === 'true') {
+            $eventTypes[self::JUSTIFICATION_EXPIRATION] = get_lang('JustificationExpiration');
+        }
+
+        return $eventTypes;
     }
 
     public function getForm(FormValidator $form, $data = [])
@@ -52,9 +57,12 @@ class NotificationEvent extends Model
         $eventType = $data['event_type'];
         switch ($eventType) {
             case self::JUSTIFICATION_EXPIRATION:
-                $plugin = Justification::create();
-                $list = $plugin->getList();
-                $list = array_column($list, 'name', 'id');
+                $list = [];
+                if (api_get_plugin_setting('justification', 'tool_enable') === 'true'
+                    && $list = Justification::create()->getList()
+                ) {
+                    $list = array_column($list, 'name', 'id');
+                }
                 $form->addSelect('event_id', get_lang('JustificationType'), $list);
                 $form->freeze('event_id');
 
@@ -94,9 +102,12 @@ class NotificationEvent extends Model
 
             switch ($eventType) {
                 case self::JUSTIFICATION_EXPIRATION:
-                    $plugin = Justification::create();
-                    $list = $plugin->getList();
-                    $list = array_column($list, 'name', 'id');
+                    $list = [];
+                    if (api_get_plugin_setting('justification', 'tool_enable') === 'true'
+                        && $list = Justification::create()->getList()
+                    ) {
+                        $list = array_column($list, 'name', 'id');
+                    }
                     $form->addSelect('event_id', get_lang('JustificationType'), $list);
                     break;
                 default:

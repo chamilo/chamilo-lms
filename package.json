@@ -70,7 +70,7 @@
     "mediaelement": "^5.0.5",
     "mediaelement-plugins": "https://github.com/chamilo/mediaelement-plugins",
     "mini-css-extract-plugin": "^1.6.2",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "multiselect-two-sides": "^2.5.7",
     "mxgraph": "^4.2.2",
     "optimize-css-assets-webpack-plugin": "^6.0.1",

@@ -27,6 +27,7 @@ $fields = [];
 $form = new FormValidator('edit', 'post', api_get_self().'?id='.$id);
 $form = $manager->getForm($form, $notification);
 
+$notification['users'] = array_keys($notification['users']);
 $form->setDefaults($notification);
 $form->addButtonSave(get_lang('Update'));
 

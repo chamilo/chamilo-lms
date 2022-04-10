@@ -5,6 +5,8 @@ class NotificationEvent extends Model
 {
     const ACCOUNT_EXPIRATION = 1;
     const JUSTIFICATION_EXPIRATION = 2;
+    const GLOBAL_NOTIFICATION = 3;
+    const SPECIFIC_USER = 4;
 
     public $table;
     public $columns = [
@@ -40,6 +42,8 @@ class NotificationEvent extends Model
     {
         $eventTypes = [
             self::ACCOUNT_EXPIRATION => get_lang('AccountExpiration'),
+            self::GLOBAL_NOTIFICATION => get_lang('Global'),
+            self::SPECIFIC_USER => get_lang('SpecificUsers'),
         ];
 
         if (!$onlyEnabled || api_get_plugin_setting('justification', 'tool_enable') === 'true') {
@@ -49,6 +53,9 @@ class NotificationEvent extends Model
         return $eventTypes;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getForm(FormValidator $form, $data = []): FormValidator
     {
         $options = $this->getEventsForSelect();
@@ -78,9 +85,29 @@ class NotificationEvent extends Model
         $form->addCheckBox('persistent', get_lang('Persistent'));
         $form->addNumeric('day_diff', get_lang('DaysDifference'), false);
 
+        switch ($eventType) {
+            case self::SPECIFIC_USER:
+                $form->addSelectAjax(
+                    'users',
+                    get_lang('Users'),
+                    $data['users'] ?? [],
+                    [
+                        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
+                        'multiple' => 'multiple',
+                    ]
+                );
+                //no break
+            case self::GLOBAL_NOTIFICATION:
+                $form->removeElement('day_diff');
+                break;
+        }
+
         return $form;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getAddForm(FormValidator $form): FormValidator
     {
         $options = $this->getEventsForSelect();
@@ -110,6 +137,20 @@ class NotificationEvent extends Model
                         $list = array_column($list, 'name', 'id');
                     }
                     $form->addSelect('event_id', get_lang('JustificationType'), $list);
+                    break;
+                case self::SPECIFIC_USER:
+                    $form->addSelectAjax(
+                        'users',
+                        get_lang('Users'),
+                        [],
+                        [
+                            'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
+                            'multiple' => 'multiple',
+                        ]
+                    );
+                    //no break
+                case self::GLOBAL_NOTIFICATION:
+                    $form->removeElement('day_diff');
                     break;
                 default:
                     break;
@@ -215,6 +256,30 @@ class NotificationEvent extends Model
                         }
                     }
                     break;
+                case self::SPECIFIC_USER:
+                    $assignedUsers = self::getAssignedUsers($event['id']);
+                    $assignedUserIdList = array_keys($assignedUsers);
+
+                    if (!in_array($userId, $assignedUserIdList)) {
+                        break;
+                    }
+                    //no break
+                case self::GLOBAL_NOTIFICATION:
+                    $id = "id_{$event['event_type']}_event_{$event['id']}_$userId";
+
+                    $wasRead = $checkIsRead && $this->isRead($id, $extraFieldData);
+
+                    if (!$wasRead) {
+                        $notifications[] = [
+                            'id' => $id,
+                            'title' => $event['title'],
+                            'content' => $event['content'],
+                            'event_text' => null,
+                            'link' => $event['link'],
+                            'persistent' => $event['persistent'],
+                        ];
+                    }
+                    break;
             }
         }
 
@@ -292,5 +357,96 @@ class NotificationEvent extends Model
             event_type VARCHAR(255)
         )";
         Database::query($sql);
+    }
+
+    public function save($params, $show_query = false)
+    {
+        $userIdList = [];
+
+        if (isset($params['users'])) {
+            $userIdList = $params['users'];
+            unset($params['users']);
+        }
+
+        /** @var int|bool $saved */
+        $saved = parent::save($params, $show_query);
+
+        if (false !== $saved && !empty($userIdList)) {
+            self::assignUserIdList($saved, $userIdList);
+        }
+
+        return $saved;
+    }
+
+    public function update($params, $showQuery = false): bool
+    {
+        $userIdList = [];
+
+        if (isset($params['users'])) {
+            $userIdList = $params['users'];
+            unset($params['users']);
+        }
+
+        $updated = parent::update($params, $showQuery);
+
+        self::deleteAssignedUsers($params['id']);
+        self::assignUserIdList($params['id'], $userIdList);
+
+        return $updated;
+    }
+
+    public function get($id)
+    {
+        $props = parent::get($id);
+        $props['users'] = self::getAssignedUsers($id);
+
+        return $props;
+    }
+
+    public static function assignUserIdList(int $eventId, array $userIdList)
+    {
+        foreach ($userIdList as $userId) {
+            Database::insert(
+                'notification_event_rel_user',
+                [
+                    'event_id' => $eventId,
+                    'user_id' => (int) $userId,
+                ]
+            );
+        }
+    }
+
+    public static function getAssignedUsers(int $eventId): array
+    {
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+
+        $result = Database::select(
+            'u.id, u.username, u.firstname, u.lastname',
+            "notification_event_rel_user neru INNER JOIN $tblUser u ON neru.user_id = u.id",
+            ['where' => ['neru.event_id = ?' => $eventId]]
+        );
+
+        $userList = [];
+
+        foreach ($result as $userInfo) {
+            $userList[$userInfo['id']] = api_get_person_name(
+                $userInfo['firstname'],
+                $userInfo['lastname'],
+                null,
+                null,
+                null,
+                $userInfo['username']
+            );
+        }
+
+        return $userList;
+    }
+
+    public static function deleteAssignedUsers(int $eventId)
+    {
+        Database::delete(
+            'notification_event_rel_user',
+            ['event_id = ?' => $eventId]
+        );
     }
 }

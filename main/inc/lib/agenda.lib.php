@@ -1456,7 +1456,9 @@ class Agenda
                     }
                 }
 
-                $this->loadSessionsAsEvents($start, $end);
+                if ($start && $end) {
+                    $this->loadSessionsAsEvents($start, $end);
+                }
 
                 break;
         }

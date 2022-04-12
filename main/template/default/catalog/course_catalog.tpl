@@ -44,8 +44,6 @@
 
 <script>
     $(function() {
-        $(".selectpicker").selectpicker({ "width": "500px" });
-
         $('.star-rating li a').on('click', function(event) {
             var id = $(this).parents('ul').attr('id');
             $('#vote_label2_' + id).html('{{ 'Loading'|get_lang }}');

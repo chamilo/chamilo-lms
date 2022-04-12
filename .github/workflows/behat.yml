@@ -98,39 +98,29 @@ jobs:
               uses: nanasess/setup-chromedriver@master
               with:
                   # Optional: do not specify to match Chrome's version
-                  chromedriver-version: '88.0.4324.96'
+                  chromedriver-version: '100.0.4896.60'
 
             - run: |
                 export DISPLAY=:99
                 chromedriver --url-base=/wd/hub &
                 sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
-#                wget https://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_linux64.zip --quiet && unzip chromedriver_linux64.zip
-#                sudo mv chromedriver /usr/bin
-#                sudo chmod +x /usr/bin/chromedriver
-#                chromedriver --version
-
-#            - run: |
-#                export DISPLAY=:99
-#                chromedriver --url-base=/wd/hub &
-#                sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
-#                chromedriver --version
-
-            - name: Set up JDK 1.8
-              uses: actions/setup-java@v1
+            - name: Set up JDK
+              uses: actions/setup-java@v3
               with:
-                  java-version: 1.8
+                  distribution: 'temurin'
+                  java-version: '17'
 
             - name: Get Selenium
               run: |
-                wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar --quiet
+                wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.1.0/selenium-server-4.1.3.jar --quiet
 
             - name: Run Selenium
               run: |
                 java -version
                 export DISPLAY=:99.0
                 sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-                java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-standalone-3.141.59.jar  -log selenium.log > /dev/null &
+                java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-4.1.3.jar standalone --log selenium.log > /dev/null &
 
             - name: Start mysql service
               run: |

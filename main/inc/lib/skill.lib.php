@@ -1183,6 +1183,7 @@ class Skill extends Model
             return false;
         }
 
+        $enableGradeSubCategorySkills = (true === api_get_configuration_value('gradebook_enable_subcategory_skills_independant_assignement'));
         // Load subcategories
         if (empty($category->get_parent_id())) {
             $subCategories = $category->get_subcategories(
@@ -1210,14 +1211,15 @@ class Skill extends Model
         $skill_gradebooks = $skill_gradebook->get_all(['where' => ['gradebook_id = ?' => $gradebookId]]);
 
         // It checks if gradebook is passed to add the skill
-        $userFinished = Category::userFinishedCourse(
-            $userId,
-            $category,
-            true
-        );
-
-        if (!$userFinished) {
-            return false;
+        if ($enableGradeSubCategorySkills) {
+            $userFinished = Category::userFinishedCourse(
+                $userId,
+                $category,
+                true
+            );
+            if (!$userFinished) {
+                return false;
+            }
         }
 
         if (!empty($skill_gradebooks)) {
@@ -1271,7 +1273,7 @@ class Skill extends Model
             foreach ($gradeResult as $data) {
                 /** @var AbstractLink $item */
                 $item = $data[0];
-                if ('Category' === get_class($item)) {
+                if (Category::class === get_class($item)) {
                     $scoreSubCategories[$item->get_id()]['min_score'] = $item->getCertificateMinScore();
                     $scoreSubCategories[$item->get_id()]['user_score'] = round($data['result_score'][0]);
                 }

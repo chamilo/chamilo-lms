@@ -2159,6 +2159,8 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Enable skills in subcategory to work independant on assignement
 // Require DB changes:
 // ALTER TABLE gradebook_category ADD allow_skills_by_subcategory tinyint(1) NOT NULL DEFAULT '1';
+// Requires edit Entity GradebookCategory: src/Chamilo/CoreBundle/Entity/GradebookCategory.php uncomment "allowSkillsBySubcategory" variable.
+// Requires uncomment the allowSkillsBySubcategory get and set
 //$_configuration['gradebook_enable_subcategory_skills_independant_assignement'] = false;
 
 // KEEP THIS AT THE END

@@ -874,7 +874,11 @@ function SetValue(param, val) {
 /**
  * Saves the current data from JS memory to the LMS database
  */
-function savedata(item_id, forceIframeSave = 0) {
+function savedata(item_id, forceIframeSave) {
+    if (!forceIframeSave) {
+        forceIframeSave = 0;
+    }
+
     // Origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
     logit_lms('function savedata(' + item_id + ')', 3);
 

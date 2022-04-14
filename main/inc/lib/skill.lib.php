@@ -2038,8 +2038,12 @@ class Skill extends Model
         ];
 
         if ($courseId > 0) {
-            $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ? '] = $sessionId ? $sessionId : null;
+            if ($sessionId) {
+                $whereConditions['AND course_id = ? '] = $courseId;
+                $whereConditions['AND session_id = ? '] = $sessionId;
+            } else {
+                $whereConditions['AND course_id = ? AND session_id is NULL'] = $courseId;
+            }
         }
 
         $result = Database::select(

@@ -18,6 +18,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 
@@ -57,7 +58,7 @@ class Meeting
 
     /**
      * @var int
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="id")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
@@ -109,6 +110,20 @@ class Meeting
      */
     protected $meetingInfoGetJson;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="sign_attendance")
+     */
+    protected $signAttendance;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="text", name="reason_to_sign_attendance", nullable=true)
+     */
+    protected $reasonToSignAttendance;
+
     /** @var MeetingListItem */
     protected $meetingListItem;
 
@@ -141,6 +156,7 @@ class Meeting
         $this->registrants = new ArrayCollection();
         $this->recordings = new ArrayCollection();
         $this->activities = new ArrayCollection();
+        $this->signAttendance = false;
     }
 
     /**
@@ -508,26 +524,21 @@ class Meeting
     public function hasRegisteredUser($user)
     {
         return $this->getRegistrants()->exists(
-            function (Registrant $registrantEntity) use (&$user) {
+            function (int $key, Registrant $registrantEntity) use (&$user) {
                 return $registrantEntity->getUser() === $user;
             }
         );
     }
 
-    /**
-     * @param User $user
-     *
-     * @return Registrant|null
-     */
-    public function getRegistrant($user)
+    public function getRegistrant(User $user): ?Registrant
     {
-        foreach ($this->getRegistrants() as $registrant) {
-            if ($registrant->getUser() === $user) {
-                return $registrant;
-            }
-        }
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('user', $user)
+            )
+        ;
 
-        return null;
+        return $this->registrants->matching($criteria)->first() ?? null;
     }
 
     /**
@@ -538,29 +549,54 @@ class Meeting
      */
     public function getIntroduction()
     {
-        $introduction = sprintf('<h1>%s</h1>', $this->meetingInfoGet->topic);
+        $introduction = sprintf('<h1>%s</h1>', $this->meetingInfoGet->topic).PHP_EOL;
         if (!$this->isGlobalMeeting()) {
             if (!empty($this->formattedStartTime)) {
                 $introduction .= $this->formattedStartTime;
                 if (!empty($this->formattedDuration)) {
                     $introduction .= ' ('.$this->formattedDuration.')';
                 }
+                $introduction .= PHP_EOL;
             }
         }
         if ($this->user) {
-            $introduction .= sprintf('<p>%s</p>', $this->user->getFullname());
+            $introduction .= sprintf('<p>%s</p>', $this->user->getFullname()).PHP_EOL;
         } elseif ($this->isCourseMeeting()) {
             if (null === $this->session) {
-                $introduction .= sprintf('<p class="main">%s</p>', $this->course);
+                $introduction .= sprintf('<p class="main">%s</p>', $this->course).PHP_EOL;
             } else {
-                $introduction .= sprintf('<p class="main">%s (%s)</p>', $this->course, $this->session);
+                $introduction .= sprintf('<p class="main">%s (%s)</p>', $this->course, $this->session).PHP_EOL;
             }
         }
         if (!empty($this->meetingInfoGet->agenda)) {
-            $introduction .= sprintf('<p>%s</p>', $this->meetingInfoGet->agenda);
+            $introduction .= sprintf('<p>%s</p>', $this->meetingInfoGet->agenda).PHP_EOL;
         }
 
         return $introduction;
+    }
+
+    public function isSignAttendance(): bool
+    {
+        return $this->signAttendance;
+    }
+
+    public function setSignAttendance(bool $signAttendance): Meeting
+    {
+        $this->signAttendance = $signAttendance;
+
+        return $this;
+    }
+
+    public function getReasonToSignAttendance(): ?string
+    {
+        return $this->reasonToSignAttendance;
+    }
+
+    public function setReasonToSignAttendance(string $reasonToSignAttendance): Meeting
+    {
+        $this->reasonToSignAttendance = $reasonToSignAttendance;
+
+        return $this;
     }
 
     /**

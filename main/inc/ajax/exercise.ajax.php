@@ -1134,9 +1134,7 @@ switch ($action) {
                 'errorStatus' => 0,
             ]);
             exit;
-
         } else {
-
             if (!empty($_FILES)) {
                 $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
                 $userId = api_get_user_id();
@@ -1203,7 +1201,6 @@ switch ($action) {
                 echo json_encode(['files' => $resultList]);
                 exit;
             }
-
         }
         break;
     default:

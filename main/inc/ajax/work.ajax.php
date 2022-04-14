@@ -90,9 +90,7 @@ switch ($action) {
                 'errorStatus' => 0,
             ]);
             exit;
-
         } else {
-
             $workId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
             $workInfo = get_work_data_by_id($workId);
             $sessionId = api_get_session_id();
@@ -120,7 +118,6 @@ switch ($action) {
 
                 $resultList = [];
                 foreach ($fileList as $file) {
-
                     if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
                         // to rename and move the finished file
                         $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
@@ -176,7 +173,6 @@ switch ($action) {
                 echo json_encode(['files' => $resultList]);
                 exit;
             }
-
         }
         break;
     case 'delete_work':

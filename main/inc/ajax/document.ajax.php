@@ -148,7 +148,6 @@ switch ($action) {
 
                 $resultList = [];
                 foreach ($fileList as $file) {
-
                     if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
                         // to rename and move the finished file
                         $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$file['name'];

@@ -1823,6 +1823,23 @@ EOT;
                 previewMaxHeight: 169,
                 previewCrop: true,
                 dropzone: $('#dropzone'),
+                maxChunkSize: 10000000, // 10 MB
+                sequentialUploads: true,
+            }).on('fileuploadchunksend', function (e, data) {
+                console.log('fileuploadchunkbeforesend');
+                console.log(data);
+                data.url = url + '&chunkAction=send';
+            }).on('fileuploadchunkdone', function (e, data) {
+                console.log('fileuploadchunkdone');
+                console.log(data);
+                if (data.uploadedBytes >= data.total) {
+                    data.url = url + '&chunkAction=done';
+                    data.submit();
+                }
+            }).on('fileuploadchunkfail', function (e, data) {
+                console.log('fileuploadchunkfail');
+                console.log(data);
+
             }).on('fileuploadadd', function (e, data) {
                 data.context = $('<div class=\"row\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {

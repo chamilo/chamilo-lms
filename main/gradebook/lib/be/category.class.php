@@ -714,6 +714,39 @@ class Category implements GradebookItem
     }
 
     /**
+     * Update value to allow user skills by subcategory passed.
+     *
+     * @param $value
+     */
+    public function updateAllowSkillBySubCategory($value)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $value = (int) $value;
+        $upd = 'UPDATE '.$table.' SET allow_skills_by_subcategory = '.$value.' WHERE id = '.intval($this->id);
+        Database::query($upd);
+    }
+
+    /**
+     * Get the value to Allow skill by subcategory.
+     *
+     * @return bool
+     */
+    public function getAllowSkillBySubCategory($parentId = null)
+    {
+        $id = (int) $this->id;
+        if (isset($parentId)) {
+            $id = (int) $parentId;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = 'SELECT allow_skills_by_subcategory FROM '.$table.' WHERE id = '.$id;
+        $rs = Database::query($sql);
+        $value = (bool) Database::result($rs, 0, 0);
+
+        return $value;
+    }
+
+    /**
      * Update link weights see #5168.
      *
      * @param type $new_weight
@@ -2115,7 +2148,9 @@ class Category implements GradebookItem
             true
         );
 
-        if (!$userFinishedCourse) {
+        $enableGradeSubCategorySkills = (true === api_get_configuration_value('gradebook_enable_subcategory_skills_independant_assignement'));
+        // it continues if is enabled skills independant of assignment
+        if (!$userFinishedCourse && !$enableGradeSubCategorySkills) {
             return false;
         }
 
@@ -2127,6 +2162,11 @@ class Category implements GradebookItem
         $userHasSkills = false;
         if ($skillToolEnabled) {
             $skill = new Skill();
+            $objSkillRelUser = new SkillRelUser();
+
+            // It cleans the previous results to generate the new user skills
+            $objSkillRelUser->deleteUserSkill($user_id, $courseId, $sessionId);
+
             $skill->addSkillToUser(
                 $user_id,
                 $category,
@@ -2134,13 +2174,17 @@ class Category implements GradebookItem
                 $sessionId
             );
 
-            $objSkillRelUser = new SkillRelUser();
             $userSkills = $objSkillRelUser->getUserSkills(
                 $user_id,
                 $courseId,
                 $sessionId
             );
             $userHasSkills = !empty($userSkills);
+        }
+
+        // certificate is not generated if course is not finished
+        if (!$userFinishedCourse) {
+            return false;
         }
 
         // Block certification links depending gradebook configuration (generate certifications)

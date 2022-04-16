@@ -6,25 +6,25 @@
 {% import '@ChamiloCore/Macros/modals.html.twig' as macro_modals %}
 {# Chamilo theme #}
 {% set theme = 'chamilo' %}
+{% set modals_block = macro_modals.global_modal('') %}
 {% if not from_vue %}
-<!DOCTYPE html>
-<html lang="{{ app.request.locale }}" class="no-js h-100">
-{% block chamilo_head %}
-<head>
-{%- include "@ChamiloCore/Layout/head.html.twig" %}
-</head>
-{% endblock %}
-<body class="font-sans antialiased {{ section_name }}">
-<noscript>{{ "Your browser does not support Javascript" | trans }}</noscript>
-{%- block chamilo_wrap -%}
-    {%- block page_content %}
+    <!DOCTYPE html>
+    <html lang="{{ app.request.locale }}" class="no-js h-100">
+    {% block chamilo_head %}
+        {%- include "@ChamiloCore/Layout/head.html.twig" %}
     {% endblock %}
-{% endblock -%}
-{%- block chamilo_footer -%}
-{% endblock -%}
-</body>
-</html>
+    <body class="font-sans antialiased {{ section_name }}">
+    <noscript>{{ "Your browser does not support Javascript"|trans }}</noscript>
+    {%- block chamilo_wrap -%}
+        {%- block page_content %}
+        {% endblock %}
+    {% endblock -%}
+    {%- block chamilo_footer -%}
+    {% endblock -%}
+    {{ modals_block }}
+    </body>
+    </html>
 {% else %}
     {{ block('page_content') }}
+    {{ modals_block }}
 {% endif %}
-{{ macro_modals.global_modal('') }}

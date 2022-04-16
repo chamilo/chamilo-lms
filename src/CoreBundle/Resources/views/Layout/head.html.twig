@@ -1,54 +1,56 @@
-<meta charset="utf-8">
-<link href="https://chamilo.org/chamilo-lms/" rel="help"/>
-<link href="https://chamilo.org/the-association/" rel="author"/>
-<link href="https://chamilo.org/the-association/" rel="copyright"/>
-<link rel="apple-touch-icon" href="{{ url('index') ~ 'apple-touch-icon.png' }}"/>
-{#<link rel="shortcut icon" href="{{ url('index') ~  favico}}" type="image/x-icon" />#}
-<title>
-{%- block title %}
-{{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
-{%- endblock -%}
-</title>
-{% set bug_notification_link = '' %}
-{% set help_content = '' %}
-{% set header_extra_content = '' %}
-{% set template = 'default' %}
-{% set notification_menu = '' %}
-{% set accessibility = '' %}
-{% set containerClass = '' %}
-{% set breadcrumb = '' %}
-{% set user_notifications = '' %}
-{% set message_url = '' %}
-{% set profile_link = '' %}
-{% set message_link = '' %}
-{%- block stylesheets %}
-{# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
-{#    {{ encore_entry_link_tags('app') }}#}
-{% if theme is defined %}
-{#    <link rel="stylesheet" href="{{ url('index') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>#}
-{% endif %}
-{#    {{ encore_entry_link_tags('vue') }}#}
-<link rel="stylesheet" href="{{ url('index') ~ 'build/vue.css' }}"/>
-<link rel="stylesheet" href="{{ url('index') ~ 'build/css/app.css' }}"/>
-{#<link rel="stylesheet" href="{{ url('index') ~ 'build/css/print.css' }}" media="print" />#}
-{% endblock %}
-{# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-{#<script src="{{ url('index') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script>#}
-<script src="{{ url('index') ~ 'build/runtime.js' }}"></script>
-<script src="{{ url('index') ~ 'build/app.js' }}"></script>
-{#{{ encore_entry_script_tags('app') }}#}
-{# Add third party js libraries that can't be loaded using webpack #}
-{#<script src="{{ asset('libs/readmore-js/readmore.js') }}"></script>#}
-<script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-{# Check chamilo_js key in assetic.yml #}
-{% block javascripts %}
-    {% block chamilo_header_js %}
-        {# Loading legacy js using the $htmlHeadXtra array #}
-        {% autoescape false %}
-            {% for js in legacy_javascript %}
-                {{~ js }}
-            {% endfor %}
-        {% endautoescape %}
+<head>
+    <meta charset="utf-8">
+    <link href="https://chamilo.org/chamilo-lms/" rel="help" />
+    <link href="https://chamilo.org/the-association/" rel="author" />
+    <link href="https://chamilo.org/the-association/" rel="copyright" />
+    <link rel="apple-touch-icon" href="{{ url('index') ~ 'apple-touch-icon.png' }}" />
+    {# <link rel="shortcut icon" href="{{ url('index') ~  favico}}" type="image/x-icon" /> #}
+    <title>
+        {%- block title %}
+            {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
+        {%- endblock -%}
+    </title>
+    {% set bug_notification_link = '' %}
+    {% set help_content = '' %}
+    {% set header_extra_content = '' %}
+    {% set template = 'default' %}
+    {% set notification_menu = '' %}
+    {% set accessibility = '' %}
+    {% set containerClass = '' %}
+    {% set breadcrumb = '' %}
+    {% set user_notifications = '' %}
+    {% set message_url = '' %}
+    {% set profile_link = '' %}
+    {% set message_link = '' %}
+    {%- block stylesheets %}
+        {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
+        {#    {{ encore_entry_link_tags('app') }} #}
+        {% if theme is defined %}
+            {#    <link rel="stylesheet" href="{{ url('index') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/> #}
+        {% endif %}
+        {#    {{ encore_entry_link_tags('vue') }} #}
+        <link rel="stylesheet" href="{{ url('index') ~ 'build/vue.css' }}" />
+        <link rel="stylesheet" href="{{ url('index') ~ 'build/css/app.css' }}" />
+        {# <link rel="stylesheet" href="{{ url('index') ~ 'build/css/print.css' }}" media="print" /> #}
     {% endblock %}
-{% endblock %}
+    {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
+    {# <script src="{{ url('index') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script> #}
+    <script src="{{ url('index') ~ 'build/runtime.js' }}"></script>
+    <script src="{{ url('index') ~ 'build/app.js' }}"></script>
+    {# {{ encore_entry_script_tags('app') }} #}
+    {# Add third party js libraries that can't be loaded using webpack #}
+    {# <script src="{{ asset('libs/readmore-js/readmore.js') }}"></script> #}
+    <script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {# Check chamilo_js key in assetic.yml #}
+    {% block javascripts %}
+        {% block chamilo_header_js %}
+            {# Loading legacy js using the $htmlHeadXtra array #}
+            {% autoescape false %}
+                {% for js in legacy_javascript %}
+                    {{~ js }}
+                {% endfor %}
+            {% endautoescape %}
+        {% endblock %}
+    {% endblock %}
+</head>

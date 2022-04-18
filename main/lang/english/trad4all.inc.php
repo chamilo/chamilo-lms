@@ -8858,4 +8858,5 @@ $SelectTheNextLp = "Next LP";
 $NoNotifications = "No notification";
 $AllowsSkillsBySubCategories = "Allow skills assignation by sub category";
 $ItAllowsTheAcquisitionOfSkillsBySubCategories = "It allows the acquisition of skills by sub categories independently.";
+$SkillMinScore = "Minimum score";
 ?>

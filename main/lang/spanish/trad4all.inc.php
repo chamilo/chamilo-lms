@@ -8886,4 +8886,5 @@ $SelectTheNextLp = "Leccion siguiente";
 $NoNotifications = "Niguna notificacion";
 $AllowsSkillsBySubCategories = "Permitir la asignacion de competencias por sub categoria";
 $ItAllowsTheAcquisitionOfSkillsBySubCategories = "Permite la adquisicion de competencia por validacion indeprendiente de sub categorias.";
+$SkillMinScore = "Score minimum";
 ?>

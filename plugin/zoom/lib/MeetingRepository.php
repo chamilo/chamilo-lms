@@ -30,9 +30,15 @@ class MeetingRepository extends EntityRepository
     public function periodMeetings($startDate, $endDate)
     {
         $matching = [];
+        /** @var array<Meeting> $all */
         $all = $this->findAll();
         foreach ($all as $candidate) {
-            if ($candidate->startDateTime >= $startDate && $candidate->startDateTime <= $endDate) {
+            $meetingEndDate = clone $candidate->startDateTime;
+            $meetingEndDate->add($candidate->durationInterval);
+
+            if (($candidate->startDateTime >= $startDate && $candidate->startDateTime <= $endDate)
+                || $meetingEndDate <= $startDate
+            ) {
                 $matching[] = $candidate;
             }
         }

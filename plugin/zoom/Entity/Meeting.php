@@ -636,7 +636,7 @@ class Meeting
             $now = new DateTime();
             $later = new DateTime();
             $later->add(new DateInterval('PT'.$this->meetingInfoGet->duration.'M'));
-            $this->durationInterval = $later->diff($now);
+            $this->durationInterval = $now->diff($later);
             $this->formattedDuration = $this->durationInterval->format($zoomPlugin->get_lang('DurationFormat'));
         }
     }

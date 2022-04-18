@@ -3131,7 +3131,7 @@ $email = "courriel";
 $CourseCodeAlreadyExists = "Désolé, mais ce code de cours existe déjà. Veuillez en choisir un autre.";
 $Statistics = "Statistiques";
 $GroupList = "Liste des groupes";
-$Previous = "précédent";
+$Previous = "Précédent";
 $DestDirectoryDoesntExist = "Le répertoire de destination n'existe pas";
 $Courses = "Cours";
 $In = "dans";
@@ -8791,4 +8791,7 @@ $ExportLpQuizResults = "Export des résultats des exercices des parcours";
 $ElearningResults = "Résultats de parcours";
 $InvoicingByAccessUrl = "Utilisateurs actifs dans les sessions par URL";
 $SelectTheNextLp = "Parcours suivant";
+$NoNotifications = "Aucune notification";
+$AllowsSkillsBySubCategories = "Permettre l'assignation de compétences par sous catégorie";
+$ItAllowsTheAcquisitionOfSkillsBySubCategories = "Permet d'assigner les compétences par validation indépendantes des sous catégories.";
 ?>

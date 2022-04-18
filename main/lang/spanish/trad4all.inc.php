@@ -8883,4 +8883,7 @@ $ExportLpQuizResults = "Exportacion de los resultados de los ejercicios en lecci
 $ElearningResults = "Resultados de lecciones";
 $InvoicingByAccessUrl = "Usuarios activos en sesiones por URL";
 $SelectTheNextLp = "Leccion siguiente";
+$NoNotifications = "Niguna notificacion";
+$AllowsSkillsBySubCategories = "Permitir la asignacion de competencias por sub categoria";
+$ItAllowsTheAcquisitionOfSkillsBySubCategories = "Permite la adquisicion de competencia por validacion indeprendiente de sub categorias.";
 ?>

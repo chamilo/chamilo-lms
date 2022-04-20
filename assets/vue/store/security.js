@@ -35,8 +35,12 @@ export default {
                 return false;
             }
 
+            if (('studentview' === window.localStorage.getItem("studentview"))) {
+              return false;
+            }
+
             if (getters.hasRole('ROLE_SUPER_ADMIN') || getters.hasRole('ROLE_ADMIN')) {
-                return true
+                return true;
             }
 
             return getters.hasRole('ROLE_CURRENT_COURSE_TEACHER');
@@ -45,6 +49,11 @@ export default {
             return getters.hasRole('ROLE_STUDENT_BOSS');
         },
         isStudent(state, getters) {
+
+            if ('studentview' === window.localStorage.getItem("studentview")) {
+              return true;
+            }
+
             return getters.hasRole('ROLE_STUDENT');
         },
         getUser(state) {

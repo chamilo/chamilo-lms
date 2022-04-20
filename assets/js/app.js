@@ -5,7 +5,7 @@ const $ = require('jquery');
 window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
-global.$ = global.jQuery = $
+global.$ = global.jQuery = $;
 
 //Routing.setRoutingData(routes);
 
@@ -83,7 +83,7 @@ const mainUrl = homePublicUrl + 'main/';
 const webAjax = homePublicUrl + 'main/inc/ajax/';
 
 $(function () {
-  let courseId = $('body').attr('data-course-id');
+  let courseId = parseInt(window.cid); //$('body').attr('data-course-id');
   let webCidReq = '&cid=' + courseId + '&sid=' + $('body').attr('data-session-id');
   window.webCidReq = webCidReq;
 
@@ -98,7 +98,7 @@ $(function () {
   });
 
   if (courseId >0) {
-    let courseCode = $("body").data("course-code");
+    /*let courseCode = $("body").data("course-code");
     let logOutUrl = webAjax + 'course.ajax.php?a=course_logout&cidReq=' + courseCode;
     function courseLogout() {
       $.ajax({
@@ -109,7 +109,20 @@ $(function () {
         }
       });
     }
-    addMainEvent(window, 'unload', courseLogout ,false);
+    addMainEvent(window, 'unload', courseLogout ,false);*/
+
+    $("#view-as-student-link").removeClass('hidden');
+    $("#view-as-student-link").click(function(e) {
+      e.preventDefault();
+      $.ajax({
+        url: '/toggle_student_view',
+        success: function (content) {
+          window.localStorage.setItem("studentview", content);
+          window.location.reload();
+        }
+      });
+    });
+
   }
 
   $("#open-view-list").click(function () {

@@ -10,11 +10,6 @@
 
       <div>
         <div class="flex flex-row" v-if="isCurrentTeacher && course">
-          <a class="btn btn-info mr-2 text-xs">
-            <v-icon icon="mdi-eye" class="pr-2" />
-            {{ $t('See as student') }}
-          </a>
-
           <div class="relative">
             <!--          shadow rounded-full-->
             <button

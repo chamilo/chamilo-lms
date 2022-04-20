@@ -3,6 +3,7 @@ window.config = {{ config_json | raw }};
 window.user = {{ user_json | raw }};
 window.access_url_id = {{ access_url_id }};
 window.languages = {{ languages_json | raw }};
+window.cid = {{ cid }};
 {% if legacy_breadcrumb is defined %}
 window.breadcrumb = {{ legacy_breadcrumb | raw }};
 {% else %}

@@ -98,5 +98,6 @@ class TwigListener
         $this->twig->addGlobal('access_url_id', $request->getSession()->get('access_url_id'));
         $this->twig->addGlobal('config_json', json_encode($config));
         $this->twig->addGlobal('languages_json', json_encode($languages));
+        $this->twig->addGlobal('cid', $request->getSession()->get('cid'));
     }
 }

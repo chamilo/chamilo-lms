@@ -102,7 +102,7 @@ export default {
       if (typeof redirect !== "undefined") {
         router.push({path: redirect});
       } else {
-        router.push({path: "/home"});
+        router.push({path: "/sessions"});
       }
     }
 
@@ -123,7 +123,7 @@ export default {
           if (store.getters["security/isAdmin"]) {
             redirect = '/main/admin/index.php';
           } else {
-            redirect = '/home';
+            redirect = '/sessions';
           }
         }
         router.push({path: redirect});

@@ -6636,8 +6636,14 @@ div#chat-remote-video video {
     font-size: 14px;
 }
 
-.grid-courses .items .toolbar > div {
+.grid-courses .items .toolbar {
+    margin-top: 10px;
     text-align: center;
+}
+
+#homepage-announcements .toolbar .btn {
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 .grid-courses .items .toolbar .info {

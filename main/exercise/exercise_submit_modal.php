@@ -62,7 +62,7 @@ if ($tryAgain) {
 }
 
 $loaded = isset($_GET['loaded']);
-if ($allowTryAgain) {
+if ($allowTryAgain || $feedbackType == EXERCISE_FEEDBACK_TYPE_DIRECT) {
     unset($exerciseResult[$questionId]);
 }
 
@@ -409,8 +409,10 @@ if (!empty($url) && $url != -1) {
     ).'<a target="_blank" href="'.$url.'">'.get_lang('VisitUrl').'</a><br /><br />';
 }
 
-$nextQuestion = $questionNum + 1;
-$destinationId = $questionList[$nextQuestion] ?? -1;
+if (null === $destinationId) {
+    $nextQuestion = $questionNum + 1;
+    $destinationId = $questionList[$nextQuestion] ?? -1;
+}
 
 // the link to finish the test
 if (-1 == $destinationId) {

@@ -117,8 +117,11 @@ function bigUpload () {
 		//Reset the background color of the progress bar in case it was changed by any earlier errors
 		//Change the Upload button to a Pause button
 		this.$(this.settings.progressBarField).style.backgroundColor = this.settings.progressBarColor;
+		this.$(this.settings.progressBarField).style.width = '0%';
+		this.$(this.settings.progressBarField).textContent = '0%';
 		this.$(this.settings.responseField).textContent = '';
 		this.$(this.settings.submitButton).value = 'Pause';
+		this.$(this.settings.submitButton).disabled = true;
 
 		//Alias the file input object to this.uploadData
 		this.uploadData.file = this.$(this.settings.inputField).files[0];

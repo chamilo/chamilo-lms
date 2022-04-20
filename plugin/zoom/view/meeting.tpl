@@ -20,6 +20,10 @@
     <a class="btn btn-default" href="activity.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
         {{ 'Activity'|get_plugin_lang('ZoomPlugin') }}
     </a>
+
+    <a href="attendance.php?meetingId={{ meeting.meetingId ~ '&' ~ url_extra }}" class="btn btn-info">
+        {{ 'Attendance'|get_lang }}
+    </a>
 {% endif %}
 </div>
 

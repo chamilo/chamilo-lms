@@ -1649,6 +1649,9 @@ $_configuration['course_catalog_settings'] = [
 ];
 */
 
+// Display the course catalog in home page
+//$_configuration['course_catalog_display_in_home'] = false;
+
 // Page "My Courses" shows specific course extra fields (CourseManager::getExtraFieldsToBePresented)
 /*$_configuration['my_course_course_extrafields_to_be_presented'] = [
     'fields' => ['mots_cles', 'duree_en_min', 'format'],
@@ -2036,6 +2039,8 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 
 // Disable webservices.
 //$_configuration['disable_webservices'] = true;
+// Enable admin-only APIs: get_users_api_keys, get_user_api_key
+//$_configuration['webservice_enable_adminonly_api'] = false;
 
 // Ask user to renew password at first login.
 // Requires a user checkbox extra field called "ask_new_password".
@@ -2153,8 +2158,20 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Hides the icon of percentage in "Average of tests in Learning Paths" indication on a student tracking
 // $_configuration['student_follow_page_hide_lp_tests_average'] = false;
 
+// Add navigation to the next or previous lp without going to the list.
+// Requires DB change:
+// ALTER TABLE c_lp ADD next_lp_id int(11) NOT NULL DEFAULT '0';
+//$_configuration['lp_enable_flow'] = false;
+
 // User extra fields to be check on user edition to generate a specific process if it was modified
 //$_configuration['user_edition_extra_field_to_check'] = 'ExtrafieldLabel';
+
+// Enable skills in subcategory to work independant on assignement
+// Require DB changes:
+// ALTER TABLE gradebook_category ADD allow_skills_by_subcategory tinyint(1) NOT NULL DEFAULT '1';
+// Requires edit Entity GradebookCategory: src/Chamilo/CoreBundle/Entity/GradebookCategory.php uncomment "allowSkillsBySubcategory" variable.
+// Requires uncomment the allowSkillsBySubcategory get and set
+//$_configuration['gradebook_enable_subcategory_skills_independant_assignement'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

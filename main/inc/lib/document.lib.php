@@ -3383,7 +3383,7 @@ class DocumentManager
                 $html .= '<audio id="'.$id.'" controls="controls" src="'.$file.'" type="audio/mp3" ></audio></div>';
                 break;
             default:
-                $html = '<video id="'.$id.'" controls>';
+                $html = '<video id="'.$id.'" width="100%" height="100%" controls>';
                 $html .= '<source src="'.$file.'" >';
                 $html .= '</video>';
                 break;

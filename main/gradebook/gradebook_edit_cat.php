@@ -9,7 +9,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
 $edit_cat = isset($_REQUEST['editcat']) ? (int) $_REQUEST['editcat'] : 0;
-
+$enableGradeSubCategorySkills = (true === api_get_configuration_value('gradebook_enable_subcategory_skills_independant_assignement'));
 $catedit = Category::load($edit_cat);
 $form = new CatForm(
     CatForm::TYPE_EDIT,
@@ -62,6 +62,13 @@ if ($form->validate()) {
 
     if ($values['hid_parent_id'] == 0) {
         $cat->set_certificate_min_score($values['certif_min_score']);
+    } else {
+        if ($enableGradeSubCategorySkills) {
+            $allowSkillsBySubCategory = $cat->getAllowSkillBySubCategory($cat->get_parent_id());
+            if ($allowSkillsBySubCategory) {
+                $cat->set_certificate_min_score($values['certif_min_score']);
+            }
+        }
     }
 
     $visible = 1;
@@ -75,6 +82,12 @@ if ($form->validate()) {
     } else {
         $cat->setIsRequirement(false);
     }
+
+    if ($enableGradeSubCategorySkills) {
+        $allowSkillsBySubCategory = isset($values['allow_skills_by_subcategory']);
+        $cat->updateAllowSkillBySubCategory($allowSkillsBySubCategory);
+    }
+
     $cat->save();
     header('Location: '.Category::getUrl().'editcat=&selectcat='.$cat->get_parent_id());
     exit;

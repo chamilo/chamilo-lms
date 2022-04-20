@@ -119,12 +119,14 @@ export default {
       await store.dispatch("security/login", payload);
       if (!store.getters["security/hasError"]) {
         //isSidebarOpen.value = true;
-        if (typeof redirect !== "undefined") {
-          router.push({path: redirect});
-        } else {
-          // router.replace({path: "/home"});
-          window.location.href = '/home';
+        if (typeof redirect === "undefined") {
+          if (store.getters["security/isAdmin"]) {
+            redirect = '/main/admin/index.php';
+          } else {
+            redirect = '/home';
+          }
         }
+        router.push({path: redirect});
       }
     }
 

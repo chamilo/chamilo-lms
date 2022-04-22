@@ -142,7 +142,7 @@ $(function() {
     ".$result['js']."
     $('#system_template').on('change', function() {
         var sessionId = $(this).find('option:selected').val();
-
+        console.log('system_template CHANGE');
         $.ajax({
             type: 'GET',
             dataType: 'json',
@@ -156,10 +156,10 @@ $(function() {
                     $('#session_category').val(0);
                     $('#session_category').selectpicker('render');
                 }*/
-                                
-                $('#session_category').val(data.session_category_id);
+
+                $('#session_category').val(parseInt(data.session_category_id));
                 $('#session_category').trigger('change');
-                
+
                 setContentFromEditor('description', data.description);
 
                 if (data.duration > 0) {
@@ -184,10 +184,10 @@ $(function() {
                         var variableName = variable + '_to_local_time';
                         if (data[variableName]) {
                             console.log(data[variableName]);
-                            let parsedDate = data[variableName];                     
+                            let parsedDate = data[variableName];
                             if (parsedDate) {
                                  var item = $('#'+variable);
-                                 flatpickr = item[0]._flatpickr;                       
+                                 flatpickr = item[0]._flatpickr;
                                  flatpickr.setDate(parsedDate);
                             }
                         }
@@ -240,7 +240,7 @@ $(function() {
                         case '21': // alphanum
                             $('input[name='+fieldName+']').val(item.value);
                             break;
-                        case '2': // textarea                            
+                        case '2': // textarea
                             setContentFromEditor(fieldName, item.value);
                             break;
                         case '3': // radio
@@ -251,7 +251,7 @@ $(function() {
                         case '5': // multiple select
                             var options = item.value.split(';');
                             $('#'+fieldName+'').val(options);
-                            $('#'+fieldName+'').selectpicker('render');
+                            $('#'+fieldName+'').trigger('change');
                             break;
                         case '8': // double
                             var first = 'first_'+fieldName;
@@ -262,7 +262,7 @@ $(function() {
                                 var firstFieldId = values[0];
                                 var secondFieldId = values[1];
                                 $('#'+first+'').val(firstFieldId);
-                                $('#'+first+'').selectpicker('render');
+                                $('#'+first+'').trigger('change');
 
                                 // Remove all options
                                  $('#'+second+'')
@@ -288,7 +288,7 @@ $(function() {
                                 });
 
                                 $('#'+second+'').val(secondFieldId);
-                                $('#'+second+'').selectpicker('render');
+                                $('#'+second+'').trigger('change');
                             }
                             break;
                         case '10': // tags
@@ -370,7 +370,7 @@ if ($form->validate()) {
     }
     $coachEndDate = $params['coach_access_end_date'];
     $coachUsername = $params['coach_username'];
-    $id_session_category = $params['session_category'];
+    $id_session_category = isset($params['session_category']) ? (int) $params['session_category'] : 0;
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
     $description = $params['description'];

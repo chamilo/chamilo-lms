@@ -341,6 +341,12 @@ class ZoomPlugin extends Plugin
             $isWebinar ? $this->get_lang('UpdateWebinar') : $this->get_lang('UpdateMeeting')
         );
         $form->addLabel(get_lang('Type'), $conference->typeName);
+        if ($conference->getAccountEmail()) {
+            $form->addLabel(
+                $this->get_lang('AccountEmail'),
+                $conference->getAccountEmail()
+            );
+        }
         $form->addText('topic', $this->get_lang('Topic'));
 
         if ($requiresDateAndDuration) {

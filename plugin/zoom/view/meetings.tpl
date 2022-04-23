@@ -24,8 +24,7 @@
         {% for meeting in meetings %}
             <tr>
                 <td>{{ meeting.typeName }}</td>
-                <td>{{ meeting.meetingInfoGet.topic }}</td>
-                <td>{{ meeting.webinarSchema.topic }}</td>
+                <td>{{ meeting.topic }}</td>
                 <td>{{ meeting.formattedStartTime }}</td>
                 <td>{{ meeting.user ? 'No'|get_lang : 'Yes'|get_lang }}</td>
 {#                    <td>{{ meeting.course ? meeting.course : '-' }}</td>#}

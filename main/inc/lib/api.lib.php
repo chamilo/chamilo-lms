@@ -5053,6 +5053,9 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
         case 'uk': // Ukraine
             $country = 'ua';
             break;
+        case 'vi': // Vietnam - GH#4231
+            $country = 'vn';
+            break;
         case 'zh-TW':
         case 'zh':
             $country = 'cn';

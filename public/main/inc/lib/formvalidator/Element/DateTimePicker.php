@@ -53,7 +53,7 @@ class DateTimePicker extends HTML_QuickForm_text
         return '
             <div id="div_'.$id.'" class="flex flex-row mt-1">
                 <input '.$this->_getAttrString($this->_attributes).'
-                    class="form-control" type="text" value="'.$value.'" data-input>
+                    class="form-control border" type="text" value="'.$value.'" placeholder="'.get_lang('Select datetime ..').'" data-input>
                 <div class="ml-1" id="button-addon3">
                     <button class="btn btn-outline-secondary"  type="button" data-toggle>
                         <i class="fas fa-calendar-alt"></i>

@@ -92,16 +92,11 @@ switch ($type) {
         if (api_is_anonymous()) {
             api_not_allowed(true);
         }
-        $extra_field_data = UserManager::get_extra_user_data_by_field(
-            api_get_user_id(),
-            'google_calendar_url'
-        );
-        if (!empty($extra_field_data) &&
-            isset($extra_field_data['google_calendar_url']) &&
-            !empty($extra_field_data['google_calendar_url'])
-        ) {
+        $googleCalendarUrl = Agenda::returnGoogleCalendarUrl(api_get_user_id());
+
+        if (!empty($googleCalendarUrl)) {
             $tpl->assign('use_google_calendar', 1);
-            $tpl->assign('google_calendar_url', $extra_field_data['google_calendar_url']);
+            $tpl->assign('google_calendar_url', $googleCalendarUrl);
         }
         $this_section = SECTION_MYAGENDA;
         if (!api_is_anonymous()) {
@@ -312,23 +307,11 @@ $form->addHtml('</div>');
 $tpl->assign('form_add', $form->returnForm());
 $tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));
 
-$onHoverInfo = api_get_configuration_value('agenda_on_hover_info');
-if (!empty($onHoverInfo)) {
-    $options = $onHoverInfo['options'];
-} else {
-    $options = [
-        'comment' => true,
-        'description' => true,
-    ];
-}
-$tpl->assign('on_hover_info', $options);
+$onHoverInfo = Agenda::returnOnHoverInfo();
+$tpl->assign('on_hover_info', $onHoverInfo);
 
-$settings = api_get_configuration_value('fullcalendar_settings');
-$extraSettings = '';
-if (!empty($settings) && isset($settings['settings']) && !empty($settings['settings'])) {
-    $encoded = json_encode($settings['settings']);
-    $extraSettings = substr($encoded, 1, -1).',';
-}
+$extraSettings = Agenda::returnFullCalendarExtraSettings();
+
 $tpl->assign('fullcalendar_settings', $extraSettings);
 
 $templateName = $tpl->get_template('agenda/month.tpl');

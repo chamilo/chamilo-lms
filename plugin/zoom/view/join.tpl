@@ -1,4 +1,4 @@
-{{ meeting.introduction }}
+{% include 'zoom/view/meeting_details.tpl' %}
 
 {% if is_conference_manager and meeting.isSignAttendance %}
     <p class="text-info">

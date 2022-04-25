@@ -219,13 +219,9 @@ class Registrant
     }
 
     /**
-     * @param MeetingRegistrant $meetingRegistrant
-     *
      * @throws Exception
-     *
-     * @return $this
      */
-    public function setMeetingRegistrant($meetingRegistrant)
+    public function setMeetingRegistrant(API\RegistrantSchema $meetingRegistrant): Registrant
     {
         $this->meetingRegistrant = $meetingRegistrant;
         $this->computeFullName();

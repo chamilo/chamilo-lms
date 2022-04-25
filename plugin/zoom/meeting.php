@@ -3,6 +3,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\PluginBundle\Zoom\Meeting;
+use Chamilo\PluginBundle\Zoom\Webinar;
 
 require_once __DIR__.'/config.php';
 
@@ -55,8 +56,14 @@ $tpl = new Template($meeting->getMeetingId());
 if ($plugin->userIsConferenceManager($meeting)) {
     // user can edit, start and delete meeting
     $tpl->assign('isConferenceManager', true);
-    $tpl->assign('editMeetingForm', $plugin->getEditMeetingForm($meeting)->returnForm());
-    $tpl->assign('deleteMeetingForm', $plugin->getDeleteMeetingForm($meeting, $returnURL)->returnForm());
+
+    $tpl->assign('editMeetingForm', $plugin->getEditConferenceForm($meeting)->returnForm());
+
+    if ($meeting instanceof Webinar) {
+        $tpl->assign('deleteMeetingForm', $plugin->getDeleteWebinarForm($meeting, $returnURL)->returnForm());
+    } elseif ($meeting instanceof Meeting) {
+        $tpl->assign('deleteMeetingForm', $plugin->getDeleteMeetingForm($meeting, $returnURL)->returnForm());
+    }
 
     if (false === $meeting->isGlobalMeeting() && false == $meeting->isCourseMeeting()) {
         if ('true' === $plugin->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {

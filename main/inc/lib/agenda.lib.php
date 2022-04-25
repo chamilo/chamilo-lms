@@ -4591,6 +4591,44 @@ class Agenda
             });';
     }
 
+    public static function returnGoogleCalendarUrl(int $userId): ?string
+    {
+        $extraFieldInfo = UserManager::get_extra_user_data_by_field($userId, 'google_calendar_url');
+
+        if (empty($extraFieldInfo) || empty($extraFieldInfo['google_calendar_url'])) {
+            return null;
+        }
+
+        return $extraFieldInfo['google_calendar_url'];
+    }
+
+    public static function returnFullCalendarExtraSettings(): ?string
+    {
+        $settings = api_get_configuration_value('fullcalendar_settings');
+
+        if (empty($settings) || empty($settings['settings'])) {
+            return null;
+        }
+
+        $encoded = json_encode($settings['settings']);
+
+        return substr($encoded, 1, -1).',';
+    }
+
+    public static function returnOnHoverInfo()
+    {
+        $onHoverInfo = api_get_configuration_value('agenda_on_hover_info');
+
+        if (!empty($onHoverInfo)) {
+            return $onHoverInfo['options'];
+        }
+
+        return [
+            'comment' => true,
+            'description' => true,
+        ];
+    }
+
     private function editReminders(int $eventId, array $reminderList = [])
     {
         if (false === api_get_configuration_value('agenda_reminders')) {

@@ -94,7 +94,7 @@ switch ($action) {
             [],
             [],
             null,
-            $color,
+            $color
         );
         break;
     case 'delete_event':

@@ -261,7 +261,6 @@ $form->addHtml('</div>');
 
 $form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');
 $form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span id="end_date"></span>');
-
 $form->addElement('text', 'title', get_lang('Title'), ['id' => 'title']);
 $form->addHtmlEditor(
     'content',

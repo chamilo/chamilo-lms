@@ -2371,6 +2371,10 @@ class Agenda
         $result = Database::query($sql);
         $my_events = [];
         if (Database::num_rows($result)) {
+            $allowCareersInGlobalAgenda = api_get_configuration_value('allow_careers_in_global_agenda');
+            $userId = api_get_user_id();
+            $userVisibility = SystemAnnouncementManager::getCurrentUserVisibility();
+
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $event = [];
                 $event['id'] = 'platform_'.$row['id'];
@@ -2399,9 +2403,20 @@ class Agenda
                 $event['has_children'] = 0;
                 $event['description'] = $row['content'];
 
-                if (api_get_configuration_value('allow_careers_in_global_agenda')) {
+                if ($allowCareersInGlobalAgenda) {
                     $event['career'] = null;
                     $event['promotion'] = null;
+
+                    $eventIsVisibleForUser = SystemAnnouncementManager::isVisibleAnnouncementForUser(
+                        $userId,
+                        $userVisibility,
+                        (int) $row['career_id'],
+                        (int) $row['promotion_id']
+                    );
+
+                    if (false === $eventIsVisibleForUser) {
+                        continue;
+                    }
 
                     if (!empty($row['career_id'])) {
                         $careerInfo = (new Career())->get($row['career_id']);

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * List sessions in an efficient and usable way.
  */
@@ -106,6 +108,125 @@ switch ($action) {
             $url = 'session_list.php?list_type='.$listType;
         }
         header('Location: '.$url);
+        exit;
+        break;
+    case 'export_multiple':
+        $sessionList = explode(',', $idMultiple);
+        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
+        $zip = new PclZip($tempZipFile);
+        $csvList = [];
+        
+        foreach ($sessionList as $sessionId) {
+            $em = Database::getManager();
+            $sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
+            $session = $sessionRepository->find($sessionId);
+
+            if ($session->getNbrCourses() > 0) {
+                $courses = $session->getCourses();
+                $courseList = [];
+                
+                foreach ($courses as $sessionRelCourse) {
+                    $courseList[] = $sessionRelCourse->getCourse();
+                }
+
+                foreach ($courseList as $course) {
+                    $courseId = $course->getId();
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $courseCode = $courseInfo['code'];
+                    $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
+                    $sortByFirstName = api_sort_by_first_name();
+                    $bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
+
+                    $csv_headers = [];
+                    $csv_headers[] = get_lang('OfficialCode');
+
+                    if ($sortByFirstName) {
+                        $csv_headers[] = get_lang('FirstName');
+                        $csv_headers[] = get_lang('LastName');
+                    } else {
+                        $csv_headers[] = get_lang('LastName');
+                        $csv_headers[] = get_lang('FirstName');
+                    }
+
+                    $csv_headers[] = get_lang('Login');
+                    $csv_headers[] = get_lang('TrainingTime');
+                    $csv_headers[] = get_lang('CourseProgress');
+                    $csv_headers[] = get_lang('ExerciseProgress');
+                    $csv_headers[] = get_lang('ExerciseAverage');
+                    $csv_headers[] = get_lang('Score');
+                    $csv_headers[] = $bestScoreLabel;
+                    $exerciseResultHeaders = [];
+                    if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
+                        isset($addExerciseOption['courses'][$courseCode])
+                    ) {
+                        foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
+                            $exercise = new Exercise();
+                            $exercise->read($exerciseId);
+                            if ($exercise->iId) {
+                                $title = get_lang('Exercise').': '.$exercise->get_formated_title();
+                                $table->set_header(
+                                    $headerCounter++,
+                                    $title,
+                                    false
+                                );
+                                $exerciseResultHeaders[] = $title;
+                                $headers['exercise_'.$exercise->iId] = $title;
+                            }
+                        }
+                    }
+                    $csv_headers[] = get_lang('Student_publication');
+                    $csv_headers[] = get_lang('Messages');
+                    $csv_headers[] = get_lang('Classes');
+                    if (empty($sessionId)) {
+                        $csv_headers[] = get_lang('Survey');
+                    } else {
+                        $csv_headers[] = get_lang('RegistrationDate');
+                    }
+                    $csv_headers[] = get_lang('FirstLoginInCourse');
+                    $csv_headers[] = get_lang('LatestLoginInCourse');
+                    $csvContentInSession = Session::read('csv_content', []);
+
+                    array_unshift($csvContentInSession, $csv_headers);
+
+                    if ($sessionId) {
+                        $sessionInfo = api_get_session_info($sessionId);
+                        $sessionDates = SessionManager::parseSessionDates($sessionInfo);
+                        
+                        array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
+                        array_unshift($csvContentInSession, [get_lang('SessionName'), Security::remove_XSS($sessionInfo['name'])]);
+                    }
+                    $csvList[] = [
+                        'session_id' => $sessionId,
+                        'session_name' => $session->getName(),
+                        'course_id' => $courseId,
+                        'course_name' => $courseInfo['name'],
+                        'path' => Export::arrayToCsv($csvContentInSession, '', true)
+                    ];
+                }
+            }
+        }
+
+        foreach ($csvList as $csv) {
+            $newFileName = $csv['session_id'].'_'.$csv['session_name'];
+            $newFileName .= '-'.$csv['course_id'].'_'.$csv['course_name'].'.csv';
+
+            $zip->add(
+                array(
+                    array(
+                        PCLZIP_ATT_FILE_NAME => $csv['path'],
+                        PCLZIP_ATT_FILE_NEW_FULL_NAME => $newFileName
+                    )
+                ),
+                'fixDocumentNameCallback'
+            );
+            unlink($csv['path']);
+        }
+
+        DocumentManager::file_send_for_download(
+            $tempZipFile,
+            true
+        );
+        unlink($tempZipFile);
         exit;
         break;
 }
@@ -234,6 +355,7 @@ $allowOrder = api_get_configuration_value('session_list_order');
 $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 $deleteUrl = api_get_self().'?list_type='.$listType.'&action=delete_multiple';
 $copyUrl = api_get_self().'?list_type='.$listType.'&action=copy_multiple';
+$exportUrl = api_get_self().'?list_type='.$listType.'&action=export_multiple';
 $extra_params['multiselect'] = true;
 
 ?>
@@ -389,6 +511,17 @@ $extra_params['multiselect'] = true;
                     var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
                     if (list.length) {
                         window.location.replace('<?php echo $copyUrl; ?>&id='+list.join(','));
+                    } else {
+                        alert("<?php echo addslashes(get_lang('SelectAnOption')); ?>");
+                    }
+                }
+            }).navButtonAdd('#sessions_pager',{
+                caption:"<?php echo addslashes(get_lang('Export2ZIP')); ?>",
+                buttonicon:"ui-icon ui-icon-plus",
+                onClickButton: function(a) {
+                    var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
+                    if (list.length) {
+                        window.location.replace('<?php echo $exportUrl; ?>&id='+list.join(','));
                     } else {
                         alert("<?php echo addslashes(get_lang('SelectAnOption')); ?>");
                     }

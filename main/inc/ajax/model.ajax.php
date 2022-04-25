@@ -2607,7 +2607,8 @@ switch ($action) {
         if (!empty($result)) {
             $urlUserGroup = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
             foreach ($result as $group) {
-                $countUsers = count($obj->get_users_by_usergroup($group['id']));
+                $role = $obj->get_user_group_role(api_get_user_id(), $group['id']);
+                $countUsers = count($obj->get_users_by_usergroup($group['id'], [$role]));
                 $group['users'] = $countUsers;
                 if (!empty($countUsers)) {
                     $group['users'] = Display::url(
@@ -2637,8 +2638,8 @@ switch ($action) {
                         break;
                 }
 
-                $role = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
-                $group['status'] = $role;
+                $roleToString = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
+                $group['status'] = $roleToString;
                 $group['actions'] = '';
 
                 if ($isAllow) {

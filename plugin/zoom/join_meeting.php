@@ -52,7 +52,7 @@ try {
     }
 
     if ($meeting->isSignAttendance() && !$isConferenceManager) {
-        $signature = $meeting->getRegistrant($currentUser)->getSignature();
+        $signature = $meeting->getRegistrantByUser($currentUser)->getSignature();
 
         Security::get_token('zoom_signature');
     }

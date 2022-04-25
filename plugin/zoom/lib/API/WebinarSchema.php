@@ -102,7 +102,7 @@ class WebinarSchema
     /**
      * @throws Exception
      */
-    public function addRegistrant(RegistrantSchema $registrant, string $ocurrenceIds = ''): CreatedRegistration
+    public function addRegistrant(RegistrantSchema $registrant, string $occurrenceIds = ''): CreatedRegistration
     {
         return CreatedRegistration::fromJson(
             Client::getInstance()->send(

@@ -42,6 +42,7 @@ switch ($action) {
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
         $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : null;
+        $color = isset($_REQUEST['color']) ? $_REQUEST['color'] : null;
         $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
@@ -64,7 +65,7 @@ switch ($action) {
             [],
             null,
             $comment,
-            '',
+            $color,
             $inviteesList,
             $isCollective,
             $reminders
@@ -81,13 +82,19 @@ switch ($action) {
         }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
+        $color = isset($_REQUEST['color']) ? $_REQUEST['color'] : null;
         $agenda->editEvent(
             $id,
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],
             $title,
-            $content
+            $content,
+            [],
+            [],
+            [],
+            null,
+            $color,
         );
         break;
     case 'delete_event':

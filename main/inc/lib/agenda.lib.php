@@ -1767,7 +1767,7 @@ class Agenda
                 $event['id'] = 'personal_'.$row['id'];
                 $event['title'] = $row['title'];
                 $event['className'] = 'personal';
-                $event['borderColor'] = $event['backgroundColor'] = $this->event_personal_color;
+                $event['borderColor'] = $event['backgroundColor'] = $row['color'];
                 $event['editable'] = true;
                 $event['sent_to'] = get_lang('Me');
                 $event['type'] = 'personal';
@@ -2669,6 +2669,7 @@ class Agenda
         }
 
         $form->addElement('text', 'title', get_lang('ItemTitle'));
+        $form->addElement('color', 'color', get_lang('Color'));
 
         if (isset($groupId) && !empty($groupId)) {
             $form->addElement(

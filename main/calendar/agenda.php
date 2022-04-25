@@ -170,6 +170,7 @@ if ($allowToEdit) {
                 $usersToSend = $values['users_to_send'] ?? '';
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
+                $color = $values['color'];
                 $notificationCount = $_REQUEST['notification_count'] ?? [];
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
 
@@ -187,7 +188,7 @@ if ($allowToEdit) {
                     $attachmentList,
                     $attachmentCommentList,
                     $comment,
-                    '',
+                    $color,
                     $values['invitees'] ?? [],
                     $values['collective'] ?? false,
                     $reminders
@@ -241,7 +242,7 @@ if ($allowToEdit) {
                 $addAsAnnouncement = isset($values['add_announcement']);
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
-
+                $color = $values['color'];
                 $sendAttachment = isset($_FILES) && !empty($_FILES);
                 $attachmentList = $sendAttachment ? $_FILES : [];
                 $attachmentCommentList = $values['legend'] ?? '';
@@ -267,7 +268,7 @@ if ($allowToEdit) {
                         $attachmentList,
                         $attachmentCommentList,
                         $comment,
-                        '',
+                        $color,
                         $values['invitees'] ?? [],
                         $values['collective'] ?? false,
                         $reminders
@@ -293,7 +294,7 @@ if ($allowToEdit) {
                     $attachmentList,
                     $attachmentCommentList,
                     $comment,
-                    '',
+                    $color,
                     $addAsAnnouncement,
                     true,
                     0,

@@ -532,7 +532,7 @@ class Meeting
             )
         ;
 
-        return $this->registrants->matching($criteria)->first() ?? null;
+        return $this->registrants->matching($criteria)->first() ?: null;
     }
 
     /**

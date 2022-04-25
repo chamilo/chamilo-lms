@@ -215,9 +215,9 @@ switch ($action) {
                     [
                         PCLZIP_ATT_FILE_NAME => $csv['path'],
                         PCLZIP_ATT_FILE_NEW_FULL_NAME => $newFileName,
-                    ]
+                    ],
                 ],
-                'fixDocumentNameCallback',
+                'fixDocumentNameCallback'
             );
             unlink($csv['path']);
         }

@@ -2584,7 +2584,8 @@ class SessionManager
                 // Copy gradebook categories and links (from base course)
                 // to the new course session
                 if ($copyEvaluation) {
-                    $cats = Category::load(null, null, $courseInfo['code']);
+                    // it gets the main categories ordered by parent
+                    $cats = Category::load(null, null, $courseInfo['code'], null, null, null, 'ORDER BY parent_id ASC');
                     if (!empty($cats)) {
                         $sessionCategory = Category:: load(
                             null,
@@ -2596,25 +2597,32 @@ class SessionManager
                             false
                         );
 
-                        // @todo remove commented code
+                        $sessionCategoriesId = [];
                         if (empty($sessionCategory)) {
-                            // There is no category for this course+session, so create one
-                            $cat = new Category();
-                            $sessionName = $session->getName();
-                            $cat->set_name($courseInfo['code'].' - '.get_lang('Session').' '.$sessionName);
-                            $cat->set_session_id($sessionId);
-                            $cat->set_course_code($courseInfo['code']);
-                            $cat->set_description(null);
-                            //$cat->set_user_id($stud_id);
-                            $cat->set_parent_id(0);
-                            $cat->set_weight(100);
-                            $cat->set_visible(0);
-                            $cat->set_certificate_min_score(75);
-                            $cat->add();
-                            $sessionGradeBookCategoryId = $cat->get_id();
+                            // It sets the values from the main categories to be copied
+                            foreach ($cats as $origCat) {
+                                $cat = new Category();
+                                $sessionName = $session->getName();
+                                $cat->set_name($origCat->get_name().' - '.get_lang('Session').' '.$sessionName);
+                                $cat->set_session_id($sessionId);
+                                $cat->set_course_code($origCat->get_course_code());
+                                $cat->set_description($origCat->get_description());
+                                $cat->set_parent_id($origCat->get_parent_id());
+                                $cat->set_weight($origCat->get_weight());
+                                $cat->set_visible(0);
+                                $cat->set_certificate_min_score($origCat->getCertificateMinScore());
+                                $cat->add();
+                                $sessionGradeBookCategoryId = $cat->get_id();
+                                $sessionCategoriesId[$origCat->get_id()] = $sessionGradeBookCategoryId;
+
+                                // it updates the new parent id
+                                if ($origCat->get_parent_id() > 0) {
+                                    $cat->updateParentId($sessionCategoriesId[$origCat->get_parent_id()], $sessionGradeBookCategoryId);
+                                }
+                            }
                         } else {
                             if (!empty($sessionCategory[0])) {
-                                $sessionGradeBookCategoryId = $sessionCategory[0]->get_id();
+                                $sessionCategoriesId[0] = $sessionCategory[0]->get_id();
                             }
                         }
 
@@ -2633,23 +2641,11 @@ class SessionManager
                                 0
                             );
 
-                            //$cat->set_session_id($sessionId);
-                            //$oldCategoryId = $cat->get_id();
-                            //$newId = $cat->add();
-                            //$newCategoryIdList[$oldCategoryId] = $newId;
-                            //$parentId = $cat->get_parent_id();
-
-                            /*if (!empty($parentId)) {
-                                $newParentId = $newCategoryIdList[$parentId];
-                                $cat->set_parent_id($newParentId);
-                                $cat->save();
-                            }*/
-
                             if (!empty($links)) {
                                 /** @var AbstractLink $link */
                                 foreach ($links as $link) {
-                                    //$newCategoryId = $newCategoryIdList[$link->get_category_id()];
-                                    $link->set_category_id($sessionGradeBookCategoryId);
+                                    $newCategoryId = isset($sessionCategoriesId[$link->getCategory()->get_id()]) ? $sessionCategoriesId[$link->getCategory()->get_id()] : $sessionCategoriesId[0];
+                                    $link->set_category_id($newCategoryId);
                                     $link->add();
                                 }
                             }
@@ -2664,8 +2660,8 @@ class SessionManager
                             if (!empty($evaluationList)) {
                                 /** @var Evaluation $evaluation */
                                 foreach ($evaluationList as $evaluation) {
-                                    //$evaluationId = $newCategoryIdList[$evaluation->get_category_id()];
-                                    $evaluation->set_category_id($sessionGradeBookCategoryId);
+                                    $newCategoryId = isset($sessionCategoriesId[$evaluation->getCategory()->get_id()]) ? $sessionCategoriesId[$evaluation->getCategory()->get_id()] : $sessionCategoriesId[0];
+                                    $evaluation->set_category_id($newCategoryId);
                                     $evaluation->add();
                                 }
                             }

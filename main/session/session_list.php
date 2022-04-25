@@ -115,7 +115,7 @@ switch ($action) {
         $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
         $zip = new PclZip($tempZipFile);
         $csvList = [];
-        
+
         foreach ($sessionList as $sessionId) {
             $em = Database::getManager();
             $sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
@@ -124,7 +124,7 @@ switch ($action) {
             if ($session->getNbrCourses() > 0) {
                 $courses = $session->getCourses();
                 $courseList = [];
-                
+
                 foreach ($courses as $sessionRelCourse) {
                     $courseList[] = $sessionRelCourse->getCourse();
                 }
@@ -200,7 +200,7 @@ switch ($action) {
                         'session_name' => $session->getName(),
                         'course_id' => $courseId,
                         'course_name' => $courseInfo['name'],
-                        'path' => Export::arrayToCsv($csvContentInSession, '', true)
+                        'path' => Export::arrayToCsv($csvContentInSession, '', true),
                     ];
                 }
             }
@@ -211,13 +211,13 @@ switch ($action) {
             $newFileName .= '-'.$csv['course_id'].'_'.$csv['course_name'].'.csv';
 
             $zip->add(
-                array(
-                    array(
+                [
+                    [
                         PCLZIP_ATT_FILE_NAME => $csv['path'],
-                        PCLZIP_ATT_FILE_NEW_FULL_NAME => $newFileName
-                    )
-                ),
-                'fixDocumentNameCallback'
+                        PCLZIP_ATT_FILE_NEW_FULL_NAME => $newFileName,
+                    ]
+                ],
+                'fixDocumentNameCallback',
             );
             unlink($csv['path']);
         }

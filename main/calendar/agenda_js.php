@@ -251,11 +251,14 @@ $agenda->showToForm($form, $sendTo, [], $addOnlyItemsInSendTo);
 $form->addHtml('</div>');
 
 $form->addHtml('<div id="visible_to_read_only" style="display: none">');
-$form->addElement('label', get_lang('To'), '<div id="visible_to_read_only_users"></div>');
+$form->addElement('label', get_lang('To'), '<p id="visible_to_read_only_users" class="form-control-static"></p>');
 $form->addHtml('</div>');
 
-$form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');
-$form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span id="end_date"></span>');
+$form->addElement('label', get_lang('Agenda'), '<p class="form-control-static"><span id ="color_calendar"></span></p>');
+$form->addElement(
+    'label',
+    get_lang('Date'), '<p class="form-control-static"><span id="start_date"></span><span id="end_date"></span></p>'
+);
 $form->addElement('text', 'title', get_lang('Title'), ['id' => 'title']);
 $form->addHtmlEditor(
     'content',
@@ -297,6 +300,11 @@ if (api_get_configuration_value('agenda_reminders')) {
 
     $form->addHtml('<hr><div id="notification_list"></div>');
     $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+    $form->addHtml('<hr>');
+}
+
+if (api_get_configuration_value('allow_careers_in_global_agenda') && 'admin' === $agenda->type) {
+    Career::addCareerFieldsToForm($form);
     $form->addHtml('<hr>');
 }
 

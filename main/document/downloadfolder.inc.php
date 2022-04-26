@@ -127,6 +127,8 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
     $courseInfo['code']
 );
 
+$filesToZip = [];
+
 // Admins are allowed to download invisible files
 if (api_is_allowed_to_edit()) {
     // Set the path that will be used in the query
@@ -180,14 +182,15 @@ if (api_is_allowed_to_edit()) {
                 }
             }
         }
-        $zip->add(
-            $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'],
-            PCLZIP_OPT_REMOVE_PATH,
-            $sysCoursePath.$courseInfo['path'].'/document'.$remove_dir,
-            PCLZIP_CB_PRE_ADD,
-            'fixDocumentNameCallback'
-        );
+        $filesToZip[] = $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'];
     }
+    $zip->add(
+        $filesToZip,
+        PCLZIP_OPT_REMOVE_PATH,
+        $sysCoursePath.$courseInfo['path'].'/document'.$remove_dir,
+        PCLZIP_CB_PRE_ADD,
+        'fixDocumentNameCallback'
+    );
 
     Session::erase('doc_files_to_download');
 } else {
@@ -324,14 +327,15 @@ if (api_is_allowed_to_edit()) {
 
     // Add all files in our final array to the zipfile
     for ($i = 0; $i < count($files_for_zipfile); $i++) {
-        $zip->add(
-            $sysCoursePath.$courseInfo['path'].'/document'.$files_for_zipfile[$i],
-            PCLZIP_OPT_REMOVE_PATH,
-            $sysCoursePath.$courseInfo['path'].'/document'.$remove_dir,
-            PCLZIP_CB_PRE_ADD,
-            'fixDocumentNameCallback'
-        );
+        $filesToZip[] = $sysCoursePath.$courseInfo['path'].'/document'.$files_for_zipfile[$i];
     }
+    $zip->add(
+        $filesToZip,
+        PCLZIP_OPT_REMOVE_PATH,
+        $sysCoursePath.$courseInfo['path'].'/document'.$remove_dir,
+        PCLZIP_CB_PRE_ADD,
+        'fixDocumentNameCallback'
+    );
     Session::erase('doc_files_to_download');
 }
 

@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\PluginBundle\Zoom\API\BaseMeetingTrait;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\MeetingListItem;
 use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
@@ -35,6 +36,9 @@ use Exception;
  *     }
  * )
  * @ORM\HasLifecycleCallbacks
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"meeting" = "Chamilo\PluginBundle\Zoom\Meeting", "webinar" = "Chamilo\PluginBundle\Zoom\Webinar"})
  */
 class Meeting
 {
@@ -150,6 +154,13 @@ class Meeting
      * @ORM\OneToMany(targetEntity="Recording", mappedBy="meeting", cascade={"persist"}, orphanRemoval=true)
      */
     protected $recordings;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", name="account_email", nullable=true)
+     */
+    protected $accountEmail;
 
     public function __construct()
     {
@@ -392,7 +403,7 @@ class Meeting
     }
 
     /**
-     * @param MeetingInfoGet $meetingInfoGet
+     * @param MeetingInfoGet|BaseMeetingTrait $meetingInfoGet
      *
      * @throws Exception
      *
@@ -498,12 +509,9 @@ class Meeting
             || MeetingInfoGet::TYPE_RECURRING_WITH_FIXED_TIME === $this->meetingInfoGet->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function requiresRegistration()
+    public function requiresRegistration(): bool
     {
-        return MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE === $this->meetingInfoGet->settings->approval_type;
+        return true; //MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE === $this->meetingInfoGet->settings->approval_type;
         /*return
             MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $this->meetingInfoGet->settings->approval_type;*/
     }
@@ -516,21 +524,7 @@ class Meeting
         return \ZoomPlugin::RECORDING_TYPE_NONE !== $this->meetingInfoGet->settings->auto_recording;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function hasRegisteredUser($user)
-    {
-        return $this->getRegistrants()->exists(
-            function (int $key, Registrant $registrantEntity) use (&$user) {
-                return $registrantEntity->getUser() === $user;
-            }
-        );
-    }
-
-    public function getRegistrant(User $user): ?Registrant
+    public function getRegistrantByUser(User $user): ?Registrant
     {
         $criteria = Criteria::create()
             ->where(
@@ -538,7 +532,7 @@ class Meeting
             )
         ;
 
-        return $this->registrants->matching($criteria)->first() ?? null;
+        return $this->registrants->matching($criteria)->first() ?: null;
     }
 
     /**
@@ -549,7 +543,7 @@ class Meeting
      */
     public function getIntroduction()
     {
-        $introduction = sprintf('<h1>%s</h1>', $this->meetingInfoGet->topic).PHP_EOL;
+        $introduction = sprintf('<h1>%s</h1>', $this->getTopic()).PHP_EOL;
         if (!$this->isGlobalMeeting()) {
             if (!empty($this->formattedStartTime)) {
                 $introduction .= $this->formattedStartTime;
@@ -568,8 +562,9 @@ class Meeting
                 $introduction .= sprintf('<p class="main">%s (%s)</p>', $this->course, $this->session).PHP_EOL;
             }
         }
-        if (!empty($this->meetingInfoGet->agenda)) {
-            $introduction .= sprintf('<p>%s</p>', $this->meetingInfoGet->agenda).PHP_EOL;
+
+        if (!empty($this->getAgenda())) {
+            $introduction .= sprintf('<p>%s</p>', $this->getAgenda()).PHP_EOL;
         }
 
         return $introduction;
@@ -587,6 +582,18 @@ class Meeting
         return $this;
     }
 
+    public function getAccountEmail(): ?string
+    {
+        return $this->accountEmail;
+    }
+
+    public function setAccountEmail(?string $accountEmail): self
+    {
+        $this->accountEmail = $accountEmail;
+
+        return $this;
+    }
+
     public function getReasonToSignAttendance(): ?string
     {
         return $this->reasonToSignAttendance;
@@ -599,10 +606,20 @@ class Meeting
         return $this;
     }
 
+    public function getTopic(): string
+    {
+        return $this->meetingInfoGet->topic;
+    }
+
+    public function getAgenda(): ?string
+    {
+        return $this->meetingInfoGet->agenda;
+    }
+
     /**
      * @throws Exception on unexpected start_time or duration
      */
-    private function initializeDisplayableProperties()
+    protected function initializeDisplayableProperties()
     {
         $zoomPlugin = new \ZoomPlugin();
 

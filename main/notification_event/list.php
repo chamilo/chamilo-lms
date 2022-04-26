@@ -21,17 +21,17 @@ $tpl->assign('list', $list);
 $content = $tpl->fetch($tpl->get_template('notification_event/list.tpl'));
 
 $actionLinks = '';
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
+$action = $_REQUEST['a'] ?? '';
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
-switch ($action) {
-    case 'delete':
-        $manager->delete($id);
+if ($action == 'delete') {
+    $manager->delete($id);
 
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
-        header('Location: '.api_get_self());
-        exit;
-        break;
+    Display::addFlash(
+        Display::return_message(get_lang('Deleted'), 'success')
+    );
+    header('Location: '.api_get_self());
+    exit;
 }
 
 $actionLinks .= Display::toolbarButton(

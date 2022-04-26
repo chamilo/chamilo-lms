@@ -1,5 +1,8 @@
 <h4>
-    {{ meeting.typeName }} {{ meeting.meetingId }} ({{ meeting.meetingInfoGet.status }})
+    {{ meeting.typeName }} {{ meeting.meetingId }}
+    {% if meeting.meetingInfoGet.status %}
+        ({{ meeting.meetingInfoGet.status }})
+    {% endif %}
 </h4>
 
 <div class="btn-group" role="group">
@@ -62,7 +65,10 @@
 {% if isConferenceManager %}
     {{ editMeetingForm }}
     {{ deleteMeetingForm }}
-    {{ registerParticipantForm }}
+    {% if registerParticipantForm %}
+        <hr>
+        {{ registerParticipantForm }}
+    {% endif %}
     {{ fileForm }}
 
     {#    {% if registrants and meeting.meetingInfoGet.settings.approval_type != 2 %}#}
@@ -103,18 +109,5 @@
         </table>
     {% endif %}
 {% else %}
-    <h2>{{ meeting.meetingInfoGet.topic }}</h2>
-    {% if meeting.meetingInfoGet.agenda %}
-    <blockquote>{{ meeting.meetingInfoGet.agenda| nl2br }}</blockquote>
-    {% endif %}
-
-    {% if meeting.meetingInfoGet.type == 2 or meeting.meetingInfoGet.type == 8 %}
-    <dl class="meeting_properties">
-        <dt>{{ 'StartTime'|get_lang }}</dt>
-        <dd>{{ meeting.formattedStartTime }}</dd>
-
-        <dt>{{ 'Duration'|get_lang }}</dt>
-        <dd>{{ meeting.formattedDuration }}</dd>
-    </dl>
-    {% endif %}
+    {% include 'zoom/view/meeting_details.tpl' %}
 {% endif %}

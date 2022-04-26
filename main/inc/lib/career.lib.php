@@ -1456,8 +1456,6 @@ class Career extends Model
                     var $txtPromotion = $("#promotion_id");
 
                     $("#career_id").on("change", function () {
-                        $("#promotion").show();
-
                         var id = this.value;
 
                         $txtPromotion.empty().append($("<option>", {
@@ -1491,24 +1489,22 @@ class Career extends Model
             ]
         );
 
-        $display = 'none;';
-        $options = [];
+        $options = [
+            '0' => get_lang('All'),
+        ];
         if (isset($values['promotion_id'])) {
             $promotion = new Promotion();
             $promotion = $promotion->get($values['promotion_id']);
             if ($promotion) {
                 $options = [$promotion['id'] => $promotion['name']];
-                $display = 'block';
             }
         }
 
-        $form->addHtml('<div id="promotion" style="display:'.$display.';">');
         $form->addSelect(
             'promotion_id',
             get_lang('Promotion'),
             $options,
             ['id' => 'promotion_id']
         );
-        $form->addHtml('</div>');
     }
 }

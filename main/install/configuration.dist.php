@@ -1527,6 +1527,16 @@ id INT unsigned NOT NULL auto_increment PRIMARY KEY,
         event_type VARCHAR(255)
     );
 ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
+CREATE TABLE IF NOT EXISTS notification_event_rel_user (
+    id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+    event_id INT unsigned,
+    user_id INT,
+    INDEX FK_EVENT (event_id),
+    INDEX FK_USER (user_id),
+    PRIMARY KEY (id)
+);
+ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_EVENT FOREIGN KEY (event_id) REFERENCES notification_event (id) ON DELETE CASCADE;
+ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_USER FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
 */
 // create new user text extra field called 'notification_event' to save the persistent settings.
 // $_configuration['notification_event'] = false;
@@ -1538,6 +1548,11 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // ALTER TABLE sys_announcement ADD COLUMN career_id INT DEFAULT 0;
 // ALTER TABLE sys_announcement ADD COLUMN promotion_id INT DEFAULT 0;
 //$_configuration['allow_careers_in_global_announcements'] = false;
+
+// Allow career/promotions in global calendar. Require DB changes:
+// ALTER TABLE sys_calendar ADD COLUMN career_id INT DEFAULT 0;
+// ALTER TABLE sys_calendar ADD COLUMN promotion_id INT DEFAULT 0;
+//$_configuration['allow_careers_in_global_agenda'] = false;
 
 // Hide start/end dates in "My courses" page (user_portal.php)
 //$_configuration['hide_session_dates_in_user_portal'] = false;

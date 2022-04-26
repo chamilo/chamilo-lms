@@ -252,7 +252,9 @@ class Agenda
         $color = '',
         array $inviteesList = [],
         bool $isCollective = false,
-        array $reminders = []
+        array $reminders = [],
+        int $careerId = 0,
+        int $promotionId = 0
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -445,6 +447,11 @@ class Agenda
                         'all_day' => $allDay,
                         'access_url_id' => api_get_current_access_url_id(),
                     ];
+
+                    if (api_get_configuration_value('allow_careers_in_global_agenda')) {
+                        $attributes['career_id'] = $careerId;
+                        $attributes['promotion_id'] = $promotionId;
+                    }
 
                     $id = Database::insert(
                         $this->tbl_global_agenda,
@@ -856,7 +863,9 @@ class Agenda
         $authorId = 0,
         array $inviteesList = [],
         bool $isCollective = false,
-        array $remindersList = []
+        array $remindersList = [],
+        int $careerId = 0,
+        int $promotionId = 0
     ) {
         $id = (int) $id;
         $start = api_get_utc_datetime($start);
@@ -1164,6 +1173,11 @@ class Agenda
                         'end_date' => $end,
                         'all_day' => $allDay,
                     ];
+
+                    if (api_get_configuration_value('allow_careers_in_global_agenda')) {
+                        $attributes['career_id'] = $careerId;
+                        $attributes['promotion_id'] = $promotionId;
+                    }
 
                     if ($updateContent) {
                         $attributes['content'] = $content;
@@ -2357,6 +2371,10 @@ class Agenda
         $result = Database::query($sql);
         $my_events = [];
         if (Database::num_rows($result)) {
+            $allowCareersInGlobalAgenda = api_get_configuration_value('allow_careers_in_global_agenda');
+            $userId = api_get_user_id();
+            $userVisibility = SystemAnnouncementManager::getCurrentUserVisibility();
+
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $event = [];
                 $event['id'] = 'platform_'.$row['id'];
@@ -2384,6 +2402,43 @@ class Agenda
                 $event['parent_event_id'] = 0;
                 $event['has_children'] = 0;
                 $event['description'] = $row['content'];
+
+                if ($allowCareersInGlobalAgenda) {
+                    $event['career'] = null;
+                    $event['promotion'] = null;
+
+                    $eventIsVisibleForUser = SystemAnnouncementManager::isVisibleAnnouncementForUser(
+                        $userId,
+                        $userVisibility,
+                        (int) $row['career_id'],
+                        (int) $row['promotion_id']
+                    );
+
+                    if (false === $eventIsVisibleForUser) {
+                        continue;
+                    }
+
+                    if (!empty($row['career_id'])) {
+                        $careerInfo = (new Career())->get($row['career_id']);
+
+                        unset($careerInfo['status'], $careerInfo['created_at'], $careerInfo['updated_at']);
+
+                        $event['career'] = $careerInfo;
+                    }
+
+                    if (!empty($row['promotion_id'])) {
+                        $promotionInfo = (new Promotion())->get($row['promotion_id']);
+
+                        unset(
+                            $promotionInfo['career_id'],
+                            $promotionInfo['status'],
+                            $promotionInfo['created_at'],
+                            $promotionInfo['updated_at']
+                        );
+
+                        $event['promotion'] = $promotionInfo;
+                    }
+                }
 
                 $my_events[] = $event;
                 $this->events[] = $event;
@@ -2873,6 +2928,11 @@ class Agenda
 
             $form->addHtml('</div>');
             $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+            $form->addHtml('<hr>');
+        }
+
+        if (api_get_configuration_value('allow_careers_in_global_agenda') && 'admin' === $this->type) {
+            Career::addCareerFieldsToForm($form);
             $form->addHtml('<hr>');
         }
 
@@ -3435,7 +3495,7 @@ class Agenda
                         ['id' => 'session_id', 'onchange' => 'submit();']
                     );
 
-                    $form->addButtonReset(get_lang('Reset'));
+                    $form->addButton('reset', get_lang('Reset'), 'eraser');
                     $form = $form->returnForm();
                 }
             }
@@ -4589,6 +4649,44 @@ class Agenda
 
                 $(this).parents(".form-group").remove();
             });';
+    }
+
+    public static function returnGoogleCalendarUrl(int $userId): ?string
+    {
+        $extraFieldInfo = UserManager::get_extra_user_data_by_field($userId, 'google_calendar_url');
+
+        if (empty($extraFieldInfo) || empty($extraFieldInfo['google_calendar_url'])) {
+            return null;
+        }
+
+        return $extraFieldInfo['google_calendar_url'];
+    }
+
+    public static function returnFullCalendarExtraSettings(): ?string
+    {
+        $settings = api_get_configuration_value('fullcalendar_settings');
+
+        if (empty($settings) || empty($settings['settings'])) {
+            return null;
+        }
+
+        $encoded = json_encode($settings['settings']);
+
+        return substr($encoded, 1, -1).',';
+    }
+
+    public static function returnOnHoverInfo()
+    {
+        $onHoverInfo = api_get_configuration_value('agenda_on_hover_info');
+
+        if (!empty($onHoverInfo)) {
+            return $onHoverInfo['options'];
+        }
+
+        return [
+            'comment' => true,
+            'description' => true,
+        ];
     }
 
     private function editReminders(int $eventId, array $reminderList = [])

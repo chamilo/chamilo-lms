@@ -29,13 +29,13 @@ if (null === $meeting) {
 
 switch ($httpRequest->get('a')) {
     case 'sign_attempt':
+        $registrant = $meeting->getRegistrantByUser($currentUser);
+
         if (!$meeting->isSignAttendance() ||
-            !$meeting->hasRegisteredUser($currentUser)
+            null === $registrant
         ) {
             api_not_allowed();
         }
-
-        $registrant = $meeting->getRegistrant($currentUser);
 
         $file = $httpRequest->request->get('file', '');
 

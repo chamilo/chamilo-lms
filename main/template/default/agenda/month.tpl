@@ -1,5 +1,6 @@
 {% set agenda_collective_invitations = 'agenda_collective_invitations'|api_get_configuration_value %}
 {% set agenda_reminders = 'agenda_reminders'|api_get_configuration_value %}
+{% set career_in_global_events = 'allow_careers_in_global_agenda'|api_get_configuration_value %}
 
 <style>
 .fc-day-grid-event > .fc-content {
@@ -30,15 +31,17 @@ $(function() {
     var defaultStartDate = (cookieData && cookieData.start) || moment.now();
 
     // Reset button.
-    $("button[type=reset]").click(function() {
-        $("#session_id").find('option').removeAttr("selected");
+    $('form#form-search #form-search_reset').on('click', function (e) {
+        e.preventDefault();
+
+        $("#session_id").val('0').selectpicker('refresh').trigger('change');
     });
 
 	$("#dialog-form").dialog({
 		autoOpen : false,
 		modal : true,
         position: { of: document },
-		width : 600,
+		width : 650,
 		height : 630,
         zIndex : 20000 // added because of qtip2
    	});
@@ -47,7 +50,7 @@ $(function() {
 		autoOpen : false,
         modal : true,
         position: { of: document },
-		width : 600,
+		width : 650,
 		height : 630,
         zIndex : 20000 // added because of qtip2
    	});
@@ -329,6 +332,11 @@ $(function() {
                     $('#collective').prop('checked', false).show();
                 {% endif %}
 
+                {% if career_in_global_events %}
+                    $('#career_id, #promotion_id').parent().show();
+                    $('#form_career_id_edit, #form_promotion_id_edit').text('').hide();
+                {% endif %}
+
                 //Reset the CKEditor content that persist in memory
                 CKEDITOR.instances['content'].setData('');
 				allFields.removeClass("ui-state-error");
@@ -521,18 +529,18 @@ $(function() {
                 }
 
                 if ($("#title").parent().find('#title_edit').length == 0) {
-                    $("#title").parent().append('<div id="title_edit"></div>');
+                    $("#title").parent().append('<p id="title_edit" class="form-control-static"></p>');
                 }
 
                 $("#title_edit").html(calEvent.title);
 
                 if ($("#content").parent().find('#content_edit').length == 0) {
-                    $("#content").parent().append('<div id="content_edit"></div>');
+                    $("#content").parent().append('<div id="content_edit" class="form-control-static"></div>');
                 }
                 $("#content_edit").html(calEvent.description);
 
                 if ($("#comment").parent().find('#comment_edit').length == 0) {
-                    $("#comment").parent().append('<div id="comment_edit"></div>');
+                    $("#comment").parent().append('<p id="comment_edit" class="form-control-static"></p>');
                 }
 
                 if (calEvent.course_name) {
@@ -547,7 +555,7 @@ $(function() {
                 if (calEvent.session_name) {
                     $("#calendar_session_info").html(
                         '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Session' | get_lang }}</label>'+
-                        '<div class="class="col-sm-8">' + calEvent.session_name+"</div></div>"
+                        '<div class="class="col-sm-8"><p class="form-control-static">' + calEvent.session_name + "</p></div></div>"
                     );
                 } else {
                     $("#calendar_session_info").html('');
@@ -601,6 +609,29 @@ $(function() {
                     });
                 {% endif %}
 
+                {% if career_in_global_events %}
+                    $('select#promotion_id').on('refreshed.bs.select', function () {
+                        $('select#promotion_id').val(function () {
+                            if (calEvent.promotion
+                                && calEvent.career
+                                && $('select#career_id').val() == calEvent.career.id
+                            ) {
+                                return calEvent.promotion.id;
+                            }
+
+                            return '0';
+                        }).trigger('change');
+                    });
+
+                    $('select#career_id').val(function () {
+                        if (calEvent.career) {
+                            return calEvent.career.id;
+                        }
+
+                        return '';
+                    }).trigger('change');
+                {% endif %}
+
                 $("#title_edit").show();
                 $("#content_edit").show();
                 {% if agenda_collective_invitations and 'personal' == type %}
@@ -615,6 +646,32 @@ $(function() {
                                 .join('<br>');
                         })
                         .show();
+                {% endif %}
+
+                {% if career_in_global_events %}
+                    var $careerFieldParent = $('#career_id').parents('.col-sm-8');
+                    var $promotionFieldParent = $('#promotion_id').parents('.col-sm-8');
+                    
+                    if ($careerFieldParent.find('#form_career_id_edit').length === 0) {
+                        $careerFieldParent.append('<p id="form_career_id_edit" class="form-control-static"></p>');
+                    }
+
+                    if ($promotionFieldParent.find('#form_promotion_id_edit').length === 0) {
+                        $promotionFieldParent.append('<p id="form_promotion_id_edit" class="form-control-static"></p>');
+                    }
+
+                    $('#form_career_id_edit, #form_promotion_id_edit').text('');
+                    $('#career_id, #promotion_id').parent().hide();
+
+                    if (calEvent.career && 'admin' === calEvent.type) {
+                        $('#form_career_id_edit').text(calEvent.career.name).show();
+                        $('#promotion').show();
+                        $('#form_promotion_id_edit').text('{{ 'All'|get_lang|escape('js') }}').show();
+                    }
+
+                    if (calEvent.promotion && 'admin' === calEvent.type) {
+                        $('#form_promotion_id_edit').text(calEvent.promotion.name);
+                    }
                 {% endif %}
 
                 $("#title").hide();
@@ -794,7 +851,7 @@ $(function() {
                 if (calEvent.course_name) {
                     $("#calendar_course_info_simple").html(
                         '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Course' | get_lang }}</label>' +
-                        '<div class="col-sm-9">' + calEvent.course_name+"</div></div>"
+                        '<div class="col-sm-9"><p class="form-control-static">' + calEvent.course_name+"</p></div></div>"
                     );
                 } else {
                     $("#calendar_course_info_simple").html('');
@@ -837,6 +894,23 @@ $(function() {
 
                     $('#simple_notification_list').append(reminderText);
                 });
+                {% endif %}
+
+                {% if career_in_global_events %}
+                    $('#simple_career_field').hide();
+                    $('#simple_promotion_field').hide();
+                    $('#simple_career').html();
+                    $('#simple_promotion').html('{{ 'All'|get_lang|escape('js') }}');
+
+                    if (calEvent.career) {
+                        $('#simple_career_field').show();
+                        $('#simple_promotion_field').show();
+                        $('#simple_career').html(calEvent.career.name);
+                    }
+
+                    if (calEvent.promotion) {
+                        $('#simple_promotion').html(calEvent.promotion.name);
+                    }
                 {% endif %}
 
                 {% if agenda_collective_invitations and 'personal' == type %}
@@ -944,8 +1018,10 @@ $(function() {
                 <b>{{ "Date" |get_lang}}</b>
             </label>
             <div class="col-sm-9">
-                <span id="simple_start_date"></span>
-                <span id="simple_end_date"></span>
+                <p class="form-control-static">
+                    <span id="simple_start_date"></span>
+                    <span id="simple_end_date"></span>
+                </p>
             </div>
         </div>
         <div class="form-group">
@@ -953,7 +1029,7 @@ $(function() {
                 <b>{{ "Title" |get_lang}}</b>
             </label>
             <div class="col-sm-9">
-                <div id="simple_title"></div>
+                <p id="simple_title" class="form-control-static"></p>
             </div>
         </div>
         <div class="form-group">
@@ -961,7 +1037,7 @@ $(function() {
                 <b>{{ "Description" |get_lang}}</b>
             </label>
             <div class="col-sm-9">
-                <div id="simple_content"></div>
+                <div id="simple_content" class="form-control-static"></div>
             </div>
         </div>
         <div class="form-group">
@@ -969,7 +1045,7 @@ $(function() {
                 <b>{{ "Comment" |get_lang}}</b>
             </label>
             <div class="col-sm-9">
-                <div id="simple_comment"></div>
+                <p id="simple_comment" class="form-control-static"></p>
             </div>
         </div>
 
@@ -992,6 +1068,26 @@ $(function() {
         {% if agenda_reminders %}
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9" id="simple_notification_list"></div>
+            </div>
+        {% endif %}
+
+        {% if career_in_global_events %}
+            <div class="form-group" id="simple_career_field">
+                <label class="col-sm-3 control-label">
+                    <b>{{ "Career" |get_lang}}</b>
+                </label>
+                <div class="col-sm-9">
+                    <p class="form-control-static" id="simple_career"></p>
+                </div>
+            </div>
+
+            <div class="form-group" id="simple_promotion_field">
+                <label class="col-sm-3 control-label">
+                    <b>{{ "Promotion" |get_lang}}</b>
+                </label>
+                <div class="col-sm-9">
+                    <p class="form-control-static" id="simple_promotion"></p>
+                </div>
             </div>
         {% endif %}
     </form>

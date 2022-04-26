@@ -354,6 +354,12 @@ switch ($action) {
             $item['title'] = Display::url($item['title'], $course_url, ['target' => SESSION_LINK_TARGET]);
 
             foreach ($flat_list as $lp_id => $lp_item) {
+                if (api_is_anonymous() || api_is_student()) {
+                    if ($lp_item['lp_visibility'] == 0) {
+                        continue;
+                    }
+                }
+
                 $temp[$count]['id'] = $lp_id;
 
                 $lp = new learnpath($item['code'], $lp_id, api_get_user_id());
@@ -639,6 +645,12 @@ switch ($action) {
                 ['target' => SESSION_LINK_TARGET]
             );
             foreach ($flat_list as $lp_id => $lp_item) {
+                if (api_is_anonymous() || api_is_student()) {
+                    if ($lp_item['lp_visibility'] == 0) {
+                        continue;
+                    }
+                }
+
                 $temp[$count]['id'] = $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
                 $last_date = Tracking::get_last_connection_date_on_the_course(

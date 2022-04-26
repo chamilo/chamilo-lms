@@ -10,9 +10,11 @@ $plugin = BBBPlugin::create();
 $meetingTable = Database::get_main_table('plugin_bbb_meeting');
 $roomTable = Database::get_main_table('plugin_bbb_room');
 
+$applyAllUrls = $plugin->get('plugin_bbb_multiple_urls_cron_apply_to_all');
+
 $bbb = new bbb();
 if ($bbb->pluginEnabled) {
-    $activeSessions = $bbb->getActiveSessions();
+    $activeSessions = $bbb->getActiveSessions($applyAllUrls);
 
     if (!empty($activeSessions)) {
         foreach ($activeSessions as $value) {

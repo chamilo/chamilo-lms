@@ -74,6 +74,7 @@ class BBBPlugin extends Plugin
                 'bbb_force_record_generation' => 'checkbox',
                 'disable_course_settings' => 'boolean',
                 'meeting_duration' => 'text',
+                'plugin_bbb_multiple_urls_cron_apply_to_all' => 'checkbox',
             ]
         );
 

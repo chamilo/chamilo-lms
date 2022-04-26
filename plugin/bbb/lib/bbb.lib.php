@@ -1875,13 +1875,23 @@ class bbb
 
     /**
      * Get active session in the all platform
+     *
+     * @param boolean $allSites Parameter to indicate whether to get the result from all sites
+     *
+     * @return array
      */
-    public function getActiveSessions()
+    public function getActiveSessions($allSites = false)
     {
+        $where = ['where' => ['status = ?' => 1]];
+
+        if (!$allSites) {
+            $where['where'][' AND access_url = ?'] = $this->accessUrl;
+        }
+
         $meetingList = Database::select(
             '*',
             $this->table,
-            array('where' => array('status = ? AND access_url = ?' => array(1, $this->accessUrl)))
+            $where
         );
 
         return $meetingList;

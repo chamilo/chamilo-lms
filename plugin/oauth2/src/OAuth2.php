@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
@@ -81,8 +82,8 @@ class OAuth2 extends Plugin
                 self::SETTING_ACCESS_TOKEN_METHOD => [
                     'type' => 'select',
                     'options' => [
-                        GenericProvider::METHOD_POST => 'POST',
-                        GenericProvider::METHOD_GET => 'GET',
+                        AbstractProvider::METHOD_POST => 'POST',
+                        AbstractProvider::METHOD_GET => 'GET',
                     ],
                 ],
                 // self::SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID => 'text',
@@ -120,11 +121,11 @@ class OAuth2 extends Plugin
      *
      * @return $this
      */
-    public static function create()
+    public static function create(): OAuth2
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     public function getProvider(): GenericProvider
@@ -218,7 +219,8 @@ class OAuth2 extends Plugin
                         $this->get_lang('DefaultLastname')
                     ),
                     'status' => $this->getValueByKey(
-                        $response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
                         STUDENT
                     ),
                     'email' => $this->getValueByKey(
@@ -261,7 +263,7 @@ class OAuth2 extends Plugin
         return $userInfo;
     }
 
-    public function getSignInURL()
+    public function getSignInURL(): string
     {
         return api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
     }
@@ -289,20 +291,15 @@ class OAuth2 extends Plugin
      * $key can contain wild card character *
      * It will be replaced by 0, 1, 2 and so on as long as the resulting key exists in $data
      * This is a recursive function, allowing for more than one occurrence of the wild card character.
-     *
-     * @param string $key
-     * @param array  $default
-     *
-     * @return array
      */
-    private function getValuesByKey(array $data, $key, $default = [])
+    private function getValuesByKey(array $data, string $key, array $default = []): array
     {
         if (!is_string($key) || empty($key) || !count($data)) {
             return $default;
         }
         $pos = strpos($key, '*');
         if ($pos === false) {
-            $value = $this->getValueByKey($data, $key, null);
+            $value = $this->getValueByKey($data, $key);
 
             return is_null($value) ? [] : [$value];
         }
@@ -324,34 +321,43 @@ class OAuth2 extends Plugin
 
     private function updateUser($userId, $response)
     {
-        /**
-         * @var $user Chamilo\UserBundle\Entity\User
-         */
         $user = UserManager::getRepository()->find($userId);
         $user->setFirstname(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
-            ), $user->getFirstname())
+            $this->getValueByKey(
+                $response,
+                $this->get(
+                    self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
+                ),
+                $user->getFirstname()
+            )
         );
         $user->setLastname(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
-            ), $user->getLastname())
+            $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
+                $user->getLastname()
+            )
         );
         $user->setUserName(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
-            ), $user->getUsername())
+            $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME),
+                $user->getUsername()
+            )
         );
         $user->setEmail(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
-            ), $user->getEmail())
+            $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
+                $user->getEmail()
+            )
         );
         $user->setStatus(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
-            ), $user->getStatus())
+            $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
+                $user->getStatus()
+            )
         );
         $user->setAuthSource('oauth2');
         $configFilePath = __DIR__.'/../config.php';
@@ -376,7 +382,7 @@ class OAuth2 extends Plugin
     private function updateUserUrls($userId, $response)
     {
         if (api_is_multiple_url_enabled()) {
-            $key = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_URLS);
+            $key = (string) $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_URLS);
             if (!empty($key)) {
                 $availableUrls = [];
                 foreach (UrlManager::get_url_data() as $existingUrl) {

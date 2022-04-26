@@ -178,11 +178,8 @@ class OAuth2 extends Plugin
      * @throws IdentityProviderException
      *
      * @return array user information, as returned by api_get_user_info(userId)
-     *
-     * @var AccessToken
-     * @var GenericProvider
      */
-    public function getUserInfo($provider, $accessToken)
+    public function getUserInfo(GenericProvider $provider, AccessToken $accessToken): array
     {
         $url = $provider->getResourceOwnerDetailsUrl($accessToken);
         $request = $provider->getAuthenticatedRequest($provider::METHOD_GET, $url, $accessToken);
@@ -210,21 +207,30 @@ class OAuth2 extends Plugin
             require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
             $userId = external_add_user(
                 [
-                    'firstname' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
-                    ), $this->get_lang('DefaultFirstname')),
-                    'lastname' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
-                    ), $this->get_lang('DefaultLastname')),
-                    'status' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
-                    ), STUDENT),
-                    'email' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
-                    ), 'oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost')),
-                    'username' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
-                    ), 'oauth2user_'.$resourceOwnerId),
+                    'firstname' => $this->getValueByKey(
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME),
+                        $this->get_lang('DefaultFirstname')
+                    ),
+                    'lastname' => $this->getValueByKey(
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
+                        $this->get_lang('DefaultLastname')
+                    ),
+                    'status' => $this->getValueByKey(
+                        $response, $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
+                        STUDENT
+                    ),
+                    'email' => $this->getValueByKey(
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
+                        'oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost')
+                    ),
+                    'username' => $this->getValueByKey(
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME),
+                        'oauth2user_'.$resourceOwnerId
+                    ),
                     'auth_source' => 'oauth2',
                 ]
             );

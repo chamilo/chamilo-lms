@@ -268,9 +268,17 @@ class OAuth2 extends Plugin
         return api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
     }
 
-    public function getLogoutUrl()
+    public function getLogoutUrl(): string
     {
-        return $this->get(self::SETTING_LOGOUT_URL);
+        $token = ChamiloSession::read('oauth2AccessToken');
+        $idToken = !empty($token['id_token']) ? $token['id_token'] : null;
+
+        return $this->get(self::SETTING_LOGOUT_URL).'?'.http_build_query(
+            [
+                'id_token_hint' => $idToken,
+                'post_logout_redirect_uri' => api_get_path(WEB_PATH),
+            ]
+        );
     }
 
     /**

@@ -1880,7 +1880,7 @@ class bbb
      *
      * @return array
      */
-    public function getActiveSessions(bool $allSites = false)
+    public function getActiveSessions(bool $allSites = false): array
     {
         $where = ['where' => ['status = ?' => 1]];
 
@@ -1888,13 +1888,11 @@ class bbb
             $where['where'][' AND access_url = ?'] = $this->accessUrl;
         }
 
-        $meetingList = Database::select(
+        return Database::select(
             '*',
             $this->table,
             $where
         );
-
-        return $meetingList;
     }
 
     /**

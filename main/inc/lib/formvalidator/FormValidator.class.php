@@ -1812,6 +1812,8 @@ EOT;
                     });
                 });
 
+            var counter = 0,
+                total = 0;
             $('#".$inputName."').fileupload({
                 url: url,
                 dataType: 'json',
@@ -1845,6 +1847,11 @@ EOT;
                 $.each(data.files, function (index, file) {
                     var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
                     node.appendTo(data.context);
+                    var iconLoading = $('<div class=\"col-sm-3\">').html(
+                        $('<span id=\"image-loading'+index+'\"/>').html('".Display::return_icon('loading1.gif', get_lang('Uploading'), [], ICON_SIZE_MEDIUM)."')
+                    );
+                    $(data.context.children()[index]).parent().append(iconLoading);
+                    total++;
                 });
             }).on('fileuploadprocessalways', function (e, data) {
                 var index = data.index,
@@ -1861,7 +1868,7 @@ EOT;
                         .prop('disabled', !!data.files.error);
                 }
             }).on('fileuploadprogressall', function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
+                var progress = parseInt(data.loaded / data.total * 100, 10) - 2;
                 $('#progress .progress-bar').css(
                     'width',
                     progress + '%'
@@ -1890,11 +1897,17 @@ EOT;
                     }
                     // Update file name with new one from Chamilo
                     $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                    $('#image-loading'+index).remove();
                     var message = $('<div class=\"col-sm-3\">').html(
                         $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
                     );
                     $(data.context.children()[index]).parent().append(message);
+                    counter++;
                 });
+                if (counter == total) {
+                    $('#progress .progress-bar').css('width', '100%');
+                    $('#progress .progress-bar').text('100%');
+                }
                 $('#dropzone').removeClass('hover');
                 ".$redirectCondition."
             }).on('fileuploadfail', function (e, data) {

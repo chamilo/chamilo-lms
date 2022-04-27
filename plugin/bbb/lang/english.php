@@ -74,3 +74,5 @@ $strings['RoomClosed'] = 'Room closed';
 $strings['RoomClosedComment'] = ' ';
 $strings['meeting_duration'] = 'Meeting duration (in minutes)';
 $strings['big_blue_button_students_start_conference_in_groups'] = 'Allow students to start conference in their groups.';
+$strings['plugin_bbb_multiple_urls_cron_apply_to_all'] = 'Automatically closes all rooms on ALL campuses.';
+$strings['plugin_bbb_multiple_urls_cron_apply_to_all_help'] = 'Option for multi-url environments. Allows the CRON task to close all open rooms on mother and child campus.';

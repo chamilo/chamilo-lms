@@ -78,7 +78,7 @@ class BBBPlugin extends Plugin
         }
 
         parent::__construct(
-            '2.10',
+            '2.11',
             'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz, Ghazi Triki, Adnen Manssouri',
             $settings
         );

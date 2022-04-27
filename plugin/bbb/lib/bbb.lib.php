@@ -1880,7 +1880,7 @@ class bbb
      *
      * @return array
      */
-    public function getActiveSessions($allSites = false)
+    public function getActiveSessions(bool $allSites = false)
     {
         $where = ['where' => ['status = ?' => 1]];
 

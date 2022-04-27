@@ -80,6 +80,9 @@ if (!empty($objExercise->getResultAccess())) {
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 }
 
+// Fix to display embed-responsive video
+$htmlHeadXtra[] = "<style>.embed-responsive { overflow: initial; }</style>";
+
 if ($show_headers) {
     $interbreadcrumb[] = [
         'url' => 'exercise.php?'.api_get_cidreq(),

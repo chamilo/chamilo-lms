@@ -176,6 +176,9 @@ if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 }
 
+// Fix to display embed-responsive video
+$htmlHeadXtra[] = "<style>.embed-responsive { overflow: initial; }</style>";
+
 if ($action !== 'export') {
     $scoreJsCode = ExerciseLib::getJsCode();
     if ($origin !== 'learnpath') {

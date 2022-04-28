@@ -29,7 +29,7 @@ switch ($action) {
         break;
     case 'mark_notification_as_read':
         if (api_get_configuration_value('notification_event')) {
-            $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+            $id = $_REQUEST['id'] ?? 0;
             $notificationManager = new NotificationEvent();
             $notificationManager->markAsRead($id);
             echo 1;

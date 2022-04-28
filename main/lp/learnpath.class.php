@@ -3507,6 +3507,38 @@ class learnpath
     }
 
     /**
+     * Returns an HTML-formatted string ready to display flow buttons
+     * in LP view menu.
+     *
+     * @return string HTML TOC ready to display
+     */
+    public function getFlowLpbuttons()
+    {
+        $allowFlowButtons = api_get_configuration_value('lp_enable_flow');
+        $html = '';
+        if ($allowFlowButtons) {
+            $nextLpId = self::getFlowNextLpId($this->lp_id, api_get_course_int_id());
+            $prevLpId = self::getFlowPrevLpId($this->lp_id, api_get_course_int_id());
+            if (!empty($nextLpId) || !empty($prevLpId)) {
+                $html .= '<div id="actions_lp" class="actions_lp"><hr>';
+                $html .= '<div class="btn-group">';
+                if ($prevLpId > 0) {
+                    $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&action=view&lp_id=".$prevLpId."' target='_parent'>".
+                        Display::returnFontAwesomeIcon('arrow-left').'&nbsp;'.get_lang('Previous')."</a>";
+                }
+                if ($nextLpId > 0) {
+                    $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?".api_get_cidreq()."&action=view&lp_id=".$nextLpId."' target='_parent'>".
+                        get_lang('Next').'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right')."</a>";
+                }
+                $html .= '</div>';
+                $html .= '</div>';
+            }
+        }
+
+        return $html;
+    }
+
+    /**
      * Gets the learnpath maker name - generally the editor's name.
      *
      * @return string Learnpath maker name
@@ -13713,7 +13745,7 @@ EOD;
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
-                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'wav'];
+                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'webm', 'wav'];
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
                 $showDirectUrl = !in_array($extension, $mediaSupportedFiles);
 
@@ -14288,6 +14320,91 @@ EOD;
         }
 
         return $icons;
+    }
+
+    /**
+     * Get the learnpaths availables for next lp.
+     *
+     * @param int $courseId
+     *
+     * @return array
+     */
+    public static function getNextLpsAvailable($courseId, $lpId)
+    {
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+
+        $sqlNextLp = "SELECT next_lp_id FROM $table WHERE c_id = $courseId AND next_lp_id > 0";
+        $sql = "SELECT iid, name
+                FROM $table
+            WHERE c_id = $courseId AND
+                  iid NOT IN($sqlNextLp)";
+        $rs = Database::query($sql);
+        $lpsAvailable = [0 => get_lang('None')];
+        if (Database::num_rows($rs) > 0) {
+            while ($row = Database::fetch_array($rs)) {
+                if ($row['iid'] == $lpId) {
+                    continue;
+                }
+                $lpsAvailable[$row['iid']] = $row['name'];
+            }
+        }
+
+        return $lpsAvailable;
+    }
+
+    /**
+     * Get The next lp id.
+     *
+     * @param $lpId
+     * @param $courseId
+     *
+     * @return int
+     */
+    public static function getFlowNextLpId($lpId, $courseId)
+    {
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+
+        $sql = "SELECT next_lp_id
+                FROM $table
+            WHERE c_id = $courseId AND iid = $lpId";
+        $rs = Database::query($sql);
+        $nextLpId = Database::result($rs, 0, 0);
+
+        return $nextLpId;
+    }
+
+    /**
+     * Get The previous lp id.
+     *
+     * @param $nextLpId
+     * @param $courseId
+     *
+     * @return int
+     */
+    public static function getFlowPrevLpId($nextLpId, $courseId)
+    {
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+
+        $sql = "SELECT iid
+                FROM $table
+            WHERE c_id = $courseId AND next_lp_id = $nextLpId";
+        $rs = Database::query($sql);
+        $prevLpId = Database::result($rs, 0, 0);
+
+        return $prevLpId;
+    }
+
+    /**
+     * Save the next lp id.
+     *
+     * @param $lpId
+     * @param $nextLpId
+     */
+    public static function saveTheNextLp($lpId, $nextLpId)
+    {
+        $nextLpId = (int) $nextLpId;
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        Database::query("UPDATE $table SET next_lp_id = $nextLpId WHERE iid = $lpId");
     }
 
     /**

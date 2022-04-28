@@ -514,6 +514,15 @@ if ($form->validate()) {
             }
         }
 
+        // It updates course relation type as EX-LEARNER if project name (extra field from user_edition_extra_field_to_check) is changed
+        if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+            $extraToCheck = api_get_configuration_value('user_edition_extra_field_to_check');
+            if (isset($user['extra_'.$extraToCheck])) {
+                $extraValueToCheck = $user['extra_'.$extraToCheck];
+                UserManager::updateCourseRelationTypeExLearner($user_id, $extraValueToCheck);
+            }
+        }
+
         $extraFieldValue = new ExtraFieldValue('user');
         $extraFieldValue->saveFieldValues($user);
         $userInfo = api_get_user_info($user_id);

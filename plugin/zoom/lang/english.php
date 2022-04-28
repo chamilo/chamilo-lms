@@ -15,6 +15,8 @@ $strings['enableGlobalConference'] = 'Enable global conference';
 $strings['enableGlobalConferencePerUser'] = 'Enable global conference per user';
 $strings['globalConferenceAllowRoles'] = "Global conference link only visible for these user roles";
 $strings['globalConferencePerUserAllowRoles'] = "Global conference per user link only visible for these user roles";
+$strings['accountSelector'] = 'Account selector';
+$strings['accountSelector_help'] = 'It allows you to declare the emails of the different accounts with whom you want to open the Zoom videos. Separated by semicolons (account_one@example.come;account_two@exaple.com).';
 
 $strings['tool_enable_help'] = "Choose whether you want to enable the Zoom videoconference tool.
 Once enabled, it will show as an additional course tool in all courses' homepage :
@@ -43,6 +45,10 @@ and add these event types:
 <br/>- End Meeting
 <br/>- Participant/Host joined meeting
 <br/>- Participant/Host left meeting
+<br/>- Start Webinar
+<br/>- End Webinar
+<br/>- Participant/Host joined webinar
+<br/>- Participant/Host left webinar
 <br/>- All Recordings have completed
 <br/>- Recording transcript files have completed
 <br/>then click on <em>Done</em> then on <em>Save</em>
@@ -142,3 +148,20 @@ $strings['ForEveryone'] = "Everyone";
 $strings['SomeUsers'] = "Some users (Select later)";
 $strings['Activity'] = "Activity";
 $strings['ConferenceNotAvailable'] = "Conference not available";
+$strings['SignAttendance'] = "Sign attendance";
+$strings['ReasonToSign'] = 'Reason to sign attendance';
+$strings['ConferenceWithAttendance'] = "Conference with attendance sign";
+$strings['Sign'] = "Sign";
+$strings['Signature'] = "Signature";
+$strings['Meeting'] = "Meeting";
+$strings['Webinar'] = "Webinar";
+$strings['AudienceType'] = 'Audience type';
+$strings['AccountEmail'] = 'Account email';
+$strings['NewWebinarCreated'] = "New webinar created";
+$strings['UpdateWebinar'] = 'Update webinar';
+$strings['WebinarUpdated'] = "Webinar updated";
+$strings['DeleteWebinar'] = "Delete webinar";
+$strings['WebinarDeleted'] = "Webinar deleted";
+$strings['UrlForSelfRegistration'] = "URL for self registration";
+$strings['RegisterMeToConference'] = "Register me to conference";
+$strings['UnregisterMeToConference'] = "Unregister me to conference";

@@ -1381,6 +1381,23 @@ class DocumentManager
             $sessionId = intval($sessionId);
         }
 
+        // Special case: cache doc ID for 3600s if "/" has already been queried
+        // recently.
+        // This is a hack. Better solutions: use apcu (not always available)
+        // and even better: reduce the amount of calls by not processing
+        // documents that will not be shown (e.g. on other pages of a table)
+        $isSlash = ($path === '/');
+        if ($isSlash) {
+            $cSSlashString = 'docIdSlash2C'.$courseId.'S'.$sessionId;
+            $storedSlashId = Session::read($cSSlashString);
+            $now = time();
+            if (is_array($storedSlashId)) {
+                if ($storedSlashId['t'] >= $now - 3600) {
+                    return $storedSlashId['id'];
+                }
+            }
+        }
+
         $path = Database::escape_string($path);
         if (!empty($courseId) && !empty($path)) {
             $folderCondition = '';
@@ -1398,8 +1415,15 @@ class DocumentManager
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
+                if ($isSlash) {
+                    Session::write($cSSlashString, ['t' => $now, 'id' => intval($row['id'])]);
+                }
 
                 return intval($row['id']);
+            }
+            if ($isSlash) {
+                // Even if there is no "/" document/folder, store a result to avoid querying the database again
+                Session::write($cSSlashString, ['t' => $now, 'id' => false]);
             }
         }
 
@@ -2014,6 +2038,7 @@ class DocumentManager
         $first_name = $user_info['firstname'];
         $last_name = $user_info['lastname'];
         $username = $user_info['username'];
+        $user_picture = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
         $official_code = $user_info['official_code'];
 
         // Teacher information
@@ -2093,6 +2118,7 @@ class DocumentManager
             $first_name,
             $last_name,
             $username,
+            $user_picture,
             $organization_name,
             $portal_name,
             $teacher_first_name,
@@ -2117,6 +2143,7 @@ class DocumentManager
             '((user_firstname))',
             '((user_lastname))',
             '((user_username))',
+            '((user_picture))',
             '((gradebook_institution))',
             '((gradebook_sitename))',
             '((teacher_firstname))',
@@ -3356,7 +3383,7 @@ class DocumentManager
                 $html .= '<audio id="'.$id.'" controls="controls" src="'.$file.'" type="audio/mp3" ></audio></div>';
                 break;
             default:
-                $html = '<video id="'.$id.'" controls>';
+                $html = '<video id="'.$id.'" width="100%" height="100%" controls>';
                 $html .= '<source src="'.$file.'" >';
                 $html .= '</video>';
                 break;

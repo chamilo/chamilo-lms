@@ -15,7 +15,6 @@ if (empty($meetingId)) {
 }
 
 $plugin = ZoomPlugin::create();
-$content = '';
 /** @var Meeting $meeting */
 $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $meetingId]);
 if (null === $meeting) {
@@ -36,22 +35,30 @@ if ($meeting->isCourseMeeting()) {
     }
 }
 
+$startJoinURL = '';
+$detailsURL = '';
+$signature = '';
+
+$currentUser = api_get_user_entity(api_get_user_id());
+$isConferenceManager = $plugin->userIsConferenceManager($meeting);
+
 try {
     $startJoinURL = $plugin->getStartOrJoinMeetingURL($meeting);
-    $content .= $meeting->getIntroduction();
 
-    if (!empty($startJoinURL)) {
-        $content .= Display::url($plugin->get_lang('EnterMeeting'), $startJoinURL, ['class' => 'btn btn-primary']);
-    } else {
-        $content .= Display::return_message($plugin->get_lang('ConferenceNotAvailable'), 'warning');
+    if (empty($startJoinURL)) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('ConferenceNotAvailable'), 'warning')
+        );
     }
 
-    if ($plugin->userIsConferenceManager($meeting)) {
-        $content .= '&nbsp;'.Display::url(
-            get_lang('Details'),
-            api_get_path(WEB_PLUGIN_PATH).'zoom/meeting.php?meetingId='.$meeting->getMeetingId(),
-            ['class' => 'btn btn-default']
-        );
+    if ($meeting->isSignAttendance() && !$isConferenceManager) {
+        $signature = $meeting->getRegistrantByUser($currentUser)->getSignature();
+
+        Security::get_token('zoom_signature');
+    }
+
+    if ($isConferenceManager) {
+        $detailsURL = api_get_path(WEB_PLUGIN_PATH).'zoom/meeting.php?meetingId='.$meeting->getMeetingId();
     }
 } catch (Exception $exception) {
     Display::addFlash(
@@ -59,7 +66,15 @@ try {
     );
 }
 
-Display::display_header($plugin->get_title());
-echo $plugin->getToolbar();
-echo $content;
-Display::display_footer();
+$htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
+
+$tpl = new Template($meeting->getMeetingId());
+$tpl->assign('meeting', $meeting);
+$tpl->assign('start_url', $startJoinURL);
+$tpl->assign('details_url', $detailsURL);
+$tpl->assign('is_conference_manager', $isConferenceManager);
+$tpl->assign('signature', $signature);
+$content = $tpl->fetch('zoom/view/join.tpl');
+$tpl->assign('actions', $plugin->getToolbar());
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

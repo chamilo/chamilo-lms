@@ -252,7 +252,9 @@ class Agenda
         $color = '',
         array $inviteesList = [],
         bool $isCollective = false,
-        array $reminders = []
+        array $reminders = [],
+        int $careerId = 0,
+        int $promotionId = 0
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -445,6 +447,11 @@ class Agenda
                         'all_day' => $allDay,
                         'access_url_id' => api_get_current_access_url_id(),
                     ];
+
+                    if (api_get_configuration_value('allow_careers_in_global_agenda')) {
+                        $attributes['career_id'] = $careerId;
+                        $attributes['promotion_id'] = $promotionId;
+                    }
 
                     $id = Database::insert(
                         $this->tbl_global_agenda,
@@ -856,7 +863,9 @@ class Agenda
         $authorId = 0,
         array $inviteesList = [],
         bool $isCollective = false,
-        array $remindersList = []
+        array $remindersList = [],
+        int $careerId = 0,
+        int $promotionId = 0
     ) {
         $id = (int) $id;
         $start = api_get_utc_datetime($start);
@@ -1164,6 +1173,11 @@ class Agenda
                         'end_date' => $end,
                         'all_day' => $allDay,
                     ];
+
+                    if (api_get_configuration_value('allow_careers_in_global_agenda')) {
+                        $attributes['career_id'] = $careerId;
+                        $attributes['promotion_id'] = $promotionId;
+                    }
 
                     if ($updateContent) {
                         $attributes['content'] = $content;
@@ -2357,6 +2371,10 @@ class Agenda
         $result = Database::query($sql);
         $my_events = [];
         if (Database::num_rows($result)) {
+            $allowCareersInGlobalAgenda = api_get_configuration_value('allow_careers_in_global_agenda');
+            $userId = api_get_user_id();
+            $userVisibility = SystemAnnouncementManager::getCurrentUserVisibility();
+
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $event = [];
                 $event['id'] = 'platform_'.$row['id'];
@@ -2384,6 +2402,43 @@ class Agenda
                 $event['parent_event_id'] = 0;
                 $event['has_children'] = 0;
                 $event['description'] = $row['content'];
+
+                if ($allowCareersInGlobalAgenda) {
+                    $event['career'] = null;
+                    $event['promotion'] = null;
+
+                    $eventIsVisibleForUser = SystemAnnouncementManager::isVisibleAnnouncementForUser(
+                        $userId,
+                        $userVisibility,
+                        (int) $row['career_id'],
+                        (int) $row['promotion_id']
+                    );
+
+                    if (false === $eventIsVisibleForUser) {
+                        continue;
+                    }
+
+                    if (!empty($row['career_id'])) {
+                        $careerInfo = (new Career())->get($row['career_id']);
+
+                        unset($careerInfo['status'], $careerInfo['created_at'], $careerInfo['updated_at']);
+
+                        $event['career'] = $careerInfo;
+                    }
+
+                    if (!empty($row['promotion_id'])) {
+                        $promotionInfo = (new Promotion())->get($row['promotion_id']);
+
+                        unset(
+                            $promotionInfo['career_id'],
+                            $promotionInfo['status'],
+                            $promotionInfo['created_at'],
+                            $promotionInfo['updated_at']
+                        );
+
+                        $event['promotion'] = $promotionInfo;
+                    }
+                }
 
                 $my_events[] = $event;
                 $this->events[] = $event;
@@ -2873,6 +2928,11 @@ class Agenda
 
             $form->addHtml('</div>');
             $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+            $form->addHtml('<hr>');
+        }
+
+        if (api_get_configuration_value('allow_careers_in_global_agenda') && 'admin' === $this->type) {
+            Career::addCareerFieldsToForm($form);
             $form->addHtml('<hr>');
         }
 
@@ -3435,7 +3495,7 @@ class Agenda
                         ['id' => 'session_id', 'onchange' => 'submit();']
                     );
 
-                    $form->addButtonReset(get_lang('Reset'));
+                    $form->addButton('reset', get_lang('Reset'), 'eraser');
                     $form = $form->returnForm();
                 }
             }
@@ -4591,6 +4651,44 @@ class Agenda
             });';
     }
 
+    public static function returnGoogleCalendarUrl(int $userId): ?string
+    {
+        $extraFieldInfo = UserManager::get_extra_user_data_by_field($userId, 'google_calendar_url');
+
+        if (empty($extraFieldInfo) || empty($extraFieldInfo['google_calendar_url'])) {
+            return null;
+        }
+
+        return $extraFieldInfo['google_calendar_url'];
+    }
+
+    public static function returnFullCalendarExtraSettings(): ?string
+    {
+        $settings = api_get_configuration_value('fullcalendar_settings');
+
+        if (empty($settings) || empty($settings['settings'])) {
+            return null;
+        }
+
+        $encoded = json_encode($settings['settings']);
+
+        return substr($encoded, 1, -1).',';
+    }
+
+    public static function returnOnHoverInfo()
+    {
+        $onHoverInfo = api_get_configuration_value('agenda_on_hover_info');
+
+        if (!empty($onHoverInfo)) {
+            return $onHoverInfo['options'];
+        }
+
+        return [
+            'comment' => true,
+            'description' => true,
+        ];
+    }
+
     private function editReminders(int $eventId, array $reminderList = [])
     {
         if (false === api_get_configuration_value('agenda_reminders')) {
@@ -4677,6 +4775,95 @@ class Agenda
         }
     }
 
+    /**
+     * @throws Exception
+     */
+    private function convertSessionWithDuration(int $userId, array $sessionInfo, DateTime $start, DateTime $end): array
+    {
+        $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
+            $sessionInfo['session_id'],
+            $userId
+        );
+
+        if (empty($courseAccess)) {
+            throw new Exception();
+        }
+
+        $firstAccessDate = new DateTime($courseAccess['login_course_date'], new DateTimeZone('UTC'));
+        $lastAccessDate = clone $firstAccessDate;
+        $lastAccessDate->modify('+'.$sessionInfo['duration'].' days');
+
+        if ($firstAccessDate->format('Y-m-d H:i:s') > $start
+            && $lastAccessDate->format('Y-m-d H:i:s') < $end
+        ) {
+            throw new Exception();
+        }
+
+        $courseList = SessionManager::get_course_list_by_session_id($sessionInfo['id']);
+        $firstCourse = current($courseList);
+
+        return [
+            'id' => 'session_'.$sessionInfo['id'],
+            'session_id' => $sessionInfo['id'],
+            'title' => $sessionInfo['name'],
+            'description' => $sessionInfo['show_description'] ? $sessionInfo['description'] : '',
+            'className' => 'personal',
+            'borderColor' => $this->event_personal_color,
+            'backgroundColor' => $this->event_personal_color,
+            'editable' => false,
+            'sent_to' => get_lang('Me'),
+            'type' => 'session',
+            'start' => $firstAccessDate->format(DateTime::ISO8601),
+            'start_date_localtime' => api_get_local_time($firstAccessDate),
+            'end' => $lastAccessDate->format(DateTime::ISO8601),
+            'end_date_localtime' => api_get_local_time($lastAccessDate),
+            'allDay' => 0,
+            'parent_event_id' => 0,
+            'has_children' => 0,
+            'course_url' => api_get_course_url($firstCourse['code'], $sessionInfo['id']),
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function convertSessionWithDates(array $sessionInfo, DateTime $start, DateTime $end): array
+    {
+        if ($sessionInfo['display_start_date'] < $start
+            && $sessionInfo['display_end_date'] > $end
+        ) {
+            throw new Exception();
+        }
+
+        $courseList = SessionManager::get_course_list_by_session_id($sessionInfo['id']);
+        $firstCourse = current($courseList);
+
+        return [
+            'id' => 'session_'.$sessionInfo['id'],
+            'session_id' => $sessionInfo['id'],
+            'title' => $sessionInfo['name'],
+            'description' => $sessionInfo['show_description'] ? $sessionInfo['description'] : '',
+            'className' => 'personal',
+            'borderColor' => $this->event_personal_color,
+            'backgroundColor' => $this->event_personal_color,
+            'editable' => false,
+            'sent_to' => get_lang('Me'),
+            'type' => 'session_subscription',
+            'start' => $sessionInfo['display_start_date'],
+            'start_date_localtime' => $sessionInfo['display_start_date']
+                ? $this->formatEventDate($sessionInfo['display_start_date'])
+                : '',
+            'end' => $sessionInfo['display_end_date'],
+            'end_date_localtime' => $sessionInfo['display_end_date']
+                ? $this->formatEventDate($sessionInfo['display_end_date'])
+                : '',
+            'allDay' => 0,
+            'parent_event_id' => 0,
+            'has_children' => 0,
+            'course_url' => api_get_course_url($firstCourse['code'], $sessionInfo['id']),
+        ];
+    }
+
     private function loadSessionsAsEvents(int $start, int $end)
     {
         if (false === api_get_configuration_value('personal_calendar_show_sessions_occupation')) {
@@ -4690,85 +4877,24 @@ class Agenda
 
         foreach ($sessionList as $sessionInfo) {
             if (!empty($sessionInfo['duration'])) {
-                $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
-                    $sessionInfo['session_id'],
-                    $userInfo['id']
-                );
-
-                if (empty($courseAccess)) {
+                try {
+                    $this->events[] = $this->convertSessionWithDuration($userInfo['id'], $sessionInfo, $start, $end);
+                } catch (Exception $e) {
                     continue;
                 }
-
-                $firstAccessDate = new DateTime($courseAccess['login_course_date'], new DateTimeZone('UTC'));
-                $lastAccessDate = clone $firstAccessDate;
-                $lastAccessDate->modify('+'.$sessionInfo['duration'].' days');
-
-                if ($firstAccessDate->format('Y-m-d H:i:s') > $start
-                    && $lastAccessDate->format('Y-m-d H:i:s') < $end
-                ) {
-                    continue;
-                }
-
-                $courseList = SessionManager::get_course_list_by_session_id($sessionInfo['id']);
-                $firstCourse = current($courseList);
-
-                $this->events[] = [
-                    'id' => 'session_'.$sessionInfo['id'],
-                    'session_id' => $sessionInfo['id'],
-                    'title' => $sessionInfo['name'],
-                    'description' => $sessionInfo['show_description'] ? $sessionInfo['description'] : '',
-                    'className' => 'personal',
-                    'borderColor' => $this->event_personal_color,
-                    'backgroundColor' => $this->event_personal_color,
-                    'editable' => false,
-                    'sent_to' => get_lang('Me'),
-                    'type' => 'session',
-                    'start' => $firstAccessDate->format(DateTime::ISO8601),
-                    'start_date_localtime' => api_get_local_time($firstAccessDate),
-                    'end' => $lastAccessDate->format(DateTime::ISO8601),
-                    'end_date_localtime' => api_get_local_time($lastAccessDate),
-                    'allDay' => 0,
-                    'parent_event_id' => 0,
-                    'has_children' => 0,
-                    'course_url' => api_get_course_url($firstCourse['code'], $sessionInfo['id']),
-                ];
 
                 continue;
             }
 
-            if ($sessionInfo['display_start_date'] < $start
-                && $sessionInfo['display_end_date'] > $end
-            ) {
+            if (empty($sessionInfo['display_start_date']) || empty($sessionInfo['display_end_date'])) {
                 continue;
             }
 
-            $courseList = SessionManager::get_course_list_by_session_id($sessionInfo['id']);
-            $firstCourse = current($courseList);
-
-            $this->events[] = [
-                'id' => 'session_'.$sessionInfo['id'],
-                'session_id' => $sessionInfo['id'],
-                'title' => $sessionInfo['name'],
-                'description' => $sessionInfo['show_description'] ? $sessionInfo['description'] : '',
-                'className' => 'personal',
-                'borderColor' => $this->event_personal_color,
-                'backgroundColor' => $this->event_personal_color,
-                'editable' => false,
-                'sent_to' => get_lang('Me'),
-                'type' => 'session_subscription',
-                'start' => $sessionInfo['display_start_date'],
-                'start_date_localtime' => $sessionInfo['display_start_date']
-                    ? $this->formatEventDate($sessionInfo['display_start_date'])
-                    : '',
-                'end' => $sessionInfo['display_end_date'],
-                'end_date_localtime' => $sessionInfo['display_end_date']
-                    ? $this->formatEventDate($sessionInfo['display_end_date'])
-                    : '',
-                'allDay' => 0,
-                'parent_event_id' => 0,
-                'has_children' => 0,
-                'course_url' => api_get_course_url($firstCourse['code'], $sessionInfo['id']),
-            ];
+            try {
+                $this->events[] = $this->convertSessionWithDates($sessionInfo, $start, $end);
+            } catch (Exception $e) {
+                continue;
+            }
         }
     }
 }

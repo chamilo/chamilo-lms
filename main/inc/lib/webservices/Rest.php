@@ -94,6 +94,8 @@ class Rest extends WebService
     const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
     const UPDATE_USER_APIKEY = 'update_user_apikey';
     const DELETE_USER = 'delete_user';
+    const GET_USERS_API_KEYS = 'get_users_api_keys';
+    const GET_USER_API_KEY = 'get_user_api_key';
 
     const GET_COURSES = 'get_courses';
     const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
@@ -3090,6 +3092,76 @@ class Rest extends WebService
         exit;
     }
 
+    /**
+     * @throws Exception
+     */
+    public function getAllUsersApiKeys(int $page, int $length, ?int $urlId = null): array
+    {
+        if (false === api_get_configuration_value('webservice_enable_adminonly_api')
+            || !UserManager::is_admin($this->user->getId())
+        ) {
+            throw new Exception(get_lang('NotAllowed'));
+        }
+
+        $limitOffset = ($page - 1) * $length;
+
+        $currentUrlId = $urlId ?: api_get_current_access_url_id();
+
+        $data = [];
+        $data['total'] = UserManager::get_number_of_users(0, $currentUrlId);
+        $data['list'] = array_map(
+            function (array $user) {
+                $apiKeys = UserManager::get_api_keys($user['id'], self::SERVICE_NAME);
+
+                return [
+                    'id' => $user['id'],
+                    'username' => $user['username'],
+                    'api_key' => $apiKeys ? current($apiKeys) : null,
+                ];
+            },
+            $users = UserManager::get_user_list([], [], $limitOffset, $length, $currentUrlId)
+        );
+        $data['length'] = count($users);
+
+        if ($page * $length < $data['total']) {
+            $nextPageQueryParams = [
+                'page' => $page + 1,
+                'per_page' => $length,
+                'url_id' => $urlId,
+            ];
+
+            $data['next'] = $this->generateUrl($nextPageQueryParams);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUserApiKey(string $username): array
+    {
+        if (false === api_get_configuration_value('webservice_enable_adminonly_api')
+            || !UserManager::is_admin($this->user->getId())
+        ) {
+            throw new Exception(get_lang('NotAllowed'));
+        }
+
+        $userInfo = api_get_user_info_from_username($username);
+
+        if (empty($userInfo)) {
+            throw new Exception(get_lang('UserNotFound'));
+        }
+
+        $apiKeys = UserManager::get_api_keys($userInfo['id'], self::SERVICE_NAME);
+
+        return [
+            'id' => $userInfo['id'],
+            'username' => $userInfo['username'],
+            'api_key' => $apiKeys ? current($apiKeys) : null,
+        ];
+    }
+
     public static function isAllowedByRequest(bool $inpersonate = false): bool
     {
         $username = $_GET['username'] ?? null;
@@ -3128,5 +3200,18 @@ class Rest extends WebService
         );
 
         return json_encode($params);
+    }
+
+    private function generateUrl(array $additionalParams = []): string
+    {
+        $queryParams = [
+            'course' => $this->course ? $this->course->getId() : null,
+            'session' => $this->session ? $this->session->getId() : null,
+            'api_key' => $this->apiKey,
+            'username' => $this->user->getUsername(),
+        ];
+
+        return api_get_self().'?'
+            .http_build_query(array_merge($queryParams, $additionalParams));
     }
 }

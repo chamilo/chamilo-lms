@@ -122,6 +122,344 @@ class Tracking
     }
 
     /**
+     * Get the lp quizzes result as content for pdf export.
+     *
+     * @param $userId
+     * @param $sessionId
+     *
+     * @return string
+     */
+    public static function getLpQuizContentToPdf(
+        $userId,
+        $sessionId
+    ) {
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        $courses = Tracking::get_courses_list_from_session($sessionId);
+
+        // It creates lp quiz table html
+        $lpQuizTable = '';
+        if (!empty($courses)) {
+            $lpQuizTable .= '<table class="data_table">';
+            $lpQuizTable .= '<tbody>';
+            $lpTitle = '';
+            foreach ($courses as $course) {
+                $courseId = $course['c_id'];
+                $sql = 'SELECT DISTINCT c_lp_item.title AS quiz_name,
+				c_lp.name AS lp_name,
+				CASE WHEN c_lp_item_view.max_score>0 THEN CONCAT(ROUND((SUM(c_lp_item_view.score)/c_lp_item_view.max_score)*100),\'%\') ELSE 0 END AS score,
+				SUM(c_lp_view.view_count) AS attempts
+				FROM '.$tblLpView.' AS c_lp_view
+				JOIN '.$tblUser.' AS user ON (user.user_id = c_lp_view.user_id)
+				JOIN '.$tblCourse.' AS course ON (course.id = c_lp_view.c_id)
+				JOIN '.$tblLp.' AS c_lp ON (c_lp.id = c_lp_view.lp_id AND c_lp.c_id = c_lp_view.c_id)
+				JOIN '.$tblLpItem.' AS c_lp_item ON (c_lp_item.c_id = c_lp_view.c_id AND c_lp_item.lp_id = c_lp_view.lp_id)
+				LEFT JOIN '.$tblLpItemView.' AS c_lp_item_view ON (c_lp_item_view.lp_item_id = c_lp_item.id AND c_lp_item_view.lp_view_id = c_lp_view.id AND c_lp_item_view.c_id = c_lp_view.c_id)
+				WHERE
+				    user.id = '.$userId.' AND
+				    course.id = '.$courseId.' AND
+				    c_lp_item.item_type = \'quiz\' AND
+				    c_lp_view.session_id = '.$sessionId.'
+				GROUP BY quiz_name, lp_name
+				ORDER BY c_lp_item.display_order';
+                $result = Database::query($sql);
+                while ($row = Database::fetch_array($result)) {
+                    if ($lpTitle != $row['lp_name']) {
+                        $lpTitle = $row['lp_name'];
+                        $lpQuizTable .= '<tr>
+                            <th>'.stripslashes($lpTitle).'</th>
+                            <th>'.get_lang('Score').'</th>
+                            <th>'.get_lang('Attempts').'</th>
+                        </tr>';
+                    }
+                    $lpQuizTable .= '<tr>
+                        <td>'.$row['quiz_name'].'</td>
+                        <td>'.$row['score'].'</td>
+                        <td>'.$row['attempts'].'</td>
+                    </tr>';
+                }
+            }
+            $lpQuizTable .= '</tbody></table>';
+        }
+
+        return $lpQuizTable;
+    }
+
+    /**
+     * Get the tables html as contents to export lp certificate pdf .
+     *
+     * @param $userId
+     * @param $sessionId
+     *
+     * @return array
+     */
+    public static function getLpCertificateTablesToPdf(
+        $userId,
+        $sessionId
+    ) {
+        $tblTrackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        $courses = Tracking::get_courses_list_from_session($sessionId);
+
+        // It creates the progress table html
+        $progressTable = '';
+        if (!empty($courses)) {
+            $timeSpent = 0;
+            $numberVisits = 0;
+            $progress = 0;
+            foreach ($courses as $course) {
+                $courseId = $course['c_id'];
+                $timeSpent += Tracking::get_time_spent_on_the_course($userId, $courseId, $sessionId);
+                $sql = 'SELECT DISTINCT count(course_access_id) as count
+                    FROM '.$tblTrackCourseAccess.'
+                    WHERE
+                        user_id = '.$userId.' AND
+                        c_id = '.$courseId.' AND
+                        session_id = '.$sessionId.'
+                    ORDER BY login_course_date ASC';
+                $result = Database::query($sql);
+                $row = Database::fetch_array($result);
+                $numberVisits += $row['count'];
+                $progress += Tracking::get_avg_student_progress($userId, $course['code'], [], $sessionId);
+            }
+            $average = round($progress / count($courses), 1);
+            $average = empty($average) ? '0%' : $average.'%';
+            $first = Tracking::get_first_connection_date($userId);
+            $last = Tracking::get_last_connection_date($userId);
+
+            $table = new HTML_Table(['class' => 'data_table']);
+            $column = 0;
+            $row = 0;
+            $headers = [
+                get_lang('TimeSpent'),
+                get_lang('NumberOfVisits'),
+                get_lang('GlobalProgress'),
+                get_lang('FirstLogin'),
+                get_lang('LastConnexionDate'),
+            ];
+
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $table->setCellContents(1, 0, api_time_to_hms($timeSpent));
+            $table->setCellContents(1, 1, $numberVisits);
+            $table->setCellContents(1, 2, $average);
+            $table->setCellContents(1, 3, $first);
+            $table->setCellContents(1, 4, $last);
+            $progressTable = $table->toHtml();
+        }
+
+        // It creates the course table html
+        $courseTable = '';
+        if (!empty($courses)) {
+            $totalCourseTime = 0;
+            $totalAttendance = [0, 0];
+            $totalScore = 0;
+            $totalProgress = 0;
+            $gradeBookTotal = [0, 0];
+            $totalEvaluations = '0/0 (0%)';
+            $totalCourses = count($courses);
+            $scoreDisplay = ScoreDisplay::instance();
+
+            $courseTable .= '<table class="data_table">';
+            $courseTable .= '<thead>';
+            $courseTable .= '<tr>
+                    <th>'.get_lang('ToolLearnpath').'</th>
+                    <th>'.get_lang('ConnectionTime').'</th>
+					<th>'.get_lang('NumberOfVisits').'</th>
+                    <th>'.get_lang('Progress').'</th>
+                    <th>'.get_lang('FirstLogin').'</th>
+                    <th>'.get_lang('LastConnexion').'</th>
+                </tr>';
+            $courseTable .= '</thead>';
+            $courseTable .= '<tbody>';
+            foreach ($courses as $course) {
+                $courseId = $course['c_id'];
+                $courseInfoItem = api_get_course_info_by_id($courseId);
+                $courseId = $courseInfoItem['real_id'];
+                $courseCodeItem = $courseInfoItem['code'];
+
+                $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                    $userId,
+                    $courseCodeItem,
+                    true,
+                    $sessionId
+                );
+
+                if ($isSubscribed) {
+                    $timeInSeconds = Tracking::get_time_spent_on_the_course(
+                        $userId,
+                        $courseId,
+                        $sessionId
+                    );
+                    $totalCourseTime += $timeInSeconds;
+                    $time_spent_on_course = api_time_to_hms($timeInSeconds);
+                    $progress = Tracking::get_avg_student_progress(
+                        $userId,
+                        $courseCodeItem,
+                        [],
+                        $sessionId
+                    );
+                    $totalProgress += $progress;
+                    $bestScore = Tracking::get_avg_student_score(
+                        $userId,
+                        $courseCodeItem,
+                        [],
+                        $sessionId,
+                        false,
+                        false,
+                        true
+                    );
+                    if (is_numeric($bestScore)) {
+                        $totalScore += $bestScore;
+                    }
+                    if ($progress > 0) {
+                        $progress = empty($progress) ? '0%' : $progress.'%';
+                        $score = empty($bestScore) ? '0%' : $bestScore.'%';
+                        $sql = 'SELECT
+                                    DISTINCT count(course_access_id) as count,
+   							        date_format(min(login_course_date),\'%d/%m/%Y\') as first,
+							        date_format(max(logout_course_date),\'%d/%m/%Y\') as last
+                                FROM
+                                    '.$tblTrackCourseAccess.'
+                                WHERE
+                                    user_id = '.$userId.' AND
+                                    c_id = '.$courseId.' AND
+                                    session_id = '.$sessionId;
+                        $result = Database::query($sql);
+                        $row = Database::fetch_array($result);
+                        $numberVisitsByCourse = $row['count'];
+                        $firstByCourse = $row['first'];
+                        $lastByCourse = $row['last'];
+                        $courseTable .= '<tr>
+                        <td ><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sessionId.'">'.$courseInfoItem['title'].'</a></td>
+                        <td >'.$time_spent_on_course.'</td>
+						<td >'.$numberVisitsByCourse.'</td>
+                        <td >'.$progress.'</td>
+                        <td >'.$firstByCourse.'</td>
+                        <td >'.$lastByCourse.'</td>';
+                        $courseTable .= '</tr>';
+                    }
+                }
+            }
+            $totalAttendanceFormatted = $scoreDisplay->display_score($totalAttendance);
+            $totalScoreFormatted = $scoreDisplay->display_score([$totalScore / $totalCourses, 100], SCORE_AVERAGE);
+            $totalProgressFormatted = $scoreDisplay->display_score(
+                [$totalProgress / $totalCourses, 100],
+                SCORE_AVERAGE
+            );
+            $totalEvaluations = $scoreDisplay->display_score($gradeBookTotal);
+            $totalTimeFormatted = api_time_to_hms($totalCourseTime);
+            $courseTable .= '<tr>
+                <th>'.get_lang('Total').'</th>
+                <th>'.$totalTimeFormatted.'</th>
+				<th>'.$numberVisits.'</th>
+                <th>'.$totalProgressFormatted.'</th>
+                <th>'.$first.'</th>
+                <th>'.$last.'</th>
+            </tr>';
+            $courseTable .= '</tbody></table>';
+        }
+
+        // It creates the lps table html
+        $lpTable = '';
+        if (!empty($courses)) {
+            $lpTable = '<table class="data_table">';
+            $lpTable .= '<tbody>';
+            $lpTitle = '';
+            foreach ($courses as $course) {
+                $courseId = $course['c_id'];
+                $sql = 'SELECT DISTINCT c_lp.name AS lp_name,
+				c_lp_item.title AS chapter,
+				SEC_TO_TIME(c_lp_item_view.total_time) AS temps,
+				c_lp_item_view.status AS etat,
+				SUM(c_lp_view.view_count) AS tentatives,
+				c_lp_item_2.title AS chapter2,
+				SEC_TO_TIME(c_lp_item_view_2.total_time) AS temps2,
+				c_lp_item_view_2.status AS etat2
+				FROM '.$tblLpView.' AS c_lp_view
+				JOIN '.$tblUser.' AS user ON user.user_id = c_lp_view.user_id
+				JOIN '.$tblCourse.' AS course ON course.id = c_lp_view.c_id
+				JOIN '.$tblLp.' AS c_lp ON (c_lp.id = c_lp_view.lp_id AND c_lp.c_id = c_lp_view.c_id)
+				JOIN '.$tblLpItem.' AS c_lp_item ON (c_lp_item.c_id = c_lp_view.c_id AND c_lp_item.lp_id = c_lp_view.lp_id)
+				LEFT JOIN '.$tblLpItemView.' AS c_lp_item_view ON (c_lp_item_view.lp_item_id = c_lp_item.id AND c_lp_item_view.lp_view_id = c_lp_view.id AND c_lp_item_view.c_id = c_lp_view.c_id)
+                LEFT JOIN '.$tblLpItem.' AS c_lp_item_2 ON (c_lp_item_2.parent_item_id > 0 AND c_lp_item_2.parent_item_id = c_lp_item.id)
+				LEFT JOIN '.$tblLpItemView.' AS c_lp_item_view_2 ON (c_lp_item_view_2.lp_item_id = c_lp_item_2.id AND c_lp_item_view_2.lp_view_id = c_lp_view.id AND c_lp_item_view_2.c_id = c_lp_view.c_id)
+				WHERE
+				    user.id = '.$userId.' AND
+				    course.id = '.$courseId.' AND
+                    c_lp_view.session_id = '.$sessionId.' AND
+				    c_lp_item.parent_item_id = 0
+				GROUP BY
+				    lp_name, chapter, chapter2
+				ORDER BY
+				    lp_name, c_lp_item.display_order';
+                $result = Database::query($sql);
+                $chapterTitle = false;
+                while ($row = Database::fetch_array($result)) {
+                    if ($lpTitle != $row['lp_name']) {
+                        $lpTitle = $row['lp_name'];
+                        $lpTable .= '<tr>
+                        <th>'.stripslashes($lpTitle).'</th>
+                        <th>'.get_lang('Duration').'</th>
+                        <th>'.get_lang('Progress').'</th>
+                    </tr>';
+                    }
+                    if ('' == $row['chapter2']) {
+                        $progression = $row['etat'];
+                        if (('completed' === $progression) || ('passed' === $progression)) {
+                            $progression = get_lang('Done');
+                        } else {
+                            $progression = get_lang('Incomplete');
+                        }
+                        $lpTable .= '<tr>
+                        <td>'.$row['chapter'].'</td>
+                        <td>'.$row['temps'].'</td>
+                        <td>'.$progression.'</td>
+                    </tr>';
+                        $chapterTitle = false;
+                    } else {
+                        if (false == $chapterTitle) {
+                            $lpTable .= '<tr>
+                            <td>'.$row['chapter'].'</td>
+                            <td></td>
+                            <td></td>
+                        </tr>';
+                            $chapterTitle = true;
+                        }
+                        $progression = $row['etat2'];
+                        if ('completed' == $progression) {
+                            $progression = get_lang('Done');
+                        } else {
+                            $progression = get_lang('Incomplete');
+                        }
+                        $lpTable .= '<tr>
+                        <td>&nbsp;-&nbsp;'.$row['chapter2'].'</td>
+                        <td>'.$row['temps2'].'</td>
+                        <td>'.$progression.'</td>
+                    </tr>';
+                    }
+                }
+            }
+            $lpTable .= '</tbody></table>';
+        }
+
+        return ['progress_table' => $progressTable, 'course_table' => $courseTable, 'lp_table' => $lpTable];
+    }
+
+    /**
      * It gets table html of Lp stats used to export in pdf.
      *
      * @param $userId
@@ -8899,6 +9237,13 @@ class TrackingCourseLog
                 user.lastname LIKE '%".$keyword."%'  OR
                 user.username LIKE '%".$keyword."%'  OR
                 user.email LIKE '%".$keyword."%'
+             ) ";
+        }
+
+        if (isset($_GET['user_active'])) {
+            $active = (int) $_GET['user_active'];
+            $condition_user .= " AND (
+                user.active = $active
              ) ";
         }
 

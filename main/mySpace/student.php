@@ -21,7 +21,7 @@ if (!$allowToTrack) {
 
 $nameTools = get_lang('Students');
 
-$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
@@ -45,17 +45,17 @@ if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) &&
     $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Tutors')];
 }
 
-function get_count_users()
+function get_count_users(): int
 {
     $users = get_users(null, null, 0, 3);
 
     return count($users);
 }
 
-function get_users($from, $limit, $column, $direction)
+function get_users($from, $limit, $column, $direction): array
 {
     global $export_csv;
-    $active = isset($_GET['active']) ? $_GET['active'] : 1;
+    $active = $_GET['active'] ?? 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -70,6 +70,7 @@ function get_users($from, $limit, $column, $direction)
     $coach_id = api_get_user_id();
     $column = 'u.user_id';
     $drhLoaded = false;
+    $students = [];
 
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
@@ -201,7 +202,9 @@ function get_users($from, $limit, $column, $direction)
         }
 
         $row = [];
-        $row[] = $student_id;
+        if (!$export_csv) {
+            $row[] = $student_id;
+        }
         if ($is_western_name_order) {
             $first = Display::url($student_data['firstname'], $urlDetails);
             $last = Display::url($student_data['lastname'], $urlDetails);
@@ -211,33 +214,35 @@ function get_users($from, $limit, $column, $direction)
         }
 
         if ($export_csv) {
-            $row[] = strip_tags($first);
-            $row[] = strip_tags($last);
-        } else {
-            $row[] = $first;
-            $row[] = $last;
+            $first = strip_tags($first);
+            $last = strip_tags($last);
         }
 
-        $string_date = Tracking::get_last_connection_date($student_id, true);
+        $row[] = $first;
+        $row[] = $last;
+
+        $string_date = Tracking::get_last_connection_date($student_id, !$export_csv);
         $first_date = Tracking::get_first_connection_date($student_id);
         $row[] = $first_date;
         $row[] = $string_date;
 
-        $detailsLink = Display::url(
-            Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
-            $urlDetails,
-            ['id' => 'details_'.$student_data['username']]
-        );
-
-        $lostPasswordLink = '';
-        if (api_is_drh() || api_is_platform_admin()) {
-            $lostPasswordLink = '&nbsp;'.Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
-                    $webCodePath.'mySpace/user_edit.php?user_id='.$student_id
+        if (!$export_csv) {
+            $detailsLink = Display::url(
+                Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
+                $urlDetails,
+                ['id' => 'details_'.$student_data['username']]
             );
-        }
 
-        $row[] = $lostPasswordLink.$detailsLink;
+            $lostPasswordLink = '';
+            if (api_is_drh() || api_is_platform_admin()) {
+                $lostPasswordLink = '&nbsp;'.Display::url(
+                        Display::return_icon('edit.png', get_lang('Edit')),
+                        $webCodePath.'mySpace/user_edit.php?user_id='.$student_id
+                    );
+            }
+
+            $row[] = $lostPasswordLink.$detailsLink;
+        }
         $all_datas[] = $row;
     }
 
@@ -397,20 +402,16 @@ $form->setDefaults($params);
 if ($export_csv) {
     // send the csv file if asked
     $content = $table->get_table_data();
-    foreach ($content as &$row) {
-        unset($row[4]);
-    }
     $csv_content = array_merge($csv_header, $content);
-    ob_end_clean();
     Export::arrayToCsv($csv_content, 'reporting_student_list');
     exit;
 } else {
 
     // It sends the email to selected users
     if (isset($_POST['action']) && 'send_message' == $_POST['action']) {
-        $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
-        $message = isset($_POST['message']) ? $_POST['message'] : '';
-        $users = isset($_POST['uid']) ? $_POST['uid'] : '';
+        $subject = $_POST['subject'] ?? '';
+        $message = $_POST['message'] ?? '';
+        $users = $_POST['uid'] ?? '';
         if (!empty($subject) && !empty($message) && !empty($users)) {
             foreach ($users as $uid) {
                 MessageManager::send_message_simple(

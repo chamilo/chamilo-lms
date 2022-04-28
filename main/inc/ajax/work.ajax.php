@@ -60,81 +60,120 @@ switch ($action) {
         break;
     case 'upload_file':
         api_protect_course_script(true);
-        $workId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
 
-        $workInfo = get_work_data_by_id($workId);
-        $sessionId = api_get_session_id();
-        $userId = api_get_user_id();
-        $groupId = api_get_group_id();
+        if (isset($_REQUEST['chunkAction']) && 'send' === $_REQUEST['chunkAction']) {
+            // It uploads the files in chunks
+            if (!empty($_FILES)) {
+                $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
+                }
+                if (!empty($fileList)) {
+                    foreach ($fileList as $n => $file) {
+                        $tmpFile = $tempDirectory.$file['name'];
+                        file_put_contents(
+                            $tmpFile,
+                            fopen($file['tmp_name'], 'r'),
+                            FILE_APPEND
+                        );
+                    }
+                }
+            }
+            echo json_encode([
+                'files' => $_FILES,
+                'errorStatus' => 0,
+            ]);
+            exit;
+        } else {
+            $workId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
+            $workInfo = get_work_data_by_id($workId);
+            $sessionId = api_get_session_id();
+            $userId = api_get_user_id();
+            $groupId = api_get_group_id();
 
-        $onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
-        if ($onlyOnePublication) {
-            $count = get_work_count_by_student($userId, $workId);
-            if ($count >= 1) {
+            $onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
+            if ($onlyOnePublication) {
+                $count = get_work_count_by_student($userId, $workId);
+                if ($count >= 1) {
+                    exit;
+                }
+            }
+
+            if (!empty($_FILES)) {
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
+                }
+
+                $resultList = [];
+                foreach ($fileList as $file) {
+                    if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
+                        // to rename and move the finished file
+                        $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
+                        $file['tmp_name'] = $chunkedFile;
+                        $file['size'] = filesize($chunkedFile);
+                        $file['copy_file'] = true;
+                    }
+
+                    $globalFile = [];
+                    $globalFile['files'] = $file;
+
+                    $values = [
+                        'contains_file' => 1,
+                        'title' => $file['name'],
+                        'description' => '',
+                    ];
+
+                    $result = processWorkForm(
+                        $workInfo,
+                        $values,
+                        $courseInfo,
+                        $sessionId,
+                        $groupId,
+                        $userId,
+                        $file,
+                        api_get_configuration_value('assignment_prevent_duplicate_upload'),
+                        false
+                    );
+
+                    $json = [];
+                    if (!empty($result) && is_array($result) && empty($result['error'])) {
+                        $json['name'] = api_htmlentities($result['title']);
+                        $json['link'] = Display::url(
+                            api_htmlentities($result['title']),
+                            api_htmlentities($result['view_url']),
+                            ['target' => '_blank']
+                        );
+
+                        $json['url'] = $result['view_url'];
+                        $json['size'] = '';
+                        $json['type'] = api_htmlentities($result['filetype']);
+                        $json['result'] = Display::return_icon(
+                            'accept.png',
+                            get_lang('Uploaded')
+                        );
+                    } else {
+                        $json['url'] = '';
+                        $json['error'] = isset($result['error']) ? $result['error'] : get_lang('Error');
+                    }
+                    $resultList[] = $json;
+                }
+
+                echo json_encode(['files' => $resultList]);
                 exit;
             }
         }
-
-        if (!empty($_FILES)) {
-            $files = $_FILES['files'];
-            $fileList = [];
-            foreach ($files as $name => $array) {
-                $counter = 0;
-                foreach ($array as $data) {
-                    $fileList[$counter][$name] = $data;
-                    $counter++;
-                }
-            }
-
-            $resultList = [];
-            foreach ($fileList as $file) {
-                $globalFile = [];
-                $globalFile['files'] = $file;
-
-                $values = [
-                    'contains_file' => 1,
-                    'title' => $file['name'],
-                    'description' => '',
-                ];
-
-                $result = processWorkForm(
-                    $workInfo,
-                    $values,
-                    $courseInfo,
-                    $sessionId,
-                    $groupId,
-                    $userId,
-                    $file,
-                    api_get_configuration_value('assignment_prevent_duplicate_upload'),
-                    false
-                );
-
-                $json = [];
-                if (!empty($result) && is_array($result) && empty($result['error'])) {
-                    $json['name'] = api_htmlentities($result['title']);
-                    $json['link'] = Display::url(
-                        api_htmlentities($result['title']),
-                        api_htmlentities($result['view_url']),
-                        ['target' => '_blank']
-                    );
-
-                    $json['url'] = $result['view_url'];
-                    $json['size'] = '';
-                    $json['type'] = api_htmlentities($result['filetype']);
-                    $json['result'] = Display::return_icon(
-                        'accept.png',
-                        get_lang('Uploaded')
-                    );
-                } else {
-                    $json['url'] = '';
-                    $json['error'] = isset($result['error']) ? $result['error'] : get_lang('Error');
-                }
-                $resultList[] = $json;
-            }
-
-            echo json_encode(['files' => $resultList]);
-        }
-
         break;
     case 'delete_work':
         if ($isAllowedToEdit) {

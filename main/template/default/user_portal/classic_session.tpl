@@ -27,7 +27,7 @@
                     {% elseif row.course_list_session_style == 3 %}
                         {# Collapsible/Foldable panel #}
                         <a role="button" data-toggle="collapse" data-parent="#page-content" href="#collapse_{{ row.id }}"
-                           aria-expanded="false">
+                           aria-expanded="false" class="collapse-toogle--right collapsed">
                             {{ session_image }} {{ row.title }}
                         </a>
                         {% if row.collapsable_link %}

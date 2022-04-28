@@ -79,7 +79,7 @@ use ChamiloSession as Session;
  * of their scripts. It will make code maintenance much easier.
  *
  *    Many if the functions you need you can already find in the
- *    main_api.lib.php
+ *    api.lib.php
  *
  * We encourage you to use functions to access these global "kernel" variables.
  * You can add them to e.g. the main API library.
@@ -364,9 +364,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             if (is_array($my_url_list) &&
                                 in_array($current_access_url_id, $my_url_list)
                             ) {
-                                Session::write('_user', $_user);
-                                Event::eventLogin($_user['user_id']);
-                                $logging_in = true;
                             } else {
                                 phpCAS::logout();
                                 $location = api_get_path(WEB_PATH)
@@ -377,7 +374,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         }
                         Session::write('_user', $_user);
                         Event::eventLogin($_user['user_id']);
-                        $logging_in = true;
                     } else {
                         phpCAS::logout();
                         header(
@@ -730,7 +726,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
 
                 if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
-                    //first login for a not self registred
+                    //first login for a not self registered
                     //e.g. registered by a teacher
                     //do nothing (code may be added later)
                 }
@@ -760,7 +756,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 // see configuration.php to define these
                 include_once $extAuthSource[$key]['login'];
             /* >>>>>>>> External authentication modules <<<<<<<<< */
-            } else { // no standard Chamilo login - try external authentification
+            } else { // no standard Chamilo login - try external authentication
                 //huh... nothing to do... we shouldn't get here
                 error_log(
                     'Chamilo Authentication file defined in'.
@@ -1464,7 +1460,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                 $is_courseAdmin = true;
             }
         } else {
-            // User has not access to the course
+            // User has no access to the course
             // This will check if the course was added in one of his sessions
             // Then it will be redirected to that course-session
             if ($is_courseMember === false && $is_platformAdmin === false) {

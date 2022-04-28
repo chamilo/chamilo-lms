@@ -130,19 +130,28 @@ if (isset($_POST) && $is_error) {
             return false;
             break;
     }
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' || ('bigUpload' === $_REQUEST['from'] && !empty($_REQUEST['name']))) {
     // end if is_uploaded_file
     // If file name given to get in /upload/, try importing this way.
     // A file upload has been detected, now deal with the file...
     // Directory creation.
     $stopping_error = false;
 
-    if (!isset($_POST['file_name'])) {
-        return false;
+    // When it is used from bigupload input
+    if ('bigUpload' === $_REQUEST['from']) {
+        if (empty($_REQUEST['name'])) {
+            return false;
+        }
+        $tempName = $_REQUEST['name'];
+    } else {
+        if (!isset($_POST['file_name'])) {
+            return false;
+        }
+        $tempName = $_POST['file_name'];
     }
 
     // Escape path with basename so it can only be directly into the archive/ directory.
-    $s = api_get_path(SYS_ARCHIVE_PATH).basename($_POST['file_name']);
+    $s = api_get_path(SYS_ARCHIVE_PATH).basename($tempName);
     // Get name of the zip file without the extension
     $info = pathinfo($s);
     $filename = $info['basename'];

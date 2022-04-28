@@ -8,6 +8,7 @@ use ChamiloSession as Session;
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
 $current_course_tool = TOOL_QUIZ;
 
 api_protect_course_script();
@@ -35,8 +36,8 @@ $questionList = Session::read('questionList');
 $exerciseId = (int) $_GET['exerciseId'];
 $questionNum = (int) $_GET['num'];
 $questionId = $questionList[$questionNum];
-$choiceValue = isset($_GET['choice']) ? $_GET['choice'] : '';
-$hotSpot = isset($_GET['hotspot']) ? $_GET['hotspot'] : '';
+$choiceValue = $_GET['choice'] ?? '';
+$hotSpot = $_GET['hotspot'] ?? '';
 $tryAgain = isset($_GET['tryagain']) && 1 === (int) $_GET['tryagain'];
 
 $allowTryAgain = false;
@@ -61,7 +62,7 @@ if ($tryAgain) {
 }
 
 $loaded = isset($_GET['loaded']);
-if ($allowTryAgain) {
+if ($allowTryAgain || $feedbackType == EXERCISE_FEEDBACK_TYPE_DIRECT) {
     unset($exerciseResult[$questionId]);
 }
 
@@ -113,7 +114,7 @@ echo '<div id="delineation-container">';
 // Getting the options by js
 if (empty($choiceValue) && empty($hotSpot) && $loaded) {
     $nextQuestion = $questionNum + 1;
-    $destinationId = isset($questionList[$nextQuestion]) ? $questionList[$nextQuestion] : -1;
+    $destinationId = $questionList[$nextQuestion] ?? -1;
     $icon = Display::return_icon(
         'reload.png',
         '',
@@ -194,7 +195,7 @@ if (empty($choiceValue) && empty($hotSpot)) {
     exit;
 }
 $choice = [];
-$choice[$questionId] = isset($choiceValue) ? $choiceValue : null;
+$choice[$questionId] = $choiceValue ?? null;
 if (!is_array($exerciseResult)) {
     $exerciseResult = [];
 }
@@ -208,7 +209,7 @@ if (is_array($choice)) {
         $exerciseResult = $choice;
     } else {
         // gets the question ID from $choice. It is the key of the array
-        list($key) = array_keys($choice);
+        [$key] = array_keys($choice);
         // if the user didn't already answer this question
         if (!isset($exerciseResult[$key])) {
             // stores the user answer into the array
@@ -244,7 +245,7 @@ switch ($answerType) {
     case HOT_SPOT_DELINEATION:
         $showResult = true;
         if (is_array($hotSpot)) {
-            $choiceValue = isset($hotSpot[1]) ? $hotSpot[1] : '';
+            $choiceValue = $hotSpot[1] ?? '';
             $_SESSION['exerciseResultCoordinates'][$questionId] = $choiceValue; //needed for exercise_result.php
             $delineation_cord = $objAnswerTmp->selectHotspotCoordinates(1);
             $answer_delineation_destination = $objAnswerTmp->selectDestination(1);
@@ -380,7 +381,7 @@ if (isset($result['answer_destination'])) {
 // the link to retry the question
 if (isset($try) && 1 == $try) {
     $num_value_array = array_keys($questionList, $questionId);
-    $links .= Display:: return_icon(
+    $links .= Display::return_icon(
         'reload.gif',
         '',
         ['style' => 'padding-left:0px;padding-right:5px;']
@@ -390,7 +391,7 @@ if (isset($try) && 1 == $try) {
 // the link to theory (a learning path)
 if (!empty($lp)) {
     $lp_url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp;
-    $links .= Display:: return_icon(
+    $links .= Display::return_icon(
         'theory.gif',
         '',
         ['style' => 'padding-left:0px;padding-right:5px;']
@@ -401,19 +402,21 @@ $links .= '<br />';
 
 // the link to an external website or link
 if (!empty($url) && $url != -1) {
-    $links .= Display:: return_icon(
+    $links .= Display::return_icon(
         'link.gif',
         '',
         ['style' => 'padding-left:0px;padding-right:5px;']
     ).'<a target="_blank" href="'.$url.'">'.get_lang('VisitUrl').'</a><br /><br />';
 }
 
-$nextQuestion = $questionNum + 1;
-$destinationId = isset($questionList[$nextQuestion]) ? $questionList[$nextQuestion] : -1;
+if (null === $destinationId) {
+    $nextQuestion = $questionNum + 1;
+    $destinationId = $questionList[$nextQuestion] ?? -1;
+}
 
 // the link to finish the test
 if (-1 == $destinationId) {
-    $links .= Display:: return_icon(
+    $links .= Display::return_icon(
         'finish.gif',
         '',
         ['style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;']

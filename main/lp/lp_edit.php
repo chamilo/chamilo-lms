@@ -287,6 +287,23 @@ if ($form->hasElement('extra_authors')) {
 
 Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_LEARNPATH, $lpId);
 
+// select the next lp
+if (true === api_get_configuration_value('lp_enable_flow')) {
+    $nextLpsOptions = learnpath::getNextLpsAvailable(api_get_course_int_id(), $lpId);
+    $nextLpId = learnpath::getFlowNextLpId($lpId, api_get_course_int_id());
+    if (!empty($nextLpId)) {
+        $nextLpsOptions[$nextLpId] = learnPath::getLpNameById($nextLpId);
+    }
+    if (!empty($nextLpsOptions)) {
+        $form->addSelect(
+            'next_lp_id',
+            get_lang('SelectTheNextLp'),
+            $nextLpsOptions
+        );
+        $defaults['next_lp_id'] = $nextLpId;
+    }
+}
+
 // Submit button
 $form->addButtonSave(get_lang('SaveLPSettings'));
 

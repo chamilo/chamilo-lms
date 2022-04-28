@@ -172,6 +172,8 @@ if ($allowToEdit) {
                 $endDate = $values['date_range_end'];
                 $notificationCount = $_REQUEST['notification_count'] ?? [];
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
+                $careerId = $_REQUEST['career_id'] ?? 0;
+                $promotionId = $_REQUEST['promotion_id'] ?? 0;
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -190,7 +192,9 @@ if ($allowToEdit) {
                     '',
                     $values['invitees'] ?? [],
                     $values['collective'] ?? false,
-                    $reminders
+                    $reminders,
+                    (int) $careerId,
+                    (int) $promotionId
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -248,6 +252,8 @@ if ($allowToEdit) {
                 $comment = $values['comment'] ?? '';
                 $notificationCount = $_REQUEST['notification_count'] ?? [];
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
+                $careerId = $_REQUEST['career_id'] ?? 0;
+                $promotionId = $_REQUEST['promotion_id'] ?? 0;
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -299,7 +305,9 @@ if ($allowToEdit) {
                     0,
                     $values['invitees'] ?? [],
                     $values['collective'] ?? false,
-                    $reminders
+                    $reminders,
+                    (int) $careerId,
+                    (int) $promotionId
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {

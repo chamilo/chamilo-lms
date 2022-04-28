@@ -153,6 +153,3 @@ $strings['WebinarDeleted'] = "Webinar supprimé";
 $strings['UrlForSelfRegistration'] = "URL pour l'auto-inscription des participants";
 $strings['RegisterMeToConference'] = "M'inscrire à la visio";
 $strings['UnregisterMeToConference'] = "Me désinscrire de la visio";
-                                                                                                                                                                                            167,1         Bas
-
-

@@ -1,4 +1,4 @@
-v7.3 - 2022-02-07
+v7.3 - 2022-04-28
 ====
 Add Cecabank payments support.
 

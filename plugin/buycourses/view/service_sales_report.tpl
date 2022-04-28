@@ -7,6 +7,10 @@
         <a href="service_sales_report.php" aria-controls="buy-services"
            role="tab">{{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}</a>
     </li>
+    <li id="buy-subscriptions-tab" role="presentation">
+        <a href="subscription_sales_report.php" aria-controls="buy-subscriptions"
+           role="tab">{{ 'Subscriptions'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+    </li>
 </ul>
 </br>
 </br>

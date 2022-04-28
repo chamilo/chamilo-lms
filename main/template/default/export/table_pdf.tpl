@@ -11,7 +11,7 @@
     {% if pdf_student_info %}
     <tr>
         <td style="background-color: #E5E5E5; text-align: left; width:130px; ">
-           <strong>{{ "Student" | get_lang }}:</strong>
+           <strong>{{ "Student" | get_lang }}:</strong>blob:https://web.whatsapp.com/d7b63bbf-cfa5-4c3f-a277-23eb52dfde4f
         </td>
         <td>
             {{ pdf_student_info.complete_name }}
@@ -31,7 +31,7 @@
 
     {% if pdf_session_info %}
         <tr>
-            <td style="background-color: #E5E5E5; text-align: left; width:130px;">
+            <td style="background-color: #E5E5E5; text-align: left; width:130px;" {{ pdf_session_info.description ? '' : 'colspan="2"' }}>
                 <strong>{{ "Session" | get_lang }}:</strong> {{ pdf_session_info.name }}
             </td>
 
@@ -48,7 +48,7 @@
                 <strong>{{ "PeriodToDisplay" | get_lang }}:</strong>
             </td>
             <td>
-                {{ "FromDateXToDateY"| get_lang | format(pdf_session_info.access_start_date, pdf_session_info.access_end_date ) }}
+                {{ "FromDateXToDateY"| get_lang | format(pdf_session_info.access_start_date_to_local_time, pdf_session_info.access_end_date_to_local_time ) }}
             </td>
         </tr>
         {% endif %}

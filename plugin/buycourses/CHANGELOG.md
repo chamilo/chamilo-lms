@@ -1,3 +1,9 @@
+v7.4 - 2022-04-28
+====
+Add subscriptions support.
+
+If the plugin has already been installed, the update.php script must be executed (load plugin/buycourses/update.php in your browser) to update the structure of the tables in the database.
+
 v7.3 - 2022-04-28
 ====
 Add Cecabank payments support.

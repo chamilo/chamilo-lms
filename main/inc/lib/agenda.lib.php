@@ -2411,8 +2411,8 @@ class Agenda
                 $event['career'] = null;
                 $event['promotion'] = null;
 
-                $careerId = (int)$row['career_id'];
-                $promotionId = (int)$row['promotion_id'];
+                $careerId = (int) $row['career_id'];
+                $promotionId = (int) $row['promotion_id'];
 
                 $careerPromotionEventIsVisibleForUser = true;
 

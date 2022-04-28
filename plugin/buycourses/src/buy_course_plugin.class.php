@@ -1559,6 +1559,10 @@ class BuyCoursesPlugin extends Plugin
             unset($types[BuyCoursesPlugin::PAYMENT_TYPE_STRIPE]);
         }
 
+        if ($this->get('cecabank_enable') !== 'true') {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_TPV_CECABANK]);
+        }
+
         return $types;
     }
 

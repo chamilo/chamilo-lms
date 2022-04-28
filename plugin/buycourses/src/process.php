@@ -95,10 +95,6 @@ if ($form->validate()) {
 
 $paymentTypesOptions = $plugin->getPaymentTypes(true);
 
-if (!$tpvCecabankEnable ||  strtolower($currency['iso_code']) != 'eur') {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TPV_CECABANK]);
-}
-
 $count = count($paymentTypesOptions);
 if ($count === 0) {
     $form->addHtml($plugin->get_lang('NoPaymentOptionAvailable'));

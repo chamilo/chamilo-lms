@@ -1,4 +1,4 @@
-<div style="position: absolute; top: 40px; right: 50px;">
+<div style="position: absolute; top: 40px; right: 50px; width: 250px">
     {{ logo }}
 </div>
 <h1>{{ 'StudentDetails'|get_lang }}</h1>

@@ -2369,80 +2369,90 @@ class Agenda
                 WHERE access_url_id = $access_url_id
                 $dateCondition";
         $result = Database::query($sql);
+
+        if (!Database::num_rows($result)) {
+            return [];
+        }
+
         $my_events = [];
-        if (Database::num_rows($result)) {
-            $allowCareersInGlobalAgenda = api_get_configuration_value('allow_careers_in_global_agenda');
-            $userId = api_get_user_id();
-            $userVisibility = SystemAnnouncementManager::getCurrentUserVisibility();
+        $allowCareersInGlobalAgenda = api_get_configuration_value('allow_careers_in_global_agenda');
+        $userId = api_get_user_id();
+        $userVisibility = SystemAnnouncementManager::getCurrentUserVisibility();
 
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $event = [];
-                $event['id'] = 'platform_'.$row['id'];
-                $event['title'] = $row['title'];
-                $event['className'] = 'platform';
-                $event['allDay'] = 'false';
-                $event['borderColor'] = $event['backgroundColor'] = $this->event_platform_color;
-                $event['editable'] = false;
-                $event['type'] = 'admin';
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $event = [];
+            $event['id'] = 'platform_'.$row['id'];
+            $event['title'] = $row['title'];
+            $event['className'] = 'platform';
+            $event['allDay'] = 'false';
+            $event['borderColor'] = $event['backgroundColor'] = $this->event_platform_color;
+            $event['editable'] = false;
+            $event['type'] = 'admin';
 
-                if (api_is_platform_admin() && $this->type === 'admin') {
-                    $event['editable'] = true;
-                }
+            if (api_is_platform_admin() && $this->type === 'admin') {
+                $event['editable'] = true;
+            }
 
-                if (!empty($row['start_date'])) {
-                    $event['start'] = $this->formatEventDate($row['start_date']);
-                    $event['start_date_localtime'] = api_get_local_time($row['start_date']);
-                }
+            if (!empty($row['start_date'])) {
+                $event['start'] = $this->formatEventDate($row['start_date']);
+                $event['start_date_localtime'] = api_get_local_time($row['start_date']);
+            }
 
-                if (!empty($row['end_date'])) {
-                    $event['end'] = $this->formatEventDate($row['end_date']);
-                    $event['end_date_localtime'] = api_get_local_time($row['end_date']);
-                }
-                $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
-                $event['parent_event_id'] = 0;
-                $event['has_children'] = 0;
-                $event['description'] = $row['content'];
+            if (!empty($row['end_date'])) {
+                $event['end'] = $this->formatEventDate($row['end_date']);
+                $event['end_date_localtime'] = api_get_local_time($row['end_date']);
+            }
+            $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
+            $event['parent_event_id'] = 0;
+            $event['has_children'] = 0;
+            $event['description'] = $row['content'];
 
-                if ($allowCareersInGlobalAgenda) {
-                    $event['career'] = null;
-                    $event['promotion'] = null;
+            if ($allowCareersInGlobalAgenda) {
+                $event['career'] = null;
+                $event['promotion'] = null;
 
-                    $eventIsVisibleForUser = SystemAnnouncementManager::isVisibleAnnouncementForUser(
+                $careerId = (int) $row['career_id'];
+                $promotionId = (int) $row['promotion_id'];
+
+                $careerPromotionEventIsVisibleForUser = true;
+
+                if (($careerId || $promotionId) && 'admin' !== $this->type) {
+                    $careerPromotionEventIsVisibleForUser = SystemAnnouncementManager::isVisibleAnnouncementForUser(
                         $userId,
                         $userVisibility,
-                        (int) $row['career_id'],
-                        (int) $row['promotion_id']
+                        $careerId,
+                        $promotionId
                     );
-
-                    if (false === $eventIsVisibleForUser) {
-                        continue;
-                    }
-
-                    if (!empty($row['career_id'])) {
-                        $careerInfo = (new Career())->get($row['career_id']);
-
-                        unset($careerInfo['status'], $careerInfo['created_at'], $careerInfo['updated_at']);
-
-                        $event['career'] = $careerInfo;
-                    }
-
-                    if (!empty($row['promotion_id'])) {
-                        $promotionInfo = (new Promotion())->get($row['promotion_id']);
-
-                        unset(
-                            $promotionInfo['career_id'],
-                            $promotionInfo['status'],
-                            $promotionInfo['created_at'],
-                            $promotionInfo['updated_at']
-                        );
-
-                        $event['promotion'] = $promotionInfo;
-                    }
                 }
 
-                $my_events[] = $event;
-                $this->events[] = $event;
+                if (false === $careerPromotionEventIsVisibleForUser) {
+                    continue;
+                }
+
+                if (0 !== $careerId) {
+                    $careerInfo = (new Career())->get($row['career_id']);
+
+                    unset($careerInfo['status'], $careerInfo['created_at'], $careerInfo['updated_at']);
+
+                    $event['career'] = $careerInfo;
+                }
+
+                if (0 !== $promotionId) {
+                    $promotionInfo = (new Promotion())->get($row['promotion_id']);
+
+                    unset(
+                        $promotionInfo['career_id'],
+                        $promotionInfo['status'],
+                        $promotionInfo['created_at'],
+                        $promotionInfo['updated_at']
+                    );
+
+                    $event['promotion'] = $promotionInfo;
+                }
             }
+
+            $my_events[] = $event;
+            $this->events[] = $event;
         }
 
         return $my_events;

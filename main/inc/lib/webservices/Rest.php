@@ -3095,7 +3095,7 @@ class Rest extends WebService
     /**
      * @throws Exception
      */
-    public function getAllUsersApiKeys(int $page, int $length, ?int $urlId = null): array
+    public function getAllUsersApiKeys(int $page, int $length, bool $force = false, ?int $urlId = null): array
     {
         if (false === api_get_configuration_value('webservice_enable_adminonly_api')
             || !UserManager::is_admin($this->user->getId())
@@ -3110,13 +3110,18 @@ class Rest extends WebService
         $data = [];
         $data['total'] = UserManager::get_number_of_users(0, $currentUrlId);
         $data['list'] = array_map(
-            function (array $user) {
+            function (array $user) use ($force) {
                 $apiKeys = UserManager::get_api_keys($user['id'], self::SERVICE_NAME);
+                $apiKey = $apiKeys ? current($apiKeys) : null;
+
+                if ($force && empty($apiKey)) {
+                    $apiKey = self::generateApiKeyForUser((int) $user['id']);
+                }
 
                 return [
-                    'id' => $user['id'],
+                    'id' => (int) $user['id'],
                     'username' => $user['username'],
-                    'api_key' => $apiKeys ? current($apiKeys) : null,
+                    'api_key' => $apiKey,
                 ];
             },
             $users = UserManager::get_user_list([], [], $limitOffset, $length, $currentUrlId)
@@ -3139,7 +3144,7 @@ class Rest extends WebService
     /**
      * @throws Exception
      */
-    public function getUserApiKey(string $username): array
+    public function getUserApiKey(string $username, bool $force = false): array
     {
         if (false === api_get_configuration_value('webservice_enable_adminonly_api')
             || !UserManager::is_admin($this->user->getId())
@@ -3154,11 +3159,16 @@ class Rest extends WebService
         }
 
         $apiKeys = UserManager::get_api_keys($userInfo['id'], self::SERVICE_NAME);
+        $apiKey = $apiKeys ? current($apiKeys) : null;
+
+        if ($force && empty($apiKey)) {
+            $apiKey = self::generateApiKeyForUser((int) $userInfo['id']);
+        }
 
         return [
             'id' => $userInfo['id'],
             'username' => $userInfo['username'],
-            'api_key' => $apiKeys ? current($apiKeys) : null,
+            'api_key' => $apiKey,
         ];
     }
 
@@ -3182,6 +3192,15 @@ class Rest extends WebService
         }
 
         return (bool) $restApi;
+    }
+
+    protected static function generateApiKeyForUser(int $userId): string
+    {
+        UserManager::add_api_key($userId, self::SERVICE_NAME);
+
+        $apiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return current($apiKeys);
     }
 
     /**

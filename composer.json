@@ -62,7 +62,7 @@
         "chamilo/settings-bundle": "dev-master",
         "clue/graph": "^0.9.2",
         "cocur/slugify": "^4.0",
-        "doctrine/annotations": "1.13.2",
+        "doctrine/annotations": "^1.13",
         "doctrine/dbal": "^3.2",
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-fixtures-bundle": "^3.4",

@@ -125,7 +125,7 @@ class GradebookCategory
      *
      * @var int
      *
-     * @ORM\Column(name="allow_skills_by_subcategory", type="integer", nullable=false)
+     * @ORM\Column(name="allow_skills_by_subcategory", type="integer", nullable=true, options={"default": 1})
      */
     //protected $allowSkillsBySubcategory;
 

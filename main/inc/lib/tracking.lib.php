@@ -8239,7 +8239,12 @@ class Tracking
             $userList = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId, null, null, 0);
         }
 
-        $exerciseList = ExerciseLib::get_all_exercises($courseInfo, $sessionId, false, null);
+        $active = 3;
+        if (true === api_get_configuration_value('tracking_my_progress_show_deleted_exercises')) {
+            $active = 2;
+        }
+
+        $exerciseList = ExerciseLib::get_all_exercises($courseInfo, $sessionId, false, null, false, $active);
 
         if (empty($exerciseList)) {
             return Display::return_message(get_lang('NoEx'));
@@ -8251,6 +8256,7 @@ class Tracking
         $quizzesTable->setHeaders(
             [
                 get_lang('Title'),
+                get_lang('InLp'),
                 get_lang('Attempts'),
                 get_lang('BestAttempt'),
                 get_lang('Ranking'),
@@ -8271,7 +8277,8 @@ class Tracking
                 api_get_user_id(),
                 $exercices['iid'],
                 $courseInfo['real_id'],
-                $sessionId
+                $sessionId,
+                false
             );
 
             $url = $webCodePath.'exercise/overview.php?'
@@ -8289,8 +8296,12 @@ class Tracking
                 $exercices['title'] = sprintf(get_lang('XParenthesisDeleted'), $exercices['title']);
             }
 
+            $lpList = Exercise::getLpListFromExercise($exercices['iid'], $courseInfo['real_id']);
+            $inLp = !empty($lpList) ? get_lang('Yes') : get_lang('No');
+
             $quizData = [
                 $exercices['title'],
+                $inLp,
                 $attempts,
                 '-',
                 '-',
@@ -8311,7 +8322,9 @@ class Tracking
             $bestExerciseAttempts = Event::get_best_exercise_results_by_user(
                 $exercices['iid'],
                 $courseInfo['real_id'],
-                $sessionId
+                $sessionId,
+                0,
+                false
             );
 
             $toGraphExerciseResult[$exercices['iid']] = [
@@ -8323,11 +8336,12 @@ class Tracking
             $bestScoreData = ExerciseLib::get_best_attempt_in_course(
                 $exercices['iid'],
                 $courseInfo['real_id'],
-                $sessionId
+                $sessionId,
+                false
             );
 
             if (!empty($bestScoreData)) {
-                $quizData[5] = ExerciseLib::show_score(
+                $quizData[6] = ExerciseLib::show_score(
                     $bestScoreData['exe_result'],
                     $bestScoreData['exe_weighting']
                 );
@@ -8337,7 +8351,8 @@ class Tracking
                 api_get_user_id(),
                 $exercices['iid'],
                 $courseInfo['real_id'],
-                $sessionId
+                $sessionId,
+                false
             );
 
             if (!empty($exerciseAttempt)) {
@@ -8356,7 +8371,7 @@ class Tracking
                         ]
                     );
 
-                $quizData[3] = Display::url(
+                $quizData[4] = Display::url(
                     ExerciseLib::show_score($score, $weighting),
                     $latestAttemptUrl
                 );
@@ -8368,18 +8383,20 @@ class Tracking
                     $userList = [$userList];
                 }
 
-                $quizData[4] = ExerciseLib::get_exercise_result_ranking(
+                $quizData[5] = ExerciseLib::get_exercise_result_ranking(
                     $myScore,
                     $exeId,
                     $exercices['iid'],
                     $courseInfo['code'],
                     $sessionId,
-                    $userList
+                    $userList,
+                    true,
+                    false
                 );
                 $graph = self::generate_exercise_result_thumbnail_graph($toGraphExerciseResult[$exercices['iid']]);
                 $normalGraph = self::generate_exercise_result_graph($toGraphExerciseResult[$exercices['iid']]);
 
-                $quizData[6] = Display::url(
+                $quizData[7] = Display::url(
                     Display::img($graph, '', [], false),
                     $normalGraph,
                     ['id' => $exercices['iid'], 'class' => 'expand-image']

@@ -81,7 +81,7 @@ if (!empty($objExercise->getResultAccess())) {
 }
 
 // Fix to display embed-responsive video
-$htmlHeadXtra[] = "<style>.embed-responsive { overflow: initial; }</style>";
+$htmlHeadXtra[] = ExerciseLib::fixVideoEmbedResponsive();
 
 if ($show_headers) {
     $interbreadcrumb[] = [

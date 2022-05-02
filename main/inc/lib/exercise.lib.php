@@ -6807,4 +6807,22 @@ EOT;
 
         error_log("Exercise ping received: exe_id = $exeId. _user not found in session.");
     }
+
+    /**
+     * Fix css or js to display video embed responsive inside quiz result page.
+     *
+     * @return string
+     */
+    public static function fixVideoEmbedResponsive()
+    {
+        $style = '<style>
+                    .embed-responsive {
+                            overflow: initial;
+                            padding-bottom: 56.25% !important;
+                    }
+                 </style>';
+        $script = '';
+
+        return $style.$script;
+    }
 }

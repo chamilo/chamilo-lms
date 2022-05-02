@@ -177,7 +177,7 @@ if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
 }
 
 // Fix to display embed-responsive video
-$htmlHeadXtra[] = "<style>.embed-responsive { overflow: initial; }</style>";
+$htmlHeadXtra[] = ExerciseLib::fixVideoEmbedResponsive();
 
 if ($action !== 'export') {
     $scoreJsCode = ExerciseLib::getJsCode();

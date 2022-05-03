@@ -116,10 +116,12 @@ switch ($action) {
         $zip = new PclZip($tempZipFile);
         $csvList = [];
 
-        foreach ($sessionList as $sessionId) {
+        foreach ($sessionList as $session_id) {
             $em = Database::getManager();
             $sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
-            $session = $sessionRepository->find($sessionId);
+            $session = $sessionRepository->find($session_id);
+
+            Session::write('id_session', $session_id);
 
             if ($session->getNbrCourses() > 0) {
                 $courses = $session->getCourses();
@@ -132,10 +134,10 @@ switch ($action) {
                 foreach ($courseList as $course) {
                     $courseId = $course->getId();
                     $courseInfo = api_get_course_info_by_id($courseId);
-                    $courseCode = $courseInfo['code'];
                     $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
                     $sortByFirstName = api_sort_by_first_name();
                     $bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
+                    $course_code = $courseInfo['code'];
 
                     $csv_headers = [];
                     $csv_headers[] = get_lang('OfficialCode');
@@ -157,9 +159,9 @@ switch ($action) {
                     $csv_headers[] = $bestScoreLabel;
                     $exerciseResultHeaders = [];
                     if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
-                        isset($addExerciseOption['courses'][$courseCode])
+                        isset($addExerciseOption['courses'][$course_code])
                     ) {
-                        foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
+                        foreach ($addExerciseOption['courses'][$course_code] as $exerciseId) {
                             $exercise = new Exercise();
                             $exercise->read($exerciseId);
                             if ($exercise->iId) {
@@ -177,26 +179,36 @@ switch ($action) {
                     $csv_headers[] = get_lang('Student_publication');
                     $csv_headers[] = get_lang('Messages');
                     $csv_headers[] = get_lang('Classes');
-                    if (empty($sessionId)) {
-                        $csv_headers[] = get_lang('Survey');
-                    } else {
-                        $csv_headers[] = get_lang('RegistrationDate');
-                    }
+                    $csv_headers[] = get_lang('RegistrationDate');
                     $csv_headers[] = get_lang('FirstLoginInCourse');
                     $csv_headers[] = get_lang('LatestLoginInCourse');
-                    $csvContentInSession = Session::read('csv_content', []);
+
+                    $student_list = CourseManager::get_student_list_from_course_code(
+                        $course_code,
+                        true,
+                        $session_id
+                    );
+                    $nb_students = count($student_list);
+                    $user_ids = array_keys($student_list);
+                    $export_csv = true;
+                    $csvContentInSession = TrackingCourseLog::get_user_data(
+                        null,
+                        $nb_students,
+                        null,
+                        null,
+                        []
+                    );
 
                     array_unshift($csvContentInSession, $csv_headers);
 
-                    if ($sessionId) {
-                        $sessionInfo = api_get_session_info($sessionId);
-                        $sessionDates = SessionManager::parseSessionDates($sessionInfo);
+                    $sessionInfo = api_get_session_info($session_id);
+                    $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 
-                        array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
-                        array_unshift($csvContentInSession, [get_lang('SessionName'), Security::remove_XSS($sessionInfo['name'])]);
-                    }
+                    array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
+                    array_unshift($csvContentInSession, [get_lang('SessionName'), Security::remove_XSS($sessionInfo['name'])]);
+
                     $csvList[] = [
-                        'session_id' => $sessionId,
+                        'session_id' => $session_id,
                         'session_name' => $session->getName(),
                         'course_id' => $courseId,
                         'course_name' => $courseInfo['name'],
@@ -516,7 +528,7 @@ $extra_params['multiselect'] = true;
                     }
                 }
             }).navButtonAdd('#sessions_pager',{
-                caption:"<?php echo addslashes(get_lang('Export2ZIP')); ?>",
+                caption:"<?php echo addslashes(get_lang('ExportCoursesReports')); ?>",
                 buttonicon:"ui-icon ui-icon-plus",
                 onClickButton: function(a) {
                     var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');

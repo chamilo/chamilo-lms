@@ -8795,4 +8795,5 @@ $NoNotifications = "Aucune notification";
 $AllowsSkillsBySubCategories = "Permettre l'assignation de compétences par sous catégorie";
 $ItAllowsTheAcquisitionOfSkillsBySubCategories = "Permet d'assigner les compétences par validation indépendantes des sous catégories.";
 $SkillMinScore = "Score minimum";
+$InLp = "Dans un parcours";
 ?>

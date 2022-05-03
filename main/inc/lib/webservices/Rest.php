@@ -41,6 +41,7 @@ class Rest extends WebService
     const VIEW_PROFILE = 'view_user_profile';
     const GET_PROFILE = 'user_profile';
 
+    const VIEW_MY_COURSES = 'view_my_courses';
     const VIEW_COURSE_HOME = 'view_course_home';
     const GET_COURSE_INFO = 'course_info';
     const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
@@ -3192,6 +3193,15 @@ class Rest extends WebService
         }
 
         return (bool) $restApi;
+    }
+
+    public function viewMyCourses()
+    {
+        $url = api_get_path(WEB_PATH).'user_portal.php?'
+            .http_build_query(['nosession' => 'true']);
+
+        header("Location: $url");
+        exit;
     }
 
     protected static function generateApiKeyForUser(int $userId): string

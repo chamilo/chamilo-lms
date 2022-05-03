@@ -2188,6 +2188,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Requires uncomment the allowSkillsBySubcategory get and set
 //$_configuration['gradebook_enable_subcategory_skills_independant_assignement'] = false;
 
+// Shows the deleted quizzes in my progress page.
+//$_configuration['tracking_my_progress_show_deleted_exercises'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

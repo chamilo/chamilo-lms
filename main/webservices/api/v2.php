@@ -184,6 +184,9 @@ try {
             $restResponse->setData($userInfo);
             break;
 
+        case Rest::VIEW_MY_COURSES:
+            $restApi->viewMyCourses();
+            break;
         case Rest::VIEW_COURSE_HOME:
             $restApi->viewCourseHome();
             break;

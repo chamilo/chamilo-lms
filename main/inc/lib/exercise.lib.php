@@ -3821,7 +3821,8 @@ EOT;
         $course_code,
         $session_id = 0,
         $user_list = [],
-        $return_string = true
+        $return_string = true,
+        $skipLpResults = true
     ) {
         //No score given we return
         if (is_null($my_score)) {
@@ -3838,7 +3839,8 @@ EOT;
                 $user_id,
                 $exercise_id,
                 $course_code,
-                $session_id
+                $session_id,
+                $skipLpResults
             );
         }
 
@@ -3976,13 +3978,16 @@ EOT;
      *
      * @return array
      */
-    public static function get_best_attempt_in_course($exercise_id, $courseId, $session_id)
+    public static function get_best_attempt_in_course($exercise_id, $courseId, $session_id, $skipLpResults = true)
     {
         $user_results = Event::get_all_exercise_results(
             $exercise_id,
             $courseId,
             $session_id,
-            false
+            false,
+            null,
+            0,
+            $skipLpResults
         );
 
         $best_score_data = [];
@@ -4018,14 +4023,17 @@ EOT;
         $user_id,
         $exercise_id,
         $courseId,
-        $session_id
+        $session_id,
+        $skipLpResults = true
     ) {
         $user_results = Event::get_all_exercise_results(
             $exercise_id,
             $courseId,
             $session_id,
             false,
-            $user_id
+            $user_id,
+            0,
+            $skipLpResults
         );
         $best_score_data = [];
         $best_score = 0;

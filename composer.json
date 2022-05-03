@@ -34,7 +34,7 @@
         ]
     },
     "require": {
-        "php": "^7.2",
+        "php": "^8.0",
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-fileinfo": "*",

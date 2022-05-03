@@ -169,7 +169,7 @@ class UserManager
         $result = false;
 
         $detectedEncryption = self::detectPasswordEncryption($encoded, $salt);
-        if (self::getPasswordEncryption() != $detectedEncryption) {
+        if (api_get_configuration_value('password_conversion') && self::getPasswordEncryption() != $detectedEncryption) {
             $encoder = new \Chamilo\UserBundle\Security\Encoder($detectedEncryption);
             $result = $encoder->isPasswordValid($encoded, $raw, $salt);
             if ($result) {

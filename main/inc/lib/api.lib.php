@@ -2829,6 +2829,10 @@ function api_get_session_visibility(
 
     // I don't care the session visibility.
     if (empty($row['access_start_date']) && empty($row['access_end_date'])) {
+        if (api_is_teacher()) {
+            return SESSION_AVAILABLE;
+        }
+
         // Session duration per student.
         if (isset($row['duration']) && !empty($row['duration'])) {
             $duration = $row['duration'] * 24 * 60 * 60;

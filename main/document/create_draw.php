@@ -83,7 +83,7 @@ if (!empty($groupId)) {
         "url" => "../group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace'),
     ];
-    $group = GroupManager :: get_group_properties($groupId);
+    $group = GroupManager::get_group_properties($groupId);
     $path = explode('/', $dir);
     if ('/'.$path[1] != $group['directory']) {
         api_not_allowed(true);
@@ -134,7 +134,7 @@ if (empty($document_data['parents'])) {
         ];
     }
 }
-Display :: display_header($nameTools, 'Doc');
+Display::display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$document_id.'">'.
@@ -169,4 +169,4 @@ if (api_browser_support('svg')) {
     echo Display::return_message(get_lang('BrowserDontSupportsSVG'), 'error');
 }
 
-Display :: display_footer();
+Display::display_footer();

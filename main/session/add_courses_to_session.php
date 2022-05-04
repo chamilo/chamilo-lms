@@ -257,8 +257,8 @@ unset($Courses);
                     <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple', <?php echo $sessionId; ?>)" class="selectpicker form-control">
                         <option value="%">--</option>
                         <?php
-                        echo Display :: get_alphabet_options();
-                echo Display :: get_numeric_options(0, 9, ''); ?>
+                        echo Display::get_alphabet_options();
+                echo Display::get_numeric_options(0, 9, ''); ?>
                     </select>
                 </div>
             <?php

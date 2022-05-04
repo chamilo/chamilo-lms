@@ -106,4 +106,4 @@ if (!$displayScore->is_custom() || empty($displays)) {
     $html .= '</table>';
     echo $html;
 }
-Display :: display_footer();
+Display::display_footer();

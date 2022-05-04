@@ -11,11 +11,11 @@ use ChamiloSession as Session;
  */
 class MultipleAnswerTrueFalseDegreeCertainty extends Question
 {
-    const LEVEL_DARKGREEN = 1;
-    const LEVEL_LIGHTGREEN = 2;
-    const LEVEL_WHITE = 3;
-    const LEVEL_LIGHTRED = 4;
-    const LEVEL_DARKRED = 5;
+    public const LEVEL_DARKGREEN = 1;
+    public const LEVEL_LIGHTGREEN = 2;
+    public const LEVEL_WHITE = 3;
+    public const LEVEL_LIGHTRED = 4;
+    public const LEVEL_DARKRED = 5;
 
     public $typePicture = 'mccert.png';
     public $explanationLangVar = 'MultipleAnswerTrueFalseDegreeCertainty';

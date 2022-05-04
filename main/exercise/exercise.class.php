@@ -9309,7 +9309,7 @@ class Exercise
                         c_id = $courseId AND
                         path LIKE '".Database::escape_string($uploadPath.'/%/%')."'";
             $res = Database::query($sql);
-            $hp_count = Database :: num_rows($res);
+            $hp_count = Database::num_rows($res);
         } else {
             $sql = "SELECT * FROM $TBL_DOCUMENT d
                     INNER JOIN $TBL_ITEM_PROPERTY ip
@@ -9882,7 +9882,7 @@ class Exercise
                                 ORDER BY exe_id DESC";
 
                         $qryres = Database::query($sql);
-                        $num = Database :: num_rows($qryres);
+                        $num = Database::num_rows($qryres);
 
                         // Hide the results.
                         $my_result_disabled = $row['results_disabled'];
@@ -9906,7 +9906,7 @@ class Exercise
                                 ) {
                                     // More than one attempt
                                     if ($num > 0) {
-                                        $row_track = Database :: fetch_array($qryres);
+                                        $row_track = Database::fetch_array($qryres);
                                         $attempt_text = get_lang('LatestAttempt').' : ';
                                         $attempt_text .= ExerciseLib::show_score(
                                             $row_track['exe_result'],
@@ -9973,7 +9973,7 @@ class Exercise
                             )
                             ) {
                                 if ($num > 0) {
-                                    $row_track = Database :: fetch_array($qryres);
+                                    $row_track = Database::fetch_array($qryres);
                                     $attempt_text = get_lang('LatestAttempt').' : ';
                                     $attempt_text .= ExerciseLib::show_score(
                                         $row_track['exe_result'],
@@ -10053,7 +10053,7 @@ class Exercise
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
+                        d.path  LIKE '".Database::escape_string($uploadPath.'/%/%')."'
                     LIMIT $from , $limit"; // only .htm or .html files listed
         } else {
             $sql = "SELECT d.iid, d.path as path, d.comment as comment
@@ -10061,7 +10061,7 @@ class Exercise
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
+                        d.path  LIKE '".Database::escape_string($uploadPath.'/%/%')."'
                     LIMIT $from , $limit";
         }
 

@@ -3,10 +3,10 @@
 
 class NotificationEvent extends Model
 {
-    const ACCOUNT_EXPIRATION = 1;
-    const JUSTIFICATION_EXPIRATION = 2;
-    const GLOBAL_NOTIFICATION = 3;
-    const SPECIFIC_USER = 4;
+    public const ACCOUNT_EXPIRATION = 1;
+    public const JUSTIFICATION_EXPIRATION = 2;
+    public const GLOBAL_NOTIFICATION = 3;
+    public const SPECIFIC_USER = 4;
 
     public $table;
     public $columns = [

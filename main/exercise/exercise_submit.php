@@ -1131,7 +1131,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     $_custom['exercises_hidden_when_no_start_date']
 ) {
     if (empty($objExercise->start_time)) {
-        echo Display:: return_message(
+        echo Display::return_message(
             sprintf(
                 get_lang('ExerciseNoStartedYet'),
                 $exercise_title,

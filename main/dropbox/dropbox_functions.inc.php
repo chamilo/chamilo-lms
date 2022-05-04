@@ -562,7 +562,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     if (api_get_session_id()) {
         $complete_user_list_for_dropbox = [];
         if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
-            $complete_user_list_for_dropbox = CourseManager:: get_user_list_from_course_code(
+            $complete_user_list_for_dropbox = CourseManager::get_user_list_from_course_code(
                 $course_info['code'],
                 api_get_session_id(),
                 null,

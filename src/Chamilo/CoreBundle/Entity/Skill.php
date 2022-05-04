@@ -19,8 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Skill
 {
-    const STATUS_DISABLED = 0;
-    const STATUS_ENABLED = 1;
+    public const STATUS_DISABLED = 0;
+    public const STATUS_ENABLED = 1;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="skills")

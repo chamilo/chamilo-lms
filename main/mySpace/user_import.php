@@ -87,7 +87,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     }
 }
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (isset($_FILES['import_file']) && $_FILES['import_file']['size'] == 0 && $_POST) {
     echo Display::return_message(get_lang('ThisFieldIsRequired'), 'error');
@@ -162,4 +162,4 @@ $form->display();
 </pre>
 </blockquote>
 <?php
-Display :: display_footer();
+Display::display_footer();

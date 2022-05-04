@@ -478,7 +478,7 @@ if ($allowAntiPlagiarism) {
     Display::panel($table);
     echo '</div>';
 
-    $workTable = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $courseId = $courseInfo['real_id'];
     $formAction['analyseCompilatio'] = [
         'label' => get_lang('CompilatioStartAnalysis'),

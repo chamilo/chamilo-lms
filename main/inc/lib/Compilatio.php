@@ -478,7 +478,7 @@ class Compilatio
             return false;
         }
 
-        $table = Database:: get_course_table(TABLE_PLAGIARISM);
+        $table = Database::get_course_table(TABLE_PLAGIARISM);
         $params = [$courseId, $itemId];
         Database::delete($table, ['c_id = ? AND document_id = ?' => $params]);
 

@@ -4531,7 +4531,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 
     if (empty($file['size'])) {
         return [
-            'error' => Display:: return_message(
+            'error' => Display::return_message(
                 get_lang('UplUploadFailedSizeIsZero'),
                 'error'
             ),
@@ -4604,7 +4604,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         }
     } else {
         return [
-            'error' => Display :: return_message(
+            'error' => Display::return_message(
                 get_lang('FolderDoesntExistsInFileSystem'),
                 'error'
             ),

@@ -6,12 +6,12 @@
  */
 class CcVersion1 extends CcVersionBase
 {
-    const WEBCONTENT = 'webcontent';
-    const QUESTIONBANK = 'imsqti_xmlv1p2/imscc_xmlv1p0/question-bank';
-    const ASSESSMENT = 'imsqti_xmlv1p2/imscc_xmlv1p0/assessment';
-    const ASSOCIATEDCONTENT = 'associatedcontent/imscc_xmlv1p0/learning-application-resource';
-    const DISCUSSIONTOPIC = 'imsdt_xmlv1p0';
-    const WEBLINK = 'imswl_xmlv1p0';
+    public const WEBCONTENT = 'webcontent';
+    public const QUESTIONBANK = 'imsqti_xmlv1p2/imscc_xmlv1p0/question-bank';
+    public const ASSESSMENT = 'imsqti_xmlv1p2/imscc_xmlv1p0/assessment';
+    public const ASSOCIATEDCONTENT = 'associatedcontent/imscc_xmlv1p0/learning-application-resource';
+    public const DISCUSSIONTOPIC = 'imsdt_xmlv1p0';
+    public const WEBLINK = 'imswl_xmlv1p0';
 
     public static $checker = [self::WEBCONTENT,
                                    self::ASSESSMENT,

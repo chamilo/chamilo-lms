@@ -142,4 +142,4 @@ Display::display_header();
 
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

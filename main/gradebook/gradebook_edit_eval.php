@@ -31,7 +31,7 @@ if ($form->validate()) {
     $eval->set_course_code($values['hid_course_code']);
     $eval->set_category_id($values['hid_category_id']);
 
-    $parent_cat = Category :: load($values['hid_category_id']);
+    $parent_cat = Category::load($values['hid_category_id']);
     $final_weight = $values['weight_mask'];
 
     $eval->set_weight($final_weight);

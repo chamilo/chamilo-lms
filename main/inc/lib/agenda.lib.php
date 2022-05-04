@@ -4432,7 +4432,7 @@ class Agenda
                 $course['db']
             );
             // get the groups to which the user belong
-            $group_memberships = GroupManager:: get_group_ids(
+            $group_memberships = GroupManager::get_group_ids(
                 $course['db'],
                 $user_id
             );

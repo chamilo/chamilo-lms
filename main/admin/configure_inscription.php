@@ -24,7 +24,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
                 $term_preview = LegalManager::get_last_condition($language);
             }
             $tool_name = get_lang('TermsAndConditions');
-            Display:: display_header('');
+            Display::display_header('');
             echo '<div class="actions-title">';
             echo $tool_name;
             echo '</div>';
@@ -33,7 +33,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
             } else {
                 echo get_lang('ComingSoon');
             }
-            Display:: display_footer();
+            Display::display_footer();
             exit;
         }
     }
@@ -151,7 +151,7 @@ if (!empty($action)) {
     }
 }
 
-Display:: display_header($tool_name);
+Display::display_header($tool_name);
 
 echo Display::page_header($tool_name);
 
@@ -464,4 +464,4 @@ switch ($action) {
         break;
 }
 
-Display:: display_footer();
+Display::display_footer();

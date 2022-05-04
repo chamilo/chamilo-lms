@@ -10,13 +10,13 @@
  */
 class EvalForm extends FormValidator
 {
-    const TYPE_ADD = 1;
-    const TYPE_EDIT = 2;
-    const TYPE_MOVE = 3;
-    const TYPE_RESULT_ADD = 4;
-    const TYPE_RESULT_EDIT = 5;
-    const TYPE_ALL_RESULTS_EDIT = 6;
-    const TYPE_ADD_USERS_TO_EVAL = 7;
+    public const TYPE_ADD = 1;
+    public const TYPE_EDIT = 2;
+    public const TYPE_MOVE = 3;
+    public const TYPE_RESULT_ADD = 4;
+    public const TYPE_RESULT_EDIT = 5;
+    public const TYPE_ALL_RESULTS_EDIT = 6;
+    public const TYPE_ADD_USERS_TO_EVAL = 7;
 
     protected $evaluation_object;
     private $result_object;
@@ -564,7 +564,7 @@ class EvalForm extends FormValidator
 
         $session_id = api_get_session_id();
         $course_code = api_get_course_id();
-        $all_categories = Category:: load(
+        $all_categories = Category::load(
             null,
             null,
             $course_code,

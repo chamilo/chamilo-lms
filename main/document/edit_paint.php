@@ -125,7 +125,7 @@ if (!$is_allowedToEdit) {
 
 Event::event_access_tool(TOOL_DOCUMENT);
 
-Display :: display_header($nameTools, 'Doc');
+Display::display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$parent_id.'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';

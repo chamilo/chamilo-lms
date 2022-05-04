@@ -12,7 +12,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
  */
 class Explode implements TransformPropertyInterface
 {
-    const SEPARATOR = '@mm@';
+    public const SEPARATOR = '@mm@';
 
     /**
      * @return mixed

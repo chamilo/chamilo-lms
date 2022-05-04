@@ -436,7 +436,7 @@ if ($form->validate()) {
             $password = $user_data['password1'];
         } else {
             Display::addFlash(
-                Display:: return_message(
+                Display::return_message(
                     get_lang('CurrentPasswordEmptyOrIncorrect'),
                     'warning',
                     false
@@ -466,7 +466,7 @@ if ($form->validate()) {
 
             if (!check_user_email($user_data['email']) && empty($user_data['password0'])) {
                 Display::addFlash(
-                    Display:: return_message(
+                    Display::return_message(
                         get_lang('ToChangeYourEmailMustTypeYourPassword'),
                         'error',
                         false
@@ -489,7 +489,7 @@ if ($form->validate()) {
             $user_data['picture_uri'] = $new_picture;
 
             Display::addFlash(
-                Display:: return_message(
+                Display::return_message(
                     get_lang('PictureUploaded'),
                     'normal',
                     false
@@ -517,7 +517,7 @@ if ($form->validate()) {
         }
         $form->removeElement('productions_list');
         Display::addFlash(
-            Display:: return_message(get_lang('FileDeleted'), 'normal', false)
+            Display::return_message(get_lang('FileDeleted'), 'normal', false)
         );
     }
 
@@ -530,7 +530,7 @@ if ($form->validate()) {
             $filtered_extension = true;
         } else {
             Display::addFlash(
-                Display:: return_message(
+                Display::return_message(
                     get_lang('ProductionUploaded'),
                     'normal',
                     false
@@ -650,12 +650,12 @@ if ($form->validate()) {
 
     if ($passwordWasChecked == false) {
         Display::addFlash(
-            Display:: return_message(get_lang('ProfileReg'), 'normal', false)
+            Display::return_message(get_lang('ProfileReg'), 'normal', false)
         );
     } else {
         if ($validPassword) {
             Display::addFlash(
-                Display:: return_message(get_lang('ProfileReg'), 'normal', false)
+                Display::return_message(get_lang('ProfileReg'), 'normal', false)
             );
         }
     }

@@ -426,10 +426,11 @@ if ($form->validate()) {
         api_get_setting('profile', 'email') == 'true')
     ) {
         $passwordWasChecked = true;
-        $validPassword = UserManager::isPasswordValid(
+        $validPassword = UserManager::checkPassword(
             $user->getPassword(),
             $user_data['password0'],
-            $user->getSalt()
+            $user->getSalt(),
+            $user->getId()
         );
 
         if ($validPassword) {

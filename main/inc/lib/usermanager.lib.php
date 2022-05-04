@@ -127,6 +127,62 @@ class UserManager
     }
 
     /**
+     * Validates the password.
+     *
+     * @param $encoded
+     * @param $salt
+     *
+     * @return bool
+     */
+    public static function detectPasswordEncryption($encoded, $salt)
+    {
+
+        $encryption = false;
+
+        $length = strlen($encoded);
+
+        $pattern = '/^\$2y\$04\$[A-Za-z0-9\.\/]{53}$/';
+
+        if ( $length == 60 && preg_match($pattern, $encoded)) {
+            $encryption = 'bcrypt';
+        }
+        elseif ( $length == 32 && ctype_xdigit($encoded) ) {
+            $encryption = 'md5';
+        }
+        elseif ( $length == 40 && ctype_xdigit($encoded) ) {
+            $encryption = 'sha1';
+        }
+        else {
+            $start = strpos($encoded, '{');
+            if ($start !== false && substr($encoded, -1, 1) == '}') {
+                if (substr($encoded,$start + 1,-1) == $salt) {
+                    $encryption = 'none';
+                }
+            }
+        }
+
+        return $encryption;
+    }
+
+    public static function checkPassword($encoded, $raw, $salt, $userId)
+    {
+        $result = false;
+
+        $detectedEncryption = self::detectPasswordEncryption($encoded, $salt);
+        if (api_get_configuration_value('password_conversion') && self::getPasswordEncryption() != $detectedEncryption) {
+            $encoder = new \Chamilo\UserBundle\Security\Encoder($detectedEncryption);
+            $result = $encoder->isPasswordValid($encoded, $raw, $salt);
+            if ($result) {
+                self::updatePassword($userId, $raw);
+            }
+        }
+        else {
+            return self::isPasswordValid($encoded, $raw, $salt);
+        }
+
+        return $result;
+    }
+    /**
      * @param string $raw
      *
      * @return string

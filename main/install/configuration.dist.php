@@ -163,8 +163,9 @@ $_configuration['cdn'] = [
 $_configuration['security_key'] = '{SECURITY_KEY}';
 // Hash function method
 $_configuration['password_encryption'] = '{ENCRYPT_PASSWORD}';
-// allow to convert passwords after login if password_encryption has changed since last login
-$_configuration['password_conversion'] = false;
+// Set to true to allow automated password conversion after login if
+// password_encryption has changed since last login. See GH#4063 for details.
+//$_configuration['password_conversion'] = false;
 // You may have to restart your web server if you change this
 $_configuration['session_stored_in_db'] = false;
 // Session lifetime

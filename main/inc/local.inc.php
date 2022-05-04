@@ -511,18 +511,11 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE ||
                 $uData['auth_source'] == CAS_AUTH_SOURCE
             ) {
-                /*
-                $validPassword = isset($password) && UserManager::isPasswordValid(
-                    $uData['password'],
-                    $password,
-                    $uData['salt']
-                );
-                */
                 $validPassword = isset($password) && UserManager::checkPassword(
                         $uData['password'],
                         $password,
                         $uData['salt'],
-                        $uData['user_id']
+                        $uData['id']
                     );
 
                 $checkUserFromExternalWebservice = false;

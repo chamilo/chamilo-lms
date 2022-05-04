@@ -127,14 +127,13 @@ class UserManager
     }
 
     /**
-     * Validates the password.
+     * Detects and returns the type of encryption of the given encrypted
+     * password.
      *
-     * @param $encoded
-     * @param $salt
-     *
-     * @return bool
+     * @param string $encoded The encrypted password
+     * @param string $salt The user salt, if any
      */
-    public static function detectPasswordEncryption($encoded, $salt)
+    public static function detectPasswordEncryption(string $encoded, string $salt): bool
     {
 
         $encryption = false;
@@ -164,30 +163,41 @@ class UserManager
         return $encryption;
     }
 
-    public static function checkPassword($encoded, $raw, $salt, $userId)
+    /**
+     * Checks if the password is correct for this user.
+     * If the password_conversion setting is true, also update the password
+     * in the database to a new encryption method.
+     *
+     * @param string $encoded  Encrypted password
+     * @param string $raw      Clear password given through login form
+     * @param string $salt     User salt, if any
+     * @param int $userId   The user's internal ID
+     */
+    public static function checkPassword(string $encoded, string $raw, string $salt, int $userId): bool
     {
         $result = false;
 
-        $detectedEncryption = self::detectPasswordEncryption($encoded, $salt);
-        if (api_get_configuration_value('password_conversion') && self::getPasswordEncryption() != $detectedEncryption) {
-            $encoder = new \Chamilo\UserBundle\Security\Encoder($detectedEncryption);
-            $result = $encoder->isPasswordValid($encoded, $raw, $salt);
-            if ($result) {
-                self::updatePassword($userId, $raw);
+        if (true === api_get_configuration_value('password_conversion')) {
+            $detectedEncryption = self::detectPasswordEncryption($encoded, $salt);
+            if (self::getPasswordEncryption() != $detectedEncryption) {
+                $encoder = new \Chamilo\UserBundle\Security\Encoder($detectedEncryption);
+                $result = $encoder->isPasswordValid($encoded, $raw, $salt);
+                if ($result) {
+                    self::updatePassword($userId, $raw);
+                }
             }
-        }
-        else {
+        } else {
             return self::isPasswordValid($encoded, $raw, $salt);
         }
 
         return $result;
     }
     /**
-     * @param string $raw
+     * Encrypt the password using the current encoder
      *
-     * @return string
+     * @param string $raw The clear password
      */
-    public static function encryptPassword($raw, User $user)
+    public static function encryptPassword(string $raw, User $user): string
     {
         $encoder = self::getEncoder($user);
 
@@ -198,10 +208,11 @@ class UserManager
     }
 
     /**
-     * @param int    $userId
-     * @param string $password
+     * Update the password of the given user to the given (in-clear) password
+     * @param int    $userId    Internal user ID
+     * @param string $password  Password in clear
      */
-    public static function updatePassword($userId, $password)
+    public static function updatePassword(int $userId, string $password): void
     {
         $repository = self::getRepository();
         /** @var User $user */

@@ -190,7 +190,7 @@ switch ($action) {
                     );
                     $nbStudents = count($studentList);
 
-                    // Global variables:
+                    // Set global variables used by get_user_data()
                     $user_ids = array_keys($studentList);
                     $session_id = $sessionItemId;
                     $export_csv = true;

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
 /**
@@ -6000,19 +6001,56 @@ EOT;
     }
 
     /**
-     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video.
-     * By making sure it is set on one question per page and it only contains unique-answer or multiple-answer questions
-     * or unique-answer image. And that the exam does not have immediate feedback.
-     *
-     * @param array $exercise Exercise info
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return bool
+     * By default, allowed types are unique-answer (and image) or multiple-answer questions.
+     * Types can be extended by the configuration setting "exercise_embeddable_extra_types".
      */
-    public static function isQuizEmbeddable(array $exercise)
+    public static function getEmbeddableTypes(): array
     {
-        $em = Database::getManager();
+        $allowedTypes = [
+            UNIQUE_ANSWER,
+            MULTIPLE_ANSWER,
+            FILL_IN_BLANKS,
+            MATCHING,
+            FREE_ANSWER,
+            MULTIPLE_ANSWER_COMBINATION,
+            UNIQUE_ANSWER_NO_OPTION,
+            MULTIPLE_ANSWER_TRUE_FALSE,
+            MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,
+            ORAL_EXPRESSION,
+            GLOBAL_MULTIPLE_ANSWER,
+            CALCULATED_ANSWER,
+            UNIQUE_ANSWER_IMAGE,
+            READING_COMPREHENSION,
+            MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
+            UPLOAD_ANSWER,
+        ];
+        $defaultTypes = [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE];
+        $types = $defaultTypes;
+
+        $extraTypes = api_get_configuration_value('exercise_embeddable_extra_types');
+
+        if (false !== $extraTypes && !empty($extraTypes['types'])) {
+            $types = array_merge($defaultTypes, $extraTypes['types']);
+        }
+
+        return array_filter(
+            array_unique($types),
+            function ($type) use ($allowedTypes) {
+                return in_array($type, $allowedTypes);
+            }
+        );
+    }
+
+    /**
+     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video.
+     * By making sure it is set on one question per page, and that the exam does not have immediate feedback,
+     * and it only contains allowed types.
+     *
+     * @see Exercise::getEmbeddableTypes()
+     */
+    public static function isQuizEmbeddable(array $exercise): bool
+    {
+        $exercise['iid'] = isset($exercise['iid']) ? (int) $exercise['iid'] : 0;
 
         if (ONE_PER_PAGE != $exercise['type'] ||
             in_array($exercise['feedback_type'], [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])
@@ -6020,32 +6058,12 @@ EOT;
             return false;
         }
 
-        $countAll = $em
-            ->createQuery('SELECT COUNT(qq)
-                FROM ChamiloCourseBundle:CQuizQuestion qq
-                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.questionId
-                WHERE qrq.exerciceId = :id'
-            )
-            ->setParameter('id', $exercise['iid'])
-            ->getSingleScalarResult();
+        $questionRepository = Database::getManager()->getRepository(CQuizQuestion::class);
 
-        $countOfAllowed = $em
-            ->createQuery('SELECT COUNT(qq)
-                FROM ChamiloCourseBundle:CQuizQuestion qq
-                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.questionId
-                WHERE qrq.exerciceId = :id AND qq.type IN (:types)'
-            )
-            ->setParameters(
-                [
-                    'id' => $exercise['iid'],
-                    'types' => [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE],
-                ]
-            )
-            ->getSingleScalarResult();
+        $countAll = $questionRepository->countQuestionsInExercise($exercise['iid']);
+        $countAllowed = $questionRepository->countEmbeddableQuestionsInExercise($exercise['iid']);
 
-        return $countAll === $countOfAllowed;
+        return $countAll === $countAllowed;
     }
 
     /**

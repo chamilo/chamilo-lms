@@ -728,6 +728,31 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['hide_user_info_in_quiz_result'] = false;
 // Show the username field in exercise results report
 //$_configuration['exercise_attempts_report_show_username'] = false;
+// Allow extends allowed question types for embeddable exercises.
+/* By default, only the following question types are allowed: 1, 2, 17
+Add this types to allow them in embeddable exercises:
+ 1 = Multiple choice
+ 2 = Multiple answers
+ 3 = Fill blanks or form
+ 4 = Matching
+ 5 = Open question
+ 9 = Exact Selection
+10 = Unique answer with unknown
+11 = Multiple answer true/false/don't know
+12 = Combination true/false/don't know
+13 = Oral expression
+14 = Global multiple answer
+16 = Calculated question
+17 = Unique answer image
+21 = Reading comprehension
+22 = Multiple answer true/false/degree of certainty
+23 = Upload answer
+ */
+/*
+$_configuration['exercise_embeddable_extra_types'] = [
+    'types' => [],
+];
+*/
 
 // Score model
 // Allow to convert a score into a text/color label

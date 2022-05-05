@@ -328,7 +328,7 @@ function get_caller_name($caller_id)
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('CourseList')];
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (!$course_validation_feature) {
     // Disabled course validation feature - show nothing after the error message.

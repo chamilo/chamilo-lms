@@ -59,4 +59,4 @@ function count_mask()
     return LegalManager::count();
 }
 
-Display :: display_footer();
+Display::display_footer();

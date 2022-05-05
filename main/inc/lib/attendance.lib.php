@@ -13,9 +13,9 @@
 class Attendance
 {
     // constants
-    const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
-    const UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
-    const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
+    public const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
+    public const UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
+    public const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
     public $category_id;
     private $session_id;
     private $course_id;
@@ -689,14 +689,14 @@ class Attendance
         $studentInGroup = [];
 
         if (!empty($current_session_id)) {
-            $a_course_users = CourseManager:: get_user_list_from_course_code(
+            $a_course_users = CourseManager::get_user_list_from_course_code(
                 $current_course_id,
                 $current_session_id,
                 '',
                 'lastname'
             );
         } else {
-            $a_course_users = CourseManager:: get_user_list_from_course_code(
+            $a_course_users = CourseManager::get_user_list_from_course_code(
                 $current_course_id,
                 0,
                 '',

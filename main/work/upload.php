@@ -163,4 +163,4 @@ if (!empty($work_id)) {
     Display::addFlash(Display::return_message(get_lang('ActionNotAllowed'), 'error'));
 }
 
-Display :: display_footer();
+Display::display_footer();

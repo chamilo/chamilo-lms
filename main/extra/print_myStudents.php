@@ -18,10 +18,10 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 
 //$nameTools = get_lang('StudentDetails');
 $cidReset = true;
-$get_course_code = Security:: remove_XSS($_GET['course']);
+$get_course_code = Security::remove_XSS($_GET['course']);
 if (isset($_GET['details'])) {
     if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
-        $course_info = CourseManager:: get_course_information($get_course_code);
+        $course_info = CourseManager::get_course_information($get_course_code);
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
                 "url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'],
@@ -34,7 +34,7 @@ if (isset($_GET['details'])) {
         ];
     } else {
         if (!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
-            $course_info = CourseManager:: get_course_information($get_course_code);
+            $course_info = CourseManager::get_course_information($get_course_code);
             if (empty($cidReq)) {
                 //$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['title']);
             }
@@ -53,7 +53,7 @@ if (isset($_GET['details'])) {
                     "name" => get_lang('SessionList'),
                 ];
                 $interbreadcrumb[] = [
-                    'url' => "../admin/resume_session.php?id_session=".Security:: remove_XSS($_GET['id_session']),
+                    'url' => "../admin/resume_session.php?id_session=".Security::remove_XSS($_GET['id_session']),
                     "name" => get_lang('SessionOverview'),
                 ];
             } else {
@@ -63,13 +63,13 @@ if (isset($_GET['details'])) {
                 ];
                 if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
                     $interbreadcrumb[] = [
-                        "url" => "student.php?id_coach=".Security:: remove_XSS($_GET['id_coach']),
+                        "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']),
                         "name" => get_lang("CoachStudents"),
                     ];
                     $interbreadcrumb[] = [
-                        "url" => "myStudents.php?student=".Security:: remove_XSS(
+                        "url" => "myStudents.php?student=".Security::remove_XSS(
                                 $_GET['student']
-                            ).'&id_coach='.Security:: remove_XSS($_GET['id_coach']),
+                            ).'&id_coach='.Security::remove_XSS($_GET['id_coach']),
                         "name" => get_lang("StudentDetails"),
                     ];
                 } else {
@@ -78,7 +78,7 @@ if (isset($_GET['details'])) {
                         "name" => get_lang("MyStudents"),
                     ];
                     $interbreadcrumb[] = [
-                        "url" => "myStudents.php?student=".Security:: remove_XSS($_GET['student']),
+                        "url" => "myStudents.php?student=".Security::remove_XSS($_GET['student']),
                         "name" => get_lang("StudentDetails"),
                     ];
                 }
@@ -97,7 +97,7 @@ if (isset($_GET['details'])) {
             "name" => get_lang('SessionList'),
         ];
         $interbreadcrumb[] = [
-            'url' => "../admin/resume_session.php?id_session=".Security:: remove_XSS($_GET['id_session']),
+            'url' => "../admin/resume_session.php?id_session=".Security::remove_XSS($_GET['id_session']),
             "name" => get_lang('SessionOverview'),
         ];
     } else {
@@ -108,14 +108,14 @@ if (isset($_GET['details'])) {
         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
             if (isset($_GET['id_session']) && intval($_GET['id_session']) != 0) {
                 $interbreadcrumb[] = [
-                    "url" => "student.php?id_coach=".Security:: remove_XSS(
+                    "url" => "student.php?id_coach=".Security::remove_XSS(
                             $_GET['id_coach']
                         )."&id_session=".$_GET['id_session'],
                     "name" => get_lang("CoachStudents"),
                 ];
             } else {
                 $interbreadcrumb[] = [
-                    "url" => "student.php?id_coach=".Security:: remove_XSS($_GET['id_coach']),
+                    "url" => "student.php?id_coach=".Security::remove_XSS($_GET['id_coach']),
                     "name" => get_lang("CoachStudents"),
                 ];
             }
@@ -135,8 +135,8 @@ if (!api_is_allowed_to_edit() && !api_is_coach() && !api_is_drh() && !api_is_cou
     api_not_allowed(true);
 }
 
-Display:: display_header($nameTools);
-$tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+Display::display_header($nameTools);
+$tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 if (isset($_GET['user_id']) && $_GET['user_id'] != '') {
     $user_id = intval($_GET['user_id']);

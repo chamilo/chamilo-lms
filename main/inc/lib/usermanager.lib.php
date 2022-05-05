@@ -131,30 +131,26 @@ class UserManager
      * password.
      *
      * @param string $encoded The encrypted password
-     * @param string $salt The user salt, if any
+     * @param string $salt    The user salt, if any
      */
     public static function detectPasswordEncryption(string $encoded, string $salt): bool
     {
-
         $encryption = false;
 
         $length = strlen($encoded);
 
         $pattern = '/^\$2y\$04\$[A-Za-z0-9\.\/]{53}$/';
 
-        if ( $length == 60 && preg_match($pattern, $encoded)) {
+        if ($length == 60 && preg_match($pattern, $encoded)) {
             $encryption = 'bcrypt';
-        }
-        elseif ( $length == 32 && ctype_xdigit($encoded) ) {
+        } elseif ($length == 32 && ctype_xdigit($encoded)) {
             $encryption = 'md5';
-        }
-        elseif ( $length == 40 && ctype_xdigit($encoded) ) {
+        } elseif ($length == 40 && ctype_xdigit($encoded)) {
             $encryption = 'sha1';
-        }
-        else {
+        } else {
             $start = strpos($encoded, '{');
             if ($start !== false && substr($encoded, -1, 1) == '}') {
-                if (substr($encoded,$start + 1,-1) == $salt) {
+                if (substr($encoded, $start + 1, -1) == $salt) {
                     $encryption = 'none';
                 }
             }
@@ -168,10 +164,10 @@ class UserManager
      * If the password_conversion setting is true, also update the password
      * in the database to a new encryption method.
      *
-     * @param string $encoded  Encrypted password
-     * @param string $raw      Clear password given through login form
-     * @param string $salt     User salt, if any
-     * @param int $userId   The user's internal ID
+     * @param string $encoded Encrypted password
+     * @param string $raw     Clear password given through login form
+     * @param string $salt    User salt, if any
+     * @param int    $userId  The user's internal ID
      */
     public static function checkPassword(string $encoded, string $raw, string $salt, int $userId): bool
     {
@@ -192,8 +188,9 @@ class UserManager
 
         return $result;
     }
+
     /**
-     * Encrypt the password using the current encoder
+     * Encrypt the password using the current encoder.
      *
      * @param string $raw The clear password
      */
@@ -208,9 +205,10 @@ class UserManager
     }
 
     /**
-     * Update the password of the given user to the given (in-clear) password
-     * @param int    $userId    Internal user ID
-     * @param string $password  Password in clear
+     * Update the password of the given user to the given (in-clear) password.
+     *
+     * @param int    $userId   Internal user ID
+     * @param string $password Password in clear
      */
     public static function updatePassword(int $userId, string $password): void
     {
@@ -3240,8 +3238,8 @@ class UserManager
 
                     $fval = $efv->get_values_by_handler_and_field_variable($user_id, $row['fvar']);
                     $fopt = $efo->get_field_option_by_field_and_option($row['id'], $fval['value']);
-                    $fopt = current($fopt);
-                    $fOptText = $fopt ? $fopt['display_text'] : $fval['value'];
+                    $fopt = current(is_array($fopt) ? $fopt : []);
+                    $fOptText = $fopt['display_text'] ?? $fval['value'];
 
                     if ($prefix) {
                         $extra_data['extra_'.$row['fvar']] = $fOptText;

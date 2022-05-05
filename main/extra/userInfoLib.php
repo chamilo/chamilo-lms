@@ -96,8 +96,8 @@ function edit_cat_def($id, $title, $comment, $nbline)
  */
 function remove_cat_def($id, $force = false)
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
-    $TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
+    $TBL_USERINFO_DEF = Database::get_course_table(TABLE_USER_INFO_DEF);
+    $TBL_USERINFO_CONTENT = Database::get_course_table(TABLE_USER_INFO_CONTENT);
 
     $id = strval(intval($id));
 
@@ -132,7 +132,7 @@ function remove_cat_def($id, $force = false)
  */
 function move_cat_rank($id, $direction) // up & down.
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
+    $TBL_USERINFO_DEF = Database::get_course_table(userinfo_def);
     $id = strval(intval($id));
 
     if (0 == (int) $id || !($direction == "up" || $direction == "down")) {
@@ -167,7 +167,7 @@ function move_cat_rank($id, $direction) // up & down.
  */
 function move_cat_rank_by_rank($rank, $direction) // up & down.
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(userinfo_def);
+    $TBL_USERINFO_DEF = Database::get_course_table(userinfo_def);
 
     if (0 == (int) $rank || !($direction == "up" || $direction == "down")) {
         return false;
@@ -243,8 +243,8 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
              WHERE user_id = $user_id";
     Database::query($sql2);
     //on récupère l'horaire
-    $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
-    $TABLECALDATES = Database:: get_course_table(cal_dates);
+    $tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
+    $TABLECALDATES = Database::get_course_table(cal_dates);
     $jour = 0;
     $sql3 = "SELECT date FROM $TABLECALDATES
              WHERE
@@ -435,8 +435,8 @@ function cleanout_cat_content($user_id, $definition_id)
  */
 function get_course_user_info($user_id)
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
-    $TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
+    $TBL_USERINFO_DEF = Database::get_course_table(TABLE_USER_INFO_DEF);
+    $TBL_USERINFO_CONTENT = Database::get_course_table(TABLE_USER_INFO_CONTENT);
 
     $user_id = (int) $user_id;
     $sql = "SELECT  cat.id catId,   cat.title,
@@ -471,8 +471,8 @@ function get_course_user_info($user_id)
  */
 function get_cat_content($userId, $catId)
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
-    $TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
+    $TBL_USERINFO_DEF = Database::get_course_table(TABLE_USER_INFO_DEF);
+    $TBL_USERINFO_CONTENT = Database::get_course_table(TABLE_USER_INFO_CONTENT);
 
     $userId = (int) $userId;
     $catId = (int) $catId;
@@ -507,7 +507,7 @@ function get_cat_content($userId, $catId)
  */
 function get_cat_def($catId)
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
+    $TBL_USERINFO_DEF = Database::get_course_table(TABLE_USER_INFO_DEF);
 
     $catId = (int) $catId;
     $sql = "SELECT id, title, comment, line_count, rank FROM $TBL_USERINFO_DEF WHERE id = $catId";
@@ -536,7 +536,7 @@ function get_cat_def($catId)
  */
 function get_cat_def_list()
 {
-    $TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
+    $TBL_USERINFO_DEF = Database::get_course_table(TABLE_USER_INFO_DEF);
 
     $sql = "SELECT  id catId,   title,  comment , line_count
             FROM  $TBL_USERINFO_DEF

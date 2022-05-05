@@ -43,7 +43,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
 
 if (!empty($group_id)) {
-    $group_properties = GroupManager :: get_group_properties($group_id);
+    $group_properties = GroupManager::get_group_properties($group_id);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),

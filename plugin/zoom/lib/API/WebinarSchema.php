@@ -12,9 +12,9 @@ class WebinarSchema
     use BaseMeetingTrait;
     use JsonDeserializableTrait;
 
-    const TYPE_WEBINAR = 5;
-    const TYPE_RECURRING_NO_FIXED_TIME = 6;
-    const TYPE_RECURRING_FIXED_TIME = 9;
+    public const TYPE_WEBINAR = 5;
+    public const TYPE_RECURRING_NO_FIXED_TIME = 6;
+    public const TYPE_RECURRING_FIXED_TIME = 9;
 
     public $uuid;
     public $id;

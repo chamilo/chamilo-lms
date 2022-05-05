@@ -929,7 +929,7 @@ class Certificate extends Model
                         if (!empty($sessionData['courses'])) {
                             $sessionId = $sessionData['session_id'];
                             foreach ($sessionData['courses'] as $courseData) {
-                                $cats = Category:: load(
+                                $cats = Category::load(
                                     null,
                                     null,
                                     $courseData['course_code'],

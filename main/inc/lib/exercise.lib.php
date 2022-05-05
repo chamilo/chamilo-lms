@@ -2853,7 +2853,7 @@ HOTSPOT;
                             switch ($revised) {
                                 case 0:
                                     $actions .= "<a href='exercise_show.php?".$cidReq."&action=qualify&id=$id'>".
-                                        Display:: return_icon(
+                                        Display::return_icon(
                                             'quiz.png',
                                             get_lang('Qualify')
                                         );
@@ -2865,7 +2865,7 @@ HOTSPOT;
                                     break;
                                 case 1:
                                     $actions .= "<a href='exercise_show.php?".$cidReq."&action=edit&id=$id'>".
-                                        Display:: return_icon(
+                                        Display::return_icon(
                                             'edit.png',
                                             get_lang('Edit'),
                                             [],
@@ -2883,7 +2883,7 @@ HOTSPOT;
                                         .'&exerciseId='.$exercise_id
                                         .'&a=close&id='.$id
                                         .'">'.
-                                        Display:: return_icon(
+                                        Display::return_icon(
                                             'lock.png',
                                             get_lang('MarkAttemptAsClosed'),
                                             [],
@@ -2896,7 +2896,7 @@ HOTSPOT;
                                     );
                                     break;
                                 case 3: //still ongoing
-                                    $actions .= Display:: return_icon(
+                                    $actions .= Display::return_icon(
                                         'clock.png',
                                         get_lang('AttemptStillOngoingPleaseWait'),
                                         [],
@@ -2912,7 +2912,7 @@ HOTSPOT;
 
                             if ($filter == 2) {
                                 $actions .= ' <a href="exercise_history.php?'.$cidReq.'&exe_id='.$id.'">'.
-                                    Display:: return_icon(
+                                    Display::return_icon(
                                         'history.png',
                                         get_lang('ViewHistoryChange')
                                     ).'</a>';

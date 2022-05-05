@@ -132,7 +132,7 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
     $sql = "SELECT * FROM $table_survey
             WHERE c_id = $course_id AND code = '".Database::escape_string($surveyCode)."'";
     $result = Database::query($sql);
-    if (Database :: num_rows($result) > 0) {
+    if (Database::num_rows($result) > 0) {
         // Check availability
         $row = Database::fetch_array($result, 'ASSOC');
         $tempdata = SurveyManager::get_survey($row['survey_id']);
@@ -147,7 +147,7 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
                     $lpItemCondition";
         $result = Database::query($sql);
         $now = api_get_utc_datetime();
-        if (0 == Database :: num_rows($result)) {
+        if (0 == Database::num_rows($result)) {
             $params = [
                 'c_id' => $course_id,
                 'survey_code' => $surveyCode,
@@ -649,7 +649,7 @@ if ($survey_data['form_fields'] &&
 
                 foreach ($user_data as $key => $value) {
                     if (in_array($key, $allowedFields)) {
-                        $sql .= " $key = '".Database :: escape_string($value)."',";
+                        $sql .= " $key = '".Database::escape_string($value)."',";
                         $update = true;
                     }
                 }
@@ -852,7 +852,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
             $counter = 0;
             $limit = 0;
             $questions = [];
-            while ($row = Database :: fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
                 // If the type is not a pagebreak we store it in the $questions array
                 if ($row['type'] !== 'pagebreak') {
                     $sort = $row['sort'];
@@ -922,7 +922,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                     ";
 
             $result = Database::query($sql);
-            while ($row = Database :: fetch_array($result)) {
+            while ($row = Database::fetch_array($result)) {
                 $answer_list['value'] = $row['value'];
                 $answer_list['group'] = $row['survey_group_pri'];
                 $results[] = $answer_list;
@@ -1263,7 +1263,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                                 survey_question.question_id IN (".$imploded.")
                             ORDER $order_sql ";
                     $result = Database::query($sql);
-                    $question_counter_max = Database :: num_rows($result);
+                    $question_counter_max = Database::num_rows($result);
                 }
             }
 
@@ -1271,7 +1271,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 $counter = 0;
                 $limit = 0;
                 $questions = [];
-                while ($row = Database :: fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
                     // If the type is not a pagebreak we store it in the $questions array
                     if ('pagebreak' !== $row['type']) {
                         $questions[$row['sort']]['question_id'] = $row['question_id'];

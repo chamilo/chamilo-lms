@@ -4,19 +4,19 @@
 abstract class CcQtiMetadata
 {
     // Assessment.
-    const QMD_ASSESSMENTTYPE = 'qmd_assessmenttype';
-    const QMD_SCORETYPE = 'qmd_scoretype';
-    const QMD_FEEDBACKPERMITTED = 'qmd_feedbackpermitted';
-    const QMD_HINTSPERMITTED = 'qmd_hintspermitted';
-    const QMD_SOLUTIONSPERMITTED = 'qmd_solutionspermitted';
-    const QMD_TIMELIMIT = 'qmd_timelimit';
-    const CC_ALLOW_LATE_SUBMISSION = 'cc_allow_late_submission';
-    const CC_MAXATTEMPTS = 'cc_maxattempts';
-    const CC_PROFILE = 'cc_profile';
+    public const QMD_ASSESSMENTTYPE = 'qmd_assessmenttype';
+    public const QMD_SCORETYPE = 'qmd_scoretype';
+    public const QMD_FEEDBACKPERMITTED = 'qmd_feedbackpermitted';
+    public const QMD_HINTSPERMITTED = 'qmd_hintspermitted';
+    public const QMD_SOLUTIONSPERMITTED = 'qmd_solutionspermitted';
+    public const QMD_TIMELIMIT = 'qmd_timelimit';
+    public const CC_ALLOW_LATE_SUBMISSION = 'cc_allow_late_submission';
+    public const CC_MAXATTEMPTS = 'cc_maxattempts';
+    public const CC_PROFILE = 'cc_profile';
 
     // Items.
-    const CC_WEIGHTING = 'cc_weighting';
-    const QMD_SCORINGPERMITTED = 'qmd_scoringpermitted';
-    const QMD_COMPUTERSCORED = 'qmd_computerscored';
-    const CC_QUESTION_CATEGORY = 'cc_question_category';
+    public const CC_WEIGHTING = 'cc_weighting';
+    public const QMD_SCORINGPERMITTED = 'qmd_scoringpermitted';
+    public const QMD_COMPUTERSCORED = 'qmd_computerscored';
+    public const CC_QUESTION_CATEGORY = 'cc_question_category';
 }

@@ -43,7 +43,7 @@ class FlatViewTable extends SortableTable
         $addparams = null,
         $mainCourseCategory = null
     ) {
-        parent:: __construct(
+        parent::__construct(
             'flatviewlist',
             null,
             null,

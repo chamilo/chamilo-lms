@@ -12,23 +12,23 @@ use TheNetworg\OAuth2\Client\Provider\Azure;
  */
 class AzureActiveDirectory extends Plugin
 {
-    const SETTING_ENABLE = 'enable';
-    const SETTING_APP_ID = 'app_id';
-    const SETTING_APP_SECRET = 'app_secret';
-    const SETTING_BLOCK_NAME = 'block_name';
-    const SETTING_FORCE_LOGOUT_BUTTON = 'force_logout';
-    const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
-    const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
-    const SETTING_PROVISION_USERS = 'provisioning';
-    const SETTING_GROUP_ID_ADMIN = 'group_id_admin';
-    const SETTING_GROUP_ID_SESSION_ADMIN = 'group_id_session_admin';
-    const SETTING_GROUP_ID_TEACHER = 'group_id_teacher';
+    public const SETTING_ENABLE = 'enable';
+    public const SETTING_APP_ID = 'app_id';
+    public const SETTING_APP_SECRET = 'app_secret';
+    public const SETTING_BLOCK_NAME = 'block_name';
+    public const SETTING_FORCE_LOGOUT_BUTTON = 'force_logout';
+    public const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
+    public const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
+    public const SETTING_PROVISION_USERS = 'provisioning';
+    public const SETTING_GROUP_ID_ADMIN = 'group_id_admin';
+    public const SETTING_GROUP_ID_SESSION_ADMIN = 'group_id_session_admin';
+    public const SETTING_GROUP_ID_TEACHER = 'group_id_teacher';
 
-    const URL_TYPE_AUTHORIZE = 'login';
-    const URL_TYPE_LOGOUT = 'logout';
+    public const URL_TYPE_AUTHORIZE = 'login';
+    public const URL_TYPE_LOGOUT = 'logout';
 
-    const EXTRA_FIELD_ORGANISATION_EMAIL = 'organisationemail';
-    const EXTRA_FIELD_AZURE_ID = 'azure_id';
+    public const EXTRA_FIELD_ORGANISATION_EMAIL = 'organisationemail';
+    public const EXTRA_FIELD_AZURE_ID = 'azure_id';
 
     /**
      * AzureActiveDirectory constructor.

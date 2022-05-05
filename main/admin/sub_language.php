@@ -93,7 +93,7 @@ if (!is_dir($path_folder) || strlen($all_data_of_language['dokeos_folder']) == 0
     api_not_allowed(true);
 }
 
-Display :: display_header($language_name);
+Display::display_header($language_name);
 
 echo '<div class="actions-message" >';
 echo $intro;
@@ -384,4 +384,4 @@ $table->set_header(5, get_lang('Action'), false);
 $table->setHideColumn(0);
 $table->display();
 
-Display :: display_footer();
+Display::display_footer();

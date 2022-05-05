@@ -240,7 +240,7 @@ if (!empty($message)) {
 Display::display_header($tool_name);
 
 if (!$course_validation_feature) {
-    Display :: display_footer();
+    Display::display_footer();
     exit;
 }
 

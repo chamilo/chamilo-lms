@@ -125,7 +125,7 @@ function get_users($from, $limit, $column, $direction)
             foreach ($courses as $course_code) {
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
-                if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
+                if (CourseManager::is_user_subscribed_in_course($student_id, $course_code, true)) {
                     $avg_time_spent += Tracking::get_time_spent_on_the_course(
                         $student_id,
                         $courseId,
@@ -286,7 +286,7 @@ if ($export_csv) {
     }
     $csv_content = array_merge($csv_header, $content);
     ob_end_clean();
-    Export :: arrayToCsv($csv_content, 'reporting_teacher_list');
+    Export::arrayToCsv($csv_content, 'reporting_teacher_list');
     exit;
 } else {
     Display::display_header($nameTools);
@@ -305,4 +305,4 @@ if ($export_csv) {
     $table->display();
 }
 
-Display :: display_footer();
+Display::display_footer();

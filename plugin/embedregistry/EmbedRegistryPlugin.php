@@ -11,10 +11,10 @@ use Doctrine\ORM\Tools\SchemaTool;
  */
 class EmbedRegistryPlugin extends Plugin
 {
-    const SETTING_ENABLED = 'tool_enabled';
-    const SETTING_TITLE = 'tool_title';
-    const SETTING_EXTERNAL_URL = 'external_url';
-    const TBL_EMBED = 'plugin_embed_registry_embed';
+    public const SETTING_ENABLED = 'tool_enabled';
+    public const SETTING_TITLE = 'tool_title';
+    public const SETTING_EXTERNAL_URL = 'external_url';
+    public const TBL_EMBED = 'plugin_embed_registry_embed';
 
     /**
      * EmbedRegistryPlugin constructor.

@@ -19,7 +19,7 @@ $this_section = SECTION_TRACKING;
 
 api_block_anonymous_users();
 $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 
 // Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -75,4 +75,4 @@ if (Database::num_rows($result_course) > 0) {
     echo get_lang('NoCourse');
 }
 
-Display :: display_footer();
+Display::display_footer();

@@ -10,9 +10,9 @@
  */
 class FillBlanks extends Question
 {
-    const FILL_THE_BLANK_STANDARD = 0;
-    const FILL_THE_BLANK_MENU = 1;
-    const FILL_THE_BLANK_SEVERAL_ANSWER = 2;
+    public const FILL_THE_BLANK_STANDARD = 0;
+    public const FILL_THE_BLANK_MENU = 1;
+    public const FILL_THE_BLANK_SEVERAL_ANSWER = 2;
 
     public $typePicture = 'fill_in_blanks.png';
     public $explanationLangVar = 'FillBlanks';

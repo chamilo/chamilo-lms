@@ -228,7 +228,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
             [],
             $totalGroups
         );
-        $block_search .= Display:: panelCollapse(
+        $block_search .= Display::panelCollapse(
             get_lang('Groups'),
             $block_groups,
             'search-groups',

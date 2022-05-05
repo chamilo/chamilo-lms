@@ -8,7 +8,7 @@ if (empty($allow)) {
     exit;
 }
 
-$table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $ex_user_id = isset($_GET['ex_user_id']) ? (int) $_GET['ex_user_id'] : '';
 $mod_no = isset($_GET['mod_no']) ? Database::escape_string($_GET['mod_no']) : '';
 $score_ex = isset($_GET['score_ex']) ? Database::escape_string($_GET['score_ex']) : '';

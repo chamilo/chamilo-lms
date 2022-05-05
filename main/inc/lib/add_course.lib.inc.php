@@ -848,7 +848,7 @@ class AddCourse
                                         "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size)
                                         VALUES ($course_id,'$path_documents".$folder_path."','".$title."','folder','0')"
                                     );
-                                    $image_id = Database:: insert_id();
+                                    $image_id = Database::insert_id();
 
                                     Database::insert(
                                         $TABLEITEMPROPERTY,
@@ -899,7 +899,7 @@ class AddCourse
                                         "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size)
                                         VALUES ($course_id,'$path_documents".$value["file"]."','".$temp[count($temp) - 1]."','file','$file_size')"
                                     );
-                                    $image_id = Database:: insert_id();
+                                    $image_id = Database::insert_id();
                                     if ($image_id) {
                                         $sql = "UPDATE $TABLETOOLDOCUMENT SET id = iid WHERE iid = $image_id";
                                         Database::query($sql);
@@ -1098,12 +1098,12 @@ class AddCourse
                 "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','',1,'$course_code',0,100,0,75,NULL,$example_cert_id)"
             );
-            $gbid = Database:: insert_id();
+            $gbid = Database::insert_id();
             Database::query(
                 "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','',1,'$course_code',$gbid,100,1,75,NULL,$example_cert_id)"
             );
-            $gbid = Database:: insert_id();
+            $gbid = Database::insert_id();
             Database::query(
                 "INSERT INTO $TABLEGRADEBOOKLINK (type, ref_id, user_id, course_code, category_id, created_at, weight, visible, locked)
                 VALUES (1,$exercise_id,1,'$course_code',$gbid,'$now',100,1,0)"
@@ -1132,7 +1132,7 @@ class AddCourse
         $sql = "INSERT INTO $tableDocument (id, c_id, path,title,filetype,size, readonly, session_id)
                 VALUES ($counter, $course_id, '".$file['path']."', '".$file['title']."', '".$file['filetype']."', '".$file['size']."', 0, 0)";
         Database::query($sql);
-        $docId = Database:: insert_id();
+        $docId = Database::insert_id();
 
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
@@ -1330,7 +1330,7 @@ class AddCourse
                 // Default true
                 $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
                 if ($addTeacher) {
-                    $i_course_sort = CourseManager:: userCourseSort(
+                    $i_course_sort = CourseManager::userCourseSort(
                         $user_id,
                         $code
                     );

@@ -26,11 +26,11 @@ use Doctrine\Common\Collections\Criteria;
  */
 class CourseManager
 {
-    const MAX_COURSE_LENGTH_CODE = 40;
+    public const MAX_COURSE_LENGTH_CODE = 40;
     /** This constant is used to show separate user names in the course
      * list (userportal), footer, etc */
-    const USER_SEPARATOR = ' |';
-    const COURSE_FIELD_TYPE_CHECKBOX = 10;
+    public const USER_SEPARATOR = ' |';
+    public const COURSE_FIELD_TYPE_CHECKBOX = 10;
     public $columns = [];
 
     /**
@@ -1732,7 +1732,7 @@ class CourseManager
                         $users[$row_key]['count_users_registered'] = $registered_users_with_extra_field;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
 
-                        $category = Category:: load(
+                        $category = Category::load(
                             null,
                             null,
                             $course_code,
@@ -1773,7 +1773,7 @@ class CourseManager
                             )
                         );
 
-                        $category = Category:: load(
+                        $category = Category::load(
                             null,
                             null,
                             $course_code,

@@ -46,7 +46,7 @@ if (api_is_in_gradebook()) {
 $groupId = api_get_group_id();
 
 if ($origin == 'group') {
-    $group_properties = GroupManager:: get_group_properties($groupId);
+    $group_properties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -89,5 +89,5 @@ forum_search();
 
 // Footer
 if ('learnpath' != $origin) {
-    Display :: display_footer();
+    Display::display_footer();
 }

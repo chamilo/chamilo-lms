@@ -35,9 +35,9 @@ use Doctrine\ORM\Tools\ToolsException;
  */
 class ZoomPlugin extends Plugin
 {
-    const RECORDING_TYPE_CLOUD = 'cloud';
-    const RECORDING_TYPE_LOCAL = 'local';
-    const RECORDING_TYPE_NONE = 'none';
+    public const RECORDING_TYPE_CLOUD = 'cloud';
+    public const RECORDING_TYPE_LOCAL = 'local';
+    public const RECORDING_TYPE_NONE = 'none';
     public $isCoursePlugin = true;
 
     /**

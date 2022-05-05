@@ -230,7 +230,7 @@ function search_users($needle, $type)
         $rs = Database::query($sql);
         $i = 0;
         if ($type == 'single') {
-            while ($user = Database:: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
                     $person_name =
@@ -252,7 +252,7 @@ function search_users($needle, $type)
         } else {
             global $nosessionUsersList;
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
-            while ($user = Database:: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $person_name =
                     $user['lastname'].' '.$user['firstname'].' ('.$user['username'].') '.$user['official_code'];
                 if ($showOfficialCode) {
@@ -737,7 +737,7 @@ $newLinks .= Display::url(
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
                         <option value="%">--</option>
                         <?php
-                        echo Display:: get_alphabet_options(); ?>
+                        echo Display::get_alphabet_options(); ?>
                     </select>
                     <br/>
                     <br/>

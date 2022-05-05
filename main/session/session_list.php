@@ -116,12 +116,12 @@ switch ($action) {
         $zip = new PclZip($tempZipFile);
         $csvList = [];
 
-        foreach ($sessionList as $session_id) {
+        foreach ($sessionList as $sessionItemId) {
             $em = Database::getManager();
             $sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
-            $session = $sessionRepository->find($session_id);
+            $session = $sessionRepository->find($sessionItemId);
 
-            Session::write('id_session', $session_id);
+            Session::write('id_session', $sessionItemId);
 
             if ($session->getNbrCourses() > 0) {
                 $courses = $session->getCourses();
@@ -137,31 +137,31 @@ switch ($action) {
                     $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
                     $sortByFirstName = api_sort_by_first_name();
                     $bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
-                    $course_code = $courseInfo['code'];
+                    $courseCode = $courseInfo['code'];
 
-                    $csv_headers = [];
-                    $csv_headers[] = get_lang('OfficialCode');
+                    $csvHeaders = [];
+                    $csvHeaders[] = get_lang('OfficialCode');
 
                     if ($sortByFirstName) {
-                        $csv_headers[] = get_lang('FirstName');
-                        $csv_headers[] = get_lang('LastName');
+                        $csvHeaders[] = get_lang('FirstName');
+                        $csvHeaders[] = get_lang('LastName');
                     } else {
-                        $csv_headers[] = get_lang('LastName');
-                        $csv_headers[] = get_lang('FirstName');
+                        $csvHeaders[] = get_lang('LastName');
+                        $csvHeaders[] = get_lang('FirstName');
                     }
 
-                    $csv_headers[] = get_lang('Login');
-                    $csv_headers[] = get_lang('TrainingTime');
-                    $csv_headers[] = get_lang('CourseProgress');
-                    $csv_headers[] = get_lang('ExerciseProgress');
-                    $csv_headers[] = get_lang('ExerciseAverage');
-                    $csv_headers[] = get_lang('Score');
-                    $csv_headers[] = $bestScoreLabel;
+                    $csvHeaders[] = get_lang('Login');
+                    $csvHeaders[] = get_lang('TrainingTime');
+                    $csvHeaders[] = get_lang('CourseProgress');
+                    $csvHeaders[] = get_lang('ExerciseProgress');
+                    $csvHeaders[] = get_lang('ExerciseAverage');
+                    $csvHeaders[] = get_lang('Score');
+                    $csvHeaders[] = $bestScoreLabel;
                     $exerciseResultHeaders = [];
                     if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
-                        isset($addExerciseOption['courses'][$course_code])
+                        isset($addExerciseOption['courses'][$courseCode])
                     ) {
-                        foreach ($addExerciseOption['courses'][$course_code] as $exerciseId) {
+                        foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
                             $exercise = new Exercise();
                             $exercise->read($exerciseId);
                             if ($exercise->iId) {
@@ -176,39 +176,43 @@ switch ($action) {
                             }
                         }
                     }
-                    $csv_headers[] = get_lang('Student_publication');
-                    $csv_headers[] = get_lang('Messages');
-                    $csv_headers[] = get_lang('Classes');
-                    $csv_headers[] = get_lang('RegistrationDate');
-                    $csv_headers[] = get_lang('FirstLoginInCourse');
-                    $csv_headers[] = get_lang('LatestLoginInCourse');
+                    $csvHeaders[] = get_lang('Student_publication');
+                    $csvHeaders[] = get_lang('Messages');
+                    $csvHeaders[] = get_lang('Classes');
+                    $csvHeaders[] = get_lang('RegistrationDate');
+                    $csvHeaders[] = get_lang('FirstLoginInCourse');
+                    $csvHeaders[] = get_lang('LatestLoginInCourse');
 
-                    $student_list = CourseManager::get_student_list_from_course_code(
-                        $course_code,
+                    $studentList = CourseManager::get_student_list_from_course_code(
+                        $courseCode,
                         true,
-                        $session_id
+                        $sessionItemId
                     );
-                    $nb_students = count($student_list);
-                    $user_ids = array_keys($student_list);
+                    $nbStudents = count($studentList);
+
+                    // Global variables:
+                    $user_ids = array_keys($studentList);
+                    $session_id = $sessionItemId;
                     $export_csv = true;
+
                     $csvContentInSession = TrackingCourseLog::get_user_data(
                         null,
-                        $nb_students,
+                        $nbStudents,
                         null,
                         null,
                         []
                     );
 
-                    array_unshift($csvContentInSession, $csv_headers);
+                    array_unshift($csvContentInSession, $csvHeaders);
 
-                    $sessionInfo = api_get_session_info($session_id);
+                    $sessionInfo = api_get_session_info($sessionItemId);
                     $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 
                     array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
                     array_unshift($csvContentInSession, [get_lang('SessionName'), Security::remove_XSS($sessionInfo['name'])]);
 
                     $csvList[] = [
-                        'session_id' => $session_id,
+                        'session_id' => $sessionItemId,
                         'session_name' => $session->getName(),
                         'course_id' => $courseId,
                         'course_name' => $courseInfo['name'],

@@ -3238,8 +3238,8 @@ class UserManager
 
                     $fval = $efv->get_values_by_handler_and_field_variable($user_id, $row['fvar']);
                     $fopt = $efo->get_field_option_by_field_and_option($row['id'], $fval['value']);
-                    $fopt = current($fopt);
-                    $fOptText = $fopt ? $fopt['display_text'] : $fval['value'];
+                    $fopt = current(is_array($fopt) ? $fopt : []);
+                    $fOptText = $fopt['display_text'] ?? $fval['value'];
 
                     if ($prefix) {
                         $extra_data['extra_'.$row['fvar']] = $fOptText;

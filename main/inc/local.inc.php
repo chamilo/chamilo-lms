@@ -515,7 +515,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         $uData['password'],
                         $password,
                         $uData['salt'],
-                        $uData['id']
+                        $uData['user_id']
                     );
 
                 $checkUserFromExternalWebservice = false;

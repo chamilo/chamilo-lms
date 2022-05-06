@@ -5604,6 +5604,7 @@ EOT;
                 $nbrOptions = $nbrAnswers;
                 break;
             case MATCHING_GLOBAL:
+            case MATCHING_DRAGGABLE_GLOBAL:
                 if (isset($listCorrectAnswers['form_values'])) {
                     if (isset($listCorrectAnswers['form_values']['correct'])) {
                         $nbrCorrect = count($listCorrectAnswers['form_values']['correct']);

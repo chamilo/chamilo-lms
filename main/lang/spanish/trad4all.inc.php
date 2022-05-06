@@ -8888,4 +8888,5 @@ $AllowsSkillsBySubCategories = "Permitir la asignacion de competencias por sub c
 $ItAllowsTheAcquisitionOfSkillsBySubCategories = "Permite la adquisicion de competencia por validacion indeprendiente de sub categorias.";
 $SkillMinScore = "Score minimum";
 $InLp = "En una leccion";
+$ExportCoursesReports = "Reportes de cursos";
 ?>

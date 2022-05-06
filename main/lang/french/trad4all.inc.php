@@ -8796,4 +8796,5 @@ $AllowsSkillsBySubCategories = "Permettre l'assignation de compétences par sous
 $ItAllowsTheAcquisitionOfSkillsBySubCategories = "Permet d'assigner les compétences par validation indépendantes des sous catégories.";
 $SkillMinScore = "Score minimum";
 $InLp = "Dans un parcours";
+$ExportCoursesReports = "Rapports des cours";
 ?>

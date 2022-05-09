@@ -1083,6 +1083,8 @@ ALTER TABLE portfolio_category ADD parent_id INT(11) NOT NULL DEFAULT 0;
 // $_configuration['video_features'] = ['features' => ['speed']];
 // Hide the context menu on video player
 //$_configuration['video_context_menu_hidden'] = false;
+// Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias
+//$_configuration['video_player_renderers'] = ['renderers' => ['dailymotion', 'facebook', 'twitch', 'vimeo', 'youtube']];
 
 // Disable token verification when sending a message
 // $_configuration['disable_token_in_new_message'] = false;

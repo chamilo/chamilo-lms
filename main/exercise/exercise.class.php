@@ -1917,12 +1917,17 @@ class Exercise
     }
 
     /**
-     * deletes the exercise from the database
-     * Notice : leaves the question in the data base.
+     * Marks the exercise as deleted.
+     * If $delete argument set, completely deletes it from the database.
+     * Note: leaves the questions in the database as "orphan" questions
+     * (unless used by other tests)
+     * @param bool $delete Whether to really delete the test (true) or only mark it (false = default)
+     * @return bool Whether the operation was successful or not
      *
      * @author Olivier Brouckaert
+     * @author Yannick Warnier
      */
-    public function delete()
+    public function delete(bool $delete = false): bool
     {
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
@@ -1941,7 +1946,7 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $table SET active='-1'
-                WHERE iid = ".intval($this->iid);
+                WHERE iid = ".$this->iid;
         Database::query($sql);
 
         api_item_property_update(
@@ -1976,6 +1981,18 @@ class Exercise
 
         if ($linkInfo !== false) {
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
+        }
+
+        if ($delete) {
+            // Really delete the test (and orphan its questions)
+            $questions = $this->getQuestionOrderedList();
+            foreach ($questions as $order => $questionId) {
+                $question = Question::read($questionId, $this->course);
+                $question->delete($this->course_id);
+            }
+            $sql = "DELETE FROM $table
+                WHERE iid = ".$this->iid;
+            Database::query($sql);
         }
 
         return true;
@@ -11476,13 +11493,13 @@ class Exercise
      */
     public function getQuestionOrderedList($adminView = false)
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUIZ_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
         // Getting question_order to verify that the question
         // list is correct and all question_order's were set
         $sql = "SELECT DISTINCT count(e.question_order) as count
-                FROM $TBL_EXERCICE_QUESTION e
+                FROM $TBL_QUIZ_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
                 ON e.question_id = q.iid
                 WHERE
@@ -11495,7 +11512,7 @@ class Exercise
 
         // Getting question list from the order (question list drag n drop interface).
         $sql = "SELECT DISTINCT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
+                FROM $TBL_QUIZ_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
                 ON e.question_id = q.iid
                 WHERE

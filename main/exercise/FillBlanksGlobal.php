@@ -6,7 +6,7 @@
  */
 class FillBlanksGlobal extends FillBlanks
 {
-    public $typePicture = 'fill_in_blanks.png';
+    public $typePicture = 'fill_in_blanks_global.png';
     public $explanationLangVar = 'FillBlanksGlobal';
 
     /**

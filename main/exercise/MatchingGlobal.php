@@ -6,7 +6,7 @@
  */
 class MatchingGlobal extends Matching
 {
-    public $typePicture = 'matching.png';
+    public $typePicture = 'matching_global.png';
     public $explanationLangVar = 'MatchingGlobal';
 
     /**

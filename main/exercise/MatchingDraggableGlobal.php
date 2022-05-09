@@ -6,7 +6,7 @@
  */
 class MatchingDraggableGlobal extends MatchingDraggable
 {
-    public $typePicture = 'matchingdrag.png';
+    public $typePicture = 'matching_drag_global.png';
     public $explanationLangVar = 'MatchingDraggableGlobal';
 
     /**

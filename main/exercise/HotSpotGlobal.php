@@ -6,7 +6,7 @@
  */
 class HotSpotGlobal extends HotSpot
 {
-    public $typePicture = 'hotspot.png';
+    public $typePicture = 'hotspot_global.png';
     public $explanationLangVar = 'HotSpotGlobal';
 
     /**

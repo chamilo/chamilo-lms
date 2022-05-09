@@ -1598,8 +1598,8 @@ function getWorkListTeacherQuery(
             $whereCondition
         ORDER BY `$column` $direction";
 
-    if ($start != 0 && $limit != 0) {
-        $sql .= ' LIMIT $start, $limit';
+    if (!empty($start) && !empty($limit)) {
+        $sql .= " LIMIT $start, $limit";
     }
 
     return Database::query($sql);

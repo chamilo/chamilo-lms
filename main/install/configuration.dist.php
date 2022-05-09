@@ -484,6 +484,7 @@ ALTER TABLE c_lp CHANGE name name LONGTEXT NOT NULL;
 ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 --
 */
+// This option will not remove tags when presenting LP list so it might be a source of security vulnerability.
 // $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;

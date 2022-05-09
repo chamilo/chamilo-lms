@@ -358,8 +358,12 @@ foreach ($categories as $item) {
                 $oddclass = 'row_odd';
             }
 
-            $url_start_lp = 'lp_controller.php?'.$cidReq.'&action=view&lp_id='.$id;
-            $name = trim(strip_tags(Security::remove_XSS($details['lp_name'])));
+	    $url_start_lp = 'lp_controller.php?'.$cidReq.'&action=view&lp_id='.$id;
+            if (api_get_configuration_value('save_titles_as_html')) {
+                $name = trim(Security::remove_XSS($details['lp_name']));
+            } else {
+                $name = trim(strip_tags(Security::remove_XSS($details['lp_name'])));
+            }
             $extra = null;
 
             if ($is_allowed_to_edit) {

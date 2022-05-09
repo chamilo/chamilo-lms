@@ -1405,16 +1405,16 @@ abstract class Question
 
     /**
      * Deletes a question from the database
-     * the parameter tells if the question is removed from all exercises (value = 0),
+     * The parameter tells if the question is removed from all exercises (value = 0),
      * or just from one exercise (value = exercise ID).
      *
      * @author Olivier Brouckaert
      *
-     * @param int $deleteFromEx - exercise ID if the question is only removed from one exercise
+     * @param int $deleteFromEx Exercise ID if the question is only to be removed from one exercise
      *
      * @return bool
      */
-    public function delete($deleteFromEx = 0)
+    public function delete(int $deleteFromEx = 0): bool
     {
         if (empty($this->course)) {
             return false;

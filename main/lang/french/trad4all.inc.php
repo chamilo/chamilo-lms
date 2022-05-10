@@ -8797,4 +8797,8 @@ $ItAllowsTheAcquisitionOfSkillsBySubCategories = "Permet d'assigner les compéte
 $SkillMinScore = "Score minimum";
 $InLp = "Dans un parcours";
 $ExportCoursesReports = "Rapports des cours";
+$FillBlanksGlobal = "Remplir les blancs avec score global";
+$MatchingGlobal = "Apparier avec score global";
+$HotSpotGlobal = "Zones sur images avec score global";
+$MatchingDraggableGlobal = "Correspondances glisser-déplacer avec score global";
 ?>

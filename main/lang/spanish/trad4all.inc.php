@@ -8889,4 +8889,8 @@ $ItAllowsTheAcquisitionOfSkillsBySubCategories = "Permite la adquisicion de comp
 $SkillMinScore = "Score minimum";
 $InLp = "En una leccion";
 $ExportCoursesReports = "Reportes de cursos";
+$FillBlanksGlobal = "Rellenar blancos con resultado global";
+$MatchingGlobal = "Relacionar con resultado global";
+$HotSpotGlobal = "Zonas de imagen con resultado global";
+$MatchingDraggableGlobal = "Coincidencia arrastrable con resultado global";
 ?>

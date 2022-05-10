@@ -799,7 +799,7 @@ foreach ($categories as $item) {
                         ),
                         'lp_controller.php?'.$cidReq."&action=delete&lp_id=$id",
                         [
-                            'onclick' => "javascript: return confirmation('".addslashes($strip_tags(name))."');",
+                            'onclick' => "javascript: return confirmation('".addslashes(strip_tags($name))."');",
                         ]
                     );
                 } else {

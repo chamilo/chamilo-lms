@@ -3576,31 +3576,31 @@ class Tracking
         // Then, courses where $coach_id is coach of the session
         $sql = "SELECT srcru.user_id
             FROM $tbl_session_course_user srcru
-            INNER JOIN $tbl_session_course src 
+            INNER JOIN $tbl_session_course src
             ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-            INNER JOIN $tbl_session s 
+            INNER JOIN $tbl_session s
             ON srcru.session_id = s.id AND src.session_id = s.id
             INNER JOIN $tbl_session_user sru on s.id = sru.session_id
-            WHERE 
-               srcru.status = ".SessionEntity::STUDENT." AND 
+            WHERE
+               srcru.status = ".SessionEntity::STUDENT." AND
                sru.relation_type = ".SessionEntity::GENERAL_COACH." AND
                sru.user_id = $coach_id";
 
         if (-1 != $access_url_id) {
             $sql = "SELECT srcru.user_id
                     FROM $tbl_session_course_user srcru
-                    INNER JOIN $tbl_session_course src 
+                    INNER JOIN $tbl_session_course src
                     ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-                    INNER JOIN $tbl_session s 
+                    INNER JOIN $tbl_session s
                     ON srcru.session_id = s.id AND src.session_id = s.id
-                    INNER JOIN $tbl_session_user sru 
+                    INNER JOIN $tbl_session_user sru
                     ON s.id = sru.session_id
-                    INNER JOIN $tbl_session_rel_access_url aurs 
+                    INNER JOIN $tbl_session_rel_access_url aurs
                     ON s.id = aurs.session_id
-                    WHERE 
+                    WHERE
                         srcru.status = ".SessionEntity::STUDENT." AND
                         sru.relation_type = ".SessionEntity::GENERAL_COACH." AND
-                        sru.user_id = $coach_id AND 
+                        sru.user_id = $coach_id AND
                         aurs.access_url_id = $access_url_id";
         }
 
@@ -3641,13 +3641,13 @@ class Tracking
         // Then, courses where $coach_id is coach of the session
         $sql = "SELECT srcru.user_id
             FROM $tbl_session_course_user srcru
-            INNER JOIN $tbl_session_course src 
+            INNER JOIN $tbl_session_course src
             ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-            INNER JOIN $tbl_session s 
+            INNER JOIN $tbl_session s
             ON srcru.session_id = s.id AND src.session_id = s.id
-            INNER JOIN $tblSessionRelUser sru 
+            INNER JOIN $tblSessionRelUser sru
             ON s.id = sru.session_id
-            WHERE 
+            WHERE
                 (srcru.status = ".SessionEntity::STUDENT." AND srcru.user_id = $student_id) AND
                 (sru.relation_type = ".SessionEntity::GENERAL_COACH." AND sru.user_id = $coach_id)";
         $result = Database::query($sql);
@@ -4837,7 +4837,7 @@ class Tracking
                     );*/
 
                     $qb = Container::getQuizRepository()->findAllByCourse($course, null, null, 1, false);
-                    /** @var CQuiz[] $exerciseList */
+                    /** @var CQuiz[] $exercises */
                     $exercises = $qb->getQuery()->getResult();
                     $countExercises = count($exercises);
                     foreach ($exercises as $exercise_data) {
@@ -8049,13 +8049,13 @@ class TrackingCourseLog
 
                     $sql = "SELECT s.id, s.name, u.name
                         FROM $tbl_thematic t
-                        INNER JOIN $tblSessionRelUser sru 
+                        INNER JOIN $tblSessionRelUser sru
                         ON t.session_id = sru.session_id
-                        INNER JOIN $table_session s 
+                        INNER JOIN $table_session s
                         ON sru.session_id = s.id
-                        INNER JOIN $table_user u 
+                        INNER JOIN $table_user u
                         ON sru.user_id = u.id
-                        WHERE 
+                        WHERE
                               t.c_id = $course_id AND
                               t.id = $thematic_id AND
                               sru.relation_type = ".SessionEntity::GENERAL_COACH;

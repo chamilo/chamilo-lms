@@ -365,7 +365,8 @@ export default {
       const unReadFilter = {
         msgType: MESSAGE_TYPE_INBOX,
         'receivers.receiver': user.id,
-        read: false
+        read: false,
+        'order[sendDate]': 'desc',
       };
       filters.value = unReadFilter;
       store.dispatch('message/resetList');
@@ -376,7 +377,8 @@ export default {
       title.value = 'Sent';
       index.value = 'sent';
       const sentFilter = {
-        sender: user.id
+        sender: user.id,
+        'order[sendDate]': 'desc',
       };
       filters.value = sentFilter;
       store.dispatch('message/resetList');
@@ -389,7 +391,8 @@ export default {
       const tagFilter = {
         msgType: MESSAGE_TYPE_INBOX,
         'receivers.receiver': user.id,
-        'receivers.tags.tag': [tag.tag]
+        'receivers.tags.tag': [tag.tag],
+        'order[sendDate]': 'desc',
       };
       filters.value = tagFilter;
       store.dispatch('message/resetList');

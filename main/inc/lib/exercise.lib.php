@@ -5586,20 +5586,14 @@ EOT;
                 } else {
                     // We get the user answers from database
                     $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                    $sql = "SELECT hotspot_correct
+                    $sql = "SELECT count(hotspot_id) as ct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE
-                                    hotspot_exe_id = $exeId AND
-                                    hotspot_question_id= $questionId
-                                ORDER BY hotspot_id ASC";
+                                    hotspot_exe_id = '".Database::escape_string($exeId)."' AND
+                                    hotspot_question_id = '".Database::escape_string($questionId)."' AND
+                                    hotspot_correct = 1";
                     $result = Database::query($sql);
-                    if (Database::num_rows($result) > 0) {
-                        while ($row = Database::fetch_array($result)) {
-                            if (1 === (int) $row['hotspot_correct']) {
-                                $nbrCorrect++;
-                            }
-                        }
-                    }
+                    $nbrCorrect = (int) Database::result($result, 0, 0);
                 }
                 $nbrOptions = $nbrAnswers;
                 break;

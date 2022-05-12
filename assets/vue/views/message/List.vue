@@ -105,7 +105,7 @@
       <DataTable
         v-model:filters="filters"
         v-model:selection="selectedItems"
-        :global-filter-fields="['title', 'sendDate']"
+        :global-filter-fields="['sendDate']"
         :lazy="true"
         :loading="isLoading"
         :paginator="true"
@@ -120,7 +120,7 @@
         paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         responsive-layout="scroll"
         sortBy="sendDate"
-        sort-order="asc"
+        sort-order="desc"
         @page="onPage($event)"
         @sort="sortingChanged($event)">
 
@@ -181,7 +181,7 @@
           <!--      </template>-->
         </Column>
 
-        <Column :header="$t('Send date')" :sortable="false" field="sendDate">
+        <Column :header="$t('Send date')" :sortable="true" field="sendDate">
           <template #body="slotProps">
             {{ $filters.relativeDatetime(slotProps.data.sendDate) }}
           </template>
@@ -516,7 +516,7 @@ export default {
       isBusy: false,
       options: {
         sortBy: 'sendDate',
-        sortDesc: 'asc',
+        sortDesc: true,
       },
       // prime vue
       itemDialog: false,

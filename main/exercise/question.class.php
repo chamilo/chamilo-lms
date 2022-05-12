@@ -1411,10 +1411,11 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int $deleteFromEx Exercise ID if the question is only to be removed from one exercise
+     * @param bool $deletePicture Allow for special cases where the picture would be better left alone
      *
      * @return bool
      */
-    public function delete(int $deleteFromEx = 0): bool
+    public function delete(int $deleteFromEx = 0, bool $deletePicture = true): bool
     {
         if (empty($this->course)) {
             return false;

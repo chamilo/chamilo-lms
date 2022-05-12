@@ -1495,7 +1495,9 @@ abstract class Question
                 LOG_QUESTION_ID,
                 $this->iid
             );
-            $this->removePicture();
+            if ($deletePicture) {
+                $this->removePicture();
+            }
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx, $courseId);

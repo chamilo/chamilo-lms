@@ -57,9 +57,7 @@ if (is_object($objQuestion)) {
         $objQuestion->processAnswersCreation($form, $objExercise);
         // TODO: maybe here is the better place to index this tool, including answers text
         // redirect
-        if ($objQuestion->type != HOT_SPOT &&
-            $objQuestion->type != HOT_SPOT_DELINEATION
-        ) {
+        if (!in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_GLOBAL, HOT_SPOT_DELINEATION])) {
             if (isset($_GET['editQuestion'])) {
                 if (empty($exerciseId)) {
                     Display::addFlash(Display::return_message(get_lang('ItemUpdated')));

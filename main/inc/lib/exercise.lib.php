@@ -75,6 +75,7 @@ class ExerciseLib
         $pictureName = $objQuestionTmp->getPictureFilename();
         $s = '';
         if ($answerType != HOT_SPOT &&
+            $answerType != HOT_SPOT_GLOBAL &&
             $answerType != HOT_SPOT_DELINEATION &&
             $answerType != ANNOTATION
         ) {
@@ -133,7 +134,9 @@ class ExerciseLib
             $num_suggestions = 0;
             switch ($answerType) {
                 case MATCHING:
+                case MATCHING_GLOBAL:
                 case DRAGGABLE:
+                case MATCHING_DRAGGABLE_GLOBAL:
                 case MATCHING_DRAGGABLE:
                     if ($answerType == DRAGGABLE) {
                         $isVertical = $objQuestionTmp->extra == 'v';
@@ -947,6 +950,7 @@ class ExerciseLib
                         $s .= '</tr>';
                         break;
                     case FILL_IN_BLANKS:
+                    case FILL_IN_BLANKS_GLOBAL:
                         // display the question, with field empty, for student to fill it,
                         // or filled to display the answer in the Question preview of the exercise/admin.php page
                         $displayForStudent = true;
@@ -1177,6 +1181,7 @@ class ExerciseLib
                         }
                         break;
                     case MATCHING:
+                    case MATCHING_GLOBAL:
                         // matching type, showing suggestions and answers
                         // TODO: replace $answerId by $numAnswer
                         if ($answerCorrect != 0) {
@@ -1336,6 +1341,7 @@ class ExerciseLib
                             $s .= '</li>';
                         }
                         break;
+                    case MATCHING_DRAGGABLE_GLOBAL:
                     case MATCHING_DRAGGABLE:
                         if ($answerId == 1) {
                             echo $objAnswerTmp->getJs();
@@ -1454,7 +1460,9 @@ HTML;
                 $answerType,
                 [
                     MATCHING,
+                    MATCHING_GLOBAL,
                     MATCHING_DRAGGABLE,
+                    MATCHING_DRAGGABLE_GLOBAL,
                     UNIQUE_ANSWER_NO_OPTION,
                     MULTIPLE_ANSWER_TRUE_FALSE,
                     MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,
@@ -1496,7 +1504,7 @@ HTML;
 //                $s .= '</div>';
             }
 
-            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+            if (in_array($answerType, [MATCHING, MATCHING_GLOBAL, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_GLOBAL])) {
                 $s .= '</div>'; //drag_question
             }
 
@@ -1510,7 +1518,7 @@ HTML;
                 return $s;
             }
             echo $s;
-        } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
+        } elseif (in_array($answerType, [HOT_SPOT, HOT_SPOT_DELINEATION, HOT_SPOT_GLOBAL])) {
             global $exe_id;
             // Question is a HOT_SPOT
             // Checking document/images visibility
@@ -1590,7 +1598,7 @@ HTML;
                         </div>
                     </div>
                     <script>
-                        new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
+                        new ".(in_array($answerType, [HOT_SPOT, HOT_SPOT_GLOBAL]) ? "HotspotQuestion" : "DelineationQuestion")."({
                             questionId: $questionId,
                             exerciseId: {$exercise->iid},
                             exeId: 0,
@@ -4400,7 +4408,7 @@ EOT;
         $courseId = api_get_course_int_id($course_code);
         $session_id = intval($session_id);
 
-        if ($questionType == FILL_IN_BLANKS) {
+        if (in_array($questionType, [FILL_IN_BLANKS, FILL_IN_BLANKS_GLOBAL])) {
             $listStudentsId = [];
             $listAllStudentInfo = CourseManager::get_student_list_from_course_code(
                 api_get_course_id(),
@@ -4567,11 +4575,14 @@ EOT;
 
         switch ($question_type) {
             case FILL_IN_BLANKS:
+            case FILL_IN_BLANKS_GLOBAL:
                 $answer_condition = '';
                 $select_condition = ' e.exe_id, answer ';
                 break;
             case MATCHING:
+            case MATCHING_GLOBAL:
             case MATCHING_DRAGGABLE:
+            case MATCHING_DRAGGABLE_GLOBAL:
             default:
                 $answer_condition = " answer = $answer_id AND ";
                 $select_condition = ' DISTINCT exe_user_id ';
@@ -4615,6 +4626,7 @@ EOT;
             $good_answers = 0;
             switch ($question_type) {
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_GLOBAL:
                     while ($row = Database::fetch_array($result, 'ASSOC')) {
                         $fill_blank = self::check_fill_in_blanks(
                             $correct_answer,
@@ -4629,7 +4641,9 @@ EOT;
                     return $good_answers;
                     break;
                 case MATCHING:
+                case MATCHING_GLOBAL:
                 case MATCHING_DRAGGABLE:
+                case MATCHING_DRAGGABLE_GLOBAL:
                 default:
                     $return = Database::num_rows($result);
             }
@@ -5525,6 +5539,89 @@ EOT;
             'total_percentage' => $percentage,
             'count_pending_questions' => $countPendingQuestions,
         ];
+    }
+
+    /**
+     * It validates unique score when all user answers are correct by question.
+     * It is used for global questions.
+     *
+     * @param       $answerType
+     * @param       $listCorrectAnswers
+     * @param       $exeId
+     * @param       $questionId
+     * @param       $questionWeighting
+     * @param array $choice
+     * @param int   $nbrAnswers
+     *
+     * @return int|mixed
+     */
+    public static function getUserQuestionScoreGlobal(
+        $answerType,
+        $listCorrectAnswers,
+        $exeId,
+        $questionId,
+        $questionWeighting,
+        $choice = [],
+        $nbrAnswers = 0
+    ) {
+        $nbrCorrect = 0;
+        $nbrOptions = 0;
+        switch ($answerType) {
+            case FILL_IN_BLANKS_GLOBAL:
+                if (!empty($listCorrectAnswers)) {
+                    foreach ($listCorrectAnswers['student_score'] as $idx => $val) {
+                        if (1 === (int) $val) {
+                            $nbrCorrect++;
+                        }
+                    }
+                    $nbrOptions = (int) $listCorrectAnswers['words_count'];
+                }
+                break;
+            case HOT_SPOT_GLOBAL:
+                if (!empty($listCorrectAnswers)) {
+                    foreach ($listCorrectAnswers as $idx => $val) {
+                        if (1 === (int) $choice[$idx]) {
+                            $nbrCorrect++;
+                        }
+                    }
+                } else {
+                    // We get the user answers from database
+                    $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                    $sql = "SELECT count(hotspot_id) as ct
+                                FROM $TBL_TRACK_HOTSPOT
+                                WHERE
+                                    hotspot_exe_id = '".Database::escape_string($exeId)."' AND
+                                    hotspot_question_id = '".Database::escape_string($questionId)."' AND
+                                    hotspot_correct = 1";
+                    $result = Database::query($sql);
+                    $nbrCorrect = (int) Database::result($result, 0, 0);
+                }
+                $nbrOptions = $nbrAnswers;
+                break;
+            case MATCHING_GLOBAL:
+            case MATCHING_DRAGGABLE_GLOBAL:
+                if (isset($listCorrectAnswers['form_values'])) {
+                    if (isset($listCorrectAnswers['form_values']['correct'])) {
+                        $nbrCorrect = count($listCorrectAnswers['form_values']['correct']);
+                        $nbrOptions = (int) $listCorrectAnswers['form_values']['count_options'];
+                    }
+                } else {
+                    if (isset($listCorrectAnswers['from_database'])) {
+                        if (isset($listCorrectAnswers['from_database']['correct'])) {
+                            $nbrCorrect = count($listCorrectAnswers['from_database']['correct']);
+                            $nbrOptions = (int) $listCorrectAnswers['from_database']['count_options'];
+                        }
+                    }
+                }
+                break;
+        }
+
+        $questionScore = 0;
+        if ($nbrCorrect > 0 && $nbrCorrect == $nbrOptions) {
+            $questionScore = $questionWeighting;
+        }
+
+        return $questionScore;
     }
 
     /**

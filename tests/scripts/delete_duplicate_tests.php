@@ -261,6 +261,7 @@ while ($course = Database::fetch_assoc($resCourse)) {
                                 }
                                 $deletedTestsCount++;
                             }
+                            unset($exercise);
                         } else {
                             //echo "Found test ".$test['iid']." included in a learning path in ".$course['code'].". Not deleting.".PHP_EOL;
                             $sql2b = "SELECT question_id FROM c_quiz_rel_question WHERE c_id = ".$course['id']." AND exercice_id = ".$test['iid'];

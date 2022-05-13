@@ -1351,11 +1351,11 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int $exerciseId - exercise ID
-     * @param int $courseId
+     * @param int $courseId The ID of the course, to avoid deleting re-used questions
      *
      * @return bool - true if removed, otherwise false
      */
-    public function removeFromList($exerciseId, $courseId = 0)
+    public function removeFromList(int $exerciseId, int $courseId = 0): bool
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $id = (int) $this->iid;

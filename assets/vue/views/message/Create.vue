@@ -63,7 +63,7 @@
       v-model="item.content"
       :init="{
         skin_url: '/build/libs/tinymce/skins/ui/oxide',
-        content_css: '/build/libs/tinymce/skins/content/default/content.css',
+        content_css: '/build/css/editor.css',
         branding: false,
         relative_urls: false,
         height: 500,

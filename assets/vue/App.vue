@@ -1,207 +1,152 @@
 <template>
-  <component :is="layout" :show-breadcrumb="showBreadcrumb">
+  <component
+    :is="layout"
+    :show-breadcrumb="route.meta.showBreadcrumb"
+  >
     <slot />
     <div
-        id="legacy_content"
-        v-html="legacyContent"
+      id="legacy_content"
+      v-html="legacyContent"
     />
   </component>
 </template>
 
-<script>
-import {mapGetters} from 'vuex';
-import NotificationMixin from './mixins/NotificationMixin';
+<script setup>
+import {computed, onMounted, provide, ref, watch, watchEffect} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import {DefaultApolloClient} from '@vue/apollo-composable';
+import {ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client/core';
+import {useStore} from "vuex";
 import axios from "axios";
-import { computed, watch, provide, ref } from 'vue';
-import isEmpty from 'lodash/isEmpty';
-import { useRouter, useRoute } from 'vue-router';
+import {isEmpty} from "lodash";
+import showMessage from "./utils/showMessage";
 
-import useState from './hooks/useState'
-/*import Sidebar from './components/sidebar/Sidebar.vue'
-import Navbar from './components/navbar/Navbar.vue'
-import SettingsPanel from './components/panels/SettingsPanel.vue'
-import SearchPanel from './components/panels/SearchPanel.vue'
-import NotificationsPanel from './components/panels/NotificationsPanel.vue'
-import Button from './components/global/Button.vue'*/
-
-const defaultLayout = 'Dashboard';
-import { DefaultApolloClient } from '@vue/apollo-composable';
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core';
-
-// HTTP connection to the API
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: '/api/graphql',
-})
-
-// Cache implementation
-const cache = new InMemoryCache();
-
-// Create the apollo client
 const apolloClient = new ApolloClient({
-  link: httpLink,
-  cache,
+  link: createHttpLink({
+    uri: '/api/graphql',
+  }),
+  cache: new InMemoryCache(),
 });
 
-export default {
-  name: "App",
-  setup () {
-    const { currentRoute } = useRouter();
-    const route = useRoute();
-    const showBreadcrumb = ref(true);
-    const layout = computed(
-        () => {
-            let queryParams = new URLSearchParams(window.location.href);
+provide(DefaultApolloClient, apolloClient);
 
-            if (queryParams.has('lp')
-                || (queryParams.has('origin') && queryParams.get('origin') === 'learnpath')
-            ) {
-                return 'EmptyLayout';
-            } else {
-                return `${currentRoute.value.meta.layout || defaultLayout}Layout`
-            }
-        }
-    );
+const route = useRoute();
+const router = useRouter();
 
-    provide(DefaultApolloClient, apolloClient);
+const layout = computed(
+  () => {
+    const queryParams = new URLSearchParams(window.location.href);
 
-    watch(
-        () => route.meta,
-        async meta => {
-          try {
-            const component = `${meta.layout}.vue`;
-            layout.value = component?.default || defaultLayout;
-            showBreadcrumb.value = meta.showBreadcrumb;
-          } catch (e) {
-            layout.value = defaultLayout
-          }
-        },
-        {immediate: true}
-    );
-
-    return {
-      showBreadcrumb,
-      layout
+    if (queryParams.has('lp')
+      || (queryParams.has('origin') && 'learnpath' === queryParams.get('origin'))
+    ) {
+      return 'EmptyLayout';
     }
-  },
-  data: () => ({
-    user: {},
-    firstTime: false,
-    legacyContent: '',
-  }),
-  watch: {
-    $route() {
-      //console.log('watch.$route');
-      this.legacyContent = '';
 
-      // This code below will handle the legacy content to be loaded.
-      let url = window.location.href;
-      var n = url.indexOf("main/");
-      if (n > 0) {
-        if (this.firstTime) {
-          //console.log('App.vue: firstTime: 1.');
-          let content = document.querySelector("#sectionMainContent");
-          if (content) {
-            //console.log('legacyContent updated');
-            content.style.display = 'block';
-            document.querySelector("#sectionMainContent").remove();
-            this.legacyContent = content.outerHTML;
-          }
-        } else {
-          if (document.querySelector("#sectionMainContent")) {
-            document.querySelector("#sectionMainContent").remove();
-            //console.log('remove');
-          }
+    return `${router.currentRoute.value.meta.layout ?? 'Dashboard'}Layout`;
+  }
+);
 
-          //console.log('Replace URL', url);
-          window.location.replace(url);
+const legacyContent = ref('');
+let isFirstTime = false;
+
+onMounted(
+  () => {
+    isFirstTime = true;
+  }
+);
+
+watch(
+  route,
+  () => {
+    legacyContent.value = '';
+
+    const currentUrl = window.location.href;
+
+    if (currentUrl.indexOf('main/') > 0) {
+      if (isFirstTime) {
+        const content = document.querySelector('#sectionMainContent');
+
+        if (content) {
+          content.style.display = 'block';
+          document.querySelector('#sectionMainContent').remove();
+          legacyContent.value = content.outerHTML;
         }
       } else {
-        if (this.firstTime) {
-          //console.log('App.vue: firstTime 2');
-          let content = document.querySelector("#sectionMainContent");
-          if (content) {
-            //console.log('legacyContent updated');
-            content.style.display = 'block';
-            document.querySelector("#sectionMainContent").remove();
-            this.legacyContent = content.outerHTML;
-          }
-        } else {
-          //console.log('legacyContent cleaned');
-          let content = document.querySelector("#sectionMainContent");
-          if (content) {
-            document.querySelector("#sectionMainContent").remove();
-          }
-          this.legacyContent = '';
-        }
+        document.querySelector('#sectionMainContent')?.remove();
+
+        window.location.replace(currentUrl);
       }
-      this.firstTime = false;
-    },
-    legacyContent: {
-      handler: function () {
-      },
-      immediate: true
-    },
-  },
+    } else {
+      if (isFirstTime) {
+        const content = document.querySelector("#sectionMainContent");
 
-  created() {
-    //console.log('App.vue created');
-    this.legacyContent = '';
-    let app = document.getElementById('app');
-
-    let isAuthenticated = false;
-    if (!isEmpty(window.user)) {
-      console.log('APP.vue: is logged in as ' + window.user.username);
-      this.user = window.user;
-      isAuthenticated = true;
-    }
-
-    let payload = {isAuthenticated: isAuthenticated, user: this.user};
-    this.$store.dispatch("security/onRefresh", payload);
-
-    if (app && app.attributes["data-flashes"]) {
-      let flashes = JSON.parse(app.attributes["data-flashes"].value);
-      if (flashes) {
-        for (const key in flashes) {
-          for (const text in flashes[key]) {
-            this.showMessage(flashes[key][text], key);
-          }
+        if (content) {
+          content.style.display = 'block';
+          document.querySelector("#sectionMainContent").remove();
+          legacyContent.value = content.outerHTML;
         }
+      } else {
+        document.querySelector("#sectionMainContent")?.remove();
+
+        legacyContent.value = '';
       }
     }
 
-    axios.interceptors.response.use(undefined, (err) => {
-      //console.log('interceptor');console.log(err.response.status);
+    isFirstTime = false;
+  }
+);
 
-      return new Promise(() => {
-        // Unauthorized.
-        if (401 === err.response.status) {
-          // Redirect to the login if status 401.
-          //this.$router.replace({path: "/login"}).catch(()=>{});
-          // Real redirect to avoid loops with Login.vue page.
-          //window.location.href = '/login';
-            this.showMessage(err.response.data.error, 'warning');
-        } else if (500 === err.response.status) {
-          if (err.response) {
-            // Request made and server responded
-            this.showMessage(err.response.data.detail, 'warning');
-          }
-        }
-        throw err;
-      });
-    });
-  },
-  mounted() {
-    //console.log('App.vue mounted');
-    this.firstTime = true;
-  },
-  mixins: [NotificationMixin],
-  computed: {
-    ...mapGetters({
-      'isAuthenticated': 'security/isAuthenticated',
-      'isAdmin': 'security/isAdmin',
-      'currentUser': 'security/getUser',
-    }),
+watchEffect(
+  async () => {
+    try {
+      const component = `${route.meta.layout}.vue`;
+      layout.value = component?.default || 'Dashboard';
+    } catch (e) {
+      layout.value = 'Dashboard';
+    }
+  }
+);
+
+const user = ref({});
+
+let isAuthenticated = false;
+
+if (!isEmpty(window.user)) {
+  user.value = window.user;
+  isAuthenticated = true;
+}
+
+const store = useStore();
+
+const payload = {isAuthenticated, user};
+
+store.dispatch('security/onRefresh', payload);
+
+const app = document.getElementById('app');
+
+if (app && app.hasAttribute('data-flashes')) {
+  const flashes = JSON.parse(app.getAttribute('data-flashes'));
+
+  for (const key in flashes) {
+    for (const flashText in flashes[key]) {
+      showMessage(flashes[key][flashText], key);
+    }
   }
 }
+
+axios.interceptors.response.use(
+  undefined,
+  (error) => new Promise(() => {
+    if (401 === error.response.status) {
+      showMessage(error.response.data.error, 'warning');
+    } else if (500 === error.response.status) {
+      if (error.response) {
+        showMessage(error.response.data.detail, 'warning');
+      }
+    }
+
+    throw error;
+  })
+);
 </script>

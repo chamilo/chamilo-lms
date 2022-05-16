@@ -69,6 +69,7 @@ if (!in_array(
         'get_usergroups_users',
         'get_calendar_users',
         'get_exercise_categories',
+        'document_log_events',
     ]
 ) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);
@@ -318,6 +319,19 @@ switch ($action) {
             exit;
         }
         $count = Statistics::getNumberOfActivities($courseId, $sessionId);
+        break;
+    case 'document_log_events':
+        $courseCode = api_get_course_id();
+        if (empty($courseCode)) {
+            exit;
+        }
+        $sessionId = api_get_session_id();
+        $documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course(
+            $courseCode,
+            $sessionId,
+            1000
+        );
+        $count = count($documents_most_downloaded);
         break;
     case 'get_programmed_announcements':
         $object = new ScheduledAnnouncement();
@@ -1068,6 +1082,32 @@ switch ($action) {
             $sessionId
         );
         break;
+    case 'document_log_events':
+        $columns = [
+            'down_doc_path',
+            'user_full_name',
+            'username',
+            'last_down_date',
+            'count_down',
+        ];
+        $documents = Tracking::get_documents_most_downloaded_by_course(
+            $course_code,
+            $session_id,
+            $limit,
+            $start
+        );
+        $result = [];
+        foreach ($documents as $document) {
+            $userInfo = api_get_user_info($document['user_id']);
+            $result[] = [
+                'down_doc_path' => $document['down_doc_path'],
+                'user_full_name' => $userInfo['lastname'].' '.$userInfo['firstname'],
+                'username' => $userInfo['username'],
+                'last_down_date' => api_format_date($document['down_date'], DATE_FORMAT_NUMBER),
+                'count_down' => $document['count_down'],
+            ];
+        }
+        break;
     case 'get_programmed_announcements':
         $columns = ['subject', 'date', 'sent', 'actions'];
         $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
@@ -1638,6 +1678,9 @@ switch ($action) {
                 'status',
                 'lp',
                 'actions',
+                'exe_result',
+                'revised',
+                'orig_lp_id',
             ];
             $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
             if ($officialCodeInList === 'true') {
@@ -2706,6 +2749,7 @@ $allowed_actions = [
     'get_usergroups_users',
     'get_calendar_users',
     'get_exercise_categories',
+    'document_log_events',
 ];
 
 // 5. Creating an obj to return a json

@@ -9379,6 +9379,7 @@ function api_mail_html(
     }
     $mailView->assign('mail_header_style', api_get_configuration_value('mail_header_style'));
     $mailView->assign('mail_content_style', api_get_configuration_value('mail_content_style'));
+    $mailView->assign('include_ldjson', (empty($platform_email['EXCLUDE_JSON']) ? true : false));
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 

@@ -731,7 +731,7 @@ class AttendanceController
             $table = $attendance->getAttendanceLoginCsvTable($result['users']);
             if ($format === 'csv') {
                 Export::arrayToCsv($table['csv_content'], $table['filename']);
-            } else if ($format === 'xls') {
+            } elseif ($format === 'xls') {
                 Export::arrayToXls($table['csv_content'], $table['filename']);
             }
         }

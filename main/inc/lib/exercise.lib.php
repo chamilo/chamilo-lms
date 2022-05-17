@@ -4787,32 +4787,34 @@ EOT;
     }
 
     /**
-     * @param int    $exercise_id
-     * @param string $course_code
-     * @param int    $session_id
+     * It gets the number of users who finishing the exercise.
+     *
+     * @param int $exerciseId
+     * @param int $courseId
+     * @param int $sessionId
      *
      * @return int
      */
-    public static function get_number_students_finish_exercise(
-        $exercise_id,
-        $course_code,
-        $session_id
+    public static function getNumberStudentsFinishExercise(
+        $exerciseId,
+        $courseId,
+        $sessionId
     ) {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tblTrackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $exercise_id = (int) $exercise_id;
-        $course_code = Database::escape_string($course_code);
-        $session_id = (int) $session_id;
+        $exerciseId = (int) $exerciseId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $sql = "SELECT DISTINCT exe_user_id
-                FROM $track_exercises e
-                INNER JOIN $track_attempt a
+                FROM $tblTrackExercises e
+                INNER JOIN $tblTrackAttempt a
                 ON (a.exe_id = e.exe_id)
                 WHERE
-                    exe_exo_id 	 = $exercise_id AND
-                    course_code  = '$course_code' AND
-                    e.session_id = $session_id AND
+                    exe_exo_id 	 = $exerciseId AND
+                    e.c_id  = $courseId AND
+                    e.session_id = $sessionId AND
                     status = ''";
         $result = Database::query($sql);
         $return = 0;

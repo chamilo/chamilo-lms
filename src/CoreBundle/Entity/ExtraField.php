@@ -6,12 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity
@@ -19,6 +24,34 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\MappedSuperclass
  */
+#[ApiResource(
+    collectionOperations:[
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    itemOperations:[
+        "get" => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'put' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN')",
+    ],
+    denormalizationContext: [
+        'groups' => ['extra_field:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['extra_field:read'],
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['variable'])]
 class ExtraField
 {
     public const USER_FIELD_TYPE = 1;
@@ -47,27 +80,32 @@ class ExtraField
      * @ORM\Id
      * @ORM\GeneratedValue
      */
+    #[Groups(['extra_field:read'])]
     protected int $id;
 
     /**
      * @ORM\Column(name="extra_field_type", type="integer")
      */
+    #[Groups(['extra_field:read', 'extra_field:write'])]
     protected int $extraFieldType;
 
     /**
      * @ORM\Column(name="field_type", type="integer")
      */
+    #[Groups(['extra_field:read', 'extra_field:write'])]
     protected int $fieldType;
 
     /**
      * @ORM\Column(name="variable", type="string", length=255)
      */
     #[Assert\NotBlank]
+    #[Groups(['extra_field:read', 'extra_field:write'])]
     protected string $variable;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
+    #[Groups(['extra_field:read', 'extra_field:write'])]
     protected ?string $description;
 
     /**
@@ -75,6 +113,7 @@ class ExtraField
      * @ORM\Column(name="display_text", type="string", length=255, nullable=true, unique=false)
      */
     #[Assert\NotBlank]
+    #[Groups(['extra_field:read', 'extra_field:write'])]
     protected ?string $displayText = null;
 
     /**
@@ -122,6 +161,7 @@ class ExtraField
      *
      * @var ExtraFieldOptions[]|Collection
      */
+    #[Groups(['extra_field:read'])]
     protected Collection $options;
 
     /**

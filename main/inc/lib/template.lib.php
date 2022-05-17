@@ -765,6 +765,16 @@ class Template
             'js-cookie/src/js.cookie.js',
         ];
 
+        if ($renderers = api_get_configuration_sub_value('video_player_renderers/renderers')) {
+            foreach ($renderers as $renderName) {
+                if ('youtube' === $renderName) {
+                    continue;
+                }
+
+                $bowerJsFiles[] = "mediaelement/build/renderers/$renderName.min.js";
+            }
+        }
+
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
 
         if ($viewBySession || api_is_global_chat_enabled()) {

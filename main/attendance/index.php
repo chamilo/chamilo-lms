@@ -351,7 +351,9 @@ switch ($action) {
         break;
     case 'calendar_logins':
         if (api_is_course_admin() || api_is_drh()) {
-            $attendanceController->getAttendanceBaseInLogin(false, true);
+            $format = isset($_GET['format']) ? $_GET['format'] : false;
+            $exportToPdf = $format ? false : true;
+            $attendanceController->getAttendanceBaseInLogin(false, $exportToPdf, $format);
         }
         break;
     default:

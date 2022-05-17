@@ -2250,13 +2250,70 @@ class Attendance
         return $table->toHtml();
     }
 
+    public function getAttendanceLoginCsvTable($users)
+    {
+        $sortByFirstName = api_sort_by_first_name();
+        $csvHeaders = [];
+        $csvHeaders[] = '#';
+        if ($sortByFirstName) {
+            $csvHeaders[] = get_lang('FirstName');
+            $csvHeaders[] = get_lang('LastName');
+        } else {
+            $csvHeaders[] = get_lang('LastName');
+            $csvHeaders[] = get_lang('FirstName');
+        }
+        $csvHeaders[] = get_lang('User');
+        $csvHeaders[] = get_lang('Date');
+
+        $row = 1;
+        $csvContent = [];
+        foreach ($users as $user) {
+            $csvContent[] = $row;
+            if ($sortByFirstName) {
+                $csvContent[] = $user['firstname'];
+                $csvContent[] = $user['lastname'];
+            } else {
+                $csvContent[] = $user['lastname'];
+                $csvContent[] = $user['firstname'];
+            }
+            $csvContent[] = $user['username'];
+            if (isset($user['user_id']) && !empty($user['user_id'])) {
+                $dates = implode(', ', array_keys($user['user_id']));
+            } else {
+                $dates = '';
+            }
+            $csvContent[] = $dates;
+            $row++;
+        }
+
+        $courseCode = api_get_course_id();
+        $courseInfo = api_get_course_info($courseCode);
+        $sessionId = api_get_session_id();
+        $sessionInfo = api_get_session_info($sessionId);
+        $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseCode);
+        $dateOnly = api_format_date(api_get_local_time(), DATE_FORMAT_LONG);
+        $filename = get_lang('Attendance').'_'.api_get_utc_datetime();
+
+        array_unshift($csvContent, $csvHeaders);
+        array_unshift($csvContent, [get_lang('Date'), $dateOnly]);
+        array_unshift($csvContent, [get_lang('Course'), $courseInfo['name'].' ('.$courseCode.')']);
+        array_unshift($csvContent, [get_lang('Session'), $sessionInfo['name']]);
+        array_unshift($csvContent, [get_lang('Teachers'), $teacherList]);
+        array_unshift($csvContent, [get_lang('CourseName'), $courseInfo['name']]);
+
+        return [
+            'csv_content' => $csvContent,
+            'filename' => $filename,
+        ];
+    }
+
     /**
      * @param string $startDate in UTC time
      * @param string $endDate   in UTC time
      *
      * @return string
      */
-    public function exportAttendanceLogin($startDate, $endDate)
+    public function exportAttendanceLogin($startDate, $endDate, $format = 'pdf')
     {
         $data = $this->getAttendanceLogin($startDate, $endDate);
 
@@ -2266,41 +2323,48 @@ class Attendance
         $users = $data['users'];
         $results = $data['results'];
 
-        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $table->setHeaderContents(0, 0, get_lang('User'));
-        $table->setHeaderContents(0, 1, get_lang('Date'));
+        switch ($format) {
+            case 'pdf':
+                $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+                $table->setHeaderContents(0, 0, get_lang('User'));
+                $table->setHeaderContents(0, 1, get_lang('Date'));
 
-        $row = 1;
-        foreach ($users as $user) {
-            $table->setCellContents(
-                $row,
-                0,
-                $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'
-            );
-            $row++;
+                $row = 1;
+                foreach ($users as $user) {
+                    $table->setCellContents(
+                        $row,
+                        0,
+                        $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'
+                    );
+                    $row++;
+                }
+                $table->setColAttributes(0, ['style' => 'width:28%']);
+
+                $row = 1;
+                foreach ($users as $user) {
+                    if (isset($results[$user['user_id']]) &&
+                        !empty($results[$user['user_id']])
+                    ) {
+                        $dates = implode(', ', array_keys($results[$user['user_id']]));
+                        $table->setCellContents($row, 1, $dates);
+                    }
+                    $row++;
+                }
+
+                $tableToString = $table->toHtml();
+                $params = [
+                    'filename' => get_lang('Attendance').'_'.api_get_utc_datetime(),
+                    'pdf_title' => get_lang('Attendance'),
+                    'course_code' => api_get_course_id(),
+                    'show_real_course_teachers' => true,
+                ];
+                $pdf = new PDF('A4', null, $params);
+                $pdf->html_to_pdf_with_template($tableToString);
+                break;
+            default:
+                return $data;
+                break;
         }
-        $table->setColAttributes(0, ['style' => 'width:28%']);
-
-        $row = 1;
-        foreach ($users as $user) {
-            if (isset($results[$user['user_id']]) &&
-                !empty($results[$user['user_id']])
-            ) {
-                $dates = implode(', ', array_keys($results[$user['user_id']]));
-                $table->setCellContents($row, 1, $dates);
-            }
-            $row++;
-        }
-
-        $tableToString = $table->toHtml();
-        $params = [
-            'filename' => get_lang('Attendance').'_'.api_get_utc_datetime(),
-            'pdf_title' => get_lang('Attendance'),
-            'course_code' => api_get_course_id(),
-            'show_real_course_teachers' => true,
-        ];
-        $pdf = new PDF('A4', null, $params);
-        $pdf->html_to_pdf_with_template($tableToString);
     }
 
     /**

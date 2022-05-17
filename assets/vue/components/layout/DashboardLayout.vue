@@ -1,147 +1,6 @@
 <template>
+  <Topbar />
   <q-layout view="hHh LpR lff" class="bg-grey-1">
-    <q-header class="bg-white text-grey-8 header-border-bottom" height-hint="64">
-      <q-toolbar>
-        <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
-          <img style="height:40px" src="/build/css/themes/chamilo/images/header-logo.svg"/>
-        </q-toolbar-title>
-
-        <q-btn
-            flat
-            dense
-            round
-            @click="toggleSidebar()"
-            aria-label="Menu"
-            icon="menu"
-            class="q-mr-sm"
-        />
-
-        <q-space/>
-
-        <!--        <div v-if="isAuthenticated"  class="GPLAY__toolbar-input-container row no-wrap">-->
-        <!--          <q-tabs v-if="$q.screen.gt.xs" align="center" dense inline-label>-->
-        <!--            <q-route-tab dense no-caps icon="home"  to="/" label="Home" />-->
-        <!--            <q-route-tab no-caps icon="book" to="/courses" label="My courses" />-->
-        <!--            <q-route-tab no-caps icon="event" to="/main/calendar/agenda_js.php?type=personal" label="Agenda" />-->
-        <!--          </q-tabs>-->
-        <!--          <q-tabs v-else align="center" dense inline-label>-->
-        <!--            <q-route-tab dense no-caps icon="home"  to="/"  />-->
-        <!--            <q-route-tab no-caps icon="book" to="/courses" />-->
-        <!--            <q-route-tab no-caps icon="event" to="/main/calendar/agenda_js.php?type=personal" />-->
-        <!--          </q-tabs>-->
-        <!--        </div>-->
-        <q-space/>
-
-        <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn
-              v-if="isAuthenticated && 'true' === config['display.show_link_ticket_notification']"
-              color="grey-8"
-              dense
-              flat
-              icon="mdi-face-agent"
-              round
-              type="a"
-              :href="generateTicketUrl()"
-          >
-            <q-tooltip>{{ $t('Ticket') }}</q-tooltip>
-          </q-btn>
-
-          <q-btn v-if="isAuthenticated" round dense flat color="grey-8"
-                 icon="person"
-                 :to="'/account/home'"
-          >
-            <q-tooltip>{{ $t('Profile') }}</q-tooltip>
-          </q-btn>
-
-          <q-btn v-if="isAuthenticated" round dense flat color="grey-8"
-                 icon="inbox"
-                 :to="'/resources/messages'"
-          >
-            <!--            <q-badge color="red" text-color="white" floating>-->
-            <!--              2-->
-            <!--            </q-badge>-->
-            <q-tooltip>{{ $t('Inbox') }}</q-tooltip>
-          </q-btn>
-
-          <!--          <q-btn-->
-          <!--              v-if="isAuthenticated" round dense flat color="grey-8" icon="folder"-->
-          <!--               :to="'/resources/personal_files/' + currentUser.resourceNode.id"-->
-          <!--          >-->
-          <!--            <q-tooltip>Files</q-tooltip>-->
-          <!--          </q-btn>-->
-
-
-          <!--          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="notifications">-->
-          <!--            <q-badge color="red" text-color="white" floating>-->
-          <!--              2-->
-          <!--            </q-badge>-->
-          <!--            <q-tooltip>Notifications</q-tooltip>-->
-          <!--          </q-btn>-->
-
-          <q-btn v-if="!isAuthenticated"
-                 :to="{ name: 'Login'}"
-                 color="primary"
-                 icon="mail"
-                 label="Login"
-          />
-
-          <!--          <Button v-if="!isAuthenticated" :to="{ name: 'Login' }" label="Login" class="p-button-sm"    />-->
-
-
-          <!--          <q-btn v-if="isAuthenticated" round flat>-->
-          <!--            <q-avatar size="26px">-->
-          <!--              <img src="https://cdn.quasar.dev/img/boy-avatar.png">-->
-          <!--            </q-avatar>-->
-          <!--            <q-tooltip>Account</q-tooltip>-->
-          <!--          </q-btn>-->
-
-          <q-btn v-if="isAuthenticated" dense flat no-wrap>
-            <q-avatar size="26px">
-              <img :src="currentUser.illustrationUrl + '?w=80&h=80&fit=crop'"/>
-              <!--              <q-icon name="person" ></q-icon>-->
-            </q-avatar>
-
-            <q-icon name="arrow_drop_down" size="16px"/>
-            <q-menu auto-close>
-              <q-list dense>
-                <q-item class="GL__menu-link-signed-in">
-                  <q-item-section>
-                    <div>{{ $t('Signed in as') }} <strong>{{ currentUser.fullName }}</strong></div>
-                  </q-item-section>
-                </q-item>
-                <!--                <q-separator />-->
-                <!--                <q-item clickable class="GL__menu-link-status">-->
-                <!--                  <q-item-section>-->
-                <!--                    <div>-->
-                <!--                      <q-icon name="tag_faces" color="blue-9" size="18px" />-->
-                <!--                      Set your status-->
-                <!--                    </div>-->
-                <!--                  </q-item-section>-->
-                <!--                </q-item>-->
-                <q-separator/>
-                <!--                <q-item replace :to="'/main/messages/index.php'"  clickable class="">-->
-                <!--                  <q-item-section>Inbox</q-item-section>-->
-                <!--                </q-item>-->
-                <!--                <q-item href="/account/home" tag="a" class="">-->
-                <!--                  <q-item-section>-->
-                <!--                    Your profile-->
-                <!--                  </q-item-section>-->
-                <!--                </q-item>-->
-                <q-item href="/account/edit" tag="a" class="">
-                  <q-item-section>{{ $t('Settings') }}</q-item-section>
-                </q-item>
-                <q-item href="/logout" tag="a" clickable class="">
-                  <q-item-section>
-                    {{ $t('Logout') }}
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
-        </div>
-      </q-toolbar>
-    </q-header>
-
     <q-drawer
         v-if="isSidebarOpen"
         show-if-above
@@ -228,14 +87,15 @@ import useState from "../../hooks/useState";
 import {computed, onMounted, ref, toRefs} from "vue";
 import Breadcrumb from '../../components/Breadcrumb.vue';
 import {useRoute} from 'vue-router'
-
+import Topbar from '../../components/layout/Topbar.vue';
 import {useI18n} from 'vue-i18n'
 import Cookies from 'js-cookie'
 import toInteger from "lodash/toInteger";
 export default {
   name: "DashboardLayout",
   components: {
-    Breadcrumb
+    Breadcrumb,
+    Topbar
   },
   props: {
     showBreadcrumb: {

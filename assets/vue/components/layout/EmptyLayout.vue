@@ -1,13 +1,7 @@
 <template>
-    <router-view />
-    <slot></slot>
+  <router-view />
+  <slot />
 </template>
 
-<script>
-export default {
-  name: "EmptyLayout",
-  components: {},
-  setup() {
-  }
-}
+<script setup>
 </script>

@@ -308,3 +308,345 @@
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";
 //@import "~jquery-contextmenu/dist/jquery.contextMenu.css";
+
+// Base Prime components
+.p-megamenu,
+.p-menubar {
+  @apply bg-white border-b border-solid border-gray-200 text-gray-700 flex py-4 px-6;
+}
+
+.p-menu,
+.p-megamenu,
+.p-menubar {
+  .p-menuitem-link {
+    @apply rounded-none text-gray-700 py-3 px-4 transition-none select-none;
+
+    .p-menuitem-text {
+      @apply text-gray-700;
+    }
+
+    .p-menuitem-icon {
+      @apply text-gray-500 mr-2;
+
+      &:empty {
+        @apply mr-0;
+      }
+    }
+
+    .p-submenu-icon {
+      @apply text-gray-500
+    }
+
+    &:not(.p-disabled) {
+      &:hover {
+        @apply bg-gray-100;
+
+        .p-menuitem-text {
+          @apply text-gray-900;
+        }
+
+        .p-menuitem-icon {
+          @apply text-gray-500
+        }
+
+        .p-submenu-icon {
+          @apply text-gray-500
+        }
+      }
+    }
+
+    &:focus {
+      @apply outline-none outline-offset-0;
+      box-shadow: inset 0 0 0 0.15rem #6366F1;
+    }
+  }
+}
+
+.p-megamenu-root-list,
+.p-menubar-root-list {
+  @apply grow justify-end;
+
+  > .p-menuitem {
+    > .p-menuitem-link {
+      @apply rounded-md text-gray-700 py-3 px-4 transition-none select-none;
+
+      .p-menuitem-text {
+        @apply text-gray-700;
+      }
+
+      .p-menuitem-icon {
+        @apply text-gray-500 mr-2;
+
+        &:empty {
+          @apply mr-0;
+        }
+      }
+
+      .p-submenu-icon {
+        @apply text-gray-500 ml-2;
+      }
+
+      &:not(.p-disabled) {
+        &:hover {
+          @apply bg-gray-100;
+
+          .p-menuitem-text {
+            @apply text-gray-900;
+          }
+
+          .p-menuitem-icon {
+            @apply text-gray-500;
+          }
+
+          .p-submenu-icon {
+            @apply text-gray-500;
+          }
+        }
+      }
+
+      &:focus {
+        @apply outline-none outline-offset-0;
+        box-shadow: inset 0 0 0 0.15rem #6366F1;
+      }
+    }
+  }
+
+  > .p-menuitem.p-menuitem-active {
+    > .p-menuitem-link {
+      @apply bg-gray-100;
+
+      &:not(.p-disabled) {
+        &:hover {
+          @apply bg-gray-100;
+
+          .p-menuitem-text {
+            @apply text-gray-700;
+          }
+
+          .p-menuitem-icon {
+            @apply text-gray-500;
+          }
+
+          .p-submenu-icon {
+            @apply text-gray-500;
+          }
+        }
+      }
+
+      .p-menuitem-text {
+        @apply text-gray-700;
+      }
+
+      .p-menuitem-icon {
+        @apply text-gray-500;
+      }
+
+      .p-submenu-icon {
+        @apply text-gray-500;
+      }
+    }
+  }
+}
+
+.p-megamenu {
+  .p-megamenu-panel {
+    @apply bg-white border-none shadow-md text-gray-700;
+  }
+
+  .p-megamenu-submenu-header {
+    @apply text-gray-700 bg-white rounded-t-md font-semibold m-0 py-3 px-4;
+  }
+
+  .p-megamenu-submenu {
+    @apply py-1 px-0 w-52;
+
+    .p-menu-separator {
+      @apply border-t border-solid border-gray-100 my-1 mx-0;
+    }
+  }
+
+  .p-menuitem.p-menuitem-active {
+    > .p-menuitem-link {
+      @apply bg-gray-100;
+
+      .p-menuitem-text {
+        @apply text-gray-700;
+      }
+
+      .p-menuitem-icon {
+        @apply text-gray-500;
+      }
+
+      .p-submenu-icon {
+        @apply text-gray-500;
+      }
+    }
+  }
+}
+
+.p-megamenu.p-megamenu-vertical {
+  @apply py-1 px-0 w-52;
+}
+
+.p-menu {
+  @apply bg-white border border-solid border-gray-200 rounded-md text-gray-700 py-1 px-0 w-52;
+
+  .p-submenu-header {
+    @apply bg-white rounded-t-none text-gray-700 font-semibold m-0 py-3 px-4;
+  }
+
+  .p-menu-separator {
+    @apply border-t border-solid border-gray-100 my-1 mx-0;
+  }
+}
+
+.p-menu.p-menu-overlay {
+  @apply bg-white border-none shadow-md;
+}
+
+.p-menubar {
+  .p-submenu-list {
+    @apply bg-white border-none shadow-md py-1 px-0 w-52;
+
+    .p-menu-separator {
+      @apply border-t border-solid border-gray-100 my-1 mx-0;
+    }
+
+    .p-submenu-icon {
+      @applt text-sm;
+    }
+  }
+
+  .p-menuitem.p-menuitem-active {
+    > .p-menuitem-link {
+      @apply bg-gray-100;
+
+      .p-menuitem-text {
+        @apply text-gray-700;
+      }
+
+      .p-menuitem-icon {
+        @apply text-gray-500;
+      }
+
+      .p-submenu-icon {
+        @apply text-gray-500;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .p-megamenu,
+  .p-menubar {
+    @apply px-4;
+  }
+
+  .p-menubar {
+    @apply relative justify-between;
+
+    .p-menubar-button {
+      @apply rounded-full text-gray-500 flex h-8 transition-none w-8;
+
+      &:hover {
+        @apply text-gray-500;
+      }
+
+      &:focus {
+        @apply outline-none outline-offset-0;
+      }
+    }
+
+    .p-menubar-root-list {
+      @apply bg-white border-none shadow-md hidden py-1 px-0 absolute w-full;
+
+      .p-menu-separator {
+        @apply border border-solid border-gray-100 my-1 mx-0;
+      }
+
+      .p-submenu-icon {
+        @apply text-sm;
+      }
+
+      > .p-menuitem {
+        @apply static w-full;
+
+        > .p-menuitem-link {
+          > .p-submenu-icon {
+            @apply ml-auto transition-transform duration-200;
+          }
+        }
+      }
+
+      > .p-menuitem.p-menuitem-active {
+        > .p-menuitem-link {
+          > .p-submenu-icon {
+            @apply rotate-180;
+          }
+        }
+      }
+
+      .p-submenu-list {
+        @apply border-none shadow-none static w-full;
+
+        .p-submenu-icon {
+          @apply rotate-90 transition-transform duration-200;
+        }
+
+        .p-menuitem-active {
+          > .p-menuitem-link {
+            > .p-submenu-icon {
+              @apply rotate-90;
+            }
+          }
+        }
+      }
+
+      .p-menuitem {
+        @apply static w-full;
+      }
+
+      ul li {
+        a {
+          @apply pl-8;
+        }
+
+        ul li {
+          a {
+            @apply pl-12;
+          }
+
+          ul li {
+            a {
+              @apply pl-16;
+            }
+
+            ul li {
+              a {
+                @apply pl-20;
+              }
+
+              ul li a {
+                @apply pl-24;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .p-menubar.p-menubar-mobile-active {
+    .p-menubar-button {
+      .pi.pi-bars {
+        &::before {
+          content: "\e90b";
+        }
+      }
+    }
+
+    .p-menubar-root-list {
+      @apply flex flex-col left-0 top-full;
+      z-index: 1;
+    }
+  }
+}

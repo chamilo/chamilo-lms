@@ -231,6 +231,7 @@ import Button from 'primevue/button';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';
 
+// import 'primevue/resources/themes/tailwind-light/theme.css';
 import 'primevue/resources/primevue.min.css';
 // import 'primeflex/primeflex.css';
 import "primeicons/primeicons.css";
@@ -276,7 +277,7 @@ window.Alpine = Alpine
 Alpine.start();
 
 app
-    .use(PrimeVue, {ripple: true})
+    .use(PrimeVue, {ripple: false})
     .use(Quasar, quasarUserOptions)
     .use(VueFlatPickr)
     //.use(VuelidatePlugin)

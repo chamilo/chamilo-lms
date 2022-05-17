@@ -1767,10 +1767,14 @@ class Agenda
                 $event['id'] = 'personal_'.$row['id'];
                 $event['title'] = $row['title'];
                 $event['className'] = 'personal';
-                $event['borderColor'] = $event['backgroundColor'] = $row['color'];
                 $event['editable'] = true;
                 $event['sent_to'] = get_lang('Me');
                 $event['type'] = 'personal';
+                $event['backgroundColor'] = $this->event_personal_color;
+
+                if (!empty($row['color'])) {
+                    $event['backgroundColor'] = $row['color'];
+                }
 
                 if (!empty($row['date'])) {
                     $event['start'] = $this->formatEventDate($row['date']);
@@ -1782,6 +1786,7 @@ class Agenda
                     $event['end_date_localtime'] = api_get_local_time($row['enddate']);
                 }
 
+                $event['borderColor'] = $event['backgroundColor'];
                 $event['description'] = $row['text'];
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
                 $event['parent_event_id'] = 0;

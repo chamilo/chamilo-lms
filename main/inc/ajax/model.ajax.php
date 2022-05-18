@@ -326,10 +326,13 @@ switch ($action) {
             exit;
         }
         $sessionId = api_get_session_id();
+        $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
         $documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course(
             $courseCode,
             $sessionId,
-            1000
+            1000,
+            0,
+            $keyword
         );
         $count = count($documents_most_downloaded);
         break;
@@ -1094,11 +1097,12 @@ switch ($action) {
             $course_code,
             $session_id,
             $limit,
-            $start
+            $start,
+            $keyword
         );
         $result = [];
         foreach ($documents as $document) {
-            $userInfo = api_get_user_info($document['user_id']);
+            $userInfo = api_get_user_info($document['down_user_id']);
             $result[] = [
                 'down_doc_path' => $document['down_doc_path'],
                 'user_full_name' => $userInfo['lastname'].' '.$userInfo['firstname'],

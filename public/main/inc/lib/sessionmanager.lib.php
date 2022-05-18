@@ -5075,7 +5075,7 @@ class SessionManager
                         if ($i > 1) {
                             $suffix = ' - '.$i;
                         }
-                        $sql = 'SELECT 1 FROM '.$tbl_session.'
+                        $sql = 'SELECT id FROM '.$tbl_session.'
                                 WHERE name="'.Database::escape_string($session_name).$suffix.'"';
                         $rs = Database::query($sql);
                         if (Database::result($rs, 0, 0)) {
@@ -5095,6 +5095,11 @@ class SessionManager
                         'coach_access_start_date' => $coachAccessStartDate,
                         'coach_access_end_date' => $coachAccessEndDate,
                         'visibility' => $visibilityAfterExpirationPerSession,
+                        'nbr_users' => 0,
+                        'nbr_courses' => 0,
+                        'nbr_classes' => 0,
+                        'status' => 0,
+                        'duration' => 0,
                     ];
 
                     if (!empty($extraParams)) {
@@ -5173,6 +5178,11 @@ class SessionManager
                             'coach_access_start_date' => $coachAccessStartDate,
                             'coach_access_end_date' => $coachAccessEndDate,
                             'visibility' => $visibilityAfterExpirationPerSession,
+                            'nbr_users' => 0,
+                            'nbr_courses' => 0,
+                            'nbr_classes' => 0,
+                            'status' => 0,
+                            'duration' => 0,
                         ];
 
                         if (!empty($extraParams)) {
@@ -5389,15 +5399,17 @@ class SessionManager
                     $extraFieldValueCareer = new ExtraFieldValue('career');
                     $careerList = isset($enreg['extra_careerid']) && !empty($enreg['extra_careerid']) ? $enreg['extra_careerid'] : [];
                     $careerList = str_replace(['[', ']'], '', $careerList);
-                    $careerList = explode(',', $careerList);
-                    $finalCareerIdList = [];
-                    foreach ($careerList as $careerId) {
-                        $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
-                            'external_career_id',
-                            $careerId
-                        );
-                        if (isset($realCareerIdList['item_id'])) {
-                            $finalCareerIdList[] = $realCareerIdList['item_id'];
+                    if (!empty($careerList)) {
+                        $careerList = explode(',', $careerList);
+                        $finalCareerIdList = [];
+                        foreach ($careerList as $careerId) {
+                            $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                                'external_career_id',
+                                $careerId
+                            );
+                            if (isset($realCareerIdList['item_id'])) {
+                                $finalCareerIdList[] = $realCareerIdList['item_id'];
+                            }
                         }
                     }
 

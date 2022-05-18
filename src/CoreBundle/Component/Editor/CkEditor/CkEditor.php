@@ -66,6 +66,9 @@ class CkEditor extends Editor
         $config['selector'] = '#'.$this->getTextareaId();
         $javascript = $this->toJavascript($config);
 
+        // it replaces [browser] by image picker callback
+        $javascript = str_replace('"[browser]"', $this->getImagePicker(), $javascript);
+
         return "<script>
             document.addEventListener('DOMContentLoaded', function() {
                 tinymce.init(
@@ -136,6 +139,36 @@ class CkEditor extends Editor
         $templates = array_merge($templates, $personalTemplates);
 
         return json_encode($templates);
+    }
+
+    /**
+     * Get a custom image picker.
+     *
+     * @return string
+     */
+    private function getImagePicker()
+    {
+        $callback = 'function (cb, value, meta) {
+            var input = document.createElement("input");
+            input.setAttribute("type", "file");
+            input.setAttribute("accept", "image/*");
+            input.onchange = function () {
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var id = "blobid" + (new Date()).getTime();
+                    var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                    var base64 = reader.result.split(",")[1];
+                    var blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+                    cb(blobInfo.blobUri(), { title: file.name });
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        }';
+
+        return $callback;
     }
 
     /**

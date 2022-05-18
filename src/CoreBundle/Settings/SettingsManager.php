@@ -133,7 +133,14 @@ class SettingsManager implements SettingsManagerInterface
         $this->update($settings);
     }
 
-    public function getSetting(string $name, bool $loadFromDb = false)
+    /**
+     * Get a specific configuration setting, getting from the previously stored
+     * PHP session data whenever possible.
+     * @param string $name      The setting name (composed if in a category, i.e. 'platform.theme')
+     * @param bool   $loadFromDb Whether to load from the database
+     * @return mixed
+     */
+    public function getSetting(string $name, bool $loadFromDb = false): mixed
     {
         $name = $this->validateSetting($name);
 

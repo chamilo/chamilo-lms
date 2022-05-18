@@ -228,6 +228,10 @@
     border-width: 1px !important;
   }
 
+  .has-error input, .has-error select {
+    border-color: red !important;
+  }
+
   // Special
 
   .badge {

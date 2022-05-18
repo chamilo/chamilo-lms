@@ -756,7 +756,7 @@ class AddCourse
                 ->setShowScore(1)
                 ->setDiskQuota($disk_quota)
                 ->setExpirationDate(new \DateTime($expiration_date))
-                ->setDepartmentName($department_name)
+                ->setDepartmentName((string) $department_name)
                 ->setDepartmentUrl($department_url)
                 ->setSubscribe($subscribe)
                 ->setSticky(1 === (int) ($params['sticky'] ?? 0))

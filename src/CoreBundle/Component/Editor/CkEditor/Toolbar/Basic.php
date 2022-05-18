@@ -181,7 +181,14 @@ class Basic extends Toolbar
         $config['autosave_ask_before_unload'] = true;
         $config['toolbar_mode'] = 'sliding';
 
-        //file_picker_callback : browser,
+        // enable title field in the Image dialog
+        $config['image_title'] = true;
+        // enable automatic uploads of images represented by blob or data URIs
+        $config['automatic_uploads'] = true;
+        // custom filepicker only to Image dialog
+        $config['file_picker_types'] = 'image';
+
+        $config['file_picker_callback'] = '[browser]';
 
         $iso = api_get_language_isocode();
         $url = api_get_path(WEB_PATH);

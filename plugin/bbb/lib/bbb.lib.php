@@ -913,6 +913,7 @@ class bbb
     ) {
         $em = Database::getManager();
         $manager = $this->isConferenceManager();
+        $isGlobal = $this->isGlobalConference();
 
         $conditions = [];
         if ($courseId || $sessionId || $groupId) {
@@ -947,6 +948,21 @@ class bbb
             }
         }
 
+        if ($isGlobal && !UserManager::is_admin($this->userId)) {
+            $conditions = array(
+                'where' => array(
+                    'c_id IN (
+                        SELECT c.id FROM course c 
+                        INNER JOIN course_rel_user r ON c.id = r.c_id 
+                        INNER JOIN user u ON r.user_id = u.user_id 
+                        WHERE u.user_id = ?
+                    )' => array(
+                        $this->userId,
+                    ),
+                ),
+            );
+        }
+
         if (!empty($dateRange)) {
             $dateStart = date_create($dateRange['search_meeting_start']);
             $dateStart = date_format($dateStart, 'Y-m-d H:i:s');
@@ -968,7 +984,6 @@ class bbb
             $this->table,
             $conditions
         );
-        $isGlobal = $this->isGlobalConference();
         $newMeetingList = array();
         foreach ($meetingList as $meetingDB) {
             $item = array();

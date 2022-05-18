@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,7 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             'security' => "is_granted('ROLE_ADMIN')",
         ],
         'put' => [
-                'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('ROLE_ADMIN')",
         ],
     ],
     attributes: [
@@ -49,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['extra_field_values:write'],
     ],
-        normalizationContext: [
+    normalizationContext: [
         'groups' => ['extra_field_values:read'],
     ],
 )]

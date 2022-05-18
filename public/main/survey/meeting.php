@@ -156,7 +156,7 @@ $table->setHeaderContents(
 
 foreach ($questions as $item) {
     $questionId = $item->getIid();
-    $count = 0;
+    $count = '';
     $questionsWithAnswer = 0;
     if (isset($answerList[$questionId])) {
         foreach ($answerList[$questionId] as $userAnswer) {
@@ -167,7 +167,7 @@ foreach ($questions as $item) {
         $count = '<p style="color:cornflowerblue" >
                   <span class="fa fa-check fa-2x"></span>'.$questionsWithAnswer.'</p>';
     }
-    $table->setHeaderContents(
+    $table->setCellContents(
         $row,
         ++$column,
         $count

@@ -43,7 +43,7 @@ function check_name_exist($file_path)
  *
  * @author - Hugues Peeters
  *
- * @param  $file (String) - the path of file or directory to delete
+ * @param $file (String) - the path of file or directory to delete
  *
  * @return bool - true if the delete succeed, false otherwise
  *

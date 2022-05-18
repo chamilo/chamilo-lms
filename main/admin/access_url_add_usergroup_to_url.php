@@ -122,4 +122,4 @@ $db_urls = Database::store_result($result);
 </form>
 <?php
 
-Display :: display_footer();
+Display::display_footer();

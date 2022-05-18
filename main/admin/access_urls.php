@@ -21,7 +21,7 @@ if (!api_get_multiple_access_url()) {
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $tool_name = get_lang('MultipleAccessURLs');
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());
 $current_access_url_id = api_get_current_access_url_id();
@@ -184,4 +184,4 @@ $table->set_header(3, get_lang('CreatedAt'));
 $table->set_header(4, get_lang('Modify'), false);
 $table->display();
 
-Display :: display_footer();
+Display::display_footer();

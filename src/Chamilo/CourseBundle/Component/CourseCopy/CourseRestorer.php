@@ -3187,7 +3187,7 @@ class CourseRestorer
                         if (!is_dir($dest.'/'.$file)) {
                             mkdir($dest.'/'.$file);
                         }
-                        self:: allow_create_all_directory($path, $dest.'/'.$file, $overwrite);
+                        self::allow_create_all_directory($path, $dest.'/'.$file, $overwrite);
                     }
                 }
             }
@@ -3703,7 +3703,7 @@ class CourseRestorer
             $resources = $this->course->resources;
             $destinationCourseCode = $this->destination_course_info['code'];
             // Delete destination gradebook
-            $cats = \Category:: load(
+            $cats = \Category::load(
                 null,
                 null,
                 $destinationCourseCode,

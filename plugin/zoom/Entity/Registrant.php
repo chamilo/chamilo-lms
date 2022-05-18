@@ -30,8 +30,8 @@ class Registrant
     public $fullName;
 
     /**
-     * @var string
-     * @ORM\Column(type="integer")
+     * @var int
+     * @ORM\Column(type="integer", name="id")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -68,6 +68,13 @@ class Registrant
      * @ORM\Column(type="text", name="meeting_registrant_json", nullable=true)
      */
     protected $meetingRegistrantJson;
+
+    /**
+     * @var Signature|null
+     *
+     * @ORM\OneToOne(targetEntity="Chamilo\PluginBundle\Zoom\Signature", mappedBy="registrant", orphanRemoval=true)
+     */
+    protected $signature;
 
     /** @var CreatedRegistration */
     protected $createdRegistration;
@@ -212,13 +219,9 @@ class Registrant
     }
 
     /**
-     * @param MeetingRegistrant $meetingRegistrant
-     *
      * @throws Exception
-     *
-     * @return $this
      */
-    public function setMeetingRegistrant($meetingRegistrant)
+    public function setMeetingRegistrant(API\RegistrantSchema $meetingRegistrant): Registrant
     {
         $this->meetingRegistrant = $meetingRegistrant;
         $this->computeFullName();
@@ -261,5 +264,17 @@ class Registrant
         if (null !== $this->meetingRegistrantListItem) {
             $this->meetingRegistrantListItemJson = json_encode($this->meetingRegistrantListItem);
         }
+    }
+
+    public function setSignature(Signature $signature): void
+    {
+        $this->signature = $signature;
+
+        $signature->setRegistrant($this);
+    }
+
+    public function getSignature(): ?Signature
+    {
+        return $this->signature;
     }
 }

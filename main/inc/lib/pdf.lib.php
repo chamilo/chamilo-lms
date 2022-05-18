@@ -957,13 +957,8 @@ class PDF
 
     /**
      * Fix images source paths to allow export to pdf.
-     *
-     * @param string $documentHtml
-     * @param string $dirName
-     *
-     * @return string
      */
-    private static function fixImagesPaths($documentHtml, array $courseInfo, $dirName = '')
+    public static function fixImagesPaths(string $documentHtml, array $courseInfo, string $dirName = ''): string
     {
         $documentHtml = '<?xml encoding="utf-8" ?>'.$documentHtml;
         $doc = new DOMDocument();

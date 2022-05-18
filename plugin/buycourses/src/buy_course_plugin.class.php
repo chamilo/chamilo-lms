@@ -20,58 +20,58 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  */
 class BuyCoursesPlugin extends Plugin
 {
-    const TABLE_PAYPAL = 'plugin_buycourses_paypal_account';
-    const TABLE_CURRENCY = 'plugin_buycourses_currency';
-    const TABLE_ITEM = 'plugin_buycourses_item';
-    const TABLE_ITEM_BENEFICIARY = 'plugin_buycourses_item_rel_beneficiary';
-    const TABLE_SALE = 'plugin_buycourses_sale';
-    const TABLE_TRANSFER = 'plugin_buycourses_transfer';
-    const TABLE_COMMISSION = 'plugin_buycourses_commission';
-    const TABLE_PAYPAL_PAYOUTS = 'plugin_buycourses_paypal_payouts';
-    const TABLE_SERVICES = 'plugin_buycourses_services';
-    const TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
-    const TABLE_CULQI = 'plugin_buycourses_culqi';
-    const TABLE_GLOBAL_CONFIG = 'plugin_buycourses_global_config';
-    const TABLE_INVOICE = 'plugin_buycourses_invoices';
-    const TABLE_TPV_REDSYS = 'plugin_buycourses_tpvredsys_account';
-    const TABLE_COUPON = 'plugin_buycourses_coupon';
-    const TABLE_COUPON_ITEM = 'plugin_buycourses_coupon_rel_item';
-    const TABLE_COUPON_SERVICE = 'plugin_buycourses_coupon_rel_service';
-    const TABLE_COUPON_SALE = 'plugin_buycourses_coupon_rel_sale';
-    const TABLE_COUPON_SERVICE_SALE = 'plugin_buycourses_coupon_rel_service_sale';
-    const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
-    const PRODUCT_TYPE_COURSE = 1;
-    const PRODUCT_TYPE_SESSION = 2;
-    const PRODUCT_TYPE_SERVICE = 3;
-    const PAYMENT_TYPE_PAYPAL = 1;
-    const PAYMENT_TYPE_TRANSFER = 2;
-    const PAYMENT_TYPE_CULQI = 3;
-    const PAYMENT_TYPE_TPV_REDSYS = 4;
-    const PAYMENT_TYPE_STRIPE = 5;
-    const PAYOUT_STATUS_CANCELED = 2;
-    const PAYOUT_STATUS_PENDING = 0;
-    const PAYOUT_STATUS_COMPLETED = 1;
-    const SALE_STATUS_CANCELED = -1;
-    const SALE_STATUS_PENDING = 0;
-    const SALE_STATUS_COMPLETED = 1;
-    const SERVICE_STATUS_PENDING = 0;
-    const SERVICE_STATUS_COMPLETED = 1;
-    const SERVICE_STATUS_CANCELLED = -1;
-    const SERVICE_TYPE_USER = 1;
-    const SERVICE_TYPE_COURSE = 2;
-    const SERVICE_TYPE_SESSION = 3;
-    const SERVICE_TYPE_LP_FINAL_ITEM = 4;
-    const CULQI_INTEGRATION_TYPE = 'INTEG';
-    const CULQI_PRODUCTION_TYPE = 'PRODUC';
-    const TAX_APPLIES_TO_ALL = 1;
-    const TAX_APPLIES_TO_ONLY_COURSE = 2;
-    const TAX_APPLIES_TO_ONLY_SESSION = 3;
-    const TAX_APPLIES_TO_ONLY_SERVICES = 4;
-    const PAGINATION_PAGE_SIZE = 6;
-    const COUPON_DISCOUNT_TYPE_PERCENTAGE = 1;
-    const COUPON_DISCOUNT_TYPE_AMOUNT = 2;
-    const COUPON_STATUS_ACTIVE = 1;
-    const COUPON_STATUS_DISABLE = 0;
+    public const TABLE_PAYPAL = 'plugin_buycourses_paypal_account';
+    public const TABLE_CURRENCY = 'plugin_buycourses_currency';
+    public const TABLE_ITEM = 'plugin_buycourses_item';
+    public const TABLE_ITEM_BENEFICIARY = 'plugin_buycourses_item_rel_beneficiary';
+    public const TABLE_SALE = 'plugin_buycourses_sale';
+    public const TABLE_TRANSFER = 'plugin_buycourses_transfer';
+    public const TABLE_COMMISSION = 'plugin_buycourses_commission';
+    public const TABLE_PAYPAL_PAYOUTS = 'plugin_buycourses_paypal_payouts';
+    public const TABLE_SERVICES = 'plugin_buycourses_services';
+    public const TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
+    public const TABLE_CULQI = 'plugin_buycourses_culqi';
+    public const TABLE_GLOBAL_CONFIG = 'plugin_buycourses_global_config';
+    public const TABLE_INVOICE = 'plugin_buycourses_invoices';
+    public const TABLE_TPV_REDSYS = 'plugin_buycourses_tpvredsys_account';
+    public const TABLE_COUPON = 'plugin_buycourses_coupon';
+    public const TABLE_COUPON_ITEM = 'plugin_buycourses_coupon_rel_item';
+    public const TABLE_COUPON_SERVICE = 'plugin_buycourses_coupon_rel_service';
+    public const TABLE_COUPON_SALE = 'plugin_buycourses_coupon_rel_sale';
+    public const TABLE_COUPON_SERVICE_SALE = 'plugin_buycourses_coupon_rel_service_sale';
+    public const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
+    public const PRODUCT_TYPE_COURSE = 1;
+    public const PRODUCT_TYPE_SESSION = 2;
+    public const PRODUCT_TYPE_SERVICE = 3;
+    public const PAYMENT_TYPE_PAYPAL = 1;
+    public const PAYMENT_TYPE_TRANSFER = 2;
+    public const PAYMENT_TYPE_CULQI = 3;
+    public const PAYMENT_TYPE_TPV_REDSYS = 4;
+    public const PAYMENT_TYPE_STRIPE = 5;
+    public const PAYOUT_STATUS_CANCELED = 2;
+    public const PAYOUT_STATUS_PENDING = 0;
+    public const PAYOUT_STATUS_COMPLETED = 1;
+    public const SALE_STATUS_CANCELED = -1;
+    public const SALE_STATUS_PENDING = 0;
+    public const SALE_STATUS_COMPLETED = 1;
+    public const SERVICE_STATUS_PENDING = 0;
+    public const SERVICE_STATUS_COMPLETED = 1;
+    public const SERVICE_STATUS_CANCELLED = -1;
+    public const SERVICE_TYPE_USER = 1;
+    public const SERVICE_TYPE_COURSE = 2;
+    public const SERVICE_TYPE_SESSION = 3;
+    public const SERVICE_TYPE_LP_FINAL_ITEM = 4;
+    public const CULQI_INTEGRATION_TYPE = 'INTEG';
+    public const CULQI_PRODUCTION_TYPE = 'PRODUC';
+    public const TAX_APPLIES_TO_ALL = 1;
+    public const TAX_APPLIES_TO_ONLY_COURSE = 2;
+    public const TAX_APPLIES_TO_ONLY_SESSION = 3;
+    public const TAX_APPLIES_TO_ONLY_SERVICES = 4;
+    public const PAGINATION_PAGE_SIZE = 6;
+    public const COUPON_DISCOUNT_TYPE_PERCENTAGE = 1;
+    public const COUPON_DISCOUNT_TYPE_AMOUNT = 2;
+    public const COUPON_STATUS_ACTIVE = 1;
+    public const COUPON_STATUS_DISABLE = 0;
 
     public $isAdminPlugin = true;
 
@@ -1501,18 +1501,44 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Get payment types.
-     *
-     * @return array
      */
-    public function getPaymentTypes()
+    public function getPaymentTypes(bool $onlyActive = false): array
     {
-        return [
+        $types = [
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
             self::PAYMENT_TYPE_TRANSFER => $this->get_lang('BankTransfer'),
             self::PAYMENT_TYPE_CULQI => 'Culqi',
             self::PAYMENT_TYPE_TPV_REDSYS => $this->get_lang('TpvPayment'),
             self::PAYMENT_TYPE_STRIPE => 'Stripe',
         ];
+
+        if (!$onlyActive) {
+            return $types;
+        }
+
+        if ($this->get('paypal_enable') !== 'true') {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL]);
+        }
+
+        if ($this->get('transfer_enable') !== 'true') {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER]);
+        }
+
+        if ($this->get('culqi_enable') !== 'true') {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
+        }
+
+        if ($this->get('tpv_redsys_enable') !== 'true'
+            || !file_exists(api_get_path(SYS_PLUGIN_PATH).'buycourses/resources/apiRedsys.php')
+        ) {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_TPV_REDSYS]);
+        }
+
+        if ($this->get('stripe_enable') !== 'true') {
+            unset($types[BuyCoursesPlugin::PAYMENT_TYPE_STRIPE]);
+        }
+
+        return $types;
     }
 
     /**

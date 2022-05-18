@@ -103,10 +103,11 @@ class WebService
             return false;
         }
 
-        return UserManager::isPasswordValid(
+        return UserManager::checkPassword(
             $user->getPassword(),
             $password,
-            $user->getSalt()
+            $user->getSalt(),
+            $user->getId()
         );
     }
 

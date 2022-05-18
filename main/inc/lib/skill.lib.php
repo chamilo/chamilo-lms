@@ -577,10 +577,13 @@ class SkillRelUser extends Model
             'user_id = ? ' => (int) $userId,
         ];
 
-        if ($courseId > 0) {
+        if ($sessionId > 0) {
             $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ?'] = $sessionId;
+            $whereConditions['AND session_id = ? '] = $sessionId;
+        } else {
+            $whereConditions['AND course_id = ? AND session_id is NULL'] = $courseId;
         }
+
 
         $result = Database::select(
             'skill_id',
@@ -622,6 +625,25 @@ class SkillRelUser extends Model
         $result = Database::query($sql);
 
         return Database::fetch_assoc($result);
+    }
+
+    /**
+     * Delete a user skill by course.
+     *
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     */
+    public function deleteUserSkill($userId, $courseId, $sessionId = 0)
+    {
+        $whereSession = ($sessionId ? " AND session_id = $sessionId" : " AND session_id IS NULL");
+        $sql = "DELETE FROM {$this->table}
+                WHERE
+                      user_id = $userId AND
+                      course_id = $courseId
+                      $whereSession";
+
+        Database::query($sql);
     }
 
     /**
@@ -1164,6 +1186,7 @@ class Skill extends Model
             return false;
         }
 
+        $enableGradeSubCategorySkills = (true === api_get_configuration_value('gradebook_enable_subcategory_skills_independant_assignement'));
         // Load subcategories
         if (empty($category->get_parent_id())) {
             $subCategories = $category->get_subcategories(
@@ -1171,16 +1194,36 @@ class Skill extends Model
                 $category->get_course_code(),
                 $category->get_session_id()
             );
+            $scoreSubCategories = $this->getSubCategoryResultScore($category, $userId);
             if (!empty($subCategories)) {
                 /** @var Category $subCategory */
                 foreach ($subCategories as $subCategory) {
-                    $this->addSkillToUser($userId, $subCategory, $courseId, $sessionId);
+                    $scoreChecked = true;
+                    if (!empty($scoreSubCategories[$subCategory->get_id()])) {
+                        $resultScore = $scoreSubCategories[$subCategory->get_id()];
+                        $scoreChecked = ($resultScore['user_score'] >= $resultScore['min_score']);
+                    }
+                    if ($scoreChecked) {
+                        $this->addSkillToUser($userId, $subCategory, $courseId, $sessionId);
+                    }
                 }
             }
         }
 
         $gradebookId = $category->get_id();
         $skill_gradebooks = $skill_gradebook->get_all(['where' => ['gradebook_id = ?' => $gradebookId]]);
+
+        // It checks if gradebook is passed to add the skill
+        if ($enableGradeSubCategorySkills) {
+            $userFinished = Category::userFinishedCourse(
+                $userId,
+                $category,
+                true
+            );
+            if (!$userFinished) {
+                return false;
+            }
+        }
 
         if (!empty($skill_gradebooks)) {
             foreach ($skill_gradebooks as $skill_gradebook) {
@@ -1201,11 +1244,69 @@ class Skill extends Model
                     ];
 
                     $skill_rel_user->save($params);
+
+                    // It sends notifications about user skills from gradebook
+                    $badgeAssignationNotification = api_get_configuration_value('badge_assignation_notification');
+                    if ($badgeAssignationNotification) {
+                        $entityManager = Database::getManager();
+                        $skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
+                        $skill = $skillRepo->find($skill_gradebook['skill_id']);
+                        if ($skill) {
+                            $user = api_get_user_entity($userId);
+                            $url = api_get_path(WEB_PATH)."skill/{$skill_gradebook['skill_id']}/user/{$userId}";
+                            $message = sprintf(
+                                get_lang('YouXHaveAchievedTheSkillYToSeeFollowLinkZ'),
+                                $user->getFirstname(),
+                                $skill->getName(),
+                                Display::url($url, $url, ['target' => '_blank'])
+                            );
+                            MessageManager::send_message(
+                                $user->getId(),
+                                get_lang('YouHaveAchievedANewSkill'),
+                                $message
+                            );
+                        }
+                    }
                 }
             }
         }
 
         return true;
+    }
+
+    /**
+     * Get the results of user in a subCategory.
+     *
+     * @param $category
+     * @param $userId
+     *
+     * @return array
+     */
+    public function getSubCategoryResultScore($category, $userId)
+    {
+        $scoreSubCategories = [];
+        if (true === api_get_configuration_value('gradebook_enable_subcategory_skills_independant_assignement')) {
+            $subCategories = $category->get_subcategories(
+                $userId,
+                $category->get_course_code(),
+                $category->get_session_id()
+            );
+            $alleval = $category->get_evaluations($userId, false, $category->get_course_code(),
+                $category->get_session_id());
+            $alllink = $category->get_links($userId, true, $category->get_course_code(), $category->get_session_id());
+            $datagen = new GradebookDataGenerator($subCategories, $alleval, $alllink);
+            $gradeResult = $datagen->get_data();
+            foreach ($gradeResult as $data) {
+                /** @var AbstractLink $item */
+                $item = $data[0];
+                if (Category::class === get_class($item)) {
+                    $scoreSubCategories[$item->get_id()]['min_score'] = $item->getCertificateMinScore();
+                    $scoreSubCategories[$item->get_id()]['user_score'] = round($data['result_score'][0]);
+                }
+            }
+        }
+
+        return $scoreSubCategories;
     }
 
     /* Deletes a skill */
@@ -1963,8 +2064,12 @@ class Skill extends Model
         ];
 
         if ($courseId > 0) {
-            $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ? '] = $sessionId ? $sessionId : null;
+            if ($sessionId) {
+                $whereConditions['AND course_id = ? '] = $courseId;
+                $whereConditions['AND session_id = ? '] = $sessionId;
+            } else {
+                $whereConditions['AND course_id = ? AND session_id is NULL'] = $courseId;
+            }
         }
 
         $result = Database::select(

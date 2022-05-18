@@ -44,37 +44,43 @@ class BBBPlugin extends Plugin
      */
     protected function __construct()
     {
-        parent::__construct(
-            '2.10',
-            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz, Ghazi Triki, Adnen Manssouri',
-            [
-                'tool_enable' => 'boolean',
-                'host' => 'text',
-                'salt' => 'text',
-                'enable_global_conference' => 'boolean',
-                'enable_global_conference_per_user' => 'boolean',
-                'enable_conference_in_course_groups' => 'boolean',
-                'enable_global_conference_link' => 'boolean',
-                'disable_download_conference_link' => 'boolean',
-                'max_users_limit' => 'text',
-                'global_conference_allow_roles' => [
-                    'type' => 'select',
-                    'options' => [
-                        PLATFORM_ADMIN => get_lang('Administrator'),
-                        COURSEMANAGER => get_lang('Teacher'),
-                        STUDENT => get_lang('Student'),
-                        STUDENT_BOSS => get_lang('StudentBoss'),
-                    ],
-                    'attributes' => ['multiple' => 'multiple'],
+        $settings = [
+            'tool_enable' => 'boolean',
+            'host' => 'text',
+            'salt' => 'text',
+            'enable_global_conference' => 'boolean',
+            'enable_global_conference_per_user' => 'boolean',
+            'enable_conference_in_course_groups' => 'boolean',
+            'enable_global_conference_link' => 'boolean',
+            'disable_download_conference_link' => 'boolean',
+            'max_users_limit' => 'text',
+            'global_conference_allow_roles' => [
+                'type' => 'select',
+                'options' => [
+                    PLATFORM_ADMIN => get_lang('Administrator'),
+                    COURSEMANAGER => get_lang('Teacher'),
+                    STUDENT => get_lang('Student'),
+                    STUDENT_BOSS => get_lang('StudentBoss'),
                 ],
-                'allow_regenerate_recording' => 'boolean',
-                // Default course settings, must be the same as $course_settings
-                'big_blue_button_record_and_store' => 'checkbox',
-                'bbb_enable_conference_in_groups' => 'checkbox',
-                'bbb_force_record_generation' => 'checkbox',
-                'disable_course_settings' => 'boolean',
-                'meeting_duration' => 'text',
-            ]
+                'attributes' => ['multiple' => 'multiple'],
+            ],
+            'allow_regenerate_recording' => 'boolean',
+            // Default course settings, must be the same as $course_settings
+            'big_blue_button_record_and_store' => 'checkbox',
+            'bbb_enable_conference_in_groups' => 'checkbox',
+            'bbb_force_record_generation' => 'checkbox',
+            'disable_course_settings' => 'boolean',
+            'meeting_duration' => 'text',
+        ];
+
+        if (1 === (int) api_get_current_access_url_id()) {
+            $settings['plugin_bbb_multiple_urls_cron_apply_to_all'] = 'checkbox';
+        }
+
+        parent::__construct(
+            '2.11',
+            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz, Ghazi Triki, Adnen Manssouri',
+            $settings
         );
 
         $this->isAdminPlugin = true;

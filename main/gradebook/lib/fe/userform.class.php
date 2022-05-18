@@ -9,8 +9,8 @@
  */
 class UserForm extends FormValidator
 {
-    const TYPE_USER_INFO = 1;
-    const TYPE_SIMPLE_SEARCH = 3;
+    public const TYPE_USER_INFO = 1;
+    public const TYPE_SIMPLE_SEARCH = 3;
 
     /**
      * Builds a form containing form items based on a given parameter.

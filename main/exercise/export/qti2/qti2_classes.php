@@ -65,6 +65,7 @@ class Ims2Question extends Question
 
                 return $answer;
             case HOT_SPOT:
+            case HOT_SPOT_GLOBAL:
                 $answer = new ImsAnswerHotspot($this->iid);
 
                 return $answer;

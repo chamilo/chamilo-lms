@@ -583,7 +583,7 @@ if ($is_allowedToEdit) {
                 $query = "SELECT iid FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
-                $row = Database :: fetch_array($res, 'ASSOC');
+                $row = Database::fetch_array($res, 'ASSOC');
                 api_item_property_update(
                     $courseInfo,
                     TOOL_DOCUMENT,
@@ -604,7 +604,7 @@ if ($is_allowedToEdit) {
                 $query = "SELECT iid FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
-                $row = Database :: fetch_array($res, 'ASSOC');
+                $row = Database::fetch_array($res, 'ASSOC');
                 api_item_property_update(
                     $courseInfo,
                     TOOL_DOCUMENT,

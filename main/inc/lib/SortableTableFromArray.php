@@ -31,7 +31,7 @@ class SortableTableFromArray extends SortableTable
         $get_total_number_function = null,
         $tableId = ''
     ) {
-        parent:: __construct(
+        parent::__construct(
             $tableName,
             $get_total_number_function,
             null,

@@ -562,7 +562,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     if (api_get_session_id()) {
         $complete_user_list_for_dropbox = [];
         if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
-            $complete_user_list_for_dropbox = CourseManager:: get_user_list_from_course_code(
+            $complete_user_list_for_dropbox = CourseManager::get_user_list_from_course_code(
                 $course_info['code'],
                 api_get_session_id(),
                 null,
@@ -974,7 +974,7 @@ function store_add_dropbox($file = [], $work = null)
     }
 
     // check if the file is actually uploaded
-    if (!is_uploaded_file($dropbox_filetmpname)) { // check user fraud : no clean error msg.
+    if (!isset($file['copy_file']) && !is_uploaded_file($dropbox_filetmpname)) { // check user fraud : no clean error msg.
         Display::addFlash(Display::return_message(get_lang('TheFileIsNotUploaded'), 'warning'));
 
         return false;
@@ -1055,10 +1055,15 @@ function store_add_dropbox($file = [], $work = null)
         }
     }
 
-    @move_uploaded_file(
-        $dropbox_filetmpname,
-        api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$dropbox_filename
-    );
+    if (isset($file['copy_file']) && $file['copy_file']) {
+        @copy($dropbox_filetmpname, api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$dropbox_filename);
+        @unlink($dropbox_filetmpname);
+    } else {
+        @move_uploaded_file(
+            $dropbox_filetmpname,
+            api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$dropbox_filename
+        );
+    }
 
     $b_send_mail = api_get_course_setting('email_alert_on_new_doc_dropbox');
 

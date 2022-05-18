@@ -237,6 +237,7 @@ if ($debug) {
 
 $get_toc_list = $lp->get_toc();
 $get_teacher_buttons = $lp->get_teacher_toc_buttons();
+$flowButtons = $lp->getFlowLpbuttons();
 $itemType = '';
 foreach ($get_toc_list as $toc) {
     if ($toc['id'] == $lp_item_id) {
@@ -526,6 +527,7 @@ $template->assign('show_audio_player', $show_audioplayer);
 $template->assign('media_player', $mediaplayer);
 $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
+$template->assign('flow_buttons', $flowButtons);
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
@@ -624,7 +626,7 @@ $frameReady = Display::getFrameReadyBlock(
     '#content_id, #content_id_blank',
     $itemType,
     'function () {
-        var arr = ["link", "sco", "xapi"];
+        var arr = ["link", "sco", "xapi", "quiz"];
 
         return $.inArray(olms.lms_item_type, arr) !== -1;
     }'

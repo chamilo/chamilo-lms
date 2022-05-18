@@ -8,11 +8,11 @@
  */
 class FormValidator extends HTML_QuickForm
 {
-    const LAYOUT_HORIZONTAL = 'horizontal';
-    const LAYOUT_INLINE = 'inline';
-    const LAYOUT_BOX = 'box';
-    const LAYOUT_BOX_NO_LABEL = 'box-no-label';
-    const LAYOUT_GRID = 'grid';
+    public const LAYOUT_HORIZONTAL = 'horizontal';
+    public const LAYOUT_INLINE = 'inline';
+    public const LAYOUT_BOX = 'box';
+    public const LAYOUT_BOX_NO_LABEL = 'box-no-label';
+    public const LAYOUT_GRID = 'grid';
 
     public $with_progress_bar = false;
     private $layout;
@@ -1812,6 +1812,8 @@ EOT;
                     });
                 });
 
+            var counter = 0,
+                total = 0;
             $('#".$inputName."').fileupload({
                 url: url,
                 dataType: 'json',
@@ -1823,11 +1825,33 @@ EOT;
                 previewMaxHeight: 169,
                 previewCrop: true,
                 dropzone: $('#dropzone'),
+                maxChunkSize: 10000000, // 10 MB
+                sequentialUploads: true,
+            }).on('fileuploadchunksend', function (e, data) {
+                console.log('fileuploadchunkbeforesend');
+                console.log(data);
+                data.url = url + '&chunkAction=send';
+            }).on('fileuploadchunkdone', function (e, data) {
+                console.log('fileuploadchunkdone');
+                console.log(data);
+                if (data.uploadedBytes >= data.total) {
+                    data.url = url + '&chunkAction=done';
+                    data.submit();
+                }
+            }).on('fileuploadchunkfail', function (e, data) {
+                console.log('fileuploadchunkfail');
+                console.log(data);
+
             }).on('fileuploadadd', function (e, data) {
                 data.context = $('<div class=\"row\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
                     var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
                     node.appendTo(data.context);
+                    var iconLoading = $('<div class=\"col-sm-3\">').html(
+                        $('<span id=\"image-loading'+index+'\"/>').html('".Display::return_icon('loading1.gif', get_lang('Uploading'), [], ICON_SIZE_MEDIUM)."')
+                    );
+                    $(data.context.children()[index]).parent().append(iconLoading);
+                    total++;
                 });
             }).on('fileuploadprocessalways', function (e, data) {
                 var index = data.index,
@@ -1844,11 +1868,12 @@ EOT;
                         .prop('disabled', !!data.files.error);
                 }
             }).on('fileuploadprogressall', function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
+                var progress = parseInt(data.loaded / data.total * 100, 10) - 2;
                 $('#progress .progress-bar').css(
                     'width',
                     progress + '%'
                 );
+                $('#progress .progress-bar').text(progress + '%');
             }).on('fileuploaddone', function (e, data) {
                 $.each(data.result.files, function (index, file) {
                     if (file.error) {
@@ -1872,11 +1897,17 @@ EOT;
                     }
                     // Update file name with new one from Chamilo
                     $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                    $('#image-loading'+index).remove();
                     var message = $('<div class=\"col-sm-3\">').html(
                         $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
                     );
                     $(data.context.children()[index]).parent().append(message);
+                    counter++;
                 });
+                if (counter == total) {
+                    $('#progress .progress-bar').css('width', '100%');
+                    $('#progress .progress-bar').text('100%');
+                }
                 $('#dropzone').removeClass('hover');
                 ".$redirectCondition."
             }).on('fileuploadfail', function (e, data) {

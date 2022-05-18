@@ -983,6 +983,7 @@ class SurveyManager
             'personality',
             'yesno',
             'multiplechoice',
+            'multiplechoiceother',
             'multipleresponse',
             'open',
             'dropdown',
@@ -990,6 +991,7 @@ class SurveyManager
             'pagebreak',
             'percentage',
             'score',
+            'selectivedisplay',
         ];
 
         // the images array
@@ -997,6 +999,7 @@ class SurveyManager
             'yesno' => 'yesno.png',
             'personality' => 'yesno.png',
             'multiplechoice' => 'mcua.png',
+            'multiplechoiceother' => 'mcma.png',
             'multipleresponse' => 'mcma.png',
             'open' => 'open_answer.png',
             'dropdown' => 'dropdown.png',
@@ -1004,6 +1007,7 @@ class SurveyManager
             'score' => 'scorequestion.png',
             'comment' => 'commentquestion.png',
             'pagebreak' => 'page_end.png',
+            'selectivedisplay' => 'yesno.png',
         ];
 
         if (in_array($type, $possible_types)) {
@@ -2135,9 +2139,9 @@ class SurveyManager
     public static function emptySurveyFromId($surveyId)
     {
         // Database table definitions
-        $surveyInvitationTable = Database:: get_course_table(TABLE_SURVEY_INVITATION);
-        $surveyAnswerTable = Database:: get_course_table(TABLE_SURVEY_ANSWER);
-        $surveyTable = Database:: get_course_table(TABLE_SURVEY);
+        $surveyInvitationTable = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $surveyAnswerTable = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $surveyTable = Database::get_course_table(TABLE_SURVEY);
         $surveyId = (int) $surveyId;
         $surveyData = self::get_survey($surveyId);
         if (empty($surveyData)) {
@@ -2475,7 +2479,7 @@ class SurveyManager
             case 'by_user':
                 if (null === $groupId) {
                     $sessionId = api_get_session_id();
-                    $users = CourseManager:: get_student_list_from_course_code(
+                    $users = CourseManager::get_student_list_from_course_code(
                         api_get_course_id(),
                         !empty($sessionId),
                         $sessionId
@@ -2839,7 +2843,7 @@ class SurveyManager
         if ($currentDate < $startDate) {
             api_not_allowed(
                 true,
-                Display:: return_message(
+                Display::return_message(
                     get_lang('SurveyNotAvailableYet'),
                     'warning',
                     false
@@ -2850,7 +2854,7 @@ class SurveyManager
         if ($currentDate > $endDate) {
             api_not_allowed(
                 true,
-                Display:: return_message(
+                Display::return_message(
                     get_lang('SurveyNotAvailableAnymore'),
                     'warning',
                     false

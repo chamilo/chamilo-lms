@@ -751,7 +751,7 @@ switch ($action) {
                     $session_id,
                     $my_question_id
                 );
-                if ($objQuestionTmp->type === HOT_SPOT) {
+                if (in_array($objQuestionTmp->type, [HOT_SPOT, HOT_SPOT_GLOBAL])) {
                     Event::delete_attempt_hotspot(
                         $exeId,
                         api_get_user_id(),
@@ -961,7 +961,7 @@ switch ($action) {
         }
         echo $id;
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
-        if ($objQuestion->type === FILL_IN_BLANKS) {
+        if (in_array($objQuestion->type, [FILL_IN_BLANKS, FILL_IN_BLANKS_GLOBAL])) {
             echo '<script>
                 $(function() {
                     $(".selectpicker").selectpicker({});
@@ -1104,56 +1104,103 @@ switch ($action) {
         break;
     case 'upload_answer':
         api_block_anonymous_users();
-        if (!empty($_FILES)) {
-            $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
-            $userId = api_get_user_id();
 
-            // Upload answer path is created inside user personal folder my_files/upload_answer/[exe_id]/[question_id]
-            $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
-            @mkdir($syspath, api_get_permissions_for_new_directories(), true);
-            $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
-
-            $files = $_FILES['files'];
-            $fileList = [];
-            foreach ($files as $name => $array) {
-                $counter = 0;
-                foreach ($array as $data) {
-                    $fileList[$counter][$name] = $data;
-                    $counter++;
+        if (isset($_REQUEST['chunkAction']) && 'send' === $_REQUEST['chunkAction']) {
+            // It uploads the files in chunks
+            if (!empty($_FILES)) {
+                $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
+                }
+                if (!empty($fileList)) {
+                    foreach ($fileList as $n => $file) {
+                        $tmpFile = $tempDirectory.$file['name'];
+                        file_put_contents(
+                            $tmpFile,
+                            fopen($file['tmp_name'], 'r'),
+                            FILE_APPEND
+                        );
+                    }
                 }
             }
-            $resultList = [];
-            foreach ($fileList as $file) {
-                $json = [];
-
-                $filename = api_replace_dangerous_char($file['name']);
-                $filename = disable_dangerous_file($filename);
-
-                if (move_uploaded_file($file['tmp_name'], $syspath.$filename)) {
-                    $title = $filename;
-                    $url = $webpath.$filename;
-                    $json['name'] = api_htmlentities($title);
-                    $json['link'] = Display::url(
-                        api_htmlentities($title),
-                        api_htmlentities($url),
-                        ['target' => '_blank']
-                    );
-                    $json['url'] = $url;
-                    $json['size'] = format_file_size($file['size']);
-                    $json['type'] = api_htmlentities($file['type']);
-                    $json['result'] = Display::return_icon(
-                        'accept.png',
-                        get_lang('Uploaded')
-                    );
-                } else {
-                    $json['name'] = isset($file['name']) ? $filename : get_lang('Unknown');
-                    $json['url'] = '';
-                    $json['error'] = get_lang('Error');
-                }
-                $resultList[] = $json;
-            }
-            echo json_encode(['files' => $resultList]);
+            echo json_encode([
+                'files' => $_FILES,
+                'errorStatus' => 0,
+            ]);
             exit;
+        } else {
+            if (!empty($_FILES)) {
+                $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
+                $userId = api_get_user_id();
+
+                // Upload answer path is created inside user personal folder my_files/upload_answer/[exe_id]/[question_id]
+                $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
+                @mkdir($syspath, api_get_permissions_for_new_directories(), true);
+                $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
+
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
+                }
+                $resultList = [];
+                foreach ($fileList as $file) {
+                    $json = [];
+
+                    if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
+                        // to rename and move the finished file
+                        $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
+                        $file['tmp_name'] = $chunkedFile;
+                        $file['size'] = filesize($chunkedFile);
+                        $file['copy_file'] = true;
+                    }
+
+                    $filename = api_replace_dangerous_char($file['name']);
+                    $filename = disable_dangerous_file($filename);
+
+                    if (isset($file['copy_file']) && $file['copy_file']) {
+                        $uploaded = copy($file['tmp_name'], $syspath.$filename);
+                        @unlink($file['tmp_name']);
+                    } else {
+                        $uploaded = move_uploaded_file($file['tmp_name'], $syspath.$filename);
+                    }
+
+                    if ($uploaded) {
+                        $title = $filename;
+                        $url = $webpath.$filename;
+                        $json['name'] = api_htmlentities($title);
+                        $json['link'] = Display::url(
+                            api_htmlentities($title),
+                            api_htmlentities($url),
+                            ['target' => '_blank']
+                        );
+                        $json['url'] = $url;
+                        $json['size'] = format_file_size($file['size']);
+                        $json['type'] = api_htmlentities($file['type']);
+                        $json['result'] = Display::return_icon(
+                            'accept.png',
+                            get_lang('Uploaded')
+                        );
+                    } else {
+                        $json['name'] = isset($file['name']) ? $filename : get_lang('Unknown');
+                        $json['url'] = '';
+                        $json['error'] = get_lang('Error');
+                    }
+                    $resultList[] = $json;
+                }
+                echo json_encode(['files' => $resultList]);
+                exit;
+            }
         }
         break;
     default:

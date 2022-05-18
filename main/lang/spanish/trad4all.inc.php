@@ -8882,4 +8882,15 @@ $YourLpQuizzesResultsAre = "Ha obtenido los siguientes resultados en los ejercic
 $ExportLpQuizResults = "Exportacion de los resultados de los ejercicios en lecciones";
 $ElearningResults = "Resultados de lecciones";
 $InvoicingByAccessUrl = "Usuarios activos en sesiones por URL";
+$SelectTheNextLp = "Leccion siguiente";
+$NoNotifications = "Niguna notificacion";
+$AllowsSkillsBySubCategories = "Permitir la asignacion de competencias por sub categoria";
+$ItAllowsTheAcquisitionOfSkillsBySubCategories = "Permite la adquisicion de competencia por validacion indeprendiente de sub categorias.";
+$SkillMinScore = "Score minimum";
+$InLp = "En una leccion";
+$ExportCoursesReports = "Reportes de cursos";
+$FillBlanksGlobal = "Rellenar blancos con resultado global";
+$MatchingGlobal = "Relacionar con resultado global";
+$HotSpotGlobal = "Zonas de imagen con resultado global";
+$MatchingDraggableGlobal = "Coincidencia arrastrable con resultado global";
 ?>

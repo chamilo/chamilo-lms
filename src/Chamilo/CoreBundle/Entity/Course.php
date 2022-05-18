@@ -31,11 +31,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Course
 {
-    const CLOSED = 0;
-    const REGISTERED = 1;
-    const OPEN_PLATFORM = 2;
-    const OPEN_WORLD = 3;
-    const HIDDEN = 4;
+    public const CLOSED = 0;
+    public const REGISTERED = 1;
+    public const OPEN_PLATFORM = 2;
+    public const OPEN_WORLD = 3;
+    public const HIDDEN = 4;
 
     /**
      * @var int

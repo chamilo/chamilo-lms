@@ -8,10 +8,10 @@
  */
 class CatForm extends FormValidator
 {
-    const TYPE_ADD = 1;
-    const TYPE_EDIT = 2;
-    const TYPE_MOVE = 3;
-    const TYPE_SELECT_COURSE = 4;
+    public const TYPE_ADD = 1;
+    public const TYPE_EDIT = 2;
+    public const TYPE_MOVE = 3;
+    public const TYPE_SELECT_COURSE = 4;
     /** @var Category */
     private $category_object;
 
@@ -292,6 +292,19 @@ class CatForm extends FormValidator
                     true,
                     ['maxlength' => '5']
                 );
+
+                if (true === api_get_configuration_value('gradebook_enable_subcategory_skills_independant_assignement')) {
+                    // It allows the acquisition of competencies independently in the subcategories
+                    $allowSkillsBySubCategory = $this->addCheckBox(
+                        'allow_skills_by_subcategory',
+                        [
+                            null,
+                            get_lang('ItAllowsTheAcquisitionOfSkillsBySubCategories'),
+                        ],
+                        get_lang('AllowsSkillsBySubCategories')
+                    );
+                    $allowSkillsBySubCategory->setChecked($this->category_object->getAllowSkillBySubCategory());
+                }
             } else {
                 $questionWeighting = $value;
                 $defaultCertification = api_number_format($this->category_object->getCertificateMinScore(), 2);
@@ -330,6 +343,33 @@ class CatForm extends FormValidator
                 0
             );
         } else {
+            // It enables minimun score to get the skills independant assigment
+            if (true === api_get_configuration_value('gradebook_enable_subcategory_skills_independant_assignement')) {
+                $allowSkillsBySubCategory = $this->category_object->getAllowSkillBySubCategory($this->category_object->get_parent_id());
+                if ($allowSkillsBySubCategory) {
+                    $this->addText(
+                        'certif_min_score',
+                        get_lang('SkillMinScore'),
+                        true,
+                        ['maxlength' => '5']
+                    );
+                    $this->addRule(
+                        'certif_min_score',
+                        get_lang('OnlyNumbers'),
+                        'numeric'
+                    );
+                    $this->addRule(
+                        'certif_min_score',
+                        get_lang('NegativeValue'),
+                        'compare',
+                        '>=',
+                        'server',
+                        false,
+                        false,
+                        0
+                    );
+                }
+            }
             $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
         }
 

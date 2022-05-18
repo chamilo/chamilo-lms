@@ -335,15 +335,15 @@ if (count($certificate_list) == 0) {
                 ['target' => '_blank', 'class' => 'btn btn-default']
             );
             echo $certificateUrl.PHP_EOL;
-
-            $url .= '&action=export';
-            $pdf = Display::url(
-                Display::return_icon('pdf.png', get_lang('Download')),
-                $url,
-                ['target' => '_blank']
-            );
-            echo $pdf.PHP_EOL;
-
+            if ($hideCertificateExport !== 'true') {
+                $url .= '&action=export';
+                $pdf = Display::url(
+                    Display::return_icon('pdf.png', get_lang('Download')),
+                    $url,
+                    ['target' => '_blank']
+                );
+                echo $pdf.PHP_EOL;
+            }
             echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">
                     '.Display::return_icon('delete.png', get_lang('Delete')).'
                   </a>'.PHP_EOL;

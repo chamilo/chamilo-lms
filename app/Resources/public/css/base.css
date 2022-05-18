@@ -3067,6 +3067,11 @@ table.certaintyTable td.globalChart {
     display: inline-block;
     width: 100%;
 }
+.question_row .question_description,
+.question_row_answer .question_description {
+    clear: both;
+}
+
 #question_feedback {
     border-radius: 10px;
     background-color: #FCF7BA;
@@ -6636,8 +6641,14 @@ div#chat-remote-video video {
     font-size: 14px;
 }
 
-.grid-courses .items .toolbar > div {
+.grid-courses .items .toolbar {
+    margin-top: 10px;
     text-align: center;
+}
+
+#homepage-announcements .toolbar .btn {
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 .grid-courses .items .toolbar .info {
@@ -7491,13 +7502,8 @@ div#chat-remote-video video {
     font-size: 12px;
 }
 
-#dialog-form .dialog-form-content .control-label {
-    font-size: 12px;
-    font-weight: normal;
-    padding-top: 0;
-}
-
-#dialog-form .dialog-form-content .multiple-select {
+#dialog-form .dialog-form-content .bootstrap-select,
+#dialog-form .dialog-form-content .dropdown-menu {
     font-size: 12px;
 }
 

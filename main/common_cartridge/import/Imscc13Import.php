@@ -3,7 +3,7 @@
 
 class Imscc13Import
 {
-    const FORMAT_IMSCC13 = 'imscc13';
+    public const FORMAT_IMSCC13 = 'imscc13';
 
     public function log($message, $level, $a = null, $depth = null, $display = false)
     {

@@ -187,4 +187,4 @@ $form->setDefaults(['select_type' => '1', 'file_type' => 'csv', 'include_users' 
 $form->addButtonExport(get_lang('ExportCourses'));
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

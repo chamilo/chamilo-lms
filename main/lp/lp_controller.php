@@ -1243,6 +1243,11 @@ switch ($action) {
             $form->addSelect('skills', 'skills');
             Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $_SESSION['oLP']->get_id());
 
+            // It saves the next learnpath id
+            if (isset($_REQUEST['next_lp_id']) && true === api_get_configuration_value('lp_enable_flow')) {
+                learnpath::saveTheNextLp($_SESSION['oLP']->lp_id, $_REQUEST['next_lp_id']);
+            }
+
             if (api_get_setting('search_enabled') === 'true') {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                 $specific_fields = get_specific_field_list();

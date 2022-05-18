@@ -740,7 +740,7 @@ if (isset($_GET['studentoverview'])) {
     // then Category::load() will create a new 'root' category with empty
     // course and session fields in memory (Category::create_root_category())
 
-    $cats = Category:: load(
+    $cats = Category::load(
         null,
         null,
         $course_code,
@@ -803,8 +803,8 @@ $no_qualification = false;
 // Show certificate link.
 $certificate = [];
 $actionsLeft = '';
-$hideCertificateExport = api_get_setting('hide_certificate_export_link');
-
+$hideCertificateExport = api_get_setting('hide_certificate_export_link') === 'true';
+$hideCertificateExportStudent = api_is_student() && api_get_setting('hide_certificate_export_link_students') === 'true';
 if (!empty($selectCat)) {
     $cat = new Category();
     $course_id = CourseManager::get_course_by_category($selectCat);
@@ -817,12 +817,14 @@ if (!empty($selectCat)) {
                 $stud_id
             );
 
-            if ($hideCertificateExport !== 'true' && isset($certificate['pdf_url'])) {
-                $actionsLeft .= Display::url(
-                    Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
-                    $certificate['pdf_url'],
-                    ['class' => 'btn btn-default']
-                );
+            if (isset($certificate['pdf_url'])) {
+                if (!$hideCertificateExport && !$hideCertificateExportStudent) {
+                    $actionsLeft .= Display::url(
+                        Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
+                        $certificate['pdf_url'],
+                        ['class' => 'btn btn-default']
+                    );
+                }
             }
 
             $currentScore = Category::getCurrentScore(

@@ -151,7 +151,7 @@ function search_users($needle, $type = 'multiple')
 
             $rs = Database::query($sql);
             $i = 0;
-            while ($user = Database :: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
                     $person_name = api_get_person_name($user['firstname'], $user['lastname']);
@@ -167,7 +167,7 @@ function search_users($needle, $type = 'multiple')
             );
         } else {
             $return .= '<select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="15" ">';
-            while ($user = Database :: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $person_name = api_get_person_name($user['firstname'], $user['lastname']);
                 $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name, ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
             }

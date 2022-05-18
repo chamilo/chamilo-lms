@@ -520,6 +520,10 @@ define('ANNOTATION', 20);
 define('READING_COMPREHENSION', 21);
 define('MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY', 22);
 define('UPLOAD_ANSWER', 23);
+define('MATCHING_GLOBAL', 24);
+define('MATCHING_DRAGGABLE_GLOBAL', 25);
+define('HOT_SPOT_GLOBAL', 26);
+define('FILL_IN_BLANKS_GLOBAL', 27);
 
 define('EXERCISE_CATEGORY_RANDOM_SHUFFLED', 1);
 define('EXERCISE_CATEGORY_RANDOM_ORDERED', 2);
@@ -5053,6 +5057,9 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
         case 'uk': // Ukraine
             $country = 'ua';
             break;
+        case 'vi': // Vietnam - GH#4231
+            $country = 'vn';
+            break;
         case 'zh-TW':
         case 'zh':
             $country = 'cn';
@@ -9372,6 +9379,7 @@ function api_mail_html(
     }
     $mailView->assign('mail_header_style', api_get_configuration_value('mail_header_style'));
     $mailView->assign('mail_content_style', api_get_configuration_value('mail_content_style'));
+    $mailView->assign('include_ldjson', (empty($platform_email['EXCLUDE_JSON']) ? true : false));
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 

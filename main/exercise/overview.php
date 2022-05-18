@@ -312,6 +312,9 @@ if (!empty($attempts)) {
             'date' => api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG),
             'userIp' => $attempt_result['user_ip'],
         ];
+        if (api_is_anonymous()) {
+            unset($row['userIp']);
+        }
         $attempt_link .= PHP_EOL.$teacher_revised;
 
         if (in_array(
@@ -432,6 +435,9 @@ if (!empty($attempts)) {
                 ];
             }
             break;
+    }
+    if (api_is_anonymous()) {
+        unset($header_names[2]); // It removes the 3rd column related to IP
     }
     $column = 0;
     foreach ($header_names as $item) {

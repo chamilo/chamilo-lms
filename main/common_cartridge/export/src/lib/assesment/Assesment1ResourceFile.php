@@ -3,7 +3,7 @@
 
 class Assesment1ResourceFile extends CcGeneralFile
 {
-    const DEAFULTNAME = 'assesment.xml';
+    public const DEAFULTNAME = 'assesment.xml';
 
     protected $rootns = 'xmlns';
     protected $rootname = CcQtiTags::QUESTESTINTEROP;

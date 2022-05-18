@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
@@ -18,46 +19,46 @@ class OAuth2 extends Plugin
 {
     use ArrayAccessorTrait;
 
-    const SETTING_ENABLE = 'enable';
+    public const SETTING_ENABLE = 'enable';
 
-    const SETTING_FORCE_REDIRECT = 'force_redirect';
-    const SETTING_SKIP_FORCE_REDIRECT_IN = 'skip_force_redirect_in';
+    public const SETTING_FORCE_REDIRECT = 'force_redirect';
+    public const SETTING_SKIP_FORCE_REDIRECT_IN = 'skip_force_redirect_in';
 
-    const SETTING_CLIENT_ID = 'client_id';
-    const SETTING_CLIENT_SECRET = 'client_secret';
+    public const SETTING_CLIENT_ID = 'client_id';
+    public const SETTING_CLIENT_SECRET = 'client_secret';
 
-    const SETTING_AUTHORIZE_URL = 'authorize_url';
-    const SETTING_SCOPES = 'scopes';
-    const SETTING_SCOPE_SEPARATOR = 'scope_separator';
+    public const SETTING_AUTHORIZE_URL = 'authorize_url';
+    public const SETTING_SCOPES = 'scopes';
+    public const SETTING_SCOPE_SEPARATOR = 'scope_separator';
 
-    const SETTING_ACCESS_TOKEN_URL = 'access_token_url';
-    const SETTING_ACCESS_TOKEN_METHOD = 'access_token_method';
+    public const SETTING_ACCESS_TOKEN_URL = 'access_token_url';
+    public const SETTING_ACCESS_TOKEN_METHOD = 'access_token_method';
     // const SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID = 'access_token_resource_owner_id';
 
-    const SETTING_RESOURCE_OWNER_DETAILS_URL = 'resource_owner_details_url';
+    public const SETTING_RESOURCE_OWNER_DETAILS_URL = 'resource_owner_details_url';
 
-    const SETTING_RESPONSE_ERROR = 'response_error';
-    const SETTING_RESPONSE_CODE = 'response_code';
-    const SETTING_RESPONSE_RESOURCE_OWNER_ID = 'response_resource_owner_id';
+    public const SETTING_RESPONSE_ERROR = 'response_error';
+    public const SETTING_RESPONSE_CODE = 'response_code';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_ID = 'response_resource_owner_id';
 
-    const SETTING_UPDATE_USER_INFO = 'update_user_info';
-    const SETTING_CREATE_NEW_USERS = 'create_new_users';
-    const SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME = 'response_resource_owner_firstname';
-    const SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME = 'response_resource_owner_lastname';
-    const SETTING_RESPONSE_RESOURCE_OWNER_STATUS = 'response_resource_owner_status';
-    const SETTING_RESPONSE_RESOURCE_OWNER_EMAIL = 'response_resource_owner_email';
-    const SETTING_RESPONSE_RESOURCE_OWNER_USERNAME = 'response_resource_owner_username';
+    public const SETTING_UPDATE_USER_INFO = 'update_user_info';
+    public const SETTING_CREATE_NEW_USERS = 'create_new_users';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME = 'response_resource_owner_firstname';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME = 'response_resource_owner_lastname';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_STATUS = 'response_resource_owner_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_EMAIL = 'response_resource_owner_email';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_USERNAME = 'response_resource_owner_username';
 
-    const SETTING_RESPONSE_RESOURCE_OWNER_URLS = 'response_resource_owner_urls';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_URLS = 'response_resource_owner_urls';
 
-    const SETTING_LOGOUT_URL = 'logout_url';
+    public const SETTING_LOGOUT_URL = 'logout_url';
 
-    const SETTING_BLOCK_NAME = 'block_name';
+    public const SETTING_BLOCK_NAME = 'block_name';
 
-    const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
-    const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
+    public const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
+    public const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
 
-    const EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
+    public const EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
 
     protected function __construct()
     {
@@ -81,8 +82,8 @@ class OAuth2 extends Plugin
                 self::SETTING_ACCESS_TOKEN_METHOD => [
                     'type' => 'select',
                     'options' => [
-                        GenericProvider::METHOD_POST => 'POST',
-                        GenericProvider::METHOD_GET => 'GET',
+                        AbstractProvider::METHOD_POST => 'POST',
+                        AbstractProvider::METHOD_GET => 'GET',
                     ],
                 ],
                 // self::SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID => 'text',
@@ -120,11 +121,11 @@ class OAuth2 extends Plugin
      *
      * @return $this
      */
-    public static function create()
+    public static function create(): OAuth2
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     public function getProvider(): GenericProvider
@@ -178,11 +179,8 @@ class OAuth2 extends Plugin
      * @throws IdentityProviderException
      *
      * @return array user information, as returned by api_get_user_info(userId)
-     *
-     * @var AccessToken
-     * @var GenericProvider
      */
-    public function getUserInfo($provider, $accessToken)
+    public function getUserInfo(GenericProvider $provider, AccessToken $accessToken): array
     {
         $url = $provider->getResourceOwnerDetailsUrl($accessToken);
         $request = $provider->getAuthenticatedRequest($provider::METHOD_GET, $url, $accessToken);
@@ -210,21 +208,31 @@ class OAuth2 extends Plugin
             require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
             $userId = external_add_user(
                 [
-                    'firstname' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
-                    ), $this->get_lang('DefaultFirstname')),
-                    'lastname' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
-                    ), $this->get_lang('DefaultLastname')),
-                    'status' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
-                    ), STUDENT),
-                    'email' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
-                    ), 'oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost')),
-                    'username' => $this->getValueByKey($response, $this->get(
-                        self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
-                    ), 'oauth2user_'.$resourceOwnerId),
+                    'firstname' => $this->getValueByKey(
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME),
+                        $this->get_lang('DefaultFirstname')
+                    ),
+                    'lastname' => $this->getValueByKey(
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
+                        $this->get_lang('DefaultLastname')
+                    ),
+                    'status' => $this->getValueByKey(
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
+                        STUDENT
+                    ),
+                    'email' => $this->getValueByKey(
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
+                        'oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost')
+                    ),
+                    'username' => $this->getValueByKey(
+                        $response,
+                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME),
+                        'oauth2user_'.$resourceOwnerId
+                    ),
                     'auth_source' => 'oauth2',
                 ]
             );
@@ -255,14 +263,22 @@ class OAuth2 extends Plugin
         return $userInfo;
     }
 
-    public function getSignInURL()
+    public function getSignInURL(): string
     {
         return api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
     }
 
-    public function getLogoutUrl()
+    public function getLogoutUrl(): string
     {
-        return $this->get(self::SETTING_LOGOUT_URL);
+        $token = ChamiloSession::read('oauth2AccessToken');
+        $idToken = !empty($token['id_token']) ? $token['id_token'] : null;
+
+        return $this->get(self::SETTING_LOGOUT_URL).'?'.http_build_query(
+            [
+                'id_token_hint' => $idToken,
+                'post_logout_redirect_uri' => api_get_path(WEB_PATH),
+            ]
+        );
     }
 
     /**
@@ -283,20 +299,15 @@ class OAuth2 extends Plugin
      * $key can contain wild card character *
      * It will be replaced by 0, 1, 2 and so on as long as the resulting key exists in $data
      * This is a recursive function, allowing for more than one occurrence of the wild card character.
-     *
-     * @param string $key
-     * @param array  $default
-     *
-     * @return array
      */
-    private function getValuesByKey(array $data, $key, $default = [])
+    private function getValuesByKey(array $data, string $key, array $default = []): array
     {
         if (!is_string($key) || empty($key) || !count($data)) {
             return $default;
         }
         $pos = strpos($key, '*');
         if ($pos === false) {
-            $value = $this->getValueByKey($data, $key, null);
+            $value = $this->getValueByKey($data, $key);
 
             return is_null($value) ? [] : [$value];
         }
@@ -318,34 +329,43 @@ class OAuth2 extends Plugin
 
     private function updateUser($userId, $response)
     {
-        /**
-         * @var $user Chamilo\UserBundle\Entity\User
-         */
         $user = UserManager::getRepository()->find($userId);
         $user->setFirstname(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
-            ), $user->getFirstname())
+            $this->getValueByKey(
+                $response,
+                $this->get(
+                    self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
+                ),
+                $user->getFirstname()
+            )
         );
         $user->setLastname(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
-            ), $user->getLastname())
+            $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
+                $user->getLastname()
+            )
         );
         $user->setUserName(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
-            ), $user->getUsername())
+            $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME),
+                $user->getUsername()
+            )
         );
         $user->setEmail(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
-            ), $user->getEmail())
+            $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
+                $user->getEmail()
+            )
         );
         $user->setStatus(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
-            ), $user->getStatus())
+            $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
+                $user->getStatus()
+            )
         );
         $user->setAuthSource('oauth2');
         $configFilePath = __DIR__.'/../config.php';
@@ -370,7 +390,7 @@ class OAuth2 extends Plugin
     private function updateUserUrls($userId, $response)
     {
         if (api_is_multiple_url_enabled()) {
-            $key = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_URLS);
+            $key = (string) $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_URLS);
             if (!empty($key)) {
                 $availableUrls = [];
                 foreach (UrlManager::get_url_data() as $existingUrl) {

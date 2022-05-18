@@ -31,7 +31,7 @@ $tool_name = get_lang('AddCoursesToURL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
@@ -91,8 +91,8 @@ unset($result);
      <select name="first_letter_course" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value="">--</option>
     <?php
-    echo Display:: get_alphabet_options($first_letter_course);
-    echo Display:: get_numeric_options(0, 9, $first_letter_course);
+    echo Display::get_alphabet_options($first_letter_course);
+    echo Display::get_numeric_options(0, 9, $first_letter_course);
     ?>
      </select>
     </td>
@@ -136,4 +136,4 @@ unset($result);
 </form>
 <?php
 
-Display :: display_footer();
+Display::display_footer();

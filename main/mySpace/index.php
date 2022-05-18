@@ -404,6 +404,6 @@ $view->display_one_col_template();
 // Send the csv file if asked
 if ($export_csv) {
     ob_end_clean();
-    Export:: arrayToCsv($csv_content, 'reporting_index');
+    Export::arrayToCsv($csv_content, 'reporting_index');
     exit;
 }

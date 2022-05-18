@@ -13,7 +13,7 @@ api_block_anonymous_users();
 Display::display_header();
 $num = isset($_GET['num']) ? (int) $_GET['num'] : 0;
 $student_idd = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
-$tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 ?>
 <form action="update_intervention.php" method="post" name="save_intercention">

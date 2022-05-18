@@ -874,17 +874,17 @@ function SetValue(param, val) {
 /**
  * Saves the current data from JS memory to the LMS database
  */
-function savedata(item_id, forceIframeSave = 0) {
+function savedata(item_id) {
+    var forceIframeSave = arguments.length > 1 && arguments[1] !== undefined
+        ? arguments[1]
+        : 0;
+
     // Origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
     logit_lms('function savedata(' + item_id + ')', 3);
 
     // Status is NOT modified here see the lp_ajax_save_item.php file
     if (olms.lesson_status != '') {
         //olms.updatable_vars_list['cmi.core.lesson_status'] = true;
-    }
-
-    if (typeof(forceIframeSave) == 'undefined') {
-        forceIframeSave = 0;
     }
 
     old_item_id = olms.info_lms_item[0];

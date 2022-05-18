@@ -5,6 +5,21 @@ use League\OAuth2\Client\Token\AccessToken;
 
 require __DIR__.'/../../../main/inc/global.inc.php';
 
+if (!empty($_GET['error']) && !empty($_GET['state'])) {
+    if ($_GET['state'] === ChamiloSession::read('oauth2state')) {
+        api_not_allowed(
+            true,
+            Display::return_message(
+                $_GET['error_description'] ?? $_GET['error'],
+                'warning'
+            )
+        );
+    } else {
+        ChamiloSession::erase('oauth2state');
+        exit('Invalid state');
+    }
+}
+
 $plugin = OAuth2::create();
 
 $provider = $plugin->getProvider();

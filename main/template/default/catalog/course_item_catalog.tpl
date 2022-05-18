@@ -104,18 +104,12 @@
             {% endblock %}
 
             {% block course_toolbar %}
-                <div class="toolbar row">
+                <div class="toolbar">
                     {% if course.already_registered_formatted %}
-                        <div class="col-sm-6">
-                            {{ course.unregister_formatted }}
-                        </div>
-                        <div class="col-sm-6">
-                            {{ course.already_registered_formatted }}
-                        </div>
+                        {{ course.unregister_formatted }}
+                        {{ course.already_registered_formatted }}
                     {% else %}
-                        <div class="col-sm-12">
-                            {{ course.subscribe_formatted }}
-                        </div>
+                        {{ course.subscribe_formatted }}
                     {% endif %}
                 </div>
             {% endblock %}

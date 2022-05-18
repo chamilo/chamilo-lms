@@ -18,7 +18,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
  */
 class RoleAssignmentsTask extends BaseTask
 {
-    const CONTEXT_LEVEL_COURSE = 50;
+    public const CONTEXT_LEVEL_COURSE = 50;
 
     /**
      * @return array

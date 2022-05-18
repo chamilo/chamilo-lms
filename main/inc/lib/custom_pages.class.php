@@ -10,12 +10,12 @@
  */
 class CustomPages
 {
-    const INDEX_LOGGED = 'index-logged';
-    const INDEX_UNLOGGED = 'index-unlogged';
-    const LOGGED_OUT = 'loggedout';
-    const REGISTRATION_FEEDBACK = 'registration-feedback';
-    const REGISTRATION = 'registration';
-    const LOST_PASSWORD = 'lostpassword';
+    public const INDEX_LOGGED = 'index-logged';
+    public const INDEX_UNLOGGED = 'index-unlogged';
+    public const LOGGED_OUT = 'loggedout';
+    public const REGISTRATION_FEEDBACK = 'registration-feedback';
+    public const REGISTRATION = 'registration';
+    public const LOST_PASSWORD = 'lostpassword';
 
     /**
      * Returns true if custom pages are enabled. False otherwise.

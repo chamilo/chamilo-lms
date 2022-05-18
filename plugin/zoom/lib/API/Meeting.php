@@ -16,10 +16,10 @@ class Meeting
     use BaseMeetingTrait;
     use JsonDeserializableTrait;
 
-    const TYPE_INSTANT = 1;
-    const TYPE_SCHEDULED = 2;
-    const TYPE_RECURRING_WITH_NO_FIXED_TIME = 3;
-    const TYPE_RECURRING_WITH_FIXED_TIME = 8;
+    public const TYPE_INSTANT = 1;
+    public const TYPE_SCHEDULED = 2;
+    public const TYPE_RECURRING_WITH_NO_FIXED_TIME = 3;
+    public const TYPE_RECURRING_WITH_FIXED_TIME = 8;
 
     /** @var string password to join. [a-z A-Z 0-9 @ - _ *]. Max of 10 characters. */
     public $password;
@@ -60,9 +60,13 @@ class Meeting
      *
      * @return MeetingInfoGet meeting
      */
-    public function create()
+    public function create($userId = null)
     {
-        return MeetingInfoGet::fromJson(Client::getInstance()->send('POST', 'users/me/meetings', [], $this));
+        $userId = empty($userId) ? 'me' : $userId;
+
+        return MeetingInfoGet::fromJson(
+            Client::getInstance()->send('POST', "users/$userId/meetings", [], $this)
+        );
     }
 
     /**

@@ -46,7 +46,7 @@ if (isset($_GET['delete_mark'])) {
 }
 
 if (isset($_GET['selecteval'])) {
-    $allresults = Result :: load(null, null, $select_eval);
+    $allresults = Result::load(null, null, $select_eval);
     $iscourse = !empty(api_get_course_id());
 }
 
@@ -222,7 +222,7 @@ if (isset($_GET['import'])) {
         ''
     );
     if (!$import_result_form->validate()) {
-        Display :: display_header(get_lang('Import'));
+        Display::display_header(get_lang('Import'));
     }
     $eval[0]->check_lock_permissions();
     if (isset($_POST['formSent']) && $_POST['formSent']) {
@@ -230,7 +230,7 @@ if (isset($_GET['import'])) {
             $values = $import_result_form->exportValues();
             $file_type = $_POST['file_type'];
             $file_name = $_FILES['import_file']['tmp_name'];
-            $results = Import :: csvToArray($file_name);
+            $results = Import::csvToArray($file_name);
             $nr_results_added = 0;
             foreach ($results as $index => $importedresult) {
                 //check username & score
@@ -415,7 +415,7 @@ if (isset($_GET['export'])) {
                 $head_table[] = [get_lang('Letters'), 15];
             }
             $head_display_score = '';
-            $scoredisplay = ScoreDisplay :: instance();
+            $scoredisplay = ScoreDisplay::instance();
             $customdisplays = $scoredisplay->get_custom_score_display_settings();
 
             if (!empty($customdisplays) && $scoredisplay->is_custom()) {
@@ -533,7 +533,7 @@ if (isset($_POST['action'])) {
             case 'delete':
                 $number_of_deleted_results = 0;
                 foreach ($_POST['id'] as $indexstr) {
-                    $result = Result :: load($indexstr);
+                    $result = Result::load($indexstr);
                     $result[0]->delete();
                     $number_of_deleted_results++;
                 }

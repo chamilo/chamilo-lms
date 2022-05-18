@@ -83,7 +83,7 @@ function search_sessions($needle, $type)
         }
         $rs = Database::query($sql);
         $return .= '<select class="form-control" id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20">';
-        while ($session = Database :: fetch_array($rs)) {
+        while ($session = Database::fetch_array($rs)) {
             $return .= '<option value="'.$session['id'].'" title="'.htmlspecialchars($session['name'], ENT_QUOTES).'">'.$session['name'].'</option>';
         }
         $return .= '</select>';
@@ -243,7 +243,7 @@ $result = Database::query($sql);
                 <p><?php echo get_lang('FirstLetterSession'); ?> :</p>
                 <select class="selectpicker form-control" name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
                     <option value="%">--</option>
-                        <?php echo Display :: get_alphabet_options($firstLetterSession); ?>
+                        <?php echo Display::get_alphabet_options($firstLetterSession); ?>
                 </select>
                 <?php
                     } ?>

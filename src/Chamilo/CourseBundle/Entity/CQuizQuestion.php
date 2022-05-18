@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="position", columns={"position"})
  *  }
  * )
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Entity\Repository\CQuizQuestionRepository")
  */
 class CQuizQuestion
 {

@@ -603,7 +603,7 @@ class CourseController extends ToolBaseController
                     'createInSession' => $createInSession
                 ];
             }
-            $responseData['c_tool'] = $ctool;
+            $responseData['c_tool'] = $ctoolintro;
         }
 
         $json = $this->serializer->serialize(

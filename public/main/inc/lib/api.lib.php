@@ -294,7 +294,7 @@ define('LOG_SURVEY_ID', 'survey_id');
 define('LOG_SURVEY_CREATED', 'survey_created');
 define('LOG_SURVEY_DELETED', 'survey_deleted');
 define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
-define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.\$-]/');
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.@\$-]/');
 
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
@@ -2965,12 +2965,12 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     if (!empty($session_id)) {
         $sql = "SELECT DISTINCT s.id
                 FROM $session_table AS s
-                INNER JOIN $tblSessionRelUser sru 
+                INNER JOIN $tblSessionRelUser sru
                 ON s.id = sru.session_id
-                WHERE 
-                    sru.user_id = $userId AND 
-                    s.id = $session_id AND 
-                    sru.relation_type = ".SessionEntity::GENERAL_COACH." 
+                WHERE
+                    sru.user_id = $userId AND
+                    s.id = $session_id AND
+                    sru.relation_type = ".SessionEntity::GENERAL_COACH."
                 ORDER BY s.access_start_date, s.access_end_date, s.name";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {

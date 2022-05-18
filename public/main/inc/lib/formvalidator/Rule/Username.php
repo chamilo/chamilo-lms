@@ -21,12 +21,10 @@ class HTML_QuickForm_Rule_Username extends HTML_QuickForm_Rule
      */
     public function validate($username, $options)
     {
-        // Allow field username to use "@" and "." BT#19778
-        return api_valid_email($username);
-        /*if ('true' == api_get_setting('login_is_email')) {
+        if ('true' == api_get_setting('login_is_email')) {
             return api_valid_email($username);
         } else {
             return UserManager::is_username_valid($username);
-        }*/
+        }
     }
 }

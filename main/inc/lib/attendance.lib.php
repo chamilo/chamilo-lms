@@ -2268,21 +2268,23 @@ class Attendance
         $row = 1;
         $csvContent = [];
         foreach ($users as $user) {
-            $csvContent[] = $row;
+            $csvUserContent = [];
+            $csvUserContent[] = $row;
             if ($sortByFirstName) {
-                $csvContent[] = $user['firstname'];
-                $csvContent[] = $user['lastname'];
+                $csvUserContent[] = $user['firstname'];
+                $csvUserContent[] = $user['lastname'];
             } else {
-                $csvContent[] = $user['lastname'];
-                $csvContent[] = $user['firstname'];
+                $csvUserContent[] = $user['lastname'];
+                $csvUserContent[] = $user['firstname'];
             }
-            $csvContent[] = $user['username'];
+            $csvUserContent[] = $user['username'];
             if (isset($user['user_id']) && !empty($user['user_id'])) {
                 $dates = implode(', ', array_keys($user['user_id']));
             } else {
                 $dates = '';
             }
-            $csvContent[] = $dates;
+            $csvUserContent[] = $dates;
+            $csvContent[] = $csvUserContent;
             $row++;
         }
 

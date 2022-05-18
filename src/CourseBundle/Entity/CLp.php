@@ -203,7 +203,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected int $accumulateWorkTime;
 
     /**
-     * @var Collection|CLpItem[]
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpItem", mappedBy="lp", cascade={"persist", "remove"}, orphanRemoval=true)
      */

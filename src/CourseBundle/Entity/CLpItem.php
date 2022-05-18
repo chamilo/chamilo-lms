@@ -127,11 +127,17 @@ class CLpItem
     protected ?float $prerequisiteMaxScore = null;
 
     /**
-     * @Gedmo\TreeRoot
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CLp $lp;
+
+    /**
+     * @Gedmo\TreeRoot
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItem")
+     * @ORM\JoinColumn(name="item_root", referencedColumnName="iid", onDelete="CASCADE")
+     */
+    protected ?CLpItem $root = null;
 
     /**
      * @Gedmo\TreeParent
@@ -141,7 +147,6 @@ class CLpItem
     protected ?CLpItem $parent = null;
 
     /**
-     * @var Collection|CLpItem[]
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpItem", mappedBy="parent")
      */
     protected Collection $children;

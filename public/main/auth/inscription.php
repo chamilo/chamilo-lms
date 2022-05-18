@@ -306,25 +306,25 @@ if (false === $userAlreadyRegisteredShowTerms &&
             get_lang('Phone'),
             ['size' => 20]
         );
-        if ('true' === api_get_setting('registration', 'phone')) {
+        //if ('true' === api_get_setting('registration', 'phone')) {
             $form->addRule(
                 'phone',
                 get_lang('Required field'),
                 'required'
             );
-        }
+        //}
     }
 
     // Language
     if (in_array('language', $allowedFields)) {
-        if ('true' === api_get_setting('registration', 'language')) {
+        //if ('true' === api_get_setting('registration', 'language')) {
             $form->addSelectLanguage(
                 'language',
                 get_lang('Language'),
                 [],
                 ['id' => 'language']
             );
-        }
+        //}
     }
 
     if (in_array('official_code', $allowedFields)) {
@@ -334,13 +334,13 @@ if (false === $userAlreadyRegisteredShowTerms &&
             get_lang('Code'),
             ['size' => 40]
         );
-        if ('true' === api_get_setting('registration', 'officialcode')) {
+        //if ('true' === api_get_setting('registration', 'officialcode')) {
             $form->addRule(
                 'official_code',
                 get_lang('Required field'),
                 'required'
             );
-        }
+        //}
     }
 
     // STUDENT/TEACHER
@@ -475,7 +475,6 @@ if (false === $userAlreadyRegisteredShowTerms &&
             false,
             [],
             $requiredFields,
-            true
         );
         $extraFieldsLoaded = true;
     }

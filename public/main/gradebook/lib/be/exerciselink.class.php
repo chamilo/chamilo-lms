@@ -342,7 +342,9 @@ class ExerciseLink extends AbstractLink
 
             if (0 == $student_count) {
                 if ($cacheAvailable) {
-                    $cacheDriver->save($key, null);
+                    $cacheItem = $cache->getItem($key);
+                    $cacheItem->set(null);
+                    $cache->save($cacheItem);
                 }
 
                 return null;
@@ -351,17 +353,20 @@ class ExerciseLink extends AbstractLink
                     case 'best':
                         $result = [$bestResult, $weight];
                         if ($cacheAvailable) {
-                            $cacheDriver->save($key, $result);
+                            $cacheItem = $cache->getItem($key);
+                            $cacheItem->set($result);
+                            $cache->save($cacheItem);
                         }
 
                         return $result;
-                        break;
                     case 'average':
                         $count = count($this->getStudentList());
                         if (empty($count)) {
                             $result = [0, $weight];
                             if ($cacheAvailable) {
-                                $cacheDriver->save($key, $result);
+                                $cacheItem = $cache->getItem($key);
+                                $cacheItem->set($result);
+                                $cache->save($cacheItem);
                             }
 
                             return $result;
@@ -370,27 +375,30 @@ class ExerciseLink extends AbstractLink
                         $result = [$sumResult / $count, $weight];
 
                         if ($cacheAvailable) {
-                            $cacheDriver->save($key, $result);
+                            $cacheItem = $cache->getItem($key);
+                            $cacheItem->set($result);
+                            $cache->save($cacheItem);
                         }
 
                         return $result;
-                        break;
                     case 'ranking':
                         $ranking = AbstractLink::getCurrentUserRanking($studentId, $students);
                         if ($cacheAvailable) {
-                            $cacheDriver->save($key, $ranking);
+                            $cacheItem = $cache->getItem($key);
+                            $cacheItem->set($ranking);
+                            $cache->save($cacheItem);
                         }
 
                         return $ranking;
-                        break;
                     default:
                         $result = [$sum, $student_count];
                         if ($cacheAvailable) {
-                            $cacheDriver->save($key, $result);
+                            $cacheItem = $cache->getItem($key);
+                            $cacheItem->set($result);
+                            $cache->save($cacheItem);
                         }
 
                         return $result;
-                        break;
                 }
             }
         }

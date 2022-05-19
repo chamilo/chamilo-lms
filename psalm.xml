@@ -200,6 +200,8 @@
 
         <LessSpecificReturnType errorLevel="info"/>
 
+        <UndefinedDocblockClass errorLevel="info"/>
+
         <!-- level 3 issues - slightly lazy code writing, but provably low false-negatives -->
 
         <DeprecatedClass errorLevel="info"/>
@@ -270,6 +272,7 @@
 
         <ForbiddenCode errorLevel="info"/>
         <ImplicitToStringCast errorLevel="info"/>
+        <InternalMethod errorLevel="info"/>
         <InvalidScalarArgument errorLevel="info"/>
         <InvalidToString errorLevel="info"/>
         <InvalidOperand errorLevel="info"/>

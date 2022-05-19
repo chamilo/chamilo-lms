@@ -948,19 +948,19 @@ class bbb
             }
         }
 
-        if ($isGlobal && !UserManager::is_admin($this->userId)) {
-            $conditions = array(
-                'where' => array(
+        if ($isGlobal) {
+            $conditions = [
+                'where' => [
                     'c_id IN (
                         SELECT c.id FROM course c 
                         INNER JOIN course_rel_user r ON c.id = r.c_id 
                         INNER JOIN user u ON r.user_id = u.user_id 
                         WHERE u.user_id = ?
-                    )' => array(
+                    )' => [
                         $this->userId,
-                    ),
-                ),
-            );
+                    ],
+                ],
+            ];
         }
 
         if (!empty($dateRange)) {

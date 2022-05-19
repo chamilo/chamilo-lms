@@ -148,7 +148,7 @@ class CkEditor extends Editor
      */
     private function getImagePicker()
     {
-        $callback = 'function (cb, value, meta) {
+        return 'function (cb, value, meta) {
             var input = document.createElement("input");
             input.setAttribute("type", "file");
             input.setAttribute("accept", "image/*");
@@ -167,8 +167,6 @@ class CkEditor extends Editor
             };
             input.click();
         }';
-
-        return $callback;
     }
 
     /**

@@ -126,6 +126,20 @@ function save_courses_data($courses)
         $params['user_id'] = $creatorId;
         $addMeAsTeacher = isset($_POST['add_me_as_teacher']) ? $_POST['add_me_as_teacher'] : false;
         $params['add_user_as_teacher'] = $addMeAsTeacher;
+
+        if (array_key_exists('CourseTemplate', $course) && $course['CourseTemplate'] != '') {
+            $results = Database::fetch_array(
+                Database::query(
+                    'SELECT *, id as real_id FROM '.Database::get_main_table(TABLE_MAIN_COURSE).'
+                    WHERE code = "'.Database::escape_string($course['CourseTemplate']).'"'
+                ),
+                'ASSOC'
+            );
+            if (count($results) && array_key_exists('real_id', $results)) {
+                $params['CourseTemplate'] = $results['real_id'];
+            }
+        }
+
         $courseInfo = CourseManager::create_course($params);
 
         if (!empty($courseInfo)) {
@@ -140,6 +154,23 @@ function save_courses_data($courses)
             }
             $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/">
                     '.$courseInfo['title'].'</a> '.get_lang('Created').'<br />';
+        }
+
+        if (array_key_exists('CloneTools', $course) && $course['CloneTools'] == 'true' && array_key_exists('CourseTemplate', $params)) {
+            $table = Database::get_course_table(TABLE_TOOL_LIST);
+            $results = Database::store_result(
+                Database::query('SELECT * FROM '.$table.' WHERE c_id = '.$params['CourseTemplate']),
+                'ASSOC'
+            );
+            if (count($results)) {
+                foreach ($results as $row) {
+                    Database::update(
+                        $table,
+                        ['visibility' => $row['visibility']],
+                        ['c_id = ? and name = ?' => [$courseInfo['real_id'], $row['name']]]
+                    );
+                }
+            }
         }
     }
 
@@ -233,10 +264,10 @@ $form->display();
 
 <blockquote>
 <pre>
-<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>CourseCategoryName</strong>;Teacher;Language
-BIO0015;Biology;BIO;Science;teacher1;english
-BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english
-BIO0017;Language;LANG;;;english
+<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>CourseCategoryName</strong>;Teacher;Language;CourseTemplate;CloneTools
+BIO0015;Biology;BIO;Science;teacher1;english;TEMPLATE1;true
+BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english;;
+BIO0017;Language;LANG;;;english;;
 </pre>
 </blockquote>
 

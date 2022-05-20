@@ -514,20 +514,20 @@ class GradebookCategory
     /**
      * @return int
      */
-    /*public function getAllowSkillsBySubcategory()
+    public function getAllowSkillsBySubcategory()
     {
         return $this->allowSkillsBySubcategory;
-    }*/
+    }
 
     /**
      * @param int $allowSkillsBySubcategory
      *
      * @return GradebookCategory
      */
-    /*public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
+    public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
     {
         $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
 
         return $this;
-    }*/
+    }
 }

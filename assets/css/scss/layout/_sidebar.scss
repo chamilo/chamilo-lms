@@ -1,0 +1,132 @@
+.app-sidebar {
+  @apply block bg-white fixed left-0 transition-[width] duration-150 items-stretch w-full;
+  height: calc(100vh - 4.5rem - 1px);
+  top: calc(4.5rem + 1px);
+
+  &__container {
+    @apply flex flex-col h-full;
+  }
+
+  &__top {
+    @apply text-xl md:hidden font-bold pt-8 px-8;
+  }
+
+  &__panel {
+    @apply py-6 px-0 overflow-x-hidden overflow-y-auto flex-1 overscroll-none;
+  }
+
+  &__bottom {
+  }
+
+  &__logout-link {
+    @apply block font-semibold p-4 border-t border-solid border-blue-100 text-center whitespace-nowrap;
+
+    .logout-text {
+      @apply ml-2;
+    }
+  }
+
+  &__button {
+    @apply bg-white border border-solid border-blue-100 rounded-full absolute top-7 -right-3.5 px-2 py-1.5 text-xs hidden md:flex;
+  }
+
+  .p-panelmenu {
+    @apply min-w-[15rem];
+
+    .p-panelmenu-header {
+      > a {
+        @apply gap-4 pl-8 py-3 pr-6 font-semibold flex-nowrap;
+
+        .p-panelmenu-icon {
+          @apply order-3 text-xs rotate-90;
+        }
+
+        .p-menuitem-icon {
+          @apply order-1;
+        }
+
+        .p-menuitem-text {
+          @apply order-2 grow whitespace-nowrap;
+        }
+
+        &:hover {
+          @apply bg-blue-100;
+        }
+
+        &.router-link-active,
+        &[aria-expanded="true"] {
+          @apply bg-blue-200 border-l-4 border-blue-500 border-solid pl-7 text-blue-500;
+
+          .p-panelmenu-icon {
+            @apply rotate-180;
+          }
+        }
+      }
+    }
+
+    .p-panelmenu-content {
+      .p-menuitem {
+        .p-menuitem-link {
+          @apply pl-8 py-3 pr-6;
+
+          &:hover {
+            @apply bg-blue-100;
+          }
+
+          &.router-link-active-exact {
+            @apply text-blue-500;
+          }
+        }
+      }
+    }
+  }
+}
+
+.app-sidebar__topbar-button {
+  @apply flex h-8 w-8 rounded-full transition-none items-center justify-center md:hidden;
+}
+
+#app.app--sidebar-inactive {
+  .app-sidebar {
+    @apply hidden;
+  }
+
+  .app-sidebar__topbar-button {
+    .pi.pi-times {
+      &::before {
+        content: "\e91d";
+      }
+    }
+  }
+}
+
+@media (min-width: 640px) {
+  .app-sidebar {
+    @apply bg-blue-50 border-r border-solid border-blue-100 w-60;
+  }
+
+  #app.app--sidebar-inactive {
+    .app-sidebar {
+      @apply block;
+      width: 88px;
+
+      .p-panelmenu-header {
+        > a {
+          .p-panelmenu-icon {
+            @apply hidden;
+          }
+
+          .p-menuitem-text {
+            @apply hidden;
+          }
+        }
+      }
+
+      &__logout-link {
+        .logout-text {
+          @apply hidden mr-0;
+        }
+      }
+    }
+  }
+}

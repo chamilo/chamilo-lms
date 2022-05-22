@@ -1,287 +1,44 @@
 <template>
   <Topbar />
-  <q-layout view="hHh LpR lff" class="bg-grey-1">
-    <q-drawer
-        v-if="isSidebarOpen"
-        show-if-above
-        bordered
-        content-class="bg-white"
-        :width="280"
-        :breakpoint="850"
-        class="q-mt-sm"
-    >
-      <q-scroll-area class="fit">
-        <q-list class="text-grey-8">
-          <q-item class="GNL__drawer-item" v-ripple v-for="link in linksAnon" :key="link.text" :to="link.url" clickable>
-            <q-item-section avatar>
-              <v-icon :icon="link.icon" medium/>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-
-        <q-separator inset class="q-my-sm"/>
-
-        <q-list v-if="isAuthenticated" padding class="text-grey-8">
-          <q-item class="GNL__drawer-item" v-ripple v-for="link in linksUser" :key="link.text" :to="link.url" clickable>
-            <q-item-section avatar>
-              <!--              <q-icon :name="link.icon" />-->
-              <v-icon :icon="link.icon" medium/>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator v-if="isAdmin" inset class="q-my-sm"/>
-
-          <q-item v-if="isAdmin" class="GNL__drawer-item" v-ripple
-                  v-for="link in linksAdmin" :key="link.text" :to="link.url" clickable
-          >
-            <q-item-section avatar>
-              <!--              <q-icon :name="link.icon" />-->
-              <v-icon :icon="link.icon" medium/>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator inset class="q-my-sm"/>
-
-          <div class="q-mt-md">
-            <div class="flex flex-center q-gutter-xs">
-              <a
-                  class="GNL__drawer-footer-link"
-                  href="javascript:void(0)"
-              >
-                {{ config['platform.site_name'] }}
-                {{ config['platform.institution'] }}
-              </a>
-            </div>
-          </div>
-        </q-list>
-      </q-scroll-area>
-    </q-drawer>
-    <!--    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" elevated>-->
-    <!--      &lt;!&ndash; drawer content &ndash;&gt;-->
-    <!--    </q-drawer>-->
-    <q-page-container>
-      <q-page
-          class="q-layout-padding"
-      >
-        <Breadcrumb v-if="showBreadcrumb" :legacy="this.breadcrumb"/>
-        <router-view/>
-        <slot></slot>
-      </q-page>
-    </q-page-container>
-  </q-layout>
+  <Sidebar v-if="isAuthenticated" />
+  <div
+    class="app-main"
+    :class="{ 'app-main--no-sidebar': !isAuthenticated }"
+  >
+    <Breadcrumb
+      v-if="showBreadcrumb"
+      :legacy="breadcrumb"
+    />
+    <router-view />
+    <slot />
+  </div>
 </template>
 
-<script>
-import {mapGetters, useStore} from "vuex";
-import isEmpty from "lodash/isEmpty";
-import useState from "../../hooks/useState";
-import {computed, onMounted, ref, toRefs} from "vue";
+<script setup>
 import Breadcrumb from '../../components/Breadcrumb.vue';
-import {useRoute} from 'vue-router'
 import Topbar from '../../components/layout/Topbar.vue';
-import {useI18n} from 'vue-i18n'
-import Cookies from 'js-cookie'
-import toInteger from "lodash/toInteger";
-export default {
-  name: "DashboardLayout",
-  components: {
-    Breadcrumb,
-    Topbar
+import Sidebar from '../../components/layout/Sidebar.vue';
+import {useStore} from "vuex";
+import {computed} from "vue";
+
+// eslint-disable-next-line no-undef
+defineProps({
+  showBreadcrumb: {
+    type: Boolean,
+    default: true,
   },
-  props: {
-    showBreadcrumb: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  setup(props) {
-    const {isSidebarOpen, isSettingsPanelOpen, isSearchPanelOpen, isNotificationsPanelOpen} = useState();
-    const rightDrawerOpen = ref(false);
-    const linksUser = ref([]);
-    const linksAdmin = ref([]);
-    const linksAnon = ref([]);
-    const {showBreadcrumb} = toRefs(props);
-    const config = ref([]);
-    const route = useRoute();
-    const {t} = useI18n();
+});
 
-    onMounted(() => {
-      let open = toInteger(Cookies.get('open_sidebar'));
+const store = useStore();
+const isAuthenticated = computed(() => store.getters['security/isAuthenticated']);
 
-      if (1 === open) {
-        isSidebarOpen.value = true;
-      } else {
-        isSidebarOpen.value = false;
-      }
-    });
+let breadcrumb = [];
 
-    function toggleSidebar() {
-      isSidebarOpen.value = !isSidebarOpen.value;
-      if (true === isSidebarOpen.value) {
-        Cookies.set('open_sidebar', 1);
-      } else {
-        Cookies.set('open_sidebar', 0);
-      }
-    }
-
-    if (!isEmpty(window.config)) {
-      config.value = window.config;
-    }
-
-    linksUser.value = [
-      //{ icon: 'home', url: '/', text: 'Home' },
-      //{ icon: 'star_border', url: '/', text: 'News' },
-      {icon: 'mdi-book-open-page-variant', url: '/courses', text: t('My courses')},
-      {icon: 'mdi-google-classroom', url: '/sessions', text: t('My sessions')},
-      {icon: 'mdi-calendar-text', url: '/resources/ccalendarevent', text: t('Events')},
-      {icon: 'mdi-chart-box', url: '/main/auth/my_progress.php', text: t('My progress')},
-      //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
-      //{ icon: 'compass', url: '/catalog', text: 'Explore' },
-      // { icon: 'star_border', url: '/news', text: 'News' },
-      {icon: 'mdi-network', url: '/social', text: t('Social network')},
-    ];
-
-    linksAdmin.value = [
-      {icon: 'mdi-account-multiple', url: '/main/admin/user_list.php', text: t('Users')},
-      {icon: 'mdi-book-open-page-variant', url: '/main/admin/course_list.php', text: t('Courses')},
-      {icon: 'mdi-google-classroom', url: '/main/session/session_list.php', text: t('Sessions')},
-      {icon: 'mdi-cogs', url: '/main/admin/index.php', text: t('Administration')},
-      {icon: 'mdi-chart-box', url: '/main/mySpace/index.php', text: t('Reporting')},
-    ];
-
-    linksAnon.value = [
-      {icon: 'mdi-home', url: '/home', text: t('Home')},
-      //{ icon: 'mdi-compass', url: '/catalog', text: 'Explore' },
-    ];
-
-    function generateTicketUrl() {
-      const queryParams = new URLSearchParams(window.location.href);
-
-      const cid = route.query.cid || route.params.id || queryParams.get('cid') || 0;
-      const sid = route.query.sid || queryParams.get('sid') || 0;
-      const gid = route.query.gid || queryParams.get('gid') || 0;
-
-      return `/main/ticket/tickets.php?project_id=1&cid=${cid}&sid=${sid}&gid=${gid}`;
-    }
-
-    return {
-      toggleSidebar,
-      linksAnon,
-      linksUser,
-      linksAdmin,
-      config,
-      showBreadcrumb,
-      isSettingsPanelOpen,
-      isSearchPanelOpen,
-      isNotificationsPanelOpen,
-      isSidebarOpen,
-      rightDrawerOpen,
-      toggleRightDrawer() {
-        rightDrawerOpen.value = !rightDrawerOpen.value
-      },
-      generateTicketUrl,
-    }
-  },
-
-  data: () => ({
-    user: {},
-    moved: true,
-    drawer: true,
-    breadcrumb: [],
-    languageArray: ['en', 'fr'],
-    courses: [
-      ['Courses', 'mdi-book', 'CourseList'],
-      ['Courses category', 'mdi-book', 'CourseCategoryList'],
-    ],
-  }),
-  updated() {
-    if (this.isAuthenticated) {
-      if (this.isBoss) {
-        if (!this.linksUser.some(data => data.id === 'load_search')) {
-          this.linksUser.push({
-            icon: 'mdi-format-list-checks',
-            url: '/main/search/load_search.php',
-            text: this.$i18n.t('Diagnosis Management'),
-            id: 'load_search'
-          });
-        }
-        if (!this.linksUser.some(data => data.id === 'search')) {
-          this.linksUser.push({
-            icon: 'mdi-account-search',
-            url: '/main/search/search.php',
-            text: this.$i18n.t('Diagnostic Form'),
-            id: 'search'
-          });
-        }
-      }
-      if (this.isStudent) {
-        if (!this.linksUser.some(data => data.id === 'search')) {
-          this.linksUser.push({
-            icon: 'mdi-account-search',
-            url: '/main/search/search.php',
-            text: this.$i18n.t('Diagnostic Form'),
-            id: 'search'
-          });
-        }
-      }
-    }
-  },
-  created() {
-    this.legacyContent = '';
-    let isAuthenticated = false;
-    if (!isEmpty(window.user)) {
-      this.user = window.user;
-      isAuthenticated = true;
-    }
-
-    try {
-      if (window.breadcrumb) {
-        this.breadcrumb = window.breadcrumb;
-      }
-    } catch (e) {
-      console.log(e.message);
-    }
-
-    //let payload = {isAuthenticated: isAuthenticated, user: this.user};
-    //this.$store.dispatch("security/onRefresh", payload);
-    /*if (isAuthenticated) {
-      this.linksUser.unshift({icon: 'mdi-account', url: '/account/home', text: this.currentUser.username});
-    }*/
-  },
-  computed: {
-    ...mapGetters({
-      'isAuthenticated': 'security/isAuthenticated',
-      'isAdmin': 'security/isAdmin',
-      'isBoss': 'security/isBoss',
-      'isStudent': 'security/isStudent',
-      'currentUser': 'security/getUser',
-    }),
-  },
-  methods: {
-    dropdownHandler(event) {
-      let single = event.currentTarget.getElementsByTagName("ul")[0];
-      single.classList.toggle("hidden");
-    },
-    sidebarHandler() {
-      var sideBar = document.getElementById("mobile-nav");
-      sideBar.style.transform = "translateX(-260px)";
-      if (this.$data.moved) {
-        sideBar.style.transform = "translateX(0px)";
-        this.$data.moved = false;
-      } else {
-        sideBar.style.transform = "translateX(-260px)";
-        this.$data.moved = true;
-      }
-    },
-  },
+try {
+  if (window.breadcrumb) {
+    breadcrumb = window.breadcrumb;
+  }
+} catch (e) {
+  console.log(e.message);
 }
 </script>

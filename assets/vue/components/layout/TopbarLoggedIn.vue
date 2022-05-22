@@ -111,10 +111,6 @@ const userSubmenuItems = [
         label: 'Settings',
         url: '/account/edit'
       },
-      {
-        label: 'Logout',
-        url: '/logout'
-      },
     ]
   },
 ];

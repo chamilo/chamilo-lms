@@ -1,36 +1,18 @@
 <template>
-  <q-layout view="hHh LpR lff" class="bg-grey-1">
-    <q-page-container>
-      <q-page class="q-layout-padding">
-        <div class="grid grid-cols-1 md:grid-cols-2">
-
-          <!-- Form-->
-          <div class="md:row-start-1 md:col-start-2 md:col-end-2 xl:p-12">
-            <div class="md:mt-10 lg:mt-16 flex justify-center">
-              <div class="max-w-sm">
-                <div>
-                  <h2 class="text-center text-3xl font-extrabold text-gray-900">
-                    {{ $t('Sign in') }}
-                  </h2>
-                </div>
-                <Login />
-              </div>
-            </div>
-          </div>
-
-          <div class="md:row-start-1 md:col-start-1 md:col-end-1">
-            <div
-                v-if="pages.length"
-                class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 mt-2">
-              <PageCardList
-                  :pages="pages"
-              />
-            </div>
-          </div>
-        </div>
-      </q-page>
-    </q-page-container>
-  </q-layout>
+  <div class="flex gap-8">
+    <div class="order-2 flex-none w-96">
+      <Login />
+    </div>
+    <div class="order-1 flex-1 ">
+      <div
+        v-if="pages.length"
+      >
+        <PageCardList
+          :pages="pages"
+        />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>

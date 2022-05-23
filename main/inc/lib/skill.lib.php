@@ -577,10 +577,13 @@ class SkillRelUser extends Model
             'user_id = ? ' => (int) $userId,
         ];
 
-        if ($courseId > 0) {
+        if ($sessionId > 0) {
             $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ?'] = $sessionId;
+            $whereConditions['AND session_id = ? '] = $sessionId;
+        } else {
+            $whereConditions['AND course_id = ? AND session_id is NULL'] = $courseId;
         }
+
 
         $result = Database::select(
             'skill_id',
@@ -1241,6 +1244,29 @@ class Skill extends Model
                     ];
 
                     $skill_rel_user->save($params);
+
+                    // It sends notifications about user skills from gradebook
+                    $badgeAssignationNotification = api_get_configuration_value('badge_assignation_notification');
+                    if ($badgeAssignationNotification) {
+                        $entityManager = Database::getManager();
+                        $skillRepo = $entityManager->getRepository('ChamiloCoreBundle:Skill');
+                        $skill = $skillRepo->find($skill_gradebook['skill_id']);
+                        if ($skill) {
+                            $user = api_get_user_entity($userId);
+                            $url = api_get_path(WEB_PATH)."skill/{$skill_gradebook['skill_id']}/user/{$userId}";
+                            $message = sprintf(
+                                get_lang('YouXHaveAchievedTheSkillYToSeeFollowLinkZ'),
+                                $user->getFirstname(),
+                                $skill->getName(),
+                                Display::url($url, $url, ['target' => '_blank'])
+                            );
+                            MessageManager::send_message(
+                                $user->getId(),
+                                get_lang('YouHaveAchievedANewSkill'),
+                                $message
+                            );
+                        }
+                    }
                 }
             }
         }

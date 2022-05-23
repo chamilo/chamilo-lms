@@ -153,3 +153,5 @@ $strings['WebinarDeleted'] = "Webinar supprimé";
 $strings['UrlForSelfRegistration'] = "URL pour l'auto-inscription des participants";
 $strings['RegisterMeToConference'] = "M'inscrire à la visio";
 $strings['UnregisterMeToConference'] = "Me désinscrire de la visio";
+$strings['ForEveryone'] = "Tout le monde";
+$strings['SomeUsers'] = "Utilisateurs inscrits (à inscrire après)";

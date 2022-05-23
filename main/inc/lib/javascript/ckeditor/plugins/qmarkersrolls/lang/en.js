@@ -15,5 +15,7 @@ CKEDITOR.plugins.setLang('qmarkersrolls', 'en', {
     assignQuiz: 'Assign quiz',
     currentMarkers: 'Current Markers',
     markerColor: 'Marker color',
-    choose: 'Choose'
+    choose: 'Choose',
+    time: 'Time',
+    embedVideoSource: 'Embed video source'
 });

@@ -101,6 +101,10 @@ class Matching extends Question
         $form->addElement('hidden', 'nb_matches', $nb_matches);
         $form->addElement('hidden', 'nb_options', $nb_options);
 
+        $thWeighting = '';
+        if (MATCHING === $this->type) {
+            $thWeighting = '<th width="10%">'.get_lang('Weighting').'</th>';
+        }
         // DISPLAY MATCHES
         $html = '<table class="table table-striped table-hover">
             <thead>
@@ -108,7 +112,7 @@ class Matching extends Question
                     <th width="5%">'.get_lang('Number').'</th>
                     <th width="70%">'.get_lang('Answer').'</th>
                     <th width="15%">'.get_lang('MatchesTo').'</th>
-                    <th width="10%">'.get_lang('Weighting').'</th>
+                    '.$thWeighting.'
                 </tr>
             </thead>
             <tbody>';
@@ -161,12 +165,16 @@ class Matching extends Question
                 $matches,
                 ['id' => 'matches_'.$i]
             );
-            $form->addText(
-                "weighting[$i]",
-                null,
-                true,
-                ['id' => 'weighting_'.$i, 'value' => 10]
-            );
+            if (MATCHING === $this->type) {
+                $form->addText(
+                    "weighting[$i]",
+                    null,
+                    true,
+                    ['id' => 'weighting_'.$i, 'value' => 10]
+                );
+            } else {
+                $form->addHidden("weighting[$i]", "0");
+            }
             $form->addHtml('</tr>');
         }
 
@@ -212,6 +220,14 @@ class Matching extends Question
         }
 
         $form->addHtml('</table>');
+
+        if (MATCHING_GLOBAL === $this->type) {
+            //only 1 answer the all deal ...
+            $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
+            if (!empty($this->iid)) {
+                $defaults['questionWeighting'] = $this->weighting;
+            }
+        }
 
         global $text;
         $group = [];
@@ -271,6 +287,11 @@ class Matching extends Question
                 $position
             );
         }
+
+        if (MATCHING_GLOBAL == $this->type) {
+            $this->weighting = $form->getSubmitValue('questionWeighting');
+        }
+
         $objAnswer->save();
         $this->save($exercise);
     }

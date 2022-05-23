@@ -1083,6 +1083,8 @@ ALTER TABLE portfolio_category ADD parent_id INT(11) NOT NULL DEFAULT 0;
 // $_configuration['video_features'] = ['features' => ['speed']];
 // Hide the context menu on video player
 //$_configuration['video_context_menu_hidden'] = false;
+// Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias
+//$_configuration['video_player_renderers'] = ['renderers' => ['dailymotion', 'facebook', 'twitch', 'vimeo', 'youtube']];
 
 // Disable token verification when sending a message
 // $_configuration['disable_token_in_new_message'] = false;
@@ -2214,7 +2216,6 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Require DB changes:
 // ALTER TABLE gradebook_category ADD allow_skills_by_subcategory tinyint(1) NULL DEFAULT '1';
 // Requires edit Entity GradebookCategory: src/Chamilo/CoreBundle/Entity/GradebookCategory.php uncomment "allowSkillsBySubcategory" variable.
-// Requires uncomment the allowSkillsBySubcategory get and set
 //$_configuration['gradebook_enable_subcategory_skills_independant_assignement'] = false;
 
 // Shows the deleted quizzes in my progress page.

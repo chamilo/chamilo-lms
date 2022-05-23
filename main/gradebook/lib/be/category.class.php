@@ -2163,10 +2163,6 @@ class Category implements GradebookItem
         if ($skillToolEnabled) {
             $skill = new Skill();
             $objSkillRelUser = new SkillRelUser();
-
-            // It cleans the previous results to generate the new user skills
-            $objSkillRelUser->deleteUserSkill($user_id, $courseId, $sessionId);
-
             $skill->addSkillToUser(
                 $user_id,
                 $category,

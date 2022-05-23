@@ -1243,13 +1243,13 @@ if (!empty($questionList)) {
             if ($current_question != $i) {
                 continue;
             } else {
-                if ($selectType == HOT_SPOT || $selectType == HOT_SPOT_DELINEATION) {
+                if (in_array($selectType, [HOT_SPOT, HOT_SPOT_GLOBAL, HOT_SPOT_DELINEATION])) {
                     $number_of_hotspot_questions++;
                 }
                 break;
             }
         } else {
-            if ($selectType == HOT_SPOT || $selectType == HOT_SPOT_DELINEATION) {
+            if (in_array($selectType, [HOT_SPOT, HOT_SPOT_GLOBAL, HOT_SPOT_DELINEATION])) {
                 $number_of_hotspot_questions++;
             }
         }

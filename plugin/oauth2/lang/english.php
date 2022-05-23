@@ -126,3 +126,5 @@ $strings['NoUserHasThisOauthCode'] = 'No existing user has this OAuth2 code';
 $strings['OAuth2Id'] = 'OAuth2 identifier';
 $strings['UserNotAllowedOnThisPortal'] = 'This user account is not enabled on this portal';
 $strings['WrongResponseResourceOwnerId'] = 'OAuth2 resource owner identifier value not found at the configured key';
+$strings['IssuerNotFound'] = 'Issuer not found';
+$strings['AuthorizeUrlNotAllowed'] = 'Authorize URL not allowed';

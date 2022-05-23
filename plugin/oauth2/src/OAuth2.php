@@ -58,6 +58,8 @@ class OAuth2 extends Plugin
     public const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
     public const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
 
+    public const SETTING_ALLOW_THIRD_PARTY_LOGIN = 'allow_third_party_login';
+
     public const EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
 
     protected function __construct()
@@ -110,6 +112,8 @@ class OAuth2 extends Plugin
 
                 self::SETTING_MANAGEMENT_LOGIN_ENABLE => 'boolean',
                 self::SETTING_MANAGEMENT_LOGIN_NAME => 'text',
+
+                self::SETTING_ALLOW_THIRD_PARTY_LOGIN => 'boolean',
             ]
         );
     }

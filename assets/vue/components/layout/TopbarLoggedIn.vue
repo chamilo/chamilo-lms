@@ -1,5 +1,6 @@
 <template>
   <MegaMenu
+    class="app-topbar"
     :model="menuItems"
   >
     <template #start>
@@ -49,6 +50,7 @@
   <Menu
     id="user-submenu"
     ref="elUserSubmenu"
+    class="app-topbar__user-submenu"
     :model="userSubmenuItems"
     :popup="true"
   />
@@ -62,6 +64,7 @@ import MegaMenu from "primevue/megamenu";
 import Avatar from "primevue/avatar";
 import Menu from "primevue/menu";
 
+// eslint-disable-next-line no-undef
 const props = defineProps({
   currentUser: {
     required: true,

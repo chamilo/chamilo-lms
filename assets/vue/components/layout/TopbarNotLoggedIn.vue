@@ -1,5 +1,6 @@
 <template>
   <Menubar
+    class="app-topbar"
     :model="menuItems"
   >
     <template #start>

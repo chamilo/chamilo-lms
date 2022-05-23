@@ -1945,9 +1945,16 @@ class Exercise
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET active='-1'
-                WHERE iid = ".$this->iid;
-        Database::query($sql);
+
+        if (api_get_session_id() != 0) {
+            $sql = "SELECT session_id FROM $table
+                    WHERE iid = ".$this->iid;
+            $result = Database::query($sql);
+            $result = Database::fetch_array($result);
+            if ($result['session_id'] == 0) {
+                return false;
+            }
+        }
 
         api_item_property_update(
             $this->course,

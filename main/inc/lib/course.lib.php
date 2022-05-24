@@ -7145,13 +7145,15 @@ class CourseManager
      * @param int             $userId
      * @param string|int|null $startDate
      * @param string|int|null $endDate
+     * @param int             $sessionId
      */
     public static function getAccessCourse(
         $courseId = 0,
         $withSession = 0,
         $userId = 0,
         $startDate = null,
-        $endDate = null
+        $endDate = null,
+        $sessionId = null
     ) {
         $where = null;
         $courseId = (int) $courseId;
@@ -7166,16 +7168,21 @@ class CourseManager
         }
         if (!empty($startDate)) {
             $startDate = api_get_utc_datetime($startDate, false, true);
-            $wheres[] = " course_access.login_course_date >= '".$startDate->format('Y-m-d')."' ";
+            $wheres[] = " course_access.login_course_date >= '".$startDate->format('Y-m-d 00:00:00')."' ";
         }
         if (!empty($endDate)) {
             $endDate = api_get_utc_datetime($endDate, false, true);
-            $wheres[] = " course_access.login_course_date <= '".$endDate->format('Y-m-d')."' ";
+            $wheres[] = " course_access.login_course_date <= '".$endDate->format('Y-m-d 23:59:59')."' ";
         }
         if (0 == $withSession) {
             $wheres[] = " course_access.session_id = 0 ";
         } elseif (1 == $withSession) {
             $wheres[] = " course_access.session_id != 0 ";
+        }
+
+        if (isset($sessionId)) {
+            $sessionId = (int) $sessionId;
+            $wheres[] = " course_access.session_id = $sessionId ";
         }
 
         $totalWhere = count($wheres);

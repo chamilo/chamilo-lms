@@ -1387,7 +1387,7 @@ class SessionManager
      */
     public static function get_user_data_access_tracking_overview(
         $sessionId,
-        $courseId,
+        $courseId = 0,
         $studentId = 0,
         $profile = '',
         $date_from = '',

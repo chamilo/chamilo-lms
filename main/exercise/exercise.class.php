@@ -1920,8 +1920,10 @@ class Exercise
      * Marks the exercise as deleted.
      * If $delete argument set, completely deletes it from the database.
      * Note: leaves the questions in the database as "orphan" questions
-     * (unless used by other tests)
+     * (unless used by other tests).
+     *
      * @param bool $delete Whether to really delete the test (true) or only mark it (false = default)
+     *
      * @return bool Whether the operation was successful or not
      *
      * @author Olivier Brouckaert

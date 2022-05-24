@@ -29,3 +29,5 @@
     </table>
 </div>
 {% endif %}
+
+{{script}}

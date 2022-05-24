@@ -1924,6 +1924,10 @@ switch ($action) {
                     api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']
                 );
                 $detailButtons[] = Display::url(
+                    Display::return_icon('clock.png', get_lang('ProgressInSessionReport')),
+                    api_get_path(WEB_CODE_PATH).'mySpace/progress_in_session_report.php?session_id='.$session['id']
+                );
+                $detailButtons[] = Display::url(
                     Display::return_icon('2rightarrow.png'),
                     api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id']
                 );

@@ -347,7 +347,7 @@ if (api_is_platform_admin(true, true)) {
     );
 
     $menu_items[] = Display::url(
-        Display::return_icon('clock.png', get_lang('ProgressInSessionReport'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('attendance_list.png', get_lang('ProgressInSessionReport'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'mySpace/progress_in_session_report.php'
     );
 

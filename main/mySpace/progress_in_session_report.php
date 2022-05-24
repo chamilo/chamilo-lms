@@ -23,6 +23,34 @@ $interbreadcrumb[] = [
     'name' => get_lang('FollowedSessions'),
 ];
 
+$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
+
+$script = '<script>
+var sessionId = '.$sessionId.';
+$(function() {
+  $(".export").click(function(e) {
+    var actionFrm = $(this).attr("href");
+    submitFrm(actionFrm, e);
+  });
+
+  $("#session_progress_report_submitReport").click(function(e) {
+    var actionFrm = "'.api_get_self().'";
+    submitFrm(actionFrm, e);
+  });
+
+  if (sessionId > 0) {
+    $("#session_progress_report_submitReport").click();
+  }
+})
+
+function submitFrm(actionFrm, e) {
+  e.stopImmediatePropagation();
+  e.preventDefault();
+  $("#session_progress_report").attr("action", actionFrm);
+  $("#session_progress_report").submit();
+}
+</script>';
+
 $actions = null;
 $actions .= Display::url(
     Display::return_icon('back.png', get_lang('Back'),
@@ -30,14 +58,6 @@ $actions .= Display::url(
         ICON_SIZE_MEDIUM
     ),
     '../mySpace/session.php'
-);
-$actions .= Display::url(
-    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], 32),
-    api_get_self().'?export=csv'
-);
-$actions .= Display::url(
-    Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-    api_get_self().'?export=xls'
 );
 
 if (api_is_platform_admin()) {
@@ -63,11 +83,10 @@ $form->addDateRangePicker(
     false,
     ['id' => 'date_range']
 );
-$form->addButtonFilter(get_lang('Filter'));
+$form->addButtonFilter(get_lang('Filter'), 'submitReport');
 
-$sid = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
 if (!empty($sessionId)) {
-    $form->setDefaults(['session_id' => $sid]);
+    $form->setDefaults(['session_id' => $sessionId]);
 }
 
 $users = [];
@@ -132,12 +151,49 @@ if ($form->validate()) {
     }
 }
 
+if (isset($_GET['export']) && !empty($users)) {
+    $fileName = 'progress_in_session_'.api_get_local_time();
+
+    $dataToExport = [];
+    $dataToExport['headers'][] = get_lang('StudentName');
+    $dataToExport['headers'][] = get_lang('TimeSpentOnThePlatform');
+
+    foreach ($courses as $courseCode) {
+        $dataToExport['headers'][] = get_lang('Progress').' '.$courseCode;
+        $dataToExport['headers'][] = get_lang('Certificate').' '.$courseCode;
+    }
+
+    foreach ($users as $user) {
+        $dataToExport[] = $user;
+    }
+
+    switch ($_GET['export']) {
+        case 'xls':
+            Export::export_table_xls_html($dataToExport, $fileName);
+            break;
+        case 'csv':
+            Export::arrayToCsv($dataToExport, $fileName);
+            break;
+    }
+}
+
 $view = new Template($toolName);
 $view->assign('form', $form->returnForm());
+$view->assign('script', $script);
 if (!empty($users)) {
     $view->assign('sessionName', $sessionName);
     $view->assign('courses', $courses);
     $view->assign('users', $users);
+    $actions .= Display::url(
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], 32),
+        api_get_self().'?export=csv',
+        ['class' => 'export']
+    );
+    $actions .= Display::url(
+        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+        api_get_self().'?export=xls',
+        ['class' => 'export']
+    );
 }
 $template = $view->get_template('my_space/progress_in_session_report.tpl');
 $content = $view->fetch($template);

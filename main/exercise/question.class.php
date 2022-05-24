@@ -1358,7 +1358,7 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int $exerciseId - exercise ID
-     * @param int $courseId The ID of the course, to avoid deleting re-used questions
+     * @param int $courseId   The ID of the course, to avoid deleting re-used questions
      *
      * @return bool - true if removed, otherwise false
      */
@@ -1417,10 +1417,8 @@ abstract class Question
      *
      * @author Olivier Brouckaert
      *
-     * @param int $deleteFromEx Exercise ID if the question is only to be removed from one exercise
+     * @param int  $deleteFromEx  Exercise ID if the question is only to be removed from one exercise
      * @param bool $deletePicture Allow for special cases where the picture would be better left alone
-     *
-     * @return bool
      */
     public function delete(int $deleteFromEx = 0, bool $deletePicture = true): bool
     {

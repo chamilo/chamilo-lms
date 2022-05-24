@@ -2619,11 +2619,11 @@ class Tracking
     /**
      * Calculates the time spent on the course.
      *
-     * @param int $user_id
-     * @param int $courseId
-     * @param int $session_id
-     * @param string $startDate date string
-     * @param string $endDate date string
+     * @param int    $user_id
+     * @param int    $courseId
+     * @param int    $session_id
+     * @param string $startDate  date string
+     * @param string $endDate    date string
      *
      * @return int Time in seconds
      */

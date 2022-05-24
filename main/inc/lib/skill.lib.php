@@ -584,7 +584,6 @@ class SkillRelUser extends Model
             $whereConditions['AND course_id = ? AND session_id is NULL'] = $courseId;
         }
 
-
         $result = Database::select(
             'skill_id',
             $this->table,

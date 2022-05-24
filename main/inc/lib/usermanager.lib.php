@@ -5953,8 +5953,8 @@ class UserManager
      * @param string $course_code The course code
      * @param int    $session_id
      * @param int    $user_id     The user id
-     * @param string $startDate date string
-     * @param string $endDate date string
+     * @param string $startDate   date string
+     * @param string $endDate     date string
      *
      * @return array if there is not information return false
      */

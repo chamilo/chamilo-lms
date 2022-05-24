@@ -16,7 +16,7 @@ $toolName = get_lang('ProgressInSessionReport');
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
-    'name' => get_lang('Reporting')
+    'name' => get_lang('Reporting'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/session.php',
@@ -39,7 +39,6 @@ $actions .= Display::url(
     Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
     api_get_self().'?export=xls'
 );
-
 
 if (api_is_platform_admin()) {
     $sessionList = SessionManager::get_sessions_list();
@@ -126,7 +125,7 @@ if ($form->validate()) {
                         $endDate
                     );
                     $users[$userId][$courseCode.'_progress'] = is_numeric($progress) ? "$progress %" : '0 %';
-                    $users[$userId][$courseCode.'_certificate'] = $infoGradeCertificate ? get_lang('Yes') : get_lang('No');;
+                    $users[$userId][$courseCode.'_certificate'] = $infoGradeCertificate ? get_lang('Yes') : get_lang('No');
                 }
             }
         }

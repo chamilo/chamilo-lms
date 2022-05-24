@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $is_allowedToTrack = api_is_platform_admin(true, true) ||
-    api_is_teacher() || api_is_course_tutor();
+    api_is_teacher() || api_is_course_tutor() || api_is_student_boss();
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);

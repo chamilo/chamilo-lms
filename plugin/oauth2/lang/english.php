@@ -114,6 +114,8 @@ to directory <code>/main/template/overrides/layout/</code>.';
 $strings['management_login_name'] = 'Name for the management login';
 $strings['management_login_name_help'] = 'Default value is "Management Login".';
 
+$strings['allow_third_party_login'] = 'Allow third party login';
+
 // please keep these below alphabetically sorted
 $strings['AccountInactive'] = "Account inactive";
 $strings['DefaultFirstname'] = 'OAuth2 User default firstname';

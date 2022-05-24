@@ -9,7 +9,7 @@ require __DIR__.'/../../../main/inc/global.inc.php';
 
 $httpRequest = HttpRequest::createFromGlobals();
 
-$plugin = Oauth2::create();
+$plugin = OAuth2::create();
 
 $iss = $httpRequest->get('iss');
 $loginHint = $httpRequest->get('login_hint');

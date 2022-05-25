@@ -2985,12 +2985,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.4.4":
-  version: 10.4.7
-  resolution: "autoprefixer@npm:10.4.7"
+"autoprefixer@npm:10.4.5":
+  version: 10.4.5
+  resolution: "autoprefixer@npm:10.4.5"
   dependencies:
-    browserslist: ^4.20.3
-    caniuse-lite: ^1.0.30001335
+    browserslist: ^4.20.2
+    caniuse-lite: ^1.0.30001332
     fraction.js: ^4.2.0
     normalize-range: ^0.1.2
     picocolors: ^1.0.0
@@ -2999,7 +2999,7 @@ __metadata:
     postcss: ^8.1.0
   bin:
     autoprefixer: bin/autoprefixer
-  checksum: 0e55d0d19806c672ec0c79cc23c27cf77e90edf2600670735266ba33ec5294458f404baaa2f7cd4cfe359cf7a97b3c86f01886bdbdc129a4f2f76ca5977a91af
+  checksum: 6c638d8f515a9c37776f9d6b1263e497768d9e8d8ad3b45d901513ba0f26c74df73f4afb84efd3253ab3d1c57803b4e2d97ad9b8919ef1955e373fcf24661213
   languageName: node
   linkType: hard
 
@@ -3373,7 +3373,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001332, caniuse-lite@npm:^1.0.30001335":
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001332":
   version: 1.0.30001340
   resolution: "caniuse-lite@npm:1.0.30001340"
   checksum: 5b419c93cb5a67568ffe8c84520d149146e5b84056ce41ee509c89d2bd036e4ce6d87485e25dfee2bb8a818d46e0734e93cacbef6b9b911c20166b943b36b78c
@@ -3452,7 +3452,7 @@ __metadata:
     "@vuelidate/core": ^2.0.0-alpha.35
     "@vuelidate/validators": ^2.0.0-alpha.27
     alpinejs: ^3.10.2
-    autoprefixer: ^10.4.4
+    autoprefixer: ^10.4.7
     axios: ^0.27.2
     blueimp-file-upload: ^10.32.0
     blueimp-load-image: ^5.16.0
@@ -3505,9 +3505,9 @@ __metadata:
     postcss-loader: ^6.2.1
     postcss-prefix-selector: ^1.15.0
     pretty-bytes: ^5.6.0
-    primeflex: ^3.1.3
-    primeicons: ^4.1.0
-    primevue: ^3.8.2
+    primeflex: ^3.2.0
+    primeicons: ^5.0.0
+    primevue: ^3.12.6
     purgecss-webpack-plugin: ^4.1.3
     pwstrength-bootstrap: 3.1.1
     qtip2: 3.0.3
@@ -7795,21 +7795,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primeflex@npm:^3.1.3":
+"primeflex@npm:^3.2.0":
   version: 3.2.0
   resolution: "primeflex@npm:3.2.0"
   checksum: 3158929a718b809c061985df590c61d7fe35a73c78ebb53cd2f9495d7a1a3f4ff55719044664feeb51108aa23896125c0bcddf6bd5b3cabba523aec084df71e5
   languageName: node
   linkType: hard
 
-"primeicons@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "primeicons@npm:4.1.0"
-  checksum: 0e04524afa708f6b0d383d3bf12d337f313b593ba9c4e06790144c5073b7f2cdeb01e97023e372718dec3fb6b3682735da02eaa7ba1a4da5c8c401e8359dfaf7
+"primeicons@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "primeicons@npm:5.0.0"
+  checksum: f391179f0c774064af417c0d4dbee4c37c714165632f23a2b93083322e4362ef9b1978d3c9aa09ed4ef0187c70dc5501a208b7f40c64c1e88a89462801b7e8c0
   languageName: node
   linkType: hard
 
-"primevue@npm:^3.8.2":
+"primevue@npm:^3.12.6":
   version: 3.12.6
   resolution: "primevue@npm:3.12.6"
   peerDependencies:

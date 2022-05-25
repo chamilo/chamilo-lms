@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Twig;
 
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
-use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Sylius\Bundle\SettingsBundle\Templating\Helper\SettingsHelperInterface;
 use Symfony\Component\Templating\Helper\Helper;
@@ -21,15 +21,15 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
         $this->settingsManager = $settingsManager;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'chamilo_settings';
     }
 
     /**
-     * @param string $schemaAlias Example: admin, agenda, etc
+     * @param string $schemaAlias Example: admin, agenda, etc.
      *
-     * @return Settings
+     * @return SettingsInterface
      */
     public function getSettings($schemaAlias): SettingsInterface
     {
@@ -41,6 +41,6 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
      */
     public function getSettingsParameter(string $parameter)
     {
-        return $this->settingsManager->getSetting($parameter);
+        return $this->settingsManager instanceof SettingsManager ? $this->settingsManager->getSetting($parameter) : '';
     }
 }

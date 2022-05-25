@@ -27,7 +27,7 @@ class Language
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="original_name", type="string", length=255, nullable=true)

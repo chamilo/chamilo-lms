@@ -24,7 +24,7 @@ class AccessUrlRelCourse implements EntityAccessUrlInterface
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="urls", cascade={"persist"})

@@ -21,7 +21,7 @@ class SequenceRowEntity
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="c_id", type="integer")

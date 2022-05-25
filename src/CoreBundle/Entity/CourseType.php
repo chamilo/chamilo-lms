@@ -19,7 +19,7 @@ class CourseType
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="name", type="string", length=50, nullable=false)

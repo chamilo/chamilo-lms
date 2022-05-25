@@ -22,7 +22,7 @@ class Tag
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="tag", type="string", length=255, nullable=false)

@@ -22,7 +22,7 @@ class UserCareer
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="user_id", type="integer", nullable=false)

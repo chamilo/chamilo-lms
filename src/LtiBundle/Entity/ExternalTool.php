@@ -33,7 +33,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="name", type="string")

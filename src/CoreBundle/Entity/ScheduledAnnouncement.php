@@ -22,7 +22,7 @@ class ScheduledAnnouncement
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="subject", type="string", length=255)

@@ -23,7 +23,7 @@ class Token
      * @ORM\Id()
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", onDelete="CASCADE")

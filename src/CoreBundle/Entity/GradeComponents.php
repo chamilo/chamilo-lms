@@ -21,7 +21,7 @@ class GradeComponents
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="percentage", type="string", length=255, nullable=false)

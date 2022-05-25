@@ -25,7 +25,7 @@ class Platform
      * @ORM\Id()
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
     /**
      * @ORM\Column(name="kid", type="string")
      */

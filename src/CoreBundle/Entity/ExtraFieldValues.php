@@ -63,7 +63,7 @@ class ExtraFieldValues
      * @ORM\GeneratedValue()
      */
     #[Groups(['extra_field_values:read'])]
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="value", type="text", nullable=true, unique=false)

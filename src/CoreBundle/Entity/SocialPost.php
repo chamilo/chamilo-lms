@@ -96,7 +96,7 @@ class SocialPost
      * @ORM\GeneratedValue
      * @ORM\Column(name="id", type="bigint")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentSocialPosts")

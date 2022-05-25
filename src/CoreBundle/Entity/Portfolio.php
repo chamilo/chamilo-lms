@@ -33,7 +33,7 @@ class Portfolio
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="title", type="text", nullable=false)

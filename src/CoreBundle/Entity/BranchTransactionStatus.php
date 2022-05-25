@@ -21,7 +21,7 @@ class BranchTransactionStatus
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=false, unique=false)

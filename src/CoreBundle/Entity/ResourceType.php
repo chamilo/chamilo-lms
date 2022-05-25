@@ -25,7 +25,7 @@ class ResourceType
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column()

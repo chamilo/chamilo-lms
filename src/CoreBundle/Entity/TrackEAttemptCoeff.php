@@ -21,7 +21,7 @@ class TrackEAttemptCoeff
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="attempt_id", type="integer", nullable=false)

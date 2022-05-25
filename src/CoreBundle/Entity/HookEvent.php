@@ -27,7 +27,7 @@ class HookEvent
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="class_name", type="string", length=190, nullable=true)

@@ -26,7 +26,7 @@ class Tool
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @Groups({"tool:read"})

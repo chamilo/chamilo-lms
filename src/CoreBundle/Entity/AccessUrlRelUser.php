@@ -29,7 +29,7 @@ class AccessUrlRelUser implements EntityAccessUrlInterface
      * @ORM\GeneratedValue
      * @ORM\Column(name="id", type="integer")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="portals")

@@ -23,7 +23,7 @@ class SysAnnouncement
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="date_start", type="datetime", nullable=false)

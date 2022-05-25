@@ -24,7 +24,7 @@ class Admin
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="admin")

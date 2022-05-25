@@ -21,7 +21,7 @@ class Profile
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="name", type="string", length=255, nullable=false)

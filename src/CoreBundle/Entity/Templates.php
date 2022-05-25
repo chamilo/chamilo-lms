@@ -24,7 +24,7 @@ class Templates
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="title", type="string", length=100, nullable=false)

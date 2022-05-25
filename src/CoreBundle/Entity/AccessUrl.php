@@ -38,7 +38,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
      *
      * @Groups({"access_url:read", "access_url:write"})
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @var AccessUrlRelCourse[]|Collection<int, AccessUrlRelCourse>

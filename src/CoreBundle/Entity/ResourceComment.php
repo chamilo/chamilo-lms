@@ -40,7 +40,7 @@ class ResourceComment
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"comment:read"})
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="comments")

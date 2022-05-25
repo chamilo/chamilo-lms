@@ -28,7 +28,7 @@ class TrackEAttemptRecording
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="exe_id", type="integer", nullable=false)

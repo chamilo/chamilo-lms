@@ -45,7 +45,7 @@ class SessionCategory
      * @ORM\GeneratedValue
      */
     #[Groups(['session_category:read', 'session_rel_user:read'])]
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="sessionCategories", cascade={"persist"})

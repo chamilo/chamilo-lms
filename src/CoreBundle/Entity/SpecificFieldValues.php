@@ -21,7 +21,7 @@ class SpecificFieldValues
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="course_code", type="string", length=40, nullable=false)

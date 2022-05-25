@@ -27,7 +27,7 @@ class SettingsOptions
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="variable", type="string", length=190, nullable=false)

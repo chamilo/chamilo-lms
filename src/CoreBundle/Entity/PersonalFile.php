@@ -124,7 +124,7 @@ class PersonalFile extends AbstractResource implements ResourceInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=false)

@@ -21,7 +21,7 @@ class AccessUrlRelSession implements EntityAccessUrlInterface
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="urls", cascade={"persist"})

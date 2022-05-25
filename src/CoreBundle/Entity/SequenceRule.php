@@ -21,7 +21,7 @@ class SequenceRule
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=false)

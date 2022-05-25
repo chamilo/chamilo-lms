@@ -80,7 +80,7 @@ class ExtraField
      * @ORM\GeneratedValue
      */
     #[Groups(['extra_field:read'])]
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="extra_field_type", type="integer")

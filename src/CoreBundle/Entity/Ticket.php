@@ -21,7 +21,7 @@ class Ticket
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="code", type="string", length=255, nullable=false)

@@ -31,7 +31,7 @@ class ChatVideo
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="from_user", type="integer", nullable=false)

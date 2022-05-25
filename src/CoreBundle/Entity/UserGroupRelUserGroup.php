@@ -21,7 +21,7 @@ class UserGroupRelUserGroup
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="group_id", type="integer", nullable=false)

@@ -23,7 +23,7 @@ class GradebookScoreDisplay
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=false)

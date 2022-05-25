@@ -24,7 +24,7 @@ class GradebookLinkevalLog
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="id_linkeval_log", type="integer", nullable=false)

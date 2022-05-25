@@ -27,7 +27,7 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @Gedmo\SortableGroup

@@ -21,7 +21,7 @@ class SystemTemplate
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="title", type="string", length=250, nullable=false)

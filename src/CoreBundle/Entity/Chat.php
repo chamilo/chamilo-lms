@@ -25,7 +25,7 @@ class Chat
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="from_user", type="integer", nullable=true)

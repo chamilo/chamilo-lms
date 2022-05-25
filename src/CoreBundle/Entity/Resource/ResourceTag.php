@@ -23,7 +23,7 @@ class ResourceTag
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="name", type="string", nullable=false)

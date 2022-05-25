@@ -22,7 +22,7 @@ class ToolResourceRight
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="role", type="string", length=255, nullable=false)

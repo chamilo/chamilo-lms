@@ -27,9 +27,7 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
     }
 
     /**
-     * @param string $schemaAlias Example: admin, agenda, etc.
-     *
-     * @return SettingsInterface
+     * @param string $schemaAlias example: admin, agenda, etc
      */
     public function getSettings($schemaAlias): SettingsInterface
     {

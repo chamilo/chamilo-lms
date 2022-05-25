@@ -6121,7 +6121,9 @@ EOT;
             UNIQUE_ANSWER_IMAGE,
             READING_COMPREHENSION,
             MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
-            UPLOAD_ANSWER,
+	    UPLOAD_ANSWER,
+            MATCHING_GLOBAL,
+            FILL_IN_BLANKS_GLOBAL,
         ];
         $defaultTypes = [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE];
         $types = $defaultTypes;

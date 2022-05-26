@@ -1,184 +1,157 @@
 <template>
-  <div class="p-2" style="margin-left: -0.25rem; margin-bottom: 0.5rem">
-    <q-breadcrumbs
-        active-color="primary"
-        large
-    >
-<!--      <q-breadcrumbs-el v-for ="item in items" :label="item.text" :to="item.href" />-->
-      <q-breadcrumbs-el v-for="item in items" :label="item.text" :to="item.href" exact-path />
-    </q-breadcrumbs>
-
-<!--    <v-breadcrumbs-->
-<!--        rounded-->
-<!--        density="compact"-->
-<!--    >-->
-
-<!--        <a  v-for="item in items" :href="item.href"  >-->
-<!--          <v-breadcrumbs-item>-->
-<!--          {{item.text}}-->
-<!--            </v-breadcrumbs-item>-->
-<!--        </a>-->
-<!--    </v-breadcrumbs>-->
-  </div>
+  <Breadcrumb
+    :home="home"
+    :model="foo"
+    class="app-breadcrumb"
+  />
 </template>
 
-<script>
+<script setup>
+import {useStore} from "vuex";
+import {computed, defineProps} from "vue";
+import {useRoute} from "vue-router";
+import {useI18n} from "vue-i18n";
+import Breadcrumb from 'primevue/breadcrumb';
 
-import {mapGetters} from "vuex";
-import isEmpty from 'lodash/isEmpty';
-
-export default {
-  name: 'Breadcrumb',
-  props: ['layoutClass', 'legacy'],
-  computed: {
-    ...mapGetters('resourcenode', {
-      resourceNode: 'getResourceNode',
-    }),
-    ...mapGetters('course', {
-      course: 'getCourse',
-    }),
-    ...mapGetters('session', {
-      session: 'getSession',
-    }),
-    items() {
-      console.log('Breadcrumb.vue');
-      console.log(this.$route.name);
-
-      const items = [
-        {
-          text: this.$t('Home'),
-          href: '/'
-        }
-      ];
-
-      const list = [
-        'CourseHome',
-        'MyCourses',
-        'MySessions',
-        'MySessionsUpcoming',
-        'MySessionsPast',
-        'Home',
-        'MessageList',
-        'MessageNew',
-        'MessageShow',
-        'MessageCreate',
-      ];
-
-      if (!isEmpty(this.$route.name) && this.$route.name.includes('Page')) {
-        items.push({
-          text: this.$t('Pages'),
-          href: '/resources/pages'
-        });
-      }
-
-      if (!isEmpty(this.$route.name) && this.$route.name.includes('Message')) {
-        items.push({
-          text: this.$t('Messages'),
-          //disabled: route.path === path || lastItem.path === route.path,
-          href: '/resources/messages'
-        });
-      }
-
-
-      if (list.includes(this.$route.name)) {
-        return items;
-      }
-
-      if (this.legacy) {
-        console.log('legacy');
-        // Checking data from legacy main (1.11.x)
-        const mainUrl = window.location.href;
-        const mainPath = mainUrl.indexOf("main/");
-
-        for (let i = 0, len = this.legacy.length; i < len; i += 1) {
-          console.log(this.legacy[i]['name']);
-          let url = this.legacy[i]['url'].toString();
-
-          let newUrl = url;
-          if (url.indexOf("main/") > 0) {
-            newUrl = '/' + url.substring(mainPath, url.length);
-          }
-
-          if (newUrl === '/') {
-            newUrl = '#';
-          }
-
-          items.push({
-            text: this.legacy[i]['name'],
-            //disabled: route.path === path || lastItem.path === route.path,
-            href: newUrl
-          });
-        }
-      }
-
-      let folderParams = this.$route.query;
-      var queryParams = '';
-      for (var key in folderParams) {
-        if (queryParams != '') {
-          queryParams += "&";
-        }
-        queryParams += key + '=' + encodeURIComponent(folderParams[key]);
-      }
-
-      // course is set in documents/List.vue
-      if (this.course) {
-
-        let sessionTitle = '';
-        if (this.session) {
-          sessionTitle = ' (' + this.session.name + ') ';
-        }
-
-        items.push({
-          text:  this.course.title + sessionTitle,
-          href: '/course/' + this.course.id + '/home?'+queryParams
-        });
-      }
-
-      console.log(items);
-
-      const { path, matched } = this.$route;
-      const lastItem = matched[matched.length - 1];
-
-      if (this.resourceNode) {
-        const parts = this.resourceNode.path.split('/');
-
-        for (let i = 0, len = parts.length; i < len; i += 1) {
-          let route = parts[i];
-          let routeParts = route.split('-');
-          if (0 === i) {
-            let firstParts = parts[i + 1].split('-');
-            items.push({
-              text: matched[0].name,
-              href: '/resources/document/' + firstParts[1] + '/?' + queryParams
-            });
-            i++;
-            continue;
-          }
-
-          if (routeParts[0]) {
-            items.push({
-              text: routeParts[0],
-              href: '/resources/document/' + routeParts[1] + '/?' + queryParams
-            });
-          }
-        }
-      }
-
-      for (let i = 1, len = matched.length; i < len; i += 1) {
-        const route = matched[i];
-        if (route.path) {
-          items.push({
-            text: route.name,
-            disabled: route.path === path || lastItem.path === route.path,
-            href: route.path
-          });
-        }
-      }
-
-      console.log('BREADCRUMB');
-      console.log(items);
-      return items;
-    }
+const props = defineProps({
+  layoutClass: {
+    type: String,
+    default: null,
+  },
+  legacy: {
+    type: Array,
+    default: () => [],
   }
+});
+
+const store = useStore();
+const route = useRoute();
+const {t} = useI18n();
+
+const resourceNode = computed(() => store.getters['resourcenode/getResourceNode']);
+const course = computed(() => store.getters['course/getCourse']);
+const session = computed(() => store.getters['session/getSession']);
+
+const home = {
+  icon: 'pi pi-home',
+  to: '/'
 };
+
+const foo = computed(() => {
+  const list = [
+    'CourseHome',
+    'MyCourses',
+    'MySessions',
+    'MySessionsUpcoming',
+    'MySessionsPast',
+    'Home',
+    'MessageList',
+    'MessageNew',
+    'MessageShow',
+    'MessageCreate',
+  ];
+
+  const items = [];
+
+  if (route.name && route.name.includes('Page')) {
+    items.push({
+      label: t('Pages'),
+      to: '/resources/pages',
+    });
+  }
+
+  if (route.name && route.name.includes('Message')) {
+    items.push({
+      label: t('Messages'),
+      //disabled: route.path === path || lastItem.path === route.path,
+      to: '/resources/messages',
+    });
+  }
+
+  if (list.includes(route.name)) {
+    return items;
+  }
+
+  if (0 < props.legacy.length) {
+    const mainUrl = window.location.href;
+    const mainPath = mainUrl.indexOf("main/");
+
+    props.legacy.forEach(item => {
+      let url = item.url.toString();
+      let newUrl = url;
+
+      if (url.indexOf('main/') > 0) {
+        newUrl = '/' + url.substring(mainPath, url.length);
+      }
+
+      if (newUrl === '/') {
+        newUrl = '#';
+      }
+
+      items.push({
+        label: item['name'],
+        href: newUrl
+      });
+    });
+  }
+
+  let queryParams = '';
+
+  Object.keys(route.query)
+    .forEach(key => {
+      if ('' !== queryParams) {
+        queryParams += "&";
+      }
+
+      queryParams += key + '=' + encodeURIComponent(route.query[key].toString());
+    });
+
+  if (course.value) {
+    let sessionTitle = '';
+
+    if (session.value) {
+      sessionTitle = ' (' + session.value.name + ') ';
+    }
+
+    items.push({
+      label: course.value.title + sessionTitle,
+      to: '/course/' + course.value.id + '/home?' + queryParams
+    });
+  }
+
+  const {path, matched} = route;
+  const lastItem = matched[matched.length - 1];
+
+  if (resourceNode.value) {
+    resourceNode.value.path.split('/').forEach((pathItem, i, parthItems) => {
+      let itemParts = pathItem.split('-');
+
+      if (0 === i) {
+        let firstParts = parthItems[i + 1].split('-');
+
+        items.push({
+          label: matched[0].name,
+          to: '/resources/document/' + firstParts[1] + '/?' + queryParams
+        });
+      } else if (itemParts[0]) {
+        items.push({
+          label: itemParts[0],
+          to: '/resources/document/' + itemParts[1] + '/?' + queryParams
+        });
+      }
+    });
+  }
+
+  matched.forEach(pathItem => {
+    if (pathItem.path) {
+      items.push({
+        label: pathItem.name,
+        disabled: route.path === path || lastItem.path === route.path,
+        href: pathItem.path,
+      });
+    }
+  });
+
+  return items;
+});
 </script>

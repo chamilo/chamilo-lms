@@ -8,11 +8,12 @@
 
 <script setup>
 import {useStore} from "vuex";
-import {computed, defineProps} from "vue";
+import {computed} from "vue";
 import {useRoute} from "vue-router";
 import {useI18n} from "vue-i18n";
 import Breadcrumb from 'primevue/breadcrumb';
 
+// eslint-disable-next-line no-undef
 const props = defineProps({
   layoutClass: {
     type: String,

@@ -8,6 +8,9 @@
       id="legacy_content"
       v-html="legacyContent"
     />
+    <Toast
+      position="top-center"
+    />
   </component>
 </template>
 
@@ -19,7 +22,8 @@ import {ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client/core';
 import {useStore} from "vuex";
 import axios from "axios";
 import {isEmpty} from "lodash";
-import showMessage from "./utils/showMessage";
+import Toast from "primevue/toast";
+import {useToast} from 'primevue/usetoast';
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -32,6 +36,7 @@ provide(DefaultApolloClient, apolloClient);
 
 const route = useRoute();
 const router = useRouter();
+const toast = useToast();
 
 const layout = computed(
   () => {
@@ -130,7 +135,11 @@ if (app && app.hasAttribute('data-flashes')) {
 
   for (const key in flashes) {
     for (const flashText in flashes[key]) {
-      showMessage(flashes[key][flashText], key);
+      toast.add({
+        severity: key,
+        detail: flashes[key][flashText],
+        life: 5000,
+      });
     }
   }
 }
@@ -139,11 +148,17 @@ axios.interceptors.response.use(
   undefined,
   (error) => new Promise(() => {
     if (401 === error.response.status) {
-      showMessage(error.response.data.error, 'warning');
+      toast.add({
+        severity: 'warn',
+        detail: error.response.data.error,
+        life: 5000,
+      });
     } else if (500 === error.response.status) {
-      if (error.response) {
-        showMessage(error.response.data.detail, 'warning');
-      }
+      toast.add({
+        severity: 'warn',
+        detail: error.response.data.detail,
+        life: 5000,
+      });
     }
 
     throw error;

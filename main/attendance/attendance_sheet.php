@@ -18,6 +18,8 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_course_info()
 ) || api_is_drh();
 
+$allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+
 if (api_is_allowed_to_edit(null, true) ||
     api_is_coach(api_get_session_id(), api_get_course_int_id()) ||
     $isDrhOfCourse
@@ -353,6 +355,15 @@ if (api_is_allowed_to_edit(null, true) ||
                         $disabled = '';
                     }
 
+                    if ($allowSignature) {
+                        $attendance = new Attendance();
+                        $signature = $attendance->getSignature($user['user_id'], $calendar['id']);
+                        if (!empty($signature)) {
+                            $disabled = 'disabled';
+                            $checked = 'checked';
+                        }
+                    }
+
                     echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
                     echo '<div class="check">';
 
@@ -360,6 +371,23 @@ if (api_is_allowed_to_edit(null, true) ||
                         if (!$is_locked_attendance || api_is_platform_admin()) {
                             echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
                             echo '<span class="anchor_'.$calendar['id'].'"></span>';
+                            if ($allowSignature) {
+                                if (!empty($signature)) {
+                                    echo '<div class="list-data">
+                                        <span class="item"></span>
+                                        <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign-view" href="javascript:void(0)">
+                                            <em class="fa fa-search"></em> '.get_lang('SignView').'
+                                        </a>
+                                    </div>';
+                                } else {
+                                    echo '<div class="list-data">
+                                        <span class="item"></span>
+                                        <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
+                                            <em class="fa fa-pencil"></em> '.get_lang('Sign').'
+                                        </a>
+                                    </div>';
+                                }
+                            }
                         } else {
                             echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
                         }
@@ -468,4 +496,149 @@ if (api_is_allowed_to_edit(null, true) ||
         } ?>
     </table>
 <?php
-} ?>
+}
+
+if ($allowSignature) {
+    ?>
+    <div id="sign_popup" style="display: none">
+        <div id="signature_area" class="well">
+            <canvas width="400px"></canvas>
+        </div>
+        <span class="loading" style="display: none"><em class="fa fa-spinner"></em></span>
+        <span id="save_controls">
+            <button id="sign_popup_save" class="btn btn-primary" type="submit">
+                <em class="fa fa-save"></em> <?php echo get_lang('Save'); ?>
+            </button>
+            <button id="sign_popup_clean" class="btn btn-default" type="submit">
+                <em class="fa fa-eraser"></em> <?php echo get_lang('Clean'); ?>
+            </button>
+        </span>
+        <span id="remove_controls" clase="hidden">
+            <button id="sign_popup_remove" class="btn btn-danger" type="submit">
+                <em class="fa fa-remove"></em> <?php echo get_lang('Remove'); ?>
+            </button>
+        </span>
+        <span id="close_controls" style="display: none">
+            <span id="sign_results"></span>
+            <hr />
+            <button id="sign_popup_close" class="btn btn-default" type="submit">
+                <?php echo get_lang('Close'); ?>
+            </button>
+        </span>
+        <input type="hidden" id="sign-selected" />
+    </div>
+
+    <script>
+        var imageFormat = 'image/png';
+        var canvas = document.querySelector("#signature_area canvas");
+        var signaturePad = new SignaturePad(canvas);
+        var urlAjax = "<?php echo api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.api_get_cidreq(); ?>";
+
+        $(function() {
+            $("#sign_popup_close").on("click", function() {
+                $("#sign_popup").dialog("close");
+                $('#loading').hide();
+                $('#save_controls').show();
+                $('#close_controls').hide();
+                $('#signature_area').show();
+            });
+
+            $("#sign_popup_clean").on("click", function() {
+                signaturePad.clear();
+            });
+
+            $("#sign_popup_remove").on("click", function() {
+                var selected = $("#sign-selected").val();
+                $.ajax({
+                    type: "POST",
+                    url: urlAjax,
+                    data: "a=remove_attendance_sign&selected="+selected,
+                    success: function(data) {
+                        location.reload();
+                    },
+                });
+            });
+
+            $("#sign_popup_save").on("click", function() {
+                if (signaturePad.isEmpty()) {
+                    alert('<?php echo get_lang('ProvideASignatureFirst'); ?>');
+                    return false;
+                }
+                var selected = $("#sign-selected").val();
+                var dataURL = signaturePad.toDataURL(imageFormat);
+                $.ajax({
+                    beforeSend: function(result) {
+                        $('#loading').show();
+                    },
+                    type: "POST",
+                    url: urlAjax,
+                    data: "a=sign_attendance&selected="+selected+"&file="+dataURL,
+                    success: function(data) {
+                        $('#loading').hide();
+                        $('#save_controls').hide();
+                        $('#close_controls').show();
+                        $('#signature_area').hide();
+
+                        signaturePad.clear();
+                        if (1 == data) {
+                            $('#sign_results').html('<?php echo get_lang('Saved'); ?>');
+                        } else {
+                            $('#sign_results').html('<?php echo get_lang('Error'); ?>');
+                        }
+                        $('#close_controls').hide();
+                        location.reload();
+                    },
+                });
+            });
+
+            $(".attendance-sign").on("click", function() {
+                $("#sign-selected").val($(this).attr("id"));
+                $("#sign_popup").dialog({
+                    autoOpen: false,
+                    width: 500,
+                    height: 'auto',
+                    close: function(){
+                    }
+                });
+                $("#sign_popup").dialog("open");
+                $("#save_controls").show();
+                $("#remove_controls").hide();
+                $('#signature_area').show();
+                $('#signature_area').html("<canvas width='400px'></canvas>");
+                canvas = document.querySelector("#signature_area canvas");
+                signaturePad = new SignaturePad(canvas);
+            });
+
+            $(".attendance-sign-view").on("click", function() {
+                var selected = $(this).attr("id");
+                $.ajax({
+                    beforeSend: function(result) {
+                        $('#signature_area').html("");
+                        $('#loading').show();
+                    },
+                    type: "POST",
+                    url: urlAjax,
+                    data: "a=get_attendance_sign&selected="+selected,
+                    success: function(sign) {
+                        $('#signature_area').show();
+                        $('#signature_area').html("<img src='"+sign+"' />");
+                    },
+                });
+                $("#sign_popup").dialog({
+                    autoOpen: false,
+                    width: 500,
+                    height: 'auto',
+                    close: function(){
+                    }
+                });
+                $("#sign-selected").val(selected);
+                $("#sign_popup").dialog("open");
+                $("#save_controls").hide();
+                $("#remove_controls").show();
+            });
+        });
+    </script>
+
+    <?php
+}
+?>

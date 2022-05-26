@@ -103,7 +103,7 @@ $(function() {
 
             $(".row_odd  td.checkboxes_col_"+calendar_id).css({
                 "opacity":"1",
-                "background-color":"#F9F9F9",   
+                "background-color":"#F9F9F9",
                 "border-left":"none",
                 "border-right":"none"
             });
@@ -125,16 +125,16 @@ $(function() {
 
             $(".row_odd  td.checkboxes_col_"+calendar_id).css({
                 "opacity":"1",
-                "background-color":"#dcdcdc", 
-                "border-left":"1px #bbb solid", 
-                "border-right":"1px #bbb solid", 
+                "background-color":"#dcdcdc",
+                "border-left":"1px #bbb solid",
+                "border-right":"1px #bbb solid",
                 "z-index":"1"
             });
             $(".row_even td.checkboxes_col_"+calendar_id).css({
                 "opacity":"1",
-                "background-color":"#eee", 
-                "border-left":"1px #bbb solid", 
-                "border-right":"1px #bbb solid", 
+                "background-color":"#eee",
+                "border-left":"1px #bbb solid",
+                "border-right":"1px #bbb solid",
                 "z-index":"1"
             });
 
@@ -185,6 +185,12 @@ $(function() {
 });
 
 </script>';
+
+$allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+if ($allowSignature) {
+    $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
+}
+
 $student_param = '';
 $student_id = null;
 

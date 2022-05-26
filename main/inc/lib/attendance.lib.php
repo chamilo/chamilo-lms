@@ -10,6 +10,9 @@
  *
  * @package chamilo.attendance
  */
+
+use Chamilo\CourseBundle\Entity\CAttendanceSheet;
+
 class Attendance
 {
     // constants
@@ -181,22 +184,22 @@ class Attendance
                 ) || api_is_drh();
                 if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                     // Link to edit
-                    $attendance[1] = '<a 
+                    $attendance[1] = '<a
                         href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
                         Security::remove_XSS($attendance[1]).
                         '</a>'.
                         $session_star;
                 } else {
                     // Link to view
-                    $attendance[1] = '<a 
+                    $attendance[1] = '<a
                         href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$student_param.'">'.
                         Security::remove_XSS($attendance[1]).
                         '</a>'.
                         $session_star;
                 }
             } else {
-                $attendance[1] = '<a 
-                    class="muted" 
+                $attendance[1] = '<a
+                    class="muted"
                     href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
                     Security::remove_XSS($attendance[1]).
                     '</a>'.
@@ -2505,5 +2508,133 @@ class Attendance
         }
 
         return $data;
+    }
+
+    /**
+     * Clean a sing of a user in attendance sheet.
+     *
+     * @param $userId
+     * @param $attendanceCalendarId
+     *
+     * @return false or void when it is deleted.
+     */
+    public function deleteSignature(
+        $userId,
+        $attendanceCalendarId
+    ) {
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        if (!$allowSignature) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+        $result = $repo->findBy($criteria);
+
+        if (count($result) > 0) {
+            /** @var CAttendanceSheet $attendanceSheet */
+            $attendanceSheet = $result[0];
+            $attendanceSheet->setPresence(0);
+            $attendanceSheet->setSignature('');
+
+            $em->persist($attendanceSheet);
+            $em->flush();
+        }
+    }
+
+    /**
+     * Get the user sign in attendance sheet.
+     *
+     * @param $userId
+     * @param $attendanceCalendarId
+     *
+     * @return false|string
+     */
+    public function getSignature(
+        $userId,
+        $attendanceCalendarId
+    ) {
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        if (!$allowSignature) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+        $result = $repo->findBy($criteria);
+
+        $signature = "";
+        if (count($result) > 0) {
+            /** @var CAttendanceSheet $attendanceSheet */
+            $attendanceSheet = $result[0];
+            $signature = $attendanceSheet->getSignature();
+        }
+
+        return $signature;
+    }
+
+    /**
+     * It saves the user sign from attendance sheet.
+     *
+     * @param $userId
+     * @param $attendanceCalendarId
+     * @param $file string in base64
+     *
+     * @return false or void when it is saved.
+     */
+    public function saveSignature(
+        $userId,
+        $attendanceCalendarId,
+        $file
+    ) {
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        if (!$allowSignature) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+        $result = $repo->findBy($criteria);
+
+        /** @var CAttendanceSheet $attendanceSheet */
+        if (count($result) > 0) {
+            $attendanceSheet = $result[0];
+            $attendanceSheet->setPresence(1);
+            $attendanceSheet->setSignature($file);
+            $em->persist($attendanceSheet);
+            $em->flush();
+        } else {
+            $attendanceSheet = new CAttendanceSheet();
+            $attendanceSheet
+                ->setCId($courseId)
+                ->setPresence(1)
+                ->setUserId($userId)
+                ->setAttendanceCalendarId($attendanceCalendarId)
+                ->setSignature($file);
+
+            $em->persist($attendanceSheet);
+            $em->flush();
+        }
     }
 }

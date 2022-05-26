@@ -11,13 +11,14 @@
       <InputText
         v-model="login"
         :placeholder="t('Username')"
+        name="login"
         type="text"
       />
-
       <Password
         v-model="password"
         :feedback="false"
         :placeholder="t('Password')"
+        name="password"
         toggle-mask
       />
 
@@ -44,6 +45,7 @@
             id="binary"
             v-model="remember"
             :binary="true"
+            name="remember_me"
             tabindex="4"
           />
           <label for="binary">{{ t('Remember me') }}</label>
@@ -58,12 +60,6 @@
           {{ t('Forgot your password ?') }}
         </a>
       </div>
-
-      <input
-        name="remember"
-        type="hidden"
-        value="true"
-      >
     </form>
   </div>
 </template>

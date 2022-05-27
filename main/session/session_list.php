@@ -193,6 +193,7 @@ switch ($action) {
                     // Set global variables used by get_user_data()
                     $user_ids = array_keys($studentList);
                     $session_id = $sessionItemId;
+                    $course_code = $courseCode;
                     $export_csv = true;
 
                     $csvContentInSession = TrackingCourseLog::get_user_data(

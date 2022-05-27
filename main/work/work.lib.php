@@ -2378,6 +2378,11 @@ function get_work_user_list(
                     $work['qualification'] = $qualification_string.$feedback.$hasCorrection;
                 }
 
+                if (empty($work['qualificator_id'])) {
+                    $finalScore = '?? / '.$work_data['qualification'];
+                    $work['qualification'] = Display::label($finalScore, 'warning');
+                }
+
                 $work['qualification_only'] = $qualification_string;
 
                 // Date.

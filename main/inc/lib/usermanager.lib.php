@@ -5953,11 +5953,18 @@ class UserManager
      * @param string $course_code The course code
      * @param int    $session_id
      * @param int    $user_id     The user id
+     * @param string $startDate   date string
+     * @param string $endDate     date string
      *
      * @return array if there is not information return false
      */
-    public static function get_info_gradebook_certificate($course_code, $session_id, $user_id)
-    {
+    public static function get_info_gradebook_certificate(
+        $course_code,
+        $session_id,
+        $user_id,
+        $startDate = null,
+        $endDate = null
+    ) {
         $tbl_grade_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $tbl_grade_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = (int) $session_id;
@@ -5969,11 +5976,21 @@ class UserManager
             $session_condition = " AND session_id = $session_id";
         }
 
+        $dateConditions = "";
+        if (!empty($startDate)) {
+            $startDate = api_get_utc_datetime($startDate, false, true);
+            $dateConditions .= " AND created_at >= '".$startDate->format('Y-m-d 00:00:00')."' ";
+        }
+        if (!empty($endDate)) {
+            $endDate = api_get_utc_datetime($endDate, false, true);
+            $dateConditions .= " AND created_at <= '".$endDate->format('Y-m-d 23:59:59')."' ";
+        }
+
         $sql = 'SELECT * FROM '.$tbl_grade_certificate.'
                 WHERE cat_id = (
                     SELECT id FROM '.$tbl_grade_category.'
                     WHERE
-                        course_code = "'.Database::escape_string($course_code).'" '.$session_condition.'
+                        course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' '.$dateConditions.'
                     LIMIT 1
                 ) AND user_id='.$user_id;
 

@@ -2619,16 +2619,20 @@ class Tracking
     /**
      * Calculates the time spent on the course.
      *
-     * @param int $user_id
-     * @param int $courseId
-     * @param int $session_id
+     * @param int    $user_id
+     * @param int    $courseId
+     * @param int    $session_id
+     * @param string $startDate  date string
+     * @param string $endDate    date string
      *
      * @return int Time in seconds
      */
     public static function get_time_spent_on_the_course(
         $user_id,
         $courseId,
-        $session_id = 0
+        $session_id = 0,
+        $startDate = null,
+        $endDate = null
     ) {
         $courseId = (int) $courseId;
 
@@ -2664,6 +2668,15 @@ class Tracking
 
         if (-1 != $session_id) {
             $sql .= "AND session_id = '$session_id' ";
+        }
+
+        if (!empty($startDate)) {
+            $startDate = api_get_utc_datetime($startDate, false, true);
+            $sql .= " AND login_course_date >= '".$startDate->format('Y-m-d 00:00:00')."' ";
+        }
+        if (!empty($endDate)) {
+            $endDate = api_get_utc_datetime($endDate, false, true);
+            $sql .= " AND login_course_date <= '".$endDate->format('Y-m-d 23:59:59')."' ";
         }
 
         $sql .= $conditionUser;
@@ -3403,7 +3416,9 @@ class Tracking
         $sessionId = null,
         $returnArray = false,
         $onlySeriousGame = false,
-        $maxInsteadAvg = false
+        $maxInsteadAvg = false,
+        $startDate = null,
+        $endDate = null
     ) {
         // If there is at least one learning path and one student.
         if (empty($studentId)) {
@@ -3452,11 +3467,11 @@ class Tracking
         }
 
         $conditions = [
-            " c_id = {$courseInfo['real_id']} ",
+            " lp_view.c_id = {$courseInfo['real_id']} ",
             " lp_view.lp_id IN (".implode(', ', $filteredLP).") ",
         ];
 
-        $groupBy = 'GROUP BY lp_id';
+        $groupBy = 'GROUP BY lp_view.lp_id';
 
         if (is_array($studentId)) {
             $studentId = array_map('intval', $studentId);
@@ -3491,14 +3506,30 @@ class Tracking
             $conditions[] = ' (session_id = 0 OR session_id IS NULL) ';
         }
 
+        $innerJoin = "";
+        if (!empty($startDate) || !empty($endDate)) {
+            $lpItemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+            $innerJoin = " INNER JOIN $lpItemViewTable liv ON liv.lp_view_id = lp_view.iid";
+            if (!empty($startDate)) {
+                $startDate = api_get_utc_datetime($startDate, false, true);
+                $startTime = strtotime($startDate->format('Y-m-d 00:00:00'));
+                $conditions[] = " liv.start_time >= '".$startTime."' ";
+            }
+            if (!empty($endDate)) {
+                $endDate = api_get_utc_datetime($endDate, false, true);
+                $endTime = strtotime($endDate->format('Y-m-d 23:59:59'));
+                $conditions[] = " liv.start_time <= '".$endTime."' ";
+            }
+        }
+
         $conditionToString = implode('AND', $conditions);
-        $sql = "SELECT lp_id, view_count, progress
+        $sql = "SELECT lp_view.lp_id, lp_view.view_count, lp_view.progress
                 FROM $lpViewTable lp_view
+                $innerJoin
                 WHERE
                     $conditionToString
                     $groupBy
                 ORDER BY view_count DESC";
-
         $result = Database::query($sql);
 
         $progress = [];

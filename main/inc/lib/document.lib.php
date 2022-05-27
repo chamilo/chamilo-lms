@@ -2165,10 +2165,16 @@ class DocumentManager
         ];
 
         if (!empty($extraFields)) {
+            $efv = new ExtraFieldValue('user');
+
             foreach ($extraFields as $extraField) {
-                $valueExtra = isset($extra_user_info_data[$extraField['variable']]) ? $extra_user_info_data[$extraField['variable']] : '';
+                $valueExtra = $efv->get_values_by_handler_and_field_variable(
+                    $user_id,
+                    $extraField['variable'],
+                    true
+                );
                 $tags[] = '(('.strtolower($extraField['variable']).'))';
-                $info_to_replace_in_content_html[] = $valueExtra;
+                $info_to_replace_in_content_html[] = $valueExtra['value'];
             }
         }
 

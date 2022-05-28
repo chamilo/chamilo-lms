@@ -1324,6 +1324,7 @@ class Attendance
                 }
             }
         }
+
         return $data;
     }
 

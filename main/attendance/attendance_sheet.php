@@ -110,7 +110,6 @@ if (api_is_allowed_to_edit(null, true) ||
         ]
     );
 
-
     if (!$is_locked_attendance || api_is_platform_admin()) {
         $actionsLeft = '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">'.
             Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -513,9 +512,7 @@ if (api_is_allowed_to_edit(null, true) ||
                                         </a>
                                     </span>';
                             }
-                        }
-
-                        ?>
+                        } ?>
 
                     </td>
                 </tr>

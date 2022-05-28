@@ -349,20 +349,23 @@ class AttendanceController
         );
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-            if (isset($_POST['hidden_input'])) {
-                foreach ($_POST['hidden_input'] as $cal_id) {
-                    $users_present = [];
-                    if (isset($_POST['check_presence'][$cal_id])) {
-                        $users_present = $_POST['check_presence'][$cal_id];
+            $check = Security::check_token();
+            if ($check) {
+                if (isset($_POST['hidden_input'])) {
+                    foreach ($_POST['hidden_input'] as $cal_id) {
+                        $users_present = [];
+                        if (isset($_POST['check_presence'][$cal_id])) {
+                            $users_present = $_POST['check_presence'][$cal_id];
+                        }
+                        $attendance->attendance_sheet_add(
+                            $cal_id,
+                            $users_present,
+                            $attendance_id
+                        );
                     }
-                    $attendance->attendance_sheet_add(
-                        $cal_id,
-                        $users_present,
-                        $attendance_id
-                    );
                 }
+                Security::clear_token();
             }
-
             $data['users_in_course'] = $attendance->get_users_rel_course($attendance_id, $groupId);
             $my_calendar_id = null;
             if (is_numeric($filter_type)) {

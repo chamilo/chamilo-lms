@@ -19,6 +19,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 ) || api_is_drh();
 
 $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+$token = Security::get_token();
 
 if (api_is_allowed_to_edit(null, true) ||
     api_is_coach(api_get_session_id(), api_get_course_int_id()) ||
@@ -108,6 +109,7 @@ if (api_is_allowed_to_edit(null, true) ||
             'group_id' => $groupId,
         ]
     );
+
 
     if (!$is_locked_attendance || api_is_platform_admin()) {
         $actionsLeft = '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">'.
@@ -355,13 +357,11 @@ if (api_is_allowed_to_edit(null, true) ||
                         $disabled = '';
                     }
 
+                    $signed = false;
                     if ($allowSignature) {
                         $attendance = new Attendance();
                         $signature = $attendance->getSignature($user['user_id'], $calendar['id']);
-                        if (!empty($signature)) {
-                            $disabled = 'disabled';
-                            $checked = 'checked';
-                        }
+                        $signed = !empty($signature);
                     }
 
                     echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
@@ -369,10 +369,10 @@ if (api_is_allowed_to_edit(null, true) ||
 
                     if (api_is_allowed_to_edit(null, true)) {
                         if (!$is_locked_attendance || api_is_platform_admin()) {
-                            echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
-                            echo '<span class="anchor_'.$calendar['id'].'"></span>';
                             if ($allowSignature) {
-                                if (!empty($signature)) {
+                                if ($signed) {
+                                    echo Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY);
+                                    echo '<input type="hidden" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" />';
                                     echo '<div class="list-data">
                                         <span class="item"></span>
                                         <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign-view" href="javascript:void(0)">
@@ -380,6 +380,8 @@ if (api_is_allowed_to_edit(null, true) ||
                                         </a>
                                     </div>';
                                 } else {
+                                    echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
+                                    echo '<span class="anchor_'.$calendar['id'].'"></span>';
                                     echo '<div class="list-data">
                                         <span class="item"></span>
                                         <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
@@ -387,6 +389,9 @@ if (api_is_allowed_to_edit(null, true) ||
                                         </a>
                                     </div>';
                                 }
+                            } else {
+                                echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
+                                echo '<span class="anchor_'.$calendar['id'].'"></span>';
                             }
                         } else {
                             echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
@@ -436,6 +441,7 @@ if (api_is_allowed_to_edit(null, true) ||
         } ?>
                     </div>
                 </div>
+                <input type="hidden" name="sec_token" value="<?php echo $token; ?>" />
         </form>
     <?php
     } else {
@@ -473,6 +479,12 @@ if (api_is_allowed_to_edit(null, true) ||
         if (!empty($users_presence)) {
             $i = 0;
             foreach ($users_presence[$user_id] as $presence) {
+                $signed = false;
+                if ($allowSignature) {
+                    $attendance = new Attendance();
+                    $signature = $attendance->getSignature($user_id, $presence['calendar_id']);
+                    $signed = !empty($signature);
+                }
                 $class = '';
                 if ($i % 2 == 0) {
                     $class = 'row_even';
@@ -483,6 +495,27 @@ if (api_is_allowed_to_edit(null, true) ||
                     <td>
                         <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY); ?>
                         <?php echo "&nbsp; ".$presence['date_time']; ?>
+
+                        <?php
+
+                        if ($allowSignature) {
+                            if ($signed) {
+                                echo '<span class="list-data">
+                                        <a id="sign-'.$user_id.'-'.$presence['calendar_id'].'" class="btn btn-primary attendance-sign-view" href="javascript:void(0)">
+                                            <em class="fa fa-search"></em> '.get_lang('SignView').'
+                                        </a>
+                                    </span>';
+                            } else {
+                                echo '<span class="list-data">
+                                        <a id="sign-'.$user_id.'-'.$presence['calendar_id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
+                                            <em class="fa fa-pencil"></em> '.get_lang('Sign').'
+                                        </a>
+                                    </span>';
+                            }
+                        }
+
+                        ?>
+
                     </td>
                 </tr>
             <?php
@@ -504,7 +537,6 @@ if ($allowSignature) {
         <div id="signature_area" class="well">
             <canvas width="400px"></canvas>
         </div>
-        <span class="loading" style="display: none"><em class="fa fa-spinner"></em></span>
         <span id="save_controls">
             <button id="sign_popup_save" class="btn btn-primary" type="submit">
                 <em class="fa fa-save"></em> <?php echo get_lang('Save'); ?>
@@ -525,6 +557,7 @@ if ($allowSignature) {
                 <?php echo get_lang('Close'); ?>
             </button>
         </span>
+        <span class="loading" style="display: none"><em class="fa fa-spinner"></em></span>
         <input type="hidden" id="sign-selected" />
     </div>
 
@@ -533,6 +566,7 @@ if ($allowSignature) {
         var canvas = document.querySelector("#signature_area canvas");
         var signaturePad = new SignaturePad(canvas);
         var urlAjax = "<?php echo api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.api_get_cidreq(); ?>";
+        var attendance_id = "<?php echo $attendance_id; ?>";
 
         $(function() {
             $("#sign_popup_close").on("click", function() {
@@ -550,9 +584,12 @@ if ($allowSignature) {
             $("#sign_popup_remove").on("click", function() {
                 var selected = $("#sign-selected").val();
                 $.ajax({
+                    beforeSend: function(result) {
+                        $('#loading').show();
+                    },
                     type: "POST",
                     url: urlAjax,
-                    data: "a=remove_attendance_sign&selected="+selected,
+                    data: "a=remove_attendance_sign&selected="+selected+"&attendance_id="+attendance_id,
                     success: function(data) {
                         location.reload();
                     },
@@ -572,7 +609,7 @@ if ($allowSignature) {
                     },
                     type: "POST",
                     url: urlAjax,
-                    data: "a=sign_attendance&selected="+selected+"&file="+dataURL,
+                    data: "a=sign_attendance&selected="+selected+"&file="+dataURL+"&attendance_id="+attendance_id,
                     success: function(data) {
                         $('#loading').hide();
                         $('#save_controls').hide();
@@ -585,7 +622,7 @@ if ($allowSignature) {
                         } else {
                             $('#sign_results').html('<?php echo get_lang('Error'); ?>');
                         }
-                        $('#close_controls').hide();
+                        $('#sign_popup_close').hide();
                         location.reload();
                     },
                 });
@@ -611,15 +648,16 @@ if ($allowSignature) {
 
             $(".attendance-sign-view").on("click", function() {
                 var selected = $(this).attr("id");
+                $('#loading').show();
                 $.ajax({
                     beforeSend: function(result) {
-                        $('#signature_area').html("");
-                        $('#loading').show();
+                        $('#signature_area').html("<em class='fa fa-spinner'></em>");
                     },
                     type: "POST",
                     url: urlAjax,
                     data: "a=get_attendance_sign&selected="+selected,
                     success: function(sign) {
+                        $('#loading').hide();
                         $('#signature_area').show();
                         $('#signature_area').html("<img src='"+sign+"' />");
                     },

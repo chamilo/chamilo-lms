@@ -28,20 +28,22 @@ switch ($action) {
         break;
     case 'remove_attendance_sign':
         $selected = $_REQUEST['selected'];
+        $attendanceId = $_REQUEST['attendance_id'];
         if (!empty($selected)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
             $attendance = new Attendance();
-            $attendance->deleteSignature($userId, $attendanceCalendarId);
+            $attendance->deleteSignature($userId, $attendanceCalendarId, $attendanceId);
         }
         break;
     case 'sign_attendance':
         $selected = $_REQUEST['selected'];
         $file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
         $file = str_replace(' ', '+', $file);
+        $attendanceId = $_REQUEST['attendance_id'];
         if (!empty($selected)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
             $attendance = new Attendance();
-            $attendance->saveSignature($userId, $attendanceCalendarId, $file);
+            $attendance->saveSignature($userId, $attendanceCalendarId, $file, $attendanceId);
             echo 1;
             exit;
         }

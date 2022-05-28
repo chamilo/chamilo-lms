@@ -267,11 +267,11 @@ class Attendance
                             $message_alert = get_lang('UnlockMessageInformation');
                         }
                         $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].'">'.
-                            Display::return_icon('unlock.png', get_lang('LockAttendance')).'</a>';
+                            Display::return_icon('lock-open.png', get_lang('LockAttendance')).'</a>';
                     } else {
                         if (api_is_platform_admin()) {
                             $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
-                                    Display::return_icon('locked.png', get_lang('UnlockAttendance')).'</a>';
+                                    Display::return_icon('lock-closed.png', get_lang('UnlockAttendance')).'</a>';
                         } else {
                             $actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('LockedAttendance'));
                         }
@@ -1304,7 +1304,7 @@ class Attendance
             // Get attendance for current user
             $user_id = (int) $user_id;
             if (count($calendar_ids) > 0) {
-                $sql = "SELECT cal.date_time, att.presence
+                $sql = "SELECT cal.date_time, att.presence, cal.iid as calendar_id
                         FROM $tbl_attendance_sheet att
                         INNER JOIN  $tbl_attendance_calendar cal
                         ON cal.id = att.attendance_calendar_id
@@ -1324,7 +1324,6 @@ class Attendance
                 }
             }
         }
-
         return $data;
     }
 
@@ -2520,7 +2519,8 @@ class Attendance
      */
     public function deleteSignature(
         $userId,
-        $attendanceCalendarId
+        $attendanceCalendarId,
+        $attendanceId
     ) {
         $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
         if (!$allowSignature) {
@@ -2536,16 +2536,16 @@ class Attendance
         ];
 
         $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
-        $result = $repo->findBy($criteria);
+        $attendanceSheet = $repo->findOneBy($criteria);
 
-        if (count($result) > 0) {
+        if ($attendanceSheet) {
             /** @var CAttendanceSheet $attendanceSheet */
-            $attendanceSheet = $result[0];
             $attendanceSheet->setPresence(0);
             $attendanceSheet->setSignature('');
 
             $em->persist($attendanceSheet);
             $em->flush();
+            $this->updateUsersResults([$userId], $attendanceId);
         }
     }
 
@@ -2575,12 +2575,11 @@ class Attendance
             'attendanceCalendarId' => $attendanceCalendarId,
             'cId' => $courseId,
         ];
-        $result = $repo->findBy($criteria);
+        $attendanceSheet = $repo->findOneBy($criteria);
 
         $signature = "";
-        if (count($result) > 0) {
+        if ($attendanceSheet) {
             /** @var CAttendanceSheet $attendanceSheet */
-            $attendanceSheet = $result[0];
             $signature = $attendanceSheet->getSignature();
         }
 
@@ -2599,7 +2598,8 @@ class Attendance
     public function saveSignature(
         $userId,
         $attendanceCalendarId,
-        $file
+        $file,
+        $attendanceId
     ) {
         $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
         if (!$allowSignature) {
@@ -2615,11 +2615,10 @@ class Attendance
         ];
 
         $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
-        $result = $repo->findBy($criteria);
+        $attendanceSheet = $repo->findOneBy($criteria);
 
         /** @var CAttendanceSheet $attendanceSheet */
-        if (count($result) > 0) {
-            $attendanceSheet = $result[0];
+        if ($attendanceSheet) {
             $attendanceSheet->setPresence(1);
             $attendanceSheet->setSignature($file);
             $em->persist($attendanceSheet);
@@ -2636,5 +2635,6 @@ class Attendance
             $em->persist($attendanceSheet);
             $em->flush();
         }
+        $this->updateUsersResults([$userId], $attendanceId);
     }
 }

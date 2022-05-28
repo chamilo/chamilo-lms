@@ -39,6 +39,8 @@ $actions = [
     'attendance_sheet_export_to_pdf',
     'attendance_sheet_list_no_edit',
     'calendar_logins',
+    'lock_attendance',
+    'unlock_attendance'
 ];
 
 $actions_calendar = [

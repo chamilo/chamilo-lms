@@ -40,7 +40,8 @@ $actions = [
     'attendance_sheet_list_no_edit',
     'calendar_logins',
     'lock_attendance',
-    'unlock_attendance'
+    'unlock_attendance',
+    'attendance_sheet_qrcode',
 ];
 
 $actions_calendar = [
@@ -257,6 +258,16 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance_set_visible_selec
 }
 
 switch ($action) {
+    case 'attendance_sheet_qrcode':
+        header("Content-Type: image/png");
+        header("Content-Disposition: attachment; filename=AttendanceSheetQRcode.png");
+        $renderer = new \BaconQrCode\Renderer\Image\Png();
+        $renderer->setHeight(256);
+        $renderer->setWidth(256);
+        $writer = new \BaconQrCode\Writer($renderer);
+        $attendanceSheetLink = api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance_id;
+        echo $writer->writeString($attendanceSheetLink);
+        exit;
     case 'attendance_list':
         $attendanceController->attendance_list();
         break;

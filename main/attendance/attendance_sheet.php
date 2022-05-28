@@ -116,7 +116,8 @@ if (api_is_allowed_to_edit(null, true) ||
             Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
             Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
-
+        $actionsLeft .= '<a style="float:left;" title="QR"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_qrcode&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
+            Display::return_icon('paint.png', get_lang('DownloadQr'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsRight = $form->returnForm();
         $toolbar = Display::toolbarAction('toolbar-attendance', [$actionsLeft, $actionsRight]);
         echo $toolbar;

@@ -2221,6 +2221,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Shows the deleted quizzes in my progress page.
 //$_configuration['tracking_my_progress_show_deleted_exercises'] = true;
 
+// Hide IP in exercises reports
+// $_configuration['exercise_hide_ip'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

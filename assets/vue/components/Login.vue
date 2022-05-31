@@ -1,64 +1,71 @@
 <template>
-  <div>
-    <h2 class="text-3xl font-extrabold text-gray-900">
-      {{ t('Sign in') }}
-    </h2>
+  <div class="login-section">
+    <h2
+      v-t="'Sign in'"
+      class="login-section__title"
+    />
 
     <form
-      class="mt-8 space-y-4"
       @submit.prevent="performLogin"
+      class="login-section__form"
     >
-      <InputText
-        v-model="login"
-        :placeholder="t('Username')"
-        name="login"
-        type="text"
-      />
-      <Password
-        v-model="password"
-        :feedback="false"
-        :placeholder="t('Password')"
-        name="password"
-        toggle-mask
-      />
+      <div class="form__field p-input-filled">
+        <InputText
+          v-model="login"
+          :placeholder="t('Username')"
+          name="login"
+          type="text"
+        />
+      </div>
 
-      <div class="flex gap-4">
+      <div class="form__field p-input-filled">
+        <Password
+          v-model="password"
+          :feedback="false"
+          :placeholder="t('Password')"
+          name="password"
+          toggle-mask
+        />
+      </div>
+
+      <div class="form__field login-section__buttons">
         <Button
           :label="t('Sign in')"
           :loading="isLoading"
-          class="w-6/12 btn btn-primary text-center py-2 px-4 border border-transparent text-sm font-medium text-white"
+          class="btn btn--primary"
           type="submit"
         />
 
         <a
-          class="w-6/12 btn btn-default text-center py-2 px-4 border border-transparent text-sm font-medium text-gray-600"
+          v-t="'Register oneself'"
+          class="btn btn--primary-outline"
           href="/main/auth/inscription.php"
           tabindex="3"
-        >
-          {{ t('Register oneself') }}
-        </a>
+        />
       </div>
 
-      <div class="text-center text-sm">
-        <div class="field-checkbox">
-          <Checkbox
-            id="binary"
-            v-model="remember"
-            :binary="true"
-            name="remember_me"
-            tabindex="4"
-          />
-          <label for="binary">{{ t('Remember me') }}</label>
-        </div>
+      <div class="form__field text-center">
+        <InputSwitch
+          id="binary"
+          v-model="remember"
+          :binary="true"
+          name="remember_me"
+          tabindex="4"
+        />
+        <label
+          v-t="'Remember me'"
+          for="binary"
+        />
+      </div>
 
+      <div class="form__field text-center">
         <a
           id="forgot"
-          class="font-medium text-ch-primary hover:text-ch-primary-dark"
+          v-t="'Forgot your password?'"
+          class="form__field"
           href="/main/auth/lostPassword.php"
           tabindex="5"
-        >
-          {{ t('Forgot your password ?') }}
-        </a>
+        />
       </div>
     </form>
   </div>
@@ -70,7 +77,7 @@ import {computed, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
-import Checkbox from 'primevue/checkbox';
+import InputSwitch from 'primevue/inputswitch';
 import {useI18n} from "vue-i18n";
 
 const route = useRoute();

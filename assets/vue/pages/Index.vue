@@ -1,16 +1,13 @@
 <template>
-  <div class="flex gap-8">
-    <div class="order-2 flex-none w-96">
-      <Login />
-    </div>
-    <div class="order-1 flex-1 ">
-      <div
-        v-if="pages.length"
-      >
-        <PageCardList
-          :pages="pages"
-        />
-      </div>
+  <div class="container mx-auto flex gap-8">
+    <Login class="md:w-4/12 lg:order-1" />
+    <div
+      v-if="pages.length"
+      class="flex-1 md:w-8/12 lg:order-0"
+    >
+      <PageCardList
+        :pages="pages"
+      />
     </div>
   </div>
 </template>

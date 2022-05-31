@@ -1,0 +1,64 @@
+.login-section {
+  @apply flex justify-center flex-col;
+  min-height: calc(100vh - 4.5rem - 2rem - 1px);
+
+  .form__field {
+    @apply mb-6;
+
+    &:last-of-type {
+      @apply mb-0;
+    }
+  }
+
+  .p-inputtext {
+    @apply py-4 pl-4 text-support-3;
+
+    &.p-invalid.p-component {
+      @apply border-error;
+    }
+
+    &::placeholder {
+      @apply text-support-3;
+    }
+
+    &:hover,
+    &:focus {
+      @apply border-none ring-1 ring-primary text-primary;
+
+      + i.pi:last-of-type {
+        @apply text-primary;
+      }
+    }
+  }
+
+  .p-input-icon-right {
+    > i:last-of-type {
+      @apply text-support-3;
+    }
+  }
+
+  .p-input-filled {
+    .p-inputtext {
+      @apply bg-support-1;
+    }
+  }
+
+  &__title {
+    @apply font-bold leading-tight mb-6 text-[4rem];
+  }
+
+  &__form {
+    label,
+    a:not(.btn) {
+      @apply font-semibold text-primary;
+    }
+  }
+
+  &__buttons {
+    @apply flex gap-4;
+
+    .btn {
+      @apply w-6/12;
+    }
+  }
+}

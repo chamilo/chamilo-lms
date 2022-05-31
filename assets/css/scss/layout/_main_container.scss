@@ -1,16 +1,14 @@
 .app-main {
   @apply min-h-screen px-4 pb-4 transition-[margin-left] duration-150;
   padding-top: calc(4.5rem + 1rem + 1px);
+
+  &:not(.app-main--no-sidebar) {
+    @apply sm:ml-60;
+  }
 }
 
-@media (min-width: 640px) {
+#app.app--sidebar-inactive {
   .app-main:not(.app-main--no-sidebar) {
-    @apply ml-60;
-  }
-
-  #app.app--sidebar-inactive {
-    .app-main:not(.app-main--no-sidebar) {
-      @apply ml-[88px];
-    }
+    @apply sm:ml-[88px];
   }
 }

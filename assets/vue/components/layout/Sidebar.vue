@@ -8,15 +8,16 @@
         <PanelMenu :model="items" />
       </div>
       <div class="app-sidebar__bottom">
-        <a
-          v-if="isAuthenticated"
-          href="/logout"
-          class="app-sidebar__logout-link"
-        >
-          <span class="pi pi-fw pi-sign-out" />
-          <span class="logout-text">{{ t('Sign out') }}</span>
-        </a>
+        <p>{{ t('Created with Chamilo &copy; {year}', { 'year': 2022 }) }}</p>
       </div>
+      <a
+        v-if="isAuthenticated"
+        href="/logout"
+        class="app-sidebar__logout-link"
+      >
+        <span class="pi pi-fw pi-sign-out" />
+        <span class="logout-text">{{ t('Sign out') }}</span>
+      </a>
     </div>
     <ToggleButton
       v-model="sidebarIsOpen"

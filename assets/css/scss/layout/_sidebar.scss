@@ -1,5 +1,6 @@
 .app-sidebar {
-  @apply block bg-white fixed left-0 transition-[width] duration-150 items-stretch w-full;
+  @apply block bg-white fixed left-0 transition-[width] duration-150 items-stretch w-full text-gray-50 z-10
+    sm:bg-gray-15 sm:border-r sm:border-solid sm:border-gray-25 sm:w-60;
   height: calc(100vh - 4.5rem - 1px);
   top: calc(4.5rem + 1px);
 
@@ -8,7 +9,7 @@
   }
 
   &__top {
-    @apply text-xl md:hidden font-bold pt-8 px-8;
+    @apply sm:hidden font-bold pt-14 px-9 text-gray-90 text-[32px];
   }
 
   &__panel {
@@ -16,18 +17,33 @@
   }
 
   &__bottom {
+    @apply border-b border-solid border-gray-25 p-6 text-xs;
   }
 
   &__logout-link {
-    @apply block font-semibold p-4 border-t border-solid border-blue-100 text-center whitespace-nowrap;
+    @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2;
+
+    .pi {
+      @apply leading-normal;
+    }
 
     .logout-text {
       @apply ml-2;
     }
+
+    &:hover {
+      @apply bg-primary text-white rounded-md;
+    }
   }
 
   &__button {
-    @apply bg-white border border-solid border-blue-100 rounded-full absolute top-7 -right-3.5 px-2 py-1.5 text-xs hidden md:flex;
+    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-3.5 px-2 py-1.5 text-xs text-primary
+      sm:flex;
+    z-index: 11;
+
+    &:hover {
+      @apply border-primary;
+    }
   }
 
   .p-panelmenu {
@@ -35,7 +51,7 @@
 
     .p-panelmenu-header {
       > a {
-        @apply gap-4 pl-8 py-3 pr-6 font-semibold flex-nowrap;
+        @apply gap-4 pl-8 py-3 pr-6 mb-1 font-semibold flex-nowrap;
 
         .p-panelmenu-icon {
           @apply order-3 text-xs rotate-90;
@@ -49,14 +65,13 @@
           @apply order-2 grow whitespace-nowrap;
         }
 
-        &:hover {
-          @apply bg-blue-100;
+        &.router-link-active,
+        &[aria-expanded="true"],
+        &:hover{
+          @apply bg-support-1 border-l-4 border-primary border-solid pl-7 text-primary;
         }
 
-        &.router-link-active,
         &[aria-expanded="true"] {
-          @apply bg-blue-200 border-l-4 border-blue-500 border-solid pl-7 text-blue-500;
-
           .p-panelmenu-icon {
             @apply rotate-180;
           }
@@ -69,12 +84,9 @@
         .p-menuitem-link {
           @apply pl-8 py-3 pr-6;
 
+          &.router-link-active-exact,
           &:hover {
-            @apply bg-blue-100;
-          }
-
-          &.router-link-active-exact {
-            @apply text-blue-500;
+            @apply text-primary;
           }
         }
       }
@@ -83,50 +95,59 @@
 }
 
 .app-sidebar__topbar-button {
-  @apply flex h-8 w-8 rounded-full transition-none items-center justify-center md:hidden;
+  @apply flex h-8 w-8 rounded-full transition-none items-center justify-center
+    sm:hidden;
 }
 
-#app.app--sidebar-inactive {
-  .app-sidebar {
-    @apply hidden;
+#app {
+  .app-main {
+     @apply overflow-hidden;
   }
 
-  .app-sidebar__topbar-button {
-    .pi.pi-times {
-      &::before {
-        content: "\e91d";
-      }
-    }
-  }
-}
-
-@media (min-width: 640px) {
-  .app-sidebar {
-    @apply bg-blue-50 border-r border-solid border-blue-100 w-60;
-  }
-
-  #app.app--sidebar-inactive {
+  &.app--sidebar-inactive {
     .app-sidebar {
-      @apply block;
-      width: 88px;
+      @apply hidden
+        sm:block sm:w-[88px];
 
       .p-panelmenu-header {
         > a {
           .p-panelmenu-icon {
-            @apply hidden;
+            @apply sm:hidden;
           }
 
           .p-menuitem-text {
-            @apply hidden;
+            @apply sm:hidden;
           }
+        }
+      }
+
+      &__bottom {
+        @apply p-0;
+
+        * {
+          @apply hidden;
         }
       }
 
       &__logout-link {
+        @apply md:text-xs md:mx-5 md:my-3 md:py-3;
+
         .logout-text {
-          @apply hidden mr-0;
+          @apply sm:hidden sm:mr-0;
         }
       }
+    }
+
+    .app-sidebar__topbar-button {
+      .pi.pi-times {
+        &::before {
+          content: "\e91d";
+        }
+      }
+    }
+
+    .app-main {
+      @apply overflow-auto;
     }
   }
 }

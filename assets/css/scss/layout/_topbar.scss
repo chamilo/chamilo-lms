@@ -1,100 +1,65 @@
+.app-topbar {
+  @apply bg-white border-b border-solid border-gray-25 fixed left-0 p-4 top-0 w-full text-gray-50 z-10
+    md:text-gray-90;
+}
+
 .app-topbar.p-megamenu,
-.app-topbar.p-menubar {
-  @apply bg-white border-b border-solid border-gray-200 text-gray-700 fixed flex py-4 px-6 left-0 top-0 w-full;
+.app-topbar .p-menubar {
+  @apply flex;
+}
+
+.app-topbar.p-megamenu {
+  @apply md:px-6;
+}
+
+.app-topbar .p-menubar {
+  @apply container mx-auto;
 }
 
 .app-topbar__user-submenu,
 .app-topbar.p-megamenu,
-.app-topbar.p-menubar {
+.app-topbar .p-menubar {
   .p-menuitem-link {
-    @apply rounded-none text-gray-700 py-3 px-4 transition-none select-none;
-
-    .p-menuitem-text {
-      @apply text-gray-700;
-    }
-
-    .p-menuitem-icon {
-      @apply text-gray-500 mr-2;
-
-      &:empty {
-        @apply mr-0;
-      }
-    }
-
-    .p-submenu-icon {
-      @apply text-gray-500;
-    }
-
-    &:not(.p-disabled) {
-      &:hover {
-        @apply bg-gray-100;
-
-        .p-menuitem-text {
-          @apply text-gray-900;
-        }
-
-        .p-menuitem-icon {
-          @apply text-gray-500;
-        }
-
-        .p-submenu-icon {
-          @apply text-gray-500;
-        }
-      }
-    }
+    @apply rounded-none py-3 px-4 transition-none select-none;
 
     &:focus {
       @apply outline-none outline-offset-0;
-      box-shadow: inset 0 0 0 0.15rem #6366F1;
+    }
+
+    &:hover,
+    &:focus {
+      @apply text-primary;
     }
   }
 }
 
 .app-topbar .p-megamenu-root-list,
 .app-topbar .p-menubar-root-list {
-  @apply grow justify-end;
+  @apply bg-white grow justify-end;
+
+  .p-menuitem-icon {
+    @apply mr-2;
+
+    &:empty {
+      @apply mx-0;
+    }
+  }
 
   > .p-menuitem {
     > .p-menuitem-link {
-      @apply rounded-md text-gray-700 py-3 px-4 transition-none select-none;
-
-      .p-menuitem-text {
-        @apply text-gray-700;
-      }
-
-      .p-menuitem-icon {
-        @apply text-gray-500 mr-2;
-
-        &:empty {
-          @apply mr-0;
-        }
-      }
 
       .p-submenu-icon {
-        @apply text-gray-500 ml-2;
+        @apply mr-2 -order-1;
       }
 
       &:focus {
         @apply outline-none outline-offset-0;
-        box-shadow: inset 0 0 0 0.15rem #6366F1;
       }
     }
-  }
 
-  > .p-menuitem.p-menuitem-active {
-    > .p-menuitem-link {
-      @apply bg-gray-100;
-
-      .p-menuitem-text {
-        @apply text-gray-700;
-      }
-
-      .p-menuitem-icon {
-        @apply text-gray-500;
-      }
-
-      .p-submenu-icon {
-        @apply text-gray-500;
+    &.p-menuitem-active {
+      > .p-menuitem-link {
+        @apply text-primary;
       }
     }
   }
@@ -106,103 +71,70 @@
   }
 
   .p-megamenu-panel {
-    @apply bg-white border-none shadow-md text-gray-700;
+    @apply border-none shadow-lg text-gray-90;
   }
 
   .p-megamenu-submenu-header {
-    @apply text-gray-700 bg-white rounded-t-md font-semibold m-0 py-3 px-4;
+    @apply rounded-t-md font-semibold m-0 py-3 px-4;
   }
 
   .p-megamenu-submenu {
     @apply py-1 px-0 w-52;
 
     .p-menu-separator {
-      @apply border-t border-solid border-gray-100 my-1 mx-0;
-    }
-  }
-
-  .p-menuitem.p-menuitem-active {
-    > .p-menuitem-link {
-      @apply bg-gray-100;
-
-      .p-menuitem-text {
-        @apply text-gray-700;
-      }
-
-      .p-menuitem-icon {
-        @apply text-gray-500;
-      }
-
-      .p-submenu-icon {
-        @apply text-gray-500;
-      }
+      @apply border-t border-solid my-1 mx-0;
     }
   }
 }
 
 .app-topbar__user-submenu {
-  @apply bg-white border border-solid border-gray-200 rounded-md text-gray-700 py-1 px-0 w-52;
+  @apply bg-white border-none rounded-lg shadow-lg py-3 px-0 w-52 max-h-60 overflow-y-auto;
 
   .p-submenu-header {
-    @apply bg-white rounded-t-none text-gray-700 font-semibold m-0 py-3 px-4;
+    @apply rounded-t-none font-semibold m-0 py-3 px-4;
   }
 
   .p-menu-separator {
-    @apply border-t border-solid border-gray-100 my-1 mx-0;
+    @apply border-t border-solid my-1 mx-0;
   }
 
   &.p-menu-overlay {
-    @apply bg-white border-none shadow-md;
+    @apply border-none shadow-lg;
+  }
+
+  .p-menuitem {
+    .p-menuitem-link {
+      &:hover,
+      &:focus {
+        @apply bg-support-1;
+      }
+    }
   }
 }
 
-.app-topbar.p-menubar {
+.app-topbar .p-menubar {
   .p-submenu-list {
-    @apply bg-white border-none shadow-md py-1 px-0 w-52;
-
-    .p-menu-separator {
-      @apply border-t border-solid border-gray-100 my-1 mx-0;
-    }
+    @apply bg-white border-none rounded-lg shadow-lg py-3 px-0 w-52 max-h-60 overflow-y-auto right-0;
 
     .p-submenu-icon {
       @applt text-sm;
     }
-  }
 
-  .p-menuitem.p-menuitem-active {
-    > .p-menuitem-link {
-      @apply bg-gray-100;
-
-      .p-menuitem-text {
-        @apply text-gray-700;
-      }
-
-      .p-menuitem-icon {
-        @apply text-gray-500;
-      }
-
-      .p-submenu-icon {
-        @apply text-gray-500;
+    >.p-menuitem:hover,
+    >.p-menuitem:focus {
+      > .p-menuitem-link {
+        @apply bg-support-1;
       }
     }
   }
 }
 
 @media (max-width: 639px) {
-  .app-topbar.p-megamenu,
-  .app-topbar.p-menubar {
-    @apply px-4;
-  }
-
-  .app-topbar.p-menubar {
+  .app-topbar .p-menubar {
     @apply justify-between;
 
     .p-menubar-button {
-      @apply rounded-full text-gray-500 flex h-8 transition-none w-8;
-
-      &:hover {
-        @apply text-gray-500;
-      }
+      @apply rounded-full flex h-8 transition-none w-8;
 
       &:focus {
         @apply outline-none outline-offset-0;
@@ -210,84 +142,67 @@
     }
 
     .p-menubar-root-list {
-      @apply bg-white border-none shadow-md hidden py-1 px-0 absolute w-full;
-
-      .p-menu-separator {
-        @apply border border-solid border-gray-100 my-1 mx-0;
-      }
-
-      .p-submenu-icon {
-        @apply text-sm;
-      }
+      @apply hidden flex-col absolute left-0 w-full pt-8;
+      height: calc(100vh - 4.5rem - 1px);
+      top: calc(100% + 1px);
 
       > .p-menuitem {
-        @apply static w-full;
+        @apply w-full px-6 pb-2;
 
         > .p-menuitem-link {
-          > .p-submenu-icon {
-            @apply ml-auto transition-transform duration-200;
+          @apply py-3 px-9;
+
+          &:hover,
+          &:focus {
+            @apply border-l-4 border-primary border-solid pl-8;
           }
         }
-      }
 
-      > .p-menuitem.p-menuitem-active {
-        > .p-menuitem-link {
-          > .p-submenu-icon {
-            @apply rotate-180;
+        &:nth-last-child(2) {
+          @apply grow;
+        }
+
+        &:last-child {
+          @apply border-t border-solid border-gray-25 py-5;
+
+          .p-submenu-icon {
+            &.pi.pi-angle-down {
+              &::before {
+                content: "\e94f";
+              }
+            }
+          }
+
+          &.p-menuitem-active {
+            @apply text-gray-90;
+
+            > .p-menuitem-link {
+              @apply bg-primary text-white rounded-md;
+            }
+          }
+
+          > .p-menuitem-link {
+            @apply px-4;
+
+            &:hover,
+            &:focus {
+              @apply border-none;
+            }
           }
         }
       }
 
       .p-submenu-list {
-        @apply border-none shadow-none static w-full;
-
-        .p-submenu-icon {
-          @apply rotate-90 transition-transform duration-200;
-        }
-
-        .p-menuitem-active {
-          > .p-menuitem-link {
-            > .p-submenu-icon {
-              @apply rotate-90;
-            }
-          }
-        }
-      }
-
-      .p-menuitem {
-        @apply static w-full;
-      }
-
-      ul li {
-        a {
-          @apply pl-8;
-        }
-
-        ul li {
-          a {
-            @apply pl-12;
-          }
-
-          ul li {
-            a {
-              @apply pl-16;
-            }
-
-            ul li {
-              a {
-                @apply pl-20;
-              }
-
-              ul li a {
-                @apply pl-24;
-              }
-            }
-          }
-        }
+        @apply bottom-full -mb-4 right-auto;
+        width: calc(100% - 3rem);
       }
     }
 
     &.p-menubar-mobile-active {
+      + .app-main {
+        @apply max-h-screen overflow-hidden;
+      }
+
       .p-menubar-button {
         .pi.pi-bars {
           &::before {
@@ -297,8 +212,7 @@
       }
 
       .p-menubar-root-list {
-        @apply flex flex-col left-0 top-full;
-        z-index: 1;
+        @apply flex;
       }
     }
   }

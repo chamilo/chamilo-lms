@@ -1,15 +1,16 @@
 <template>
-  <Menubar
-    class="app-topbar"
-    :model="menuItems"
-  >
-    <template #start>
-      <img
-        alt="Chamilo LMS"
-        src="/build/css/themes/chamilo/images/header-logo.svg"
-      >
-    </template>
-  </Menubar>
+  <div class="app-topbar">
+    <Menubar
+      :model="menuItems"
+    >
+      <template #start>
+        <img
+          alt="Chamilo LMS"
+          src="/build/css/themes/chamilo/images/header-logo.svg"
+        >
+      </template>
+    </Menubar>
+  </div>
 </template>
 
 <script setup>

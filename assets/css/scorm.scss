@@ -243,13 +243,11 @@ body {
 .scorm_item_section .section {
     background: url("../../public/img/scorm/folder-item-closed.png") no-repeat 10px center;
     padding: 10px 20px 10px 35px;
-    @apply text-ch-ternary;
 }
 
 .scorm_item_section.scorm_completed .section {
     background: url("../../public/img/scorm/folder-item-open.png") no-repeat 10px center;
     padding-right: 1.5em;
-    @apply text-ch-ternary;
 }
 
 .scorm_item_normal a:hover {
@@ -273,7 +271,6 @@ body {
     padding: 0;
     display: inline-block;
     width: 100%;
-    @apply bg-ch-primary;
 }
 
 #scorm-info .description-autor p {
@@ -294,12 +291,11 @@ body {
 }
 
 #scorm-info #progress_bar .progress {
-    @apply rounded-sm ring-1 ring-ch-secondary bg-white text-sm text-center min-h-full ml-12 mr-4;
+    @apply rounded-sm ring-1 bg-white text-sm text-center min-h-full ml-12 mr-4;
 }
 
 #scorm-info .progress-bar {
   line-height: 17px;
-  @apply bg-ch-secondary text-ch-text-secondary;
 }
 
 .scorm-title {
@@ -444,27 +440,22 @@ body {
     text-align: center;
     border-radius: 100%;
     font-size: 20px;
-    @apply bg-ch-ternary text-ch-text-secondary;
 }
 
 .icon-toolbar .fa:hover,
 .icon-toolbar .mdi:hover {
-    @apply bg-ch-primary-light;
 }
 
 .expand .fa,
 .expand .mdi {
-    @apply bg-ch-ternary;
 }
 
 .expand .fa:hover,
 .expand .mdi:hover {
-    @apply bg-ch-primary-light text-ch-text-secondary;
 }
 
 .expand .fa:active, .expand .fa:focus,
 .expand .mdi:active, .expand .mdi:focus {
-    @apply bg-ch-primary-light text-ch-text-secondary;
 }
 
 .actions_lp {
@@ -501,7 +492,7 @@ body {
     -webkit-transition: all 0.4s ease-out;
     -moz-transition: all 0.4s ease-out;
     transition: all 0.4s ease-out;
-    @apply border-2 border-ch-ternary-dark bg-ch-text-secondary;
+    @apply border-2;
 }
 .c-menu-right .circle {
     opacity: 0;
@@ -510,7 +501,7 @@ body {
     padding: 2px;
     border-radius: 20px;
     background-color: #ffffff;
-    @apply border-2 border-ch-ternary-dark bg-ch-text-secondary;
+    @apply border-2;
 }
 
 .c-menu-left .open.circle {
@@ -531,7 +522,6 @@ body {
     line-height: 35px;
     text-align: center;
     border-radius: 100%;
-    @apply text-ch-text-secondary;
 }
 
 .c-menu-left .circle a:hover {
@@ -551,14 +541,12 @@ body {
     padding: 7px;
     background: #ffffff;
     font-size: 16px;
-    @apply border-2 border-ch-ternary-dark;
+    @apply border-2;
 }
 
 .menu-button:hover {
-  @apply bg-ch-ternary-light text-ch-text-secondary;
 }
 .menu-button-selected {
-  @apply bg-ch-ternary text-ch-text-secondary;
 }
 
 /* LP VIEW COLLAPSE */
@@ -671,19 +659,15 @@ body {
 }
 #learning_path_toc .child_item.lp_item_type_document.scorm_completed{
     background: url(../../public/img/icons/svg/check-completed.svg) right center no-repeat;
-    @apply bg-ch-ternary;
 }
 #learning_path_toc .child_item.lp_item_type_document.scorm_not_attempted{
     background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
-    @apply bg-ch-ternary;
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_completed{
     background: url(../../public/img/icons/svg/check-completed.svg) right center no-repeat;
-    @apply bg-ch-ternary;
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_not_attempted{
     background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
-    @apply bg-ch-ternary;
 }
 
 .status-heading .panel-heading .item-action{
@@ -704,42 +688,31 @@ body {
   width: 100%;
 }
 .scorm_completed .item a{
-  @apply text-ch-ternary;
 }
 .scorm_completed .item a.scorm_highlighted{
-  @apply text-ch-ternary;
 }
 .scorm_highlight .item {
   background: url("../../public/img/scorm/scorm_highlight.png") no-repeat 10px center !important;
-  @apply bg-ch-secondary text-ch-text-secondary;
 }
 .scorm_highlight.scorm_completed .item {
   background: url("../../public/img/scorm/scorm_current.png") no-repeat 10px center !important;
-  @apply bg-ch-secondary text-ch-text-secondary;
 }
 .scorm_highlight.scorm_failed .item {
   background: url("../../public/img/scorm/scorm_failed.png") no-repeat 10px center !important;
-  @apply bg-ch-secondary text-ch-text-secondary;
 }
 .scorm_item_normal.scorm_highlight {
-  @apply bg-ch-secondary text-ch-text-secondary;
 }
 .scorm_item_normal.scorm_highlight.scorm_not_attempted {
   background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
-  @apply bg-ch-secondary text-ch-text-secondary;
 }
 .scorm_item_normal.scorm_highlight.scorm_completed {
   background: url(../../public/img/icons/svg/check-highlight.svg) right center no-repeat;
-  @apply bg-ch-secondary text-ch-text-secondary;
 }
 .scorm_item_normal.scorm_highlight a {
-  @apply text-ch-text-secondary;
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_highlight{
-  @apply bg-ch-primary;
 }
 #learning_path_toc .child_item.lp_item_type_document.scorm_highlight{
-  @apply bg-ch-primary;
 }
 #learning_path_right_zone .lp-view-tabs .tab-content {
   bottom: 0;

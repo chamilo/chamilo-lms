@@ -28,7 +28,7 @@
 <!--      <q-btn-->
 <!--        v-if="handleSubmit"-->
 <!--        no-caps-->
-<!--        class="btn btn-primary"-->
+<!--        class="btn btn--primary"-->
 <!--        :loading="isLoading"-->
 <!--        @click="submitItem"-->
 <!--        unelevated-->
@@ -81,7 +81,7 @@
       <q-btn
         v-if="handleAdd"
         no-caps
-        class="btn btn-primary"
+        class="btn btn--primary"
         @click="addItem"
       >
         <v-icon icon="mdi-folder-plus"/>
@@ -90,7 +90,7 @@
 
       <q-btn
         no-caps
-        class="btn btn-primary"
+        class="btn btn--primary"
         v-if="handleAddDocument"
         @click="addDocument"
       >
@@ -100,7 +100,7 @@
 
       <q-btn
         no-caps
-        class="btn btn-primary"
+        class="btn btn--primary"
         v-if="handleUploadDocument"
         @click="uploadDocument"
       >

@@ -1,0 +1,31 @@
+.badge {
+  @apply font-semibold py-1 px-4 rounded-full text-white;
+
+  &--default {
+    @apply bg-gray-50;
+  }
+
+  &--error {
+    @apply bg-error;
+  }
+
+  &--success {
+    @apply bg-success;
+  }
+
+  &--warning {
+    @apply bg-warning;
+  }
+
+  &--info {
+    @apply bg-info;
+  }
+
+  &--primary {
+    @apply bg-primary;
+  }
+
+  &--secondary {
+    @apply bg-secondary;
+  }
+}

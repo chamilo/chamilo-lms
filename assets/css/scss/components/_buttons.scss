@@ -1,0 +1,70 @@
+.btn {
+  @apply font-semibold px-6 py-3.5 rounded-md text-center transition;
+
+  &--primary {
+    @apply bg-primary text-white;
+
+    &:hover,
+    &:focus {
+      @apply bg-support-4;
+    }
+
+    &:disabled {
+      @apply bg-gray-25 cursor-default select-none text-gray-50;
+    }
+  }
+
+  &--primary-outline {
+    @apply bg-white border border-primary text-primary;
+
+    &:hover,
+    &:focus {
+      @apply bg-primary text-white;
+    }
+
+    &:disabled,
+    &.disabled{
+      @apply bg-gray-10 border-gray-25 text-gray-50;
+    }
+  }
+
+  &--secondary {
+    @apply bg-secondary text-white;
+
+    &:hover,
+    &:focus {
+      @apply bg-support-5;
+    }
+
+    &:disabled {
+      @apply bg-gray-25 cursor-default select-none text-gray-50;
+    }
+  }
+
+  &--secondary-outline {
+    @apply bg-white border border-secondary text-secondary;
+
+    &:hover,
+    &:focus {
+      @apply bg-secondary text-white;
+    }
+
+    &:disabled,
+    &.disabled{
+      @apply bg-gray-10 border-gray-25 text-gray-50;
+    }
+  }
+
+  &--gray {
+    @apply bg-gray-90 text-white;
+
+    &:hover,
+    &:focus {
+      @apply bg-black;
+    }
+
+    &:disabled {
+      @apply bg-gray-25 cursor-default select-none text-gray-50;
+    }
+  }
+}

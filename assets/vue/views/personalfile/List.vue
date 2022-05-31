@@ -2,9 +2,9 @@
   <div v-if="isAuthenticated"  class="q-card">
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2" >
-        <Button label="New folder" icon="fa fa-folder-plus" class="btn btn-primary" @click="openNew" />
-        <Button label="Upload" icon="fa fa-file-upload" class="btn btn-primary" @click="uploadDocumentHandler()" />
-        <Button label="Shared" icon="fa fa-file-upload" class="btn btn-success" @click="sharedDocumentHandler()" />
+        <Button label="New folder" icon="fa fa-folder-plus" class="btn btn--primary" @click="openNew" />
+        <Button label="Upload" icon="fa fa-file-upload" class="btn btn--primary" @click="uploadDocumentHandler()" />
+        <Button label="Shared" icon="fa fa-file-upload" class="btn btn--success" @click="sharedDocumentHandler()" />
         <Button label="Delete" icon="pi pi-trash" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" />
       </div>
     </div>
@@ -68,8 +68,8 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated" icon="pi pi-pencil" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)" />
+          <Button icon="fa fa-info-circle"  class="btn btn--primary " @click="showHandler(slotProps.data)" />
+          <Button v-if="isAuthenticated" icon="pi pi-pencil" class="btn btn--primary p-mr-2" @click="editHandler(slotProps.data)" />
           <Button v-if="isAuthenticated" icon="pi pi-trash" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" />
         </div>
       </template>

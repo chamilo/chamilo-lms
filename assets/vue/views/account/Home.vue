@@ -18,7 +18,7 @@
       <q-route-tab to="/resources/personal_files" label="My files" />
     </q-tabs>
 
-    <a href="/account/edit" class="btn btn-primary">
+    <a href="/account/edit" class="btn btn--primary">
       Edit profile
     </a>
   </v-card>

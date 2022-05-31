@@ -10,7 +10,7 @@
 
       <div>
         <div class="flex flex-row" v-if="isCurrentTeacher && course">
-          <a class="btn btn-info mr-2 text-xs">
+          <a class="btn btn--info mr-2 text-xs">
             <v-icon icon="mdi-eye" class="pr-2" />
             {{ $t('See as student') }}
           </a>
@@ -64,7 +64,7 @@
         <div v-if="createInSession">
           <button
               v-if="introTool"
-              class="mt-2 btn btn-info"
+              class="mt-2 btn btn--info"
               @click="addIntro(course, introTool)"
           >
             <v-icon>mdi-plus</v-icon>
@@ -73,7 +73,7 @@
         </div>
         <div v-else>
           <button
-              class="mt-2 btn btn-info"
+              class="mt-2 btn btn--info"
               @click="updateIntro(intro)"
           >
             <v-icon>mdi-pencil</v-icon>
@@ -101,7 +101,7 @@
 
           <button
               v-if="introTool"
-              class="mt-2 btn btn-info"
+              class="mt-2 btn btn--info"
               @click="addIntro(course, introTool)"
           >
             <v-icon>mdi-plus</v-icon>

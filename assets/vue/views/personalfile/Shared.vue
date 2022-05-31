@@ -53,7 +53,7 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
+          <Button icon="fa fa-info-circle"  class="btn btn--primary " @click="showHandler(slotProps.data)" />
         </div>
       </template>
     </Column>

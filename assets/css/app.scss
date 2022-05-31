@@ -2,39 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    [type='text'],
-    [type='email'],
-    [type='url'],
-    [type='password'],
-    [type='number'],
-    [type='date'],
-    [type='datetime-local'],
-    [type='month'],
-    [type='search'],
-    [type='tel'],
-    [type='time'],
-    [type='week'],
-    [multiple],
-    textarea,
-    select {
-      @apply rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500;
-    }
-
-    [type='checkbox'],
-    [type='radio'] {
-      @apply border-gray-300 text-blue-600 focus:ring-blue-500;
-    }
-}
-
-.btn {
-  @apply font-bold py-2 px-4 rounded;
-}
 .btn-blue {
-  @apply bg-blue-500 text-white;
+  @apply bg-primary text-white;
 }
 .btn-blue:hover {
-  @apply bg-blue-700;
 }
 
 @import '~cropper/dist/cropper.css';
@@ -45,36 +16,7 @@
 
 @layer components {
   .card {
-    @apply bg-white rounded shadow-lg w-full;
-  }
-
-  // Buttons.
-
-  .btn {
-    //@apply inline-block text-black px-4 py-2 text-xs font-medium leading-6 text-center bg-gray-100 uppercase transition rounded shadow hover:shadow-lg focus:outline-none;
-    //disabled:cursor-not-allowed
-    //@apply block px-4 py-2 transition duration-100 ease-in-out focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-opacity-50 disabled:opacity-50 ;
-    @apply font-bold h-10 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2;
-  }
-
-  .btn-primary {
-    @apply text-ch-text-primary bg-ch-primary hover:bg-ch-primary-dark focus:ring-ch-primary-light;
-  }
-
-  .btn-secondary {
-    @apply text-ch-text-secondary bg-ch-secondary hover:bg-ch-secondary-dark focus:ring-ch-secondary-light;
-  }
-
-  .btn-warning {
-    @apply text-ch-text-warning bg-ch-warning hover:bg-ch-warning-dark focus:ring-ch-warning-light;
-  }
-
-  .btn-success {
-    @apply text-ch-text-success bg-ch-success hover:bg-ch-success-dark focus:ring-ch-success-light;
-  }
-
-  .btn-danger {
-    @apply text-ch-text-error bg-ch-error hover:bg-ch-error-dark focus:ring-ch-error-light;
+    @apply rounded shadow-lg w-full;
   }
 
   // Buttons with icons.
@@ -89,19 +31,18 @@
   // Forms.
 
   .help-block {
-    @apply mt-2 text-xs text-gray-500;
+    @apply mt-2 text-xs;
   }
 
   .has-error .ch-form-label {
-    @apply h-8 text-red-500;
+    @apply h-8;
   }
 
   .has-error .help-block {
-    @apply text-red-500 italic text-xs;
+    @apply italic text-xs;
   }
 
   .has-error .ch-form-control {
-    @apply border-red-500;
   }
 
   legend {
@@ -122,15 +63,13 @@
 
   // Tables
   table {
-      @apply min-w-full divide-y divide-gray-200;
+      @apply min-w-full divide-y;
   }
 
   table thead {
-    @apply bg-gray-50;
   }
 
   table tbody {
-    @apply bg-white divide-y divide-gray-200;
   }
 
   table thead th,
@@ -160,19 +99,15 @@
   }
 
   .alert-info {
-    @apply text-ch-text-info bg-ch-info;
   }
 
   .alert-warning {
-    @apply text-ch-text-warning bg-ch-warning;
   }
 
   .alert-success {
-    @apply text-ch-text-success bg-ch-success;
   }
 
   .alert-danger {
-    @apply text-ch-text-error bg-ch-error;
   }
 
   // Tabs
@@ -194,11 +129,11 @@
   // Page header
 
   .page-header {
-    @apply text-gray-500 text-2xl flex flex-row gap-2;
+    @apply text-2xl flex flex-row gap-2;
   }
 
   #no-data-view {
-    @apply flex flex-col items-center justify-center p-4 space-y-4 antialiased text-gray-900;
+    @apply flex flex-col items-center justify-center p-4 space-y-4 antialiased;
   }
 
   .pull-right {
@@ -210,16 +145,12 @@
   }
 
   .ch-tool-icon {
-    @apply font-extrabold text-transparent bg-clip-text bg-ch-primary mr-0.5;
   }
   .ch-tool-icon-disabled {
-    @apply font-extrabold text-transparent bg-clip-text bg-gray-400 mr-0.5;
   }
   .ch-tool-icon-gradient {
-    @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light;
   }
   .ch-tool-icon-button {
-    @apply font-extrabold bg-clip-text bg-ch-text;
   }
 
   // Forms
@@ -234,40 +165,11 @@
 
   // Special
 
-  .badge {
-    @apply rounded-sm p-1 font-medium;
-
-    &--error {
-      @apply bg-ch-error text-ch-text-error;
-    }
-
-    &--success {
-      @apply bg-ch-success text-ch-text-success;
-    }
-
-    &--warning {
-      @apply bg-ch-warning text-ch-text-warning;
-    }
-
-    &--info {
-      @apply bg-ch-info text-ch-text-info;
-    }
-
-    &--primary {
-      @apply bg-ch-primary text-ch-text-primary;
-    }
-
-    &--secondary {
-      @apply bg-ch-secondary text-ch-text-secondary;
-    }
-  }
-
   // Progress bars
   .progress {
-    @apply rounded-sm ring-1 ring-ch-secondary bg-ch-primary text-sm text-center min-h-full ml-12 mr-4;
+    @apply rounded-sm ring-1 text-sm text-center min-h-full ml-12 mr-4;
   }
   .progress .progress-bar {
-    @apply bg-ch-secondary text-ch-text-secondary;
   }
 
   // Pager
@@ -312,44 +214,3 @@
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";
 //@import "~jquery-contextmenu/dist/jquery.contextMenu.css";
-
-// Base Prime components
-.p-checkbox {
-  width: 16px;
-  height: 16px;
-}
-.p-checkbox .p-checkbox-box {
-  border: 2px solid #d4d4d8;
-  background: #ffffff;
-  width: 16px;
-  height: 16px;
-  color: #3f3f46;
-  border-radius: 0.375rem;
-  transition: none;
-}
-.p-checkbox .p-checkbox-box .p-checkbox-icon {
-  transition-duration: 0.2s;
-  color: #ffffff;
-  font-size: 10px;
-}
-.p-checkbox .p-checkbox-box.p-highlight {
-  border-color: #4F46E5;
-  background: #4F46E5;
-}
-.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
-  border-color: #d4d4d8;
-}
-.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
-  outline: 0 none;
-  outline-offset: 0;
-  box-shadow: 0 0 0 1px #6366F1;
-  border-color: #4F46E5;
-}
-.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
-  border-color: #4F46E5;
-  background: #4F46E5;
-  color: #ffffff;
-}
-.p-checkbox.p-invalid > .p-checkbox-box {
-  border-color: #f0a9a7;
-}

@@ -39,7 +39,7 @@
 
             <!--            <span v-else>-->
             <!--                <q-btn-->
-            <!--                    class="btn btn-primary"-->
+            <!--                    class="btn btn--primary"-->
             <!--                    :to="item['downloadUrl']"-->
             <!--                >-->
             <!--                  <v-icon icon="mdi-file-download"/>-->
@@ -89,7 +89,7 @@
             <td>
               <div>
                 <a
-                    class="btn btn-primary"
+                    class="btn btn--primary"
                     :href="item['downloadUrl']"
                 >
                   <v-icon icon="mdi-file-download"/>

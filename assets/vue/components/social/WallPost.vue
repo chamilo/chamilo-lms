@@ -1,6 +1,6 @@
 <template>
   <q-card
-    :class="{ 'border-green-400': post.type === 4 }"
+    :class="{ 'border-success': post.type === 4 }"
     :flat="post.type !== 4"
     bordered
     class="mb-4"
@@ -65,7 +65,7 @@
 
     <q-list
       v-if="comments.length"
-      :class="{ 'border-green-400': post.type === 4 }"
+      :class="{ 'border-success': post.type === 4 }"
       bordered
       class="border-t-0"
       separator

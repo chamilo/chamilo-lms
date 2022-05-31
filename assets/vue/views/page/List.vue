@@ -2,11 +2,11 @@
   <div v-if="isAdmin"  class="q-card">
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2" >
-<!--        <Button class="btn btn-primary" @click="openNew">-->
+<!--        <Button class="btn btn--primary" @click="openNew">-->
 <!--          <v-icon icon="mdi-folder-plus"/>-->
 <!--          {{ $t('New category') }}-->
 <!--        </Button>-->
-        <Button label="{{ $t('New page') }}" class="btn btn-primary" @click="addHandler()" >
+        <Button label="{{ $t('New page') }}" class="btn btn--primary" @click="addHandler()" >
           <v-icon icon="mdi-file-plus"/>
           {{ $t('New page') }}
         </Button>
@@ -58,11 +58,11 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-<!--          <Button class="btn btn-primary" @click="showHandler(slotProps.data)">-->
+<!--          <Button class="btn btn--primary" @click="showHandler(slotProps.data)">-->
 <!--            <v-icon icon="mdi-information"/>-->
 <!--          </Button>-->
 
-          <Button v-if="isAuthenticated" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)">
+          <Button v-if="isAuthenticated" class="btn btn--primary p-mr-2" @click="editHandler(slotProps.data)">
             <v-icon icon="mdi-pencil"/>
           </Button>
 

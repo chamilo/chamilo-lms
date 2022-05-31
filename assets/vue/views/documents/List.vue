@@ -93,23 +93,23 @@
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2" >
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
-        <Button class="btn btn-primary" @click="openNew">
+        <Button class="btn btn--primary" @click="openNew">
           <v-icon icon="mdi-folder-plus"/>
           {{ $t('New folder') }}
         </Button>
 
         <!--         <Button label="New folder" icon="pi pi-plus" class="p-button-success p-mr-2" @click="addHandler()" />-->
         <!--         <Button label="New document" icon="pi pi-plus" class="p-button-sm p-button-primary p-mr-2" @click="addDocumentHandler()" />-->
-        <Button label="{{ $t('New document') }}" class="btn btn-primary" @click="addDocumentHandler()" >
+        <Button label="{{ $t('New document') }}" class="btn btn--primary" @click="addDocumentHandler()" >
           <v-icon icon="mdi-file-plus"/>
           {{ $t('New document') }}
         </Button>
-        <Button label="{{ $t('Upload') }}" class="btn btn-primary" @click="uploadDocumentHandler()">
+        <Button label="{{ $t('Upload') }}" class="btn btn--primary" @click="uploadDocumentHandler()">
           <v-icon icon="mdi-file-upload"/>
           {{ $t('Upload') }}
         </Button>
         <!--
-        <Button label="{{ $t('Download') }}" class="btn btn-primary" @click="downloadDocumentHandler()" :disabled="!selectedItems || !selectedItems.length">
+        <Button label="{{ $t('Download') }}" class="btn btn--primary" @click="downloadDocumentHandler()" :disabled="!selectedItems || !selectedItems.length">
           <v-icon icon="mdi-file-download"/>
           {{ $t('Download') }}
         </Button>
@@ -206,16 +206,16 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button class="btn btn-primary" @click="showHandler(slotProps.data)">
+          <Button class="btn btn--primary" @click="showHandler(slotProps.data)">
             <v-icon icon="mdi-information"/>
           </Button>
 
-          <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-primary" @click="changeVisibilityHandler(slotProps.data, slotProps)">
+          <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn--primary" @click="changeVisibilityHandler(slotProps.data, slotProps)">
             <v-icon v-if="RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility" icon="mdi-eye"/>
             <v-icon v-if="RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility" icon="mdi-eye-off"/>
           </Button>
 
-          <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)">
+          <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn--primary p-mr-2" @click="editHandler(slotProps.data)">
             <v-icon icon="mdi-pencil"/>
           </Button>
 

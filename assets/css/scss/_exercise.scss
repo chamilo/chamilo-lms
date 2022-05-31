@@ -116,7 +116,7 @@
     }
 
     .exercise-draggable-answer-option {
-      @apply border border-gray-400 rounded-sm p-2 cursor-move bg-gray-100;
+      @apply border border-gray-50 rounded-sm p-2 cursor-move bg-gray-10;
     }
 
     .question-answer {
@@ -134,7 +134,7 @@
     }
 
     .droppable-item {
-      @apply p-2 bg-indigo-200;
+      @apply p-2;
 
       &.list-inline {
         @apply text-center align-middle;
@@ -148,7 +148,7 @@
         @apply p-2;
 
         &:empty {
-          @apply bg-indigo-300 rounded-sm;
+          @apply rounded-sm;
           min-height: 4rem;
           min-width: 6rem;
         }
@@ -185,25 +185,25 @@
     @apply mb-4;
 
     &-ribbon {
-      @apply mb-4 flex border bg-gray-100 rounded-md;
+      @apply mb-4 flex border bg-gray-10 rounded-md;
 
       &-title {
-        @apply font-bold p-3 rounded-l-md;
+        @apply font-bold p-3 rounded-l-md text-white;
 
         &--error {
-          @apply bg-ch-error text-ch-text-error;
+          @apply bg-error;
         }
 
         &--warning {
-          @apply bg-ch-warning text-ch-text-warning;
+          @apply bg-warning;
         }
 
         &--success {
-          @apply bg-ch-success text-ch-text-success;
+          @apply bg-success;
         }
 
         &--info {
-          @apply bg-ch-info text-ch-text-info;
+          @apply bg-info;
         }
       }
 

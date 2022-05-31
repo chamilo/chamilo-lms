@@ -18,7 +18,6 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_course_info()
 ) || api_is_drh();
 
-$allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
 $token = Security::get_token();
 
 if (api_is_allowed_to_edit(null, true) ||
@@ -279,6 +278,14 @@ if (api_is_allowed_to_edit(null, true) ||
                             ['class' => 'img_lock', 'id' => 'datetime_column_'.$calendar['id']]
                         );
 
+                $iconFullScreen = '';
+                if ($allowSignature) {
+                    $iconFullScreen = Display::url(
+                        Display::return_icon('expand.png', get_lang('seeForTablet'), [], ICON_SIZE_SMALL),
+                        api_get_self().'?'.api_get_cidreq().'&action=attendance_sheet_list&func=fullscreen&attendance_id='.$attendance_id.'&calendar_id='.$calendar['id']
+                    );
+                }
+
                 if (!empty($calendar['done_attendance'])) {
                     $datetime = '<div class="blue">'.$date.' - '.$time.'</div>';
                 }
@@ -293,7 +300,10 @@ if (api_is_allowed_to_edit(null, true) ||
                 $result .= '<th>';
                 $result .= '<div class="date-attendance">'.$datetime.'&nbsp;';
                 if (api_is_allowed_to_edit(null, true)) {
-                    $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
+                    if (!empty($iconFullScreen)) {
+                        $result .= '<span class="attendance-fullscreen">'.$iconFullScreen.'</span>&nbsp;';
+                    }
+                    $result .= '<span class="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
                 }
 
                 if ($is_locked_attendance == false) {
@@ -530,151 +540,6 @@ if (api_is_allowed_to_edit(null, true) ||
 }
 
 if ($allowSignature) {
-    ?>
-    <div id="sign_popup" style="display: none">
-        <div id="signature_area" class="well">
-            <canvas width="400px"></canvas>
-        </div>
-        <span id="save_controls">
-            <button id="sign_popup_save" class="btn btn-primary" type="submit">
-                <em class="fa fa-save"></em> <?php echo get_lang('Save'); ?>
-            </button>
-            <button id="sign_popup_clean" class="btn btn-default" type="submit">
-                <em class="fa fa-eraser"></em> <?php echo get_lang('Clean'); ?>
-            </button>
-        </span>
-        <span id="remove_controls" clase="hidden">
-            <button id="sign_popup_remove" class="btn btn-danger" type="submit">
-                <em class="fa fa-remove"></em> <?php echo get_lang('Remove'); ?>
-            </button>
-        </span>
-        <span id="close_controls" style="display: none">
-            <span id="sign_results"></span>
-            <hr />
-            <button id="sign_popup_close" class="btn btn-default" type="submit">
-                <?php echo get_lang('Close'); ?>
-            </button>
-        </span>
-        <span class="loading" style="display: none"><em class="fa fa-spinner"></em></span>
-        <input type="hidden" id="sign-selected" />
-    </div>
-
-    <script>
-        var imageFormat = 'image/png';
-        var canvas = document.querySelector("#signature_area canvas");
-        var signaturePad = new SignaturePad(canvas);
-        var urlAjax = "<?php echo api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.api_get_cidreq(); ?>";
-        var attendance_id = "<?php echo $attendance_id; ?>";
-
-        $(function() {
-            $("#sign_popup_close").on("click", function() {
-                $("#sign_popup").dialog("close");
-                $('#loading').hide();
-                $('#save_controls').show();
-                $('#close_controls').hide();
-                $('#signature_area').show();
-            });
-
-            $("#sign_popup_clean").on("click", function() {
-                signaturePad.clear();
-            });
-
-            $("#sign_popup_remove").on("click", function() {
-                var selected = $("#sign-selected").val();
-                $.ajax({
-                    beforeSend: function(result) {
-                        $('#loading').show();
-                    },
-                    type: "POST",
-                    url: urlAjax,
-                    data: "a=remove_attendance_sign&selected="+selected+"&attendance_id="+attendance_id,
-                    success: function(data) {
-                        location.reload();
-                    },
-                });
-            });
-
-            $("#sign_popup_save").on("click", function() {
-                if (signaturePad.isEmpty()) {
-                    alert('<?php echo get_lang('ProvideASignatureFirst'); ?>');
-                    return false;
-                }
-                var selected = $("#sign-selected").val();
-                var dataURL = signaturePad.toDataURL(imageFormat);
-                $.ajax({
-                    beforeSend: function(result) {
-                        $('#loading').show();
-                    },
-                    type: "POST",
-                    url: urlAjax,
-                    data: "a=sign_attendance&selected="+selected+"&file="+dataURL+"&attendance_id="+attendance_id,
-                    success: function(data) {
-                        $('#loading').hide();
-                        $('#save_controls').hide();
-                        $('#close_controls').show();
-                        $('#signature_area').hide();
-
-                        signaturePad.clear();
-                        if (1 == data) {
-                            $('#sign_results').html('<?php echo get_lang('Saved'); ?>');
-                        } else {
-                            $('#sign_results').html('<?php echo get_lang('Error'); ?>');
-                        }
-                        $('#sign_popup_close').hide();
-                        location.reload();
-                    },
-                });
-            });
-
-            $(".attendance-sign").on("click", function() {
-                $("#sign-selected").val($(this).attr("id"));
-                $("#sign_popup").dialog({
-                    autoOpen: false,
-                    width: 500,
-                    height: 'auto',
-                    close: function(){
-                    }
-                });
-                $("#sign_popup").dialog("open");
-                $("#save_controls").show();
-                $("#remove_controls").hide();
-                $('#signature_area').show();
-                $('#signature_area').html("<canvas width='400px'></canvas>");
-                canvas = document.querySelector("#signature_area canvas");
-                signaturePad = new SignaturePad(canvas);
-            });
-
-            $(".attendance-sign-view").on("click", function() {
-                var selected = $(this).attr("id");
-                $('#loading').show();
-                $.ajax({
-                    beforeSend: function(result) {
-                        $('#signature_area').html("<em class='fa fa-spinner'></em>");
-                    },
-                    type: "POST",
-                    url: urlAjax,
-                    data: "a=get_attendance_sign&selected="+selected,
-                    success: function(sign) {
-                        $('#loading').hide();
-                        $('#signature_area').show();
-                        $('#signature_area').html("<img src='"+sign+"' />");
-                    },
-                });
-                $("#sign_popup").dialog({
-                    autoOpen: false,
-                    width: 500,
-                    height: 'auto',
-                    close: function(){
-                    }
-                });
-                $("#sign-selected").val(selected);
-                $("#sign_popup").dialog("open");
-                $("#save_controls").hide();
-                $("#remove_controls").show();
-            });
-        });
-    </script>
-
-    <?php
+    include_once 'attendance_signature.inc.php';
 }
 ?>

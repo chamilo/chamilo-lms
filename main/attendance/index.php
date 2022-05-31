@@ -94,7 +94,7 @@ if (!empty($attendance_id)) {
 
 $htmlHeadXtra[] = '<script>
 $(function() {
-    $("table th img").click(function() {
+    $("table th .attendance_lock img").click(function() {
         var col_id = this.id;
         var col_split = col_id.split("_");
         var calendar_id = col_split[2];
@@ -192,6 +192,18 @@ $(function() {
 $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
 if ($allowSignature) {
     $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
+    $htmlHeadXtra[] = '<style>
+        #search-user {
+          background-image: url("/main/img/icons/22/sn-search.png");
+          background-position: 10px 12px;
+          background-repeat: no-repeat;
+          width: 100%;
+          font-size: 16px;
+          padding: 12px 20px 12px 40px;
+          border: 1px solid #ddd;
+          margin: 12px 0px;
+        }
+    </style>';
 }
 
 $student_param = '';

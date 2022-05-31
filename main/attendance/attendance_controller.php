@@ -294,6 +294,7 @@ class AttendanceController
         $data['attendance_id'] = $attendance_id;
         $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
         $data['users_in_course'] = $attendance->get_users_rel_course($attendance_id, $groupId);
+        $data['faults'] = [];
 
         $filter_type = 'today';
         if (!empty($_REQUEST['filter'])) {
@@ -402,11 +403,37 @@ class AttendanceController
             );
         }
 
+        $attendanceInfo = $attendance->get_attendance_by_id($attendance_id);
+
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        $func = isset($_REQUEST['func']) ? $_REQUEST['func'] : null;
+        $calendarId = isset($_REQUEST['calendar_id']) ? (int) $_REQUEST['calendar_id'] : null;
+        $fullScreen = ($func == 'fullscreen' && $calendarId > 0 && $allowSignature);
+
         $data['edit_table'] = intval($edit);
         $data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);
+        $data['allowSignature'] = $allowSignature;
+        $data['fullScreen'] = $fullScreen;
+        $data['attendanceName'] = $attendanceInfo['name'];
+
+        if ($fullScreen) {
+            $uinfo = api_get_user_info();
+            $data['calendarId'] = $calendarId;
+            $data['trainer'] = api_get_person_name($uinfo['firstname'], $uinfo['lastname']);
+            $attendanceCalendar = $attendance->get_attendance_calendar(
+                $attendance_id,
+                'calendar_id',
+                $calendarId,
+                $groupId
+            );
+            $data['attendanceCalendar'] = $attendanceCalendar[0];
+            $this->view->set_template('attendance_sheet_fullscreen');
+        } else {
+            $this->view->set_template('attendance_sheet');
+        }
+
         $this->view->set_data($data);
         $this->view->set_layout('layout');
-        $this->view->set_template('attendance_sheet');
         $this->view->render();
     }
 

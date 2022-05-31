@@ -279,10 +279,22 @@ if (api_is_allowed_to_edit(null, true) ||
                         );
 
                 $iconFullScreen = '';
+                $iconBlocked = '';
                 if ($allowSignature) {
                     $iconFullScreen = Display::url(
-                        Display::return_icon('expand.png', get_lang('seeForTablet'), [], ICON_SIZE_SMALL),
+                        Display::return_icon('view_fullscreen.png', get_lang('seeForTablet'), [], ICON_SIZE_SMALL),
                         api_get_self().'?'.api_get_cidreq().'&action=attendance_sheet_list&func=fullscreen&attendance_id='.$attendance_id.'&calendar_id='.$calendar['id']
+                    );
+                    $isBlocked = 0;
+                    $iconBlockName = 'eyes.png';
+                    if ((isset($calendar['blocked']) && 1 === (int) $calendar['blocked'])) {
+                        $isBlocked = 1;
+                        $iconBlockName = 'eyes-close.png';
+                    }
+                    $iconBlocked = Display::url(
+                        Display::return_icon($iconBlockName, get_lang('seeForTablet'), [], ICON_SIZE_SMALL),
+                        api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.api_get_cidreq().'&a=block_attendance_calendar&calendar_id='.$calendar['id'],
+                        ['class' => 'block-calendar']
                     );
                 }
 
@@ -302,6 +314,9 @@ if (api_is_allowed_to_edit(null, true) ||
                 if (api_is_allowed_to_edit(null, true)) {
                     if (!empty($iconFullScreen)) {
                         $result .= '<span class="attendance-fullscreen">'.$iconFullScreen.'</span>&nbsp;';
+                    }
+                    if (!empty($iconBlocked)) {
+                        $result .= '<span class="attendance-blocked">'.$iconBlocked.'</span>&nbsp;';
                     }
                     $result .= '<span class="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
                 }
@@ -492,6 +507,11 @@ if (api_is_allowed_to_edit(null, true) ||
                 $signed = false;
                 if ($allowSignature) {
                     $attendance = new Attendance();
+                    $isBlocked = $attendance->isCalendarBlocked($presence['calendar_id']);
+                    // if calendar is blocked by admin is it not displayed here.
+                    if ($isBlocked) {
+                        continue;
+                    }
                     $signature = $attendance->getSignature($user_id, $presence['calendar_id']);
                     $signed = !empty($signature);
                 }

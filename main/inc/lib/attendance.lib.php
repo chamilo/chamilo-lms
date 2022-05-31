@@ -11,6 +11,7 @@
  * @package chamilo.attendance
  */
 
+use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 
 class Attendance
@@ -2547,6 +2548,53 @@ class Attendance
             $em->persist($attendanceSheet);
             $em->flush();
             $this->updateUsersResults([$userId], $attendanceId);
+        }
+    }
+
+    /**
+     * It checks if the calendar in a attendance sheet is blocked.
+     *
+     * @param $calendarId
+     *
+     * @return bool
+     */
+    public function isCalendarBlocked($calendarId)
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceCalendar');
+
+        $blocked = 0;
+        $attendanceCalendar = $repo->find($calendarId);
+        /** @var CAttendanceCalendar $attendanceCalendar */
+        if ($attendanceCalendar) {
+            $blocked = (int) $attendanceCalendar->getBlocked();
+        }
+
+        $isBlocked = (1 === $blocked);
+
+        return $isBlocked;
+    }
+
+    /**
+     * It blocks/unblocks the calendar in attendance sheet.
+     *
+     * @param $calendarId
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateCalendarBlocked($calendarId)
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceCalendar');
+        $attendanceCalendar = $repo->find($calendarId);
+
+        /** @var CAttendanceCalendar $attendanceCalendar */
+        if ($attendanceCalendar) {
+            $blocked = !$this->isCalendarBlocked($calendarId);
+            $attendanceCalendar->setBlocked($blocked);
+            $em->persist($attendanceCalendar);
+            $em->flush();
         }
     }
 

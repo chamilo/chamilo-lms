@@ -17,6 +17,12 @@ $isRequestByAjax = $request->isXmlHttpRequest();
 $action = $_REQUEST['a'];
 
 switch ($action) {
+    case 'block_attendance_calendar':
+        $calendarId = (int) $_REQUEST['calendar_id'];
+        $attendance = new Attendance();
+        $attendance->updateCalendarBlocked($calendarId);
+        echo (int) $attendance->isCalendarBlocked($calendarId);
+        break;
     case 'get_attendance_sign':
         $selected = $_REQUEST['selected'];
         if (!empty($selected)) {
@@ -28,7 +34,7 @@ switch ($action) {
         break;
     case 'remove_attendance_sign':
         $selected = $_REQUEST['selected'];
-        $attendanceId = $_REQUEST['attendance_id'];
+        $attendanceId = (int) $_REQUEST['attendance_id'];
         if (!empty($selected)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
             $attendance = new Attendance();

@@ -139,6 +139,27 @@
             $("#save_controls").hide();
             $("#remove_controls").show();
         });
+
+        $(".block-calendar").on("click", function(e) {
+            e.preventDefault();
+            var urlAjax = $(this).attr("href");
+            var imgBlocked = $(this).find("img");
+            var srcImg =  imgBlocked.attr("src");
+            $.ajax({
+                type: "POST",
+                url: urlAjax,
+                success: function(data) {
+                    if (1 == data) {
+                        var newSrcImg = srcImg.replace("eyes.png", "eyes-close.png");
+                        imgBlocked.attr("src", newSrcImg);
+                    } else {
+                        var newSrcImg = srcImg.replace("eyes-close.png", "eyes.png");
+                        imgBlocked.attr("src", newSrcImg);
+                    }
+                },
+            });
+        });
+
     });
 
     function searchUser() {

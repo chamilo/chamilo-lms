@@ -40,7 +40,7 @@
     <?php if (!empty($users_in_course)) { ?>
 
         <div class="input-group">
-            <input type="text" id="search-user" onkeyup="searchUser()" placeholder="<?php echo get_lang('SearchUser'); ?>">
+            <input type="text" id="search-user" onkeyup="searchUser()" />
         </div>
 
         <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_filter; ?>&attendance_id=<?php echo $attendance_id; ?>" >
@@ -57,7 +57,8 @@
                 <?php foreach ($users_in_course as $user) {
     $attendance = new Attendance();
     $signature = $attendance->getSignature($user['user_id'], $calendarId);
-    $signed = !empty($signature); ?>
+    $signed = !empty($signature);
+    $isBlocked = $attendance->isCalendarBlocked($calendarId); ?>
                     <tr>
                         <td>
                             <?php
@@ -69,26 +70,25 @@
                         </td>
                         <td><?php echo api_get_person_name($user['firstname'], $user['lastname']); ?></td>
                         <td>
-
                             <?php
-
-                            if ($signed) {
-                                echo '<div class="list-data">
-                                        <span class="item"></span>
-                                        <a id="sign-'.$user['user_id'].'-'.$calendarId.'" class="btn btn-primary attendance-sign-view" href="javascript:void(0)">
-                                            <em class="fa fa-search"></em> '.get_lang('SignView').'
-                                        </a>
-                                    </div>';
-                            } else {
-                                echo '<input type="hidden" name="check_presence['.$calendarId.'][]" value="'.$user['user_id'].'" />';
-                                echo '<div class="list-data">
-                                        <span class="item"></span>
-                                        <a id="sign-'.$user['user_id'].'-'.$calendarId.'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
-                                            <em class="fa fa-pencil"></em> '.get_lang('Sign').'
-                                        </a>
-                                    </div>';
-                            } ?>
-
+                                if (!$isBlocked) {
+                                    if ($signed) {
+                                        echo '<div class="list-data">
+                                            <span class="item"></span>
+                                            <a id="sign-'.$user['user_id'].'-'.$calendarId.'" class="btn btn-primary attendance-sign-view" href="javascript:void(0)">
+                                                <em class="fa fa-search"></em> '.get_lang('SignView').'
+                                            </a>
+                                        </div>';
+                                    } else {
+                                        echo '<input type="hidden" name="check_presence['.$calendarId.'][]" value="'.$user['user_id'].'" />';
+                                        echo '<div class="list-data">
+                                            <span class="item"></span>
+                                            <a id="sign-'.$user['user_id'].'-'.$calendarId.'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
+                                                <em class="fa fa-pencil"></em> '.get_lang('Sign').'
+                                            </a>
+                                        </div>';
+                                    }
+                                } ?>
                         </td>
                     </tr>
                 <?php
@@ -102,5 +102,5 @@
 </div>
 <?php
 if ($allowSignature) {
-    include_once 'attendance_signature.inc.php';
-}
+                                    include_once 'attendance_signature.inc.php';
+                                }

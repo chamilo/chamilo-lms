@@ -417,17 +417,19 @@ class AttendanceController
         $data['attendanceName'] = $attendanceInfo['name'];
 
         if ($fullScreen) {
-            $uinfo = api_get_user_info();
-            $data['calendarId'] = $calendarId;
-            $data['trainer'] = api_get_person_name($uinfo['firstname'], $uinfo['lastname']);
-            $attendanceCalendar = $attendance->get_attendance_calendar(
-                $attendance_id,
-                'calendar_id',
-                $calendarId,
-                $groupId
-            );
-            $data['attendanceCalendar'] = $attendanceCalendar[0];
-            $this->view->set_template('attendance_sheet_fullscreen');
+            if (api_is_allowed_to_edit()) {
+                $uinfo = api_get_user_info();
+                $data['calendarId'] = $calendarId;
+                $data['trainer'] = api_get_person_name($uinfo['firstname'], $uinfo['lastname']);
+                $attendanceCalendar = $attendance->get_attendance_calendar(
+                    $attendance_id,
+                    'calendar_id',
+                    $calendarId,
+                    $groupId
+                );
+                $data['attendanceCalendar'] = $attendanceCalendar[0];
+                $this->view->set_template('attendance_sheet_fullscreen');
+            }
         } else {
             $this->view->set_template('attendance_sheet');
         }

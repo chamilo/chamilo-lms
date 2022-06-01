@@ -82,7 +82,8 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface as HttpSessionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -100,6 +101,7 @@ class Container
     public static ?Request $request = null;
     public static ?TranslatorInterface $translator = null;
     public static Environment $twig;
+    public static ?Session $session = null;
     public static string $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
 
     public static function setContainer(ContainerInterface $container): void
@@ -196,13 +198,22 @@ class Container
         self::$request = $request;
     }
 
-    public static function getSession(): SessionInterface|bool
+    public static function getSession(): Session|HttpSessionInterface|bool|null
     {
-        if (!empty(self::$request)) {
-            return self::$request->getSession();
+        if (null !== self::$session) {
+            return self::$session;
+        }
+
+        if (null !== self::$container) {
+            return self::$container->get('request_stack')->getSession();
         }
 
         return false;
+    }
+
+    public static function setSession(Session $session): void
+    {
+        self::$session = $session;
     }
 
     /**

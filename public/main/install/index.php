@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Translator;
 
@@ -77,6 +78,8 @@ $translator->addResource(
     $installationLanguage
 );
 Container::$translator = $translator;
+
+Container::$session = new HttpSession();
 
 // The function api_get_setting() might be called within the installation scripts.
 // We need to provide some limited support for it through initialization of the

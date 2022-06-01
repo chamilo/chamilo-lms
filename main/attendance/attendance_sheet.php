@@ -282,16 +282,16 @@ if (api_is_allowed_to_edit(null, true) ||
                 $iconBlocked = '';
                 if ($allowSignature) {
                     $iconFullScreen = Display::url(
-                        Display::return_icon('view_fullscreen.png', get_lang('seeForTablet'), [], ICON_SIZE_SMALL),
+                        Display::return_icon('view_fullscreen.png', get_lang('SeeForTablet'), [], ICON_SIZE_SMALL),
                         api_get_self().'?'.api_get_cidreq().'&action=attendance_sheet_list&func=fullscreen&attendance_id='.$attendance_id.'&calendar_id='.$calendar['id']
                     );
                     $isBlocked = 0;
                     $iconBlockName = 'eyes.png';
-                    $iconBlockLabel = get_lang('disableSignature');
+                    $iconBlockLabel = get_lang('DisableSignature');
                     if ((isset($calendar['blocked']) && 1 === (int) $calendar['blocked'])) {
                         $isBlocked = 1;
                         $iconBlockName = 'eyes-close.png';
-                        $iconBlockLabel = get_lang('enableSignature');
+                        $iconBlockLabel = get_lang('EnableSignature');
                     }
                     $iconBlocked = Display::url(
                         Display::return_icon($iconBlockName, $iconBlockLabel, [], ICON_SIZE_SMALL),

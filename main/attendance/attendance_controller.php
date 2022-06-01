@@ -419,8 +419,10 @@ class AttendanceController
         if ($fullScreen) {
             if (api_is_allowed_to_edit()) {
                 $uinfo = api_get_user_info();
+                $cinfo = api_get_course_info();
                 $data['calendarId'] = $calendarId;
                 $data['trainer'] = api_get_person_name($uinfo['firstname'], $uinfo['lastname']);
+                $data['courseName'] = $cinfo['title'];
                 $attendanceCalendar = $attendance->get_attendance_calendar(
                     $attendance_id,
                     'calendar_id',

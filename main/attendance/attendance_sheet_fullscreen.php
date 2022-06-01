@@ -35,7 +35,10 @@
 
     <h3><?php echo $attendanceName; ?> <span class="label label-default"><?php echo $attendanceCalendar['date']; ?></span></h3>
 
-    <div class="well mt-2"><?php echo get_lang('Trainer').' : '.$trainer; ?></div>
+    <div class="well mt-2">
+        <p><?php echo get_lang('Course').' : '.$courseName; ?></p>
+        <p><?php echo get_lang('Trainer').' : '.$trainer; ?></p>
+    </div>
 
     <?php if (!empty($users_in_course)) { ?>
 

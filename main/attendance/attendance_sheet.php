@@ -287,12 +287,14 @@ if (api_is_allowed_to_edit(null, true) ||
                     );
                     $isBlocked = 0;
                     $iconBlockName = 'eyes.png';
+                    $iconBlockLabel = get_lang('disableSignature');
                     if ((isset($calendar['blocked']) && 1 === (int) $calendar['blocked'])) {
                         $isBlocked = 1;
                         $iconBlockName = 'eyes-close.png';
+                        $iconBlockLabel = get_lang('enableSignature');
                     }
                     $iconBlocked = Display::url(
-                        Display::return_icon($iconBlockName, get_lang('seeForTablet'), [], ICON_SIZE_SMALL),
+                        Display::return_icon($iconBlockName, $iconBlockLabel, [], ICON_SIZE_SMALL),
                         api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.api_get_cidreq().'&a=block_attendance_calendar&calendar_id='.$calendar['id'],
                         ['class' => 'block-calendar']
                     );

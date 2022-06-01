@@ -152,9 +152,11 @@
                     if (1 == data) {
                         var newSrcImg = srcImg.replace("eyes.png", "eyes-close.png");
                         imgBlocked.attr("src", newSrcImg);
+                        imgBlocked.attr("title", "<?php echo get_lang('enableSignature') ?>");
                     } else {
                         var newSrcImg = srcImg.replace("eyes-close.png", "eyes.png");
                         imgBlocked.attr("src", newSrcImg);
+                        imgBlocked.attr("title", "<?php echo get_lang('disableSignature') ?>");
                     }
                 },
             });

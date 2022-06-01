@@ -128,10 +128,14 @@ const payload = {isAuthenticated, user};
 
 store.dispatch('security/onRefresh', payload);
 
-const app = document.getElementById('app');
+onMounted(() => {
+  const app = document.getElementById('app');
 
-if (app && app.hasAttribute('data-flashes')) {
-  const flashes = JSON.parse(app.getAttribute('data-flashes'));
+  if (!(app && app.dataset.flashes)) {
+    return;
+  }
+
+  const flashes = JSON.parse(app.dataset.flashes);
 
   for (const key in flashes) {
     for (const flashText in flashes[key]) {
@@ -142,7 +146,7 @@ if (app && app.hasAttribute('data-flashes')) {
       });
     }
   }
-}
+});
 
 axios.interceptors.response.use(
   undefined,

@@ -82,7 +82,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -196,13 +196,10 @@ class Container
         self::$request = $request;
     }
 
-    /**
-     * @return false|Session
-     */
-    public static function getSession()
+    public static function getSession(): SessionInterface|bool
     {
-        if (null !== self::$container) {
-            return self::$container->get('session');
+        if (!empty(self::$request)) {
+            return self::$request->getSession();
         }
 
         return false;

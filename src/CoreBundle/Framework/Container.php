@@ -604,8 +604,16 @@ class Container
      */
     public static function addFlash(string $message, string $type = 'success'): void
     {
+        $type = match ($type) {
+            'confirmation', 'confirm' => 'success',
+            default => 'info',
+        };
+
         $session = self::getSession();
-        $session->getFlashBag()->add($type, $message);
+
+        if ($session instanceof Session) {
+            $session->getFlashBag()->add($type, $message);
+        }
     }
 
     public static function getRouter(): Router

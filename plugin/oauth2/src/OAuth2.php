@@ -209,39 +209,53 @@ class OAuth2 extends Plugin
             if ('true' !== $this->get(self::SETTING_CREATE_NEW_USERS)) {
                 throw new RuntimeException($this->get_lang('NoUserHasThisOauthCode'));
             }
-            require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
-            $userId = external_add_user(
-                [
-                    'firstname' => $this->getValueByKey(
-                        $response,
-                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME),
-                        $this->get_lang('DefaultFirstname')
-                    ),
-                    'lastname' => $this->getValueByKey(
-                        $response,
-                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
-                        $this->get_lang('DefaultLastname')
-                    ),
-                    'status' => $this->getValueByKey(
-                        $response,
-                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
-                        STUDENT
-                    ),
-                    'email' => $this->getValueByKey(
-                        $response,
-                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
-                        'oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost')
-                    ),
-                    'username' => $this->getValueByKey(
-                        $response,
-                        $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME),
-                        'oauth2user_'.$resourceOwnerId
-                    ),
-                    'auth_source' => 'oauth2',
-                ]
+
+            $firstName = $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME),
+                $this->get_lang('DefaultFirstname')
             );
-            if (false === $userId) {
-                throw new RuntimeException($this->get_lang('FailedUserCreation'));
+            $lastName = $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
+                $this->get_lang('DefaultLastname')
+            );
+            $status = $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
+                STUDENT
+            );
+            $email = $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
+                'oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost')
+            );
+            $username = $this->getValueByKey(
+                $response,
+                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME),
+                'oauth2user_'.$resourceOwnerId
+            );
+
+            $userInfo = api_get_user_info_from_username($username);
+
+            if (false !== $userInfo && !empty($userInfo['id']) && 'platform' === $userInfo['auth_source']) {
+                $userId = $userInfo['id'];
+            } else {
+                require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
+
+                $userId = external_add_user(
+                    [
+                        'firstname' => $firstName,
+                        'lastname' => $lastName,
+                        'status' => $status,
+                        'email' => $email,
+                        'username' => $username,
+                        'auth_source' => 'oauth2',
+                    ]
+                );
+                if (false === $userId) {
+                    throw new RuntimeException($this->get_lang('FailedUserCreation'));
+                }
             }
             $this->updateUser($userId, $response);
             // Not checking function update_extra_field_value return value because not reliable

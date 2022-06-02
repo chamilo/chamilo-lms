@@ -142,7 +142,6 @@ onMounted(() => {
       toast.add({
         severity: key,
         detail: flashes[key][flashText],
-        life: 5000,
       });
     }
   }
@@ -155,13 +154,11 @@ axios.interceptors.response.use(
       toast.add({
         severity: 'warn',
         detail: error.response.data.error,
-        life: 5000,
       });
     } else if (500 === error.response.status) {
       toast.add({
         severity: 'warn',
         detail: error.response.data.detail,
-        life: 5000,
       });
     }
 

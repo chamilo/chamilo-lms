@@ -375,7 +375,7 @@ $groupInfo = GroupManager::get_group_properties(api_get_group_id());
 
 if ($owner_id == api_get_user_id() ||
     api_is_platform_admin() ||
-    $is_allowed_to_edit || GroupManager:: is_user_in_group(
+    $is_allowed_to_edit || GroupManager::is_user_in_group(
         api_get_user_id(),
         $groupInfo
     )

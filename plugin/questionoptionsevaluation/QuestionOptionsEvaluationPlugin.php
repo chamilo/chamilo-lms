@@ -8,9 +8,9 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
  */
 class QuestionOptionsEvaluationPlugin extends Plugin
 {
-    const SETTING_ENABLE = 'enable';
-    const SETTING_MAX_SCORE = 'exercise_max_score';
-    const EXTRAFIELD_FORMULA = 'quiz_evaluation_formula';
+    public const SETTING_ENABLE = 'enable';
+    public const SETTING_MAX_SCORE = 'exercise_max_score';
+    public const EXTRAFIELD_FORMULA = 'quiz_evaluation_formula';
 
     /**
      * QuestionValuationPlugin constructor.

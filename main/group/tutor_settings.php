@@ -164,7 +164,7 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     // Storing the tutors (we first remove all the tutors and then add only those who were selected)
-    GroupManager :: unsubscribe_all_tutors($current_group['iid']);
+    GroupManager::unsubscribe_all_tutors($current_group['iid']);
     if (isset($_POST['group_tutors']) && count($_POST['group_tutors']) > 0) {
         GroupManager::subscribe_tutors($values['group_tutors'], $current_group);
     }
@@ -195,9 +195,9 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-Display :: display_header($nameTools, 'Group');
+Display::display_header($nameTools, 'Group');
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('tutor');
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

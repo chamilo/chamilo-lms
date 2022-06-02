@@ -73,7 +73,7 @@ if (!$is_allowed_to_edit) {
 $interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang("Doc")];
 
 $nameTools = get_lang("OogieConversionPowerPoint");
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 $message = get_lang("WelcomeOogieConverter");
 
 if (!empty($errorMessage)) {

@@ -197,7 +197,7 @@ if ($form->validate()) {
 }
 
 // Displaying the header.
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (count($errors) != 0) {
     $error_message = '<ul>';
@@ -228,4 +228,4 @@ adam;course01;<?php echo STUDENT; ?>
     </blockquote>
 <?php
 
-Display :: display_footer();
+Display::display_footer();

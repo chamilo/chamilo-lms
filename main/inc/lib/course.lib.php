@@ -26,11 +26,11 @@ use Doctrine\Common\Collections\Criteria;
  */
 class CourseManager
 {
-    const MAX_COURSE_LENGTH_CODE = 40;
+    public const MAX_COURSE_LENGTH_CODE = 40;
     /** This constant is used to show separate user names in the course
      * list (userportal), footer, etc */
-    const USER_SEPARATOR = ' |';
-    const COURSE_FIELD_TYPE_CHECKBOX = 10;
+    public const USER_SEPARATOR = ' |';
+    public const COURSE_FIELD_TYPE_CHECKBOX = 10;
     public $columns = [];
 
     /**
@@ -1732,7 +1732,7 @@ class CourseManager
                         $users[$row_key]['count_users_registered'] = $registered_users_with_extra_field;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
 
-                        $category = Category:: load(
+                        $category = Category::load(
                             null,
                             null,
                             $course_code,
@@ -1773,7 +1773,7 @@ class CourseManager
                             )
                         );
 
-                        $category = Category:: load(
+                        $category = Category::load(
                             null,
                             null,
                             $course_code,
@@ -7145,13 +7145,15 @@ class CourseManager
      * @param int             $userId
      * @param string|int|null $startDate
      * @param string|int|null $endDate
+     * @param int             $sessionId
      */
     public static function getAccessCourse(
         $courseId = 0,
         $withSession = 0,
         $userId = 0,
         $startDate = null,
-        $endDate = null
+        $endDate = null,
+        $sessionId = null
     ) {
         $where = null;
         $courseId = (int) $courseId;
@@ -7166,16 +7168,21 @@ class CourseManager
         }
         if (!empty($startDate)) {
             $startDate = api_get_utc_datetime($startDate, false, true);
-            $wheres[] = " course_access.login_course_date >= '".$startDate->format('Y-m-d')."' ";
+            $wheres[] = " course_access.login_course_date >= '".$startDate->format('Y-m-d 00:00:00')."' ";
         }
         if (!empty($endDate)) {
             $endDate = api_get_utc_datetime($endDate, false, true);
-            $wheres[] = " course_access.login_course_date <= '".$endDate->format('Y-m-d')."' ";
+            $wheres[] = " course_access.login_course_date <= '".$endDate->format('Y-m-d 23:59:59')."' ";
         }
         if (0 == $withSession) {
             $wheres[] = " course_access.session_id = 0 ";
         } elseif (1 == $withSession) {
             $wheres[] = " course_access.session_id != 0 ";
+        }
+
+        if (isset($sessionId)) {
+            $sessionId = (int) $sessionId;
+            $wheres[] = " course_access.session_id = $sessionId ";
         }
 
         $totalWhere = count($wheres);

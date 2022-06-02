@@ -7,9 +7,9 @@
  */
 class RemedialCoursePlugin extends Plugin
 {
-    const SETTING_ENABLED = 'enabled';
-    const EXTRAFIELD_REMEDIAL_VARIABLE = 'remedialcourselist';
-    const EXTRAFIELD_ADVACED_VARIABLE = 'advancedcourselist';
+    public const SETTING_ENABLED = 'enabled';
+    public const EXTRAFIELD_REMEDIAL_VARIABLE = 'remedialcourselist';
+    public const EXTRAFIELD_ADVACED_VARIABLE = 'advancedcourselist';
 
     /**
      * RemedialCoursePlugin constructor.

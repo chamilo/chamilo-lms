@@ -44,10 +44,13 @@ abstract class Question
         UNIQUE_ANSWER => ['unique_answer.class.php', 'UniqueAnswer'],
         MULTIPLE_ANSWER => ['multiple_answer.class.php', 'MultipleAnswer'],
         FILL_IN_BLANKS => ['fill_blanks.class.php', 'FillBlanks'],
+        FILL_IN_BLANKS_GLOBAL => ['FillBlanksGlobal.php', 'FillBlanksGlobal'],
         MATCHING => ['matching.class.php', 'Matching'],
+        MATCHING_GLOBAL => ['MatchingGlobal.php', 'MatchingGlobal'],
         FREE_ANSWER => ['freeanswer.class.php', 'FreeAnswer'],
         ORAL_EXPRESSION => ['oral_expression.class.php', 'OralExpression'],
         HOT_SPOT => ['hotspot.class.php', 'HotSpot'],
+        HOT_SPOT_GLOBAL => ['HotSpotGlobal.php', 'HotSpotGlobal'],
         HOT_SPOT_DELINEATION => ['HotSpotDelineation.php', 'HotSpotDelineation'],
         MULTIPLE_ANSWER_COMBINATION => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
         UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
@@ -65,6 +68,7 @@ abstract class Question
         UNIQUE_ANSWER_IMAGE => ['UniqueAnswerImage.php', 'UniqueAnswerImage'],
         DRAGGABLE => ['Draggable.php', 'Draggable'],
         MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable'],
+        MATCHING_DRAGGABLE_GLOBAL => ['MatchingDraggableGlobal.php', 'MatchingDraggableGlobal'],
         //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
@@ -97,9 +101,12 @@ abstract class Question
         // See BT#12611
         $this->questionTypeWithFeedback = [
             MATCHING,
+            MATCHING_GLOBAL,
             MATCHING_DRAGGABLE,
+            MATCHING_DRAGGABLE_GLOBAL,
             DRAGGABLE,
             FILL_IN_BLANKS,
+            FILL_IN_BLANKS_GLOBAL,
             FREE_ANSWER,
             ORAL_EXPRESSION,
             CALCULATED_ANSWER,
@@ -1098,7 +1105,7 @@ abstract class Question
                 );
 
                 // If hotspot, create first answer
-                if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
+                if (in_array($type, [HOT_SPOT, HOT_SPOT_GLOBAL, HOT_SPOT_ORDER])) {
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setCId($c_id)
@@ -1351,11 +1358,11 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int $exerciseId - exercise ID
-     * @param int $courseId
+     * @param int $courseId   The ID of the course, to avoid deleting re-used questions
      *
      * @return bool - true if removed, otherwise false
      */
-    public function removeFromList($exerciseId, $courseId = 0)
+    public function removeFromList(int $exerciseId, int $courseId = 0): bool
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $id = (int) $this->iid;
@@ -1405,16 +1412,15 @@ abstract class Question
 
     /**
      * Deletes a question from the database
-     * the parameter tells if the question is removed from all exercises (value = 0),
+     * The parameter tells if the question is removed from all exercises (value = 0),
      * or just from one exercise (value = exercise ID).
      *
      * @author Olivier Brouckaert
      *
-     * @param int $deleteFromEx - exercise ID if the question is only removed from one exercise
-     *
-     * @return bool
+     * @param int  $deleteFromEx  Exercise ID if the question is only to be removed from one exercise
+     * @param bool $deletePicture Allow for special cases where the picture would be better left alone
      */
-    public function delete($deleteFromEx = 0)
+    public function delete(int $deleteFromEx = 0, bool $deletePicture = true): bool
     {
         if (empty($this->course)) {
             return false;
@@ -1494,7 +1500,9 @@ abstract class Question
                 LOG_QUESTION_ID,
                 $this->iid
             );
-            $this->removePicture();
+            if ($deletePicture) {
+                $this->removePicture();
+            }
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx, $courseId);
@@ -2320,7 +2328,7 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
-        if ($exercise->hideComment && $this->type == HOT_SPOT) {
+        if ($exercise->hideComment && in_array($this->type, [HOT_SPOT, HOT_SPOT_GLOBAL])) {
             $header .= Display::return_message(get_lang('ResultsOnlyAvailableOnline'));
 
             return $header;

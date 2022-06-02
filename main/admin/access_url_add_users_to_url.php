@@ -29,7 +29,7 @@ $tool_name = get_lang('AddUsersToURL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
@@ -102,7 +102,7 @@ unset($result);
      <select name="first_letter_user" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value="">--</option>
       <?php
-        echo Display :: get_alphabet_options($first_letter_user);
+        echo Display::get_alphabet_options($first_letter_user);
         ?>
      </select>
     </td>
@@ -150,4 +150,4 @@ unset($result);
 </form>
 <?php
 
-Display :: display_footer();
+Display::display_footer();

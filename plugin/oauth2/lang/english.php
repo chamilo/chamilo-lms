@@ -114,6 +114,8 @@ to directory <code>/main/template/overrides/layout/</code>.';
 $strings['management_login_name'] = 'Name for the management login';
 $strings['management_login_name_help'] = 'Default value is "Management Login".';
 
+$strings['allow_third_party_login'] = 'Allow third party login';
+
 // please keep these below alphabetically sorted
 $strings['AccountInactive'] = "Account inactive";
 $strings['DefaultFirstname'] = 'OAuth2 User default firstname';
@@ -126,3 +128,5 @@ $strings['NoUserHasThisOauthCode'] = 'No existing user has this OAuth2 code';
 $strings['OAuth2Id'] = 'OAuth2 identifier';
 $strings['UserNotAllowedOnThisPortal'] = 'This user account is not enabled on this portal';
 $strings['WrongResponseResourceOwnerId'] = 'OAuth2 resource owner identifier value not found at the configured key';
+$strings['IssuerNotFound'] = 'Issuer not found';
+$strings['AuthorizeUrlNotAllowed'] = 'Authorize URL not allowed';

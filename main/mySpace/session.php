@@ -345,6 +345,12 @@ if (api_is_platform_admin(true, true)) {
         Display::return_icon('works.png', get_lang('WorksReport'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php'
     );
+
+    $menu_items[] = Display::url(
+        Display::return_icon('attendance_list.png', get_lang('ProgressInSessionReport'), [], ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'mySpace/progress_in_session_report.php'
+    );
+
     $menu_items[] = Display::url(
         Display::return_icon('clock.png', get_lang('TeacherTimeReportBySession'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'

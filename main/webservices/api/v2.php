@@ -184,6 +184,9 @@ try {
             $restResponse->setData($userInfo);
             break;
 
+        case Rest::VIEW_MY_COURSES:
+            $restApi->viewMyCourses();
+            break;
         case Rest::VIEW_COURSE_HOME:
             $restApi->viewCourseHome();
             break;
@@ -518,6 +521,7 @@ try {
                 $restApi->getAllUsersApiKeys(
                     $httpRequest->query->getInt('page', 1),
                     $httpRequest->query->getInt('per_page', 30),
+                    $httpRequest->query->getBoolean('force', false),
                     $httpRequest->query->getInt('url_id', 0) ?: null
                 )
             );
@@ -530,7 +534,10 @@ try {
             }
 
             $restResponse->setData(
-                $restApi->getUserApiKey($username)
+                $restApi->getUserApiKey(
+                    $username,
+                    $httpRequest->query->getBoolean('force', false)
+                )
             );
             break;
 

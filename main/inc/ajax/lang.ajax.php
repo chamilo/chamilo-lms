@@ -28,7 +28,7 @@ switch ($action) {
             $languageId = (int) $_REQUEST['id'];
             $subLanguageId = (int) $_REQUEST['sub'];
 
-            $langFilesToLoad = SubLanguageManager:: get_lang_folder_files_list(
+            $langFilesToLoad = SubLanguageManager::get_lang_folder_files_list(
                 api_get_path(SYS_LANG_PATH).'english',
                 true
             );

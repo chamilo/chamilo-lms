@@ -38,7 +38,7 @@ function validate_filter() {
 </script>';
 
 // displaying the header
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 $link_add_group = '<a href="usergroups.php">'.
     Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
@@ -295,7 +295,7 @@ if (is_array($extra_field_list)) {
         aria-label="<?php echo get_lang('FirstLetterUser'); ?>">
       <option value="">--</option>
       <?php
-        echo Display :: get_alphabet_options($first_letter_user);
+        echo Display::get_alphabet_options($first_letter_user);
       ?>
      </select>
     </td>
@@ -309,7 +309,7 @@ if (is_array($extra_field_list)) {
         aria-label="<?php echo get_lang('FirstLetterCourse'); ?>">
       <option value="">--</option>
       <?php
-      echo Display :: get_alphabet_options($first_letter_course);
+      echo Display::get_alphabet_options($first_letter_course);
       ?>
      </select>
     </td>
@@ -357,4 +357,4 @@ if (is_array($extra_field_list)) {
 </form>
 <?php
 
-Display :: display_footer();
+Display::display_footer();

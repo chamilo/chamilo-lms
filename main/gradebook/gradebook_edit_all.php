@@ -247,13 +247,13 @@ if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
             'url' => Category::getUrl().'selectcat='.$my_selectcat,
             'name' => get_lang('Gradebook'),
         ];
-        Display:: display_header(get_lang('FlatView'));
+        Display::display_header(get_lang('FlatView'));
     } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$my_selectcat,
             'name' => get_lang('Gradebook'),
         ];
-        Display:: display_header(get_lang('SearchResults'));
+        Display::display_header(get_lang('SearchResults'));
     } else {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat=1',
@@ -263,7 +263,7 @@ if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
             'url' => '#',
             'name' => get_lang('EditAllWeights'),
         ];
-        Display:: display_header('');
+        Display::display_header('');
     }
 }
 ?>
@@ -309,4 +309,4 @@ echo Display::return_message(sprintf(get_lang('TotalWeightMustBeX'), $original_t
     </button>
 </form>
 <?php
-Display:: display_footer();
+Display::display_footer();

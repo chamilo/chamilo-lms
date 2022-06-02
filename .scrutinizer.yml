@@ -16,7 +16,7 @@ build:
         cpus: 1
     environment:
         php:
-            version: 7.1
+            version: 7.2
             ini:
                 memory_limit: "-1"
 

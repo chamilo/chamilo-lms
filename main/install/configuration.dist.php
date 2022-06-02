@@ -163,6 +163,9 @@ $_configuration['cdn'] = [
 $_configuration['security_key'] = '{SECURITY_KEY}';
 // Hash function method
 $_configuration['password_encryption'] = '{ENCRYPT_PASSWORD}';
+// Set to true to allow automated password conversion after login if
+// password_encryption has changed since last login. See GH#4063 for details.
+//$_configuration['password_conversion'] = false;
 // You may have to restart your web server if you change this
 $_configuration['session_stored_in_db'] = false;
 // Session lifetime
@@ -481,6 +484,7 @@ ALTER TABLE c_lp CHANGE name name LONGTEXT NOT NULL;
 ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 --
 */
+// This option will not remove tags when presenting LP list so it might be a source of security vulnerability.
 // $_configuration['save_titles_as_html'] = false;
 // Show the full toolbar set to all CKEditor
 //$_configuration['full_ckeditor_toolbar_set'] = false;
@@ -725,6 +729,31 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['hide_user_info_in_quiz_result'] = false;
 // Show the username field in exercise results report
 //$_configuration['exercise_attempts_report_show_username'] = false;
+// Allow extends allowed question types for embeddable exercises.
+/* By default, only the following question types are allowed: 1, 2, 17
+Add this types to allow them in embeddable exercises:
+ 1 = Multiple choice
+ 2 = Multiple answers
+ 3 = Fill blanks or form
+ 4 = Matching
+ 5 = Open question
+ 9 = Exact Selection
+10 = Unique answer with unknown
+11 = Multiple answer true/false/don't know
+12 = Combination true/false/don't know
+13 = Oral expression
+14 = Global multiple answer
+16 = Calculated question
+17 = Unique answer image
+21 = Reading comprehension
+22 = Multiple answer true/false/degree of certainty
+23 = Upload answer
+ */
+/*
+$_configuration['exercise_embeddable_extra_types'] = [
+    'types' => [],
+];
+*/
 
 // Score model
 // Allow to convert a score into a text/color label
@@ -1054,6 +1083,8 @@ ALTER TABLE portfolio_category ADD parent_id INT(11) NOT NULL DEFAULT 0;
 // $_configuration['video_features'] = ['features' => ['speed']];
 // Hide the context menu on video player
 //$_configuration['video_context_menu_hidden'] = false;
+// Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias
+//$_configuration['video_player_renderers'] = ['renderers' => ['dailymotion', 'facebook', 'twitch', 'vimeo', 'youtube']];
 
 // Disable token verification when sending a message
 // $_configuration['disable_token_in_new_message'] = false;
@@ -2183,10 +2214,12 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 
 // Enable skills in subcategory to work independant on assignement
 // Require DB changes:
-// ALTER TABLE gradebook_category ADD allow_skills_by_subcategory tinyint(1) NOT NULL DEFAULT '1';
+// ALTER TABLE gradebook_category ADD allow_skills_by_subcategory tinyint(1) NULL DEFAULT '1';
 // Requires edit Entity GradebookCategory: src/Chamilo/CoreBundle/Entity/GradebookCategory.php uncomment "allowSkillsBySubcategory" variable.
-// Requires uncomment the allowSkillsBySubcategory get and set
 //$_configuration['gradebook_enable_subcategory_skills_independant_assignement'] = false;
+
+// Shows the deleted quizzes in my progress page.
+//$_configuration['tracking_my_progress_show_deleted_exercises'] = true;
 
 // Make sessions by duration always accessible to coaches (otherwise
 // they are only accessible during the active duration).

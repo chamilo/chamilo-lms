@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
 /**
@@ -74,6 +75,7 @@ class ExerciseLib
         $pictureName = $objQuestionTmp->getPictureFilename();
         $s = '';
         if ($answerType != HOT_SPOT &&
+            $answerType != HOT_SPOT_GLOBAL &&
             $answerType != HOT_SPOT_DELINEATION &&
             $answerType != ANNOTATION
         ) {
@@ -132,7 +134,9 @@ class ExerciseLib
             $num_suggestions = 0;
             switch ($answerType) {
                 case MATCHING:
+                case MATCHING_GLOBAL:
                 case DRAGGABLE:
+                case MATCHING_DRAGGABLE_GLOBAL:
                 case MATCHING_DRAGGABLE:
                     if ($answerType == DRAGGABLE) {
                         $isVertical = $objQuestionTmp->extra == 'v';
@@ -946,6 +950,7 @@ class ExerciseLib
                         $s .= '</tr>';
                         break;
                     case FILL_IN_BLANKS:
+                    case FILL_IN_BLANKS_GLOBAL:
                         // display the question, with field empty, for student to fill it,
                         // or filled to display the answer in the Question preview of the exercise/admin.php page
                         $displayForStudent = true;
@@ -1176,6 +1181,7 @@ class ExerciseLib
                         }
                         break;
                     case MATCHING:
+                    case MATCHING_GLOBAL:
                         // matching type, showing suggestions and answers
                         // TODO: replace $answerId by $numAnswer
                         if ($answerCorrect != 0) {
@@ -1335,6 +1341,7 @@ class ExerciseLib
                             $s .= '</li>';
                         }
                         break;
+                    case MATCHING_DRAGGABLE_GLOBAL:
                     case MATCHING_DRAGGABLE:
                         if ($answerId == 1) {
                             echo $objAnswerTmp->getJs();
@@ -1453,7 +1460,9 @@ HTML;
                 $answerType,
                 [
                     MATCHING,
+                    MATCHING_GLOBAL,
                     MATCHING_DRAGGABLE,
+                    MATCHING_DRAGGABLE_GLOBAL,
                     UNIQUE_ANSWER_NO_OPTION,
                     MULTIPLE_ANSWER_TRUE_FALSE,
                     MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,
@@ -1495,7 +1504,7 @@ HTML;
 //                $s .= '</div>';
             }
 
-            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+            if (in_array($answerType, [MATCHING, MATCHING_GLOBAL, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_GLOBAL])) {
                 $s .= '</div>'; //drag_question
             }
 
@@ -1509,7 +1518,7 @@ HTML;
                 return $s;
             }
             echo $s;
-        } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
+        } elseif (in_array($answerType, [HOT_SPOT, HOT_SPOT_DELINEATION, HOT_SPOT_GLOBAL])) {
             global $exe_id;
             // Question is a HOT_SPOT
             // Checking document/images visibility
@@ -1589,7 +1598,7 @@ HTML;
                         </div>
                     </div>
                     <script>
-                        new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
+                        new ".(in_array($answerType, [HOT_SPOT, HOT_SPOT_GLOBAL]) ? "HotspotQuestion" : "DelineationQuestion")."({
                             questionId: $questionId,
                             exerciseId: {$exercise->iid},
                             exeId: 0,
@@ -2853,7 +2862,7 @@ HOTSPOT;
                             switch ($revised) {
                                 case 0:
                                     $actions .= "<a href='exercise_show.php?".$cidReq."&action=qualify&id=$id'>".
-                                        Display:: return_icon(
+                                        Display::return_icon(
                                             'quiz.png',
                                             get_lang('Qualify')
                                         );
@@ -2865,7 +2874,7 @@ HOTSPOT;
                                     break;
                                 case 1:
                                     $actions .= "<a href='exercise_show.php?".$cidReq."&action=edit&id=$id'>".
-                                        Display:: return_icon(
+                                        Display::return_icon(
                                             'edit.png',
                                             get_lang('Edit'),
                                             [],
@@ -2883,7 +2892,7 @@ HOTSPOT;
                                         .'&exerciseId='.$exercise_id
                                         .'&a=close&id='.$id
                                         .'">'.
-                                        Display:: return_icon(
+                                        Display::return_icon(
                                             'lock.png',
                                             get_lang('MarkAttemptAsClosed'),
                                             [],
@@ -2896,7 +2905,7 @@ HOTSPOT;
                                     );
                                     break;
                                 case 3: //still ongoing
-                                    $actions .= Display:: return_icon(
+                                    $actions .= Display::return_icon(
                                         'clock.png',
                                         get_lang('AttemptStillOngoingPleaseWait'),
                                         [],
@@ -2912,7 +2921,7 @@ HOTSPOT;
 
                             if ($filter == 2) {
                                 $actions .= ' <a href="exercise_history.php?'.$cidReq.'&exe_id='.$id.'">'.
-                                    Display:: return_icon(
+                                    Display::return_icon(
                                         'history.png',
                                         get_lang('ViewHistoryChange')
                                     ).'</a>';
@@ -3821,7 +3830,8 @@ EOT;
         $course_code,
         $session_id = 0,
         $user_list = [],
-        $return_string = true
+        $return_string = true,
+        $skipLpResults = true
     ) {
         //No score given we return
         if (is_null($my_score)) {
@@ -3838,7 +3848,8 @@ EOT;
                 $user_id,
                 $exercise_id,
                 $course_code,
-                $session_id
+                $session_id,
+                $skipLpResults
             );
         }
 
@@ -3976,13 +3987,16 @@ EOT;
      *
      * @return array
      */
-    public static function get_best_attempt_in_course($exercise_id, $courseId, $session_id)
+    public static function get_best_attempt_in_course($exercise_id, $courseId, $session_id, $skipLpResults = true)
     {
         $user_results = Event::get_all_exercise_results(
             $exercise_id,
             $courseId,
             $session_id,
-            false
+            false,
+            null,
+            0,
+            $skipLpResults
         );
 
         $best_score_data = [];
@@ -4018,14 +4032,17 @@ EOT;
         $user_id,
         $exercise_id,
         $courseId,
-        $session_id
+        $session_id,
+        $skipLpResults = true
     ) {
         $user_results = Event::get_all_exercise_results(
             $exercise_id,
             $courseId,
             $session_id,
             false,
-            $user_id
+            $user_id,
+            0,
+            $skipLpResults
         );
         $best_score_data = [];
         $best_score = 0;
@@ -4391,7 +4408,7 @@ EOT;
         $courseId = api_get_course_int_id($course_code);
         $session_id = intval($session_id);
 
-        if ($questionType == FILL_IN_BLANKS) {
+        if (in_array($questionType, [FILL_IN_BLANKS, FILL_IN_BLANKS_GLOBAL])) {
             $listStudentsId = [];
             $listAllStudentInfo = CourseManager::get_student_list_from_course_code(
                 api_get_course_id(),
@@ -4558,11 +4575,14 @@ EOT;
 
         switch ($question_type) {
             case FILL_IN_BLANKS:
+            case FILL_IN_BLANKS_GLOBAL:
                 $answer_condition = '';
                 $select_condition = ' e.exe_id, answer ';
                 break;
             case MATCHING:
+            case MATCHING_GLOBAL:
             case MATCHING_DRAGGABLE:
+            case MATCHING_DRAGGABLE_GLOBAL:
             default:
                 $answer_condition = " answer = $answer_id AND ";
                 $select_condition = ' DISTINCT exe_user_id ';
@@ -4606,6 +4626,7 @@ EOT;
             $good_answers = 0;
             switch ($question_type) {
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_GLOBAL:
                     while ($row = Database::fetch_array($result, 'ASSOC')) {
                         $fill_blank = self::check_fill_in_blanks(
                             $correct_answer,
@@ -4620,7 +4641,9 @@ EOT;
                     return $good_answers;
                     break;
                 case MATCHING:
+                case MATCHING_GLOBAL:
                 case MATCHING_DRAGGABLE:
+                case MATCHING_DRAGGABLE_GLOBAL:
                 default:
                     $return = Database::num_rows($result);
             }
@@ -4764,32 +4787,34 @@ EOT;
     }
 
     /**
-     * @param int    $exercise_id
-     * @param string $course_code
-     * @param int    $session_id
+     * It gets the number of users who finishing the exercise.
+     *
+     * @param int $exerciseId
+     * @param int $courseId
+     * @param int $sessionId
      *
      * @return int
      */
-    public static function get_number_students_finish_exercise(
-        $exercise_id,
-        $course_code,
-        $session_id
+    public static function getNumberStudentsFinishExercise(
+        $exerciseId,
+        $courseId,
+        $sessionId
     ) {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tblTrackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $exercise_id = (int) $exercise_id;
-        $course_code = Database::escape_string($course_code);
-        $session_id = (int) $session_id;
+        $exerciseId = (int) $exerciseId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $sql = "SELECT DISTINCT exe_user_id
-                FROM $track_exercises e
-                INNER JOIN $track_attempt a
+                FROM $tblTrackExercises e
+                INNER JOIN $tblTrackAttempt a
                 ON (a.exe_id = e.exe_id)
                 WHERE
-                    exe_exo_id 	 = $exercise_id AND
-                    course_code  = '$course_code' AND
-                    e.session_id = $session_id AND
+                    exe_exo_id 	 = $exerciseId AND
+                    e.c_id  = $courseId AND
+                    e.session_id = $sessionId AND
                     status = ''";
         $result = Database::query($sql);
         $return = 0;
@@ -5519,6 +5544,89 @@ EOT;
     }
 
     /**
+     * It validates unique score when all user answers are correct by question.
+     * It is used for global questions.
+     *
+     * @param       $answerType
+     * @param       $listCorrectAnswers
+     * @param       $exeId
+     * @param       $questionId
+     * @param       $questionWeighting
+     * @param array $choice
+     * @param int   $nbrAnswers
+     *
+     * @return int|mixed
+     */
+    public static function getUserQuestionScoreGlobal(
+        $answerType,
+        $listCorrectAnswers,
+        $exeId,
+        $questionId,
+        $questionWeighting,
+        $choice = [],
+        $nbrAnswers = 0
+    ) {
+        $nbrCorrect = 0;
+        $nbrOptions = 0;
+        switch ($answerType) {
+            case FILL_IN_BLANKS_GLOBAL:
+                if (!empty($listCorrectAnswers)) {
+                    foreach ($listCorrectAnswers['student_score'] as $idx => $val) {
+                        if (1 === (int) $val) {
+                            $nbrCorrect++;
+                        }
+                    }
+                    $nbrOptions = (int) $listCorrectAnswers['words_count'];
+                }
+                break;
+            case HOT_SPOT_GLOBAL:
+                if (!empty($listCorrectAnswers)) {
+                    foreach ($listCorrectAnswers as $idx => $val) {
+                        if (1 === (int) $choice[$idx]) {
+                            $nbrCorrect++;
+                        }
+                    }
+                } else {
+                    // We get the user answers from database
+                    $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                    $sql = "SELECT count(hotspot_id) as ct
+                                FROM $TBL_TRACK_HOTSPOT
+                                WHERE
+                                    hotspot_exe_id = '".Database::escape_string($exeId)."' AND
+                                    hotspot_question_id = '".Database::escape_string($questionId)."' AND
+                                    hotspot_correct = 1";
+                    $result = Database::query($sql);
+                    $nbrCorrect = (int) Database::result($result, 0, 0);
+                }
+                $nbrOptions = $nbrAnswers;
+                break;
+            case MATCHING_GLOBAL:
+            case MATCHING_DRAGGABLE_GLOBAL:
+                if (isset($listCorrectAnswers['form_values'])) {
+                    if (isset($listCorrectAnswers['form_values']['correct'])) {
+                        $nbrCorrect = count($listCorrectAnswers['form_values']['correct']);
+                        $nbrOptions = (int) $listCorrectAnswers['form_values']['count_options'];
+                    }
+                } else {
+                    if (isset($listCorrectAnswers['from_database'])) {
+                        if (isset($listCorrectAnswers['from_database']['correct'])) {
+                            $nbrCorrect = count($listCorrectAnswers['from_database']['correct']);
+                            $nbrOptions = (int) $listCorrectAnswers['from_database']['count_options'];
+                        }
+                    }
+                }
+                break;
+        }
+
+        $questionScore = 0;
+        if ($nbrCorrect > 0 && $nbrCorrect == $nbrOptions) {
+            $questionScore = $questionWeighting;
+        }
+
+        return $questionScore;
+    }
+
+    /**
      * Display the ranking of results in a exercise.
      *
      * @param Exercise $exercise
@@ -5992,19 +6100,58 @@ EOT;
     }
 
     /**
-     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video.
-     * By making sure it is set on one question per page and it only contains unique-answer or multiple-answer questions
-     * or unique-answer image. And that the exam does not have immediate feedback.
-     *
-     * @param array $exercise Exercise info
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return bool
+     * By default, allowed types are unique-answer (and image) or multiple-answer questions.
+     * Types can be extended by the configuration setting "exercise_embeddable_extra_types".
      */
-    public static function isQuizEmbeddable(array $exercise)
+    public static function getEmbeddableTypes(): array
     {
-        $em = Database::getManager();
+        $allowedTypes = [
+            UNIQUE_ANSWER,
+            MULTIPLE_ANSWER,
+            FILL_IN_BLANKS,
+            MATCHING,
+            FREE_ANSWER,
+            MULTIPLE_ANSWER_COMBINATION,
+            UNIQUE_ANSWER_NO_OPTION,
+            MULTIPLE_ANSWER_TRUE_FALSE,
+            MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,
+            ORAL_EXPRESSION,
+            GLOBAL_MULTIPLE_ANSWER,
+            CALCULATED_ANSWER,
+            UNIQUE_ANSWER_IMAGE,
+            READING_COMPREHENSION,
+            MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
+	    UPLOAD_ANSWER,
+            MATCHING_GLOBAL,
+            FILL_IN_BLANKS_GLOBAL,
+        ];
+        $defaultTypes = [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE];
+        $types = $defaultTypes;
+
+        $extraTypes = api_get_configuration_value('exercise_embeddable_extra_types');
+
+        if (false !== $extraTypes && !empty($extraTypes['types'])) {
+            $types = array_merge($defaultTypes, $extraTypes['types']);
+        }
+
+        return array_filter(
+            array_unique($types),
+            function ($type) use ($allowedTypes) {
+                return in_array($type, $allowedTypes);
+            }
+        );
+    }
+
+    /**
+     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video.
+     * By making sure it is set on one question per page, and that the exam does not have immediate feedback,
+     * and it only contains allowed types.
+     *
+     * @see Exercise::getEmbeddableTypes()
+     */
+    public static function isQuizEmbeddable(array $exercise): bool
+    {
+        $exercise['iid'] = isset($exercise['iid']) ? (int) $exercise['iid'] : 0;
 
         if (ONE_PER_PAGE != $exercise['type'] ||
             in_array($exercise['feedback_type'], [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])
@@ -6012,32 +6159,12 @@ EOT;
             return false;
         }
 
-        $countAll = $em
-            ->createQuery('SELECT COUNT(qq)
-                FROM ChamiloCourseBundle:CQuizQuestion qq
-                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.questionId
-                WHERE qrq.exerciceId = :id'
-            )
-            ->setParameter('id', $exercise['iid'])
-            ->getSingleScalarResult();
+        $questionRepository = Database::getManager()->getRepository(CQuizQuestion::class);
 
-        $countOfAllowed = $em
-            ->createQuery('SELECT COUNT(qq)
-                FROM ChamiloCourseBundle:CQuizQuestion qq
-                INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.questionId
-                WHERE qrq.exerciceId = :id AND qq.type IN (:types)'
-            )
-            ->setParameters(
-                [
-                    'id' => $exercise['iid'],
-                    'types' => [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE],
-                ]
-            )
-            ->getSingleScalarResult();
+        $countAll = $questionRepository->countQuestionsInExercise($exercise['iid']);
+        $countAllowed = $questionRepository->countEmbeddableQuestionsInExercise($exercise['iid']);
 
-        return $countAll === $countOfAllowed;
+        return $countAll === $countAllowed;
     }
 
     /**

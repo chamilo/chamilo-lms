@@ -300,22 +300,22 @@ class SortableTable extends HTML_Table
             $params['urlVar'] = $this->param_prefix.'page_nr';
             $params['currentPage'] = $this->page_nr;
             $icon_attributes = ['style' => 'vertical-align: middle;'];
-            $params['prevImg'] = Display:: return_icon(
+            $params['prevImg'] = Display::return_icon(
                 'action_prev.png',
                 get_lang('PreviousPage'),
                 $icon_attributes
             );
-            $params['nextImg'] = Display:: return_icon(
+            $params['nextImg'] = Display::return_icon(
                 'action_next.png',
                 get_lang('NextPage'),
                 $icon_attributes
             );
-            $params['firstPageText'] = Display:: return_icon(
+            $params['firstPageText'] = Display::return_icon(
                 'action_first.png',
                 get_lang('FirstPage'),
                 $icon_attributes
             );
-            $params['lastPageText'] = Display:: return_icon(
+            $params['lastPageText'] = Display::return_icon(
                 'action_last.png',
                 get_lang('LastPage'),
                 $icon_attributes

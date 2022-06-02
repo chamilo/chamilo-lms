@@ -6,10 +6,10 @@
  */
 class GradingElectronicPlugin extends Plugin
 {
-    const EXTRAFIELD_STUDENT_ID = 'fcdice_or_acadis_student_id';
-    const EXTRAFIELD_COURSE_PROVIDER_ID = 'plugin_gradingelectronic_provider_id';
-    const EXTRAFIELD_COURSE_ID = 'plugin_gradingelectronic_course_id';
-    const EXTRAFIELD_COURSE_HOURS = 'plugin_gradingelectronic_coursehours';
+    public const EXTRAFIELD_STUDENT_ID = 'fcdice_or_acadis_student_id';
+    public const EXTRAFIELD_COURSE_PROVIDER_ID = 'plugin_gradingelectronic_provider_id';
+    public const EXTRAFIELD_COURSE_ID = 'plugin_gradingelectronic_course_id';
+    public const EXTRAFIELD_COURSE_HOURS = 'plugin_gradingelectronic_coursehours';
 
     /**
      * {@inheritdoc}

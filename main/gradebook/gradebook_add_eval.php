@@ -132,4 +132,4 @@ if ($evaladd->get_course_code() == null) {
 Display::display_header(get_lang('NewEvaluation'));
 
 $form->display();
-Display :: display_footer();
+Display::display_footer();

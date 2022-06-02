@@ -19,46 +19,48 @@ class OAuth2 extends Plugin
 {
     use ArrayAccessorTrait;
 
-    const SETTING_ENABLE = 'enable';
+    public const SETTING_ENABLE = 'enable';
 
-    const SETTING_FORCE_REDIRECT = 'force_redirect';
-    const SETTING_SKIP_FORCE_REDIRECT_IN = 'skip_force_redirect_in';
+    public const SETTING_FORCE_REDIRECT = 'force_redirect';
+    public const SETTING_SKIP_FORCE_REDIRECT_IN = 'skip_force_redirect_in';
 
-    const SETTING_CLIENT_ID = 'client_id';
-    const SETTING_CLIENT_SECRET = 'client_secret';
+    public const SETTING_CLIENT_ID = 'client_id';
+    public const SETTING_CLIENT_SECRET = 'client_secret';
 
-    const SETTING_AUTHORIZE_URL = 'authorize_url';
-    const SETTING_SCOPES = 'scopes';
-    const SETTING_SCOPE_SEPARATOR = 'scope_separator';
+    public const SETTING_AUTHORIZE_URL = 'authorize_url';
+    public const SETTING_SCOPES = 'scopes';
+    public const SETTING_SCOPE_SEPARATOR = 'scope_separator';
 
-    const SETTING_ACCESS_TOKEN_URL = 'access_token_url';
-    const SETTING_ACCESS_TOKEN_METHOD = 'access_token_method';
+    public const SETTING_ACCESS_TOKEN_URL = 'access_token_url';
+    public const SETTING_ACCESS_TOKEN_METHOD = 'access_token_method';
     // const SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID = 'access_token_resource_owner_id';
 
-    const SETTING_RESOURCE_OWNER_DETAILS_URL = 'resource_owner_details_url';
+    public const SETTING_RESOURCE_OWNER_DETAILS_URL = 'resource_owner_details_url';
 
-    const SETTING_RESPONSE_ERROR = 'response_error';
-    const SETTING_RESPONSE_CODE = 'response_code';
-    const SETTING_RESPONSE_RESOURCE_OWNER_ID = 'response_resource_owner_id';
+    public const SETTING_RESPONSE_ERROR = 'response_error';
+    public const SETTING_RESPONSE_CODE = 'response_code';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_ID = 'response_resource_owner_id';
 
-    const SETTING_UPDATE_USER_INFO = 'update_user_info';
-    const SETTING_CREATE_NEW_USERS = 'create_new_users';
-    const SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME = 'response_resource_owner_firstname';
-    const SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME = 'response_resource_owner_lastname';
-    const SETTING_RESPONSE_RESOURCE_OWNER_STATUS = 'response_resource_owner_status';
-    const SETTING_RESPONSE_RESOURCE_OWNER_EMAIL = 'response_resource_owner_email';
-    const SETTING_RESPONSE_RESOURCE_OWNER_USERNAME = 'response_resource_owner_username';
+    public const SETTING_UPDATE_USER_INFO = 'update_user_info';
+    public const SETTING_CREATE_NEW_USERS = 'create_new_users';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME = 'response_resource_owner_firstname';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME = 'response_resource_owner_lastname';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_STATUS = 'response_resource_owner_status';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_EMAIL = 'response_resource_owner_email';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_USERNAME = 'response_resource_owner_username';
 
-    const SETTING_RESPONSE_RESOURCE_OWNER_URLS = 'response_resource_owner_urls';
+    public const SETTING_RESPONSE_RESOURCE_OWNER_URLS = 'response_resource_owner_urls';
 
-    const SETTING_LOGOUT_URL = 'logout_url';
+    public const SETTING_LOGOUT_URL = 'logout_url';
 
-    const SETTING_BLOCK_NAME = 'block_name';
+    public const SETTING_BLOCK_NAME = 'block_name';
 
-    const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
-    const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
+    public const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
+    public const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
 
-    const EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
+    public const SETTING_ALLOW_THIRD_PARTY_LOGIN = 'allow_third_party_login';
+
+    public const EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
 
     protected function __construct()
     {
@@ -68,10 +70,10 @@ class OAuth2 extends Plugin
             [
                 self::SETTING_ENABLE => 'boolean',
 
-        self::SETTING_FORCE_REDIRECT => 'boolean',
+                self::SETTING_FORCE_REDIRECT => 'boolean',
                 self::SETTING_SKIP_FORCE_REDIRECT_IN => 'text',
 
-        self::SETTING_CLIENT_ID => 'text',
+                self::SETTING_CLIENT_ID => 'text',
                 self::SETTING_CLIENT_SECRET => 'text',
 
                 self::SETTING_AUTHORIZE_URL => 'text',
@@ -110,6 +112,8 @@ class OAuth2 extends Plugin
 
                 self::SETTING_MANAGEMENT_LOGIN_ENABLE => 'boolean',
                 self::SETTING_MANAGEMENT_LOGIN_NAME => 'text',
+
+                self::SETTING_ALLOW_THIRD_PARTY_LOGIN => 'boolean',
             ]
         );
     }

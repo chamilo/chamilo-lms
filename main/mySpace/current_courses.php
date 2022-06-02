@@ -40,7 +40,7 @@ if (!empty($my_courses)) {
             }
         }
 
-        $tmp_students = CourseManager :: get_student_list_from_course_code($course_code, false);
+        $tmp_students = CourseManager::get_student_list_from_course_code($course_code, false);
 
         //Cleaning students only REAL students
         $students = [];
@@ -69,8 +69,8 @@ if (!empty($my_courses)) {
             $total_tools += $tool['count_access_tool'];
         }
 
-        if (Database :: num_rows($rs_lp) > 0) {
-            while ($learnpath = Database :: fetch_array($rs_lp)) {
+        if (Database::num_rows($rs_lp) > 0) {
+            while ($learnpath = Database::fetch_array($rs_lp)) {
                 $lp_id = $learnpath['id'];
 
                 $lp_items =

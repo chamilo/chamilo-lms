@@ -10,7 +10,7 @@ use Doctrine\ORM\Tools\SchemaTool;
  */
 class CourseHomeNotifyPlugin extends Plugin
 {
-    const SETTING_ENABLED = 'enabled';
+    public const SETTING_ENABLED = 'enabled';
 
     /**
      * CourseHomeNotifyPlugin constructor.

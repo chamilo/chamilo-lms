@@ -114,7 +114,7 @@ if ($form->validate()) {
 }
 
 $htmlHeadXtra[] = to_javascript_work();
-Display :: display_header(null);
+Display::display_header(null);
 
 if (!empty($work_id)) {
     echo $validationStatus['message'];
@@ -133,4 +133,4 @@ if (!empty($work_id)) {
     api_not_allowed();
 }
 
-Display :: display_footer();
+Display::display_footer();

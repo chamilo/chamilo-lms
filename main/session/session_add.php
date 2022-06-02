@@ -69,7 +69,7 @@ function search_coachs($needle)
         }
 
         $rs = Database::query($sql);
-        while ($user = Database :: fetch_array($rs)) {
+        while ($user = Database::fetch_array($rs)) {
             $return .= '<a href="javascript: void(0);" onclick="javascript: fill_coach_field(\''.$user['username'].'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
         }
     }

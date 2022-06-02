@@ -1917,12 +1917,19 @@ class Exercise
     }
 
     /**
-     * deletes the exercise from the database
-     * Notice : leaves the question in the data base.
+     * Marks the exercise as deleted.
+     * If $delete argument set, completely deletes it from the database.
+     * Note: leaves the questions in the database as "orphan" questions
+     * (unless used by other tests).
+     *
+     * @param bool $delete Whether to really delete the test (true) or only mark it (false = default)
+     *
+     * @return bool Whether the operation was successful or not
      *
      * @author Olivier Brouckaert
+     * @author Yannick Warnier
      */
-    public function delete()
+    public function delete(bool $delete = false): bool
     {
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
@@ -1941,7 +1948,7 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $table SET active='-1'
-                WHERE iid = ".intval($this->iid);
+                WHERE iid = ".$this->iid;
         Database::query($sql);
 
         api_item_property_update(
@@ -1976,6 +1983,18 @@ class Exercise
 
         if ($linkInfo !== false) {
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
+        }
+
+        if ($delete) {
+            // Really delete the test (and orphan its questions)
+            $questions = $this->getQuestionOrderedList();
+            foreach ($questions as $order => $questionId) {
+                $question = Question::read($questionId, $this->course);
+                $question->delete($this->course_id);
+            }
+            $sql = "DELETE FROM $table
+                WHERE iid = ".$this->iid;
+            Database::query($sql);
         }
 
         return true;
@@ -3884,7 +3903,7 @@ class Exercise
         $organs_at_risk_hit = 0;
         $questionScore = 0;
         $orderedHotSpots = [];
-        if ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
+        if (in_array($answerType, [HOT_SPOT_GLOBAL, HOT_SPOT, ANNOTATION])) {
             $orderedHotSpots = $em->getRepository('ChamiloCoreBundle:TrackEHotspot')->findBy(
                 [
                     'hotspotQuestionId' => $questionId,
@@ -3902,7 +3921,7 @@ class Exercise
         $answerDestination = null;
         $userAnsweredQuestion = false;
         $correctAnswerId = [];
-
+        $matchingCorrectAnswers = [];
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -4159,6 +4178,7 @@ class Exercise
                     }
                     break;
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_GLOBAL:
                     $str = '';
                     $answerFromDatabase = '';
                     if ($from_database) {
@@ -4647,6 +4667,8 @@ class Exercise
                     break;
                 case DRAGGABLE:
                 case MATCHING_DRAGGABLE:
+                case MATCHING_DRAGGABLE_GLOBAL:
+                case MATCHING_GLOBAL:
                 case MATCHING:
                     if ($from_database) {
                         $sql = "SELECT iid, answer, id_auto
@@ -4752,6 +4774,7 @@ class Exercise
                                         }
 
                                         if (isset($real_list[$i_answer_correct_answer])) {
+                                            $matchingCorrectAnswers[$questionId]['from_database']['correct'][$i_answer_correct_answer] = $real_list[$i_answer_correct_answer];
                                             $user_answer = Display::span(
                                                 $real_list[$i_answer_correct_answer],
                                                 ['style' => 'color: #008000; font-weight: bold;']
@@ -4792,6 +4815,8 @@ class Exercise
                                 }
                                 switch ($answerType) {
                                     case MATCHING:
+                                    case MATCHING_GLOBAL:
+                                    case MATCHING_DRAGGABLE_GLOBAL:
                                     case MATCHING_DRAGGABLE:
                                         if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
                                             if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
@@ -4817,7 +4842,7 @@ class Exercise
                                         if ($this->showExpectedChoice()) {
                                             if ($this->showExpectedChoiceColumn()) {
                                                 echo '<td>';
-                                                if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                                                if (in_array($answerType, [MATCHING, MATCHING_GLOBAL, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_GLOBAL])) {
                                                     if (isset($real_list[$i_answer_correct_answer]) &&
                                                         $showTotalScoreAndUserChoicesInLastAttempt == true
                                                     ) {
@@ -4830,7 +4855,7 @@ class Exercise
                                             }
                                             echo '<td>'.$status.'</td>';
                                         } else {
-                                            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                                            if (in_array($answerType, [MATCHING, MATCHING_GLOBAL, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_GLOBAL])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
                                                     $showTotalScoreAndUserChoicesInLastAttempt === true
                                                 ) {
@@ -4876,7 +4901,7 @@ class Exercise
                                             echo '<td>'.$counterAnswer.'</td>';
                                             echo '<td>'.$status.'</td>';
                                             echo '<td>';
-                                            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                                            if (in_array($answerType, [MATCHING, MATCHING_GLOBAL, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_GLOBAL])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
                                                     $showTotalScoreAndUserChoicesInLastAttempt === true
                                                 ) {
@@ -4894,12 +4919,14 @@ class Exercise
                             }
                             $counterAnswer++;
                         }
+                        $matchingCorrectAnswers[$questionId]['from_database']['count_options'] = count($options);
                         break 2; // break the switch and the "for" condition
                     } else {
                         if ($answerCorrect) {
                             if (isset($choice[$answerAutoId]) &&
                                 $answerCorrect == $choice[$answerAutoId]
                             ) {
+                                $matchingCorrectAnswers[$questionId]['form_values']['correct'][$answerAutoId] = $choice[$answerAutoId];
                                 $correctAnswerId[] = $answerAutoId;
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
@@ -4914,9 +4941,11 @@ class Exercise
                             }
                             $matching[$answerAutoId] = $choice[$answerAutoId];
                         }
+                        $matchingCorrectAnswers[$questionId]['form_values']['count_options'] = count($choice);
                     }
                     break;
                 case HOT_SPOT:
+                case HOT_SPOT_GLOBAL:
                     if ($from_database) {
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         // Check auto id
@@ -5109,7 +5138,7 @@ class Exercise
             if ($show_result) {
                 if ('exercise_result' === $from) {
                     // Display answers (if not matching type, or if the answer is correct)
-                    if (!in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE]) ||
+                    if (!in_array($answerType, [MATCHING, MATCHING_GLOBAL, DRAGGABLE, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_GLOBAL]) ||
                         $answerCorrect
                     ) {
                         if (in_array(
@@ -5181,7 +5210,7 @@ class Exercise
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
-                        } elseif ($answerType == FILL_IN_BLANKS) {
+                        } elseif (in_array($answerType, [FILL_IN_BLANKS, FILL_IN_BLANKS_GLOBAL])) {
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
                                 $this,
                                 $feedback_type,
@@ -5235,7 +5264,7 @@ class Exercise
                                 $results_disabled,
                                 $questionScore
                             );
-                        } elseif ($answerType == HOT_SPOT) {
+                        } elseif (in_array($answerType, [HOT_SPOT, HOT_SPOT_GLOBAL])) {
                             $correctAnswerId = 0;
                             /** @var TrackEHotspot $hotspot */
                             foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
@@ -5414,7 +5443,7 @@ class Exercise
                                     error_log(__LINE__.' first', 0);
                                 }
                             }
-                        } elseif (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                        } elseif (in_array($answerType, [MATCHING, MATCHING_GLOBAL, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_GLOBAL])) {
                             echo '<tr>';
                             echo Display::tag('td', $answerMatching[$answerId]);
                             echo Display::tag(
@@ -5577,6 +5606,7 @@ class Exercise
                             }
                             break;
                         case FILL_IN_BLANKS:
+                        case FILL_IN_BLANKS_GLOBAL:
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
                                 $this,
                                 $feedback_type,
@@ -5636,6 +5666,7 @@ class Exercise
                                 </table>';
                             break;
                         case HOT_SPOT:
+                        case HOT_SPOT_GLOBAL:
                             $correctAnswerId = 0;
                             /** @var TrackEHotspot $hotspot */
                             foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
@@ -5792,6 +5823,8 @@ class Exercise
                             break;
                         case DRAGGABLE:
                         case MATCHING_DRAGGABLE:
+                        case MATCHING_DRAGGABLE_GLOBAL:
+                        case MATCHING_GLOBAL:
                         case MATCHING:
                             echo '<tr>';
                             echo Display::tag('td', $answerMatching[$answerId]);
@@ -5818,6 +5851,38 @@ class Exercise
                 }
             }
         } // end for that loops over all answers of the current question
+
+        // It validates unique score when all answers are correct for global questions
+        if (FILL_IN_BLANKS_GLOBAL === $answerType) {
+            $questionScore = ExerciseLib::getUserQuestionScoreGlobal(
+                $answerType,
+                $listCorrectAnswers,
+                $exeId,
+                $questionId,
+                $questionWeighting
+            );
+        }
+        if (HOT_SPOT_GLOBAL === $answerType) {
+            $listCorrectAnswers = isset($exerciseResultCoordinates[$questionId]) ? $exerciseResultCoordinates[$questionId] : [];
+            $questionScore = ExerciseLib::getUserQuestionScoreGlobal(
+                $answerType,
+                $listCorrectAnswers,
+                $exeId,
+                $questionId,
+                $questionWeighting,
+                $choice,
+                $nbrAnswers
+            );
+        }
+        if (in_array($answerType, [MATCHING_GLOBAL, MATCHING_DRAGGABLE_GLOBAL])) {
+            $questionScore = ExerciseLib::getUserQuestionScoreGlobal(
+                $answerType,
+                $matchingCorrectAnswers[$questionId],
+                $exeId,
+                $questionId,
+                $questionWeighting
+            );
+        }
 
         if ($debug) {
             error_log('-- End answer loop --');
@@ -5862,7 +5927,7 @@ class Exercise
             //  we use the results from the session (from_db=0)
             // TODO Change this, because it is wrong to show the user
             //  some results that haven't been stored in the database yet
-            if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER || $answerType == HOT_SPOT_DELINEATION) {
+            if (in_array($answerType, [HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION, HOT_SPOT_GLOBAL])) {
                 if ($debug) {
                     error_log('$from AND this is a hotspot kind of question ');
                 }
@@ -5997,7 +6062,7 @@ class Exercise
 
             $relPath = api_get_path(WEB_CODE_PATH);
 
-            if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
+            if (in_array($answerType, [HOT_SPOT, HOT_SPOT_GLOBAL, HOT_SPOT_ORDER])) {
                 // We made an extra table for the answers
                 if ($show_result) {
                     echo '</table></td></tr>';
@@ -6173,7 +6238,7 @@ class Exercise
                         $questionDuration
                     );
                 }
-            } elseif (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
+            } elseif (in_array($answerType, [MATCHING, MATCHING_GLOBAL, DRAGGABLE, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_GLOBAL])) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
                         Event::saveQuestionAttempt(
@@ -6238,7 +6303,7 @@ class Exercise
             ) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->iid, false, $questionDuration);
-            } elseif ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
+            } elseif (in_array($answerType, [HOT_SPOT, HOT_SPOT_GLOBAL, ANNOTATION])) {
                 $answer = [];
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     if ($debug) {
@@ -8463,10 +8528,13 @@ class Exercise
                     if ($onlyCorrect) {
                         switch ($objAnswer->getQuestionType()) {
                             case FILL_IN_BLANKS:
+                            case FILL_IN_BLANKS_GLOBAL:
                                 $isCorrect = FillBlanks::isCorrect($answer['answer']);
                                 break;
                             case MATCHING:
+                            case MATCHING_GLOBAL:
                             case DRAGGABLE:
+                            case MATCHING_DRAGGABLE_GLOBAL:
                             case MATCHING_DRAGGABLE:
                                 $isCorrect = Matching::isCorrect(
                                     $answer['position'],
@@ -9309,7 +9377,7 @@ class Exercise
                         c_id = $courseId AND
                         path LIKE '".Database::escape_string($uploadPath.'/%/%')."'";
             $res = Database::query($sql);
-            $hp_count = Database :: num_rows($res);
+            $hp_count = Database::num_rows($res);
         } else {
             $sql = "SELECT * FROM $TBL_DOCUMENT d
                     INNER JOIN $TBL_ITEM_PROPERTY ip
@@ -9882,7 +9950,7 @@ class Exercise
                                 ORDER BY exe_id DESC";
 
                         $qryres = Database::query($sql);
-                        $num = Database :: num_rows($qryres);
+                        $num = Database::num_rows($qryres);
 
                         // Hide the results.
                         $my_result_disabled = $row['results_disabled'];
@@ -9906,7 +9974,7 @@ class Exercise
                                 ) {
                                     // More than one attempt
                                     if ($num > 0) {
-                                        $row_track = Database :: fetch_array($qryres);
+                                        $row_track = Database::fetch_array($qryres);
                                         $attempt_text = get_lang('LatestAttempt').' : ';
                                         $attempt_text .= ExerciseLib::show_score(
                                             $row_track['exe_result'],
@@ -9973,7 +10041,7 @@ class Exercise
                             )
                             ) {
                                 if ($num > 0) {
-                                    $row_track = Database :: fetch_array($qryres);
+                                    $row_track = Database::fetch_array($qryres);
                                     $attempt_text = get_lang('LatestAttempt').' : ';
                                     $attempt_text .= ExerciseLib::show_score(
                                         $row_track['exe_result'],
@@ -10053,7 +10121,7 @@ class Exercise
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
+                        d.path  LIKE '".Database::escape_string($uploadPath.'/%/%')."'
                     LIMIT $from , $limit"; // only .htm or .html files listed
         } else {
             $sql = "SELECT d.iid, d.path as path, d.comment as comment
@@ -10061,7 +10129,7 @@ class Exercise
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
+                        d.path  LIKE '".Database::escape_string($uploadPath.'/%/%')."'
                     LIMIT $from , $limit";
         }
 
@@ -10663,6 +10731,7 @@ class Exercise
                 if ($question) {
                     switch ($question->type) {
                         case FILL_IN_BLANKS:
+                        case FILL_IN_BLANKS_GLOBAL:
                             $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
                             break;
                     }
@@ -11017,14 +11086,13 @@ class Exercise
             }
         }
 
-        $totalUsers = count($userList);
-
         foreach ($exercises as $exercise) {
             $exerciseId = $exercise->iid;
+            $totalResults = ExerciseLib::getNumberStudentsFinishExercise($exerciseId, $courseId, $sessionId);
             $data = [];
             foreach ($labelsWithId as $category_id => $title) {
                 if (isset($tempResult[$exerciseId]) && isset($tempResult[$exerciseId][$category_id])) {
-                    $data[] = round($tempResult[$exerciseId][$category_id] / $totalUsers);
+                    $data[] = round($tempResult[$exerciseId][$category_id] / $totalResults);
                 } else {
                     $data[] = 0;
                 }
@@ -11476,13 +11544,13 @@ class Exercise
      */
     public function getQuestionOrderedList($adminView = false)
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUIZ_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
         // Getting question_order to verify that the question
         // list is correct and all question_order's were set
         $sql = "SELECT DISTINCT count(e.question_order) as count
-                FROM $TBL_EXERCICE_QUESTION e
+                FROM $TBL_QUIZ_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
                 ON e.question_id = q.iid
                 WHERE
@@ -11495,7 +11563,7 @@ class Exercise
 
         // Getting question list from the order (question list drag n drop interface).
         $sql = "SELECT DISTINCT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
+                FROM $TBL_QUIZ_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
                 ON e.question_id = q.iid
                 WHERE

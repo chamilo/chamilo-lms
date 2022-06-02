@@ -15,10 +15,10 @@ class MeetingList
 {
     use Pagination;
 
-    const TYPE_SCHEDULED = 'scheduled'; // all valid past meetings (unexpired),
+    public const TYPE_SCHEDULED = 'scheduled'; // all valid past meetings (unexpired),
     // live meetings and upcoming scheduled meetings.
-    const TYPE_LIVE = 'live';           // all the ongoing meetings.
-    const TYPE_UPCOMING = 'upcoming';   // all upcoming meetings, including live meetings.
+    public const TYPE_LIVE = 'live';           // all the ongoing meetings.
+    public const TYPE_UPCOMING = 'upcoming';   // all upcoming meetings, including live meetings.
 
     /** @var MeetingListItem[] */
     public $meetings;

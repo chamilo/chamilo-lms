@@ -78,7 +78,7 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
-    $students = CourseManager:: get_student_list_from_course_code(
+    $students = CourseManager::get_student_list_from_course_code(
         api_get_course_id(),
         false,
         0,
@@ -89,7 +89,7 @@ if (empty($session_id)) {
     );
 } else {
     // Registered students in session.
-    $students = CourseManager:: get_student_list_from_course_code(
+    $students = CourseManager::get_student_list_from_course_code(
         api_get_course_id(),
         true,
         api_get_session_id()
@@ -464,7 +464,7 @@ if ($linkReporting) {
 // send the csv file if asked
 if ($export_csv) {
     ob_end_clean();
-    Export:: arrayToCsv($csv_content, 'reporting_course_tools');
+    Export::arrayToCsv($csv_content, 'reporting_course_tools');
     exit;
 }
 

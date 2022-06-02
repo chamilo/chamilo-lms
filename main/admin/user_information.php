@@ -346,7 +346,7 @@ if (count($sessions) > 0) {
             }
 
             $timeSpent = api_time_to_hms(
-                Tracking :: get_time_spent_on_the_course(
+                Tracking::get_time_spent_on_the_course(
                     $userId,
                     $courseInfo['real_id'],
                     $id_session

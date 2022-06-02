@@ -146,7 +146,7 @@ $tool_name = get_lang('AddUrl');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 // URL Images
 $form->addElement('file', 'url_image_1', 'URL Image 1 (PNG)');

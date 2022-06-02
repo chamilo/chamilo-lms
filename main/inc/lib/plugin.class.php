@@ -19,8 +19,8 @@ use Chamilo\CourseBundle\Entity\CTool;
  */
 class Plugin
 {
-    const TAB_FILTER_NO_STUDENT = '::no-student';
-    const TAB_FILTER_ONLY_STUDENT = '::only-student';
+    public const TAB_FILTER_NO_STUDENT = '::no-student';
+    public const TAB_FILTER_ONLY_STUDENT = '::only-student';
     public $isCoursePlugin = false;
     public $isAdminPlugin = false;
     public $isMailPlugin = false;

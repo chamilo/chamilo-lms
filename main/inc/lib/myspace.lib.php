@@ -2832,7 +2832,7 @@ class MySpace
                         $session_id
                     );
 
-                    $last_login_date_tmp = Tracking:: get_last_connection_date_on_the_course(
+                    $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
                         $row_user->user_id,
                         $courseInfo,
                         $session_id,
@@ -3567,7 +3567,7 @@ class MySpace
             // coach only will registered users
             $default_status = STUDENT;
             if ($user['create'] == COURSEMANAGER) {
-                $user['id'] = UserManager:: create_user(
+                $user['id'] = UserManager::create_user(
                     $user['FirstName'],
                     $user['LastName'],
                     $default_status,

@@ -2188,6 +2188,10 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Requires uncomment the allowSkillsBySubcategory get and set
 //$_configuration['gradebook_enable_subcategory_skills_independant_assignement'] = false;
 
+// Make sessions by duration always accessible to coaches (otherwise
+// they are only accessible during the active duration).
+//$_configuration['session_coach_access_after_duration_end'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

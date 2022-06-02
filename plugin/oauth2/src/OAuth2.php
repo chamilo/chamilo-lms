@@ -207,14 +207,11 @@ class OAuth2 extends Plugin
         if (false === $result) {
             // authenticated user not found in internal database
             if ('true' !== $this->get(self::SETTING_CREATE_NEW_USERS)) {
-                throw new RuntimeException(
-                    sprintf(
-                        $this->get_lang('NoUserAccountAndUserCreationNotAllowed'),
-                        Display::encrypted_mailto_link(
-                            api_get_setting('emailAdministrator')
-                        )
-                    )
+                $message = sprintf(
+                    $this->get_lang('NoUserAccountAndUserCreationNotAllowed'),
+                    Display::encrypted_mailto_link(api_get_setting('emailAdministrator'))
                 );
+                throw new RuntimeException($message);
             }
 
             $firstName = $this->getValueByKey(

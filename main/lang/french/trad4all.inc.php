@@ -8802,4 +8802,5 @@ $MatchingGlobal = "Apparier avec score global";
 $HotSpotGlobal = "Zones sur images avec score global";
 $MatchingDraggableGlobal = "Correspondances glisser-déplacer avec score global";
 $ProgressInSessionReport = "Rapport de progression dans la session";
+$QuestionInOtherExercises = "Cette question est encore utilisée dans d'autres exercices. Êtes-vous sûr de vouloir la supprimer définitivement ?";
 ?>

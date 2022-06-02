@@ -207,7 +207,14 @@ class OAuth2 extends Plugin
         if (false === $result) {
             // authenticated user not found in internal database
             if ('true' !== $this->get(self::SETTING_CREATE_NEW_USERS)) {
-                throw new RuntimeException($this->get_lang('NoUserHasThisOauthCode'));
+                throw new RuntimeException(
+                    sprintf(
+                        $this->get_lang('NoUserAccountAndUserCreationNotAllowed'),
+                        Display::encrypted_mailto_link(
+                            api_get_setting('emailAdministrator')
+                        )
+                    )
+                );
             }
 
             $firstName = $this->getValueByKey(

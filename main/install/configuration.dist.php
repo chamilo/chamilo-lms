@@ -2221,6 +2221,14 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Shows the deleted quizzes in my progress page.
 //$_configuration['tracking_my_progress_show_deleted_exercises'] = true;
 
+// Enable sign in attendance sheet for users
+// Require DB changes:
+// ALTER TABLE c_attendance_sheet ADD signature longtext NULL;
+// ALTER TABLE c_attendance_calendar ADD blocked tinyint(1) NULL;
+// Requires edit Entity CAttendanceSheet : src/Chamilo/CourseBundle/Entity/CAttendanceSheet.php uncomment "signature" variable.
+// Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php uncomment "blocked" variable.
+//$_configuration['enable_sign_attendance_sheet'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

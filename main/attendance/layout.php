@@ -14,7 +14,14 @@ api_protect_course_script(true);
 
 // Header
 $tool = TOOL_ATTENDANCE;
-Display::display_header('');
+
+$func = isset($_REQUEST['func']) ? $_REQUEST['func'] : null;
+if ('fullscreen' === $func) {
+    $htmlHeadXtra[] = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css');
+    Display::display_reduced_header();
+} else {
+    Display::display_header('');
+}
 
 // Introduction section
 Display::display_introduction_section($tool);
@@ -26,4 +33,8 @@ Event::event_access_tool($tool);
 echo $content;
 
 // Footer
-Display::display_footer();
+if ('fullscreen' === $func) {
+    Display::display_reduced_footer();
+} else {
+    Display::display_footer();
+}

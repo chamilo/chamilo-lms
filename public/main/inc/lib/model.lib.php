@@ -20,24 +20,18 @@ class Model
 
     /**
      * Useful finder - experimental akelos like only use in notification.lib.php send function.
-     *
-     * @param string $type
-     * @param array  $options
-     *
-     * @return array
      */
-    public function find($type, $options = null)
+    public function find(string|int $type, array $options = []): array
     {
-        switch ($type) {
-            case 'all':
-                return self::get_all($options);
-                break;
-            default:
-                if (is_numeric($type)) {
-                    return self::get($type);
-                }
-                break;
+        if ('all' === $type) {
+            return self::get_all($options);
         }
+
+        if (is_numeric($type)) {
+            return self::get((int) $type);
+        }
+
+        return [];
     }
 
     /**

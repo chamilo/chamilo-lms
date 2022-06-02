@@ -1441,10 +1441,17 @@ abstract class Question
 
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
+            $courseFilter = " AND c_id = $courseId";
+
+            if (true === api_get_configuration_value('quiz_question_allow_inter_course_linking')) {
+                $courseFilter = '';
+            }
+
             //update the question_order of each question to avoid inconsistencies
             $sql = "SELECT exercice_id, question_order
                     FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $courseId AND question_id = $id";
+                    WHERE question_id = $id
+                        $courseFilter";
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1453,16 +1460,17 @@ abstract class Question
                         $sql = "UPDATE $TBL_EXERCISE_QUESTION
                                 SET question_order = question_order-1
                                 WHERE
-                                    c_id = $courseId AND
                                     exercice_id = ".intval($row['exercice_id'])." AND
-                                    question_order > ".$row['question_order'];
+                                    question_order > ".$row['question_order']
+                                    .$courseFilter;
                         Database::query($sql);
                     }
                 }
             }
 
             $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $courseId AND question_id = $id";
+                    WHERE question_id = $id
+                        $courseFilter";
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS
@@ -1476,8 +1484,8 @@ abstract class Question
             // remove the category of this question in the question_rel_category table
             $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
                     WHERE
-                        c_id = $courseId AND
-                        question_id = $id";
+                        question_id = $id
+                        $courseFilter";
             Database::query($sql);
 
             // Add extra fields.
@@ -2689,6 +2697,69 @@ abstract class Question
         );
 
         return (int) $result['c'];
+    }
+
+    /**
+     * Check if a question is shared between quices
+     *
+     * @param int $questionId - question ID
+     *
+     * @return int - The number of quices where the question is used
+     */
+    public static function isQuestionOnOtherQuizs(int $questionId)
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $result = Database::select(
+            'count(*) as count',
+            $table,
+            [
+                'where' => [
+                    'question_id = ? ' => [
+                        $questionId,
+                    ],
+                ],
+            ],
+            'first'
+        );
+
+        if ($result && isset($result['count'])) {
+            return $result['count'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * Gets the first quiz ID that uses a given question.
+     * The c_quiz_rel_question result with lower iid is the master quiz.
+     *
+     * @param int $questionId - question ID
+     *
+     * @return int The quiz ID
+     */
+    public static function getMasterQuizForQuestion($questionId)
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+        $row = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'question_id = ?' => [
+                        $questionId,
+                    ],
+                ],
+                'order' => 'iid ASC',
+            ],
+            'first'
+        );
+
+        if (is_array($row) && isset($row['exercice_id'])) {
+            return $row['exercice_id'];
+        } else {
+            return false;
+        }
     }
 
     /**

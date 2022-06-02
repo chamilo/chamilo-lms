@@ -8894,4 +8894,5 @@ $MatchingGlobal = "Relacionar con resultado global";
 $HotSpotGlobal = "Zonas de imagen con resultado global";
 $MatchingDraggableGlobal = "Coincidencia arrastrable con resultado global";
 $ProgressInSessionReport = "Reporte de progreso en una sesión";
+$QuestionInOtherExercises = "Esta pregunta está en otros ejercicios, ¿estás seguro de querer eliminarla?";
 ?>

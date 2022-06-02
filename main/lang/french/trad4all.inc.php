@@ -8803,4 +8803,10 @@ $HotSpotGlobal = "Zones sur images avec score global";
 $MatchingDraggableGlobal = "Correspondances glisser-déplacer avec score global";
 $ProgressInSessionReport = "Rapport de progression dans la session";
 $QuestionInOtherExercises = "Cette question est encore utilisée dans d'autres exercices. Êtes-vous sûr de vouloir la supprimer définitivement ?";
+$SeeForTablet = "Vue spéciale pour tablette";
+$DisableSignature = "Bloquer les signatures";
+$EnableSignature = "Débloquer les signatures";
+$Sign = "Signer";
+$SignView = "Voir la signature";
+$DownloadQr = "Télécharger le code QR pour la signature de présences";
 ?>

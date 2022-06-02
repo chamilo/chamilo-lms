@@ -149,14 +149,21 @@ class Asset
         return $this->getOriginalName();
     }
 
+    public function getOriginalName(): string
+    {
+        return (string) $this->originalName;
+    }
+
+    public function setOriginalName(?string $originalName): self
+    {
+        $this->originalName = $originalName;
+
+        return $this;
+    }
+
     public function getId(): Uuid
     {
         return $this->id;
-    }
-
-    public function getFolder(): string
-    {
-        return $this->category.'/'.$this->getOriginalName();
     }
 
     public function getFileUrl(): string
@@ -164,11 +171,28 @@ class Asset
         return $this->getFolder().'/'.$this->getOriginalName();
     }
 
+    public function getFolder(): string
+    {
+        return $this->category.'/'.$this->getOriginalName();
+    }
+
     public function isImage(): bool
     {
         $mimeType = $this->getMimeType();
 
         return str_contains($mimeType, 'image');
+    }
+
+    public function getMimeType(): ?string
+    {
+        return $this->mimeType;
+    }
+
+    public function setMimeType(?string $mimeType): self
+    {
+        $this->mimeType = $mimeType;
+
+        return $this;
     }
 
     public function isVideo(): bool
@@ -202,42 +226,6 @@ class Asset
         return $this;
     }
 
-    public function getMimeType(): ?string
-    {
-        return $this->mimeType;
-    }
-
-    public function setMimeType(?string $mimeType): self
-    {
-        $this->mimeType = $mimeType;
-
-        return $this;
-    }
-
-    public function getOriginalName(): string
-    {
-        return (string) $this->originalName;
-    }
-
-    public function setOriginalName(?string $originalName): self
-    {
-        $this->originalName = $originalName;
-
-        return $this;
-    }
-
-    public function getDimensions(): array
-    {
-        return $this->dimensions;
-    }
-
-    public function setDimensions(?array $dimensions): self
-    {
-        $this->dimensions = $dimensions;
-
-        return $this;
-    }
-
     public function getWidth(): int
     {
         $data = $this->getDimensions();
@@ -248,6 +236,18 @@ class Asset
         }
 
         return 0;
+    }
+
+    public function getDimensions(): ?array
+    {
+        return $this->dimensions;
+    }
+
+    public function setDimensions(?array $dimensions): self
+    {
+        $this->dimensions = $dimensions;
+
+        return $this;
     }
 
     public function getHeight(): int
@@ -263,7 +263,7 @@ class Asset
         return 0;
     }
 
-    public function getMetadata(): array
+    public function getMetadata(): ?array
     {
         return $this->metadata;
     }
@@ -275,7 +275,7 @@ class Asset
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -287,14 +287,9 @@ class Asset
         return $this;
     }
 
-    public function getFile(): ?File
+    public function getFile(): File
     {
         return $this->file;
-    }
-
-    public function hasFile(): bool
-    {
-        return null !== $this->file;
     }
 
     /**
@@ -313,7 +308,12 @@ class Asset
         return $this;
     }
 
-    public function getTitle(): string
+    public function hasFile(): bool
+    {
+        return !empty($this->file);
+    }
+
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -325,7 +325,7 @@ class Asset
         return $this;
     }
 
-    public function getCategory(): string
+    public function getCategory(): ?string
     {
         return $this->category;
     }

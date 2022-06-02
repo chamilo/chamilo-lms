@@ -1,0 +1,66 @@
+.p-message {
+  @apply mb-4 shadow-sm rounded-md border-0;
+
+  .p-message-wrapper {
+    @apply py-3 px-4;
+  }
+
+  .p-message-close {
+    @apply rounded-full transition duration-200 w-6 h-6;
+
+    &:hover {
+    }
+
+    &:focus {
+      @apply outline-none outline-offset-0 shadow-none;
+    }
+  }
+
+  .p-message-text {
+    @apply ml-4;
+
+    a {
+      @apply font-semibold;
+    }
+  }
+
+  .p-message-icon {
+    @apply leading-normal;
+  }
+
+  &.p-message-info {
+    @apply bg-primary text-white;
+
+    .p-message-icon,
+    .p-message-close {
+      @apply text-white;
+    }
+  }
+
+  &.p-message-success {
+    @apply bg-success text-white;
+
+    .p-message-icon,
+    .p-message-close {
+      @apply text-white;
+    }
+  }
+
+  &.p-message-warn {
+    @apply bg-warning text-gray-90;
+
+    .p-message-icon,
+    .p-message-close {
+      @apply text-gray-90;
+    }
+  }
+
+  &.p-message-error {
+    @apply bg-error text-white;
+
+    .p-message-icon,
+    .p-message-close {
+      @apply text-white;
+    }
+  }
+}

@@ -3,13 +3,22 @@
     :is="layout"
     :show-breadcrumb="route.meta.showBreadcrumb"
   >
+    <transition-group
+      name="p-message"
+      tag="div"
+    >
+      <Message
+        v-for="(toastObj, index) in flashMessageList"
+        :key="index"
+        :severity="toastObj.severity"
+      >
+        <div v-html="toastObj.detail" />
+      </Message>
+    </transition-group>
     <slot />
     <div
       id="legacy_content"
       v-html="legacyContent"
-    />
-    <Toast
-      position="top-center"
     />
   </component>
 </template>
@@ -22,8 +31,7 @@ import {ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client/core';
 import {useStore} from "vuex";
 import axios from "axios";
 import {isEmpty} from "lodash";
-import Toast from "primevue/toast";
-import {useToast} from 'primevue/usetoast';
+import Message from "primevue/message";
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -36,7 +44,6 @@ provide(DefaultApolloClient, apolloClient);
 
 const route = useRoute();
 const router = useRouter();
-const toast = useToast();
 
 const layout = computed(
   () => {
@@ -128,6 +135,8 @@ const payload = {isAuthenticated, user};
 
 store.dispatch('security/onRefresh', payload);
 
+const flashMessageList = ref([]);
+
 onMounted(() => {
   const app = document.getElementById('app');
 
@@ -139,7 +148,11 @@ onMounted(() => {
 
   for (const key in flashes) {
     for (const flashText in flashes[key]) {
-      toast.add({
+      flashMessageList.value.push({
+        severity: key,
+        detail: flashes[key][flashText],
+      });
+      flashMessageList.value.push({
         severity: key,
         detail: flashes[key][flashText],
       });
@@ -151,12 +164,12 @@ axios.interceptors.response.use(
   undefined,
   (error) => new Promise(() => {
     if (401 === error.response.status) {
-      toast.add({
+      flashMessageList.value.push({
         severity: 'warn',
         detail: error.response.data.error,
       });
     } else if (500 === error.response.status) {
-      toast.add({
+      flashMessageList.value.push({
         severity: 'warn',
         detail: error.response.data.detail,
       });

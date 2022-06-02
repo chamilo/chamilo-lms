@@ -8866,4 +8866,11 @@ $MatchingGlobal = "Matching with global score";
 $HotSpotGlobal = "Image zones with global score";
 $MatchingDraggableGlobal = "Match by dragging with global score";
 $ProgressInSessionReport = "Progress in session report";
+$QuestionInOtherExercises = "This question is shared with other exercises, are you sure you want to delete it?";
+$SeeForTablet = "View for tablet";
+$DisableSignature = "Disable signature";
+$EnableSignature = "Enable signature";
+$Sign = "Sign";
+$SignView = "View signature";
+$DownloadQr = "Download QR for attendance signature";
 ?>

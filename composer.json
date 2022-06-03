@@ -194,7 +194,7 @@
         "symfony/var-dumper": "5.4.*",
         "symfony/web-profiler-bundle": "5.4.*",
         "symplify/easy-coding-standard": "^9.3",
-        "vimeo/psalm": "^4.10",
+        "vimeo/psalm": "^4.23",
         "weirdan/doctrine-psalm-plugin": "^1.0"
     },
     "replace": {

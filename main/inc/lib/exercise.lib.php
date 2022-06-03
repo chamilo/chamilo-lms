@@ -2666,6 +2666,7 @@ HOTSPOT;
             $thousandSeparator = '';
         }
 
+        $hideIp = api_get_configuration_value('exercise_hide_ip');
         $listInfo = [];
         // Simple exercises
         if (empty($hotpotatoe_where)) {
@@ -3187,11 +3188,17 @@ HOTSPOT;
                             $attempt['total'] = $onlyTotal;
                             $attempt['lp'] = $lp_name;
                             $attempt['actions'] = $actions;
+                            if ($hideIp && isset($attempt['user_ip'])) {
+                                unset($attempt['user_ip']);
+                            }
                             $listInfo[] = $attempt;
                         } else {
                             $attempt['status'] = $revisedLabel;
                             $attempt['score'] = $score;
                             $attempt['actions'] = $actions;
+                            if ($hideIp && isset($attempt['user_ip'])) {
+                                unset($attempt['user_ip']);
+                            }
                             $listInfo[] = $attempt;
                         }
                     }
@@ -6121,7 +6128,7 @@ EOT;
             UNIQUE_ANSWER_IMAGE,
             READING_COMPREHENSION,
             MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
-	    UPLOAD_ANSWER,
+        UPLOAD_ANSWER,
             MATCHING_GLOBAL,
             FILL_IN_BLANKS_GLOBAL,
         ];

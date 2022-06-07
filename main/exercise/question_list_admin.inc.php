@@ -27,12 +27,10 @@ if ($deleteQuestion) {
 
             if ($masterExerciseId != $exerciseId) {
                 $objQuestionTmp->delete($exerciseId);
-            }
-            else {
+            } else {
                 $objQuestionTmp->delete();
             }
-        }
-        else {
+        } else {
             $objQuestionTmp->delete($exerciseId);
         }
 
@@ -338,7 +336,6 @@ if (!$inATest) {
                         } else {
                             $questionInOtherQuizs = false;
                         }
-
                     } else {
                         $delete = true;
                     }

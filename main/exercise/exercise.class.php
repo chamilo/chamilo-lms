@@ -6666,6 +6666,10 @@ class Exercise
             $data['ip'] = $ip;
         }
 
+        if (true === api_get_configuration_value('exercise_hide_ip')) {
+            unset($data['ip']);
+        }
+
         if (api_get_configuration_value('save_titles_as_html')) {
             $data['title'] = Security::remove_XSS($this->get_formated_title()).get_lang('Result');
         } else {

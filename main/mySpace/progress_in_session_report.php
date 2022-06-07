@@ -112,8 +112,14 @@ if ($form->validate()) {
 
         foreach ($accessSessionCourse as $access) {
             $user = api_get_user_entity($access['user_id']);
+
+            $studentLink = Display::url(
+                UserManager::formatUserFullName($user),
+                api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$user->getId().'&origin=session_report'
+            );
+
             $users[$user->getId()] = [
-                'complete_name' => UserManager::formatUserFullName($user),
+                'complete_name' => $studentLink,
                 'time_in_platform' => api_time_to_hms(
                    Tracking::get_time_spent_on_the_course($user->getId(), $access['c_id'], $sessionId, $startDate, $endDate)
                 ),

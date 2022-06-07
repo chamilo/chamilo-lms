@@ -909,7 +909,9 @@ class bbb
         $sessionId = 0,
         $groupId = 0,
         $isAdminReport = false,
-        $dateRange = []
+        $dateRange = [],
+        $start = 0,
+        $limit = 0
     ) {
         $em = Database::getManager();
         $manager = $this->isConferenceManager();
@@ -962,6 +964,7 @@ class bbb
         }
 
         $conditions['order'] = 'created_at ASC';
+        $conditions['limit'] = '$start , $limit';
 
         $meetingList = Database::select(
             '*',

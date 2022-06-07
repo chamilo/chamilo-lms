@@ -8894,4 +8894,11 @@ $MatchingGlobal = "Relacionar con resultado global";
 $HotSpotGlobal = "Zonas de imagen con resultado global";
 $MatchingDraggableGlobal = "Coincidencia arrastrable con resultado global";
 $ProgressInSessionReport = "Reporte de progreso en una sesión";
+$QuestionInOtherExercises = "Esta pregunta está en otros ejercicios, ¿está seguro de querer eliminarla?";
+$SeeForTablet = "Vista para tableta";
+$DisableSignature = "Bloquear firmas";
+$EnableSignature = "Desbloquear firmas";
+$Sign = "Firmar";
+$SignView = "Ver firma";
+$DownloadQr = "Descargar QR para firma de asistencia";
 ?>

@@ -10,6 +10,10 @@
  *
  * @package chamilo.attendance
  */
+
+use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CourseBundle\Entity\CAttendanceSheet;
+
 class Attendance
 {
     // constants
@@ -181,22 +185,22 @@ class Attendance
                 ) || api_is_drh();
                 if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                     // Link to edit
-                    $attendance[1] = '<a 
+                    $attendance[1] = '<a
                         href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
                         Security::remove_XSS($attendance[1]).
                         '</a>'.
                         $session_star;
                 } else {
                     // Link to view
-                    $attendance[1] = '<a 
+                    $attendance[1] = '<a
                         href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$student_param.'">'.
                         Security::remove_XSS($attendance[1]).
                         '</a>'.
                         $session_star;
                 }
             } else {
-                $attendance[1] = '<a 
-                    class="muted" 
+                $attendance[1] = '<a
+                    class="muted"
                     href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
                     Security::remove_XSS($attendance[1]).
                     '</a>'.
@@ -264,11 +268,11 @@ class Attendance
                             $message_alert = get_lang('UnlockMessageInformation');
                         }
                         $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].'">'.
-                            Display::return_icon('unlock.png', get_lang('LockAttendance')).'</a>';
+                            Display::return_icon('lock-open.png', get_lang('LockAttendance')).'</a>';
                     } else {
                         if (api_is_platform_admin()) {
                             $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
-                                    Display::return_icon('locked.png', get_lang('UnlockAttendance')).'</a>';
+                                    Display::return_icon('lock-closed.png', get_lang('UnlockAttendance')).'</a>';
                         } else {
                             $actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('LockedAttendance'));
                         }
@@ -1301,7 +1305,7 @@ class Attendance
             // Get attendance for current user
             $user_id = (int) $user_id;
             if (count($calendar_ids) > 0) {
-                $sql = "SELECT cal.date_time, att.presence
+                $sql = "SELECT cal.date_time, att.presence, cal.iid as calendar_id
                         FROM $tbl_attendance_sheet att
                         INNER JOIN  $tbl_attendance_calendar cal
                         ON cal.id = att.attendance_calendar_id
@@ -2505,5 +2509,181 @@ class Attendance
         }
 
         return $data;
+    }
+
+    /**
+     * Clean a sing of a user in attendance sheet.
+     *
+     * @param $userId
+     * @param $attendanceCalendarId
+     *
+     * @return false or void when it is deleted.
+     */
+    public function deleteSignature(
+        $userId,
+        $attendanceCalendarId,
+        $attendanceId
+    ) {
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        if (!$allowSignature) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+        $attendanceSheet = $repo->findOneBy($criteria);
+
+        if ($attendanceSheet) {
+            /** @var CAttendanceSheet $attendanceSheet */
+            $attendanceSheet->setPresence(0);
+            $attendanceSheet->setSignature('');
+
+            $em->persist($attendanceSheet);
+            $em->flush();
+            $this->updateUsersResults([$userId], $attendanceId);
+        }
+    }
+
+    /**
+     * It checks if the calendar in a attendance sheet is blocked.
+     *
+     * @param $calendarId
+     *
+     * @return bool
+     */
+    public function isCalendarBlocked($calendarId)
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceCalendar');
+
+        $blocked = 0;
+        $attendanceCalendar = $repo->find($calendarId);
+        /** @var CAttendanceCalendar $attendanceCalendar */
+        if ($attendanceCalendar) {
+            $blocked = (int) $attendanceCalendar->getBlocked();
+        }
+
+        $isBlocked = (1 === $blocked);
+
+        return $isBlocked;
+    }
+
+    /**
+     * It blocks/unblocks the calendar in attendance sheet.
+     *
+     * @param $calendarId
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateCalendarBlocked($calendarId)
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceCalendar');
+        $attendanceCalendar = $repo->find($calendarId);
+
+        /** @var CAttendanceCalendar $attendanceCalendar */
+        if ($attendanceCalendar) {
+            $blocked = !$this->isCalendarBlocked($calendarId);
+            $attendanceCalendar->setBlocked($blocked);
+            $em->persist($attendanceCalendar);
+            $em->flush();
+        }
+    }
+
+    /**
+     * Get the user sign in attendance sheet.
+     *
+     * @param $userId
+     * @param $attendanceCalendarId
+     *
+     * @return false|string
+     */
+    public function getSignature(
+        $userId,
+        $attendanceCalendarId
+    ) {
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        if (!$allowSignature) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+        $attendanceSheet = $repo->findOneBy($criteria);
+
+        $signature = "";
+        if ($attendanceSheet) {
+            /** @var CAttendanceSheet $attendanceSheet */
+            $signature = $attendanceSheet->getSignature();
+        }
+
+        return $signature;
+    }
+
+    /**
+     * It saves the user sign from attendance sheet.
+     *
+     * @param $userId
+     * @param $attendanceCalendarId
+     * @param $file string in base64
+     *
+     * @return false or void when it is saved.
+     */
+    public function saveSignature(
+        $userId,
+        $attendanceCalendarId,
+        $file,
+        $attendanceId
+    ) {
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        if (!$allowSignature) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+        $attendanceSheet = $repo->findOneBy($criteria);
+
+        /** @var CAttendanceSheet $attendanceSheet */
+        if ($attendanceSheet) {
+            $attendanceSheet->setPresence(1);
+            $attendanceSheet->setSignature($file);
+            $em->persist($attendanceSheet);
+            $em->flush();
+        } else {
+            $attendanceSheet = new CAttendanceSheet();
+            $attendanceSheet
+                ->setCId($courseId)
+                ->setPresence(1)
+                ->setUserId($userId)
+                ->setAttendanceCalendarId($attendanceCalendarId)
+                ->setSignature($file);
+
+            $em->persist($attendanceSheet);
+            $em->flush();
+        }
+        $this->updateUsersResults([$userId], $attendanceId);
     }
 }

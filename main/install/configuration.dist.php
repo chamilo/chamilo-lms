@@ -2221,6 +2221,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Shows the deleted quizzes in my progress page.
 //$_configuration['tracking_my_progress_show_deleted_exercises'] = true;
 
+// Hide IP in exercises reports
+// $_configuration['exercise_hide_ip'] = false;
+
 // Enable sign in attendance sheet for users
 // Require DB changes:
 // ALTER TABLE c_attendance_sheet ADD signature longtext NULL;

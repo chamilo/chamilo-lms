@@ -2666,6 +2666,7 @@ HOTSPOT;
             $thousandSeparator = '';
         }
 
+        $hideIp = api_get_configuration_value('exercise_hide_ip');
         $listInfo = [];
         // Simple exercises
         if (empty($hotpotatoe_where)) {
@@ -3187,11 +3188,17 @@ HOTSPOT;
                             $attempt['total'] = $onlyTotal;
                             $attempt['lp'] = $lp_name;
                             $attempt['actions'] = $actions;
+                            if ($hideIp && isset($attempt['user_ip'])) {
+                                unset($attempt['user_ip']);
+                            }
                             $listInfo[] = $attempt;
                         } else {
                             $attempt['status'] = $revisedLabel;
                             $attempt['score'] = $score;
                             $attempt['actions'] = $actions;
+                            if ($hideIp && isset($attempt['user_ip'])) {
+                                unset($attempt['user_ip']);
+                            }
                             $listInfo[] = $attempt;
                         }
                     }

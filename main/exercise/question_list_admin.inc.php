@@ -31,7 +31,8 @@ if ($deleteQuestion) {
             else {
                 $objQuestionTmp->delete();
             }
-        } else {
+        }
+        else {
             $objQuestionTmp->delete($exerciseId);
         }
 

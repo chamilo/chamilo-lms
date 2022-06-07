@@ -1922,7 +1922,7 @@ class Exercise
      * Note: leaves the questions in the database as "orphan" questions
      * (unless used by other tests).
      *
-     * @param bool $delete Whether to really delete the test (true) or only mark it (false = default)
+     * @param bool $delete          Whether to really delete the test (true) or only mark it (false = default)
      * @param bool $deleteQuestions Whether to delete the test questions (true)
      *
      * @return bool Whether the operation was successful or not

@@ -2700,7 +2700,7 @@ abstract class Question
     }
 
     /**
-     * Check if a question is shared between quices
+     * Check if a question is shared between quices.
      *
      * @param int $questionId - question ID
      *

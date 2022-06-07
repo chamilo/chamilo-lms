@@ -247,11 +247,12 @@ abstract class Question
     }
 
     /**
-     * @param int $itemNumber
+     * @param int $itemNumber The numerical counter of the question
+     * @param int $exerciseId The iid of the corresponding c_quiz, for specific rules applied to the title
      *
      * @return string
      */
-    public function getTitleToDisplay($itemNumber)
+    public function getTitleToDisplay(int $itemNumber, int $exerciseId): string
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
         $title = '';
@@ -260,7 +261,7 @@ abstract class Question
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
-        $checkIfShowNumberQuestion = $this->getShowHideConfiguration();
+        $checkIfShowNumberQuestion = $this->getShowHideConfiguration($exerciseId);
         if ($checkIfShowNumberQuestion != 1) {
             $title .= $itemNumber.'. ';
         }
@@ -277,10 +278,10 @@ abstract class Question
     /**
      * Gets the respective value to show or hide the number of a question in the exam.
      * If the field does not exist in the database, it will return 0.
-     *
-     * @return int
+     * @param int $exerciseId The iid of the corresponding c_quiz, to avoid mix-ups when the question is used in more than one exercise
+     * @return int  1 if we should hide the numbering for the current question
      */
-    public function getShowHideConfiguration()
+    public function getShowHideConfiguration(int $exerciseId): int
     {
         $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -299,7 +300,8 @@ abstract class Question
                 FROM
                     $tblQuiz as q
                 INNER JOIN  $tblQuizRelQuestion AS qrq ON qrq.exercice_id = q.iid
-                WHERE qrq.question_id = ".$this->iid;
+                WHERE qrq.question_id = ".$this->iid."
+                AND qrq.exercice_id = ".$exerciseId;
             $res = Database::query($sql);
             $result = Database::store_result($res);
             if (is_array($result) &&

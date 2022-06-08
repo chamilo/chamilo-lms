@@ -824,7 +824,7 @@ if ($nbStudents > 0) {
         $table->set_header($headerCounter++, get_lang('Survey'), false);
         $headers['survey'] = get_lang('Survey');
     } else {
-        $table->set_header($headerCounter++, get_lang('RegisteredDate'), false);
+        $table->set_header($headerCounter++, get_lang('RegisteredDate'), true);
         $headers['registered_at'] = get_lang('RegisteredDate');
     }
     $table->set_header($headerCounter++, get_lang('FirstLoginInCourse'), false);

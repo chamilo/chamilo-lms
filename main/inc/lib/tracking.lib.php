@@ -9314,6 +9314,9 @@ class TrackingCourseLog
                     user.firstname      as col2,
                     user.username       as col3,
                     user.email          as col4';
+        if (!empty($session_id)) {
+            $select .= ', user.registration_date as col13';
+        }
         if ($getCount) {
             $select = ' SELECT COUNT(distinct(user.id)) as count ';
         }

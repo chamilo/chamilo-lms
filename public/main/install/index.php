@@ -521,7 +521,7 @@ if (isset($_POST['step2'])) {
         <tr>
             <td>
                 <button type="submit"
-                        class="btn btn-secondary" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" >
+                        class="btn btn--secondary" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" >
                     <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
                 </button>
             </td>
@@ -530,7 +530,7 @@ if (isset($_POST['step2'])) {
                 <input type="hidden" name="step6" value="1" />
                 <button
                         id="button_step6"
-                        class="btn btn-success"
+                        class="btn btn--success"
                         type="submit"
                         name="button_step6" value="<?php echo get_lang('Install Chamilo'); ?>">
                     <em class="fa fa-check"> </em>
@@ -789,7 +789,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
             });
 
             $("#button_please_wait").hide();
-            $("button").addClass('btn btn-secondary');
+            $("button").addClass('btn btn--secondary');
 
             // Allow Chamilo install in IE
             $("button").click(function() {
@@ -862,7 +862,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
         }
     </script>
 </head>
-<body class="w-full justify-center bg-gradient-to-br from-ch-primary to-ch-primary-light">
+<body class="w-full justify-center bg-gradient-to-br from-primary to-primary-gradient">
     <div class="flex flex-col items-center justify-center ">
         <div class="rounded p-4 m-8 w-3/5 bg-white flex">
             <div class="w-1/3 p-4">
@@ -905,7 +905,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                     </ol>
                 </div>
                 <div id="note">
-                    <a class="btn btn-info btn-block m-2" href="<?php echo $installationGuideLink; ?>" target="_blank">
+                    <a class="btn btn--info btn-block m-2" href="<?php echo $installationGuideLink; ?>" target="_blank">
                         <em class="fa fa-file-alt"></em>
                         <?php echo $translator->trans('Read the installation guide'); ?>
                     </a>

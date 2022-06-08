@@ -828,8 +828,8 @@ if (!empty($user_list)) {
                 echo $options;
                 echo '</select>';
                 echo '<br />';
-                echo '<button type="submit" class="btn btn-success" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Compare stats').'</button>';
-                echo '<button type="submit" class="btn btn-success" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
+                echo '<button type="submit" class="btn btn--success" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Compare stats').'</button>';
+                echo '<button type="submit" class="btn btn--success" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
                 echo '<div id ="reponse_'.$unique_id.'"></div>';
                 echo '</td>';
             }

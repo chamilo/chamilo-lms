@@ -1086,19 +1086,19 @@ echo '</form>';
 $html = '<div class="btn-toolbar">';
 $html .= '<div class="btn-group">';
 $html .= '<a
-        class="btn btn-default"
+        class="btn btn--plain"
         href="?'.$url.'selectall=1"
         onclick="javascript: setCheckbox(true, \''.$tableId.'\'); return false;">
         '.get_lang('Select all').'</a>';
 $html .= '<a
-            class="btn btn-default"
+            class="btn btn--plain"
             href="?'.$url.'"
             onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">
             '.get_lang('Unselect all').'</a> ';
 $html .= '</div>';
 $html .= '<div class="btn-group">
-            <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button class="btn btn--plain" onclick="javascript:return false;">'.get_lang('Actions').'</button>
+            <button class="btn btn--plain dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">';

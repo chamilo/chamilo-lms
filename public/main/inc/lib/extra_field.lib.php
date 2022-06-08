@@ -515,13 +515,13 @@ class ExtraField extends Model
                     <label for="geolocalization_extra_'.$variable.'"
                         class="col-sm-2 control-label"></label>
                     <div class="col-sm-8">
-                        <button class="btn btn-default"
+                        <button class="btn btn--plain"
                             id="geolocalization_extra_'.$variable.'"
                             name="geolocalization_extra_'.$variable.'"
                             type="submit">
                             <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
                         </button>
-                        <button class="btn btn-default" id="myLocation_extra_'.$variable.'"
+                        <button class="btn btn--plain" id="myLocation_extra_'.$variable.'"
                             name="myLocation_extra_'.$variable.'"
                             type="submit">
                             <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'

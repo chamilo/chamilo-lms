@@ -257,17 +257,17 @@ if (!empty($msg)) {
         </div>
         <div class="control-course">
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                     <em class="fa fa-arrow-right"></em>
                 </button>
             </div>
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                     <em class="fa fa-arrow-left"></em>
                 </button>
             </div>
             <div class="separate-action">
-                <?php echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>'; ?>
+                <?php echo '<button class="btn btn--success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>'; ?>
             </div>
         </div>
     </div>

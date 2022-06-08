@@ -235,10 +235,10 @@ function extra_formatter(cellvalue, options, rowObject) {
 
     if (calendarName == "") {
         return \'<a href="'.
-        api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?user_id=\'+options.rowId+\'&id='.$id.'&action=add_calendar&width=700" class="btn btn-primary ajax">'.get_lang('Add').'</a>\';
+        api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?user_id=\'+options.rowId+\'&id='.$id.'&action=add_calendar&width=700" class="btn btn--primary ajax">'.get_lang('Add').'</a>\';
     } else {
     return \' \'+calendarName+\' <a href="'.
-        api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?calendar_id=\'+calendarId+\'&user_id=\'+options.rowId+\'&id='.$id.'&action=edit_calendar&width=700" class="btn btn-primary ajax"> '.get_lang('Edit').'</a>\';
+        api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?calendar_id=\'+calendarId+\'&user_id=\'+options.rowId+\'&id='.$id.'&action=edit_calendar&width=700" class="btn btn--primary ajax"> '.get_lang('Edit').'</a>\';
     }
 
     return calendarName;

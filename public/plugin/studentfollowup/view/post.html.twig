@@ -21,7 +21,7 @@
                     {% endif %}
 
                     {% if post.attachment %}
-                        <a href="{{ post_url }}&action=download&post_id={{ post.id }}" class="btn btn-default">
+                        <a href="{{ post_url }}&action=download&post_id={{ post.id }}" class="btn btn--plain">
                             {{ 'Download' | get_lang }}
                         </a>
                     {% endif %}

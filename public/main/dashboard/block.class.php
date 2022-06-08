@@ -22,7 +22,7 @@ class Block
     public function getDeleteLink(): string
     {
         global $charset;
-        $closeLink = '<a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(
+        $closeLink = '<a class="btn btn--danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(
                 api_htmlentities(
                     get_lang('Please confirm your choice'),
                     ENT_QUOTES

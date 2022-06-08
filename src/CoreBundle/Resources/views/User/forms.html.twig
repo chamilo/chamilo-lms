@@ -16,7 +16,7 @@
         {% set type = type|default('text') %}
 
         {% if 'file' == type %}
-            <span class="btn-primary btn-lg file-overlay"><i
+            <span class="btn--primary btn-lg file-overlay"><i
                         class="icon-folder-open"></i> {{ 'sylius.form.choose_file'|trans }}</span>
         {% endif %}
         {{ parent() }}

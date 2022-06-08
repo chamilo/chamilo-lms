@@ -464,7 +464,7 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
                 ['style' => 'display:none', 'id' => 'datepicker_span']
             );
         }
-        $actions .= '<a class="btn btn-default" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
+        $actions .= '<a class="btn btn--plain" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
             get_lang('QuestionStats').'</a>';
     }
 } else {

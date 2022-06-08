@@ -515,7 +515,7 @@ class IndexManager
                     // 2.
                     if ($user_identified && !array_key_exists($course['code'], $courses_of_user)) {
                         if ('1' == $course['subscribe']) {
-                            $courses_list_string .= '&nbsp;<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&category_code='.Security::remove_XSS(
+                            $courses_list_string .= '&nbsp;<a class="btn btn--primary" href="main/auth/courses.php?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&category_code='.Security::remove_XSS(
                                     $_GET['category']
                                 ).'">'.get_lang('Subscribe').'</a><br />';
                         } else {
@@ -650,7 +650,7 @@ class IndexManager
             $search_content = '<form action="main/search/" method="post">
                 <div class="form-group">
                 <input type="text" id="query" class="form-control" name="query" value="" />
-                <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.
+                <button class="btn btn--plain" type="submit" name="submit" value="'.$search_btn.'" />'.
                 $search_btn.' </button>
                 </div></form>';
             $html .= $this->showRightBlock(get_lang('Search'), $search_content, 'search_block');
@@ -1919,7 +1919,7 @@ class IndexManager
         if ($displayButton) {
             $button = '<input id="session-view-button-'.intval(
                     $id
-                ).'" class="btn btn-default btn-sm" type="button" onclick="hideUnhide(\'courseblock-'.intval(
+                ).'" class="btn btn--plain btn-sm" type="button" onclick="hideUnhide(\'courseblock-'.intval(
                     $id
                 ).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
         }

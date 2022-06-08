@@ -18,11 +18,11 @@
 
                     <td >{{ item.date_manual_on }}</td>
                     <td>
-                        <a href="{{_p.web_plugin }}justification/edit.php?id={{ item.id }}" class="btn btn-primary">
+                        <a href="{{_p.web_plugin }}justification/edit.php?id={{ item.id }}" class="btn btn--primary">
                             {{'Edit' | get_lang}}
                         </a>
 
-                        <a href="{{_p.web_plugin }}justification/list.php?a=delete&id={{ item.id }}" class="btn btn-danger">
+                        <a href="{{_p.web_plugin }}justification/list.php?a=delete&id={{ item.id }}" class="btn btn--danger">
                             {{'Delete' | get_lang}}
                         </a>
                     </td>

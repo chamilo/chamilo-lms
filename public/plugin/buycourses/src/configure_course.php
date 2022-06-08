@@ -171,7 +171,7 @@ if ('true' === $commissionsEnable) {
             $(function() {
                 if ($('[name=\"commissions\"]').val() === '') {
                     $('#panelSliders').html(
-                        '<button id=\"setCommissionsButton\" class=\"btn btn-warning\">'
+                        '<button id=\"setCommissionsButton\" class=\"btn btn--warning\">'
                             + '".get_plugin_lang('SetCommissions', 'BuyCoursesPlugin')."'
                     );
                 } else {

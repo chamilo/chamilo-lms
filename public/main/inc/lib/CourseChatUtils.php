@@ -522,7 +522,7 @@ class CourseChatUtils
         if ($isMaster || $GLOBALS['is_session_general_coach']) {
             $history .= '
                 <div id="clear-chat">
-                    <button type="button" id="chat-reset" class="btn btn-danger btn-sm">
+                    <button type="button" id="chat-reset" class="btn btn--danger btn-sm">
                         '.get_lang('Clear the chat').'
                     </button>
                 </div>

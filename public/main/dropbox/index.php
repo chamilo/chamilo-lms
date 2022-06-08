@@ -642,7 +642,7 @@ if ('add' != $action) {
                     $action_icons .= "<tr><td colspan=\"9\">";
                     $url = api_get_path(WEB_CODE_PATH)."dropbox/index.php?".api_get_cidreq()."&view_received_category=".$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params;
                     $action_icons .= feedback($dropbox_file->feedback2, $url);
-                    //$action_icons .= "<a class=\"btn btn-default\" href=\""><i class=\"fa fa-times\" aria-hidden=\"true\"></i></a>";
+                    //$action_icons .= "<a class=\"btn btn--plain\" href=\""><i class=\"fa fa-times\" aria-hidden=\"true\"></i></a>";
                     $action_icons .= "</tr>";
                 }
                 $dropbox_file_data[] = $action_icons;

@@ -136,8 +136,8 @@ class FillBlanks extends Question
                         fields += "<td>"+blanksWithColor+"</td>";
                         fields += "<td><input class=\"form-control\" style=\"width:60px\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td>";
                         fields += "<td>";
-                        fields += "<input class=\"btn btn-default\" type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">&nbsp;";
-                        fields += "<input class=\"btn btn-default\" type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">&nbsp;";
+                        fields += "<input class=\"btn btn--plain\" type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">&nbsp;";
+                        fields += "<input class=\"btn btn--plain\" type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">&nbsp;";
                         fields += "&nbsp;&nbsp;<input class=\"sample\" id=\"samplesize["+i+"]\" data-btoa=\""+btoaValue+"\"   type=\"text\" value=\""+textValue+"\" style=\"width:"+inputSize+"px\" disabled=disabled />";
                         fields += "<input id=\"sizeofinput["+i+"]\" type=\"hidden\" value=\""+inputSize+"\" name=\"sizeofinput["+i+"]\"  />";
                         fields += "</td>";
@@ -352,7 +352,7 @@ class FillBlanks extends Question
         );
         $form->addLabel(
             null,
-            '<input type="button" onclick="updateBlanks()" value="'.get_lang('Refresh terms').'" class="btn btn-default" />'
+            '<input type="button" onclick="updateBlanks()" value="'.get_lang('Refresh terms').'" class="btn btn--plain" />'
         );
 
         $form->addHtml('<div id="blanks_weighting"></div>');

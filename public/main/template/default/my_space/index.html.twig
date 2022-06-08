@@ -117,7 +117,7 @@
                             <span class="percent">{{ total_user }}</span>
                         </div>
                         <div class="easypiechart-link">
-                            <a class="btn btn-default" href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}">
+                            <a class="btn btn--plain" href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}">
                                 {{ 'Followed users' | trans }}
                             </a>
                         </div>
@@ -126,7 +126,7 @@
                     {% if app.user.status == 1 %}
                         <a
                            href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_users_to_user.php'}) }}?user={{ app.user.id }}"
-                           class="btn btn-default btn-sm"
+                           class="btn btn--plain btn-sm"
                         >
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
@@ -138,7 +138,7 @@
                             <span class="percent">{{ stats.courses }}</span>
                         </div>
                         <div class="easypiechart-link">
-                            <a class="btn btn-default"
+                            <a class="btn btn--plain"
                                href="{{ url('legacy_main', {'name' : 'mySpace/course.php'}) }}"
                             >
                                 {{ 'Assigned courses' | trans }}
@@ -148,7 +148,7 @@
                     {% if app.user.status == 1 %}
                         <a
                             href="{{ url('legacy_main', {'name' : 'mySpace/course.php'}) }}"
-                           class="btn btn-default btn-sm">
+                           class="btn btn--plain btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
                     {% endif %}
@@ -159,7 +159,7 @@
                             <span class="percent">{{ stats.assigned_courses }}</span>
                         </div>
                         <div class="easypiechart-link">
-                            <a class="btn btn-default"
+                            <a class="btn btn--plain"
                                href="{{ url('legacy_main', {'name' : 'mySpace/course.php?follow'}) }}"
                             >
                                 {{ 'Followed courses' | trans }}
@@ -169,7 +169,7 @@
                     {% if app.user.status == 1 %}
                         <a
                             href="{{ url('legacy_main', {'name' : 'mySpace/course.php?follow'}) }}"
-                            class="btn btn-default btn-sm">
+                            class="btn btn--plain btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
                     {% endif %}
@@ -180,7 +180,7 @@
                             <span class="percent">{{ stats.session_list |length }}</span>
                         </div>
                         <div class="easypiechart-link">
-                            <a class="btn btn-default"
+                            <a class="btn btn--plain"
                                href="{{ url('legacy_main', {'name' : 'mySpace/session.php'}) }}"
                             >
                                 {{ 'Followed sessions' | trans }}
@@ -190,7 +190,7 @@
                     {% if app.user.status == 1 %}
                         <a
                             href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_sessions_to_user.php'}) }}?user={{ app.user.id }}"
-                            class="btn btn-default btn-sm"
+                            class="btn btn--plain btn-sm"
                         >
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>

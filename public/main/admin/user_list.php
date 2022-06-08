@@ -1028,7 +1028,7 @@ $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
 <a id="advanced_params" href="javascript://"
-    class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
+    class="btn btn--plain advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
     '.Display::getMdiIcon('arrow-right-bold', 'ch-tool-icon-button', null, 16).' '.get_lang('Advanced search').'
     </span>

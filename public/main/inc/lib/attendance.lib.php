@@ -2839,7 +2839,7 @@ class Attendance
                             <div class="col-md-12">';
                 if (!$is_locked_attendance || api_is_platform_admin()) {
                     if ($allowToEdit) {
-                        $form .= '<button type="submit" class="btn btn-primary">'.get_lang('Save').'</button>';
+                        $form .= '<button type="submit" class="btn btn--primary">'.get_lang('Save').'</button>';
                     }
                 }
                 $form .= '</div>

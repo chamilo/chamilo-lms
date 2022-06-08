@@ -256,7 +256,7 @@ $content .= Display::url(
     get_lang("Corporate reportResumed"),
     api_get_path(WEB_CODE_PATH).'mySpace/company_reports_resumed.php',
     [
-        'class' => 'btn btn-success',
+        'class' => 'btn btn--success',
     ]
 );
 $content .= '</div>';

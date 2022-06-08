@@ -82,12 +82,12 @@ $(function() {
 
 $form->addLabel(
     '',
-    Display::url(get_lang('Add'), 'javascript:void(0)', ['id' => 'add_button', 'class' => 'btn btn-default'])
+    Display::url(get_lang('Add'), 'javascript:void(0)', ['id' => 'add_button', 'class' => 'btn btn--plain'])
     .' '.
     Display::url(
         get_lang('Remove'),
         'javascript:void(0)',
-        ['id' => 'remove_button', 'class' => 'btn btn-danger']
+        ['id' => 'remove_button', 'class' => 'btn btn--danger']
     )
 );
 

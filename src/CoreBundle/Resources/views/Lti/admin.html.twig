@@ -10,7 +10,7 @@
                 </p>
 
                 <div class="btn-toolbar" role="toolbar" aria-label="{{ 'LTI Toolbar'|trans }}">
-                    <a href="{{ url('chamilo_lti_admin_add') }}" class="btn btn-primary">
+                    <a href="{{ url('chamilo_lti_admin_add') }}" class="btn btn--primary">
                         <span class="fa fa-plus fa-fw" aria-hidden="true"></span> {{ 'Add external tool'|trans }}
                     </a>
                 </div>
@@ -38,11 +38,11 @@
                                 </td>
                                 <td class="text-right">
                                     <a href="{{ url('chamilo_lti_admin_edit', {'toolId': tool.id}) }}"
-                                       class="btn btn-success mb-1 mb-lg-0">
+                                       class="btn btn--success mb-1 mb-lg-0">
                                         {{ 'Edit'|trans }}
                                     </a>
                                     <a href="{{ url('chamilo_lti_admin_delete', {'toolId': tool.id}) }}"
-                                       class="btn btn-danger">
+                                       class="btn btn--danger">
                                         {{ 'Delete'|trans }}
                                     </a>
                                 </td>

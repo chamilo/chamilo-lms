@@ -50,11 +50,10 @@ class IndexController extends BaseController
         $studentView = $request->getSession()->get('studentview');
         if (empty($studentView) || 'studentview' === $studentView) {
             $content = 'teacherview';
-            $request->getSession()->set('studentview', $content);
         } else {
             $content = 'studentview';
-            $request->getSession()->set('studentview', $content);
         }
+        $request->getSession()->set('studentview', $content);
 
         return new Response($content);
     }

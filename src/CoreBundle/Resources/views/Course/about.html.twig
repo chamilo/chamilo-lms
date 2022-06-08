@@ -105,14 +105,14 @@
                                 <div class="session-subscribe">
                                     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                                         {% if 'allow_registration'|api_get_setting != 'false' %}
-                                            <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-success btn-block btn-lg">
+                                            <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn--success btn-block btn-lg">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|trans }}
                                             </a>
                                         {% endif %}
                                     {% elseif subscription %}
-                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?sid=0" class="btn btn-lg btn-success btn-block">{{ 'CourseHomepage'|trans }}</a>
+                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?sid=0" class="btn btn-lg btn--success btn-block">{{ 'CourseHomepage'|trans }}</a>
                                     {% else %}
-                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}" class="btn btn-lg btn-success btn-block">{{ 'Subscribe'|trans }}</a>
+                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}" class="btn btn-lg btn--success btn-block">{{ 'Subscribe'|trans }}</a>
                                     {% endif %}
                                 </div>
                             {% else %}
@@ -124,7 +124,7 @@
                                         {{ is_premium.iso_code }} {{ is_premium.price }}
                                     </div>
                                     <div class="buy-box">
-                                        <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|trans }}</a>
+                                        <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn-lg btn--primary btn-block">{{ 'BuyNow'|trans }}</a>
                                     </div>
                                 </div>
                             {% endif %}

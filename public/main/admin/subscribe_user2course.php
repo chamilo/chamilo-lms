@@ -286,7 +286,7 @@ if (is_array($extra_field_list)) {
             echo $extraHidden;
             echo '&nbsp;&nbsp;';
         }
-        echo '<input class="btn btn-primary" type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" ></input>';
+        echo '<input class="btn btn--primary" type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" ></input>';
         echo '<br /><br />';
     }
 }
@@ -343,7 +343,7 @@ if (is_array($extra_field_list)) {
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <button type="submit" class="btn btn-primary" value="<?php echo get_lang('Add to the course(s)'); ?> &gt;&gt;">
+    <button type="submit" class="btn btn--primary" value="<?php echo get_lang('Add to the course(s)'); ?> &gt;&gt;">
         <em class="fa fa-plus"></em> <?php echo get_lang('Add to the course(s)'); ?>
     </button>
    </td>

@@ -14,7 +14,7 @@
 {#                </p>#}
                 {% if user_is_group_admin %}
                     <div id="edit_image" class="buttom-subscribed">
-                        <a class="btn btn-default" href="{{ url('legacy_main', { 'name' : 'social/group_edit.php', 'id': group_id}) }}">
+                        <a class="btn btn--plain" href="{{ url('legacy_main', { 'name' : 'social/group_edit.php', 'id': group_id}) }}">
                             {{ 'EditGroup'|get_lang }}
                         </a>
                     </div>

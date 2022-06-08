@@ -118,7 +118,7 @@ if (!api_is_student_boss()) {
         get_lang("Corporate report"),
         api_get_path(WEB_CODE_PATH)."mySpace/company_reports.php",
         [
-            'class' => 'btn btn-success',
+            'class' => 'btn btn--success',
         ]
     );
 }

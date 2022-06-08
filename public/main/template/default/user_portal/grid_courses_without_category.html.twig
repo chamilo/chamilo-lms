@@ -23,12 +23,12 @@
                             {% if item.edit_actions != '' %}
                                 <div class="admin-actions">
                                     {% if item.document == '' %}
-                                        <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                        <a class="btn btn--plain btn-sm" href="{{ item.edit_actions }}">
                                             <i class="fas fa-pencil-alt" aria-hidden="true"></i>
                                         </a>
                                     {% else %}
                                         <div class="btn-group" role="group">
-                                            <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
+                                            <a class="btn btn--plain btn-sm" href="{{ item.edit_actions }}">
                                                 <i class="fas fa-pencil-alt" aria-hidden="true"></i>
                                             </a>
                                             {{ item.document }}
@@ -51,7 +51,7 @@
                             </div>
                             <div class="block-author">
                                 {% if item.teachers | length > 6 %}
-                                    <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
+                                    <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn--plain panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
                                         <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                                     </a>
                                     <div id="popover-content-plist-{{ loop.index }}" class="hide">

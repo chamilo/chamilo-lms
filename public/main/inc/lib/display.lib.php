@@ -2148,9 +2148,9 @@ class Display
         array $attributes = [],
         $includeText = true
     ) {
-        $buttonClass = "btn btn-outline-secondary";
+        $buttonClass = "btn btn--secondary-outline";
         if (!empty($type)) {
-            $buttonClass = "btn btn-$type";
+            $buttonClass = "btn btn--$type";
         }
         //$icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
         $icon = self::getMdiIcon($icon);
@@ -2455,7 +2455,7 @@ HTML;
         $content .= self::url(
             '<em class="fa fa-plus"></em> '.$buttonTitle,
             $url,
-            ['class' => 'btn btn-primary']
+            ['class' => 'btn btn--primary']
         );
         $content .= '</div>';
         $content .= '</div>';

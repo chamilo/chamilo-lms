@@ -200,7 +200,7 @@ if (!$inATest) {
                         ICON_SIZE_TINY
                     ),
                     api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
-                    ['class' => 'btn btn-default btn-sm']
+                    ['class' => 'btn btn--plain btn-sm']
                 );
 
                 $edit_link = CALCULATED_ANSWER == $objQuestionTmp->selectType() && $objQuestionTmp->isAnswered()
@@ -211,7 +211,7 @@ if (!$inATest) {
                             [],
                             ICON_SIZE_TINY
                         ),
-                        ['class' => 'btn btn-default btn-sm']
+                        ['class' => 'btn btn--plain btn-sm']
                     )
                     : Display::url(
                         Display::return_icon(
@@ -226,7 +226,7 @@ if (!$inATest) {
                                 'editQuestion' => $id,
                                 'page' => $page,
                             ]),
-                        ['class' => 'btn btn-default btn-sm']
+                        ['class' => 'btn btn--plain btn-sm']
                     );
                 $delete_link = null;
                 if (true == $objExercise->edit_exercise_in_lp) {
@@ -245,7 +245,7 @@ if (!$inATest) {
                             ]),
                         [
                             'id' => "delete_$id",
-                            'class' => 'delete-swal btn btn-default btn-sm',
+                            'class' => 'delete-swal btn btn--plain btn-sm',
                             'data-title' => get_lang('Are you sure you want to delete'),
                             'title' => get_lang('Delete'),
                         ]

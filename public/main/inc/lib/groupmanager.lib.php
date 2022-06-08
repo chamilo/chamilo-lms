@@ -2233,12 +2233,12 @@ class GroupManager
             if (!api_is_allowed_to_edit(false, true)) {
                 if (self::is_self_registration_allowed($user_id, $group)) {
                     $row[] = '<a
-                        class = "btn btn-default"
+                        class = "btn btn--plain"
                         href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_reg&group_id='.$groupId.'"
                         onclick="javascript:if(!confirm('."'".$confirmMessage."'".')) return false;">'.get_lang('register').'</a>';
                 } elseif (self::is_self_unregistration_allowed($user_id, $group)) {
                     $row[] = '<a
-                        class = "btn btn-default"
+                        class = "btn btn--plain"
                         href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_unreg&group_id='.$groupId.'"
                         onclick="javascript:if(!confirm('."'".$confirmMessage."'".')) return false;">'.get_lang('unregister').'</a>';
                 } else {

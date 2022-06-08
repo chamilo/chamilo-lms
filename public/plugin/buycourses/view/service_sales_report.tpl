@@ -62,7 +62,7 @@
                         {% endif %}
                         <td class="text-center">
                             <a id="service_sale_info" tag="{{ sale.id }}" name="s_{{ sale.id }}"
-                               class="btn btn-info btn-sm">
+                               class="btn btn--info btn-sm">
                                 {{ 'Info'|get_lang }}
                             </a>
                         </td>
@@ -105,7 +105,7 @@
                         buttons: {
                             main: {
                                 label: "{{ 'Close'|get_lang }}",
-                                className: "btn-default"
+                                className: "btn--plain"
                             }
                         }
                     });

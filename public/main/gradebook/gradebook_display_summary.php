@@ -206,7 +206,7 @@ echo Display::page_header(get_lang('Students list report'));
 echo '<div class="btn-group">';
 if (count($userList) > 0) {
     $url = api_get_self().'?action=export_all&'.api_get_cidreq().'&selectcat='.$cat_id;
-    echo Display::url(get_lang('Export all to PDF'), $url, ['class' => 'btn btn-default']);
+    echo Display::url(get_lang('Export all to PDF'), $url, ['class' => 'btn btn--plain']);
 }
 echo '</div>';
 
@@ -236,7 +236,7 @@ if (0 == count($userList)) {
             $link = Display::url(
                 get_lang('Skills'),
                 $url,
-                ['class' => 'btn btn-default']
+                ['class' => 'btn btn--plain']
             ).'&nbsp;';
         }
 
@@ -244,14 +244,14 @@ if (0 == count($userList)) {
         $link .= Display::url(
             get_lang('Export to PDF'),
             $url,
-            ['target' => '_blank', 'class' => 'btn btn-default']
+            ['target' => '_blank', 'class' => 'btn btn--plain']
         );
         if ($allowComments) {
             $url = api_get_self().'?'.api_get_cidreq().'&action=add_comment&user_id='.$value['user_id'].'&gradebook_id='.$cat_id;
             $link .= '&nbsp;'.Display::url(
                 get_lang('AddGradebookComment'),
                 $url,
-                ['target' => '_blank', 'class' => 'ajax btn btn-default']
+                ['target' => '_blank', 'class' => 'ajax btn btn--plain']
             );
         }
         echo $link;

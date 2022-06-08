@@ -96,7 +96,7 @@ $(function() {
 
     $("#extra_theme").parent().append(
         $("<a>", {
-            "class": "btn ajax btn-default",
+            "class": "btn ajax btn--plain",
             "href": "'.$url.'&field_variable=extra_theme",
             "text": "'.get_lang('Order').'"
         })
@@ -104,7 +104,7 @@ $(function() {
 
     $("#extra_theme_fr").parent().append(
         $("<a>", {
-            "class": "btn ajax btn-default",
+            "class": "btn ajax btn--plain",
             "href": "'.$url.'&field_variable=extra_theme_fr",
             "text": "'.get_lang('Order').'"
         })
@@ -112,7 +112,7 @@ $(function() {
 
     $("#extra_theme_de").parent().append(
         $("<a>", {
-            "class": "btn ajax btn-default",
+            "class": "btn ajax btn--plain",
             "href": "'.$url.'&field_variable=extra_theme_de",
             "text": "'.get_lang('Order').'"
         })
@@ -120,7 +120,7 @@ $(function() {
 
     $("#extra_theme_it").parent().append(
         $("<a>", {
-            "class": "btn ajax btn-default",
+            "class": "btn ajax btn--plain",
             "href": "'.$url.'&field_variable=extra_theme_it",
             "text": "'.get_lang('Order').'"
         })
@@ -128,7 +128,7 @@ $(function() {
 
     $("#extra_theme_es").parent().append(
         $("<a>", {
-            "class": "btn ajax btn-default",
+            "class": "btn ajax btn--plain",
             "href": "'.$url.'&field_variable=extra_theme_es",
             "text": "'.get_lang('Order').'"
         })
@@ -136,7 +136,7 @@ $(function() {
 
      $("#extra_theme_pl").parent().append(
         $("<a>", {
-            "class": "btn ajax btn-default",
+            "class": "btn ajax btn--plain",
             "href": "'.$url.'&field_variable=extra_theme_pl",
             "text": "'.get_lang('Order').'"
         })

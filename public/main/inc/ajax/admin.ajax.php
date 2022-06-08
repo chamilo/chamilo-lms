@@ -113,7 +113,7 @@ function version_check()
                 get_lang('Hide campus from public platforms list');
         $return .= '</label>
             <button type="submit"
-                class="btn btn-primary btn-block"
+                class="btn btn--primary btn-block"
                 name="Register"
                 value="'.get_lang('Enable version check').'"
                 id="register" >'.get_lang('Enable version check').'</button>';

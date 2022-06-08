@@ -34,7 +34,7 @@
                         {% endfor %}
                     </ul>
                     <p>
-                        <a class="ajax btn btn-primary btn-sm" data-title="{{ course.title }}"
+                        <a class="ajax btn btn--primary btn-sm" data-title="{{ course.title }}"
                            href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
                             {{ 'Description'|get_lang }}
                         </a>

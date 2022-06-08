@@ -10,7 +10,7 @@
                     </a>
                     {% if user.is_admin == 1 %}
                         <div class="pull-right">
-                            <a class="btn btn-default btn-sm btn-social-edit"
+                            <a class="btn btn--plain btn-sm btn-social-edit"
                                title="{{ "Edit"|get_lang }}"
                                href="{{ url('index') }}main/admin/user_edit.php?user_id={{ user.id }}"
                             >
@@ -147,7 +147,7 @@
 
                         {% if not profile_edition_link is empty %}
                             <li class="item">
-                                <a class="btn btn-default btn-sm btn-block" href="{{ profile_edition_link }}">
+                                <a class="btn btn--plain btn-sm btn-block" href="{{ profile_edition_link }}">
                                     <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
                                 </a>
                             </li>

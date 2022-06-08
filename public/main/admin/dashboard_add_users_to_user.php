@@ -331,7 +331,7 @@ if (STUDENT_BOSS != $userStatus) {
 $actionsRight = Display::url(
     '<em class="fa fa-search"></em> '.get_lang('Advanced search'),
     '#',
-    ['class' => 'btn btn-default advanced_options', 'id' => 'advanced_search']
+    ['class' => 'btn btn--plain advanced_options', 'id' => 'advanced_search']
 );
 
 $toolbar = Display::toolbarAction('toolbar-dashboard', [$actionsLeft, $actionsRight]);
@@ -458,18 +458,18 @@ $result = Database::query($sql);
         <?php if ($ajax_search) {
                             ?>
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
+                <button class="btn btn--primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
             </div>
         <?php
                         } else {
                             ?>
             <div class="separate-action">
-                <button id="add_user_button" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                <button id="add_user_button" class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                 <em class="fa fa-chevron-right"></em>
             </button>
             </div>
             <div class="separate-action">
-                <button id="remove_user_button" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                <button id="remove_user_button" class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                 <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
@@ -477,7 +477,7 @@ $result = Database::query($sql);
                         } ?>
             <div class="separate-action">
         <?php
-        echo '<button id="assign_user" class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
+        echo '<button id="assign_user" class="btn btn--success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
         ?>
             </div>
         </div>

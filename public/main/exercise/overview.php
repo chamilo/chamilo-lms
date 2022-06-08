@@ -156,7 +156,7 @@ $exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,
-    ['class' => 'btn btn-success btn-large']
+    ['class' => 'btn btn--success btn-large']
 );
 
 $btnCheck = '';
@@ -169,7 +169,7 @@ if ($quizCheckButtonEnabled) {
                 'type' => 'button',
                 'role' => 'button',
                 'id' => 'quiz-check-request-button',
-                'class' => 'btn btn-default',
+                'class' => 'btn btn--plain',
                 'data-loading-text' => get_lang('Loading'),
                 'autocomplete' => 'off',
             ]
@@ -256,7 +256,7 @@ if (!empty($attempts)) {
             get_lang('Show'),
             $attempt_url,
             [
-                'class' => $btn_class.'btn btn-default',
+                'class' => $btn_class.'btn btn--plain',
                 'data-title' => get_lang('Show'),
                 'data-size' => 'lg',
             ]
@@ -509,7 +509,7 @@ if ($quizCheckButtonEnabled) {
             btnTest.on('click', function (e) {
                 e.preventDefault();
 
-                btnTest.prop('disabled', true).removeClass('btn-success btn-danger').addClass('btn-default');
+                btnTest.prop('disabled', true).removeClass('btn--success btn--danger').addClass('btn--plain');
                 iconBtnTest.removeClass('hidden');
 
                 var txtResult = $('#quiz-check-request-text').removeClass('text-success text-danger').hide();
@@ -533,16 +533,16 @@ if ($quizCheckButtonEnabled) {
                             var xhr2IsOk = !!xhr2 && xhr2[1] === 'success' && !!xhr2[0] && 'ok' === xhr2[0];
 
                             if (xhr1IsOk && xhr2IsOk) {
-                                btnTest.removeClass('btn-default btn-danger').addClass('btn-success');
+                                btnTest.removeClass('btn--plain btn--danger').addClass('btn--success');
                                 txtResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
                             } else {
-                                btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
+                                btnTest.removeClass('btn--plain btn--success').addClass('btn--danger');
                                 txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
                             }
                         },
                         function () {
                             txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
-                            btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
+                            btnTest.removeClass('btn--plain btn--success').addClass('btn--danger');
                         }
                     )
                     .always(function () {

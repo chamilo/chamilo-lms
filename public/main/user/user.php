@@ -644,7 +644,7 @@ if ($canRead) {
 
     $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
     if (api_is_allowed_to_edit() && 'true' === $allowTutors) {
-        $actionsRight .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
+        $actionsRight .= ' <a class="btn btn--plain" href="session_list.php?'.api_get_cidreq().'">'.
             get_lang('Course sessions').'</a>';
     }
 
@@ -1062,7 +1062,7 @@ function modify_filter($user_id, $row, $data)
                 $result .= Display::url(
                     $text,
                     'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
-                    ['class' => 'btn btn-default '.$disabled]
+                    ['class' => 'btn btn--plain '.$disabled]
                 ).'&nbsp;';
             }
         }
@@ -1072,7 +1072,7 @@ function modify_filter($user_id, $row, $data)
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
                 $result .= '<a
-                class="btn btn-sm btn-danger delete-swal"
+                class="btn btn-sm btn--danger delete-swal"
                 href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'"
                 title="'.addslashes(api_htmlentities(get_lang('Unsubscribe'))).' " >'.
                     get_lang('Unsubscribe').'</a>&nbsp;';
@@ -1083,7 +1083,7 @@ function modify_filter($user_id, $row, $data)
         if (1 == $course_info['unsubscribe']) {
             if ($user_id == $current_user_id) {
                 $result .= '<a
-                class="btn btn-sm btn-danger delete-swal"
+                class="btn btn-sm btn--danger delete-swal"
                 href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'"
                 title="'.addslashes(api_htmlentities(get_lang('Unsubscribe'))).' >'.
                     get_lang('Unsubscribe').'</a>&nbsp;';

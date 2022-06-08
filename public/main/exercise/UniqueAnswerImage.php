@@ -247,7 +247,7 @@ class UniqueAnswerImage extends UniqueAnswer
                     '<br><div class="form-group ">
                         <label for="question_admin_form_btn_add_img['.$i.']" class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <button class="add_img_link btn btn-info btn-sm"
+                            <button class="add_img_link btn btn--info btn-sm"
                                 name="btn_add_img['.$i.']"
                                 type="submit"
                                 id="question_admin_form_btn_add_img['.$i.']">

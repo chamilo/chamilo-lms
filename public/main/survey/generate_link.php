@@ -39,7 +39,7 @@ $link = SurveyManager::generate_survey_link(
 );
 echo '<div class="row">';
     echo '<div class="col-md-12">';
-    echo Display::url(get_lang('Go to Survey'), $link, ['class' => 'btn btn-primary btn-large']);
+    echo Display::url(get_lang('Go to Survey'), $link, ['class' => 'btn btn--primary btn-large']);
     echo '</div>';
     echo '<div class="col-md-12">';
     echo get_lang('By copying the link below and pasting it in an e-mail or on a website, you will allow any anonymous person to enter and answer this survey.');

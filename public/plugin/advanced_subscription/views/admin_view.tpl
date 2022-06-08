@@ -72,13 +72,13 @@
                         <td>
                             {% if student.status != approveAdmin and student.status != disapproveAdmin %}
                             <a
-                                class="btn btn-success btn-advanced-subscription btn-accept"
+                                class="btn btn--success btn-advanced-subscription btn-accept"
                                 href="{{ student.acceptUrl }}"
                             >
                                 {{ 'AcceptInfinitive' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
                             <a
-                                class="btn btn-danger btn-advanced-subscription btn-reject"
+                                class="btn btn--danger btn-advanced-subscription btn-reject"
                                 href="{{ student.rejectUrl }}"
                             >
                                 {{ 'RejectInfinitive' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
@@ -118,7 +118,7 @@
                 </iframe>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn--primary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

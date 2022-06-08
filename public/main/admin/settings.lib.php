@@ -106,13 +106,13 @@ function handleRegions()
     }
     echo '</table>';
     echo '<br />';
-    echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.get_lang('Enable the selected plugins').'</button></form>';
+    echo '<button class="btn btn--success" type="submit" name="submit_plugins">'.get_lang('Enable the selected plugins').'</button></form>';
 }
 
 function handleExtensions()
 {
     echo Display::page_subheader(get_lang('Configure extensions'));
-    echo '<a class="btn btn-success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Chamilo RAPID').'</a>';
+    echo '<a class="btn btn--success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Chamilo RAPID').'</a>';
 }
 
 /**
@@ -197,12 +197,12 @@ function handlePlugins()
                 $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
                     'configure_plugin.php?name='.$pluginName,
-                    ['class' => 'btn btn-primary']
+                    ['class' => 'btn btn--primary']
                 );
                 $pluginRow .= Display::url(
                     '<em class="fa fa-th-large"></em> '.get_lang('Regions'),
                     'settings.php?category=Regions&name='.$pluginName,
-                    ['class' => 'btn btn-primary']
+                    ['class' => 'btn btn--primary']
                 );
             }
 
@@ -250,7 +250,7 @@ function handlePlugins()
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';
-    echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
+    echo '<button class="btn btn--primary" type="submit" name="submit_plugins">';
     echo '<i class="fa fa-check" aria-hidden="true"></i> ';
     echo get_lang('Enable the selected plugins').'</button>';
     echo '</div>';
@@ -1875,7 +1875,7 @@ function generateCSSDownloadLink($style)
         $url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch);
 
         //@TODO: use more generic script to download.
-        $str = '<a class="btn btn-primary btn-large" href="'.$url.'">'.get_lang('Download the file').'</a>';
+        $str = '<a class="btn btn--primary btn-large" href="'.$url.'">'.get_lang('Download the file').'</a>';
         echo Display::return_message($str, 'normal', false);
     } else {
         echo Display::return_message(get_lang('The file was not found'), 'warning');

@@ -188,7 +188,7 @@ switch ($action) {
                 $html .= '</li>';
             }
             $html .= '</ul>';
-            $html .= Display::url(get_lang('Save'), '#', ['id' => 'link_'.$variable, 'class' => 'btn btn-primary']);
+            $html .= Display::url(get_lang('Save'), '#', ['id' => 'link_'.$variable, 'class' => 'btn btn--primary']);
             echo $html;
         }
         break;

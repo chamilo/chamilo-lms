@@ -61,7 +61,7 @@ if (Security::check_token('post') &&
     echo Display::url(
         get_lang('Download'),
         api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$zipFile.'&'.api_get_cidreq(),
-        ['class' => 'btn btn-primary btn-large']
+        ['class' => 'btn btn--primary btn-large']
     );
 } elseif (Security::check_token('post') && 'select_items' === $backupOption) {
     // Clear token

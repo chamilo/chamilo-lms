@@ -40,7 +40,7 @@ if (isset($_GET['delete']) && 'yes' === $_GET['delete'] && $_GET['course_code'] 
         $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
         $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
         $message .= '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
-        $message .= '<p><a class="btn btn-primary" href="'
+        $message .= '<p><a class="btn btn--primary" href="'
             .api_get_path(WEB_CODE_PATH)
             .'course_info/delete_course.php?'
             .api_get_cidreq()
@@ -57,9 +57,9 @@ if (isset($_GET['delete']) && 'yes' === $_GET['delete'] && $_GET['course_code'] 
         .'&nbsp;<input type="text" name="course_code" id="course_code"></p>';
 
     $message .= '<p>';
-    $message .= '<button class="btn btn-danger delete-course">'.get_lang('ValidateChanges').'</button>';
+    $message .= '<button class="btn btn--danger delete-course">'.get_lang('ValidateChanges').'</button>';
     $message .= '&nbsp;';
-    $message .= '<a class="btn btn-primary"href="'
+    $message .= '<a class="btn btn--primary"href="'
         .api_get_path(WEB_CODE_PATH)
         .'course_info/maintenance.php?'
         .api_get_cidreq().'">'

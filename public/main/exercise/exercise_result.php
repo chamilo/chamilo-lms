@@ -268,7 +268,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $pageBottom .= Display::url(
         get_lang('Return to Course Homepage'),
         api_get_course_url(),
-        ['class' => 'btn btn-primary']
+        ['class' => 'btn btn--primary']
     );
     $pageBottom .= '</div>';
 

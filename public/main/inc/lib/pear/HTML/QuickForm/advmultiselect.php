@@ -231,8 +231,8 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
         // add multiple selection attribute by default if missing
         $class = '
-                block appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none 
-                focus:bg-white focus:border-gray-500 w-full mt-1 overflow-auto w-full border 
+                block appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none
+                focus:bg-white focus:border-gray-500 w-full mt-1 overflow-auto w-full border
                 bg-white rounded px-3 py-2 outline-none text-gray-700';
 
         $this->updateAttributes(['multiple' => 'multiple']);
@@ -346,7 +346,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                         'name'  => 'add',
                         'value' => ' ',
                         'type'  => 'button',
-                        'class'=> 'btn btn-primary'
+                        'class'=> 'btn btn--primary'
                     );
                 } else {
                     $this->_updateAttrArray(
@@ -361,7 +361,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                         'name'  => 'remove',
                         'value' => '  ',
                         'type'  => 'button',
-                        'class'=> 'btn btn-primary'
+                        'class'=> 'btn btn--primary'
                     );
                 } else {
                     $this->_updateAttrArray($this->_removeButtonAttributes,

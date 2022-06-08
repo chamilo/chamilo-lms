@@ -1148,13 +1148,13 @@ if ($userToLoad) {
     $button = Display::url(
         get_lang('Ofaj End Of LearnPath'),
         api_get_path(WEB_PATH).'resources/messages/new',
-        ['class' => 'btn btn-default']
+        ['class' => 'btn btn--plain']
     );
     $button .= '<br /><br />';
     $userReportButton = Display::url(
         get_lang('Diagnostic Validate LearningPath'),
         api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userToLoad,
-        ['class' => 'btn btn-primary']
+        ['class' => 'btn btn--primary']
     );
 }
 

@@ -1,7 +1,7 @@
 {% autoescape false %}
 {% if allow_skill_tool %}
     <div class="btn-group">
-        <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">
+        <a class="btn btn--plain" href="{{ _p.web_main }}social/skills_wheel.php">
             {{ 'Skills wheel' | trans }}
         </a>
     </div>
@@ -19,7 +19,7 @@
             </option>
         {% endfor %}
     </select>
-    <button type="submit" class="btn btn-primary">{{ 'Search' | trans }}</button>
+    <button type="submit" class="btn btn--primary">{{ 'Search' | trans }}</button>
 </form>
 
 {% if rows %}

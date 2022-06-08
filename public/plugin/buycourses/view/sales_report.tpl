@@ -68,11 +68,11 @@
                     {% if sale.status == sale_status_pending %}
                         <div class="btn-group btn-group-xs" role="group" aria-label="...">
                             <a title="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}" href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}"
-                               class="btn btn-default">
+                               class="btn btn--plain">
                                 <img src="{{ 'user_subscribe_session.png' | icon(22) }}" width="22" height="22 alt="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}">
                             </a>
                             <a title="{{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}" href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode() }}"
-                               class="btn btn-default">
+                               class="btn btn--plain">
                                 <img src="{{ 'delete.png' | icon(22) }}" width="22" height="22 alt="{{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}">
                             </a>
                         </div>

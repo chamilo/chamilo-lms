@@ -248,17 +248,17 @@ if (!empty($errorMsg)) {
   <?php
   if ($ajax_search) {
       ?>
-    <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('elements_in'))" >
+    <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('elements_in'))" >
         <em class="fa fa-arrow-left"></em>
     </button>
   <?php
   } else {
       ?>
-    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
+    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
         <em class="fa fa-arrow-right"></em>
     </button>
     <br /><br />
-    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
+    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
         <em class="fa fa-arrow-left"></em>
     </button>
     <?php
@@ -282,7 +282,7 @@ echo Display::select(
     <td colspan="3" align="center">
         <br />
         <?php
-        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Subscribe class to sessions').'</button>';
+        echo '<button class="btn btn--primary" type="button" value="" onclick="valide()" >'.get_lang('Subscribe class to sessions').'</button>';
         ?>
     </td>
 </tr>

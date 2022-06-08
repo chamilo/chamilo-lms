@@ -63,7 +63,7 @@ $group = [
         Display::url(
             get_lang('Search'),
             'javascript://',
-            ['onclick' => 'loadGraph();', 'class' => 'btn btn-default']
+            ['onclick' => 'loadGraph();', 'class' => 'btn btn--plain']
         )
     ),
 ];
@@ -99,7 +99,7 @@ function loadGraph() {
 
                 var exportLink = $('<a></a>').
                     attr(\"href\", url+'&export=excel')
-                    .attr('class', 'btn btn-default')
+                    .attr('class', 'btn btn--plain')
                     .attr('target', '_blank')
                     .html('".addslashes(get_lang('ExportAsXLS'))."');
 

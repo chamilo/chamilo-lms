@@ -45,13 +45,13 @@
 </div>
 <div class="legal-terms-buttons legal-terms-popup">
     <a
-        class="btn btn-success btn-advanced-subscription btn-accept"
+        class="btn btn--success btn-advanced-subscription btn-accept"
         href="{{ acceptTermsUrl }}"
     >
         {{ "AcceptInfinitive" | get_plugin_lang("AdvancedSubscriptionPlugin") }}
     </a>
     <a
-        class="btn btn-danger btn-advanced-subscription btn-reject"
+        class="btn btn--danger btn-advanced-subscription btn-reject"
         href="{{ rejectTermsUrl }}"
     >
         {{ "RejectInfinitive" | get_plugin_lang("AdvancedSubscriptionPlugin") }}

@@ -159,7 +159,7 @@ if (!empty($file)) {
         Display::url(
             get_lang('RemoveAudio'),
             $url,
-            ['class' => 'btn btn-danger']
+            ['class' => 'btn btn--danger']
         )
     );
 }

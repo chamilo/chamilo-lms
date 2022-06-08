@@ -36,7 +36,7 @@ if (api_is_anonymous()) {
 
     $form->addElement('html', $option1);
     $form->addElement('checkbox', 'left', null, get_lang('Yes'));
-    $form->addElement('button', 'submit', get_lang('Confirm'), ['class' => 'btn btn-primary']);
+    $form->addElement('button', 'submit', get_lang('Confirm'), ['class' => 'btn btn--primary']);
     $formHtml = $form->returnForm();
     if ($form->validate()) {
         $result = $form->getSubmitValues();

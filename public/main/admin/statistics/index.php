@@ -407,9 +407,9 @@ switch ($report) {
 
             $content .= Display::page_subheader2(get_lang('GeneralStats'));
             // Coach.
-            $sql = "SELECT COUNT(DISTINCT(sru.user_id)) count 
+            $sql = "SELECT COUNT(DISTINCT(sru.user_id)) count
                     FROM $tableSession s
-                    INNER JOIN $tableSessionRelUser sru 
+                    INNER JOIN $tableSessionRelUser sru
                     ON s.id = sru.session_id
                     WHERE
                         (s.display_start_date BETWEEN '$start' AND '$end' OR
@@ -588,7 +588,7 @@ switch ($report) {
             $link = Display::url(
                 Display::return_icon('excel.png').'&nbsp;'.get_lang('ExportAsXLS'),
                 $url,
-                ['class' => 'btn btn-default']
+                ['class' => 'btn btn--plain']
             );
         }
 

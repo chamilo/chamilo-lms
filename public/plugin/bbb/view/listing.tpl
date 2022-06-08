@@ -27,7 +27,7 @@
                                type="text"
                                style="width:600px"
                                class="form-control" readonly value="{{ conference_url }}">
-                        <button onclick="copyTextToClipBoard('share_button');" class="btn btn-default">
+                        <button onclick="copyTextToClipBoard('share_button');" class="btn btn--plain">
                             <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
                         </button>
                     </div>
@@ -96,7 +96,7 @@
                 {% if allow_to_edit %}
                     <td>
                     {% if meeting.status == 1 %}
-                        <a class="btn btn-default" href="{{ meeting.end_url }} ">
+                        <a class="btn btn--plain" href="{{ meeting.end_url }} ">
                             {{ 'CloseMeeting'|get_plugin_lang('BBBPlugin') }}
                         </a>
                     {% endif %}

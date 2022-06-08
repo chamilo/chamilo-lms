@@ -260,7 +260,7 @@ if (isset($_POST['formSent'])) {
                 fputs($fp, "</Sessions>\n");
                 fclose($fp);
                 $errorMsg = get_lang('The users list has been exported.').'<br/>
-                <a class="btn btn-default" href="'.$archiveURL.$archiveFile.'">'.get_lang('Download the file').'</a>';
+                <a class="btn btn--plain" href="'.$archiveURL.$archiveFile.'">'.get_lang('Download the file').'</a>';
                 break;
             case 'csv':
                 Export::arrayToCsv($sessionListToExport, $archiveFile);

@@ -193,7 +193,7 @@ class SettingsController extends BaseController
     {
         $builder = $this->container->get('form.factory')->createNamedBuilder('search');
         $builder->add('keyword', TextType::class);
-        $builder->add('search', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']]);
+        $builder->add('search', SubmitType::class, ['attr' => ['class' => 'btn btn--primary']]);
 
         return $builder->getForm();
     }

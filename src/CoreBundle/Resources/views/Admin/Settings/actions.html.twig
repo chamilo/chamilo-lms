@@ -1,9 +1,9 @@
 {% macro create(url) %}
 <div class="form-actions">
-    <button type="submit" class="btn btn-primary btn-lg">
+    <button type="submit" class="btn btn--primary btn-lg">
         <i class="glyphicon glyphicon-ok"></i> {{ 'Create'|trans }}
     </button>
-    <a href="{{ app.request.headers.get('referer', url) }}" class="btn btn-danger btn-lg">
+    <a href="{{ app.request.headers.get('referer', url) }}" class="btn btn--danger btn-lg">
         <i class="glyphicon glyphicon-remove"></i> {{ 'Cancel'|trans }}
     </a>
 </div>
@@ -11,10 +11,10 @@
 
 {% macro update(url) %}
 <div class="form-actions">
-    <button type="submit" class="btn btn-primary btn-lg">
+    <button type="submit" class="btn btn--primary btn-lg">
         <i class="glyphicon glyphicon-save"></i> {{ 'Save settings'|trans }}
     </button>
-    <a href="{{ app.request.headers.get('referer', url) }}" class="btn btn-danger btn-lg">
+    <a href="{{ app.request.headers.get('referer', url) }}" class="btn btn--danger btn-lg">
         <i class="glyphicon glyphicon-remove"></i> {{ 'Cancel'|trans }}
     </a>
 </div>

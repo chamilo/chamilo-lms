@@ -450,28 +450,28 @@ $_configuration['score_grade_model'] = [
             'score_list' => [
                 [
                     'name' => 'VeryBad', // Value will be translated using get_lang
-                    'css_class' => 'btn-danger',
+                    'css_class' => 'btn--danger',
                     'min' => 0,
                     'max' => 20,
                     'score_to_qualify' => 0
                 ],
                 [
                     'name' => 'Bad',
-                    'css_class' => 'btn-danger',
+                    'css_class' => 'btn--danger',
                     'min' => 21,
                     'max' => 50,
                     'score_to_qualify' => 25
                 ],
                 [
                     'name' => 'Good',
-                    'css_class' => 'btn-warning',
+                    'css_class' => 'btn--warning',
                     'min' => 51,
                     'max' => 70,
                     'score_to_qualify' => 60
                 ],
                 [
                     'name' => 'VeryGood',
-                    'css_class' => 'btn-success',
+                    'css_class' => 'btn--success',
                     'min' => 71,
                     'max' => 100,
                     'score_to_qualify' => 100

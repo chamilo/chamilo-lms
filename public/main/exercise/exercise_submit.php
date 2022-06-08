@@ -1542,7 +1542,7 @@ if ($allowBlockCategory &&
                                     $("#global-modal").modal("hide");
                                     $("#global-modal .modal-body").html("");
                                 }
-                            }).addClass("btn btn-default").appendTo("#global-modal .modal-body .btn-group");
+                            }).addClass("btn btn--plain").appendTo("#global-modal .modal-body .btn-group");
 
                              $("<a>",{
                                 text: "'.addslashes(get_lang('EndTest')).'",
@@ -1554,7 +1554,7 @@ if ($allowBlockCategory &&
                                     save_now(questionId, urlExtra);
                                     $("#global-modal .modal-body").html("<span style=\"text-align:center\">'.addslashes($loading).addslashes(get_lang('Loading')).'</span>");
                                 }
-                            }).addClass("btn btn-primary").appendTo("#global-modal .modal-body .btn-group");
+                            }).addClass("btn btn--primary").appendTo("#global-modal .modal-body .btn-group");
                         });
                         $("#global-modal").modal("show");
                         return true;
@@ -1809,7 +1809,7 @@ if ($allowBlockCategory &&
                             get_lang('Save and continue'),
                             [
                                 'type' => 'button',
-                                'class' => 'btn btn-info',
+                                'class' => 'btn btn--info',
                                 'data-question' => $questionId,
                             ]
                         ),

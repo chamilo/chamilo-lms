@@ -224,7 +224,7 @@ if (!empty($projectId)) {
         Display::getMdiIcon('arrow-right-bold').' '.get_lang('Advanced search'),
         'javascript://',
         [
-            'class' => 'btn btn-default advanced-parameters',
+            'class' => 'btn btn--plain advanced-parameters',
             'onclick' => 'display_advanced_search_form();',
         ]
     );

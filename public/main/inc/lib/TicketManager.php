@@ -656,9 +656,9 @@ class TicketManager
             $form =
                 '<form action="ticket_details.php?ticket_id='.$ticketId.'" id="confirmticket" method="POST" >
                      <p>'.get_lang('Was this answer satisfactory?').'</p>
-                     <button class="btn btn-primary responseyes" name="response" id="responseyes" value="1">'.
+                     <button class="btn btn--primary responseyes" name="response" id="responseyes" value="1">'.
                 get_lang('Yes').'</button>
-                     <button class="btn btn-danger responseno" name="response" id="responseno" value="0">'.
+                     <button class="btn btn--danger responseno" name="response" id="responseno" value="0">'.
                 get_lang('No').'</button>
                  </form>';
             $content .= $form;

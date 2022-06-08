@@ -118,7 +118,7 @@ switch ($action) {
             echo '
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-2">
-                        <a class="btn btn-primary" id="send_message_link">
+                        <a class="btn btn--primary" id="send_message_link">
                             <em class="fa fa-envelope"></em> '.get_lang('Send message').'
                         </a>
                     </div>

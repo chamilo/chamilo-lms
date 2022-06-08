@@ -134,13 +134,13 @@ function modify_filter($id, $params, $row)
     $result = Display::url(
         get_lang('Tickets'),
         "tickets.php?project_id={$row['id']}",
-        ['class' => 'btn btn-small btn-default']
+        ['class' => 'btn btn-small btn--plain']
     );
 
     $result .= Display::url(
         get_lang('Categories'),
         "categories.php?project_id={$row['id']}",
-        ['class' => 'btn btn-default']
+        ['class' => 'btn btn--plain']
     );
 
     $result .= Display::url(

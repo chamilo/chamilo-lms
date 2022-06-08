@@ -22,7 +22,7 @@ if (is_object($objQuestion)) {
     // FORM CREATION
     $form = new FormValidator('question_admin_form', 'post', $action);
 
-    $class = 'btn btn-default';
+    $class = 'btn btn--plain';
     if (isset($_GET['editQuestion'])) {
         $text = get_lang('Save the question');
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;

@@ -28,13 +28,13 @@
             </div>
             {% if badge.allow_download_export %}
                 <p class="text-center">
-                    <a href="{{ badge.personal_badge }}" class="btn btn-primary">
+                    <a href="{{ badge.personal_badge }}" class="btn btn--primary">
                         <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
                     </a>
                 </p>
                 <hr>
                 <p class="text-center">
-                    <a href="#" class="btn btn-success" id="badge-export-button-{{ badge.issue_info.id }}">
+                    <a href="#" class="btn btn--success" id="badge-export-button-{{ badge.issue_info.id }}">
                         <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
                     </a>
                 </p>

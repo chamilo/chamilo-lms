@@ -32,10 +32,10 @@ class DateTimeRangePicker extends DateRangePicker
                 <input '.$this->_getAttrString($this->_attributes).'
                     class="form-control" type="text" value="'.$value.'" data-input>
                 <div class="ml-1" id="button-addon3">
-                    <button class="btn btn-outline-secondary"  type="button" data-toggle>
+                    <button class="btn btn--secondary-outline"  type="button" data-toggle>
                         <i class="fas fa-calendar-alt"></i>
                     </button>
-                    <button class="btn btn-outline-secondary" type="button" data-clear>
+                    <button class="btn btn--secondary-outline" type="button" data-clear>
                         <i class="fas fa-times"></i>
                     </button>
               </div>

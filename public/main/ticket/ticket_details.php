@@ -529,7 +529,7 @@ function getForm($ticket)
     );
     $form->addLabel(
         '',
-        '<span id="link-more-attach"><span class="btn btn-success" onclick="return add_image_form()">'
+        '<span id="link-more-attach"><span class="btn btn--success" onclick="return add_image_form()">'
         .get_lang('Add one more file')
         .'</span></span>('
         .sprintf(

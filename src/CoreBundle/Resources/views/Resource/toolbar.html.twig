@@ -6,7 +6,7 @@
                 <li class="nav-item">
                 <div class="dropdown">
                     <button
-                        class="btn btn-secondary dropdown-toggle"
+                        class="btn btn--secondary dropdown-toggle"
                         type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-plus"></i>
                     </button>
@@ -54,7 +54,7 @@
 {#                    <a#}
 {#                        data-id="{{ key }}"#}
 {#                        href="#"#}
-{#                        class="btn btn-secondary action_shortcut"#}
+{#                        class="btn btn--secondary action_shortcut"#}
 {#                        title="{{ massAction.title|trans }}"#}
 {#                    >#}
 {#                        <i class="fas {{ massAction.parameters.icon }}"></i>#}
@@ -63,7 +63,7 @@
             </span>
 
             {% if resource_settings.allowToSaveEditorToResourceFile %}
-                <a class="btn btn-secondary"
+                <a class="btn btn--secondary"
                    href="{{ url('chamilo_core_resource_disk_space', { 'tool': tool, 'type': type, 'cid': course.id, 'sid': session ? session.id : 0,  'id': id }) }}"
                    title="{{ 'Disk Space' | trans }}"
                 >
@@ -71,7 +71,7 @@
                 </a>
             {% endif %}
 
-            <a class="btn btn-secondary resource_info"
+            <a class="btn btn--secondary resource_info"
                href="#"
                title="{{ 'Information' | trans }}"
             >

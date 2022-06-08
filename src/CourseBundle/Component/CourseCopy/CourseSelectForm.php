@@ -300,7 +300,7 @@ class CourseSelectForm
                 } else {
                     echo '<br />
                           <button
-                                class="save btn btn-primary"
+                                class="save btn btn--primary"
                                 type="submit"
                                 onclick="checkLearnPath(\''.addslashes(get_lang('Documents will be added too')).'\')">'.
                     get_lang('Validate').'</button>';
@@ -408,10 +408,10 @@ class CourseSelectForm
                         if ($showItems) {
                             echo '<div class="well">';
                             echo '<div class="btn-group">';
-                            echo "<a class=\"btn btn-default\"
+                            echo "<a class=\"btn btn--plain\"
                                         href=\"javascript: void(0);\"
                                         onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All').'</a>';
-                            echo "<a class=\"btn btn-default\"
+                            echo "<a class=\"btn btn--plain\"
                                         href=\"javascript: void(0);\"
                                         onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('none').'</a>';
                             echo '</div>';

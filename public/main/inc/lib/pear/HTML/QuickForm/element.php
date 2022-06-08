@@ -680,7 +680,7 @@ class HTML_QuickForm_element extends HTML_Common
                             {icon}
                             {element}
                             <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
+                                <button class="btn btn--plain" type="submit">
                                     <em class="fa fa-search"></em>
                                 </button>
                             </div>

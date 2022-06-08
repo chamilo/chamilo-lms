@@ -1,7 +1,7 @@
 {% autoescape false %}
 
 {% if resource.resourceNode.resourceFile %}
-    <a class="btn btn-success"
+    <a class="btn btn--success"
        href="{{ url('chamilo_core_resource_view', {
            'id': resource.resourceNode.id,
            'cid': course.id,
@@ -33,7 +33,7 @@
 {% endif %}
 
 {% if is_granted('DELETE', resource.resourceNode) %}
-    <a class="btn btn-danger" href="{{ url('chamilo_core_resource_delete', {
+    <a class="btn btn--danger" href="{{ url('chamilo_core_resource_delete', {
         'id': resource.resourceNode.id,
         'cid': course.id,
         'sid': session.id,

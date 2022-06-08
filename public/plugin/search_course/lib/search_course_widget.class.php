@@ -194,7 +194,7 @@ EOT;
             <input type="hidden" name="sec_token" value="$stok" />
             <input type="hidden" name="search_course" value="1" />
             <input type="text" name="search_term" class="span2" value="$search_term" />
-            &nbsp;<input class="btn btn-default" type="submit" value="$search_label" />
+            &nbsp;<input class="btn btn--plain" type="submit" value="$search_label" />
         </form>
 EOT;
         echo $form;

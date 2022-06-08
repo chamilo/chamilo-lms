@@ -194,13 +194,13 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
         $btn = Display::url(
             get_lang('Delete legal agreement'),
             api_get_self().'?action=delete_legal&user_id='.$userId,
-            ['class' => 'btn btn-danger btn-xs']
+            ['class' => 'btn btn--danger btn-xs']
         );
     } else {
         $btn = Display::url(
             get_lang('Send legal agreement'),
             api_get_self().'?action=send_legal&user_id='.$userId,
-            ['class' => 'btn btn-primary btn-xs']
+            ['class' => 'btn btn--primary btn-xs']
         );
         $timeLegalAccept = get_lang('Not Registered');
     }

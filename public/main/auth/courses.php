@@ -516,7 +516,7 @@ switch ($action) {
                             Display::getMdiIcon('external-link', 'mdi-tool-icon-button').'&nbsp;'.
                             get_lang('GoToCourse'),
                             $courseUrl.$course['directory'].'/index.php?id_session=0',
-                            ['class' => 'btn btn-primary']
+                            ['class' => 'btn btn--primary']
                         );
                         if (!$courseClosed && $course_unsubscribe_allowed &&
                             false === $userRegisteredInCourseAsTeacher

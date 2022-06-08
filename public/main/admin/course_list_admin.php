@@ -396,7 +396,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         ['id' => 'course-search-keyword', 'aria-label' => get_lang('SearchCourse')]
     );
     $form->addButtonSearch(get_lang('SearchCourse'));
-    $advanced = '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php?search=advanced">
+    $advanced = '<a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php?search=advanced">
         <em class="fa fa-search"></em> '.
         get_lang('Advanced search').'</a>';
 

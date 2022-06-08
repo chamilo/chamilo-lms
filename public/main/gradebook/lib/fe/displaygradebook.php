@@ -463,7 +463,7 @@ class DisplayGradebook
                         $actionsLeft .= Display::url(
                             get_lang('Generate custom report'),
                             api_get_path(WEB_AJAX_PATH)."gradebook.ajax.php?$my_api_cidreq&a=generate_custom_report",
-                            ['class' => 'btn btn-default ajax']
+                            ['class' => 'btn btn--plain ajax']
                         );
                     }
 

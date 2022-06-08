@@ -76,7 +76,7 @@ if (!empty($items)) {
         $link = Display::url(
             '<em class="fa fa-trash"></em> '.get_lang('Delete'),
             $url,
-            ['class' => 'btn btn-danger btn-sm']
+            ['class' => 'btn btn--danger btn-sm']
         );
         echo '<li class="list-group-item">'.
                 $userInfo['complete_name_with_username'].'<div class="pull-right">'.$link.'</div></li>';
@@ -113,7 +113,7 @@ if (!empty($userToAddList)) {
         $link = Display::url(
             '<em class="fa fa-plus"></em> '.get_lang('Add'),
             $url,
-            ['class' => 'btn btn-primary btn-sm']
+            ['class' => 'btn btn--primary btn-sm']
         );
         echo '<li class="list-group-item">'.$userName.'<div class="pull-right"> '.$link.'</div></li>';
     }

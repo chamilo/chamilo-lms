@@ -1851,7 +1851,7 @@ class SocialManager extends UserManager
                     );
 
                     $result['picture'] = '<img class="img-responsive" src="'.$picture.'" />';
-                    $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
+                    $group_actions = '<div class="group-more"><a class="btn btn--plain" href="groups.php?#tab_browse-2">'.
                         get_lang('See more').'</a></div>';
                     $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
                     $myGroups[] = [
@@ -2018,7 +2018,7 @@ class SocialManager extends UserManager
                     'id' => 'message_'.$message['id'],
                     'title' => get_lang('Delete comment'),
                     'onclick' => 'deleteMessage('.$message['id'].')',
-                    'class' => 'btn btn-default',
+                    'class' => 'btn btn--plain',
                 ]
             );
 

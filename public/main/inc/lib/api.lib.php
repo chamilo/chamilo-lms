@@ -1082,7 +1082,7 @@ function api_block_inactive_user()
         );
 
         $msg .= '<p class="text-center">
-                 <a class="btn btn-default" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
+                 <a class="btn btn--plain" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
 
         $tpl->assign('content', $msg);
         $tpl->display_one_col_template();
@@ -2965,12 +2965,12 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     if (!empty($session_id)) {
         $sql = "SELECT DISTINCT s.id
                 FROM $session_table AS s
-                INNER JOIN $tblSessionRelUser sru 
+                INNER JOIN $tblSessionRelUser sru
                 ON s.id = sru.session_id
-                WHERE 
-                    sru.user_id = $userId AND 
-                    s.id = $session_id AND 
-                    sru.relation_type = ".SessionEntity::GENERAL_COACH." 
+                WHERE
+                    sru.user_id = $userId AND
+                    s.id = $session_id AND
+                    sru.relation_type = ".SessionEntity::GENERAL_COACH."
                 ORDER BY s.access_start_date, s.access_end_date, s.name";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
@@ -3179,17 +3179,17 @@ function api_display_tool_view_option()
             // We have to remove the isStudentView=true from the $sourceurl
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-primary btn-sm" href="'.$sourceurl.'&isStudentView=false" target="_self">'.
+            $output_string .= '<a class="btn btn--primary btn-sm" href="'.$sourceurl.'&isStudentView=false" target="_self">'.
                 Display::getMdiIcon('eye').' '.get_lang('Switch to teacher view').'</a>';
         } elseif ('teacherview' == $_SESSION['studentview']) {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
+            $output_string .= '<a class="btn btn--plain btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
                 Display::getMdiIcon('eye').' '.get_lang('Switch to student view').'</a>';
         }
     } else {
-        $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
+        $output_string .= '<a class="btn btn--plain btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
             Display::getMdiIcon('eye').' '.get_lang('Switch to student view').'</a>';
     }
     $output_string = Security::remove_XSS($output_string);

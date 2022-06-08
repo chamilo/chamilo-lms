@@ -361,13 +361,13 @@ if (api_is_allowed_to_edit() && $counter > 0) {
     echo '<h4>'.get_lang('ScoreChangesHistory').'</h4>';
     if (isset($_GET['type']) && 'false' === $_GET['type']) {
         $buttons = '<a
-            class="btn btn-default"
+            class="btn btn--plain"
             href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&origin='.$origin.'&thread='.$threadId.'&user='.(int) ($_GET['user']).'&user_id='.(int) ($_GET['user_id']).'&type=true&idtextqualify='.$score.'#history">'.
-            get_lang('more recent').'</a> <a class="btn btn-default disabled" >'.get_lang('older').'</a>';
+            get_lang('more recent').'</a> <a class="btn btn--plain disabled" >'.get_lang('older').'</a>';
     } else {
-        $buttons = '<a class="btn btn-default">'.get_lang('more recent').'</a>
+        $buttons = '<a class="btn btn--plain">'.get_lang('more recent').'</a>
                         <a
-                            class="btn btn-default"
+                            class="btn btn--plain"
                             href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&origin='.$origin.'&thread='.$threadId.'&user='.(int) ($_GET['user']).'&user_id='.(int) ($_GET['user_id']).'&type=false&idtextqualify='.$score.'#history">'.
             get_lang('older').'</a>';
     }

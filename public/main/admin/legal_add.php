@@ -169,9 +169,9 @@ if (isset($_POST['language'])) {
     // Submit & preview button
     $buttons = '<div class="row" align="center">
                 <div class="formw">
-                <button type="submit" class="btn btn-default back" 	 name="send" value="back">'.get_lang('Back').'</button>
-                <button type="submit" class="btn btn-default search" name="send" value="preview">'.get_lang('Preview').'</button>
-                <button type="submit" class="btn btn-primary save" 	 name="send" value="save">'.get_lang('Save').'</button>
+                <button type="submit" class="btn btn--plain back" 	 name="send" value="back">'.get_lang('Back').'</button>
+                <button type="submit" class="btn btn--plain search" name="send" value="preview">'.get_lang('Preview').'</button>
+                <button type="submit" class="btn btn--primary save" 	 name="send" value="save">'.get_lang('Save').'</button>
                 </div>
             </div>';
     $form->addElement('html', $buttons);

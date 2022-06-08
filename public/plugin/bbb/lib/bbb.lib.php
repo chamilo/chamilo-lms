@@ -1048,7 +1048,7 @@ class bbb
                     $recordLink = Display::url(
                         $this->plugin->get_lang('ViewRecord'),
                         $record['playbackFormatUrl'],
-                        ['target' => '_blank', 'class' => 'btn btn-default']
+                        ['target' => '_blank', 'class' => 'btn btn--plain']
                     );
                 } else {
                     $recordLink = $this->plugin->get_lang('NoRecording');

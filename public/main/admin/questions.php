@@ -210,7 +210,7 @@ if ($formSent) {
                 get_lang('Delete'),
                 $deleteUrl,
                 [
-                    'class' => 'btn btn-danger',
+                    'class' => 'btn btn--danger',
                     'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
                 ]
             ).'</div>';

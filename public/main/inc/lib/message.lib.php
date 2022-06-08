@@ -42,7 +42,7 @@ class MessageManager
                     $deleteButton = Display::url(
                         get_lang('Delete'),
                         $url.'&action=delete_message&message_id='.$messageId,
-                        ['class' => 'btn btn-danger']
+                        ['class' => 'btn btn--danger']
                     );
                 }
 
@@ -750,7 +750,7 @@ class MessageManager
                             api_get_path(
                                 WEB_CODE_PATH
                             ).'social/group_topics.php?action=delete&id='.$groupId.'&topic_id='.$topic['id'],
-                            ['class' => 'btn btn-default']
+                            ['class' => 'btn btn--plain']
                         );
                 }
 
@@ -1683,7 +1683,7 @@ class MessageManager
 
         $countLikes = self::countLikesAndDislikes($messageId, $userId);
 
-        $class = $countLikes['user_liked'] ? 'btn-primary' : 'btn-default';
+        $class = $countLikes['user_liked'] ? 'btn--primary' : 'btn--plain';
 
         $btnLike = Display::button(
             'like',
@@ -1700,7 +1700,7 @@ class MessageManager
 
         $btnDislike = '';
         if (false === api_get_configuration_value('disable_dislike_option')) {
-            $disabled = $countLikes['user_disliked'] ? 'btn-danger' : 'btn-default';
+            $disabled = $countLikes['user_disliked'] ? 'btn--danger' : 'btn--plain';
 
             $btnDislike = Display::button(
                 'like',

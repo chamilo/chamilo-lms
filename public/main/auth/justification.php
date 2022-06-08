@@ -178,13 +178,13 @@ if (!empty($userJustifications)) {
             $actions .= Display::url(
                 get_lang('Edit'),
                 api_get_self().'?a=edit_justification&justification_id='.$userJustification['id'],
-                ['class' => 'btn btn-primary']
+                ['class' => 'btn btn--primary']
             );
         }
         $actions .= '&nbsp;'.Display::url(
                 get_lang('Delete'),
                 api_get_self().'?a=delete_justification&justification_id='.$userJustification['id'],
-                ['class' => 'btn btn-danger']
+                ['class' => 'btn btn--danger']
             );
         $table->setCellContents($row, $col++, $actions);
         $row++;

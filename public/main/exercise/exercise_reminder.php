@@ -124,25 +124,25 @@ echo $objExercise->getReminderTable($question_list, $exercise_stat_info);
 $exerciseActions = Display::url(
     get_lang('Review selected questions'),
     'javascript://',
-    ['onclick' => 'review_questions();', 'class' => 'btn btn-primary']
+    ['onclick' => 'review_questions();', 'class' => 'btn btn--primary']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
     get_lang('Select all'),
     'javascript://',
-    ['onclick' => 'changeOptionStatus(1);', 'class' => 'btn btn-default']
+    ['onclick' => 'changeOptionStatus(1);', 'class' => 'btn btn--plain']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
     get_lang('UnSelect all'),
     'javascript://',
-    ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn-default']
+    ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn--plain']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
     get_lang('End test'),
     'javascript://',
-    ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']
+    ['onclick' => 'final_submit();', 'class' => 'btn btn--warning']
 );
 
 echo Display::div('', ['class' => 'clear']);

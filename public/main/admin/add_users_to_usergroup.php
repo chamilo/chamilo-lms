@@ -434,11 +434,11 @@ echo Display::input('hidden', 'add_type', null);
     </div>
     <div class="col-md-2">
         <div style="padding-top:54px;width:auto;text-align: center;">
-        <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
+        <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
             <em class="fa fa-arrow-right"></em>
         </button>
         <br /><br />
-        <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
+        <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
             <em class="fa fa-arrow-left"></em>
         </button>
         </div>
@@ -464,7 +464,7 @@ echo Display::input('hidden', 'add_type', null);
     </div>
 </div>
 <?php
-    echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" ><em class="fa fa-check"></em>'.
+    echo '<button class="btn btn--primary" type="button" value="" onclick="valide()" ><em class="fa fa-check"></em>'.
         get_lang('Subscribe users to class').'</button>';
 ?>
 </form>

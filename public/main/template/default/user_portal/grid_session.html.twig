@@ -14,12 +14,12 @@
                 {% if course.edit_actions %}
                     <div class="admin-actions">
                         {% if course.document == '' %}
-                            <a class="btn btn-default btn-sm" href="{{ course.edit_actions }}">
+                            <a class="btn btn--plain btn-sm" href="{{ course.edit_actions }}">
                                 <i class="fas fa-pencil-alt" aria-hidden="true"></i>
                             </a>
                         {% else %}
                             <div class="btn-group" role="group">
-                                <a class="btn btn-default btn-sm" href="{{ course.edit_actions }}">
+                                <a class="btn btn--plain btn-sm" href="{{ course.edit_actions }}">
                                     <i class="fas fa-pencil-alt" aria-hidden="true"></i>
                                 </a>
                                 {{ course.document }}
@@ -45,7 +45,7 @@
                             id="plist"
                             data-trigger="focus"
                             tabindex="0" role="button"
-                            class="btn btn-default panel_popover"
+                            class="btn btn--plain panel_popover"
                             data-toggle="popover"
                             title="{{ 'CourseTeachers' | get_lang }}"
                             data-html="true"

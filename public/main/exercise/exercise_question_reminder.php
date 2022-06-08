@@ -171,24 +171,24 @@ if (!in_array($categoryId, $blockedCategories)) {
     $exerciseActions = '&nbsp;'.Display::url(
         get_lang('GoBack'),
         'javascript://',
-        ['onclick' => 'goBack();', 'class' => 'btn btn-default']
+        ['onclick' => 'goBack();', 'class' => 'btn btn--plain']
     );
 }
 if ($objExercise->review_answers) {
     $exerciseActions .= Display::url(
         get_lang('ReviewQuestions'),
         'javascript://',
-        ['onclick' => 'reviewQuestions();', 'class' => 'btn btn-primary']
+        ['onclick' => 'reviewQuestions();', 'class' => 'btn btn--primary']
     );
     $exerciseActions .= '&nbsp;'.Display::url(
         get_lang('SelectAll'),
     'javascript://',
-        ['onclick' => 'selectAll();', 'class' => 'btn btn-default']
+        ['onclick' => 'selectAll();', 'class' => 'btn btn--plain']
 );
     $exerciseActions .= '&nbsp;'.Display::url(
         get_lang('UnSelectAll'),
         'javascript://',
-        ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn-default']
+        ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn--plain']
     );
 }
 
@@ -199,13 +199,13 @@ if (key($categoryList) === $categoryId) {
     $exerciseActions .= '&nbsp;'.Display::url(
     get_lang('EndTest'),
     'javascript://',
-    ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']
+    ['onclick' => 'final_submit();', 'class' => 'btn btn--warning']
     );
 } else {
     $exerciseActions .= '&nbsp;'.Display::url(
         get_lang('ContinueTest'),
         'javascript://',
-        ['onclick' => 'continueExercise();', 'class' => 'btn btn-primary']
+        ['onclick' => 'continueExercise();', 'class' => 'btn btn--primary']
     );
 }
 

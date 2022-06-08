@@ -57,7 +57,7 @@
                             {% if allow_signature %}
                                 <div class="list-data">
                                     <span class="item"></span>
-                                    <a id="sign" class="btn btn-primary" href="javascript:void(0)">
+                                    <a id="sign" class="btn btn--primary" href="javascript:void(0)">
                                         <em class="fas fa-pencil-alt"></em> {{ 'Sign'| get_plugin_lang('ExerciseSignaturePlugin') }}
                                     </a>
                                 </div>
@@ -67,7 +67,7 @@
                                 <br />
                                 <div class="list-data">
                                     <span class="item"></span>
-                                    <a href="{{ export_url }}" class="btn btn-default">
+                                    <a href="{{ export_url }}" class="btn btn--plain">
                                         <img src="{{ 'export_pdf.png'|icon(32) }}" />
                                         {{ 'Export response report'| trans }}
                                     </a>
@@ -112,7 +112,7 @@
                                         <div class="form-group">
                                             <div class="col-sm-12">
                                                 <input type="hidden" name="tc_id" value="{{ data.track_confirmation.id }}">
-                                                <button type="submit" class="btn btn-primary" disabled>
+                                                <button type="submit" class="btn btn--primary" disabled>
                                                     <span class="fa fa-save fa-fw" aria-hidden="true"></span> {{ 'Save'|trans }}
                                                 </button>
                                             </div>

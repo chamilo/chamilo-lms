@@ -166,7 +166,7 @@ switch ($action) {
                 $content .= '<input type="hidden" name="what" value="snapshotinstance" />';
                 $content .= '<input type="hidden" name="vid" value="'.$vhost->id.'" />';
                 $content .= '<input type="hidden" name="step" value="1" />';
-                $content .= '<input type="submit" class="btn btn-primary"  name="go_btn" value="'.$plugin->get_lang('continue').'" />';
+                $content .= '<input type="submit" class="btn btn--primary"  name="go_btn" value="'.$plugin->get_lang('continue').'" />';
                 $content .= '</form>';
                 $content .= '</div>';
 
@@ -230,7 +230,7 @@ switch ($action) {
                         $content .= '<input type="hidden" name="what" value="snapshotinstance" />';
                         $content .= '<input type="hidden" name="vid" value="'.$vhost->id.'" />';
                         $content .= '<input type="hidden" name="step" value="2" />';
-                        $content .= '<input class="btn btn-primary"  type="submit" name="go_btn" value="'.$plugin->get_lang('continue').'" />';
+                        $content .= '<input class="btn btn--primary"  type="submit" name="go_btn" value="'.$plugin->get_lang('continue').'" />';
                         $content .= '</form>';
                     }
 
@@ -293,7 +293,7 @@ switch ($action) {
 
                 $actionurl = $_configuration['root_web'].'/plugin/vchamilo/views/manage.php';
                 $content .= '<form name"single" action="'.$actionurl.'">';
-                $content .= '<input class="btn btn-primary" type="submit" name="go_btn" value="'.$plugin->get_lang('backtoindex').'" />';
+                $content .= '<input class="btn btn--primary" type="submit" name="go_btn" value="'.$plugin->get_lang('backtoindex').'" />';
                 $content .= '</form>';
 
                 $tpl = new Template(get_lang('Snapshot'), true, true, false, true, false);
@@ -374,7 +374,7 @@ switch ($action) {
         echo '<td><input type="text" name="subkey" value="" size="30" /></td></tr>';
         echo '<tr><td colspan="2">'.$select.'</td></tr>';
         echo '<tr><td colspan="2">';
-        echo '<input class="btn btn-primary" type="submit" name="go_btn" value="'.$plugin->get_lang('distributevalue').'"</td></tr>';
+        echo '<input class="btn btn--primary" type="submit" name="go_btn" value="'.$plugin->get_lang('distributevalue').'"</td></tr>';
         echo '</table>';
         echo '</form>';
         Display::display_footer();

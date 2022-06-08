@@ -103,7 +103,7 @@ class DashboardManager
         echo '</table>';
         echo '<br />';
         echo '<button
-            class="btn btn-default"
+            class="btn btn--plain"
             type="submit"
             name="submit_dashboard_plugins"
             value="'.get_lang('EnableDashboard plugins').'">'.
@@ -411,13 +411,13 @@ class DashboardManager
 
             $html .= '</table>';
             $html .= '<div class="row"><div class="col-md-12">';
-            $html .= '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('Enable dashboard block').'"><em class="fa fa-check-square"></em> '.
+            $html .= '<button class="btn btn--plain" type="submit" name="submit_dashboard_list" value="'.get_lang('Enable dashboard block').'"><em class="fa fa-check-square"></em> '.
                 get_lang('Enable dashboard block').'</button></form>';
             $html .= '</div></div>';
         } else {
             $html .= '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboard plugins').'</div>';
             if (api_is_platform_admin()) {
-                $html .= '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
+                $html .= '<a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
                     get_lang('Configure Dashboard Plugin').'</a>';
             }
         }

@@ -109,7 +109,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $actionsRight = '<form method="POST" action="session_category_list.php" class="form-inline">
                         <div class="form-group">
                             <input class="form-control" type="text" name="keyword" aria-label="'.get_lang('Search').'"/>
-                            <button class="btn btn-default" type="submit" name="name"
+                            <button class="btn btn--plain" type="submit" name="name"
                                     value="'.get_lang('Search').'">
                                     <em class="fa fa-search"></em>'.get_lang('Search').'</button>
                         </div>
@@ -255,10 +255,10 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
             <div class="row">
                 <div class="col-sm-4">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');">
+                        <button type="button" class="btn btn--plain" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');">
                             <?php echo get_lang('Select all'); ?>
                         </button>
-                        <button type="button" class="btn btn-default" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');">
+                        <button type="button" class="btn btn--plain" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');">
                             <?php echo get_lang('UnSelect all'); ?>
                         </button>
                     </div>
@@ -274,7 +274,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                     </select>
                 </div>
                 <div class="col-sm-2">
-                    <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('Validate'); ?>">
+                    <button class="btn btn--success" type="submit" name="name" value="<?php echo get_lang('Validate'); ?>">
                         <?php echo get_lang('Validate'); ?>
                     </button>
                 </div>

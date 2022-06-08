@@ -566,15 +566,15 @@ if ('true' === $allowTutors) {
             <?php
                 if ($ajax_search) {
                     ?>
-                  <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" ><em class="fa fa-arrow-left"></em></button>
+                  <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('destination_users'))" ><em class="fa fa-arrow-left"></em></button>
                 <?php
                 } else {
                     ?>
-                    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
+                    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
                         <em class="fa fa-arrow-right"></em>
                     </button>
                     <br /><br />
-                    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
+                    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
                         <em class="fa fa-arrow-left"></em>
                     </button>
                   <?php
@@ -584,7 +584,7 @@ if ('true' === $allowTutors) {
             <br />
             <?php
             if (isset($_GET['add'])) {
-                echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Finish session creation').'</button>';
+                echo '<button class="btn btn--primary" type="button" value="" onclick="valide()" >'.get_lang('Finish session creation').'</button>';
             } else {
                 //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
                 echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('Subscribe users to this session').'</button>';

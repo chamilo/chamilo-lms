@@ -153,7 +153,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
      */
     public function setStyle($style)
     {
-        $style = !empty($style) ? 'btn btn-'.$style : null;
+        $style = !empty($style) ? 'btn btn--'.$style : null;
         $this->style = $style;
     }
 

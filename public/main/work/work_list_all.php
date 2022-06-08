@@ -518,12 +518,12 @@ if ($allowAntiPlagiarism) {
     $html .= '<td>';
     $html .= '<div class="btn-toolbar">';
     $html .= '<div class="btn-group">';
-    $html .= '<a class="btn btn-default" href="?'
+    $html .= '<a class="btn btn--plain" href="?'
         .'&amp;'.'gbox_results'.'&amp;'.'selectall=1" onclick="javascript: setCheckbox(true, \''
         .'gbox_results'.'\'); return false;">'
         .get_lang('Select all')
         .'</a>';
-    $html .= '<a class="btn btn-default" href="?'
+    $html .= '<a class="btn btn--plain" href="?'
         .'" onclick="javascript: setCheckbox(false, \''
         .'gbox_results'
         .'\'); return false;">'
@@ -531,10 +531,10 @@ if ($allowAntiPlagiarism) {
         .'</a> ';
     $html .= '</div>';
     $html .= '<div class="btn-group">
-        <button class="btn btn-default" onclick="javascript:return false;">'
+        <button class="btn btn--plain" onclick="javascript:return false;">'
         .get_lang('Detail')
         .'</button>'
-        .'<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">'
+        .'<button class="btn btn--plain dropdown-toggle" data-toggle="dropdown">'
         .'<span class="caret"></span>'
         .'</button>';
 

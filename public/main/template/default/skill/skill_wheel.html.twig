@@ -64,11 +64,11 @@
                 <td>' + skill_name + '</td>\n\
                 <td class="text-right">\n\
                     <div class="btn-group btn-group-sm" data-toggle="buttons">\n\
-                        <label class="btn btn-default ' + activeCondition + '" aria-label="{{ 'Select'|trans }}" title="{{ 'Select to search'|trans }}">\n\
+                        <label class="btn btn--plain ' + activeCondition + '" aria-label="{{ 'Select'|trans }}" title="{{ 'Select to search'|trans }}">\n\
                             <input id="skill_to_select_id_' + skill_id + '" data-id="' + skill_id + '" name="' + skill_name + '" class="skill_to_select" type="checkbox" autocomplete="off" ' + checked_condition + '>\n\
                             <span class="' + iconClassCondition + '" aria-hidden="true"></span>\n\
                         </label>\n\
-                        <button class="btn btn-default load_wheel" aria-label="{{ 'Search'|trans }}" title="{{ 'Place on the wheel'|trans }}" data-id="' + skill_id + '">\n\
+                        <button class="btn btn--plain load_wheel" aria-label="{{ 'Search'|trans }}" title="{{ 'Place on the wheel'|trans }}" data-id="' + skill_id + '">\n\
                             <span class="fa fa-crosshairs fa-fw" aria-hidden="true"></span>\n\
                         </button>\n\
                     </div>\n\
@@ -494,7 +494,7 @@
         <div class="row">
             <div class="col-md-3 skill-options">
                 <div class="skill-home">
-                    <a class="btn btn-large btn-block btn-primary" href="{{ url('courses') }}">
+                    <a class="btn btn-large btn-block btn--primary" href="{{ url('courses') }}">
                         <em class="fa fa-home"></em> {{ "Return to the course list"|trans }}
                     </a>
                 </div>
@@ -511,20 +511,20 @@
                         <div class="search-profile-skill">
                             <ul id="profile_search" class="holder holder_simple hide"></ul>
                             <form id="search_profile_form" class="form-search">
-                                <button class="btn btn-default btn-block" type="submit">
+                                <button class="btn btn--plain btn-block" type="submit">
                                     <em class="fa fa-search"></em> {{ "Search profile matches"|trans }}
                                 </button>
                             </form>
                             <h4 class="page-header">{{ 'Is this what you were looking for?'|trans }}</h4>
                             <form id="save_profile_form_button" class="form-search">
-                                <button class="btn btn-default btn-block" type="submit">
+                                <button class="btn btn--plain btn-block" type="submit">
                                     <em class="fa fa-floppy-o"></em> {{ "Save this search"|trans }}
                                 </button>
                             </form>
                         </div>
                         <hr>
                         <p>
-                            <a class="btn btn-block btn-primary load_root" rel="0" href="#">
+                            <a class="btn btn-block btn--primary load_root" rel="0" href="#">
                                 <em class="fa fa-eye"></em> {{ "View skills wheel"|trans }}
                             </a>
                         </p>
@@ -602,16 +602,16 @@
                 {{ dialogForm }}
             </div>
             <div class="modal-footer">
-                <button id="form-button-edit" class="btn btn-primary">
+                <button id="form-button-edit" class="btn btn--primary">
                     <em class="fa fa-edit"></em> {{ "Edit" | trans }}
                 </button>
-                <button id="form-button-create-child" class="btn btn-primary">
+                <button id="form-button-create-child" class="btn btn--primary">
                     <em class="fa fa-plus"></em> {{ "Create child skill" | trans }}
                 </button>
-                <button id="form-button-add-to-profile" class="btn btn-primary">
+                <button id="form-button-add-to-profile" class="btn btn--primary">
                     <em class="fa fa-check"></em> {{ "Add skill to profile search" | trans }}
                 </button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                <button type="button" class="btn btn--primary" data-dismiss="modal">
                     <em class="fa fa-close"></em> {{ "Close" | trans }}
                 </button>
             </div>
@@ -634,10 +634,10 @@
                 {{ save_profile_form }}
             </div>
             <div class="modal-footer">
-                <button id="form-button-save-profile" class="btn btn-primary">
+                <button id="form-button-save-profile" class="btn btn--primary">
                     <em class="fa fa-save"></em> {{ "Save" | trans }}
                 </button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                <button type="button" class="btn btn--primary" data-dismiss="modal">
                     <em class="fa fa-close"></em> {{ "Close" | trans }}
                 </button>
             </div>

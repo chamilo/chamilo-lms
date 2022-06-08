@@ -883,7 +883,7 @@ if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_af
                 $downloadFileAfterFinish .= Display::url(
                     get_lang('Download').': '.$documentData['title'],
                     api_get_self().'?'.api_get_cidreq().'&download_finished='.$documentId,
-                    ['class' => 'btn btn-primary']
+                    ['class' => 'btn btn--primary']
                 );
                 if ($downloadFinishId === $documentId) {
                     $docUrl = $documentData['path'];

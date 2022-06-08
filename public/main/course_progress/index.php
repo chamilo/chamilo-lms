@@ -609,26 +609,26 @@ switch ($action) {
                             ICON_SIZE_TINY
                         ),
                         'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$id.$params.$url_token,
-                        ['class' => 'btn btn-default']
+                        ['class' => 'btn btn--plain']
                     );
                     if (0 == api_get_session_id()) {
                         if ($thematic->getDisplayOrder() > 1) {
                             $toolbarThematic .= ' <a
-                                class="btn btn-default"
+                                class="btn btn--plain"
                                 href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
                                 Display::return_icon('up.png', get_lang('Up'), '', ICON_SIZE_TINY).'</a>';
                         } else {
-                            $toolbarThematic .= '<div class="btn btn-default">'.
+                            $toolbarThematic .= '<div class="btn btn--plain">'.
                                 Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
                         }
                         //$thematic->getDisplayOrder()
                         if ($thematic->getDisplayOrder() < $max_thematic_item) {
                             $toolbarThematic .= ' <a
-                                class="btn btn-default"
+                                class="btn btn--plain"
                                 href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
                                 Display::return_icon('down.png', get_lang('down'), '', ICON_SIZE_TINY).'</a>';
                         } else {
-                            $toolbarThematic .= '<div class="btn btn-default">'.
+                            $toolbarThematic .= '<div class="btn btn--plain">'.
                                 Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
                         }
                     }
@@ -643,7 +643,7 @@ switch ($action) {
                                     'thematic_id' => $id,
                                 ]
                             ),
-                            ['class' => 'btn btn-default']
+                            ['class' => 'btn btn--plain']
                         );
                         /*$toolbarThematic .= Display::url(
                             Display::return_icon(
@@ -655,14 +655,14 @@ switch ($action) {
                             api_get_self().'?'.api_get_cidreq().$url_token.'&'.http_build_query(
                                 ['action' => 'export_single_documents', 'thematic_id' => $id]
                             ),
-                            ['class' => 'btn btn-default']
+                            ['class' => 'btn btn--plain']
                         );*/
                         $toolbarThematic .= '<a
-                            class="btn btn-default"
+                            class="btn btn--plain"
                             href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$id.$params.$url_token.'">'
                             .Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_TINY).'</a>';
                         $toolbarThematic .= '<a
-                            class="btn btn-default"
+                            class="btn btn--plain"
                             onclick="javascript:if(!confirm(\''
                             .get_lang('Are you sure you want to delete')
                             .'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='

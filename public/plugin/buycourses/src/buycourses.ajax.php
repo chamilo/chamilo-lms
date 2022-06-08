@@ -512,8 +512,8 @@ switch ($action) {
             if (BuyCoursesPlugin::SERVICE_STATUS_PENDING == $status) {
                 $status = $plugin->get_lang('Pending');
                 if ($isAdmin) {
-                    $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_confirm' class='btn btn-success pull-left'>{$plugin->get_lang('ConfirmOrder')}</a>";
-                    $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_cancel' class='btn btn-danger pull-right'>{$plugin->get_lang('CancelOrder')}</a>";
+                    $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_confirm' class='btn btn--success pull-left'>{$plugin->get_lang('ConfirmOrder')}</a>";
+                    $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_cancel' class='btn btn--danger pull-right'>{$plugin->get_lang('CancelOrder')}</a>";
                 }
             } else {
                 if (BuyCoursesPlugin::SERVICE_STATUS_CANCELLED == $status) {
@@ -543,7 +543,7 @@ switch ($action) {
         $html .= "beforeSend: function() {";
         $processingLoaderText = $plugin->get_lang('ProcessingDontCloseThisWindow');
         $html .= "$('.bootbox-close-button').remove();";
-        $html .= "$('.btn-default').attr('disabled', true);";
+        $html .= "$('.btn--plain').attr('disabled', true);";
         $html .= "$('.bc-action-buttons').html('<div class=\"wobblebar-loader\"></div><p> $processingLoaderText</p>');";
         $html .= "},";
         $html .= "success: function(response) {";
@@ -570,7 +570,7 @@ switch ($action) {
             $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
         }
 
-        $html .= "<a id='finish-button' class='btn btn-primary'>".$plugin->get_lang('ClickHereToFinish')."</a>";
+        $html .= "<a id='finish-button' class='btn btn--primary'>".$plugin->get_lang('ClickHereToFinish')."</a>";
         $html .= "</div>";
         $html .= "<script>";
         $html .= "$('#finish-button').click(function() {";
@@ -594,7 +594,7 @@ switch ($action) {
             $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
         }
 
-        $html .= "<a id='finish-button' class='btn btn-primary'>".$plugin->get_lang('ClickHereToFinish')."</a>";
+        $html .= "<a id='finish-button' class='btn btn--primary'>".$plugin->get_lang('ClickHereToFinish')."</a>";
         $html .= "</div>";
         $html .= "<script>";
         $html .= "$('#finish-button').click(function() {";

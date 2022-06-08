@@ -67,7 +67,7 @@ foreach ($list as $item) {
     $content .= '<tr>';
     $content .= '<td>'.$userName.'</td>';
     $content .= '<td>'.$item['url'].'</td>';
-    $content .= '<td><a class="btn btn-danger" href="'.$url.'?id='.$item['id'].'">Delete</a></td>';
+    $content .= '<td><a class="btn btn--danger" href="'.$url.'?id='.$item['id'].'">Delete</a></td>';
     $content .= '</tr>';
 }
 

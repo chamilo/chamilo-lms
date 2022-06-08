@@ -2514,7 +2514,7 @@ function get_work_user_list(
                                 get_lang('Analyse'),
                                 'javascript:void(0)',
                                 [
-                                    'class' => 'getSingleCompilatio btn btn-primary btn-xs',
+                                    'class' => 'getSingleCompilatio btn btn--primary btn-xs',
                                     'onclick' => "getSingleCompilatio($item_id);",
                                 ]
                             );
@@ -3024,7 +3024,7 @@ function getAllWork(
                             get_lang('CompilatioAnalysis'),
                             'javascript:void(0)',
                             [
-                                'class' => 'getSingleCompilatio btn btn-primary btn-xs',
+                                'class' => 'getSingleCompilatio btn btn--primary btn-xs',
                                 'onclick' => "getSingleCompilatio($item_id);",
                             ]
                         );

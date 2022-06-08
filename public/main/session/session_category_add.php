@@ -308,7 +308,7 @@ if (!empty($return)) {
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
-                    <button class="btn btn-success" type="submit" value="<?php echo get_lang('Add category'); ?>"><em class="fa fa-plus"></em> <?php echo get_lang('Add category'); ?></button>
+                    <button class="btn btn--success" type="submit" value="<?php echo get_lang('Add category'); ?>"><em class="fa fa-plus"></em> <?php echo get_lang('Add category'); ?></button>
                 </div>
                 <div class="col-md-3"></div>
             </div>

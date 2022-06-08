@@ -1066,7 +1066,7 @@ class CoursesAndSessionsCatalog
             id="plist"
             data-trigger="focus"
             tabindex="0" role="button"
-            class="btn btn-default panel_popover"
+            class="btn btn--plain panel_popover"
             data-toggle="popover"
             title="'.addslashes(get_lang('CourseTeachers')).'"
             data-html="true"
@@ -1157,7 +1157,7 @@ class CoursesAndSessionsCatalog
             Display::getMdiIcon('check').' '.$title,
             api_get_self().'?action='.$action.'&sec_token='.$stok.
             '&course_code='.$course['code'].'&search_term='.$search_term.'&category_code='.$categoryCode,
-            ['class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title]
+            ['class' => 'btn btn--success btn-sm', 'title' => $title, 'aria-label' => $title]
         );
     }
 
@@ -1185,7 +1185,7 @@ class CoursesAndSessionsCatalog
         return Display::url(
             Display::getMdiIcon('login').'&nbsp;'.$title,
             $url,
-            ['class' => 'btn btn-danger', 'title' => $title, 'aria-label' => $title]
+            ['class' => 'btn btn--danger', 'title' => $title, 'aria-label' => $title]
         );
     }
 
@@ -1320,7 +1320,7 @@ class CoursesAndSessionsCatalog
         return Display::div(
             $icon,
             [
-                'class' => 'btn btn-default btn-sm registered',
+                'class' => 'btn btn--plain btn-sm registered',
                 'title' => get_lang("AlreadyRegisteredToSession"),
             ]
         );

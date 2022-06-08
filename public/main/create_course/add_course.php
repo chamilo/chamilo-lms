@@ -410,7 +410,7 @@ if ($form->validate()) {
                     Display::url(
                         get_lang('Back to courses list'),
                         api_get_path(WEB_PATH).'user_portal.php',
-                        ['class' => 'btn btn-primary']
+                        ['class' => 'btn btn--primary']
                     ),
                     ['style' => 'float: left; margin:0px; padding: 0px;']
                 );

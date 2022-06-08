@@ -20,19 +20,19 @@
                 <br />
             </div>
 
-            <button class="btn btn-primary" type="button" id="btn-start-record-{{ question_id }}">
+            <button class="btn btn--primary" type="button" id="btn-start-record-{{ question_id }}">
                 <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'Start recording'|trans }}
             </button>
-            <button class="btn btn-primary hidden" type="button" id="btn-pause-record-{{ question_id }}" disabled>
+            <button class="btn btn--primary hidden" type="button" id="btn-pause-record-{{ question_id }}" disabled>
                 <span class="fa fa-pause fa-fw" aria-hidden="true"></span> {{ 'Pause recording'|trans }}
             </button>
-            <button class="btn btn-primary hidden" type="button" id="btn-play-record-{{ question_id }}" disabled>
+            <button class="btn btn--primary hidden" type="button" id="btn-play-record-{{ question_id }}" disabled>
                 <span class="fa fa-play fa-fw" aria-hidden="true"></span> {{ 'Resume recording'|trans }}
             </button>
-            <button class="btn btn-danger hidden" type="button" id="btn-stop-record-{{ question_id }}" disabled>
+            <button class="btn btn--danger hidden" type="button" id="btn-stop-record-{{ question_id }}" disabled>
                 <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'Stop recording'|trans }}
             </button>
-            <button class="btn btn-success hidden" type="button" id="btn-save-record-{{ question_id }}"
+            <button class="btn btn--success hidden" type="button" id="btn-save-record-{{ question_id }}"
                     data-loadingtext="{{ 'Uploading'|trans }}"
                     disabled>
                 <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'Save recorded audio'|trans }}
@@ -40,7 +40,7 @@
             <button
                 id="hide_description_{{ question_id }}"
                 type="button"
-                class="btn btn-default advanced_options" data-toggle="button" aria-pressed="false" autocomplete="off">
+                class="btn btn--plain advanced_options" data-toggle="button" aria-pressed="false" autocomplete="off">
                 <em class="fa fa-bars"></em> {{ 'Add text' | trans }}
             </button>
         </div>

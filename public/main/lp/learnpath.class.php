@@ -2570,12 +2570,12 @@ class learnpath
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
                 $html .= '<div class="flex flex-row justify-center mb-2">';
                 $html .= "<a
-                    class='btn btn-sm btn-default mx-1'
+                    class='btn btn-sm btn--plain mx-1'
                     href='lp_controller.php?".api_get_cidreq()."&action=add_item&type=step&lp_id=".$this->lp_id."&isStudentView=false'
                     target='_parent'>".
                     Display::getMdiIcon('pencil').get_lang('Edit')."</a>";
                 $html .= '<a
-                    class="btn btn-sm btn-default mx-1"
+                    class="btn btn-sm btn--plain mx-1"
                     href="lp_controller.php?'.api_get_cidreq()."&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
                     Display::getMdiIcon('hammer-wrench').get_lang('Settings').'</a>';
                 $html .= '</div>';
@@ -4231,7 +4231,7 @@ class learnpath
                 $return .= self::return_new_tree($update_audio);
                 $return .= '</div>';*/
                 $return .= Display::div(
-                    Display::url(get_lang('Save'), '#', ['id' => 'listSubmit', 'class' => 'btn btn-primary']),
+                    Display::url(get_lang('Save'), '#', ['id' => 'listSubmit', 'class' => 'btn btn--primary']),
                     ['style' => 'float:left; margin-top:15px;width:100%']
                 );
             } else {
@@ -4245,7 +4245,7 @@ class learnpath
                 $return .= Display::button(
                     'save_audio',
                     '<em class="fa fa-file-audio-o"></em> '.get_lang('Save audio and organization'),
-                    ['class' => 'btn btn-primary', 'type' => 'submit']
+                    ['class' => 'btn btn--primary', 'type' => 'submit']
                 );
                 $return .= '</div>';
             }
@@ -4612,7 +4612,7 @@ class learnpath
                     $urlPreviewLink,
                     [
                         'target' => '_blank',
-                        'class' => 'btn btn-default',
+                        'class' => 'btn btn--plain',
                         'data-title' => $title,
                         'title' => $title,
                     ]
@@ -4636,12 +4636,12 @@ class learnpath
                     $orderIcons = Display::url(
                         $upIcon,
                         'javascript:void(0)',
-                        ['class' => 'btn btn-default order_items', 'data-dir' => 'up', 'data-id' => $itemId]
+                        ['class' => 'btn btn--plain order_items', 'data-dir' => 'up', 'data-id' => $itemId]
                     );
                     $orderIcons .= Display::url(
                         $downIcon,
                         'javascript:void(0)',
-                        ['class' => 'btn btn-default order_items', 'data-dir' => 'down', 'data-id' => $itemId]
+                        ['class' => 'btn btn--plain order_items', 'data-dir' => 'down', 'data-id' => $itemId]
                     );
                 }*/
 
@@ -5133,14 +5133,14 @@ class learnpath
                 $return .= Display::url(
                     get_lang('Go to thread'),
                     $link,
-                    ['class' => 'btn btn-primary']
+                    ['class' => 'btn btn--primary']
                 );
                 break;
             case TOOL_FORUM:
                 $return .= Display::url(
                     get_lang('Go to the forum'),
                     api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$path,
-                    ['class' => 'btn btn-primary']
+                    ['class' => 'btn btn--primary']
                 );
                 break;
             case TOOL_QUIZ:
@@ -5151,7 +5151,7 @@ class learnpath
                     $return .= Display::url(
                         get_lang('Go to exercise'),
                         api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$exercise->id,
-                        ['class' => 'btn btn-primary']
+                        ['class' => 'btn btn--primary']
                     );
                 }
                 break;
@@ -6214,7 +6214,7 @@ class learnpath
         $return .= '</table>';
         $return .= '</div>';
         $return .= '<div class="form-group">';
-        $return .= '<button class="btn btn-primary" name="submit_button" type="submit">'.
+        $return .= '<button class="btn btn--primary" name="submit_button" type="submit">'.
             get_lang('Save prerequisites settings').'</button>';
         $return .= '</form>';
 

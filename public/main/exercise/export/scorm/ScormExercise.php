@@ -103,7 +103,7 @@ class ScormExercise
     {
         $button = '<input
             id="chamilo_scorm_submit"
-            class="btn btn-primary"
+            class="btn btn--primary"
             type="button"
             name="chamilo_scorm_submit"
             value="OK" />';

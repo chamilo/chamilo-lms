@@ -58,7 +58,7 @@ $wwwroot = isset($_configuration['root_web']) ? $_configuration['root_web'] : ''
 $options = [0 => $plugin->get_lang('no'), 1 => $plugin->get_lang('yes')];
 $form->addLabel(
     '',
-    '<a class="btn btn-primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.
+    '<a class="btn btn--primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.
     $plugin->get_lang('manage_instances').'</a>'
 );
 $form->addElement('header', $plugin->get_lang('enabling'));

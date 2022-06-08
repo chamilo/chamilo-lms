@@ -114,7 +114,7 @@
           {{ $t('Download') }}
         </Button>
         -->
-        <Button label="{{ $t('Delete selected') }}" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length">
+        <Button label="{{ $t('Delete selected') }}" class="btn btn--danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length">
           <v-icon icon="mdi-delete"/>
           {{ $t('Delete selected') }}
         </Button>
@@ -219,7 +219,7 @@
             <v-icon icon="mdi-pencil"/>
           </Button>
 
-          <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" >
+          <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn--danger" @click="confirmDeleteItem(slotProps.data)" >
             <v-icon icon="mdi-delete"/>
           </Button>
         </div>

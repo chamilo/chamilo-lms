@@ -386,7 +386,7 @@ if (0 == count($certificateList)) {
             $certificateUrl = Display::url(
                 get_lang('Certificate'),
                 $url,
-                ['target' => '_blank', 'class' => 'btn btn-default']
+                ['target' => '_blank', 'class' => 'btn btn--plain']
             );
             echo $certificateUrl.PHP_EOL;
 

@@ -55,7 +55,7 @@ switch ($action) {
                                             <a href="profile.php?u='.$friend['friend_user_id'].'">'.$user_name.'</a>
                                         </h3>
                                         <p>
-                                            <button class="btn btn-danger" onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'>
+                                            <button class="btn btn--danger" onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'>
                                                 '.get_lang('Delete').'
                                             </button>
                                         </p>

@@ -1329,7 +1329,7 @@ if ('0' == $survey->getSurveyType()) {
                 ) {
                     if ($lastQuestion >= 0) {
                         $form->addHtml(
-                            "<a class=\" btn btn-warning \" href=\"$url&show=$lastQuestion\">".
+                            "<a class=\" btn btn--warning \" href=\"$url&show=$lastQuestion\">".
                             "<em class=\"fa fa-arrow-left\"></em> "
                             .get_lang('Back')." </a>"
                         );

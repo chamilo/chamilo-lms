@@ -16,7 +16,7 @@
 
             {% if item.show_actions %}
                 <div class="float-right">
-                    <a class="btn btn-outline-secondary btn-sm" title="{{ "Edit"|get_lang }}"
+                    <a class="btn btn--secondary-outline btn-sm" title="{{ "Edit"|get_lang }}"
                        href="{{ url('legacy_main', { 'name' : 'session/resume_session.php', 'id_session' : row.id }) }}">
                         {{ 'pencil' | mdi_icon }}
                     </a>

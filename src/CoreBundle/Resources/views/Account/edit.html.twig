@@ -42,7 +42,7 @@
     </script>
 
     <h3>{{ user.userIdentifier }}</h3>
-{#        <a href="{{ url('app_forgot_password_request') }}" class="btn btn-primary">#}
+{#        <a href="{{ url('app_forgot_password_request') }}" class="btn btn--primary">#}
 {#            Reset password#}
 {#        </a>#}
 
@@ -55,7 +55,7 @@
     {{ form_widget(form) }}
 
     <div>
-        <input class="btn btn-primary" name="update_profile" type="submit" value="{{ 'Update profile'|trans }}" />
+        <button class="btn btn--primary" name="update_profile" type="submit">{{ 'Update profile'|trans }}</button>
     </div>
     {{ form_end(form) }}
 {% endautoescape %}

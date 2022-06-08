@@ -567,7 +567,7 @@ class Compilatio
                         .Display::url(
                             get_lang('Analyse'),
                             $urlRapport,
-                            ['class' => 'btn btn-primary btn-xs', 'target' => '_blank']
+                            ['class' => 'btn btn--primary btn-xs', 'target' => '_blank']
                         );
                     break;
                 case 'ANALYSE_PROCESSING':

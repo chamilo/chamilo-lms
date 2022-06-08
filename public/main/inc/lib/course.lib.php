@@ -3523,13 +3523,13 @@ class CourseManager
                 if (api_is_platform_admin()) {
                     $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'];
                     if ($load_dirs) {
-                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
+                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn--secondary-outline btn-sm" href="javascript:void(0);">'
                            .Display::getMdiIcon('folder-open-outline').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
                 } else {
                     if (Course::CLOSED != $course_info['visibility'] && $load_dirs) {
-                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
+                        $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn--secondary-outline btn-sm" href="javascript:void(0);">'
                            .Display::getMdiIcon('folder-open-outline').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
@@ -3706,7 +3706,7 @@ class CourseManager
             if (api_is_platform_admin()) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course_info['real_id'];
                 if ($load_dirs) {
-                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                    $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn--plain btn-sm" href="javascript:void(0);">'
                                .Display::getMdiIcon('folder-open-outline').'</a>';
                     $params['document'] .= Display::div(
                         '',
@@ -3718,7 +3718,7 @@ class CourseManager
                 }
             }
             if ($load_dirs) {
-                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn-default btn-sm" href="javascript:void(0);">'
+                $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn--plain btn-sm" href="javascript:void(0);">'
                     .Display::getMdiIcon('folder-open-outline').'</a>';
                 $params['document'] .= Display::div(
                     '',
@@ -4012,7 +4012,7 @@ class CourseManager
                 if ($load_dirs) {
                     $params['document'] .= '<a
                         id="document_preview_'.$course_info['real_id'].'_'.$session_id.'"
-                        class="document_preview btn btn-default btn-sm"
+                        class="document_preview btn btn--plain btn-sm"
                         href="javascript:void(0);">'.
                         Display::getMdiIcon('folder-open-outline').'</a>';
                     $params['document'] .= Display::div('', [
@@ -4794,7 +4794,7 @@ class CourseManager
                     api_get_path(WEB_COURSE_PATH).$course_info['path'].
                      '/index.php?action=subscribe&sec_token='.$stok,
                     [
-                        'class' => 'btn btn-success btn-sm',
+                        'class' => 'btn btn--success btn-sm',
                         'title' => get_lang('Subscribe'),
                         'aria-label' => get_lang('Subscribe'),
                     ]
@@ -4809,7 +4809,7 @@ class CourseManager
                     Display::getMdiIcon('share'),
                     api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php',
                     [
-                        'class' => 'btn btn-default btn-sm',
+                        'class' => 'btn btn--plain btn-sm',
                         'title' => get_lang('Go to the course'),
                         'aria-label' => get_lang('Go to the course'),
                     ]
@@ -4823,7 +4823,7 @@ class CourseManager
                     api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&unsubscribe='.$courseCode
                     .'&sec_token='.$stok.'&category_code='.$categoryCode,
                     [
-                        'class' => 'btn btn-danger btn-sm',
+                        'class' => 'btn btn--danger btn-sm',
                         'title' => get_lang('Unsubscribe'),
                         'aria-label' => get_lang('Unsubscribe'),
                     ]
@@ -5733,7 +5733,7 @@ class CourseManager
 
                 $form->addLabel(
                     '',
-                    Display::url(get_lang('Add learners'), '#', ['id' => 'add_students', 'class' => 'btn btn-primary'])
+                    Display::url(get_lang('Add learners'), '#', ['id' => 'add_students', 'class' => 'btn btn--primary'])
                 );
             }
         }
@@ -6007,7 +6007,7 @@ class CourseManager
                         $form_data['button'] = Display::button(
                             'next',
                             get_lang('Go to the course', null, $_user['language']),
-                            ['class' => 'btn btn-primary btn-large']
+                            ['class' => 'btn btn--primary btn-large']
                         );
 
                         $exercise_redirect = (int) Session::read('exercise_redirect');
@@ -6023,7 +6023,7 @@ class CourseManager
                             $form_data['button'] = Display::button(
                                 'next',
                                 get_lang('Go', null, $_user['language']),
-                                ['class' => 'btn btn-primary btn-large']
+                                ['class' => 'btn btn--primary btn-large']
                             );
                         }
 
@@ -6137,7 +6137,7 @@ class CourseManager
                 );
             } else {
                 $params['right_actions'] .=
-                    '<a class="btn btn-default btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
+                    '<a class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
                     Display::getMdiIcon('pencil').'</a>';
             }
         } else {
@@ -6155,7 +6155,7 @@ class CourseManager
                 } else {
                     if (COURSEMANAGER == $course_info['status']) {
                         $params['right_actions'] .= '<a
-                            class="btn btn-default btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
+                            class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
                             Display::getMdiIcon('pencil').'</a>';
                     }
                 }
@@ -6362,7 +6362,7 @@ class CourseManager
                 Display::getMdiIcon('information'),
                 $url,
                 [
-                    'class' => "$class btn btn-default btn-sm",
+                    'class' => "$class btn btn--plain btn-sm",
                     'data-title' => $title,
                     'title' => get_lang('Description'),
                     'aria-label' => get_lang('Description'),

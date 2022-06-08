@@ -1576,14 +1576,14 @@ HOTSPOT;
                                 <div class="well well-sm" id="annotation-toolbar-'.$questionId.'">
                                     <div class="btn-toolbar">
                                         <div class="btn-group" data-toggle="buttons">
-                                            <label class="btn btn-default active"
+                                            <label class="btn btn--plain active"
                                                 aria-label="'.get_lang('Add annotation path').'">
                                                 <input
                                                     type="radio" value="0"
                                                     name="'.$questionId.'-options" autocomplete="off" checked>
                                                 <span class="fas fa-pencil-alt" aria-hidden="true"></span>
                                             </label>
-                                            <label class="btn btn-default"
+                                            <label class="btn btn--plain"
                                                 aria-label="'.get_lang('Add annotation text').'">
                                                 <input
                                                     type="radio" value="1"
@@ -2400,7 +2400,7 @@ HOTSPOT;
                             get_lang('Show'),
                             $attempt_url,
                             [
-                                'class' => 'ajax btn btn-default',
+                                'class' => 'ajax btn btn--plain',
                                 'data-title' => get_lang('Show'),
                             ]
                         );

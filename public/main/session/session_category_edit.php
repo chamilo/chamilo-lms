@@ -412,7 +412,7 @@ if (!empty($return)) {
         </div>
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-6">
-                <button class="btn btn-success" type="submit" value="<?php echo get_lang('Edit'); ?>">
+                <button class="btn btn--success" type="submit" value="<?php echo get_lang('Edit'); ?>">
                     <?php echo get_lang('Edit'); ?>
                 </button>
             </div>

@@ -652,7 +652,7 @@ switch ($action) {
                 Display::url(
                     get_lang('Preview'),
                     'javascript:void(0)',
-                    ['class' => 'btn btn-default', 'id' => 'announcement_preview']
+                    ['class' => 'btn btn--plain', 'id' => 'announcement_preview']
                 ).'<div id="announcement_preview_result" style="display:none"></div>'
             );
             $form->addHtml('<div id="send_button" style="display:none">');

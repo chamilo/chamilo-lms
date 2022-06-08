@@ -1175,9 +1175,9 @@ class Template
         if ('true' == api_get_setting('accessibility_font_resize')) {
             $resize .= '<div class="resize_font">';
             $resize .= '<div class="btn-group">';
-            $resize .= '<a title="'.get_lang('Decrease the font size').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('Reset the font size').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('Increase the font size').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('Decrease the font size').'" href="#" class="decrease_font btn btn--plain"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('Reset the font size').'" href="#" class="reset_font btn btn--plain"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('Increase the font size').'" href="#" class="increase_font btn btn--plain"><em class="fa fa-font"></em></a>';
             $resize .= '</div>';
             $resize .= '</div>';
         }

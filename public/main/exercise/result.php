@@ -152,7 +152,7 @@ $pageBottom .= Display::url(
     get_lang('Back to the attempt list'),
     api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq().
     "&learnpath_id=$lpId&learnpath_item_id=$lpItemId&learnpath_item_view_id=$lpViewId",
-    ['class' => 'btn btn-primary']
+    ['class' => 'btn btn--primary']
 );
 $pageBottom .= '</div>';
 $pageContent .= $pageBottom;

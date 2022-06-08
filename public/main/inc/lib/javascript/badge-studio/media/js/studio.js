@@ -86,7 +86,7 @@ function initGlyphSelector() {
     var glyphLog = [];
 
     $glyphSelectorButton = document.createElement('button');
-    $glyphSelectorButton.className = 'btn btn-default pull-right';
+    $glyphSelectorButton.className = 'btn btn--plain pull-right';
     $glyphSelectorButton.id = 'search-glyphs';
     $glyphSelectorButton.type = 'button';
     $glyphSelectorButton.innerHTML = '<em class="fa fa-search"></em> Search';

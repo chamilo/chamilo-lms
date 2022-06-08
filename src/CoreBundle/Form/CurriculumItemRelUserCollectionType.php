@@ -46,7 +46,7 @@ class CurriculumItemRelUserCollectionType extends AbstractType
         );
 
         // Save button per item
-        //$builder->add('submit', 'submit', array('attr' => array('class' => 'btn btn-success', 'onclick' => 'save(this);')));
+        //$builder->add('submit', 'submit', array('attr' => array('class' => 'btn btn--success', 'onclick' => 'save(this);')));
     }
 
     public function configureOptions(OptionsResolver $resolver): void

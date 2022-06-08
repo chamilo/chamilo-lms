@@ -86,7 +86,7 @@ $confirmationMessage = addslashes(api_htmlentities(get_lang('Please confirm your
 $subscribe_group = '';
 if (GroupManager::is_self_registration_allowed($user_id, $groupEntity)) {
     $subscribe_group = '<a
-            class="btn btn-default"
+            class="btn btn--plain"
             href="'.api_get_self().'?selfReg=1&group_id='.$group_id.'"
             onclick="javascript: if(!confirm('."'".$confirmationMessage."'".')) return false;">'.
         get_lang('Add me to this group').
@@ -97,7 +97,7 @@ if (GroupManager::is_self_registration_allowed($user_id, $groupEntity)) {
 $unsubscribe_group = '';
 if (GroupManager::is_self_unregistration_allowed($user_id, $groupEntity)) {
     $unsubscribe_group = '<a
-        class="btn btn-default" href="'.api_get_self().'?selfUnReg=1"
+        class="btn btn--plain" href="'.api_get_self().'?selfUnReg=1"
         onclick="javascript: if(!confirm('."'".$confirmationMessage."'".')) return false;">'.
         get_lang('Unsubscribe me from this group.').'</a>';
 }

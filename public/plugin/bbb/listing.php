@@ -451,7 +451,7 @@ if (false === $bbb->isGlobalConference() &&
 $urlList[] = Display::url(
     $plugin->get_lang('EnterConference'),
     $conferenceUrl,
-    ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
+    ['target' => '_blank', 'class' => 'btn btn--primary btn-large']
 );
 
 $tpl = new Template($tool_name);

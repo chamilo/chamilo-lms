@@ -770,7 +770,7 @@ if ($blockButton) {
             Display::url(
                 get_lang('Validate'),
                 'javascript:void',
-                ['class' => 'btn btn-default', 'id' => 'pre_validation']
+                ['class' => 'btn btn--plain', 'id' => 'pre_validation']
             )
         );
         $form->addHtml('<div id="final_button" style="display: none">');
@@ -1115,7 +1115,7 @@ if ($form->validate()) {
         'button' => Display::button(
             'next',
             get_lang('Next'),
-            ['class' => 'btn btn-primary btn-large']
+            ['class' => 'btn btn--primary btn-large']
         ),
         'message' => '',
         'action' => api_get_path(WEB_PATH).'user_portal.php',
@@ -1151,18 +1151,18 @@ if ($form->validate()) {
                 $formData['button'] = Display::button(
                     'next',
                     get_lang('Create a course request'),
-                    ['class' => 'btn btn-primary btn-large']
+                    ['class' => 'btn btn--primary btn-large']
                 );
             } else {
                 $formData['button'] = Display::button(
                     'next',
                     get_lang('Create a course'),
-                    ['class' => 'btn btn-primary btn-large']
+                    ['class' => 'btn btn--primary btn-large']
                 );
                 $formData['go_button'] = '&nbsp;&nbsp;<a href="'.api_get_path(WEB_PATH).'index.php'.'">'.
                     Display::span(
                         get_lang('Next'),
-                        ['class' => 'btn btn-primary btn-large']
+                        ['class' => 'btn btn--primary btn-large']
                     ).'</a>';
             }
         } else {
@@ -1175,7 +1175,7 @@ if ($form->validate()) {
             $formData['button'] = Display::button(
                 'next',
                 get_lang('Next'),
-                ['class' => 'btn btn-primary btn-large']
+                ['class' => 'btn btn--primary btn-large']
             );
         }
     }

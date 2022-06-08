@@ -311,7 +311,7 @@ $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 $form->addLabel(
     '',
     '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">'
+         <span class="btn btn--success" onclick="return add_image_form()">'
     .get_lang('Add one more file')
     .'</span></span>('
     .sprintf(
@@ -328,7 +328,7 @@ $form->addElement(
     null,
     null,
     null,
-    'btn btn-primary',
+    'btn btn--primary',
     [
         'id' => 'btnsubmit',
     ]

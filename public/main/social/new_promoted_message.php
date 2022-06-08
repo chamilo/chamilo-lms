@@ -140,7 +140,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     $form->addLabel(
         '',
-        '<span id="link-more-attach"><a class="btn btn-default" href="javascript://" onclick="return add_image_form()">'.
+        '<span id="link-more-attach"><a class="btn btn--plain" href="javascript://" onclick="return add_image_form()">'.
         get_lang('Add one more file').'</a></span>&nbsp;('.
         sprintf(
             get_lang('Maximun file size: %s'),

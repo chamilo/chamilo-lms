@@ -10,7 +10,7 @@
             </select>
         </div>
         <div class="col-md-3">
-            <a id="filter-button" class="btn btn-default">{{ 'Filter by tags' | trans }}</a>
+            <a id="filter-button" class="btn btn--plain">{{ 'Filter by tags' | trans }}</a>
         </div>
     </div>
     <br />
@@ -50,12 +50,12 @@
                 <div class="btn-group btn-group-sm" role="group" aria-label="">
                     <a
                         href="{{ url('legacy_main', { 'name' : 'admin/skill_edit.php', 'id' : skill.id }) }}"
-                       class="btn btn-primary btn-sm" title="{{ "Edit" | trans }}">
+                       class="btn btn--primary btn-sm" title="{{ "Edit" | trans }}">
                         {{ 'pencil' | mdi_icon }}
                     </a>
                     <a
                         href="{{ url('legacy_main', { 'name' : 'admin/skill_create.php', 'parent' : skill.id }) }}"
-                       class="btn btn-default btn-sm" title="{{ "Create child skill" | trans }}">
+                       class="btn btn--plain btn-sm" title="{{ "Create child skill" | trans }}">
                         {{ 'plus' | mdi_icon }}
                     </a>
                     <a
@@ -66,7 +66,7 @@
                     {% if skill.status == 0 %}
                         <a
                             href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'enable' }) }}"
-                           class="btn btn-success btn-sm" title="{{ 'Enable' }}">
+                           class="btn btn--success btn-sm" title="{{ 'Enable' }}">
                             {{ 'check-circle' | mdi_icon }}
                         </a>
                     {% else %}

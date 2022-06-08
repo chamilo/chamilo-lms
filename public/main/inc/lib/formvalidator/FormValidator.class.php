@@ -994,7 +994,7 @@ EOT;
                             <div id="'.$id.'_crop_image" class="cropCanvas">
                                 <img id="'.$id.'_preview_image">
                             </div>
-                            <button class="btn btn-primary" type="button" name="cropButton" id="'.$id.'_crop_button">
+                            <button class="btn btn--primary" type="button" name="cropButton" id="'.$id.'_crop_button">
                                 <em class="fa fa-crop"></em> '.get_lang('Crop your picture').'
                             </button>
                         </div>
@@ -1649,7 +1649,7 @@ EOT;
             <div class="description-upload">
             '.get_lang('Click on the box below to select files from your computer (you can use CTRL + clic to select various files at a time), or drag and drop some files from your desktop directly over the box below. The system will handle the rest!').'
             </div>
-            <span class="btn btn-success fileinput-button">
+            <span class="btn btn--success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>'.get_lang('Add files').'</span>
                 <!-- The file input field used as target for the file upload widget -->
@@ -1840,7 +1840,7 @@ EOT;
 
             var url = '".$url."';
             var uploadButton = $('<button/>')
-                .addClass('btn btn-primary')
+                .addClass('btn btn--primary')
                 .prop('disabled', true)
                 .text('".addslashes(get_lang('Loading'))."')
                 .on('click', function () {

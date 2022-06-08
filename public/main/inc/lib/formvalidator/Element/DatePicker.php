@@ -46,10 +46,10 @@ class DatePicker extends HTML_QuickForm_text
                 <input '.$this->_getAttrString($this->_attributes).'
                     class="form-control border" type="text" value="'.$value.'" placeholder="'.get_lang('Select date ..').'" data-input>
                 <div class="ml-1" id="button-addon3">
-                    <button class="btn btn-outline-secondary"  type="button" data-toggle>
+                    <button class="btn btn--secondary-outline"  type="button" data-toggle>
                         <i class="fas fa-calendar-alt"></i>
                     </button>
-                    <button class="btn btn-outline-secondary" type="button" data-clear>
+                    <button class="btn btn--secondary-outline" type="button" data-clear>
                         <i class="fas fa-times"></i>
                     </button>
               </div>

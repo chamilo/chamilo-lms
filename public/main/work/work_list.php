@@ -76,7 +76,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
         ).
         get_lang('Upload my assignment'),
         $url,
-        ['class' => 'btn btn-primary', 'id' => 'upload_button']
+        ['class' => 'btn btn--primary', 'id' => 'upload_button']
     );
 }
 

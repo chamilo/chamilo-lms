@@ -618,7 +618,7 @@ foreach ($questionList as $questionId) {
                 $url_name,
                 [
                     'type' => 'button',
-                    'class' => 'btn btn-default',
+                    'class' => 'btn btn--plain',
                     'onclick' => "showfck('".$name."', '".$marksname."');",
                 ]
             );

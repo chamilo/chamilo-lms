@@ -571,11 +571,11 @@
     {% if not is_invitee and lp_is_shown and allow_min_time %}
         <div class="controls text-center">
             {% if not is_ending %}
-                <button class="btn btn-primary" type="button" disabled>
+                <button class="btn btn--primary" type="button" disabled>
                     {{ 'I have finished the lessons, notify the teacher'|trans }}
                 </button>
             {% else %}
-                <a href="{{ web_self ~ "?" ~ course_url_params ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
+                <a href="{{ web_self ~ "?" ~ course_url_params ~ "&action=send_notify_teacher" }}" class="btn btn--primary">
                     {{ 'I have finished the lessons, notify the teacher'|trans }}
                 </a>
             {% endif %}

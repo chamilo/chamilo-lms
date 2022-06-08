@@ -40,7 +40,7 @@ foreach ($settings as $param) {
     $check = '';
     $attrs = ['center' => 'left'];
     $syncButton = '
-        <input class="btn btn-default" type="button" name="syncthis" 
+        <input class="btn btn--plain" type="button" name="syncthis"
             value="'.$plugin->get_lang('syncthis').'" onclick="ajax_sync_setting(\''.$param['id'].'\')" />
         <span id="res_'.$param['id'].'"></span>';
     $data = [
@@ -48,7 +48,7 @@ foreach ($settings as $param) {
         isset($param['subkey']) && !empty($param['subkey']) ? $param['variable'].' ['.$param['subkey'].']' : $param['variable'],
         $param['category'],
         $param['access_url'],
-        '<input type="text" disabled name="value_'.$param['id'].'" 
+        '<input type="text" disabled name="value_'.$param['id'].'"
         value="'.htmlspecialchars($param['selected_value'], ENT_COMPAT, 'UTF-8').'" />'.
         '<br />Master value: '.$param['selected_value'],
         $syncButton,
@@ -70,7 +70,7 @@ function ajax_sync_setting(settingid) {
     var webUrl = '".api_get_path(WEB_PATH)."';
     var spare = $('#row_'+settingid).html();
     var formobj = document.forms['settingsform'];
-    var url = webUrl + 'plugin/vchamilo/ajax/service.php?what=syncthis&settingid='+settingid+'&value='+encodeURIComponent(formobj.elements['value_'+settingid].value);    
+    var url = webUrl + 'plugin/vchamilo/ajax/service.php?what=syncthis&settingid='+settingid+'&value='+encodeURIComponent(formobj.elements['value_'+settingid].value);
     $('#row_'+settingid).html('<td colspan=\"7\"><img src=\"'+webUrl+'plugin/vchamilo/pix/ajax_waiter.gif\" /></td>');
     $.get(url, function (data) {
         $('#row_'+settingid).html(spare);

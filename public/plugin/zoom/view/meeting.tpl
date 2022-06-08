@@ -5,19 +5,19 @@
 <div class="btn-group" role="group">
 
 {% if meeting.meetingInfoGet.status != 'finished' %}
-    <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
+    <a class="btn btn--primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
         {{ 'ViewMeeting'|get_plugin_lang('ZoomPlugin') }}
     </a>
 {% endif %}
 
 {% if isConferenceManager %}
     {% if meeting.status == 'waiting' %}
-        <a class="btn btn-primary" href="{{ meeting.meetingInfoGet.start_url }}" target="_blank">
+        <a class="btn btn--primary" href="{{ meeting.meetingInfoGet.start_url }}" target="_blank">
             {{ 'StartMeeting'|get_plugin_lang('ZoomPlugin') }}
         </a>
     {% endif %}
 
-    <a class="btn btn-default" href="activity.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
+    <a class="btn btn--plain" href="activity.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
         {{ 'Activity'|get_plugin_lang('ZoomPlugin') }}
     </a>
 {% endif %}
@@ -38,7 +38,7 @@
                            class="form-control" readonly
                            value="{{ _p.web }}plugin/zoom/join_meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}"
                     >
-                    <button onclick="copyTextToClipBoard('share_button_flash');" class="btn btn-default">
+                    <button onclick="copyTextToClipBoard('share_button_flash');" class="btn btn--plain">
                         <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
                     </button>
                 </div>
@@ -85,11 +85,11 @@
                 </td>
                <td>
 {#               {% if registrant.joinUrl %}#}
-{#                <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.joinUrl }}')">#}
+{#                <a class="btn btn--primary" onclick="copyJoinURL(event, '{{ registrant.joinUrl }}')">#}
 {#                    {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}#}
 {#                </a>#}
 {#               {% else %}#}
-{#                   <a class="btn btn-primary disabled" >#}
+{#                   <a class="btn btn--primary disabled" >#}
 {#                       {{ 'JoinURLNotAvailable'|get_plugin_lang('ZoomPlugin') }}#}
 {#                   </a>#}
 {#               {% endif %}#}

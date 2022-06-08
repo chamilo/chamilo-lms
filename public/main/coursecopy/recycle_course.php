@@ -74,7 +74,7 @@ if (Security::check_token('post') && (
             echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
         } else {
             $messageFailCourseCode = '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
-            $messageFailCourseCode .= '<p><a class="btn btn-primary" href="'.api_get_self().'?'.api_get_cidreq().'">'.
+            $messageFailCourseCode .= '<p><a class="btn btn--primary" href="'.api_get_self().'?'.api_get_cidreq().'">'.
                 get_lang('BackToPreviousPage').
                 '</a></p>';
             echo Display::return_message($messageFailCourseCode, 'error', false);

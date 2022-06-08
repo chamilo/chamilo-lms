@@ -311,7 +311,7 @@ echo Display::return_message($warning_message, 'warning', false);
     </table>
     <input type="hidden" name="submitted" value="1"/>
     <br/>
-    <button class="btn btn-primary" type="submit" name="name"
+    <button class="btn btn--primary" type="submit" name="name"
             value="<?php echo get_lang('Save'); ?>">
         <?php echo get_lang('Save weights in report'); ?>
     </button>

@@ -73,10 +73,10 @@ function search_sessions($needle, $type)
 
         if (api_is_multiple_url_enabled()) {
             $sql = " SELECT s.id, s.name FROM $tbl_session s
-                     LEFT JOIN $tbl_session_rel_access_url a 
+                     LEFT JOIN $tbl_session_rel_access_url a
                      ON (s.id = a.session_id)
-                     WHERE  
-                        s.name LIKE '$needle%' $without_assigned_sessions AND 
+                     WHERE
+                        s.name LIKE '$needle%' $without_assigned_sessions AND
                         access_url_id = ".api_get_current_access_url_id();
         } else {
             $sql = "SELECT s.id, s.name FROM $tbl_session s
@@ -254,7 +254,7 @@ $result = Database::query($sql);
                 if ($ajax_search) {
                     ?>
                     <div class="separate-action">
-                        <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))">
+                        <button class="btn btn--primary" type="button" onclick="remove_item(document.getElementById('destination'))">
                             <em class="fa fa-arrow-left"></em>
                         </button>
                     </div>
@@ -262,19 +262,19 @@ $result = Database::query($sql);
                 } else {
                     ?>
                 <div class="separate-action">
-                    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                    <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                         <em class="fa fa-arrow-right"></em>
                     </button>
                 </div>
                 <div class="separate-action">
-                    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                    <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                         <em class="fa fa-arrow-left"></em>
                     </button>
                 </div>
 
                 <?php
                 }
-                echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
+                echo '<button class="btn btn--success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
                 ?>
             </div>
         </div>

@@ -3161,7 +3161,7 @@ class Exercise
                 );
 
             $params = [
-                'class' => 'ajax btn btn-default no-close-button',
+                'class' => 'ajax btn btn--plain no-close-button',
                 'data-title' => Security::remove_XSS(get_lang('Comment')),
                 'data-size' => 'md',
                 'id' => "button_$question_id",
@@ -3197,15 +3197,15 @@ class Exercise
         if (ALL_ON_ONE_PAGE == $this->type || $nbrQuestions == $questionNum || $endReminderValue) {
             if ($this->review_answers) {
                 $label = get_lang('ReviewQuestions');
-                $class = 'btn btn-success';
+                $class = 'btn btn--success';
             } else {
                 $endTest = true;
                 $label = get_lang('End Test');
-                $class = 'btn btn-warning';
+                $class = 'btn btn--warning';
             }
         } else {
             $label = get_lang('Next question');
-            $class = 'btn btn-primary';
+            $class = 'btn btn--primary';
         }
         // used to select it with jquery
         $class .= ' question-validate-btn';
@@ -3243,7 +3243,7 @@ class Exercise
                         get_lang('Previous question'),
                         [
                             'type' => 'button',
-                            'class' => 'btn btn-default',
+                            'class' => 'btn btn--plain',
                             'data-prev' => $prev_question,
                             'data-question' => $question_id,
                         ]
@@ -3283,10 +3283,10 @@ class Exercise
 
         if ($this->review_answers) {
             $all_label = get_lang('Review selected questions');
-            $class = 'btn btn-success';
+            $class = 'btn btn--success';
         } else {
             $all_label = get_lang('End test');
-            $class = 'btn btn-warning';
+            $class = 'btn btn--warning';
         }
         // used to select it with jquery
         $class .= ' question-validate-btn';
@@ -7772,7 +7772,7 @@ class Exercise
                             Display::button(
                                 'save_now',
                                 get_lang('Save and continue'),
-                                ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                                ['type' => 'button', 'class' => 'btn btn--primary', 'data-question' => $questionId]
                             ),
                             '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
                         ];
@@ -7792,7 +7792,7 @@ class Exercise
                         Display::button(
                             'save_now',
                             get_lang('Save and continue'),
-                            ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
+                            ['type' => 'button', 'class' => 'btn btn--primary', 'data-question' => $questionId]
                         ),
                         '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;',
                     ];

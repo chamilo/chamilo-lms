@@ -147,7 +147,7 @@ class CalculatedAnswer extends Question
             get_lang('Formula notation'),
             api_get_path(WEB_CODE_PATH).'exercise/evalmathnotation.php',
             [
-                'class' => 'btn btn-info ajax',
+                'class' => 'btn btn--info ajax',
                 'data-title' => get_lang('Formula notation'),
                 '_target' => '_blank',
             ]

@@ -935,7 +935,7 @@ if (!empty($courseCode)) {
                 'sid' => $sessionId,
             ]
         ),
-        ['class' => 'btn btn-default']
+        ['class' => 'btn btn--plain']
     );
 }
 
@@ -990,14 +990,14 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             $btn = Display::url(
                 get_lang('Delete legal agreement'),
                 api_get_self().'?action=delete_legal&student='.$studentId.'&course='.$courseCode,
-                ['class' => 'btn btn-danger']
+                ['class' => 'btn btn--danger']
             );
             $timeLegalAccept = api_get_local_time($legalTime);
         } else {
             $btn = Display::url(
                 get_lang('Send message legal agreement'),
                 api_get_self().'?action=send_legal&student='.$studentId.'&course='.$courseCode,
-                ['class' => 'btn btn-primary']
+                ['class' => 'btn btn--primary']
             );
             $timeLegalAccept = get_lang('Not Registered');
         }
@@ -1011,7 +1011,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
 $iconCertificate = ' '.Display::url(
     get_lang('Generate'),
     api_get_self().'?action=generate_certificate&student='.$studentId.'&cid='.$courseId.'&course='.$courseCode,
-    ['class' => 'btn btn-primary btn-xs']
+    ['class' => 'btn btn--primary btn-xs']
 );
 $userInfoExtra['certificate'] = [
     'label' => get_lang('Certificate'),
@@ -2258,7 +2258,7 @@ if ($allowMessages) {
         'javascript: void(0);',
         [
             'onClick' => "$('#compose_message').show();",
-            'class' => 'btn btn-default',
+            'class' => 'btn btn--plain',
         ]
     );
 

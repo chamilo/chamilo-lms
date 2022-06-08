@@ -70,7 +70,7 @@ if (empty($docId)) {
             $docData = $docRepo->find($documentId);
             if ($docData) {
                 $url = $urlDocument.'?action=delete&id='.$workId.'&document_id='.$documentId.'&'.api_get_cidreq();
-                $link = Display::url(get_lang('Remove'), $url, ['class' => 'btn btn-danger']);
+                $link = Display::url(get_lang('Remove'), $url, ['class' => 'btn btn--danger']);
                 echo $docData->getTitle().' '.$link.'<br />';
             }
         }

@@ -163,7 +163,7 @@
                     CKEDITOR.instances['content'].setData('');
                     allFields.removeClass("ui-state-error");
                     $("#modalDialogForm").modal();
-                    var btnSave = '<button id="btnSave" type="button" class="btn btn-primary">{{ "Add" | trans }}</button>';
+                    var btnSave = '<button id="btnSave" type="button" class="btn btn--primary">{{ "Add" | trans }}</button>';
                     $("#modalDialogForm #modalFooter").html(btnSave);
 
                     $("#btnSave").click( function() {
@@ -307,8 +307,8 @@
                     var exportCalConfidential = '<a href="'+urlOne+'" class="btn btn-light">{{"Export in iCal format as confidential event"|trans}}</a>';
                     var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"Export in iCal format as private event"|trans}}</a>';
                     var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"Export in iCal format as public event"|trans}}</a>';
-                    var btnEdit = '<a href="'+urlEdit+'" id="btnEdit" class="btn btn-primary">{{ "Edit" | trans }}</a>';
-                    var btnDelete = '<button type="button" id="btnDelete" class="btn btn-danger">{{ "Delete" | trans }}</button>';
+                    var btnEdit = '<a href="'+urlEdit+'" id="btnEdit" class="btn btn--primary">{{ "Edit" | trans }}</a>';
+                    var btnDelete = '<button type="button" id="btnDelete" class="btn btn--danger">{{ "Delete" | trans }}</button>';
 
                     $('#calendarModal #modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic+btnEdit+btnDelete);
 
@@ -523,8 +523,8 @@
                 {{ form_add }}
             </div>
             <div id="modalFooter" class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn--secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn--primary">Save changes</button>
             </div>
         </div>
     </div>

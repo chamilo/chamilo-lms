@@ -380,14 +380,14 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     /*$permissionBlock .= Display::url(
         get_lang('Delete legal agreement'),
         api_get_self().'?action=delete_legal&user_id='.$userId,
-        ['class' => 'btn btn-danger btn-xs']
+        ['class' => 'btn btn--danger btn-xs']
     );*/
     } else {
         // @TODO add action handling for button
         $permissionBlock .= Display::url(
             get_lang('Send legal agreement'),
             api_get_self().'?action=send_legal&user_id='.$userId,
-            ['class' => 'btn btn-primary btn-xs']
+            ['class' => 'btn btn--primary btn-xs']
         );
     }
 } else {

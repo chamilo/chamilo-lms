@@ -55,7 +55,7 @@
             <tr>\n\
                 <td>' + skill_name + '</td>\n\
                 <td class="text-right">\n\
-                    <button type="button" id="skill_to_select_id_' + skill_id + '" class="btn btn-warning btn-sm load_wheel" data-id="' + skill_id + '" title="{{ 'PlaceOnTheWheel'|trans }}" aria-label="{{ 'PlaceOnTheWheel'|trans }}">\n\
+                    <button type="button" id="skill_to_select_id_' + skill_id + '" class="btn btn--warning btn-sm load_wheel" data-id="' + skill_id + '" title="{{ 'PlaceOnTheWheel'|trans }}" aria-label="{{ 'PlaceOnTheWheel'|trans }}">\n\
                         <span class="fa fa-crosshairs fa-fw" aria-hidden="true"></span>\n\
                     </button>\n\
                 </td>\n\
@@ -160,7 +160,7 @@
         <div class="row">
             <div class="col-md-3 skill-options">
                 <p class="skill-home">
-                    <a class="btn btn-large btn-block btn-primary" href="{{ _p.web }}user_portal.php">
+                    <a class="btn btn-large btn-block btn--primary" href="{{ _p.web }}user_portal.php">
                         <em class="fa fa-home"></em> {{ "ReturnToCourseList"|trans }}
                     </a>
                 </p>
@@ -171,7 +171,7 @@
                             <figcaption class="avatar-author">{{ user_info.complete_name }}</figcaption>
                         </figure>
                         <p class="text-center">
-                            <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default" target="_blank">
+                            <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn--plain" target="_blank">
                                 {{ 'YourSkillRankingX'|trans|format(ranking) }}
                             </a>
                         </p>
@@ -213,7 +213,7 @@
                                 <div id="skill_info"></div>
                                 <!-- END INFO SKILL -->
                                 <p>
-                                    <a class="btn btn-default btn-block load_root" rel="0" href="#">
+                                    <a class="btn btn--plain btn-block load_root" rel="0" href="#">
                                         <em class="fa fa-eye"></em> {{ "ViewSkillsWheel"|trans }}
                                     </a>
                                 </p>
@@ -295,7 +295,7 @@
                 {{ dialogForm }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                <button type="button" class="btn btn--primary" data-dismiss="modal">
                     {{ "Close" | trans }}
                 </button>
             </div>
@@ -314,7 +314,7 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close" | trans }}</button>
+                <button type="button" class="btn btn--primary" data-dismiss="modal">{{ "Close" | trans }}</button>
             </div>
         </div>
     </div>

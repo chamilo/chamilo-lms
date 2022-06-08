@@ -43,14 +43,14 @@ $nameTools = $plugin->get_lang('Positioning');
 $template = new Template($nameTools);
 $url = $currentUrl.'&';
 $actions = function ($row) use ($plugin, $url, $courseId, $sessionId) {
-    $classInitial = 'btn btn-default';
+    $classInitial = 'btn btn--plain';
     if ($plugin->isInitialExercise($row['iid'], $courseId, $sessionId)) {
-        $classInitial = 'btn btn-primary disabled';
+        $classInitial = 'btn btn--primary disabled';
     }
 
-    $classFinal = 'btn btn-default';
+    $classFinal = 'btn btn--plain';
     if ($plugin->isFinalExercise($row['iid'], $courseId, $sessionId)) {
-        $classFinal = 'btn btn-primary disabled';
+        $classFinal = 'btn btn--primary disabled';
     }
 
     $actions = Display::url(

@@ -163,7 +163,7 @@ foreach ($sentInvitations as $row) {
                 $link .= ' '.Display::url(
                         Display::getMdiIcon('content-copy').get_lang('Copy text'),
                         'javascript:void()',
-                        ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
+                        ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn--primary btn-sm']
                     );
 
                 echo $link;
@@ -191,7 +191,7 @@ foreach ($sentInvitations as $row) {
         $link .= ' '.Display::url(
                 Display::getMdiIcon('content-copy').get_lang('Copy text'),
                 'javascript:void()',
-                ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn-primary btn-sm']
+                ['onclick' => "copyTextToClipBoard('copy_".$id."')", 'class' => 'btn btn--primary btn-sm']
             );
 
         echo $link;

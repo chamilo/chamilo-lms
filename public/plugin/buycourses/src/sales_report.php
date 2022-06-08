@@ -153,7 +153,7 @@ $toolbar = Display::url(
     Display::getMdiIcon('file-excel-outline').
     get_lang('GenerateReport'),
     api_get_path(WEB_PLUGIN_PATH).'buycourses/src/export_report.php',
-    ['class' => 'btn btn-primary']
+    ['class' => 'btn btn--primary']
 );
 
 if ('true' === $paypalEnable && 'true' === $commissionsEnable) {

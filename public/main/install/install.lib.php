@@ -440,7 +440,7 @@ function display_language_selection()
         <label for="language_list"><?php echo get_lang('Please select installation language'); ?></label>
         <div class="form-group">
             <?php echo display_language_selection_box('language_list', api_get_language_isocode()); ?>
-            <button type="submit" name="step1" class="btn btn-primary" value="<?php echo get_lang('Next'); ?>">
+            <button type="submit" name="step1" class="btn btn--primary" value="<?php echo get_lang('Next'); ?>">
                 <em class="fa fa-forward"> </em>
                 <?php echo get_lang('Next'); ?>
             </button>
@@ -776,13 +776,13 @@ function display_requirements(
                     </p>
                     <p>
                         <div class="btn-group">
-                            <button type="submit" class="btn btn-secondary" name="step1" value="<?php echo get_lang('Back'); ?>" >
+                            <button type="submit" class="btn btn--secondary" name="step1" value="<?php echo get_lang('Back'); ?>" >
                                 <em class="fa fa-backward"> <?php echo get_lang('Back'); ?></em>
                             </button>
                             <input type="hidden" name="is_executable" id="is_executable" value="-" />
                             <button
                                 type="submit"
-                                class="btn btn-success"
+                                class="btn btn--success"
                                 name="<?php echo isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'; ?>"
                                 value="<?php echo get_lang('Next'); ?> &gt;" >
                                 <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
@@ -874,14 +874,14 @@ function display_requirements(
             <button
                 type="submit"
                 name="step1"
-                class="btn btn-default"
+                class="btn btn--plain"
                 onclick="javascript: window.location='index.php'; return false;"
                 value="<?php echo get_lang('Previous'); ?>" >
                 <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
             </button>
             <button
                 type="submit" name="step2_install"
-                class="btn btn-primary"
+                class="btn btn--primary"
                 value="<?php echo get_lang('New installation'); ?>" <?php if ($error) {
             echo 'disabled="disabled"';
         } ?> >
@@ -890,7 +890,7 @@ function display_requirements(
             <input type="hidden" name="is_executable" id="is_executable" value="-" />
             <button
                 type="submit"
-                class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"'; ?>
+                class="btn btn--plain" <?php echo !$error ?: 'disabled="disabled"'; ?>
                 name="step2_update_8"
                 value="Upgrade from Chamilo 1.11.x">
                 <em class="fa fa-forward" aria-hidden="true"></em>
@@ -943,14 +943,14 @@ function display_license_agreement()
         </div>
     </div>
     <div class="text-center">
-    <button type="submit" class="btn btn-default" name="step1" value="&lt; '.get_lang('Previous').'" >
+    <button type="submit" class="btn btn--plain" name="step1" value="&lt; '.get_lang('Previous').'" >
         <em class="fa fa-backward"> </em> '.get_lang('Previous').'
     </button>
     <input type="hidden" name="is_executable" id="is_executable" value="-" />
     <button
         type="submit"
         id="license-next"
-        class="btn btn-success" name="step3"
+        class="btn btn--success" name="step3"
         onclick="javascript:if(!document.getElementById(\'accept_licence\').checked) { alert(\''.get_lang('You must accept the licence').'\');return false;}"
         value="'.get_lang('Next').' &gt;">
         <em class="fa fa-forward"> </em>'.get_lang('Next').'
@@ -1109,7 +1109,7 @@ function get_contact_registration_form()
             <div class="col-sm-9">
             <button
                 type="button"
-                class="btn btn-default"
+                class="btn btn--plain"
                 onclick="javascript:send_contact_information();"
                 value="'.get_lang('Send information').'" >
                 <em class="fa fa-check"></em> '.get_lang('Send information').'
@@ -1286,7 +1286,7 @@ function display_database_settings_form(
     );
     echo '</div></div>';
     if (INSTALL_TYPE_UPDATE != $installType) { ?>
-        <button type="submit" class="btn btn-primary m-2" name="step3" value="step3">
+        <button type="submit" class="btn btn--primary m-2" name="step3" value="step3">
             <em class="fa fa-sync"> </em>
             <?php echo get_lang('Check database connection'); ?>
         </button>
@@ -1372,13 +1372,13 @@ function display_database_settings_form(
 
    <div class="btn-group" role="group">
        <button type="submit" name="step2"
-               class="btn btn-secondary" value="&lt; <?php echo get_lang('Previous'); ?>" >
+               class="btn btn--secondary" value="&lt; <?php echo get_lang('Previous'); ?>" >
            <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
        </button>
        <input type="hidden" name="is_executable" id="is_executable" value="-" />
        <?php if ($manager) {
         ?>
-           <button type="submit" class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
+           <button type="submit" class="btn btn--success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
@@ -1386,7 +1386,7 @@ function display_database_settings_form(
         ?>
            <button
                    disabled="disabled"
-                   type="submit" class="btn btn-success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
+                   type="submit" class="btn btn--success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
        <?php
@@ -1721,12 +1721,12 @@ function display_configuration_settings_form(
     <div class='btn-group'>
         <button
             type="submit"
-            class="btn btn-secondary "
+            class="btn btn--secondary "
             name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" >
                 <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
         </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
-        <button class="btn btn-success" type="submit" name="step5">
+        <button class="btn btn--success" type="submit" name="step5">
             <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
         </button>
     </div>
@@ -1750,7 +1750,7 @@ function display_after_install_message()
         'To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory.'), 'var/config/', 'main/install/');
     $html .= '</div></form>
     <br />
-    <a class="btn btn-success" href="../../">
+    <a class="btn btn--success" href="../../">
         '.$trans->trans('Go to your newly created portal.').'
     </a>';
 
@@ -2279,7 +2279,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 {
     error_log('-----------------------------------------');
     error_log('Starting migration process from '.$fromVersion.' ('.date('Y-m-d H:i:s').')');
-    //echo '<a class="btn btn-secondary" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
+    //echo '<a class="btn btn--secondary" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
     //echo '<div id="details" style="display:none">';
     $connection = $manager->getConnection();
 

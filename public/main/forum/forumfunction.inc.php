@@ -5352,9 +5352,9 @@ function getAskRevisionButton(CForumPost $post, CForumThread $threadInfo): strin
 
     $postId = $post->getIid();
 
-    $status = 'btn-default';
+    $status = 'btn--plain';
     if (postNeedsRevision($post)) {
-        $status = 'btn-success';
+        $status = 'btn--success';
     }
 
     return Display::url(
@@ -5397,7 +5397,7 @@ function getReportButton(int $postId, CForumThread $threadInfo): string
         api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
         api_get_cidreq().'&action=report&post_id='.$postId.
         '&forum='.$threadInfo->getForum()->getIid().'&thread='.$threadInfo->getIid(),
-        ['class' => 'btn btn-danger', 'title' => get_lang('Report')]
+        ['class' => 'btn btn--danger', 'title' => get_lang('Report')]
     );
 }
 

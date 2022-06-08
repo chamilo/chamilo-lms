@@ -2232,6 +2232,10 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php uncomment "blocked" variable.
 //$_configuration['enable_sign_attendance_sheet'] = false;
 
+// Make sessions by duration always accessible to coaches (otherwise
+// they are only accessible during the active duration).
+//$_configuration['session_coach_access_after_duration_end'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

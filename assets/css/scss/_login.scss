@@ -11,7 +11,7 @@
   }
 
   .p-inputtext {
-    @apply py-4 pl-4 text-support-3;
+    @apply border-none py-4 pl-4 text-support-3;
 
     &.p-invalid.p-component {
       @apply border-error;
@@ -23,7 +23,7 @@
 
     &:hover,
     &:focus {
-      @apply border-none ring-1 ring-primary text-primary;
+      @apply ring-1 ring-primary text-primary;
 
       + i.pi:last-of-type {
         @apply text-primary;
@@ -57,8 +57,9 @@
   &__buttons {
     @apply flex gap-4;
 
-    .btn {
-      @apply w-6/12;
+    a.btn,
+    .p-button {
+      @apply w-6/12 p-3.5;
     }
   }
 }

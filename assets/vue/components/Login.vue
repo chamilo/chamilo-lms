@@ -6,8 +6,8 @@
     />
 
     <form
-      @submit.prevent="performLogin"
       class="login-section__form"
+      @submit.prevent="performLogin"
     >
       <div class="form__field p-input-filled">
         <InputText
@@ -32,7 +32,6 @@
         <Button
           :label="t('Sign in')"
           :loading="isLoading"
-          class="btn btn--primary"
           type="submit"
         />
 
@@ -75,6 +74,7 @@
 import {useStore} from 'vuex';
 import {computed, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
+import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import InputSwitch from 'primevue/inputswitch';

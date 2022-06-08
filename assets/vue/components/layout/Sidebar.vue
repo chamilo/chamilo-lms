@@ -26,7 +26,7 @@
       on-icon="pi pi-fw pi-chevron-left"
     />
   </aside>
-  
+
   <Teleport to=".p-megamenu .p-megamenu-end">
     <a
       tabindex="0"

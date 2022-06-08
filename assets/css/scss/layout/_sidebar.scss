@@ -37,11 +37,12 @@
   }
 
   &__button {
-    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-3.5 px-2 py-1.5 text-xs text-primary
-      sm:flex;
+    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-5 text-xs text-primary
+      sm:inline-flex;
     z-index: 11;
 
-    &:hover {
+    &:hover,
+    &:active {
       @apply border-primary;
     }
   }

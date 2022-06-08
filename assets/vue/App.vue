@@ -152,10 +152,6 @@ onMounted(() => {
         severity: key,
         detail: flashes[key][flashText],
       });
-      flashMessageList.value.push({
-        severity: key,
-        detail: flashes[key][flashText],
-      });
     }
   }
 });

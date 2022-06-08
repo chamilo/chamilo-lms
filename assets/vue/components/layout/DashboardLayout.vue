@@ -9,8 +9,8 @@
       v-if="showBreadcrumb"
       :legacy="breadcrumb"
     />
-    <router-view />
     <slot />
+    <router-view />
   </div>
 </template>
 

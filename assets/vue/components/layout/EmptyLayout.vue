@@ -1,6 +1,6 @@
 <template>
-  <router-view />
   <slot />
+  <router-view />
 </template>
 
 <script setup>

@@ -9309,14 +9309,12 @@ class TrackingCourseLog
 
         $select = '
                 SELECT user.id as user_id,
-                    user.official_code  as col0,
-                    user.lastname       as col1,
-                    user.firstname      as col2,
-                    user.username       as col3,
-                    user.email          as col4';
-        if (!empty($session_id)) {
-            $select .= ', user.registration_date as col13';
-        }
+                    user.official_code      as col0,
+                    user.lastname           as col1,
+                    user.firstname          as col2,
+                    user.username           as col3,
+                    user.email              as col4,
+                    user.registration_date  as col13';
         if ($getCount) {
             $select = ' SELECT COUNT(distinct(user.id)) as count ';
         }
@@ -9356,7 +9354,7 @@ class TrackingCourseLog
             $direction = 'ASC';
         }
 
-        $column = (int) $column;
+        $column = $column < 5 ? (int) $column : 0;
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
 

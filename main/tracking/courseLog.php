@@ -741,14 +741,14 @@ if ($nbStudents > 0) {
         $headers['lastname'] = get_lang('LastName');
         $headers['firstname'] = get_lang('FirstName');
     }
-    $table->set_header($headerCounter++, get_lang('Login'), false);
+    $table->set_header($headerCounter++, get_lang('Login'), true);
     $headers['login'] = get_lang('Login');
 
     $table->set_header(
         $headerCounter++,
         get_lang('TrainingTime').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), [], ICON_SIZE_TINY),
-        false
+        true
     );
     $headers['training_time'] = get_lang('TrainingTime');
 
@@ -757,7 +757,7 @@ if ($nbStudents > 0) {
         $headerCounter++,
         get_lang('CourseProgress').'&nbsp;'.
         Display::return_icon('info3.gif', $courseProgressHeadTitle, [], ICON_SIZE_TINY),
-        false
+        true
     );
     $headers['course_progress'] = get_lang('CourseProgress');
 
@@ -765,14 +765,14 @@ if ($nbStudents > 0) {
         $headerCounter++,
         get_lang('ExerciseProgress').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), [], ICON_SIZE_TINY),
-        false
+        true
     );
     $headers['exercise_progress'] = get_lang('ExerciseProgress');
     $table->set_header(
         $headerCounter++,
         get_lang('ExerciseAverage').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), [], ICON_SIZE_TINY),
-        false
+        true
     );
     $headers['exercise_average'] = get_lang('ExerciseAverage');
 
@@ -780,7 +780,7 @@ if ($nbStudents > 0) {
         $headerCounter++,
         get_lang('Score').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), [], ICON_SIZE_TINY),
-        false
+        true
     );
     $headers['score'] = get_lang('Score');
 
@@ -788,7 +788,7 @@ if ($nbStudents > 0) {
         $headerCounter++,
         $bestScoreLabel.'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), [], ICON_SIZE_TINY),
-        false
+        true
     );
     $headers['score_best'] = $bestScoreLabel;
 
@@ -805,7 +805,7 @@ if ($nbStudents > 0) {
                 $table->set_header(
                     $headerCounter++,
                     $title,
-                    false
+                    true
                 );
                 $exerciseResultHeaders[] = $title;
                 $headers['exercise_'.$exercise->iId] = $title;
@@ -813,34 +813,34 @@ if ($nbStudents > 0) {
         }
     }
 
-    $table->set_header($headerCounter++, get_lang('Student_publication'), false);
+    $table->set_header($headerCounter++, get_lang('Student_publication'), true);
     $headers['student_publication'] = get_lang('Student_publication');
-    $table->set_header($headerCounter++, get_lang('Messages'), false);
+    $table->set_header($headerCounter++, get_lang('Messages'), true);
     $headers['messages'] = get_lang('Messages');
     $table->set_header($headerCounter++, get_lang('Classes'));
     $headers['classes'] = get_lang('Classes');
 
     if (empty($sessionId)) {
-        $table->set_header($headerCounter++, get_lang('Survey'), false);
+        $table->set_header($headerCounter++, get_lang('Survey'), true);
         $headers['survey'] = get_lang('Survey');
     } else {
         $table->set_header($headerCounter++, get_lang('RegisteredDate'), true);
         $headers['registered_at'] = get_lang('RegisteredDate');
     }
-    $table->set_header($headerCounter++, get_lang('FirstLoginInCourse'), false);
+    $table->set_header($headerCounter++, get_lang('FirstLoginInCourse'), true);
     $headers['first_login'] = get_lang('FirstLoginInCourse');
-    $table->set_header($headerCounter++, get_lang('LatestLoginInCourse'), false);
+    $table->set_header($headerCounter++, get_lang('LatestLoginInCourse'), true);
     $headers['latest_login'] = get_lang('LatestLoginInCourse');
 
     $counter = $headerCounter;
     if (api_get_setting('show_email_addresses') === 'true') {
-        $table->set_header($counter, get_lang('Email'), false);
+        $table->set_header($counter, get_lang('Email'), true);
         $headers['email'] = get_lang('Email');
         $counter++;
     }
     if (isset($_GET['additional_profile_field'])) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {
-            $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
+            $table->set_header($counter, $extra_info[$fieldId]['display_text'], true);
             $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
             $counter++;
             $parameters['additional_profile_field'] = $fieldId;
@@ -849,13 +849,13 @@ if ($nbStudents > 0) {
     if (isset($defaultExtraFields)) {
         if (!empty($defaultExtraInfo)) {
             foreach ($defaultExtraInfo as $field) {
-                $table->set_header($counter, $field['display_text'], false);
+                $table->set_header($counter, $field['display_text'], true);
                 $headers[$field['variable']] = $field['display_text'];
                 $counter++;
             }
         }
     }
-    $table->set_header($counter, get_lang('Details'), false);
+    $table->set_header($counter, get_lang('Details'), true);
     $headers['Details'] = get_lang('Details');
 
     if (!empty($fields)) {

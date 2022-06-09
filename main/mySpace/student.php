@@ -160,7 +160,7 @@ function get_users($from, $limit, $column, $direction): array
         }
 
         if (isset($_GET['id_session'])) {
-            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $sessionId);
+            $courses = Tracking::get_course_list_in_session_from_student($student_id, $sessionId);
         }
 
         $avg_time_spent = $avg_student_score = $avg_student_progress = 0;

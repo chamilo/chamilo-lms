@@ -211,7 +211,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) {
     case 'empty':
         if (api_is_allowed_to_edit(false, true)) {
-            GroupManager:: unsubscribe_all_users($current_group);
+            GroupManager::unsubscribe_all_users($current_group);
             echo Display::return_message(get_lang('GroupEmptied'), 'confirm');
         }
         break;

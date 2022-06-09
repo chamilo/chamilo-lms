@@ -1432,7 +1432,8 @@ class Event
         $session_id = 0,
         $load_question_list = true,
         $user_id = null,
-        $groupId = 0
+        $groupId = 0,
+        $skipLpResults = true
     ) {
         $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1465,14 +1466,18 @@ class Event
             }
         }
 
+        $skipLpQuery = "";
+        if ($skipLpResults) {
+            $skipLpQuery = " AND orig_lp_id = 0 AND orig_lp_item_id = 0 ";
+        }
+
         $sql = "SELECT * FROM $TABLETRACK_EXERCICES
                 WHERE
                     status = '' AND
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
-                    session_id = $session_id  AND
-                    orig_lp_id = 0 AND
-                    orig_lp_item_id = 0
+                    session_id = $session_id
+                    $skipLpQuery
                     $user_condition
                     $groupCondition
                 ORDER BY exe_id";
@@ -1720,7 +1725,8 @@ class Event
         $user_id,
         $exercise_id,
         $courseId,
-        $session_id = 0
+        $session_id = 0,
+        $skipLpResults = true
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $courseId = (int) $courseId;
@@ -1728,15 +1734,19 @@ class Event
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
 
+        $skipLpQuery = "";
+        if ($skipLpResults) {
+            $skipLpQuery = " AND orig_lp_id = 0 AND orig_lp_item_id = 0 ";
+        }
+
         $sql = "SELECT count(*) as count
                 FROM $table
                 WHERE status = ''  AND
                     exe_user_id = $user_id AND
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
-                    session_id = $session_id AND
-                    orig_lp_id =0 AND
-                    orig_lp_item_id = 0
+                    session_id = $session_id
+                    $skipLpQuery
                 ORDER BY exe_id";
         $res = Database::query($sql);
         $result = 0;
@@ -1765,7 +1775,8 @@ class Event
         $exercise_id,
         $courseId,
         $session_id = 0,
-        $userId = 0
+        $userId = 0,
+        $skipLpResults = true
     ) {
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1773,14 +1784,18 @@ class Event
         $exercise_id = (int) $exercise_id;
         $session_id = (int) $session_id;
 
+        $skipLpQuery = "";
+        if ($skipLpResults) {
+            $skipLpQuery = " AND orig_lp_id = 0 AND orig_lp_item_id = 0 ";
+        }
+
         $sql = "SELECT * FROM $table_track_exercises
                 WHERE
                     status = '' AND
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
-                    session_id = $session_id AND
-                    orig_lp_id = 0 AND
-                    orig_lp_item_id = 0";
+                    session_id = $session_id
+                    $skipLpQuery";
 
         if (!empty($userId)) {
             $userId = (int) $userId;

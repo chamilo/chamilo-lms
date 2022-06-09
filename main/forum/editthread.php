@@ -89,7 +89,7 @@ if (api_is_invitee()) {
 
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
-    $groupProperties = GroupManager:: get_group_properties($groupId);
+    $groupProperties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq,
         'name' => get_lang('Groups'),

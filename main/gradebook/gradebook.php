@@ -45,7 +45,7 @@ $filter_warning_msg = true;
 //this is called when there is no data for the course admin
 if (isset($_GET['createallcategories'])) {
     GradebookUtils::block_students();
-    $coursecat = Category :: get_not_created_course_categories(api_get_user_id());
+    $coursecat = Category::get_not_created_course_categories(api_get_user_id());
     if (!count($coursecat) == 0) {
         foreach ($coursecat as $row) {
             $cat = new Category();
@@ -68,7 +68,7 @@ if (isset($_GET['createallcategories'])) {
 if (isset($_GET['movecat'])) {
     $move_cat = (int) $_GET['movecat'];
     GradebookUtils::block_students();
-    $cats = Category :: load($move_cat);
+    $cats = Category::load($move_cat);
     if (!isset($_GET['targetcat'])) {
         $move_form = new CatForm(
             CatForm::TYPE_MOVE,
@@ -85,7 +85,7 @@ if (isset($_GET['movecat'])) {
         }
     } else {
         $get_target_cat = Security::remove_XSS($_GET['targetcat']);
-        $targetcat = Category :: load($get_target_cat);
+        $targetcat = Category::load($get_target_cat);
         $course_to_crsind = ($cats[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null);
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
@@ -102,7 +102,7 @@ if (isset($_GET['movecat'])) {
 if (isset($_GET['moveeval'])) {
     GradebookUtils::block_students();
     $get_move_eval = Security::remove_XSS($_GET['moveeval']);
-    $evals = Evaluation :: load($get_move_eval);
+    $evals = Evaluation::load($get_move_eval);
     if (!isset($_GET['targetcat'])) {
         $move_form = new EvalForm(
             EvalForm::TYPE_MOVE,
@@ -121,7 +121,7 @@ if (isset($_GET['moveeval'])) {
         }
     } else {
         $get_target_cat = Security::remove_XSS($_GET['targetcat']);
-        $targetcat = Category :: load($get_target_cat);
+        $targetcat = Category::load($get_target_cat);
         $course_to_crsind = ($evals[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null);
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
@@ -148,7 +148,7 @@ if (isset($_GET['movelink'])) {
         api_get_self().'?movelink='.$get_move_link.'&selectcat='.$selectcat
     );
     if ($move_form->validate()) {
-        $targetcat = Category :: load($move_form->exportValue('move_cat'));
+        $targetcat = Category::load($move_form->exportValue('move_cat'));
         $link[0]->move_to_cat($targetcat[0]);
         unset($link);
         header('Location: '.api_get_self().'?linkmoved=&selectcat='.$selectcat);
@@ -164,7 +164,7 @@ if (isset($_GET['visiblecat'])) {
     } else {
         $visibility_command = 0;
     }
-    $cats = Category :: load($_GET['visiblecat']);
+    $cats = Category::load($_GET['visiblecat']);
     $cats[0]->set_visible($visibility_command);
     $cats[0]->save();
     $cats[0]->apply_visibility_to_children();
@@ -179,7 +179,7 @@ if (isset($_GET['visiblecat'])) {
 }
 if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
-    $cats = Category :: load($_GET['deletecat']);
+    $cats = Category::load($_GET['deletecat']);
     //delete all categories,subcategories and results
     if ($cats[0] != null) {
         if ($cats[0]->get_id() != 0) {
@@ -200,7 +200,7 @@ if (isset($_GET['visibleeval'])) {
         $visibility_command = 0;
     }
 
-    $eval = Evaluation :: load($_GET['visibleeval']);
+    $eval = Evaluation::load($_GET['visibleeval']);
     $eval[0]->set_visible($visibility_command);
     $eval[0]->save();
     unset($eval);
@@ -215,7 +215,7 @@ if (isset($_GET['visibleeval'])) {
 
 if (isset($_GET['deleteeval'])) {
     GradebookUtils::block_students();
-    $eval = Evaluation :: load($_GET['deleteeval']);
+    $eval = Evaluation::load($_GET['deleteeval']);
     if ($eval[0] != null) {
         $eval[0]->delete_with_results();
     }
@@ -230,7 +230,7 @@ if (isset($_GET['visiblelink'])) {
     } else {
         $visibility_command = 0;
     }
-    $link = LinkFactory :: load($_GET['visiblelink']);
+    $link = LinkFactory::load($_GET['visiblelink']);
     $link[0]->set_visible($visibility_command);
     $link[0]->save();
     unset($link);
@@ -246,7 +246,7 @@ if (isset($_GET['deletelink'])) {
     GradebookUtils::block_students();
     //fixing #5229
     if (!empty($_GET['deletelink'])) {
-        $link = LinkFactory:: load($_GET['deletelink']);
+        $link = LinkFactory::load($_GET['deletelink']);
         if ($link[0] != null) {
             $link[0]->delete();
         }
@@ -288,14 +288,14 @@ if (isset($_POST['action'])) {
                 $number_of_deleted_links = 0;
                 foreach ($_POST['id'] as $indexstr) {
                     if (api_substr($indexstr, 0, 4) == 'CATE') {
-                        $cats = Category :: load(api_substr($indexstr, 4));
+                        $cats = Category::load(api_substr($indexstr, 4));
                         if ($cats[0] != null) {
                             $cats[0]->delete_all();
                         }
                         $number_of_deleted_categories++;
                     }
                     if (api_substr($indexstr, 0, 4) == 'EVAL') {
-                        $eval = Evaluation :: load(api_substr($indexstr, 4));
+                        $eval = Evaluation::load(api_substr($indexstr, 4));
                         if ($eval[0] != null) {
                             $eval[0]->delete_with_results();
                         }
@@ -304,7 +304,7 @@ if (isset($_POST['action'])) {
                     if (api_substr($indexstr, 0, 4) == 'LINK') {
                         $id = api_substr($indexstr, 4);
                         if (!empty($id)) {
-                            $link = LinkFactory :: load();
+                            $link = LinkFactory::load();
                             if ($link[0] != null) {
                                 $link[0]->delete();
                             }
@@ -318,18 +318,18 @@ if (isset($_POST['action'])) {
             case 'setvisible':
                 foreach ($_POST['id'] as $indexstr) {
                     if (api_substr($indexstr, 0, 4) == 'CATE') {
-                        $cats = Category:: load(api_substr($indexstr, 4));
+                        $cats = Category::load(api_substr($indexstr, 4));
                         $cats[0]->set_visible(1);
                         $cats[0]->save();
                         $cats[0]->apply_visibility_to_children();
                     }
                     if (api_substr($indexstr, 0, 4) == 'EVAL') {
-                        $eval = Evaluation:: load(api_substr($indexstr, 4));
+                        $eval = Evaluation::load(api_substr($indexstr, 4));
                         $eval[0]->set_visible(1);
                         $eval[0]->save();
                     }
                     if (api_substr($indexstr, 0, 4) == 'LINK') {
-                        $link = LinkFactory:: load(api_substr($indexstr, 4));
+                        $link = LinkFactory::load(api_substr($indexstr, 4));
                         $link[0]->set_visible(1);
                         $link[0]->save();
                     }
@@ -340,18 +340,18 @@ if (isset($_POST['action'])) {
             case 'setinvisible':
                 foreach ($_POST['id'] as $indexstr) {
                     if (api_substr($indexstr, 0, 4) == 'CATE') {
-                        $cats = Category:: load(api_substr($indexstr, 4));
+                        $cats = Category::load(api_substr($indexstr, 4));
                         $cats[0]->set_visible(0);
                         $cats[0]->save();
                         $cats[0]->apply_visibility_to_children();
                     }
                     if (api_substr($indexstr, 0, 4) == 'EVAL') {
-                        $eval = Evaluation:: load(api_substr($indexstr, 4));
+                        $eval = Evaluation::load(api_substr($indexstr, 4));
                         $eval[0]->set_visible(0);
                         $eval[0]->save();
                     }
                     if (api_substr($indexstr, 0, 4) == 'LINK') {
-                        $link = LinkFactory:: load(api_substr($indexstr, 4));
+                        $link = LinkFactory::load(api_substr($indexstr, 4));
                         $link[0]->set_visible(0);
                         $link[0]->save();
                     }
@@ -419,7 +419,7 @@ if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
             'url' => Category::getUrl().'selectcat='.$selectcat,
             'name' => get_lang('ToolGradebook'),
         ];
-        Display :: display_header(get_lang('FlatView'));
+        Display::display_header(get_lang('FlatView'));
     } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl(),
@@ -439,9 +439,9 @@ if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
                 ];
             }
         }
-        Display :: display_header('');
+        Display::display_header('');
     } else {
-        Display :: display_header('');
+        Display::display_header('');
     }
 }
 
@@ -458,7 +458,7 @@ if (empty($selectcat)) {
 // search form
 
 $simple_search_form = new UserForm(
-    UserForm :: TYPE_SIMPLE_SEARCH,
+    UserForm::TYPE_SIMPLE_SEARCH,
     null,
     'simple_search_form',
     null,
@@ -474,7 +474,7 @@ if ($simple_search_form->validate() && (empty($keyword))) {
 }
 
 if (!empty($keyword)) {
-    $cats = Category :: load($category);
+    $cats = Category::load($category);
     $allcat = [];
     if ((isset($_GET['selectcat']) && $_GET['selectcat'] == 0) && isset($_GET['search'])) {
         $allcat = $cats[0]->get_subcategories(null);
@@ -487,7 +487,7 @@ if (!empty($keyword)) {
     }
 } elseif (isset($_GET['studentoverview'])) {
     //@todo this code seems to be deprecated because the gradebook tab is off
-    $cats = Category :: load($category);
+    $cats = Category::load($category);
     $stud_id = (api_is_allowed_to_edit() ? null : api_get_user_id());
     $allcat = [];
     $alleval = $cats[0]->get_evaluations($stud_id, true);
@@ -501,7 +501,7 @@ if (!empty($keyword)) {
             get_lang('Date'),
             get_lang('Results'),
         ];
-        $data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME, 0, null, true);
+        $data_array = $datagen->get_data(GradebookDataGenerator::GDG_SORT_NAME, 0, null, true);
         $newarray = [];
         foreach ($data_array as $data) {
             $newarray[] = array_slice($data, 1);
@@ -535,14 +535,14 @@ if (!empty($keyword)) {
     if (!api_is_allowed_to_edit(true, true)) {
         $user_id = api_get_user_id();
     }
-    $category = Category :: load($_GET['cat_id']);
+    $category = Category::load($_GET['cat_id']);
     if ($category[0]->is_certificate_available($user_id)) {
         $user = api_get_user_info($user_id);
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
         $scorecourse = $category[0]->calc_score($user_id);
         $scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse, SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
 
-        $cattotal = Category :: load(0);
+        $cattotal = Category::load(0);
         $scoretotal = $cattotal[0]->calc_score($user_id);
         $scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('NoResultsAvailable'));
 
@@ -575,7 +575,7 @@ if (!empty($keyword)) {
     }
     exit;
 } else {
-    $cats = Category :: load($category);
+    $cats = Category::load($category);
     $stud_id = (api_is_allowed_to_edit() ? null : api_get_user_id());
     $allcat = $cats[0]->get_subcategories($stud_id);
     $alleval = $cats[0]->get_evaluations($stud_id);
@@ -618,7 +618,7 @@ if (empty($allcat) && empty($alleval) && empty($alllink) &&
 }
 // Here we are in a sub category
 if ($category != '0') {
-    DisplayGradebook:: header(
+    DisplayGradebook::header(
         $cats[0],
         1,
         $_GET['selectcat'],
@@ -628,7 +628,7 @@ if ($category != '0') {
     );
 } else {
     // This is the root category
-    DisplayGradebook:: header(
+    DisplayGradebook::header(
         $cats[0],
         count($allcat) == '0' && !isset($_GET['search']) ? 0 : 1,
         0,
@@ -638,4 +638,4 @@ if ($category != '0') {
     );
 }
 $gradebooktable->display();
-Display :: display_footer();
+Display::display_footer();

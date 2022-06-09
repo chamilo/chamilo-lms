@@ -133,7 +133,7 @@ if ($export && $name) {
             form_special_export();
         } else {
             echo Display::return_message(get_lang('ToExportSpecialSelect'), 'normal');
-            CourseSelectForm :: display_form_session_export($course);
+            CourseSelectForm::display_form_session_export($course);
         }
     } else {
         form_special_export();

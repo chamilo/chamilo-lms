@@ -313,11 +313,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                                         label : lang.sourceType,
                                         type : 'select',
                                         'default' : 'video/mp4',
-                                        items :
-                                            [
-                                                [ 'MP4', 'video/mp4' ],
-                                                [ 'WebM', 'video/webm' ]
-                                            ],
+                                        items : editor.config.videoTypes,
                                         onChange: onChangeSrc,
                                         commit : commitSrc,
                                         setup : loadSrc
@@ -353,11 +349,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                                         label : lang.sourceType,
                                         type : 'select',
                                         'default':'video/webm',
-                                        items :
-                                            [
-                                                [ 'MP4', 'video/mp4' ],
-                                                [ 'WebM', 'video/webm' ]
-                                            ],
+                                        items : editor.config.videoTypes,
                                         commit : commitSrc,
                                         setup : loadSrc
                                     }]

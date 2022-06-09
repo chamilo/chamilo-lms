@@ -760,6 +760,23 @@ If you have issues with files taking a long time to download, make sure you reco
       ExpiresByType application/font-woff "access plus 1 month"
     &lt;/IfModule&gt;
     </pre>
+
+    <h4>Special note on sharing questions between courses</h4>
+    In Chamilo 1.11.16, we added the possibility (see configuration.php) to share questions between
+    several courses. This feature, although working great for pure-text questions, does however generate
+    an issue when sharing media files between courses, as one media file in one course will not be
+    visible by a user that sees the question in another course and doesn't have access to the question's
+    original course.<br />
+    To avoid this issue, you can adapt your .htaccess (or the VirtualHost in case you put it there) to allow
+    for media files to be accessed directly (without logging in to the portal). This will also speed up
+    loading these media files, but it introduces a reduction in the level of security, as those specific media
+    files are accessible by anyone having access to the portal itself and knowing the path of the files.<br /><br />
+    To apply the patch, locate this line in your .htaccess:<br /><br />
+    <pre>    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]</pre>
+    and remove it or comment it out, then put those two lines instead:<br /><br />
+    <pre>    RewriteCond %{REQUEST_URI} !\.(gif|jpg|jpeg|png|webp|ico|icon|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff|webm|mp4)
+    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA|L]</pre>
+
     <h3>Nginx</h3>
     Nginx doesn't support .htaccess rules, so you have no other option than to apply the following rules (note that your PHP backend configuration may vary).
     These are only the redirection rules to be placed inside a server{} block, as other settings might differ from one installation to another.
@@ -838,6 +855,7 @@ If you have issues with files taking a long time to download, make sure you reco
     deny all;
   }
     </pre>
+
     <h3>Apple on OS X servers</h3>
     <div>
         Scott Steven reports that Apache on OS X requires specific actions<br />

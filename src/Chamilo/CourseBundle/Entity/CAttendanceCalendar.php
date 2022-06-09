@@ -65,6 +65,13 @@ class CAttendanceCalendar
     protected $doneAttendance;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="blocked", type="boolean", nullable=true)
+     */
+    //protected $blocked;
+
+    /**
      * Set attendanceId.
      *
      * @param int $attendanceId
@@ -182,5 +189,29 @@ class CAttendanceCalendar
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Set blocked.
+     *
+     * @param bool $blocked
+     *
+     * @return CAttendanceCalendar
+     */
+    public function setBlocked($blocked)
+    {
+        $this->blocked = $blocked;
+
+        return $this;
+    }
+
+    /**
+     * Get blocked.
+     *
+     * @return bool
+     */
+    public function getBlocked()
+    {
+        return $this->blocked;
     }
 }

@@ -28,14 +28,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Session
 {
-    const VISIBLE = 1;
-    const READ_ONLY = 2;
-    const INVISIBLE = 3;
-    const AVAILABLE = 4;
+    public const VISIBLE = 1;
+    public const READ_ONLY = 2;
+    public const INVISIBLE = 3;
+    public const AVAILABLE = 4;
 
-    const STUDENT = 0;
-    const DRH = 1;
-    const COACH = 2;
+    public const STUDENT = 0;
+    public const DRH = 1;
+    public const COACH = 2;
 
     /**
      * @var int

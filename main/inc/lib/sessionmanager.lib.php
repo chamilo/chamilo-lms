@@ -25,10 +25,10 @@ use Monolog\Logger;
  */
 class SessionManager
 {
-    const STATUS_PLANNED = 1;
-    const STATUS_PROGRESS = 2;
-    const STATUS_FINISHED = 3;
-    const STATUS_CANCELLED = 4;
+    public const STATUS_PLANNED = 1;
+    public const STATUS_PROGRESS = 2;
+    public const STATUS_FINISHED = 3;
+    public const STATUS_CANCELLED = 4;
 
     public static $_debug = false;
 
@@ -1387,7 +1387,7 @@ class SessionManager
      */
     public static function get_user_data_access_tracking_overview(
         $sessionId,
-        $courseId,
+        $courseId = 0,
         $studentId = 0,
         $profile = '',
         $date_from = '',
@@ -2586,7 +2586,7 @@ class SessionManager
                 if ($copyEvaluation) {
                     $cats = Category::load(null, null, $courseInfo['code']);
                     if (!empty($cats)) {
-                        $sessionCategory = Category:: load(
+                        $sessionCategory = Category::load(
                             null,
                             null,
                             $courseInfo['code'],

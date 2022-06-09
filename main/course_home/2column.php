@@ -28,7 +28,7 @@ if (api_is_allowed_to_edit(null, true)) {
         $msgDestroy = get_lang('DelLk').'<br />';
         $msgDestroy .= '<a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;';
         $msgDestroy .= '<a href="'.api_get_self().'?destroy=yes&amp;id='.$id.'">'.get_lang('Yes').'</a>';
-        $show_message .= Display :: return_message($msgDestroy, 'confirmation', false);
+        $show_message .= Display::return_message($msgDestroy, 'confirmation', false);
     } elseif (isset($_GET['destroy']) && $_GET['destroy']) {
         /*
          * Process hiding a tools from available tools.

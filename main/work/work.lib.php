@@ -1598,8 +1598,8 @@ function getWorkListTeacherQuery(
             $whereCondition
         ORDER BY `$column` $direction";
 
-    if ($start != 0 && $limit != 0) {
-        $sql .= ' LIMIT $start, $limit';
+    if (!empty($start) && !empty($limit)) {
+        $sql .= " LIMIT $start, $limit";
     }
 
     return Database::query($sql);
@@ -2376,6 +2376,11 @@ function get_work_user_list(
                     $work['qualification'] = $qualification_string.$feedback;
                 } else {
                     $work['qualification'] = $qualification_string.$feedback.$hasCorrection;
+                }
+
+                if (empty($work['qualificator_id'])) {
+                    $finalScore = '?? / '.$work_data['qualification'];
+                    $work['qualification'] = Display::label($finalScore, 'warning');
                 }
 
                 $work['qualification_only'] = $qualification_string;
@@ -4531,7 +4536,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 
     if (empty($file['size'])) {
         return [
-            'error' => Display:: return_message(
+            'error' => Display::return_message(
                 get_lang('UplUploadFailedSizeIsZero'),
                 'error'
             ),
@@ -4604,7 +4609,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         }
     } else {
         return [
-            'error' => Display :: return_message(
+            'error' => Display::return_message(
                 get_lang('FolderDoesntExistsInFileSystem'),
                 'error'
             ),

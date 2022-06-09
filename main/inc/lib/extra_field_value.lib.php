@@ -827,6 +827,14 @@ class ExtraFieldValue extends Model
                         $result['value'] = implode(' / ', $optionValues);
                     }
                 }
+
+                if ($result['field_type'] == Extrafield::FIELD_TYPE_SELECT && !empty($result['value'])) {
+                    $fopt = (new ExtraFieldOption('user'))
+                        ->get_field_option_by_field_and_option($result['field_id'], $result['value']);
+                    $fopt = current(is_array($fopt) ? $fopt : []);
+
+                    $result['value'] = $fopt['display_text'] ?? $result['value'];
+                }
             }
 
             return $result;

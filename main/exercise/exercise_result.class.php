@@ -206,7 +206,7 @@ class ExerciseResult
                                 LIMIT 1";
                     $query = Database::query($sql_exe);
 
-                    if (Database:: num_rows($query) > 0) {
+                    if (Database::num_rows($query) > 0) {
                         $revised = 1;
                     }
                 }
@@ -661,7 +661,7 @@ class ExerciseResult
                     strip_tags(
                         implode(
                             ", ",
-                            GroupManager:: get_user_group_name($row['user_id'])
+                            GroupManager::get_user_group_name($row['user_id'])
                         )
                     ),
                     ENT_QUOTES,

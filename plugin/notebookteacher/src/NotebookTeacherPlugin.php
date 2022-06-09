@@ -11,7 +11,7 @@
  */
 class NotebookTeacherPlugin extends Plugin
 {
-    const TABLE_NOTEBOOKTEACHER = 'plugin_notebook_teacher';
+    public const TABLE_NOTEBOOKTEACHER = 'plugin_notebook_teacher';
     public $isCoursePlugin = true;
 
     /**

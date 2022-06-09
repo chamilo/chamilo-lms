@@ -10,7 +10,7 @@
  */
 class CustomCertificatePlugin extends Plugin
 {
-    const TABLE_CUSTOMCERTIFICATE = 'plugin_customcertificate';
+    public const TABLE_CUSTOMCERTIFICATE = 'plugin_customcertificate';
     public $isCoursePlugin = true;
 
     // When creating a new course this settings are added to the course

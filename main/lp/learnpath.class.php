@@ -359,7 +359,7 @@ class learnpath
                                 ORDER BY view_count DESC ";
                         $status_list = [];
                         $res = Database::query($sql);
-                        while ($row = Database:: fetch_array($res)) {
+                        while ($row = Database::fetch_array($res)) {
                             $status_list[$row['lp_item_id']] = $row['status'];
                         }
 
@@ -3754,7 +3754,7 @@ class learnpath
                                             lp_view_id ='".$lp_view_id."' AND
                                             status='completed'";
                                 $result = Database::query($sql);
-                                $row_count = Database:: fetch_row($result);
+                                $row_count = Database::fetch_row($result);
                                 $count_item_view = (int) $row_count[0];
                                 $not_multiple_attempt = 0;
                                 if ($prevent_reinit === 1 && $count_item_view > 0) {
@@ -7997,7 +7997,7 @@ class learnpath
             $legend .= get_lang('EditCurrentExecice');
         }
         if (isset($_GET['edit']) && $_GET['edit'] == 'true') {
-            $legend .= Display:: return_message(
+            $legend .= Display::return_message(
                 get_lang('Warning').' ! '.get_lang('WarningEditingDocument')
             );
         }

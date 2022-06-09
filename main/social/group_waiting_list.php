@@ -106,7 +106,7 @@ foreach ($users as $user) {
 
 $social_right_content = '';
 if (empty($new_member_list) > 0) {
-    $social_right_content = Display :: return_message(get_lang('ThereAreNotUsersInTheWaitingList'));
+    $social_right_content = Display::return_message(get_lang('ThereAreNotUsersInTheWaitingList'));
 }
 
 $tpl = new Template(null);

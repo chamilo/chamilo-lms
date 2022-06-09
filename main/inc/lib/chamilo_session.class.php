@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class ChamiloSession extends System\Session
 {
-    const NAME = 'ch_sid';
+    public const NAME = 'ch_sid';
 
     /**
      * Generate new session instance.

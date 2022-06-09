@@ -15,21 +15,19 @@ if (!$cecabankEnabled) {
     api_not_allowed(true);
 }
 
-$reference = $_POST['Num_operacion'];
 $receivedAmount = (float) $_POST['Importe'];
-$receivedSignature = $_POST['Firma'];
 
-if (empty($reference) || empty($receivedAmount) || empty($receivedSignature)) {
+if (empty($_POST['Num_operacion']) || empty($_POST['Firma']) || empty($receivedAmount)) {
     api_not_allowed(true);
 }
 
-$signature = $plugin->getCecabankSignature($reference , $receivedAmount);
+$signature = $plugin->getCecabankSignature($_POST['Num_operacion'] , $receivedAmount);
 
-if($signature != $receivedSignature) {
+if($signature != $_POST['Firma']) {
     api_not_allowed(true);
 }
 
-$sale = $plugin->getSaleFromReference($reference);
+$sale = $plugin->getSaleFromReference($_POST['Num_operacion']);
 
 if (empty($sale) ) {
     api_not_allowed(true);

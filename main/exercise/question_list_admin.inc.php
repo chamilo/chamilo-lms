@@ -325,10 +325,10 @@ if (!$inATest) {
                     );
                 $delete_link = null;
                 if ($objExercise->edit_exercise_in_lp == true) {
-                    $delete = true;
+                    $delete = false;
                     $questionInOtherQuizs = true;
-                    $results = Question::isQuestionOnOtherQuizs($id);
-                    if ($results && $results > 1) {
+                    $results = Question::countQuizzesUsingQuestion($id);
+                    if ($results > 1) {
                         $masterExerciseId = Question::getMasterQuizForQuestion($id);
                         if ($masterExerciseId == $exerciseId) {
                             $delete = true;

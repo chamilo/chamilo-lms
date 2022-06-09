@@ -2700,13 +2700,13 @@ abstract class Question
     }
 
     /**
-     * Check if a question is shared between quices.
+     * Count the number of quizzes that use a question.
      *
      * @param int $questionId - question ID
      *
-     * @return int - The number of quices where the question is used
+     * @return int - The number of quizzes where the question is used
      */
-    public static function isQuestionOnOtherQuizs(int $questionId)
+    public static function countQuizzesUsingQuestion(int $questionId)
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $result = Database::select(

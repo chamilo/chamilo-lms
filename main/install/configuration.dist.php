@@ -714,7 +714,7 @@ $_configuration['send_all_emails_to'] = [
 // $_configuration['quiz_question_allow_inter_course_linking'] = false;
 // Delete automatically the questions when a quiz is deleted
 // If questions are reused between courses only deletes the non-reused questions
-// or reused questions where the quiz has the lowest idd value from c_quiz_rel_question
+// or reused questions where the quiz has the lowest iid value from c_quiz_rel_question
 // $_configuration['quiz_question_delete_automatically_when_deleting_exercise'] = false;
 // Define how many seconds an AJAX request should be started to avoid loss of connection.
 //$_configuration['quiz_keep_alive_ping_interval'] = 0;

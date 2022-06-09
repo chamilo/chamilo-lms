@@ -21,6 +21,9 @@
     <a href="/account/edit" class="btn btn--primary">
       Edit profile
     </a>
+    <a href="/account/update_password" class="btn btn--primary">
+      Update Password
+    </a>
   </v-card>
 </template>
 

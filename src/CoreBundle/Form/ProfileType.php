@@ -20,6 +20,10 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 class ProfileType extends AbstractType
 {
     private LanguageRepository $languageRepository;
@@ -32,49 +36,65 @@ class ProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $languages = array_flip($this->languageRepository->getAllAvailableToArray());
-
-        $builder
-            ->add('firstname', TextType::class, ['label' => 'Firstname', 'required' => true])
-            ->add('lastname', TextType::class, ['label' => 'Lastname', 'required' => true])
-            ->add('email', EmailType::class, ['label' => 'Email', 'required' => true])
-            //->add('official_code', TextType::class)
-            //->add('groups')
-            ->add('locale', LocaleType::class, [
-                //'preferred_choices' => ['en', 'fr_FR', 'es_ES', 'pt', 'nl'],
-                'choices' => $languages,
-                'choice_loader' => null,
-            ])
-            /*->add(                'dateOfBirth',
-                BirthdayType::class,
-                [
-                    'label' => 'form.label_date_of_birth',
+        $action = isset($GLOBALS['action']) ? $GLOBALS['action'] : null;
+        if (!empty($action)) {
+            switch ($action) {
+                case 'update_password':
+                    $builder->add('plainPassword', RepeatedType::class, [
+                        'type' => PasswordType::class,
+                        'invalid_message' => 'The password fields must match.',
+                        'options' => ['attr' => ['class' => 'password-field']],
+                        'required' => true,
+                        'first_options' => ['label' => 'New Password'],
+                        'second_options' => ['label' => 'Repeat Password'],
+                        'attr' => ['autocomplete' => 'off'],
+                    ]);
+                    break;
+            }
+        } else {
+            $builder
+                ->add('firstname', TextType::class, ['label' => 'Firstname', 'required' => true])
+                ->add('lastname', TextType::class, ['label' => 'Lastname', 'required' => true])
+                ->add('email', EmailType::class, ['label' => 'Email', 'required' => true])
+                //->add('official_code', TextType::class)
+                //->add('groups')
+                ->add('locale', LocaleType::class, [
+                    //'preferred_choices' => ['en', 'fr_FR', 'es_ES', 'pt', 'nl'],
+                    'choices' => $languages,
+                    'choice_loader' => null,
+                ])
+                /*->add(                'dateOfBirth',
+                    BirthdayType::class,
+                    [
+                        'label' => 'form.label_date_of_birth',
+                        'required' => false,
+                        'widget' => 'single_text',
+                    ]
+                )
+                ->add(
+                    'biography',
+                    TextareaType::class,
+                    [
+                        'label' => 'form.label_biography',
+                        'required' => false,
+                    ]
+                )*/
+                /*->add('locale', 'locale', array(
+                    'label'    => 'form.label_locale',
                     'required' => false,
-                    'widget' => 'single_text',
-                ]
-            )
-            ->add(
-                'biography',
-                TextareaType::class,
-                [
-                    'label' => 'form.label_biography',
-                    'required' => false,
-                ]
-            )*/
-            /*->add('locale', 'locale', array(
-                'label'    => 'form.label_locale',
-                'required' => false,
-            ))*/
-            ->add('timezone', TimezoneType::class, ['label' => 'Timezone', 'required' => true])
-            ->add('phone', TextType::class, ['label' => 'Phone number', 'required' => false])
-            ->add(
-                'illustration',
-                IllustrationType::class,
-                ['label' => 'Picture', 'required' => false, 'mapped' => false]
-            )
-            //->add('website', UrlType::class, ['label' => 'Website', 'required' => false])
-        ;
+                ))*/
+                ->add('timezone', TimezoneType::class, ['label' => 'Timezone', 'required' => true])
+                ->add('phone', TextType::class, ['label' => 'Phone number', 'required' => false])
+                ->add(
+                    'illustration',
+                    IllustrationType::class,
+                    ['label' => 'Picture', 'required' => false, 'mapped' => false]
+                )
+                //->add('website', UrlType::class, ['label' => 'Website', 'required' => false])
+            ;
 
-        $builder->add('extra_fields', ExtraFieldType::class, ['mapped' => false]);
+            $builder->add('extra_fields', ExtraFieldType::class, ['mapped' => false]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

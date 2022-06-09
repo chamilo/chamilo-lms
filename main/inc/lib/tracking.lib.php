@@ -9353,7 +9353,7 @@ class TrackingCourseLog
             $direction = 'ASC';
         }
 
-        $column = (int) $column;
+        $column = $column <= 2 ? (int) $column : 0;
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
 

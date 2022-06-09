@@ -16,7 +16,7 @@ if (!$cecabankEnabled) {
 }
 
 $reference = $_POST['Num_operacion'];
-$receivedAmount = $_POST['Importe'];
+$receivedAmount = (float) $_POST['Importe'];
 $receivedSignature = $_POST['Firma'];
 
 if (empty($reference) || empty($receivedAmount) || empty($receivedSignature)) {

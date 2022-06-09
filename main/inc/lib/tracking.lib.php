@@ -9364,6 +9364,16 @@ class TrackingCourseLog
             return $row['count'];
         }
 
+        $sortByFirstName = api_sort_by_first_name();
+
+        if ($sortByFirstName) {
+            if ($column == 1) {
+                $column = 2;
+            } elseif ($column == 2) {
+                $column = 1;
+            }
+        }
+
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from, $number_of_items";
 
@@ -9406,7 +9416,6 @@ class TrackingCourseLog
         $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$courseCode.
             '&course='.$course_code.'&origin=tracking_course&id_session='.$session_id;
 
-        $sortByFirstName = api_sort_by_first_name();
         Session::write('user_id_list', []);
         $userIdList = [];
 

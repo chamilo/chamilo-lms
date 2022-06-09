@@ -1893,15 +1893,50 @@ class SessionManager
             return false;
         }
 
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        //$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        //$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        //$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
-        $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $trackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        //$trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        //$trackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
-        $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
+        $forDelete = [
+            ['table' => TABLE_STATISTIC_TRACK_COURSE_RANKING, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_ACCESS, 'column' => 'access_session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_COURSE_ACCESS, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_DEFAULT, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_DOWNLOADS, 'column' => 'down_session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_EXERCISES, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_LASTACCESS, 'column' => 'access_session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_LINKS, 'column' => 'links_session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_ONLINE, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_UPLOADS, 'column' => 'upload_session_id'],
+            ['table' => TABLE_MAIN_GRADEBOOK_CATEGORY, 'column' => 'session_id'],
+            ['table' => TABLE_MAIN_SESSION_COURSE, 'column' => 'session_id'],
+            ['table' => TABLE_MAIN_SESSION_COURSE_USER, 'column' => 'session_id'],
+            ['table' => TABLE_MAIN_SESSION_USER, 'column' => 'session_id'],
+            ['table' => TABLE_MAIN_SKILL_REL_USER, 'column' => 'session_id'],
+        ];
+        $forDeleteCourse = [
+            ['table' => TABLE_CHAT_CONNECTED, 'column' => 'session_id'],
+            ['table' => TABLE_DROPBOX_CATEGORY, 'column' => 'session_id'],
+            ['table' => TABLE_DROPBOX_FILE, 'column' => 'session_id'],
+            ['table' => TABLE_DROPBOX_POST, 'column' => 'session_id'],
+            ['table' => TABLE_FORUM_THREAD_QUALIFY_LOG, 'column' => 'session_id'],
+            ['table' => TABLE_LP_REL_USERGROUP, 'column' => 'session_id'],
+            ['table' => TABLE_LP_VIEW, 'column' => 'session_id'],
+            ['table' => TABLE_SURVEY_INVITATION, 'column' => 'session_id'],
+            ['table' => TABLE_TOOL_LIST, 'column' => 'session_id'],
+            ['table' => TABLE_WIKI, 'column' => 'session_id'],
+            ['table' => TABLE_WIKI_MAILCUE, 'column' => 'session_id'],
+        ];
+        $forUpdate = [
+            ['table' => TABLE_TICKET_TICKET, 'column' => 'session_id'],
+        ];
+
+        //$ticket = Database::get_main_table(TABLE_TICKET_TICKET);
         $em = Database::getManager();
         $userId = api_get_user_id();
         $user = api_get_user_entity();
@@ -1966,15 +2001,31 @@ class SessionManager
         Database::query($sql);
 
         //Database::query("DELETE FROM $tbl_student_publication WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id = $sessionId");
+        //Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id = $sessionId");
+        //Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = $sessionId");
+        //Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id = $sessionId");
         //Database::query("DELETE FROM $tbl_item_properties WHERE session_id = $sessionId");
         Database::query("DELETE FROM $tbl_url_session WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $trackCourseAccess WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $trackAccess WHERE access_session_id = $sessionId");
-        $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id = $sessionId";
-        Database::query($sql);
+        //Database::query("DELETE FROM $trackCourseAccess WHERE session_id = $sessionId");
+        //Database::query("DELETE FROM $trackAccess WHERE access_session_id = $sessionId");
+        //$sql = "UPDATE $ticket SET session_id = NULL WHERE session_id = $sessionId";
+        //Database::query($sql);
+
+        foreach ($forDelete as $item) {
+            $table = $item['table'];
+            $column = $item['column'];
+            Database::query("DELETE FROM $table WHERE $column = $sessionId");
+        }
+        foreach ($forDeleteCourse as $item) {
+            $table = DB_COURSE_PREFIX.$item['table'];
+            $column = $item['column'];
+            Database::query("DELETE FROM $table WHERE $column = $sessionId");
+        }
+        foreach ($forUpdate as $item) {
+            $table = $item['table'];
+            $column = $item['column'];
+            Database::query("UPDATE $table SET $column = NULL WHERE $column = $sessionId");
+        }
 
         $extraFieldValue = new ExtraFieldValue('session');
         $extraFieldValue->deleteValuesByItem($sessionId);

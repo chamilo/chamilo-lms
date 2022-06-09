@@ -370,8 +370,8 @@ if ($showReporting) {
     }
 }
 
-$trackingColumn = isset($_GET['users_tracking_column']) ? $_GET['users_tracking_column'] : null;
-$trackingDirection = isset($_GET['users_tracking_direction']) ? $_GET['users_tracking_direction'] : null;
+$trackingColumn = $_GET['users_tracking_column'] ?? null;
+$trackingDirection = $_GET['users_tracking_direction'] ?? null;
 $hideReports = api_get_configuration_value('hide_course_report_graph');
 $conditions = [];
 
@@ -565,7 +565,7 @@ if ($nbStudents > 0) {
     if ($hideReports === false) {
         $conditions['include_invited_users'] = false;
         $usersTracking = TrackingCourseLog::get_user_data(
-            null,
+            0,
             $nbStudents,
             $trackingColumn,
             $trackingDirection,
@@ -817,7 +817,7 @@ if ($nbStudents > 0) {
     $headers['student_publication'] = get_lang('Student_publication');
     $table->set_header($headerCounter++, get_lang('Messages'), false);
     $headers['messages'] = get_lang('Messages');
-    $table->set_header($headerCounter++, get_lang('Classes'));
+    $table->set_header($headerCounter++, get_lang('Classes'), false);
     $headers['classes'] = get_lang('Classes');
 
     if (empty($sessionId)) {

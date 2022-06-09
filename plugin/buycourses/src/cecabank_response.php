@@ -21,15 +21,15 @@ if (empty($_POST['Num_operacion']) || empty($_POST['Firma']) || empty($receivedA
     api_not_allowed(true);
 }
 
-$signature = $plugin->getCecabankSignature($_POST['Num_operacion'] , $receivedAmount);
+$signature = $plugin->getCecabankSignature($_POST['Num_operacion'], $receivedAmount);
 
-if($signature != $_POST['Firma']) {
+if ($signature != $_POST['Firma']) {
     api_not_allowed(true);
 }
 
 $sale = $plugin->getSaleFromReference($_POST['Num_operacion']);
 
-if (empty($sale) ) {
+if (empty($sale)) {
     api_not_allowed(true);
 }
 

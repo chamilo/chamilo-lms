@@ -1333,11 +1333,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get sale data by reference.
      *
-     * @param int $reference The sale reference
+     * @param string $reference The sale reference
      *
      * @return array
      */
-    public function getSaleFromReference($reference)
+    public function getSaleFromReference(string $reference)
     {
         return Database::select(
             '*',

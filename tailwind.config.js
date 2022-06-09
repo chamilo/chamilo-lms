@@ -43,6 +43,19 @@ module.exports = {
         sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif']
       },
     },
+    fontSize: {
+      'header': ['52px', '64px'],
+      'h1': ['32px', '40px'],
+      'h2': ['29px', '32px'],
+      'h3': ['26px', '32px'],
+      'h4': ['23px', '32px'],
+      'h5': ['20px', '24px'],
+      'h6': ['18px', '24px'],
+      'body-1': ['16px', '24px'],
+      'body-2': ['14px', '16px'],
+      'caption': ['13px', '16px'],
+      'tiny': ['11px', '16px'],
+    }
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),

@@ -1,5 +1,5 @@
 <template>
-  <h5 class="text-xl font-semibold">{{ event.title }}</h5>
+  <h5>{{ event.title }}</h5>
   {{ $filters.abbreviatedDatetime(event.startDate) }}
     
   <p v-if="event.endDate">
@@ -8,9 +8,9 @@
 
   <hr class="my-2">
 
-  <div class="text-base mb-3" v-html="event.content" />
+  <div class="mb-3" v-html="event.content" />
 
-  <h6 class="text-xl"> {{ $t('Invitees') }}</h6>
+  <h6 class="text-h5"> {{ $t('Invitees') }}</h6>
 
   <ShowLinks
       :item="event"

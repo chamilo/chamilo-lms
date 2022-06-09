@@ -2288,7 +2288,7 @@ class Display
 
             $html = <<<HTML
                 <div class="v-card bg-white mx-2" id="$id">
-                    <div class="v-card-header text-xl my-2">
+                    <div class="v-card-header text-h5 my-2">
                         $title
                     </div>
                     <div class="v-card-text">$content</div>
@@ -2301,7 +2301,7 @@ HTML;
             $params['class'] = 'v-card bg-white mx-2';
             $html = '';
             if (!empty($title)) {
-                $html .= '<div class="v-card-header text-xl my-2">'.$title.'</div>'.PHP_EOL;
+                $html .= '<div class="v-card-header text-h5 my-2">'.$title.'</div>'.PHP_EOL;
             }
             $html .= '<div class="v-card-text">'.$content.'</div>'.PHP_EOL;
             $html = self::div($html, $params);

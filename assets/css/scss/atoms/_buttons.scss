@@ -230,7 +230,7 @@ $border-color_12: #9333EA;
   }
 
   .p-button-icon {
-    @apply font-semibold leading-6 text-sm w-[1.5rem] h-[1.5rem];
+    @apply font-semibold leading-6 w-[1.5rem] h-[1.5rem];
 
     &::before {
       @apply leading-6;
@@ -263,11 +263,11 @@ $border-color_12: #9333EA;
 }
 
 .p-button.p-button-sm {
-  @apply text-base px-4 py-1;
+  @apply text-body-1 px-4 py-1;
 }
 
 .p-button.p-button-lg {
-  @apply px-8 py-3 text-xl;
+  @apply px-8 py-3 text-h5;
 }
 
 // secondary button

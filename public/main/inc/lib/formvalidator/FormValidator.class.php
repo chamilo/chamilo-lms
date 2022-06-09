@@ -106,7 +106,7 @@ class FormValidator extends HTML_QuickForm
         }
 
         //Set Header template
-        $renderer->setHeaderTemplate(' <h1 class="text-2xl font-small text-gray-800 mb-4">{header}<hr /></h1>');
+        $renderer->setHeaderTemplate(' <h1 class="text-h3 font-small text-gray-800 mb-4">{header}<hr /></h1>');
 
         $required = '<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>';
         if ((self::LAYOUT_INLINE === $layout || self::LAYOUT_BOX_SEARCH === $layout)) {

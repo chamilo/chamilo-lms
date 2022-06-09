@@ -433,7 +433,7 @@ function display_language_selection()
         <div class="install-icon">
             <img width="150px;" src="chamilo-install.svg"/>
         </div>
-        <h2 class="text-2xl">
+        <h2 class="text-h3">
             <?php echo display_step_sequence(); ?>
             <?php echo get_lang('Installation Language'); ?>
         </h2>

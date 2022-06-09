@@ -1,10 +1,10 @@
 <template>
   <div v-if="categories.length" class="grid">
     <div v-for="category in categories">
-      <div class="text-xl">
-        <v-icon icon="mdi-folder"/>
+      <h5>
+        <v-icon icon="mdi-folder" />
         {{ category.name }}
-      </div>
+      </h5>
       <SessionListCategoryWrapper :sessions="getSessionsFromCategory(category)"/>
     </div>
   </div>

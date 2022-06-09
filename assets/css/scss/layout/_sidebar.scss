@@ -17,11 +17,11 @@
   }
 
   &__bottom {
-    @apply border-b border-solid border-gray-25 p-6 text-xs;
+    @apply border-b border-solid border-gray-25 p-6 text-tiny;
   }
 
   &__logout-link {
-    @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2;
+    @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2 text-body-2;
 
     .pi {
       @apply leading-normal;
@@ -37,7 +37,7 @@
   }
 
   &__button {
-    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-5 text-xs text-primary
+    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-5 text-tiny text-primary
       sm:inline-flex;
     z-index: 11;
 
@@ -55,7 +55,7 @@
         @apply gap-4 pl-8 py-3 pr-6 mb-1 font-semibold flex-nowrap;
 
         .p-panelmenu-icon {
-          @apply order-3 text-xs rotate-90;
+          @apply order-3 rotate-90;
         }
 
         .p-menuitem-icon {
@@ -131,7 +131,7 @@
       }
 
       &__logout-link {
-        @apply md:text-xs md:mx-5 md:my-3 md:py-3;
+        @apply md:mx-5 md:my-3 md:py-3 md:px-3 text-center;
 
         .logout-text {
           @apply sm:hidden sm:mr-0;

@@ -30,7 +30,7 @@
                      alt=""
                 />
             </div>
-            <div v-if="course.users.edges.length < 3 " class="text-xs flex-col">
+            <div v-if="course.users.edges.length < 3 " class="flex-col">
               <div>
               {{ courseRelUser.node.user.firstname }} {{ courseRelUser.node.user.lastname }}
               </div>

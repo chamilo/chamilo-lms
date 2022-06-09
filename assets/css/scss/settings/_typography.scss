@@ -1,0 +1,33 @@
+@layer base {
+  body {
+    @apply text-body-1;
+  }
+
+  header {
+    @apply font-bold text-header;
+  }
+
+  h1 {
+    @apply font-bold text-h1;
+  }
+
+  h2 {
+    @apply font-bold text-h2;
+  }
+
+  h3 {
+    @apply font-bold text-h3;
+  }
+
+  h4 {
+    @apply font-bold text-h4;
+  }
+
+  h5 {
+    @apply font-bold text-h5;
+  }
+
+  h6 {
+    @apply font-bold text-h6;
+  }
+}

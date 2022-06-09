@@ -31,7 +31,7 @@
   // Forms.
 
   .help-block {
-    @apply mt-2 text-xs;
+    @apply mt-2 text-caption;
   }
 
   .has-error .ch-form-label {
@@ -39,7 +39,7 @@
   }
 
   .has-error .help-block {
-    @apply italic text-xs;
+    @apply italic text-caption;
   }
 
   .has-error .ch-form-control {
@@ -129,7 +129,7 @@
   // Page header
 
   .page-header {
-    @apply text-2xl flex flex-row gap-2;
+    @apply text-h3 flex flex-row gap-2;
   }
 
   #no-data-view {
@@ -167,7 +167,7 @@
 
   // Progress bars
   .progress {
-    @apply rounded-sm ring-1 text-sm text-center min-h-full ml-12 mr-4;
+    @apply rounded-sm ring-1 text-center min-h-full ml-12 mr-4;
   }
   .progress .progress-bar {
   }

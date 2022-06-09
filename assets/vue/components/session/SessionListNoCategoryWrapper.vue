@@ -1,8 +1,8 @@
 <template>
-    <div class="text-xl">
-      <v-icon icon="mdi-folder"/>
+    <h5>
+      <v-icon icon="mdi-folder" />
       {{ $t('No category') }}
-    </div>
+    </h5>
     <SessionListCategoryWrapper :sessions="sessions"/>
 </template>
 <script>

@@ -1,7 +1,7 @@
 <template>
   <div v-if="course" class="grid gap-4">
     <div class="flex flex-row justify-between border-b-2 border-gray-200 ">
-      <div class="line-clamp-1 text-2xl font-bold">
+      <div class="line-clamp-1 text-h3 font-bold">
         {{ course.title }}
         <span v-if="session">
           ({{ session.name }})
@@ -10,7 +10,7 @@
 
       <div>
         <div class="flex flex-row" v-if="isCurrentTeacher && course">
-          <a class="btn btn--info mr-2 text-xs">
+          <a class="btn btn--info mr-2">
             <v-icon icon="mdi-eye" class="pr-2" />
             {{ $t('See as student') }}
           </a>

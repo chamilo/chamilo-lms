@@ -1,33 +1,113 @@
+@layer utilities {
+  .text-header {
+    font-size: 52px;
+    line-height: 64px;
+    font-weight: 700;
+  }
+
+  .text-h1 {
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 700;
+  }
+
+  .text-h2 {
+    font-size: 29px;
+    line-height: 32px;
+    font-weight: 700;
+  }
+
+  .text-h3 {
+    font-size: 26px;
+    line-height: 32px;
+    font-weight: 700;
+  }
+
+  .text-h4 {
+    font-size: 23px;
+    line-height: 32px;
+    font-weight: 700;
+  }
+
+  .text-h5 {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 700;
+  }
+
+  .text-h6 {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 700;
+  }
+
+  .text-body-1 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .text-body-1-bold {
+    @apply text-body-1 font-semibold;
+  }
+
+  .text-body-2 {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .text-body-2-bold {
+    @apply text-body-2 font-semibold;
+  }
+
+  .text-caption {
+    font-size: 13px;
+    line-height: 16px;
+  }
+
+  .text-caption-bold {
+    @apply text-caption font-semibold;
+  }
+
+  .text-tiny {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .text-tiny-bold {
+    @apply text-tiny font-semibold;
+  }
+}
+
 @layer base {
   body {
     @apply text-body-1;
   }
 
   header {
-    @apply font-bold text-header;
+    @apply text-header;
   }
 
   h1 {
-    @apply font-bold text-h1;
+    @apply text-h1;
   }
 
   h2 {
-    @apply font-bold text-h2;
+    @apply text-h2;
   }
 
   h3 {
-    @apply font-bold text-h3;
+    @apply text-h3;
   }
 
   h4 {
-    @apply font-bold text-h4;
+    @apply text-h4;
   }
 
   h5 {
-    @apply font-bold text-h5;
+    @apply text-h5;
   }
 
   h6 {
-    @apply font-bold text-h6;
+    @apply text-h6;
   }
 }

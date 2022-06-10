@@ -145,12 +145,16 @@
   }
 
   .ch-tool-icon {
+    @apply font-extrabold text-primary;
   }
   .ch-tool-icon-disabled {
+    @apply font-extrabold text-gray-50;
   }
   .ch-tool-icon-gradient {
+    @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-gradient;
   }
   .ch-tool-icon-button {
+    @apply font-extrabold bg-clip-text text-gray-90;
   }
 
   // Forms
@@ -203,6 +207,10 @@
   > .active {
     display: block;
   }
+}
+
+.mdi {
+  @apply align-middle inline-flex leading-none;
 }
 
 //@import 'primevue-md-light-indigo/theme.css';

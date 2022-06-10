@@ -10,7 +10,7 @@
 <!--          <v-icon-->
 <!--              icon="mdi-google-classroom"-->
 <!--              size="72px"-->
-<!--              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-ch-primary to-ch-primary-light"-->
+<!--              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-gradient"-->
 <!--          />-->
 <!--        </div>-->
 

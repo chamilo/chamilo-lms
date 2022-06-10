@@ -128,7 +128,7 @@
     </div>
 
     <div
-        class="grid gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
+      class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 justify-between grid-cols-course-tools"
     >
       <CourseToolList
           v-for="tool in tools.authoring"

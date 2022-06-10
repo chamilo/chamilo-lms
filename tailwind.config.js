@@ -45,6 +45,9 @@ module.exports = {
       fontFamily: {
         sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif']
       },
+      gridTemplateColumns: {
+        'course-tools': 'repeat(auto-fit, 120px)',
+      }
     },
   },
   plugins: [

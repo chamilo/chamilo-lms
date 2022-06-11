@@ -3937,19 +3937,16 @@ class SurveyUtil
      *
      * @return bool return true if the survey has answers, false otherwise
      */
-    public static function checkIfSurveyHasAnswers($surveyId)
+    public static function checkIfSurveyHasAnswers(int $surveyId): bool
     {
         $tableSurveyAnswer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $courseId = api_get_course_int_id();
-        $surveyId = (int) $surveyId;
 
-        if (empty($courseId) || empty($surveyId)) {
+        if (empty($surveyId)) {
             return false;
         }
 
         $sql = "SELECT * FROM $tableSurveyAnswer
                 WHERE
-                    c_id = $courseId AND
                     survey_id = '".$surveyId."'
                 ORDER BY iid, user ASC";
         $result = Database::query($sql);

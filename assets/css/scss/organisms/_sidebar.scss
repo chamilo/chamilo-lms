@@ -17,18 +17,18 @@
   }
 
   &__bottom {
-    @apply border-b border-solid border-gray-25 p-6 text-tiny;
+    @apply border-b border-solid border-gray-25 p-6 text-tiny-bold;
   }
 
   &__logout-link {
-    @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2 text-body-2;
+    @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2;
 
     .pi {
-      @apply leading-normal;
+      @apply leading-normal text-body-2;
     }
 
     .logout-text {
-      @apply ml-2;
+      @apply ml-2 text-body-2;
     }
 
     &:hover {
@@ -37,13 +37,17 @@
   }
 
   &__button {
-    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-5 text-tiny text-primary
+    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-4 text-tiny text-primary
       sm:inline-flex;
     z-index: 11;
 
     &:hover,
     &:active {
       @apply border-primary;
+    }
+
+    &.p-button.p-button-icon-only {
+      @apply h-8 p-0 w-8;
     }
   }
 
@@ -52,18 +56,18 @@
 
     .p-panelmenu-header {
       > a {
-        @apply gap-4 pl-8 py-3 pr-6 mb-1 font-semibold flex-nowrap;
+        @apply gap-4 pl-8 py-3 pr-6 mb-1 flex-nowrap;
 
         .p-panelmenu-icon {
-          @apply order-3 rotate-90;
+          @apply order-3 rotate-90 text-body-2-bold;
         }
 
         .p-menuitem-icon {
-          @apply order-1;
+          @apply order-1 text-body-2-bold;
         }
 
         .p-menuitem-text {
-          @apply order-2 grow whitespace-nowrap;
+          @apply order-2 grow text-body-2-bold whitespace-nowrap;
         }
 
         &.router-link-active,
@@ -84,6 +88,10 @@
       .p-menuitem {
         .p-menuitem-link {
           @apply pl-8 py-3 pr-6;
+
+          .p-menuitem-text {
+            @apply text-body-2;
+          }
 
           &.router-link-active-exact,
           &:hover {

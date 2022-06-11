@@ -12,12 +12,13 @@
 
 @import "molecules/course_tool";
 
+@import "organisms/sidebar";
+
 @import "components/badges";
 @import "components/forms";
 //@import 'announcement';
 
 @import "layout/topbar";
-@import 'layout/sidebar';
 @import "layout/breadcrumb";
 @import 'layout/main_container';
 

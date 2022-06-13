@@ -230,7 +230,7 @@ function get_number_of_users()
     $courseCode = api_get_course_id();
     $sessionId = api_get_session_id();
 
-    if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'teacher') {
+    if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
         if (api_get_session_id() != 0) {
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u

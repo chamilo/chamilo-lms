@@ -5329,7 +5329,8 @@ class Tracking
     public static function getInactiveStudentsInCourse(
         $courseId,
         $since = 'never',
-        $session_id = 0
+        $session_id = 0,
+        $userActive = null
     ) {
         $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -5402,7 +5403,13 @@ class Tracking
         $users = [];
         while ($user = Database::fetch_array($rs)) {
             $userId = $user['user_id'];
-
+            if (isset($userActive)) {
+                $userActive = (int) $userActive;
+                $uInfo = api_get_user_info($userId);
+                if ((int) $uInfo['active'] !== $userActive) {
+                    continue;
+                }
+            }
             if ($allow && $allowPauseFormation) {
                 $pause = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'pause_formation');
                 if (!empty($pause) && isset($pause['value']) && 1 == $pause['value']) {
@@ -9285,13 +9292,6 @@ class TrackingCourseLog
                 user.lastname LIKE '%".$keyword."%'  OR
                 user.username LIKE '%".$keyword."%'  OR
                 user.email LIKE '%".$keyword."%'
-             ) ";
-        }
-
-        if (isset($_GET['user_active'])) {
-            $active = (int) $_GET['user_active'];
-            $condition_user .= " AND (
-                user.active = $active
              ) ";
         }
 

@@ -23,6 +23,10 @@ if (!$is_allowedToTrack) {
 //keep course_code form as it is loaded (global) by the table's get_user_data
 $courseCode = $courseInfo['code'];
 $courseId = $courseInfo['real_id'];
+$parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
+$parameters['id_session'] = $sessionId;
+$parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
+$parameters['user_active'] = isset($_REQUEST['user_active']) && is_numeric($_REQUEST['user_active']) ? (int) $_REQUEST['user_active'] : null;
 
 // PERSON_NAME_DATA_EXPORT is buggy
 $sortByFirstName = api_sort_by_first_name();
@@ -54,6 +58,10 @@ if (isset($_GET['additional_profile_field'])) {
     foreach ($_GET['additional_profile_field'] as $fieldId) {
         $additionalParams .= '&additional_profile_field[]='.(int) $fieldId;
     }
+}
+
+if (isset($parameters['user_active'])) {
+    $additionalParams .= '&user_active='.(int) $parameters['user_active'];
 }
 
 // If the user is a HR director (drh)
@@ -183,10 +191,35 @@ $tpl = new Template($nameTools);
 // Getting all the students of the course
 if (empty($sessionId)) {
     // Registered students in a course outside session.
-    $studentList = CourseManager::get_student_list_from_course_code($courseCode);
+    $studentList = CourseManager::get_student_list_from_course_code(
+        $courseCode,
+        false,
+        0,
+        null,
+        null,
+        true,
+        0,
+        false,
+        0,
+        0,
+        $parameters['user_active']
+    );
+
 } else {
     // Registered students in session.
-    $studentList = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionId);
+    $studentList = CourseManager::get_student_list_from_course_code(
+        $courseCode,
+        true,
+        $sessionId,
+        null,
+        null,
+        true,
+        0,
+        false,
+        0,
+        0,
+        $parameters['user_active']
+    );
 }
 
 $nbStudents = count($studentList);
@@ -462,8 +495,12 @@ if ($nbStudents > 0) {
     $group = [];
     $group[] = $formActiveUsers->createElement('radio', 'user_active', 'id="user_active1"', get_lang('Yes'), 1);
     $group[] = $formActiveUsers->createElement('radio', 'user_active', 'id="user_active0"', get_lang('No'), 0);
-    $formActiveUsers->addGroup($group, 'active', get_lang('AccountActive'));
+    $formActiveUsers->addGroup($group, '', get_lang('AccountActive'));
     $formActiveUsers->addButtonSearch(get_lang('Search'));
+
+    if (isset($parameters['user_active'])) {
+        $formActiveUsers->setDefaults(['user_active' => $parameters['user_active']]);
+    }
 
     $extraField = new ExtraField('user');
     $extraField->addElements($formExtraField, 0, [], true);
@@ -537,9 +574,9 @@ if ($nbStudents > 0) {
     }
 
     if ($formActiveUsers->validate()) {
-        $formValue = $formActiveUsers->getSubmitValue('active');
-        if (isset($formValue['user_active'])) {
-            $active = (int) $formValue['user_active'];
+        $userActive = $formActiveUsers->getSubmitValue('user_active');
+        if (isset($userActive) && is_numeric($userActive)) {
+            $active = (int) $userActive;
             $whereCondition = " AND user.active = $active ";
             $conditions = ['where' => $whereCondition, 'inject_joins' => ''];
         }
@@ -657,7 +694,7 @@ if ($nbStudents > 0) {
     $getLangXDays = get_lang('XDays');
     $form = new FormValidator(
         'reminder_form',
-        'get',
+        'post',
         api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
         null,
         ['style' => 'margin-bottom: 10px']
@@ -721,10 +758,6 @@ if ($nbStudents > 0) {
         );
         $table->setDataFunctionParams($conditions);
     }
-
-    $parameters['cidReq'] = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
-    $parameters['id_session'] = $sessionId;
-    $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $headerCounter = 0;
     $headers = [];
@@ -866,8 +899,6 @@ if ($nbStudents > 0) {
             $parameters[$key] = $value;
         }
     }
-    $parameters['cidReq'] = $courseCode;
-    $parameters['id_session'] = $sessionId;
     $table->set_additional_parameters($parameters);
     // display buttons to un hide hidden columns
     $html .= '<div id="unhideButtons" class="btn-toolbar">';
@@ -1178,7 +1209,8 @@ if (isset($_GET['csv']) && $_GET['csv'] == 1) {
     $users = Tracking::getInactiveStudentsInCourse(
         api_get_course_int_id(),
         $since,
-        $sessionId
+        $sessionId,
+        $parameters['user_active']
     );
 
     if (count($users) != 0) {

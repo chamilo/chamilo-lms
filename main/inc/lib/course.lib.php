@@ -2000,7 +2000,8 @@ class CourseManager
         $groupId = 0,
         $getCount = false,
         $start = 0,
-        $limit = 0
+        $limit = 0,
+        $userActive = null
     ) {
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $sessionId = (int) $sessionId;
@@ -2088,6 +2089,12 @@ class CourseManager
             if (!$includeInvitedUsers) {
                 $sql .= " AND u.status != ".INVITEE;
             }
+
+            if (isset($userActive)) {
+                $userActive = (int) $userActive;
+                $sql .= " AND u.active = $userActive";
+            }
+
             $sql .= $limitCondition;
 
             $rs = Database::query($sql);

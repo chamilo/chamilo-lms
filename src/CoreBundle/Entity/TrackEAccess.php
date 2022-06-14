@@ -15,8 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="track_e_access", indexes={
  *     @ORM\Index(name="access_user_id", columns={"access_user_id"}),
  *     @ORM\Index(name="access_c_id", columns={"c_id"}),
- *     @ORM\Index(name="access_session_id", columns={"access_session_id"}),
- *     @ORM\Index(name="user_course_session_date", columns={"access_user_id", "c_id", "access_session_id", "access_date"})
+ *     @ORM\Index(name="session_id", columns={"session_id"}),
+ *     @ORM\Index(name="user_course_session_date", columns={"access_user_id", "c_id", "session_id", "access_date"})
  * })
  * @ORM\Entity
  */
@@ -50,9 +50,9 @@ class TrackEAccess
     protected ?string $accessTool = null;
 
     /**
-     * @ORM\Column(name="access_session_id", type="integer", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected int $accessSessionId;
+    protected int $sessionId;
 
     /**
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
@@ -148,25 +148,25 @@ class TrackEAccess
     }
 
     /**
-     * Set accessSessionId.
+     * Set sessionId.
      *
      * @return TrackEAccess
      */
-    public function setAccessSessionId(int $accessSessionId)
+    public function setSessionId(int $sessionId)
     {
-        $this->accessSessionId = $accessSessionId;
+        $this->accessSessionId = $sessionId;
 
         return $this;
     }
 
     /**
-     * Get accessSessionId.
+     * Get sessionId.
      *
      * @return int
      */
-    public function getAccessSessionId()
+    public function getSessionId()
     {
-        return $this->accessSessionId;
+        return $this->sessionId;
     }
 
     /**

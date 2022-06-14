@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="track_e_links", indexes={
  *     @ORM\Index(name="idx_tel_c_id", columns={"c_id"}),
  *     @ORM\Index(name="idx_tel_user_id", columns={"links_user_id"}),
- *     @ORM\Index(name="links_session_id", columns={"links_session_id"})
+ *     @ORM\Index(name="session_id", columns={"session_id"})
  * })
  * @ORM\Entity
  */
@@ -42,9 +42,9 @@ class TrackELinks
     protected int $linksLinkId;
 
     /**
-     * @ORM\Column(name="links_session_id", type="integer", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected int $linksSessionId;
+    protected int $sessionId;
 
     /**
      * @ORM\Column(name="links_id", type="integer")
@@ -142,25 +142,25 @@ class TrackELinks
     }
 
     /**
-     * Set linksSessionId.
+     * Set sessionId.
      *
      * @return TrackELinks
      */
-    public function setLinksSessionId(int $linksSessionId)
+    public function setSessionId(int $sessionId)
     {
-        $this->linksSessionId = $linksSessionId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
 
     /**
-     * Get linksSessionId.
+     * Get sessionId.
      *
      * @return int
      */
-    public function getLinksSessionId()
+    public function getSessionId()
     {
-        return $this->linksSessionId;
+        return $this->sessionId;
     }
 
     /**

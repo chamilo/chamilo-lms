@@ -230,7 +230,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 //4. track_e_lastaccess
                 $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
                         WHERE c_id = $course_id
-                        AND access_session_id = $origin_session_id
+                        AND session_id = $origin_session_id
                         AND access_user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = [];
@@ -242,7 +242,7 @@ if (isset($_REQUEST['load_ajax'])) {
                     foreach ($list as $id) {
                         if ($update_database) {
                             $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS
-                                    SET access_session_id = $new_session_id
+                                    SET session_id = $new_session_id
                                     WHERE access_id = $id";
                             if ($debug) {
                                 echo $sql;

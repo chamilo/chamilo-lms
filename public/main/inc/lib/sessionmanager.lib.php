@@ -1317,7 +1317,7 @@ class SessionManager
                     FROM $table_stats_access
                     WHERE access_tool = 'course_description'
                     AND c_id = '%s'
-                    AND access_session_id = %s
+                    AND session_id = %s
                     AND access_user_id = %s ";
             $sql_query = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
 
@@ -1972,7 +1972,7 @@ class SessionManager
         //Database::query("DELETE FROM $tbl_item_properties WHERE session_id = $sessionId");
         Database::query("DELETE FROM $tbl_url_session WHERE session_id = $sessionId");
         Database::query("DELETE FROM $trackCourseAccess WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $trackAccess WHERE access_session_id = $sessionId");
+        Database::query("DELETE FROM $trackAccess WHERE session_id = $sessionId");
         $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id = $sessionId";
         Database::query($sql);
 

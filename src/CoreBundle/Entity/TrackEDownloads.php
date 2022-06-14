@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="track_e_downloads", indexes={
  *     @ORM\Index(name="idx_ted_user_id", columns={"down_user_id"}),
  *     @ORM\Index(name="idx_ted_c_id", columns={"c_id"}),
- *     @ORM\Index(name="down_session_id", columns={"down_session_id"})
+ *     @ORM\Index(name="session_id", columns={"session_id"})
  * })
  * @ORM\Entity
  */
@@ -49,9 +49,9 @@ class TrackEDownloads
     protected string $downDocPath;
 
     /**
-     * @ORM\Column(name="down_session_id", type="integer", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected int $downSessionId;
+    protected int $sessionId;
 
     /**
      * Set downUserId.
@@ -142,25 +142,25 @@ class TrackEDownloads
     }
 
     /**
-     * Set downSessionId.
+     * Set sessionId.
      *
      * @return TrackEDownloads
      */
-    public function setDownSessionId(int $downSessionId)
+    public function setSessionId(int $sessionId)
     {
-        $this->downSessionId = $downSessionId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
 
     /**
-     * Get downSessionId.
+     * Get sessionId.
      *
      * @return int
      */
-    public function getDownSessionId()
+    public function getSessionId()
     {
-        return $this->downSessionId;
+        return $this->sessionId;
     }
 
     /**

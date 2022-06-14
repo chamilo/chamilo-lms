@@ -131,7 +131,7 @@ class Event
         } else {
             $userId = '0'; // no one
         }
-        $sql = "INSERT INTO $TABLETRACK_ACCESS  (user_ip, access_user_id, c_id, access_date, access_session_id)
+        $sql = "INSERT INTO $TABLETRACK_ACCESS  (user_ip, access_user_id, c_id, access_date, session_id)
                 VALUES ('$ip', $userId, $courseId, '$now', $sessionId)";
 
         Database::query($sql);
@@ -142,11 +142,11 @@ class Event
                   access_user_id = $userId AND
                   c_id = $courseId AND
                   access_tool IS NULL AND
-                  access_session_id = $sessionId";
+                  session_id = $sessionId";
         $result = Database::query($sql);
 
         if (0 == Database::affected_rows($result)) {
-            $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_date, access_session_id)
+            $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_date, session_id)
                     VALUES ($userId, $courseId, '$now', $sessionId)";
             Database::query($sql);
         }
@@ -225,7 +225,7 @@ class Event
                 'c_id' => $courseId,
                 'access_tool' => $tool,
                 'access_date' => $reallyNow,
-                'access_session_id' => $sessionId,
+                'session_id' => $sessionId,
                 'user_ip' => Database::escape_string(api_get_real_ip()),
             ];
             Database::insert($tableAccess, $params);
@@ -238,7 +238,7 @@ class Event
                     access_user_id = $userId AND
                     c_id = $courseId AND
                     access_tool = '$tool' AND
-                    access_session_id = $sessionId";
+                    session_id = $sessionId";
         $result = Database::query($sql);
 
         if (0 == Database::affected_rows($result)) {
@@ -247,7 +247,7 @@ class Event
                 'c_id' => $courseId,
                 'access_tool' => $tool,
                 'access_date' => $reallyNow,
-                'access_session_id' => $sessionId,
+                'session_id' => $sessionId,
             ];
             Database::insert($tableLastAccess, $params);
         }
@@ -287,7 +287,7 @@ class Event
                 'c_id' => $courseId,
                 'down_doc_path' => $documentUrl,
                 'down_date' => $reallyNow,
-                'down_session_id' => $sessionId,
+                'session_id' => $sessionId,
             ]
         );
     }
@@ -320,7 +320,7 @@ class Event
                   c_id,
                   upload_work_id,
                   upload_date,
-                  upload_session_id
+                  session_id
                 )
                 VALUES (
                  $userId,
@@ -361,7 +361,7 @@ class Event
                      c_id,
                      links_link_id,
                      links_date,
-                     links_session_id
+                     session_id
                     ) VALUES (
                      $userId,
                      $courseId,

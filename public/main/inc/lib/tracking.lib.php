@@ -3576,31 +3576,31 @@ class Tracking
         // Then, courses where $coach_id is coach of the session
         $sql = "SELECT srcru.user_id
             FROM $tbl_session_course_user srcru
-            INNER JOIN $tbl_session_course src 
+            INNER JOIN $tbl_session_course src
             ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-            INNER JOIN $tbl_session s 
+            INNER JOIN $tbl_session s
             ON srcru.session_id = s.id AND src.session_id = s.id
             INNER JOIN $tbl_session_user sru on s.id = sru.session_id
-            WHERE 
-               srcru.status = ".SessionEntity::STUDENT." AND 
+            WHERE
+               srcru.status = ".SessionEntity::STUDENT." AND
                sru.relation_type = ".SessionEntity::GENERAL_COACH." AND
                sru.user_id = $coach_id";
 
         if (-1 != $access_url_id) {
             $sql = "SELECT srcru.user_id
                     FROM $tbl_session_course_user srcru
-                    INNER JOIN $tbl_session_course src 
+                    INNER JOIN $tbl_session_course src
                     ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-                    INNER JOIN $tbl_session s 
+                    INNER JOIN $tbl_session s
                     ON srcru.session_id = s.id AND src.session_id = s.id
-                    INNER JOIN $tbl_session_user sru 
+                    INNER JOIN $tbl_session_user sru
                     ON s.id = sru.session_id
-                    INNER JOIN $tbl_session_rel_access_url aurs 
+                    INNER JOIN $tbl_session_rel_access_url aurs
                     ON s.id = aurs.session_id
-                    WHERE 
+                    WHERE
                         srcru.status = ".SessionEntity::STUDENT." AND
                         sru.relation_type = ".SessionEntity::GENERAL_COACH." AND
-                        sru.user_id = $coach_id AND 
+                        sru.user_id = $coach_id AND
                         aurs.access_url_id = $access_url_id";
         }
 
@@ -3641,13 +3641,13 @@ class Tracking
         // Then, courses where $coach_id is coach of the session
         $sql = "SELECT srcru.user_id
             FROM $tbl_session_course_user srcru
-            INNER JOIN $tbl_session_course src 
+            INNER JOIN $tbl_session_course src
             ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-            INNER JOIN $tbl_session s 
+            INNER JOIN $tbl_session s
             ON srcru.session_id = s.id AND src.session_id = s.id
-            INNER JOIN $tblSessionRelUser sru 
+            INNER JOIN $tblSessionRelUser sru
             ON s.id = sru.session_id
-            WHERE 
+            WHERE
                 (srcru.status = ".SessionEntity::STUDENT." AND srcru.user_id = $student_id) AND
                 (sru.relation_type = ".SessionEntity::GENERAL_COACH." AND sru.user_id = $coach_id)";
         $result = Database::query($sql);
@@ -4098,7 +4098,7 @@ class Tracking
                     DATE_SUB('$now',INTERVAL $last_days DAY) <= access_date AND
                     c_id = '$courseId' AND
                     access_tool='".TOOL_CHAT."' AND
-                    access_session_id = '$session_id' ";
+                    session_id = '$session_id' ";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_row($result);
@@ -4137,7 +4137,7 @@ class Tracking
                      access_tool='".TOOL_CHAT."' AND
                      access_user_id='$student_id' AND
                      c_id = $courseId AND
-                     access_session_id = '$session_id'
+                     session_id = '$session_id'
                 ORDER BY access_date DESC limit 1";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
@@ -4175,7 +4175,7 @@ class Tracking
                 WHERE
                     links_user_id= '.$student_id.' AND
                     c_id = "'.$courseId.'" AND
-                    links_session_id = '.$session_id.' ';
+                    session_id = '.$session_id.' ';
 
         $rs = Database::query($sql);
 
@@ -4204,7 +4204,7 @@ class Tracking
                 FROM '.$table.'
                 WHERE down_user_id = '.$student_id.'
                 AND c_id  = "'.$courseId.'"
-                AND down_session_id = '.$session_id.' ';
+                AND session_id = '.$session_id.' ';
         $rs = Database::query($sql);
 
         return Database::num_rows($rs);
@@ -4358,7 +4358,7 @@ class Tracking
         $condition_session = '';
         if (isset($session_id)) {
             $session_id = (int) $session_id;
-            $condition_session = ' AND access_session_id = '.$session_id;
+            $condition_session = ' AND session_id = '.$session_id;
         }
         $sql = "SELECT
                     access_tool,
@@ -4406,7 +4406,7 @@ class Tracking
         $condition_session = '';
         $session_id = intval($session_id);
         if (!empty($session_id)) {
-            $condition_session = ' AND down_session_id = '.$session_id;
+            $condition_session = ' AND session_id = '.$session_id;
         }
         $sql = "SELECT
                     down_doc_path,
@@ -4452,7 +4452,7 @@ class Tracking
         $condition_session = '';
         if (isset($session_id)) {
             $session_id = intval($session_id);
-            $condition_session = ' AND sl.links_session_id = '.$session_id;
+            $condition_session = ' AND sl.session_id = '.$session_id;
         }
 
         $sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title) as count_visits
@@ -7031,7 +7031,7 @@ class Tracking
         $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
                 WHERE
                     c_id = $course_id AND
-                    access_session_id = $origin_session_id AND
+                    session_id = $origin_session_id AND
                     access_user_id = $user_id ";
         $res = Database::query($sql);
         $list = [];
@@ -7043,7 +7043,7 @@ class Tracking
             foreach ($list as $id) {
                 if ($update_database) {
                     $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS
-                            SET access_session_id = $new_session_id
+                            SET session_id = $new_session_id
                             WHERE access_id = $id";
                     if ($debug) {
                         echo $sql;
@@ -8049,13 +8049,13 @@ class TrackingCourseLog
 
                     $sql = "SELECT s.id, s.name, u.name
                         FROM $tbl_thematic t
-                        INNER JOIN $tblSessionRelUser sru 
+                        INNER JOIN $tblSessionRelUser sru
                         ON t.session_id = sru.session_id
-                        INNER JOIN $table_session s 
+                        INNER JOIN $table_session s
                         ON sru.session_id = s.id
-                        INNER JOIN $table_user u 
+                        INNER JOIN $table_user u
                         ON sru.user_id = u.id
-                        WHERE 
+                        WHERE
                               t.c_id = $course_id AND
                               t.id = $thematic_id AND
                               sru.relation_type = ".SessionEntity::GENERAL_COACH;

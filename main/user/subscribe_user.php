@@ -131,12 +131,21 @@ $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
 
 // Build table
-$table = new SortableTable(
-    'subscribe_users',
-    'get_number_of_users',
-    'get_user_data',
-    ($is_western_name_order xor $sort_by_first_name) ? 3 : 2
-);
+if (api_get_configuration_value('session_course_users_subscription_limited_to_session_users') && !empty($sessionId)) {
+    $table = new SortableTable(
+        'subscribe_users',
+        'getRestrictedSessionNumberOfUsers',
+        'getRestrictedSessionUserList',
+        ($is_western_name_order xor $sort_by_first_name) ? 3 : 2
+    );
+} else {
+    $table = new SortableTable(
+        'subscribe_users',
+        'get_number_of_users',
+        'get_user_data',
+        ($is_western_name_order xor $sort_by_first_name) ? 3 : 2
+    );
+}
 $parameters['keyword'] = $keyword;
 $parameters['type'] = $type;
 $table->set_additional_parameters($parameters);
@@ -215,6 +224,96 @@ $table->display();
 Display::display_footer();
 
 /*		SHOW LIST OF USERS  */
+
+function getRestrictedSessionNumberOfUsers(): int
+{
+    $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+    $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+    $sessionId = api_get_session_id();
+    $courseId = api_get_course_int_id();
+    $urlAccessId = api_get_current_access_url_id();
+
+    $sql = "SELECT COUNT(DISTINCT u.id) nbr
+        FROM $tblSessionRelUser s
+        INNER JOIN $tblUser u ON (u.id = s.user_id)
+        INNER JOIN $urlTable url ON (url.user_id = u.id)
+        LEFT JOIN $tblSessionRelCourseRelUser scru
+            ON (s.session_id = scru.session_id AND s.user_id = scru.user_id AND scru.c_id = $courseId)
+        WHERE
+            s.session_id = $sessionId
+            AND url.access_url_id = $urlAccessId
+            AND scru.user_id IS NULL";
+
+    $sql = getSqlFilters($sql);
+
+    $result = Database::fetch_assoc(Database::query($sql));
+
+    return (int) $result['nbr'];
+}
+
+function getRestrictedSessionUserList($from, $numberOfItems, $column, $direction): array
+{
+    $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+    $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+    $selectNames = api_is_western_name_order()
+        ? "u.firstname AS col2, u.lastname AS col3"
+        : "u.lastname AS col2, u.firstname AS col3";
+
+    $selectFields = "u.user_id AS col0, u.official_code AS col1, $selectNames, u.active AS col4, u.user_id AS col5";
+
+    if (api_get_setting('show_email_addresses') === 'true') {
+        $selectFields = "u.id AS col0, u.official_code AS col1, $selectNames, u.email AS col4, u.active AS col5, u.user_id AS col6";
+    }
+
+    $sessionId = api_get_session_id();
+    $courseId = api_get_course_int_id();
+    $urlAccessId = api_get_current_access_url_id();
+
+    $sql = "SELECT $selectFields
+        FROM $tblSessionRelUser s
+        INNER JOIN $tblUser u ON (u.id = s.user_id)
+        INNER JOIN $urlTable url ON (url.user_id = u.id)
+        LEFT JOIN $tblSessionRelCourseRelUser scru
+            ON (s.session_id = scru.session_id AND s.user_id = scru.user_id AND scru.c_id = $courseId)
+        WHERE
+            s.session_id = $sessionId
+            AND url.access_url_id = $urlAccessId
+            AND scru.user_id IS NULL";
+
+    $sql = getSqlFilters($sql);
+
+    $sql .= " ORDER BY col$column $direction LIMIT $from, $numberOfItems";
+
+    return Database::store_result(Database::query($sql));
+}
+
+function getSqlFilters(string $sql): string
+{
+    if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
+        $sql .= " AND u.status = ".COURSEMANAGER;
+    } else {
+        $sql .= " AND u.status <> ".DRH;
+    }
+
+    if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+        $keyword = Database::escape_string(trim($_REQUEST['keyword']));
+        $sql .= " AND (
+            u.firstname LIKE '%".$keyword."%' OR
+            u.lastname LIKE '%".$keyword."%' OR
+            u.email LIKE '%".$keyword."%' OR
+            u.username LIKE '%".$keyword."%' OR
+            u.official_code LIKE '%".$keyword."%'
+        )";
+    }
+
+    return $sql;
+}
 
 /**
  ** Get the users to display on the current page.

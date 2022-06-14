@@ -2236,6 +2236,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // they are only accessible during the active duration).
 //$_configuration['session_coach_access_after_duration_end'] = false;
 
+// Restrict the list of students to subscribe in the course session
+//$_configuration['session_course_users_subscription_limited_to_session_users'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

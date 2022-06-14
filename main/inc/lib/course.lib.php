@@ -492,7 +492,7 @@ class CourseManager
                 $rs = Database::query($sql);
 
                 if (Database::num_rows($rs) == 0) {
-                    SessionManager::unsubscribe_user_from_session($uid, $session_id);
+                    SessionManager::unsubscribe_user_from_session($session_id, $uid);
                 }
             }
 

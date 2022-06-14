@@ -491,7 +491,9 @@ class CourseManager
                         WHERE session_id = $session_id AND user_id = $uid";
                 $rs = Database::query($sql);
 
-                if (Database::num_rows($rs) == 0) {
+                if (Database::num_rows($rs) == 0
+                    && !api_get_configuration_value('session_course_users_subscription_limited_to_session_users')
+                ) {
                     SessionManager::unsubscribe_user_from_session($session_id, $uid);
                 }
             }

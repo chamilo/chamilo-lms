@@ -380,6 +380,8 @@ $meetings = $bbb->getMeetings(
     $courseId,
     $sessionId,
     $idGroup,
+    false,
+    [],
     $start,
     $limit
 );

@@ -964,7 +964,10 @@ class bbb
         }
 
         $conditions['order'] = 'created_at ASC';
-        $conditions['limit'] = '$start , $limit';
+
+        if ($limit) {
+            $conditions['limit'] = '$start , $limit';
+        }
 
         $meetingList = Database::select(
             '*',

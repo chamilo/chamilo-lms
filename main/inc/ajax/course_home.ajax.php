@@ -354,10 +354,10 @@ switch ($action) {
             $item['title'] = Display::url($item['title'], $course_url, ['target' => SESSION_LINK_TARGET]);
 
             foreach ($flat_list as $lp_id => $lp_item) {
-                if (api_is_anonymous() || api_is_student()) {
-                    if ($lp_item['lp_visibility'] == 0) {
-                        continue;
-                    }
+                $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+
+                if (!$isAllowedToEdit && 0 == $lp_item['lp_visibility']) {
+                    continue;
                 }
 
                 $temp[$count]['id'] = $lp_id;
@@ -645,10 +645,10 @@ switch ($action) {
                 ['target' => SESSION_LINK_TARGET]
             );
             foreach ($flat_list as $lp_id => $lp_item) {
-                if (api_is_anonymous() || api_is_student()) {
-                    if ($lp_item['lp_visibility'] == 0) {
-                        continue;
-                    }
+                $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+
+                if (!$isAllowedToEdit && 0 == $lp_item['lp_visibility']) {
+                    continue;
                 }
 
                 $temp[$count]['id'] = $lp_id;

@@ -114,6 +114,11 @@ const userSubmenuItems = [
         label: 'Settings',
         url: '/account/edit'
       },
+      {
+        label: 'Pending Surveys',
+        url: '/main/survey/pending.php',
+        visible: 'true' === props.platformSettings['display.show_pending_survey_in_menu'],
+      },
     ]
   },
 ];

@@ -83,6 +83,12 @@ class TwigListener
             $config[$variable] = $value;
         }
 
+        if (true === api_get_configuration_value('show_pending_survey_in_menu')) {
+            $config['display.show_pending_survey_in_menu'] = 'true';
+        } else {
+            $config['display.show_pending_survey_in_menu'] = 'false';
+        }
+
         if ($userIsAllowedInProject && 'true' === $this->settingsManager->getSetting('display.show_link_ticket_notification')) {
             $config['display.show_link_ticket_notification'] = 'true';
         } else {

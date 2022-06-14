@@ -6677,11 +6677,18 @@ SQL;
                     'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
                     'content' => get_lang('Groups'),
                 ],
-                [
+                'classes' => [
                     'url' => $userPath.'class.php?'.api_get_cidreq(),
                     'content' => get_lang('Classes'),
                 ],
             ];
+
+            if (api_get_configuration_value('session_classes_tab_disable')
+                && !api_is_platform_admin()
+                && api_get_session_id()
+            ) {
+                unset($headers['classes']);
+            }
 
             return Display::tabsOnlyLink($headers, $optionSelected);
         }

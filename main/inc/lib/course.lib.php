@@ -496,15 +496,17 @@ class CourseManager
                 }
             }
 
-            Event::addEvent(
-                LOG_UNSUBSCRIBE_USER_FROM_COURSE,
-                LOG_COURSE_CODE,
-                $course_code,
-                api_get_utc_datetime(),
-                $user_id,
-                $course_id,
-                $session_id
-            );
+            foreach ($user_id as $uId) {
+                Event::addEvent(
+                    LOG_UNSUBSCRIBE_USER_FROM_COURSE,
+                    LOG_COURSE_CODE,
+                    $course_code,
+                    api_get_utc_datetime(),
+                    $uId,
+                    $course_id,
+                    $session_id
+                );
+            }
         } else {
             $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                     WHERE

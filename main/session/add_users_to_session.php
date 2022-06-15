@@ -325,13 +325,15 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         //$notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
+        $isLimited = api_get_configuration_value('session_course_users_subscription_limited_to_session_users');
 
         // Added a parameter to send emails when registering a user
         SessionManager::subscribeUsersToSession(
             $id_session,
             $UserList,
             null,
-            false
+            false,
+            false === $isLimited
         );
         Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: resume_session.php?id_session='.$id_session);

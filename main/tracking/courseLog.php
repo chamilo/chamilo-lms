@@ -415,7 +415,7 @@ $class = new UserGroup();
 $classes = $class->get_all();
 
 // Show the charts part only if there are students subscribed to this course/session
-if ($nbStudents > 0) {
+if ($nbStudents > 0 || isset($parameters['user_active'])) {
     // Classes
     $formClass = new FormValidator(
         'classes',
@@ -652,7 +652,10 @@ if ($nbStudents > 0) {
         }
 
         uasort($userScoreList, 'sort_by_order');
-        $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
+        $averageStudentsTestScore = 0;
+        if ($nbStudents > 0) {
+            $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
+        }
 
         $colors = ChamiloApi::getColorPalette(true, true, 10);
         $tpl->assign('chart_colors', json_encode($colors));
@@ -671,7 +674,7 @@ if ($nbStudents > 0) {
 $html .= Display::page_subheader2(get_lang('StudentList'));
 
 $bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
-if ($nbStudents > 0) {
+if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $mainForm = new FormValidator(
         'filter',
         'get',

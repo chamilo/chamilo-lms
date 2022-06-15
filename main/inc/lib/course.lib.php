@@ -2036,6 +2036,12 @@ class CourseManager
                 if (!$includeInvitedUsers) {
                     $sql .= " AND u.status != ".INVITEE;
                 }
+
+                if (isset($userActive)) {
+                    $userActive = (int) $userActive;
+                    $sql .= " AND u.active = $userActive";
+                }
+
                 $sql .= $limitCondition;
                 $rs = Database::query($sql);
 

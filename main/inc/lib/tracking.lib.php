@@ -9277,7 +9277,7 @@ class TrackingCourseLog
         $access_url_id = api_get_current_access_url_id();
 
         // get all users data from a course for sortable with limit
-        if (is_array($user_ids)) {
+        if (is_array($user_ids) && !empty($user_ids)) {
             $user_ids = array_map('intval', $user_ids);
             $condition_user = " WHERE user.id IN (".implode(',', $user_ids).") ";
         } else {

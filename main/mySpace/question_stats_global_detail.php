@@ -98,7 +98,7 @@ function getCourseSessionRow($courseId, Exercise $exercise, $sessionId, $title)
         $sessionId
     );
 
-    //$questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, 10);
+    //$questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId);
     return [
         'title' => $title,
         'correct_count' => $correctCount,

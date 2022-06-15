@@ -6408,11 +6408,10 @@ EOT;
         return $total;
     }
 
-    public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $groups = [], $users = [], $limit = 10)
+    public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $groups = [], $users = [])
     {
         $courseId = (int) $courseId;
         $exerciseId = (int) $exerciseId;
-        $limit = (int) $limit;
 
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -6459,7 +6458,6 @@ EOT;
                     $userCondition
                 GROUP BY q.iid
                 ORDER BY count DESC
-                LIMIT $limit
         ";
 
         $result = Database::query($sql);

@@ -1,0 +1,46 @@
+.p-dialog {
+  @apply shadow-lg rounded-lg;
+
+  .p-dialog-header {
+    @apply bg-white border-b border-solid border-gray-30 flex gap-4 rounded-t-lg p-4;
+
+    .p-dialog-title {
+      @apply text-body-1-bold;
+    }
+
+    .p-dialog-header-icons {
+      @apply flex gap-4;
+    }
+
+    .p-dialog-header-icon {
+      @apply cursor-default h-6 w-6 text-gray-50;
+
+      &:enabled {
+        &:hover,
+        &:focus {
+          @apply outline-none text-gray-90;
+        }
+      }
+    }
+  }
+
+  .p-dialog-content {
+    @apply bg-white p-4;
+  }
+
+  .p-dialog-footer {
+    @apply bg-gray-15 flex gap-4 justify-end rounded-b-lg p-4;
+  }
+}
+
+.p-dialog.p-confirm-dialog {
+  .p-dialog-content {
+    @apply flex gap-2;
+
+    .p-confirm-dialog-icon {
+    }
+
+    .p-confirm-dialog-message {
+    }
+  }
+}

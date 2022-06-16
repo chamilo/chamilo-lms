@@ -2,6 +2,9 @@ name: PHP-CS-Fixer
 
 on: [ push, pull_request ]
 
+permissions:
+    contents: read
+
 jobs:
   composer_install:
     runs-on: ubuntu-18.04

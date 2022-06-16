@@ -2,6 +2,9 @@ name: PHP format code 🔎
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
     build:
         name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}

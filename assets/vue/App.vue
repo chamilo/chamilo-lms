@@ -139,6 +139,8 @@ store.dispatch('security/onRefresh', payload);
 
 const flashMessageList = ref([]);
 
+provide('flashMessageList', flashMessageList);
+
 onMounted(() => {
   const app = document.getElementById('app');
 

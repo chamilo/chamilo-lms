@@ -1,33 +1,37 @@
 <template>
-  <h5>{{ event.title }}</h5>
-  {{ $filters.abbreviatedDatetime(event.startDate) }}
-    
-  <p v-if="event.endDate">
-    {{ $filters.abbreviatedDatetime(event.endDate) }}
-  </p>
+  <div class="flex flex-col gap-4">
+    <h5 v-text="event.title" />
 
-  <hr class="my-2">
+    <p v-text="useAbbreviatedDatetime(event.startDate)" />
 
-  <div class="mb-3" v-html="event.content" />
+    <p
+      v-if="event.endDate"
+      v-text="useAbbreviatedDatetime(event.endDate)"
+    />
 
-  <h6 class="text-h5"> {{ $t('Invitees') }}</h6>
+    <hr>
 
-  <ShowLinks
+    <div v-html="event.content" />
+
+    <h6 v-t="'Invitees'" />
+
+    <ShowLinks
       :item="event"
       :show-status="false"
-  />
+    />
+  </div>
 </template>
 
-<script>
-import ShowLinks from "../resource_links/ShowLinks";
-export default {
-  name: "CCalendarEventInfo",
-  components: {ShowLinks},
-  props: {
-    event: {
-      type: Object,
-      required: true
-    }
+<script setup>
+import { useAbbreviatedDatetime } from '../../composables/formatDate.js';
+
+import ShowLinks from '../resource_links/ShowLinks';
+
+// eslint-disable-next-line no-undef
+defineProps({
+  event: {
+    type: Object,
+    required: true
   }
-}
+});
 </script>

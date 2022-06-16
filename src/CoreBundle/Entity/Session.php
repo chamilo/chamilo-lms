@@ -103,7 +103,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
-    #[Groups(['session:read', 'session_rel_user:read'])]
+    #[Groups(['session:read'])]
     protected Collection $users;
 
     /**
@@ -116,7 +116,7 @@ class Session implements ResourceWithAccessUrlInterface
      *     orphanRemoval=true
      * )
      */
-    #[Groups(['session:read', 'session_rel_user:read', 'session_rel_course_rel_user:read'])]
+    #[Groups(['session:read', 'session_rel_course_rel_user:read'])]
     protected Collection $sessionRelCourseRelUsers;
 
     /**

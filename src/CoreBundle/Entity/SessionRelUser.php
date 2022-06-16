@@ -59,7 +59,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['session_rel_user:read'],
     ],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['session' => 'exact', 'user' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['session' => 'exact', 'user' => 'exact', 'relationType' => 'exact'])]
 #[ApiFilter(
     DateFilter::class,
     properties: [
@@ -95,7 +95,6 @@ class SessionRelUser
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     #[Assert\NotNull]
-    #[Groups(['session_rel_user:read'])]
     protected User $user;
 
     /**

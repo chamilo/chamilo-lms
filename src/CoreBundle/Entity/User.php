@@ -429,7 +429,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *     orphanRemoval=true
      * )
      */
-    #[ApiSubresource]
     protected Collection $sessionsRelUser;
 
     /**

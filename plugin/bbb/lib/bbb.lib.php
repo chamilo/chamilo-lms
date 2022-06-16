@@ -900,6 +900,8 @@ class bbb
      * @param int   $groupId
      * @param bool  $isAdminReport Optional. Set to true then the report is for admins
      * @param array $dateRange     Optional
+     * @param int   $start         Optional
+     * @param int   $limit         Optional
      *
      * @return array Array of current open meeting rooms
      * @throws Exception
@@ -1134,6 +1136,80 @@ class bbb
         }
 
         return $newMeetingList;
+    }
+
+    /**
+     * Counts all the course meetings saved in the plugin_bbb_meeting table.
+     *
+     * @param int   $courseId
+     * @param int   $sessionId
+     * @param int   $groupId
+     * @param array $dateRange
+     *
+     * @return int Count of meetings
+     * @throws Exception
+     */
+    public function getCountMeetings(
+        $courseId = 0,
+        $sessionId = 0,
+        $groupId = 0,
+        $dateRange = []
+    ) {
+        $conditions = [];
+        if ($courseId || $sessionId || $groupId) {
+            $conditions = array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? ' => array($courseId, $sessionId),
+                ),
+            );
+
+            if ($this->hasGroupSupport()) {
+                $conditions = array(
+                    'where' => array(
+                        'c_id = ? AND session_id = ? AND group_id = ? ' => array(
+                            $courseId,
+                            $sessionId,
+                            $groupId,
+                        ),
+                    ),
+                );
+            }
+
+            if ($this->isGlobalConferencePerUserEnabled()) {
+                $conditions = array(
+                    'where' => array(
+                        'c_id = ? AND session_id = ? AND user_id = ?' => array(
+                            $courseId,
+                            $sessionId,
+                            $this->userId,
+                        ),
+                    ),
+                );
+            }
+        }
+
+        if (!empty($dateRange)) {
+            $dateStart = date_create($dateRange['search_meeting_start']);
+            $dateStart = date_format($dateStart, 'Y-m-d H:i:s');
+            $dateEnd = date_create($dateRange['search_meeting_end']);
+            $dateEnd = $dateEnd->add(new DateInterval('P1D'));
+            $dateEnd = date_format($dateEnd, 'Y-m-d H:i:s');
+
+            $conditions = array(
+                'where' => array(
+                    'created_at BETWEEN ? AND ? ' => array($dateStart, $dateEnd),
+                ),
+            );
+        }
+
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            $conditions,
+            'first'
+        );
+
+        return $row['count'];
     }
 
     /**

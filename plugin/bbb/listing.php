@@ -357,18 +357,18 @@ if ($conferenceManager && $allowToEdit) {
     }
 }
 
-if (isset($_GET['pageId'])) {
-    $pageId = (int) $_GET['pageId'];
+if (isset($_GET['page_id'])) {
+    $pageId = (int) $_GET['page_id'];
 }
 
-$meetings = $bbb->getMeetings(
+$meetingsCount = $bbb->getCountMeetings(
     api_get_course_int_id(),
     api_get_session_id(),
     $groupId
 );
 
 $limit = 10;
-$pageNumber = ceil(sizeof($meetings) / $limit);
+$pageNumber = ceil($meetingsCount / $limit);
 
 if (!isset($pageId)) {
     $pageId = 1;

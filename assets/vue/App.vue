@@ -20,6 +20,7 @@
       id="legacy_content"
       v-html="legacyContent"
     />
+    <ConfirmDialog />
   </component>
 </template>
 
@@ -32,6 +33,7 @@ import {useStore} from "vuex";
 import axios from "axios";
 import {isEmpty} from "lodash";
 import Message from "primevue/message";
+import ConfirmDialog from "primevue/confirmdialog";
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({

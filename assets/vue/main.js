@@ -231,6 +231,7 @@ import Button from 'primevue/button';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 
 // import 'primevue/resources/themes/tailwind-light/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -238,6 +239,7 @@ import 'primevue/resources/primevue.min.css';
 import "primeicons/primeicons.css";
 
 app.use(ToastService);
+app.use(ConfirmationService);
 app.component('Dialog', Dialog);
 app.component('DataView', DataView);
 app.component('DataTable', DataTable);

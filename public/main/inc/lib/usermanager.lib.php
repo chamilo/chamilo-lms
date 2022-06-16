@@ -1387,6 +1387,9 @@ class UserManager
             $return = 'true' === api_get_setting('login_is_email') ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, User::USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, User::USERNAME_MAX_LENGTH);
             $return = URLify::transliterate($return);
 
+            // We want everything transliterate() does except converting @ to '(at)'. This is a hack to avoid this.
+            $return = str_replace(' (at) ', '@', $return);
+
             return $return;
         }
 

@@ -132,7 +132,9 @@ if ($surveyQuestion->getForm()->validate()) {
     $values = $surveyQuestion->getForm()->getSubmitValues();
     $survey = Container::getSurveyRepository()->find($surveyId);
     $surveyQuestion->save($survey, $values, $formData);
-    api_location($surveyUrl);
+    if (isset($_POST['buttons']['save'])) {
+        api_location($surveyUrl);
+    }
 }
 
 Display::display_header($tool_name, 'Survey');

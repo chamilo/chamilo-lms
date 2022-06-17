@@ -1254,7 +1254,6 @@ class SurveyManager
                 $sql = "DELETE FROM $table
 			            WHERE
 			                iid = $iid AND
-			                c_id = $course_id AND
                             question_id = '".intval($form_content['question_id'])."'
                             ";
                 Database::query($sql);

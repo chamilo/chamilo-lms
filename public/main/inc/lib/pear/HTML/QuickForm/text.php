@@ -112,23 +112,10 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         $layout = $this->getLayout();
         $class = '';
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
-            $class = 'w-full mt-1';
+            $class = '';
         }
-        $extraClass = "
-            sm:text-sm
-            text-gray-600
-            bg-white
-            font-normal
-            h-10
-            rounded
-            border
-            shadow
-            appearance-none
-            leading-tight
-            focus:outline-none
-            focus:shadow-outline
-            $class
-        ";
+        $extraClass = "p-component p-inputtext p-filled $class";
+
         if (isset($this->_attributes['class'])) {
             $this->_attributes['class'] .= $extraClass;
         } else {

@@ -1,5 +1,7 @@
 .btn {
-  @apply cursor-default font-semibold gap-1 inline-flex justify-center px-6 py-2 rounded-md transition;
+  @apply cursor-default font-semibold gap-1 inline-flex justify-center px-6 py-3 rounded-md transition;
+  font-size: 1rem;
+  line-height: 1rem;
 
   &--primary {
     @apply bg-primary text-white;
@@ -223,18 +225,12 @@ $border-color_12: #9333EA;
 
 .p-button {
   @include filled-style('primary', 'support-4');
-  @apply cursor-default font-semibold gap-1 inline-flex justify-center px-6 py-2 rounded-md transition;
+  @apply cursor-default font-semibold gap-1 inline-flex justify-center px-6 py-3 rounded-md transition;
+  font-size: 1rem;
+  line-height: 1rem;
 
   &:focus {
     @apply outline-none;
-  }
-
-  .p-button-icon {
-    @apply font-semibold leading-6 w-[1.5rem] h-[1.5rem];
-
-    &::before {
-      @apply leading-6;
-    }
   }
 
   .p-badge {
@@ -263,11 +259,13 @@ $border-color_12: #9333EA;
 }
 
 .p-button.p-button-sm {
-  @apply text-body-1 px-4 py-1;
+  @apply px-4 py-1;
+  font-size: 13px;
 }
 
 .p-button.p-button-lg {
-  @apply px-8 py-3 text-h5;
+  @apply px-8 py-5;
+  font-size: 18px;
 }
 
 // secondary button
@@ -311,17 +309,17 @@ $border-color_12: #9333EA;
 }
 
 .p-buttonset.p-button-plain {
-    > .p-button {
-      @include filled-style('gray-90', 'black');
+  > .p-button {
+    @include filled-style('gray-90', 'black');
 
-      &.p-button-outlined {
-        @include outlined-style('black');
-      }
-
-      &.p-button-text {
-        @include text-style('black');
-      }
+    &.p-button-outlined {
+      @include outlined-style('black');
     }
+
+    &.p-button-text {
+      @include text-style('black');
+    }
+  }
 }
 
 // info button
@@ -567,7 +565,7 @@ $border-color_12: #9333EA;
 }
 
 .p-button.p-button-icon-only {
-  @apply p-2;
+  @apply px-3 py-2;
 
   .p-button-label {
     @apply flex-initial hidden w-0;

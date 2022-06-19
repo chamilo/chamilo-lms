@@ -28,6 +28,20 @@
         />
       </div>
 
+      <div class="form__field login-section__remember-me">
+        <InputSwitch
+          id="binary"
+          v-model="remember"
+          :binary="true"
+          name="remember_me"
+          tabindex="4"
+        />
+        <label
+          v-t="'Remember me'"
+          for="binary"
+        />
+      </div>
+
       <div class="form__field login-section__buttons">
         <Button
           :label="t('Sign in')"
@@ -40,20 +54,6 @@
           class="btn btn--primary-outline"
           href="/main/auth/inscription.php"
           tabindex="3"
-        />
-      </div>
-
-      <div class="form__field text-center">
-        <InputSwitch
-          id="binary"
-          v-model="remember"
-          :binary="true"
-          name="remember_me"
-          tabindex="4"
-        />
-        <label
-          v-t="'Remember me'"
-          for="binary"
         />
       </div>
 

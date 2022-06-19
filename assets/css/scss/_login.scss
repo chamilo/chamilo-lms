@@ -2,12 +2,8 @@
   @apply flex justify-center flex-col;
   min-height: calc(100vh - 4.5rem - 2rem - 1px);
 
-  .form__field {
-    @apply mb-6;
-
-    &:last-of-type {
-      @apply mb-0;
-    }
+  form {
+    @apply gap-6;
   }
 
   .p-inputtext {
@@ -50,12 +46,16 @@
   &__form {
     label,
     a:not(.btn) {
-      @apply font-semibold text-primary;
+      @apply text-caption-bold text-primary;
     }
   }
 
-  &__buttons {
-    @apply flex gap-4;
+  &__remember-me.form__field {
+    @apply flex-row justify-center;
+  }
+
+  &__buttons.form__field {
+    @apply flex-row gap-4;
 
     a.btn,
     .p-button {

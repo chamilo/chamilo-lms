@@ -1,0 +1,156 @@
+@layer base {
+  [type='text'],
+  [type='email'],
+  [type='url'],
+  [type='password'],
+  [type='number'],
+  [type='date'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='search'],
+  [type='tel'],
+  [type='time'],
+  [type='week'],
+  [multiple],
+  textarea,
+  select {
+    @apply text-body-2 text-gray-90 w-full
+      placeholder:text-gray-90
+      focus:outline-none focus:outline-offset-0 focus:ring-0 focus:ring-offset-0;
+  }
+
+  label {
+    @apply text-body-2;
+  }
+}
+
+form {
+  @apply flex flex-col gap-5;
+
+  &--inline {
+    @apply flex-row gap-3;
+  }
+
+  .form__field {
+    @apply flex flex-col gap-2;
+  }
+
+  small {
+    @apply text-caption;
+  }
+}
+
+// input switch
+.p-inputswitch {
+  @apply align-middle h-4 w-8;
+
+  .p-inputswitch-slider {
+    @apply bg-gray-50 rounded-full transition-none
+    before:bg-white before:duration-200 before:h-3 before:left-0.5 before:-mt-1.5 before:rounded-full before:w-3;
+
+  }
+
+  &.p-inputswitch-checked {
+    .p-inputswitch-slider {
+      @apply bg-secondary
+        before:translate-x-4;
+    }
+  }
+
+  &.p-focus {
+    .p-inputswitch-slider {
+      @apply outline-none outline-offset-0;
+    }
+  }
+}
+
+.p-inputwrapper {
+  @apply w-full;
+}
+
+// input text
+.p-inputtext {
+  @apply bg-white border border-solid border-gray-50 px-4 py-3 rounded-lg transition;
+
+  &:enabled {
+    @apply hover:border-primary focus:border-primary;
+  }
+
+  &.p-invalid.p-component {
+    @apply border-error text-error;
+  }
+
+  &.p-inputtext-sm {
+    @apply px-2 py-1;
+  }
+
+  &.p-inputtext-lg {
+    @apply px-6 py-5;
+  }
+}
+
+.p-input-icon-right {
+  > .p-inputtext {
+    @apply pr-10;
+  }
+
+  > i:last-of-type {
+    @apply right-3;
+  }
+}
+
+.p-float-label {
+  input,
+  textarea {
+    &:focus {
+      ~ {
+        label {
+          @apply top-0 text-primary text-caption;
+        }
+      }
+    }
+
+    &.p-filled {
+      ~ {
+        label {
+          @apply top-0 text-caption;
+        }
+      }
+    }
+  }
+
+  .p-inputwrapper-focus {
+    ~ {
+      label {
+        @apply top-0 text-primary text-caption;
+      }
+    }
+  }
+
+  .p-inputwrapper-filled {
+    ~ {
+      label {
+        @apply top-0 text-caption;
+      }
+    }
+  }
+
+  > label {
+    @apply bg-white duration-200 left-2 px-1 text-black;
+  }
+
+  > .p-invalid {
+    + label,
+    &:focus ~ label {
+      @apply text-error;
+    }
+  }
+}
+
+.p-error {
+  @apply text-error;
+}
+
+.p-disabled {
+  @apply opacity-60;
+}

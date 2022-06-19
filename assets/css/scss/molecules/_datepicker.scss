@@ -1,0 +1,133 @@
+.p-calendar {
+  &.p-invalid {
+    &.p-component {
+      > .p-inputtext {
+        @apply border-error;
+      }
+    }
+  }
+}
+
+.p-datepicker {
+  @apply bg-white p-0 rounded-lg text-body-2;
+
+  &:not(.p-datepicker-inline) {
+    @apply shadow-lg;
+  }
+
+  .p-datepicker-calendar-container {
+    @apply flex gap-2 p-2;
+  }
+
+  .p-datepicker-header {
+    @apply border-b border-solid border-gray-30 flex gap-2 rounded-t-lg p-2;
+
+    .p-datepicker-prev,
+    .p-datepicker-next {
+      @apply cursor-default font-semibold p-2 text-gray-50;
+
+      &:enabled {
+        @apply hover:outline-none hover:text-gray-90 focus:outline-none focus:text-gray-90;
+      }
+    }
+
+    .p-datepicker-title {
+      @apply flex font-semibold gap-2;
+
+      .p-datepicker-year,
+      .p-datepicker-month {
+        @apply cursor-default p-2 text-gray-90;
+
+        &:enabled {
+          @apply hover:text-black;
+        }
+      }
+    }
+  }
+
+  table {
+
+    th {
+      @apply px-0 py-1;
+
+      > span {
+        @apply text-gray-90 h-8 w-8;
+      }
+    }
+
+    tbody {
+      @apply border-none;
+    }
+
+    td {
+      @apply p-0.5;
+
+      > span {
+        @apply cursor-default h-8 rounded-lg w-8
+          focus:outline-none focus:outline-offset-0;
+      }
+
+      > span.p-highlight {
+        @apply bg-support-3 text-support-4;
+      }
+    }
+
+    td.p-datepicker-today {
+      > span {
+        @apply bg-gray-30;
+
+        &.p-highlight {
+          @apply bg-support-3 text-support-4;
+        }
+      }
+    }
+  }
+
+  .p-timepicker {
+    @apply border-t border-solid border-gray-30 flex font-semibold justify-center gap-2 rounded-b-lg p-2;
+
+    button {
+      @apply cursor-default h-8 w-8 text-gray-50;
+
+      &:enabled {
+        @apply hover:outline-none hover:text-gray-90 focus:outline-none focus:text-gray-90;
+      }
+    }
+  }
+
+  .p-monthpicker {
+    @apply gap-2 grid grid-cols-3 grid-rows-4 p-2;
+
+    .p-monthpicker-month {
+      @apply rounded-lg mx-auto p-2;
+    }
+
+    .p-monthpicker-month.p-highlight {
+      @apply bg-support-3 text-support-4;
+    }
+  }
+
+  .p-yearpicker {
+    @apply gap-2 grid grid-cols-2 p-2;
+
+    .p-yearpicker-year {
+      @apply rounded-lg mx-auto p-2;
+    }
+
+    .p-yearpicker-year.p-highlight {
+      @apply bg-support-3 text-support-4;
+    }
+  }
+
+  &:not(.p-disabled) {
+    table td span,
+    .p-monthpicker .p-monthpicker-month,
+    .p-yearpicker .p-yearpicker-year {
+      &:not(.p-disabled) {
+        &:not(.p-highlight) {
+          @apply hover:bg-gray-50;
+        }
+      }
+    }
+  }
+}

@@ -25,7 +25,7 @@
   }
 
   .p-dialog-content {
-    @apply bg-white p-4;
+    @apply bg-white overscroll-contain p-4;
   }
 
   .p-dialog-footer {

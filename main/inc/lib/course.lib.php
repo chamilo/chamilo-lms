@@ -491,20 +491,24 @@ class CourseManager
                         WHERE session_id = $session_id AND user_id = $uid";
                 $rs = Database::query($sql);
 
-                if (Database::num_rows($rs) == 0) {
-                    SessionManager::unsubscribe_user_from_session($uid, $session_id);
+                if (Database::num_rows($rs) == 0
+                    && !api_get_configuration_value('session_course_users_subscription_limited_to_session_users')
+                ) {
+                    SessionManager::unsubscribe_user_from_session($session_id, $uid);
                 }
             }
 
-            Event::addEvent(
-                LOG_UNSUBSCRIBE_USER_FROM_COURSE,
-                LOG_COURSE_CODE,
-                $course_code,
-                api_get_utc_datetime(),
-                $user_id,
-                $course_id,
-                $session_id
-            );
+            foreach ($user_id as $uId) {
+                Event::addEvent(
+                    LOG_UNSUBSCRIBE_USER_FROM_COURSE,
+                    LOG_COURSE_CODE,
+                    $course_code,
+                    api_get_utc_datetime(),
+                    $uId,
+                    $course_id,
+                    $session_id
+                );
+            }
         } else {
             $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                     WHERE

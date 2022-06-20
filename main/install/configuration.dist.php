@@ -2236,6 +2236,13 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // they are only accessible during the active duration).
 //$_configuration['session_coach_access_after_duration_end'] = false;
 
+// Restrict the list of students to subscribe in the course session. And disable
+// registration for users in all courses from Resume Session page
+//$_configuration['session_course_users_subscription_limited_to_session_users'] = false;
+
+// Disable tab to add classes in course session for non-admins
+//$_configuration['session_classes_tab_disable'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

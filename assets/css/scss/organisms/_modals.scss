@@ -1,5 +1,6 @@
 .p-dialog {
-  @apply shadow-lg rounded-lg;
+  @apply shadow-lg rounded-lg w-11/12
+    md:w-10/12 xl:w-9/12;
 
   .p-dialog-header {
     @apply bg-white border-b border-solid border-gray-30 flex gap-4 rounded-t-lg p-4;

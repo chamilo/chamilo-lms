@@ -1,13 +1,11 @@
 <template>
-  <form
-    action="#"
-    class="flex flex-col gap-4"
-  >
+  <form>
     <div class="form__field">
       <div class="p-float-label">
         <InputText
           id="item_title"
           v-model="v$.item.title.$model"
+          type="text"
           :class="{'p-invalid': v$.item.title.$invalid}"
         />
         <label
@@ -22,40 +20,53 @@
       />
     </div>
 
-    <div class="flex gap-4">
-      <div class="w-1/2 flex flex-col gap-4">
+    <div class="flex flex-col md:flex-row gap-5">
+      <div class="md:w-1/2 flex flex-col gap-5">
         <div class="form__field">
           <div class="p-float-label">
             <Calendar
               id="start_date"
-              v-model="item.startDate"
+              v-model="v$.item.startDate.$model"
               :show-icon="true"
               :show-time="true"
+              :class="{'p-invalid': v$.item.startDate.$invalid}"
             />
             <label
               v-t="'From'"
               for="start_date"
             />
           </div>
+          <small
+            v-if="v$.item.startDate.$invalid || v$.item.startDate.$pending.$response"
+            v-t="v$.item.startDate.required.$message"
+            class="p-error"
+          />
         </div>
 
         <div class="form__field">
           <div class="p-float-label">
             <Calendar
               id="end_date"
-              v-model="item.endDate"
+              v-model="v$.item.endDate.$model"
               :show-icon="true"
               :show-time="true"
+              :class="{'p-invalid': v$.item.endDate.$invalid}"
+              :manual-input="false"
             />
             <label
-              v-t="'From'"
+              v-t="'Until'"
               for="end_date"
             />
           </div>
+          <small
+            v-if="v$.item.endDate.$invalid || v$.item.endDate.$pending.$response"
+            v-t="v$.item.endDate.required.$message"
+            class="p-error"
+          />
         </div>
 
-        <TinyEditor
-          v-model="item.content"
+        <tiny-editor
+          v-model="v$.item.content.$model"
           :init="{
             skin_url: '/build/libs/tinymce/skins/ui/oxide',
             content_css: '/build/libs/tinymce/skins/content/default/content.css',
@@ -76,7 +87,7 @@
         />
       </div>
 
-      <div class="w-1/2 flex flex-col gap-4">
+      <div class="md:w-1/2 flex flex-col gap-5">
         <div
           v-t="'Invitees'"
           class="text-h6"
@@ -89,10 +100,11 @@
           :show-status="false"
         />
 
-        <div class="form__field">
+        <div class="form__field flex-row">
           <Checkbox
             id="is_collective"
             v-model="item.collective"
+            :binary="true"
           />
           <label
             v-t="'Is it editable by the invitees?'"

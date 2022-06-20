@@ -73,7 +73,7 @@ $message = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $UserList = $_POST['sessionUsersList'];
+    $UserList = !empty($_POST['sessionUsersList']) ?: [];
 
     if (!is_array($UserList)) {
         $UserList = [];

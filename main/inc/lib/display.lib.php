@@ -2954,13 +2954,19 @@ HTML;
                 showSpinner = true;
             }
         }
+        
+        var $iframe = $("'.$frameName.'");
 
         if (showSpinner) {
-            var $iframe = $("'.$frameName.'");
             var $iframeSpinner = $("<span aria-hidden=\"true\"  id=\"iframe-spinner\" class=\"fa fa-spinner fa-spin fa-3x\"></span>");
 
             $iframe.hide().parent().append($iframeSpinner);
         }
+        
+        $iframe.load(function () {
+            $("#iframe-spinner").remove();
+            $iframe.show();
+        });
 
         $.frameReady(function() {
              $(function () {
@@ -2972,12 +2978,6 @@ HTML;
                     },
                     vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
-
-                window.top.document.querySelectorAll("'.$frameName.'")
-                    .forEach(function (iframe) {
-                        iframe.parentNode.querySelector(".fa").remove();
-                        iframe.style.display = "block";
-                    });
             });
         },
         "'.$frameName.'",

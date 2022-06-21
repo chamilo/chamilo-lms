@@ -4403,7 +4403,7 @@ function getWorkCommentForm($work, $workParent)
         );
     }
 
-    $form->addButtonSend(get_lang('Send'), 'button');
+    $form->addButtonSend(get_lang('Send'), 'button', false, ['onclick' => 'this.form.submit();this.disabled=true;']);
 
     return $form->returnForm();
 }

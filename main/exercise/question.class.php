@@ -249,8 +249,6 @@ abstract class Question
     /**
      * @param int $itemNumber The numerical counter of the question
      * @param int $exerciseId The iid of the corresponding c_quiz, for specific rules applied to the title
-     *
-     * @return string
      */
     public function getTitleToDisplay(int $itemNumber, int $exerciseId): string
     {
@@ -278,8 +276,10 @@ abstract class Question
     /**
      * Gets the respective value to show or hide the number of a question in the exam.
      * If the field does not exist in the database, it will return 0.
+     *
      * @param int $exerciseId The iid of the corresponding c_quiz, to avoid mix-ups when the question is used in more than one exercise
-     * @return int  1 if we should hide the numbering for the current question
+     *
+     * @return int 1 if we should hide the numbering for the current question
      */
     public function getShowHideConfiguration(int $exerciseId): int
     {

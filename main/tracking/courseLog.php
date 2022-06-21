@@ -204,7 +204,6 @@ if (empty($sessionId)) {
         0,
         $parameters['user_active']
     );
-
 } else {
     // Registered students in session.
     $studentList = CourseManager::get_student_list_from_course_code(

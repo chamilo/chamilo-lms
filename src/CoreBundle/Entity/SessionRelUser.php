@@ -10,7 +10,6 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\Collection;
@@ -257,15 +256,12 @@ class SessionRelUser
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(User $user): SessionRelUser
+    public function setUser(User $user): self
     {
         $user->addSessionRelUser($this);
 

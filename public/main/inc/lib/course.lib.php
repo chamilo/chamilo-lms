@@ -609,7 +609,7 @@ class CourseManager
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions)) {
                 // user has no accessible session
-                if ($user->getStudentSessions()) {
+                if ($user->getSessionsAsStudent()) {
                     // user has ancient or future student session(s) but not available now
                     Display::addFlash(
                         Display::return_message(
@@ -1138,7 +1138,7 @@ class CourseManager
             if (is_null($user)) {
                 return false;
             }
-            foreach ($user->getStudentSessions() as $session) {
+            foreach ($user->getSessionsAsStudent() as $session) {
                 if ($session->hasCourse($course)) {
                     return true;
                 }

@@ -3869,7 +3869,7 @@ class SessionManager
             default:
                 $sessionsQuery = array_map(
                     fn(Session $session) => $session->getId(),
-                    $user->getStudentSessions()
+                    $user->getSessionsAsStudent()
                 );
                 break;
         }

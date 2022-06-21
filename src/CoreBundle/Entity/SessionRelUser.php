@@ -73,8 +73,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class SessionRelUser
 {
-    use UserTrait;
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -255,6 +253,23 @@ class SessionRelUser
     public function setDuration(int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): SessionRelUser
+    {
+        $user->addSessionRelUser($this);
+
+        $this->user = $user;
 
         return $this;
     }

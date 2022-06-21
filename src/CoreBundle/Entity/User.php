@@ -2270,7 +2270,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @return Session[]
      */
-    public function getStudentSessions(): array
+    public function getSessionsAsStudent(): array
     {
         return $this->getSessions(Session::STUDENT);
     }
@@ -2281,6 +2281,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getSessionsRelUser()
     {
         return $this->sessionsRelUser;
+    }
+
+    public function addSessionRelUser(SessionRelUser $sessionSubscription): static
+    {
+        $this->sessionsRelUser->add($sessionSubscription);
+
+        return $this;
     }
 
     public function isSkipResourceNode(): bool

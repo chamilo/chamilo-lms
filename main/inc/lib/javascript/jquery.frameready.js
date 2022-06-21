@@ -53,6 +53,11 @@ $.frameReady = function (callback, targetSelector, resources, conditional) {
 
         targetDocument = targetWindow.contentDocument;
 
+        if (!targetDocument) {
+            console.log('frameReady: Can\'t access to contentDocument.');
+            return;
+        }
+
         scripts.forEach(function (script) {
             createScript(script);
         });

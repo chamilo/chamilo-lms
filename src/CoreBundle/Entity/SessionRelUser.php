@@ -85,7 +85,7 @@ class SessionRelUser
      */
     #[Assert\NotNull]
     #[Groups(['session_rel_user:read'])]
-    protected Session $session;
+    protected ?Session $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionsRelUser", cascade={"persist"})
@@ -149,14 +149,14 @@ class SessionRelUser
         return $this->id;
     }
 
-    public function setSession(Session $session): self
+    public function setSession(?Session $session): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    public function getSession(): Session
+    public function getSession(): ?Session
     {
         return $this->session;
     }

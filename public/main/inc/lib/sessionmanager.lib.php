@@ -1792,26 +1792,22 @@ class SessionManager
                     ->setCoachAccessEndDate(null)
                 ;
 
-                $originalCoaches = $sessionEntity->getGeneralCoachesSubscriptions();
-                if ($originalCoaches->count()) {
-                    $deleteCoachList = $originalCoaches->map(function (SessionRelUser $subscription) use ($coachesId) {
-                        if (!in_array($subscription->getUser()->getId(), $coachesId)) {
-                            return $subscription;
-                        }
-                    });
+                $newGeneralCoaches = array_map(
+                    fn($coachId) => api_get_user_entity($coachId),
+                    $coachesId
+                );
+                $currentGeneralCoaches = $sessionEntity->getGeneralCoaches();
 
-                    if ($deleteCoachList->count() > 0) {
-                        foreach ($deleteCoachList as $subscription) {
-                            if (null !== $subscription) {
-                                $em->remove($subscription);
-                            }
-                        }
+                foreach ($newGeneralCoaches as $generalCoach) {
+                    if (!$sessionEntity->hasUserAsGeneralCoach($generalCoach)) {
+                        $sessionEntity->addGeneralCoach($generalCoach);
                     }
                 }
 
-                foreach ($coachesId as $coachId) {
-                    $coach = api_get_user_entity($coachId);
-                    $sessionEntity->addGeneralCoach($coach);
+                foreach ($currentGeneralCoaches as $generalCoach) {
+                    if (!in_array($generalCoach, $newGeneralCoaches, true)) {
+                        $sessionEntity->removeGeneralCoach($generalCoach);
+                    }
                 }
 
                 if (!empty($sessionAdminId)) {
@@ -1853,7 +1849,6 @@ class SessionManager
                     $sessionEntity->setStatus($status);
                 }
 
-                $em->persist($sessionEntity);
                 $em->flush();
 
                 if (!empty($extraFields)) {

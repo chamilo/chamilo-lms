@@ -99,9 +99,9 @@ class Session implements ResourceWithAccessUrlInterface
     protected Collection $courses;
 
     /**
-     * @var Collection|SessionRelUser[]
+     * @var Collection<SessionRelUser>
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser", mappedBy="session", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     #[Groups(['session:read'])]
     protected Collection $users;
@@ -375,12 +375,12 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    public function addUser(SessionRelUser $user): void
+    public function addUserSubscription(SessionRelUser $subscription): void
     {
-        $user->setSession($this);
+        $subscription->setSession($this);
 
-        if (!$this->hasUser($user)) {
-            $this->users->add($user);
+        if (!$this->hasUser($subscription)) {
+            $this->users->add($subscription);
             $this->nbrUsers++;
         }
     }
@@ -388,12 +388,44 @@ class Session implements ResourceWithAccessUrlInterface
     public function addUserInSession(int $relationType, User $user): self
     {
         $sessionRelUser = (new SessionRelUser())
-            ->setSession($this)
             ->setUser($user)
             ->setRelationType($relationType)
         ;
 
-        $this->addUser($sessionRelUser);
+        $this->addUserSubscription($sessionRelUser);
+
+        return $this;
+    }
+
+    public function removeUserInSession(int $relationType, User $user): self
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('relationType', $relationType)
+            )
+            ->andWhere(
+                Criteria::expr()->eq('user', $user)
+            )
+        ;
+
+        /** @var Collection<SessionRelUser> $subscriptions */
+        $subscriptions = $this->users->matching($criteria);
+
+        foreach ($subscriptions as $subscription) {
+            $this->removeUserSubscription($subscription);
+        }
+
+        return $this;
+    }
+
+    public function removeUserSubscription(SessionRelUser $subscription): self
+    {
+        if ($this->hasUser($subscription)) {
+            $subscription->setSession(null);
+
+            $this->users->removeElement($subscription);
+            $this->nbrUsers--;
+        }
 
         return $this;
     }
@@ -750,6 +782,13 @@ class Session implements ResourceWithAccessUrlInterface
     public function addGeneralCoach(User $coach): self
     {
         return $this->addUserInSession(self::GENERAL_COACH, $coach);
+    }
+
+    public function removeGeneralCoach(User $user): self
+    {
+        $this->removeUserInSession(self::GENERAL_COACH, $user);
+
+        return $this;
     }
 
     public function getCategory(): ?SessionCategory

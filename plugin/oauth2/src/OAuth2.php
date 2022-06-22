@@ -225,56 +225,57 @@ class OAuth2 extends Plugin
             if (false !== $userInfo && !empty($userInfo['id']) && 'platform' === $userInfo['auth_source']) {
                 $this->log('platform user exists', print_r($userInfo, true));
 
-                return $userInfo;
-            }
+                $userId = $userInfo['id'];
+            } else {
+                // authenticated user not found in internal database
+                if ('true' !== $this->get(self::SETTING_CREATE_NEW_USERS)) {
+                    $this->log('exception', 'create_new_users setting is disabled');
+                    $message = sprintf(
+                        $this->get_lang('NoUserAccountAndUserCreationNotAllowed'),
+                        Display::encrypted_mailto_link(api_get_setting('emailAdministrator'))
+                    );
+                    throw new RuntimeException($message);
+                }
 
-            // authenticated user not found in internal database
-            if ('true' !== $this->get(self::SETTING_CREATE_NEW_USERS)) {
-                $this->log('exception', 'create_new_users setting is disabled');
-                $message = sprintf(
-                    $this->get_lang('NoUserAccountAndUserCreationNotAllowed'),
-                    Display::encrypted_mailto_link(api_get_setting('emailAdministrator'))
+                require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
+
+                $firstName = $this->getValueByKey(
+                    $response,
+                    $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME),
+                    $this->get_lang('DefaultFirstname')
                 );
-                throw new RuntimeException($message);
+                $lastName = $this->getValueByKey(
+                    $response,
+                    $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
+                    $this->get_lang('DefaultLastname')
+                );
+                $status = $this->getValueByKey(
+                    $response,
+                    $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
+                    STUDENT
+                );
+                $email = $this->getValueByKey(
+                    $response,
+                    $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
+                    'oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost')
+                );
+
+                $userInfo = [
+                    'firstname' => $firstName,
+                    'lastname' => $lastName,
+                    'status' => $status,
+                    'email' => $email,
+                    'username' => $username,
+                    'auth_source' => 'oauth2',
+                ];
+                $userId = external_add_user($userInfo);
+                if (false === $userId) {
+                    $this->log('user not created', print_r($userInfo, true));
+                    throw new RuntimeException($this->get_lang('FailedUserCreation'));
+                }
+                $this->log('user created', (string) $userId);
             }
 
-            require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
-
-            $firstName = $this->getValueByKey(
-                $response,
-                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME),
-                $this->get_lang('DefaultFirstname')
-            );
-            $lastName = $this->getValueByKey(
-                $response,
-                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME),
-                $this->get_lang('DefaultLastname')
-            );
-            $status = $this->getValueByKey(
-                $response,
-                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS),
-                STUDENT
-            );
-            $email = $this->getValueByKey(
-                $response,
-                $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL),
-                'oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost')
-            );
-
-            $userInfo = [
-                'firstname' => $firstName,
-                'lastname' => $lastName,
-                'status' => $status,
-                'email' => $email,
-                'username' => $username,
-                'auth_source' => 'oauth2',
-            ];
-            $userId = external_add_user($userInfo);
-            if (false === $userId) {
-                $this->log('user not created', print_r($userInfo, true));
-                throw new RuntimeException($this->get_lang('FailedUserCreation'));
-            }
-            $this->log('user created', (string) $userId);
             $this->updateUser($userId, $response);
             // Not checking function update_extra_field_value return value because not reliable
             UserManager::update_extra_field_value($userId, self::EXTRA_FIELD_OAUTH2_ID, $resourceOwnerId);

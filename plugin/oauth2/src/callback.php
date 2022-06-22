@@ -72,7 +72,7 @@ try {
         }
     }
 } catch (Exception $exception) {
-    $message = Display::return_message($exception->getMessage(), 'error');
+    $message = Display::return_message($exception->getMessage(), 'error', false);
     Display::addFlash($message);
     header('Location: '.api_get_path(WEB_PATH));
     exit;

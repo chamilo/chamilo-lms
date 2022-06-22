@@ -205,6 +205,7 @@ class OAuth2 extends Plugin
             $this->log('missing setting', 'response_resource_owner_id');
             throw new RuntimeException($this->get_lang('WrongResponseResourceOwnerId'));
         }
+        $this->log('response resource owner id', $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_ID));
         $extraFieldValue = new ExtraFieldValue('user');
         $result = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
             self::EXTRA_FIELD_OAUTH2_ID,

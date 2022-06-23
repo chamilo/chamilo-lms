@@ -92,6 +92,7 @@ class SessionRelUser
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     #[Assert\NotNull]
+    #[Groups(['session_rel_user:read'])]
     protected User $user;
 
     /**

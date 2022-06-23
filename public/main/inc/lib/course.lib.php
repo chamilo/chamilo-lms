@@ -2224,7 +2224,8 @@ class CourseManager
     public static function get_group_list_of_course(
         $course_code,
         $session_id = 0,
-        $getEmptyGroups = 0
+        $getEmptyGroups = 0,
+        $asArray = false
     ) {
         $course_info = api_get_course_info($course_code);
 
@@ -2251,7 +2252,11 @@ class CourseManager
                     continue;
                 }
             }
-            $groupList[$group->getIid()] = $group;
+            if ($asArray) {
+                $groupList[$group->getIid()] = ['id' => $group->getIid(), 'name' => $group->getName()];
+            } else {
+                $groupList[$group->getIid()] = $group;
+            }
         }
 
         /* 0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';

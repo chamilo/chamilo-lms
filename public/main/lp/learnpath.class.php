@@ -1818,24 +1818,40 @@ class learnpath
                     // Try group
                     $is_visible = false;
                     // Checking only the user visibility
-                    // @todo fix visibility
-                    $userVisibility = 1;
-                    if (1 == $userVisibility) {
-                        $is_visible = true;
-                    } else {
-                        $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id, $courseId);
-                        if (!empty($userGroups)) {
-                            foreach ($userGroups as $groupInfo) {
-                                $groupId = $groupInfo['iid'];
-                                // @todo fix visibility.
-                                $userVisibility = 1;
-                                if (1 == $userVisibility) {
-                                    $is_visible = true;
-                                    break;
-                                }
-                            }
-                        }
+                    $userVisibility = self::isUserSubscribedToLp($lp, $student_id, $course, $session);
+
+                    if (true === $userVisibility) {
+                        return true;
                     }
+
+                    // Try with groups
+                    $groupVisibility = self::isGroupSubscribedToLp($lp, $student_id, $course, $session);
+                    if (true === $groupVisibility) {
+                        return true;
+                    }
+                }
+            }
+
+            return $is_visible;
+        } else {
+
+            $is_visible = true;
+            $subscriptionSettings = self::getSubscriptionSettings();
+            // Check if the subscription users/group to a LP is ON
+            if (1 == $lp->getSubscribeUsers() &&
+                true === $subscriptionSettings['allow_add_users_to_lp']
+            ) {
+                $is_visible = false;
+                $userVisibility = self::isUserSubscribedToLp($lp, $student_id, $course, $session);
+
+                if (true === $userVisibility) {
+                    return true;
+                }
+
+                // Try with groups
+                $groupVisibility = self::isGroupSubscribedToLp($lp, $student_id, $course, $session);
+                if (true === $groupVisibility) {
+                    return true;
                 }
             }
 
@@ -1843,6 +1859,78 @@ class learnpath
         }
 
         return true;
+    }
+
+    public static function isGroupSubscribedToLp(
+        CLp $lp,
+        int $studentId,
+        Course $course,
+        SessionEntity $session = null
+    ): bool {
+
+        $em = Database::getManager();
+
+        /** @var \Chamilo\CourseBundle\Repository\CLpRelGroupRepository $cLpRelGroupRepo */
+        $cLpRelGroupRepo = $em->getRepository('ChamiloCourseBundle:CLpRelGroup');
+
+        // Getting subscribed groups to a LP.
+        $subscribedGroupsInLp = $cLpRelGroupRepo->getGroupsSubscribedToItem(
+            $lp,
+            $course,
+            $session
+        );
+
+        $selectedChoices = [];
+        foreach ($subscribedGroupsInLp as $lpGroup) {
+            /** @var \Chamilo\CourseBundle\Entity\CLpRelGroup $lpGroup */
+            $selectedChoices[] = $lpGroup->getGroup()->getIid();
+        }
+
+        $isVisible = false;
+        $userGroups = GroupManager::getAllGroupPerUserSubscription($studentId, $course->getId());
+        if (!empty($userGroups)) {
+            foreach ($userGroups as $groupInfo) {
+                $groupId = $groupInfo['iid'];
+                if (in_array($groupId, $selectedChoices)) {
+                    $isVisible = true;
+                    break;
+                }
+            }
+        }
+
+        return $isVisible;
+    }
+
+    public static function isUserSubscribedToLp(
+        CLp $lp,
+        int $studentId,
+        Course $course,
+        SessionEntity $session = null
+    ): bool {
+
+        $isVisible = true;
+        $em = Database::getManager();
+        /** @var \Chamilo\CourseBundle\Repository\CLpRelUserRepository $cLpRelUserRepo */
+        $cLpRelUserRepo = $em->getRepository('ChamiloCourseBundle:CLpRelUser');
+
+        // Getting subscribed users to a LP.
+        $subscribedUsersInLp = $cLpRelUserRepo->getUsersSubscribedToItem(
+            $lp,
+            $course,
+            $session
+        );
+
+        $selectedChoices = [];
+        foreach ($subscribedUsersInLp as $users) {
+            /** @var \Chamilo\CourseBundle\Entity\CLpRelUser $users */
+            $selectedChoices[] = $users->getUser()->getId();
+        }
+
+        if (!api_is_allowed_to_edit() && !in_array($studentId, $selectedChoices)) {
+            $isVisible = false;
+        }
+
+        return $isVisible;
     }
 
     /**

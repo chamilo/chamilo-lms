@@ -6,6 +6,10 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CLpRelUser;
+use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
+use Chamilo\CourseBundle\Entity\CLpRelGroup;
+use Chamilo\CourseBundle\Repository\CLpRelGroupRepository;
 
 /**
  * Report from students for learning path.
@@ -59,31 +63,39 @@ $session = api_get_session_entity($sessionId);
 $em = Database::getManager();
 // Check LP subscribers
 if ('1' === $lp->getSubscribeUsers()) {
-    /** @var ItemPropertyRepository $itemRepo */
-    $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
-    $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
-        'learnpath',
-        $lpId,
+
+    /** @var CLpRelUserRepository $cLpRelUserRepo */
+    $cLpRelUserRepo = $em->getRepository('ChamiloCourseBundle:CLpRelUser');
+    $subscribedUsersInLp = $cLpRelUserRepo->getUsersSubscribedToItem(
+        $entity,
         $course,
         $session
     );
+
+    /** @var CLpRelGroupRepository $cLpRelGroupRepo */
+    $cLpRelGroupRepo = $em->getRepository('ChamiloCourseBundle:CLpRelGroup');
 
     // Subscribed groups to a LP
-    $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
-        'learnpath',
-        $lpId,
+    $subscribedGroupsInLp = $cLpRelGroupRepo->getGroupsSubscribedToItem(
+        $entity,
         $course,
         $session
     );
 
+    $selectedGroupChoices = [];
+    /** @var CLpRelGroup $cLpRelGroup */
+    foreach ($subscribedGroupsInLp as $cLpRelGroup) {
+        $selectedGroupChoices[] = $cLpRelGroup->getGroup()->getIid();
+    }
+
     $groups = [];
-    /** @var CItemProperty $itemProperty */
     if (!empty($subscribedGroupsInLp)) {
-        foreach ($subscribedGroupsInLp as $itemProperty) {
-            if (!empty($itemProperty)) {
-                $getGroup = $itemProperty->getGroup();
+        /** @var CLpRelGroup $cLpRelGroup */
+        foreach ($subscribedGroupsInLp as $cLpRelGroup) {
+            if (!empty($cLpRelGroup)) {
+                $getGroup = $cLpRelGroup->getGroup();
                 if (!empty($getGroup)) {
-                    $groups[] = $itemProperty->getGroup()->getId();
+                    $groups[] = $getGroup->getIid();
                 }
             }
         }
@@ -102,10 +114,11 @@ if ('1' === $lp->getSubscribeUsers()) {
     }
 
     if (!empty($subscribedUsersInLp)) {
-        foreach ($subscribedUsersInLp as $itemProperty) {
-            $user = $itemProperty->getToUser();
+        foreach ($subscribedUsersInLp as $users) {
+            /** @var CLpRelUser $users */
+            $user = $users->getUser();
             if ($user) {
-                $users[]['user_id'] = $itemProperty->getToUser()->getId();
+                $users[]['user_id'] = $user->getId();
             }
         }
     }

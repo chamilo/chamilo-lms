@@ -90,7 +90,7 @@ class Session implements ResourceWithAccessUrlInterface
     protected ?int $id = null;
 
     /**
-     * @var Collection|SessionRelCourse[]
+     * @var Collection<int, SessionRelCourse>
      *
      * @ORM\OrderBy({"position"="ASC"})
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
@@ -99,7 +99,7 @@ class Session implements ResourceWithAccessUrlInterface
     protected Collection $courses;
 
     /**
-     * @var Collection<SessionRelUser>
+     * @var Collection<int, SessionRelUser>
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser", mappedBy="session", cascade={"persist", "remove"}, orphanRemoval=true)
      */
@@ -107,7 +107,7 @@ class Session implements ResourceWithAccessUrlInterface
     protected Collection $users;
 
     /**
-     * @var Collection|SessionRelCourseRelUser[]
+     * @var Collection<int, SessionRelCourseRelUser>
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser",
@@ -120,13 +120,13 @@ class Session implements ResourceWithAccessUrlInterface
     protected Collection $sessionRelCourseRelUsers;
 
     /**
-     * @var Collection|SkillRelCourse[]
+     * @var Collection<int, SkillRelCourse>
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
      */
     protected Collection $skills;
 
     /**
-     * @var Collection|SkillRelUser[]
+     * @var Collection<int, SkillRelUser>
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="session", cascade={"persist"})
      */
@@ -144,7 +144,7 @@ class Session implements ResourceWithAccessUrlInterface
     protected Collection $urls;
 
     /**
-     * @var Collection|ResourceLink[]
+     * @var Collection<int, ResourceLink>
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
      */
@@ -357,9 +357,9 @@ class Session implements ResourceWithAccessUrlInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, SessionRelUser>
      */
-    public function getUsers()
+    public function getUsers(): Collection
     {
         return $this->users;
     }
@@ -369,7 +369,7 @@ class Session implements ResourceWithAccessUrlInterface
         $this->users = new ArrayCollection();
 
         foreach ($users as $user) {
-            $this->addUser($user);
+            $this->addUserSubscription($user);
         }
 
         return $this;
@@ -408,7 +408,6 @@ class Session implements ResourceWithAccessUrlInterface
             )
         ;
 
-        /** @var Collection<SessionRelUser> $subscriptions */
         $subscriptions = $this->users->matching($criteria);
 
         foreach ($subscriptions as $subscription) {

@@ -1,0 +1,77 @@
+.p-inputtext {
+  @apply bg-white border border-solid border-gray-50 px-4 py-3 rounded-lg transition;
+
+  &:enabled {
+    @apply hover:border-primary focus:border-primary;
+  }
+
+  &.p-invalid.p-component {
+    @apply border-error text-error;
+  }
+
+  &.p-inputtext-sm {
+    @apply px-2 py-1;
+  }
+
+  &.p-inputtext-lg {
+    @apply px-6 py-5;
+  }
+}
+
+.p-input-icon-right {
+  > .p-inputtext {
+    @apply pr-10;
+  }
+
+  > i:last-of-type {
+    @apply right-3;
+  }
+}
+
+.p-float-label {
+  input,
+  textarea {
+    &:focus {
+      ~ {
+        label {
+          @apply top-0 text-primary text-caption;
+        }
+      }
+    }
+
+    &.p-filled {
+      ~ {
+        label {
+          @apply top-0 text-caption;
+        }
+      }
+    }
+  }
+
+  .p-inputwrapper-focus {
+    ~ {
+      label {
+        @apply top-0 text-primary text-caption;
+      }
+    }
+  }
+
+  .p-inputwrapper-filled {
+    ~ {
+      label {
+        @apply top-0 text-caption;
+      }
+    }
+  }
+
+  > label {
+    @apply bg-white duration-200 left-2 px-1 text-black;
+  }
+
+  > .p-invalid {
+    + label,
+    &:focus ~ label {
+      @apply text-error;
+    }
+  }
+}

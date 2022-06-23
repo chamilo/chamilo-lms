@@ -1,0 +1,54 @@
+@layer base {
+  [type='text'],
+  [type='email'],
+  [type='url'],
+  [type='password'],
+  [type='number'],
+  [type='date'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='search'],
+  [type='tel'],
+  [type='time'],
+  [type='week'],
+  [multiple],
+  textarea,
+  select {
+    @apply text-body-2 text-gray-90 w-full
+      placeholder:text-gray-90
+      focus:outline-none focus:outline-offset-0 focus:ring-0 focus:ring-offset-0;
+  }
+
+  label {
+    @apply text-body-2;
+  }
+}
+
+form {
+  @apply flex flex-col gap-5;
+
+  &--inline {
+    @apply flex-row gap-3;
+  }
+
+  .form__field {
+    @apply flex flex-col gap-2;
+  }
+
+  small {
+    @apply text-caption;
+  }
+}
+
+
+.p-inputwrapper {
+  @apply w-full;
+}
+
+.p-error {
+  @apply text-error;
+}
+
+.p-disabled {
+  @apply opacity-60;
+}

@@ -2243,6 +2243,12 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Disable tab to add classes in course session for non-admins
 //$_configuration['session_classes_tab_disable'] = false;
 
+// Add a custom extra footer for notificacions emails, for example for
+// privacy policy notices. Multiple paragraphs can be added.
+/*$_configuration['notifications_extended_footer_message'] = ['paragraphs' => [
+    'Change or delete this paragraph or add another one'
+]];*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -17,7 +17,7 @@ if (!empty($course_info)) {
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
 $this_section = SECTION_COURSES;
-$url = null;
+$url = '/resources/ccalendarevent';
 if (empty($action)) {
     if (!empty($course_info)) {
         $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq();

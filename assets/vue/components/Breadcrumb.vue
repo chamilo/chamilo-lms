@@ -99,6 +99,7 @@ const foo = computed(() => {
   let queryParams = '';
 
   Object.keys(route.query)
+    .filter(key => !!key)
     .forEach(key => {
       if ('' !== queryParams) {
         queryParams += "&";
@@ -124,11 +125,11 @@ const foo = computed(() => {
   const lastItem = matched[matched.length - 1];
 
   if (resourceNode.value) {
-    resourceNode.value.path.split('/').forEach((pathItem, i, parthItems) => {
+    resourceNode.value.path.split('/').forEach((pathItem, i, pathItems) => {
       let itemParts = pathItem.split('-');
 
       if (0 === i) {
-        let firstParts = parthItems[i + 1].split('-');
+        let firstParts = pathItems[i + 1].split('-');
 
         items.push({
           label: matched[0].name,

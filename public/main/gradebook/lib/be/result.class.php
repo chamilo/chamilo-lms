@@ -203,20 +203,30 @@ class Result
     public function add()
     {
         if (isset($this->user_id) && isset($this->evaluation)) {
+            $userId = (int) $this->get_user_id();
+            $evaluationId = (int) $this->get_evaluation_id();
+            $date = $this->get_date();
+            $score = $this->get_score();
             $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-            $sql = "INSERT INTO ".$tbl_grade_results
-                ." (user_id, evaluation_id,
-					created_at";
-            if (isset($this->score)) {
-                $sql .= ",score";
+            if ($this->exists()) {
+                $sql = "INSERT INTO ".$tbl_grade_results
+                    ." (user_id, evaluation_id,
+                        created_at";
+                if (isset($this->score)) {
+                    $sql .= ",score";
+                }
+                $sql .= ") VALUES
+                        ($userId, $evaluationId, '$date' ";
+                if (isset($this->score)) {
+                    $sql .= ", $score";
+                }
+                $sql .= ")";
+            } else {
+                $sql = "UPDATE $tbl_grade_results
+                        SET score = $score
+                        WHERE user_id = $userId
+                        AND evaluation_id = $evaluationId";
             }
-            $sql .= ") VALUES
-					(".(int) $this->get_user_id().", ".(int) $this->get_evaluation_id()
-                .", '".$this->get_date()."' ";
-            if (isset($this->score)) {
-                $sql .= ", ".$this->get_score();
-            }
-            $sql .= ")";
             Database::query($sql);
         } else {
             exit('Error in Result add: required field empty');

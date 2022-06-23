@@ -150,14 +150,14 @@ class CForum extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CForumThread[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", mappedBy="forum")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", mappedBy="forum", cascade={"persist"}, orphanRemoval=true)
      */
     protected Collection $threads;
 
     /**
      * @var Collection|CForumPost[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="forum")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="forum", cascade={"persist"}, orphanRemoval=true)
      */
     protected Collection $posts;
 

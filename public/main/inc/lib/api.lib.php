@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
+use Doctrine\ORM\Query\Expr\Func;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\Address;
@@ -7397,5 +7398,62 @@ function api_protect_webservices()
         echo "Webservices are disabled. \n";
         echo "To enable, add \$_configuration['disable_webservices'] = true; in configuration.php";
         exit;
+    }
+}
+
+function get_tables_with_session_id($type = 'all')
+{
+    $list = [
+        'forDelete' => [
+            ['table' => TABLE_STATISTIC_TRACK_COURSE_RANKING, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_ACCESS, 'column' => 'access_session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_COURSE_ACCESS, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_DEFAULT, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_DOWNLOADS, 'column' => 'down_session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_EXERCISES, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_LASTACCESS, 'column' => 'access_session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_LINKS, 'column' => 'links_session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_ONLINE, 'column' => 'session_id'],
+            ['table' => TABLE_STATISTIC_TRACK_E_UPLOADS, 'column' => 'upload_session_id'],
+            ['table' => TABLE_MAIN_GRADEBOOK_CATEGORY, 'column' => 'session_id'],
+            ['table' => TABLE_MAIN_SESSION_COURSE, 'column' => 'session_id'],
+            ['table' => TABLE_MAIN_SESSION_COURSE_USER, 'column' => 'session_id'],
+            ['table' => TABLE_MAIN_SESSION_USER, 'column' => 'session_id'],
+            ['table' => TABLE_MAIN_SKILL_REL_USER, 'column' => 'session_id'],
+            ['table' => TABLE_MAIN_ACCESS_URL_REL_SESSION, 'column' => 'session_id'],
+            ['table' => TABLE_USERGROUP_REL_SESSION, 'column' => 'session_id']
+        ],
+        'forDeleteCourse' => [
+            ['table' => TABLE_CHAT_CONNECTED, 'column' => 'session_id'],
+            ['table' => TABLE_DROPBOX_CATEGORY, 'column' => 'session_id'],
+            ['table' => TABLE_DROPBOX_FILE, 'column' => 'session_id'],
+            ['table' => TABLE_DROPBOX_POST, 'column' => 'session_id'],
+            ['table' => TABLE_FORUM_THREAD_QUALIFY_LOG, 'column' => 'session_id'],
+            ['table' => TABLE_LP_REL_USERGROUP, 'column' => 'session_id'],
+            ['table' => TABLE_LP_VIEW, 'column' => 'session_id'],
+            ['table' => TABLE_SURVEY_INVITATION, 'column' => 'session_id'],
+            ['table' => TABLE_TOOL_LIST, 'column' => 'session_id'],
+            ['table' => TABLE_WIKI, 'column' => 'session_id'],
+            ['table' => TABLE_WIKI_MAILCUE, 'column' => 'session_id'],
+        ],
+        'forUpdate' => [
+            ['table' => TABLE_TICKET_TICKET, 'column' => 'session_id'],
+        ],
+    ];
+
+    switch ($type) {
+        case 'forDelete':
+            return $list['forDelete'];
+            break;
+        case 'forDeleteCourse':
+            return $list['forDeleteCourse'];
+            break;
+        case 'forDeleteCourse':
+            return $list['forDeleteCourse'];
+            break;
+        default:
+            return $list;
+            break;
     }
 }

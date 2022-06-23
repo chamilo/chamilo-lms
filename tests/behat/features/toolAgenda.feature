@@ -9,10 +9,10 @@ Feature: Agenda tool
     Given I am on "/main/calendar/agenda.php?action=add&type=personal"
     When I fill in the following:
       | title | Event 1 |
-    Then I fill in editor field "content" with "Description event"
     Then wait for the page to be loaded
     And I focus "date_range"
     And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
+    Then I fill in editor field "content" with "Description event"
     And I press "Add event"
     And wait very long for the page to be loaded
     Then I should see "Event added"

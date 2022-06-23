@@ -645,13 +645,13 @@ class HTML_QuickForm_element extends HTML_Common
             case FormValidator::LAYOUT_HORIZONTAL:
                 $template = '
                 <div class="form__field '.$size[0].'">
-                    <div class="p-float-label '.$size[1].'">
+                    <div class="'.$size[1].'">
                         {icon}
-                        {element}
                         <label {label-for} class="'.$height.' {error_class}">
                             <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                             {label}
                         </label>
+                        {element}
                     </div>
                     <!-- BEGIN label_2 -->
                         <small>{label_2}</small>

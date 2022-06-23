@@ -19,7 +19,7 @@ class DateTimePicker extends HTML_QuickForm_text
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
         }
-        $attributes['class'] = 'form-control';
+        $attributes['class'] = 'p-component p-inputtext';
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
     }
@@ -50,20 +50,7 @@ class DateTimePicker extends HTML_QuickForm_text
 
         //$resetFieldX = sprintf(get_lang('Reset %s'), $label);
 
-        return '
-            <div id="div_'.$id.'" class="flex flex-row mt-1">
-                <input '.$this->_getAttrString($this->_attributes).'
-                    class="form-control border" type="text" value="'.$value.'" placeholder="'.get_lang('Select datetime ..').'" data-input>
-                <div class="ml-1" id="button-addon3">
-                    <button class="btn btn--secondary-outline"  type="button" data-toggle>
-                        <i class="fas fa-calendar-alt"></i>
-                    </button>
-                    <button class="btn btn--secondary-outline" type="button" data-clear>
-                        <i class="fas fa-times"></i>
-                    </button>
-              </div>
-            </div>
-        '.$this->getElementJS();
+        return '<input '.$this->_getAttrString($this->_attributes).' />'.$this->getElementJS();
     }
 
     /**

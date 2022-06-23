@@ -364,7 +364,7 @@ if (isset($_GET['page_id'])) {
 $meetingsCount = $bbb->getCountMeetings(
     api_get_course_int_id(),
     api_get_session_id(),
-    $groupId
+    api_get_group_id()
 );
 
 $limit = 10;
@@ -377,9 +377,9 @@ if (!isset($pageId)) {
 $start = ($pageId - 1) * $limit;
 
 $meetings = $bbb->getMeetings(
-    $courseId,
-    $sessionId,
-    $idGroup,
+    api_get_course_int_id(),
+    api_get_session_id(),
+    api_get_group_id(),
     false,
     [],
     $start,
@@ -387,7 +387,7 @@ $meetings = $bbb->getMeetings(
 );
 
 if (empty($meetings)) {
-    $idpage = 0;
+    $pageId = 0;
 }
 
 if (!empty($meetings)) {

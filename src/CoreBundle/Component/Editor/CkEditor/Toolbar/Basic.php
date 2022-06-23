@@ -208,7 +208,7 @@ class Basic extends Toolbar
         $this->config = $config;
 
         //$config['width'] = '100';
-        $config['height'] = '300';
+        $this->config['height'] = '300';
 
         return $this->config;
     }

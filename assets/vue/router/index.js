@@ -67,7 +67,9 @@ const router = createRouter({
             component: MyCoursesLayout,
             children: [
                 {
-                    path: '/courses', name: 'MyCourses', component: MyCourseList,
+                    path: '',
+                    name: 'MyCourses',
+                    component: MyCourseList,
                     meta: {requiresAuth: true},
                 },
             ]

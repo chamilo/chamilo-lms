@@ -1,0 +1,7 @@
+.p-skeleton {
+  @apply bg-gray-30 rounded-lg w-full;
+
+  &:after {
+    @apply bg-gradient-to-r from-transparent via-gray-15 to-transparent;
+  }
+}

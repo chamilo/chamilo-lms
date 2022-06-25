@@ -1,13 +1,30 @@
 <template>
-  <q-layout>
-<!--    <q-tabs align="left" dense inline-label no-caps>-->
-<!--      <q-route-tab to="/courses" label="My courses" />-->
-<!--      <q-route-tab to="/sessions" label="My sessions" />-->
-<!--    </q-tabs>-->
-
-    <!-- this is where the Pages are injected -->
-    <q-page-container>
-      <router-view></router-view>
-    </q-page-container>
-  </q-layout>
+  <div class="flex justify-between items-center">
+    <h2 v-t="'My Courses'" />
+    <Button
+      v-if="isTeacher"
+      class="p-button-secondary md:hidden"
+      icon="pi pi-plus"
+    />
+    <Button
+      v-if="isTeacher"
+      :label="t('Course')"
+      class="p-button-secondary hidden md:inline-flex"
+      icon="pi pi-plus"
+    />
+  </div>
+  <hr>
+  <router-view />
 </template>
+
+<script setup>
+import Button from 'primevue/button';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
+
+const store = useStore();
+const { t } = useI18n();
+
+const isTeacher = computed(() => store.getters['security/hasRole']('ROLE_TEACHER'));
+</script>

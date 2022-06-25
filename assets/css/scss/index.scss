@@ -5,6 +5,12 @@
 //@import 'inbox';
 //@import 'install';
 
+@layer base {
+  hr {
+    @apply text-gray-30 my-6;
+  }
+}
+
 @import "settings/typography";
 
 @import "atoms/buttons";
@@ -14,9 +20,11 @@
 @import "atoms/input_text";
 @import "atoms/messages";
 @import "atoms/overlay";
+@import "atoms/skeleton";
 
 @import "molecules/course_tool";
 @import "molecules/datepicker";
+@import "molecules/empty_state";
 
 @import "organisms/modals";
 @import "organisms/sidebar";

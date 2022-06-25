@@ -1,5 +1,5 @@
 .app-main {
-  @apply min-h-screen px-4 pb-4 transition-[margin-left] duration-150;
+  @apply flex flex-col min-h-screen pb-8 px-8 transition-[margin-left] duration-150;
   padding-top: calc(4.5rem + 1rem + 1px);
 
   &:not(.app-main--no-sidebar) {

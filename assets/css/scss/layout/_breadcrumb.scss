@@ -2,7 +2,7 @@ $color_1: rgba(0, 0, 0, 0.87);
 $color_2: rgba(0, 0, 0, 0.6);
 
 .app-breadcrumb.p-breadcrumb {
-  @apply bg-white p-3;
+  @apply bg-white pb-3;
 
   ul {
     li {

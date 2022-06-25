@@ -1,5 +1,5 @@
 .btn {
-  @apply cursor-default font-semibold gap-1 inline-flex justify-center px-6 py-3 rounded-md transition;
+  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-3 rounded-md transition;
   font-size: 1rem;
   line-height: 1rem;
 
@@ -225,7 +225,7 @@ $border-color_12: #9333EA;
 
 .p-button {
   @include filled-style('primary', 'support-4');
-  @apply cursor-default font-semibold gap-1 inline-flex justify-center px-6 py-3 rounded-md transition;
+  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-3 rounded-md transition;
   font-size: 1rem;
   line-height: 1rem;
 
@@ -244,28 +244,52 @@ $border-color_12: #9333EA;
   &.p-button-text {
     @include text-style('primary');
   }
-}
 
-.p-button.p-button-raised {
-  @apply shadow-lg;
-}
+  &.p-button-raised {
+    @apply shadow-lg;
+  }
 
-.p-button.p-button-rounded {
-  @apply rounded-full;
-}
+  &.p-button-rounded {
+    @apply rounded-full;
+  }
 
-.p-button.p-button-icon-only.p-button-rounded {
-  @apply rounded-full;
-}
+  &.p-button-sm {
+    @apply px-4 py-1;
+    font-size: 13px;
+  }
 
-.p-button.p-button-sm {
-  @apply px-4 py-1;
-  font-size: 13px;
-}
+  &.p-button-lg {
+    @apply px-8 py-5;
+    font-size: 18px;
+  }
 
-.p-button.p-button-lg {
-  @apply px-8 py-5;
-  font-size: 18px;
+  .p-button-label {
+    @apply align-middle flex-none font-semibold inline;
+  }
+
+  &.p-button-icon-only {
+    @apply px-3;
+
+    .p-button-label {
+      @apply flex-initial hidden w-0;
+    }
+  }
+
+  &.p-button-link {
+    @apply cursor-pointer bg-transparent text-primary;
+
+    &:enabled {
+      &:hover,
+      &:focus,
+      &:active {
+        @apply bg-gray-10;
+
+        .p-button-label {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
 
 // secondary button
@@ -541,33 +565,5 @@ $border-color_12: #9333EA;
     &.p-button-text {
       @include text-style('error');
     }
-  }
-}
-
-.p-button.p-button-link {
-  @apply cursor-pointer bg-transparent text-primary;
-
-  &:enabled {
-    &:hover,
-    &:focus,
-    &:active {
-      @apply bg-gray-10;
-
-      .p-button-label {
-        text-decoration: underline;
-      }
-    }
-  }
-}
-
-.p-button-label {
-  @apply align-middle flex-none font-semibold inline;
-}
-
-.p-button.p-button-icon-only {
-  @apply px-3 py-2;
-
-  .p-button-label {
-    @apply flex-initial hidden w-0;
   }
 }

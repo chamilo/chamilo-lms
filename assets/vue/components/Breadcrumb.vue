@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2" style="margin-left: -0.25rem; margin-bottom: 0.5rem;">
+  <div class="p-2" style="margin-left: -0.25rem; margin-bottom: 0.5rem">
     <q-breadcrumbs
         active-color="primary"
         large
@@ -8,15 +8,6 @@
       <q-breadcrumbs-el v-for="item in items" :label="item.text" :to="item.href" exact-path />
     </q-breadcrumbs>
 
-      <a href="#" id="view-as-student-link" class="hidden btn btn-info mr-2 text-xs position-absolute right-20 top-0 z-10">
-        <v-icon icon="mdi-eye" class="pr-2" />
-        <span v-if="isCurrentTeacher">
-          {{ $t('See as student') }}
-        </span>
-        <span v-else>
-          {{ $t('See as trainer') }}
-        </span>
-      </a>
 <!--    <v-breadcrumbs-->
 <!--        rounded-->
 <!--        density="compact"-->
@@ -48,9 +39,6 @@ export default {
     }),
     ...mapGetters('session', {
       session: 'getSession',
-    }),
-    ...mapGetters({
-      'isCurrentTeacher': 'security/isCurrentTeacher',
     }),
     items() {
       console.log('Breadcrumb.vue');

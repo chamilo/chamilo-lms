@@ -125,7 +125,7 @@ class GradebookCategory
      *
      * @var int
      *
-     * @ORM\Column(name="allow_skills_by_subcategory", type="integer", nullable=false)
+     * @ORM\Column(name="allow_skills_by_subcategory", type="integer", nullable=true, options={"default": 1})
      */
     //protected $allowSkillsBySubcategory;
 
@@ -514,20 +514,20 @@ class GradebookCategory
     /**
      * @return int
      */
-    /*public function getAllowSkillsBySubcategory()
+    public function getAllowSkillsBySubcategory()
     {
         return $this->allowSkillsBySubcategory;
-    }*/
+    }
 
     /**
      * @param int $allowSkillsBySubcategory
      *
      * @return GradebookCategory
      */
-    /*public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
+    public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
     {
         $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
 
         return $this;
-    }*/
+    }
 }

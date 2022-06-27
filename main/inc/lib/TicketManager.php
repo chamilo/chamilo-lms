@@ -14,20 +14,20 @@ use Chamilo\TicketBundle\Entity\Ticket;
  */
 class TicketManager
 {
-    const PRIORITY_NORMAL = 'NRM';
-    const PRIORITY_HIGH = 'HGH';
-    const PRIORITY_LOW = 'LOW';
+    public const PRIORITY_NORMAL = 'NRM';
+    public const PRIORITY_HIGH = 'HGH';
+    public const PRIORITY_LOW = 'LOW';
 
-    const SOURCE_EMAIL = 'MAI';
-    const SOURCE_PHONE = 'TEL';
-    const SOURCE_PLATFORM = 'PLA';
-    const SOURCE_PRESENTIAL = 'PRE';
+    public const SOURCE_EMAIL = 'MAI';
+    public const SOURCE_PHONE = 'TEL';
+    public const SOURCE_PLATFORM = 'PLA';
+    public const SOURCE_PRESENTIAL = 'PRE';
 
-    const STATUS_NEW = 'NAT';
-    const STATUS_PENDING = 'PND';
-    const STATUS_UNCONFIRMED = 'XCF';
-    const STATUS_CLOSE = 'CLS';
-    const STATUS_FORWARDED = 'REE';
+    public const STATUS_NEW = 'NAT';
+    public const STATUS_PENDING = 'PND';
+    public const STATUS_UNCONFIRMED = 'XCF';
+    public const STATUS_CLOSE = 'CLS';
+    public const STATUS_FORWARDED = 'REE';
 
     /**
      * Constructor.

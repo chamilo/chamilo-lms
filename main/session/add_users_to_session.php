@@ -222,7 +222,7 @@ function search_users($needle, $type)
         $rs = Database::query($sql);
         $i = 0;
         if ($type == 'single') {
-            while ($user = Database:: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
                     $person_name =
@@ -246,7 +246,7 @@ function search_users($needle, $type)
             $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
         } else {
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
-            while ($user = Database:: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $person_name =
                     $user['lastname'].' '.$user['firstname'].' ('.$user['username'].') '.$user['official_code'];
                 if ($showOfficialCode) {
@@ -325,13 +325,15 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         //$notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
+        $isLimited = api_get_configuration_value('session_course_users_subscription_limited_to_session_users');
 
         // Added a parameter to send emails when registering a user
         SessionManager::subscribeUsersToSession(
             $id_session,
             $UserList,
             null,
-            false
+            false,
+            false === $isLimited
         );
         Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: resume_session.php?id_session='.$id_session);
@@ -696,7 +698,7 @@ $newLinks .= Display::url(
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
                         <option value="%">--</option>
                         <?php
-                        echo Display:: get_alphabet_options(); ?>
+                        echo Display::get_alphabet_options(); ?>
                     </select>
                     <br/>
                     <br/>

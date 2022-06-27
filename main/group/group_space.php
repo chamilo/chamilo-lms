@@ -89,7 +89,7 @@ if (GroupManager::is_self_registration_allowed($user_id, $current_group)) {
  * Unregister from group
  */
 $unsubscribe_group = '';
-if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group)) {
+if (GroupManager::is_self_unregistration_allowed($user_id, $current_group)) {
     $unsubscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.
         get_lang('StudentUnsubscribe').'</a>';
 }

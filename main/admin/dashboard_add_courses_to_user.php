@@ -88,7 +88,7 @@ function search_courses($needle, $type)
         $rs = Database::query($sql);
 
         $return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" >';
-        while ($course = Database :: fetch_array($rs)) {
+        while ($course = Database::fetch_array($rs)) {
             $return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'], ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
         }
         $return .= '</select>';
@@ -247,7 +247,7 @@ if (!empty($msg)) {
         <p><?php echo get_lang('FirstLetterCourse'); ?> :</p>
         <select name="firstLetterCourse" class="selectpicker form-control" onchange = "xajax_search_courses(this.value,'multiple')">
             <option value="%">--</option>
-            <?php echo Display :: get_alphabet_options($firstLetter); ?>
+            <?php echo Display::get_alphabet_options($firstLetter); ?>
         </select>
         <?php
     } ?>

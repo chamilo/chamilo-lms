@@ -34,7 +34,7 @@ echo '</div>';
 $t_user = Database::get_main_table(TABLE_MAIN_USER);
 $t_link_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $visible_link = Security::remove_XSS($_GET['visiblelink']);
-$evaledit = EvalLink:: load($visible_link);
+$evaledit = EvalLink::load($visible_link);
 $sql = "SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at,us.username
         FROM ".$t_link_log." lk inner join ".$t_user." us
         ON lk.user_id_log=us.user_id
@@ -66,4 +66,4 @@ $table->set_header(5, get_lang('Date'));
 $table->set_header(6, get_lang('GradebookWhoChangedItLog'));
 $table->display();
 
-Display :: display_footer();
+Display::display_footer();

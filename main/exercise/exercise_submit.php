@@ -1131,7 +1131,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     $_custom['exercises_hidden_when_no_start_date']
 ) {
     if (empty($objExercise->start_time)) {
-        echo Display:: return_message(
+        echo Display::return_message(
             sprintf(
                 get_lang('ExerciseNoStartedYet'),
                 $exercise_title,
@@ -1243,13 +1243,13 @@ if (!empty($questionList)) {
             if ($current_question != $i) {
                 continue;
             } else {
-                if ($selectType == HOT_SPOT || $selectType == HOT_SPOT_DELINEATION) {
+                if (in_array($selectType, [HOT_SPOT, HOT_SPOT_GLOBAL, HOT_SPOT_DELINEATION])) {
                     $number_of_hotspot_questions++;
                 }
                 break;
             }
         } else {
-            if ($selectType == HOT_SPOT || $selectType == HOT_SPOT_DELINEATION) {
+            if (in_array($selectType, [HOT_SPOT, HOT_SPOT_GLOBAL, HOT_SPOT_DELINEATION])) {
                 $number_of_hotspot_questions++;
             }
         }

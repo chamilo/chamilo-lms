@@ -11,16 +11,16 @@
 class UserDataGenerator
 {
     // Sorting types constants
-    const UDG_SORT_TYPE = 1;
-    const UDG_SORT_NAME = 2;
-    const UDG_SORT_COURSE = 4;
-    const UDG_SORT_CATEGORY = 8;
-    const UDG_SORT_AVERAGE = 16;
-    const UDG_SORT_SCORE = 32;
-    const UDG_SORT_MASK = 64;
+    public const UDG_SORT_TYPE = 1;
+    public const UDG_SORT_NAME = 2;
+    public const UDG_SORT_COURSE = 4;
+    public const UDG_SORT_CATEGORY = 8;
+    public const UDG_SORT_AVERAGE = 16;
+    public const UDG_SORT_SCORE = 32;
+    public const UDG_SORT_MASK = 64;
 
-    const UDG_SORT_ASC = 128;
-    const UDG_SORT_DESC = 256;
+    public const UDG_SORT_ASC = 128;
+    public const UDG_SORT_DESC = 256;
 
     private $items;
     private $userid;

@@ -74,7 +74,7 @@ $interbreadcrumb[] = [
     'name' => $my_folder_data['title'],
 ];
 
-Display :: display_header(null);
+Display::display_header(null);
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'>'.
@@ -214,4 +214,4 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_others&w
 <?php
 echo Display::grid_html('results');
 
-Display :: display_footer();
+Display::display_footer();

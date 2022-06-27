@@ -8751,4 +8751,14 @@ $XQuestionsSelectedWithTotalScoreY = "فقط %d اسئلة سيتم اختيار
 $QuestionAlsoUsedInTheFollowingTests = "السؤال تم استخدامه ايضا في الاختيارات الاتية";
 $LinkToTestEdition = "رابط لنسخة الاختبار";
 $MoveUsersFromCourseToSession = "نقل نتائج المستخدمين من المقرر الاساسي الى الدورة";
+$IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments = "اذا كان الاختبار يتضمن اسئلة المناطق الساخنة، فيجب اختيار الصور ذات الصلة من المستندات";
+$BackToAttemptList = "العودة الى قائمة المحاولات";
+$ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "اظهار النتيجة للمُتعلم: اظهار الدرجة، اختيار المُتعلم والتغذية الراجعة لكل محاولة، اضافة الحل الصحيح والتغذية الراجعة عند تجاوز حدود المحاولات";
+$AddGradebookComment = "تعليق";
+$LatestLoginInAnyCourse = "اخر تسجيل دخول للمقرر";
+$The = "الـ";
+$MultiplicateQuestionsByClass = "مضاعفة الاسئلة وفقا للصف";
+$MultiplicateQuestionsByUser = "مضاعفة الاسئلة وفقا للمستخدم";
+$QuestionForNextUser = "الاسئلة للمستخدم القادم";
+$CourseCodeToEnteredCapitalLettersToConfirmDeletionX = "يجب ادخال كود المقرر بالاحرف الكبيرة لتأكيد عملية الحذف: %s";
 ?>

@@ -21,7 +21,7 @@ $tool_name = get_lang('CommandLineInterpreter');
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 // including the header file (which includes the banner itself)
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 switch ($_GET["cmd"]) {
     case "clear_stapi":
         echo "Are you sure you are willing to erase all storage api data (no backup)? <a href='cli.php?cmd=clear_stapi_confirm' >Yes</a>";
@@ -36,4 +36,4 @@ switch ($_GET["cmd"]) {
         break;
 }
 
-Display :: display_footer();
+Display::display_footer();

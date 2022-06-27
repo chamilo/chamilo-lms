@@ -123,6 +123,26 @@ CKEDITOR.editorConfig = function (config) {
 
     config.qMarkersRollsUrl = '{{ _p.web_ajax }}exercise.ajax.php?a=get_quiz_embeddable';
 
+    var videoTypesMap = {
+        dailymotion: 'DailyMotion',
+        facebook: 'Facebook',
+        twitch: 'Twitch',
+        vimeo: 'Vimeo',
+        youtube: 'YouTube'
+    };
+    config.videoTypes = [
+        [ 'MP4', 'video/mp4' ],
+        [ 'WebM', 'video/webm' ],
+    ];
+    {% set video_renderers = 'video_player_renderers'|api_get_configuration_value %}
+    {% if video_renderers and video_renderers.renderers %}
+        {{ video_renderers.renderers|json_encode }}.forEach(function(rendererName) {
+            if (videoTypesMap.hasOwnProperty(rendererName)) {
+                config.videoTypes.push( [videoTypesMap[rendererName], 'video/' + rendererName] );
+            }
+        });
+    {% endif %}
+
     config.font_names = "{{ font_names }}";
 };
 

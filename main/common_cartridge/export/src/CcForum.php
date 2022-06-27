@@ -3,7 +3,7 @@
 
 class CcForum extends CcGeneralFile
 {
-    const DEAFULTNAME = 'discussion.xml';
+    public const DEAFULTNAME = 'discussion.xml';
     protected $rootns = 'dt';
     protected $rootname = 'topic';
     protected $ccnamespaces = ['dt' => 'http://www.imsglobal.org/xsd/imsccv1p3/imsdt_v1p3',

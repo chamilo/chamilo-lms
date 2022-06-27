@@ -389,4 +389,4 @@ echo '<div class="row">';
 $form->display();
 echo '</div>';
 
-Display :: display_footer();
+Display::display_footer();

@@ -31,7 +31,7 @@ class ResultTable extends SortableTable
         $addparams = [],
         $forprint = false
     ) {
-        parent:: __construct(
+        parent::__construct(
             'resultlist',
             null,
             null,

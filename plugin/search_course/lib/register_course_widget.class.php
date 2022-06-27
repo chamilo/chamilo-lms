@@ -11,9 +11,9 @@
  */
 class RegisterCourseWidget
 {
-    const ACTION_SUBSCRIBE = 'subscribe';
-    const PARAM_SUBSCRIBE = 'subscribe';
-    const PARAM_PASSCODE = 'course_registration_code';
+    public const ACTION_SUBSCRIBE = 'subscribe';
+    public const PARAM_SUBSCRIBE = 'subscribe';
+    public const PARAM_PASSCODE = 'course_registration_code';
 
     /**
      * Returns $_POST data for $key is it exists or $default otherwise.

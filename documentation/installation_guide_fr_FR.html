@@ -804,6 +804,27 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
     RewriteRule ^(tests|.git) - [F,L,NC]
   &lt;/Directory&gt;
 </pre>
+
+            <h4>Note spéciale concernant le partage de questions entre cours</h4>
+            Dans Chamilo 1.11.16, nous avons introduit la possibilité (voir configuration.php) de partager
+            des questions entre différents cours. Cette fonctionnalité, si elle fonctionne très bien pour des
+            questions de type texte, génère un nouveau problème lorsqu'une ressource média (image, vidéo, etc)
+            fait partie de la question. L'utilisateur qui voit la question dans un cours vers lequel elle a
+            été partagée mais n'a pas accès au cours original, ne pourra pas voir la ressource média parce
+            que celle-ci se trouve uniquement dans le cours original.<br />
+            Pour éviter ce problème, vous pouvez adapter votre .htaccess (ou votre VirtualHost si c'est là
+            que vous avez placé la configuration) pour permettre aux fichiers de type média d'&ecirc;tre lus
+            directement (sans m&ecirc;me se connecter au portail). Cela améliorera parallèlement la vitesse
+            de chargement à ces médias, mais introduira une baisse du niveau de sécurité, puisque ces ressources
+            seront directement accessibles par quiconque a accès à la page d'accueil du portail et connaît
+            les adresses exactes de ces médias. À prendre en considération, donc.<br /><br />
+            Pour appliquer le patch, localisez la ligne suivante dans votre .htaccess .htaccess:<br /><br />
+            <pre>    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]</pre>
+            et supprimez-la ou commentez-la, puis remplacez-la par ces deux lignes :<br /><br />
+            <pre>    RewriteCond %{REQUEST_URI} !\.(gif|jpg|jpeg|png|webp|ico|icon|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff|webm|mp4)
+    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA|L]</pre>
+
+
 <h3>Nginx</h3>
 Nginx ne supporte pas les règles .htaccess, donc vous n'avez pas d'autre option que d'appliquer les règles suivantes (notez que la configuration PHP peut changer).
 Ce sont uniquement les redirections à placer dans un bloc server{}, comme les autres valeurs peuvent changer d'une installation à l'autre.

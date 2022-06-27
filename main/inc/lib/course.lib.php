@@ -26,11 +26,11 @@ use Doctrine\Common\Collections\Criteria;
  */
 class CourseManager
 {
-    const MAX_COURSE_LENGTH_CODE = 40;
+    public const MAX_COURSE_LENGTH_CODE = 40;
     /** This constant is used to show separate user names in the course
      * list (userportal), footer, etc */
-    const USER_SEPARATOR = ' |';
-    const COURSE_FIELD_TYPE_CHECKBOX = 10;
+    public const USER_SEPARATOR = ' |';
+    public const COURSE_FIELD_TYPE_CHECKBOX = 10;
     public $columns = [];
 
     /**
@@ -491,20 +491,24 @@ class CourseManager
                         WHERE session_id = $session_id AND user_id = $uid";
                 $rs = Database::query($sql);
 
-                if (Database::num_rows($rs) == 0) {
-                    SessionManager::unsubscribe_user_from_session($uid, $session_id);
+                if (Database::num_rows($rs) == 0
+                    && !api_get_configuration_value('session_course_users_subscription_limited_to_session_users')
+                ) {
+                    SessionManager::unsubscribe_user_from_session($session_id, $uid);
                 }
             }
 
-            Event::addEvent(
-                LOG_UNSUBSCRIBE_USER_FROM_COURSE,
-                LOG_COURSE_CODE,
-                $course_code,
-                api_get_utc_datetime(),
-                $user_id,
-                $course_id,
-                $session_id
-            );
+            foreach ($user_id as $uId) {
+                Event::addEvent(
+                    LOG_UNSUBSCRIBE_USER_FROM_COURSE,
+                    LOG_COURSE_CODE,
+                    $course_code,
+                    api_get_utc_datetime(),
+                    $uId,
+                    $course_id,
+                    $session_id
+                );
+            }
         } else {
             $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                     WHERE
@@ -1732,7 +1736,7 @@ class CourseManager
                         $users[$row_key]['count_users_registered'] = $registered_users_with_extra_field;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
 
-                        $category = Category:: load(
+                        $category = Category::load(
                             null,
                             null,
                             $course_code,
@@ -1773,7 +1777,7 @@ class CourseManager
                             )
                         );
 
-                        $category = Category:: load(
+                        $category = Category::load(
                             null,
                             null,
                             $course_code,
@@ -2000,7 +2004,8 @@ class CourseManager
         $groupId = 0,
         $getCount = false,
         $start = 0,
-        $limit = 0
+        $limit = 0,
+        $userActive = null
     ) {
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $sessionId = (int) $sessionId;
@@ -2035,6 +2040,12 @@ class CourseManager
                 if (!$includeInvitedUsers) {
                     $sql .= " AND u.status != ".INVITEE;
                 }
+
+                if (isset($userActive)) {
+                    $userActive = (int) $userActive;
+                    $sql .= " AND u.active = $userActive";
+                }
+
                 $sql .= $limitCondition;
                 $rs = Database::query($sql);
 
@@ -2088,6 +2099,12 @@ class CourseManager
             if (!$includeInvitedUsers) {
                 $sql .= " AND u.status != ".INVITEE;
             }
+
+            if (isset($userActive)) {
+                $userActive = (int) $userActive;
+                $sql .= " AND u.active = $userActive";
+            }
+
             $sql .= $limitCondition;
 
             $rs = Database::query($sql);
@@ -7145,13 +7162,15 @@ class CourseManager
      * @param int             $userId
      * @param string|int|null $startDate
      * @param string|int|null $endDate
+     * @param int             $sessionId
      */
     public static function getAccessCourse(
         $courseId = 0,
         $withSession = 0,
         $userId = 0,
         $startDate = null,
-        $endDate = null
+        $endDate = null,
+        $sessionId = null
     ) {
         $where = null;
         $courseId = (int) $courseId;
@@ -7166,16 +7185,21 @@ class CourseManager
         }
         if (!empty($startDate)) {
             $startDate = api_get_utc_datetime($startDate, false, true);
-            $wheres[] = " course_access.login_course_date >= '".$startDate->format('Y-m-d')."' ";
+            $wheres[] = " course_access.login_course_date >= '".$startDate->format('Y-m-d 00:00:00')."' ";
         }
         if (!empty($endDate)) {
             $endDate = api_get_utc_datetime($endDate, false, true);
-            $wheres[] = " course_access.login_course_date <= '".$endDate->format('Y-m-d')."' ";
+            $wheres[] = " course_access.login_course_date <= '".$endDate->format('Y-m-d 23:59:59')."' ";
         }
         if (0 == $withSession) {
             $wheres[] = " course_access.session_id = 0 ";
         } elseif (1 == $withSession) {
             $wheres[] = " course_access.session_id != 0 ";
+        }
+
+        if (isset($sessionId)) {
+            $sessionId = (int) $sessionId;
+            $wheres[] = " course_access.session_id = $sessionId ";
         }
 
         $totalWhere = count($wheres);

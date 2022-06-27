@@ -71,12 +71,12 @@ $interbreadcrumb[] = [
     'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
     'name' => get_lang('ViewResult'),
 ];
-Display :: display_header(get_lang('AddUserToEval'));
+Display::display_header(get_lang('AddUserToEval'));
 if (isset($_GET['erroroneuser'])) {
     echo Display::return_message(get_lang('AtLeastOneUser'), 'warning', false);
 }
-DisplayGradebook :: display_header_result($evaluation[0], null, 0, 0);
+DisplayGradebook::display_header_result($evaluation[0], null, 0, 0);
 echo '<div class="main">';
 echo $add_user_form->toHtml();
 echo '</div>';
-Display :: display_footer();
+Display::display_footer();

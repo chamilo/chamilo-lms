@@ -2124,7 +2124,7 @@ class CourseBuilder
     ) {
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseCode = $courseInfo['code'];
-        $cats = Category:: load(
+        $cats = Category::load(
             null,
             null,
             $courseCode,

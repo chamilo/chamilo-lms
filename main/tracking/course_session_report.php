@@ -59,7 +59,7 @@ $form->setDefaults(['session_id' => $session_id]);
 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 if (!$export_to_xls) {
-    Display :: display_header(get_lang("MySpace"));
+    Display::display_header(get_lang("MySpace"));
     echo '<div class="actions">';
 
     if ($global) {

@@ -20,8 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SessionRelCourseRelUser
 {
-    const STATUS_STUDENT = 0;
-    const STATUS_COURSE_COACH = 2;
+    public const STATUS_STUDENT = 0;
+    public const STATUS_COURSE_COACH = 2;
 
     public $statusList = [
         0 => 'student',

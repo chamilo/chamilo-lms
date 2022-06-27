@@ -17,45 +17,45 @@ class GroupManager
     /* DEFAULT_GROUP_CATEGORY:
     When group categories aren't available (platform-setting),
     all groups are created in this 'dummy'-category*/
-    const DEFAULT_GROUP_CATEGORY = 2;
+    public const DEFAULT_GROUP_CATEGORY = 2;
 
     /**
      * infinite.
      */
-    const INFINITE = 99999;
+    public const INFINITE = 99999;
     /**
      * No limit on the number of users in a group.
      */
-    const MEMBER_PER_GROUP_NO_LIMIT = 0;
+    public const MEMBER_PER_GROUP_NO_LIMIT = 0;
     /**
      * No limit on the number of groups per user.
      */
-    const GROUP_PER_MEMBER_NO_LIMIT = 0;
+    public const GROUP_PER_MEMBER_NO_LIMIT = 0;
     /**
      * The tools of a group can have 3 states
      * - not available
      * - public
      * - private.
      */
-    const TOOL_NOT_AVAILABLE = 0;
-    const TOOL_PUBLIC = 1;
-    const TOOL_PRIVATE = 2;
-    const TOOL_PRIVATE_BETWEEN_USERS = 3;
+    public const TOOL_NOT_AVAILABLE = 0;
+    public const TOOL_PUBLIC = 1;
+    public const TOOL_PRIVATE = 2;
+    public const TOOL_PRIVATE_BETWEEN_USERS = 3;
 
     /**
      * Constants for the available group tools.
      */
-    const GROUP_TOOL_FORUM = 0;
-    const GROUP_TOOL_DOCUMENTS = 1;
-    const GROUP_TOOL_CALENDAR = 2;
-    const GROUP_TOOL_ANNOUNCEMENT = 3;
-    const GROUP_TOOL_WORK = 4;
-    const GROUP_TOOL_WIKI = 5;
-    const GROUP_TOOL_CHAT = 6;
+    public const GROUP_TOOL_FORUM = 0;
+    public const GROUP_TOOL_DOCUMENTS = 1;
+    public const GROUP_TOOL_CALENDAR = 2;
+    public const GROUP_TOOL_ANNOUNCEMENT = 3;
+    public const GROUP_TOOL_WORK = 4;
+    public const GROUP_TOOL_WIKI = 5;
+    public const GROUP_TOOL_CHAT = 6;
 
-    const DOCUMENT_MODE_SHARE = 0; // By default
-    const DOCUMENT_MODE_READ_ONLY = 1;
-    const DOCUMENT_MODE_COLLABORATION = 2;
+    public const DOCUMENT_MODE_SHARE = 0; // By default
+    public const DOCUMENT_MODE_READ_ONLY = 1;
+    public const DOCUMENT_MODE_COLLABORATION = 2;
 
     /**
      * GroupManager constructor.

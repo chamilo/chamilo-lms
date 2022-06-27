@@ -14,22 +14,22 @@ use Doctrine\ORM\Tools\SchemaTool;
  */
 class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 {
-    const SETTING_ENABLE = 'enable';
-    const SETTING_MAX_ATTEMPTS = 'max_attempts';
-    const SETTING_2FA = '2fa';
-    const SETTING_API_URL = 'api_url';
-    const SETTING_TOKEN = 'token';
+    public const SETTING_ENABLE = 'enable';
+    public const SETTING_MAX_ATTEMPTS = 'max_attempts';
+    public const SETTING_2FA = '2fa';
+    public const SETTING_API_URL = 'api_url';
+    public const SETTING_TOKEN = 'token';
 
-    const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
-    const EXTRAFIELD_LP_ITEM = 'whispeak_lp_item';
-    const EXTRAFIELD_QUIZ_QUESTION = 'whispeak_quiz_question';
+    public const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
+    public const EXTRAFIELD_LP_ITEM = 'whispeak_lp_item';
+    public const EXTRAFIELD_QUIZ_QUESTION = 'whispeak_quiz_question';
 
-    const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
-    const SESSION_2FA_USER = 'whispeak_user_id';
-    const SESSION_LP_ITEM = 'whispeak_lp_item';
-    const SESSION_QUIZ_QUESTION = 'whispeak_quiz_question';
-    const SESSION_AUTH_PASSWORD = 'whispeak_auth_password';
-    const SESSION_SENTENCE_TEXT = 'whispeak_sentence_text';
+    public const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
+    public const SESSION_2FA_USER = 'whispeak_user_id';
+    public const SESSION_LP_ITEM = 'whispeak_lp_item';
+    public const SESSION_QUIZ_QUESTION = 'whispeak_quiz_question';
+    public const SESSION_AUTH_PASSWORD = 'whispeak_auth_password';
+    public const SESSION_SENTENCE_TEXT = 'whispeak_sentence_text';
 
     /**
      * StudentFollowUpPlugin constructor.

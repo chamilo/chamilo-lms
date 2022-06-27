@@ -14,8 +14,8 @@ $nameTools = get_lang('MyProgress');
 $this_section = 'session_my_progress_ind';
 $_user = api_get_user_info();
 
-$tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$tbl_stats_access = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$tbl_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
 Display::display_header($nameTools);
 
@@ -126,7 +126,7 @@ while ($a_courses = Database::fetch_array($result2)) {
 api_display_tool_title($nameTools);
 
 $now = date('Y-m-d');
-$tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
+$tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
 
 //on compte le nombre de m% dans l'agenda pour chaque module
 $sqljtot = "SELECT COUNT( * ) AS TOT
@@ -329,7 +329,7 @@ while ($a_courses = Database::fetch_array($result2)) {
     // The Tracking Class still uses the course code rather then the course id.
     $tracking_c_code = $course_code_id['code'];
     // time spent on the course
-    $time_spent_on_course = api_time_to_hms(Tracking:: get_time_spent_on_the_course($user_id, $c_id, $session_id));
+    $time_spent_on_course = api_time_to_hms(Tracking::get_time_spent_on_the_course($user_id, $c_id, $session_id));
     //  firts connection date
     $sql2 = "SELECT STR_TO_DATE(access_date,'%Y-%m-%d')
             FROM $tbl_stats_access
@@ -388,11 +388,11 @@ while ($a_courses = Database::fetch_array($result2)) {
     $end_date_module = $row[1];
     //fin de trouver la date de fin prévue du module
     //progression en %
-    $t_lp = Database:: get_course_table(TABLE_LP_MAIN);
+    $t_lp = Database::get_course_table(TABLE_LP_MAIN);
     $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = '$c_id'  ORDER BY lp.display_order";
     $rs_lp = Database::query($sql_lp);
     $i = 0;
-    while ($learnpath = Database:: fetch_array($rs_lp)) {
+    while ($learnpath = Database::fetch_array($rs_lp)) {
         $lp_id = intval($learnpath['id']);
         $lp_name = $learnpath['name'];
         $any_result = false;

@@ -106,6 +106,7 @@ $html = '';
 $message = '';
 $html .= '<div class="exercise-overview">';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$hideIp = api_get_configuration_value('exercise_hide_ip');
 $editLink = '';
 if ($is_allowed_to_edit) {
     if ($objExercise->sessionId == $sessionId) {
@@ -312,7 +313,7 @@ if (!empty($attempts)) {
             'date' => api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG),
             'userIp' => $attempt_result['user_ip'],
         ];
-        if (api_is_anonymous()) {
+        if (api_is_anonymous() || $hideIp) {
             unset($row['userIp']);
         }
         $attempt_link .= PHP_EOL.$teacher_revised;
@@ -436,7 +437,7 @@ if (!empty($attempts)) {
             }
             break;
     }
-    if (api_is_anonymous()) {
+    if (api_is_anonymous() || $hideIp) {
         unset($header_names[2]); // It removes the 3rd column related to IP
     }
     $column = 0;

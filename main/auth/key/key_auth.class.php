@@ -41,7 +41,7 @@ use ChamiloSession as Session;
  */
 class KeyAuth
 {
-    const PARAM_ACCESS_TOKEN = 'access_token';
+    public const PARAM_ACCESS_TOKEN = 'access_token';
 
     protected static $services = [];
 

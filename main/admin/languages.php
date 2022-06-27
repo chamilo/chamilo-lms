@@ -344,4 +344,4 @@ $table->set_form_actions($form_actions);
 echo '<div id="id_content_message">&nbsp;</div>';
 $table->display();
 
-Display :: display_footer();
+Display::display_footer();

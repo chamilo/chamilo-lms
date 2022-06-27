@@ -3,7 +3,7 @@
 
 class CcWebLink extends CcGeneralFile
 {
-    const DEAFULTNAME = 'weblink.xml';
+    public const DEAFULTNAME = 'weblink.xml';
 
     protected $rootns = 'wl';
     protected $rootname = 'webLink';

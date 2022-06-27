@@ -3067,6 +3067,11 @@ table.certaintyTable td.globalChart {
     display: inline-block;
     width: 100%;
 }
+.question_row .question_description,
+.question_row_answer .question_description {
+    clear: both;
+}
+
 #question_feedback {
     border-radius: 10px;
     background-color: #FCF7BA;

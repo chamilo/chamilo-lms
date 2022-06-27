@@ -128,7 +128,7 @@ class Login
         if ($result == 1) {
             return get_lang('YourPasswordHasBeenReset');
         } else {
-            $mail = Display:: encrypted_mailto_link(
+            $mail = Display::encrypted_mailto_link(
                 api_get_setting('emailAdministrator'),
                 api_get_person_name(
                     api_get_setting('administratorName'),
@@ -201,7 +201,7 @@ class Login
 
             return get_lang('AnEmailToResetYourPasswordHasBeenSent');
         } else {
-            $admin_email = Display:: encrypted_mailto_link(
+            $admin_email = Display::encrypted_mailto_link(
                 api_get_setting('emailAdministrator'),
                 api_get_person_name(
                     api_get_setting('administratorName'),

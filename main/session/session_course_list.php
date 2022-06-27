@@ -93,7 +93,7 @@ foreach ($Courses as $key => $enreg) {
     $tableCourses[] = $course;
 }
 echo '<form method="post" action="'.api_get_self().'">';
-Display :: display_sortable_table($tableHeader, $tableCourses, [], []);
+Display::display_sortable_table($tableHeader, $tableCourses, [], []);
 echo '<select name="action">
 	<option value="delete">'.get_lang('UnsubscribeCoursesFromSession').'</option>
 	</select>

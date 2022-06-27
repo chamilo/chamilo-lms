@@ -96,6 +96,11 @@ class MatchingDraggable extends Question
         $form->addElement('hidden', 'nb_matches', $nb_matches);
         $form->addElement('hidden', 'nb_options', $nb_options);
 
+        $thWeighting = '';
+        if (MATCHING_DRAGGABLE === $this->type) {
+            $thWeighting = '<th width="10">'.get_lang('Weighting').'</th>';
+        }
+
         // DISPLAY MATCHES
         $html = '<table class="table table-striped table-hover">
             <thead>
@@ -103,7 +108,7 @@ class MatchingDraggable extends Question
                     <th width="10">'.get_lang('Number').'</th>
                     <th width="85%">'.get_lang('Answer').'</th>
                     <th width="15%">'.get_lang('MatchesTo').'</th>
-                    <th width="10">'.get_lang('Weighting').'</th>
+                    '.$thWeighting.'
                 </tr>
             </thead>
             <tbody>';
@@ -152,7 +157,11 @@ class MatchingDraggable extends Question
             );
 
             $form->addSelect("matches[$i]", null, $matches);
-            $form->addText("weighting[$i]", null, true, ['style' => 'width: 60px;', 'value' => 10]);
+            if (MATCHING_DRAGGABLE === $this->type) {
+                $form->addText("weighting[$i]", null, true, ['style' => 'width: 60px;', 'value' => 10]);
+            } else {
+                $form->addHidden("weighting[$i]", "0");
+            }
             $form->addHtml('</tr>');
         }
 
@@ -196,6 +205,15 @@ class MatchingDraggable extends Question
         }
 
         $form->addHtml('</table>');
+
+        if (MATCHING_DRAGGABLE_GLOBAL === $this->type) {
+            //only 1 answer the all deal ...
+            $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
+            if (!empty($this->iid)) {
+                $defaults['questionWeighting'] = $this->weighting;
+            }
+        }
+
         global $text;
         $group = [];
         // setting the save button here and not in the question class.php
@@ -254,6 +272,11 @@ class MatchingDraggable extends Question
                 $position
             );
         }
+
+        if (MATCHING_DRAGGABLE_GLOBAL == $this->type) {
+            $this->weighting = $form->getSubmitValue('questionWeighting');
+        }
+
         $objAnswer->save();
         $this->save($exercise);
     }

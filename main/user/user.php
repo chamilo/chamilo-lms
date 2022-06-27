@@ -247,7 +247,7 @@ if (isset($_GET['action'])) {
                 $rs = Database::query($sql);
                 $counter = 1;
 
-                while ($user = Database:: fetch_array($rs, 'ASSOC')) {
+                while ($user = Database::fetch_array($rs, 'ASSOC')) {
                     if (isset($user['legal_agreement'])) {
                         if ($user['legal_agreement'] == 1) {
                             $user['legal_agreement'] = get_lang('Yes');
@@ -836,7 +836,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         }
     }
 
-    $users = CourseManager :: get_user_list_from_course_code(
+    $users = CourseManager::get_user_list_from_course_code(
         $course_code,
         $sessionId,
         $limit,

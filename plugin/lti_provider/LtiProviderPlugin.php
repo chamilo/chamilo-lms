@@ -13,7 +13,7 @@ use Doctrine\ORM\Tools\SchemaTool;
  */
 class LtiProviderPlugin extends Plugin
 {
-    const TABLE_PLATFORM = 'plugin_lti_provider_platform';
+    public const TABLE_PLATFORM = 'plugin_lti_provider_platform';
 
     public $isAdminPlugin = true;
 

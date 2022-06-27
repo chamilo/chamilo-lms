@@ -73,7 +73,9 @@ switch ($action) {
         exit();
         break;
     case 'add':
-        SessionManager::subscribe_users_to_session_course($idChecked, $id_session, $course_code);
+        if (!empty($idChecked) && is_array($idChecked)) {
+            SessionManager::subscribe_users_to_session_course($idChecked, $id_session, $course_code);
+        }
         header('Location: '.api_get_self()
             .'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
         exit;

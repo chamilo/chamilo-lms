@@ -199,7 +199,7 @@ if (!empty($errorMsg)) {
      <select name="firstLetterUser" onchange = "xajax_search_usergroup_sessions(this.value,'multiple')" >
       <option value = "%">--</option>
       <?php
-        echo Display :: get_alphabet_options(); ?>
+        echo Display::get_alphabet_options(); ?>
      </select>
 <?php echo '<br />'; ?>
 </td>

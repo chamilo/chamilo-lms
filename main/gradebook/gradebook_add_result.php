@@ -59,7 +59,7 @@ $interbreadcrumb[] = [
     'url' => Category::getUrl(),
     'name' => get_lang('Gradebook'),
 ];
-Display :: display_header(get_lang('AddResult'));
+Display::display_header(get_lang('AddResult'));
 DisplayGradebook::display_header_result($evaluation[0], null, 0, 0);
 echo $table;
-Display :: display_footer();
+Display::display_footer();

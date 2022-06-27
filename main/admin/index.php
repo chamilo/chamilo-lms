@@ -46,7 +46,7 @@ if (api_is_platform_admin()) {
     /* ACTION HANDLING */
     if (!empty($_POST['Register'])) {
         api_register_campus(!$_POST['donotlistcampus']);
-        $message = Display :: return_message(get_lang('VersionCheckEnabled'), 'confirmation');
+        $message = Display::return_message(get_lang('VersionCheckEnabled'), 'confirmation');
         Display::addFlash($message);
     }
     $keyword_url = Security::remove_XSS((empty($_GET['keyword']) ? '' : $_GET['keyword']));

@@ -27,18 +27,18 @@ use Xabbuh\XApi\Serializer\Symfony\Serializer;
  */
 class XApiPlugin extends Plugin implements HookPluginInterface
 {
-    const SETTING_LRS_URL = 'lrs_url';
-    const SETTING_LRS_AUTH_USERNAME = 'lrs_auth_username';
-    const SETTING_LRS_AUTH_PASSWORD = 'lrs_auth_password';
-    const SETTING_UUID_NAMESPACE = 'uuid_namespace';
-    const SETTING_LRS_LP_ITEM_ACTIVE = 'lrs_lp_item_viewed_active';
-    const SETTING_LRS_LP_ACTIVE = 'lrs_lp_end_active';
-    const SETTING_LRS_QUIZ_ACTIVE = 'lrs_quiz_active';
-    const SETTING_LRS_QUIZ_QUESTION_ACTIVE = 'lrs_quiz_question_active';
-    const SETTING_LRS_PORTFOLIO_ACTIVE = 'lrs_portfolio_active';
+    public const SETTING_LRS_URL = 'lrs_url';
+    public const SETTING_LRS_AUTH_USERNAME = 'lrs_auth_username';
+    public const SETTING_LRS_AUTH_PASSWORD = 'lrs_auth_password';
+    public const SETTING_UUID_NAMESPACE = 'uuid_namespace';
+    public const SETTING_LRS_LP_ITEM_ACTIVE = 'lrs_lp_item_viewed_active';
+    public const SETTING_LRS_LP_ACTIVE = 'lrs_lp_end_active';
+    public const SETTING_LRS_QUIZ_ACTIVE = 'lrs_quiz_active';
+    public const SETTING_LRS_QUIZ_QUESTION_ACTIVE = 'lrs_quiz_question_active';
+    public const SETTING_LRS_PORTFOLIO_ACTIVE = 'lrs_portfolio_active';
 
-    const STATE_FIRST_LAUNCH = 'first_launch';
-    const STATE_LAST_LAUNCH = 'last_launch';
+    public const STATE_FIRST_LAUNCH = 'first_launch';
+    public const STATE_LAST_LAUNCH = 'last_launch';
 
     /**
      * XApiPlugin constructor.

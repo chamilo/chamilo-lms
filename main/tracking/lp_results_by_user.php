@@ -27,7 +27,7 @@ if (api_is_platform_admin()) {
 }
 
 if ($global) {
-    $temp_course_list = CourseManager :: get_courses_list();
+    $temp_course_list = CourseManager::get_courses_list();
     foreach ($temp_course_list as $temp_course_item) {
         $course_item = api_get_course_info($temp_course_item['code']);
         $course_list[] = [
@@ -81,7 +81,7 @@ if (!empty($selected_course)) {
 }
 
 if (!$export_to_csv) {
-    Display :: display_header(get_lang('Reporting'));
+    Display::display_header(get_lang('Reporting'));
     echo '<div class="actions" style ="font-size:10pt;">';
     if ($global) {
         echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
@@ -244,9 +244,9 @@ function export_complete_report_csv($filename, $array)
     ];
     if (!empty($array)) {
         $array = array_merge($header, $array);
-        Export :: arrayToCsv($array, $filename);
+        Export::arrayToCsv($array, $filename);
     }
     exit;
 }
 
-Display :: display_footer();
+Display::display_footer();

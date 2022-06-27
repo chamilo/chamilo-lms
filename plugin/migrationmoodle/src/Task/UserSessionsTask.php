@@ -17,7 +17,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\SessionName;
  */
 class UserSessionsTask extends BaseTask
 {
-    const SEPARATOR_NAME = ' - ';
+    public const SEPARATOR_NAME = ' - ';
 
     /**
      * {@inheritdoc}

@@ -6,9 +6,9 @@
  */
 class LearningCalendarPlugin extends Plugin
 {
-    const EVENT_TYPE_TAKEN = 1;
-    const EVENT_TYPE_EXAM = 2;
-    const EVENT_TYPE_FREE = 3;
+    public const EVENT_TYPE_TAKEN = 1;
+    public const EVENT_TYPE_EXAM = 2;
+    public const EVENT_TYPE_FREE = 3;
 
     /**
      * Class constructor.

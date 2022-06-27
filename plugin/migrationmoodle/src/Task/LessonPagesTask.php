@@ -21,9 +21,9 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLessonPageLo
  */
 class LessonPagesTask extends BaseTask
 {
-    const TYPE_END_BRANCH = 21;
-    const TYPE_CLUSTER = 30;
-    const TYPE_END_CLUSTER = 31;
+    public const TYPE_END_BRANCH = 21;
+    public const TYPE_CLUSTER = 30;
+    public const TYPE_END_CLUSTER = 31;
 
     /**
      * @return array

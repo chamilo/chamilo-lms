@@ -45,7 +45,7 @@ if (api_get_setting('stylesheets') != '') {
 $html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;
 
 $fullpage = intval($_GET['fullpage']) != 0;
-$tags = HTML_QuickForm_Rule_HTML :: get_allowed_tags($html_type, $fullpage);
+$tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($html_type, $fullpage);
 $table_header = [];
 $table_header[] = ['tag', true];
 $table_header[] = ['attributes', false];

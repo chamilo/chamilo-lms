@@ -375,7 +375,7 @@ if (($action === 'course_select_form') ||
         $hiddenFields['origin_course'] = api_get_course_id();
         $hiddenFields['origin_session'] = api_get_session_id();
 
-        CourseSelectForm :: display_form($course, $hiddenFields, true);
+        CourseSelectForm::display_form($course, $hiddenFields, true);
 
         echo '<div style="float:right"><a href="javascript:window.history.go(-1);">'.
             Display::return_icon(

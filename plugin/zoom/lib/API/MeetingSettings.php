@@ -13,13 +13,13 @@ class MeetingSettings
 {
     use JsonDeserializableTrait;
 
-    const APPROVAL_TYPE_AUTOMATICALLY_APPROVE = 0;
-    const APPROVAL_TYPE_MANUALLY_APPROVE = 1;
-    const APPROVAL_TYPE_NO_REGISTRATION_REQUIRED = 2;
+    public const APPROVAL_TYPE_AUTOMATICALLY_APPROVE = 0;
+    public const APPROVAL_TYPE_MANUALLY_APPROVE = 1;
+    public const APPROVAL_TYPE_NO_REGISTRATION_REQUIRED = 2;
 
-    const REGISTRATION_TYPE_REGISTER_ONCE_ATTEND_ANY = 1;
-    const REGISTRATION_TYPE_REGISTER_EACH = 2;
-    const REGISTRATION_TYPE_REGISTER_ONCE_CHOOSE = 3;
+    public const REGISTRATION_TYPE_REGISTER_ONCE_ATTEND_ANY = 1;
+    public const REGISTRATION_TYPE_REGISTER_EACH = 2;
+    public const REGISTRATION_TYPE_REGISTER_ONCE_CHOOSE = 3;
 
     /** @var bool Start video when the host joins the meeting */
     public $host_video;

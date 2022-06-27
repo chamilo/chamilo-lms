@@ -251,7 +251,7 @@ if (isset($_REQUEST['comments']) &&
                 GROUP BY question_id';
         $res = Database::query($qry);
         $tot = 0;
-        while ($row = Database :: fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_array($res, 'ASSOC')) {
             $marks = $row['marks'];
             if (!$objExerciseTmp->propagate_neg && $marks < 0) {
                 continue;
@@ -417,6 +417,7 @@ if (isset($_REQUEST['comments']) &&
 }
 
 $actions = null;
+$hideIp = api_get_configuration_value('exercise_hide_ip');
 if ($is_allowedToEdit && $origin !== 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() ||
@@ -689,8 +690,9 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('ToolLearnpath'),
         get_lang('Actions'),
     ];
-
+    $indexIp = 8;
     if ($officialCodeInList === 'true') {
+        $indexIp = 9;
         $columns = array_merge([get_lang('OfficialCode')], $columns);
     }
 
@@ -759,6 +761,14 @@ if ($is_allowedToEdit || $is_tutor) {
     if ('true' === $officialCodeInList) {
         $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true'];
         $column_model = array_merge([$officialCodeRow], $column_model);
+    }
+
+    if ($hideIp) {
+        // It removes the 9th column related to IP
+        unset($columns[$indexIp]);
+        unset($column_model[$indexIp]);
+        $columns = array_values($columns);
+        $column_model = array_values($column_model);
     }
 
     $action_links = '

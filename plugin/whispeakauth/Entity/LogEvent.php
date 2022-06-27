@@ -24,8 +24,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LogEvent
 {
-    const STATUS_FAILED = 0;
-    const STATUS_SUCCESS = 1;
+    public const STATUS_FAILED = 0;
+    public const STATUS_SUCCESS = 1;
 
     /**
      * @var int

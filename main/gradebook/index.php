@@ -740,7 +740,7 @@ if (isset($_GET['studentoverview'])) {
     // then Category::load() will create a new 'root' category with empty
     // course and session fields in memory (Category::create_root_category())
 
-    $cats = Category:: load(
+    $cats = Category::load(
         null,
         null,
         $course_code,

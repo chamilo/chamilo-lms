@@ -183,7 +183,7 @@ if ($form->validate()) {
             }
         }
 
-        $studentData = UserManager:: get_extra_user_data(
+        $studentData = UserManager::get_extra_user_data(
             $user['UserId'],
             true,
             false
@@ -214,6 +214,6 @@ if ($form->validate()) {
     }
 }
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 $form->display();
-Display :: display_footer();
+Display::display_footer();

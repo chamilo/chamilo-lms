@@ -17,7 +17,7 @@ $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $em = Database::getManager();
 
-$linkarray = LinkFactory :: load($_GET['editlink']);
+$linkarray = LinkFactory::load($_GET['editlink']);
 /** @var AbstractLink $link */
 $link = $linkarray[0];
 if ($link->is_locked() && !api_is_platform_admin()) {
@@ -30,7 +30,7 @@ $course_code = api_get_course_id();
 $session_id = api_get_session_id();
 
 if ($session_id == 0) {
-    $cats = Category:: load(
+    $cats = Category::load(
         null,
         null,
         $course_code,
@@ -53,7 +53,7 @@ $form = new LinkAddEditForm(
 );
 if ($form->validate()) {
     $values = $form->exportValues();
-    $parent_cat = Category :: load($values['select_gradebook']);
+    $parent_cat = Category::load($values['select_gradebook']);
     $final_weight = $values['weight_mask'];
     $link->set_weight($final_weight);
 
@@ -142,6 +142,6 @@ $(function() {
 });
 </script>';
 
-Display :: display_header(get_lang('EditLink'));
+Display::display_header(get_lang('EditLink'));
 $form->display();
-Display :: display_footer();
+Display::display_footer();

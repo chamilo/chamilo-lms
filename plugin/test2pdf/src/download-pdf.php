@@ -30,7 +30,7 @@ $pdf->AddPage();
 
 $pdf->SetFont('Arial', '', 16);
 $pdf->SetTextColor(64);
-$pdf->MultiCell(0, 7, $infoQuiz['title'], 0, 'L', false);
+$pdf->MultiCell(0, 7, $titleQuiz, 0, 'L', false);
 if (!empty($infoQuiz['description'])) {
     $pdf->WriteHTML(
         PDF::fixImagesPaths(

@@ -1620,6 +1620,7 @@ switch ($action) {
 
         break;
     case 'get_exercise_results':
+        $hideIp = api_get_configuration_value('exercise_hide_ip');
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
             api_is_drh() ||
             api_is_student_boss() ||
@@ -1642,9 +1643,16 @@ switch ($action) {
                 'revised',
                 'orig_lp_id',
             ];
+            $indexIp = 8;
             $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
             if ($officialCodeInList === 'true') {
                 $columns = array_merge(['official_code'], $columns);
+                $indexIp = 9;
+            }
+            if ($hideIp) {
+                // It removes the column related to IP
+                unset($columns[$indexIp]);
+                $columns = array_values($columns);
             }
         }
 
@@ -1922,6 +1930,10 @@ switch ($action) {
                 $detailButtons[] = Display::url(
                     Display::return_icon('works.png', get_lang('WorksReport')),
                     api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']
+                );
+                $detailButtons[] = Display::url(
+                    Display::return_icon('clock.png', get_lang('ProgressInSessionReport')),
+                    api_get_path(WEB_CODE_PATH).'mySpace/progress_in_session_report.php?session_id='.$session['id']
                 );
                 $detailButtons[] = Display::url(
                     Display::return_icon('2rightarrow.png'),

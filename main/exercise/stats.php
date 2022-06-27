@@ -157,6 +157,7 @@ if (!empty($questionList)) {
             // Overwriting values depending of the question
             switch ($questionObj->type) {
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_GLOBAL:
                     $answer_info_db = $answer_info;
                     $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
                     $correct_answer = $is_correct;
@@ -239,6 +240,7 @@ if (!empty($questionList)) {
                     }
                     break;
                 case HOT_SPOT:
+                case HOT_SPOT_GLOBAL:
                     if ($answer_id == 1) {
                         $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {
@@ -366,7 +368,7 @@ $interbreadcrumb[] = [
 
 $tpl = new Template(get_lang('ReportByQuestion'));
 $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
-    Display:: return_icon(
+    Display::return_icon(
         'back.png',
         get_lang('GoBackToQuestionList'),
         '',

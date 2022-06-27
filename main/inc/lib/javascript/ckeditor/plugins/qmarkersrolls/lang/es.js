@@ -5,7 +5,6 @@
  *
  * This plugin allows set quizzes markers in video with mediaelement.
  */
-
 CKEDITOR.plugins.setLang('qmarkersrolls', 'es', {
     dialogTitle: 'Marcadores de exámenes',
     setQuizMarkersRolls: 'Agregar marcadores de exámenes',
@@ -16,5 +15,7 @@ CKEDITOR.plugins.setLang('qmarkersrolls', 'es', {
     assignQuiz: 'Asignar examen',
     currentMarkers: 'Marcadores actuales',
     markerColor: 'Color del marcador',
-    choose: 'Elegir'
+    choose: 'Elegir',
+    time: 'Tiempo',
+    embedVideoSource: 'Fuente de video'
 });

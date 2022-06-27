@@ -3,13 +3,13 @@
 
 class CcVersion13 extends CcVersion1
 {
-    const WEBCONTENT = 'webcontent';
-    const QUESTIONBANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
-    const ASSESSMENT = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
-    const ASSOCIATEDCONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
-    const DISCUSSIONTOPIC = 'imsdt_xmlv1p3';
-    const WEBLINK = 'imswl_xmlv1p3';
-    const BASICLTI = 'imsbasiclti_xmlv1p3';
+    public const WEBCONTENT = 'webcontent';
+    public const QUESTIONBANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
+    public const ASSESSMENT = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
+    public const ASSOCIATEDCONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
+    public const DISCUSSIONTOPIC = 'imsdt_xmlv1p3';
+    public const WEBLINK = 'imswl_xmlv1p3';
+    public const BASICLTI = 'imsbasiclti_xmlv1p3';
 
     public static $checker = [self::WEBCONTENT,
                                    self::ASSESSMENT,

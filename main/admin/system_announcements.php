@@ -318,7 +318,7 @@ if ($action_todo) {
 }
 
 if ($show_announcement_list) {
-    $announcements = SystemAnnouncementManager :: get_all_announcements();
+    $announcements = SystemAnnouncementManager::get_all_announcements();
     $announcement_data = [];
     foreach ($announcements as $index => $announcement) {
         $row = [];
@@ -364,4 +364,4 @@ if ($show_announcement_list) {
     $table->display();
 }
 
-Display :: display_footer();
+Display::display_footer();

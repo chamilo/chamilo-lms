@@ -174,7 +174,7 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
 
 $interbreadcrumb[] = ["url" => 'skill_list.php', "name" => get_lang('ManageSkills')];
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (!empty($error_message)) {
     echo Display::return_message($error_message, 'error');
@@ -214,4 +214,4 @@ $form->display();
     <b>2</b>;<b>1</b>;<b>Chamilo Expert</b>;Chamilo is an open source LMS;<br />
 </pre>
 <?php
-Display :: display_footer();
+Display::display_footer();

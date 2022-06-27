@@ -103,7 +103,7 @@ if ($is_allowedToEdit || $is_tutor) {
     $objExerciseTmp = new Exercise();
 }
 
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 $actions = Display::div($actions, ['class' => 'actions']);
 
 $extra = '<script>
@@ -325,4 +325,4 @@ $(function() {
 <?php
 
 echo Display::grid_html('results');
-Display :: display_footer();
+Display::display_footer();

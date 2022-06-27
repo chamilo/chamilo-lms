@@ -9,8 +9,8 @@ use Chamilo\CourseBundle\Entity\CItemProperty;
  */
 class StudentFollowPage
 {
-    const VARIABLE_ACQUISITION = 'acquisition';
-    const VARIABLE_INVISIBLE = 'invisible';
+    public const VARIABLE_ACQUISITION = 'acquisition';
+    public const VARIABLE_INVISIBLE = 'invisible';
 
     public static function getLpSubscription(
         array $lpInfo,

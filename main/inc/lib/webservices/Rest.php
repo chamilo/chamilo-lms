@@ -16,113 +16,114 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  */
 class Rest extends WebService
 {
-    const SERVICE_NAME = 'MsgREST';
-    const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
+    public const SERVICE_NAME = 'MsgREST';
+    public const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
 
-    const GET_AUTH = 'authenticate';
-    const SAVE_GCM_ID = 'gcm_id';
-    const LOGOUT = 'logout';
+    public const GET_AUTH = 'authenticate';
+    public const SAVE_GCM_ID = 'gcm_id';
+    public const LOGOUT = 'logout';
 
-    const GET_USER_MESSAGES = 'user_messages';
-    const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
-    const DELETE_USER_MESSAGE = 'delete_user_message';
-    const GET_USER_MESSAGES_SENT = 'user_messages_sent';
-    const GET_COUNT_NEW_MESSAGES = 'get_count_new_messages';
-    const SET_MESSAGE_READ = 'set_message_read';
-    const POST_USER_MESSAGE_READ = 'user_message_read';
-    const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
-    const SAVE_USER_MESSAGE = 'save_user_message';
-    const GET_MESSAGE_USERS = 'message_users';
-    const VIEW_MESSAGE = 'view_message';
+    public const GET_USER_MESSAGES = 'user_messages';
+    public const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
+    public const DELETE_USER_MESSAGE = 'delete_user_message';
+    public const GET_USER_MESSAGES_SENT = 'user_messages_sent';
+    public const GET_COUNT_NEW_MESSAGES = 'get_count_new_messages';
+    public const SET_MESSAGE_READ = 'set_message_read';
+    public const POST_USER_MESSAGE_READ = 'user_message_read';
+    public const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
+    public const SAVE_USER_MESSAGE = 'save_user_message';
+    public const GET_MESSAGE_USERS = 'message_users';
+    public const VIEW_MESSAGE = 'view_message';
 
-    const GET_USER_COURSES = 'user_courses';
-    const GET_USER_SESSIONS = 'user_sessions';
+    public const GET_USER_COURSES = 'user_courses';
+    public const GET_USER_SESSIONS = 'user_sessions';
 
-    const VIEW_PROFILE = 'view_user_profile';
-    const GET_PROFILE = 'user_profile';
+    public const VIEW_PROFILE = 'view_user_profile';
+    public const GET_PROFILE = 'user_profile';
 
-    const VIEW_COURSE_HOME = 'view_course_home';
-    const GET_COURSE_INFO = 'course_info';
-    const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
-    const GET_COURSE_DOCUMENTS = 'course_documents';
-    const GET_COURSE_ANNOUNCEMENTS = 'course_announcements';
-    const GET_COURSE_ANNOUNCEMENT = 'course_announcement';
-    const GET_COURSE_AGENDA = 'course_agenda';
-    const GET_COURSE_NOTEBOOKS = 'course_notebooks';
-    const GET_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
-    const GET_COURSE_FORUM = 'course_forum';
-    const GET_COURSE_FORUM_THREAD = 'course_forumthread';
-    const GET_COURSE_LEARNPATHS = 'course_learnpaths';
-    const GET_COURSE_LEARNPATH = 'course_learnpath';
-    const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
-    const GET_COURSE_LINKS = 'course_links';
-    const GET_COURSE_WORKS = 'course_works';
+    public const VIEW_MY_COURSES = 'view_my_courses';
+    public const VIEW_COURSE_HOME = 'view_course_home';
+    public const GET_COURSE_INFO = 'course_info';
+    public const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
+    public const GET_COURSE_DOCUMENTS = 'course_documents';
+    public const GET_COURSE_ANNOUNCEMENTS = 'course_announcements';
+    public const GET_COURSE_ANNOUNCEMENT = 'course_announcement';
+    public const GET_COURSE_AGENDA = 'course_agenda';
+    public const GET_COURSE_NOTEBOOKS = 'course_notebooks';
+    public const GET_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
+    public const GET_COURSE_FORUM = 'course_forum';
+    public const GET_COURSE_FORUM_THREAD = 'course_forumthread';
+    public const GET_COURSE_LEARNPATHS = 'course_learnpaths';
+    public const GET_COURSE_LEARNPATH = 'course_learnpath';
+    public const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
+    public const GET_COURSE_LINKS = 'course_links';
+    public const GET_COURSE_WORKS = 'course_works';
 
-    const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
+    public const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
 
-    const SAVE_FORUM_POST = 'save_forum_post';
-    const SAVE_FORUM_THREAD = 'save_forum_thread';
-    const SET_THREAD_NOTIFY = 'set_thread_notify';
-    const DOWNLOAD_FORUM_ATTACHMENT = 'download_forum_attachment';
+    public const SAVE_FORUM_POST = 'save_forum_post';
+    public const SAVE_FORUM_THREAD = 'save_forum_thread';
+    public const SET_THREAD_NOTIFY = 'set_thread_notify';
+    public const DOWNLOAD_FORUM_ATTACHMENT = 'download_forum_attachment';
 
-    const GET_WORK_LIST = 'get_work_list';
-    const GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS = 'get_work_students_without_publications';
-    const GET_WORK_USERS = 'get_work_users';
-    const GET_WORK_STUDENT_LIST = 'get_work_student_list';
-    const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
-    const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
-    const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
-    const DOWNLOAD_WORK_FOLDER = 'download_work_folder';
-    const DOWNLOAD_WORK_COMMENT_ATTACHMENT = 'download_work_comment_attachment';
-    const DOWNLOAD_WORK = 'download_work';
+    public const GET_WORK_LIST = 'get_work_list';
+    public const GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS = 'get_work_students_without_publications';
+    public const GET_WORK_USERS = 'get_work_users';
+    public const GET_WORK_STUDENT_LIST = 'get_work_student_list';
+    public const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
+    public const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
+    public const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
+    public const DOWNLOAD_WORK_FOLDER = 'download_work_folder';
+    public const DOWNLOAD_WORK_COMMENT_ATTACHMENT = 'download_work_comment_attachment';
+    public const DOWNLOAD_WORK = 'download_work';
 
-    const VIEW_DOCUMENT_IN_FRAME = 'view_document_in_frame';
+    public const VIEW_DOCUMENT_IN_FRAME = 'view_document_in_frame';
 
-    const VIEW_QUIZ_TOOL = 'view_quiz_tool';
+    public const VIEW_QUIZ_TOOL = 'view_quiz_tool';
 
-    const VIEW_SURVEY_TOOL = 'view_survey_tool';
+    public const VIEW_SURVEY_TOOL = 'view_survey_tool';
 
-    const CREATE_CAMPUS = 'add_campus';
-    const EDIT_CAMPUS = 'edit_campus';
-    const DELETE_CAMPUS = 'delete_campus';
+    public const CREATE_CAMPUS = 'add_campus';
+    public const EDIT_CAMPUS = 'edit_campus';
+    public const DELETE_CAMPUS = 'delete_campus';
 
-    const GET_USERS = 'get_users';
-    const USERNAME_EXIST = 'username_exist';
-    const SAVE_USER = 'save_user';
-    const SAVE_USER_GET_APIKEY = 'save_user_get_apikey';
-    const SAVE_USER_JSON = 'save_user_json';
-    const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
-    const UPDATE_USER_APIKEY = 'update_user_apikey';
-    const DELETE_USER = 'delete_user';
-    const GET_USERS_API_KEYS = 'get_users_api_keys';
-    const GET_USER_API_KEY = 'get_user_api_key';
+    public const GET_USERS = 'get_users';
+    public const USERNAME_EXIST = 'username_exist';
+    public const SAVE_USER = 'save_user';
+    public const SAVE_USER_GET_APIKEY = 'save_user_get_apikey';
+    public const SAVE_USER_JSON = 'save_user_json';
+    public const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
+    public const UPDATE_USER_APIKEY = 'update_user_apikey';
+    public const DELETE_USER = 'delete_user';
+    public const GET_USERS_API_KEYS = 'get_users_api_keys';
+    public const GET_USER_API_KEY = 'get_user_api_key';
 
-    const GET_COURSES = 'get_courses';
-    const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
-    const SAVE_COURSE = 'save_course';
-    const DELETE_COURSE = 'delete_course';
+    public const GET_COURSES = 'get_courses';
+    public const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
+    public const SAVE_COURSE = 'save_course';
+    public const DELETE_COURSE = 'delete_course';
 
-    const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
-    const SAVE_SESSION = 'save_session';
-    const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
-    const UPDATE_SESSION = 'update_session';
+    public const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    public const SAVE_SESSION = 'save_session';
+    public const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
+    public const UPDATE_SESSION = 'update_session';
 
-    const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
-    const SUBSCRIBE_USER_TO_COURSE_PASSWORD = 'subscribe_user_to_course_password';
-    const UNSUBSCRIBE_USER_FROM_COURSE = 'unsubscribe_user_from_course';
-    const GET_USERS_SUBSCRIBED_TO_COURSE = 'get_users_subscribed_to_course';
+    public const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
+    public const SUBSCRIBE_USER_TO_COURSE_PASSWORD = 'subscribe_user_to_course_password';
+    public const UNSUBSCRIBE_USER_FROM_COURSE = 'unsubscribe_user_from_course';
+    public const GET_USERS_SUBSCRIBED_TO_COURSE = 'get_users_subscribed_to_course';
 
-    const ADD_COURSES_SESSION = 'add_courses_session';
-    const ADD_USERS_SESSION = 'add_users_session';
-    const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
+    public const ADD_COURSES_SESSION = 'add_courses_session';
+    public const ADD_USERS_SESSION = 'add_users_session';
+    public const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
 
-    const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
+    public const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
 
-    const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
+    public const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
 
-    const CHECK_CONDITIONAL_LOGIN = 'check_conditional_login';
-    const GET_LEGAL_CONDITIONS = 'get_legal_conditions';
-    const UPDATE_CONDITION_ACCEPTED = 'update_condition_accepted';
+    public const CHECK_CONDITIONAL_LOGIN = 'check_conditional_login';
+    public const GET_LEGAL_CONDITIONS = 'get_legal_conditions';
+    public const UPDATE_CONDITION_ACCEPTED = 'update_condition_accepted';
 
     /**
      * @var Session
@@ -3095,7 +3096,7 @@ class Rest extends WebService
     /**
      * @throws Exception
      */
-    public function getAllUsersApiKeys(int $page, int $length, ?int $urlId = null): array
+    public function getAllUsersApiKeys(int $page, int $length, bool $force = false, ?int $urlId = null): array
     {
         if (false === api_get_configuration_value('webservice_enable_adminonly_api')
             || !UserManager::is_admin($this->user->getId())
@@ -3110,13 +3111,18 @@ class Rest extends WebService
         $data = [];
         $data['total'] = UserManager::get_number_of_users(0, $currentUrlId);
         $data['list'] = array_map(
-            function (array $user) {
+            function (array $user) use ($force) {
                 $apiKeys = UserManager::get_api_keys($user['id'], self::SERVICE_NAME);
+                $apiKey = $apiKeys ? current($apiKeys) : null;
+
+                if ($force && empty($apiKey)) {
+                    $apiKey = self::generateApiKeyForUser((int) $user['id']);
+                }
 
                 return [
-                    'id' => $user['id'],
+                    'id' => (int) $user['id'],
                     'username' => $user['username'],
-                    'api_key' => $apiKeys ? current($apiKeys) : null,
+                    'api_key' => $apiKey,
                 ];
             },
             $users = UserManager::get_user_list([], [], $limitOffset, $length, $currentUrlId)
@@ -3139,7 +3145,7 @@ class Rest extends WebService
     /**
      * @throws Exception
      */
-    public function getUserApiKey(string $username): array
+    public function getUserApiKey(string $username, bool $force = false): array
     {
         if (false === api_get_configuration_value('webservice_enable_adminonly_api')
             || !UserManager::is_admin($this->user->getId())
@@ -3154,11 +3160,16 @@ class Rest extends WebService
         }
 
         $apiKeys = UserManager::get_api_keys($userInfo['id'], self::SERVICE_NAME);
+        $apiKey = $apiKeys ? current($apiKeys) : null;
+
+        if ($force && empty($apiKey)) {
+            $apiKey = self::generateApiKeyForUser((int) $userInfo['id']);
+        }
 
         return [
             'id' => $userInfo['id'],
             'username' => $userInfo['username'],
-            'api_key' => $apiKeys ? current($apiKeys) : null,
+            'api_key' => $apiKey,
         ];
     }
 
@@ -3182,6 +3193,24 @@ class Rest extends WebService
         }
 
         return (bool) $restApi;
+    }
+
+    public function viewMyCourses()
+    {
+        $url = api_get_path(WEB_PATH).'user_portal.php?'
+            .http_build_query(['nosession' => 'true']);
+
+        header("Location: $url");
+        exit;
+    }
+
+    protected static function generateApiKeyForUser(int $userId): string
+    {
+        UserManager::add_api_key($userId, self::SERVICE_NAME);
+
+        $apiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return current($apiKeys);
     }
 
     /**

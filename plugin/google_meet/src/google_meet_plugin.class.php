@@ -9,10 +9,10 @@
  */
 class GoogleMeetPlugin extends Plugin
 {
-    const TABLE_MEET_LIST = 'plugin_google_meet_room';
-    const SETTING_TITLE = 'tool_title';
-    const SETTING_ENABLED = 'google_meet_enabled';
-    const GOOGLE_MEET_URL = 'https://meet.google.com/';
+    public const TABLE_MEET_LIST = 'plugin_google_meet_room';
+    public const SETTING_TITLE = 'tool_title';
+    public const SETTING_ENABLED = 'google_meet_enabled';
+    public const GOOGLE_MEET_URL = 'https://meet.google.com/';
 
     public $isCoursePlugin = true;
 

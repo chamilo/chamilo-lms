@@ -3,22 +3,22 @@
 
 class CcValidateType
 {
-    const MANIFEST_VALIDATOR1 = 'cclibxml2validator.xsd';
-    const ASSESMENT_VALIDATOR1 = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
-    const DISCUSSION_VALIDATOR1 = '/domainProfile_6/imsdt_v1p0_localised.xsd';
-    const WEBLINK_VALIDATOR1 = '/domainProfile_5/imswl_v1p0_localised.xsd';
+    public const MANIFEST_VALIDATOR1 = 'cclibxml2validator.xsd';
+    public const ASSESMENT_VALIDATOR1 = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
+    public const DISCUSSION_VALIDATOR1 = '/domainProfile_6/imsdt_v1p0_localised.xsd';
+    public const WEBLINK_VALIDATOR1 = '/domainProfile_5/imswl_v1p0_localised.xsd';
 
-    const MANIFEST_VALIDATOR11 = 'cc11libxml2validator.xsd';
-    const BLTI_VALIDATOR11 = 'imslticc_v1p0p1.xsd';
-    const ASSESMENT_VALIDATOR11 = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd';
-    const DISCUSSION_VALIDATOR11 = 'ccv1p1_imsdt_v1p1.xsd';
-    const WEBLINK_VALIDATOR11 = 'ccv1p1_imswl_v1p1.xsd';
+    public const MANIFEST_VALIDATOR11 = 'cc11libxml2validator.xsd';
+    public const BLTI_VALIDATOR11 = 'imslticc_v1p0p1.xsd';
+    public const ASSESMENT_VALIDATOR11 = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd';
+    public const DISCUSSION_VALIDATOR11 = 'ccv1p1_imsdt_v1p1.xsd';
+    public const WEBLINK_VALIDATOR11 = 'ccv1p1_imswl_v1p1.xsd';
 
-    const MANIFEST_VALIDATOR13 = 'cc13libxml2validator.xsd';
-    const BLTI_VALIDATOR13 = 'imslticc_v1p3.xsd';
-    const ASSESMENT_VALIDATOR13 = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd';
-    const DISCUSSION_VALIDATOR13 = 'ccv1p3_imsdt_v1p3.xsd';
-    const WEBLINK_VALIDATOR13 = 'ccv1p3_imswl_v1p3.xsd';
+    public const MANIFEST_VALIDATOR13 = 'cc13libxml2validator.xsd';
+    public const BLTI_VALIDATOR13 = 'imslticc_v1p3.xsd';
+    public const ASSESMENT_VALIDATOR13 = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd';
+    public const DISCUSSION_VALIDATOR13 = 'ccv1p3_imsdt_v1p3.xsd';
+    public const WEBLINK_VALIDATOR13 = 'ccv1p3_imswl_v1p3.xsd';
 
     /**
      * @var string

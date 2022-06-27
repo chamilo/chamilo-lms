@@ -1124,7 +1124,7 @@ class Statistics
             $table_header[] = [get_lang("LastAccess"), true];
 
             ob_start();
-            Display:: display_sortable_table(
+            Display::display_sortable_table(
                 $table_header,
                 $courses,
                 ['column' => $column, 'direction' => $direction],

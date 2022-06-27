@@ -359,7 +359,11 @@ foreach ($categories as $item) {
             }
 
             $url_start_lp = 'lp_controller.php?'.$cidReq.'&action=view&lp_id='.$id;
-            $name = trim(strip_tags(Security::remove_XSS($details['lp_name'])));
+            if (api_get_configuration_value('save_titles_as_html')) {
+                $name = trim(Security::remove_XSS($details['lp_name']));
+            } else {
+                $name = trim(strip_tags(Security::remove_XSS($details['lp_name'])));
+            }
             $extra = null;
 
             if ($is_allowed_to_edit) {
@@ -795,7 +799,7 @@ foreach ($categories as $item) {
                         ),
                         'lp_controller.php?'.$cidReq."&action=delete&lp_id=$id",
                         [
-                            'onclick' => "javascript: return confirmation('".addslashes($name)."');",
+                            'onclick' => "javascript: return confirmation('".addslashes(strip_tags($name))."');",
                         ]
                     );
                 } else {

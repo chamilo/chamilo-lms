@@ -13,7 +13,7 @@
     {% endif %}
 
     {% if meeting.accountEmail %}
-        <dt>{{ 'AccountEmail' }}</dt>
+        <dt>{{ 'AccountEmail'|get_lang }}</dt>
         <dd>{{ meeting.accountEmail }}</dd>
     {% endif %}
 </dl>

@@ -3,5 +3,5 @@
 
 abstract class CcXmlNamespace
 {
-    const XML = 'http://www.w3.org/XML/1998/namespace';
+    public const XML = 'http://www.w3.org/XML/1998/namespace';
 }

@@ -11,10 +11,10 @@
 class FlatViewDataGenerator
 {
     // Sorting types constants
-    const FVDG_SORT_LASTNAME = 1;
-    const FVDG_SORT_FIRSTNAME = 2;
-    const FVDG_SORT_ASC = 4;
-    const FVDG_SORT_DESC = 8;
+    public const FVDG_SORT_LASTNAME = 1;
+    public const FVDG_SORT_FIRSTNAME = 2;
+    public const FVDG_SORT_ASC = 4;
+    public const FVDG_SORT_DESC = 8;
     public $params;
     /** @var Category */
     public $category;

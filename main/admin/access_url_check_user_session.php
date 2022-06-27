@@ -111,4 +111,4 @@ foreach ($session_list as $session_item) {
 }
 echo $html;
 // footer
-Display :: display_footer();
+Display::display_footer();

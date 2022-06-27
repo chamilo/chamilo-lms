@@ -58,6 +58,13 @@ class CAttendanceSheet
     protected $attendanceCalendarId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="signature", type="string", nullable=true)
+     */
+    //protected $signature;
+
+    /**
      * Set presence.
      *
      * @param bool $presence
@@ -151,5 +158,35 @@ class CAttendanceSheet
     public function getAttendanceCalendarId()
     {
         return $this->attendanceCalendarId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * Set signature.
+     *
+     * @return CAttendanceSheet
+     */
+    public function setSignature(string $signature)
+    {
+        $this->signature = $signature;
+
+        return $this;
+    }
+
+    /**
+     * Get signature.
+     *
+     * @return string
+     */
+    public function getSignature()
+    {
+        return $this->signature;
     }
 }

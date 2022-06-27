@@ -11,22 +11,22 @@
  */
 class SepePlugin extends Plugin
 {
-    const TABLE_SEPE_CENTER = 'plugin_sepe_center';
-    const TABLE_SEPE_ACTIONS = 'plugin_sepe_actions';
-    const TABLE_SEPE_SPECIALTY = 'plugin_sepe_specialty';
-    const TABLE_SEPE_SPECIALTY_CLASSROOM = 'plugin_sepe_specialty_classroom';
-    const TABLE_SEPE_CENTERS = 'plugin_sepe_centers';
-    const TABLE_SEPE_TUTORS = 'plugin_sepe_tutors';
-    const TABLE_SEPE_SPECIALTY_TUTORS = 'plugin_sepe_specialty_tutors';
-    const TABLE_SEPE_PARTICIPANTS = 'plugin_sepe_participants';
-    const TABLE_SEPE_PARTICIPANTS_SPECIALTY = 'plugin_sepe_participants_specialty';
-    const TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS = 'plugin_sepe_participants_specialty_tutorials';
-    const TABLE_SEPE_COURSE_ACTIONS = 'plugin_sepe_course_actions';
-    const TABLE_SEPE_TUTORS_COMPANY = 'plugin_sepe_tutors_company';
-    const TABLE_SEPE_TEACHING_COMPETENCE = 'plugin_sepe_teaching_competence';
-    const TABLE_SEPE_LOG_PARTICIPANT = 'plugin_sepe_log_participant';
-    const TABLE_SEPE_LOG_MOD_PARTICIPANT = 'plugin_sepe_log_mod_participant';
-    const TABLE_SEPE_LOG = 'plugin_sepe_log';
+    public const TABLE_SEPE_CENTER = 'plugin_sepe_center';
+    public const TABLE_SEPE_ACTIONS = 'plugin_sepe_actions';
+    public const TABLE_SEPE_SPECIALTY = 'plugin_sepe_specialty';
+    public const TABLE_SEPE_SPECIALTY_CLASSROOM = 'plugin_sepe_specialty_classroom';
+    public const TABLE_SEPE_CENTERS = 'plugin_sepe_centers';
+    public const TABLE_SEPE_TUTORS = 'plugin_sepe_tutors';
+    public const TABLE_SEPE_SPECIALTY_TUTORS = 'plugin_sepe_specialty_tutors';
+    public const TABLE_SEPE_PARTICIPANTS = 'plugin_sepe_participants';
+    public const TABLE_SEPE_PARTICIPANTS_SPECIALTY = 'plugin_sepe_participants_specialty';
+    public const TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS = 'plugin_sepe_participants_specialty_tutorials';
+    public const TABLE_SEPE_COURSE_ACTIONS = 'plugin_sepe_course_actions';
+    public const TABLE_SEPE_TUTORS_COMPANY = 'plugin_sepe_tutors_company';
+    public const TABLE_SEPE_TEACHING_COMPETENCE = 'plugin_sepe_teaching_competence';
+    public const TABLE_SEPE_LOG_PARTICIPANT = 'plugin_sepe_log_participant';
+    public const TABLE_SEPE_LOG_MOD_PARTICIPANT = 'plugin_sepe_log_mod_participant';
+    public const TABLE_SEPE_LOG = 'plugin_sepe_log';
 
     public $isAdminPlugin = true;
 

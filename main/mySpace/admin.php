@@ -15,7 +15,7 @@ $nameTools = get_lang('Administrators');
 
 api_block_anonymous_users();
 $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 
 api_display_tool_title($nameTools);
 

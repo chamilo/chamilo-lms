@@ -85,7 +85,7 @@ $exerciseId = isset($_REQUEST['exercise_id']) ? intval($_REQUEST['exercise_id'])
 $form->setDefaults(['score' => $filter_score]);
 
 if (!$exportToXLS) {
-    Display :: display_header(get_lang('Reporting'));
+    Display::display_header(get_lang('Reporting'));
     $actionsLeft = $actionsRight = '';
     if ($global) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
@@ -727,4 +727,4 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         'total_students' => $totalStudents,
     ];
 }
-Display :: display_footer();
+Display::display_footer();

@@ -892,6 +892,24 @@ AddType application/font-woff .woff .woff2
   ExpiresByType application/font-woff "access plus 1 month"
 &lt;/IfModule&gt;
 </pre>
+
+    <h4>Nota especial para compartir preguntas entre cursos</h4>
+    En Chamilo 1.11.16, hemos añadido la posibilidad (ver configuration.php) de compartir preguntas entre
+    distintos cursos. Esta funcionalidad, aunque funcione bien para preguntas de tipo texto únicamente,
+    genera noobstante un problema cuando se comparten elementos de tipo multimedia entre cursos, ya que un
+    recurso multimedia en un curso no será visible por un usuario que ve esta pregunta desde otro curso y
+    no tiene acceso al curso de origen.<br />
+    Para evitar este problema, puede adaptar su .htacess (o el VirtualHost si lo ha puesto ahí) para
+    permitir el acceso directo a los archivos de tipo multimedia (sin logearse en el portal). Esto también
+    acelerará la carga de estos archivos multimedia, pero introduce una reducción de nivel de seguridad,
+    porque estos archivos ya se ponen disponibles para cualquier persona que tenga acceso a la página
+    principal del portal y conozca la ruta exacta de estos archivos.<br /><br />
+    Para aplicar el parche, ubique esta línea en su .htaccess:<br /><br />
+    <pre>    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]</pre>
+    Quítela o coméntela, y ponga estas dos líneas en su lugar:<br /><br />
+    <pre>    RewriteCond %{REQUEST_URI} !\.(gif|jpg|jpeg|png|webp|ico|icon|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff|webm|mp4)
+    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA|L]</pre>
+
 <h3>Nginx</h3>
 Nginx no es compatible con las reglas de .htaccess, por lo que no tiene otra opción que aplicar las siguientes reglas
 (tenga en cuenta que la configuración de back-end de PHP puede variar). Estas son solo las reglas de redireccionamiento

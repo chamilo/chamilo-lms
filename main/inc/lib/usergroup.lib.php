@@ -10,8 +10,8 @@
  */
 class UserGroup extends Model
 {
-    const SOCIAL_CLASS = 1;
-    const NORMAL_CLASS = 0;
+    public const SOCIAL_CLASS = 1;
+    public const NORMAL_CLASS = 0;
     public $columns = [
         'id',
         'name',

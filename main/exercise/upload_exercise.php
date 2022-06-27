@@ -86,6 +86,7 @@ function lp_upload_quiz_main()
         UNIQUE_ANSWER => get_lang('UniqueSelect'),
         MULTIPLE_ANSWER => get_lang('MultipleSelect'),
         FILL_IN_BLANKS => get_lang('FillBlanks'),
+        FILL_IN_BLANKS_GLOBAL => get_lang('FillBlanksGlobal'),
         MATCHING => get_lang('Matching'),
         FREE_ANSWER => get_lang('FreeAnswer'),
         GLOBAL_MULTIPLE_ANSWER => get_lang('GlobalMultipleAnswer'),
@@ -329,6 +330,7 @@ function lp_upload_quiz_action_handling()
                     $answer = new MultipleAnswer();
                     break;
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_GLOBAL:
                     $answer = new FillBlanks();
                     $question_description_text = '';
                     break;
@@ -469,6 +471,7 @@ function lp_upload_quiz_action_handling()
                     }
                     break;
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_GLOBAL:
                     $fillInScoreList = [];
                     $size = [];
                     $globalScore = 0;

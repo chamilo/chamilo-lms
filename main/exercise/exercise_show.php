@@ -438,6 +438,7 @@ foreach ($questionList as $questionId) {
         case MULTIPLE_ANSWER:
         case MULTIPLE_ANSWER_TRUE_FALSE:
         case FILL_IN_BLANKS:
+        case FILL_IN_BLANKS_GLOBAL:
         case CALCULATED_ANSWER:
         case GLOBAL_MULTIPLE_ANSWER:
         case FREE_ANSWER:
@@ -483,6 +484,7 @@ foreach ($questionList as $questionId) {
             $totalScore += $questionResult['score'];
             break;
         case HOT_SPOT:
+        case HOT_SPOT_GLOBAL:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
 //                echo '<table class="table table-bordered table-striped"><tr><td>';
             }
@@ -586,7 +588,7 @@ foreach ($questionList as $questionId) {
         echo '</table>';
     }
 
-    if ($show_results && $answerType != HOT_SPOT) {
+    if ($show_results && !in_array($answerType, [HOT_SPOT_GLOBAL, HOT_SPOT])) {
         echo '</table>';
     }
 

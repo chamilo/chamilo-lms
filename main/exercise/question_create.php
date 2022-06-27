@@ -53,7 +53,7 @@ $sql = "SELECT iid, title, type, description, results_disabled
         ORDER BY title ASC";
 $result = Database::query($sql);
 $exercises['-'] = '-'.get_lang('SelectExercise').'-';
-while ($row = Database :: fetch_array($result)) {
+while ($row = Database::fetch_array($result)) {
     $exercises[$row['iid']] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
 }
 $form->addElement('select', 'exercise', get_lang('Exercise'), $exercises);

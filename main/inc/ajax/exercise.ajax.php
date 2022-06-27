@@ -751,7 +751,7 @@ switch ($action) {
                     $session_id,
                     $my_question_id
                 );
-                if ($objQuestionTmp->type === HOT_SPOT) {
+                if (in_array($objQuestionTmp->type, [HOT_SPOT, HOT_SPOT_GLOBAL])) {
                     Event::delete_attempt_hotspot(
                         $exeId,
                         api_get_user_id(),
@@ -961,7 +961,7 @@ switch ($action) {
         }
         echo $id;
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
-        if ($objQuestion->type === FILL_IN_BLANKS) {
+        if (in_array($objQuestion->type, [FILL_IN_BLANKS, FILL_IN_BLANKS_GLOBAL])) {
             echo '<script>
                 $(function() {
                     $(".selectpicker").selectpicker({});

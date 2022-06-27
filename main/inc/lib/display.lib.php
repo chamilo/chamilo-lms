@@ -2910,6 +2910,17 @@ HTML;
             $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webJsPath.$file.'"},';
         }
 
+        if ($renderers = api_get_configuration_sub_value('video_player_renderers/renderers')) {
+            foreach ($renderers as $renderName) {
+                if ('youtube' === $renderName) {
+                    continue;
+                }
+
+                $file = $webPublicPath."assets/mediaelement/build/renderers/$renderName.min.js";
+                $videoPluginFiles .= '{type: "script", src: "'.$file.'"},';
+            }
+        }
+
         $translateHtml = '';
         $translate = api_get_configuration_value('translate_html');
         if ($translate) {

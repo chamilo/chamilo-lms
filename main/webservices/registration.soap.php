@@ -3250,7 +3250,7 @@ function WSCreateCourseByTitle($params)
 
         $keys = AddCourse::define_course_keys($wanted_code, '', $_configuration['db_prefix']);
 
-        $sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"', Database :: escape_string($wanted_code));
+        $sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"', Database::escape_string($wanted_code));
         $result_check = Database::query($sql_check); // I don't know why this api function doesn't work...
         if (Database::num_rows($result_check) < 1) {
             $params = [];

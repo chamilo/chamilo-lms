@@ -9,7 +9,7 @@ if (empty($allow)) {
     exit;
 }
 
-$TABLECALHORAIRE = Database :: get_course_table(cal_horaire);
+$TABLECALHORAIRE = Database::get_course_table(cal_horaire);
 $htmlHeadXtra[] = '<script>
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
@@ -31,15 +31,15 @@ if (api_is_anonymous()) {
 }
 
 //prepare variables used in userInfoLib.php functions
-$TBL_USERINFO_DEF = Database:: get_course_table(TABLE_USER_INFO_DEF);
-$TBL_USERINFO_CONTENT = Database:: get_course_table(TABLE_USER_INFO_CONTENT);
+$TBL_USERINFO_DEF = Database::get_course_table(TABLE_USER_INFO_DEF);
+$TBL_USERINFO_CONTENT = Database::get_course_table(TABLE_USER_INFO_CONTENT);
 
 if ($tool_info['visibility'] == 1) {
     $interbreadcrumb[] = ['url' => 'user.php', 'name' => get_lang('Users')];
 }
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
-    Display :: display_header($nameTools, "User");
+    Display::display_header($nameTools, "User");
     $origin = Security::remove_XSS($_GET['origin']);
 } else {
     ?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css" /> <?php
@@ -309,7 +309,7 @@ if ($displayMode == "viewDefEdit") {
         }
         echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('SaveChanges')."</button></td>\n", "</tr>", "</table>", "</form>\n";
         if (api_get_setting('show_email_addresses') == 'true') {
-            echo "<p>".Display:: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
+            echo "<p>".Display::encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
         }
 
         if (api_get_setting('extended_profile') == 'true') {

@@ -11,8 +11,8 @@
  */
 class LinkForm extends FormValidator
 {
-    const TYPE_CREATE = 1;
-    const TYPE_MOVE = 2;
+    public const TYPE_CREATE = 1;
+    public const TYPE_MOVE = 2;
     /** @var Category */
     private $category_object;
     private $link_object;

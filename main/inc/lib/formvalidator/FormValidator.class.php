@@ -8,11 +8,11 @@
  */
 class FormValidator extends HTML_QuickForm
 {
-    const LAYOUT_HORIZONTAL = 'horizontal';
-    const LAYOUT_INLINE = 'inline';
-    const LAYOUT_BOX = 'box';
-    const LAYOUT_BOX_NO_LABEL = 'box-no-label';
-    const LAYOUT_GRID = 'grid';
+    public const LAYOUT_HORIZONTAL = 'horizontal';
+    public const LAYOUT_INLINE = 'inline';
+    public const LAYOUT_BOX = 'box';
+    public const LAYOUT_BOX_NO_LABEL = 'box-no-label';
+    public const LAYOUT_GRID = 'grid';
 
     public $with_progress_bar = false;
     private $layout;

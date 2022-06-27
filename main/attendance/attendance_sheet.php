@@ -18,6 +18,8 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_course_info()
 ) || api_is_drh();
 
+$token = Security::get_token();
+
 if (api_is_allowed_to_edit(null, true) ||
     api_is_coach(api_get_session_id(), api_get_course_int_id()) ||
     $isDrhOfCourse
@@ -112,7 +114,8 @@ if (api_is_allowed_to_edit(null, true) ||
             Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
             Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
-
+        $actionsLeft .= '<a style="float:left;" title="QR"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_qrcode&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
+            Display::return_icon('paint.png', get_lang('DownloadQr'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsRight = $form->returnForm();
         $toolbar = Display::toolbarAction('toolbar-attendance', [$actionsLeft, $actionsRight]);
         echo $toolbar;
@@ -275,6 +278,28 @@ if (api_is_allowed_to_edit(null, true) ||
                             ['class' => 'img_lock', 'id' => 'datetime_column_'.$calendar['id']]
                         );
 
+                $iconFullScreen = '';
+                $iconBlocked = '';
+                if ($allowSignature) {
+                    $iconFullScreen = Display::url(
+                        Display::return_icon('view_fullscreen.png', get_lang('SeeForTablet'), [], ICON_SIZE_SMALL),
+                        api_get_self().'?'.api_get_cidreq().'&action=attendance_sheet_list&func=fullscreen&attendance_id='.$attendance_id.'&calendar_id='.$calendar['id']
+                    );
+                    $isBlocked = 0;
+                    $iconBlockName = 'eyes.png';
+                    $iconBlockLabel = get_lang('DisableSignature');
+                    if ((isset($calendar['blocked']) && 1 === (int) $calendar['blocked'])) {
+                        $isBlocked = 1;
+                        $iconBlockName = 'eyes-close.png';
+                        $iconBlockLabel = get_lang('EnableSignature');
+                    }
+                    $iconBlocked = Display::url(
+                        Display::return_icon($iconBlockName, $iconBlockLabel, [], ICON_SIZE_SMALL),
+                        api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.api_get_cidreq().'&a=block_attendance_calendar&calendar_id='.$calendar['id'],
+                        ['class' => 'block-calendar']
+                    );
+                }
+
                 if (!empty($calendar['done_attendance'])) {
                     $datetime = '<div class="blue">'.$date.' - '.$time.'</div>';
                 }
@@ -289,7 +314,13 @@ if (api_is_allowed_to_edit(null, true) ||
                 $result .= '<th>';
                 $result .= '<div class="date-attendance">'.$datetime.'&nbsp;';
                 if (api_is_allowed_to_edit(null, true)) {
-                    $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
+                    if (!empty($iconFullScreen)) {
+                        $result .= '<span class="attendance-fullscreen">'.$iconFullScreen.'</span>&nbsp;';
+                    }
+                    if (!empty($iconBlocked)) {
+                        $result .= '<span class="attendance-blocked">'.$iconBlocked.'</span>&nbsp;';
+                    }
+                    $result .= '<span class="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
                 }
 
                 if ($is_locked_attendance == false) {
@@ -353,13 +384,42 @@ if (api_is_allowed_to_edit(null, true) ||
                         $disabled = '';
                     }
 
+                    $signed = false;
+                    if ($allowSignature) {
+                        $attendance = new Attendance();
+                        $signature = $attendance->getSignature($user['user_id'], $calendar['id']);
+                        $signed = !empty($signature);
+                    }
+
                     echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
                     echo '<div class="check">';
 
                     if (api_is_allowed_to_edit(null, true)) {
                         if (!$is_locked_attendance || api_is_platform_admin()) {
-                            echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
-                            echo '<span class="anchor_'.$calendar['id'].'"></span>';
+                            if ($allowSignature) {
+                                if ($signed) {
+                                    echo Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY);
+                                    echo '<input type="hidden" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" />';
+                                    echo '<div class="list-data">
+                                        <span class="item"></span>
+                                        <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign-view" href="javascript:void(0)">
+                                            <em class="fa fa-search"></em> '.get_lang('SignView').'
+                                        </a>
+                                    </div>';
+                                } else {
+                                    echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
+                                    echo '<span class="anchor_'.$calendar['id'].'"></span>';
+                                    echo '<div class="list-data">
+                                        <span class="item"></span>
+                                        <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
+                                            <em class="fa fa-pencil"></em> '.get_lang('Sign').'
+                                        </a>
+                                    </div>';
+                                }
+                            } else {
+                                echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
+                                echo '<span class="anchor_'.$calendar['id'].'"></span>';
+                            }
                         } else {
                             echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
                         }
@@ -408,6 +468,7 @@ if (api_is_allowed_to_edit(null, true) ||
         } ?>
                     </div>
                 </div>
+                <input type="hidden" name="sec_token" value="<?php echo $token; ?>" />
         </form>
     <?php
     } else {
@@ -445,6 +506,17 @@ if (api_is_allowed_to_edit(null, true) ||
         if (!empty($users_presence)) {
             $i = 0;
             foreach ($users_presence[$user_id] as $presence) {
+                $signed = false;
+                if ($allowSignature) {
+                    $attendance = new Attendance();
+                    $isBlocked = $attendance->isCalendarBlocked($presence['calendar_id']);
+                    // if calendar is blocked by admin is it not displayed here.
+                    if ($isBlocked) {
+                        continue;
+                    }
+                    $signature = $attendance->getSignature($user_id, $presence['calendar_id']);
+                    $signed = !empty($signature);
+                }
                 $class = '';
                 if ($i % 2 == 0) {
                     $class = 'row_even';
@@ -455,6 +527,25 @@ if (api_is_allowed_to_edit(null, true) ||
                     <td>
                         <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY); ?>
                         <?php echo "&nbsp; ".$presence['date_time']; ?>
+
+                        <?php
+
+                        if ($allowSignature) {
+                            if ($signed) {
+                                echo '<span class="list-data">
+                                        <a id="sign-'.$user_id.'-'.$presence['calendar_id'].'" class="btn btn-primary attendance-sign-view" href="javascript:void(0)">
+                                            <em class="fa fa-search"></em> '.get_lang('SignView').'
+                                        </a>
+                                    </span>';
+                            } else {
+                                echo '<span class="list-data">
+                                        <a id="sign-'.$user_id.'-'.$presence['calendar_id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
+                                            <em class="fa fa-pencil"></em> '.get_lang('Sign').'
+                                        </a>
+                                    </span>';
+                            }
+                        } ?>
+
                     </td>
                 </tr>
             <?php
@@ -468,4 +559,9 @@ if (api_is_allowed_to_edit(null, true) ||
         } ?>
     </table>
 <?php
-} ?>
+}
+
+if ($allowSignature) {
+    include_once 'attendance_signature.inc.php';
+}
+?>

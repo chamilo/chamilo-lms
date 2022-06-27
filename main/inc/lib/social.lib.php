@@ -16,8 +16,8 @@ use Zend\Feed\Reader\Reader;
  */
 class SocialManager extends UserManager
 {
-    const DEFAULT_WALL_POSTS = 10;
-    const DEFAULT_SCROLL_NEW_POST = 5;
+    public const DEFAULT_WALL_POSTS = 10;
+    public const DEFAULT_SCROLL_NEW_POST = 5;
 
     /**
      * Constructor.

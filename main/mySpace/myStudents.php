@@ -709,8 +709,13 @@ $token = Security::get_token();
 
 // Actions bar
 echo '<div class="actions">';
-echo '<a href="javascript: window.history.go(-1);">'
-    .Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+if ('session_report' === $origin) {
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/progress_in_session_report.php">'
+        .Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+} else {
+    echo '<a href="javascript: window.history.go(-1);">'
+        .Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+}
 
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'
     .Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';

@@ -276,7 +276,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
     }
 }
 
-Display:: display_header($language_name);
+Display::display_header($language_name);
 
 echo $msg;
 
@@ -335,4 +335,4 @@ if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
 /**
  * Footer.
  */
-Display:: display_footer();
+Display::display_footer();

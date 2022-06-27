@@ -1825,11 +1825,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get sale data by reference.
      *
-     * @param int $reference The sale reference
+     * @param string $reference The sale reference
      *
      * @return array
      */
-    public function getSaleFromReference($reference)
+    public function getSaleFromReference(string $reference)
     {
         return Database::select(
             '*',
@@ -4187,7 +4187,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * @return array
      */
-    public function getCecabankSignature($saleReference, $price)
+    public function getCecabankSignature(string $saleReference, float $price)
     {
         $urlOk = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_success.php';
         $urlKo = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_cancel.php';

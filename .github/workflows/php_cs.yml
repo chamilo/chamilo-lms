@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.1']
+        php-versions: ['7.2']
 
     steps:
       - name: Checkout
@@ -40,7 +40,7 @@ jobs:
 
       - name: Download PHP-CS-Fixer
         run: |
-          wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.19.3/php-cs-fixer.phar
+          wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v3.4.0/php-cs-fixer.phar
 
       - name: Run PHP-CS-Fixer
         run: |
@@ -48,4 +48,4 @@ jobs:
           '
           CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRTUXB "HEAD~..HEAD")
           if ! echo "${CHANGED_FILES}" | grep -qE "^(\\.php-cs-fixer(\\.dist)?\\.php|composer\\.lock)$"; then EXTRA_ARGS=$(printf -- '--path-mode=intersection\n--\n%s' "${CHANGED_FILES}"); else EXTRA_ARGS=''; fi
-          php ./php-cs-fixer.phar fix --config=.php-cs-fixer.php -v --dry-run --using-cache=no --diff --diff-format=udiff ${EXTRA_ARGS}
+          php ./php-cs-fixer.phar fix --config=.php-cs-fixer.php -v --dry-run --using-cache=no --diff ${EXTRA_ARGS}

@@ -8,10 +8,10 @@
  */
 class CatForm extends FormValidator
 {
-    const TYPE_ADD = 1;
-    const TYPE_EDIT = 2;
-    const TYPE_MOVE = 3;
-    const TYPE_SELECT_COURSE = 4;
+    public const TYPE_ADD = 1;
+    public const TYPE_EDIT = 2;
+    public const TYPE_MOVE = 3;
+    public const TYPE_SELECT_COURSE = 4;
     /** @var Category */
     private $category_object;
 

@@ -93,6 +93,7 @@ class ScormQuestion extends Question
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case HOT_SPOT:
+            case HOT_SPOT_GLOBAL:
                 $this->answer = new ScormAnswerHotspot($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
@@ -207,6 +208,7 @@ class ScormQuestion extends Question
                 $js .= $script;*/
                 break;
             case HOT_SPOT:
+            case HOT_SPOT_GLOBAL:
                 //put the max score to 0 to avoid discounting the points of
                 //non-exported quiz types in the SCORM
                 $weight = 0;

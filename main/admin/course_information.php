@@ -152,7 +152,7 @@ if (Database::num_rows($res) > 0) {
             $user[] = $obj->lastname;
             $user[] = $obj->firstname;
         }
-        $user[] = Display:: encrypted_mailto_link($obj->email, $obj->email);
+        $user[] = Display::encrypted_mailto_link($obj->email, $obj->email);
         $user[] = $obj->course_status == 5 ? get_lang('Student') : get_lang('Teacher');
         $user[] = '<a href="user_information.php?user_id='.$obj->user_id.'">'.
             Display::return_icon('info2.png', get_lang('UserInfo')).'</a>';

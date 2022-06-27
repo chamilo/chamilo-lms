@@ -3,13 +3,13 @@
 
 class CcBase
 {
-    const CC_TYPE_FORUM = 'imsdt_xmlv1p3';
-    const CC_TYPE_QUIZ = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
-    const CC_TYPE_QUESTION_BANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
-    const CC_TYPE_WEBLINK = 'imswl_xmlv1p3';
-    const CC_TYPE_WEBCONTENT = 'webcontent';
-    const CC_TYPE_ASSOCIATED_CONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
-    const CC_TYPE_EMPTY = '';
+    public const CC_TYPE_FORUM = 'imsdt_xmlv1p3';
+    public const CC_TYPE_QUIZ = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
+    public const CC_TYPE_QUESTION_BANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
+    public const CC_TYPE_WEBLINK = 'imswl_xmlv1p3';
+    public const CC_TYPE_WEBCONTENT = 'webcontent';
+    public const CC_TYPE_ASSOCIATED_CONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
+    public const CC_TYPE_EMPTY = '';
 
     public static $restypes = ['associatedcontent/imscc_xmlv1p0/learning-application-resource', 'webcontent'];
     public static $forumns = ['dt' => 'http://www.imsglobal.org/xsd/imsdt_v1p0'];

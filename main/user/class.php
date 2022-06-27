@@ -5,12 +5,18 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
+$sessionId = api_get_session_id();
+
 api_protect_course_script(true, false, 'user');
 
 if ('false' === api_get_setting('allow_user_course_subscription_by_course_admin')) {
     if (!api_is_platform_admin()) {
         api_not_allowed(true);
     }
+}
+
+if (api_get_configuration_value('session_classes_tab_disable') && !api_is_platform_admin() && $sessionId) {
+    api_not_allowed(true);
 }
 
 $tool_name = get_lang('Classes');
@@ -38,7 +44,7 @@ $actionsLeft = '';
 $actionsRight = '';
 $usergroup = new UserGroup();
 $actions = '';
-$sessionId = api_get_session_id();
+
 if (api_is_allowed_to_edit()) {
     if ($type === 'registered') {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.

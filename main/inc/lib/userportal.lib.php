@@ -655,7 +655,7 @@ class IndexManager
         }
         if ($category != '') {
             $result .= '<p><a href="'.api_get_self().'">'
-                .Display:: return_icon('back.png', get_lang('BackToHomePage'))
+                .Display::return_icon('back.png', get_lang('BackToHomePage'))
                 .get_lang('BackToHomePage').'</a></p>';
         }
 

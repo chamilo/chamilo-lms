@@ -631,7 +631,7 @@ if ($form->validate()) {
         }
     }
 
-    Display :: display_header($nameTools, "Doc");
+    Display::display_header($nameTools, "Doc");
     // link back to the documents overview
     if ($is_certificate_mode) {
         $actionsLeft = '<a href="document.php?'.api_get_cidreq().'&certificate=true&id='.$folder_id.'&selectcat='.$select_cat.'">'.
@@ -678,5 +678,5 @@ if ($form->validate()) {
                 '.$form->returnForm().'
             </div>
           </div></div>';
-    Display :: display_footer();
+    Display::display_footer();
 }

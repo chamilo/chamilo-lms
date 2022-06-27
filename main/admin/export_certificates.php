@@ -30,7 +30,7 @@ if ($form->validate()) {
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseCode = $courseInfo['code'];
 
-        $cats = Category:: load(
+        $cats = Category::load(
             null,
             null,
             $courseCode,
@@ -60,4 +60,4 @@ if ($form->validate()) {
     }
 }
 
-Display :: display_footer();
+Display::display_footer();

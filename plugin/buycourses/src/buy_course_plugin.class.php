@@ -4231,6 +4231,8 @@ class BuyCoursesPlugin extends Plugin
                 self::PAYMENT_TYPE_TRANSFER,
                 self::PAYMENT_TYPE_CULQI,
                 self::PAYMENT_TYPE_TPV_REDSYS,
+                self::PAYMENT_TYPE_STRIPE,
+                self::PAYMENT_TYPE_TPV_CECABANK,
             ]
         )
         ) {

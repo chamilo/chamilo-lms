@@ -544,4 +544,107 @@ switch ($sale['payment_type']) {
         $template->display_one_col_template();
 
         break;
+
+    case BuyCoursesPlugin::PAYMENT_TYPE_TPV_CECABANK:
+        $buyingCourse = false;
+        $buyingSession = false;
+
+        switch ($sale['product_type']) {
+            case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
+                $buyingCourse = true;
+                $course = $plugin->getCourseInfo($sale['product_id']);
+                break;
+            case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
+                $buyingSession = true;
+                $session = $plugin->getSessionInfo($sale['product_id']);
+                break;
+        }
+
+        $cecabankParams = $plugin->getcecabankParams();
+        $currency = $plugin->getCurrency($sale['currency_id']);
+
+        $form = new FormValidator(
+            'success',
+            'POST',
+            api_get_self(),
+            null,
+            null,
+            FormValidator::LAYOUT_INLINE
+        );
+
+        if ($form->validate()) {
+            $formValues = $form->getSubmitValues();
+
+            if (isset($formValues['cancel'])) {
+                $plugin->cancelSale($sale['id']);
+
+                unset($_SESSION['bc_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
+
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
+                exit;
+            }
+
+            $urlTpv = $cecabankParams['url'];
+            $currency = $plugin->getCurrency($sale['currency_id']);
+            $signature = $plugin->getCecabankSignature($sale['reference'], $sale['price']);
+
+            echo '<form name="tpv_chamilo" action="'.$urlTpv.'" method="POST">';
+            echo '<input type="hidden" name="MerchantID" value="'.$cecabankParams['merchant_id'].'" />';
+            echo '<input type="hidden" name="AcquirerBIN" value="'.$cecabankParams['acquirer_bin'].'" />';
+            echo '<input type="hidden" name="TerminalID" value="'.$cecabankParams['terminal_id'].'" />';
+            echo '<input type="hidden" name="URL_OK" value="'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_success.php'.'" />';
+            echo '<input type="hidden" name="URL_NOK" value="'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_cancel.php'.'" />';
+            echo '<input type="hidden" name="Firma" value="'.$signature.'" />';
+            echo '<input type="hidden" name="Cifrado" value="'.$cecabankParams['cypher'].'" />';
+            echo '<input type="hidden" name="Num_operacion" value="'.$sale['reference'].'" />';
+            echo '<input type="hidden" name="Importe" value="'.($sale['price'] * 100).'" />';
+            echo '<input type="hidden" name="TipoMoneda" value="978" />';
+            echo '<input type="hidden" name="Exponente" value="'.$cecabankParams['exponent'].'" />';
+            echo '<input type="hidden" name="Pago_soportado" value="'.$cecabankParams['supported_payment'].'" />';
+            echo '</form>';
+
+            echo '<SCRIPT language=javascript>';
+            echo 'document.tpv_chamilo.submit();';
+            echo '</script>';
+
+            exit;
+        }
+
+        $form->addButton(
+            'confirm',
+            $plugin->get_lang('ConfirmOrder'),
+            'check',
+            'success',
+            'default',
+            null,
+            ['id' => 'confirm']
+        );
+        $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
+
+        $template = new Template();
+
+        if ($buyingCourse) {
+            $template->assign('course', $course);
+        } elseif ($buyingSession) {
+            $template->assign('session', $session);
+        }
+
+        $template->assign('buying_course', $buyingCourse);
+        $template->assign('buying_session', $buyingSession);
+        $template->assign('terms', $globalParameters['terms_and_conditions']);
+        $template->assign('title', $sale['product_name']);
+        $template->assign('price', $sale['price']);
+        $template->assign('currency', $sale['currency_id']);
+        $template->assign('user', $userInfo);
+        $template->assign('transfer_accounts', $transferAccounts);
+        $template->assign('form', $form->returnForm());
+        $template->assign('is_bank_transfer', false);
+
+        $content = $template->fetch('buycourses/view/process_confirm.tpl');
+
+        $template->assign('content', $content);
+        $template->display_one_col_template();
+
+        break;
 }

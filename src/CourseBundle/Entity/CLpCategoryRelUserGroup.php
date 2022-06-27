@@ -33,21 +33,21 @@ class CLpCategoryRelUserGroup
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="lp_category_id", referencedColumnName="iid")
      */
-    protected CLpCategory $category;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
-     */
-    protected ?Session $session = null;
+    protected CLpCategory $lpCategory;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     protected Course $course;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
+     */
+    protected ?Session $session = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
@@ -61,8 +61,4 @@ class CLpCategoryRelUserGroup
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected DateTime $createdAt;
-
-    public function __construct()
-    {
-    }
 }

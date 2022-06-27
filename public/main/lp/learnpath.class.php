@@ -1868,22 +1868,13 @@ class learnpath
         SessionEntity $session = null
     ): bool {
 
-        $em = Database::getManager();
-
-        /** @var \Chamilo\CourseBundle\Repository\CLpRelGroupRepository $cLpRelGroupRepo */
-        $cLpRelGroupRepo = $em->getRepository('ChamiloCourseBundle:CLpRelGroup');
-
-        // Getting subscribed groups to a LP.
-        $subscribedGroupsInLp = $cLpRelGroupRepo->getGroupsSubscribedToItem(
-            $lp,
-            $course,
-            $session
-        );
-
+        // Subscribed groups to a LP
+        $links = $lp->getResourceNode()->getResourceLinks();
         $selectedChoices = [];
-        foreach ($subscribedGroupsInLp as $lpGroup) {
-            /** @var \Chamilo\CourseBundle\Entity\CLpRelGroup $lpGroup */
-            $selectedChoices[] = $lpGroup->getGroup()->getIid();
+        foreach ($links as $link) {
+            if (null !== $link->getGroup()) {
+                $selectedChoices[] = $link->getGroup()->getIid();
+            }
         }
 
         $isVisible = false;

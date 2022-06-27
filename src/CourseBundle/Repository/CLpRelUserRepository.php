@@ -141,6 +141,7 @@ final class CLpRelUserRepository extends ResourceRepository
 
         if (!empty($usersToDelete)) {
             foreach ($usersToDelete as $userId) {
+                $userId = (int) $userId;
                 $item = $this->findOneBy(
                     [
                         'course' => $course,

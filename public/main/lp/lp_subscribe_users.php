@@ -3,12 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
-use Chamilo\CourseBundle\Repository\CLpRelGroupRepository;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
-use Chamilo\CourseBundle\Entity\CLpRelGroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
@@ -59,9 +57,6 @@ $courseRepo = Container::getCourseRepository();
 
 /** @var CLpRelUserRepository $cLpRelUserRepo */
 $cLpRelUserRepo = $em->getRepository('ChamiloCourseBundle:CLpRelUser');
-
-/** @var CLpRelGroupRepository $cLpRelGroupRepo */
-$cLpRelGroupRepo = $em->getRepository('ChamiloCourseBundle:CLpRelGroup');
 
 /** @var Session $session */
 $session = null;
@@ -126,6 +121,9 @@ if (!empty($selectedChoices)) {
 
 $formUsers->setDefaults($defaults);
 
+// Subscribed groups to a LP
+$links = $entity->getResourceNode()->getResourceLinks();
+
 // Building the form for Groups
 $form = new FormValidator('lp_edit', 'post', $url);
 $form->addElement('hidden', 'group_form', 1);
@@ -139,17 +137,11 @@ $groupList = \CourseManager::get_group_list_of_course(
 );
 $groupChoices = array_column($groupList, 'name', 'id');
 
-// Subscribed groups to a LP
-$subscribedGroupsInLp = $cLpRelGroupRepo->getGroupsSubscribedToItem(
-    $entity,
-    $course,
-    $session
-);
-
 $selectedGroupChoices = [];
-/** @var CLpRelGroup $cLpRelGroup */
-foreach ($subscribedGroupsInLp as $cLpRelGroup) {
-    $selectedGroupChoices[] = $cLpRelGroup->getGroup()->getIid();
+foreach ($links as $link) {
+    if (null !== $link->getGroup()) {
+        $selectedGroupChoices[] = $link->getGroup()->getIid();
+    }
 }
 
 $groupMultiSelect = $form->addMultiSelect(
@@ -316,13 +308,28 @@ if ($form->validate()) {
     $groupForm = isset($values['group_form']) ? $values['group_form'] : [];
 
     if (!empty($groupForm)) {
-        $cLpRelGroupRepo->subscribeGroupsToItem(
-            $currentUser,
-            $course,
-            $session,
-            $entity,
-            $groups
-        );
+        if (!empty($selectedGroupChoices)) {
+            $diff = array_diff($selectedGroupChoices, $groups);
+            if (!empty($diff)) {
+                foreach ($diff as $groupIdToDelete) {
+                    foreach ($links as $link) {
+                        if ($link->getGroup() && $link->getGroup()->getIid()) {
+                            $em->remove($link);
+                        }
+                    }
+                }
+                $em->flush();
+            }
+        }
+
+        foreach ($groups as $groupId) {
+            $group = api_get_group_entity($groupId);
+            $entity->addGroupLink($course, $group);
+        }
+
+        $em->persist($entity);
+        $em->flush();
+
         Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 

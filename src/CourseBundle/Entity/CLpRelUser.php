@@ -9,6 +9,9 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\CourseTrait;
+use Chamilo\CoreBundle\Traits\SessionTrait;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -21,6 +24,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class CLpRelUser
 {
+    use CourseTrait;
+    use SessionTrait;
+    use UserTrait;
+
     /**
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -106,66 +113,6 @@ class CLpRelUser
     }
 
     /**
-     * @return Course
-     */
-    public function getCourse(): Course
-    {
-        return $this->course;
-    }
-
-    /**
-     * @param Course $course
-     *
-     * @return CLpRelUser
-     */
-    public function setCourse(Course $course): self
-    {
-        $this->course = $course;
-
-        return $this;
-    }
-
-    /**
-     * @return Session|null
-     */
-    public function getSession(): ?Session
-    {
-        return $this->session;
-    }
-
-    /**
-     * @param Session|null $session
-     *
-     * @return CLpRelUser
-     */
-    public function setSession(?Session $session): self
-    {
-        $this->session = $session;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return CLpRelUser
-     */
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @return DateTime
      */
     public function getCreatedAt(): DateTime
@@ -186,7 +133,7 @@ class CLpRelUser
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getCreatorUser()
     {
@@ -194,11 +141,11 @@ class CLpRelUser
     }
 
     /**
-     * @param mixed $creatorUser
+     * @param User $creatorUser
      *
      * @return CLpRelUser
      */
-    public function setCreatorUser($creatorUser): self
+    public function setCreatorUser(User $creatorUser): self
     {
         $this->creatorUser = $creatorUser;
 

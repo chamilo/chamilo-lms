@@ -8,8 +8,6 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
-use Chamilo\CourseBundle\Entity\CLpRelGroup;
-use Chamilo\CourseBundle\Repository\CLpRelGroupRepository;
 
 /**
  * Report from students for learning path.
@@ -72,32 +70,12 @@ if ('1' === $lp->getSubscribeUsers()) {
         $session
     );
 
-    /** @var CLpRelGroupRepository $cLpRelGroupRepo */
-    $cLpRelGroupRepo = $em->getRepository('ChamiloCourseBundle:CLpRelGroup');
-
     // Subscribed groups to a LP
-    $subscribedGroupsInLp = $cLpRelGroupRepo->getGroupsSubscribedToItem(
-        $entity,
-        $course,
-        $session
-    );
-
-    $selectedGroupChoices = [];
-    /** @var CLpRelGroup $cLpRelGroup */
-    foreach ($subscribedGroupsInLp as $cLpRelGroup) {
-        $selectedGroupChoices[] = $cLpRelGroup->getGroup()->getIid();
-    }
-
+    $links = $entity->getResourceNode()->getResourceLinks();
     $groups = [];
-    if (!empty($subscribedGroupsInLp)) {
-        /** @var CLpRelGroup $cLpRelGroup */
-        foreach ($subscribedGroupsInLp as $cLpRelGroup) {
-            if (!empty($cLpRelGroup)) {
-                $getGroup = $cLpRelGroup->getGroup();
-                if (!empty($getGroup)) {
-                    $groups[] = $getGroup->getIid();
-                }
-            }
+    foreach ($links as $link) {
+        if (null !== $link->getGroup()) {
+            $groups[] = $link->getGroup()->getIid();
         }
     }
 

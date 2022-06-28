@@ -1733,7 +1733,7 @@ foreach ($questionList as $questionId) {
         if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i == 1)) {
             echo Display::panelCollapse(
                 '<span>'.get_lang('ExerciseDescriptionLabel').'</span>',
-                Security::remove_XSS($objExercise->description),
+                Security::remove_XSS($objExercise->description, COURSEMANAGERLOWSECURITY),
                 'exercise-description',
                 [],
                 'description',

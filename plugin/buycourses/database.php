@@ -514,6 +514,24 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_STRIPE)) {
     $stripeTable->setPrimaryKey(['id']);
 }
 
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TPV_CECABANK)) {
+    $tpvCecabankTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_TPV_CECABANK);
+    $tpvCecabankTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $tpvCecabankTable->addColumn('crypto_key', Types::STRING);
+    $tpvCecabankTable->addColumn('merchant_id', Types::STRING);
+    $tpvCecabankTable->addColumn('acquirer_bin', Types::STRING);
+    $tpvCecabankTable->addColumn('terminal_id', Types::STRING);
+    $tpvCecabankTable->addColumn('cypher', Types::STRING);
+    $tpvCecabankTable->addColumn('exponent', Types::STRING);
+    $tpvCecabankTable->addColumn('supported_payment', Types::STRING);
+    $tpvCecabankTable->addColumn('url', Types::STRING);
+    $tpvCecabankTable->setPrimaryKey(['id']);
+}
+
 $queries = $pluginSchema->toSql($platform);
 
 foreach ($queries as $query) {

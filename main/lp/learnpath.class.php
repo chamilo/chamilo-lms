@@ -14625,8 +14625,13 @@ EOD;
         }
     }
 
-    public static function findLastView(int $lpId, int $studentId, int $courseId, int $sessionId = 0)
-    {
+    public static function findLastView(
+        int $lpId,
+        int $studentId,
+        int $courseId,
+        int $sessionId = 0,
+        bool $createIfNotExists = false
+    ): array {
         $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
 
         $sessionCondition = api_get_session_condition($sessionId);
@@ -14636,7 +14641,25 @@ EOD;
             ORDER BY view_count DESC";
         $result = Database::query($sql);
 
-        return Database::fetch_assoc($result);
+        $lpView = Database::fetch_assoc($result);
+
+        if ($createIfNotExists && empty($lpView)) {
+            $lpViewId = Database::insert(
+                $tblLpView,
+                [
+                    'c_id' => $courseId,
+                    'lp_id' => $lpId,
+                    'user_id' => $studentId,
+                    'view_count' => 1,
+                    'session_id' => $sessionId,
+                ]
+            );
+            Database::update($tblLpView, ['id' => $lpViewId], ['iid = ?' => $lpViewId]);
+
+            return ['iid' => $lpViewId];
+        }
+
+        return $lpView;
     }
 
     /**

@@ -90,11 +90,7 @@ class StudentFollowPage
         int $sessionId = 0,
         bool $allowEdit = false
     ): string {
-        $lpView = learnpath::findLastView($lpInfo['iid'], $studentId, $courseId, $sessionId);
-
-        if (empty($lpView)) {
-            return '-';
-        }
+        $lpView = learnpath::findLastView($lpInfo['iid'], $studentId, $courseId, $sessionId, true);
 
         $extraField = new ExtraField('lp_view');
         $field = $extraField->get_handler_field_info_by_field_variable(self::VARIABLE_ACQUISITION);

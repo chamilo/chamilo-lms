@@ -14659,7 +14659,7 @@ EOD;
             return ['iid' => $lpViewId];
         }
 
-        return $lpView;
+        return empty($lpView) ? [] : $lpView;
     }
 
     /**

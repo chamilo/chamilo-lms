@@ -1846,11 +1846,7 @@ if (empty($details)) {
                 }
 
                 if (in_array('lp', $columnHeadersKeys)) {
-                    $contentToExport[] = api_html_entity_decode(
-                        stripslashes($lp_name),
-                        ENT_QUOTES,
-                        $charset
-                    );
+                    $contentToExport[] = strip_tags($lp_name);
                     echo Display::tag('td', stripslashes($lp_name));
                 }
                 if (in_array('time', $columnHeadersKeys)) {

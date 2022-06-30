@@ -134,7 +134,7 @@ class StudentFollowPage
             $return .= Display::url(
                 Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_TINY),
                 $editUrl,
-                ['class' => 'ajax', 'data-title' => $lpInfo['lp_name']]
+                ['class' => 'ajax', 'data-title' => strip_tags($lpInfo['lp_name'])]
             );
         }
 

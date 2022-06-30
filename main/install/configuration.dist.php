@@ -335,6 +335,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Hide rating elements in pages ("Courses catalog" & "Most Popular courses")
 // $_configuration['hide_course_rating'] = false;
 // Customize password generation and verification
+// For this configuration to be taken into account you need to set define('CHECK_PASS_EASY_TO_FIND', true); in app/config/profile.conf.php
 /*$_configuration['password_requirements'] = [
     'min' => [
         'lowercase' => 2,

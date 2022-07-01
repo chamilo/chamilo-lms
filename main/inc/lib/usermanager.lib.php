@@ -133,7 +133,7 @@ class UserManager
      * @param string $encoded The encrypted password
      * @param string $salt    The user salt, if any
      */
-    public static function detectPasswordEncryption(string $encoded, string $salt): bool
+    public static function detectPasswordEncryption(string $encoded, string $salt): string
     {
         $encryption = false;
 
@@ -179,11 +179,15 @@ class UserManager
                 $encoder = new \Chamilo\UserBundle\Security\Encoder($detectedEncryption);
                 $result = $encoder->isPasswordValid($encoded, $raw, $salt);
                 if ($result) {
+                    $raw = $encoder->encodePassword($encoded, $salt);
                     self::updatePassword($userId, $raw);
                 }
             }
+            else {
+                $result = self::isPasswordValid($encoded, $raw, $salt);
+            }
         } else {
-            return self::isPasswordValid($encoded, $raw, $salt);
+            $result = self::isPasswordValid($encoded, $raw, $salt);
         }
 
         return $result;

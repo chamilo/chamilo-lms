@@ -1,46 +1,19 @@
 <template>
-    <div
-         v-for="course in courses"
-         :key="course.id"
-    >
-      <CourseCard
-          :course="course"
-      />
-    </div>
+  <CourseCard
+    v-for="course in courses"
+    :key="course.id"
+    :course="course"
+  />
 </template>
 
-<script>
-
+<script setup>
 import CourseCard from './CourseCard.vue';
-export default {
-  name: 'CourseCardList',
-  components: {
-    CourseCard
+
+// eslint-disable-next-line no-undef
+defineProps({
+  courses: {
+    type: Array,
+    default: () => [],
   },
-  props: {
-    courses: Array,
-  },
-  data() {
-    return {
-      deck: false
-    };
-  },
-  methods: {
-    isList: function (){
-      if (!this.deck) {
-        return 'primary';
-      }
-      return 'secondary';
-    },
-    isDeck: function (){
-      if (this.deck) {
-        return 'primary';
-      }
-      return 'secondary';
-    },
-    changeLayout: function () {
-      this.deck = !this.deck;
-    },
-  }
-};
+});
 </script>

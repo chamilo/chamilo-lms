@@ -17,8 +17,7 @@ export const GET_COURSE_REL_USER = gql`
                                     user {
                                         illustrationUrl,
                                         username,
-                                        firstname,
-                                        lastname
+                                        fullName
                                     }
                                 }
                             }

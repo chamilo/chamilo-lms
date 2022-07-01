@@ -1,0 +1,30 @@
+.p-card {
+  @apply rounded-lg shadow-lg;
+
+  .p-card-body {
+    @apply flex flex-col gap-4 p-4;
+  }
+
+  .p-card-header {
+    img {
+      @apply rounded-t-lg;
+    }
+  }
+
+  .p-card-title {
+    @apply text-body-2-bold line-clamp-2 min-h-[2rem];
+  }
+
+  .p-card-subtitle {
+    @apply text-body-1 text-gray-50;
+  }
+
+  .p-card-content {
+    &:empty {
+      @apply hidden;
+    }
+  }
+
+  .p-card-footer {
+  }
+}

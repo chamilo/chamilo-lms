@@ -106,7 +106,6 @@
   "devDependencies": {
     "@mdi/font": "^6.6.96",
     "@symfony/webpack-encore": "^1.8.2",
-    "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.5.1",
     "@tailwindcss/line-clamp": "^0.3.1",
     "@tailwindcss/typography": "^0.5.2",

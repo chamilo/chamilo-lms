@@ -921,16 +921,17 @@ class MessageManager
     }
 
     /**
-     * @param int $user_receiver_id
-     * @param int $id
+     * Delete (or just flag) a message (and its attachment) from the table and disk
+     * @param int The owner (receiver) of the message
+     * @param int The internal ID of the message
+     * @param bool Whether to really delete the message (true) or just mark it deleted (default/false)
      *
-     * @return bool
+     * @return bool False on error, true otherwise
+     * @throws Exception if file cannot be deleted in delete_message_attachment_file()
      */
-    public static function delete_message_by_user_receiver($user_receiver_id, $id)
+    public static function delete_message_by_user_receiver(int $user_receiver_id, int $id, bool $realDelete = false)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $id = (int) $id;
-        $user_receiver_id = (int) $user_receiver_id;
 
         if (empty($id) || empty($user_receiver_id)) {
             return false;
@@ -945,13 +946,18 @@ class MessageManager
 
         if (Database::num_rows($rs) > 0) {
             // Delete attachment file.
-            self::delete_message_attachment_file($id, $user_receiver_id);
-            // Soft delete message.
-            $query = "UPDATE $table
+            self::delete_message_attachment_file($id, $user_receiver_id, null, $realDelete);
+            if (false !== $realDelete) {
+                // Hard delete message.
+                $query = "DELETE FROM $table WHERE id = $id";
+            } else {
+                // Soft delete message.
+                $query = "UPDATE $table
                       SET msg_status = ".MESSAGE_STATUS_DELETED."
                       WHERE
                         id = $id AND
                         user_receiver_id = $user_receiver_id ";
+            }
             Database::query($query);
 
             return true;
@@ -961,20 +967,19 @@ class MessageManager
     }
 
     /**
-     * Set status deleted.
+     * Set status deleted or delete the message completely
      *
      * @author Isaac FLores Paz <isaac.flores@dokeos.com>
-     *
-     * @param  int
-     * @param  int
+     * @author Yannick Warnier <yannick.warnier@beeznest.com> - Added realDelete option
+     * @param   int     The user's sender ID
+     * @param   int     The message's ID
+     * @param   bool    whether to really delete the message (true) or just mark it deleted (default/false)
      *
      * @return bool
+     * @throws Exception if file cannot be deleted in delete_message_attachment_file()
      */
-    public static function delete_message_by_user_sender($user_sender_id, $id)
+    public static function delete_message_by_user_sender(int $user_sender_id, int $id, bool $realDelete = false)
     {
-        $user_sender_id = (int) $user_sender_id;
-        $id = (int) $id;
-
         if (empty($id) || empty($user_sender_id)) {
             return false;
         }
@@ -986,11 +991,16 @@ class MessageManager
 
         if (Database::num_rows($rs) > 0) {
             // delete attachment file
-            self::delete_message_attachment_file($id, $user_sender_id);
-            // delete message
-            $sql = "UPDATE $table
+            self::delete_message_attachment_file($id, $user_sender_id, null, $realDelete);
+            if (false !== $realDelete) {
+                // hard delete message
+                $sql = "DELETE FROM $table WHERE id = $id";
+            } else {
+                // soft delete message
+                $sql = "UPDATE $table
                     SET msg_status = '".MESSAGE_STATUS_DELETED."'
-                    WHERE user_sender_id= $user_sender_id AND id= $id";
+                    WHERE user_sender_id = $user_sender_id AND id = $id";
+            }
             Database::query($sql);
 
             return true;
@@ -1094,22 +1104,25 @@ class MessageManager
      * @param  int    message id
      * @param  int    message user id (receiver user id or sender user id)
      * @param  int    group id (optional)
+     * @param  bool   whether to really delete the file (true) or just mark it deleted (default/false)
+     * @return void
+     * @throws Exception if file cannot be deleted
      */
     public static function delete_message_attachment_file(
-        $message_id,
-        $message_uid,
-        $group_id = 0
-    ) {
-        $message_id = (int) $message_id;
-        $message_uid = (int) $message_uid;
+        int $message_id,
+        int $message_uid,
+        ?int $group_id = 0,
+        bool $realDelete = false
+    ): void
+    {
         $table_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         $sql = "SELECT * FROM $table_message_attach
-                WHERE message_id = '$message_id'";
+                WHERE message_id = $message_id";
         $rs = Database::query($sql);
         while ($row = Database::fetch_array($rs)) {
             $path = $row['path'];
-            $attach_id = (int) $row['id'];
+            $attach_id = $row['id'];
             $new_path = $path.'_DELETED_'.$attach_id;
 
             if (!empty($group_id)) {
@@ -1128,12 +1141,21 @@ class MessageManager
 
             $path_message_attach = $path_user_info['dir'].'message_attachments/';
             if (is_file($path_message_attach.$path)) {
-                if (rename($path_message_attach.$path, $path_message_attach.$new_path)) {
-                    $sql = "UPDATE $table_message_attach
+                if ($realDelete) {
+                    $unlink = unlink($path_message_attach.$path);
+                    if (!$unlink) {
+                        throw new Exception('Could not delete file '.$path_message_attach.$path);
+                    }
+                    $sql = "DELETE FROM $table_message_attach
+                            WHERE id = $attach_id ";
+                } else {
+                    if (rename($path_message_attach.$path, $path_message_attach.$new_path)) {
+                        $sql = "UPDATE $table_message_attach
                             SET path = '$new_path'
                             WHERE id = $attach_id ";
-                    Database::query($sql);
+                    }
                 }
+                Database::query($sql);
             }
         }
     }

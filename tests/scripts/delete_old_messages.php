@@ -18,15 +18,15 @@ if (PHP_SAPI !== 'cli') {
     die('This script can only be executed from the command line');
 }
 
-if (!empty($argv[1]) && $argv[1] == '-s') {
-    $simulate = true;
-    echo "Simulation mode is enabled".PHP_EOL;
-}
 if (!empty($argv[1]) && $argv[1] == '--from') {
     $from = $argv[2];
 }
 if (!empty($argv[3]) && $argv[3] == '--until') {
     $until = $argv[4];
+}
+if (!empty($argv[5]) && $argv[5] == '-s') {
+    $simulate = true;
+    echo "Simulation mode is enabled".PHP_EOL;
 }
 if (empty($from) or empty($until)) {
     echo PHP_EOL."Usage: sudo php ".basename(__FILE__)." [options]".PHP_EOL;
@@ -37,10 +37,7 @@ if (empty($from) or empty($until)) {
     die('Please make sure --from and --until are defined.');
 }
 
-
-
 echo "About to delete messages from $from to $until".PHP_EOL;
-
 echo deleteMessages($from, $until, $simulate);
 
 /**

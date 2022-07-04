@@ -97,7 +97,7 @@ if (isset($_POST['form_sent'])) {
             if (count($checkList) > 0) {
                 $join = 'INNER JOIN course_rel_user cru ON u.user_id = cru.user_id
                         INNER JOIN course c ON cru.c_id = c.id';
-                $where = trim($where , ',');
+                $where = trim($where, ',');
                 $where = "AND c.id IN($where)";
             }
         }
@@ -215,7 +215,7 @@ $url_list = UrlManager::get_url_data();
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 } ?> >
-    <?php echo get_lang('SelectUrl').' : '; ?>
+<?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
 <option value="0"> <?php echo get_lang('SelectUrl'); ?></option>
         <?php
@@ -242,28 +242,17 @@ $url_list = UrlManager::get_url_data();
 if (count($courseList) > 0) {
     echo get_lang('ForCourse').' : ';
     echo '<ul>';
-    foreach($courseList as $course){
-        $checked = in_array($course['real_id'], $checkList);
-        echo '<li>
-            <input
-                type="checkbox"
-                name="'.$course['code'].'"
-                value="'.$course['real_id'].'"
-                onclick="javascript:send();"
-                '.($checked ? "checked" : "").'
-            >
-            '.$course['title'].'
-        </li>';
+    foreach ($courseList as $course) {
+        $checked = in_array($course['real_id'], $checkList) ? 'checked' : '';
+        echo '<li>';
+        echo '<input type="checkbox" name="'.$course['code'].'" value="'.$course['real_id'].'" onclick="javascript:send();" '.$checked.'>';
+        echo ' '.$course['title'];
+        echo '</li>';
     }
     echo '</ul>';
 
-    $checked = isset($_POST['no_any_course']);
-    echo '<input
-            type="checkbox"
-            name="no_any_course"
-            onclick="javascript:send();"
-            '.($checked ? "checked" : "").'
-        > ';
+    $checked = isset($_POST['no_any_course']) ? 'checked' : '';
+    echo '<input type="checkbox" name="no_any_course" onclick="javascript:send();" '.$checked.'> ';
     echo get_lang('NoAnyCourse');
 }
 ?>
@@ -274,8 +263,8 @@ if (count($courseList) > 0) {
 
 <?php
 if (!empty($errorMsg)) {
-            echo Display::return_message($errorMsg, 'normal'); //main API
-        }
+    echo Display::return_message($errorMsg, 'normal'); //main API
+}
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">

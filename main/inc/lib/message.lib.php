@@ -921,13 +921,15 @@ class MessageManager
     }
 
     /**
-     * Delete (or just flag) a message (and its attachment) from the table and disk
+     * Delete (or just flag) a message (and its attachment) from the table and disk.
+     *
      * @param int The owner (receiver) of the message
      * @param int The internal ID of the message
      * @param bool Whether to really delete the message (true) or just mark it deleted (default/false)
      *
-     * @return bool False on error, true otherwise
      * @throws Exception if file cannot be deleted in delete_message_attachment_file()
+     *
+     * @return bool False on error, true otherwise
      */
     public static function delete_message_by_user_receiver(int $user_receiver_id, int $id, bool $realDelete = false)
     {
@@ -967,16 +969,18 @@ class MessageManager
     }
 
     /**
-     * Set status deleted or delete the message completely
+     * Set status deleted or delete the message completely.
      *
      * @author Isaac FLores Paz <isaac.flores@dokeos.com>
      * @author Yannick Warnier <yannick.warnier@beeznest.com> - Added realDelete option
+     *
      * @param   int     The user's sender ID
      * @param   int     The message's ID
      * @param   bool    whether to really delete the message (true) or just mark it deleted (default/false)
      *
-     * @return bool
      * @throws Exception if file cannot be deleted in delete_message_attachment_file()
+     *
+     * @return bool
      */
     public static function delete_message_by_user_sender(int $user_sender_id, int $id, bool $realDelete = false)
     {
@@ -1103,18 +1107,19 @@ class MessageManager
      *
      * @param  int    message id
      * @param  int    message user id (receiver user id or sender user id)
-     * @param  int    group id (optional)
+     * @param  null|int   group id (optional)
      * @param  bool   whether to really delete the file (true) or just mark it deleted (default/false)
-     * @return void
+     *
      * @throws Exception if file cannot be deleted
+     *
+     * @return void
      */
     public static function delete_message_attachment_file(
         int $message_id,
         int $message_uid,
         ?int $group_id = 0,
         bool $realDelete = false
-    ): void
-    {
+    ): void {
         $table_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         $sql = "SELECT * FROM $table_message_attach

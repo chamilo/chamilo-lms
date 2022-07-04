@@ -1107,12 +1107,10 @@ class MessageManager
      *
      * @param  int    message id
      * @param  int    message user id (receiver user id or sender user id)
-     * @param  null|int   group id (optional)
+     * @param  int|null   group id (optional)
      * @param  bool   whether to really delete the file (true) or just mark it deleted (default/false)
      *
      * @throws Exception if file cannot be deleted
-     *
-     * @return void
      */
     public static function delete_message_attachment_file(
         int $message_id,

@@ -70,13 +70,37 @@ function remove_item(origin) {
 
 $errorMsg = '';
 $message = '';
+$userId = api_get_user_id();
+$courseList = CourseManager::get_courses_list_by_user_id($userId);
+$checkList = [];
+$join = '';
+$where = '';
 
-if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+if (isset($_POST['form_sent'])) {
     $form_sent = $_POST['form_sent'];
     $UserList = $_POST['sessionUsersList'];
 
     if (!is_array($UserList)) {
         $UserList = [];
+    }
+    if ($form_sent == 0) {
+        if (isset($_POST['no_any_course'])) {
+            $where = 'SELECT cru.user_id FROM course_rel_user cru GROUP BY cru.user_id';
+            $where = "AND u.id NOT IN($where)";
+        } else {
+            foreach ($courseList as $course) {
+                if (isset($_POST[$course['code']])) {
+                    $checkList[] = $course['real_id'];
+                    $where .= $course['real_id'].',';
+                }
+            }
+            if (count($checkList) > 0) {
+                $join = 'INNER JOIN course_rel_user cru ON u.user_id = cru.user_id
+                        INNER JOIN course c ON cru.c_id = c.id';
+                $where = trim($where , ',');
+                $where = "AND c.id IN($where)";
+            }
+        }
     }
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
@@ -144,14 +168,14 @@ $nosessionUsersList = $sessionUsersList = [];
 $ajax_search = $add_type == 'unique' ? true : false;
 
 if ($ajax_search) {
-    $Users = UrlManager::get_url_rel_user_data($access_url_id);
+    $Users = UrlManager::get_url_rel_user_data($access_url_id, null, $join, $where);
     foreach ($Users as $user) {
         $sessionUsersList[$user['user_id']] = $user;
     }
 } else {
     $order_clause = api_sort_by_first_name() ? ' ORDER BY username, firstname, lastname' : ' ORDER BY username, lastname, firstname';
 
-    $Users = UrlManager::get_url_rel_user_data(null, $order_clause);
+    $Users = UrlManager::get_url_rel_user_data(null, $order_clause, $join, $where);
     foreach ($Users as $user) {
         if ($user['access_url_id'] == $access_url_id) {
             $sessionUsersList[$user['user_id']] = $user;
@@ -159,8 +183,11 @@ if ($ajax_search) {
     }
 
     $sql = "SELECT u.user_id, lastname, firstname, username
-	  	  	FROM $tbl_user u WHERE status <> ".ANONYMOUS." ".
-            $order_clause;
+	  	  	FROM $tbl_user u
+            $join
+            WHERE u.status <> ".ANONYMOUS."
+            $where
+            $order_clause";
     $result = Database::query($sql);
     $Users = Database::store_result($result);
     $user_list_leys = array_keys($sessionUsersList);
@@ -210,6 +237,38 @@ $url_list = UrlManager::get_url_data();
         ?>
 </select>
 <br /><br />
+
+<?php
+if (count($courseList) > 0) {
+    echo get_lang('ForCourse').' : ';
+    echo '<ul>';
+    foreach($courseList as $course){
+        $checked = in_array($course['real_id'], $checkList);
+        echo '<li>
+            <input
+                type="checkbox"
+                name="'.$course['code'].'"
+                value="'.$course['real_id'].'"
+                onclick="javascript:send();"
+                '.($checked ? "checked" : "").'
+            >
+            '.$course['title'].'
+        </li>';
+    }
+    echo '</ul>';
+
+    $checked = isset($_POST['no_any_course']);
+    echo '<input
+            type="checkbox"
+            name="no_any_course"
+            onclick="javascript:send();"
+            '.($checked ? "checked" : "").'
+        > ';
+    echo get_lang('NoAnyCourse');
+}
+?>
+<br /><br />
+
 <input type="hidden" name="form_sent" value="1" />
 <input type="hidden" name="add_type" value = "<?php echo $add_type; ?>" />
 

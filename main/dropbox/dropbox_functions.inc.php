@@ -761,9 +761,6 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
 /**
  * Checks if there are files in the dropbox_file table that aren't used anymore in dropbox_person table.
  * If there are, all entries concerning the file are deleted from the db + the file is deleted from the server.
- *
- * @param int $courseId
- * @param int $sessionId
  */
 function removeUnusedFiles(int $courseId = 0, int $sessionId = 0)
 {

@@ -436,12 +436,6 @@ class Dropbox_Person
 
     /**
      * Constructor for recreating the Dropbox_Person object.
-     *
-     * @param int  $userId
-     * @param bool $isCourseAdmin
-     * @param bool $isCourseTutor
-     * @param int $courseId
-     * @param int $sessionId
      */
     public function __construct(
         int $userId,
@@ -507,12 +501,6 @@ class Dropbox_Person
 
     /**
      * Deletes all the received categories and work of this person.
-     *
-     * @param int $id
-     * @param int $courseId
-     * @param int $sessionId
-     *
-     * @return bool
      */
     public function deleteReceivedWorkFolder(int $id, int $courseId = 0, int $sessionId = 0): bool
     {
@@ -542,10 +530,6 @@ class Dropbox_Person
 
     /**
      * Deletes a received dropbox file of this person with id=$id.
-     *
-     * @param int $id
-     * @param int $courseId
-     * @param int $sessionId
      */
     public function deleteReceivedWork(int $id, int $courseId = 0, int $sessionId = 0): void
     {
@@ -579,10 +563,6 @@ class Dropbox_Person
 
     /**
      * Deletes a sent dropbox file of this person with id=$id.
-     *
-     * @param int $id
-     * @param int $courseId
-     * @param int $sessionId
      */
     public function deleteSentWork(int $id, int $courseId = 0, int $sessionId = 0): void
     {

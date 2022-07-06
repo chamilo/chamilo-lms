@@ -80,14 +80,6 @@ class OralExpression extends Question
 
     /**
      * Initialize the attributes to generate the file path.
-     *
-     * @param int $sessionId
-     * @param int $userId
-     * @param int $exerciseId
-     * @param int $exeId
-     * @param int $courseId
-     *
-     * @return void
      */
     public function initFile(
         int $sessionId,

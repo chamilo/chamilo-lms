@@ -1768,7 +1768,6 @@ class SessionManager
         $trackEExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $trackEAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-
         $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
         $em = Database::getManager();
         $userId = api_get_user_id();
@@ -1890,8 +1889,8 @@ class SessionManager
                     'where' => [
                         'session_id = ? AND c_id = ? AND (filename IS NOT NULL AND filename != \'\')' => [
                             $id_checked,
-                            $courseId
-                        ]
+                            $courseId,
+                        ],
                     ],
                 ]
             );

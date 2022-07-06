@@ -1763,11 +1763,18 @@ class SessionManager
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $trackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
+        $tbl_dropbox = Database::get_course_table(TABLE_DROPBOX_FILE);
+        $trackEExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $trackEAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
 
         $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
         $em = Database::getManager();
         $userId = api_get_user_id();
 
+        // If this session is involved in any sequence, cancel deletion and ask
+        // for the sequence update before deleting.
         /** @var SequenceResourceRepository $repo */
         $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
         $sequenceResource = $repo->findRequirementForResource(
@@ -1786,6 +1793,8 @@ class SessionManager
             return false;
         }
 
+        // If the $id_checked param is an array, split it into individual
+        // sessions deletion.
         if (is_array($id_checked)) {
             foreach ($id_checked as $sessionId) {
                 self::delete($sessionId);
@@ -1794,6 +1803,9 @@ class SessionManager
             $id_checked = intval($id_checked);
         }
 
+        // Check permissions from the person launching the deletion.
+        // If the call is issued from a web service or automated process,
+        // we assume the caller checks for permissions ($from_ws).
         if (self::allowed($id_checked) && !$from_ws) {
             $qb = $em
                 ->createQuery('
@@ -1811,11 +1823,14 @@ class SessionManager
 
         $sessionInfo = api_get_session_info($id_checked);
 
-        // Delete documents inside a session
+        // Delete documents and assignments inside a session
         $courses = self::getCoursesInSession($id_checked);
         foreach ($courses as $courseId) {
             $courseInfo = api_get_course_info_by_id($courseId);
+            // Delete documents
             DocumentManager::deleteDocumentsFromSession($courseInfo, $id_checked);
+
+            // Delete assignments
             $works = Database::select(
                 '*',
                 $tbl_student_publication,
@@ -1823,13 +1838,68 @@ class SessionManager
                     'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]],
                 ]
             );
-
             $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
             foreach ($works as $index => $work) {
                 if ($work['filetype'] = 'folder') {
                     Database::query("DELETE FROM $tbl_student_publication_assignment WHERE publication_id = $index");
                 }
                 my_delete($currentCourseRepositorySys.'/'.$work['url']);
+            }
+
+            // Delete learning paths
+            $learnpaths = Database::select(
+                'iid',
+                $tbl_learnpath,
+                [
+                    'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]],
+                ]
+            );
+            $courseInfo = api_get_course_info_by_id($courseId);
+            foreach ($learnpaths as $lpData) {
+                $lp = new learnpath($courseInfo['code'], $lpData['iid'], $userId);
+                $lp->delete($courseInfo, $lpData['iid'], true);
+                unset($lp);
+            }
+
+            // Delete dropbox documents
+            $dropboxes = Database::select(
+                'iid',
+                $tbl_dropbox,
+                [
+                    'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]],
+                ]
+            );
+            require_once __DIR__.'/../../dropbox/dropbox_functions.inc.php';
+            foreach ($dropboxes as $dropbox) {
+                $dropboxPerson = new Dropbox_Person(
+                    $userId,
+                    true,
+                    false,
+                    $courseId,
+                    $id_checked
+                );
+                $dropboxPerson->deleteReceivedWork($dropbox['iid'], $courseId, $id_checked);
+                $dropboxPerson->deleteSentWork($dropbox['iid'], $courseId, $id_checked);
+            }
+
+            // TODO: Delete audio files from test answers
+            $attempts = Database::select(
+                ['id', 'user_id', 'exe_id'],
+                $trackEAttempt,
+                [
+                    'where' => [
+                        'session_id = ? AND c_id = ? AND (filename IS NOT NULL AND filename != \'\')' => [
+                            $id_checked,
+                            $courseId
+                        ]
+                    ],
+                ]
+            );
+            foreach ($attempts as $attempt) {
+                $attempt = new OralExpression();
+                $attempt->initFile($id_checked, $attempt['user_id'], 0, $attempt['exe_id'], $courseId);
+                $filename = $attempt->getAbsoluteFilePath(true);
+                my_delete($filename);
             }
         }
 

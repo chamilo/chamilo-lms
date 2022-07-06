@@ -79,22 +79,33 @@ class OralExpression extends Question
     }
 
     /**
-     * initialize the attributes to generate the file path.
+     * Initialize the attributes to generate the file path.
      *
      * @param int $sessionId
      * @param int $userId
      * @param int $exerciseId
      * @param int $exeId
+     * @param int $courseId
+     *
+     * @return void
      */
-    public function initFile($sessionId, $userId, $exerciseId, $exeId)
-    {
-        $this->sessionId = (int) $sessionId;
-        $this->userId = (int) $userId;
-        $this->exerciseId = 0;
-        $this->exeId = (int) $exeId;
-        if (!empty($exerciseId)) {
-            $this->exerciseId = (int) $exerciseId;
+    public function initFile(
+        int $sessionId,
+        int $userId,
+        int $exerciseId,
+        int $exeId,
+        int $courseId = 0
+    ): void {
+        if (!empty($courseId)) {
+            $this->course = api_get_course_info_by_id($courseId);
         }
+        $this->sessionId = $sessionId;
+        $this->userId = $userId;
+        $this->exerciseId = 0;
+        if (!empty($exerciseId)) {
+            $this->exerciseId = $exerciseId;
+        }
+        $this->exeId = $exeId;
         $this->storePath = $this->generateDirectory();
         $this->fileName = $this->generateFileName();
         $this->filePath = $this->storePath.$this->fileName;

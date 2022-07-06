@@ -761,28 +761,39 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
 /**
  * Checks if there are files in the dropbox_file table that aren't used anymore in dropbox_person table.
  * If there are, all entries concerning the file are deleted from the db + the file is deleted from the server.
+ *
+ * @param int $courseId
+ * @param int $sessionId
  */
-function removeUnusedFiles()
+function removeUnusedFiles(int $courseId = 0, int $sessionId = 0)
 {
-    $_course = api_get_course_info();
-    $course_id = $_course['real_id'];
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    }
+    $_course = api_get_course_info_by_id($courseId);
+    if (empty($sessionId)) {
+        $sessionId = api_get_session_id();
+    }
+    $condition_session = api_get_session_condition($sessionId, true, false, 'f.session_id');
 
     // select all files that aren't referenced anymore
-    $sql = "SELECT DISTINCT f.id, f.filename
+    $sql = "SELECT DISTINCT f.iid, f.filename
             FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." f
             LEFT JOIN ".Database::get_course_table(TABLE_DROPBOX_PERSON)." p
-            ON (f.id = p.file_id)
+            ON (f.iid = p.file_id)
             WHERE p.user_id IS NULL AND
-                  f.c_id = $course_id
+                  f.c_id = $courseId
+                  $condition_session
             ";
     $result = Database::query($sql);
+    $condition_session = api_get_session_condition($sessionId);
     while ($res = Database::fetch_array($result)) {
         //delete the selected files from the post and file tables
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
-                WHERE c_id = $course_id AND file_id = '".$res['id']."'";
+                WHERE c_id = $courseId $condition_session AND file_id = ".$res['iid'];
         Database::query($sql);
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)."
-                WHERE c_id = $course_id AND id ='".$res['id']."'";
+                WHERE iid = ".$res['iid'];
         Database::query($sql);
         //delete file from server
         @unlink(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$res['filename']);
@@ -832,18 +843,26 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
  *
  * @todo check if this function is still necessary.
  */
-function removeMoreIfMailing($file_id)
+function removeMoreIfMailing(int $file_id, int $courseId = 0, int $sessionId = 0, int $uploaderId = 0)
 {
-    $course_id = api_get_course_int_id();
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    }
+    if (empty($sessionId)) {
+        $sessionId = api_get_session_id();
+    }
+    $condition_session = api_get_session_condition($sessionId);
+    if (empty($uploaderId)) {
+        $uploaderId = api_get_user_id();
+    }
     // when deleting a mailing zip-file (posted to mailingPseudoId):
     // 1. the detail window is no longer reachable, so
     //    for all content files, delete mailingPseudoId from person-table
     // 2. finding the owner (getUserOwningThisMailing) is no longer possible, so
     //    for all content files, replace mailingPseudoId by owner as uploader
-    $file_id = (int) $file_id;
     $sql = "SELECT p.dest_user_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_POST)." p
-            WHERE c_id = $course_id AND p.file_id = '".$file_id."'";
+            WHERE c_id = $courseId $condition_session AND p.file_id = $file_id";
     $result = Database::query($sql);
 
     if ($res = Database::fetch_array($result)) {
@@ -851,12 +870,12 @@ function removeMoreIfMailing($file_id)
         $mailId = get_mail_id_base();
         if ($mailingPseudoId > $mailId) {
             $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
-                    WHERE c_id = $course_id AND user_id='".$mailingPseudoId."'";
+                    WHERE c_id = $courseId AND user_id = $mailingPseudoId";
             Database::query($sql);
 
             $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FILE)."
-                    SET uploader_id='".api_get_user_id()."'
-                    WHERE c_id = $course_id AND uploader_id='".$mailingPseudoId."'";
+                    SET uploader_id = $uploaderId
+                    WHERE c_id = $courseId $condition_session AND uploader_id = $mailingPseudoId";
             Database::query($sql);
         }
     }

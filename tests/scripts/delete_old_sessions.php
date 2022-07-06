@@ -9,7 +9,7 @@
  * 'permanently_remove_deleted_files' is set to 'true'.
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-//exit;
+exit;
 require __DIR__.'/../../main/inc/global.inc.php';
 $simulate = false;
 

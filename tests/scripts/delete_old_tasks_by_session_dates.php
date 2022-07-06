@@ -10,7 +10,7 @@
  * @author Percy Santiago <psantiago@icpna.edu.pe>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> - Cleanup and debug
  */
-//exit;
+exit;
 require __DIR__.'/../../main/inc/global.inc.php';
 $simulate = false;
 $taskNameFilter = ''; // fill with any value to only delete tasks that contain this text

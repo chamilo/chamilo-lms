@@ -10,30 +10,40 @@
  * @author Percy Santiago <psantiago@icpna.edu.pe>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> - Cleanup and debug
  */
-die();
+//exit;
 require __DIR__.'/../../main/inc/global.inc.php';
-$fromDate = '2017-03-01'; //session start date must be > to be considered
-$expiryDate = '2022-01-01'; //session end date must be < to be considered
 $simulate = false;
 $taskNameFilter = ''; // fill with any value to only delete tasks that contain this text
 if (PHP_SAPI !== 'cli') {
     die('This script can only be executed from the command line');
 }
-echo PHP_EOL."Usage: php ".basename(__FILE__)." [options]".PHP_EOL;
-echo "Where [options] can be ".PHP_EOL;
-echo "  -s         Simulate execution - Do not delete anything, just show numbers".PHP_EOL.PHP_EOL;
-echo "Processing...".PHP_EOL.PHP_EOL;
 
-if (!empty($argv[1]) && $argv[1] == '-s') {
+if (!empty($argv[1]) && $argv[1] == '--from') {
+    $from = $argv[2];
+}
+if (!empty($argv[3]) && $argv[3] == '--until') {
+    $until = $argv[4];
+}
+if (!empty($argv[5]) && $argv[5] == '-s') {
     $simulate = true;
     echo "Simulation mode is enabled".PHP_EOL;
 }
+if (empty($from) or empty($until)) {
+    echo PHP_EOL."Usage: sudo php ".basename(__FILE__)." [options]".PHP_EOL;
+    echo "Where [options] can be ".PHP_EOL;
+    echo "  --from yyyy-mm-dd    Date from which the content should be removed (e.g. 2017-08-31)".PHP_EOL.PHP_EOL;
+    echo "  --until yyyy-mm-dd   Date up to which the content should be removed (e.g. 2020-08-31)".PHP_EOL.PHP_EOL;
+    echo "  -s                   (optional) Simulate execution - Do not delete anything, just show numbers".PHP_EOL.PHP_EOL;
+    die('Please make sure --from and --until are defined.');
+}
+
+echo "Processing...".PHP_EOL.PHP_EOL;
 
 $sessionCourses = array();
 $coursesCodes = array();
 $coursesDirs = array();
 echo "[".time()."] Querying sessions\n";
-$sql = "SELECT id FROM session where access_start_date < '$expiryDate' AND access_start_date > '$fromDate'";
+$sql = "SELECT id FROM session where access_start_date > '$from 00:00:00' AND access_start_date <= '$until 23:59:59'";
 
 $res = Database::query($sql);
 
@@ -49,7 +59,7 @@ if ($resc === false) {
 }
 $countAllSessions = Database::result($resc, 0, 'nbr');
 echo "[".time()."]"
-    ." Found $countSessions sessions between $fromDate and $expiryDate on a total of $countAllSessions sessions."."\n";
+    ." Found $countSessions sessions between $from and $until on a total of $countAllSessions sessions."."\n";
 
 while ($session = Database::fetch_assoc($res)) {
     $sql2 = "SELECT c.id AS cid, c.code AS ccode, c.directory AS cdir
@@ -126,7 +136,7 @@ foreach ($sessionCourses as $sid => $cid) {
     }
 }
 echo "[".time()."] ".($simulate ? "Would delete" : "Deleted")
-    ." tasks from $countSessions sessions between $fromDate and $expiryDate on a total of $countAllSessions"
+    ." tasks from $countSessions sessions between $from and $until on a total of $countAllSessions"
     ." sessions for a total estimated size of "
     .round($totalSize / (1024 * 1024))." MB."."\n";
 

@@ -254,12 +254,12 @@ $border-color_12: #9333EA;
   }
 
   &.p-button-sm {
-    @apply px-4 py-1;
+    @apply px-4 py-2;
     font-size: 13px;
   }
 
   &.p-button-lg {
-    @apply px-8 py-5;
+    @apply px-8 py-4;
     font-size: 18px;
   }
 

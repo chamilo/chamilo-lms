@@ -16,6 +16,7 @@
         class="empty-state__detail"
         v-text="detail"
       />
+      <slot />
     </div>
   </div>
 </template>

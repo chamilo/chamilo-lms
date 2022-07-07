@@ -60,7 +60,9 @@ const router = createRouter({
             }
         },
         {
-            path: '/course/:id/home', name: 'CourseHome', component: CourseHome
+            path: '/course/:id/home',
+            name: 'CourseHome',
+            component: CourseHome
         },
         {
             path: '/courses',

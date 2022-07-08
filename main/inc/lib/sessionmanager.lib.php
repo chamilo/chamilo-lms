@@ -1895,9 +1895,9 @@ class SessionManager
                 ]
             );
             foreach ($attempts as $attempt) {
-                $attempt = new OralExpression();
-                $attempt->initFile($id_checked, $attempt['user_id'], 0, $attempt['exe_id'], $courseId);
-                $filename = $attempt->getAbsoluteFilePath(true);
+                $oral = new OralExpression();
+                $oral->initFile($id_checked, $attempt['user_id'], 0, $attempt['exe_id'], $courseId);
+                $filename = $oral->getAbsoluteFilePath(true);
                 my_delete($filename);
             }
         }

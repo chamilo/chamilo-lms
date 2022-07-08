@@ -79,6 +79,7 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import InputSwitch from 'primevue/inputswitch';
 import {useI18n} from "vue-i18n";
+import axios from "axios";
 
 const route = useRoute();
 const router = useRouter();
@@ -114,6 +115,12 @@ async function performLogin() {
       // router.replace({path: "/home"});
       window.location.href = '/home';
     }
+  } else {
+    // Log of connection attempts
+    axios.post('/login_failed', {
+      username: login.value,
+      password: password.value,
+    });
   }
 }
 </script>

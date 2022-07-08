@@ -36,7 +36,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $label = null,
         $attributes = null
     ) {
-        $attributes['class'] = $attributes['class'] ?? ' mt-1';
         $columnsSize = $attributes['cols-size'] ?? null;
         $this->setColumnsSize($columnsSize);
         parent::__construct($elementName, $label, $attributes);
@@ -127,10 +126,48 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $this->updateAttributes(['cols' => $cols]);
     }
 
+    public function getTemplate(string $layout): string
+    {
+        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+            return '
+                <div class="form__field">
+                    <div class="p-float-label">
+                        {element}
+                        {icon}
+                        <label {label-for}>
+                            <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                            {label}
+                        </label>
+                    </div>
+                    <!-- BEGIN label_2 -->
+                        <small>{label_2}</small>
+                    <!-- END label_2 -->
+
+                     <!-- BEGIN label_3 -->
+                        <small>{label_3}</small>
+                    <!-- END label_3 -->
+
+                    <!-- BEGIN error -->
+                        <small class="p-error">{error}</small>
+                    <!-- END error -->
+                </div>';
+        }
+
+        return parent::getTemplate($layout);
+    }
+
     public function toHtml()
     {
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
+        }
+
+        if (!isset($this->_attributes['class'])) {
+            $this->_attributes['class'] = '';
+        }
+
+        if (FormValidator::LAYOUT_HORIZONTAL === $this->getLayout()) {
+            $this->_attributes['class'] .= 'p-inputtextarea p-inputtext p-component p-filled';
         }
 
         return $this->_getTabs().

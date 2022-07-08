@@ -31,7 +31,7 @@
             <div class="share">
                 {{ 'JoinURLToSendToParticipants'| get_plugin_lang('ZoomPlugin') }}
             </div>
-            <div class="form-inline">
+            <div class="form--inline">
                 <div class="form-group">
                     <input id="share_button_flash" type="text"
                            style="width:460px"

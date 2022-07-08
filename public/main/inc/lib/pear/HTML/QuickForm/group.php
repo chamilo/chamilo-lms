@@ -258,16 +258,29 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      * Returns Html for the group.
      *
      * @since       1.0
-     *
-     * @return string
      */
-    public function toHtml()
+    public function getTemplate(string $layout): string
     {
-        $renderer = new HTML_QuickForm_Renderer_Default();
-        $renderer->setElementTemplate('{element}');
-        $this->accept($renderer);
+        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+            return '<div class="form__field">
+                <label><!-- BEGIN required --><span class="form_required">*</span><!-- END required -->{label}</label>
+                {element}
+                {icon}
+                <!-- BEGIN label_2 -->
+                    <small>{label_2}</small>
+                <!-- END label_2 -->
+    
+                 <!-- BEGIN label_3 -->
+                    <small>{label_3}</small>
+                <!-- END label_3 -->
+    
+                <!-- BEGIN error -->
+                    <small class="p-error">{error}</small>
+                <!-- END error -->
+                </div>';
+        }
 
-        return $renderer->toHtml();
+        return parent::getTemplate($layout);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="box-body">
-        <form class="form-inline"
+        <form class="form--inline"
           action="{{ url('chamilo_core_resource_new_folder', {'tool': tool, 'type': type, 'cid': course.id, 'sid': session.id, 'id': id }) }}"
           method="post"
         >

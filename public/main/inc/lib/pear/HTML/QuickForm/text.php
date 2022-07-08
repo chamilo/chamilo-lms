@@ -35,24 +35,18 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             $attributes = [];
         }
 
-        if (is_array($attributes) || empty($attributes)) {
-            $classFromAttributes = $attributes['class'] ?? '';
-
-            $attributes['class'] = $classFromAttributes;
-        }
-
-        $inputSize = $attributes['input-size'] ?? null;
-        $this->setInputSize($inputSize);
-        $columnsSize = $attributes['cols-size'] ?? null;
-        $this->setColumnsSize($columnsSize);
-        $icon = $attributes['icon'] ?? null;
-        $this->setIcon($icon);
-
-        if (!empty($inputSize)) {
+        if (!empty($attributes['input-size'])) {
+            $this->setInputSize($attributes['input-size']);
             unset($attributes['input-size']);
         }
 
-        if (!empty($icon)) {
+        if (!empty($attributes['cols-size'])) {
+            $this->setColumnsSize($attributes['cols-size']);
+            unset($attributes['cols-size']);
+        }
+
+        if (!empty($attributes['icon'])) {
+            $this->setIcon($attributes['icon']);
             unset($attributes['icon']);
         }
 
@@ -103,23 +97,49 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     {
         $this->updateAttributes(array('maxlength' => $maxlength));
     }
+    
+    public function getTemplate(string $layout): string
+    {
+        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+            return '
+                <div class="form__field">
+                    <div class="p-float-label">
+                        {element}
+                        {icon}
+                        <label {label-for}>
+                            <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                            {label}
+                        </label>
+                    </div>
+                    <!-- BEGIN label_2 -->
+                        <small>{label_2}</small>
+                    <!-- END label_2 -->
+
+                     <!-- BEGIN label_3 -->
+                        <small>{label_3}</small>
+                    <!-- END label_3 -->
+
+                    <!-- BEGIN error -->
+                        <small class="p-error">{error}</small>
+                    <!-- END error -->
+                </div>';
+        }
+        
+        return parent::getTemplate($layout);
+    }
 
     public function toHtml()
     {
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
         }
-        $layout = $this->getLayout();
-        $class = '';
-        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
-            $class = '';
-        }
-        $extraClass = "p-component p-inputtext p-filled $class";
 
-        if (isset($this->_attributes['class'])) {
-            $this->_attributes['class'] .= $extraClass;
-        } else {
-            $this->_attributes['class'] = $extraClass;
+        if (!isset($this->_attributes['class'])) {
+            $this->_attributes['class'] = '';
+        }
+
+        if (FormValidator::LAYOUT_HORIZONTAL === $this->getLayout()) {
+            $this->_attributes['class'] .= 'p-component p-inputtext p-filled';
         }
 
         return '<input '.$this->_getAttrString($this->_attributes).' />';

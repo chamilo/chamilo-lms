@@ -21,25 +21,36 @@
 
   label {
     @apply text-body-2;
+
+    &:empty {
+      @apply hidden;
+    }
+  }
+
+  form {
+    @apply flex flex-col gap-5;
+
+    small {
+      @apply text-caption;
+    }
   }
 }
 
-form {
-  @apply flex flex-col gap-5;
+@layer components {
+  .form {
+    &--inline {
+      @apply flex-row gap-3;
+    }
 
-  &--inline {
-    @apply flex-row gap-3;
-  }
+    &__field {
+      @apply flex flex-col gap-2;
+    }
 
-  .form__field {
-    @apply flex flex-col gap-2;
-  }
-
-  small {
-    @apply text-caption;
+    &__radio-field {
+      @apply flex gap-2 items-center;
+    }
   }
 }
-
 
 .p-inputwrapper {
   @apply w-full;

@@ -53,10 +53,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         array $attributes = []
     ) {
         $addBlank = '';
-        $layout = $this->getLayout();
-        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
-            $attributes['class'] = 'form-control mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-indigo-500 sm:text-sm';
-        }
 
         //$attributes['data-live-search'] = 'true';
         if (isset($attributes['disable_js']) && $attributes['disable_js']) {
@@ -353,6 +349,35 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         $this->_optgroups[] = ['label' => $label, 'options' => $options];
     }
 
+    public function getTemplate(string $layout): string
+    {
+        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+            return '<div class="form__field">
+                    <div class="p-float-label">
+                        {element}
+                        {icon}
+                        <label {label-for}>
+                            <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                            {label}
+                        </label>
+                    </div>
+                    <!-- BEGIN label_2 -->
+                        <small>{label_2}</small>
+                    <!-- END label_2 -->
+
+                     <!-- BEGIN label_3 -->
+                        <small>{label_3}</small>
+                    <!-- END label_3 -->
+
+                    <!-- BEGIN error -->
+                        <small class="p-error">{error}</small>
+                    <!-- END error -->
+                </div>';
+        }
+        
+        return parent::getTemplate($layout);
+    }
+
     /**
      * Returns the SELECT in HTML
      */
@@ -367,30 +392,13 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $strHtml .= $tabs . '<!-- ' . $this->getComment() . " //-->\n";
             }
 
-            $layout = $this->getLayout();
-
-            $attrClass = [
-                'block',
-                'appearance-none',
-                'border',
-                'border-gray-200',
-                'text-gray-700',
-                'rounded',
-                'leading-tight',
-                'focus:outline-none',
-                'focus:bg-white',
-                'focus:border-gray-500',
-            ];
-
-            if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
-                $attrClass[] = 'w-full mt-1';
+            if (!isset($this->_attributes['class'])) {
+                $this->_attributes['class'] = '';
             }
 
-            if (isset($this->_attributes['class'])) {
-                $attrClass[] = $this->_attributes['class'];
+            if (FormValidator::LAYOUT_HORIZONTAL === $this->getLayout()) {
+                $this->_attributes['class'] .= 'p-dropdown p-component p-inputwrapper p-inputwrapper-filled';
             }
-
-            $this->_attributes['class'] = implode(' ', $attrClass);
 
             if (!$this->getMultiple()) {
                 $attrString = $this->_getAttrString($this->_attributes);
@@ -402,15 +410,13 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             }
 
             $strHtml .= $tabs . '<select ' . $attrString . ">\n";
-            $strValues = is_array($this->_values)? array_map('strval', $this->_values): array();
+            $strValues = is_array($this->_values) ? array_map('strval', $this->_values) : array();
 
             foreach ($this->_options as $option) {
                 if (!empty($strValues) && in_array($option['attr']['value'], $strValues, true)) {
                     $option['attr']['selected'] = 'selected';
                 }
-                $strHtml .=
-                    $tabs."<option class='py-1' ".$this->_getAttrString($option['attr']).'>'.
-                    $option['text']."</option>";
+                $strHtml .= $tabs."<option ".$this->_getAttrString($option['attr']).'>'.$option['text']."</option>";
             }
             foreach ($this->_optgroups as $optgroup) {
                 $strHtml .= $tabs.'<optgroup label="'.$optgroup['label'].'">';
@@ -422,7 +428,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                         $option['selected'] = 'selected';
                     }
 
-                    $strHtml .= $tabs." <option".$this->_getAttrString($option).'>'.$text."</option>";
+                    $strHtml .= $tabs." <option ".$this->_getAttrString($option).'>'.$text."</option>";
                 }
                 $strHtml .= "</optgroup>";
             }

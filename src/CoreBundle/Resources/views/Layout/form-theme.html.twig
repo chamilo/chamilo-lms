@@ -1,4 +1,31 @@
 {# Uses the default Symfony Tailwind style in
 vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig #}
 
-{% use 'tailwind_2_layout.html.twig' %}
+{% use 'form_div_layout.html.twig' %}
+
+{%- block form_row -%}
+    {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('p-float-label')) }) -%}
+
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <div class="form__field">
+        <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+            {{- form_widget(form, widget_attr) -}}
+            {{- form_label(form) -}}
+            {{- form_errors(form) -}}
+            {{- form_help(form) -}}
+        </div>
+    </div>
+{%- endblock form_row -%}
+
+{%- block form_widget_simple -%}
+    {%- set attr = attr|merge({ class: attr.class|default('p-inputtext p-component p-filled') }) -%}
+    {{- parent() -}}
+{%- endblock form_widget_simple -%}
+
+{%- block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({ class: attr.class|default('p-dropdown p-component p-inputwrapper p-inputwrapper-filled') }) -%}
+    {{- parent() -}}
+{%- endblock -%}

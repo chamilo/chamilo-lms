@@ -52,7 +52,7 @@
     />
 
     {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
-    {{ form_widget(form) }}
+    {{ form_widget(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
 
     <div>
         <button class="btn btn--primary" name="update_profile" type="submit">{{ 'Update profile'|trans }}</button>

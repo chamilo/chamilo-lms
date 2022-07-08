@@ -21,7 +21,7 @@
             <br />
             <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
             <div class="well">
-                <div class="form-inline">
+                <div class="form--inline">
                     <div class="form-group">
                         <input id="share_button"
                                type="text"

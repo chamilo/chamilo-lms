@@ -106,7 +106,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
             Display::return_icon('session.png', get_lang('Training sessions list'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'session/session_list.php'
         );
-    $actionsRight = '<form method="POST" action="session_category_list.php" class="form-inline">
+    $actionsRight = '<form method="POST" action="session_category_list.php" class="form--inline">
                         <div class="form-group">
                             <input class="form-control" type="text" name="keyword" aria-label="'.get_lang('Search').'"/>
                             <button class="btn btn--plain" type="submit" name="name"

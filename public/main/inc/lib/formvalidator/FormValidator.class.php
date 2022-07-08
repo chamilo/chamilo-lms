@@ -39,13 +39,8 @@ class FormValidator extends HTML_QuickForm
             $attributes = [];
         }
 
-        // Default form class.
-        if (!isset($attributes['class']) || empty($attributes)) {
-            $attributes['class'] = 'form-horizontal q-pt-md';
-        }
-
-        if (isset($attributes['class']) && false !== strpos($attributes['class'], 'form-search')) {
-            $layout = 'inline';
+        if (isset($attributes['class']) && str_contains($attributes['class'], 'form-search')) {
+            $layout = self::LAYOUT_INLINE;
         }
 
         $this->setLayout($layout);
@@ -55,15 +50,12 @@ class FormValidator extends HTML_QuickForm
 
         switch ($layout) {
             case self::LAYOUT_HORIZONTAL:
-                $attributes['class'] = 'ch w-full ';
                 break;
             case self::LAYOUT_BOX_SEARCH:
-                $attributes['class'] = 'ch w-full flex gap-2';
-                $formTemplate = $this->getInLineTemplate();
+                $attributes['class'] = 'w-full flex gap-2';
                 break;
             case self::LAYOUT_INLINE:
                 $attributes['class'] = 'ch flex gap-2 ';
-                $formTemplate = $this->getInLineTemplate();
                 break;
             case self::LAYOUT_BOX:
                 $attributes['class'] = 'ch flex gap-1 ';
@@ -81,7 +73,7 @@ class FormValidator extends HTML_QuickForm
         $renderer->setFormTemplate($formTemplate);
 
         // Element template
-        if ((isset($attributes['class']) && 'form-inline' === $attributes['class']) ||
+        if ((isset($attributes['class']) && 'form--inline' === $attributes['class']) ||
             (self::LAYOUT_INLINE === $layout || self::LAYOUT_BOX_SEARCH === $layout)
         ) {
             $elementTemplate = ' {label}  {element} ';
@@ -125,24 +117,10 @@ EOT;
 
     public function getFormTemplate(): string
     {
-        return '
-                <div class="pt-4">
-                    <div class="q-card p-4">
-                        <form{attributes}>
-                            {content}
-                            {hidden}
-                        </form>
-                    </div>
-                </div>
-        ';
-    }
-
-    public function getInLineTemplate(): string
-    {
         return '<form{attributes}>
-            {content}
-            {hidden}
-        </form>';
+                {content}
+                {hidden}
+            </form>';
     }
 
     public function getGridFormTemplate(): string
@@ -197,18 +175,12 @@ EOT;
             </div>';
     }
 
-    /**
-     * @return string
-     */
-    public function getLayout()
+    public function getLayout(): string
     {
         return $this->layout;
     }
 
-    /**
-     * @param string $layout
-     */
-    public function setLayout($layout)
+    public function setLayout(string $layout)
     {
         $this->layout = $layout;
     }
@@ -217,10 +189,13 @@ EOT;
      * Adds a text field to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string|array $label      The label for the form-element
      * @param string       $name       The element name
+     * @param string|array $label      The label for the form-element
      * @param bool         $required   (optional)    Is the form-element required (default=true)
      * @param array        $attributes (optional)    List of attributes for the form-element
+     * @param bool         $createElement
+     *
+     * @throws Exception
      *
      * @return HTML_QuickForm_text
      */

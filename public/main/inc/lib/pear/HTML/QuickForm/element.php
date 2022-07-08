@@ -26,7 +26,7 @@ class HTML_QuickForm_element extends HTML_Common
     private $icon;
     private $template;
     private $customFrozenTemplate = '';
-    protected $inputSize;
+    protected ?int $inputSize = null;
 
     /**
      * Label of the field
@@ -559,18 +559,12 @@ class HTML_QuickForm_element extends HTML_Common
         return $this;
     }
 
-    /**
-     * @return null
-     */
-    public function getInputSize()
+    public function getInputSize(): ?int
     {
         return $this->inputSize;
     }
 
-    /**
-     * @param null $inputSize
-     */
-    public function setInputSize($inputSize)
+    public function setInputSize(?int $inputSize)
     {
         $this->inputSize = $inputSize;
     }

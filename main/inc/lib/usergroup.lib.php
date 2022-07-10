@@ -2303,7 +2303,7 @@ class UserGroup extends Model
             api_get_utc_datetime(),
             api_get_user_id()
         );
-        
+
         return $result;
     }
 

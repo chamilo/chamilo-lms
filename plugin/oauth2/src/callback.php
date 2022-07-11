@@ -80,10 +80,9 @@ try {
 
 ConditionalLogin::check_conditions($userInfo);
 
-$_user['user_id'] = $userInfo['user_id'];
-$_user['uidReset'] = true;
+$userInfo['uidReset'] = true;
 
-ChamiloSession::write('_user', $_user);
+ChamiloSession::write('_user', $userInfo);
 ChamiloSession::write('_user_auth_source', 'oauth2');
 
 Redirect::session_request_uri(true, $userInfo['user_id']);

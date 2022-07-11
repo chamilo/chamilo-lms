@@ -52,9 +52,9 @@ if (!empty($shibbLogin)) {
  * Array of connection parameters
  **/
 $extldap_config = array(
-  //base dommain string
+  //base domain string
   'base_dn' => 'DC=cblue,DC=be',
-  //admin distinguished name
+  //admin distinguished name - might be just a term like "elearning" rather than a whole string
   'admin_dn' => 'CN=admin,dc=cblue,dc=be',
   //admin password
   'admin_password' => 'pass',
@@ -89,7 +89,7 @@ if (!empty($ldapConfig)) {
 }
 
 /**
- * Correspondance array between chamilo user info and ldap user info
+ * Matching array between chamilo user info and ldap user info
  * This array is of this form :
  *  '<chamilo_field> => <ldap_field>
  *

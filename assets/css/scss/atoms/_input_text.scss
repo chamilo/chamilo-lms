@@ -30,7 +30,8 @@
 
 .p-float-label {
   input,
-  textarea {
+  textarea,
+  select {
     &:focus {
       ~ {
         label {

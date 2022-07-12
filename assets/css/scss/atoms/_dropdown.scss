@@ -1,58 +1,42 @@
-$color_1: #71717A;
-$border-color_1: #d4d4d8;
-
 .p-dropdown {
   @apply bg-white border border-solid border-gray-50 px-4 py-3 rounded-lg transition;
 
   &:not(.p-disabled) {
-    &:hover {
-      border-color: $border-color_1;
-    }
+    @apply hover:border-primary focus:border-primary;
 
     &.p-focus {
-      outline: 0 none;
-      outline-offset: 0;
-      box-shadow: 0 0 0 1px #6366F1;
       @apply border-primary;
     }
   }
 
   .p-dropdown-label {
-    background: transparent;
-    border: 0 none;
+    @apply border-none;
 
     &:enabled {
       &:focus {
-        outline: 0 none;
-        box-shadow: none;
       }
     }
 
     &.p-placeholder {
-      color: $color_1;
+      @apply text-body-2;
     }
   }
 
   .p-dropdown-trigger {
-    background: transparent;
-    color: $color_1;
-    width: 3rem;
-    border-top-right-radius: 0.375rem;
-    border-bottom-right-radius: 0.375rem;
+    @apply rounded-r-lg w-12;
   }
 
   .p-dropdown-clear-icon {
-    color: $color_1;
-    right: 3rem;
+    @apply right-3;
   }
 
   &.p-dropdown-clearable {
     .p-dropdown-label {
-      padding-right: 1.75rem;
+      @apply pr-10;
     }
   }
 
   &.p-invalid.p-component {
-    @apply border-error;
+    @apply border-error text-error;
   }
 }

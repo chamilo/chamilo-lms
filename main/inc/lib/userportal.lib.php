@@ -1096,6 +1096,7 @@ class IndexManager
 
         if ($isHrm) {
             $items[] = [
+                'class' => 'list-followed-user-courses',
                 'link' => api_get_path(WEB_CODE_PATH).'auth/hrm_courses.php',
                 'title' => get_lang('HrmAssignedUsersCourseList'),
             ];
@@ -1112,6 +1113,7 @@ class IndexManager
                 ];
             } else {
                 $items[] = [
+                    'class' => 'dashboard-page',
                     'link' => api_get_path(WEB_CODE_PATH).'dashboard/index.php',
                     'title' => get_lang('Dashboard'),
                 ];
@@ -1120,11 +1122,13 @@ class IndexManager
 
         if (!api_is_anonymous()) {
             $items[] = [
+                'class' => 'last-visited-course',
                 'icon' => Display::return_icon('clock.png', get_lang('LastVisitedCourse')),
                 'link' => api_get_path(WEB_CODE_PATH).'course_home/last_course.php',
                 'title' => get_lang('LastVisitedCourse'),
             ];
             $items[] = [
+                'class' => 'last-visited-lp',
                 'icon' => Display::return_icon('learnpath.png', get_lang('LastVisitedLp')),
                 'link' => api_get_path(WEB_CODE_PATH).'course_home/last_lp.php',
                 'title' => get_lang('LastVisitedLp'),
@@ -1134,6 +1138,7 @@ class IndexManager
         if (api_is_teacher()) {
             if (api_get_configuration_value('my_courses_show_pending_work')) {
                 $items[] = [
+                    'class' => 'list-pending-student-assignments',
                     'icon' => Display::return_icon('work.png', get_lang('StudentPublicationToCorrect')),
                     'link' => api_get_path(WEB_CODE_PATH).'work/pending.php',
                     'title' => get_lang('StudentPublicationToCorrect'),
@@ -1142,6 +1147,7 @@ class IndexManager
 
             if (api_get_configuration_value('my_courses_show_pending_exercise_attempts')) {
                 $items[] = [
+                    'class' => 'list-pending-exercise-attempts',
                     'icon' => Display::return_icon('quiz.png', get_lang('PendingAttempts')),
                     'link' => api_get_path(WEB_CODE_PATH).'exercise/pending.php',
                     'title' => get_lang('PendingAttempts'),

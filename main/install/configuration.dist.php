@@ -1054,7 +1054,7 @@ ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2727ACA70 FOREIGN KEY (pa
 ALTER TABLE portfolio_category ADD parent_id INT(11) NOT NULL DEFAULT 0;
 */
 // In 1.11.8, before enabling this feature, you also need to:
-// - edit src/Chamilo/CoreBundle/Entity/Portfolio.php and PortfolioCategory.php
+// - edit src/Chamilo/CoreBundle/Entity/Portfolio.php, PortfolioCategory.php, PortfolioAttachment.php and PortfolioComment.php
 //   and follow the instructions about the @ORM\Entity() line
 // - launch composer install to rebuild the autoload.php
 //$_configuration['allow_portfolio_tool'] = false;

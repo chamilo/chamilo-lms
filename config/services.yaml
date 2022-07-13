@@ -58,6 +58,11 @@ services:
     Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
         arguments: ['%locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']
 
+    Chamilo\CoreBundle\EventSubscriber\LoginFailureSubscriber:
+        tags:
+            - name: kernel.event_subscriber
+              dispatcher: security.event_dispatcher.main
+
 cocur_slugify:
     lowercase: true
 

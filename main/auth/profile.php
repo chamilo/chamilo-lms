@@ -343,6 +343,13 @@ if ($showPassword &&
     );
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
+
+    $passwordRequirements = api_get_configuration_value('password_requirements');
+
+    if (!empty($passwordRequirements) && $passwordRequirements['force_different_password']) {
+        $form->addRule(['password0', 'password1'], get_lang('NewPasswordCannotBeSameAsCurrent'), 'compare', 'neq');
+    }
+
     $form->addPasswordRule('password1');
 }
 

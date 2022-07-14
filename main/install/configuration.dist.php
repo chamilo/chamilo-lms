@@ -343,7 +343,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
         'numeric' => 2,
         'length' => 8,
         'specials' => 1,
-    ]
+    ],
+    'force_different_password' => false,
 ];*/
 // Customize course session tracking columns
 /*

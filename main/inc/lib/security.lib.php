@@ -568,7 +568,7 @@ class Security
             $requirements = $passwordRequirements;
         }
 
-        return $requirements;
+        return ['min' => $requirements['min']];
     }
 
     /**

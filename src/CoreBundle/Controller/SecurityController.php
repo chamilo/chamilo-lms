@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use DateTime;
 
 class SecurityController extends AbstractController
 {
@@ -45,6 +48,17 @@ class SecurityController extends AbstractController
         $user = $this->getUser();
         $data = null;
         if ($user) {
+            // Log of connection attempts
+            $trackELoginRecord = new TrackELoginRecord();
+            $trackELoginRecord
+                ->setUsername($user->getUsername())
+                ->setLoginDate(new DateTime())
+                ->setUserIp(api_get_real_ip())
+                ->setSuccess(true)
+            ;
+            $repo = Container::getTrackELoginRecordRepository();
+            $repo->create($trackELoginRecord);
+
             $userClone = clone $user;
             $userClone->setPassword('');
             $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);

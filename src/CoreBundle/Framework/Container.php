@@ -34,6 +34,7 @@ use Chamilo\CoreBundle\Repository\SocialPostRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
+use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -638,5 +639,10 @@ class Container
     public static function getSocialPostRepository(): SocialPostRepository
     {
         return self::$container->get(SocialPostRepository::class);
+    }
+
+    public static function getTrackELoginRecordRepository(): TrackELoginRecordRepository
+    {
+        return self::$container->get(TrackELoginRecordRepository::class);
     }
 }

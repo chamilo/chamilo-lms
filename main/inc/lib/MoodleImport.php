@@ -280,12 +280,7 @@ class MoodleImport
                         $questionInstance->updateTitle($questionsValues['name']);
                         $questionText = $questionsValues['questiontext'];
 
-                        // Replace the path from @@PLUGINFILE@@ to a correct chamilo path
-                        $questionText = str_replace(
-                            '@@PLUGINFILE@@',
-                            '/courses/'.$courseInfo['path'].'/document/moodle',
-                            $questionText
-                        );
+                        $questionText = $this->replaceMoodleChamiloCoursePath($questionText);
 
                         if ($importedFiles) {
                             $this->fixPathInText($importedFiles, $questionText);
@@ -299,7 +294,7 @@ class MoodleImport
                         if ($questionInstance->type != MEDIA_QUESTION) {
                             $questionInstance->save($exercise);
                             // modify the exercise
-                            $exercise->addToList($questionInstance->id);
+                            $exercise->addToList($questionInstance->iid);
                             $exercise->update_question_positions();
                         }
 
@@ -382,6 +377,25 @@ class MoodleImport
         unlink($filePath);
 
         return true;
+    }
+
+    /**
+     * Replace the path from @@PLUGINFILE@@ to a correct chamilo path.
+     *
+     * @param $text
+     *
+     * @return string
+     */
+    public function replaceMoodleChamiloCoursePath($text)
+    {
+        $coursePath = api_get_course_path();
+        $text = str_replace(
+            '@@PLUGINFILE@@',
+            '/courses/'.$coursePath.'/document/moodle',
+            $text
+        );
+
+        return $text;
     }
 
     /**
@@ -759,7 +773,7 @@ class MoodleImport
     ) {
         switch ($questionType) {
             case 'multichoice':
-                $objAnswer = new Answer($questionInstance->id);
+                $objAnswer = new Answer($questionInstance->iid);
                 $questionWeighting = 0;
                 foreach ($questionList as $slot => $answer) {
                     $this->processMultipleAnswer(
@@ -779,13 +793,9 @@ class MoodleImport
 
                 return true;
             case 'multianswer':
-                $objAnswer = new Answer($questionInstance->id);
+                $objAnswer = new Answer($questionInstance->iid);
                 $coursePath = api_get_course_path();
-                $placeholder = str_replace(
-                    '@@PLUGINFILE@@',
-                    '/courses/'.$coursePath.'/document/moodle',
-                    $currentQuestion['questiontext']
-                );
+                $placeholder = $this->replaceMoodleChamiloCoursePath($currentQuestion['questiontext']);
                 $optionsValues = [];
                 foreach ($questionList as $slot => $subQuestion) {
                     $qtype = $subQuestion['qtype'];
@@ -826,7 +836,7 @@ class MoodleImport
 
                 return true;
             case 'match':
-                $objAnswer = new Answer($questionInstance->id);
+                $objAnswer = new Answer($questionInstance->iid);
                 $placeholder = '';
 
                 $optionsValues = $this->processFillBlanks(
@@ -876,7 +886,7 @@ class MoodleImport
 
                 return true;
             case 'truefalse':
-                $objAnswer = new Answer($questionInstance->id);
+                $objAnswer = new Answer($questionInstance->iid);
                 $questionWeighting = 0;
                 foreach ($questionList as $slot => $answer) {
                     $this->processTrueFalse(
@@ -929,6 +939,8 @@ class MoodleImport
         $goodAnswer = $correct ? true : false;
 
         $this->fixPathInText($importedFiles, $answer);
+        $answer = $this->replaceMoodleChamiloCoursePath($answer);
+        $comment = $this->replaceMoodleChamiloCoursePath($comment);
 
         $objAnswer->createAnswer(
             $answer,
@@ -959,6 +971,8 @@ class MoodleImport
         $goodAnswer = $weighting > 0;
 
         $this->fixPathInText($importedFiles, $answer);
+        $answer = $this->replaceMoodleChamiloCoursePath($answer);
+        $comment = $this->replaceMoodleChamiloCoursePath($comment);
 
         $objAnswer->createAnswer(
             $answer,
@@ -1001,6 +1015,8 @@ class MoodleImport
         $goodAnswer = $correct ? true : false;
 
         $this->fixPathInText($importedFiles, $answer);
+        $answer = $this->replaceMoodleChamiloCoursePath($answer);
+        $comment = $this->replaceMoodleChamiloCoursePath($comment);
 
         $objAnswer->createAnswer(
             $answer,
@@ -1097,11 +1113,7 @@ class MoodleImport
 
                     $currentAnswers = htmlentities($correctAnswer.$othersAnswers);
                     $currentAnswers = '['.substr($currentAnswers, 0, -1).'] ';
-                    $answer['questiontext'] = str_replace(
-                        '@@PLUGINFILE@@',
-                        '/courses/'.$coursePath.'/document/moodle',
-                        $answer['questiontext']
-                    );
+                    $answer['questiontext'] = $this->replaceMoodleChamiloCoursePath($answer['questiontext']);
 
                     $placeholder .= '<p> '.strip_tags($answer['questiontext']).' '.$currentAnswers.' </p>';
                 }

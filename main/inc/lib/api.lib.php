@@ -2618,7 +2618,7 @@ function api_check_password($password)
 
     if (!empty($minLowerCase)) {
         // Lowercase
-        $conditions['min_lowercase'] = $upperCase >= $minLowerCase;
+        $conditions['min_lowercase'] = $lowerCase >= $minLowerCase;
     }
 
     if (!empty($minSpecials)) {

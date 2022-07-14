@@ -341,7 +341,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
         'lowercase' => 2,
         'uppercase' => 2,
         'numeric' => 2,
-        'length' => 8
+        'length' => 8,
+        'specials' => 1,
     ]
 ];*/
 // Customize course session tracking columns

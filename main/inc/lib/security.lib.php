@@ -39,6 +39,11 @@ use ChamiloSession as Session;
  */
 class Security
 {
+    public const CHAR_UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    public const CHAR_LOWER = 'abcdefghijklmnopqrstuvwxyz';
+    public const CHAR_DIGITS = '0123456789';
+    public const CHAR_SYMBOLS = '!"#$%&\'()* +,-./:;<=>?@[\]^_`{|}~';
+
     public static $clean = [];
 
     /**
@@ -554,6 +559,7 @@ class Security
                 'uppercase' => 0,
                 'numeric' => 2,
                 'length' => 5,
+                'specials' => 1,
             ],
         ];
 
@@ -571,7 +577,7 @@ class Security
      *
      * @return string
      */
-    public static function getPasswordRequirementsToString($passedConditions = [])
+    public static function getPasswordRequirementsToString(): string
     {
         $output = '';
         $setting = self::getPasswordRequirements();

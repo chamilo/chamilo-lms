@@ -2639,7 +2639,7 @@ function api_check_password($password)
 
     if ($isPasswordOk === false) {
         $output = get_lang('NewPasswordRequirementsNotMatched').'<br />';
-        $output .= Security::getPasswordRequirementsToString();
+        $output .= Security::getPasswordRequirementsToString($conditions);
 
         Display::addFlash(Display::return_message($output, 'warning', false));
     }

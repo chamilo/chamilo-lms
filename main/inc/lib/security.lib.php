@@ -574,18 +574,43 @@ class Security
     /**
      * Gets password requirements in the platform language using get_lang
      * based in platform settings. See function 'self::getPasswordRequirements'.
-     *
-     * @return string
      */
-    public static function getPasswordRequirementsToString(): string
+    public static function getPasswordRequirementsToString(array $evaluatedConditions): string
     {
         $output = '';
         $setting = self::getPasswordRequirements();
+
+        $passedIcon = Display::returnFontAwesomeIcon(
+            'check',
+            '',
+            true,
+            'text-success',
+            get_lang('PasswordRequirementPassed')
+        );
+        $pendingIcon = Display::returnFontAwesomeIcon(
+            'times',
+            '',
+            true,
+            'text-danger',
+            get_lang('PasswordRequirementPending')
+        );
+
         foreach ($setting as $type => $rules) {
             foreach ($rules as $rule => $parameter) {
                 if (empty($parameter)) {
                     continue;
                 }
+
+                $evaluatedCondition = $type.'_'.$rule;
+                $icon = $passedIcon;
+
+                if (array_key_exists($evaluatedCondition, $evaluatedConditions)
+                    && false === $evaluatedConditions[$evaluatedCondition]
+                ) {
+                    $icon = $pendingIcon;
+                }
+
+                $output .= $icon;
                 $output .= sprintf(
                     get_lang(
                         'NewPasswordRequirement'.ucfirst($type).'X'.ucfirst($rule)

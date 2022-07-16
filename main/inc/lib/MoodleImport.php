@@ -101,6 +101,9 @@ class MoodleImport
             0
         );
 
+        if (is_dir($documentPath.'/moodle')) {
+            chmod($documentPath.'/moodle', 0777);
+        }
         // This process will upload all question resource files
         $filesXml = @file_get_contents($destinationDir.'/files.xml');
         $mainFileModuleValues = $this->getAllQuestionFiles($filesXml);
@@ -167,6 +170,11 @@ class MoodleImport
 
             throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
         }
+
+        // It process the sections as learnpaths
+        $sections = $this->readSections($xml, $destinationDir);
+        $sectionLpValues = $this->processSections($sections);
+
         $activities = $doc->getElementsByTagName('activity');
 
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
@@ -191,6 +199,18 @@ class MoodleImport
             }
 
             switch ($moduleName) {
+                case 'label':
+                case 'page':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readHtmlModule($moduleXml, $moduleName);
+                    $documentId = $this->processHtmlDocument($moduleValues, $moduleName);
+
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($documentId)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'document', $documentId, $moduleValues['name']);
+                    }
+                    break;
                 case 'forum':
                     $catForumValues = [];
                     // Read the current forum module xml.
@@ -213,7 +233,11 @@ class MoodleImport
                     $forumValues['forum_category'] = $catId;
                     $forumValues['moderated'] = 0;
 
-                    store_forum($forumValues, $courseInfo);
+                    $forumId = store_forum($forumValues, $courseInfo, true);
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($forumId)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'forum', $forumId, $moduleValues['name']);
+                    }
                     break;
                 case 'quiz':
                     // Read the current quiz module xml.
@@ -310,6 +334,10 @@ class MoodleImport
                             $importedFiles
                         );
                     }
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($exercise->iid)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'quiz', $exercise->iid, $title);
+                    }
                     break;
                 case 'resource':
                     // Read the current resource module xml.
@@ -340,7 +368,7 @@ class MoodleImport
                         $_POST['language'] = $courseInfo['language'];
                         $_POST['moodle_import'] = true;
 
-                        DocumentManager::upload_document(
+                        $documentData = DocumentManager::upload_document(
                             $files,
                             '/moodle',
                             $fileInfo['title'],
@@ -350,6 +378,10 @@ class MoodleImport
                             true,
                             true
                         );
+                        // It is added as item in Learnpath
+                        if (!empty($currentItem['sectionid']) && !empty($documentData['iid'])) {
+                            $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'document', $documentData['iid'], $fileInfo['title']);
+                        }
                     }
 
                     break;
@@ -364,7 +396,11 @@ class MoodleImport
                     $_POST['category_id'] = 0;
                     $_POST['target'] = '_blank';
 
-                    Link::addlinkcategory('link');
+                    $linkId = Link::addlinkcategory('link');
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($linkId)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'link', $linkId, $moduleValues['name']);
+                    }
                     break;
             }
         }
@@ -396,6 +432,245 @@ class MoodleImport
         );
 
         return $text;
+    }
+
+    /**
+     * It adds module item by section as learnpath item.
+     *
+     * @param $lpId
+     * @param $itemType
+     * @param $itemId
+     * @param $itemTitle
+     *
+     * @return int
+     */
+    public function processSectionItem($lpId, $itemType, $itemId, $itemTitle)
+    {
+        $lp = new \learnpath(
+            api_get_course_id(),
+            $lpId,
+            api_get_user_id()
+        );
+
+        $lpItemId = $lp->add_item(
+            0,
+            0,
+            $itemType,
+            $itemId,
+            $itemTitle,
+            ''
+        );
+
+        return $lpItemId;
+    }
+
+    /**
+     * It adds the section module as learnpath.
+     *
+     * @param $sections
+     *
+     * @return array|false
+     */
+    public function processSections($sections)
+    {
+        if (empty($sections)) {
+            return false;
+        }
+
+        $i = 1;
+        $lpAdded = [];
+        foreach ($sections as $sectionId => $section) {
+            $lpName = $section['name'];
+            if ('$@NULL@$' == $lpName) {
+                $lpName = get_lang('Topic').' '.$i;
+            }
+            $lpDescription = $section['summary'];
+            $lpId = learnpath::add_lp(
+                api_get_course_id(),
+                $lpName,
+                $lpDescription,
+                'chamilo',
+                'manual'
+            );
+            $lpAdded[$sectionId] = $lpId;
+            $i++;
+        }
+
+        return $lpAdded;
+    }
+
+    /**
+     * It gets the sections from xml module.
+     *
+     * @param $xml
+     * @param $destinationDir
+     *
+     * @return array|false
+     */
+    public function readSections($xml, $destinationDir)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($xml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $sections = [];
+        $sectionNodes = $doc->getElementsByTagName('section');
+        foreach ($sectionNodes as $section) {
+            if (empty($section->childNodes->length)) {
+                continue;
+            }
+            $currentItem = [];
+            foreach ($section->childNodes as $item) {
+                $currentItem[$item->nodeName] = $item->nodeValue;
+            }
+            if (!empty($currentItem['directory'])) {
+                $sectionDir = $destinationDir.'/'.$currentItem['directory'];
+                $sectionInfoXml = @file_get_contents($sectionDir.'/section.xml');
+                $sections[$currentItem['sectionid']] = $this->readSectionModule($sectionInfoXml);
+            }
+        }
+
+        return $sections;
+    }
+
+    /**
+     * It reads module xml to get section info.
+     *
+     * @param $sectionInfoXml
+     *
+     * @return array|false
+     */
+    public function readSectionModule($sectionInfoXml)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($sectionInfoXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $sectionInfo = [];
+        $sectionNode = $doc->getElementsByTagName('section');
+        foreach ($sectionNode as $section) {
+            if (empty($section->childNodes->length)) {
+                continue;
+            }
+            foreach ($section->childNodes as $item) {
+                $sectionInfo[$item->nodeName] = $item->nodeValue;
+            }
+        }
+
+        return $sectionInfo;
+    }
+
+    /**
+     * It reads item html from module to documents.
+     *
+     * @param $moduleXml
+     * @param $moduleName
+     *
+     * @return array|false
+     */
+    public function readHtmlModule($moduleXml, $moduleName)
+    {
+        $moduleDoc = new DOMDocument();
+        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        if (empty($moduleRes)) {
+            return false;
+        }
+        $activities = $moduleDoc->getElementsByTagName($moduleName);
+        $currentItem = [];
+        foreach ($activities as $activity) {
+            if ($activity->childNodes->length) {
+                foreach ($activity->childNodes as $item) {
+                    $currentItem[$item->nodeName] = $item->nodeValue;
+                }
+            }
+        }
+
+        return $currentItem;
+    }
+
+    /**
+     * It process the module as document html.
+     *
+     * @param $moduleValues
+     * @param $moduleName
+     *
+     * @return false|int
+     */
+    public function processHtmlDocument($moduleValues, $moduleName)
+    {
+        $filepath = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/';
+        $title = trim($moduleValues['name']);
+        if ('$@NULL@$' == $title) {
+            $title = get_lang('Tag');
+        }
+
+        // Setting the filename
+        $filename = $title;
+        $filename = addslashes(trim($filename));
+        $filename = Security::remove_XSS($filename);
+        $filename = api_replace_dangerous_char($filename);
+        $filename = disable_dangerous_file($filename);
+        $filename .= DocumentManager::getDocumentSuffix(
+            api_get_course_info(),
+            api_get_session_id(),
+            api_get_group_id()
+        );
+
+        $dir = '/';
+        $extension = 'html';
+        if (file_exists($filepath.$filename.'.'.$extension)) {
+            return false;
+        }
+        $content = ('page' == $moduleName ? $moduleValues['content'] : $moduleValues['intro']);
+        $content = api_html_entity_decode($content);
+        $content = $this->replaceMoodleChamiloCoursePath($content);
+
+        if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
+            $content = str_replace(
+                api_get_path(WEB_COURSE_PATH),
+                api_get_configuration_value('url_append').api_get_path(REL_COURSE_PATH),
+                $content
+            );
+
+            fputs($fp, $content);
+            fclose($fp);
+            chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
+            $fileSize = filesize($filepath.$filename.'.'.$extension);
+            $saveFilePath = $dir.$filename.'.'.$extension;
+
+            $documentId = add_document(
+                api_get_course_info(),
+                $saveFilePath,
+                'file',
+                $fileSize,
+                $title
+            );
+
+            if ($documentId) {
+                api_item_property_update(
+                    api_get_course_info(),
+                    TOOL_DOCUMENT,
+                    $documentId,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    [],
+                    null,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
+                // Update parent folders
+                item_property_update_on_folder(api_get_course_info(), $dir, api_get_user_id());
+            }
+
+            return $documentId;
+        }
+
+        return false;
     }
 
     /**

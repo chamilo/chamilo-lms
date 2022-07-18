@@ -10,6 +10,17 @@ if (!ctype_alnum($token)) {
     $token = '';
 }
 
+$user = UserManager::getManager()->findUserByConfirmationToken($token);
+
+if (!$user) {
+    Display::addFlash(
+        Display::return_message(get_lang('LinkExpired'), 'error')
+    );
+
+    header('Location: '.api_get_path(WEB_PATH));
+    exit;
+}
+
 // Build the form
 $form = new FormValidator('reset', 'POST', api_get_self().'?token='.$token);
 $form->addElement('header', get_lang('ResetPassword'));
@@ -25,6 +36,7 @@ $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule(['pass1', 'pass2'], get_lang('PassTwo'), 'compare');
 $form->addPasswordRule('pass1');
+$form->addNoSamePasswordRule('pass1', $user);
 $form->addButtonSave(get_lang('Update'));
 
 $ttl = api_get_setting('user_reset_password_token_limit');

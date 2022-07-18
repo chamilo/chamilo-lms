@@ -93,6 +93,7 @@ $user_data = $originalUserInfo = api_get_user_info(
     true,
     true
 );
+$currentUser = api_get_user_entity($user_data['id']);
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
 $value_array = [];
@@ -343,14 +344,8 @@ if ($showPassword &&
     );
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
-
-    $passwordRequirements = api_get_configuration_value('password_requirements');
-
-    if (!empty($passwordRequirements) && $passwordRequirements['force_different_password']) {
-        $form->addRule(['password0', 'password1'], get_lang('NewPasswordCannotBeSameAsCurrent'), 'compare', 'neq');
-    }
-
     $form->addPasswordRule('password1');
+    $form->addNoSamePasswordRule('password1', $currentUser);
 }
 
 $form->addHtml($extraLink);

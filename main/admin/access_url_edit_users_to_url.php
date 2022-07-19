@@ -89,7 +89,6 @@ if (isset($_POST['form_sent'])) {
             $where = "AND u.id NOT IN(SELECT g.user_id FROM $tblUsergroupRelUser g)";
         } else {
             foreach ($allUserGroup as $userGroup) {
-                echo $userGroup['id'];
                 if (isset($_POST[$userGroup['id']])) {
                     $checkList[] = $userGroup['id'];
                     $where .= $userGroup['id'].',';

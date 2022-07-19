@@ -8809,4 +8809,8 @@ $EnableSignature = "Débloquer les signatures";
 $Sign = "Signer";
 $SignView = "Voir la signature";
 $DownloadQr = "Télécharger le code QR pour la signature de présences";
+$PasswordRequirementPassed = "Les prérequis de mot passe sont validés";
+$PasswordRequirementPending = "Prérequis de mot de passe manquants";
+$NewPasswordRequirementMinXSpecials = "Minimum de %s caractères spécials";
+$NewPasswordCannotBeSameAsCurrent = "Le nouveau mot de passe doit être différent du précédent";
 ?>

@@ -8901,4 +8901,8 @@ $EnableSignature = "Desbloquear firmas";
 $Sign = "Firmar";
 $SignView = "Ver firma";
 $DownloadQr = "Descargar QR para firma de asistencia";
+$PasswordRequirementPassed = "Requerimiento de contraseña superado";
+$PasswordRequirementPending = "Requerimiento de contraseña pendiente";
+$NewPasswordRequirementMinXSpecials = "Mínimo %s caracter(es) especiales";
+$NewPasswordCannotBeSameAsCurrent = "La nueva contraseña no puede ser la misma que la actual contraseña";
 ?>

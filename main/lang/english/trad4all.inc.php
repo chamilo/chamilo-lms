@@ -8873,4 +8873,8 @@ $EnableSignature = "Enable signature";
 $Sign = "Sign";
 $SignView = "View signature";
 $DownloadQr = "Download QR for attendance signature";
+$PasswordRequirementPassed = "Password requirement passed";
+$PasswordRequirementPending = "Pending password requirement";
+$NewPasswordRequirementMinXSpecials = "Minimum %s special characters";
+$NewPasswordCannotBeSameAsCurrent = "The new password cannot be same as the current password";
 ?>

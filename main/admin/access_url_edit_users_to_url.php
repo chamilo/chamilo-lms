@@ -97,7 +97,7 @@ if (isset($_POST['form_sent'])) {
             if (count($checkList) > 0) {
                 $join = "INNER JOIN $tblUsergroupRelUser g ON u.user_id = g.user_id";
                 $where = trim($where, ',');
-                $where = "AND g.id IN($where)";
+                $where = "AND g.usergroup_id IN($where)";
             }
         }
     }
@@ -174,7 +174,7 @@ if ($ajax_search) {
 } else {
     $order_clause = api_sort_by_first_name() ? ' ORDER BY username, firstname, lastname' : ' ORDER BY username, lastname, firstname';
 
-    $Users = UrlManager::get_url_rel_user_data(null, $order_clause, $join, $where);
+    $Users = UrlManager::get_url_rel_user_data(null, $order_clause);
     foreach ($Users as $user) {
         if ($user['access_url_id'] == $access_url_id) {
             $sessionUsersList[$user['user_id']] = $user;
@@ -240,7 +240,7 @@ $url_list = UrlManager::get_url_data();
 <?php
 
 if (count($allUserGroup) > 0) {
-    echo get_lang('ForClass').' : ';
+    echo get_lang('FilterByClass').' : ';
     echo '<ul>';
     foreach ($allUserGroup as $userGroup) {
         $checked = in_array($userGroup['id'], $checkList) ? 'checked' : '';
@@ -253,7 +253,7 @@ if (count($allUserGroup) > 0) {
 
     $checked = isset($_POST['no_any_class']) ? 'checked' : '';
     echo '<input type="checkbox" name="no_any_class" onclick="javascript:send();" '.$checked.'> ';
-    echo get_lang('NoAnyClass');
+    echo get_lang('NotInAnyClass');
 }
 ?>
 <br /><br />

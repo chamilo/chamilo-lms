@@ -8813,4 +8813,6 @@ $PasswordRequirementPassed = "Les prérequis de mot passe sont validés";
 $PasswordRequirementPending = "Prérequis de mot de passe manquants";
 $NewPasswordRequirementMinXSpecials = "Minimum de %s caractères spécials";
 $NewPasswordCannotBeSameAsCurrent = "Le nouveau mot de passe doit être différent du précédent";
+$FilterByClass = "Filtrer par classe";
+$NotInAnyClass = "Dans aucune classe";
 ?>

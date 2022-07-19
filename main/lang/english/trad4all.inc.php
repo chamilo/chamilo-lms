@@ -8877,4 +8877,6 @@ $PasswordRequirementPassed = "Password requirement passed";
 $PasswordRequirementPending = "Pending password requirement";
 $NewPasswordRequirementMinXSpecials = "Minimum %s special characters";
 $NewPasswordCannotBeSameAsCurrent = "The new password cannot be same as the current password";
+$FilterByClass = "Filter by class";
+$NotInAnyClass = "Not in any class";
 ?>

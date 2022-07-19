@@ -6847,12 +6847,11 @@ SQL;
                 ['active' => false],
                 ['username = ?' => $userInfo['username']]
             );
-            //XAccountDisabledByYAttempts
 
             Display::addFlash(
                 Display::return_message(
                     sprintf(
-                        get_lang('The account for username <i>%s</i> was disabled after %d failed login attempts.'),
+                        get_lang('XAccountDisabledByYAttempts'),
                         $userInfo['username'],
                         $countFailedAttempts
                     ),

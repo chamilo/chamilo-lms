@@ -2510,7 +2510,7 @@ function api_generate_password($length = 8)
 
     $charactersLowerCase = Security::CHAR_LOWER;
     $charactersUpperCase = Security::CHAR_UPPER;
-    $charactersSpecials = Security::CHAR_SYMBOLS;
+
     $minNumbers = 2;
     $length = $length - $minNumbers;
     $minLowerCase = round($length / 2);
@@ -2534,9 +2534,11 @@ function api_generate_password($length = 8)
         if ($rest > 0) {
             $password .= $generator->generateString(
                 $rest,
-                $charactersLowerCase.$charactersUpperCase.$charactersSpecials
+                $charactersLowerCase.$charactersUpperCase
             );
         }
+
+        $password .= $generator->generateString($minSpecials, Security::CHAR_SYMBOLS);
     }
 
     // Min digits default 2

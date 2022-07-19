@@ -70,8 +70,8 @@ function remove_item(origin) {
 
 $errorMsg = '';
 $message = '';
-$userId = api_get_user_id();
-$courseList = CourseManager::get_courses_list_by_user_id($userId);
+$userGroup = new UserGroup();
+$allUserGroup = $userGroup->get_all_group_tags();
 $checkList = [];
 $join = '';
 $where = '';
@@ -84,21 +84,21 @@ if (isset($_POST['form_sent'])) {
         $UserList = [];
     }
     if ($form_sent == 0) {
-        if (isset($_POST['no_any_course'])) {
-            $where = 'SELECT cru.user_id FROM course_rel_user cru GROUP BY cru.user_id';
-            $where = "AND u.id NOT IN($where)";
+        $tblUsergroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+        if (isset($_POST['no_any_class'])) {
+            $where = "AND u.id NOT IN(SELECT g.user_id FROM $tblUsergroupRelUser g)";
         } else {
-            foreach ($courseList as $course) {
-                if (isset($_POST[$course['code']])) {
-                    $checkList[] = $course['real_id'];
-                    $where .= $course['real_id'].',';
+            foreach ($allUserGroup as $userGroup) {
+                echo $userGroup['id'];
+                if (isset($_POST[$userGroup['id']])) {
+                    $checkList[] = $userGroup['id'];
+                    $where .= $userGroup['id'].',';
                 }
             }
             if (count($checkList) > 0) {
-                $join = 'INNER JOIN course_rel_user cru ON u.user_id = cru.user_id
-                        INNER JOIN course c ON cru.c_id = c.id';
+                $join = "INNER JOIN $tblUsergroupRelUser g ON u.user_id = g.user_id";
                 $where = trim($where, ',');
-                $where = "AND c.id IN($where)";
+                $where = "AND g.id IN($where)";
             }
         }
     }
@@ -239,21 +239,22 @@ $url_list = UrlManager::get_url_data();
 <br /><br />
 
 <?php
-if (count($courseList) > 0) {
-    echo get_lang('ForCourse').' : ';
+
+if (count($allUserGroup) > 0) {
+    echo get_lang('ForClass').' : ';
     echo '<ul>';
-    foreach ($courseList as $course) {
-        $checked = in_array($course['real_id'], $checkList) ? 'checked' : '';
+    foreach ($allUserGroup as $userGroup) {
+        $checked = in_array($userGroup['id'], $checkList) ? 'checked' : '';
         echo '<li>';
-        echo '<input type="checkbox" name="'.$course['code'].'" value="'.$course['real_id'].'" onclick="javascript:send();" '.$checked.'>';
-        echo ' '.$course['title'];
+        echo '<input type="checkbox" name="'.$userGroup['id'].'" value="'.$userGroup['id'].'" onclick="javascript:send();" '.$checked.'>';
+        echo ' '.$userGroup['name'];
         echo '</li>';
     }
     echo '</ul>';
 
-    $checked = isset($_POST['no_any_course']) ? 'checked' : '';
-    echo '<input type="checkbox" name="no_any_course" onclick="javascript:send();" '.$checked.'> ';
-    echo get_lang('NoAnyCourse');
+    $checked = isset($_POST['no_any_class']) ? 'checked' : '';
+    echo '<input type="checkbox" name="no_any_class" onclick="javascript:send();" '.$checked.'> ';
+    echo get_lang('NoAnyClass');
 }
 ?>
 <br /><br />

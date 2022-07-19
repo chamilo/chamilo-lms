@@ -2769,7 +2769,7 @@ class UserGroup extends Model
      *
      * @return array
      */
-    public function get_all_group_tags($tag, $from = 0, $number_of_items = 10, $getCount = false)
+    public function get_all_group_tags($tag = '', $from = 0, $number_of_items = 10, $getCount = false)
     {
         $group_table = $this->table;
         $tag = Database::escape_string($tag);

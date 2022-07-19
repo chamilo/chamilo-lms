@@ -949,18 +949,14 @@ class bbb
         }
 
         if ($isGlobal) {
-            $conditions = [
-                'where' => [
-                    'c_id IN (
-                        SELECT c.id FROM course c 
-                        INNER JOIN course_rel_user r ON c.id = r.c_id 
-                        INNER JOIN user u ON r.user_id = u.user_id 
-                        WHERE u.user_id = ?
-                    )' => [
+            $conditions = array(
+                'where' => array(
+                    'c_id = ? AND user_id = ?' => array(
+                        0,
                         $this->userId,
-                    ],
-                ],
-            ];
+                    ),
+                ),
+            );
         }
 
         if (!empty($dateRange)) {

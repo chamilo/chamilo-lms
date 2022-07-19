@@ -575,7 +575,7 @@ class Security
      * Gets password requirements in the platform language using get_lang
      * based in platform settings. See function 'self::getPasswordRequirements'.
      */
-    public static function getPasswordRequirementsToString(array $evaluatedConditions): string
+    public static function getPasswordRequirementsToString(array $evaluatedConditions = []): string
     {
         $output = '';
         $setting = self::getPasswordRequirements();
@@ -610,7 +610,7 @@ class Security
                     $icon = $pendingIcon;
                 }
 
-                $output .= $icon;
+                $output .= empty($evaluatedConditions) ? '' : $icon;
                 $output .= sprintf(
                     get_lang(
                         'NewPasswordRequirement'.ucfirst($type).'X'.ucfirst($rule)

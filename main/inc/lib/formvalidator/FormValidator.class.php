@@ -1647,6 +1647,15 @@ EOT;
                     'api_check_password'
                 );
             }
+
+            if (!$this->isSubmitted()) {
+                $element = $this->getElement($elementName);
+                $label = $element->getLabel();
+                $element->setLabel([
+                    $label,
+                    Security::getPasswordRequirementsToString(),
+                ]);
+            }
         }
     }
 

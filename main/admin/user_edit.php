@@ -239,7 +239,7 @@ $group[] = $form->createElement(
 
 $form->addGroup($group, 'password', null, null, false);
 $form->addPasswordRule('password', 'password');
-$form->addNoSamePasswordRule('password', $userEntity, 'password');
+$form->addNoSamePasswordRule('password', $userEntity);
 
 // Status
 $status = UserManager::getUserStatusList();

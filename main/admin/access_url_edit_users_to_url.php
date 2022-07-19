@@ -70,13 +70,36 @@ function remove_item(origin) {
 
 $errorMsg = '';
 $message = '';
+$userGroup = new UserGroup();
+$allUserGroup = $userGroup->get_all_group_tags();
+$checkList = [];
+$join = '';
+$where = '';
 
-if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+if (isset($_POST['form_sent'])) {
     $form_sent = $_POST['form_sent'];
     $UserList = $_POST['sessionUsersList'];
 
     if (!is_array($UserList)) {
         $UserList = [];
+    }
+    if ($form_sent == 0) {
+        $tblUsergroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+        if (isset($_POST['no_any_class'])) {
+            $where = "AND u.id NOT IN(SELECT g.user_id FROM $tblUsergroupRelUser g)";
+        } else {
+            foreach ($allUserGroup as $userGroup) {
+                if (isset($_POST[$userGroup['id']])) {
+                    $checkList[] = $userGroup['id'];
+                    $where .= $userGroup['id'].',';
+                }
+            }
+            if (count($checkList) > 0) {
+                $join = "INNER JOIN $tblUsergroupRelUser g ON u.user_id = g.user_id";
+                $where = trim($where, ',');
+                $where = "AND g.usergroup_id IN($where)";
+            }
+        }
     }
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
@@ -144,7 +167,7 @@ $nosessionUsersList = $sessionUsersList = [];
 $ajax_search = $add_type == 'unique' ? true : false;
 
 if ($ajax_search) {
-    $Users = UrlManager::get_url_rel_user_data($access_url_id);
+    $Users = UrlManager::get_url_rel_user_data($access_url_id, null, $join, $where);
     foreach ($Users as $user) {
         $sessionUsersList[$user['user_id']] = $user;
     }
@@ -159,8 +182,11 @@ if ($ajax_search) {
     }
 
     $sql = "SELECT u.user_id, lastname, firstname, username
-	  	  	FROM $tbl_user u WHERE status <> ".ANONYMOUS." ".
-            $order_clause;
+	  	  	FROM $tbl_user u
+            $join
+            WHERE u.status <> ".ANONYMOUS."
+            $where
+            $order_clause";
     $result = Database::query($sql);
     $Users = Database::store_result($result);
     $user_list_leys = array_keys($sessionUsersList);
@@ -188,7 +214,7 @@ $url_list = UrlManager::get_url_data();
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 } ?> >
-    <?php echo get_lang('SelectUrl').' : '; ?>
+<?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
 <option value="0"> <?php echo get_lang('SelectUrl'); ?></option>
         <?php
@@ -210,13 +236,35 @@ $url_list = UrlManager::get_url_data();
         ?>
 </select>
 <br /><br />
+
+<?php
+
+if (count($allUserGroup) > 0) {
+    echo get_lang('FilterByClass').' : ';
+    echo '<ul>';
+    foreach ($allUserGroup as $userGroup) {
+        $checked = in_array($userGroup['id'], $checkList) ? 'checked' : '';
+        echo '<li>';
+        echo '<input type="checkbox" name="'.$userGroup['id'].'" value="'.$userGroup['id'].'" onclick="javascript:send();" '.$checked.'>';
+        echo ' '.$userGroup['name'];
+        echo '</li>';
+    }
+    echo '</ul>';
+
+    $checked = isset($_POST['no_any_class']) ? 'checked' : '';
+    echo '<input type="checkbox" name="no_any_class" onclick="javascript:send();" '.$checked.'> ';
+    echo get_lang('NotInAnyClass');
+}
+?>
+<br /><br />
+
 <input type="hidden" name="form_sent" value="1" />
 <input type="hidden" name="add_type" value = "<?php echo $add_type; ?>" />
 
 <?php
 if (!empty($errorMsg)) {
-            echo Display::return_message($errorMsg, 'normal'); //main API
-        }
+    echo Display::return_message($errorMsg, 'normal'); //main API
+}
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">

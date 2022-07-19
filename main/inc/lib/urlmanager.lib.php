@@ -216,14 +216,13 @@ class UrlManager
      *
      * @return array Database::store_result of the result
      */
-    public static function get_url_rel_user_data($urlId = 0, $order_by = null)
+    public static function get_url_rel_user_data($urlId = 0, $order_by = null, $join = '', $where = '')
     {
         $urlId = (int) $urlId;
-        $where = '';
         $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         if (!empty($urlId)) {
-            $where = "WHERE $table_url_rel_user.access_url_id = ".$urlId;
+            $where = "WHERE $table_url_rel_user.access_url_id = $urlId $where";
         }
         if (empty($order_by)) {
             $order_clause = api_sort_by_first_name(
@@ -235,7 +234,9 @@ class UrlManager
                 FROM $tbl_user u
                 INNER JOIN $table_url_rel_user
                 ON $table_url_rel_user.user_id = u.user_id
-                $where  $order_clause";
+                $join
+                $where
+                $order_clause";
         $result = Database::query($sql);
         $users = Database::store_result($result);
 

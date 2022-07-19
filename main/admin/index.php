@@ -412,7 +412,7 @@ if (api_is_platform_admin()) {
         'label' => get_lang('Statistics'),
     ];
     $items[] = [
-        'class' => 'item-report',
+        'class' => 'item-stats-report',
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/company_reports.php',
         'label' => get_lang('Reports'),
     ];

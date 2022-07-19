@@ -15,6 +15,7 @@ $user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $userInfo = api_get_user_info($user_id);
+$userEntity = api_get_user_entity($user_id);
 
 $htmlHeadXtra[] = '
 <script>
@@ -238,6 +239,7 @@ $group[] = $form->createElement(
 
 $form->addGroup($group, 'password', null, null, false);
 $form->addPasswordRule('password', 'password');
+$form->addNoSamePasswordRule('password', $userEntity, 'password');
 
 // Status
 $status = UserManager::getUserStatusList();

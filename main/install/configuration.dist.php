@@ -341,8 +341,10 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
         'lowercase' => 2,
         'uppercase' => 2,
         'numeric' => 2,
-        'length' => 8
-    ]
+        'length' => 8,
+        'specials' => 1,
+    ],
+    'force_different_password' => false,
 ];*/
 // Customize course session tracking columns
 /*
@@ -2088,6 +2090,24 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 //$_configuration['disable_webservices'] = true;
 // Enable admin-only APIs: get_users_api_keys, get_user_api_key
 //$_configuration['webservice_enable_adminonly_api'] = false;
+
+// Block a user account if there are multiple failed login attempts. It requires DB changes:
+/*
+CREATE TABLE track_e_login_attempt
+(
+    login_id   INT AUTO_INCREMENT NOT NULL,
+    username   VARCHAR(100)       NOT NULL,
+    login_date DATETIME           NOT NULL,
+    user_ip    VARCHAR(39)        NOT NULL,
+    success    TINYINT(1)         NOT NULL,
+    INDEX idx_track_e_login_attempt_username_success (username, success),
+    PRIMARY KEY (login_id)
+) DEFAULT CHARACTER SET utf8
+  COLLATE utf8_unicode_ci
+  ENGINE = InnoDB;
+*/
+// Then add the "@" symbol to TrackELoginAttempt class in the ORM\Entity() line.
+//$_configuration['login_max_attempt_before_blocking_account'] = 0;
 
 // Ask user to renew password at first login.
 // Requires a user checkbox extra field called "ask_new_password".

@@ -449,7 +449,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
         // Lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status, salt
+        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status, salt, last_login
                 FROM $user_table
                 WHERE username = '".Database::escape_string($login)."'";
         $result = Database::query($sql);
@@ -608,13 +608,15 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status'] = $uData['status'];
                                         Session::write('_user', $_user);
+                                        Event::eventLoginAttempt($uData['username'], true);
                                         Event::eventLogin($_user['user_id']);
                                         $logging_in = true;
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');
                                         Session::write('loginFailed', '1');
-
+                                        Event::eventLoginAttempt($uData['username']);
+                                        UserManager::blockIfMaxLoginAttempts($uData);
                                         // Fix cas redirection loop
                                         // https://support.chamilo.org/issues/6124
                                         $location = api_get_path(WEB_PATH)
@@ -631,6 +633,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['status'] = $uData['status'];
                                         Session::write('_user', $_user);
                                         Event::eventLogin($_user['user_id']);
+                                        Event::eventLoginAttempt($uData['username'], true);
                                         $logging_in = true;
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
@@ -640,11 +643,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             $_user['status'] = $uData['status'];
                                             Session::write('_user', $_user);
                                             Event::eventLogin($_user['user_id']);
+                                            Event::eventLoginAttempt($uData['username'], true);
                                             $logging_in = true;
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
                                             Session::write('loginFailed', '1');
+                                            Event::eventLoginAttempt($uData['username']);
+                                            UserManager::blockIfMaxLoginAttempts($uData);
                                             header(
                                                 'Location: '.api_get_path(WEB_PATH)
                                                 .'index.php?loginFailed=1&error=access_url_inactive'
@@ -661,6 +667,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                                 Session::write('_user', $_user);
                                 Event::eventLogin($uData['user_id']);
+                                Event::eventLoginAttempt($uData['username'], true);
                                 $logging_in = true;
                             }
                         } else {
@@ -688,6 +695,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     $loginFailed = true;
                     Session::erase('_uid');
                     Session::write('loginFailed', '1');
+                    Event::eventLoginAttempt($uData['username']);
+                    UserManager::blockIfMaxLoginAttempts($uData);
 
                     if ($allowCaptcha) {
                         if (isset($_SESSION['loginFailedCount'])) {
@@ -768,6 +777,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 );
             }
         } else {
+            Event::eventLoginAttempt($login);
+            UserManager::blockIfMaxLoginAttempts(['username' => $login, 'last_login' => null]);
+
             $extraFieldValue = new ExtraFieldValue('user');
             $uData = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                 'organisationemail',

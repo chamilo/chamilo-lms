@@ -2508,8 +2508,9 @@ function api_generate_password($length = 8)
         $length = 2;
     }
 
-    $charactersLowerCase = 'abcdefghijkmnopqrstuvwxyz';
-    $charactersUpperCase = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    $charactersLowerCase = Security::CHAR_LOWER;
+    $charactersUpperCase = Security::CHAR_UPPER;
+    $charactersSpecials = Security::CHAR_SYMBOLS;
     $minNumbers = 2;
     $length = $length - $minNumbers;
     $minLowerCase = round($length / 2);
@@ -2519,18 +2520,22 @@ function api_generate_password($length = 8)
     $passwordRequirements = api_get_configuration_value('password_requirements');
 
     $factory = new RandomLib\Factory();
-    $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
+    $generator = $factory->getMediumStrengthGenerator();
 
     if (!empty($passwordRequirements)) {
         $length = $passwordRequirements['min']['length'];
         $minNumbers = $passwordRequirements['min']['numeric'];
         $minLowerCase = $passwordRequirements['min']['lowercase'];
         $minUpperCase = $passwordRequirements['min']['uppercase'];
+        $minSpecials = $passwordRequirements['min']['specials'];
 
-        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase;
+        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase - $minSpecials;
         // Add the rest to fill the length requirement
         if ($rest > 0) {
-            $password .= $generator->generateString($rest, $charactersLowerCase.$charactersUpperCase);
+            $password .= $generator->generateString(
+                $rest,
+                $charactersLowerCase.$charactersUpperCase.$charactersSpecials
+            );
         }
     }
 
@@ -2571,6 +2576,7 @@ function api_check_password($password)
     // Optional
     $minLowerCase = $passwordRequirements['min']['lowercase'];
     $minUpperCase = $passwordRequirements['min']['uppercase'];
+    $minSpecials = $passwordRequirements['min']['specials'];
 
     $minLetters = $minLowerCase + $minUpperCase;
     $passwordLength = api_strlen($password);
@@ -2582,6 +2588,7 @@ function api_check_password($password)
     $digits = 0;
     $lowerCase = 0;
     $upperCase = 0;
+    $specials = 0;
 
     for ($i = 0; $i < $passwordLength; $i++) {
         $currentCharacterCode = api_ord(api_substr($password, $i, 1));
@@ -2595,6 +2602,10 @@ function api_check_password($password)
         if ($currentCharacterCode >= 48 && $currentCharacterCode <= 57) {
             $digits++;
         }
+
+        if (false !== strpos(Security::CHAR_SYMBOLS, $currentCharacterCode)) {
+            $specials++;
+        }
     }
 
     // Min number of digits
@@ -2607,7 +2618,11 @@ function api_check_password($password)
 
     if (!empty($minLowerCase)) {
         // Lowercase
-        $conditions['min_lowercase'] = $upperCase >= $minLowerCase;
+        $conditions['min_lowercase'] = $lowerCase >= $minLowerCase;
+    }
+
+    if (!empty($minSpecials)) {
+        $conditions['min_specials'] = $specials >= $minSpecials;
     }
 
     // Min letters

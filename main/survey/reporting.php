@@ -15,6 +15,7 @@ $this_section = SECTION_COURSES;
 $survey_id = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 $action = isset($_GET['action']) ? $_GET['action'] : 'overview';
+$lpItemId = isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : 0;
 $survey_data = SurveyManager::get_survey($survey_id);
 
 if (empty($survey_data)) {
@@ -61,7 +62,7 @@ if (!empty($exportReport) && !empty($format)) {
         case 'xls':
             $filename = 'survey_results_'.$survey_id.'.xlsx';
 
-            SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
+            SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId, false, $lpItemId);
             exit;
             break;
         case 'csv-compact':
@@ -69,7 +70,7 @@ if (!empty($exportReport) && !empty($format)) {
             // no break
         case 'csv':
         default:
-            $data = SurveyUtil::export_complete_report($survey_data, $userId, $compact);
+            $data = SurveyUtil::export_complete_report($survey_data, $userId, $compact, $lpItemId);
             $filename = 'survey_results_'.$survey_id.($compact ? '_compact' : '').'.csv';
             header('Content-type: application/octet-stream');
             header('Content-Type: application/force-download');
@@ -142,6 +143,9 @@ $htmlHeadXtra[] = api_get_js('dimple.v2.1.2.min.js');
 
 $htmlHeadXtra[] = '<script>
 
+function formExportSubmit(formId) {
+    $("#"+formId).submit();
+}
 async function exportToPdf() {
     $("#dialog-confirm").dialog({
         autoOpen: false,

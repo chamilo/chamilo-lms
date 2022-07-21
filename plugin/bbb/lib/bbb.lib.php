@@ -422,6 +422,7 @@ class bbb
                 'maxParticipants' => $max, // Optional. -1 = unlimitted. Not supported in BBB. [number]
                 'record' => $record, // New. 'true' will tell BBB to record the meeting.
                 'duration' => $duration, // Default = 0 which means no set duration in minutes. [number]
+                'meta_host' => $_SERVER['HTTP_HOST'],  // Use to pass additional info to BBB server. See API docs.
                 //'meta_category' => '',  // Use to pass additional info to BBB server. See API docs.
             );
 

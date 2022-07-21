@@ -183,8 +183,7 @@ class UserManager
                     $raw = $encoder->encodePassword($encoded, $salt);
                     self::updatePassword($userId, $raw);
                 }
-            }
-            else {
+            } else {
                 $result = self::isPasswordValid($encoded, $raw, $salt);
             }
         } else {

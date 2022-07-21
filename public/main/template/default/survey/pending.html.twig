@@ -1,11 +1,11 @@
 <div class="media">
     <div class="media-left">
         <a href="#">
-            <img class="media-object" src="{{ user | illustration }}" alt="{{ user.completeName }}">
+            <img class="media-object" src="{{ user | illustration }}" alt="{{ user.getFullname }}">
         </a>
     </div>
     <div class="media-body">
-        <h3 class="media-heading">{{ user.completeName }}</h3>
+        <h3 class="media-heading">{{ user.getFullname }}</h3>
         <p>{{ user.username }}</p>
     </div>
 </div>

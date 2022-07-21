@@ -5481,27 +5481,41 @@ class Tracking
     public static function get_documents_most_downloaded_by_course(
         $course_code,
         $session_id = 0,
-        $limit = 0
+        $limit = 0,
+        $start = 0,
+        $keyword = null
     ) {
         $courseId = api_get_course_int_id($course_code);
         $data = [];
 
         $TABLETRACK_DOWNLOADS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-        $condition_session = '';
         $session_id = intval($session_id);
+        $start = (int) $start;
+        $conditions = '';
+        $join = '';
         if (!empty($session_id)) {
-            $condition_session = ' AND down_session_id = '.$session_id;
+            $conditions = ' AND down_session_id = '.$session_id;
+        }
+        if ($keyword && $keyword !== null) {
+            $join = 'INNER JOIN user ON down_user_id = user.user_id';
+            $conditions .= " AND down_doc_path LIKE '%$keyword%'";
+            $conditions .= " OR username LIKE '%$keyword%'";
+            $conditions .= " OR firstname LIKE '%$keyword%'";
+            $conditions .= " OR lastname LIKE '%$keyword%'";
         }
         $sql = "SELECT
                     down_doc_path,
+                    down_user_id,
                     COUNT(DISTINCT down_user_id),
-                    COUNT(down_doc_path) as count_down
+                    COUNT(down_doc_path) as count_down,
+                    down_date
                 FROM $TABLETRACK_DOWNLOADS
+                    $join
                 WHERE c_id = $courseId
-                    $condition_session
-                GROUP BY down_doc_path
+                    $conditions
+                GROUP BY down_user_id, down_doc_path
                 ORDER BY count_down DESC
-                LIMIT 0,  $limit";
+                LIMIT $start, $limit";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -9888,6 +9902,11 @@ class TrackingCourseLog
             api_get_path(WEB_CODE_PATH).'tracking/lp_report.php?'.api_get_cidreq()
         );
 
+        $documentsLink = Display::url(
+            Display::return_icon('documents.png', get_lang('DocumentList'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'tracking/document_log_events.php?'.api_get_cidreq()
+        );
+
         $attendanceLink = '';
         if (!empty($sessionId)) {
             $attendanceLink = Display::url(
@@ -9943,6 +9962,12 @@ class TrackingCourseLog
                     '#'
                 );
                 break;
+            case 'document_logs':
+                $documentsLink = Display::url(
+                    Display::return_icon('documents_na.png', get_lang('DocumentList'), [], ICON_SIZE_MEDIUM),
+                    '#'
+                );
+                break;
             case 'attendance':
                 if (!empty($sessionId)) {
                     $attendanceLink = Display::url(
@@ -9968,6 +9993,7 @@ class TrackingCourseLog
             $eventsLink,
             $lpLink,
             $attendanceLink,
+            $documentsLink,
         ];
 
         return implode('', $items).'&nbsp;';

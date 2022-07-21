@@ -713,7 +713,7 @@ class AttendanceController
      * @param bool $showForm
      * @param bool $exportToPdf
      */
-    public function getAttendanceBaseInLogin($showForm = false, $exportToPdf = true)
+    public function getAttendanceBaseInLogin($showForm = false, $exportToPdf = true, $format = 'pdf')
     {
         $table = null;
         $formToDisplay = null;
@@ -746,20 +746,28 @@ class AttendanceController
         }
 
         $attendance = new Attendance();
+        $result = $attendance->exportAttendanceLogin($startDate, $endDate, $format);
+        if (empty($result)) {
+            api_not_allowed(true, get_lang('NoDataAvailable'));
+        }
+
         if ($exportToPdf) {
-            $result = $attendance->exportAttendanceLogin($startDate, $endDate);
-            if (empty($result)) {
-                api_not_allowed(true, get_lang('NoDataAvailable'));
+            $table = $attendance->getAttendanceLoginTable($startDate, $endDate);
+            $data = [
+                'form' => $formToDisplay,
+                'table' => $table,
+            ];
+            $this->view->set_data($data);
+            $this->view->set_layout('layout');
+            $this->view->set_template('calendar_logins');
+            $this->view->render();
+        } else {
+            $table = $attendance->getAttendanceLoginCsvTable($result['users']);
+            if ($format === 'csv') {
+                Export::arrayToCsv($table['csv_content'], $table['filename']);
+            } elseif ($format === 'xls') {
+                Export::arrayToXls($table['csv_content'], $table['filename']);
             }
         }
-        $table = $attendance->getAttendanceLoginTable($startDate, $endDate);
-        $data = [
-            'form' => $formToDisplay,
-            'table' => $table,
-        ];
-        $this->view->set_data($data);
-        $this->view->set_layout('layout');
-        $this->view->set_template('calendar_logins');
-        $this->view->render();
     }
 }

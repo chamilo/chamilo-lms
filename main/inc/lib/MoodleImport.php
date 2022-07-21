@@ -116,6 +116,8 @@ class MoodleImport
         $_POST['moodle_import'] = true;
         $_POST['language'] = $courseInfo['language'];
 
+        $modScormFiles = [];
+        $i = 0;
         foreach ($mainFileModuleValues as $fileInfo) {
             $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
             foreach (new RecursiveIteratorIterator($dirs) as $file) {
@@ -124,6 +126,12 @@ class MoodleImport
                 }
 
                 if (isset($importedFiles[$fileInfo['filename']])) {
+                    continue;
+                }
+
+                if (true === $fileInfo['modscorm']) {
+                    $modScormFiles[$fileInfo['contenthash']][$i] = $fileInfo;
+                    $i++;
                     continue;
                 }
 
@@ -173,9 +181,8 @@ class MoodleImport
 
         // It process the sections as learnpaths
         $sections = $this->readSections($xml, $destinationDir);
-        $sectionLpValues = $this->processSections($sections);
-
         $activities = $doc->getElementsByTagName('activity');
+        $sectionLpValues = $this->processSections($sections, $activities);
 
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
@@ -199,6 +206,12 @@ class MoodleImport
             }
 
             switch ($moduleName) {
+                case 'glossary':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readGlossaryModule($moduleXml, $currentItem['moduleid']);
+                    $this->processGlossary($moduleValues, $currentItem['moduleid']);
+                    break;
                 case 'label':
                 case 'page':
                     $moduleDir = $currentItem['directory'];
@@ -471,7 +484,7 @@ class MoodleImport
      *
      * @return array|false
      */
-    public function processSections($sections)
+    public function processSections($sections, $activities)
     {
         if (empty($sections)) {
             return false;
@@ -480,23 +493,61 @@ class MoodleImport
         $i = 1;
         $lpAdded = [];
         foreach ($sections as $sectionId => $section) {
-            $lpName = $section['name'];
-            if ('$@NULL@$' == $lpName) {
-                $lpName = get_lang('Topic').' '.$i;
+            $countSectionActivities = $this->countSectionActivities($activities, $sectionId);
+            if ($countSectionActivities > 0) {
+                $lpName = $section['name'];
+                if ('$@NULL@$' == $lpName) {
+                    $lpName = get_lang('Topic').' '.$i;
+                }
+                $lpDescription = $section['summary'];
+                $lpId = learnpath::add_lp(
+                    api_get_course_id(),
+                    $lpName,
+                    $lpDescription,
+                    'chamilo',
+                    'manual'
+                );
+                $lpAdded[$sectionId] = $lpId;
+                $i++;
             }
-            $lpDescription = $section['summary'];
-            $lpId = learnpath::add_lp(
-                api_get_course_id(),
-                $lpName,
-                $lpDescription,
-                'chamilo',
-                'manual'
-            );
-            $lpAdded[$sectionId] = $lpId;
-            $i++;
         }
 
         return $lpAdded;
+    }
+
+    /**
+     * It counts the activities inside a section module.
+     *
+     * @param $activities
+     * @param $sectionId
+     *
+     * @return int|void
+     */
+    public function countSectionActivities($activities, $sectionId)
+    {
+        $sectionActivities = [];
+        $modulesLpTypes = ['url', 'resource', 'quiz', 'forum', 'page', 'label'];
+        $i = 0;
+        foreach ($activities as $activity) {
+            if (empty($activity->childNodes->length)) {
+                continue;
+            }
+            $currentItem = [];
+            foreach ($activity->childNodes as $item) {
+                $currentItem[$item->nodeName] = $item->nodeValue;
+            }
+            if (!empty($currentItem['sectionid']) && in_array($currentItem['modulename'], $modulesLpTypes)) {
+                $sectionActivities[$currentItem['sectionid']][$i] = $currentItem;
+                $i++;
+            }
+        }
+
+        $countActivities = 0;
+        if (isset($sectionActivities[$sectionId])) {
+            $countActivities = count($sectionActivities[$sectionId]);
+        }
+
+        return $countActivities;
     }
 
     /**
@@ -565,6 +616,38 @@ class MoodleImport
     }
 
     /**
+     * Get glossary information from module xml.
+     *
+     * @param $moduleXml
+     * @param $moduleId
+     *
+     * @return array|false
+     */
+    public function readGlossaryModule($moduleXml, $moduleId)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($moduleXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $glossaryInfo = [];
+        $entries = $doc->getElementsByTagName('entry');
+        $i = 0;
+        foreach ($entries as $entry) {
+            if (empty($entry->childNodes->length)) {
+                continue;
+            }
+            foreach ($entry->childNodes as $item) {
+                $glossaryInfo[$moduleId][$i][$item->nodeName] = $item->nodeValue;
+            }
+            $i++;
+        }
+
+        return $glossaryInfo;
+    }
+
+    /**
      * It reads item html from module to documents.
      *
      * @param $moduleXml
@@ -590,6 +673,30 @@ class MoodleImport
         }
 
         return $currentItem;
+    }
+
+    /**
+     * It saves glossary terms from module xml.
+     *
+     * @param $moduleValues
+     * @param $moduleId
+     *
+     * @return bool
+     */
+    public function processGlossary($moduleValues, $moduleId)
+    {
+        if (!empty($moduleValues[$moduleId])) {
+            foreach ($moduleValues[$moduleId] as $entry) {
+                $values = [];
+                $values['name'] = $entry['concept'];
+                $values['description'] = $entry['definition'];
+                GlossaryManager::save_glossary($values);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -1425,6 +1532,10 @@ class MoodleImport
                 foreach ($activity->childNodes as $item) {
                     if ($item->nodeName == 'component' && $item->nodeValue == 'mod_resource') {
                         $thisIsAnInvalidItem = true;
+                    }
+
+                    if ($item->nodeName == 'component' && $item->nodeValue == 'mod_scorm') {
+                        $currentItem['modscorm'] = true;
                     }
 
                     if ($item->nodeName == 'contenthash') {

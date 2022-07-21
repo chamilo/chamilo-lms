@@ -208,19 +208,16 @@ $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $show_message = '';
+$isInASession = $sessionId > 0;
+$isSubscribed = CourseManager::is_user_subscribed_in_course(
+    $user_id,
+    $course_code,
+    $isInASession,
+    $sessionId
+);
 
-if (api_is_invitee()) {
-    $isInASession = $sessionId > 0;
-    $isSubscribed = CourseManager::is_user_subscribed_in_course(
-        $user_id,
-        $course_code,
-        $isInASession,
-        $sessionId
-    );
-
-    if (!$isSubscribed) {
-        api_not_allowed(true);
-    }
+if (api_is_invitee() && !$isSubscribed) {
+    api_not_allowed(true);
 }
 
 // Deleting group session
@@ -238,6 +235,14 @@ if ($isSpecialCourse) {
 }
 
 $action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+$course_info = api_get_course_info($course_code);
+$course_visibility = (int) $course_info['visibility'];
+
+if ($action !== 'subscribe' && !$isSubscribed && $course_visibility === COURSE_VISIBILITY_OPEN_PLATFORM) {
+    $generateRedirectUrl = api_get_path(WEB_PATH).'course/'.$courseId.'/about';
+    header('Location: '.$generateRedirectUrl);
+    exit;
+}
 
 if ($action === 'subscribe' && Security::check_token('get')) {
     Security::clear_token();

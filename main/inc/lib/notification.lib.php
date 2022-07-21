@@ -464,11 +464,6 @@ class Notification extends Model
                 Display::url($preferenceUrl, $preferenceUrl)
             ).'</i>';
 
-        $extendedFooterMessage = api_get_configuration_value('notifications_extended_footer_message');
-        if ($extendedFooterMessage) {
-            $content = $content.'<br /><hr><i>'.'<p>'.implode('<br/><br/>', $extendedFooterMessage['paragraphs']).'</p>';
-        }
-
         if (!empty($hook)) {
             $hook->setEventData(['content' => $content]);
             $data = $hook->notifyNotificationContent(HOOK_EVENT_TYPE_POST);

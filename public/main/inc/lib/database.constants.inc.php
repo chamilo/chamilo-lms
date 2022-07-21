@@ -295,3 +295,5 @@ define('TABLE_BRANCH_TRANSACTION', 'branch_transaction');
 define('TABLE_BRANCH_TRANSACTION_STATUS', 'branch_transaction_status');
 
 define('TABLE_MAIN_USER_CAREER', 'user_career');
+
+define('TABLE_RESOURCE_NODE', 'resource_node');

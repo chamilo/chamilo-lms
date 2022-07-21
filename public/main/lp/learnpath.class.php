@@ -786,6 +786,9 @@ class learnpath
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $lp_view = Database::get_course_table(TABLE_LP_VIEW);
         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $document = Database::get_course_table(TABLE_DOCUMENT);
+        $resource_node = Database::get_main_table(TABLE_RESOURCE_NODE);
+        $course = Database::get_main_table(TABLE_MAIN_COURSE);
 
         // Delete lp item id.
         foreach ($this->items as $lpItemId => $dummy) {
@@ -826,6 +829,31 @@ class learnpath
 
         if (false !== $link_info) {
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
+        }
+
+        $sql = "SELECT RN_3.id FROM $course C
+                INNER JOIN $resource_node RN ON C.code = RN.title
+                INNER JOIN $resource_node RN_2 ON RN.id = RN_2.parent_id
+                INNER JOIN $resource_node RN_3 ON RN_2.id = RN_3.parent_id
+                WHERE RN.resource_type_id = 27
+                AND RN_3.resource_type_id = 16
+                AND RN_3.title NOT IN(SELECT CLP.name FROM c_lp CLP)
+                AND C.id = $course_id";
+        $res_sel = Database::query($sql);
+        if (Database::num_rows($res_sel) < 1) {
+            return false;
+        }
+        $res_sel = Database::store_result($res_sel);
+
+        foreach ($res_sel as $item) {
+            $sql = "DELETE FROM $document WHERE resource_node_id = ".$item['id'];
+            Database::query($sql);
+
+            $sql = "DELETE FROM $resource_node WHERE parent_id = ".$item['id'];
+            Database::query($sql);
+
+            $sql = "DELETE FROM $resource_node WHERE id = ".$item['id'];
+            Database::query($sql);
         }
 
         if ('true' === api_get_setting('search_enabled')) {

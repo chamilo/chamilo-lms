@@ -329,7 +329,8 @@ class scorm extends learnpath
         $courseCode,
         $userMaxScore = 1,
         $sessionId = 0,
-        $userId = 0
+        $userId = 0,
+        $lpName = null
     ) {
         if ($this->debug > 0) {
             error_log('New LP - Entered import_manifest('.$courseCode.')', 0);
@@ -361,6 +362,9 @@ class scorm extends learnpath
             }
             $myname = api_utf8_decode($oOrganization->get_name());
             $now = api_get_utc_datetime();
+            if (!empty($lpName)) {
+                $myname = api_utf8_decode($lpName);
+            }
 
             $params = [
                 'c_id' => $courseId,

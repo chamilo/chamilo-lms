@@ -116,8 +116,7 @@ class MoodleImport
         $_POST['moodle_import'] = true;
         $_POST['language'] = $courseInfo['language'];
 
-        $modScormFiles = [];
-        $i = 0;
+        $modScormFileZips = [];
         foreach ($mainFileModuleValues as $fileInfo) {
             $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
             foreach (new RecursiveIteratorIterator($dirs) as $file) {
@@ -126,12 +125,6 @@ class MoodleImport
                 }
 
                 if (isset($importedFiles[$fileInfo['filename']])) {
-                    continue;
-                }
-
-                if (true === $fileInfo['modscorm']) {
-                    $modScormFiles[$fileInfo['contenthash']][$i] = $fileInfo;
-                    $i++;
                     continue;
                 }
 
@@ -146,6 +139,13 @@ class MoodleImport
                 $files['file']['size'] = $fileInfo['filesize'];
                 $files['file']['from_file'] = true;
                 $files['file']['move_file'] = true;
+
+                if (isset($fileInfo['modscorm']) && true === $fileInfo['modscorm']) {
+                    if ('application/zip' == $fileInfo['mimetype']) {
+                        $modScormFileZips[$fileInfo['contenthash']] = $files;
+                    }
+                    continue;
+                }
 
                 $title = isset($fileInfo['title']) ? $fileInfo['title'] : pathinfo($fileInfo['filename'], PATHINFO_FILENAME);
 
@@ -206,6 +206,29 @@ class MoodleImport
             }
 
             switch ($moduleName) {
+                case 'lesson':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readLessonModule($moduleXml);
+                    $this->processLesson($moduleValues);
+                    break;
+                case 'assign':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readAssignModule($moduleXml);
+                    $assignId = $this->processAssignment($moduleValues);
+
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($assignId)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'student_publication', $assignId, $moduleValues['name']);
+                    }
+                    break;
+                case 'scorm':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readScormModule($moduleXml);
+                    $this->processScorm($moduleValues, $modScormFileZips);
+                    break;
                 case 'glossary':
                     $moduleDir = $currentItem['directory'];
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
@@ -526,7 +549,7 @@ class MoodleImport
     public function countSectionActivities($activities, $sectionId)
     {
         $sectionActivities = [];
-        $modulesLpTypes = ['url', 'resource', 'quiz', 'forum', 'page', 'label'];
+        $modulesLpTypes = ['url', 'resource', 'quiz', 'forum', 'page', 'label', 'assign'];
         $i = 0;
         foreach ($activities as $activity) {
             if (empty($activity->childNodes->length)) {
@@ -616,6 +639,112 @@ class MoodleImport
     }
 
     /**
+     * It gets lesson information from module xml.
+     *
+     * @param $moduleXml
+     *
+     * @return array|false
+     */
+    public function readLessonModule($moduleXml)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($moduleXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $activities = $doc->getElementsByTagName('lesson');
+        $currentItem = [];
+        foreach ($activities as $activity) {
+            if ($activity->childNodes->length) {
+                foreach ($activity->childNodes as $item) {
+                    $currentItem[$item->nodeName] = $item->nodeValue;
+                }
+            }
+        }
+
+        $pages = $doc->getElementsByTagName('page');
+
+        $pagesList = [];
+        $counter = 0;
+        foreach ($pages as $page) {
+            if ($page->childNodes->length) {
+                foreach ($page->childNodes as $item) {
+                        $pagesList[$counter][$item->nodeName] = $item->nodeValue;
+                }
+                $counter++;
+            }
+        }
+        $currentItem['pages'] = $pagesList;
+
+        return $currentItem;
+    }
+
+    /**
+     * It gets assignment information from module xml.
+     *
+     * @param $moduleXml
+     *
+     * @return array|false
+     */
+    public function readAssignModule($moduleXml)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($moduleXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $info = [];
+        $entries = $doc->getElementsByTagName('assign');
+        foreach ($entries as $entry) {
+            if (empty($entry->childNodes->length)) {
+                continue;
+            }
+            foreach ($entry->childNodes as $item) {
+                if (in_array($item->nodeName, ['name', 'intro', 'duedate', 'grade'])) {
+                    $info[$item->nodeName] = $item->nodeValue;
+                }
+            }
+        }
+
+        return $info;
+    }
+
+    /**
+     * It gest scorm information from module xml.
+     *
+     * @param $moduleXml
+     *
+     * @return array|false
+     */
+    public function readScormModule($moduleXml)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($moduleXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $info = [];
+        $entries = $doc->getElementsByTagName('scorm');
+        $i = 0;
+        foreach ($entries as $entry) {
+            if (empty($entry->childNodes->length)) {
+                continue;
+            }
+            foreach ($entry->childNodes as $item) {
+                if (in_array($item->nodeName, ['name', 'reference', 'sha1hash', 'scormtype'])) {
+                    $info[$i][$item->nodeName] = $item->nodeValue;
+                }
+            }
+            $i++;
+        }
+
+        return $info;
+    }
+
+    /**
      * Get glossary information from module xml.
      *
      * @param $moduleXml
@@ -673,6 +802,137 @@ class MoodleImport
         }
 
         return $currentItem;
+    }
+
+    /**
+     * It saves a learnpath from module xml.
+     *
+     * @param $moduleValues
+     *
+     * @return false
+     */
+    public function processLesson($moduleValues)
+    {
+        if (!empty($moduleValues['pages'])) {
+            $qtypes = [
+                20 => 'page',
+                10 => 'essay',
+                5 => 'matching',
+                3 => 'multichoice',
+                1 => 'shortanswer',
+                2 => 'truefalse'
+            ];
+            $items = $moduleValues['pages'];
+            $lpName = $moduleValues['name'];
+            $lpDescription = api_utf8_decode($moduleValues['intro']);
+            $lpId = learnpath::add_lp(
+                api_get_course_id(),
+                $lpName,
+                $lpDescription,
+                'chamilo',
+                'manual'
+            );
+
+            $questionList = [];
+            foreach ($items as $item) {
+                if (in_array($item['qtype'], array_keys($qtypes))) {
+                    $qTypeName = $qtypes[$item['qtype']];
+                    switch ($qTypeName) {
+                        case 'page':
+                            $pageValues = [];
+                            $pageValues['name'] = $item['title'];
+                            $pageValues['content'] = $item['contents'];
+                            $documentId = $this->processHtmlDocument($pageValues, 'page');
+                            $this->processSectionItem($lpId, 'document', $documentId, $pageValues['name']);
+                            break;
+                        case 'essay':
+                        case 'matching':
+                        case 'multichoice':
+                        case 'shortanswer':
+                        case 'truefalse':
+                            break;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * It saves a student publication from module xml.
+     *
+     * @param $assign
+     *
+     * @return bool|int
+     */
+    public function processAssignment($assign)
+    {
+        if (!empty($assign)) {
+            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+            $values = [];
+            $values['new_dir'] = $assign['name'];
+            $values['enableEndDate'] = 1;
+            $values['ends_on'] = date('Y-m-d H:i', $assign['duedate']);
+            $values['work_title'] = $assign['name'];
+            $values['description'] = api_utf8_decode($assign['intro']);
+            $values['qualification'] = '';
+            $values['weight'] = $assign['grade'];
+            $values['allow_text_assignment'] = 2;
+
+            $assignId = addDir(
+                $values,
+                api_get_user_id(),
+                api_get_course_info(),
+                api_get_group_id(),
+                api_get_session_id()
+            );
+
+            return $assignId;
+        }
+
+        return false;
+    }
+
+    /**
+     * It saves a scorm from module xml.
+     *
+     * @param $moduleValues
+     * @param $modScormFileZips
+     *
+     * @return bool
+     */
+    public function processScorm($moduleValues, $modScormFileZips)
+    {
+        if (!empty($moduleValues)) {
+            foreach ($moduleValues as $info) {
+                $sha1hash = $info['sha1hash'];
+                if (!empty($modScormFileZips[$sha1hash])) {
+                    $scormFile = $modScormFileZips[$sha1hash];
+                    $oScorm = new scorm();
+                    $manifest = $oScorm->import_package(
+                        $scormFile['file']
+                    );
+                    if (!empty($manifest)) {
+                        $oScorm->parse_manifest($manifest);
+                        $oScorm->import_manifest(
+                            api_get_course_id(),
+                            1,
+                            0,
+                            0,
+                            $info['name']
+                        );
+                    }
+                    $oScorm->set_proximity($info['scormtype']);
+                    $oScorm->set_maker('Scorm');
+                    $oScorm->set_jslib('scorm_api.php');
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

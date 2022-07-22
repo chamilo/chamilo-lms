@@ -210,7 +210,7 @@ class MoodleImport
                     $moduleDir = $currentItem['directory'];
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                     $moduleValues = $this->readLessonModule($moduleXml);
-                    $this->processLesson($moduleValues);
+                    $this->processLesson($moduleValues, $importedFiles);
                     break;
                 case 'assign':
                     $moduleDir = $currentItem['directory'];
@@ -670,8 +670,18 @@ class MoodleImport
         foreach ($pages as $page) {
             if ($page->childNodes->length) {
                 foreach ($page->childNodes as $item) {
-                        $pagesList[$counter][$item->nodeName] = $item->nodeValue;
+                    $pagesList[$counter][$item->nodeName] = $item->nodeValue;
                 }
+                $i = 0;
+                $answerNodes = $page->getElementsByTagName("answer");
+                $answers = [];
+                foreach ($answerNodes as $answer) {
+                    foreach ($answer->childNodes as $n) {
+                        $answers[$i][$n->nodeName] = $n->nodeValue;
+                    }
+                    $i++;
+                }
+                $pagesList[$counter]['answers'] = $answers;
                 $counter++;
             }
         }
@@ -811,7 +821,7 @@ class MoodleImport
      *
      * @return false
      */
-    public function processLesson($moduleValues)
+    public function processLesson($moduleValues, $importedFiles)
     {
         if (!empty($moduleValues['pages'])) {
             $qtypes = [
@@ -820,7 +830,7 @@ class MoodleImport
                 5 => 'matching',
                 3 => 'multichoice',
                 1 => 'shortanswer',
-                2 => 'truefalse'
+                2 => 'truefalse',
             ];
             $items = $moduleValues['pages'];
             $lpName = $moduleValues['name'];
@@ -846,12 +856,86 @@ class MoodleImport
                             $this->processSectionItem($lpId, 'document', $documentId, $pageValues['name']);
                             break;
                         case 'essay':
-                        case 'matching':
+                        case 'match':
                         case 'multichoice':
                         case 'shortanswer':
                         case 'truefalse':
+                            $qType = $qtypes[$item['qtype']];
+                            $question = [];
+                            $question['qtype'] = $qType;
+                            $question['name'] = $item['title'];
+                            $question['questiontext'] = api_utf8_decode($item['contents']);
+                            $question[$qType.'_values']['single'] = 1;
+                            $question['questionType'] = $this->matchMoodleChamiloQuestionTypes($question);
+                            $answers = [];
+                            if (!empty($item['answers'])) {
+                                $defaultmark = 0;
+                                foreach ($item['answers'] as $answer) {
+                                    $answerValue = [];
+                                    $answerValue['answertext'] = api_utf8_decode($answer['answer_text']);
+                                    $answerValue['feedback'] = api_utf8_decode($answer['response']);
+                                    $answerValue['fraction'] = $answer['score'];
+                                    $defaultmark += $answer['score'];
+                                    $answers[] = $answerValue;
+                                }
+                                $question['defaultmark'] = $defaultmark;
+                            }
+                            $question['answers'] = $answers;
+                            $questionList[] = $question;
                             break;
                     }
+                }
+            }
+
+            if (!empty($questionList)) {
+                $courseInfo = api_get_course_info();
+                // It creates a quiz for those questions.
+                $exercise = new Exercise($courseInfo['real_id']);
+                $quizLpName = $lpName.' - '.get_lang('Quiz');
+                $title = Exercise::format_title_variable($quizLpName);
+                $exercise->updateTitle($title);
+                $exercise->updateDescription(api_utf8_decode($moduleValues['intro']));
+                $exercise->updateAttempts(0);
+                $exercise->updateFeedbackType(0);
+                $exercise->setRandom(0);
+                $exercise->updateRandomAnswers(false);
+                $exercise->updateExpiredTime(0);
+                $exercise->updateType(2);
+                $exercise->updateResultsDisabled(0);
+
+                // Create the new Quiz
+                $exercise->save();
+
+                $this->processSectionItem($lpId, 'quiz', $exercise->iid, $quizLpName);
+
+                // Ok, we got the Quiz and create it, now its time to add the Questions
+                foreach ($questionList as $question) {
+                    $questionInstance = Question::getInstance($question['questionType']);
+                    if (empty($questionInstance)) {
+                        continue;
+                    }
+                    $questionInstance->updateTitle($question['name']);
+                    $questionText = $question['questiontext'];
+                    $questionText = $this->replaceMoodleChamiloCoursePath($questionText);
+                    $questionInstance->updateDescription($questionText);
+                    $questionInstance->updateLevel(1);
+                    $questionInstance->updateCategory(0);
+
+                    //Save normal question if NOT media
+                    if ($questionInstance->type != MEDIA_QUESTION) {
+                        $questionInstance->save($exercise);
+                        // modify the exercise
+                        $exercise->addToList($questionInstance->iid);
+                        $exercise->update_question_positions();
+                    }
+                    $this->processAnswers(
+                        $exercise,
+                        $question['answers'],
+                        $question['qtype'],
+                        $questionInstance,
+                        $question,
+                        $importedFiles
+                    );
                 }
             }
         }
@@ -1360,10 +1444,10 @@ class MoodleImport
             case 'multichoice':
                 return MULTIPLE_ANSWER;
             case 'multianswer':
-            case 'shortanswer':
             case 'match':
                 return FILL_IN_BLANKS;
             case 'essay':
+            case 'shortanswer':
                 return FREE_ANSWER;
             case 'truefalse':
                 return UNIQUE_ANSWER;
@@ -1513,7 +1597,6 @@ class MoodleImport
                 $objAnswer->save();
 
                 return true;
-            case 'shortanswer':
             case 'ddmatch':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
@@ -1521,6 +1604,7 @@ class MoodleImport
                 $questionInstance->save($exercise);
 
                 return false;
+            case 'shortanswer':
             case 'essay':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);

@@ -34,12 +34,16 @@ if ($oAuth2Plugin->get(OAuth2::SETTING_ENABLE) === 'true') {
         if ($accessToken->hasExpired()) {
             $provider = $oAuth2Plugin->getProvider();
             try {
-                $newAccessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $accessToken->getRefreshToken(),
-                ]);
+                try {
+                    $newAccessToken = $provider->getAccessToken('refresh_token', [
+                        'refresh_token' => $accessToken->getRefreshToken(),
+                    ]);
+                } catch (BadMethodCallException $exception) {
+                    online_logout(null, true);
+                }
                 ChamiloSession::write('oauth2AccessToken', $newAccessToken->jsonSerialize());
             } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $exception) {
-                online_logout();
+                online_logout(null, true);
             }
         }
     }

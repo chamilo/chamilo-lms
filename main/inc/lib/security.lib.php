@@ -42,7 +42,7 @@ class Security
     public const CHAR_UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     public const CHAR_LOWER = 'abcdefghijklmnopqrstuvwxyz';
     public const CHAR_DIGITS = '0123456789';
-    public const CHAR_SYMBOLS = '!"#$%&\'()* +,-./:;<=>?@[\]^_`{|}~';
+    public const CHAR_SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~';
 
     public static $clean = [];
 
@@ -575,7 +575,7 @@ class Security
      * Gets password requirements in the platform language using get_lang
      * based in platform settings. See function 'self::getPasswordRequirements'.
      */
-    public static function getPasswordRequirementsToString(array $evaluatedConditions): string
+    public static function getPasswordRequirementsToString(array $evaluatedConditions = []): string
     {
         $output = '';
         $setting = self::getPasswordRequirements();
@@ -610,7 +610,7 @@ class Security
                     $icon = $pendingIcon;
                 }
 
-                $output .= $icon;
+                $output .= empty($evaluatedConditions) ? '' : $icon;
                 $output .= sprintf(
                     get_lang(
                         'NewPasswordRequirement'.ucfirst($type).'X'.ucfirst($rule)

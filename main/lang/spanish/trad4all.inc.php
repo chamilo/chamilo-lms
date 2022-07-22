@@ -8907,4 +8907,5 @@ $NewPasswordRequirementMinXSpecials = "Mínimo %s caracter(es) especiales";
 $NewPasswordCannotBeSameAsCurrent = "La nueva contraseña no puede ser la misma que la actual contraseña";
 $FilterByClass = "Filtrar por clase";
 $NotInAnyClass = "En ninguna clase";
+$XAccountDisabledByYAttempts = "La cuenta de usuario <i>%s</i> fue deshabilitada después de %d intentos fallidos de inicio de sesión.";
 ?>

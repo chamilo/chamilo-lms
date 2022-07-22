@@ -8815,4 +8815,5 @@ $NewPasswordRequirementMinXSpecials = "Minimum de %s caractères spécials";
 $NewPasswordCannotBeSameAsCurrent = "Le nouveau mot de passe doit être différent du précédent";
 $FilterByClass = "Filtrer par classe";
 $NotInAnyClass = "Dans aucune classe";
+$XAccountDisabledByYAttempts = "Le compte avec le nom d'utilisateur %s a été désactivé après %d tentatives de login en échec.";
 ?>

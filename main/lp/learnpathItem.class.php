@@ -1749,9 +1749,11 @@ class learnpathItem
 
         if (!Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
             $fixedAddedMinute = 5 * 60; // Add only 5 minutes
-            if ($time > $sessionLifetime) {
-                error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
-                error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
+	    if ($time > $sessionLifetime) {
+                if (api_get_setting('server_type') === 'test') {
+                    error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
+                    error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
+                }
                 $time = $fixedAddedMinute;
             }
 

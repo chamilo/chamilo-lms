@@ -945,6 +945,16 @@ class bbb
                     ),
                 );
             }
+	}
+        if ($this->isGlobalConference()) {
+            $conditions = array(
+                'where' => array(
+                    'c_id = ? AND user_id = ?' => array(
+                        0,
+                        $this->userId,
+                     ),
+                 ),
+            );
         }
 
         if (!empty($dateRange)) {

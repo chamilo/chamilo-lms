@@ -429,23 +429,24 @@ class UniqueAnswer extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header(Exercise $exercise, $counter = null, $score = [])
+    public function return_header(Exercise $exercise, $counter = null, $score = [], $displayTableHead = true)
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        if ($displayTableHead) {
+            $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
-        $header .= '<th>'.get_lang('Choice').'</th>';
-        if ($exercise->showExpectedChoiceColumn()) {
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th>'.get_lang('Choice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            }
+
+            $header .= '<th>'.get_lang('Answer').'</th>';
+            if ($exercise->showExpectedChoice()) {
+                $header .= '<th>'.get_lang('Status').'</th>';
+            }
+            $header .= '<th>'.get_lang('Comment').'</th>';
+            $header .= '</tr>';
         }
-
-        $header .= '<th>'.get_lang('Answer').'</th>';
-        if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('Status').'</th>';
-        }
-        $header .= '<th>'.get_lang('Comment').'</th>';
-        $header .= '</tr>';
-
         return $header;
     }
 

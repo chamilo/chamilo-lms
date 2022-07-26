@@ -348,7 +348,8 @@ class UniqueAnswerImage extends UniqueAnswer
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         if ($exercise->showExpectedChoice()) {
-            $header = '<table class="'.$this->question_table_class.'">
+            $header = parent::return_header($exercise, $counter, $score, false);
+            $header .= '<table class="'.$this->question_table_class.'">
 			<tr>
 				<th>'.get_lang('Choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {

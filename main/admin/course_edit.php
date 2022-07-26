@@ -431,16 +431,16 @@ if ($form->validate()) {
     $courseInfoBeforeUpdate = api_get_course_info_by_id($courseId);
     $title = str_replace('&amp;', '&', $title);
     $params = [
-        'course_language' => $course_language,
         'title' => $title,
+        'course_language' => $course_language,
         'category_code' => $category_code,
-        'visual_code' => $visual_code,
         'department_name' => $department_name,
         'department_url' => $department_url,
-        'disk_quota' => $disk_quota,
         'visibility' => $visibility,
         'subscribe' => $subscribe,
         'unsubscribe' => $unsubscribe,
+        'disk_quota' => $disk_quota,
+        'visual_code' => $visual_code,
     ];
     Database::update($course_table, $params, ['id = ?' => $courseId]);
     CourseManager::saveSettingChanges($courseInfoBeforeUpdate, $params);

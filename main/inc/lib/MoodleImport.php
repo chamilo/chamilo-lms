@@ -240,7 +240,7 @@ class MoodleImport
                     $moduleDir = $currentItem['directory'];
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                     $moduleValues = $this->readHtmlModule($moduleXml, $moduleName);
-                    $documentId = $this->processHtmlDocument($moduleValues, $moduleName);
+                    $documentId = $this->processHtmlDocument($moduleValues, $moduleName, $importedFiles);
 
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($documentId)) {
@@ -852,7 +852,7 @@ class MoodleImport
                             $pageValues = [];
                             $pageValues['name'] = $item['title'];
                             $pageValues['content'] = $item['contents'];
-                            $documentId = $this->processHtmlDocument($pageValues, 'page');
+                            $documentId = $this->processHtmlDocument($pageValues, 'page', $importedFiles);
                             $this->processSectionItem($lpId, 'document', $documentId, $pageValues['name']);
                             break;
                         case 'essay':
@@ -1051,7 +1051,7 @@ class MoodleImport
      *
      * @return false|int
      */
-    public function processHtmlDocument($moduleValues, $moduleName)
+    public function processHtmlDocument($moduleValues, $moduleName, $importedFiles = [])
     {
         $filepath = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/';
         $title = trim($moduleValues['name']);
@@ -1079,6 +1079,10 @@ class MoodleImport
         $content = ('page' == $moduleName ? $moduleValues['content'] : $moduleValues['intro']);
         $content = api_html_entity_decode($content);
         $content = $this->replaceMoodleChamiloCoursePath($content);
+
+        if ($importedFiles) {
+            $this->fixPathInText($importedFiles, $content);
+        }
 
         if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
             $content = str_replace(

@@ -479,6 +479,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
 
+    if (in_array($column, [0, 1, 11])) {
+        $column = 3;
+        $direction = 'ASC';
+    }
+
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from, $number_of_items";
 

@@ -189,7 +189,7 @@ class MoodleImport
         if ($debug) {
             error_log('Loading activities: '.count($activities));
         }
-
+        $n = 1;
         foreach ($activities as $activity) {
             if (empty($activity->childNodes->length)) {
                 continue;
@@ -220,7 +220,8 @@ class MoodleImport
 
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($assignId)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'student_publication', $assignId, $moduleValues['name']);
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'student_publication', $assignId, $moduleValues['name'], $n);
+                        $n++;
                     }
                     break;
                 case 'scorm':
@@ -244,7 +245,8 @@ class MoodleImport
 
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($documentId)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'document', $documentId, $moduleValues['name']);
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'document', $documentId, $moduleValues['name'], $n);
+                        $n++;
                     }
                     break;
                 case 'forum':
@@ -272,7 +274,8 @@ class MoodleImport
                     $forumId = store_forum($forumValues, $courseInfo, true);
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($forumId)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'forum', $forumId, $moduleValues['name']);
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'forum', $forumId, $moduleValues['name'], $n);
+                        $n++;
                     }
                     break;
                 case 'quiz':
@@ -372,7 +375,8 @@ class MoodleImport
                     }
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($exercise->iid)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'quiz', $exercise->iid, $title);
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'quiz', $exercise->iid, $title, $n);
+                        $n++;
                     }
                     break;
                 case 'resource':
@@ -416,7 +420,8 @@ class MoodleImport
                         );
                         // It is added as item in Learnpath
                         if (!empty($currentItem['sectionid']) && !empty($documentData['iid'])) {
-                            $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'document', $documentData['iid'], $fileInfo['title']);
+                            $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'document', $documentData['iid'], $fileInfo['title'], $n);
+                            $n++;
                         }
                     }
 
@@ -435,7 +440,8 @@ class MoodleImport
                     $linkId = Link::addlinkcategory('link');
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($linkId)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'link', $linkId, $moduleValues['name']);
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'link', $linkId, $moduleValues['name'], $n);
+                        $n++;
                     }
                     break;
             }
@@ -480,7 +486,7 @@ class MoodleImport
      *
      * @return int
      */
-    public function processSectionItem($lpId, $itemType, $itemId, $itemTitle)
+    public function processSectionItem($lpId, $itemType, $itemId, $itemTitle, $dspOrder = 0)
     {
         $lp = new \learnpath(
             api_get_course_id(),
@@ -494,7 +500,11 @@ class MoodleImport
             $itemType,
             $itemId,
             $itemTitle,
-            ''
+            '',
+            0,
+            0,
+            0,
+            $dspOrder
         );
 
         return $lpItemId;
@@ -1073,9 +1083,6 @@ class MoodleImport
 
         $dir = '/';
         $extension = 'html';
-        if (file_exists($filepath.$filename.'.'.$extension)) {
-            return false;
-        }
         $content = ('page' == $moduleName ? $moduleValues['content'] : $moduleValues['intro']);
         $content = api_html_entity_decode($content);
         $content = $this->replaceMoodleChamiloCoursePath($content);

@@ -490,7 +490,8 @@ class learnpath
         $description,
         $prerequisites = 0,
         $max_time_allowed = 0,
-        $userId = 0
+        $userId = 0,
+        $dspOrder = 0
     ) {
         $course_id = $this->course_info['real_id'];
         if (empty($course_id)) {
@@ -578,6 +579,11 @@ class learnpath
             $exercise->save();
         }
 
+        $newDisplayOrder = $display_order + 1;
+        if (!empty($dspOrder)) {
+            $newDisplayOrder = (int) $dspOrder;
+        }
+
         $params = [
             'c_id' => $course_id,
             'lp_id' => $this->get_id(),
@@ -590,7 +596,7 @@ class learnpath
             'parent_item_id' => $parent,
             'previous_item_id' => $previous,
             'next_item_id' => (int) $next,
-            'display_order' => $display_order + 1,
+            'display_order' => $newDisplayOrder,
             'prerequisite' => $prerequisites,
             'max_time_allowed' => $max_time_allowed,
             'min_score' => 0,

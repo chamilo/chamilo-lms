@@ -101,6 +101,9 @@ class MoodleImport
             0
         );
 
+        if (is_dir($documentPath.'/moodle')) {
+            chmod($documentPath.'/moodle', 0777);
+        }
         // This process will upload all question resource files
         $filesXml = @file_get_contents($destinationDir.'/files.xml');
         $mainFileModuleValues = $this->getAllQuestionFiles($filesXml);
@@ -113,6 +116,7 @@ class MoodleImport
         $_POST['moodle_import'] = true;
         $_POST['language'] = $courseInfo['language'];
 
+        $modScormFileZips = [];
         foreach ($mainFileModuleValues as $fileInfo) {
             $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
             foreach (new RecursiveIteratorIterator($dirs) as $file) {
@@ -135,6 +139,13 @@ class MoodleImport
                 $files['file']['size'] = $fileInfo['filesize'];
                 $files['file']['from_file'] = true;
                 $files['file']['move_file'] = true;
+
+                if (isset($fileInfo['modscorm']) && true === $fileInfo['modscorm']) {
+                    if ('application/zip' == $fileInfo['mimetype']) {
+                        $modScormFileZips[$fileInfo['contenthash']] = $files;
+                    }
+                    continue;
+                }
 
                 $title = isset($fileInfo['title']) ? $fileInfo['title'] : pathinfo($fileInfo['filename'], PATHINFO_FILENAME);
 
@@ -167,14 +178,18 @@ class MoodleImport
 
             throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
         }
+
+        // It process the sections as learnpaths
+        $sections = $this->readSections($xml, $destinationDir);
         $activities = $doc->getElementsByTagName('activity');
+        $sectionLpValues = $this->processSections($sections, $activities);
 
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         if ($debug) {
             error_log('Loading activities: '.count($activities));
         }
-
+        $n = 1;
         foreach ($activities as $activity) {
             if (empty($activity->childNodes->length)) {
                 continue;
@@ -191,6 +206,49 @@ class MoodleImport
             }
 
             switch ($moduleName) {
+                case 'lesson':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readLessonModule($moduleXml);
+                    $this->processLesson($moduleValues, $importedFiles);
+                    break;
+                case 'assign':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readAssignModule($moduleXml);
+                    $assignId = $this->processAssignment($moduleValues);
+
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($assignId)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'student_publication', $assignId, $moduleValues['name'], $n);
+                        $n++;
+                    }
+                    break;
+                case 'scorm':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readScormModule($moduleXml);
+                    $this->processScorm($moduleValues, $modScormFileZips);
+                    break;
+                case 'glossary':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readGlossaryModule($moduleXml, $currentItem['moduleid']);
+                    $this->processGlossary($moduleValues, $currentItem['moduleid']);
+                    break;
+                case 'label':
+                case 'page':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readHtmlModule($moduleXml, $moduleName);
+                    $documentId = $this->processHtmlDocument($moduleValues, $moduleName, $importedFiles);
+
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($documentId)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'document', $documentId, $moduleValues['name'], $n);
+                        $n++;
+                    }
+                    break;
                 case 'forum':
                     $catForumValues = [];
                     // Read the current forum module xml.
@@ -213,7 +271,12 @@ class MoodleImport
                     $forumValues['forum_category'] = $catId;
                     $forumValues['moderated'] = 0;
 
-                    store_forum($forumValues, $courseInfo);
+                    $forumId = store_forum($forumValues, $courseInfo, true);
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($forumId)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'forum', $forumId, $moduleValues['name'], $n);
+                        $n++;
+                    }
                     break;
                 case 'quiz':
                     // Read the current quiz module xml.
@@ -280,12 +343,7 @@ class MoodleImport
                         $questionInstance->updateTitle($questionsValues['name']);
                         $questionText = $questionsValues['questiontext'];
 
-                        // Replace the path from @@PLUGINFILE@@ to a correct chamilo path
-                        $questionText = str_replace(
-                            '@@PLUGINFILE@@',
-                            '/courses/'.$courseInfo['path'].'/document/moodle',
-                            $questionText
-                        );
+                        $questionText = $this->replaceMoodleChamiloCoursePath($questionText);
 
                         if ($importedFiles) {
                             $this->fixPathInText($importedFiles, $questionText);
@@ -299,7 +357,7 @@ class MoodleImport
                         if ($questionInstance->type != MEDIA_QUESTION) {
                             $questionInstance->save($exercise);
                             // modify the exercise
-                            $exercise->addToList($questionInstance->id);
+                            $exercise->addToList($questionInstance->iid);
                             $exercise->update_question_positions();
                         }
 
@@ -314,6 +372,11 @@ class MoodleImport
                             $currentQuestion,
                             $importedFiles
                         );
+                    }
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($exercise->iid)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'quiz', $exercise->iid, $title, $n);
+                        $n++;
                     }
                     break;
                 case 'resource':
@@ -345,7 +408,7 @@ class MoodleImport
                         $_POST['language'] = $courseInfo['language'];
                         $_POST['moodle_import'] = true;
 
-                        DocumentManager::upload_document(
+                        $documentData = DocumentManager::upload_document(
                             $files,
                             '/moodle',
                             $fileInfo['title'],
@@ -355,6 +418,11 @@ class MoodleImport
                             true,
                             true
                         );
+                        // It is added as item in Learnpath
+                        if (!empty($currentItem['sectionid']) && !empty($documentData['iid'])) {
+                            $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'document', $documentData['iid'], $fileInfo['title'], $n);
+                            $n++;
+                        }
                     }
 
                     break;
@@ -369,7 +437,12 @@ class MoodleImport
                     $_POST['category_id'] = 0;
                     $_POST['target'] = '_blank';
 
-                    Link::addlinkcategory('link');
+                    $linkId = Link::addlinkcategory('link');
+                    // It is added as item in Learnpath
+                    if (!empty($currentItem['sectionid']) && !empty($linkId)) {
+                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']], 'link', $linkId, $moduleValues['name'], $n);
+                        $n++;
+                    }
                     break;
             }
         }
@@ -382,6 +455,684 @@ class MoodleImport
         unlink($filePath);
 
         return true;
+    }
+
+    /**
+     * Replace the path from @@PLUGINFILE@@ to a correct chamilo path.
+     *
+     * @param $text
+     *
+     * @return string
+     */
+    public function replaceMoodleChamiloCoursePath($text)
+    {
+        $coursePath = api_get_course_path();
+        $text = str_replace(
+            '@@PLUGINFILE@@',
+            '/courses/'.$coursePath.'/document/moodle',
+            $text
+        );
+
+        return $text;
+    }
+
+    /**
+     * It adds module item by section as learnpath item.
+     *
+     * @param $lpId
+     * @param $itemType
+     * @param $itemId
+     * @param $itemTitle
+     *
+     * @return int
+     */
+    public function processSectionItem($lpId, $itemType, $itemId, $itemTitle, $dspOrder = 0)
+    {
+        $lp = new \learnpath(
+            api_get_course_id(),
+            $lpId,
+            api_get_user_id()
+        );
+
+        $lpItemId = $lp->add_item(
+            0,
+            0,
+            $itemType,
+            $itemId,
+            $itemTitle,
+            '',
+            0,
+            0,
+            0,
+            $dspOrder
+        );
+
+        return $lpItemId;
+    }
+
+    /**
+     * It adds the section module as learnpath.
+     *
+     * @param $sections
+     *
+     * @return array|false
+     */
+    public function processSections($sections, $activities)
+    {
+        if (empty($sections)) {
+            return false;
+        }
+
+        $i = 1;
+        $lpAdded = [];
+        foreach ($sections as $sectionId => $section) {
+            $countSectionActivities = $this->countSectionActivities($activities, $sectionId);
+            if ($countSectionActivities > 0) {
+                $lpName = $section['name'];
+                if ('$@NULL@$' == $lpName) {
+                    $lpName = get_lang('Topic').' '.$i;
+                }
+                $lpDescription = $section['summary'];
+                $lpId = learnpath::add_lp(
+                    api_get_course_id(),
+                    $lpName,
+                    $lpDescription,
+                    'chamilo',
+                    'manual'
+                );
+                $lpAdded[$sectionId] = $lpId;
+                $i++;
+            }
+        }
+
+        return $lpAdded;
+    }
+
+    /**
+     * It counts the activities inside a section module.
+     *
+     * @param $activities
+     * @param $sectionId
+     *
+     * @return int|void
+     */
+    public function countSectionActivities($activities, $sectionId)
+    {
+        $sectionActivities = [];
+        $modulesLpTypes = ['url', 'resource', 'quiz', 'forum', 'page', 'label', 'assign'];
+        $i = 0;
+        foreach ($activities as $activity) {
+            if (empty($activity->childNodes->length)) {
+                continue;
+            }
+            $currentItem = [];
+            foreach ($activity->childNodes as $item) {
+                $currentItem[$item->nodeName] = $item->nodeValue;
+            }
+            if (!empty($currentItem['sectionid']) && in_array($currentItem['modulename'], $modulesLpTypes)) {
+                $sectionActivities[$currentItem['sectionid']][$i] = $currentItem;
+                $i++;
+            }
+        }
+
+        $countActivities = 0;
+        if (isset($sectionActivities[$sectionId])) {
+            $countActivities = count($sectionActivities[$sectionId]);
+        }
+
+        return $countActivities;
+    }
+
+    /**
+     * It gets the sections from xml module.
+     *
+     * @param $xml
+     * @param $destinationDir
+     *
+     * @return array|false
+     */
+    public function readSections($xml, $destinationDir)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($xml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $sections = [];
+        $sectionNodes = $doc->getElementsByTagName('section');
+        foreach ($sectionNodes as $section) {
+            if (empty($section->childNodes->length)) {
+                continue;
+            }
+            $currentItem = [];
+            foreach ($section->childNodes as $item) {
+                $currentItem[$item->nodeName] = $item->nodeValue;
+            }
+            if (!empty($currentItem['directory'])) {
+                $sectionDir = $destinationDir.'/'.$currentItem['directory'];
+                $sectionInfoXml = @file_get_contents($sectionDir.'/section.xml');
+                $sections[$currentItem['sectionid']] = $this->readSectionModule($sectionInfoXml);
+            }
+        }
+
+        return $sections;
+    }
+
+    /**
+     * It reads module xml to get section info.
+     *
+     * @param $sectionInfoXml
+     *
+     * @return array|false
+     */
+    public function readSectionModule($sectionInfoXml)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($sectionInfoXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $sectionInfo = [];
+        $sectionNode = $doc->getElementsByTagName('section');
+        foreach ($sectionNode as $section) {
+            if (empty($section->childNodes->length)) {
+                continue;
+            }
+            foreach ($section->childNodes as $item) {
+                $sectionInfo[$item->nodeName] = $item->nodeValue;
+            }
+        }
+
+        return $sectionInfo;
+    }
+
+    /**
+     * It gets lesson information from module xml.
+     *
+     * @param $moduleXml
+     *
+     * @return array|false
+     */
+    public function readLessonModule($moduleXml)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($moduleXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $activities = $doc->getElementsByTagName('lesson');
+        $currentItem = [];
+        foreach ($activities as $activity) {
+            if ($activity->childNodes->length) {
+                foreach ($activity->childNodes as $item) {
+                    $currentItem[$item->nodeName] = $item->nodeValue;
+                }
+            }
+        }
+
+        $pages = $doc->getElementsByTagName('page');
+
+        $pagesList = [];
+        $counter = 0;
+        foreach ($pages as $page) {
+            if ($page->childNodes->length) {
+                foreach ($page->childNodes as $item) {
+                    $pagesList[$counter][$item->nodeName] = $item->nodeValue;
+                }
+                $i = 0;
+                $answerNodes = $page->getElementsByTagName("answer");
+                $answers = [];
+                foreach ($answerNodes as $answer) {
+                    foreach ($answer->childNodes as $n) {
+                        $answers[$i][$n->nodeName] = $n->nodeValue;
+                    }
+                    $i++;
+                }
+                $pagesList[$counter]['answers'] = $answers;
+                $counter++;
+            }
+        }
+        $currentItem['pages'] = $pagesList;
+
+        return $currentItem;
+    }
+
+    /**
+     * It gets assignment information from module xml.
+     *
+     * @param $moduleXml
+     *
+     * @return array|false
+     */
+    public function readAssignModule($moduleXml)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($moduleXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $info = [];
+        $entries = $doc->getElementsByTagName('assign');
+        foreach ($entries as $entry) {
+            if (empty($entry->childNodes->length)) {
+                continue;
+            }
+            foreach ($entry->childNodes as $item) {
+                if (in_array($item->nodeName, ['name', 'intro', 'duedate', 'grade'])) {
+                    $info[$item->nodeName] = $item->nodeValue;
+                }
+            }
+        }
+
+        return $info;
+    }
+
+    /**
+     * It gest scorm information from module xml.
+     *
+     * @param $moduleXml
+     *
+     * @return array|false
+     */
+    public function readScormModule($moduleXml)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($moduleXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $info = [];
+        $entries = $doc->getElementsByTagName('scorm');
+        $i = 0;
+        foreach ($entries as $entry) {
+            if (empty($entry->childNodes->length)) {
+                continue;
+            }
+            foreach ($entry->childNodes as $item) {
+                if (in_array($item->nodeName, ['name', 'reference', 'sha1hash', 'scormtype'])) {
+                    $info[$i][$item->nodeName] = $item->nodeValue;
+                }
+            }
+            $i++;
+        }
+
+        return $info;
+    }
+
+    /**
+     * Get glossary information from module xml.
+     *
+     * @param $moduleXml
+     * @param $moduleId
+     *
+     * @return array|false
+     */
+    public function readGlossaryModule($moduleXml, $moduleId)
+    {
+        $doc = new DOMDocument();
+        $res = @$doc->loadXML($moduleXml);
+        if (empty($res)) {
+            return false;
+        }
+
+        $glossaryInfo = [];
+        $entries = $doc->getElementsByTagName('entry');
+        $i = 0;
+        foreach ($entries as $entry) {
+            if (empty($entry->childNodes->length)) {
+                continue;
+            }
+            foreach ($entry->childNodes as $item) {
+                $glossaryInfo[$moduleId][$i][$item->nodeName] = $item->nodeValue;
+            }
+            $i++;
+        }
+
+        return $glossaryInfo;
+    }
+
+    /**
+     * It reads item html from module to documents.
+     *
+     * @param $moduleXml
+     * @param $moduleName
+     *
+     * @return array|false
+     */
+    public function readHtmlModule($moduleXml, $moduleName)
+    {
+        $moduleDoc = new DOMDocument();
+        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        if (empty($moduleRes)) {
+            return false;
+        }
+        $activities = $moduleDoc->getElementsByTagName($moduleName);
+        $currentItem = [];
+        foreach ($activities as $activity) {
+            if ($activity->childNodes->length) {
+                foreach ($activity->childNodes as $item) {
+                    $currentItem[$item->nodeName] = $item->nodeValue;
+                }
+            }
+        }
+
+        return $currentItem;
+    }
+
+    /**
+     * It saves a learnpath from module xml.
+     *
+     * @param $moduleValues
+     *
+     * @return false
+     */
+    public function processLesson($moduleValues, $importedFiles)
+    {
+        if (!empty($moduleValues['pages'])) {
+            $qtypes = [
+                20 => 'page',
+                10 => 'essay',
+                5 => 'matching',
+                3 => 'multichoice',
+                1 => 'shortanswer',
+                2 => 'truefalse',
+            ];
+            $items = $moduleValues['pages'];
+            $lpName = $moduleValues['name'];
+            $lpDescription = api_utf8_decode($moduleValues['intro']);
+            $lpId = learnpath::add_lp(
+                api_get_course_id(),
+                $lpName,
+                $lpDescription,
+                'chamilo',
+                'manual'
+            );
+
+            $questionList = [];
+            foreach ($items as $item) {
+                if (in_array($item['qtype'], array_keys($qtypes))) {
+                    $qTypeName = $qtypes[$item['qtype']];
+                    switch ($qTypeName) {
+                        case 'page':
+                            $pageValues = [];
+                            $pageValues['name'] = $item['title'];
+                            $pageValues['content'] = $item['contents'];
+                            $documentId = $this->processHtmlDocument($pageValues, 'page', $importedFiles);
+                            $this->processSectionItem($lpId, 'document', $documentId, $pageValues['name']);
+                            break;
+                        case 'essay':
+                        case 'match':
+                        case 'multichoice':
+                        case 'shortanswer':
+                        case 'truefalse':
+                            $qType = $qtypes[$item['qtype']];
+                            $question = [];
+                            $question['qtype'] = $qType;
+                            $question['name'] = $item['title'];
+                            $question['questiontext'] = api_utf8_decode($item['contents']);
+                            $question[$qType.'_values']['single'] = 1;
+                            $question['questionType'] = $this->matchMoodleChamiloQuestionTypes($question);
+                            $answers = [];
+                            if (!empty($item['answers'])) {
+                                $defaultmark = 0;
+                                foreach ($item['answers'] as $answer) {
+                                    $answerValue = [];
+                                    $answerValue['answertext'] = api_utf8_decode($answer['answer_text']);
+                                    $answerValue['feedback'] = api_utf8_decode($answer['response']);
+                                    $answerValue['fraction'] = $answer['score'];
+                                    $defaultmark += $answer['score'];
+                                    $answers[] = $answerValue;
+                                }
+                                $question['defaultmark'] = $defaultmark;
+                            }
+                            $question['answers'] = $answers;
+                            $questionList[] = $question;
+                            break;
+                    }
+                }
+            }
+
+            if (!empty($questionList)) {
+                $courseInfo = api_get_course_info();
+                // It creates a quiz for those questions.
+                $exercise = new Exercise($courseInfo['real_id']);
+                $quizLpName = $lpName.' - '.get_lang('Quiz');
+                $title = Exercise::format_title_variable($quizLpName);
+                $exercise->updateTitle($title);
+                $exercise->updateDescription(api_utf8_decode($moduleValues['intro']));
+                $exercise->updateAttempts(0);
+                $exercise->updateFeedbackType(0);
+                $exercise->setRandom(0);
+                $exercise->updateRandomAnswers(false);
+                $exercise->updateExpiredTime(0);
+                $exercise->updateType(2);
+                $exercise->updateResultsDisabled(0);
+
+                // Create the new Quiz
+                $exercise->save();
+
+                $this->processSectionItem($lpId, 'quiz', $exercise->iid, $quizLpName);
+
+                // Ok, we got the Quiz and create it, now its time to add the Questions
+                foreach ($questionList as $question) {
+                    $questionInstance = Question::getInstance($question['questionType']);
+                    if (empty($questionInstance)) {
+                        continue;
+                    }
+                    $questionInstance->updateTitle($question['name']);
+                    $questionText = $question['questiontext'];
+                    $questionText = $this->replaceMoodleChamiloCoursePath($questionText);
+                    $questionInstance->updateDescription($questionText);
+                    $questionInstance->updateLevel(1);
+                    $questionInstance->updateCategory(0);
+
+                    //Save normal question if NOT media
+                    if ($questionInstance->type != MEDIA_QUESTION) {
+                        $questionInstance->save($exercise);
+                        // modify the exercise
+                        $exercise->addToList($questionInstance->iid);
+                        $exercise->update_question_positions();
+                    }
+                    $this->processAnswers(
+                        $exercise,
+                        $question['answers'],
+                        $question['qtype'],
+                        $questionInstance,
+                        $question,
+                        $importedFiles
+                    );
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * It saves a student publication from module xml.
+     *
+     * @param $assign
+     *
+     * @return bool|int
+     */
+    public function processAssignment($assign)
+    {
+        if (!empty($assign)) {
+            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+            $values = [];
+            $values['new_dir'] = $assign['name'];
+            $values['enableEndDate'] = 1;
+            $values['ends_on'] = date('Y-m-d H:i', $assign['duedate']);
+            $values['work_title'] = $assign['name'];
+            $values['description'] = api_utf8_decode($assign['intro']);
+            $values['qualification'] = '';
+            $values['weight'] = $assign['grade'];
+            $values['allow_text_assignment'] = 2;
+
+            $assignId = addDir(
+                $values,
+                api_get_user_id(),
+                api_get_course_info(),
+                api_get_group_id(),
+                api_get_session_id()
+            );
+
+            return $assignId;
+        }
+
+        return false;
+    }
+
+    /**
+     * It saves a scorm from module xml.
+     *
+     * @param $moduleValues
+     * @param $modScormFileZips
+     *
+     * @return bool
+     */
+    public function processScorm($moduleValues, $modScormFileZips)
+    {
+        if (!empty($moduleValues)) {
+            foreach ($moduleValues as $info) {
+                $sha1hash = $info['sha1hash'];
+                if (!empty($modScormFileZips[$sha1hash])) {
+                    $scormFile = $modScormFileZips[$sha1hash];
+                    $oScorm = new scorm();
+                    $manifest = $oScorm->import_package(
+                        $scormFile['file']
+                    );
+                    if (!empty($manifest)) {
+                        $oScorm->parse_manifest($manifest);
+                        $oScorm->import_manifest(
+                            api_get_course_id(),
+                            1,
+                            0,
+                            0,
+                            $info['name']
+                        );
+                    }
+                    $oScorm->set_proximity($info['scormtype']);
+                    $oScorm->set_maker('Scorm');
+                    $oScorm->set_jslib('scorm_api.php');
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * It saves glossary terms from module xml.
+     *
+     * @param $moduleValues
+     * @param $moduleId
+     *
+     * @return bool
+     */
+    public function processGlossary($moduleValues, $moduleId)
+    {
+        if (!empty($moduleValues[$moduleId])) {
+            foreach ($moduleValues[$moduleId] as $entry) {
+                $values = [];
+                $values['name'] = $entry['concept'];
+                $values['description'] = $entry['definition'];
+                GlossaryManager::save_glossary($values);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * It process the module as document html.
+     *
+     * @param $moduleValues
+     * @param $moduleName
+     *
+     * @return false|int
+     */
+    public function processHtmlDocument($moduleValues, $moduleName, $importedFiles = [])
+    {
+        $filepath = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/';
+        $title = trim($moduleValues['name']);
+        if ('$@NULL@$' == $title) {
+            $title = get_lang('Tag');
+        }
+
+        // Setting the filename
+        $filename = $title;
+        $filename = addslashes(trim($filename));
+        $filename = Security::remove_XSS($filename);
+        $filename = api_replace_dangerous_char($filename);
+        $filename = disable_dangerous_file($filename);
+        $filename .= DocumentManager::getDocumentSuffix(
+            api_get_course_info(),
+            api_get_session_id(),
+            api_get_group_id()
+        );
+
+        $dir = '/';
+        $extension = 'html';
+        $content = ('page' == $moduleName ? $moduleValues['content'] : $moduleValues['intro']);
+        $content = api_html_entity_decode($content);
+        $content = $this->replaceMoodleChamiloCoursePath($content);
+
+        if ($importedFiles) {
+            $this->fixPathInText($importedFiles, $content);
+        }
+
+        if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
+            $content = str_replace(
+                api_get_path(WEB_COURSE_PATH),
+                api_get_configuration_value('url_append').api_get_path(REL_COURSE_PATH),
+                $content
+            );
+
+            fputs($fp, $content);
+            fclose($fp);
+            chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
+            $fileSize = filesize($filepath.$filename.'.'.$extension);
+            $saveFilePath = $dir.$filename.'.'.$extension;
+
+            $documentId = add_document(
+                api_get_course_info(),
+                $saveFilePath,
+                'file',
+                $fileSize,
+                $title
+            );
+
+            if ($documentId) {
+                api_item_property_update(
+                    api_get_course_info(),
+                    TOOL_DOCUMENT,
+                    $documentId,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    [],
+                    null,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
+                // Update parent folders
+                item_property_update_on_folder(api_get_course_info(), $dir, api_get_user_id());
+            }
+
+            return $documentId;
+        }
+
+        return false;
     }
 
     /**
@@ -704,10 +1455,10 @@ class MoodleImport
             case 'multichoice':
                 return MULTIPLE_ANSWER;
             case 'multianswer':
-            case 'shortanswer':
             case 'match':
                 return FILL_IN_BLANKS;
             case 'essay':
+            case 'shortanswer':
                 return FREE_ANSWER;
             case 'truefalse':
                 return UNIQUE_ANSWER;
@@ -759,7 +1510,7 @@ class MoodleImport
     ) {
         switch ($questionType) {
             case 'multichoice':
-                $objAnswer = new Answer($questionInstance->id);
+                $objAnswer = new Answer($questionInstance->iid);
                 $questionWeighting = 0;
                 foreach ($questionList as $slot => $answer) {
                     $this->processMultipleAnswer(
@@ -779,13 +1530,9 @@ class MoodleImport
 
                 return true;
             case 'multianswer':
-                $objAnswer = new Answer($questionInstance->id);
+                $objAnswer = new Answer($questionInstance->iid);
                 $coursePath = api_get_course_path();
-                $placeholder = str_replace(
-                    '@@PLUGINFILE@@',
-                    '/courses/'.$coursePath.'/document/moodle',
-                    $currentQuestion['questiontext']
-                );
+                $placeholder = $this->replaceMoodleChamiloCoursePath($currentQuestion['questiontext']);
                 $optionsValues = [];
                 foreach ($questionList as $slot => $subQuestion) {
                     $qtype = $subQuestion['qtype'];
@@ -826,7 +1573,7 @@ class MoodleImport
 
                 return true;
             case 'match':
-                $objAnswer = new Answer($questionInstance->id);
+                $objAnswer = new Answer($questionInstance->iid);
                 $placeholder = '';
 
                 $optionsValues = $this->processFillBlanks(
@@ -861,7 +1608,6 @@ class MoodleImport
                 $objAnswer->save();
 
                 return true;
-            case 'shortanswer':
             case 'ddmatch':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
@@ -869,6 +1615,7 @@ class MoodleImport
                 $questionInstance->save($exercise);
 
                 return false;
+            case 'shortanswer':
             case 'essay':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
@@ -876,7 +1623,7 @@ class MoodleImport
 
                 return true;
             case 'truefalse':
-                $objAnswer = new Answer($questionInstance->id);
+                $objAnswer = new Answer($questionInstance->iid);
                 $questionWeighting = 0;
                 foreach ($questionList as $slot => $answer) {
                     $this->processTrueFalse(
@@ -929,6 +1676,8 @@ class MoodleImport
         $goodAnswer = $correct ? true : false;
 
         $this->fixPathInText($importedFiles, $answer);
+        $answer = $this->replaceMoodleChamiloCoursePath($answer);
+        $comment = $this->replaceMoodleChamiloCoursePath($comment);
 
         $objAnswer->createAnswer(
             $answer,
@@ -959,6 +1708,8 @@ class MoodleImport
         $goodAnswer = $weighting > 0;
 
         $this->fixPathInText($importedFiles, $answer);
+        $answer = $this->replaceMoodleChamiloCoursePath($answer);
+        $comment = $this->replaceMoodleChamiloCoursePath($comment);
 
         $objAnswer->createAnswer(
             $answer,
@@ -1001,6 +1752,8 @@ class MoodleImport
         $goodAnswer = $correct ? true : false;
 
         $this->fixPathInText($importedFiles, $answer);
+        $answer = $this->replaceMoodleChamiloCoursePath($answer);
+        $comment = $this->replaceMoodleChamiloCoursePath($comment);
 
         $objAnswer->createAnswer(
             $answer,
@@ -1097,11 +1850,7 @@ class MoodleImport
 
                     $currentAnswers = htmlentities($correctAnswer.$othersAnswers);
                     $currentAnswers = '['.substr($currentAnswers, 0, -1).'] ';
-                    $answer['questiontext'] = str_replace(
-                        '@@PLUGINFILE@@',
-                        '/courses/'.$coursePath.'/document/moodle',
-                        $answer['questiontext']
-                    );
+                    $answer['questiontext'] = $this->replaceMoodleChamiloCoursePath($answer['questiontext']);
 
                     $placeholder .= '<p> '.strip_tags($answer['questiontext']).' '.$currentAnswers.' </p>';
                 }
@@ -1138,6 +1887,10 @@ class MoodleImport
                 foreach ($activity->childNodes as $item) {
                     if ($item->nodeName == 'component' && $item->nodeValue == 'mod_resource') {
                         $thisIsAnInvalidItem = true;
+                    }
+
+                    if ($item->nodeName == 'component' && $item->nodeValue == 'mod_scorm') {
+                        $currentItem['modscorm'] = true;
                     }
 
                     if ($item->nodeName == 'contenthash') {

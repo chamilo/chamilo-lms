@@ -3914,6 +3914,48 @@ class Exercise
             );
         }
 
+        if (MULTIPLE_ANSWER_DROPDOWN == $answerType) {
+            $questionScore = $questionWeighting;
+
+            if ($from_database) {
+                $studentChoices = Database::store_result(
+                    Database::query(
+                        "SELECT answer FROM $TBL_TRACK_ATTEMPT WHERE exe_id = $exeId AND question_id = $questionId"
+                    ),
+                    'ASSOC'
+                );
+                $studentChoices = array_column($studentChoices, 'answer');
+            } else {
+                $studentChoices = array_values($choice);
+            }
+
+            $correctChoices = array_filter(
+                $answerMatching,
+                function ($answerId) use ($objAnswerTmp) {
+                    $index = array_search($answerId, $objAnswerTmp->iid);
+
+                    return true === (bool) $objAnswerTmp->correct[$index];
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+
+            $correctChoices = array_keys($correctChoices);
+
+            if (array_diff($studentChoices, $correctChoices) || array_diff($correctChoices, $studentChoices)) {
+                $questionScore = 0;
+            }
+
+            if ($show_result) {
+                echo ExerciseShowFunctions::displayMultipleAnswerDropdown(
+                    $this,
+                    $objAnswerTmp,
+                    $correctChoices,
+                    $studentChoices,
+                    $showTotalScoreAndUserChoicesInLastAttempt
+                );
+            }
+        }
+
         if ($debug) {
             error_log('-- Start answer loop --');
         }
@@ -6182,9 +6224,14 @@ class Exercise
                         $questionDuration
                     );
                 }
-            } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
+            } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER || MULTIPLE_ANSWER_DROPDOWN == $answerType) {
                 if ($choice != 0) {
-                    $reply = array_keys($choice);
+                    if (MULTIPLE_ANSWER_DROPDOWN == $answerType) {
+                        $reply = array_values($choice);
+                    } else {
+                        $reply = array_keys($choice);
+                    }
+
                     for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt(

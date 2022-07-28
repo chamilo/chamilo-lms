@@ -73,6 +73,7 @@ abstract class Question
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
         UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
+        MULTIPLE_ANSWER_DROPDOWN => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown'],
     ];
 
     /**

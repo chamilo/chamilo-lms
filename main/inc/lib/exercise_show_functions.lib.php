@@ -342,6 +342,121 @@ class ExerciseShowFunctions
         echo $content;
     }
 
+    public static function displayMultipleAnswerDropdown(
+        Exercise $exercise,
+        Answer $answer,
+        array $correctAnswers,
+        array $studentChoices,
+        bool $showTotalScoreAndUserChoices = true
+    ): string {
+        if (true === $exercise->hideNoAnswer && empty($studentChoices)) {
+            return '';
+        }
+
+        $studentChoices = array_filter(
+            $studentChoices,
+            function ($studentAnswerId) {
+                return -1 !== (int) $studentAnswerId;
+            }
+        );
+
+        $allChoices = array_unique(
+            array_merge($correctAnswers, $studentChoices)
+        );
+        sort($allChoices);
+
+        $checkboxOn = Display::return_icon('checkbox_on.png', null, null, ICON_SIZE_TINY);
+        $checkboxOff = Display::return_icon('checkbox_off.png', null, null, ICON_SIZE_TINY);
+
+        $labelSuccess = Display::label(get_lang('Correct'), 'success');
+        $labelIncorrect = Display::label(get_lang('Incorrect'), 'danger');
+
+        $html = '';
+
+        foreach ($allChoices as $choice) {
+            $isStudentAnswer = in_array($choice, $studentChoices);
+            $isCorrectAnswer = $isStudentAnswer && in_array($choice, $correctAnswers);
+            $answerPosition = array_search($choice, $answer->iid);
+
+            $hideExpectedAnswer = false;
+
+            switch ($exercise->selectResultsDisabled()) {
+                case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
+                    $hideExpectedAnswer = true;
+
+                    if (!$isCorrectAnswer && empty($studentChoices)) {
+                        continue 2;
+                    }
+                    break;
+                case RESULT_DISABLE_SHOW_SCORE_ONLY:
+                    if (0 == $exercise->getFeedbackType()) {
+                        $hideExpectedAnswer = true;
+                    }
+                    break;
+                case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+                case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+                    $hideExpectedAnswer = true;
+                    if ($showTotalScoreAndUserChoices) {
+                        $hideExpectedAnswer = false;
+                    }
+                    break;
+                case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
+                    if (false === $showTotalScoreAndUserChoices && empty($studentChoices)) {
+                        continue 2;
+                    }
+                    break;
+            }
+
+            $studentAnswerClass = '';
+
+            if ($isCorrectAnswer
+                && in_array(
+                    $exercise->selectResultsDisabled(),
+                    [
+                        RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                        RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+                    ]
+                )
+            ) {
+                $studentAnswerClass = 'success';
+            }
+
+            $html .= '<tr class="'.$studentAnswerClass.'">';
+            $html .= '<td class="text-center">'.($isStudentAnswer ? $checkboxOn : $checkboxOff).'</td>';
+
+            if ($exercise->showExpectedChoiceColumn()) {
+                $html .= '<td class="text-center">';
+
+                if ($hideExpectedAnswer) {
+                    $html .= '<span class="text-muted">&mdash;</span>';
+                } else {
+                    $html .= $isCorrectAnswer ? $checkboxOn : $checkboxOff;
+                }
+
+                $html .= '</td>';
+            }
+
+            $answerText = $answer->answer[$answerPosition] ?? get_lang('None');
+
+            if ($exercise->export) {
+                $answerText = strip_tags_blacklist($answerText, ['title', 'head']);
+                // Fix answers that contains this tags
+                $tags = ['<html>', '</html>', '<body>', '</body>'];
+                $answerText = str_replace($tags, '', $answerText);
+            }
+
+            $html .= '<td>'.Security::remove_XSS($answerText).'</td>';
+
+            if ($exercise->showExpectedChoice()) {
+                $html .= '<td class="text-center">'.($isCorrectAnswer ? $labelSuccess : $labelIncorrect).'</td>';
+            }
+
+            $html .= '</tr>';
+        }
+
+        return $html;
+    }
+
     /**
      * Display the answers to a multiple choice question.
      *

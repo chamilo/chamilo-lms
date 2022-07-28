@@ -62,10 +62,10 @@ class LtiProviderPlugin extends Plugin
     {
         $courses = CourseManager::get_courses_list();
         $toolProvider = $this->getToolProvider($issuer);
-        $htmlcontent = '<div class="form-group">
+        $htmlcontent = '<div class="form-group select-tool" id="select-quiz">
             <label for="lti_provider_create_platform_kid" class="col-sm-2 control-label">'.$this->get_lang('ToolProvider').'</label>
             <div class="col-sm-8">
-                <select name="tool_provider">';
+                <select name="tool_provider" class="sbox-tool" id="sbox-tool-quiz" disabled="disabled">';
         $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneActivity').' --</option>';
         foreach ($courses as $course) {
             $courseInfo = api_get_course_info($course['code']);
@@ -80,6 +80,47 @@ class LtiProviderPlugin extends Plugin
             foreach ($exerciseList as $key => $exercise) {
                 $selectValue = "{$course['code']}@@quiz-{$exercise['iid']}";
                 $htmlcontent .= '<option value="'.$selectValue.'" '.($toolProvider == $selectValue ? ' selected="selected"' : '').'>'.Security::remove_XSS($exercise['title']).'</option>';
+            }
+            $htmlcontent .= '</optgroup>';
+        }
+        $htmlcontent .= "</select>";
+        $htmlcontent .= '   </div>
+                    <div class="col-sm-2"></div>
+                    </div>';
+
+        return $htmlcontent;
+    }
+
+    /**
+     * Get a selectbox with quizzes in courses , used for a tool provider.
+     *
+     * @param null $issuer
+     *
+     * @return string
+     */
+    public function getLearnPathsSelect($issuer = null)
+    {
+        $courses = CourseManager::get_courses_list();
+        $toolProvider = $this->getToolProvider($issuer);
+        $htmlcontent = '<div class="form-group select-tool" id="select-lp" style="display:none">
+            <label for="lti_provider_create_platform_kid" class="col-sm-2 control-label">'.$this->get_lang('ToolProvider').'</label>
+            <div class="col-sm-8">
+                <select name="tool_provider" class="sbox-tool" id="sbox-tool-lp" disabled="disabled">';
+        $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneActivity').' --</option>';
+        foreach ($courses as $course) {
+            $courseInfo = api_get_course_info($course['code']);
+            $optgroupLabel = "{$course['title']} : ".get_lang('Learnpath');
+            $htmlcontent .= '<optgroup label="'.$optgroupLabel.'">';
+
+            $list = new LearnpathList(
+                api_get_user_id(),
+                $courseInfo
+            );
+
+            $flatList = $list->get_flat_list();
+            foreach ($flatList as $id => $details) {
+                $selectValue = "{$course['code']}@@lp-{$id}";
+                $htmlcontent .= '<option value="'.$selectValue.'" '.($toolProvider == $selectValue ? ' selected="selected"' : '').'>'.Security::remove_XSS($details['lp_name']).'</option>';
             }
             $htmlcontent .= '</optgroup>';
         }

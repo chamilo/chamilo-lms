@@ -46,6 +46,20 @@ class FrmEdit extends FormValidator
         $this->addText('client_id', $plugin->get_lang('ClientId'));
         $this->addText('deployment_id', $plugin->get_lang('DeploymentId'));
         $this->addText('kid', $plugin->get_lang('KeyId'), false);
+
+        $this->addRadio(
+            'tool_type',
+            get_lang('ToolProvider'),
+            [
+                'quiz' => $plugin->get_lang('Quizzes'),
+                'lp' => $plugin->get_lang('Learnpaths'),
+            ],
+            [
+                'onclick' => 'selectToolProvider(this.value)',
+            ]
+        );
+
+        $this->addElement('html', $plugin->getLearnPathsSelect($this->platform->getIssuer()));
         $this->addElement('html', $plugin->getQuizzesSelect($this->platform->getIssuer()));
 
         $this->addButtonCreate($plugin->get_lang('EditPlatform'));
@@ -67,7 +81,13 @@ class FrmEdit extends FormValidator
         $defaults['client_id'] = $this->platform->getClientId();
         $defaults['deployment_id'] = $this->platform->getDeploymentId();
         $defaults['kid'] = $this->platform->getKid();
-        $defaults['tool_provider'] = $this->platform->getToolProvider();
+
+        $toolProvider = $this->platform->getToolProvider();
+        list($courseCode, $tool) = explode('@@', $toolProvider);
+        list($toolName, $toolId) = explode('-', $tool);
+
+        $defaults['tool_type'] = $toolName;
+        $defaults['tool_provider'] = $toolProvider;
 
         $this->setDefaults($defaults);
     }

@@ -18,6 +18,11 @@ $toolVars = $plugin->getToolProviderVars($launchData['iss']);
 $login = LtiProvider::create()->validateUser($launchData, $toolVars['courseCode']);
 $cidReq = 'cidReq='.$toolVars['courseCode'].'&id_session=0&gidReq=0&gradebook=0';
 
-$launchUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.$cidReq.'&origin=embeddable&exerciseId='.$toolVars['toolId'].'&lti_launch_id='.$launch->getLaunchId();
-header('Location: '.$launchUrl);
+if ('lp' == $toolVars['toolName']) {
+    $launchUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$cidReq.'&action=view&lp_id='.$toolVars['toolId'].'&isStudentView=true&lti_launch_id='.$launch->getLaunchId();
+    header('Location: '.$launchUrl);
+} else {
+    $launchUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.$cidReq.'&origin=embeddable&exerciseId='.$toolVars['toolId'].'&lti_launch_id='.$launch->getLaunchId();
+    header('Location: '.$launchUrl);
+}
 exit;

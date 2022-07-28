@@ -384,7 +384,7 @@ function showEmbeddableFinishButton()
         global $exeId;
         $js .= '<script>
             $(function () {
-                var url = "'.api_get_path(WEB_PLUGIN_PATH).'lti_provider/tool/api/score.php?'.api_get_cidreq().'&launch_id='.$ltiLaunchId.'&exeId='.$exeId.'";
+                var url = "'.api_get_path(WEB_PLUGIN_PATH).'lti_provider/tool/api/score.php?'.api_get_cidreq().'&lti_tool=quiz&launch_id='.$ltiLaunchId.'&lti_result_id='.$exeId.'";
                 $.get(url);
             });
         </script>';

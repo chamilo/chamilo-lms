@@ -1657,6 +1657,11 @@ switch ($action) {
 }
 
 if (!empty($_SESSION['oLP'])) {
+    // We check if a tool provider
+    if (isset($_REQUEST['lti_launch_id'])) {
+        $ltiLaunchId = Security::remove_XSS($_REQUEST['lti_launch_id']);
+        $_SESSION['oLP']->lti_launch_id = $ltiLaunchId;
+    }
     $_SESSION['lpobject'] = serialize($_SESSION['oLP']);
     if ($debug > 0) {
         error_log('lpobject is serialized in session', 0);

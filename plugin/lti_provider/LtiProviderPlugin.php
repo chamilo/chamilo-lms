@@ -3,6 +3,7 @@
 
 use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
 use Chamilo\PluginBundle\Entity\LtiProvider\PlatformKey;
+use Chamilo\PluginBundle\Entity\LtiProvider\Result;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\SchemaTool;
 
@@ -54,14 +55,14 @@ class LtiProviderPlugin extends Plugin
     /**
      * Get a selectbox with quizzes in courses , used for a tool provider.
      *
-     * @param null $issuer
+     * @param null $clientId
      *
      * @return string
      */
-    public function getQuizzesSelect($issuer = null)
+    public function getQuizzesSelect($clientId = null)
     {
         $courses = CourseManager::get_courses_list();
-        $toolProvider = $this->getToolProvider($issuer);
+        $toolProvider = $this->getToolProvider($clientId);
         $htmlcontent = '<div class="form-group select-tool" id="select-quiz">
             <label for="lti_provider_create_platform_kid" class="col-sm-2 control-label">'.$this->get_lang('ToolProvider').'</label>
             <div class="col-sm-8">
@@ -94,14 +95,14 @@ class LtiProviderPlugin extends Plugin
     /**
      * Get a selectbox with quizzes in courses , used for a tool provider.
      *
-     * @param null $issuer
+     * @param null $clientId
      *
      * @return string
      */
-    public function getLearnPathsSelect($issuer = null)
+    public function getLearnPathsSelect($clientId = null)
     {
         $courses = CourseManager::get_courses_list();
-        $toolProvider = $this->getToolProvider($issuer);
+        $toolProvider = $this->getToolProvider($clientId);
         $htmlcontent = '<div class="form-group select-tool" id="select-lp" style="display:none">
             <label for="lti_provider_create_platform_kid" class="col-sm-2 control-label">'.$this->get_lang('ToolProvider').'</label>
             <div class="col-sm-8">
@@ -149,15 +150,65 @@ class LtiProviderPlugin extends Plugin
         return $publicKey;
     }
 
+    public function getToolLearnPathResult($startDate, $endDate)
+    {
+        $dql = "SELECT
+                    a.issuer,
+                    count(DISTINCT(a.userId)) as cnt
+                FROM
+                    ChamiloPluginBundle:LtiProvider\Result a
+                WHERE
+                    a.toolName = 'lp' AND
+                    a.startDate BETWEEN '$startDate' AND '$endDate'
+                GROUP BY a.issuer";
+        $qb = Database::getManager()->createQuery($dql);
+        $issuersValues = $qb->getResult();
+
+        $result = [];
+        if (!empty($issuersValues)) {
+            foreach ($issuersValues as $issuerValue) {
+                $issuer = $issuerValue['issuer'];
+                $dqlLp = "SELECT
+                    a.toolId,
+                    a.userId
+                FROM
+                    ChamiloPluginBundle:LtiProvider\Result a
+                WHERE
+                    a.toolName = 'lp' AND
+                    a.startDate BETWEEN '$startDate' AND '$endDate' AND
+                    a.issuer = '".$issuer."'
+                GROUP BY a.toolId, a.userId";
+                $qbLp = Database::getManager()->createQuery($dqlLp);
+                $lpValues = $qbLp->getResult();
+
+                $lps = [];
+                foreach ($lpValues as $lp) {
+                    $uinfo = api_get_user_info($lp['userId']);
+                    $lps[$lp['toolId']]['users'][$lp['userId']] = [
+                        'firstname' => $uinfo['firstname'],
+                        'lastname' => $uinfo['lastname'],
+                    ];
+                }
+                $result[] = [
+                    'issuer' => $issuer,
+                    'count_iss_users' => $issuerValue['cnt'],
+                    'learnpaths' => $lps
+                ];
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * Get the tool provider.
      */
-    public function getToolProvider($issuer): string
+    public function getToolProvider($clientId): string
     {
         $toolProvider = '';
         $platform = Database::getManager()
             ->getRepository('ChamiloPluginBundle:LtiProvider\Platform')
-            ->findOneBy(['issuer' => $issuer]);
+            ->findOneBy(['clientId' => $clientId]);
 
         if ($platform) {
             $toolProvider = $platform->getToolProvider();
@@ -166,9 +217,9 @@ class LtiProviderPlugin extends Plugin
         return $toolProvider;
     }
 
-    public function getToolProviderVars($issuer): array
+    public function getToolProviderVars($clientId): array
     {
-        $toolProvider = $this->getToolProvider($issuer);
+        $toolProvider = $this->getToolProvider($clientId);
         list($courseCode, $tool) = explode('@@', $toolProvider);
         list($toolName, $toolId) = explode('-', $tool);
         $vars = ['courseCode' => $courseCode, 'toolName' => $toolName, 'toolId' => $toolId];
@@ -222,6 +273,7 @@ class LtiProviderPlugin extends Plugin
             [
                 $em->getClassMetadata(Platform::class),
                 $em->getClassMetadata(PlatformKey::class),
+                $em->getClassMetadata(Result::class),
             ]
         );
     }
@@ -284,6 +336,7 @@ class LtiProviderPlugin extends Plugin
             [
                 $em->getClassMetadata(Platform::class),
                 $em->getClassMetadata(PlatformKey::class),
+                $em->getClassMetadata(Result::class),
             ]
         );
     }
@@ -332,6 +385,52 @@ class LtiProviderPlugin extends Plugin
             'private' => $privateKey,
             'public' => $publicKey["key"],
         ];
+    }
+
+    public function saveResult($values, $ltiLaunchId = null)
+    {
+        $em = Database::getManager();
+        if (!empty($ltiLaunchId)) {
+            $repo = $em->getRepository(Result::class);
+
+            /** @var Result $objResult */
+            $objResult = $repo->findOneBy(
+                [
+                    'ltiLaunchId' => $ltiLaunchId,
+                ]
+            );
+            if ($objResult) {
+                $objResult->setScore($values['score']);
+                $objResult->setProgress($values['progress']);
+                $objResult->setDuration($values['duration']);
+                $em->persist($objResult);
+                $em->flush();
+
+                return $objResult->getId();
+            }
+        } else {
+            $objResult = new Result();
+            $objResult
+                ->setIssuer($values['issuer'])
+                ->setUserId($values['user_id'])
+                ->setClientUId($values['client_uid'])
+                ->setCourseCode($values['course_code'])
+                ->setToolId($values['tool_id'])
+                ->setToolName($values['tool_name'])
+                ->setScore(0)
+                ->setProgress(0)
+                ->setDuration(0)
+                ->setStartDate(new DateTime())
+                ->setUserIp(api_get_real_ip())
+                ->setLtiLaunchId($values['lti_launch_id'])
+            ;
+            $em->persist($objResult);
+            $em->flush();
+
+            return $objResult->getId();
+        }
+
+        return false;
     }
 
     /**

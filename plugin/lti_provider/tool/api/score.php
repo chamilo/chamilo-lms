@@ -29,6 +29,7 @@ if (in_array($toolName, ['quiz', 'lp'])) {
         $weight = $trackInfo['exe_weighting'];
         $duration = $trackInfo['exe_duration'];
         $timestamp = date(DATE_ISO8601);
+        $progress = 0;
     } else {
         $lpId = (int) $_REQUEST['lti_result_id'];
         $lpScore = Tracking::get_avg_student_score(
@@ -57,55 +58,62 @@ if (in_array($toolName, ['quiz', 'lp'])) {
     }
 
     $grades = $launch->getAgs();
-    $score = Packback\Lti1p3\LtiGrade::new()
+    $scoreGrade = Packback\Lti1p3\LtiGrade::new()
         ->setScoreGiven($score)
         ->setScoreMaximum($weight)
         ->setTimestamp($timestamp)
         ->setActivityProgress('Completed')
         ->setGradingProgress('FullyGraded')
-        ->setUserId($launch->getLaunchData()['sub']);
+        ->setUserId($launchData['sub']);
 
     $scoreLineitem = Packback\Lti1p3\LtiLineitem::new()
         ->setTag('score')
         ->setScoreMaximum($weight)
         ->setLabel('Score')
-        ->setResourceId($launch->getLaunchData()['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
+        ->setResourceId($launchData['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
 
-    $grades->putGrade($score, $scoreLineitem);
+    $grades->putGrade($scoreGrade, $scoreLineitem);
 
-    $time = Packback\Lti1p3\LtiGrade::new()
+    $timeGrade = Packback\Lti1p3\LtiGrade::new()
         ->setScoreGiven($duration)
         ->setScoreMaximum(999)
         ->setTimestamp($timestamp)
         ->setActivityProgress('Completed')
         ->setGradingProgress('FullyGraded')
-        ->setUserId($launch->getLaunchData()['sub']);
+        ->setUserId($launchData['sub']);
 
     $timeLineitem = Packback\Lti1p3\LtiLineitem::new()
         ->setTag('time')
         ->setScoreMaximum(999)
         ->setLabel('Time Taken')
-        ->setResourceId($launch->getLaunchData()['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
+        ->setResourceId($launchData['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
 
-    $grades->putGrade($time, $timeLineitem);
+    $grades->putGrade($timeGrade, $timeLineitem);
 
     if ('lp' == $toolName) {
-        $progress = Packback\Lti1p3\LtiGrade::new()
+        $progressGrade = Packback\Lti1p3\LtiGrade::new()
             ->setScoreGiven($progress)
             ->setScoreMaximum(100)
             ->setTimestamp($timestamp)
             ->setActivityProgress('Completed')
             ->setGradingProgress('FullyGraded')
-            ->setUserId($launch->getLaunchData()['sub']);
+            ->setUserId($launchData['sub']);
 
         $progressLineitem = Packback\Lti1p3\LtiLineitem::new()
             ->setTag('progress')
             ->setScoreMaximum(100)
             ->setLabel('Progress')
-            ->setResourceId($launch->getLaunchData()['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
+            ->setResourceId($launchData['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
 
-        $grades->putGrade($progress, $progressLineitem);
+        $grades->putGrade($progressGrade, $progressLineitem);
     }
+
+    $plugin = LtiProviderPlugin::create();
+    $values = [];
+    $values['score'] = $score;
+    $values['progress'] = $progress;
+    $values['duration'] = $duration;
+    $plugin->saveResult($values, $_REQUEST['launch_id']);
 
     echo '{"success" : true}';
 }

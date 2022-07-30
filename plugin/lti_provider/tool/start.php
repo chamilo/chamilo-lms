@@ -13,9 +13,21 @@ if (!$launch->hasNrps()) {
 $launchData = $launch->getLaunchData();
 
 $plugin = LtiProviderPlugin::create();
-$toolVars = $plugin->getToolProviderVars($launchData['iss']);
+$toolVars = $plugin->getToolProviderVars($launchData['aud']);
 
 $login = LtiProvider::create()->validateUser($launchData, $toolVars['courseCode']);
+if ($login) {
+    $values = [];
+    $values['issuer'] = $launchData['iss'];
+    $values['user_id'] = api_get_user_id();
+    $values['client_uid'] = $launchData['sub'];
+    $values['course_code'] = $toolVars['courseCode'];
+    $values['tool_id'] = $toolVars['toolId'];
+    $values['tool_name'] = $toolVars['toolName'];
+    $values['lti_launch_id'] = $launch->getLaunchId();
+    $plugin->saveResult($values);
+}
+
 $cidReq = 'cidReq='.$toolVars['courseCode'].'&id_session=0&gidReq=0&gradebook=0';
 
 if ('lp' == $toolVars['toolName']) {

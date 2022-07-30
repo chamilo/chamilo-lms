@@ -59,8 +59,8 @@ class FrmEdit extends FormValidator
             ]
         );
 
-        $this->addElement('html', $plugin->getLearnPathsSelect($this->platform->getIssuer()));
-        $this->addElement('html', $plugin->getQuizzesSelect($this->platform->getIssuer()));
+        $this->addElement('html', $plugin->getLearnPathsSelect($this->platform->getClientId()));
+        $this->addElement('html', $plugin->getQuizzesSelect($this->platform->getClientId()));
 
         $this->addButtonCreate($plugin->get_lang('EditPlatform'));
         $this->addHidden('id', $this->platform->getId());

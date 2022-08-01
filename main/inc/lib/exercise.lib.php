@@ -5176,8 +5176,8 @@ EOT;
                     continue;
                 }
 
-                $total_score += $result['score'];
-                $total_weight += $result['weight'];
+                $total_score += (float) $result['score'];
+                $total_weight += (float) $result['weight'];
 
                 $question_list_answers[] = [
                     'question' => $result['open_question'],

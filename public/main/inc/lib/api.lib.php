@@ -5055,8 +5055,9 @@ function api_request_uri()
  * @return int access_url_id of the current Chamilo Installation
  *
  * @author Julio Montoya <gugli100@gmail.com>
+ * @throws Exception
  */
-function api_get_current_access_url_id()
+function api_get_current_access_url_id(): int
 {
     if (false === api_get_multiple_access_url()) {
         return 1;

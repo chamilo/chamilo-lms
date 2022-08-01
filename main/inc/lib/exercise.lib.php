@@ -1455,7 +1455,19 @@ HTML;
             }
 
             if ($show_comment) {
-                $s .= '</table>';
+                if (in_array(
+                    $answerType,
+                    [
+                        MULTIPLE_ANSWER,
+                        MULTIPLE_ANSWER_COMBINATION,
+                        UNIQUE_ANSWER,
+                        UNIQUE_ANSWER_IMAGE,
+                        UNIQUE_ANSWER_NO_OPTION,
+                        GLOBAL_MULTIPLE_ANSWER,
+                    ]
+                )) {
+                    $s .= '</table>';
+                }
             } elseif (in_array(
                 $answerType,
                 [

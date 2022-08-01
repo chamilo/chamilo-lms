@@ -4,7 +4,7 @@
 
 class MultipleAnswerDropdown extends Question
 {
-    public $typePicture = 'mcma.png';
+    public $typePicture = 'mcma_dropdown.png';
     public $explanationLangVar = 'MultipleAnswerDropdown';
 
     public function __construct()

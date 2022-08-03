@@ -1180,6 +1180,14 @@ class UserGroup extends Model
                         ]
                     );
                 }
+                // Add event to system log
+                Event::addEvent(
+                    LOG_GROUP_PORTAL_USER_UNSUBSCRIBED,
+                    LOG_GROUP_PORTAL_ID,
+                    'gid: '.$usergroup_id.' - uid: '.$user_id,
+                    api_get_utc_datetime(),
+                    api_get_user_id()
+                );
             }
         }
 
@@ -1206,6 +1214,14 @@ class UserGroup extends Model
                     'relation_type' => $relationType,
                 ];
                 Database::insert($this->usergroup_rel_user_table, $params);
+                // Add event to system log
+                Event::addEvent(
+                    LOG_GROUP_PORTAL_USER_SUBSCRIBED,
+                    LOG_GROUP_PORTAL_ID,
+                    'gid: '.$usergroup_id.' - uid: '.$user_id,
+                    api_get_utc_datetime(),
+                    api_get_user_id()
+                );
             }
         }
     }

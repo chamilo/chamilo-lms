@@ -15,6 +15,9 @@ use Doctrine\ORM\Tools\SchemaTool;
 class LtiProviderPlugin extends Plugin
 {
     public const TABLE_PLATFORM = 'plugin_lti_provider_platform';
+    public const LAUNCH_PATH = 'lti_provider/tool/start.php';
+    public const LOGIN_PATH = 'lti_provider/tool/login.php';
+    public const REDIRECT_PATH = 'lti_provider/tool/start.php';
 
     public $isAdminPlugin = true;
 
@@ -25,31 +28,62 @@ class LtiProviderPlugin extends Plugin
 
         $message = Display::return_message($this->get_lang('Description'));
 
+        $launchUrlHtml = '';
+        $loginUrlHtml = '';
+        $redirectUrlHtml = '';
         if ($this->areTablesCreated()) {
             $publicKey = $this->getPublicKey();
 
-            $pkHtml = '<div class="form-group">
-                    <label for="lti_provider_public_key" class="col-sm-2 control-label">'
-                .$this->get_lang('PublicKey').'</label>
-                    <div class="col-sm-8">
-                        <pre>'.$publicKey.'</pre>
-                    </div>
-                    <div class="col-sm-2"></div>
-                </div>';
+            $pkHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('PublicKey'),
+                'public_key',
+                $publicKey
+            );
+            $launchUrlHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('LaunchUrl'),
+                'launch_url',
+                api_get_path(WEB_PLUGIN_PATH).self::LAUNCH_PATH
+            );
+            $loginUrlHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('LoginUrl'),
+                'login_url',
+                api_get_path(WEB_PLUGIN_PATH).self::LOGIN_PATH
+            );
+            $redirectUrlHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('RedirectUrl'),
+                'redirect_url',
+                api_get_path(WEB_PLUGIN_PATH).self::REDIRECT_PATH
+            );
+
         } else {
             $pkHtml = $this->get_lang('GenerateKeyPairInfo');
         }
 
         $settings = [
             $message => 'html',
-            'name' => 'text',
-            'launch_url' => 'text',
-            'login_url' => 'text',
-            'redirect_url' => 'text',
+            'name' => 'hidden',
+            $launchUrlHtml => 'html',
+            $loginUrlHtml => 'html',
+            $redirectUrlHtml => 'html',
             $pkHtml => 'html',
             'enabled' => 'boolean',
         ];
         parent::__construct($version, $author, $settings);
+    }
+
+    public function getSettingHtmlReadOnly($label, $id, $value)
+    {
+        $html = '<div class="form-group">
+                    <label for="lti_provider_'.$id.'" class="col-sm-2 control-label">'
+            .$label.'</label>
+                    <div class="col-sm-8">
+                        <pre>'.$value.'</pre>
+                    </div>
+                    <div class="col-sm-2"></div>
+                    <input type="hidden" name="'.$id.'" value="'.$value.'" />
+                </div>';
+
+        return $html;
     }
 
     /**

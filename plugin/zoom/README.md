@@ -37,10 +37,16 @@ required to authenticate with JWT. To get them, create a JWT App:
 
 ## Changelog
 
+**v0.5**
+
+* Added the ability to create a system announcement.
+
 **v0.4**
 
-Added signed attendance to allow you to configure an attendance sheet where participants register their signature. The
+* The creation of webinars is now allowed.
+* Added signed attendance to allow you to configure an attendance sheet where participants register their signature. The
 signed attendance functionality is similar to that found in the Exercise Signature plugin but does not reuse it.
+* Allows you to use multiple accounts and subaccounts to create meetings/webinars
 
 ## Meetings - Webinars
 
@@ -77,16 +83,21 @@ For a non-paying Zoom user, this plugin still works but participants will join a
 The user that starts the meeting/webinar will be identified as the Zoom account that is defined in the plugin. Socreate
 a generic account that works for all the users that start meetings.
 
-# Changelog
-
-## v0.4
-
-* The creation of webinars is now allowed.
-* Allows you to use multiple accounts and subaccounts to create meetings/webinars
-
-**Updating to v0.4 from v0.3**
+# Databace changelog
 
 Please, execute this queries in your database:
+
+**Updating to v0.5 from v.0.4**
+
+```sql
+ALTER TABLE plugin_zoom_meeting
+   ADD sys_announcement_id INT DEFAULT NULL;
+ALTER TABLE plugin_zoom_meeting
+   ADD CONSTRAINT FK_3448092778FB10C FOREIGN KEY (sys_announcement_id) REFERENCES sys_announcement (id) ON DELETE SET NULL;
+CREATE INDEX IDX_3448092778FB10C ON plugin_zoom_meeting (sys_announcement_id);
+```
+
+**Updating to v0.4 from v0.3**
 
 ```sql
 ALTER TABLE plugin_zoom_meeting

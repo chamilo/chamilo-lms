@@ -10,7 +10,6 @@ class Lti13Database implements Interfaces\Database
 {
     public function findRegistrationByIssuer($iss, $clientId = null)
     {
-
         if (!isset($clientId)) {
             $clientId = $this->getClientIdByIssuer($iss);
         }

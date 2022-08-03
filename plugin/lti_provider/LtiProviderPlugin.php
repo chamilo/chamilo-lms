@@ -54,7 +54,6 @@ class LtiProviderPlugin extends Plugin
                 'redirect_url',
                 api_get_path(WEB_PLUGIN_PATH).self::REDIRECT_PATH
             );
-
         } else {
             $pkHtml = $this->get_lang('GenerateKeyPairInfo');
         }
@@ -71,6 +70,14 @@ class LtiProviderPlugin extends Plugin
         parent::__construct($version, $author, $settings);
     }
 
+    /**
+     * Get the value by default and readonly for the configuration html form.
+     *
+     * @param $label
+     * @param $id
+     * @param $value
+     * @return string
+     */
     public function getSettingHtmlReadOnly($label, $id, $value)
     {
         $html = '<div class="form-group">

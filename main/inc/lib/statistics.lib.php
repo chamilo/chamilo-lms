@@ -1429,7 +1429,7 @@ class Statistics
     }
 
     /**
-     * It displays learnpath results from lti provider
+     * It displays learnpath results from lti provider.
      *
      * @return false|string
      */
@@ -1610,7 +1610,7 @@ class Statistics
     }
 
     /**
-     * It gets lti learnpath results by date
+     * It gets lti learnpath results by date.
      *
      * @param $startDate
      * @param $endDate

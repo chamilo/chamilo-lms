@@ -264,7 +264,7 @@ class LtiProviderPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist(['sfu_post'])) {
+        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_PLATFORM])) {
             return;
         }
 
@@ -327,7 +327,7 @@ class LtiProviderPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist(['sfu_post'])) {
+        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_PLATFORM])) {
             return;
         }
 

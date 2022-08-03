@@ -192,7 +192,7 @@ class LtiProviderPlugin extends Plugin
                 $result[] = [
                     'issuer' => $issuer,
                     'count_iss_users' => $issuerValue['cnt'],
-                    'learnpaths' => $lps
+                    'learnpaths' => $lps,
                 ];
             }
         }
@@ -349,44 +349,6 @@ class LtiProviderPlugin extends Plugin
         }
     }
 
-    private function areTablesCreated(): bool
-    {
-        $entityManager = Database::getManager();
-        $connection = $entityManager->getConnection();
-
-        return $connection->getSchemaManager()->tablesExist(self::TABLE_PLATFORM);
-    }
-
-    /**
-     * Generate a key pair and key id for the platform.
-     *
-     * Return a associative array like ['kid' => '...', 'private' => '...', 'public' => '...'].
-     */
-    private static function generatePlatformKeys(): array
-    {
-        // Create the private and public key
-        $res = openssl_pkey_new(
-            [
-                'digest_alg' => 'sha256',
-                'private_key_bits' => 2048,
-                'private_key_type' => OPENSSL_KEYTYPE_RSA,
-            ]
-        );
-
-        // Extract the private key from $res to $privateKey
-        $privateKey = '';
-        openssl_pkey_export($res, $privateKey);
-
-        // Extract the public key from $res to $publicKey
-        $publicKey = openssl_pkey_get_details($res);
-
-        return [
-            'kid' => bin2hex(openssl_random_pseudo_bytes(10)),
-            'private' => $privateKey,
-            'public' => $publicKey["key"],
-        ];
-    }
-
     public function saveResult($values, $ltiLaunchId = null)
     {
         $em = Database::getManager();
@@ -431,6 +393,44 @@ class LtiProviderPlugin extends Plugin
         }
 
         return false;
+    }
+
+    private function areTablesCreated(): bool
+    {
+        $entityManager = Database::getManager();
+        $connection = $entityManager->getConnection();
+
+        return $connection->getSchemaManager()->tablesExist(self::TABLE_PLATFORM);
+    }
+
+    /**
+     * Generate a key pair and key id for the platform.
+     *
+     * Return a associative array like ['kid' => '...', 'private' => '...', 'public' => '...'].
+     */
+    private static function generatePlatformKeys(): array
+    {
+        // Create the private and public key
+        $res = openssl_pkey_new(
+            [
+                'digest_alg' => 'sha256',
+                'private_key_bits' => 2048,
+                'private_key_type' => OPENSSL_KEYTYPE_RSA,
+            ]
+        );
+
+        // Extract the private key from $res to $privateKey
+        $privateKey = '';
+        openssl_pkey_export($res, $privateKey);
+
+        // Extract the public key from $res to $publicKey
+        $publicKey = openssl_pkey_get_details($res);
+
+        return [
+            'kid' => bin2hex(openssl_random_pseudo_bytes(10)),
+            'private' => $privateKey,
+            'public' => $publicKey["key"],
+        ];
     }
 
     /**

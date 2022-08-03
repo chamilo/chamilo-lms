@@ -7,7 +7,7 @@ require_once __DIR__.'/../LtiProviderPlugin.php';
 
 $launch = LtiProvider::create()->launch();
 if (!$launch->hasNrps()) {
-    throw new Exception("Don't have names and roles!");
+   // throw new Exception("Don't have names and roles!");
 }
 
 $launchData = $launch->getLaunchData();

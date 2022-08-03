@@ -10,13 +10,14 @@ class Lti13Database implements Interfaces\Database
 {
     public function findRegistrationByIssuer($iss, $clientId = null)
     {
+
+        if (!isset($clientId)) {
+            $clientId = $this->getClientIdByIssuer($iss);
+        }
+
         $ltiCustomers = $this->getLtiConnection();
         if (empty($ltiCustomers[$clientId])) {
             return false;
-        }
-
-        if (!isset($clientId)) {
-            $clientId = $ltiCustomers[$iss]['client_id'];
         }
 
         return LtiRegistration::new()
@@ -60,6 +61,20 @@ class Lti13Database implements Interfaces\Database
         Session::write('iss', $ltiCustomers);
 
         return $ltiCustomers;
+    }
+
+    private function getClientIdByIssuer($issuer)
+    {
+        $clientId = '';
+        $platform = Database::getManager()
+            ->getRepository('ChamiloPluginBundle:LtiProvider\Platform')
+            ->findOneBy(['issuer' => $issuer]);
+
+        if ($platform) {
+            $clientId = $platform->getClientId();
+        }
+
+        return $clientId;
     }
 
     private function getPrivateKey()

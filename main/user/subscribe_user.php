@@ -331,6 +331,8 @@ function get_number_of_users()
 
     if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
         if (api_get_session_id() != 0) {
+            $allowedRoles = implode(',', [COURSEMANAGER, SESSIONADMIN]);
+
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
@@ -340,7 +342,7 @@ function get_number_of_users()
                         session_id ='".$sessionId."'
                     WHERE
                         cu.user_id IS NULL AND
-                        u.status = 1 AND
+                        u.status IN ($allowedRoles) AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
             if (api_is_multiple_url_enabled()) {
@@ -358,17 +360,19 @@ function get_number_of_users()
                             WHERE
                                 cu.user_id IS NULL AND
                                 access_url_id= $url_access_id AND
-                                u.status = 1 AND
+                                u.status IN ($allowedRoles) AND
                                 (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
                             ";
                 }
             }
         } else {
+            $allowedRoles = implode(',', [COURSEMANAGER]);
+
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
                     ON u.id = cu.user_id and c_id='".api_get_course_int_id()."'
-                    WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+                    WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles)";
 
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
@@ -381,7 +385,7 @@ function get_number_of_users()
                         ON u.id = cu.user_id AND c_id='".api_get_course_int_id()."'
                         INNER JOIN  $tbl_url_rel_user as url_rel_user
                         ON (url_rel_user.user_id = u.id)
-                        WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+                        WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles) AND access_url_id= $url_access_id ";
                 }
             }
         }
@@ -550,6 +554,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
     if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
         // adding a teacher through a session
         if (!empty($sessionId)) {
+            $allowedRoles = implode(',', [COURSEMANAGER, SESSIONADMIN]);
+
             $sql = "SELECT $select_fields
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
@@ -571,15 +577,17 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         ON field_values.item_id = u.user_id
                     WHERE
                         cu.user_id IS NULL AND
-                        u.status = 1 AND
+                        u.status IN ($allowedRoles) AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+                $sql .= "WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles) AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
             $sql .= " AND access_url_id = $url_access_id";
         } else {
+            $allowedRoles = implode(',', [COURSEMANAGER]);
+
             // adding a teacher NOT through a session
             $sql = "SELECT $select_fields
                     FROM $user_table u
@@ -595,7 +603,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $table_user_field_values field_values
                         ON field_values.item_id = u.user_id
                     WHERE
-                        cu.user_id IS NULL AND u.status<>".DRH." AND
+                        cu.user_id IS NULL AND u.status IN ($allowedRoles) AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
@@ -623,11 +631,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
                                 ON field_values.item_id = u.user_id
                             WHERE
                                 cu.user_id IS NULL AND
-                                u.status<>".DRH." AND
+                                u.status IN ($allowedRoles) AND
                                 field_values.field_id = '".intval($field_identification[0])."' AND
                                 field_values.value = '".Database::escape_string($field_identification[1])."'";
                     } else {
-                        $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." AND access_url_id= $url_access_id ";
+                        $sql .= "WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles) AND access_url_id= $url_access_id ";
                     }
                 }
             }

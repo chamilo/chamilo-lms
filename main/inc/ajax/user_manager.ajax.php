@@ -395,7 +395,7 @@ switch ($action) {
         }
 
         $qb
-            ->andWhere('u.status != '.DRH.' AND u.status != '.ANONYMOUS)
+            ->andWhere('u.status = '.COURSEMANAGER)
             ->orderBy(
                 $sortByFirstName
                     ? 'u.firstname, u.firstname'

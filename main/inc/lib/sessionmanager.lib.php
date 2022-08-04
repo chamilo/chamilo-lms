@@ -3490,9 +3490,10 @@ class SessionManager
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
 
+        $allowedTeachers = implode(',', [COURSEMANAGER, SESSIONADMIN]);
+
         // check if user is a teacher
-        $sql = "SELECT * FROM $tblUser
-                WHERE status = 1 AND user_id = $userId";
+        $sql = "SELECT * FROM $tblUser WHERE status IN ($allowedTeachers) AND user_id = $userId";
 
         $rsCheckUser = Database::query($sql);
 

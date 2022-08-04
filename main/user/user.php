@@ -11,6 +11,9 @@
  * @author Roan Embrechts
  * @author Julio Montoya, Several fixes
  */
+
+use Chamilo\CoreBundle\Entity\Session;
+
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_USER;
@@ -683,9 +686,9 @@ function get_number_of_users()
         $status = $type;
     } else {
         if ($type == COURSEMANAGER) {
-            $status = 2;
+            $status = Session::COACH;
         } else {
-            $status = 0;
+            $status = Session::STUDENT;
         }
     }
 

@@ -41,7 +41,7 @@ if ($action == 'get_events') {
             $schema = $isWebinar ? $conference->getWebinarSchema() : $conference->getMeetingInfoGet();
 
             $endDate = new DateTime($conference->formattedStartTime);
-            $endDate->sub($conference->durationInterval);
+            $endDate->add($conference->durationInterval);
 
             return [
                 'id' => 'meeting_'.$conference->getId(),

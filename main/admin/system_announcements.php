@@ -7,6 +7,9 @@
  */
 
 // Resetting the course id.
+use Chamilo\CoreBundle\Entity\SysAnnouncement;
+use Chamilo\PluginBundle\Zoom\Meeting;
+
 $cidReset = true;
 
 // Including the global initialization file.
@@ -67,6 +70,7 @@ if ($action != 'add' && $action != 'edit') {
 /* MAIN CODE */
 $show_announcement_list = true;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+$type = $_REQUEST['type'] ?? null;
 
 // Form was posted?
 if (isset($_POST['action'])) {
@@ -153,6 +157,32 @@ if ($action_todo) {
         $url = api_get_self().'?id='.intval($_GET['id']);
     }
     $form = new FormValidator('system_announcement', 'post', $url);
+
+    if ('add' === $action && 'zoom_conference' == $type && $meetingId = $_REQUEST['meeting'] ?? 0) {
+        $plugin = ZoomPlugin::create();
+
+        if ($plugin->isEnabled(true)) {
+            /** @var Meeting $meeting */
+            $meeting = ZoomPlugin::getMeetingRepository()->findOneBy(['meetingId' => $meetingId]);
+            $meetingUrl = api_get_path(WEB_PLUGIN_PATH).'zoom/subscription.php?meetingId='.$meeting->getMeetingId();
+
+            $endDate = new DateTime($meeting->formattedStartTime);
+            $endDate->add($meeting->durationInterval);
+
+            $values['title'] = $meeting->getTopic();
+            $values['content'] = '<p>'.$meeting->getAgenda().'</p>'
+                .'<p>'.$plugin->get_lang('UrlForSelfRegistration').'<br>'.Display::url($meetingUrl, $meetingUrl).'</p>';
+            $values['range_start'] = $meeting->formattedStartTime;
+            $values['range_end'] = $endDate->format('Y-m-d H:i');
+            $values['range'] = "{$values['range_start']} / {$values['range_end']}";
+            $values['send_mail'] = true;
+            $values['add_to_calendar'] = true;
+
+            $form->addHidden('type', 'zoom_conference');
+            $form->addHidden('meeting', $meeting->getMeetingId());
+        }
+    }
+
     $form->addHeader($form_title);
     $form->addText('title', get_lang('Title'), true);
 
@@ -267,6 +297,13 @@ if ($action_todo) {
                 if ($announcement_id !== false) {
                     if (!empty($groupsToSend)) {
                         SystemAnnouncementManager::announcement_for_groups($announcement_id, $groupsToSend);
+                    }
+
+                    if (isset($meeting)) {
+                        $em = Database::getManager();
+                        $sysAnnouncement = $em->find(SysAnnouncement::class, $announcement_id);
+                        $meeting->setSysAnnouncement($sysAnnouncement);
+                        $em->flush();
                     }
 
                     echo Display::return_message(get_lang('AnnouncementAdded'), 'confirmation');

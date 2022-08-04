@@ -190,3 +190,7 @@
         {{ 'Details'|get_lang }}
     </a>
 {% endif %}
+
+{% if btn_announcement %}
+    {{ btn_announcement }}
+{% endif %}

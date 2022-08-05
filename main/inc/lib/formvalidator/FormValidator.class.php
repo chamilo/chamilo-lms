@@ -1617,36 +1617,40 @@ EOT;
     public function addPasswordRule($elementName, $groupName = '')
     {
         // Constant defined in old config/profile.conf.php
-        if (CHECK_PASS_EASY_TO_FIND === true) {
-            $message = get_lang('PassTooEasy').': '.api_generate_password();
+        if (CHECK_PASS_EASY_TO_FIND !== true) {
+            return;
+        }
 
-            if (!empty($groupName)) {
-                $groupObj = $this->getElement($groupName);
+        $message = get_lang('PassTooEasy').': '.api_generate_password();
 
-                if ($groupObj instanceof HTML_QuickForm_group) {
-                    $elementName = $groupObj->getElementName($elementName);
+        if (empty($groupName)) {
+            $this->addRule(
+                $elementName,
+                $message,
+                'callback',
+                'api_check_password'
+            );
 
-                    if ($elementName === false) {
-                        throw new Exception("The $groupName doesn't have the element $elementName");
-                    }
+            return;
+        }
 
-                    $this->_rules[$elementName][] = [
-                        'type' => 'callback',
-                        'format' => 'api_check_password',
-                        'message' => $message,
-                        'validation' => '',
-                        'reset' => false,
-                        'group' => $groupName,
-                    ];
-                }
-            } else {
-                $this->addRule(
-                    $elementName,
-                    $message,
-                    'callback',
-                    'api_check_password'
-                );
+        $groupObj = $this->getElement($groupName);
+
+        if ($groupObj instanceof HTML_QuickForm_group) {
+            $elementName = $groupObj->getElementName($elementName);
+
+            if ($elementName === false) {
+                throw new Exception("The $groupName doesn't have the element $elementName");
             }
+
+            $this->_rules[$elementName][] = [
+                'type' => 'callback',
+                'format' => 'api_check_password',
+                'message' => $message,
+                'validation' => '',
+                'reset' => false,
+                'group' => $groupName,
+            ];
         }
     }
 

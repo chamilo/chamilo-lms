@@ -25,8 +25,12 @@ external tool.
 
 # Installation
 
-*Prior to installing/uninstalling this plugin, you will need to make sure the `src/Chamilo/PluginBundle/Entity` folder
-is temporarily writeable by the web server.*
+* Prepare your web server to allow to send cookies in all contexts, set the `SameSite` attribute to `None`
+    * i.e. Apache configuration
+
+      ```apacheconf
+      Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure;SameSite=None
+      ```
 
 1. Install the plugin from the Plugins page
 2. Enable the plugin from the IMS/LTI Plugin Settings page

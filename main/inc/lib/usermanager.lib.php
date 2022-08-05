@@ -6183,9 +6183,14 @@ class UserManager
                     }
                 }
 
+		$tblUserGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+                $tblUserGroupRelCourse = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
+                $tblUserGroupRelSession = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+                $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+                $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
                 // To check in main course
                 if (!empty($coursesTocheck)) {
-                    $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                     foreach ($coursesTocheck as $courseId) {
                         $sql = "SELECT id FROM $tblCourseUser
                                 WHERE user_id = $userId AND c_id = $courseId";
@@ -6202,7 +6207,6 @@ class UserManager
                 // To check in sessions
                 if (!empty($coursesTocheck)) {
                     $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-                    $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
                     $sessionsToCheck = [];
                     foreach ($coursesTocheck as $courseId) {
                         $sql = "SELECT id, session_id FROM $tblSessionCourseUser
@@ -6235,10 +6239,6 @@ class UserManager
                     }
                 }
                 // To check users inside a class
-                $tblUserGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
-                $tblUserGroupRelCourse = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
-                $tblUserGroupRelSession = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
-
                 $rsUser = Database::query("SELECT usergroup_id FROM $tblUserGroupRelUser WHERE user_id = $userId");
                 if (Database::num_rows($rsUser) > 0) {
                     while ($rowUser = Database::fetch_array($rsUser)) {

@@ -79,30 +79,13 @@ class MultipleAnswerDropdown extends Question
         $lines = [];
 
         if (UPLOAD_ERR_OK === (int) $listFile['error']) {
-            $csvData = Import::csvToArray($listFile['tmp_name']);
-            $lines = array_map(
-                function (array $row) {
-                    return array_values($row)[0];
-                },
-                $csvData
-            );
+            $lines = Import::csvColumnToArray($listFile['tmp_name']);
         } elseif (!empty($listText)) {
-            $lines = array_map(
-                function ($line) {
-                    return trim($line);
-                },
-                explode("\n", $listText)
-            );
+            $lines = explode("\n", $listText);
         }
 
-        $lines = array_filter(
-            $lines,
-            function (string $line): bool {
-                $line = trim($line);
-
-                return !empty($line);
-            }
-        );
+        $lines = array_map('trim', $lines);
+        $lines = array_filter($lines);
 
         $objAnswer = new Answer($this->iid);
 

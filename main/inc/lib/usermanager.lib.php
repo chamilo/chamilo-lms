@@ -7640,6 +7640,14 @@ SQL;
         return $dates;
     }
 
+    public static function getAllowedRolesAsTeacher(): array
+    {
+        return [
+            COURSEMANAGER,
+            SESSIONADMIN,
+        ];
+    }
+
     /**
      * @return EncoderFactory
      */
@@ -7732,13 +7740,5 @@ SQL;
         }
 
         return $url;
-    }
-
-    public static function getAllowedRolesAsTeacher(): array
-    {
-        return [
-            COURSEMANAGER,
-            SESSIONADMIN
-        ];
     }
 }

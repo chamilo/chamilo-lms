@@ -252,6 +252,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                 }
             } else {
                 $base = basename($source);
+
                 return copyDirTo($source, $target.'/'.$base);
             }
 

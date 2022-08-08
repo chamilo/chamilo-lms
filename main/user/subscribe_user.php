@@ -332,7 +332,6 @@ function get_number_of_users()
     if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
         $allowedRoles = implode(',', UserManager::getAllowedRolesAsTeacher());
         if (api_get_session_id() != 0) {
-
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu

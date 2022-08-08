@@ -7,7 +7,7 @@ use Firebase\JWT\JWT;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_course_script(false);
+api_protect_course_script();
 api_block_anonymous_users(false);
 
 $scope = empty($_REQUEST['scope']) ? '' : trim($_REQUEST['scope']);
@@ -25,6 +25,8 @@ $em = Database::getManager();
 
 $webPath = api_get_path(WEB_PATH);
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH);
+
+$tool = null;
 
 try {
     if (
@@ -64,12 +66,12 @@ try {
         throw LtiAuthException::invalidRequest();
     }
 
-    /** @var ImsLtiTool $tool */
-    $tool = $em
-        ->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolLogin);
-
-    if (empty($tool)) {
-        throw LtiAuthException::invalidRequest();
+    try {
+        /** @var ImsLtiTool $tool */
+        $tool = $em
+            ->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolLogin);
+    } catch (\Exception $e) {
+        api_not_allowed(true);
     }
 
     if ($tool->getClientId() != $clientId) {
@@ -261,7 +263,8 @@ try {
             $course,
             $session,
             $platformDomain,
-            ImsLti::V_1P3
+            ImsLti::V_1P3,
+            $tool
         );
     }
 
@@ -292,6 +295,10 @@ try {
         'error' => $authException->getType(),
         'error_description' => $authException->getMessage(),
     ];
+}
+
+if (!$tool) {
+    exit;
 }
 
 $formActionUrl = $tool->isActiveDeepLinking() ? $tool->getRedirectUrl() : $tool->getLaunchUrl();

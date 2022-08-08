@@ -6188,6 +6188,7 @@ EOT;
             UPLOAD_ANSWER,
             MATCHING_GLOBAL,
             FILL_IN_BLANKS_GLOBAL,
+            MULTIPLE_ANSWER_DROPDOWN,
         ];
         $defaultTypes = [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE];
         $types = $defaultTypes;

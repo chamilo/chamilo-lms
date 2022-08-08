@@ -8,7 +8,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_admin_script(false);
+api_protect_admin_script();
 
 $plugin = ImsLtiPlugin::create();
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';

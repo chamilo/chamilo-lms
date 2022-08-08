@@ -56,12 +56,20 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
                 $this->processGet();
                 break;
             case Request::METHOD_PUT:
+                if (LtiAssignmentGradesService::AGS_FULL !== $this->tool->getAdvantageServices()['ags']) {
+                    throw new MethodNotAllowedHttpException([Request::METHOD_GET]);
+                }
+
                 $this->validateToken(
                     [LtiAssignmentGradesService::SCOPE_LINE_ITEM]
                 );
                 $this->processPut();
                 break;
             case Request::METHOD_DELETE:
+                if (LtiAssignmentGradesService::AGS_FULL !== $this->tool->getAdvantageServices()['ags']) {
+                    throw new MethodNotAllowedHttpException([Request::METHOD_GET]);
+                }
+
                 $this->validateToken(
                     [LtiAssignmentGradesService::SCOPE_LINE_ITEM]
                 );

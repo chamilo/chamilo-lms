@@ -207,14 +207,20 @@ try {
             if (LtiAssignmentGradesService::AGS_NONE !== $advServices['ags']) {
                 $agsClaim = [
                     'scope' => [
-                        LtiAssignmentGradesService::SCOPE_LINE_ITEM,
                         LtiAssignmentGradesService::SCOPE_LINE_ITEM_READ,
+                        LtiAssignmentGradesService::SCOPE_RESULT_READ,
+                        LtiAssignmentGradesService::SCOPE_SCORE_WRITE,
                     ],
-                    'lineitems' => LtiAssignmentGradesService::getLineItemsUrl(
-                        $course->getId(),
-                        $tool->getId()
-                    ),
                 ];
+
+                if (LtiAssignmentGradesService::AGS_FULL === $advServices['ags']) {
+                    $agsClaim['scope'][] = LtiAssignmentGradesService::SCOPE_LINE_ITEM;
+                }
+
+                $agsClaim['lineitems'] = LtiAssignmentGradesService::getLineItemsUrl(
+                    $course->getId(),
+                    $tool->getId()
+                );
 
                 if ($tool->getLineItems()->count() === 1) {
                     $agsClaim['lineitem'] = LtiAssignmentGradesService::getLineItemUrl(

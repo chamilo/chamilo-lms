@@ -251,7 +251,8 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                     }
                 }
             } else {
-                return copyDirTo($source, $target);
+                $base = basename($source);
+                return copyDirTo($source, $target.'/'.$base);
             }
 
             return true;

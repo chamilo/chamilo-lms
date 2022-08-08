@@ -131,7 +131,7 @@ const items = ref([
       },
       {
         label: t('Sessions'),
-        url: '/main/admin/session_list.php',
+        url: '/main/session/session_list.php',
       },
       {
         label: t('Reporting'),

@@ -1494,6 +1494,7 @@ HTML;
                         .select2-container--default .select2-selection--multiple .select2-selection__rendered li {
                             display:block;
                             width: 100%;
+                            white-space: break-spaces;
                         }</style>'
                 ;
             }

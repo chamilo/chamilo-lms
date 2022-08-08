@@ -330,8 +330,8 @@ function get_number_of_users()
     $sessionId = api_get_session_id();
 
     if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
+        $allowedRoles = implode(',', UserManager::getAllowedRolesAsTeacher());
         if (api_get_session_id() != 0) {
-            $allowedRoles = implode(',', [COURSEMANAGER, SESSIONADMIN]);
 
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
@@ -366,8 +366,6 @@ function get_number_of_users()
                 }
             }
         } else {
-            $allowedRoles = implode(',', [COURSEMANAGER]);
-
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
@@ -552,10 +550,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 u.user_id              AS col5";
     }
     if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
+        $allowedRoles = implode(',', UserManager::getAllowedRolesAsTeacher());
         // adding a teacher through a session
         if (!empty($sessionId)) {
-            $allowedRoles = implode(',', [COURSEMANAGER, SESSIONADMIN]);
-
             $sql = "SELECT $select_fields
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
@@ -586,8 +583,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
             }
             $sql .= " AND access_url_id = $url_access_id";
         } else {
-            $allowedRoles = implode(',', [COURSEMANAGER]);
-
             // adding a teacher NOT through a session
             $sql = "SELECT $select_fields
                     FROM $user_table u

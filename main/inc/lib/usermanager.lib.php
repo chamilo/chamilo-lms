@@ -7733,4 +7733,12 @@ SQL;
 
         return $url;
     }
+
+    public static function getAllowedRolesAsTeacher(): array
+    {
+        return [
+            COURSEMANAGER,
+            SESSIONADMIN
+        ];
+    }
 }

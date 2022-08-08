@@ -692,37 +692,20 @@ function get_number_of_users()
         }
     }
 
-    if (!empty($sessionId)) {
-        $users = CourseManager::get_user_list_from_course_code(
-            $courseCode,
-            $sessionId,
-            null,
-            null,
-            $status,
-            null,
-            false,
-            false,
-            null,
-            null,
-            null,
-            $active
-        );
-    } else {
-        $users = CourseManager::get_user_list_from_course_code(
-            $courseCode,
-            0,
-            null,
-            null,
-            $status,
-            null,
-            false,
-            false,
-            null,
-            null,
-            null,
-            $active
-        );
-    }
+    $users = CourseManager::get_user_list_from_course_code(
+        $courseCode,
+        $sessionId,
+        null,
+        null,
+        $status,
+        null,
+        false,
+        false,
+        null,
+        null,
+        null,
+        $active
+    );
 
     foreach ($users as $user) {
         if ((

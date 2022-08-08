@@ -237,7 +237,16 @@ $group[] = $form->createElement(
     ]
 );
 
-$form->addGroup($group, 'password', null, null, false);
+$form->addGroup(
+    $group,
+    'password',
+    [
+        null,
+        Security::getPasswordRequirementsToString(),
+    ],
+    null,
+    false
+);
 $form->addPasswordRule('password', 'password');
 $form->addNoSamePasswordRule('password', $userEntity);
 

@@ -25,7 +25,14 @@ if (!$user) {
 $form = new FormValidator('reset', 'POST', api_get_self().'?token='.$token);
 $form->addElement('header', get_lang('ResetPassword'));
 $form->addHidden('token', $token);
-$form->addElement('password', 'pass1', get_lang('Password'));
+$form->addElement(
+    'password',
+    'pass1',
+    [
+        get_lang('Password'),
+        Security::getPasswordRequirementsToString(),
+    ]
+);
 $form->addElement(
     'password',
     'pass2',

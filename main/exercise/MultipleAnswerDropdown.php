@@ -24,7 +24,7 @@ class MultipleAnswerDropdown extends Question
 
         $form->addTextarea(
             'list_text',
-            [get_lang('AnswerList'), get_lang('EnterListOfAnswersOneAnswerByLine)')],
+            [get_lang('AnswerList'), get_lang('EnterListOfAnswersOneAnswerByLine')],
             ['rows' => 8]
         );
         $form->addFile(

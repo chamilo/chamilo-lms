@@ -375,7 +375,8 @@ class ExerciseShowFunctions
 
         foreach ($allChoices as $choice) {
             $isStudentAnswer = in_array($choice, $studentChoices);
-            $isCorrectAnswer = $isStudentAnswer && in_array($choice, $correctAnswers);
+            $isExpectedAnswer = in_array($choice, $correctAnswers);
+            $isCorrectAnswer = $isStudentAnswer && $isExpectedAnswer;
             $answerPosition = array_search($choice, $answer->iid);
 
             $hideExpectedAnswer = false;
@@ -430,7 +431,7 @@ class ExerciseShowFunctions
                 if ($hideExpectedAnswer) {
                     $html .= '<span class="text-muted">&mdash;</span>';
                 } else {
-                    $html .= $isCorrectAnswer ? $checkboxOn : $checkboxOff;
+                    $html .= $isExpectedAnswer ? $checkboxOn : $checkboxOff;
                 }
 
                 $html .= '</td>';

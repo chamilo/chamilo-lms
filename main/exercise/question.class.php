@@ -1831,7 +1831,7 @@ abstract class Question
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToMultipleAnswer'),
-                        'dot-circle-o',
+                        'check-square-o',
                         'default',
                         null,
                         null,
@@ -1850,7 +1850,7 @@ abstract class Question
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToUniqueAnswer'),
-                        'check-square-o',
+                        'dot-circle-o',
                         'default',
                         null,
                         null,

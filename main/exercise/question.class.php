@@ -2584,6 +2584,9 @@ abstract class Question
             $swappedAnswer->$key = $value;
         }
 
+        $objAnswer = new Answer($swappedAnswer->iid);
+        $_POST['nb_answers'] = $objAnswer->nbrAnswers;
+
         return $swappedAnswer;
     }
 

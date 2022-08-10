@@ -1821,6 +1821,7 @@ abstract class Question
             global $text;
             switch ($this->type) {
                 case UNIQUE_ANSWER:
+                case MULTIPLE_ANSWER_DROPDOWN:
                     $buttonGroup = [];
                     $buttonGroup[] = $form->addButtonSave(
                         $text,
@@ -1849,6 +1850,16 @@ abstract class Question
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToUniqueAnswer'),
+                        'check-square-o',
+                        'default',
+                        null,
+                        null,
+                        null,
+                        true
+                    );
+                    $buttonGroup[] = $form->addButton(
+                        'convertAnswerAlt',
+                        get_lang('ConvertToMultipleAnswerDropdown'),
                         'check-square-o',
                         'default',
                         null,
@@ -2550,13 +2561,14 @@ abstract class Question
      *
      * @return UniqueAnswer|MultipleAnswer
      */
-    public function swapSimpleAnswerTypes()
+    public function swapSimpleAnswerTypes($index = 0)
     {
         $oppositeAnswers = [
-            UNIQUE_ANSWER => MULTIPLE_ANSWER,
-            MULTIPLE_ANSWER => UNIQUE_ANSWER,
+            UNIQUE_ANSWER => [MULTIPLE_ANSWER],
+            MULTIPLE_ANSWER => [UNIQUE_ANSWER, MULTIPLE_ANSWER_DROPDOWN],
+            MULTIPLE_ANSWER_DROPDOWN => [MULTIPLE_ANSWER],
         ];
-        $this->type = $oppositeAnswers[$this->type];
+        $this->type = $oppositeAnswers[$this->type][$index];
         Database::update(
             Database::get_course_table(TABLE_QUIZ_QUESTION),
             ['type' => $this->type],
@@ -2565,6 +2577,7 @@ abstract class Question
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',
             MULTIPLE_ANSWER => 'MultipleAnswer',
+            MULTIPLE_ANSWER_DROPDOWN => 'MultipleAnswerDropdown',
         ];
         $swappedAnswer = new $answerClasses[$this->type]();
         foreach ($this as $key => $value) {

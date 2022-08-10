@@ -101,8 +101,10 @@ Event::delete_all_incomplete_attempts(
 $objExercise = Session::read('objExercise');
 $objQuestion = Session::read('objQuestion');
 
-if (isset($_REQUEST['convertAnswer'])) {
-    $objQuestion = $objQuestion->swapSimpleAnswerTypes();
+if (isset($_REQUEST['convertAnswer']) || isset($_REQUEST['convertAnswerAlt'])) {
+    $objQuestion = $objQuestion->swapSimpleAnswerTypes(
+        isset($_REQUEST['convertAnswerAlt']) ? 1 : 0
+    );
     Session::write('objQuestion', $objQuestion);
 }
 $objAnswer = Session::read('objAnswer');

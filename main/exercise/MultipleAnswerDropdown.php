@@ -52,7 +52,7 @@ class MultipleAnswerDropdown extends Question
 
         $form->addGroup($buttonGroup);
 
-        if (!empty($this->iid) && !$form->isSubmitted()) {
+        if (!empty($this->iid)) {
             $objAnswer = new Answer($this->iid, 0, $exercise, false);
             $optionData = array_column(
                 $objAnswer->getAnswers(),

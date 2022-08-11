@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Filesystem\Filesystem;
@@ -2373,15 +2374,8 @@ class PortfolioController
 
     private function createFormTagFilter(bool $listByUser = false): FormValidator
     {
-        $extraField = new ExtraField('portfolio');
-        $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
-
-        $chbxTagOptions = array_map(
-            function (array $tagOption) {
-                return $tagOption['tag'];
-            },
-            $tagFieldInfo['options'] ?? []
-        );
+        $em = Database::getManager();
+        $tagTepo = $em->getRepository(Tag::class);
 
         $frmTagList = new FormValidator(
             'frm_tag_list',
@@ -2392,8 +2386,22 @@ class PortfolioController
             FormValidator::LAYOUT_BOX
         );
 
-        if (!empty($chbxTagOptions)) {
-            $frmTagList->addCheckBoxGroup('tags', $tagFieldInfo['display_text'], $chbxTagOptions);
+        /** @var SelectAjax $txtTags */
+        $txtTags = $frmTagList->addSelectAjax(
+            'tags',
+            get_lang('Tags'),
+            [],
+            [
+                'multiple' => 'multiple',
+                'url' => api_get_path(WEB_AJAX_PATH)."extra_field.ajax.php?a=search_tags&field_id=29&type=portfolio&byid=1",
+            ]
+        );
+        $selectedTags = $txtTags->getValue();
+
+        if (!empty($selectedTags)) {
+            foreach ($tagTepo->findById($selectedTags) as $tag) {
+                $txtTags->addOption($tag->getTag(), $tag->getId());
+            }
         }
 
         $frmTagList->addText('text', get_lang('Search'), false)->setIcon('search');

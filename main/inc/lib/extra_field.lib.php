@@ -656,6 +656,7 @@ class ExtraField extends Model
                 $row['variable'],
                 $row['display_text']
             );
+            $row['options'] = [];
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag

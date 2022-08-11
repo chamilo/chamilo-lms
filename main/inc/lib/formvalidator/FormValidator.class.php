@@ -16,6 +16,8 @@ class FormValidator extends HTML_QuickForm
     public const LAYOUT_BOX_NO_LABEL = 'box-no-label';
     public const LAYOUT_GRID = 'grid';
 
+    public const TIMEPICKER_INCREMENT_DEFAULT = 15;
+
     public $with_progress_bar = false;
     private $layout;
 
@@ -1789,6 +1791,17 @@ EOT;
             });
             </script>");
         }
+    }
+
+    public static function getTimepickerIncrement(): int
+    {
+        $customIncrement = api_get_configuration_value('timepicker_increment');
+
+        if (false !== $customIncrement) {
+            return (int) $customIncrement;
+        }
+
+        return self::TIMEPICKER_INCREMENT_DEFAULT;
     }
 
     /**

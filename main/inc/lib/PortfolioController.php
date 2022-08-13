@@ -2001,9 +2001,7 @@ class PortfolioController
         $form->addUserAvatar('user', get_lang('Author'));
         $form->addLabel(get_lang('Title'), $item->getTitle());
 
-        $itemContent = Security::remove_XSS(
-            $this->generateItemContent($item)
-        );
+        $itemContent = $this->generateItemContent($item);
 
         $form->addLabel(get_lang('Content'), $itemContent);
         $form->addNumeric(
@@ -2760,7 +2758,10 @@ class PortfolioController
                 $originContent = $origin->getContent();
                 $originContentFooter = vsprintf(
                     get_lang('OriginallyPublishedAsXTitleByYUser'),
-                    [$origin->getTitle(), $origin->getUser()->getCompleteName()]
+                    [
+                        "<cite>{$origin->getTitle()}</cite>",
+                        $origin->getUser()->getCompleteName()
+                    ]
                 );
             }
         } elseif (Portfolio::TYPE_COMMENT === $item->getOriginType()) {
@@ -2770,17 +2771,24 @@ class PortfolioController
                 $originContent = $origin->getContent();
                 $originContentFooter = vsprintf(
                     get_lang('OriginallyCommentedByXUserInYItem'),
-                    [$origin->getAuthor()->getCompleteName(), $origin->getItem()->getTitle()]
+                    [
+                        $origin->getAuthor()->getCompleteName(),
+                        "<cite>{$origin->getItem()->getTitle()}</cite>"
+                    ]
                 );
             }
         }
 
         if ($originContent) {
-            return "<blockquote>$originContent<footer>$originContentFooter</footer></blockquote>"
-                .'<div class="clearfix">'.$item->getContent().'</div>';
+            return "<figure>
+                    <blockquote>$originContent</blockquote>
+                    <figcaption style=\"margin-bottom: 10px;\">$originContentFooter</figcaption>
+                </figure>
+                <div class=\"clearfix\">".Security::remove_XSS($item->getContent()).'</div>'
+            ;
         }
 
-        return $item->getContent();
+        return Security::remove_XSS($item->getContent());
     }
 
     private function getItemsInHtmlFormatted(array $items): array
@@ -2810,9 +2818,7 @@ class PortfolioController
 
             $metadata .= '</ul>';
 
-            $itemContent = Security::remove_XSS(
-                $this->generateItemContent($item)
-            );
+            $itemContent = $this->generateItemContent($item);
 
             $itemsHtml[] = Display::panel($itemContent, Security::remove_XSS($item->getTitle()), '', 'info', $metadata);
         }

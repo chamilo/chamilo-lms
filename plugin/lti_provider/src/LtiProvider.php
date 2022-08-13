@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use Packback\Lti1p3;
 use Packback\Lti1p3\LtiMessageLaunch;
 use Packback\Lti1p3\LtiOidcLogin;
@@ -73,6 +74,12 @@ class LtiProvider
         if (empty($userInfo)) {
             // We create the user
             $username = $launchData['https://purl.imsglobal.org/spec/lti/claim/ext']['user_username'];
+            if (!UserManager::is_username_available($username)) {
+                $username = UserManager::create_unique_username(
+                    $firstName,
+                    $lastName
+                );
+            }
             $password = api_generate_password();
             $userId = UserManager::create_user(
                 $firstName,
@@ -91,6 +98,9 @@ class LtiProvider
         }
 
         $login = UserManager::loginAsUser($userId, false);
+        if ($login && CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
+            Session::write('is_allowed_in_course', true);
+        }
 
         return $login;
     }

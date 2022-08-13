@@ -538,6 +538,11 @@ function save_item(
         if (!$progressBarSpecial) {
             $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
         }
+
+        if (isset($myLP->lti_launch_id)) {
+            $ltiLaunchId = $myLP->lti_launch_id;
+            $return .= "sendLtiLaunch('$ltiLaunchId', '$lp_id');";
+        }
     }
 
     if (!Session::read('login_as')) {

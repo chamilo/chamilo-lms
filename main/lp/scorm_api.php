@@ -2626,3 +2626,12 @@ function save_suspend_data_in_local()
     }
 }
 
+/**
+* It launchs results for lti provider
+*/
+function sendLtiLaunch(ltiLaunchId, lpId)
+{
+    var url = "<?php echo api_get_path(WEB_PLUGIN_PATH).'lti_provider/tool/api/score.php?'.api_get_cidreq(); ?>&lti_tool=lp&launch_id="+ltiLaunchId+"&lti_result_id="+lpId;
+    $.get(url);
+}
+

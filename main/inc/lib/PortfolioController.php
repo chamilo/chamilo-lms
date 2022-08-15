@@ -1166,7 +1166,7 @@ class PortfolioController
             $this->baseUrl
         );
 
-        $this->renderView($content, Security::remove_XSS($item->getTitle()), $actions, false);
+        $this->renderView($content, $item->getTitle(true), $actions, false);
     }
 
     /**
@@ -1598,7 +1598,7 @@ class PortfolioController
 
         $portfolioItemColumnFilter = function (Portfolio $item) {
             return Display::url(
-                Security::remove_XSS($item->getTitle()),
+                $item->getTitle(true),
                 $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
             );
         };
@@ -2043,7 +2043,7 @@ class PortfolioController
             'url' => $this->baseUrl,
         ];
         $interbreadcrumb[] = [
-            'name' => Security::remove_XSS($item->getTitle()),
+            'name' => $item->getTitle(true),
             'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
         ];
 
@@ -2112,7 +2112,7 @@ class PortfolioController
             'url' => $this->baseUrl,
         ];
         $interbreadcrumb[] = [
-            'name' => Security::remove_XSS($item->getTitle()),
+            'name' => $item->getTitle(true),
             'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
         ];
 
@@ -2764,7 +2764,7 @@ class PortfolioController
                 $originContentFooter = vsprintf(
                     get_lang('OriginallyPublishedAsXTitleByYUser'),
                     [
-                        "<cite>{$origin->getTitle()}</cite>",
+                        "<cite>{$origin->getTitle(true)}</cite>",
                         $origin->getUser()->getCompleteName(),
                     ]
                 );
@@ -2778,7 +2778,7 @@ class PortfolioController
                     get_lang('OriginallyCommentedByXUserInYItem'),
                     [
                         $origin->getAuthor()->getCompleteName(),
-                        "<cite>{$origin->getItem()->getTitle()}</cite>",
+                        "<cite>{$origin->getItem()->getTitle(true)}</cite>",
                     ]
                 );
             }

@@ -224,11 +224,13 @@ class Portfolio
 
     /**
      * Get title.
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle(bool $stripTags = false): string
     {
+        if ($stripTags) {
+            return strip_tags($this->title);
+        }
+
         return $this->title;
     }
 

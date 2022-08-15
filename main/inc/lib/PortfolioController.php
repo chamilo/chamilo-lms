@@ -1002,6 +1002,11 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
+        HookPortfolioItemViewed::create()
+            ->setEventData(['portfolio' => $item])
+            ->notifyItemViewed()
+        ;
+
         $form = $this->createCommentForm($item);
 
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
@@ -2760,7 +2765,7 @@ class PortfolioController
                     get_lang('OriginallyPublishedAsXTitleByYUser'),
                     [
                         "<cite>{$origin->getTitle()}</cite>",
-                        $origin->getUser()->getCompleteName()
+                        $origin->getUser()->getCompleteName(),
                     ]
                 );
             }
@@ -2773,7 +2778,7 @@ class PortfolioController
                     get_lang('OriginallyCommentedByXUserInYItem'),
                     [
                         $origin->getAuthor()->getCompleteName(),
-                        "<cite>{$origin->getItem()->getTitle()}</cite>"
+                        "<cite>{$origin->getItem()->getTitle()}</cite>",
                     ]
                 );
             }

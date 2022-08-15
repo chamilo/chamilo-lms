@@ -8,39 +8,32 @@ use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItem as PortfolioItemStatement;
-use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Shared;
+use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Viewed;
 use Database;
 use Xabbuh\XApi\Model\Statement;
 
-/**
- * Class PortfolioItemShared.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Statement
- */
-class PortfolioItemShared extends PortfolioItemStatement
+class PortfolioItemViewed extends PortfolioItemStatement
 {
     public function generate(): Statement
     {
         $itemAuthor = $this->item->getUser();
-
-        $userActor = new User($itemAuthor);
-        $sharedVerb = new Shared();
-        $itemActivity = new PortfolioItem($this->item);
-
-        $context = $this->generateContext();
 
         $itemAttachments = Database::getManager()
             ->getRepository(PortfolioAttachment::class)
             ->findFromItem($this->item)
         ;
 
+        $actor = new User($itemAuthor);
+        $verb = new Viewed();
+        $object = new PortfolioItem($this->item);
+        $context = $this->generateContext();
         $attachments = $this->generateAttachments($itemAttachments, $itemAuthor);
 
         return new Statement(
             $this->generateStatementId('portfolio-item'),
-            $userActor->generate(),
-            $sharedVerb->generate(),
-            $itemActivity->generate(),
+            $actor->generate(),
+            $verb->generate(),
+            $object->generate(),
             null,
             null,
             $this->item->getCreationDate(),

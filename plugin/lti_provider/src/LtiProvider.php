@@ -59,7 +59,7 @@ class LtiProvider
     /**
      * Verify if email user is in the platform to create it and login (true) or not (false).
      */
-    public function validateUser(array $launchData, string $courseCode): bool
+    public function validateUser(array $launchData, string $courseCode, string $toolName): bool
     {
         if (empty($launchData)) {
             return false;
@@ -97,9 +97,29 @@ class LtiProvider
             CourseManager::subscribeUser($userId, $courseCode, $status);
         }
 
+        Session::erase('_user');
+        Session::erase('is_platformAdmin');
+        Session::erase('is_allowedCreateCourse');
+        Session::erase('_uid');
+
+        if ('lp' == $toolName) {
+            // Deleting the objects
+            Session::erase('oLP');
+            Session::erase('lpobject');
+            Session::erase('scorm_view_id');
+            Session::erase('scorm_item_id');
+            Session::erase('exerciseResult');
+            Session::erase('objExercise');
+            Session::erase('questionList');
+        }
+
         $login = UserManager::loginAsUser($userId, false);
         if ($login && CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
+            $_course = api_get_course_info($courseCode);
             Session::write('is_allowed_in_course', true);
+            Session::write('_real_cid', $_course['real_id']);
+            Session::write('_cid', $_course['code']);
+            Session::write('_course', $_course);
         }
 
         return $login;

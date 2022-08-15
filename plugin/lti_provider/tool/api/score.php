@@ -29,20 +29,13 @@ if (in_array($toolName, ['quiz', 'lp'])) {
         $timestamp = date(DATE_ISO8601);
     } else {
         $lpId = (int) $_REQUEST['lti_result_id'];
-        /*$lpScore = Tracking::get_avg_student_score(
+        $lpProgress = learnpath::getProgress(
+            $lpId,
             api_get_user_id(),
-            $courseCode,
-            [$lpId],
+            api_get_course_int_id(),
             api_get_session_id()
         );
-        $score = (int) $lpScore;*/
-        $lpProgress = Tracking::get_avg_student_progress(
-            api_get_user_id(),
-            $courseCode,
-            [$lpId],
-            api_get_session_id()
-        );
-        $score = (int) $lpProgress;
+        $score = $lpProgress;
         $weight = 100;
         $timestamp = date(DATE_ISO8601);
     }

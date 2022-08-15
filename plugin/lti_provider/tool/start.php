@@ -15,7 +15,7 @@ $launchData = $launch->getLaunchData();
 $plugin = LtiProviderPlugin::create();
 $toolVars = $plugin->getToolProviderVars($launchData['aud']);
 
-$login = LtiProvider::create()->validateUser($launchData, $toolVars['courseCode']);
+$login = LtiProvider::create()->validateUser($launchData, $toolVars['courseCode'], toolVars['toolName']);
 if ($login) {
     $values = [];
     $values['issuer'] = $launchData['iss'];

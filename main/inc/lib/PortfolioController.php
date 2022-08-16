@@ -822,9 +822,18 @@ class PortfolioController
             api_not_allowed(true);
         }
 
-        $item->setIsVisible(
-            !$item->isVisible()
-        );
+        switch ($item->getVisibility()) {
+            case Portfolio::VISIBILITY_HIDDEN:
+                $item->setVisibility(Portfolio::VISIBILITY_VISIBLE);
+                break;
+            case Portfolio::VISIBILITY_VISIBLE:
+                $item->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER);
+                break;
+            case Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER:
+            default:
+                $item->setVisibility(Portfolio::VISIBILITY_HIDDEN);
+                break;
+        }
 
         $this->em->persist($item);
         $this->em->flush();
@@ -1001,6 +1010,14 @@ class PortfolioController
     public function view(Portfolio $item)
     {
         global $interbreadcrumb;
+
+        if (!$this->itemBelongToOwner($item)) {
+            if ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN
+                || ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER && !api_is_allowed_to_edit())
+            ) {
+                api_not_allowed(true);
+            }
+        }
 
         HookPortfolioItemViewed::create()
             ->setEventData(['portfolio' => $item])
@@ -1179,7 +1196,7 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
-            ->setIsVisible(false)
+            ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
             ->setTitle(
                 sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName())
             )
@@ -1213,7 +1230,7 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
-            ->setIsVisible(false)
+            ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
             ->setTitle(
                 sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName())
             )
@@ -1295,7 +1312,7 @@ class PortfolioController
 
                 $portfolio = new Portfolio();
                 $portfolio
-                    ->setIsVisible(false)
+                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
                     ->setTitle($values['title'])
                     ->setContent($values['content'])
                     ->setUser($owner)
@@ -1386,7 +1403,7 @@ class PortfolioController
 
                 $portfolio = new Portfolio();
                 $portfolio
-                    ->setIsVisible(false)
+                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
                     ->setTitle($values['title'])
                     ->setContent($values['content'])
                     ->setUser($owner)
@@ -2589,11 +2606,20 @@ class PortfolioController
                     ->setParameter('user', $this->owner);
             }
 
+            $visibilityCriteria = [Portfolio::VISIBILITY_VISIBLE];
+
+            if (api_is_allowed_to_edit()) {
+                $visibilityCriteria[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
+            }
+
             $queryBuilder
                 ->andWhere(
                     $queryBuilder->expr()->orX(
-                        'pi.user = :current_user AND (pi.isVisible = TRUE OR pi.isVisible = FALSE)',
-                        'pi.user != :current_user AND pi.isVisible = TRUE'
+                        'pi.user = :current_user',
+                        $queryBuilder->expr()->andX(
+                            'pi.user != :current_user',
+                            $queryBuilder->expr()->in('pi.visibility', $visibilityCriteria)
+                        )
                     )
                 )
                 ->setParameter('current_user', $currentUserId);
@@ -2607,7 +2633,7 @@ class PortfolioController
             $itemsCriteria['user'] = $this->owner;
 
             if ($currentUserId !== $this->owner->getId()) {
-                $itemsCriteria['isVisible'] = true;
+                $itemsCriteria['visibility'] = Portfolio::VISIBILITY_VISIBLE;
             }
 
             $items = $this->em

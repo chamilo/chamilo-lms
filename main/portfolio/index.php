@@ -126,8 +126,7 @@ switch ($action) {
         $controller->editItem($item);
 
         return;
-    case 'hide_item':
-    case 'show_item':
+    case 'visibility':
         $id = $httpRequest->query->getInt('id');
 
         /** @var Portfolio $item */

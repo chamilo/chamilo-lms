@@ -18,13 +18,17 @@
                                 <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
                                     {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
                                 </a>
-                                {% if item.isVisible %}
-                                    <a href="{{ baseurl ~ {'action':'hide_item', 'id':item.id}|url_encode }}">
-                                        {{ 'visible.png'|img(22, 'Invisible'|get_lang) }}
+                                {% if item.visibility == 0 %}
+                                    <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
+                                        {{ 'invisible.png'|img(22, 'MakeVisible'|get_lang) }}
                                     </a>
-                                {% else %}
-                                    <a href="{{ baseurl ~ {'action':'show_item', 'id':item.id}|url_encode }}">
-                                        {{ 'invisible.png'|img(22, 'Visible'|get_lang) }}
+                                {% elseif item.visibility == 1 %}
+                                    <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
+                                        {{ 'visible.png'|img(22, 'MakeVisibleForTeachers'|get_lang) }}
+                                    </a>
+                                {% elseif item.visibility == 2 %}
+                                    <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
+                                        {{ 'eye-slash.png'|img(22, 'MakeInvisible'|get_lang) }}
                                     </a>
                                 {% endif %}
                                 <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn-delete">

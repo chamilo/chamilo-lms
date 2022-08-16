@@ -31,6 +31,10 @@ class Portfolio
     public const TYPE_ITEM = 1;
     public const TYPE_COMMENT = 2;
 
+    public const VISIBILITY_HIDDEN = 0;
+    public const VISIBILITY_VISIBLE = 1;
+    public const VISIBILITY_HIDDEN_EXCEPT_TEACHER = 2;
+
     /**
      * @var int
      *
@@ -94,9 +98,9 @@ class Portfolio
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_visible", type="boolean", options={"default": true})
+     * @ORM\Column(name="visibility", type="smallint", options={"default": 1})
      */
-    protected $isVisible = true;
+    protected $visibility = 1;
 
     /**
      * @var \Chamilo\CoreBundle\Entity\PortfolioCategory
@@ -314,26 +318,20 @@ class Portfolio
 
     /**
      * Set isVisible.
-     *
-     * @param bool $isVisible
-     *
-     * @return Portfolio
      */
-    public function setIsVisible($isVisible)
+    public function setVisibility(int $visibility): Portfolio
     {
-        $this->isVisible = $isVisible;
+        $this->visibility = $visibility;
 
         return $this;
     }
 
     /**
      * Get isVisible.
-     *
-     * @return bool
      */
-    public function isVisible()
+    public function getVisibility(): int
     {
-        return $this->isVisible;
+        return $this->visibility;
     }
 
     /**

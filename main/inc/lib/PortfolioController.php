@@ -1460,6 +1460,7 @@ class PortfolioController
      */
     public function details(HttpRequest $httpRequest)
     {
+        $currentUserId = api_get_user_id();
         $isAllowedToFilterStudent = $this->course && api_is_allowed_to_edit();
 
         $actions = [];
@@ -1527,7 +1528,7 @@ class PortfolioController
         $itemsRepo = $this->em->getRepository(Portfolio::class);
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
 
-        $getItemsTotalNumber = function () use ($itemsRepo) {
+        $getItemsTotalNumber = function () use ($itemsRepo, $isAllowedToFilterStudent, $currentUserId) {
             $qb = $itemsRepo->createQueryBuilder('i');
             $qb
                 ->select('COUNT(i)')
@@ -1548,9 +1549,20 @@ class PortfolioController
                 }
             }
 
+            if ($isAllowedToFilterStudent && $currentUserId !== $this->owner->getId()) {
+                $visibilityCriteria = [
+                    Portfolio::VISIBILITY_VISIBLE,
+                    Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER,
+                ];
+
+                $qb->andWhere(
+                    $qb->expr()->in('i.visibility', $visibilityCriteria)
+                );
+            }
+
             return $qb->getQuery()->getSingleScalarResult();
         };
-        $getItemsData = function ($from, $limit, $columnNo, $orderDirection) use ($itemsRepo) {
+        $getItemsData = function ($from, $limit, $columnNo, $orderDirection) use ($itemsRepo, $isAllowedToFilterStudent, $currentUserId) {
             $qb = $itemsRepo->createQueryBuilder('item')
                 ->where('item.user = :user')
                 ->leftJoin('item.category', 'category')
@@ -1570,6 +1582,17 @@ class PortfolioController
                 } else {
                     $qb->andWhere('item.session IS NULL');
                 }
+            }
+
+            if ($isAllowedToFilterStudent && $currentUserId !== $this->owner->getId()) {
+                $visibilityCriteria = [
+                    Portfolio::VISIBILITY_VISIBLE,
+                    Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER,
+                ];
+
+                $qb->andWhere(
+                    $qb->expr()->in('item.visibility', $visibilityCriteria)
+                );
             }
 
             if (0 == $columnNo) {
@@ -1760,6 +1783,7 @@ class PortfolioController
      */
     public function exportPdf(HttpRequest $httpRequest)
     {
+        $currentUserId = api_get_user_id();
         $isAllowedToFilterStudent = $this->course && api_is_allowed_to_edit();
 
         if ($isAllowedToFilterStudent) {
@@ -1786,9 +1810,22 @@ class PortfolioController
             $pdfContent .= '</p>';
         }
 
+        $visibility = [];
+
+        if ($isAllowedToFilterStudent && $currentUserId !== $this->owner->getId()) {
+            $visibility[] = Portfolio::VISIBILITY_VISIBLE;
+            $visibility[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
+        }
+
         $items = $this->em
             ->getRepository(Portfolio::class)
-            ->findItemsByUser($this->owner, $this->course, $this->session);
+            ->findItemsByUser(
+                $this->owner,
+                $this->course,
+                $this->session,
+                null,
+                $visibility
+            );
         $comments = $this->em
             ->getRepository(PortfolioComment::class)
             ->findCommentsByUser($this->owner, $this->course, $this->session);
@@ -1832,6 +1869,7 @@ class PortfolioController
 
     public function exportZip(HttpRequest $httpRequest)
     {
+        $currentUserId = api_get_user_id();
         $isAllowedToFilterStudent = $this->course && api_is_allowed_to_edit();
 
         if ($isAllowedToFilterStudent) {
@@ -1848,7 +1886,20 @@ class PortfolioController
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
         $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
 
-        $items = $itemsRepo->findItemsByUser($this->owner, $this->course, $this->session);
+        $visibility = [];
+
+        if ($isAllowedToFilterStudent && $currentUserId !== $this->owner->getId()) {
+            $visibility[] = Portfolio::VISIBILITY_VISIBLE;
+            $visibility[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
+        }
+
+        $items = $itemsRepo->findItemsByUser(
+            $this->owner,
+            $this->course,
+            $this->session,
+            null,
+            $visibility
+        );
         $comments = $commentsRepo->findCommentsByUser($this->owner, $this->course, $this->session);
 
         $itemsHtml = $this->getItemsInHtmlFormatted($items);

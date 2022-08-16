@@ -122,6 +122,11 @@ class ExerciseLib
             $objAnswerTmp = new Answer($questionId, $course_id, $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
             $quizQuestionOptions = Question::readQuestionOption($questionId, $course_id);
+            $selectableOptions = [];
+
+            for ($i = 1; $i <= $objAnswerTmp->nbrAnswers; $i++) {
+                $selectableOptions[$objAnswerTmp->iid[$i]] = $objAnswerTmp->answer[$i];
+            }
 
             // For "matching" type here, we need something a little bit special
             // because the match between the suggestions and the answers cannot be
@@ -1451,7 +1456,47 @@ HTML;
                             $matching_correct_answer++;
                         }
                         break;
+                    case MULTIPLE_ANSWER_DROPDOWN:
+                        if ($debug_mark_answer) {
+                            if ($answerCorrect) {
+                                $s .= '<p>'.Display::returnFontAwesomeIcon('check-square-o', '', true);
+                                $s .= Security::remove_XSS($objAnswerTmp->answer[$answerId]).'</p>';
+                            }
+                        }
+                        break;
                 }
+            }
+
+            if (MULTIPLE_ANSWER_DROPDOWN == $answerType && !$debug_mark_answer) {
+                $userChoiceList = array_unique($userChoiceList);
+                $input_id = "choice-$questionId";
+
+                $s .= Display::input('hidden', "choice2[$questionId]", '0')
+                    .'<p>'
+                    .Display::select(
+                        "choice[$questionId][]",
+                        $selectableOptions,
+                        $userChoiceList,
+                        [
+                            'id' => $input_id,
+                            'multiple' => 'multiple',
+                        ],
+                        false
+                    )
+                    .'</p>'
+                    .'<script>$(function () {
+                            $(\'#'.$input_id.'\').select2({
+                                selectOnClose: false,
+                                placeholder: {id: -2, text: "'.get_lang('None').'"}
+                            });
+                        });</script>'
+                    .'<style>
+                        .select2-container--default .select2-selection--multiple .select2-selection__rendered li {
+                            display:block;
+                            width: 100%;
+                            white-space: break-spaces;
+                        }</style>'
+                ;
             }
 
             if ($show_comment) {
@@ -6143,6 +6188,7 @@ EOT;
             UPLOAD_ANSWER,
             MATCHING_GLOBAL,
             FILL_IN_BLANKS_GLOBAL,
+            MULTIPLE_ANSWER_DROPDOWN,
         ];
         $defaultTypes = [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE];
         $types = $defaultTypes;

@@ -73,6 +73,7 @@ abstract class Question
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
         UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
+        MULTIPLE_ANSWER_DROPDOWN => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown'],
     ];
 
     /**
@@ -1820,6 +1821,7 @@ abstract class Question
             global $text;
             switch ($this->type) {
                 case UNIQUE_ANSWER:
+                case MULTIPLE_ANSWER_DROPDOWN:
                     $buttonGroup = [];
                     $buttonGroup[] = $form->addButtonSave(
                         $text,
@@ -1829,7 +1831,7 @@ abstract class Question
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToMultipleAnswer'),
-                        'dot-circle-o',
+                        'check-square-o',
                         'default',
                         null,
                         null,
@@ -1848,6 +1850,16 @@ abstract class Question
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToUniqueAnswer'),
+                        'dot-circle-o',
+                        'default',
+                        null,
+                        null,
+                        null,
+                        true
+                    );
+                    $buttonGroup[] = $form->addButton(
+                        'convertAnswerAlt',
+                        get_lang('ConvertToMultipleAnswerDropdown'),
                         'check-square-o',
                         'default',
                         null,
@@ -2549,13 +2561,14 @@ abstract class Question
      *
      * @return UniqueAnswer|MultipleAnswer
      */
-    public function swapSimpleAnswerTypes()
+    public function swapSimpleAnswerTypes($index = 0)
     {
         $oppositeAnswers = [
-            UNIQUE_ANSWER => MULTIPLE_ANSWER,
-            MULTIPLE_ANSWER => UNIQUE_ANSWER,
+            UNIQUE_ANSWER => [MULTIPLE_ANSWER],
+            MULTIPLE_ANSWER => [UNIQUE_ANSWER, MULTIPLE_ANSWER_DROPDOWN],
+            MULTIPLE_ANSWER_DROPDOWN => [MULTIPLE_ANSWER],
         ];
-        $this->type = $oppositeAnswers[$this->type];
+        $this->type = $oppositeAnswers[$this->type][$index];
         Database::update(
             Database::get_course_table(TABLE_QUIZ_QUESTION),
             ['type' => $this->type],
@@ -2564,11 +2577,15 @@ abstract class Question
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',
             MULTIPLE_ANSWER => 'MultipleAnswer',
+            MULTIPLE_ANSWER_DROPDOWN => 'MultipleAnswerDropdown',
         ];
         $swappedAnswer = new $answerClasses[$this->type]();
         foreach ($this as $key => $value) {
             $swappedAnswer->$key = $value;
         }
+
+        $objAnswer = new Answer($swappedAnswer->iid);
+        $_POST['nb_answers'] = $objAnswer->nbrAnswers;
 
         return $swappedAnswer;
     }

@@ -101,8 +101,10 @@ Event::delete_all_incomplete_attempts(
 $objExercise = Session::read('objExercise');
 $objQuestion = Session::read('objQuestion');
 
-if (isset($_REQUEST['convertAnswer'])) {
-    $objQuestion = $objQuestion->swapSimpleAnswerTypes();
+if (isset($_REQUEST['convertAnswer']) || isset($_REQUEST['convertAnswerAlt'])) {
+    $objQuestion = $objQuestion->swapSimpleAnswerTypes(
+        isset($_REQUEST['convertAnswerAlt']) ? 1 : 0
+    );
     Session::write('objQuestion', $objQuestion);
 }
 $objAnswer = Session::read('objAnswer');
@@ -324,12 +326,12 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 
 if ($inATest) {
     echo '<div class="actions">';
-    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion'])) {
+    if (isset($_GET['hotspotadmin']) || isset($_GET['mad_admin']) || isset($_GET['newQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
-    if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['editQuestion'])) {
+    if (!isset($_GET['hotspotadmin']) && !isset($_GET['mad_admin']) && !isset($_GET['newQuestion']) && !isset($_GET['editQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     }
@@ -476,7 +478,18 @@ if (isset($_GET['hotspotadmin'])) {
     require 'hotspot_admin.inc.php';
 }
 
-if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
+if (isset($_GET['mad_admin'])) {
+    if (!is_object($objQuestion)) {
+        $objQuestion = Question::read($_GET['mad_admin']);
+    }
+    if (!$objQuestion) {
+        api_not_allowed();
+    }
+
+    require 'multiple_answer_dropdown_admin.php';
+}
+
+if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin']) && !isset($_GET['mad_admin'])) {
     // question list management
     require 'question_list_admin.inc.php';
 }

@@ -2406,6 +2406,8 @@ class PortfolioController
             FormValidator::LAYOUT_BOX
         );
 
+        $frmTagList->addDatePicker('date', get_lang('CreationDate'));
+
         /** @var SelectAjax $txtTags */
         $txtTags = $frmTagList->addSelectAjax(
             'tags',
@@ -2544,6 +2546,13 @@ class PortfolioController
 
             if ($frmFilterList && $frmFilterList->validate()) {
                 $values = $frmFilterList->exportValues();
+
+                if (!empty($values['date'])) {
+                    $queryBuilder
+                        ->andWhere('pi.creationDate >= :date')
+                        ->setParameter(':date', api_get_utc_datetime($values['date'], false, true))
+                    ;
+                }
 
                 if (!empty($values['tags'])) {
                     $queryBuilder

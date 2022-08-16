@@ -8908,4 +8908,9 @@ $NewPasswordCannotBeSameAsCurrent = "La nueva contraseña no puede ser la misma 
 $FilterByClass = "Filtrar por clase";
 $NotInAnyClass = "En ninguna clase";
 $XAccountDisabledByYAttempts = "La cuenta de usuario <i>%s</i> fue deshabilitada después de %d intentos fallidos de inicio de sesión.";
+$AnswerList = "Lista de respuestas";
+$EnterListOfAnswersOneAnswerByLine = "Ingrese una lista de respuestas (una respuesta por línea)";
+$OrSelectCsvFileWithListOfAnswers = "O seleccione un archivo CSV con una lista de respuestas";
+$ConvertToMultipleAnswerDropdown = "Convertir a respuesta múltiple desplegable";
+$MultipleAnswerDropdown = "Respuesta múltiple desplegable";
 ?>

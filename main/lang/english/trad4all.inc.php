@@ -8880,4 +8880,9 @@ $NewPasswordCannotBeSameAsCurrent = "The new password cannot be same as the curr
 $FilterByClass = "Filter by class";
 $NotInAnyClass = "Not in any class";
 $XAccountDisabledByYAttempts = "The account for username <i>%s</i> was disabled after %d failed login attempts.";
+$AnswerList = "Answer list";
+$EnterListOfAnswersOneAnswerByLine = "Enter a list of answers (one answer by line)";
+$OrSelectCsvFileWithListOfAnswers = "Or select a CSV file with a list of answers";
+$ConvertToMultipleAnswerDropdown = "Convert to multiple answer dropdown";
+$MultipleAnswerDropdown = "Multiple answer dropdown";
 ?>

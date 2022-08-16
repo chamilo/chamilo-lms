@@ -122,6 +122,12 @@ class DatePicker extends HTML_QuickForm_text
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 return '{element}';
         }
+
+        return '<div class="form-group">
+                <label {label-for}>{label}</label>
+                {element}
+            </div>'
+        ;
     }
 
     /**

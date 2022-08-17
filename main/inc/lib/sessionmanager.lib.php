@@ -2337,6 +2337,8 @@ class SessionManager
                         }
                     }
                 }
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $courseCode = $courseInfo['code'];
 
                 // Replace with this new function
                 // insert new users into session_rel_course_rel_user and ignore if they already exist
@@ -2356,6 +2358,25 @@ class SessionManager
                             $result = Database::query($sql);
                             if (Database::affected_rows($result)) {
                                 $nbr_users++;
+                            }
+                            if (!empty($courseInfo)) {
+                                $enregUserInfo = api_get_user_info($enreg_user);
+                                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseCode);
+                                if ($subscribe === 1) {
+                                    require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+                                    $forums = get_forums(0, $courseCode, true, $sessionId);
+                                    foreach ($forums as $forum) {
+                                        $forumId = $forum['iid'];
+                                        set_notification('forum', $forumId, false, $enregUserInfo, $courseInfo);
+                                    }
+                                    if (api_get_configuration_value('subscribe_users_to_forum_notifications_also_in_base_course')) {
+                                        $forums = get_forums(0, $courseCode, true, 0);
+                                        foreach ($forums as $forum) {
+                                            $forumId = $forum['iid'];
+                                            set_notification('forum', $forumId, false, $enregUserInfo, $courseInfo);
+                                        }
+                                    }
+                                }
                             }
 
                             Event::addEvent(
@@ -2646,9 +2667,13 @@ class SessionManager
         $courseId = $courseInfo['real_id'];
         $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course_code);
         $forums = [];
+        $forumsBaseCourse = [];
         if ($subscribe === 1) {
             require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
             $forums = get_forums(0, $course_code, true, $session_id);
+            if (api_get_configuration_value('subscribe_users_to_forum_notifications_also_in_base_course')) {
+                $forumsBaseCourse = get_forums(0, $courseCode, true, 0);
+            }
         }
 
         if ($removeUsersNotInList) {
@@ -2701,6 +2726,13 @@ class SessionManager
             if (!empty($forums)) {
                 $userInfo = api_get_user_info($enreg_user);
                 foreach ($forums as $forum) {
+                    $forumId = $forum['iid'];
+                    set_notification('forum', $forumId, false, $userInfo, $courseInfo);
+                }
+            }
+            if (!empty($forumsBaseCourse)) {
+                $userInfo = api_get_user_info($enreg_user);
+                foreach ($forumsBaseCourse as $forum) {
                     $forumId = $forum['iid'];
                     set_notification('forum', $forumId, false, $userInfo, $courseInfo);
                 }

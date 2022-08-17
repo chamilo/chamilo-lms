@@ -1216,6 +1216,11 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Requires new forum_category and forum_post "language" extra fields (multiple select)
 //$_configuration['allow_forum_post_revisions'] = false;
 
+//Allows to subscribe to notification of forums of the base course for users subscribed in a session
+//Only works if subscribe_users_to_forum_notifications is set to true in the course's settings
+//$_configuration['subscribe_users_to_forum_notifications_also_in_base_course'] = false;
+
+
 // Allow to show users in a map, users need to have a coordinates extra field BT#15176
 //$_configuration['allow_social_map_fields'] = ['fields' => ['terms_villedustage', 'terms_ville']];
 

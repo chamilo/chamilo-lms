@@ -5789,6 +5789,8 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
     }
 
     $current_thread = get_thread_information($forum_id, $thread_id);
+    $courseInfo = api_get_course_info_by_id($current_thread['c_id']);
+    $courseCode = $courseInfo['code'];
 
     // User who subscribed to the thread
     if ($thread_id != 0) {
@@ -5806,8 +5808,20 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
-            $userInfo = api_get_user_info($value['user_id']);
-            send_mail($userInfo, $forumInfo, $current_thread, $postInfo);
+            $notifyUser = true;
+            if ((api_get_course_setting('share_forums_in_sessions',$courseCode) === -1 || !api_get_course_setting('share_forums_in_sessions',$courseCode)) && $current_thread['session_id'] != 0) {
+                $notifyUser = false;
+                $userSessions = SessionManager::get_sessions_by_user($value['user_id']);
+                foreach ($userSessions as $userSession) {
+                    if ($userSession['session_id'] == $current_thread['session_id']) {
+                        $notifyUser = true;
+                    }
+                }
+            }
+            if ($notifyUser === true) {
+                $userInfo = api_get_user_info($value['user_id']);
+                send_mail($userInfo, $forumInfo, $current_thread, $postInfo);
+            }
         }
     }
 }

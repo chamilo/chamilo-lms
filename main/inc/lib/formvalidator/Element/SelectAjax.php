@@ -24,12 +24,17 @@ class SelectAjax extends HTML_QuickForm_select
     {
         $iso = api_get_language_isocode(api_get_interface_language());
         $formatResult = $this->getAttribute('formatResult');
+        $formatSelection = $this->getAttribute('formatSelection');
         $formatCondition = '';
 
         if (!empty($formatResult)) {
-            $formatCondition = ',
-                templateResult : '.$formatResult.',
-                templateSelection : '.$formatResult;
+            $formatCondition .= ',
+                templateResult : '.$formatResult;
+        }
+
+        if (!empty($formatSelection)) {
+            $formatCondition .= ',
+                templateSelection : '.$formatSelection;
         }
 
         $width = 'element';
@@ -109,14 +114,15 @@ class SelectAjax extends HTML_QuickForm_select
                                     results: ''
                                 };
                             }
-                            $formatCondition
                         }
+                        $formatCondition
                     });
                 });
             </script>
 JS;
 
         $this->removeAttribute('formatResult');
+        $this->removeAttribute('formatSelection');
         $this->removeAttribute('minimumInputLength');
         $this->removeAttribute('maximumSelectionLength');
         $this->removeAttribute('tags');

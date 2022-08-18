@@ -1534,8 +1534,6 @@ class PortfolioController
             }
 
             $frmStudent = new FormValidator('frm_student_list', 'get');
-            $slctStudentOptions = [];
-            $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
 
             $urlParams = http_build_query(
                 [
@@ -1545,15 +1543,27 @@ class PortfolioController
                 ]
             );
 
-            $frmStudent->addSelectAjax(
-                'user',
-                get_lang('SelectLearnerPortfolio'),
-                $slctStudentOptions,
-                [
-                    'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
-                    'placeholder' => get_lang('SearchStudent'),
-                ]
-            );
+            $frmStudent
+                ->addSelectAjax(
+                    'user',
+                    get_lang('SelectLearnerPortfolio'),
+                    [],
+                    [
+                        'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
+                        'placeholder' => get_lang('SearchStudent'),
+                        'formatResult' => SelectAjax::templateResultForUsersInCourse(),
+                        'formatSelection' => SelectAjax::templateSelectionForUsersInCourse(),
+                    ]
+                )
+                ->addOption(
+                    $this->owner->getCompleteName(),
+                    $this->owner->getId(),
+                    [
+                        'data-avatarurl' => UserManager::getUserPicture($this->owner->getId()),
+                        'data-username' => $this->owner->getUsername(),
+                    ]
+                )
+            ;
             $frmStudent->setDefaults(['user' => $this->owner->getId()]);
             $frmStudent->addHidden('action', 'details');
             $frmStudent->addHidden('cidReq', $this->course->getCode());
@@ -2536,9 +2546,7 @@ class PortfolioController
     }
 
     /**
-     * @throws \Exception
-     *
-     * @return \FormValidator
+     * @throws Exception
      */
     private function createFormStudentFilter(bool $listByUser = false): FormValidator
     {
@@ -2550,11 +2558,6 @@ class PortfolioController
             [],
             FormValidator::LAYOUT_BOX
         );
-        $slctStudentOptions = [];
-
-        if ($listByUser) {
-            $slctStudentOptions[$this->owner->getId()] = $this->owner->getCompleteName();
-        }
 
         $urlParams = http_build_query(
             [
@@ -2564,17 +2567,29 @@ class PortfolioController
             ]
         );
 
-        $frmStudentList->addSelectAjax(
+        /** @var SelectAjax $slctUser */
+        $slctUser = $frmStudentList->addSelectAjax(
             'user',
             get_lang('SelectLearnerPortfolio'),
-            $slctStudentOptions,
+            [],
             [
                 'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
                 'placeholder' => get_lang('SearchStudent'),
+                'formatResult' => SelectAjax::templateResultForUsersInCourse(),
+                'formatSelection' => SelectAjax::templateSelectionForUsersInCourse(),
             ]
         );
 
         if ($listByUser) {
+            $slctUser->addOption(
+                $this->owner->getCompleteName(),
+                $this->owner->getId(),
+                [
+                    'data-avatarurl' => UserManager::getUserPicture($this->owner->getId()),
+                    'data-username' => $this->owner->getUsername(),
+                ]
+            );
+
             $link = Display::url(
                 get_lang('BackToMainPortfolio'),
                 $this->baseUrl

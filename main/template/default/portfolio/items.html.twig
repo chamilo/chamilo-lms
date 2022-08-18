@@ -35,6 +35,12 @@
                                     {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
                                 </a>
                             </div>
+                        {% elseif false|api_is_allowed_to_edit %}
+                            <div class="portfolio-actions pull-right">
+                                <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
+                                    {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
+                                </a>
+                            </div>
                         {% endif %}
 
                         <h3>
@@ -66,7 +72,7 @@
                                 {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
                             </li>
 
-                            {% if _u.id == item.user.id and item.creationDate != item.updateDate %}
+                            {% if item.creationDate != item.updateDate %}
                                 <li>
                                     <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
                                     {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}

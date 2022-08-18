@@ -642,13 +642,12 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
-        if (!$this->itemBelongToOwner($item)) {
+        if (!api_is_allowed_to_edit() && !$this->itemBelongToOwner($item)) {
             api_not_allowed(true);
         }
 
-        $categories = $this->em
-            ->getRepository('ChamiloCoreBundle:PortfolioCategory')
-            ->findBy(['user' => $this->owner]);
+        $itemCourse = $item->getCourse();
+        $itemSession = $item->getSession();
 
         $form = new FormValidator('edit_portfolio', 'post', $this->baseUrl."action=edit_item&id={$item->getId()}");
 
@@ -724,6 +723,21 @@ class PortfolioController
         );
 
         if ($form->validate()) {
+            if ($itemCourse) {
+                api_item_property_update(
+                    api_get_course_info($itemCourse->getCode()),
+                    TOOL_PORTFOLIO,
+                    $item->getId(),
+                    'PortfolioUpdated',
+                    api_get_user_id(),
+                    [],
+                    null,
+                    '',
+                    '',
+                    $itemSession ? $itemSession->getId() : 0
+                );
+            }
+
             $values = $form->exportValues();
             $currentTime = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
 
@@ -1024,6 +1038,9 @@ class PortfolioController
             ->notifyItemViewed()
         ;
 
+        $itemCourse = $item->getCourse();
+        $itemSession = $item->getSession();
+
         $form = $this->createCommentForm($item);
 
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
@@ -1171,6 +1188,25 @@ class PortfolioController
         $template->assign('comments', $commentsHtml);
         $template->assign('form', $form);
         $template->assign('attachment_list', $this->generateAttachmentList($item));
+
+        if ($itemCourse) {
+            $propertyInfo = api_get_item_property_info(
+                $itemCourse->getId(),
+                TOOL_PORTFOLIO,
+                $item->getId(),
+                $itemSession ? $itemSession->getId() : 0
+            );
+
+            if ($propertyInfo) {
+                $template->assign(
+                    'last_edit',
+                    [
+                        'date' => $propertyInfo['lastedit_date'],
+                        'user' => api_get_user_entity($propertyInfo['lastedit_user_id'])->getCompleteName(),
+                    ]
+                );
+            }
+        }
 
         $layout = $template->get_template('portfolio/view.html.twig');
         $content = $template->fetch($layout);
@@ -2888,20 +2924,43 @@ class PortfolioController
 
         /** @var Portfolio $item */
         foreach ($items as $item) {
+            $itemCourse = $item->getCourse();
+            $itemSession = $item->getSession();
+
             $creationDate = api_convert_and_format_date($item->getCreationDate());
             $updateDate = api_convert_and_format_date($item->getUpdateDate());
 
             $metadata = '<ul class="list-unstyled text-muted">';
 
-            if ($item->getSession()) {
-                $metadata .= '<li>'.get_lang('Course').': '.$item->getSession()->getName().' ('
-                    .$item->getCourse()->getTitle().') </li>';
-            } elseif (!$item->getSession() && $item->getCourse()) {
-                $metadata .= '<li>'.get_lang('Course').': '.$item->getCourse()->getTitle().'</li>';
+            if ($itemSession) {
+                $metadata .= '<li>'.get_lang('Course').': '.$itemSession->getName().' ('
+                    .$itemCourse->getTitle().') </li>';
+            } elseif ($itemCourse) {
+                $metadata .= '<li>'.get_lang('Course').': '.$itemCourse->getTitle().'</li>';
             }
 
             $metadata .= '<li>'.sprintf(get_lang('CreationDateXDate'), $creationDate).'</li>';
-            $metadata .= '<li>'.sprintf(get_lang('UpdateDateXDate'), $updateDate).'</li>';
+
+            if ($itemCourse) {
+                $propertyInfo = api_get_item_property_info(
+                    $itemCourse->getId(),
+                    TOOL_PORTFOLIO,
+                    $item->getId(),
+                    $itemSession ? $itemSession->getId() : 0
+                );
+
+                if ($propertyInfo) {
+                    $metadata .= '<li>'
+                        .sprintf(
+                            get_lang('UpdatedOnDateXByUserY'),
+                            api_convert_and_format_date($propertyInfo['lastedit_date'], DATE_TIME_FORMAT_LONG),
+                            api_get_user_entity($propertyInfo['lastedit_user_id'])->getCompleteName()
+                        )
+                        .'</li>';
+                }
+            } else {
+                $metadata .= '<li>'.sprintf(get_lang('UpdateDateXDate'), $updateDate).'</li>';
+            }
 
             if ($item->getCategory()) {
                 $metadata .= '<li>'.sprintf(get_lang('CategoryXName'), $item->getCategory()->getTitle()).'</li>';

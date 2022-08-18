@@ -270,6 +270,20 @@ switch ($action) {
     case 'delete_attachment':
         $controller->deleteAttachment($httpRequest);
         break;
+    case 'highlighted':
+        api_protect_teacher_script();
+
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio $item */
+        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->markAsHighlighted($item);
+        break;
     case 'list':
     default:
         $controller->index($httpRequest);

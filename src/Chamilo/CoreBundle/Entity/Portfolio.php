@@ -138,6 +138,13 @@ class Portfolio
     private $score;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_highlighted", type="boolean", options={"default": false})
+     */
+    private $isHighlighted = false;
+
+    /**
      * Portfolio constructor.
      */
     public function __construct()
@@ -414,5 +421,17 @@ class Portfolio
     public function setScore(?float $score): void
     {
         $this->score = $score;
+    }
+
+    public function isHighlighted(): bool
+    {
+        return $this->isHighlighted;
+    }
+
+    public function setIsHighlighted(bool $isHighlighted): Portfolio
+    {
+        $this->isHighlighted = $isHighlighted;
+
+        return $this;
     }
 }

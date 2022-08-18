@@ -1,5 +1,5 @@
-<article class="thumbnail portfolio-item">
-    <div class="caption">
+<article class="panel {{ item.isHighlightedd ? 'panel-success' : 'panel-default' }} portfolio-item">
+    <div class="panel-body">
         <div class="portfolio-actions pull-right">
             {% if _u.id == item.user.id %}
                 <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
@@ -38,10 +38,24 @@
                     {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
                 </a>
 
+                {% if item.isHighlighted %}
+                    <a href="{{ baseurl ~ {'action':'highlighted', 'id':item.id}|url_encode }}">
+                        {{ 'award_red.png'|img(22, 'UnmarkAsHighlighted'|get_lang) }}
+                    </a>
+                {% else %}
+                    <a href="{{ baseurl ~ {'action':'highlighted', 'id':item.id}|url_encode }}">
+                        {{ 'award_red_na.png'|img(22, 'MarkAsHighlighted'|get_lang) }}
+                    </a>
+                {% endif %}
+
                 {% if item.course and '1' == 'qualify_portfolio_item'|api_get_course_setting %}
                     <a href="{{ baseurl ~ {'action':'qualify', 'item':item.id}|url_encode }}">
                         {{ 'quiz.png'|img(22, 'QualifyThisPortfolioItem'|get_lang) }}
                     </a>
+                {% endif %}
+            {% else %}
+                {% if item.isHighlighted %}
+                    {{ 'award_red.png'|img(22, 'Highlighted'|get_lang) }}
                 {% endif %}
             {% endif %}
         </div>

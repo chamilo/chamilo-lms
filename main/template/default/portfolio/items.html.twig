@@ -10,11 +10,11 @@
             {% set item_url = baseurl ~ {'action':'view', 'id':item.id}|url_encode %}
             {% set comments = item.lastComments %}
 
-            <div class="col-md-12" id="portfolio-item-{{ item.id }}">
-                <div class="thumbnail">
-                    <div class="caption">
-                        {% if _u.id == item.user.id %}
-                            <div class="portfolio-actions pull-right">
+            <div class="col-md-12">
+                <div class="panel {{ item.isHighlighted ? 'panel-success' : 'panel-default' }} portfolio-item" id="portfolio-item-{{ item.id }}">
+                    <div class="panel-body">
+                        <div class="portfolio-actions pull-right">
+                            {% if _u.id == item.user.id %}
                                 <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
                                     {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
                                 </a>
@@ -34,14 +34,28 @@
                                 <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn-delete">
                                     {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
                                 </a>
-                            </div>
-                        {% elseif false|api_is_allowed_to_edit %}
-                            <div class="portfolio-actions pull-right">
+                            {% elseif false|api_is_allowed_to_edit %}
                                 <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
                                     {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
                                 </a>
-                            </div>
-                        {% endif %}
+                            {% endif %}
+
+                            {% if false|api_is_allowed_to_edit %}
+                                {% if item.isHighlighted %}
+                                    <a href="{{ baseurl ~ {'action':'highlighted', 'id':item.id}|url_encode }}">
+                                        {{ 'award_red.png'|img(22, 'UnmarkAsHighlighted'|get_lang) }}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ baseurl ~ {'action':'highlighted', 'id':item.id}|url_encode }}">
+                                        {{ 'award_red_na.png'|img(22, 'MarkAsHighlighted'|get_lang) }}
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                {% if item.isHighlighted %}
+                                    {{ 'award_red.png'|img(22, 'MarkedAsHighlighted'|get_lang) }}
+                                {% endif %}
+                            {% endif %}
+                        </div>
 
                         <h3>
                             <a href="{{ item_url }}">{{ item.title|remove_xss }}</a>

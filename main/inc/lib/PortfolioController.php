@@ -2349,6 +2349,33 @@ class PortfolioController
     }
 
     /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function markAsHighlighted(Portfolio $item)
+    {
+        if ($item->getCourse()->getId() !== (int) api_get_course_int_id()) {
+            api_not_allowed(true);
+        }
+
+        $item->setIsHighlighted(
+            !$item->isHighlighted()
+        );
+
+        Database::getManager()->flush();
+
+        Display::addFlash(
+            Display::return_message(
+                $item->isHighlighted() ? get_lang('MarkedAsHighlighted') : get_lang('UnmarkedAsHighlighted'),
+                'success'
+            )
+        );
+
+        header("Location: $this->baseUrl".http_build_query(['action' => 'view', 'id' => $item->getId()]));
+        exit;
+    }
+
+    /**
      * @param bool $showHeader
      */
     private function renderView(string $content, string $toolName, array $actions = [], $showHeader = true)

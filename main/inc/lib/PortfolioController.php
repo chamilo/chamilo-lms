@@ -887,6 +887,7 @@ class PortfolioController
     public function index(HttpRequest $httpRequest)
     {
         $listByUser = false;
+        $listHighlighted = $httpRequest->query->has('list_highlighted');
 
         if ($httpRequest->query->has('user')) {
             $this->owner = api_get_user_entity($httpRequest->query->getInt('user'));
@@ -940,7 +941,7 @@ class PortfolioController
         $portfolio = [];
         if ($this->course) {
             $frmTagList = $this->createFormTagFilter($listByUser);
-            $frmStudentList = $this->createFormStudentFilter($listByUser);
+            $frmStudentList = $this->createFormStudentFilter($listByUser, $listHighlighted);
             $frmStudentList->setDefaults(['user' => $this->owner->getId()]);
             // it translates the category title with the current user language
             $categories = $this->getCategoriesForIndex(null, 0);
@@ -955,7 +956,12 @@ class PortfolioController
             $portfolio = $this->getCategoriesForIndex();
         }
 
-        $items = $this->getItemsForIndex($listByUser, $frmTagList);
+        if ($listHighlighted) {
+            $items = $this->getHighlightedItems();
+        } else {
+            $items = $this->getItemsForIndex($listByUser, $frmTagList);
+        }
+
         // it gets and translate the sub-categories
         $categoryId = $httpRequest->query->getInt('categoryId');
         $subCategoryIdsReq = isset($_REQUEST['subCategoryIds']) ? Security::remove_XSS($_REQUEST['subCategoryIds']) : '';
@@ -2575,7 +2581,7 @@ class PortfolioController
     /**
      * @throws Exception
      */
-    private function createFormStudentFilter(bool $listByUser = false): FormValidator
+    private function createFormStudentFilter(bool $listByUser = false, bool $listHighlighted = false): FormValidator
     {
         $frmStudentList = new FormValidator(
             'frm_student_list',
@@ -2628,7 +2634,21 @@ class PortfolioController
             );
         }
 
-        $frmStudentList->addHtml($link);
+        $frmStudentList->addHtml("<p>$link</p>");
+
+        if ($listHighlighted) {
+            $link = Display::url(
+                get_lang('BackToMainPortfolio'),
+                $this->baseUrl
+            );
+        } else {
+            $link = Display::url(
+                get_lang('SeeHighlights'),
+                $this->baseUrl.http_build_query(['list_highlighted' => true])
+            );
+        }
+
+        $frmStudentList->addHtml("<p>$link</p>");
 
         return $frmStudentList;
     }
@@ -2649,6 +2669,46 @@ class PortfolioController
         return $this->em
             ->getRepository(PortfolioCategory::class)
             ->findBy($categoriesCriteria);
+    }
+
+    private function getHighlightedItems()
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder
+            ->select('pi')
+            ->from(Portfolio::class, 'pi')
+            ->where('pi.course = :course')
+            ->andWhere('pi.isHighlighted = TRUE')
+            ->setParameter('course', $this->course);
+
+        if ($this->session) {
+            $queryBuilder->andWhere('pi.session = :session');
+            $queryBuilder->setParameter('session', $this->session);
+        } else {
+            $queryBuilder->andWhere('pi.session IS NULL');
+        }
+
+        $visibilityCriteria = [Portfolio::VISIBILITY_VISIBLE];
+
+        if (api_is_allowed_to_edit()) {
+            $visibilityCriteria[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
+        }
+
+        $queryBuilder
+            ->andWhere(
+                $queryBuilder->expr()->orX(
+                    'pi.user = :current_user',
+                    $queryBuilder->expr()->andX(
+                        'pi.user != :current_user',
+                        $queryBuilder->expr()->in('pi.visibility', $visibilityCriteria)
+                    )
+                )
+            )
+            ->setParameter('current_user', api_get_user_id());
+
+        $queryBuilder->orderBy('pi.creationDate', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     private function getItemsForIndex(

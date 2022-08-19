@@ -8142,7 +8142,7 @@ input + .progress {
     width: 120px;
 }
 
-footer {
+footer.footer {
     font-size: 12px;
     padding-top: 10px;
 }
@@ -9824,7 +9824,7 @@ ul.dropdown-menu.inner > li > a {
 }
 
 @media (min-width: 320px) and (max-width: 479px) {
-    footer {
+    footer.footer {
         padding-top: 15px;
     }
 

@@ -1063,8 +1063,8 @@ class PortfolioController
             $query->getArrayResult(),
             [
                 'decorate' => true,
-                'rootOpen' => '<ul class="media-list">',
-                'rootClose' => '</ul>',
+                'rootOpen' => '<div class="media-list">',
+                'rootClose' => '</div>',
                 'childOpen' => function ($node) use ($commentsRepo) {
                     /** @var PortfolioComment $comment */
                     $comment = $commentsRepo->find($node['id']);
@@ -1080,12 +1080,12 @@ class PortfolioController
                         ]
                     );
 
-                    return '<li class="media" id="comment-'.$node['id'].'">
+                    return '<article class="media" id="comment-'.$node['id'].'">
                         <div class="media-left"><img class="media-object thumbnail" src="'.$userPicture.'" alt="'
                         .$author->getCompleteName().'"></div>
                         <div class="media-body">';
                 },
-                'childClose' => '</div></li>',
+                'childClose' => '</div></article>',
                 'nodeDecorator' => function ($node) use ($commentsRepo, $clockIcon, $item) {
                     /** @var PortfolioComment $comment */
                     $comment = $commentsRepo->find($node['id']);
@@ -1163,22 +1163,23 @@ class PortfolioController
                         }
                     }
 
-                    $nodeHtml = '<p class="media-heading h4">'.PHP_EOL
-                        .$comment->getAuthor()->getCompleteName().PHP_EOL.'<small>'.$clockIcon.PHP_EOL
-                        .Display::dateToStringAgoAndLongDate($comment->getDate()).'</small>'.PHP_EOL;
+                    $nodeHtml = '<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'.PHP_EOL
+                        .'<footer class="media-heading h4">'.PHP_EOL
+                        .'<p>'.$comment->getAuthor()->getCompleteName().'</p>'.PHP_EOL;
 
                     if ($comment->isImportant()
                         && ($this->itemBelongToOwner($comment->getItem()) || $isAllowedToEdit)
                     ) {
-                        $nodeHtml .= '<span class="label label-warning origin-style">'
+                        $nodeHtml .= '<span class="pull-right label label-warning origin-style">'
                             .get_lang('CommentMarkedAsImportant')
                             .'</span>'.PHP_EOL;
                     }
 
-                    $nodeHtml .= '</p>'.PHP_EOL
-                        .'<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'
-                        .Security::remove_XSS($comment->getContent())
-                        .PHP_EOL;
+                    $nodeHtml .= '<p class="small">'.$clockIcon.PHP_EOL
+                        .Display::dateToStringAgoAndLongDate($comment->getDate()).'</p>'.PHP_EOL;
+
+                    $nodeHtml .= '</footer>'.PHP_EOL
+                        .Security::remove_XSS($comment->getContent()).PHP_EOL;
 
                     $nodeHtml .= $this->generateAttachmentList($comment);
 
@@ -1219,11 +1220,78 @@ class PortfolioController
 
         $interbreadcrumb[] = ['name' => get_lang('Portfolio'), 'url' => $this->baseUrl];
 
+        $editLink = $actions[] = Display::url(
+            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'edit_item', 'id' => $item->getId()])
+        );
+
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
             $this->baseUrl
         );
+
+        if ($this->itemBelongToOwner($item)) {
+            $actions[] = $editLink;
+
+            $visibilityUrl = $this->baseUrl.http_build_query(['action' => 'visibility', 'id' => $item->getId()]);
+
+            if ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN) {
+                $actions[] = Display::url(
+                    Display::return_icon('invisible.png', get_lang('MakeVisible'), [], ICON_SIZE_MEDIUM),
+                    $visibilityUrl
+                );
+            } elseif ($item->getVisibility() === Portfolio::VISIBILITY_VISIBLE) {
+                $actions[] = Display::url(
+                    Display::return_icon('visible.png', get_lang('MakeVisibleForTeachers'), [], ICON_SIZE_MEDIUM),
+                    $visibilityUrl
+                );
+            } elseif ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER) {
+                $actions[] = Display::url(
+                    Display::return_icon('eye-slash.png', get_lang('MakeInvisible'), [], ICON_SIZE_MEDIUM),
+                    $visibilityUrl
+                );
+            }
+
+            $actions[] = Display::url(
+                Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_MEDIUM),
+                $this->baseUrl.http_build_query(['action' => 'delete_item', 'id' => $item->getId()])
+            );
+        } else {
+            $actions[] = Display::url(
+                Display::return_icon('copy.png', get_lang('CopyToMyPortfolio'), [], ICON_SIZE_MEDIUM),
+                $this->baseUrl.http_build_query(['action' => 'copy', 'id' => $item->getId()])
+            );
+        }
+
+        if (api_is_allowed_to_edit()) {
+            $actions[] = Display::url(
+                Display::return_icon('copy.png', get_lang('CopyToStudentPortfolio'), [], ICON_SIZE_MEDIUM),
+                $this->baseUrl.http_build_query(['action' => 'teacher_copy', 'copy' => 'item', 'id' => $item->getId()])
+            );
+            $actions[] = $editLink;
+
+            $highlightedUrl = $this->baseUrl.http_build_query(['action' => 'highlighted', 'id' => $item->getId()]);
+
+            if ($item->isHighlighted()) {
+                $actions[] = Display::url(
+                    Display::return_icon('award_red.png', get_lang('UnmarkAsHighlighted'), [], ICON_SIZE_MEDIUM),
+                    $highlightedUrl
+                );
+            } else {
+                $actions[] = Display::url(
+                    Display::return_icon('award_red_na.png', get_lang('MarkAsHighlighted'), [], ICON_SIZE_MEDIUM),
+                    $highlightedUrl
+                );
+            }
+
+            if ($itemCourse && '1' === api_get_course_setting('qualify_portfolio_item')) {
+                $actions[] = Display::url(
+                    Display::return_icon('quiz.png', get_lang('QualifyThisPortfolioItem'), [], ICON_SIZE_MEDIUM),
+                    $this->baseUrl.http_build_query(['action' => 'qualify', 'item' => $item->getId()])
+                );
+            }
+        }
 
         $this->renderView($content, $item->getTitle(true), $actions, false);
     }
@@ -2403,7 +2471,7 @@ class PortfolioController
         }
 
         if ($actions) {
-            $actions = implode(PHP_EOL, $actions);
+            $actions = implode('', $actions);
 
             $actionsStr .= Display::toolbarAction('portfolio-toolbar', [$actions]);
         }
@@ -2852,6 +2920,7 @@ class PortfolioController
         $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
 
         $form = new FormValidator('frm_comment', 'post', $formAction);
+        $form->addHeader(get_lang('AddNewComment'));
         $form->addHtmlEditor('content', get_lang('Comments'), true, false, ['ToolbarSet' => 'Minimal']);
         $form->addHidden('item', $item->getId());
         $form->addHidden('parent', 0);
@@ -2948,10 +3017,7 @@ class PortfolioController
             }
 
             if ($attachment->getComment()) {
-                $listItems .= PHP_EOL.Display::span(
-                        Security::remove_XSS($attachment->getComment()),
-                        ['class' => 'text-muted']
-                    );
+                $listItems .= '<p class="text-muted">'.Security::remove_XSS($attachment->getComment()).'</p>';
             }
 
             $listItems .= '</li>';
@@ -2960,7 +3026,7 @@ class PortfolioController
         $listItems .= '</ul>';
 
         if ($includeHeader) {
-            $listItems = Display::page_subheader(get_lang('AttachmentFiles'), null, 'h5', ['class' => 'h4'])
+            $listItems = '<h1 class="h4">'.get_lang('AttachmentFiles').'</h1>'
                 .$listItems;
         }
 

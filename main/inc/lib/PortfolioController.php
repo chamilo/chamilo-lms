@@ -1879,17 +1879,48 @@ class PortfolioController
             $content .= $frmStudent->returnForm();
         }
 
-        $content .= Display::page_subheader2(get_lang('PortfolioItems')).PHP_EOL;
+        $totalNumberOfItems = $tblItems->get_total_number_of_items();
+        $totalNumberOfComments = $tblComments->get_total_number_of_items();
+        $requiredNumberOfItems = (int) api_get_course_setting('portfolio_number_items');
+        $requiredNumberOfComments = (int) api_get_course_setting('portfolio_number_comments');
 
-        if ($tblItems->get_total_number_of_items() > 0) {
+        $itemsSubtitle = '';
+
+        if ($requiredNumberOfItems > 0) {
+            $itemsSubtitle = sprintf(
+                get_lang('XAddedYRequired'),
+                $totalNumberOfItems,
+                $requiredNumberOfItems
+            );
+        }
+
+        $content .= Display::page_subheader2(
+            get_lang('PortfolioItems'),
+            $itemsSubtitle
+        ).PHP_EOL;
+
+        if ($totalNumberOfItems > 0) {
             $content .= $tblItems->return_table().PHP_EOL;
         } else {
             $content .= Display::return_message(get_lang('NoItemsInYourPortfolio'), 'warning');
         }
 
-        $content .= Display::page_subheader2(get_lang('PortfolioCommentsMade')).PHP_EOL;
+        $commentsSubtitle = '';
 
-        if ($tblComments->get_total_number_of_items() > 0) {
+        if ($requiredNumberOfComments > 0) {
+            $commentsSubtitle = sprintf(
+                get_lang('XAddedYRequired'),
+                $totalNumberOfComments,
+                $requiredNumberOfComments
+            );
+        }
+
+        $content .= Display::page_subheader2(
+            get_lang('PortfolioCommentsMade'),
+            $commentsSubtitle
+        ).PHP_EOL;
+
+        if ($totalNumberOfComments > 0) {
             $content .= $tblComments->return_table().PHP_EOL;
         } else {
             $content .= Display::return_message(get_lang('YouHaveNotCommented'), 'warning');
@@ -1953,17 +1984,47 @@ class PortfolioController
         $itemsHtml = $this->getItemsInHtmlFormatted($items);
         $commentsHtml = $this->getCommentsInHtmlFormatted($comments);
 
-        $pdfContent .= Display::page_subheader2(get_lang('PortfolioItems'));
+        $totalNumberOfItems = count($itemsHtml);
+        $totalNumberOfComments = count($commentsHtml);
+        $requiredNumberOfItems = (int) api_get_course_setting('portfolio_number_items');
+        $requiredNumberOfComments = (int) api_get_course_setting('portfolio_number_comments');
 
-        if (count($itemsHtml) > 0) {
+        $itemsSubtitle = '';
+        $commentsSubtitle = '';
+
+        if ($requiredNumberOfItems > 0) {
+            $itemsSubtitle = sprintf(
+                get_lang('XAddedYRequired'),
+                $totalNumberOfItems,
+                $requiredNumberOfItems
+            );
+        }
+
+        if ($requiredNumberOfComments > 0) {
+            $commentsSubtitle = sprintf(
+                get_lang('XAddedYRequired'),
+                $totalNumberOfComments,
+                $requiredNumberOfComments
+            );
+        }
+
+        $pdfContent .= Display::page_subheader2(
+            get_lang('PortfolioItems'),
+            $itemsSubtitle
+        );
+
+        if ($totalNumberOfItems > 0) {
             $pdfContent .= implode(PHP_EOL, $itemsHtml);
         } else {
             $pdfContent .= Display::return_message(get_lang('NoItemsInYourPortfolio'), 'warning');
         }
 
-        $pdfContent .= Display::page_subheader2(get_lang('PortfolioCommentsMade'));
+        $pdfContent .= Display::page_subheader2(
+            get_lang('PortfolioCommentsMade'),
+            $commentsSubtitle
+        );
 
-        if (count($commentsHtml) > 0) {
+        if ($totalNumberOfComments > 0) {
             $pdfContent .= implode(PHP_EOL, $commentsHtml);
         } else {
             $pdfContent .= Display::return_message(get_lang('YouHaveNotCommented'), 'warning');

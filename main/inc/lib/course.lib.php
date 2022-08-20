@@ -5843,6 +5843,8 @@ class CourseManager
             $courseSettings[] = 'qualify_portfolio_item';
             $courseSettings[] = 'qualify_portfolio_comment';
             $courseSettings[] = 'portfolio_max_score';
+            $courseSettings[] = 'portfolio_number_items';
+            $courseSettings[] = 'portfolio_number_comments';
         }
 
         if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {

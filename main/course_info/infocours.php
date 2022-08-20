@@ -1015,6 +1015,12 @@ if ($allowPortfolioTool) {
         get_lang('MaxScore') => [
             $form->createElement('number', 'portfolio_max_score', get_lang('MaxScore'), ['step' => 'any', 'min' => 0]),
         ],
+        get_lang('RequiredNumberOfItems') => [
+            $form->createElement('number', 'portfolio_number_items', '', ['step' => '1', 'min' => 0]),
+        ],
+        get_lang('RequiredNumberOfComments') => [
+            $form->createElement('number', 'portfolio_number_comments', '', ['step' => '1', 'min' => 0]),
+        ],
         $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true),
     ];
 

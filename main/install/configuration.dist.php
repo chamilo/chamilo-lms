@@ -972,10 +972,10 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['allow_teachers_to_access_blocked_lp_by_prerequisite'] = false;
 
 // Allow connect skills with course tools (exercises, forum threads, works, etc)
-// 1. Add "@ORM\Entity" in these Entities:
-//SkillRelItemRelUser/SkillRelItem
-// 2. Add "@ORM\OneToMany" in the "Skill.items" variable definition
-// 3. Run DB changes:
+// 1. Add an "@" before "ORM\Entity" in these Entities:
+//SkillRelItemRelUser/SkillRelItem/SkillRelCourse (in src/Chamilo/SkillBundle/Entity/)
+// 2. Add an "@" before "ORM\OneToMany" in the "Skill.items" and "Skill.courses" variable definitions (in src/Chamilo/CoreBundle/Entity/Skill.php)
+// 3. Run the following DB changes:
 /*
 CREATE TABLE skill_rel_item_rel_user (id INT AUTO_INCREMENT NOT NULL, skill_rel_item_id INT NOT NULL, user_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_D1133E0DFD4B12DC (skill_rel_item_id), INDEX IDX_D1133E0DA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 CREATE TABLE skill_rel_item (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, item_type INT NOT NULL, item_id INT NOT NULL, obtain_conditions VARCHAR(255) DEFAULT NULL, requires_validation TINYINT(1) NOT NULL, is_real TINYINT(1) NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_EB5B2A0D5585C142 (skill_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -989,8 +989,14 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (ski
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
 */
-// 4. Set "allow_skill_rel_items" to true
+// 4. Set the following "allow_skill_rel_items" setting to true
 //$_configuration['allow_skill_rel_items'] = false;
+// 5. Insert skills links in the skill_rel_course table directly to have them
+// appear in the skills page for the course in a session, or use the
+// main/cron/import_csv.php script with a file in main/cron/incoming/ with
+// a name matching the following pattern skillset_yyyymmdd.csv
+// 6. Assign skills to users through each supported tool (see skill.lib.php::getItemInfo())
+// 7. Confirm users skills through the gradebook interface (new skill_rel_user.php icon on main page)
 
 // Allows to send a notification when a user has achieved a skill
 //$_configuration['badge_assignation_notification'] = false;

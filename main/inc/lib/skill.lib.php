@@ -2900,6 +2900,13 @@ class Skill extends Model
         }
     }
 
+    /**
+     * Builds a list of skills attributable to this course+session in a checkbox input list for FormValidator
+     * @param FormValidator $form
+     * @param               $courseId
+     * @param int           $sessionId
+     * @return array
+     */
     public static function setSkillsToCourse(FormValidator $form, $courseId, $sessionId = 0)
     {
         $courseId = (int) $courseId;
@@ -2931,6 +2938,15 @@ class Skill extends Model
         return [];
     }
 
+    /**
+     * Show a list of skills attributable to this course+session in a checkbox input list for FormValidator
+     * @param FormValidator $form
+     * @param               $skills
+     * @param               $courseId
+     * @param               $sessionId
+     * @param array         $selectedSkills
+     * @return HTML_QuickForm_Element|HTML_QuickForm_group
+     */
     public static function skillsToCheckbox(FormValidator $form, $skills, $courseId, $sessionId, $selectedSkills = [])
     {
         $em = Database::getManager();

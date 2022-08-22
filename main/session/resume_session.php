@@ -267,7 +267,7 @@ if ($session->getNbrCourses() === 0) {
 
         if ($allowSkills) {
             $courseItem .= Display::url(
-                Display::return_icon('skills.png', get_lang('Skills')),
+                Display::return_icon('skill-badges.png', get_lang('Skills')),
                 $codePath.'admin/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$course->getId()
             );
         }

@@ -2423,7 +2423,6 @@ class SessionManager
             $session_id,
             ['visibility' => $session_visibility]
         );
-
     }
 
     /**
@@ -9679,7 +9678,7 @@ class SessionManager
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
-	$courseInfo = api_get_course_info_by_id($courseId);
+        $courseInfo = api_get_course_info_by_id($courseId);
         $courseCode = $courseInfo['code'];
         $subscribeToForums = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
         if ($subscribeToForums) {
@@ -9716,7 +9715,7 @@ class SessionManager
             if (empty($count['nbr'])) {
                 Database::insert($tblSessionCourseUser, $sessionCourseUser);
 
-		Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+                Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
                 if ($subscribeToForums) {
                     $userInfo = api_get_user_info($studentID);
                     if (!empty($forums)) {

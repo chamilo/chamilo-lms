@@ -5835,7 +5835,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
             $notifyUser = true;
-            $shareForumsInSessions = api_get_course_setting('share_forums_in_sessions',$courseInfo);
+            $shareForumsInSessions = api_get_course_setting('share_forums_in_sessions', $courseInfo);
             if (($shareForumsInSessions === -1 || !$shareForumsInSessions) && $current_thread['session_id'] != 0) {
                 $notifyUser = false;
                 $userSessions = SessionManager::get_sessions_by_user($value['user_id']);

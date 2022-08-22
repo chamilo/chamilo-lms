@@ -145,6 +145,13 @@ class Portfolio
     private $isHighlighted = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_template", type="boolean", options={"default": false})
+     */
+    private $isTemplate = false;
+
+    /**
      * Portfolio constructor.
      */
     public function __construct()
@@ -431,6 +438,18 @@ class Portfolio
     public function setIsHighlighted(bool $isHighlighted): Portfolio
     {
         $this->isHighlighted = $isHighlighted;
+
+        return $this;
+    }
+
+    public function isTemplate(): bool
+    {
+        return $this->isTemplate;
+    }
+
+    public function setIsTemplate(bool $isTemplate): Portfolio
+    {
+        $this->isTemplate = $isTemplate;
 
         return $this;
     }

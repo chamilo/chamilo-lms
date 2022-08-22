@@ -284,6 +284,18 @@ switch ($action) {
 
         $controller->markAsHighlighted($item);
         break;
+    case 'template':
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio $item */
+        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->markAsTemplate($item);
+        break;
     case 'list':
     default:
         $controller->index($httpRequest);

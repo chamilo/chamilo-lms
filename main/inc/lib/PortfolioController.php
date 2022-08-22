@@ -460,7 +460,30 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
+        $templates = $this->em
+            ->getRepository(Portfolio::class)
+            ->findBy(
+                [
+                    'isTemplate' => true,
+                    'course' => $this->course,
+                    'session' => $this->session,
+                ]
+            );
+
         $form = new FormValidator('add_portfolio', 'post', $this->baseUrl.'action=add_item');
+        $form->addSelectFromCollection(
+            'template',
+            [
+                get_lang('Template'),
+                null,
+                '<span id="portfolio-spinner" class="fa fa-fw fa-spinner fa-spin" style="display: none;"
+                    aria-hidden="true" aria-label="'.get_lang('Loading').'"></span>',
+            ],
+            $templates,
+            [],
+            true,
+            'getTitle'
+        );
 
         if (api_get_configuration_value('save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
@@ -607,6 +630,21 @@ class PortfolioController
                 });
                 $(window).on("load", function () {
                     $("input[name=\'title\']").focus();
+                });
+                $(\'#add_portfolio_template\').on(\'change\', function () {
+                    $(\'#portfolio-spinner\').show();
+                
+                    $.getJSON(_p.web_ajax + \'portfolio.ajax.php?a=find_template&item=5\').done(function(response) {
+                        if (CKEDITOR.instances.title) {
+                            CKEDITOR.instances.title.setData(response.title);
+                        } else {
+                            document.getElementById(\'add_portfolio_title\').value = response.title;
+                        }
+                    
+                        CKEDITOR.instances.content.setData(response.content);
+                        
+                        $(\'#portfolio-spinner\').hide();
+                    });
                 });
                 '.$extra['jquery_ready_content'].'
             });
@@ -1220,7 +1258,7 @@ class PortfolioController
 
         $interbreadcrumb[] = ['name' => get_lang('Portfolio'), 'url' => $this->baseUrl];
 
-        $editLink = $actions[] = Display::url(
+        $editLink = Display::url(
             Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_MEDIUM),
             $this->baseUrl.http_build_query(['action' => 'edit_item', 'id' => $item->getId()])
         );
@@ -1233,6 +1271,16 @@ class PortfolioController
 
         if ($this->itemBelongToOwner($item)) {
             $actions[] = $editLink;
+
+            $actions[] = Display::url(
+                Display::return_icon(
+                    $item->isTemplate() ? 'wizard.png' : 'wizard_na.png',
+                    $item->isTemplate() ? get_lang('RemoveAsTemplate') : get_lang('AddAsTemplate'),
+                    [],
+                    ICON_SIZE_MEDIUM
+                ),
+                $this->baseUrl.http_build_query(['action' => 'template', 'id' => $item->getId()])
+            );
 
             $visibilityUrl = $this->baseUrl.http_build_query(['action' => 'visibility', 'id' => $item->getId()]);
 
@@ -2502,6 +2550,29 @@ class PortfolioController
         Display::addFlash(
             Display::return_message(
                 $item->isHighlighted() ? get_lang('MarkedAsHighlighted') : get_lang('UnmarkedAsHighlighted'),
+                'success'
+            )
+        );
+
+        header("Location: $this->baseUrl".http_build_query(['action' => 'view', 'id' => $item->getId()]));
+        exit;
+    }
+
+    public function markAsTemplate(Portfolio $item)
+    {
+        if (!$this->itemBelongToOwner($item)) {
+            api_not_allowed(true);
+        }
+
+        $item->setIsTemplate(
+            !$item->isTemplate()
+        );
+
+        Database::getManager()->flush($item);
+
+        Display::addFlash(
+            Display::return_message(
+                $item->isTemplate() ? get_lang('PortfolioItemSetAsTemplate') : get_lang('PortfolioItemUnsetAsTemplate'),
                 'success'
             )
         );

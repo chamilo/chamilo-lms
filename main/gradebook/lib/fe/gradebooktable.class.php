@@ -488,8 +488,8 @@ class GradebookTable extends SortableTable
 
                     if (empty($model)) {
                         $totalBest = [
-                            $scoredisplay->format_score($totalBest[0] + $data['best_score'][0]),
-                            $scoredisplay->format_score($totalBest[1] + $data['best_score'][1]),
+                            $scoredisplay->format_score($totalBest[0] + (empty($data['best_score'][0]) ? 0 : $data['best_score'][0])),
+                            $scoredisplay->format_score($totalBest[1] + (empty($data['best_score'][1]) ? 0 : $data['best_score'][1]))
                         ];
                         $totalAverage = [0, 0];
                         if (isset($data['average_score']) && !empty($data['average_score'])) {
@@ -769,8 +769,10 @@ class GradebookTable extends SortableTable
                 $global = null;
                 $average = null;
                 $myTotal = 0;
-                foreach ($this->dataForGraph['my_result_no_float'] as $result) {
-                    $myTotal += $result;
+                if (!empty($this->dataForGraph)) {
+                    foreach ($this->dataForGraph['my_result_no_float'] as $result) {
+                        $myTotal += $result;
+                    }
                 }
 
                 $totalResult[0] = $myTotal;

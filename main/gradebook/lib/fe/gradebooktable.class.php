@@ -1245,6 +1245,7 @@ class GradebookTable extends SortableTable
                 // Evaluation
                 $course_id = CourseManager::get_course_by_category($categoryId);
                 $show_message = $cat->show_message_resource_delete($course_id);
+                $skills = $item->getSkillsFromItem();
 
                 // course/platform admin can go to the view_results page
                 if (api_is_allowed_to_edit() && $show_message === false) {
@@ -1258,7 +1259,7 @@ class GradebookTable extends SortableTable
                         if ('simple' === $type) {
                             $extra = '';
                         }
-                        $extra .= $item->getSkillsFromItem();
+                        $extra .= $skills;
 
                         return '&nbsp;'
                             .'<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.$item->get_id().'">'
@@ -1270,14 +1271,14 @@ class GradebookTable extends SortableTable
                     return '&nbsp;'
                         .'<a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.$item->get_id().'">'
                         .$item->get_name()
-                        .'</a>';
+                        .'</a>'.$skills;
                 } elseif ($show_message === false && !api_is_allowed_to_edit() && !ScoreDisplay::instance()->is_custom()) {
                     return '&nbsp;'
                         .'<a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.$item->get_id().'">'
                         .$item->get_name()
-                        .'</a>';
+                        .'</a>'.$skills;
                 } else {
-                    return '['.get_lang('Evaluation').']&nbsp;&nbsp;'.$item->get_name().$show_message;
+                    return '['.get_lang('Evaluation').']&nbsp;&nbsp;'.$item->get_name().$show_message.$skills;
                 }
                 // no break because of return
             case 'L':

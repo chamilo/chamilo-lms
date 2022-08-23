@@ -34,10 +34,12 @@ class SessionListener
 
     /**
      * This code is executed when a new session is created.
+     *
+     * @throws Exception
      */
     public function prePersist(Session $session, LifecycleEventArgs $args): void
     {
-        $em = $args->getEntityManager();
+        $em = $args->getObjectManager();
         if (0 === $session->getUrls()->count()) {
             // The AccessUrl was not added using $resource->addAccessUrl(),
             // try getting the URL from the session if possible.

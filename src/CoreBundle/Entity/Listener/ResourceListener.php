@@ -55,6 +55,7 @@ class ResourceListener
 
     /**
      * Only in creation.
+     *
      * @throws Exception
      */
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $eventArgs): void

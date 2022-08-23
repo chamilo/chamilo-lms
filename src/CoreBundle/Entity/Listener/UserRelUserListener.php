@@ -56,7 +56,7 @@ class UserRelUserListener
     public function postRemove(UserRelUser $userRelUser, LifecycleEventArgs $args): void
     {
         // Deletes the other connection.
-        $em = $args->getEntityManager();
+        $em = $args->getObjectManager();
         $repo = $em->getRepository(UserRelUser::class);
         $connection = $repo->findOneBy(
             [

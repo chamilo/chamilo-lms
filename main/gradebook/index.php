@@ -664,6 +664,10 @@ if (!isset($_GET['exportpdf'])) {
     }
 }
 
+if (api_get_configuration_value('allow_skill_rel_items') == true) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
+}
+
 // LOAD DATA & DISPLAY TABLE
 $is_platform_admin = api_is_platform_admin();
 $is_course_admin = api_is_allowed_to_edit(null, true);

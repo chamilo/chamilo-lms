@@ -1255,9 +1255,10 @@ class GradebookTable extends SortableTable
                             .'</a>';
                     } else {
                         $extra = Display::label(get_lang('Evaluation'));
-                        if ($type === 'simple') {
+                        if ('simple' === $type) {
                             $extra = '';
                         }
+                        $extra .= $item->getSkillsFromItem();
 
                         return '&nbsp;'
                             .'<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.$item->get_id().'">'

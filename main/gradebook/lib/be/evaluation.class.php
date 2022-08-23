@@ -989,4 +989,12 @@ class Evaluation implements GradebookItem
 
         return $targets;
     }
+
+    /**
+     * Gets the skills related to this item from the skill_rel_item table
+     */
+    public function getSkillsFromItem(): string
+    {
+        return Skill::getSkillRelItemsToString(ITEM_TYPE_GRADEBOOK_EVALUATION, $this->get_id());
+    }
 }

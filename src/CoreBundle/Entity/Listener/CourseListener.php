@@ -57,8 +57,8 @@ class CourseListener
         ///$this->checkLimit($repo, $course, $url);
         $this->toolChain->addToolsInCourse($course);
 
-        $args->getEntityManager()->persist($course);
-        $args->getEntityManager()->flush();
+        $args->getObjectManager()->persist($course);
+        $args->getObjectManager()->flush();
     }
 
     /**

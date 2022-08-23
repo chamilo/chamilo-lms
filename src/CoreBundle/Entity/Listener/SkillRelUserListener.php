@@ -65,8 +65,8 @@ class SkillRelUserListener
                     ->setSender($currentUser)
                 ;
 
-                $event->getEntityManager()->persist($message);
-                $event->getEntityManager()->flush();
+                $event->getObjectManager()->persist($message);
+                $event->getObjectManager()->flush();
             }
         }
     }

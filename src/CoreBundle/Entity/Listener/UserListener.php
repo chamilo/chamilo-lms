@@ -55,7 +55,7 @@ class UserListener
                 throw new UserNotFoundException('User creator not found, use $resource->setCreator();');
             }
 
-            $em = $args->getEntityManager();
+            $em = $args->getObjectManager();
             $resourceNode = (new ResourceNode())
                 ->setTitle($user->getUsername())
                 ->setCreator($creator)

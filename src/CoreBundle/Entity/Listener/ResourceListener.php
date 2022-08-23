@@ -55,10 +55,11 @@ class ResourceListener
 
     /**
      * Only in creation.
+     * @throws Exception
      */
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
     {
-        $em = $eventArgs->getEntityManager();
+        $em = $eventArgs->getObjectManager();
         $request = $this->request;
 
         // 1. Set AccessUrl.
@@ -107,7 +108,7 @@ class ResourceListener
         // 3. Set ResourceType.
         // @todo use static table instead of Doctrine
         $resourceTypeRepo = $em->getRepository(ResourceType::class);
-        $entityClass = \get_class($eventArgs->getEntity());
+        $entityClass = \get_class($eventArgs->getObject());
 
         $name = $this->toolChain->getResourceTypeNameByEntity($entityClass);
 

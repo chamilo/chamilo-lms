@@ -342,6 +342,7 @@ if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')
 $allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
 if ($allowSkillRelItem) {
     Skill::setSkillsToCourse($form, $courseId);
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
 }
 
 $htmlHeadXtra[] = '

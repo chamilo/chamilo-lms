@@ -176,6 +176,10 @@ if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 }
 
+if (api_get_configuration_value('allow_skill_rel_items') == true) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
+}
+
 if ($action !== 'export') {
     $scoreJsCode = ExerciseLib::getJsCode();
     if ($origin !== 'learnpath') {

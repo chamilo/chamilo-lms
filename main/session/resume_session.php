@@ -35,6 +35,11 @@ $interbreadcrumb[] = [
 
 $orig_param = '&origin=resume_session';
 
+$allowSkills = api_get_configuration_value('allow_skill_rel_items');
+if ($allowSkills) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
+}
+
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_class = Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
@@ -200,8 +205,6 @@ if ($session->getNbrCourses() === 0) {
         }
         $courseList = $newCourseList;
     }
-
-    $allowSkills = api_get_configuration_value('allow_skill_rel_items');
 
     /** @var Course $course */
     foreach ($courseList as $course) {

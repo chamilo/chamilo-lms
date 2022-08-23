@@ -13,7 +13,7 @@
         <InputText
           v-model="login"
           :placeholder="t('Username')"
-          name="login"
+          id="login"
           type="text"
         />
       </div>
@@ -23,7 +23,7 @@
           v-model="password"
           :feedback="false"
           :placeholder="t('Password')"
-          name="password"
+          inputId="password"
           toggle-mask
         />
       </div>

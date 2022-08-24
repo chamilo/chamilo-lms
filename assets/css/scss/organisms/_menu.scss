@@ -1,0 +1,37 @@
+.p-menu {
+  @apply bg-white px-0 py-2 border border-gray-25 rounded-sm w-52;
+
+  .p-menuitem-link {
+    @apply p-3 duration-150 select-none;
+
+    .p-menuitem-text {
+      @apply text-body-2;
+    }
+
+    .p-menuitem-icon {
+      @apply mr-2;
+    }
+
+    .p-submenu-icon {
+    }
+
+    &:not(.p-disabled) {
+      &:hover {
+        @apply bg-gray-15;
+
+        .p-menuitem-text {
+        }
+
+        .p-menuitem-icon {
+        }
+
+        .p-submenu-icon {
+        }
+      }
+    }
+
+    &:focus {
+      @apply outline-0 outline-offset-0 shadow-none;
+    }
+  }
+}

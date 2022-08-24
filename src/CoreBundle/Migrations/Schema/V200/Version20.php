@@ -264,6 +264,11 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE personal_agenda ADD CONSTRAINT FK_D86124608D93D649 FOREIGN KEY (user) REFERENCES user (id) ON DELETE CASCADE');
         }
 
+        // Convert user_api_key.api_service to 'default'
+        $table = $schema->getTable('user_api_key');
+        if ($table->hasColumn('api_service')) {
+            $this->addSql("UPDATE user_api_key SET api_service = 'default' WHERE api_service = 'dokeos'");
+        }
         //$this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
 
         /*$table = $schema->getTable('course_rel_class');

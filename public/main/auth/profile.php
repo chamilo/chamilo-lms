@@ -95,7 +95,7 @@ $user_data = api_get_user_info(
     true
 );
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
-$id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
+$id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'default');
 $value_array = [];
 if (isset($array_list_key[$id_temp_key])) {
     $value_array = $array_list_key[$id_temp_key];

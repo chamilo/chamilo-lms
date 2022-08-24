@@ -62,11 +62,11 @@ class CourseRequestManager
         $objectives,
         $target_audience,
         $user_id,
-        $exemplary_content
+        $exemplary_content = 0
     ) {
         $wanted_code = trim($wanted_code);
         $user_id = (int) $user_id;
-        $exemplary_content = (bool) $exemplary_content ? 1 : 0;
+        $exemplary_content = (int) $exemplary_content;
 
         if ('' == $wanted_code) {
             return false;
@@ -101,20 +101,18 @@ class CourseRequestManager
         // @todo user entity
         $sql = sprintf(
             'INSERT INTO %s (
-                code, user_id, directory, db_name,
+                code, user_id,
                 course_language, title, description, category_code,
                 tutor_name, visual_code, request_date,
                 objetives, target_audience, status, info, exemplary_content)
             VALUES (
-                "%s", "%s", "%s", "%s",
+                "%s", "%d", "%s", "%s",
                 "%s", "%s", "%s", "%s",
                 "%s", "%s", "%s",
-                "%s", "%s", "%s", "%s", "%s");',
+                "%s", "%s", "%d");',
             Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
             Database::escape_string($code),
-            Database::escape_string($user_id),
-            Database::escape_string($directory),
-            Database::escape_string($db_name),
+            $user_id,
             Database::escape_string($course_language),
             Database::escape_string($title),
             Database::escape_string($description),
@@ -126,7 +124,7 @@ class CourseRequestManager
             Database::escape_string($target_audience),
             Database::escape_string($status),
             Database::escape_string($info),
-            Database::escape_string($exemplary_content)
+            $exemplary_content
         );
 
         $result_sql = Database::query($sql);
@@ -469,12 +467,17 @@ class CourseRequestManager
         $params = [];
 
         $params['title'] = $course_request_info['title'];
-        $params['course_category'] = $course_request_info['category_code'];
         $params['course_language'] = $course_request_info['course_language'];
         $params['exemplary_content'] = intval($course_request_info['exemplary_content']) > 0;
         $params['wanted_code'] = $course_request_info['code'];
         $params['user_id'] = $course_request_info['user_id'];
         $params['tutor_name'] = api_get_person_name($user_info['firstname'], $user_info['lastname']);
+
+        if (!empty($course_request_info['category_code'])) {
+            $category = CourseCategory::getCategory($course_request_info['category_code']);
+            $categoryId = (int) $category['id'];
+            $params['course_categories'] = [$categoryId];
+        }
 
         $course = CourseManager::create_course($params);
         if (null !== $course) {

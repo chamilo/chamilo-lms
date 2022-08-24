@@ -567,3 +567,15 @@ $border-color_12: #9333EA;
     }
   }
 }
+
+// toggle button
+.p-togglebutton{
+  &.p-button {
+    &.p-highlight {
+
+      &.p-button-plain {
+        @apply bg-support-1 text-primary;
+      }
+    }
+  }
+}

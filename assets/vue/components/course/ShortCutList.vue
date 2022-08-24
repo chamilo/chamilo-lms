@@ -1,22 +1,20 @@
 <template>
   <div
-      class="bg-gray-100 rounded-xl p-2 shadow-md"
+    class="bg-gray-100 rounded-xl p-2 shadow-md"
   >
     <div class="flex flex-col flex-center">
       <div class="mx-auto">
         <a :href="goToShortCut(shortcut)">
           <img
-              :alt="shortcut.name"
-              :src="'/img/tools/' + shortcut.type + '.png'"
-              class="w-32 h-32 object-contain"
-          />
+            :alt="shortcut.name"
+            :src="'/img/tools/' + shortcut.type + '.png'"
+            class="w-32 h-32 object-contain"
+          >
         </a>
       </div>
 
       <div class="flex flex-row gap-2 text-gray-500 pt-3">
-        <a
-
-        >
+        <a>
           {{ shortcut.name }}
         </a>
       </div>
@@ -24,27 +22,17 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
-import {mapGetters} from "vuex";
-
-export default {
-  name: 'ShortCutList',
-  props: {
-    shortcut: Object,
-    goToShortCut: {
-      type: Function,
-      required: true
-    },
-    changeVisibility: {
-      type: Function,
-      required: false
-    },
+// eslint-disable-next-line no-undef
+defineProps({
+  shortcut: {
+    type: Object,
+    required: true,
   },
-  computed: {
-    ...mapGetters({
-      'isCurrentTeacher': 'security/isCurrentTeacher',
-    }),
+  goToShortCut: {
+    type: Function,
+    required: true
   },
-};
+});
 </script>

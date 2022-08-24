@@ -94,7 +94,69 @@
       v-html="intro.introText"
     />
 
-    <h6 v-t="'Tools'" />
+    <div class="flex items-center gap-6">
+      <h6 v-t="'Tools'" />
+
+      <Skeleton
+        v-if="!course"
+        height="2rem"
+        width="6rem"
+        class="ml-auto aspect-square"
+      />
+      <Skeleton
+        v-if="!course"
+        height="2rem"
+        width="6rem"
+        class="aspect-square"
+      />
+      <Skeleton
+        v-if="!course"
+        height="2rem"
+        width="6rem"
+        class="aspect-square"
+      />
+      <Skeleton
+        v-if="!course"
+        height="2rem"
+        width="6rem"
+        class="aspect-square"
+      />
+
+      <Button
+        v-if="course && isCurrentTeacher"
+        icon="mdi mdi-eye"
+        :label="t('Show all')"
+        class="p-button-text p-button-plain p-button-sm ml-auto"
+        :disabled="isSorting || isCustomizing"
+      />
+      <Button
+        v-if="course && isCurrentTeacher"
+        icon="mdi mdi-eye-off"
+        :label="t('Hide all')"
+        class="p-button-text p-button-plain p-button-sm"
+        :disabled="isSorting || isCustomizing"
+      />
+      <ToggleButton
+        v-if="course && isCurrentTeacher"
+        v-model="isSorting"
+        on-icon="mdi mdi-swap-vertical"
+        off-icon="mdi mdi-swap-vertical"
+        :on-label="t('Sort')"
+        :off-label="t('Sort')"
+        class="p-button-text p-button-plain p-button-sm"
+        :disabled="isCustomizing"
+      />
+      <ToggleButton
+        v-if="course && isCurrentTeacher"
+        v-model="isCustomizing"
+        on-icon="mdi mdi-format-paint"
+        off-icon="mdi mdi-format-paint"
+        :on-label="t('Customize')"
+        :off-label="t('Customize')"
+        class="p-button-text p-button-plain p-button-sm"
+        :disabled="isSorting"
+      />
+    </div>
     <hr class="mt-0 mb-4">
 
     <div
@@ -155,13 +217,14 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, provide, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 import { ENTRYPOINT } from '../../config/entrypoint';
 import Button from 'primevue/button';
+import ToggleButton from 'primevue/togglebutton';
 import TieredMenu from 'primevue/tieredmenu';
 import CourseToolList from '../../components/course/CourseToolList.vue';
 import ShortCutList from '../../components/course/ShortCutList.vue';
@@ -186,6 +249,12 @@ let courseId = route.params.id;
 let sessionId = route.query.sid ?? 0;
 
 const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);
+
+const isSorting = ref(false);
+const isCustomizing = ref(false);
+
+provide('isSorting', isSorting);
+provide('isCustomizing', isCustomizing);
 
 // Remove the course session state.
 store.dispatch('session/cleanSession');

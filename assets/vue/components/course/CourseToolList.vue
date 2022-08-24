@@ -1,14 +1,14 @@
 <template>
   <div class="course-tool">
     <a
+      :aria-labelledby="`course-tool-${tool.ctool.iid}`"
       :href="goToCourseTool(course, tool)"
       class="course-tool__link"
-      :aria-labelledby="`course-tool-${tool.ctool.iid}`"
     >
       <span
         :class="tool.tool.icon"
-        class="course-tool__icon mdi"
         aria-hidden="true"
+        class="course-tool__icon mdi"
       />
     </a>
 
@@ -21,7 +21,7 @@
 
     <div class="course-tool__options">
       <button
-        v-if="isCurrentTeacher && changeVisibility"
+        v-if="isCurrentTeacher && !isSorting && !isCustomizing"
         @click="changeVisibility(course, tool)"
       >
         <v-icon
@@ -37,6 +37,16 @@
       </button>
 
       <a
+        v-if="isCurrentTeacher && isCustomizing"
+        href="#"
+      >
+        <v-icon
+          icon="mdi-pencil"
+          size="lg"
+        />
+      </a>
+
+      <!-- a
         v-if="isCurrentTeacher"
         :href="goToSettingCourseTool(course, tool)"
       >
@@ -44,39 +54,42 @@
           icon="mdi-cog"
           size="lg"
         />
-      </a>
+      </a -->
     </div>
   </div>
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { useStore } from 'vuex';
+import { computed, inject } from 'vue';
 
 const store = useStore();
 
+const isSorting = inject('isSorting');
+const isCustomizing = inject('isCustomizing');
+
 // eslint-disable-next-line no-undef
 defineProps({
-    course: {
-        type: Object,
-        required: true,
-    },
-    tool: {
-        type: Object,
-        required: true,
-    },
-    goToCourseTool: {
-        type: Function,
-        required: true,
-    },
-    changeVisibility: {
-        type: Function,
-        required: true,
-    },
-    goToSettingCourseTool: {
-        type: Function,
-        required: true,
-    },
+  course: {
+    type: Object,
+    required: true,
+  },
+  tool: {
+    type: Object,
+    required: true,
+  },
+  goToCourseTool: {
+    type: Function,
+    required: true,
+  },
+  changeVisibility: {
+    type: Function,
+    required: true,
+  },
+  goToSettingCourseTool: {
+    type: Function,
+    required: true,
+  },
 });
 
 const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);

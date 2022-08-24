@@ -696,7 +696,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $getLangXDays = get_lang('XDays');
     $form = new FormValidator(
         'reminder_form',
-        'post',
+        'get',
         api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
         null,
         ['style' => 'margin-bottom: 10px']

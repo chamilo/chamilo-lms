@@ -134,12 +134,10 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             return $this->getFrozenHtml();
         }
 
-        if (!isset($this->_attributes['class'])) {
-            $this->_attributes['class'] = '';
-        }
+        $this->_attributes['class'] = ($attributes['class'] ?? '').' p-inputtext p-component ';
 
         if (FormValidator::LAYOUT_HORIZONTAL === $this->getLayout()) {
-            $this->_attributes['class'] .= 'p-component p-inputtext p-filled';
+            $this->_attributes['class'] .= 'p-filled ';
         }
 
         return '<input '.$this->_getAttrString($this->_attributes).' />';

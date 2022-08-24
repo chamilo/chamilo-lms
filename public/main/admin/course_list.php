@@ -449,7 +449,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         '',
         '',
         [],
-        FormValidator::LAYOUT_INLINE
+        FormValidator::LAYOUT_BOX_SEARCH
     );
     $form->addElement(
         'text',

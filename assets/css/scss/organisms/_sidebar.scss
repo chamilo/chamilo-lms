@@ -37,7 +37,7 @@
   }
 
   &__button {
-    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-4 text-tiny text-primary
+    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-4 text-tiny text-primary p-3
       sm:inline-flex;
     z-index: 11;
 
@@ -48,6 +48,10 @@
 
     &.p-button.p-button-icon-only {
       @apply h-8 p-0 w-8;
+    }
+
+    .p-button-label {
+      @apply hidden;
     }
   }
 

@@ -2,10 +2,10 @@
   @apply h-4 w-4;
 
   .p-checkbox-box {
-    @apply border border-solid border-gray-50 bg-white h-4 rounded-sm w-4 transition-none;
+    @apply border border-solid border-gray-50 bg-white h-4 rounded w-4 transition-none;
 
     .p-checkbox-icon {
-      @apply text-body-2 text-white;
+      @apply text-caption-bold text-white;
     }
 
     &.p-highlight {
@@ -22,7 +22,7 @@
       @apply outline-none outline-offset-0;
     }
     .p-checkbox-box.p-highlight {
-      @apply hover:border-primary hover:bg-support-4;
+      @apply bg-support-4 hover:border-primary;
     }
   }
 }

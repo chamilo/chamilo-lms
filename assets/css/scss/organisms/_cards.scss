@@ -27,4 +27,8 @@
 
   .p-card-footer {
   }
+
+  .p-menu {
+    @apply border-none py-0 w-full;
+  }
 }

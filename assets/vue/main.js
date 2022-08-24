@@ -173,11 +173,8 @@ store.registerModule(
 
 // Vuetify.
 import '@mdi/font/css/materialdesignicons.css';
-//import 'vuetify/lib/styles/main.sass';
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify';
-//import * as components from 'vuetify/lib/components';
-//import * as directives from 'vuetify/lib/directives';
 import { aliases, mdi } from 'vuetify/lib/iconsets/mdi'
 
 const options = {
@@ -233,7 +230,6 @@ import ColumnGroup from 'primevue/columngroup';
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
 
-// import 'primevue/resources/themes/tailwind-light/theme.css';
 import 'primevue/resources/primevue.min.css';
 // import 'primeflex/primeflex.css';
 import "primeicons/primeicons.css";

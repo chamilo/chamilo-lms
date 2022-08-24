@@ -1,5 +1,9 @@
+select.p-dropdown {
+  @apply px-4 py-3;
+}
+
 .p-dropdown {
-  @apply bg-white border border-solid border-gray-50 px-4 py-3 rounded-lg transition;
+  @apply bg-white border border-solid border-gray-50 rounded-lg transition;
 
   &:not(.p-disabled) {
     @apply hover:border-primary focus:border-primary;
@@ -10,7 +14,7 @@
   }
 
   .p-dropdown-label {
-    @apply border-none;
+    @apply border-none text-body-2;
 
     &:enabled {
       &:focus {

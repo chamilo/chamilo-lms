@@ -1,6 +1,13 @@
 <template>
-  <Toolbar :handle-submit="onSendForm" :handle-reset="resetForm"></Toolbar>
-  <PageForm ref="updateForm" :values="item" :errors="violations" />
+  <Toolbar
+    :handle-submit="onSendForm"
+    :handle-reset="resetForm"
+  />
+  <PageForm
+    ref="updateForm"
+    :values="item"
+    :errors="violations"
+  />
   <Loading :visible="isLoading" />
 </template>
 
@@ -18,14 +25,14 @@ import useVuelidate from "@vuelidate/core";
 export default {
   name: 'PageUpdate',
   servicePrefix,
-  mixins: [UpdateMixin],
-  setup () {
-    return { v$: useVuelidate() }
-  },
   components: {
     Loading,
     Toolbar,
     PageForm
+  },
+  mixins: [UpdateMixin],
+  setup () {
+    return { v$: useVuelidate() }
   },
   computed: {
     ...mapFields('page', {

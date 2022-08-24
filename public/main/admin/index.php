@@ -46,6 +46,7 @@ if (api_is_platform_admin()) {
 $blocks = [];
 
 /* Users */
+$blocks['users']['mdi_icon'] = 'account';
 $blocks['users']['icon'] = Display::return_icon(
     'members.png',
     get_lang('User management'),
@@ -62,7 +63,7 @@ $searchForm = new FormValidator(
     'GET',
     api_get_path(WEB_CODE_PATH).'admin/user_list.php',
     null,
-    null,
+    [],
     FormValidator::LAYOUT_BOX_SEARCH
 );
 $searchForm->addText('keyword', get_lang('Keyword'));
@@ -122,6 +123,7 @@ $blocks['users']['extra'] = null;
 
 if (api_is_platform_admin()) {
     /* Courses */
+    $blocks['courses']['mdi_icon'] = 'book-open-page-variant';
     $blocks['courses']['icon'] = Display::return_icon(
         'course.png',
         get_lang('Course management'),
@@ -181,6 +183,7 @@ if (api_is_platform_admin()) {
     $blocks['courses']['extra'] = null;
 
     /* Sessions */
+    $blocks['sessions']['mdi_icon'] = 'google-classroom';
     $blocks['sessions']['icon'] = Display::return_icon(
         'session.png',
         get_lang('Sessions management'),
@@ -254,6 +257,7 @@ if (api_is_platform_admin()) {
 
     // Skills
     if (SkillModel::isToolAvailable()) {
+        $blocks['skills']['mdi_icon'] = 'certificate';
         $blocks['skills']['icon'] = Display::return_icon(
             'skill-badges.png',
             get_lang('Skills'),
@@ -308,6 +312,7 @@ if (api_is_platform_admin()) {
     }
 
     /* Platform */
+    $blocks['platform']['mdi_icon'] = 'cogs';
     $blocks['platform']['icon'] = Display::return_icon(
         'platform.png',
         get_lang('Platform management'),
@@ -391,6 +396,7 @@ if (api_is_platform_admin()) {
 
 /* Settings */
 if (api_is_platform_admin()) {
+    $blocks['settings']['mdi_icon'] = 'tools';
     $blocks['settings']['icon'] = Display::return_icon(
         'settings.png',
         get_lang('System'),
@@ -470,6 +476,7 @@ if (api_is_platform_admin()) {
         $menuAdministratorItems = $_plugins['menu_administrator'];
 
         if ($menuAdministratorItems) {
+            $blocks['plugins']['mdi_icon'] = 'puzzle';
             $blocks['plugins']['icon'] = Display::return_icon(
                 'plugins.png',
                 get_lang('Plugins'),
@@ -506,6 +513,7 @@ if (api_is_platform_admin()) {
     }
 
     /* Chamilo.org */
+    $blocks['chamilo']['mdi_icon'] = 'cogs';
     $blocks['chamilo']['icon'] = Display::return_icon(
         'platform.png',
         'Chamilo.org',
@@ -537,6 +545,7 @@ if (api_is_platform_admin()) {
     $blocks['chamilo']['search_form'] = null;
 
     // Version check
+    $blocks['version_check']['mdi_icon'] = '';
     $blocks['version_check']['icon'] = Display::return_icon(
         'platform.png',
         'Chamilo.org',

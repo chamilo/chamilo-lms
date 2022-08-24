@@ -38,8 +38,21 @@
 
 @layer components {
   .form {
+    &--search,
     &--inline {
-      @apply flex-row gap-3;
+      @apply flex-row gap-3 mb-1;
+    }
+
+    &--search {
+      button {
+        @apply flex-none;
+      }
+    }
+
+    &__group {
+      &--inline {
+        @apply flex gap-3;
+      }
     }
 
     &__field {

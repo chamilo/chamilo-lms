@@ -1015,7 +1015,7 @@ if (!empty($action)) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple', 'get', null, null, null, FormValidator::LAYOUT_INLINE);
+$form = new FormValidator('search_simple', 'get', null, null, [], FormValidator::LAYOUT_BOX_SEARCH);
 $form->addText(
     'keyword',
     null,

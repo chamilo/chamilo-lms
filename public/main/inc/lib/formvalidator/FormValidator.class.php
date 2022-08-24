@@ -49,13 +49,11 @@ class FormValidator extends HTML_QuickForm
         $formTemplate = $this->getFormTemplate();
 
         switch ($layout) {
-            case self::LAYOUT_HORIZONTAL:
-                break;
             case self::LAYOUT_BOX_SEARCH:
-                $attributes['class'] = 'w-full flex gap-2';
+                $attributes['class'] = 'form--search';
                 break;
             case self::LAYOUT_INLINE:
-                $attributes['class'] = 'ch flex gap-2 ';
+                $attributes['class'] = 'gap-3 ';
                 break;
             case self::LAYOUT_BOX:
                 $attributes['class'] = 'ch flex gap-1 ';
@@ -107,16 +105,27 @@ class FormValidator extends HTML_QuickForm
         // Set required field template
         $this->setRequiredNote($required);
 
-        $noteTemplate = <<<EOT
+        if (self::LAYOUT_BOX_SEARCH !== $layout) {
+            $noteTemplate = <<<EOT
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">{requiredNote}</div>
 	</div>
 EOT;
-        $renderer->setRequiredNoteTemplate($noteTemplate);
+            $renderer->setRequiredNoteTemplate($noteTemplate);
+        }
     }
 
     public function getFormTemplate(): string
     {
+        if (self::LAYOUT_BOX_SEARCH == $this->layout) {
+            return '<form {attributes}>
+                    <div class="form__group--inline p-inputgroup">
+                        {content}
+                        {hidden}
+                    </div>
+                </form>';
+        }
+
         return '<form{attributes}>
                 {content}
                 {hidden}

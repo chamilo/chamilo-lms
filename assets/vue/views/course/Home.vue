@@ -1,10 +1,80 @@
 <template>
   <div
+    v-if="isCourseLoading"
+    class="flex flex-col gap-4"
+  >
+    <div class="flex gap-4 items-center">
+      <Skeleton
+        height="2.5rem"
+        width="12rem"
+        class="mr-auto"
+      />
+      <Skeleton
+
+        height="2.5rem"
+        width="8rem"
+        v-if="isCurrentTeacher"
+      />
+      <Skeleton
+        height="2.5rem"
+        width="3rem"
+        v-if="isCurrentTeacher"
+      />
+    </div>
+
+    <Skeleton
+      height="16rem"
+    />
+
+    <div class="flex items-center gap-6">
+      <Skeleton
+        height="1.5rem"
+        width="6rem"
+      />
+      <Skeleton
+        v-if="isCurrentTeacher"
+        height="1.5rem"
+        width="6rem"
+        class="ml-auto"
+      />
+      <Skeleton
+        v-if="isCurrentTeacher"
+        height="1.5rem"
+        width="6rem"
+        class="aspect-square"
+      />
+      <Skeleton
+        v-if="isCurrentTeacher"
+        height="1.5rem"
+        width="6rem"
+        class="aspect-square"
+      />
+      <Skeleton
+        v-if="isCurrentTeacher"
+        height="1.5rem"
+        width="6rem"
+        class="aspect-square"
+      />
+    </div>
+
+    <hr class="mt-0 mb-4">
+
+    <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 justify-between grid-cols-course-tools">
+      <Skeleton
+        v-for="v in 30"
+        :key="v"
+        height="auto"
+        width="7.5rem"
+        class="aspect-square"
+      />
+    </div>
+  </div>
+  <div
+    v-else
     class="flex flex-col gap-4"
   >
     <div class="flex gap-4 items-center">
       <h2
-        v-if="course"
         class="mr-auto"
       >
         {{ course.title }}
@@ -12,10 +82,6 @@
           ({{ session.name }})
         </small>
       </h2>
-      <Skeleton
-        v-else
-        height="2rem"
-      />
 
       <Button
         v-if="course && isCurrentTeacher"
@@ -67,27 +133,19 @@
           @click="updateIntro(intro)"
         />
       </div>
-      <div
-        v-else
+      <EmptyState
+        v-else-if="introTool"
+        :summary="t('You don\'t have any course content yet.')"
+        :detail="t('Add a course introduction to display to your students.')"
+        icon="mdi mdi-book-open-page-variant"
       >
-        <EmptyState
-          v-if="introTool"
-          :summary="t('You don\'t have any course content yet.')"
-          :detail="t('Add a course introduction to display to your students.')"
-          icon="mdi mdi-book-open-page-variant"
-        >
-          <Button
-            class="mt-4 p-button-outlined"
-            icon="mdi mdi-plus"
-            :label="t('Course introduction')"
-            @click="addIntro(course, introTool)"
-          />
-        </EmptyState>
-        <Skeleton
-          v-else
-          height="18rem"
+        <Button
+          class="mt-4 p-button-outlined"
+          icon="mdi mdi-plus"
+          :label="t('Course introduction')"
+          @click="addIntro(course, introTool)"
         />
-      </div>
+      </EmptyState>
     </div>
     <div
       v-else-if="intro"
@@ -96,48 +154,22 @@
 
     <div class="flex items-center gap-6">
       <h6 v-t="'Tools'" />
-
-      <Skeleton
-        v-if="!course"
-        height="2rem"
-        width="6rem"
-        class="ml-auto aspect-square"
-      />
-      <Skeleton
-        v-if="!course"
-        height="2rem"
-        width="6rem"
-        class="aspect-square"
-      />
-      <Skeleton
-        v-if="!course"
-        height="2rem"
-        width="6rem"
-        class="aspect-square"
-      />
-      <Skeleton
-        v-if="!course"
-        height="2rem"
-        width="6rem"
-        class="aspect-square"
-      />
-
       <Button
-        v-if="course && isCurrentTeacher"
+        v-if="isCurrentTeacher"
         icon="mdi mdi-eye"
         :label="t('Show all')"
         class="p-button-text p-button-plain p-button-sm ml-auto"
         :disabled="isSorting || isCustomizing"
       />
       <Button
-        v-if="course && isCurrentTeacher"
+        v-if="isCurrentTeacher"
         icon="mdi mdi-eye-off"
         :label="t('Hide all')"
         class="p-button-text p-button-plain p-button-sm"
         :disabled="isSorting || isCustomizing"
       />
       <ToggleButton
-        v-if="course && isCurrentTeacher"
+        v-if="isCurrentTeacher"
         v-model="isSorting"
         on-icon="mdi mdi-swap-vertical"
         off-icon="mdi mdi-swap-vertical"
@@ -147,7 +179,7 @@
         :disabled="isCustomizing"
       />
       <ToggleButton
-        v-if="course && isCurrentTeacher"
+        v-if="isCurrentTeacher"
         v-model="isCustomizing"
         on-icon="mdi mdi-format-paint"
         off-icon="mdi mdi-format-paint"
@@ -159,22 +191,7 @@
     </div>
     <hr class="mt-0 mb-4">
 
-    <div
-      v-if="!course"
-      class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 justify-between grid-cols-course-tools"
-    >
-      <Skeleton
-        v-for="v in 30"
-        :key="v"
-        height="auto"
-        width="7.5rem"
-        class="aspect-square"
-      />
-    </div>
-    <div
-      v-else
-      class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 justify-between grid-cols-course-tools"
-    >
+    <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 justify-between grid-cols-course-tools">
       <CourseToolList
         v-for="(tool, index) in tools.authoring"
         :key="index"
@@ -248,6 +265,8 @@ const createInSession = ref(false);
 let courseId = route.params.id;
 let sessionId = route.query.sid ?? 0;
 
+const isCourseLoading = ref(true);
+
 const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);
 
 const isSorting = ref(false);
@@ -277,6 +296,8 @@ axios
     }
 
     getIntro();
+
+    isCourseLoading.value = false;
   })
   .catch(error => console.log(error));
 
@@ -304,17 +325,19 @@ async function getIntro () {
       sid: sessionId,
     };
 
-    store.dispatch('ctoolintro/findAll', filter)
-      .then(response => {
-        if (response) {
-          if (sessionId) {
-            createInSession.value = false;
-          }
-          // first item
-          intro.value = response[0];
-          translateHtml();
+    try {
+      const response = await store.dispatch('ctoolintro/findAll', filter);
+      if (response) {
+        if (sessionId) {
+          createInSession.value = false;
         }
-      });
+        // first item
+        intro.value = response[0];
+        translateHtml();
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
 

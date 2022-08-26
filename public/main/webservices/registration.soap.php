@@ -843,13 +843,13 @@ function WSCreateUsersPasswordCrypted($params)
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
 
         // Check whether x_user_id exists into user_field_values table.
-        $sql = "SELECT value as field_value,item_id as user_id
+        $sql = "SELECT field_value, item_id as user_id
                 FROM $t_uf uf, $t_ufv ufv
                 WHERE
-                    uf.extra_field_type = $extraFieldType AND
+                    uf.item_type = $extraFieldType AND
                     ufv.field_id=uf.id AND
                     variable='$original_user_id_name' AND
-                    value ='$original_user_id_value'";
+                    field_value ='$original_user_id_value'";
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         $count_row = Database::num_rows($res);

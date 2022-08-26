@@ -55,7 +55,7 @@ $form->addButtonSave(get_lang('Save'));
 
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin', 'name' => get_lang('Administration')];
 
-$type = \ExtraField::getExtraFieldTypeFromInt($extraField->getExtraFieldType());
+$type = \ExtraField::getExtraFieldTypeFromInt($extraField->getItemType());
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type='.$type,

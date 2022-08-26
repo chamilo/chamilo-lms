@@ -32,8 +32,8 @@ class ExtraFieldOptionsRepositoryTest extends AbstractApiTest
             ->setVariable('test')
             ->setDescription('desc')
             ->setHelperText('help')
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TEXT)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
         ;
         $em->persist($extraField);
 

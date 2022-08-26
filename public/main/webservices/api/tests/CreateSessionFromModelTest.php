@@ -254,7 +254,7 @@ class CreateSessionFromModelTest extends V2TestCase
         $firstExtraFieldNameForNewSession = 'extra field value for new session';
         $firstExtraFieldId = $extraFieldModel->save(
             [
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $firstExtraFieldName,
                 'display_text' => $firstExtraFieldName,
                 'visible_to_self' => 1,
@@ -275,7 +275,7 @@ class CreateSessionFromModelTest extends V2TestCase
         $secondExtraFieldValue = 'second extra field value';
         $secondExtraFieldId = $extraFieldModel->save(
             [
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $secondExtraFieldName,
                 'display_text' => $secondExtraFieldName,
                 'visible_to_self' => 1,

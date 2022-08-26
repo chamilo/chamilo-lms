@@ -22,7 +22,7 @@ class ExtraFieldValue extends Model
     public $columns = [
         'id',
         'field_id',
-        'value',
+        'field_value',
         'comment',
         'item_id',
         'asset_id',
@@ -70,8 +70,8 @@ class ExtraFieldValue extends Model
         $em = Database::getManager();
         $query = $em->getRepository(ExtraFieldValues::class)->createQueryBuilder('e');
         $query->select('count(e.id)');
-        $query->where('e.extraFieldType = :type');
-        $query->setParameter('type', $this->getExtraField()->getExtraFieldType());
+        $query->where('e.itemType = :type');
+        $query->setParameter('type', $this->getExtraField()->getItemType());
 
         return $query->getQuery()->getSingleScalarResult();
     }
@@ -116,7 +116,7 @@ class ExtraFieldValue extends Model
             return false;
         }
 
-        $type = $this->getExtraField()->getExtraFieldType();
+        $type = $this->getExtraField()->getItemType();
 
         $extraField = new ExtraField($this->type);
         $extraFields = $extraField->get_all([], 'option_order');
@@ -171,7 +171,7 @@ class ExtraFieldValue extends Model
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = $params[$commentVariable] ?? null;
 
-            switch ($extraFieldInfo['field_type']) {
+            switch ($extraFieldInfo['value_type']) {
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                     if (!empty($value)) {
@@ -181,7 +181,7 @@ class ExtraFieldValue extends Model
                         $newParams = [
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
-                            'value' => $value,
+                            'field_value' => $value,
                             'comment' => $comment,
                         ];
                         self::save($newParams, $showQuery);
@@ -281,7 +281,7 @@ class ExtraFieldValue extends Model
                             $extraFieldValues = (new ExtraFieldValues())
                                 ->setItemId((int) $params['item_id'])
                                 ->setField($field)
-                                ->setValue(1)
+                                ->setFieldValue(1)
                                 ->setAsset($asset)
                                 ->setComment($comment ?? '')
                             ;
@@ -317,7 +317,7 @@ class ExtraFieldValue extends Model
                             $extraFieldValues = (new ExtraFieldValues())
                                 ->setItemId((int) $params['item_id'])
                                 ->setField($field)
-                                ->setValue(1)
+                                ->setFieldValue(1)
                                 ->setAsset($asset)
                                 ->setComment($comment ?? '')
                             ;
@@ -338,7 +338,7 @@ class ExtraFieldValue extends Model
                     $newParams = [
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
-                        'value' => $fieldToSave,
+                        'field_value' => $fieldToSave,
                         'comment' => $comment,
                     ];
                     $this->save($newParams);
@@ -351,7 +351,7 @@ class ExtraFieldValue extends Model
                         $newParams = [
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
-                            'value' => $value,
+                            'field_value' => $value,
                             'comment' => $comment,
                         ];
                         $this->save($newParams, $showQuery);
@@ -364,7 +364,7 @@ class ExtraFieldValue extends Model
                         $newParams = [
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
-                            'value' => $value,
+                            'field_value' => $value,
                             'comment' => $comment,
                         ];
                         $this->save($newParams, $showQuery);
@@ -374,7 +374,7 @@ class ExtraFieldValue extends Model
                     $newParams = [
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
-                        'value' => $value,
+                        'field_value' => $value,
                         'comment' => $comment,
                     ];
                     $this->save($newParams, $showQuery);
@@ -427,7 +427,7 @@ class ExtraFieldValue extends Model
         $extra_field = $this->getExtraField();
 
         // Setting value to insert.
-        $value = $params['value'];
+        $value = $params['field_value'];
         $value_to_insert = null;
 
         if (is_array($value)) {
@@ -436,7 +436,7 @@ class ExtraFieldValue extends Model
             $value_to_insert = $value;
         }
 
-        $params['value'] = $value_to_insert;
+        $params['field_value'] = $value_to_insert;
 
         // If field id exists
         if (isset($params['field_id'])) {
@@ -452,7 +452,7 @@ class ExtraFieldValue extends Model
         }
 
         if ($extraFieldInfo) {
-            switch ($extraFieldInfo['field_type']) {
+            switch ($extraFieldInfo['value_type']) {
                 case ExtraField::FIELD_TYPE_RADIO:
                 case ExtraField::FIELD_TYPE_SELECT:
                     break;
@@ -493,7 +493,7 @@ class ExtraFieldValue extends Model
                     break;
             }
 
-            if (ExtraField::FIELD_TYPE_TAG == $extraFieldInfo['field_type']) {
+            if (ExtraField::FIELD_TYPE_TAG == $extraFieldInfo['value_type']) {
                 $field_values = self::getAllValuesByItemAndFieldAndValue(
                     $params['item_id'],
                     $params['field_id'],
@@ -506,7 +506,7 @@ class ExtraFieldValue extends Model
                 );
             }
 
-            $params['value'] = $value_to_insert;
+            $params['field_value'] = $value_to_insert;
             //$params['author_id'] = api_get_user_id();
 
             // Insert
@@ -514,20 +514,20 @@ class ExtraFieldValue extends Model
                 /* Enable this when field_loggeable is introduced as a table field (2.0)
                 if ($extraFieldInfo['field_loggeable'] == 1) {
                 */
-                if (ExtraField::FIELD_TYPE_TAG == $extraFieldInfo['field_type']) {
+                if (ExtraField::FIELD_TYPE_TAG == $extraFieldInfo['value_type']) {
                     $option = new ExtraFieldOption($this->type);
                     $optionExists = $option->get($params['value']);
                     if (empty($optionExists)) {
                         $optionParams = [
                             'field_id' => $params['field_id'],
-                            'option_value' => $params['value'],
+                            'option_value' => $params['field_value'],
                         ];
                         $optionId = $option->saveOptions($optionParams);
                     } else {
                         $optionId = $optionExists['id'];
                     }
 
-                    $params['value'] = $optionId;
+                    $params['field_value'] = $optionId;
                     if ($optionId) {
                         return parent::save($params, $showQuery);
                     }
@@ -561,23 +561,23 @@ class ExtraFieldValue extends Model
         $field_id = (int) $field_id;
         $item_id = Database::escape_string($item_id);
 
-        $sql = "SELECT s.*, field_type FROM {$this->table} s
+        $sql = "SELECT s.*, value_type FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
                     item_id = '$item_id' AND
                     field_id = $field_id AND
-                    sf.extra_field_type = ".$this->getExtraField()->getExtraFieldType()."
+                    sf.item_type = ".$this->getExtraField()->getItemType()."
                 ORDER BY id";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');
             if ($transform) {
-                if (!empty($result['value'])) {
-                    switch ($result['field_type']) {
+                if (!empty($result['field_value'])) {
+                    switch ($result['value_type']) {
                         case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                             $field_option = new ExtraFieldOption($this->type);
-                            $options = explode('::', $result['value']);
+                            $options = explode('::', $result['field_value']);
                             // only available for PHP 5.4  :( $result['field_value'] = $field_option->get($options[0])['id'].' -> ';
                             $result = $field_option->get($options[0]);
                             $result_second = $field_option->get($options[1]);
@@ -587,7 +587,7 @@ class ExtraFieldValue extends Model
                             }
                             break;
                         case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
-                            $optionIds = explode(';', $result['value']);
+                            $optionIds = explode(';', $result['field_value']);
                             $optionValues = [];
                             $objEfOption = new ExtraFieldOption($this->type);
                             $options = $objEfOption->get_field_options_by_field($result['field_id']);
@@ -608,7 +608,7 @@ class ExtraFieldValue extends Model
                             $field_option = new ExtraFieldOption($this->type);
                             $extra_field_option_result = $field_option->get_field_option_by_field_and_option(
                                 $result['field_id'],
-                                $result['value']
+                                $result['field_value']
                             );
 
                             if (isset($extra_field_option_result[0])) {
@@ -617,7 +617,7 @@ class ExtraFieldValue extends Model
 
                             break;
                         case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
-                            $options = explode('::', $result['value']);
+                            $options = explode('::', $result['field_value']);
                             $field_option = new ExtraFieldOption($this->type);
                             $result = $field_option->get($options[0]);
 
@@ -626,7 +626,7 @@ class ExtraFieldValue extends Model
                             }
                             break;
                         case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
-                            $optionIds = explode(';', $result['value']);
+                            $optionIds = explode(';', $result['field_value']);
                             $optionValues = [];
                             foreach ($optionIds as $optionId) {
                                 $objEfOption = new ExtraFieldOption($this->type);
@@ -659,17 +659,17 @@ class ExtraFieldValue extends Model
         $limit = (int) $limit;
         $tag = Database::escape_string($tag);
 
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
-        $sql = "SELECT DISTINCT s.value, s.field_id
+        $sql = "SELECT DISTINCT s.field_value, s.field_id
                 FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
                     field_id = $field_id AND
-                    value LIKE '%$tag%' AND
-                    sf.extra_field_type = ".$extraFieldType."
-                ORDER BY value
+                    field_value LIKE '%$tag%' AND
+                    sf.item_type = ".$extraFieldType."
+                ORDER BY field_value
                 LIMIT 0, $limit
                 ";
         $result = Database::query($sql);
@@ -703,16 +703,16 @@ class ExtraFieldValue extends Model
     ) {
         $item_id = (int) $item_id;
         $field_variable = Database::escape_string($field_variable);
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
-        $sql = "SELECT s.*, field_type
+        $sql = "SELECT s.*, value_type
                 FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
                     item_id = '$item_id'  AND
                     variable = '".$field_variable."' AND
-                    sf.extra_field_type = $extraFieldType
+                    sf.item_type = $extraFieldType
                 ";
         if ($filterByVisibility) {
             $visibility = (int) $visibility;
@@ -726,11 +726,11 @@ class ExtraFieldValue extends Model
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');
             if ($transform) {
-                $fieldType = $result['field_type'];
+                $fieldType = $result['value_type'];
                 if (ExtraField::FIELD_TYPE_DOUBLE_SELECT == $fieldType) {
-                    if (!empty($result['value'])) {
+                    if (!empty($result['field_value'])) {
                         $field_option = new ExtraFieldOption($this->type);
-                        $options = explode('::', $result['value']);
+                        $options = explode('::', $result['field_value']);
                         $result = $field_option->get($options[0]);
                         $result_second = $field_option->get($options[1]);
                         if (!empty($result)) {
@@ -740,8 +740,8 @@ class ExtraFieldValue extends Model
                     }
                 }
                 if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $fieldType) {
-                    if (!empty($result['value'])) {
-                        $options = explode('::', $result['value']);
+                    if (!empty($result['field_value'])) {
+                        $options = explode('::', $result['field_value']);
                         $field_option = new ExtraFieldOption($this->type);
                         $result = $field_option->get($options[0]);
                         if (!empty($result)) {
@@ -752,8 +752,8 @@ class ExtraFieldValue extends Model
                     }
                 }
                 if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $fieldType) {
-                    if (!empty($result['value'])) {
-                        $optionIds = explode(';', $result['value']);
+                    if (!empty($result['field_value'])) {
+                        $optionIds = explode(';', $result['field_value']);
                         $optionValues = [];
                         foreach ($optionIds as $optionId) {
                             $objEfOption = new ExtraFieldOption('user');
@@ -766,7 +766,7 @@ class ExtraFieldValue extends Model
                     }
                 }
 
-                if (in_array($result['field_type'], ExtraField::getExtraFieldTypesWithFiles())) {
+                if (in_array($result['value_type'], ExtraField::getExtraFieldTypesWithFiles())) {
                     $result['url'] = '';
                     if (!empty($result['asset_id'])) {
                         $asset = $repo->find($result['asset_id']);
@@ -808,11 +808,11 @@ class ExtraFieldValue extends Model
         $value = Database::escape_string($value);
         $variable = Database::escape_string($variable);
 
-        $valueCondition = " value  = '$value' AND ";
+        $valueCondition = " field_value  = '$value' AND ";
         if ($useLike) {
-            $valueCondition = " value LIKE '%".$value."%' AND ";
+            $valueCondition = " field_value LIKE '%".$value."%' AND ";
         }
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
         $sql = "SELECT item_id FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
@@ -820,7 +820,7 @@ class ExtraFieldValue extends Model
                 WHERE
                     $valueCondition
                     variable = '".$variable."' AND
-                    sf.extra_field_type = $extraFieldType
+                    sf.item_type = $extraFieldType
                 ORDER BY item_id
                 ";
 
@@ -854,15 +854,15 @@ class ExtraFieldValue extends Model
     public function getValuesByFieldId($fieldId)
     {
         $fieldId = (int) $fieldId;
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
         $sql = "SELECT s.* FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
                     field_id = '".$fieldId."' AND
-                    sf.extra_field_type = $extraFieldType
-                ORDER BY s.value";
+                    sf.item_type = $extraFieldType
+                ORDER BY s.field_value";
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {
@@ -882,7 +882,7 @@ class ExtraFieldValue extends Model
     {
         $fieldId = (int) $fieldId;
         $itemId = (int) $itemId;
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
         $sql = "SELECT s.* FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
@@ -890,8 +890,8 @@ class ExtraFieldValue extends Model
                 WHERE
                     field_id = $fieldId AND
                     item_id = $itemId AND
-                    sf.extra_field_type = $extraFieldType
-                ORDER BY s.value";
+                    sf.item_type = $extraFieldType
+                ORDER BY s.field_value";
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {
@@ -909,16 +909,16 @@ class ExtraFieldValue extends Model
     public function getAllValuesByItem($itemId)
     {
         $itemId = (int) $itemId;
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
-        $sql = "SELECT s.value, sf.variable, sf.field_type, sf.id, sf.display_text
+        $sql = "SELECT s.field_value, sf.variable, sf.value_type, sf.id, sf.display_text
                 FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
                     item_id = '$itemId' AND
-                    sf.extra_field_type = $extraFieldType
-                ORDER BY s.value";
+                    sf.item_type = $extraFieldType
+                ORDER BY s.field_value";
 
         $result = Database::query($sql);
         $idList = [];
@@ -928,7 +928,7 @@ class ExtraFieldValue extends Model
 
             $repo = Container::getAssetRepository();
             foreach ($result as $item) {
-                $fieldType = (int) $item['field_type'];
+                $fieldType = (int) $item['value_type'];
                 $item['url'] = '';
                 if (!empty($item['asset_id']) &&
                     in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)
@@ -950,7 +950,7 @@ class ExtraFieldValue extends Model
         $allData = $extraField->get_all(['filter = ?' => 1]);
         $allResults = [];
         foreach ($allData as $field) {
-            $fieldType = (int) $field['field_type'];
+            $fieldType = (int) $field['value_type'];
             if (in_array($field['id'], $idList)) {
                 $allResults[] = $finalResult[$field['id']];
             } else {
@@ -976,7 +976,7 @@ class ExtraFieldValue extends Model
                     $allResults[] = [
                         'value' => $tagResult,
                         'variable' => $field['variable'],
-                        'field_type' => $field['field_type'],
+                        'value_type' => $field['value_type'],
                         'id' => $field['id'],
                     ];
                 }
@@ -997,7 +997,7 @@ class ExtraFieldValue extends Model
     {
         $fieldId = (int) $fieldId;
         $itemId = (int) $itemId;
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+        $extraFieldType = $this->getExtraField()->getItemType();
 
         $fieldValue = Database::escape_string($fieldValue);
         $sql = "SELECT s.* FROM {$this->table} s
@@ -1006,9 +1006,9 @@ class ExtraFieldValue extends Model
                 WHERE
                     field_id = '$fieldId' AND
                     item_id = '$itemId' AND
-                    value = '$fieldValue' AND
-                    sf.extra_field_type = $extraFieldType
-                ORDER BY value";
+                    field_value = '$fieldValue' AND
+                    sf.item_type = $extraFieldType
+                ORDER BY field_value";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -1043,19 +1043,19 @@ class ExtraFieldValue extends Model
     public function deleteValuesByItem($itemId)
     {
         $itemId = (int) $itemId;
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
-        $sql = "SELECT DISTINCT fv.id, value, field_type FROM {$this->table} fv
+        $extraFieldType = $this->getExtraField()->getItemType();
+        $sql = "SELECT DISTINCT fv.id, field_value, value_type FROM {$this->table} fv
                 INNER JOIN {$this->table_handler_field} f
                 ON (fv.field_id = f.id)
-                WHERE extra_field_type = $extraFieldType AND item_id = $itemId";
+                WHERE item_type = $extraFieldType AND item_id = $itemId";
         $result = Database::query($sql);
         $result = Database::store_result($result, 'ASSOC');
         $em = Database::getManager();
         $repo = Container::getAssetRepository();
         foreach ($result as $item) {
-            $fieldType = (int) $item['field_type'];
+            $valueType = (int) $item['value_type'];
             if (!empty($item['asset_id']) &&
-                in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)
+                in_array($valueType, ExtraField::getExtraFieldTypesWithFiles(), true)
             ) {
                 $asset = $repo->find($item['asset_id']);
                 if ($asset) {
@@ -1070,7 +1070,7 @@ class ExtraFieldValue extends Model
                     item_id = '$itemId' AND
                     field_id IN (
                         SELECT id FROM {$this->table_handler_field}
-                        WHERE extra_field_type = $extraFieldType
+                        WHERE item_type = $extraFieldType
                     )
                 ";
         Database::query($sql);
@@ -1095,13 +1095,13 @@ class ExtraFieldValue extends Model
                     WHERE
                         item_id = '$itemId' AND
                         field_id = '$fieldId' AND
-                        value = '$fieldValue'
+                        field_value = '$fieldValue'
                     ";
             Database::query($sql);
 
             // Delete file from uploads.
             if (isset($fieldData['asset_id']) &&
-                in_array($fieldData['field_type'], ExtraField::getExtraFieldTypesWithFiles())
+                in_array($fieldData['value_type'], ExtraField::getExtraFieldTypesWithFiles())
             ) {
                 $repo = Container::getAssetRepository();
                 $asset = $repo->find($fieldData['asset_id']);
@@ -1136,7 +1136,7 @@ class ExtraFieldValue extends Model
                 $qb->expr()->eq('fv.itemId', ':item')
             )
             ->andWhere(
-                $qb->expr()->eq('f.extraFieldType', ':extra_field_type')
+                $qb->expr()->eq('f.itemType', ':item_type')
             );
 
         if (is_bool($visibleToSelf)) {
@@ -1153,7 +1153,7 @@ class ExtraFieldValue extends Model
 
         $fieldValues = $qb
             ->setParameter('item', $itemId)
-            ->setParameter('extra_field_type', $this->getExtraField()->getExtraFieldType())
+            ->setParameter('item_type', $this->getExtraField()->getItemType())
             ->getQuery()
             ->getResult();
 
@@ -1163,11 +1163,11 @@ class ExtraFieldValue extends Model
         /** @var ExtraFieldValues $fieldValue */
         foreach ($fieldValues as $fieldValue) {
             $item = ['value' => $fieldValue];
-            switch ($fieldValue->getField()->getFieldType()) {
+            switch ($fieldValue->getField()->getValueType()) {
                 case ExtraField::FIELD_TYPE_SELECT:
                     $item['option'] = $fieldOptionsRepo->findOneBy([
                         'field' => $fieldValue->getField(),
-                        'value' => $fieldValue->getValue(),
+                        'value' => $fieldValue->getFieldValue(),
                     ]);
                     break;
             }

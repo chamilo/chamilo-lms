@@ -64,18 +64,18 @@ class UserExtraFieldFilter extends AbstractContextAwareFilter
                         "$alias.user = efv.itemId"
                     )
                     ->innerJoin(ExtraField::class, 'ef', Join::WITH, 'efv.field = ef.id')
-                    ->andWhere('ef.extraFieldType = :extraFieldType')
+                    ->andWhere('ef.itemType = :itemType')
                     ->andWhere('ef.variable = :variable')
                 ;
 
                 $queryBuilder
-                    ->setParameter('extraFieldType', ExtraField::USER_FIELD_TYPE)
+                    ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
                     ->setParameter('variable', $value)
                 ;
 
                 break;
             case 'userExtraFieldValue':
-                $queryBuilder->andWhere('efv.value = :value');
+                $queryBuilder->andWhere('efv.field_value = :value');
 
                 $queryBuilder->setParameter('value', $value);
 

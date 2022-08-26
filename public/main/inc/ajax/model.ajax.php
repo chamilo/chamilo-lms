@@ -2347,7 +2347,7 @@ switch ($action) {
         $columns = [
             'display_text',
             'variable',
-            'field_type',
+            'value_type',
             'changeable',
             'visible_to_self',
             'visible_to_others',
@@ -2368,7 +2368,7 @@ switch ($action) {
             );
             foreach ($result as $item) {
                 $item['display_text'] = $item['displayText'];
-                $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
+                $item['value_type'] = $obj->get_field_type_by_id($item['valueType']);
                 $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;
                 $item['visible_to_self'] = $item['visibleToSelf'] ? $checkIcon : $timesIcon;
                 $item['visible_to_others'] = $item['visibleToOthers'] ? $checkIcon : $timesIcon;

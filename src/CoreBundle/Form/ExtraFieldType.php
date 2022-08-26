@@ -65,7 +65,7 @@ class ExtraFieldType extends AbstractType
 
         $data = [];
         foreach ($values as $value) {
-            $data[$value->getField()->getVariable()] = $value->getValue();
+            $data[$value->getField()->getVariable()] = $value->getFieldValue();
         }
 
         $gMapsPlugin = GoogleMapsPlugin::create();
@@ -85,7 +85,7 @@ class ExtraFieldType extends AbstractType
             ];
 
             // @todo validate data.
-            switch ($extraField->getFieldType()) {
+            switch ($extraField->getValueType()) {
                 case \ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                 case \ExtraField::FIELD_TYPE_DIVIDER:
                 case \ExtraField::FIELD_TYPE_TIMEZONE:
@@ -209,22 +209,22 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     if (empty($value)) {
                         $defaultOptions['data'] = null;
-                        if (\ExtraField::FIELD_TYPE_CHECKBOX === $extraField->getFieldType()) {
+                        if (\ExtraField::FIELD_TYPE_CHECKBOX === $extraField->getValueType()) {
                             $defaultOptions['data'] = [];
                         }
                     }
                     $options = $extraField->getOptions();
                     $choices = [];
                     foreach ($options as $option) {
-                        $choices[$option->getDisplayText()] = $option->getValue();
+                        $choices[$option->getDisplayText()] = $option->getFieldValue();
                     }
                     $defaultOptions['choices'] = $choices;
 
-                    if (\ExtraField::FIELD_TYPE_SELECT === $extraField->getFieldType()) {
+                    if (\ExtraField::FIELD_TYPE_SELECT === $extraField->getValueType()) {
                         $defaultOptions['expanded'] = false;
                         $defaultOptions['multiple'] = false;
                     }
-                    if (\ExtraField::FIELD_TYPE_SELECT_MULTIPLE === $extraField->getFieldType()) {
+                    if (\ExtraField::FIELD_TYPE_SELECT_MULTIPLE === $extraField->getValueType()) {
                         $defaultOptions['expanded'] = false;
                         $defaultOptions['multiple'] = true;
                     }
@@ -241,7 +241,7 @@ class ExtraFieldType extends AbstractType
                 foreach ($extraFields as $extraField) {
                     $newValue = $data[$extraField->getVariable()] ?? null;
                     if (!empty($newValue)) {
-                        if (\ExtraField::FIELD_TYPE_TAG === $extraField->getFieldType()) {
+                        if (\ExtraField::FIELD_TYPE_TAG === $extraField->getValueType()) {
                             $formItem = $event->getForm()->get($extraField->getVariable());
                             $formItem->setData($newValue);
                         }
@@ -256,7 +256,7 @@ class ExtraFieldType extends AbstractType
                 foreach ($extraFields as $extraField) {
                     $newValue = $data[$extraField->getVariable()] ?? null;
 
-                    switch ($extraField->getFieldType()) {
+                    switch ($extraField->getValueType()) {
                         case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         case \ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                             if (!empty($newValue)) {

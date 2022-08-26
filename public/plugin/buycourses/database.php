@@ -418,8 +418,8 @@ if (!$paypalExtraField) {
     Database::insert(
         $extraFieldTable,
         [
-            'extra_field_type' => 1,
-            'field_type' => 1,
+            'item_type' => 1,
+            'value_type' => 1,
             'variable' => 'paypal',
             'display_text' => 'Paypal',
             'default_value' => '',

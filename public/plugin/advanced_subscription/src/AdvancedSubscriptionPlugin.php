@@ -1448,7 +1448,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         if (!$areaExists) {
             $extraField = new ExtraField('user');
             $extraField->save([
-                'field_type' => 1,
+                'value_type' => 1,
                 'variable' => 'area',
                 'display_text' => get_plugin_lang('Area', 'AdvancedSubscriptionPlugin'),
                 'default_value' => null,
@@ -1514,7 +1514,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             INNER JOIN $tSessionField AS sf ON sfv.field_id = sf.id
             INNER JOIN $tSessionUser AS su ON s.id = su.session_id
             WHERE
-                sf.extra_field_type = $extraFieldType AND
+                sf.item_type = $extraFieldType AND
                 sf.variable = 'is_induction_session' AND
                 su.relation_type = ".Session::STUDENT." AND
                 su.user_id = ".(int) $userId;

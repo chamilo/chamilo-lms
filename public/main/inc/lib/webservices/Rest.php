@@ -127,7 +127,7 @@ class Rest extends WebService
             $extraField->save(
                 [
                     'variable' => self::EXTRA_FIELD_GCM_REGISTRATION,
-                    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                    'value_type' => ExtraField::FIELD_TYPE_TEXT,
                     'display_text' => self::EXTRA_FIELD_GCM_REGISTRATION,
                 ]
             );
@@ -788,7 +788,7 @@ class Rest extends WebService
             $extraValue = $extra['value'];
             $result['extra'][] = [
                 'title' => $extraValue->getField()->getDisplayText(),
-                'value' => $extraValue->getValue(),
+                'value' => $extraValue->getFieldValue(),
             ];
         }
 

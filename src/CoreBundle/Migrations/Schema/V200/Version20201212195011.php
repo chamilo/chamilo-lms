@@ -79,7 +79,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         // Special course.
         $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
         $sql = "SELECT id FROM extra_field
-                WHERE extra_field_type = $extraFieldType AND variable = 'special_course'";
+                WHERE item_type = $extraFieldType AND variable = 'special_course'";
         $result = $connection->executeQuery($sql);
         $extraFieldId = $result->fetchOne();
 

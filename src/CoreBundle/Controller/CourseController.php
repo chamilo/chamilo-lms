@@ -451,7 +451,7 @@ class CourseController extends ToolBaseController
         }
         /** @var ExtraField $tagField */
         $tagField = $fieldsRepo->findOneBy([
-            'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
+            'itemType' => ExtraField::COURSE_FIELD_TYPE,
             'variable' => 'tags',
         ]);
 

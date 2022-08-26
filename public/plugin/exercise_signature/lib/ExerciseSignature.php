@@ -130,7 +130,7 @@ class ExerciseSignaturePlugin extends Plugin
         if (!$exists) {
             $extraField->save(
                 [
-                    'field_type' => 13, // checkbox yes/no
+                    'value_type' => 13, // checkbox yes/no
                     'variable' => 'signature_activated',
                     'display_text' => get_plugin_lang('SignatureActivated', 'ExerciseSignaturePlugin'),
                     'default_value' => null,
@@ -148,7 +148,7 @@ class ExerciseSignaturePlugin extends Plugin
         if (!$exists) {
             $extraField->save(
                 [
-                    'field_type' => 13, // checkbox yes/no
+                    'value_type' => 13, // checkbox yes/no
                     'variable' => 'signature_mandatory',
                     'display_text' => get_plugin_lang('SignatureMandatory', 'ExerciseSignaturePlugin'),
                     'default_value' => null,
@@ -167,7 +167,7 @@ class ExerciseSignaturePlugin extends Plugin
         if (!$exists) {
             $extraField->save(
                 [
-                    'field_type' => 2, // textarea
+                    'value_type' => 2, // textarea
                     'variable' => 'signature',
                     'display_text' => get_plugin_lang('Signature', 'ExerciseSignaturePlugin'),
                     'default_value' => null,

@@ -524,7 +524,7 @@ function getExtraFieldConditions(array $formValues, $queryType = 'from')
 
         $value = $formValues["extra_$variable"];
 
-        switch ($field['field_type']) {
+        switch ($field['value_type']) {
             case ExtraField::FIELD_TYPE_CHECKBOX:
                 $value = $value["extra_$variable"];
                 break;
@@ -547,17 +547,17 @@ function getExtraFieldConditions(array $formValues, $queryType = 'from')
             $where .= "AND (
                     qu.iid = efv_$variable.item_id
                     AND efv_$variable.field_id = ef_$variable.id
-                    AND ef_$variable.extra_field_type = ".ExtraFieldEntity::QUESTION_FIELD_TYPE."
+                    AND ef_$variable.item_type = ".ExtraFieldEntity::QUESTION_FIELD_TYPE."
                     AND ef_$variable.variable = '$variable'
-                    AND efv_$variable.value = '$value'
+                    AND efv_$variable.field_value = '$value'
                 )";
         } elseif ('join' === $queryType) {
             $from .= " INNER JOIN extra_field_values efv_$variable ON qu.iid = efv_$variable.item_id
                 INNER JOIN extra_field ef_$variable ON efv_$variable.field_id = ef_$variable.id";
             $where .= "AND (
-                    ef_$variable.extra_field_type = ".ExtraFieldEntity::QUESTION_FIELD_TYPE."
+                    ef_$variable.item_type = ".ExtraFieldEntity::QUESTION_FIELD_TYPE."
                     AND ef_$variable.variable = '$variable'
-                    AND efv_$variable.value = '$value'
+                    AND efv_$variable.field_value = '$value'
                 )";
         }
     }

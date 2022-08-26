@@ -156,10 +156,10 @@ $(function() {
                     $('#session_category').val(0);
                     $('#session_category').selectpicker('render');
                 }*/
-                                
+
                 $('#session_category').val(data.session_category_id);
                 $('#session_category').trigger('change');
-                
+
                 setContentFromEditor('description', data.description);
 
                 if (data.duration > 0) {
@@ -184,10 +184,10 @@ $(function() {
                         var variableName = variable + '_to_local_time';
                         if (data[variableName]) {
                             console.log(data[variableName]);
-                            let parsedDate = data[variableName];                     
+                            let parsedDate = data[variableName];
                             if (parsedDate) {
                                  var item = $('#'+variable);
-                                 flatpickr = item[0]._flatpickr;                       
+                                 flatpickr = item[0]._flatpickr;
                                  flatpickr.setDate(parsedDate);
                             }
                         }
@@ -230,7 +230,7 @@ $(function() {
                     const FIELD_TYPE_ALPHANUMERIC = 21;
                     const FIELD_TYPE_LETTERS_SPACE = 22;
                     const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;*/
-                    switch (item.field_type) {
+                    switch (item.value_type) {
                         case '1': // text
                         case '6': // date
                         case '7': // datetime
@@ -240,7 +240,7 @@ $(function() {
                         case '21': // alphanum
                             $('input[name='+fieldName+']').val(item.value);
                             break;
-                        case '2': // textarea                            
+                        case '2': // textarea
                             setContentFromEditor(fieldName, item.value);
                             break;
                         case '3': // radio

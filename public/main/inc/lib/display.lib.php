@@ -1472,7 +1472,7 @@ class Display
                     'variable' => $value->getField()->getVariable(),
                     'display_text' => $value->getField()->getDisplayText(),
                 ],
-                'value' => $value->getValue(),
+                'value' => $value->getFieldValue(),
             ];
         }
 

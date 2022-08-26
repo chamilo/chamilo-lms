@@ -1375,7 +1375,7 @@ class SocialManager extends UserManager
                 }
 
                 if (is_array($data)) {
-                    switch ($extraFieldInfo['field_type']) {
+                    switch ($extraFieldInfo['value_type']) {
                         case ExtraField::FIELD_TYPE_RADIO:
                             $objEfOption = new ExtraFieldOption('user');
                             $value = $data['extra_'.$extraFieldInfo['variable']];
@@ -1411,7 +1411,7 @@ class SocialManager extends UserManager
                             break;
                     }
                 } else {
-                    switch ($extraFieldInfo['field_type']) {
+                    switch ($extraFieldInfo['value_type']) {
                         case ExtraField::FIELD_TYPE_RADIO:
                             $objEfOption = new ExtraFieldOption('user');
                             $optionInfo = $objEfOption->get_field_option_by_field_and_option($extraFieldInfo['id'], $extraFieldInfo['value']);

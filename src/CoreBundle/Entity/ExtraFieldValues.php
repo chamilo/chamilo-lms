@@ -66,10 +66,10 @@ class ExtraFieldValues
     protected ?int $id = null;
 
     /**
-     * @ORM\Column(name="value", type="text", nullable=true, unique=false)
+     * @ORM\Column(name="field_value", type="text", nullable=true, unique=false)
      */
     #[Groups(['extra_field_values:read', 'extra_field_values:write'])]
-    protected ?string $value = null;
+    protected ?string $fieldValue = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
@@ -151,14 +151,14 @@ class ExtraFieldValues
         return $this->id;
     }
 
-    public function getValue(): ?string
+    public function getFieldValue(): ?string
     {
-        return $this->value;
+        return $this->fieldValue;
     }
 
-    public function setValue(?string $value): self
+    public function setFieldValue(?string $fieldValue): self
     {
-        $this->value = $value;
+        $this->fieldValue = $fieldValue;
 
         return $this;
     }

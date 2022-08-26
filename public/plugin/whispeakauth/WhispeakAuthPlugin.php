@@ -105,7 +105,7 @@ class WhispeakAuthPlugin extends Plugin implements \Chamilo\CoreBundle\Hook\Inte
         $extraField = $efRepo->findOneBy(
             [
                 'variable' => self::EXTRAFIELD_AUTH_UID,
-                'extraFieldType' => ExtraField::USER_FIELD_TYPE,
+                'itemType' => ExtraField::USER_FIELD_TYPE,
             ]
         );
 
@@ -123,7 +123,7 @@ class WhispeakAuthPlugin extends Plugin implements \Chamilo\CoreBundle\Hook\Inte
         $extraField = $efRepo->findOneBy(
             [
                 'variable' => self::EXTRAFIELD_LP_ITEM,
-                'extraFieldType' => ExtraField::LP_ITEM_FIELD_TYPE,
+                'itemType' => ExtraField::LP_ITEM_FIELD_TYPE,
             ]
         );
 
@@ -141,7 +141,7 @@ class WhispeakAuthPlugin extends Plugin implements \Chamilo\CoreBundle\Hook\Inte
         $extraField = $efRepo->findOneBy(
             [
                 'variable' => self::EXTRAFIELD_QUIZ_QUESTION,
-                'extraFieldType' => ExtraField::QUESTION_FIELD_TYPE,
+                'itemType' => ExtraField::QUESTION_FIELD_TYPE,
             ]
         );
 
@@ -302,7 +302,7 @@ class WhispeakAuthPlugin extends Plugin implements \Chamilo\CoreBundle\Hook\Inte
                 ->setUpdatedAt($now);
         }
 
-        $extraFieldValue->setValue($uid);
+        $extraFieldValue->setFieldValue($uid);
 
         $em->persist($extraFieldValue);
         $em->flush();
@@ -713,7 +713,7 @@ class WhispeakAuthPlugin extends Plugin implements \Chamilo\CoreBundle\Hook\Inte
         $extraField = new \ExtraField('question');
         $params = [
             'variable' => self::EXTRAFIELD_QUIZ_QUESTION,
-            'field_type' => \ExtraField::FIELD_TYPE_CHECKBOX,
+            'value_type' => \ExtraField::FIELD_TYPE_CHECKBOX,
             'display_text' => $this->get_lang('MarkForSpeechAuthentication'),
             'default_value' => '0',
             'changeable' => true,

@@ -34,8 +34,8 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
             ->setVisibleToSelf(true)
             ->setDisplayText('test')
             ->setVariable('test')
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TEXT)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
         ;
         $em->persist($field);
         $em->flush();
@@ -91,8 +91,8 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
             ->setDisplayText('test')
             ->setVariable('test')
             ->setVisibleToSelf(true)
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TEXT)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
         ;
         $em->persist($field);
         $em->flush();
@@ -113,8 +113,8 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
             ->setDisplayText('test2')
             ->setVariable('test2')
             ->setVisibleToSelf(true)
-            ->setExtraFieldType(ExtraField::COURSE_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TEXT)
+            ->setItemType(ExtraField::COURSE_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
         ;
         $em->persist($field);
         $em->flush();

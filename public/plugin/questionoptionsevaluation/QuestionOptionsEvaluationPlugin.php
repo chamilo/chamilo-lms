@@ -256,7 +256,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 ->save(
                     [
                         'variable' => self::EXTRAFIELD_FORMULA,
-                        'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                        'value_type' => ExtraField::FIELD_TYPE_TEXT,
                         'display_text' => $this->get_lang('EvaluationFormula'),
                         'visible_to_self' => false,
                         'changeable' => false,

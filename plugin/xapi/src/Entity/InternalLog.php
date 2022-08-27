@@ -30,7 +30,7 @@ class InternalLog
     /**
      * @var string
      *
-     * @ORM\Column(name="statement_id", type="string")
+     * @ORM\Column(name="statement_id", type="string", nullable=true)
      */
     private $statementId;
     /**
@@ -105,12 +105,12 @@ class InternalLog
         return $this;
     }
 
-    public function getStatementId(): string
+    public function getStatementId(): ?string
     {
         return $this->statementId;
     }
 
-    public function setStatementId(string $statementId): InternalLog
+    public function setStatementId(?string $statementId): InternalLog
     {
         $this->statementId = $statementId;
 

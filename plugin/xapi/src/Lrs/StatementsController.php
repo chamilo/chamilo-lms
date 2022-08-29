@@ -7,6 +7,8 @@ namespace Chamilo\PluginBundle\XApi\Lrs;
 use Chamilo\PluginBundle\XApi\Lrs\Util\InternalLogUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Xabbuh\XApi\Common\Exception\NotFoundException;
+use Xabbuh\XApi\Model\StatementId;
 use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
 use Xabbuh\XApi\Serializer\Symfony\SerializerFactory;
@@ -89,11 +91,15 @@ class StatementsController extends BaseController
             )
         ;
 
-        InternalLogUtil::saveStatementForInternalLog($statement);
-
         $putStatementController = new StatementPutController($this->statementRepository);
 
-        return $putStatementController->putStatement($this->httpRequest, $statement);
+        $response = $putStatementController->putStatement($this->httpRequest, $statement);
+
+        $this->saveLog(
+            [$this->httpRequest->query->get('statementId')]
+        );
+
+        return $response;
     }
 
     public function post(): Response
@@ -109,12 +115,33 @@ class StatementsController extends BaseController
             ->deserializeStatements($content)
         ;
 
-        foreach ($statements as $statement) {
-            InternalLogUtil::saveStatementForInternalLog($statement);
-        }
-
         $postStatementController = new StatementPostController($this->statementRepository);
 
-        return $postStatementController->postStatements($this->httpRequest, $statements);
+        $response = $postStatementController->postStatements($this->httpRequest, $statements);
+
+        $this->saveLog(
+            json_decode($response->getContent(), false)
+        );
+
+        return $response;
+    }
+
+    /**
+     * @param array<string> $statementsId
+     *
+     * @return void
+     */
+    private function saveLog(array $statementsId)
+    {
+        foreach ($statementsId as $statementId) {
+            try {
+                $storedStatement = $this->statementRepository->findStatementById(
+                    StatementId::fromString($statementId)
+                );
+
+                InternalLogUtil::saveStatementForInternalLog($storedStatement);
+            } catch (NotFoundException $e) {
+            }
+        }
     }
 }

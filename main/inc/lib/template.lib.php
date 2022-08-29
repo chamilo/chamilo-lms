@@ -466,6 +466,7 @@ class Template
         $this->assign('show_course_shortcut', $courseToolBar);
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
+
     /**
      * Sets an extra class for the main cm-content div.
      * To use, give a new row to $htmlContentExtraClass like so: `$htmlContentExtraClass[] = 'feature-item-user-skill-on';`

@@ -2584,11 +2584,7 @@ class Skill extends Model
     }
 
     /**
-     * @param SkillRelItem        $skillRelItem
      * @param SkillRelItemRelUser $skillRelItemRelUser
-     * @param bool                $addHeader
-     *
-     * @return string
      */
     public static function getUserSkillStatusLabel(SkillRelItem $skillRelItem, SkillRelItemRelUser $skillRelItemRelUser = null, bool $addHeader = true, int $userId = 0): string
     {
@@ -2615,14 +2611,8 @@ class Skill extends Model
     /**
      * Attach a list of skills (skill_rel_item) potentially assigned to a user to the given form.
      *
-     * @param FormValidator $form
-     * @param int           $typeId see ITEM_TYPE_* constants
-     * @param int           $itemId
-     * @param int           $userId
-     * @param int           $resultId
-     * @param bool          $addHeader Whether to show the 'Skills' title for this block
-     *
-     * @return void
+     * @param int  $typeId    see ITEM_TYPE_* constants
+     * @param bool $addHeader Whether to show the 'Skills' title for this block
      */
     public static function addSkillsToUserForm(FormValidator $form, int $typeId, int $itemId, int $userId, int $resultId = 0, bool $addHeader = false): void
     {
@@ -2699,13 +2689,8 @@ class Skill extends Model
      * to the given form, with AJAX action on click to save the assignment.
      * Assigned skills appear in a different colour.
      *
-     * @param int           $typeId see ITEM_TYPE_* constants
-     * @param int           $itemId
-     * @param int           $userId
-     * @param int           $resultId
-     * @param bool          $addHeader Whether to show the 'Skills' title for this block
-     *
-     * @return string
+     * @param int  $typeId    see ITEM_TYPE_* constants
+     * @param bool $addHeader Whether to show the 'Skills' title for this block
      */
     public static function getAddSkillsToUserBlock(int $typeId, int $itemId, int $userId, int $resultId = 0, bool $addHeader = false): string
     {
@@ -2990,10 +2975,11 @@ class Skill extends Model
     }
 
     /**
-     * Builds a list of skills attributable to this course+session in a checkbox input list for FormValidator
-     * @param FormValidator $form
-     * @param               $courseId
-     * @param int           $sessionId
+     * Builds a list of skills attributable to this course+session in a checkbox input list for FormValidator.
+     *
+     * @param     $courseId
+     * @param int $sessionId
+     *
      * @return array
      */
     public static function setSkillsToCourse(FormValidator $form, $courseId, $sessionId = 0)
@@ -3028,12 +3014,13 @@ class Skill extends Model
     }
 
     /**
-     * Show a list of skills attributable to this course+session in a checkbox input list for FormValidator
-     * @param FormValidator $form
-     * @param               $skills
-     * @param               $courseId
-     * @param               $sessionId
-     * @param array         $selectedSkills
+     * Show a list of skills attributable to this course+session in a checkbox input list for FormValidator.
+     *
+     * @param       $skills
+     * @param       $courseId
+     * @param       $sessionId
+     * @param array $selectedSkills
+     *
      * @return HTML_QuickForm_Element|HTML_QuickForm_group
      */
     public static function skillsToCheckbox(FormValidator $form, $skills, $courseId, $sessionId, $selectedSkills = [])

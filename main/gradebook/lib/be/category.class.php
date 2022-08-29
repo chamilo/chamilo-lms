@@ -815,8 +815,6 @@ class Category implements GradebookItem
     /**
      * Show message about the resource having been deleted.
      *
-     * @param string $courseCode
-     *
      * @return string|bool
      */
     public function show_message_resource_delete(string $courseCode)

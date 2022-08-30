@@ -44,10 +44,10 @@ $json = [
         'identity' => $user['email'],
     ],
     'issuedOn' => strtotime($userSkill['acquired_skill_at']),
-    'badge' => api_get_path(WEB_CODE_PATH)."badge/class.php?id=$skillId",
+    'badge' => api_get_path(WEB_CODE_PATH)."skills/class.php?id=$skillId",
     'verify' => [
         'type' => 'hosted',
-        'url' => api_get_path(WEB_CODE_PATH)."badge/assertion.php?".http_build_query([
+        'url' => api_get_path(WEB_CODE_PATH)."skills/assertion.php?".http_build_query([
             'user' => $userId,
             'skill' => $skillId,
             'course' => $courseId,

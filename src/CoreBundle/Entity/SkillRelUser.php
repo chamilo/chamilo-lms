@@ -308,7 +308,7 @@ class SkillRelUser
      */
     public function getAssertionUrl()
     {
-        $url = api_get_path(WEB_CODE_PATH).'badge/assertion.php?';
+        $url = api_get_path(WEB_CODE_PATH).'skills/assertion.php?';
 
         return $url.http_build_query([
             'user' => $this->user->getId(),

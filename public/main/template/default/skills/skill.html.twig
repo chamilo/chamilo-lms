@@ -3,14 +3,14 @@
 <ul>
     <li>
         <a
-            href="{{ url('legacy_main', {'name' : 'admin/skill_profile.php'}) }}"
+            href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}"
         >
             {{ 'Add profile' | trans }}
         </a>
     </li>
     <li>
         <a
-            href="{{ url('legacy_main', {'name' : 'admin/skill_level.php'}) }}"
+            href="{{ url('legacy_main', {'name' : 'skills/skill_level.php'}) }}"
         >
             {{ 'Add level' | trans }}
         </a>
@@ -28,7 +28,7 @@
             ({{ item.shortCode }})
         {% endif %}
         <a
-            href="{{ url('legacy_main', {'name' : 'admin/skill.php'}) ~ '?action=edit&id='  ~  item.id}}"
+            href="{{ url('legacy_main', {'name' : 'skills/skill.php'}) ~ '?action=edit&id='  ~  item.id}}"
         >
             {{ 'pencil'|mdi_icon(22) }}
         </a>

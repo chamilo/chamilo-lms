@@ -111,7 +111,7 @@ if (api_is_platform_admin()) {
                 ICON_SIZE_MEDIUM,
                 false
             ),
-            api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId
+            api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId
         );
     }
 }

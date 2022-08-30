@@ -427,7 +427,7 @@
             }
 
 
-            window.location.href = "{{ url('legacy_main', {'name': 'admin/skill_edit.php?id=' }) }}" + SkillWheel.currentSkill.id;
+            window.location.href = "{{ url('legacy_main', {'name': 'skills/skill_edit.php?id=' }) }}" + SkillWheel.currentSkill.id;
         });
 
         $('#form-button-create-child').on('click', function (e) {
@@ -437,7 +437,7 @@
                 return;
             }
 
-            window.location.href = "{{ url('legacy_main', {'name': 'admin/skill_create.php?parent=' }) }}" + SkillWheel.currentSkill.id;
+            window.location.href = "{{ url('legacy_main', {'name': 'skills/skill_create.php?parent=' }) }}" + SkillWheel.currentSkill.id;
         });
 
         $('#form-button-add-to-profile').on('click', function (e) {

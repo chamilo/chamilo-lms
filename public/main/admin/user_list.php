@@ -624,7 +624,7 @@ function modify_filter($user_id, $url_params, $row)
                 22,
                 get_lang('Assign skill')
             ),
-            api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $user_id])
+            api_get_path(WEB_CODE_PATH).'skills/assign.php?'.http_build_query(['user' => $user_id])
         );
     }
 

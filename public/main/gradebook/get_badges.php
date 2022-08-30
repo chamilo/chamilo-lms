@@ -29,7 +29,7 @@ if (empty($userSkills)) {
 $assertions = [];
 foreach ($userSkills as $skill) {
     $skillId = current($skill);
-    $assertionUrl = api_get_path(WEB_CODE_PATH).'badge/assertion.php?';
+    $assertionUrl = api_get_path(WEB_CODE_PATH).'skills/assertion.php?';
     $assertionUrl .= http_build_query([
         'user' => $userId,
         'skill' => $skillId,

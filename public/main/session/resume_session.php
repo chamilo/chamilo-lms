@@ -215,7 +215,7 @@ if (0 === $session->getNbrCourses()) {
         if ($allowSkills) {
             $courseItem .= Display::url(
                 Display::return_icon('skills.png', get_lang('Skills')),
-                $codePath.'admin/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$courseId
+                $codePath.'skills/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$courseId
             );
         }
         $courseItem .= $orderButtons;

@@ -65,7 +65,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 
-    api_location(api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
+    api_location(api_get_path(WEB_CODE_PATH).'skills/skill_list.php');
 }
 
 $interbreadcrumb[] = [

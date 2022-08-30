@@ -123,7 +123,7 @@ switch ($action) {
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH).'admin/skill_create.php',
+            api_get_path(WEB_CODE_PATH).'skills/skill_create.php',
             ['title' => get_lang('Create skill')]
         );
 
@@ -134,7 +134,7 @@ switch ($action) {
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
+            api_get_path(WEB_CODE_PATH).'skills/skills_wheel.php',
             ['title' => get_lang('Skills wheel')]
         );
 
@@ -145,7 +145,7 @@ switch ($action) {
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH).'admin/skills_import.php',
+            api_get_path(WEB_CODE_PATH).'skills/skills_import.php',
             ['title' => get_lang('Import skills from a CSV file')]
         );
 

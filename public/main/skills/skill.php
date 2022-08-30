@@ -88,7 +88,7 @@ switch ($action) {
 }
 
 $tpl->assign('list', $list);
-$view = $tpl->get_template('admin/skill.tpl');
+$view = $tpl->get_template('skills/skill.tpl');
 $contentTemplate = $tpl->fetch($view);
 $tpl->assign('actions', $toolbarAction);
 $tpl->assign('content', $contentTemplate);

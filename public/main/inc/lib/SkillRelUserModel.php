@@ -145,7 +145,7 @@ class SkillRelUserModel extends Model
      */
     public static function getAssertionUrl(SkillRelUser $skillIssue)
     {
-        $url = api_get_path(WEB_CODE_PATH).'badge/assertion.php?';
+        $url = api_get_path(WEB_CODE_PATH).'skills/assertion.php?';
 
         $url .= http_build_query([
             'user' => $skillIssue->getUser()->getId(),

@@ -6,17 +6,17 @@
 
 {% for item in list %}
     <h4>{{ item.name }}
-        {#<a href="{{ _p.web_main }}admin/skill_level.php?action=add_level&id={{ item.id }}">#}
+        {#<a href="{{ _p.web_main }}skills/skill_level.php?action=add_level&id={{ item.id }}">#}
         {#<img src="{{ 'add.png'|icon(22) }}">#}
         {#</a>#}
         <a
-            href="{{ url('legacy_main', {'name' : 'admin/skill_profile.php'}) }}?action=edit&id={{ item.id }}"
+            href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=edit&id={{ item.id }}"
         >
             <img src="{{ 'edit.png'|icon(22) }}">
         </a>
 
         <a
-            href="{{ url('legacy_main', {'name' : 'admin/skill_profile.php'}) }}?action=delete&id={{ item.id }}"
+            href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=delete&id={{ item.id }}"
         >
             <img src="{{ 'delete.png'|icon(22) }}">
         </a>
@@ -29,7 +29,7 @@
                     <img src="{{ 'up_na.png'|icon(22) }}" />
                 {% else %}
                     <a
-                        href="{{ url('legacy_main', {'name' : 'admin/skill_profile.php'}) }}?action=move_up&level_id={{ level.id }}&id={{ item.id }}"
+                        href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=move_up&level_id={{ level.id }}&id={{ item.id }}"
                     >
                         <img src="{{ 'up.png'|icon(22) }}" />
                     </a>
@@ -39,7 +39,7 @@
                     <img src="{{ 'down_na.png'|icon(22) }}" />
                 {% else %}
                     <a
-                        href="{{ url('legacy_main', {'name' : 'admin/skill_profile.php'}) }}?action=move_down&level_id={{ level.id }}&id={{ item.id }}"
+                        href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=move_down&level_id={{ level.id }}&id={{ item.id }}"
                     >
                         <img src="{{ 'down.png'|icon(22) }}" />
                     </a>

@@ -579,16 +579,27 @@ class PortfolioController
                 }
 
                 $messageSubject = sprintf(get_lang('PortfolioAlertNewPostSubject'), $messageCourseTitle);
+                $messageContent = sprintf(
+                    get_lang('PortfolioAlertNewPostContent'),
+                    $this->owner->getCompleteName(),
+                    $messageCourseTitle,
+                    $this->baseUrl.http_build_query(['action' => 'view', 'id' => $portfolio->getId()])
+                );
+                $messageContent .= '<br><br><dl>'
+                    .'<dt>'.Security::remove_XSS($portfolio->getTitle()).'</dt>'
+                    .'<dd>'.$portfolio->getExcerpt().'</dd>'.'</dl>';
 
                 foreach ($userIdListToSend as $userIdToSend) {
-                    $messageContent = sprintf(
-                        get_lang('PortfolioAlertNewPostContent'),
-                        $this->owner->getCompleteName(),
-                        $messageCourseTitle,
-                        $this->baseUrl.http_build_query(['action' => 'view', 'id' => $portfolio->getId()])
+                    MessageManager::send_message_simple(
+                        $userIdToSend,
+                        $messageSubject,
+                        $messageContent,
+                        0,
+                        false,
+                        false,
+                        [],
+                        false
                     );
-
-                    MessageManager::send_message_simple($userIdToSend, $messageSubject, $messageContent, 0, false, false, [], false);
                 }
             }
 

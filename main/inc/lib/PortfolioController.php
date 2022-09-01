@@ -3100,6 +3100,8 @@ class PortfolioController
             $hook->setEventData(['comment' => $comment]);
             $hook->notifyItemCommented();
 
+            PortfolioNotifier::notifyTeachersAndAuthor($comment);
+
             Display::addFlash(
                 Display::return_message(get_lang('CommentAdded'), 'success')
             );

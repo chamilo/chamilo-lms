@@ -341,7 +341,9 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp', 'iframe'])) {
 
     // Record the results in the learning path, using the SCORM interface (API)
     $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
-    $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
+    if (empty($_SESSION['oLP']->lti_launch_id)) {
+        $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
+    }
     $showFooter = false;
 }
 

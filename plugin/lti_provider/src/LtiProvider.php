@@ -43,6 +43,29 @@ class LtiProvider
     }
 
     /**
+     * It removes user and oLP session.
+     *
+     * @param string $toolName
+     */
+    public function logout(string $toolName = '')
+    {
+        Session::erase('_user');
+        Session::erase('is_platformAdmin');
+        Session::erase('is_allowedCreateCourse');
+        Session::erase('_uid');
+        if ('lp' == $toolName) {
+            // Deleting the objects
+            Session::erase('oLP');
+            Session::erase('lpobject');
+            Session::erase('scorm_view_id');
+            Session::erase('scorm_item_id');
+            Session::erase('exerciseResult');
+            Session::erase('objExercise');
+            Session::erase('questionList');
+        }
+    }
+
+    /**
      * Lti Message Launch.
      */
     public function launch(bool $fromCache = false, ?string $launchId = null): LtiMessageLaunch
@@ -87,7 +110,12 @@ class LtiProvider
                 $status,
                 $email,
                 $username,
-                $password
+                $password,
+                '',
+                '',
+                '',
+                '',
+                IMS_LTI_SOURCE
             );
         } else {
             $userId = $userInfo['user_id'];
@@ -97,21 +125,7 @@ class LtiProvider
             CourseManager::subscribeUser($userId, $courseCode, $status);
         }
 
-        Session::erase('_user');
-        Session::erase('is_platformAdmin');
-        Session::erase('is_allowedCreateCourse');
-        Session::erase('_uid');
-
-        if ('lp' == $toolName) {
-            // Deleting the objects
-            Session::erase('oLP');
-            Session::erase('lpobject');
-            Session::erase('scorm_view_id');
-            Session::erase('scorm_item_id');
-            Session::erase('exerciseResult');
-            Session::erase('objExercise');
-            Session::erase('questionList');
-        }
+        $this->logout($toolName);
 
         $login = UserManager::loginAsUser($userId, false);
         if ($login && CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {

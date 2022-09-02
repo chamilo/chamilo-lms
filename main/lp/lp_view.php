@@ -134,7 +134,7 @@ if (!empty($lp->lti_launch_id)) {
     $htmlHeadXtra[] = '<script>
     $(function() {
       if ($("#btn-menu-float").length > 0) {
-        $("#btn-menu-float").hide();
+        $("#btn-menu-float").find("#home-course").hide();
       }
     });
 </script>';

@@ -176,6 +176,11 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
         error_log("mylp->lp_view_session_id: ".$mylp->lp_view_session_id);
     }
 
+    if (isset($mylp->lti_launch_id)) {
+        $ltiLaunchId = $mylp->lti_launch_id;
+        $return .= "sendLtiLaunch('$ltiLaunchId', '$lp_id');";
+    }
+
     return $return;
 }
 

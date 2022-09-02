@@ -130,6 +130,15 @@ $(function() {
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
+if (!empty($lp->lti_launch_id)) {
+    $htmlHeadXtra[] = '<script>
+    $(function() {
+      if ($("#btn-menu-float").length > 0) {
+        $("#btn-menu-float").find("#home-course").hide();
+      }
+    });
+</script>';
+}
 
 $zoomOptions = api_get_configuration_value('quiz_image_zoom');
 if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheader'])) {

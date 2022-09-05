@@ -9,10 +9,18 @@ exit;
 
 require_once '../../main/inc/global.inc.php';
 
-$courseCode = $argv[1];
-$removeFileNotFound = false;
+if (empty($argv[1])) {
+    die("You have to add a course code as first parameter");
+}
 
-echo checkDocumentFilesOnDisk($courseCode);
+if (empty($argv[2]) || (!empty($argv[2]) && !(in_array($argv[2], ['true', 'false'])))) {
+    die("You have to add 'true' or 'false' as second parameter to remove Rows");
+}
+
+$courseCode = $argv[1];
+$removeFileNotFound = ('true' === $argv[2]);
+
+echo checkDocumentFilesOnDisk($courseCode, $removeFileNotFound);
 
 /**
  * It checks the files of documents.
@@ -21,7 +29,7 @@ echo checkDocumentFilesOnDisk($courseCode);
  *
  * @return string
  */
-function checkDocumentFilesOnDisk($courseCode)
+function checkDocumentFilesOnDisk($courseCode, $removeFileNotFound)
 {
     $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
     $tableDocument = Database::get_course_table(TABLE_DOCUMENT);
@@ -59,16 +67,17 @@ function checkDocumentFilesOnDisk($courseCode)
                                     }
                                 } else {
                                     // to move the file to the new doc path
-                                    if (copy($currentPath, $sourcePath.$doc['path'])) {
-                                        @unlink($currentPath);
+                                    if (rename($currentPath, $sourcePath.$doc['path'])) {
                                         $log .= "CASE 2 - Checking document table, it doesn't exist in other path, so it is moved to the new doc path {$doc['path']}".PHP_EOL;
                                     }
                                 }
                             }
                         } else {
                             // to remove the path from document table
-                            if (deletePathInDocumentTable($doc['path'], $course['id'])) {
-                                $log .= "CASE 3 - The document path {$doc['path']} doesn't exist on disk, so it is removed the row".PHP_EOL;
+                            if ($removeFileNotFound) {
+                                if (deletePathInDocumentTable($doc['path'], $course['id'])) {
+                                    $log .= "CASE 3 - The document path {$doc['path']} doesn't exist on disk, so it is removed the row".PHP_EOL;
+                                }
                             }
                         }
                     }

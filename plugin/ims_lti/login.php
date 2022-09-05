@@ -28,6 +28,7 @@ $params = [
     'target_link_uri' => $tool->getLaunchUrl(),
     'login_hint' => ImsLtiPlugin::getLaunchUserIdClaim($tool, $user),
     'lti_message_hint' => $tool->getId(),
+    'client_id' => $tool->getClientId(),
 ];
 ?>
 <!DOCTYPE html>

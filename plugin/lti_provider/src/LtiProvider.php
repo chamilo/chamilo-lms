@@ -44,8 +44,6 @@ class LtiProvider
 
     /**
      * It removes user and oLP session.
-     *
-     * @param string $toolName
      */
     public function logout(string $toolName = '')
     {

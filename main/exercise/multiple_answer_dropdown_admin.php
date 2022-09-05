@@ -125,7 +125,7 @@ if ($questionId) {
                     <th class="text-right"><?php echo get_lang('Number'); ?></th>
                     <th style="width: 85%;"><?php echo get_lang('Answer'); ?></th>
                     <?php if (!$isGlobal) { ?>
-                        <th class="text-right"><?php echo get_lang('Weighting') ?></th>
+                        <th class="text-right"><?php echo get_lang('Weighting'); ?></th>
                     <?php } ?>
                     <th>&nbsp;</th>
                 </tr>

@@ -171,6 +171,7 @@ define('SECTION_CUSTOMPAGE', 'custompage');
 define('PLATFORM_AUTH_SOURCE', 'platform');
 define('CAS_AUTH_SOURCE', 'cas');
 define('LDAP_AUTH_SOURCE', 'extldap');
+define('IMS_LTI_SOURCE', 'ims_lti');
 
 // CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES', '/HotPotatoes_files');

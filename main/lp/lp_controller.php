@@ -428,6 +428,11 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 if (isset($_SESSION['oLP'])) {
     // Reinitialises array used by javascript to update items in the TOC.
     $_SESSION['oLP']->update_queue = [];
+    // We check if a tool provider
+    if (isset($_REQUEST['lti_launch_id'])) {
+        $ltiLaunchId = Security::remove_XSS($_REQUEST['lti_launch_id']);
+        $_SESSION['oLP']->lti_launch_id = $ltiLaunchId;
+    }
 }
 
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';

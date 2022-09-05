@@ -372,6 +372,10 @@ $tools = [
     ],
 ];
 
+if ('true' === api_get_plugin_setting('lti_provider', 'enabled')) {
+    $tools[get_lang('Users')]['report=lti_tool_lp'] = get_lang('LearningPathLTI');
+}
+
 $course_categories = Statistics::getCourseCategories();
 $content = '';
 
@@ -1015,7 +1019,7 @@ switch ($report) {
                 //$contract = isset($extraFields['termactivated']) ? $extraFields['termactivated'] : '';
                 $contract = false;
                 $legalAccept = $extraFieldValueUser->get_values_by_handler_and_field_variable($userId, 'legal_accept');
-                if ($legalAccept && isset($legalAccept['value'])) {
+                if ($legalAccept && !empty($legalAccept['value'])) {
                     list($legalId, $legalLanguageId, $legalTime) = explode(':', $legalAccept['value']);
                     if ($legalId) {
                         $contract = true;
@@ -1699,6 +1703,9 @@ switch ($report) {
         break;
     case 'logins_by_date':
         $content .= Statistics::printLoginsByDate();
+        break;
+    case 'lti_tool_lp':
+        $content .= Statistics::printLtiLearningPath();
         break;
 }
 

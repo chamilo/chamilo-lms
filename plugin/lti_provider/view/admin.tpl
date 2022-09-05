@@ -18,6 +18,7 @@
                     <th>{{ 'ClientId'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-center">{{ 'DeploymentId'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-center">{{ 'URLs'|get_plugin_lang('LtiProviderPlugin') }}</th>
+                    <th class="text-center">{{ 'ToolProvider'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-right">{{ 'Actions'|get_lang }}</th>
                 </tr>
             </thead>
@@ -33,6 +34,7 @@
                         <p><strong>{{ 'AuthTokenUrl'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getAuthTokenUrl }}</p>
                         <p><strong>{{ 'KeySetUrl'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getKeySetUrl }}</p>
                     </td>
+                    <td>{{ platform.getToolProvider }}</td>
                     <td>
                         <a href="{{ _p.web_plugin }}lti_provider/edit.php?{{ url_params }}">
                             {{ 'edit.png'|img(22, 'Edit'|get_lang) }}

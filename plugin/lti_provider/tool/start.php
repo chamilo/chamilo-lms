@@ -7,17 +7,34 @@ require_once __DIR__.'/../LtiProviderPlugin.php';
 
 $launch = LtiProvider::create()->launch();
 if (!$launch->hasNrps()) {
-    throw new Exception("Don't have names and roles!");
+    // throw new Exception("Don't have names and roles!");
 }
 
 $launchData = $launch->getLaunchData();
 
 $plugin = LtiProviderPlugin::create();
-$toolVars = $plugin->getToolProviderVars($launchData['iss']);
+$toolVars = $plugin->getToolProviderVars($launchData['aud']);
 
-$login = LtiProvider::create()->validateUser($launchData, $toolVars['courseCode']);
+$login = LtiProvider::create()->validateUser($launchData, $toolVars['courseCode'], $toolVars['toolName']);
+if ($login) {
+    $values = [];
+    $values['issuer'] = $launchData['iss'];
+    $values['user_id'] = api_get_user_id();
+    $values['client_uid'] = $launchData['sub'];
+    $values['course_code'] = $toolVars['courseCode'];
+    $values['tool_id'] = $toolVars['toolId'];
+    $values['tool_name'] = $toolVars['toolName'];
+    $values['lti_launch_id'] = $launch->getLaunchId();
+    $plugin->saveResult($values);
+}
+
 $cidReq = 'cidReq='.$toolVars['courseCode'].'&id_session=0&gidReq=0&gradebook=0';
 
-$launchUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.$cidReq.'&origin=embeddable&exerciseId='.$toolVars['toolId'].'&lti_launch_id='.$launch->getLaunchId();
-header('Location: '.$launchUrl);
+if ('lp' == $toolVars['toolName']) {
+    $launchUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$cidReq.'&action=view&lp_id='.$toolVars['toolId'].'&isStudentView=true&lti_launch_id='.$launch->getLaunchId();
+    header('Location: '.$launchUrl);
+} else {
+    $launchUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.$cidReq.'&origin=embeddable&exerciseId='.$toolVars['toolId'].'&lti_launch_id='.$launch->getLaunchId();
+    header('Location: '.$launchUrl);
+}
 exit;

@@ -250,7 +250,11 @@ class BigUploadResponse
                 $file,
                 api_get_configuration_value('assignment_prevent_duplicate_upload')
             );
-            $redirectUrl = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
+            $extraParams = '';
+            if (!empty($_SESSION['oLP'])) {
+                $extraParams .= '&origin=learnpath';
+            }
+            $redirectUrl = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().$extraParams;
 
             return json_encode(['errorStatus' => 0, 'redirect' => $redirectUrl]);
         }

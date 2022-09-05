@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use Packback\Lti1p3;
 use Packback\Lti1p3\LtiMessageLaunch;
 use Packback\Lti1p3\LtiOidcLogin;
@@ -42,6 +43,29 @@ class LtiProvider
     }
 
     /**
+     * It removes user and oLP session.
+     *
+     * @param string $toolName
+     */
+    public function logout(string $toolName = '')
+    {
+        Session::erase('_user');
+        Session::erase('is_platformAdmin');
+        Session::erase('is_allowedCreateCourse');
+        Session::erase('_uid');
+        if ('lp' == $toolName) {
+            // Deleting the objects
+            Session::erase('oLP');
+            Session::erase('lpobject');
+            Session::erase('scorm_view_id');
+            Session::erase('scorm_item_id');
+            Session::erase('exerciseResult');
+            Session::erase('objExercise');
+            Session::erase('questionList');
+        }
+    }
+
+    /**
      * Lti Message Launch.
      */
     public function launch(bool $fromCache = false, ?string $launchId = null): LtiMessageLaunch
@@ -58,7 +82,7 @@ class LtiProvider
     /**
      * Verify if email user is in the platform to create it and login (true) or not (false).
      */
-    public function validateUser(array $launchData, string $courseCode): bool
+    public function validateUser(array $launchData, string $courseCode, string $toolName): bool
     {
         if (empty($launchData)) {
             return false;
@@ -73,6 +97,12 @@ class LtiProvider
         if (empty($userInfo)) {
             // We create the user
             $username = $launchData['https://purl.imsglobal.org/spec/lti/claim/ext']['user_username'];
+            if (!UserManager::is_username_available($username)) {
+                $username = UserManager::create_unique_username(
+                    $firstName,
+                    $lastName
+                );
+            }
             $password = api_generate_password();
             $userId = UserManager::create_user(
                 $firstName,
@@ -80,7 +110,12 @@ class LtiProvider
                 $status,
                 $email,
                 $username,
-                $password
+                $password,
+                '',
+                '',
+                '',
+                '',
+                IMS_LTI_SOURCE
             );
         } else {
             $userId = $userInfo['user_id'];
@@ -90,7 +125,16 @@ class LtiProvider
             CourseManager::subscribeUser($userId, $courseCode, $status);
         }
 
+        $this->logout($toolName);
+
         $login = UserManager::loginAsUser($userId, false);
+        if ($login && CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
+            $_course = api_get_course_info($courseCode);
+            Session::write('is_allowed_in_course', true);
+            Session::write('_real_cid', $_course['real_id']);
+            Session::write('_cid', $_course['code']);
+            Session::write('_course', $_course);
+        }
 
         return $login;
     }

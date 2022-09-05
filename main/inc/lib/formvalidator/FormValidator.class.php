@@ -1811,6 +1811,10 @@ EOT;
      */
     private function addMultipleUploadJavascript($url, $inputName, $urlToRedirect = '')
     {
+        $target = '_blank';
+        if (!empty($_SESSION['oLP']->lti_launch_id)) {
+            $target = '_self';
+        }
         $redirectCondition = '';
         if (!empty($urlToRedirect)) {
             $redirectCondition = "window.location.replace('$urlToRedirect'); ";
@@ -1927,7 +1931,7 @@ EOT;
                     }
                     if (file.url) {
                         var link = $('<a>')
-                            .attr({target: '_blank', class : 'panel-image'})
+                            .attr({target: '".$target."', class : 'panel-image'})
                             .prop('href', file.url);
                         $(data.context.children()[index]).parent().wrap(link);
                     }

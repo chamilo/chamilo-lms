@@ -74,6 +74,7 @@ abstract class Question
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
         UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
         MULTIPLE_ANSWER_DROPDOWN => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown'],
+        MULTIPLE_ANSWER_DROPDOWN_GLOBAL => ['MultipleAnswerDropdownGlobal.php', 'MultipleAnswerDropdownGlobal'],
     ];
 
     /**
@@ -1822,6 +1823,7 @@ abstract class Question
             switch ($this->type) {
                 case UNIQUE_ANSWER:
                 case MULTIPLE_ANSWER_DROPDOWN:
+                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
                     $buttonGroup = [];
                     $buttonGroup[] = $form->addButtonSave(
                         $text,
@@ -2565,8 +2567,9 @@ abstract class Question
     {
         $oppositeAnswers = [
             UNIQUE_ANSWER => [MULTIPLE_ANSWER],
-            MULTIPLE_ANSWER => [UNIQUE_ANSWER, MULTIPLE_ANSWER_DROPDOWN],
+            MULTIPLE_ANSWER => [UNIQUE_ANSWER, MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL],
             MULTIPLE_ANSWER_DROPDOWN => [MULTIPLE_ANSWER],
+            MULTIPLE_ANSWER_DROPDOWN_GLOBAL => [MULTIPLE_ANSWER],
         ];
         $this->type = $oppositeAnswers[$this->type][$index];
         Database::update(
@@ -2578,6 +2581,7 @@ abstract class Question
             UNIQUE_ANSWER => 'UniqueAnswer',
             MULTIPLE_ANSWER => 'MultipleAnswer',
             MULTIPLE_ANSWER_DROPDOWN => 'MultipleAnswerDropdown',
+            MULTIPLE_ANSWER_DROPDOWN_GLOBAL => 'MultipleAnswerDropdownGlobal',
         ];
         $swappedAnswer = new $answerClasses[$this->type]();
         foreach ($this as $key => $value) {

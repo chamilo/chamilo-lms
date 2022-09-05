@@ -86,6 +86,7 @@ function lp_upload_quiz_main()
         UNIQUE_ANSWER => get_lang('UniqueSelect'),
         MULTIPLE_ANSWER => get_lang('MultipleSelect'),
         MULTIPLE_ANSWER_DROPDOWN => get_lang('MultipleAnswerDropdown'),
+        MULTIPLE_ANSWER_DROPDOWN_GLOBAL => get_lang('MultipleAnswerDropdownGlobal'),
         FILL_IN_BLANKS => get_lang('FillBlanks'),
         FILL_IN_BLANKS_GLOBAL => get_lang('FillBlanksGlobal'),
         MATCHING => get_lang('Matching'),
@@ -333,6 +334,9 @@ function lp_upload_quiz_action_handling()
                 case MULTIPLE_ANSWER_DROPDOWN:
                     $answer = new MultipleAnswerDropdown();
                     break;
+                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+                    $answer = new MultipleAnswerDropdownGlobal();
+                    break;
                 case FILL_IN_BLANKS:
                 case FILL_IN_BLANKS_GLOBAL:
                     $answer = new FillBlanks();
@@ -367,6 +371,7 @@ function lp_upload_quiz_action_handling()
             switch ($detectQuestionType) {
                 case GLOBAL_MULTIPLE_ANSWER:
                 case MULTIPLE_ANSWER_DROPDOWN:
+                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
                 case MULTIPLE_ANSWER:
                 case UNIQUE_ANSWER:
                     $total = 0;
@@ -429,7 +434,7 @@ function lp_upload_quiz_action_handling()
                                         //$total = $total - $score;
                                     }
                                     break;
-                                case MULTIPLE_ANSWER_DROPDOWN:
+                                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
                                     $score = 0;
                                     break;
                             }
@@ -458,7 +463,7 @@ function lp_upload_quiz_action_handling()
                         if ($questionObj) {
                             switch ($detectQuestionType) {
                                 case GLOBAL_MULTIPLE_ANSWER:
-                                case MULTIPLE_ANSWER_DROPDOWN:
+                                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
                                     $questionObj->updateWeighting($globalScore);
                                     break;
                                 case UNIQUE_ANSWER:

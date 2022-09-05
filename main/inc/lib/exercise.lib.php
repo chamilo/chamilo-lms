@@ -341,6 +341,18 @@ class ExerciseLib
                     $form->addHtml('</div>');
                     $s .= $form->returnForm();
                     break;
+                case MULTIPLE_ANSWER_DROPDOWN:
+                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+                    if ($debug_mark_answer) {
+                        $s .= '<p><strong>'
+                            .(
+                                MULTIPLE_ANSWER_DROPDOWN == $answerType
+                                    ? '<span class="pull-right">'.get_lang('Weighting').'</span>'
+                                    : ''
+                            )
+                            .get_lang('CorrectAnswer').'</strong></p>';
+                    }
+                    break;
             }
 
             // Now navigate through the possible answers, using the max number of
@@ -1457,17 +1469,24 @@ HTML;
                         }
                         break;
                     case MULTIPLE_ANSWER_DROPDOWN:
-                        if ($debug_mark_answer) {
-                            if ($answerCorrect) {
-                                $s .= '<p>'.Display::returnFontAwesomeIcon('check-square-o', '', true);
-                                $s .= Security::remove_XSS($objAnswerTmp->answer[$answerId]).'</p>';
-                            }
+                    case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+                        if ($debug_mark_answer && $answerCorrect) {
+                            $s .= '<p>'
+                                .(
+                                    MULTIPLE_ANSWER_DROPDOWN == $answerType
+                                        ? '<span class="pull-right">'.$objAnswerTmp->weighting[$answerId].'</span>'
+                                        : ''
+                                )
+                                .Display::returnFontAwesomeIcon('check-square-o', '', true);
+                            $s .= Security::remove_XSS($objAnswerTmp->answer[$answerId]).'</p>';
                         }
                         break;
                 }
             }
 
-            if (MULTIPLE_ANSWER_DROPDOWN == $answerType && !$debug_mark_answer) {
+            if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])
+                && !$debug_mark_answer
+            ) {
                 $userChoiceList = array_unique($userChoiceList);
                 $input_id = "choice-$questionId";
 
@@ -6189,6 +6208,7 @@ EOT;
             MATCHING_GLOBAL,
             FILL_IN_BLANKS_GLOBAL,
             MULTIPLE_ANSWER_DROPDOWN,
+            MULTIPLE_ANSWER_DROPDOWN_GLOBAL,
         ];
         $defaultTypes = [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE];
         $types = $defaultTypes;

@@ -3914,7 +3914,7 @@ class Exercise
             );
         }
 
-        if (MULTIPLE_ANSWER_DROPDOWN == $answerType) {
+        if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])) {
             $questionScore = $questionWeighting;
 
             if ($from_database) {
@@ -6224,9 +6224,19 @@ class Exercise
                         $questionDuration
                     );
                 }
-            } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER || MULTIPLE_ANSWER_DROPDOWN == $answerType) {
+            } elseif (
+                in_array(
+                    $answerType,
+                    [
+                        MULTIPLE_ANSWER,
+                        GLOBAL_MULTIPLE_ANSWER,
+                        MULTIPLE_ANSWER_DROPDOWN,
+                        MULTIPLE_ANSWER_DROPDOWN_GLOBAL,
+                    ]
+                )
+            ) {
                 if ($choice != 0) {
-                    if (MULTIPLE_ANSWER_DROPDOWN == $answerType) {
+                    if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])) {
                         $reply = array_values($choice);
                     } else {
                         $reply = array_keys($choice);

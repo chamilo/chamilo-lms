@@ -16,6 +16,8 @@ if (!is_object($objQuestion)) {
     $objQuestion = Question::read($questionId);
 }
 
+$isGlobal = MULTIPLE_ANSWER_DROPDOWN_GLOBAL === (int) $objQuestion->type;
+
 $objAnswer = new Answer($objQuestion->iid, 0, $objExercise);
 $options = [];
 
@@ -34,17 +36,39 @@ if ($submitAnswers) {
         'intval',
         (array) $httpRequest->request->get('answer', [])
     );
-    $questionWeighting = (float) $httpRequest->request->get('weighting', 0);
 
     $tblQuizAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
     Database::query(
-        "UPDATE $tblQuizAnswer SET correct = 0 WHERE question_id = ".$objQuestion->iid
+        "UPDATE $tblQuizAnswer SET correct = 0, ponderation = 0 WHERE question_id = ".$objQuestion->iid
     );
     Database::query(
         "UPDATE $tblQuizAnswer SET correct = 1
              WHERE question_id = {$objQuestion->iid} AND iid IN (".implode(', ', $questionAnswers).")"
     );
+
+    if ($isGlobal) {
+        $questionWeighting = (float) $httpRequest->request->get('weighting', 0);
+    } else {
+        $questionWeighting = 0;
+        $choiceWeighting = array_map(
+            'intval',
+            (array) $httpRequest->request->get('c_weighting', [])
+        );
+
+        foreach ($questionAnswers as $key => $questionAnswer) {
+            if (empty($choiceWeighting[$key])) {
+                continue;
+            }
+
+            $questionWeighting += $choiceWeighting[$key];
+
+            Database::query(
+                "UPDATE $tblQuizAnswer SET ponderation = {$choiceWeighting[$key]}
+                    WHERE question_id = {$objQuestion->iid} AND iid = $questionAnswer"
+            );
+        }
+    }
 
     $objQuestion->updateWeighting($questionWeighting);
     $objQuestion->save($objExercise);
@@ -64,6 +88,7 @@ if ($questionId) {
         $answers[] = [
             $objAnswer->iid[$i],
             $objAnswer->answer[$i],
+            $objAnswer->weighting[$i],
         ];
     }
 
@@ -98,7 +123,10 @@ if ($questionId) {
                 <thead>
                 <tr>
                     <th class="text-right"><?php echo get_lang('Number'); ?></th>
-                    <th style="width: 90%;"><?php echo get_lang('Answer'); ?></th>
+                    <th style="width: 85%;"><?php echo get_lang('Answer'); ?></th>
+                    <?php if (!$isGlobal) { ?>
+                        <th class="text-right"><?php echo get_lang('Weighting') ?></th>
+                    <?php } ?>
                     <th>&nbsp;</th>
                 </tr>
                 </thead>
@@ -106,13 +134,15 @@ if ($questionId) {
                 </tbody>
             </table>
         </fieldset>
-        <div class="form-group">
-            <label for="weighting" class="control-label col-sm-2"><?php echo get_lang('Weighting'); ?></label>
-            <div class="col-sm-8">
-                <input type="number" required min="0" class="form-control" step="any" id="weighting" name="weighting"
-                    value="<?php echo $objQuestion->weighting; ?>">
+        <?php if ($isGlobal) { ?>
+            <div class="form-group">
+                <label for="weighting" class="control-label col-sm-2"><?php echo get_lang('Weighting'); ?></label>
+                <div class="col-sm-8">
+                    <input type="number" required min="0" class="form-control" step="any" id="weighting" name="weighting"
+                        value="<?php echo $objQuestion->weighting; ?>">
+                </div>
             </div>
-        </div>
+        <?php } ?>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary" name="submitAnswers" value="submitAnswers">
@@ -139,7 +169,7 @@ if ($questionId) {
                     return;
                 }
 
-                answers.push([selected, lines[selected]]);
+                answers.push([selected, lines[selected], 0]);
 
                 $txtOption.val(-1).selectpicker('refresh');
 
@@ -169,6 +199,10 @@ if ($questionId) {
                         + line[1] + "\n"
                         + '<input type="hidden" name="answer[]" value="' + line[0] + '">'
                         + '</td><td class="text-right">'
+                        <?php if (!$isGlobal) { ?>
+                            + '<input type="number" required min="0" class="form-control" step="any" name="c_weighting[]" value="' + line[2] + '">'
+                            + '</td><td class="text-right">'
+                        <?php } ?>
                         + '<button type="button" class="btn btn-default btn-remove" data-index="' + key + '" aria-label="<?php echo get_lang('Remove'); ?>">'
                         + '<?php echo Display::returnFontAwesomeIcon('minus', '', true); ?>'
                         + '</button>'

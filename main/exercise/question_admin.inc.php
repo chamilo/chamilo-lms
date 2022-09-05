@@ -60,7 +60,7 @@ if (is_object($objQuestion)) {
         if (in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_GLOBAL, HOT_SPOT_DELINEATION])) {
             echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->iid.'&'.api_get_cidreq(
                 ).'"</script>';
-        } elseif (MULTIPLE_ANSWER_DROPDOWN == $objQuestion->type) {
+        } elseif (in_array($objQuestion->type, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])) {
             $url = 'admin.php?'
                 .api_get_cidreq().'&'
                 .http_build_query(['exerciseId' => $exerciseId, 'page' => $page, 'mad_admin' => $objQuestion->iid]);

@@ -2,7 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   sodipodi:docname="mcma_dropdown.svg"
+   sodipodi:docname="mcma_dropdown_global.svg"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    version="1.1"
    viewBox="0 0 124 124"
@@ -113,7 +113,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -220,5 +219,16 @@
          d="M 36.666537,993.39969 H 87.172846"
          id="path5283-0" />
     </g>
+    <text
+       id="text6075"
+       y="1037.1279"
+       x="73.217209"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:23.25px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#2f7ea6;fill-opacity:1;stroke:none;stroke-width:1.9375"
+       xml:space="preserve"><tspan
+         y="1037.1279"
+         x="73.217209"
+         id="tspan6077"
+         sodipodi:role="line"
+         style="font-size:35.4987px;line-height:1.25;stroke-width:1.9375">G</tspan></text>
   </g>
 </svg>

@@ -10,7 +10,7 @@ exit;
 require_once '../../main/inc/global.inc.php';
 
 if (empty($argv[1])) {
-    die("You have to add a course code as first parameter");
+    die("You have to add a course code to check a course or 'ALL' for all courses as first parameter");
 }
 
 if (empty($argv[2]) || (!empty($argv[2]) && !(in_array($argv[2], ['true', 'false'])))) {
@@ -35,7 +35,7 @@ function checkDocumentFilesOnDisk($courseCode, $removeFileNotFound)
     $tableDocument = Database::get_course_table(TABLE_DOCUMENT);
 
     $sql = "SELECT id, code, title, directory FROM $tableCourse";
-    if (!empty($courseCode)) {
+    if (!empty($courseCode) && 'all' !== strtolower($courseCode)) {
         $sql .= " WHERE code = '$courseCode'";
     }
     $rs = Database::query($sql);

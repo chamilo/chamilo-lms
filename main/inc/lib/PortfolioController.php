@@ -10,9 +10,9 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
-use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
+use Mpdf\MpdfException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -2001,7 +2001,7 @@ class PortfolioController
     }
 
     /**
-     * @throws \MpdfException
+     * @throws MpdfException
      */
     public function exportPdf(HttpRequest $httpRequest)
     {
@@ -2747,9 +2747,6 @@ class PortfolioController
 
     private function createFormTagFilter(bool $listByUser = false): FormValidator
     {
-        $em = Database::getManager();
-        $tagTepo = $em->getRepository(Tag::class);
-
         $extraField = new ExtraField('portfolio');
         $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
 

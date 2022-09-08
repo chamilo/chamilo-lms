@@ -2738,6 +2738,16 @@ class PortfolioController
         $em = Database::getManager();
         $tagTepo = $em->getRepository(Tag::class);
 
+        $extraField = new ExtraField('portfolio');
+        $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
+
+        $selectTagOptions = array_map(
+            function (array $tagOption) {
+                return $tagOption['tag'];
+            },
+            $tagFieldInfo['options'] ?? []
+        );
+
         $frmTagList = new FormValidator(
             'frm_tag_list',
             'get',
@@ -2749,23 +2759,12 @@ class PortfolioController
 
         $frmTagList->addDatePicker('date', get_lang('CreationDate'));
 
-        /** @var SelectAjax $txtTags */
-        $txtTags = $frmTagList->addSelectAjax(
+        $frmTagList->addSelect(
             'tags',
             get_lang('Tags'),
-            [],
-            [
-                'multiple' => 'multiple',
-                'url' => api_get_path(WEB_AJAX_PATH)."extra_field.ajax.php?a=search_tags&field_id=29&type=portfolio&byid=1",
-            ]
+            $selectTagOptions,
+            ['multiple' => 'multiple']
         );
-        $selectedTags = $txtTags->getValue();
-
-        if (!empty($selectedTags)) {
-            foreach ($tagTepo->findById($selectedTags) as $tag) {
-                $txtTags->addOption($tag->getTag(), $tag->getId());
-            }
-        }
 
         $frmTagList->addText('text', get_lang('Search'), false)->setIcon('search');
         $frmTagList->applyFilter('text', 'trim');

@@ -601,7 +601,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
+                $sql .= "WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles) ";
             }
 
             // adding a teacher NOT trough a session on a portal with multiple URLs

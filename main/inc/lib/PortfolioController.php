@@ -1148,8 +1148,19 @@ class PortfolioController
                 },
                 'childClose' => '</div></article>',
                 'nodeDecorator' => function ($node) use ($commentsRepo, $clockIcon, $item) {
+                    $commentActions = [];
                     /** @var PortfolioComment $comment */
                     $comment = $commentsRepo->find($node['id']);
+
+                    if ($this->commentBelongsToOwner($comment)) {
+                        $commentActions[] = Display::url(
+                            Display::return_icon(
+                                $comment->isTemplate() ? 'wizard.png' : 'wizard_na.png',
+                                $comment->isTemplate() ? get_lang('RemoveAsTemplate') : get_lang('AddAsTemplate')
+                            ),
+                            $this->baseUrl.http_build_query(['action' => 'template_comment', 'id' => $comment->getId()])
+                        );
+                    }
 
                     $commentActions[] = Display::url(
                         Display::return_icon('discuss.png', get_lang('ReplyToThisComment')),
@@ -2604,6 +2615,29 @@ class PortfolioController
         exit;
     }
 
+    public function markAsTemplateComment(PortfolioComment $comment)
+    {
+        if (!$this->commentBelongsToOwner($comment)) {
+            api_not_allowed(true);
+        }
+
+        $comment->setIsTemplate(
+            !$comment->isTemplate()
+        );
+
+        Database::getManager()->flush();
+
+        Display::addFlash(
+            Display::return_message(
+                $comment->isTemplate() ? get_lang('PortfolioCommentSetAsTemplate') : get_lang('PortfolioCommentUnsetAsTemplate'),
+                'success'
+            )
+        );
+
+        header("Location: $this->baseUrl".http_build_query(['action' => 'view', 'id' => $comment->getItem()->getId()]));
+        exit;
+    }
+
     /**
      * @param bool $showHeader
      */
@@ -2743,6 +2777,11 @@ class PortfolioController
         }
 
         return true;
+    }
+
+    private function commentBelongsToOwner(PortfolioComment $comment): bool
+    {
+        return $comment->getAuthor() === $this->owner;
     }
 
     private function createFormTagFilter(bool $listByUser = false): FormValidator
@@ -3070,8 +3109,30 @@ class PortfolioController
     {
         $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
 
+        $templates = $this->em
+            ->getRepository(PortfolioComment::class)
+            ->findBy(
+                [
+                    'isTemplate' => true,
+                    'author' => $this->owner,
+                ]
+            );
+
         $form = new FormValidator('frm_comment', 'post', $formAction);
         $form->addHeader(get_lang('AddNewComment'));
+        $form->addSelectFromCollection(
+            'template',
+            [
+                get_lang('Template'),
+                null,
+                '<span id="portfolio-spinner" class="fa fa-fw fa-spinner fa-spin" style="display: none;"
+                    aria-hidden="true" aria-label="'.get_lang('Loading').'"></span>',
+            ],
+            $templates,
+            [],
+            true,
+            'getExcerpt'
+        );
         $form->addHtmlEditor('content', get_lang('Comments'), true, false, ['ToolbarSet' => 'Minimal']);
         $form->addHidden('item', $item->getId());
         $form->addHidden('parent', 0);
@@ -3118,7 +3179,26 @@ class PortfolioController
             exit;
         }
 
-        return $form->returnForm();
+        $js = '<script>
+            $(function() {
+                $(\'#frm_comment_template\').on(\'change\', function () {
+                    $(\'#portfolio-spinner\').show();
+                
+                    $.getJSON(_p.web_ajax + \'portfolio.ajax.php?a=find_template_comment&comment=\' + this.value)
+                        .done(function(response) {
+                            CKEDITOR.instances.content.setData(response.content);
+                        })
+                        .fail(function () {
+                            CKEDITOR.instances.content.setData(\'\');
+                        })
+                        .always(function() {
+                          $(\'#portfolio-spinner\').hide();
+                        });
+                });
+            });
+        </script>';
+
+        return $form->returnForm().$js;
     }
 
     private function generateAttachmentList($post, bool $includeHeader = true): string

@@ -296,6 +296,17 @@ switch ($action) {
 
         $controller->markAsTemplate($item);
         break;
+    case 'template_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (empty($comment)) {
+            break;
+        }
+
+        $controller->markAsTemplateComment($comment);
+        break;
     case 'list':
     default:
         $controller->index($httpRequest);

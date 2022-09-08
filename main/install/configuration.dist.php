@@ -1062,6 +1062,7 @@ ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2F675F31B FOREIGN KEY (au
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2126F525E FOREIGN KEY (item_id) REFERENCES portfolio (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2A977936C FOREIGN KEY (tree_root) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2727ACA70 FOREIGN KEY (parent_id) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
+ALTER TABLE portfolio_comment ADD is_template TINYINT(1) DEFAULT '0' NOT NULL;
 ALTER TABLE portfolio_category ADD parent_id INT(11) NOT NULL DEFAULT 0;
 */
 // In 1.11.8, before enabling this feature, you also need to:

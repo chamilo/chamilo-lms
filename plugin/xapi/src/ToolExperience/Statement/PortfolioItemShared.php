@@ -19,6 +19,8 @@ use Xabbuh\XApi\Model\Statement;
  */
 class PortfolioItemShared extends PortfolioItemStatement
 {
+    use PortfolioAttachmentsTrait;
+
     public function generate(): Statement
     {
         $itemAuthor = $this->item->getUser();

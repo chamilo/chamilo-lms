@@ -14,8 +14,11 @@ use Xabbuh\XApi\Model\Statement;
 
 class PortfolioItemViewed extends PortfolioItemStatement
 {
+    use PortfolioAttachmentsTrait;
+
     public function generate(): Statement
     {
+        $user = api_get_user_entity(api_get_user_id());
         $itemAuthor = $this->item->getUser();
 
         $itemAttachments = Database::getManager()
@@ -23,7 +26,7 @@ class PortfolioItemViewed extends PortfolioItemStatement
             ->findFromItem($this->item)
         ;
 
-        $actor = new User($itemAuthor);
+        $actor = new User($user);
         $verb = new Viewed();
         $object = new PortfolioItem($this->item);
         $context = $this->generateContext();

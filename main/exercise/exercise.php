@@ -520,7 +520,7 @@ if ($is_allowedToEdit) {
                         exit();
                     case 'send_reminder':
                         $users = Exercise::getUsersInExercise(
-                            $objExerciseTmp->id,
+                            $objExerciseTmp->iid,
                             $courseId,
                             $sessionId
                         );

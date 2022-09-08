@@ -12,7 +12,8 @@ require_once __DIR__.'/../global.inc.php';
 $httpRequest = HttpRequest::createFromGlobals();
 
 $action = $httpRequest->query->has('a') ? $httpRequest->query->get('a') : $httpRequest->request->get('a');
-$user_id = api_get_user_id();
+$currentUserId = api_get_user_id();
+$currentUser = api_get_user_entity($currentUserId);
 
 $em = Database::getManager();
 
@@ -30,10 +31,13 @@ $httpResponse = Response::create();
 
 switch ($action) {
     case 'find_template':
-        if (!$item
-            || !$item->isTemplate()
-        ) {
+        if (!$item) {
             $httpResponse->setStatusCode(Response::HTTP_NOT_FOUND);
+            break;
+        }
+
+        if (!$item->isTemplate() || $item->getUser() !== $currentUser) {
+            $httpResponse->setStatusCode(Response::HTTP_FORBIDDEN);
             break;
         }
 

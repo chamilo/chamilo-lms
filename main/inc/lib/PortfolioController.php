@@ -467,6 +467,7 @@ class PortfolioController
                     'isTemplate' => true,
                     'course' => $this->course,
                     'session' => $this->session,
+                    'user' => $this->owner,
                 ]
             );
 
@@ -645,17 +646,28 @@ class PortfolioController
                 $(\'#add_portfolio_template\').on(\'change\', function () {
                     $(\'#portfolio-spinner\').show();
                 
-                    $.getJSON(_p.web_ajax + \'portfolio.ajax.php?a=find_template&item=\' + this.value).done(function(response) {
-                        if (CKEDITOR.instances.title) {
-                            CKEDITOR.instances.title.setData(response.title);
-                        } else {
-                            document.getElementById(\'add_portfolio_title\').value = response.title;
-                        }
-                    
-                        CKEDITOR.instances.content.setData(response.content);
-                        
-                        $(\'#portfolio-spinner\').hide();
-                    });
+                    $.getJSON(_p.web_ajax + \'portfolio.ajax.php?a=find_template&item=\' + this.value)
+                        .done(function(response) {
+                            if (CKEDITOR.instances.title) {
+                                CKEDITOR.instances.title.setData(response.title);
+                            } else {
+                                document.getElementById(\'add_portfolio_title\').value = response.title;
+                            }
+
+                            CKEDITOR.instances.content.setData(response.content);
+                        })
+                        .fail(function () {
+                            if (CKEDITOR.instances.title) {
+                                CKEDITOR.instances.title.setData(\'\');
+                            } else {
+                                document.getElementById(\'add_portfolio_title\').value = \'\';
+                            }
+
+                            CKEDITOR.instances.content.setData(\'\');
+                        })
+                        .always(function() {
+                          $(\'#portfolio-spinner\').hide();
+                        });
                 });
                 '.$extra['jquery_ready_content'].'
             });

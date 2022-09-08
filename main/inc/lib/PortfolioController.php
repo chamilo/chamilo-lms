@@ -645,7 +645,7 @@ class PortfolioController
                 $(\'#add_portfolio_template\').on(\'change\', function () {
                     $(\'#portfolio-spinner\').show();
                 
-                    $.getJSON(_p.web_ajax + \'portfolio.ajax.php?a=find_template&item=5\').done(function(response) {
+                    $.getJSON(_p.web_ajax + \'portfolio.ajax.php?a=find_template&item=\' + this.value).done(function(response) {
                         if (CKEDITOR.instances.title) {
                             CKEDITOR.instances.title.setData(response.title);
                         } else {

@@ -41,7 +41,7 @@ class Room
     protected ?string $geolocation = null;
 
     /**
-     * @ORM\Column(name="ip", type="string", length=39, nullable=true, unique=false)
+     * @ORM\Column(name="ip", type="string", length=45, nullable=true, unique=false)
      */
     protected ?string $ip = null;
 

@@ -24,12 +24,17 @@ class SelectAjax extends HTML_QuickForm_select
     {
         $iso = api_get_language_isocode(api_get_interface_language());
         $formatResult = $this->getAttribute('formatResult');
+        $formatSelection = $this->getAttribute('formatSelection');
         $formatCondition = '';
 
         if (!empty($formatResult)) {
-            $formatCondition = ',
-                templateResult : '.$formatResult.',
-                templateSelection : '.$formatResult;
+            $formatCondition .= ',
+                templateResult : '.$formatResult;
+        }
+
+        if (!empty($formatSelection)) {
+            $formatCondition .= ',
+                templateSelection : '.$formatSelection;
         }
 
         $width = 'element';
@@ -109,14 +114,15 @@ class SelectAjax extends HTML_QuickForm_select
                                     results: ''
                                 };
                             }
-                            $formatCondition
                         }
+                        $formatCondition
                     });
                 });
             </script>
 JS;
 
         $this->removeAttribute('formatResult');
+        $this->removeAttribute('formatSelection');
         $this->removeAttribute('minimumInputLength');
         $this->removeAttribute('maximumSelectionLength');
         $this->removeAttribute('tags');
@@ -142,5 +148,61 @@ JS;
         }
 
         return $this->_prepareValue($value, $assoc);
+    }
+
+    public static function templateResultForUsersInCourse(): string
+    {
+        return "function (state) {
+                if (state.loading) {
+                    return state.text;
+                }
+
+                var \$container = \$(
+                    '<div class=\"select2-result-user clearfix\">' +
+                        '<div class=\"select2-result-user__avatar pull-left\">' +
+                            '<img>' +
+                        '</div>' +
+                        '<div class=\"select2-result-user__info pull-left\">' +
+                            '<div class=\"select2-result-user__name\"></div>' +
+                            '<div class=\"select2-result-user__username small\"></div>' +
+                        '</div>' +
+                    '</div>'
+                );
+
+                \$container.find('.select2-result-user__avatar img')
+                    .prop({ 'src': state.avatarUrl, 'alt': state.username })
+                    .css({ 'width': '40px', 'height': '40px' });
+                \$container.find('.select2-result-user__info').css({ 'paddingLeft': '6px' });
+                \$container.find('.select2-result-user__name').text(state.completeName);
+                \$container.find('.select2-result-user__username').text(state.username);
+
+                return \$container;
+            }";
+    }
+
+    public static function templateSelectionForUsersInCourse(): string
+    {
+        return "function (state) {
+                if (!state.id) {
+                    return state.text;
+                }
+    
+                if (!state.avatarUrl) {
+                    var avatarUrl = $(state.element).data('avatarurl');
+                    var username = $(state.element).data('username');
+                    
+                    state.avatarUrl = avatarUrl;
+                    state.username = username;
+                    state.completeName = state.text;
+                }
+    
+                var \$container = \$('<span><img> ' + state.completeName + '</span>');
+    
+                \$container.find('img')
+                    .prop({ 'src': state.avatarUrl, 'alt': state.username })
+                    .css({ 'width': '20px', 'height': '20px' });
+    
+                return \$container;
+            }";
     }
 }

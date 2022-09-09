@@ -126,8 +126,7 @@ switch ($action) {
         $controller->editItem($item);
 
         return;
-    case 'hide_item':
-    case 'show_item':
+    case 'visibility':
         $id = $httpRequest->query->getInt('id');
 
         /** @var Portfolio $item */
@@ -270,6 +269,43 @@ switch ($action) {
         break;
     case 'delete_attachment':
         $controller->deleteAttachment($httpRequest);
+        break;
+    case 'highlighted':
+        api_protect_teacher_script();
+
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio $item */
+        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->markAsHighlighted($item);
+        break;
+    case 'template':
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio $item */
+        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->markAsTemplate($item);
+        break;
+    case 'template_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (empty($comment)) {
+            break;
+        }
+
+        $controller->markAsTemplateComment($comment);
         break;
     case 'list':
     default:

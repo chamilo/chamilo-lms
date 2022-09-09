@@ -303,6 +303,9 @@ switch ($action) {
                 $json['items'][] = [
                     'id' => $user['user_id'],
                     'text' => "{$user['username']} ($userCompleteName)",
+                    'avatarUrl' => UserManager::getUserPicture($user['id']),
+                    'username' => $user['username'],
+                    'completeName' => $userCompleteName,
                 ];
             }
 

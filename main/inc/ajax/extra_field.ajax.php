@@ -36,7 +36,9 @@ switch ($action) {
         break;
     case 'search_tags':
         header('Content-Type: application/json');
-        $tag = isset($_REQUEST['q']) ? $_REQUEST['q'] : null;
+        $tag = $_REQUEST['q'] ?? null;
+        $pageLimit = isset($_REQUEST['page_limit']) ? (int) $_REQUEST['page_limit'] : 10;
+        $byId = !empty($_REQUEST['byid']);
         $result = [];
 
         if (empty($tag)) {
@@ -44,22 +46,15 @@ switch ($action) {
             exit;
         }
 
-        $extraFieldOption = new ExtraFieldOption($type);
-
         $tags = Database::getManager()
-            ->getRepository('ChamiloCoreBundle:Tag')
-            ->createQueryBuilder('t')
-            ->where("t.tag LIKE :tag")
-            ->andWhere('t.fieldId = :field')
-            ->setParameter('field', $fieldId)
-            ->setParameter('tag', "$tag%")
-            ->getQuery()
-            ->getResult();
+            ->getRepository(Tag::class)
+            ->findByFieldIdAndText($fieldId, $tag, $pageLimit)
+        ;
 
         /** @var Tag $tag */
         foreach ($tags as $tag) {
             $result[] = [
-                'id' => $tag->getTag(),
+                'id' => $byId ? $tag->getId() : $tag->getTag(),
                 'text' => $tag->getTag(),
             ];
         }

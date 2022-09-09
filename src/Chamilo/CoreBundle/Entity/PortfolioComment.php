@@ -115,6 +115,13 @@ class PortfolioComment
     private $score;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_template", type="boolean", options={"default": false})
+     */
+    private $isTemplate = false;
+
+    /**
      * PortfolioComment constructor.
      */
     public function __construct()
@@ -248,5 +255,17 @@ class PortfolioComment
     public function getLvl(): int
     {
         return $this->lvl;
+    }
+
+    public function isTemplate(): bool
+    {
+        return $this->isTemplate;
+    }
+
+    public function setIsTemplate(bool $isTemplate): PortfolioComment
+    {
+        $this->isTemplate = $isTemplate;
+
+        return $this;
     }
 }

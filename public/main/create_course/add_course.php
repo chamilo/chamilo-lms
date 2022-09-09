@@ -306,7 +306,7 @@ if ($form->validate()) {
     $course_values = $form->exportValues();
 
     $wanted_code = $course_values['wanted_code'];
-    $category_code = isset($course_values['category_id']) ? (int) $course_values['category_id'] : '';
+    $category_code = isset($course_values['category_id']) ? (string) $course_values['category_id'] : '';
     $title = $course_values['title'];
     $course_language = $course_values['course_language'];
     $exemplary_content = !empty($course_values['exemplary_content']);
@@ -336,7 +336,7 @@ if ($form->validate()) {
             $params['title'] = $title;
             $params['exemplary_content'] = $exemplary_content;
             $params['wanted_code'] = $wanted_code;
-            $params['course_id'] = $category_code;
+            //$params['course_id'] = $category_code;
             $params['course_language'] = $course_language;
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
             $params['course_template'] = isset($course_values['course_template']) ? $course_values['course_template'] : '';

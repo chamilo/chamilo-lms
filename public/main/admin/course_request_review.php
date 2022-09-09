@@ -182,7 +182,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
 function email_filter($teacher)
 {
     $teacher = Database::escape_string($teacher);
-    $sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)." 
+    $sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
             WHERE tutor_name LIKE '".$teacher."'";
     $res = Database::query($sql);
     $info = Database::fetch_array($res);
@@ -245,7 +245,7 @@ if (!$course_validation_feature) {
 }
 
 // Create a simple search-box.
-$form = new FormValidator('search_simple', 'get', '', '', 'width=200px', false);
+$form = new FormValidator('search_simple', 'get', '', '', [], false);
 $renderer = $form->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span> ');
 $form->addElement('text', 'keyword', get_lang('Keyword'));

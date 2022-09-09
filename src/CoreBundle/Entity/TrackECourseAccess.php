@@ -68,7 +68,7 @@ class TrackECourseAccess
     protected int $sessionId;
 
     /**
-     * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
+     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
      */
     protected string $userIp;
 

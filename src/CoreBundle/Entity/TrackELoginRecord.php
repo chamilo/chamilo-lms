@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /* For licensing terms, see /license.txt */
 
@@ -37,7 +37,7 @@ class TrackELoginRecord
     protected DateTime $loginDate;
 
     /**
-     * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
+     * @ORM\Column(name="user_ip", type="string", length=45, nullable=false)
      */
     protected string $userIp;
 
@@ -141,5 +141,4 @@ class TrackELoginRecord
 
         return $this;
     }
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
@@ -12,6 +12,11 @@ use Doctrine\DBAL\Schema\Schema;
  */
 final class Version20220628180435 extends AbstractMigrationChamilo
 {
+    /**
+     * Return desription of the migration step.
+     *
+     * @return string
+     */
     public function getDescription(): string
     {
         return 'track login record';

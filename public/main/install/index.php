@@ -225,7 +225,7 @@ if (!isset($_GET['running'])) {
 
     $loginForm = 'admin';
     $passForm = api_generate_password();
-    $institutionUrlForm = 'http://www.chamilo.org';
+    $institutionUrlForm = 'https://chamilo.org';
     $languageForm = api_get_language_isocode();
     $checkEmailByHashSent = 0;
     $userMailCanBeEmpty = 1;
@@ -768,7 +768,7 @@ if (isset($_POST['step2'])) {
     ob_end_clean();
 }
 
-$poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
+$poweredBy = 'Powered by <a href="https://chamilo.org" target="_blank">Chamilo</a> &copy; '.date('Y');
 ?>
 <!DOCTYPE html>
 <head>

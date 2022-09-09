@@ -116,7 +116,7 @@
             <li class="page-item {% if page_id <= 1   %} disabled {% endif %} ">
                 <a class="page-link"
                 href=  "{{ _p.web_self_query_vars ~ '&' ~ {'page_id' : page_id - 1 }|url_encode() }}"  >
-                    Anterior
+                {{ 'Previous' | get_lang }}
                 </a>
             </li>
             {% if page_number > 0 %}
@@ -130,7 +130,7 @@
             {% endif %}
             <li class="page-item {% if page_number <= page_id   %} disabled {% endif %} ">
                 <a class="page-link" href=  "{{ _p.web_self_query_vars ~ '&' ~ {'page_id' : page_id + 1 }|url_encode() }}">
-                Siguiente
+                {{ 'Next' | get_lang }}
                 </a>
             </li>
         </ul>

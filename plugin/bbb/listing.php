@@ -357,11 +357,39 @@ if ($conferenceManager && $allowToEdit) {
     }
 }
 
+if (isset($_GET['page_id'])) {
+    $pageId = (int) $_GET['page_id'];
+}
+
+$meetingsCount = $bbb->getCountMeetings(
+    api_get_course_int_id(),
+    api_get_session_id(),
+    api_get_group_id()
+);
+
+$limit = 10;
+$pageNumber = ceil($meetingsCount / $limit);
+
+if (!isset($pageId)) {
+    $pageId = 1;
+}
+
+$start = ($pageId - 1) * $limit;
+
 $meetings = $bbb->getMeetings(
     api_get_course_int_id(),
     api_get_session_id(),
-    $groupId
+    api_get_group_id(),
+    false,
+    [],
+    $start,
+    $limit
 );
+
+if (empty($meetings)) {
+    $pageId = 0;
+}
+
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
@@ -460,6 +488,8 @@ $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
+$tpl->assign('page_number', $pageNumber);
+$tpl->assign('page_id', $pageId);
 
 $content = $tpl->fetch('bbb/view/listing.tpl');
 

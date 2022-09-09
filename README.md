@@ -13,7 +13,7 @@ Chamilo is an e-learning platform, also called "LMS", published under the GNU/GP
 
 ## Quick install
 
-**Chamilo 2.0 is still in development. This installation procedure is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch's README.md for details.**
+**Chamilo 2.0 is still in development. This installation procedure below is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch's README.md for details.**
 
 We assume you already have:
 
@@ -26,7 +26,7 @@ We assume you already have:
 ### Software stack install (Ubuntu)
 
 You will need PHP8+ and NodeJS v14+ to run Chamilo 2.
-On a fresh Ubuntu 21.04, you can prepare your server by issuing an apt command like the following with sudo (or as root, but not recommended for security reasons):
+On a fresh Ubuntu 22.04, you can prepare your server by issuing an apt command like the following with sudo (or as root, but not recommended for security reasons):
 
 ~~~~
 sudo apt update
@@ -57,11 +57,15 @@ git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
 composer install
 # not recommended to do this as the root user!
-# when asked whether you want to execute the recipes for some of the components, you can safely say no.
+# when asked whether you want to execute the recipes for some of the components,
+# you can safely type 'n' (for 'no').
 
 yarn set version stable
+# delete yarn.lock as it might contain restrictive packages from a different context
+rm yarn.lock
 yarn install
-yarn run encore dev
+yarn dev
+# you can safely ignore any "warning" mentioned by yarn dev
 chmod -R 777 .
 ~~~~
 

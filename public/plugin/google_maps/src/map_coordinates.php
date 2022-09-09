@@ -52,7 +52,7 @@ $formattedExtraFieldValues = [];
 foreach ($extraFieldValues as $index => $extra) {
     foreach ($extra as $yandex => $field) {
         $thisUserExtraField = api_get_user_info($field->getItemId());
-        $formattedExtraFieldValues[$index][$yandex]['address'] = $field->getValue();
+        $formattedExtraFieldValues[$index][$yandex]['address'] = $field->getFieldValue();
         $formattedExtraFieldValues[$index][$yandex]['user_complete_name'] = $thisUserExtraField['complete_name'];
     }
 }

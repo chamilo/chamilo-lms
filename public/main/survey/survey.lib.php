@@ -1575,7 +1575,7 @@ class SurveyManager
                         i.sessionId = :session AND
                         :now BETWEEN s.availFrom AND s.availTill AND
                         ef.variable = :variable AND
-                        efv.value = 1 AND
+                        efv.field_value = 1 AND
                         s.surveyType != 3
                     ORDER BY s.availTill ASC
                 ")

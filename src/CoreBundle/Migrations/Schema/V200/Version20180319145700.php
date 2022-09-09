@@ -281,8 +281,8 @@ class Version20180319145700 extends AbstractMigrationChamilo
                 ON efv.field_id = ef.id
                 WHERE
                     ef.variable = "is_mandatory" AND
-                    ef.extra_field_type = '.ExtraField::SURVEY_FIELD_TYPE.' AND
-                    efv.value = 1
+                    ef.item_type = '.ExtraField::SURVEY_FIELD_TYPE.' AND
+                    efv.field_value = 1
         ';
 
         $result = $em->getConnection()->executeQuery($sql);

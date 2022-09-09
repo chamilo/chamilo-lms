@@ -94,14 +94,14 @@
                             {% for extra in user.extra %}
                                 {% if extra.value.getField().getVariable() == 'skype' %}
                                     {% set skype_account %}
-                                        <a href="skype:{{ extra.value.getValue() }}?chat">
+                                        <a href="skype:{{ extra.value.getFieldValue() }}?chat">
                                             <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|get_lang }}
                                         </a>
                                     {% endset %}
                                 {% endif %}
                                 {% if extra.value.getField().getVariable() == 'linkedin_url' %}
                                     {% set linkedin_url %}
-                                        <a href="{{ extra.value.getValue() }}" target="_blank">
+                                        <a href="{{ extra.value.getFieldValue() }}" target="_blank">
                                             <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|get_lang }}
                                         </a>
                                     {% endset %}

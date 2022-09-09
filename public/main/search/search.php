@@ -200,7 +200,7 @@ if (!empty($items)) {
     /** @var ExtraFieldSavedSearch $item */
     foreach ($items as $item) {
         $variable = 'extra_'.$item->getField()->getVariable();
-        if (Extrafield::FIELD_TYPE_TAG === $item->getField()->getFieldType()) {
+        if (Extrafield::FIELD_TYPE_TAG === $item->getField()->getValueType()) {
             $tagsData[$variable] = $item->getValue();
         }
         $defaults[$variable] = $item->getValue();

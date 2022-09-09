@@ -29,8 +29,8 @@ class TagRepositoryTest extends AbstractApiTest
         $extraField = (new ExtraField())
             ->setDisplayText('test')
             ->setVariable('test')
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TAG)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TAG)
         ;
         $em->persist($extraField);
         $em->flush();
@@ -63,8 +63,8 @@ class TagRepositoryTest extends AbstractApiTest
         $extraField = (new ExtraField())
             ->setDisplayText('test')
             ->setVariable('test')
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TAG)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TAG)
         ;
         $em->persist($extraField);
         $em->flush();
@@ -115,8 +115,8 @@ class TagRepositoryTest extends AbstractApiTest
         $extraField = (new ExtraField())
             ->setDisplayText('test')
             ->setVariable('test')
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TAG)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TAG)
         ;
         $em->persist($extraField);
 
@@ -156,8 +156,8 @@ class TagRepositoryTest extends AbstractApiTest
         $extraField = (new ExtraField())
             ->setDisplayText('test')
             ->setVariable('test')
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TAG)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TAG)
         ;
         $em->persist($extraField);
         $em->flush();

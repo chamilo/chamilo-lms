@@ -29,8 +29,8 @@ class ExtraFieldRepositoryTest extends AbstractApiTest
             ->setVariable('test')
             ->setDescription('desc')
             ->setHelperText('help')
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TEXT)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
             ->setDefaultValue('')
             ->setFieldOrder(1)
         ;
@@ -39,7 +39,7 @@ class ExtraFieldRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame($defaultCount + 1, $repo->count([]));
-        $this->assertSame(ExtraField::USER_FIELD_TYPE, $extraField->getExtraFieldType());
+        $this->assertSame(ExtraField::USER_FIELD_TYPE, $extraField->getItemType());
         $this->assertSame('', $extraField->getDefaultValue());
         $this->assertSame('desc', $extraField->getDescription());
         $this->assertSame('text', $extraField->getTypeToString());
@@ -72,8 +72,8 @@ class ExtraFieldRepositoryTest extends AbstractApiTest
         $extraField = (new ExtraField())
             ->setDisplayText('test in ENGLISH')
             ->setVariable('test in en')
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TEXT)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
         ;
         $this->assertHasNoEntityViolations($extraField);
         $em->persist($extraField);
@@ -142,8 +142,8 @@ class ExtraFieldRepositoryTest extends AbstractApiTest
         $item = (new ExtraField())
             ->setDisplayText('test')
             ->setVariable('test')
-            ->setExtraFieldType(ExtraField::USER_FIELD_TYPE)
-            ->setFieldType(\ExtraField::FIELD_TYPE_TEXT)
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
         ;
         $em->persist($item);
 

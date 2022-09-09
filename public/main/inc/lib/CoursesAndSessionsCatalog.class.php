@@ -85,7 +85,7 @@ class CoursesAndSessionsCatalog
                 INNER JOIN $TABLE_COURSE_FIELD tcf
                 ON tcfv.field_id =  tcf.id
                 WHERE
-                    tcf.extra_field_type = $extraFieldType AND
+                    tcf.item_type = $extraFieldType AND
                     tcf.variable = 'hide_from_catalog' AND
                     tcfv.value = 1
                 ";
@@ -875,7 +875,7 @@ class CoursesAndSessionsCatalog
                 $qb->expr()->like('t.tag', ':tag')
             )
             ->andWhere(
-                $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
+                $qb->expr()->eq('f.itemType', ExtraField::COURSE_FIELD_TYPE)
             )
             ->andWhere($qb->expr()->gt('s.nbrCourses', 0))
             ->andWhere($qb->expr()->eq('url.accessUrlId', $urlId))
@@ -1569,7 +1569,7 @@ class CoursesAndSessionsCatalog
         $tagRepo = \Chamilo\CoreBundle\Framework\Container::getTagRepository();
 
         $tagsField = $extraFieldRepo->findOneBy([
-            'extraFieldType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
+            'itemType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
             'variable' => 'tags',
         ]);
 

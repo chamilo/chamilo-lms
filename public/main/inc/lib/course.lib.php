@@ -898,7 +898,7 @@ class CourseManager
                 WHERE
                     variable = '$original_course_id_name' AND
                     value = '$original_course_id_value' AND
-                    cf.extra_field_type = $extraFieldType
+                    cf.item_type = $extraFieldType
                 ";
         $res = Database::query($sql);
         $row = Database::fetch_object($res);
@@ -2687,7 +2687,7 @@ class CourseManager
         // get course list auto-register
 
         $sql = "SELECT id FROM $tbl_course_field
-                WHERE extra_field_type = $extraFieldType AND
+                WHERE item_type = $extraFieldType AND
                 variable = 'special_course'";
         $result = Database::query($sql);
         $courseList = [];
@@ -3000,7 +3000,7 @@ class CourseManager
         $extraField = new ExtraField('course');
         $params = [
             'variable' => $variable,
-            'field_type' => $fieldType,
+            'value_type' => $fieldType,
             'display_text' => $displayText,
             'default_value' => $default,
         ];
@@ -4735,7 +4735,7 @@ class CourseManager
                 INNER JOIN $courseTable c
                 ON (c.id = tcfv.item_id)
                 WHERE
-                    tcf.extra_field_type = $extraFieldType AND
+                    tcf.item_type = $extraFieldType AND
                     tcf.variable = 'popular_courses' AND
                     tcfv.value = 1 AND
                     visibility <> ".Course::CLOSED." AND
@@ -6305,7 +6305,7 @@ class CourseManager
                     FROM $tableUserFieldValues v
                     INNER JOIN $tableExtraFields f
                     ON (f.id = v.field_id)
-                    WHERE value = '$name' AND extra_field_type = $extraFieldType";
+                    WHERE value = '$name' AND item_type = $extraFieldType";
             $result_count = Database::query($sql);
             if (Database::num_rows($result_count)) {
                 $row_count = Database::fetch_array($result_count);

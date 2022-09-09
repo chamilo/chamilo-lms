@@ -798,7 +798,7 @@ function deleteDirWork($id)
             foreach ($resultExtra as $field) {
                 $field = $field['value'];
                 if ($consideredWorkingTime == $field->getField()->getVariable()) {
-                    $workingTime = $field->getValue();
+                    $workingTime = $field->getFieldValue();
 
                     break;
                 }
@@ -4833,7 +4833,7 @@ function processWorkForm(
                 foreach ($resultExtra as $field) {
                     $field = $field['value'];
                     if ($consideredWorkingTime == $field->getField()->getVariable()) {
-                        $workingTime = $field->getValue();
+                        $workingTime = $field->getFieldValue();
                     }
                 }
 
@@ -5357,7 +5357,7 @@ function deleteWorkItem($item_id, Course $course)
                         $field = $field['value'];
 
                         if ($consideredWorkingTime == $field->getField()->getVariable()) {
-                            $workingTime = $field->getValue();
+                            $workingTime = $field->getFieldValue();
                         }
                     }
                     // If no time was defined, or a time of "0" was set, do nothing

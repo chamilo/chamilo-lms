@@ -841,8 +841,8 @@ function search_additional_profile_fields($keyword)
             WHERE
                 user.id = user_values.item_id AND
                 user_values.field_id = e.id AND
-                e.extra_field_type = $extraFieldType AND
-                (value LIKE '%".$keyword."%'".$profiling_field_options_exact_values_sql.")";
+                e.item_type = $extraFieldType AND
+                (field_value LIKE '%".$keyword."%'".$profiling_field_options_exact_values_sql.")";
     $result = Database::query($sql);
     $additional_users = [];
     while ($profiled_users = Database::fetch_array($result)) {

@@ -129,7 +129,7 @@ class SmsPlugin extends Plugin
 
         if (empty($extraFieldInfo)) {
             $extraField->save([
-                'field_type' => 1,
+                'value_type' => 1,
                 'variable' => 'mobile_phone_number',
                 'display_text' => $this->get_lang('mobile_phone_number'),
                 'default_value' => null,

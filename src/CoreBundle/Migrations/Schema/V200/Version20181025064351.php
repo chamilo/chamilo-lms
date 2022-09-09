@@ -293,7 +293,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
                 'UPDATE gradebook_certificate gc SET downloaded_at = (
                         SELECT value from extra_field e
                         INNER JOIN extra_field_values v on v.field_id = e.id
-                        WHERE variable = "downloaded_at" and extra_field_type = 11 and item_id = gc.id
+                        WHERE variable = "downloaded_at" and item_type = 11 and item_id = gc.id
                     )'
             );
         }

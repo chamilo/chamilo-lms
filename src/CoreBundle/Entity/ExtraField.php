@@ -83,16 +83,16 @@ class ExtraField
     protected ?int $id = null;
 
     /**
-     * @ORM\Column(name="extra_field_type", type="integer")
+     * @ORM\Column(name="item_type", type="integer")
      */
     #[Groups(['extra_field:read', 'extra_field:write'])]
-    protected int $extraFieldType;
+    protected int $itemType;
 
     /**
-     * @ORM\Column(name="field_type", type="integer")
+     * @ORM\Column(name="value_type", type="integer")
      */
     #[Groups(['extra_field:read', 'extra_field:write'])]
-    protected int $fieldType;
+    protected int $valueType;
 
     /**
      * @ORM\Column(name="variable", type="string", length=255)
@@ -197,26 +197,26 @@ class ExtraField
         return $this->id;
     }
 
-    public function getExtraFieldType(): int
+    public function getItemType(): int
     {
-        return $this->extraFieldType;
+        return $this->itemType;
     }
 
-    public function setExtraFieldType(int $extraFieldType): self
+    public function setItemType(int $itemType): self
     {
-        $this->extraFieldType = $extraFieldType;
+        $this->itemType = $itemType;
 
         return $this;
     }
 
-    public function getFieldType(): int
+    public function getValueType(): int
     {
-        return $this->fieldType;
+        return $this->valueType;
     }
 
-    public function setFieldType(int $fieldType): self
+    public function setValueType(int $valueType): self
     {
-        $this->fieldType = $fieldType;
+        $this->valueType = $valueType;
 
         return $this;
     }
@@ -387,7 +387,7 @@ class ExtraField
 
     public function getTypeToString(): string
     {
-        switch ($this->getExtraFieldType()) {
+        switch ($this->getItemType()) {
             case \ExtraField::FIELD_TYPE_RADIO:
             case \ExtraField::FIELD_TYPE_SELECT:
                 return 'choice';

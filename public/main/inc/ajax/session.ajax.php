@@ -150,7 +150,7 @@ switch ($action) {
                         'id' => $extra['id'],
                         'variable' => $extra['variable'],
                         'value' => '',
-                        'field_type' => $extra['field_type'],
+                        'value_type' => $extra['value_type'],
                     ];
                 }
             }

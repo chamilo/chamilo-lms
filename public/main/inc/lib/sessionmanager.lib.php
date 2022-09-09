@@ -2910,14 +2910,14 @@ class SessionManager
      */
     public static function create_session_extra_field(
         $variable,
-        $fieldType,
+        $valueType,
         $displayText,
         $default = ''
     ) {
         $extraField = new ExtraFieldModel('session');
         $params = [
             'variable' => $variable,
-            'field_type' => $fieldType,
+            'value_type' => $valueType,
             'display_text' => $displayText,
             'default_value' => $default,
         ];
@@ -7283,9 +7283,9 @@ class SessionManager
                 $wherePublication = " AND id NOT IN (
                     SELECT sfv.item_id FROM $joinTable
                     WHERE
-                        sf.extra_field_type = $extraFieldType AND
-                        ((sf.variable = 'publication_start_date' AND sfv.value > '$publicationDateString' and sfv.value != '') OR
-                        (sf.variable = 'publication_end_date' AND sfv.value < '$publicationDateString' and sfv.value != ''))
+                        sf.item_type = $extraFieldType AND
+                        ((sf.variable = 'publication_start_date' AND sfv.field_value > '$publicationDateString' and sfv.field_value != '') OR
+                        (sf.variable = 'publication_end_date' AND sfv.field_value < '$publicationDateString' and sfv.field_value != ''))
                 )";
             }
             // Get the session list from session category and target
@@ -7297,10 +7297,10 @@ class SessionManager
                         "session_category_id = ? AND id IN (
                             SELECT sfv.item_id FROM $joinTable
                             WHERE
-                                sf.extra_field_type = $extraFieldType AND
+                                sf.item_type = $extraFieldType AND
                                 sfv.item_id = session.id AND
                                 sf.variable = 'target' AND
-                                sfv.value = ?
+                                sfv.field_value = ?
                         ) $wherePublication" => [$categoryId, $target],
                     ],
                 ]
@@ -7452,7 +7452,7 @@ class SessionManager
                 $sessionFieldList = Database::select(
                     'id, variable',
                     $sessionFieldTable,
-                    ['extra_field_type = ? ' => [$extraFieldType]]
+                    ['item_type = ? ' => [$extraFieldType]]
                 );
 
                 // Get all field values
@@ -7461,7 +7461,7 @@ class SessionManager
                         ON (f.id = v.field_id)
                         WHERE
                             item_id IN $sessionIdsString AND
-                            extra_field_type = $extraFieldType
+                            item_type = $extraFieldType
                 ";
                 $result = Database::query($sql);
                 $sessionFieldValueList = Database::store_result($result, 'ASSOC');
@@ -7600,7 +7600,7 @@ class SessionManager
                     SELECT item_id
                     FROM $sfvTable v INNER JOIN $extraFieldTable e
                     ON (v.field_id = e.id)
-                    WHERE value LIKE %?% AND extra_field_type = $extraFieldType
+                    WHERE field_value LIKE %?% AND item_type = $extraFieldType
                 ) " => $term,
                 ],
             ]);
@@ -8845,7 +8845,7 @@ class SessionManager
                         $extra_fields_info[$extra['id']] = $info;
                     }
 
-                    if (ExtraFieldModel::FIELD_TYPE_DOUBLE_SELECT == $info['field_type']) {
+                    if (ExtraFieldModel::FIELD_TYPE_DOUBLE_SELECT == $info['value_type']) {
                         $double_fields[$info['id']] = $info;
                     }
                 }

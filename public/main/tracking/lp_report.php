@@ -180,7 +180,7 @@ function prepare_user_sql_query($getCount)
                     if (empty($value)) {
                         continue;
                     }
-                    if (ExtraField::FIELD_TYPE_TAG == $info['field_type']) {
+                    if (ExtraField::FIELD_TYPE_TAG == $info['value_type']) {
                         $result = $extraField->getAllUserPerTag(
                             $info['id'],
                             $value

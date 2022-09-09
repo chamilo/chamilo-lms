@@ -45,7 +45,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             )
             ->where(
                 $qb->expr()->andX(
-                    $qb->expr()->eq('f.extraFieldType', $extraFieldType),
+                    $qb->expr()->eq('f.itemType', $extraFieldType),
                     $qb->expr()->eq('fv.itemId', $itemId),
                     $qb->expr()->eq('f.visibleToSelf', true)
                 )
@@ -68,7 +68,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->andWhere('v.itemId = :id')
             ->andWhere(
                 $qb->expr()->eq('f.visibleToSelf', true),
-                $qb->expr()->eq('f.extraFieldType', $type)
+                $qb->expr()->eq('f.itemType', $type)
             )
             ->setParameter(
                 'id',
@@ -98,7 +98,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             $extraFieldValues = (new ExtraFieldValues())
                 ->setItemId($itemId)
                 ->setField($extraField)
-                ->setValue($data)
+                ->setFieldValue($data)
             ;
             $em->persist($extraFieldValues);
             $em->flush();

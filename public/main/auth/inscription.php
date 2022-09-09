@@ -121,7 +121,7 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
         $exists = $userExtraField->get_handler_field_info_by_field_variable($condition['variable']);
         if (false == $exists) {
             $params = [
-                'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
                 'variable' => $condition['variable'],
                 'display_text' => $condition['display_text'],
                 'default_value' => '',

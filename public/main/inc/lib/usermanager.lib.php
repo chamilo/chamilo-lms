@@ -1249,8 +1249,8 @@ class UserManager
                 ON ufv.field_id = uf.id
                 WHERE
                     variable = '$original_user_id_name' AND
-                    value = '$original_user_id_value' AND
-                    extra_field_type = $extraFieldType
+                    field_value = '$original_user_id_value' AND
+                    item_type = $extraFieldType
                 ";
         $res = Database::query($sql);
         $row = Database::fetch_object($res);
@@ -2061,7 +2061,7 @@ class UserManager
         $columns = [
             'id',
             'variable',
-            'field_type',
+            'value_type',
             'display_text',
             'default_value',
             'field_order',
@@ -2073,7 +2073,7 @@ class UserManager
             $sort_direction = strtoupper($direction);
         }
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
-        $sqlf = "SELECT * FROM $t_uf WHERE extra_field_type = $extraFieldType ";
+        $sqlf = "SELECT * FROM $t_uf WHERE item_type = $extraFieldType ";
         if (!$all_visibility) {
             $sqlf .= " AND visible_to_self = 1 ";
         }
@@ -2091,7 +2091,7 @@ class UserManager
                 $fields[$rowf['id']] = [
                     0 => $rowf['id'],
                     1 => $rowf['variable'],
-                    2 => $rowf['field_type'],
+                    2 => $rowf['value_type'],
                     3 => empty($rowf['display_text']) ? '' : $rowf['display_text'],
                     4 => $rowf['default_value'],
                     5 => $rowf['field_order'],
@@ -2134,14 +2134,14 @@ class UserManager
      */
     public static function create_extra_field(
         $variable,
-        $fieldType,
+        $valueType,
         $displayText,
         $default
     ) {
         $extraField = new ExtraField('user');
         $params = [
             'variable' => $variable,
-            'field_type' => $fieldType,
+            'value_type' => $valueType,
             'display_text' => $displayText,
             'default_value' => $default,
         ];
@@ -2190,10 +2190,10 @@ class UserManager
         $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type
+        $sql = "SELECT f.id as id, f.variable as fvar, f.value_type as type
                 FROM $t_uf f
                 WHERE
-                    extra_field_type = ".EntityExtraField::USER_FIELD_TYPE."
+                    item_type = ".EntityExtraField::USER_FIELD_TYPE."
                 ";
         $filter_cond = '';
 
@@ -2283,7 +2283,7 @@ class UserManager
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
-        $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type
+        $sql = "SELECT f.id as id, f.variable as fvar, f.value_type as type
                 FROM $t_uf f
                 WHERE f.variable = '$field_variable' ";
 
@@ -2291,17 +2291,17 @@ class UserManager
             $sql .= " AND f.visible_to_self = 1 ";
         }
 
-        $sql .= " AND extra_field_type = ".EntityExtraField::USER_FIELD_TYPE;
+        $sql .= " AND item_type = ".EntityExtraField::USER_FIELD_TYPE;
         $sql .= " ORDER BY f.field_order ";
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
-                $sqlu = "SELECT value as fval FROM $t_ufv v
+                $sqlu = "SELECT field_value as fval FROM $t_ufv v
                          INNER JOIN $t_uf f
                          ON (v.field_id = f.id)
                          WHERE
-                            extra_field_type = ".EntityExtraField::USER_FIELD_TYPE." AND
+                            item_type = ".EntityExtraField::USER_FIELD_TYPE." AND
                             field_id = ".$row['id']." AND
                             item_id = ".$user_id;
                 $resu = Database::query($sqlu);

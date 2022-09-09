@@ -9,7 +9,7 @@ Feature: User extra fields
       When I fill in the following:
           | display_text          | Behat extra field               |
           | variable      | behat_extra_field               |
-      And I fill in select bootstrap static input "#field_type" select "1"
+      And I fill in select bootstrap static input "#value_type" select "1"
       And I press "submit"
       And wait the page to be loaded when ready
       Then I should see "Item added"

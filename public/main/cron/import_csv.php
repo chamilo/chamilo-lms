@@ -488,7 +488,7 @@ class ImportCsv
         $extraField = new ExtraField('calendar_event');
         $extraField->save(
             [
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['calendar_event'],
                 'display_text' => 'External calendar event id',
             ]
@@ -498,7 +498,7 @@ class ImportCsv
         $extraField->save(
             [
                 'visible_to_self' => 1,
-                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['career'],
                 'display_text' => 'External career id',
             ]
@@ -507,7 +507,7 @@ class ImportCsv
         $extraField->save(
             [
                 'visible_to_self' => 1,
-                'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
+                'value_type' => ExtraField::FIELD_TYPE_TEXTAREA,
                 'variable' => $this->extraFieldIdNameList['career_diagram'],
                 'display_text' => 'Career diagram',
             ]
@@ -516,7 +516,7 @@ class ImportCsv
         $extraField->save(
             [
                 'visible_to_self' => 1,
-                'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
+                'value_type' => ExtraField::FIELD_TYPE_TEXTAREA,
                 'variable' => $this->extraFieldIdNameList['career_urls'],
                 'display_text' => 'Career urls',
             ]
@@ -1667,7 +1667,7 @@ class ImportCsv
                     if (!empty($eventId)) {
                         $extraFieldValue->save(
                             [
-                                'value' => $externalEventId,
+                                'field_value' => $externalEventId,
                                 'field_id' => $extraFieldInfo['id'],
                                 'item_id' => $eventId,
                             ]

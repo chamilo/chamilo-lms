@@ -3274,7 +3274,7 @@ class UserManager
      *
      * @return mixed Non-indexed array containing the list of API keys for this user, or FALSE on error
      */
-    public static function get_api_keys($user_id = null, $api_service = 'dokeos')
+    public static function get_api_keys($user_id = null, $api_service = 'default')
     {
         if ($user_id != strval(intval($user_id))) {
             return false;
@@ -3315,7 +3315,7 @@ class UserManager
      *
      * @return bool True on success, false on failure
      */
-    public static function add_api_key($user_id = null, $api_service = 'dokeos')
+    public static function add_api_key($user_id = null, $api_service = 'default')
     {
         if ($user_id != strval(intval($user_id))) {
             return false;

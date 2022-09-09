@@ -373,8 +373,9 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('CREATE TABLE IF NOT EXISTS ext_translations (id INT AUTO_INCREMENT NOT NULL, locale VARCHAR(8) NOT NULL, object_class VARCHAR(191) NOT NULL, field VARCHAR(32) NOT NULL, foreign_key VARCHAR(64) NOT NULL, content LONGTEXT DEFAULT NULL, INDEX translations_lookup_idx (locale, object_class, foreign_key), UNIQUE INDEX lookup_unique_idx (locale, object_class, field, foreign_key), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
 
         // Rename extra_field field_type and extra_field_type to item_type and value_type, also, the term "value" in exta_field_values.value renamed to field_value
-        $this->addSql('ALTER TABLE extra_field ADD item_type INT NOT NULL, ADD value_type INT NOT NULL, DROP extra_field_type, DROP field_type');
-        $this->addSql('ALTER TABLE extra_field_values CHANGE value field_value LONGTEXT DEFAULT NULL');
+        $this->addSql('ALTER TABLE extra_field CHANGE extra_field_type item_type INT NOT NULL');
+        $this->addSql('ALTER TABLE extra_field CHANGE field_type value_type INT NOT NULL');
+        $this->addSql('ALTER TABLE extra_field_values CHANGE `value` field_value LONGTEXT DEFAULT NULL');
 
         // Drop unused columns
         $dropColumnsAndIndex = [

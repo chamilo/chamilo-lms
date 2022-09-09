@@ -2699,7 +2699,7 @@ class CourseManager
             // using '1' instead of integer is more efficient
             $sql = "SELECT DISTINCT(item_id) as cid
                 FROM $tbl_course_field_value
-                WHERE field_id = ".$row['id']." AND value = '1'";
+                WHERE field_id = ".$row['id']." AND field_value = '1'";
             $result = Database::query($sql);
             while ($row = Database::fetch_assoc($result)) {
                 $courseList[] = $row['cid'];

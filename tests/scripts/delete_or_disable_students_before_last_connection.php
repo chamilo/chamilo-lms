@@ -78,7 +78,7 @@ switch ($action) {
                 "Student deleted: %d - %s (%s)".PHP_EOL,
                 $row['id'],
                 $row['username'],
-                UserManager::getUserPathById($userId, 'system')
+                UserManager::getUserPathById($row['id'], 'system')
             );
         }
         break;

@@ -774,7 +774,7 @@ if (SkillModel::isAllowed($studentId, false)) {
             null,
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $studentId])
+        api_get_path(WEB_CODE_PATH).'skills/assign.php?'.http_build_query(['user' => $studentId])
     );
 }
 

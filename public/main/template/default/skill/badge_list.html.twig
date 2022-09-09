@@ -1,10 +1,10 @@
 <div class="col-md-12">
     <ul class="nav nav-tabs">
         <li>
-            <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | trans }}</a>
+            <a href="{{ _p.web_main }}skills/skill_badge.php">{{ 'Home' | trans }}</a>
         </li>
         <li class="active">
-            <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ "Current badges" | trans }}</a>
+            <a href="{{ _p.web_main }}skills/skill_badge_list.php">{{ "Current badges" | trans }}</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -30,7 +30,7 @@
                             </td>
                             <td>{{ skill.description }}</td>
                             <td>
-                                <a href="{{ _p.web_main }}admin/skill_badge_create.php?id={{ skill.id }}"
+                                <a href="{{ _p.web_main }}skills/skill_badge_create.php?id={{ skill.id }}"
                                    class="btn btn--primary btn-sm" title="{{ "Create badge" | trans }}">
                                     <em class="fa fa-shield fa-fw"></em>
                                 </a>

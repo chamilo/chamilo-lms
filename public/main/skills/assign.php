@@ -319,7 +319,7 @@ if ($form->validate()) {
                 $bossList = UserManager::getStudentBossList($userId);
                 if (!empty($bossList)) {
                     Display::addFlash(Display::return_message(get_lang('Message Sent')));
-                    $url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id='.$parentId;
+                    $url = api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId.'&id='.$parentId;
                     $link = Display::url($url, $url);
                     $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill.');
                     $message = sprintf(
@@ -405,7 +405,7 @@ if (api_is_drh()) {
     ];
 }
 
-$url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId;
+$url = api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId;
 
 $disableSelect = '';
 if ($disableList) {

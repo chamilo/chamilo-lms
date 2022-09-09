@@ -271,19 +271,19 @@ if (api_is_platform_admin()) {
 
         $items = [];
         $items[] = [
-            'url' => 'skills_wheel.php',
+            'url' => api_get_path(WEB_CODE_PATH).'skills/skills_wheel.php',
             'label' => get_lang('Skills wheel'),
         ];
         $items[] = [
-            'url' => 'skills_import.php',
+            'url' => api_get_path(WEB_CODE_PATH).'skills/skills_import.php',
             'label' => get_lang('Skills import'),
         ];
         $items[] = [
-            'url' => 'skill_list.php',
+            'url' => api_get_path(WEB_CODE_PATH).'skills/skill_list.php',
             'label' => get_lang('Manage skills'),
         ];
         $items[] = [
-            'url' => 'skill.php',
+            'url' => api_get_path(WEB_CODE_PATH).'skills/skill.php',
             'label' => get_lang('Manage skills levels'),
         ];
 
@@ -292,11 +292,11 @@ if (api_is_platform_admin()) {
             'label' => get_lang('Skills ranking'),
         ];
         $items[] = [
-            'url' => 'skills_gradebook.php',
+            'url' => api_get_path(WEB_CODE_PATH).'skills/skills_gradebook.php',
             'label' => get_lang('Skills and assessments'),
         ];
         /*$items[] = array(
-            'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
+            'url' => api_get_path(WEB_CODE_PATH).'skills/skill_badge.php',
             'label' => get_lang('Badges')
         );*/
         $allow = api_get_configuration_value('gradebook_dependency');

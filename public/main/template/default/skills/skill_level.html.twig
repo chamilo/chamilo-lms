@@ -18,13 +18,13 @@
             <td> {{ item.profile }}</td>
             <td>
                 <a
-                    href="{{ url('legacy_main', {'name' : 'admin/skill_level.php'}) }}?action=edit&id={{ item.id }}"
+                    href="{{ url('legacy_main', {'name' : 'skills/skill_level.php'}) }}?action=edit&id={{ item.id }}"
                 >
                     {{ 'pencil'|mdi_icon(22) }}
                 </a>
 
                 <a
-                    href="{{ url('legacy_main', {'name' : 'admin/skill_level.php'}) }}?action=delete&id={{ item.id }}"
+                    href="{{ url('legacy_main', {'name' : 'skills/skill_level.php'}) }}?action=delete&id={{ item.id }}"
                 >
                     {{ 'delete'|mdi_icon(22) }}
                 </a>

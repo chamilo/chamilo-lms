@@ -217,7 +217,7 @@ class IndexManager
             if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
                 $items[] = [
                     'icon' => Display::return_icon('edit-skill.png', get_lang('My skills')),
-                    'link' => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'skills/skills_wheel.php',
                     'title' => get_lang('Manage skills'),
                 ];
             }

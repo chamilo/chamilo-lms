@@ -47,7 +47,7 @@ if (empty($originalName)) {
     Display::addFlash(
         Display::return_message(get_lang('Could not translate'), 'error')
     );
-    header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_edit.php?id='.$skill->getId());
+    header('Location: '.api_get_path(WEB_CODE_PATH).'skills/skill_edit.php?id='.$skill->getId());
     exit;
 }
 

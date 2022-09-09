@@ -78,7 +78,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
         }
 
         if (isset($_REQUEST['skill'])) {
-            header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
+            header('Location: '.api_get_path(WEB_CODE_PATH).'skills/skill_list.php');
             exit;
         }
     }

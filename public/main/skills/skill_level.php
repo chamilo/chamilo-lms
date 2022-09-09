@@ -54,7 +54,7 @@ if (!empty($item)) {
 $formToDisplay = '';
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('Manage skills levels')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'skills/skill.php', 'name' => get_lang('Manage skills levels')];
 $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Skill level')];
 
 switch ($action) {
@@ -157,7 +157,7 @@ switch ($action) {
 $tpl = new Template($action);
 $tpl->assign('form', $formToDisplay);
 $tpl->assign('list', $list);
-$templateName = $tpl->get_template('admin/skill_level.tpl');
+$templateName = $tpl->get_template('skills/skill_level.tpl');
 $contentTemplate = $tpl->fetch($templateName);
 $tpl->assign('actions', Display::toolbarAction('toolbar', [$toolbarAction]));
 $tpl->assign('content', $contentTemplate);

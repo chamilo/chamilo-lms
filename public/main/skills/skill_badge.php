@@ -35,7 +35,7 @@ $toolbar = Display::url(
         null,
         ICON_SIZE_MEDIUM
     ),
-    api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
+    api_get_path(WEB_CODE_PATH).'skills/skill_list.php',
     ['title' => get_lang('Manage skills')]
 );
 

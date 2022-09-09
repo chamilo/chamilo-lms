@@ -1770,7 +1770,7 @@ class SkillModel extends Model
             $gradeBookList[$gradebook['id']] = $gradebook['name'];
         }
 
-        $translateUrl = api_get_path(WEB_CODE_PATH).'admin/skill_translate.php?';
+        $translateUrl = api_get_path(WEB_CODE_PATH).'skills/skill_translate.php?';
         $translateNameButton = '';
         $translateCodeButton = '';
         $skillId = null;
@@ -1835,7 +1835,7 @@ class SkillModel extends Model
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH).'admin/skill_list.php'
+            api_get_path(WEB_CODE_PATH).'skills/skill_list.php'
         );
 
         return Display::toolbarAction('skills_toolbar', [$toolbar]);

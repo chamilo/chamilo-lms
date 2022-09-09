@@ -61,7 +61,7 @@ if ($createForm->validate()) {
     $extraFieldValue = new ExtraFieldValue('skill');
     $extraFieldValue->saveFieldValues($skillValues);
     if ($created) {
-        $url = api_get_path(WEB_CODE_PATH).'admin/skill_edit.php?id='.$created;
+        $url = api_get_path(WEB_CODE_PATH).'skills/skill_edit.php?id='.$created;
         $link = Display::url($skillValues['name'], $url);
         Display::addFlash(
             Display::return_message(get_lang('The skill has been created').': '.$link, 'success', false)
@@ -72,7 +72,7 @@ if ($createForm->validate()) {
         );
     }
 
-    header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH).'skills/skill_list.php');
     exit;
 }
 

@@ -49,29 +49,29 @@
             <td class="text-right">
                 <div class="btn-group btn-group-sm" role="group" aria-label="">
                     <a
-                        href="{{ url('legacy_main', { 'name' : 'admin/skill_edit.php', 'id' : skill.id }) }}"
+                        href="{{ url('legacy_main', { 'name' : 'skills/skill_edit.php', 'id' : skill.id }) }}"
                        class="btn btn--primary btn-sm" title="{{ "Edit" | trans }}">
                         {{ 'pencil' | mdi_icon }}
                     </a>
                     <a
-                        href="{{ url('legacy_main', { 'name' : 'admin/skill_create.php', 'parent' : skill.id }) }}"
+                        href="{{ url('legacy_main', { 'name' : 'skills/skill_create.php', 'parent' : skill.id }) }}"
                        class="btn btn--plain btn-sm" title="{{ "Create child skill" | trans }}">
                         {{ 'plus' | mdi_icon }}
                     </a>
                     <a
-                        href="{{ url('legacy_main', { 'name' : 'admin/skill_badge_create.php', 'id' : skill.id }) }}"
+                        href="{{ url('legacy_main', { 'name' : 'skills/skill_badge_create.php', 'id' : skill.id }) }}"
                         class="btn btn-light btn-sm" title="{{ "Create badge" | trans }}">
                         {{ 'shield-star-outline' | mdi_icon }}
                     </a>
                     {% if skill.status == 0 %}
                         <a
-                            href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'enable' }) }}"
+                            href="{{ url('legacy_main', { 'name' : 'skills/skill_list.php', 'id' : skill.id, 'action': 'enable' }) }}"
                            class="btn btn--success btn-sm" title="{{ 'Enable' }}">
                             {{ 'check-circle' | mdi_icon }}
                         </a>
                     {% else %}
                         <a
-                            href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'disable' }) }}"
+                            href="{{ url('legacy_main', { 'name' : 'skills/skill_list.php', 'id' : skill.id, 'action': 'disable' }) }}"
                            class="btn btn-sm" title="{{ 'Disable' }}">
                             {{ 'cancel' | mdi_icon }}
                         </a>
@@ -90,7 +90,7 @@
             var tagId = $( "#tag-filter option:selected" ).val();
             $(location).attr(
                 'href',
-                '{{ url('legacy_main', { 'name' : 'admin/skill_list.php'}) }}' + tagId
+                '{{ url('legacy_main', { 'name' : 'skills/skill_list.php'}) }}' + tagId
             );
         });
     });

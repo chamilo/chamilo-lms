@@ -725,9 +725,9 @@ If you have issues with files taking a long time to download, make sure you reco
     RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
     RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
     RewriteRule ^course/(\d{1,})/about/?$ main/course_info/about.php?course_id=$1 [L]
-    RewriteRule ^badge/(\d{1,}) main/badge/issued.php?issue=$1 [L]
-    RewriteRule ^skill/(\d{1,})/user/(\d{1,}) main/badge/issued_all.php?skill=$1&user=$2 [L]
-    RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued_all.php?skill=$1&user=$2 [L]
+    RewriteRule ^badge/(\d{1,}) main/skills/issued.php?issue=$1 [L]
+    RewriteRule ^skill/(\d{1,})/user/(\d{1,}) main/skills/issued_all.php?skill=$1&user=$2 [L]
+    RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/skills/issued_all.php?skill=$1&user=$2 [L]
     RewriteRule ^main/exercice/(.*)$ main/exercise/$1 [QSA,L]
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
     RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
@@ -765,9 +765,9 @@ If you have issues with files taking a long time to download, make sure you reco
     rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
     rewrite ^/course/([^/]+)/about/?$ /main/course_info/about.php?course_id=$1 last;
-    rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
-    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
-    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+) /main/skills/issued.php?issue=$1 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/skills/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/skills/issued_all.php?skill=$1&user=$2 last;
     rewrite ^/main/exercice/(.*)$ /main/exercise/$1 last;
     rewrite ^/main/newscorm/(.*)$ /main/lp/$1 last;
     rewrite ^/service/(\d+)$ /plugin/buycourses/src/service_information.php?service_id=$1 last;
@@ -884,15 +884,15 @@ If you have issues with files taking a long time to download, make sure you reco
                 &lt;/rule&gt;
                 &lt;rule name="rule 13v" stopProcessing="true"&gt;
                     &lt;match url="^badge/(\d{1,})"  /&gt;
-                    &lt;action type="Rewrite" url="/main/badge/issued.php?issue={R:1}"  /&gt;
+                    &lt;action type="Rewrite" url="/main/skills/issued.php?issue={R:1}"  /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule 14v" stopProcessing="true"&gt;
                     &lt;match url="^skill/(\d{1,})/user/(\d{1,})"  /&gt;
-                    &lt;action type="Rewrite" url="/main/badge/issued_all.php?skill={R:1}&amp;user={R:2}"  /&gt;
+                    &lt;action type="Rewrite" url="/main/skills/issued_all.php?skill={R:1}&amp;user={R:2}"  /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule 15v" stopProcessing="true"&gt;
                     &lt;match url="^badge/(\d{1,})/user/(\d{1,})"  /&gt;
-                    &lt;action type="Rewrite" url="/main/badge/issued_all.php?skill={R:1}&amp;user={R:2}"  /&gt;
+                    &lt;action type="Rewrite" url="/main/skills/issued_all.php?skill={R:1}&amp;user={R:2}"  /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule 16v" stopProcessing="true"&gt;
                     &lt;match url="^main/exercice/(.*)$"  /&gt;

@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Mpdf\MpdfException;
@@ -517,7 +518,11 @@ class PortfolioController
         }
 
         $extraField = new ExtraField('portfolio');
-        $extra = $extraField->addElements($form);
+        $extra = $extraField->addElements(
+            $form,
+            0,
+            $this->course ? [] : ['tags']
+        );
 
         $this->addAttachmentsFieldToForm($form);
 
@@ -764,7 +769,11 @@ class PortfolioController
         }
 
         $extraField = new ExtraField('portfolio');
-        $extra = $extraField->addElements($form, $item->getId());
+        $extra = $extraField->addElements(
+            $form,
+            $item->getId(),
+            $this->course ? [] : ['tags']
+        );
 
         $attachmentList = $this->generateAttachmentList($item, false);
 
@@ -2786,15 +2795,10 @@ class PortfolioController
 
     private function createFormTagFilter(bool $listByUser = false): FormValidator
     {
-        $extraField = new ExtraField('portfolio');
-        $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
-
-        $selectTagOptions = array_map(
-            function (array $tagOption) {
-                return $tagOption['tag'];
-            },
-            $tagFieldInfo['options'] ?? []
-        );
+        $tags = Database::getManager()
+            ->getRepository(Tag::class)
+            ->findForPortfolioInCourse($this->course, $this->session)
+        ;
 
         $frmTagList = new FormValidator(
             'frm_tag_list',
@@ -2807,11 +2811,13 @@ class PortfolioController
 
         $frmTagList->addDatePicker('date', get_lang('CreationDate'));
 
-        $frmTagList->addSelect(
+        $frmTagList->addSelectFromCollection(
             'tags',
             get_lang('Tags'),
-            $selectTagOptions,
-            ['multiple' => 'multiple']
+            $tags,
+            ['multiple' => 'multiple'],
+            false,
+            'getTag'
         );
 
         $frmTagList->addText('text', get_lang('Search'), false)->setIcon('search');

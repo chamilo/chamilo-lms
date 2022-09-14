@@ -298,6 +298,12 @@ if (isset($_GET['key'])) {
 if (isset($_POST['key'])) {
     $tempName = $_POST['key'];
 }
+
+if (!empty($tempName)) {
+    $tempName = api_replace_dangerous_char($tempName);
+    $tempName = disable_dangerous_file($tempName);
+}
+
 $bigUpload->setTempName($tempName);
 
 switch ($_GET['action']) {

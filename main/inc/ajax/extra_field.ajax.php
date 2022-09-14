@@ -46,10 +46,19 @@ switch ($action) {
             exit;
         }
 
-        $tags = Database::getManager()
-            ->getRepository(Tag::class)
-            ->findByFieldIdAndText($fieldId, $tag, $pageLimit)
-        ;
+        $tagRepo = Database::getManager()->getRepository(Tag::class);
+
+        if ('portfolio' === $type) {
+            $tags = $tagRepo
+                ->findForPortfolioInCourseQuery(
+                    api_get_course_entity(),
+                    api_get_session_entity()
+                )
+                ->getQuery()
+                ->getResult();
+        } else {
+            $tags = $tagRepo->findByFieldIdAndText($fieldId, $tag, $pageLimit);
+        }
 
         /** @var Tag $tag */
         foreach ($tags as $tag) {

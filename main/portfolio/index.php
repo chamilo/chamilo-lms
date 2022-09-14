@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Chamilo\CoreBundle\Entity\Tag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 // Make sure we void the course context if we are in the social network section
@@ -306,6 +307,21 @@ switch ($action) {
         }
 
         $controller->markAsTemplateComment($comment);
+        break;
+    case 'tags':
+    case 'edit_tag':
+        $controller->listTags($httpRequest);
+        break;
+    case 'delete_tag':
+        $id = $httpRequest->query->getInt('id');
+
+        $tag = $em->find(Tag::class, $id);
+
+        if (empty($tag)) {
+            break;
+        }
+
+        $controller->deleteTag($tag);
         break;
     case 'list':
     default:

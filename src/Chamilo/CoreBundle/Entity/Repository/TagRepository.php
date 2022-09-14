@@ -4,7 +4,12 @@
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\PortfolioRelTag;
+use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method array findById(int|array $ids)
@@ -27,5 +32,26 @@ class TagRepository extends EntityRepository
             ->setParameter('text', "$text%")
             ->getQuery()
             ->getResult();
+    }
+
+    public function findForPortfolioInCourseQuery(Course $course, ?Session $session = null): QueryBuilder
+    {
+        $qb = $this
+            ->createQueryBuilder('t')
+            ->innerJoin(PortfolioRelTag::class, 'prt', Join::WITH, 't = prt.tag')
+            ->where('prt.course = :course')
+            ->setParameter('course', $course)
+        ;
+
+        if ($session) {
+            $qb
+                ->andWhere('prt.session = :session')
+                ->setParameter('session', $session)
+            ;
+        } else {
+            $qb->andWhere('prt.session IS NULL');
+        }
+
+        return $qb;
     }
 }

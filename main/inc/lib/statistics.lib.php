@@ -1458,29 +1458,27 @@ class Statistics
 
             $result = self::getLtiLeaningPathByDate($values['daterange_start'], $values['daterange_end']);
 
-            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+            $table = new HTML_Table(['class' => 'table table-bordered data_table']);
             $table->setHeaderContents(0, 0, get_lang('URL'));
-            $table->setHeaderContents(0, 1, get_lang('Users'));
+            $table->setHeaderContents(0, 1, get_lang('ToolLp'));
+            $table->setHeaderContents(0, 2, get_lang('LastName'));
+            $table->setHeaderContents(0, 3, get_lang('FirstName'));
             $i = 1;
             foreach ($result as $item) {
-                $table->setCellContents($i, 0, $item['issuer']);
-                $table->setCellContents($i, 1, $item['count_iss_users']);
                 if (!empty($item['learnpaths'])) {
                     foreach ($item['learnpaths'] as $lpId => $lpValues) {
-                        $i++;
                         $lpName = learnpath::getLpNameById($lpId);
-                        $table->setHeaderContents($i, 0, '&dash;&dash;&nbsp;'.get_lang('ToolLp').': '.$lpName);
-                        $table->setHeaderContents($i, 1, count($lpValues['users']));
                         if (count($lpValues['users']) > 0) {
                             foreach ($lpValues['users'] as $user) {
+                                $table->setCellContents($i, 0, $item['issuer']);
+                                $table->setCellContents($i, 1, $lpName);
+                                $table->setCellContents($i, 2, $user['lastname']);
+                                $table->setCellContents($i, 3, $user['firstname']);
                                 $i++;
-                                $fullname = $user['firstname'].' '.$user['lastname'];
-                                $table->setCellContents($i, 0, '&nbsp;&nbsp;&nbsp;'.$fullname);
                             }
                         }
                     }
                 }
-                $i++;
             }
             $content = $table->toHtml();
         }

@@ -1064,9 +1064,13 @@ ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2A977936C FOREIGN KEY (tr
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2727ACA70 FOREIGN KEY (parent_id) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD is_template TINYINT(1) DEFAULT '0' NOT NULL;
 ALTER TABLE portfolio_category ADD parent_id INT(11) NOT NULL DEFAULT 0;
+CREATE TABLE portfolio_rel_tag (id INT AUTO_INCREMENT NOT NULL, tag_id INT NOT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, INDEX IDX_DB734472BAD26311 (tag_id), INDEX IDX_DB73447291D79BD3 (c_id), INDEX IDX_DB734472613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB734472BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE;
+ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB73447291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
+ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB734472613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
 */
 // In 1.11.8, before enabling this feature, you also need to:
-// - edit src/Chamilo/CoreBundle/Entity/Portfolio.php, PortfolioCategory.php, PortfolioAttachment.php and PortfolioComment.php
+// - edit src/Chamilo/CoreBundle/Entity/Portfolio.php, PortfolioCategory.php, PortfolioAttachment.php and PortfolioComment.php PortfolioRelTag.php
 //   and follow the instructions about the @ORM\Entity() line
 // - launch composer install to rebuild the autoload.php
 //$_configuration['allow_portfolio_tool'] = false;

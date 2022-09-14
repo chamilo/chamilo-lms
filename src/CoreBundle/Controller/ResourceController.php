@@ -6,24 +6,33 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
+use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
@@ -238,6 +247,103 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $response->headers->set('Content-Type', 'application/octet-stream');
 
         return $response;
+    }
+
+    #[Route('/{tool}/{type}/{id}/change_visibility', name: 'chamilo_core_resource_change_visibility', methods: ['POST'])]
+    public function changeVisibility(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer
+    ): Response {
+        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        
+        if (!$isCourseTeacher) {
+            throw new AccessDeniedHttpException();
+        }
+        
+        $id = $request->attributes->getInt('id');
+        $resourceNode = $this->getResourceNodeRepository()->findOneBy(['id' => $id]);
+
+        if (null === $resourceNode) {
+            throw new NotFoundHttpException($this->trans('Resource not found'));
+        }
+
+        /** @var ResourceLink $link */
+        $link = $resourceNode->getResourceLinks()->first();
+
+        if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+            $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+        } else {
+            $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+        }
+
+        $entityManager->flush();
+
+        $json = $serializer->serialize(
+            $link,
+            'json', [
+                'groups' => ['ctool:read'],
+            ]
+        );
+
+        return JsonResponse::fromJsonString($json);
+    }
+
+    #[Route(
+        '/{tool}/{type}/change_visibility/{visibility}',
+        name: 'chamilo_core_resource_change_visibility_all',
+        methods: ['POST']
+    )]
+    public function changeVisibilityAll(
+        Request $request,
+        CToolRepository $toolRepository,
+        CShortcutRepository $shortcutRepository,
+        ToolChain $toolChain,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+
+        if (!$isCourseTeacher) {
+            throw new AccessDeniedHttpException();
+        }
+        
+        $visibility = $request->attributes->get('visibility');
+
+        $course = $this->getCourse();
+        $session = $this->getSession();
+
+        $result = $toolRepository->getResourcesByCourse($course, $session)
+            ->addSelect('tool')
+            ->innerJoin('resource.tool', 'tool')
+            ->getQuery()
+            ->getResult();
+
+        $skipTools = ['course_tool', 'chat', 'notebook', 'wiki'];
+
+        /** @var CTool $item */
+        foreach ($result as $item) {
+            if (\in_array($item->getName(), $skipTools, true)) {
+                continue;
+            }
+            $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
+
+            if (!in_array($toolModel->getCategory(), ['authoring', 'interaction'])) {
+                continue;
+            }
+
+            /** @var ResourceLink $link */
+            $link = $item->getResourceNode()->getResourceLinks()->first();
+            
+            if ('show' === $visibility) {
+                $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+            } elseif ('hide' === $visibility) {
+                $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+            }
+        }
+
+        $entityManager->flush();
+
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**

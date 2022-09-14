@@ -160,6 +160,7 @@
         :label="t('Show all')"
         class="p-button-text p-button-plain p-button-sm ml-auto"
         :disabled="isSorting || isCustomizing"
+        @click="onClickShowAll"
       />
       <Button
         v-if="isCurrentTeacher"
@@ -167,6 +168,7 @@
         :label="t('Hide all')"
         class="p-button-text p-button-plain p-button-sm"
         :disabled="isSorting || isCustomizing"
+        @click="onClickHideAll"
       />
       <ToggleButton
         v-if="isCurrentTeacher"
@@ -191,7 +193,7 @@
     </div>
     <hr class="mt-0 mb-4">
 
-    <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 justify-between grid-cols-course-tools">
+    <div class="grid gap-y-12 sm:gap-x-5 md:gap-x-16 md:gap-y-12 grid-cols-course-tools">
       <CourseToolList
         v-for="(tool, index) in tools.authoring"
         :key="index"
@@ -382,12 +384,36 @@ function goToShortCut (shortcut) {
   return shortcut.url + '?' + url;
 }
 
+const setToolVisibility = (tool, visibility) => {
+  tool.ctool.resourceNode.resourceLinks[0].visibility = visibility;
+};
+
 function changeVisibility (course, tool) {
   axios.post(ENTRYPOINT + '../r/course_tool/links/' + tool.ctool.resourceNode.id + '/change_visibility')
-    .then(response => {
-      if (response.data.ok) {
-        tool.ctool.resourceNode.resourceLinks[0].visibility = response.data.visibility;
-      }
+    .then(response => setToolVisibility(tool, response.data.visibility))
+    .catch(error => console.log(error));
+}
+
+function onClickShowAll () {
+  axios.post(ENTRYPOINT + `../r/course_tool/links/change_visibility/show?cid=${courseId}&sid=${sessionId}`)
+    .then(() => {
+      tools.value.authoring.forEach(tool => setToolVisibility(tool, 2))
+
+      tools.value.interaction.forEach(tool => setToolVisibility(tool, 2))
+
+      tools.value.plugin.forEach(tool => setToolVisibility(tool, 2))
+    })
+    .catch(error => console.log(error));
+}
+
+function onClickHideAll () {
+  axios.post(ENTRYPOINT + `../r/course_tool/links/change_visibility/hide?cid=${courseId}&sid=${sessionId}`)
+    .then(() => {
+      tools.value.authoring.forEach(tool => setToolVisibility(tool, 0))
+
+      tools.value.interaction.forEach(tool => setToolVisibility(tool, 0))
+
+      tools.value.plugin.forEach(tool => setToolVisibility(tool, 0))
     })
     .catch(error => console.log(error));
 }

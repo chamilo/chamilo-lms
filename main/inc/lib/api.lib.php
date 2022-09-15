@@ -8545,6 +8545,33 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         'veryStrong' => get_lang('PasswordVeryStrong'),
     ];
 
+    $requirements = Security::getPasswordRequirements();
+
+    $options = [
+        'rules' => [
+            'activated' => [
+                'wordTwoCharacterClasses' => false,
+                'wordLowercase' => !empty($requirements['min']['lowercase']),
+                'wordUppercase' => !empty($requirements['min']['uppercase']),
+                'wordOneNumber' => !empty($requirements['min']['numeric']),
+                'wordThreeNumbers' => !empty($requirements['min']['numeric']),
+                'wordOneSpecialChar' => false,
+                'wordTwoSpecialChar' => false,
+                'wordUpperLowerCombo' => !empty($requirements['min']['lowercase']) || !empty($requirements['min']['uppercase']),
+                'wordLetterNumberCombo' => !empty($requirements['min']['numeric']),
+                'wordLetterNumberCharCombo' => false,
+            ],
+            'scores' => [
+                'wordLowercase' => 3,
+                'wordUppercase' => 3,
+                'wordOneNumber' => 3,
+                'wordThreeNumbers' => 5,
+                'wordUpperLowerCombo' => 2,
+                'wordLetterNumberCombo' => 2,
+            ],
+        ],
+    ];
+
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
     $js .= "<script>
     var errorMessages = {
@@ -8556,6 +8583,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         var lang = ".json_encode($translations).";
         var options = {
             common: {
+                minChar: '".$requirements['min']['length']."',
                 onLoad: function () {
                     //$('#messages').text('Start typing password');
 
@@ -8586,7 +8614,29 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
                 return result === key ? '' : result; // This assumes you return the
             }
         };
-        $('".$passwordInputId."').pwstrength(options);
+        options.rules = ".json_encode($options).";
+
+        var \$password = $('".$passwordInputId."').pwstrength(options);
+        \$password.pwstrength('addRule', '_wordTwoCharacterClasses', function (options, word, score) {
+            if (word.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/) ||
+                (word.match(/([a-zA-Z])/) && word.match(/([0-9])/)) ||
+                (word.match(/(.[!,\",#,$,%,&,',\(,\),*,+,\,,-,.,/,:,;,<,=,>,?,@,\[,\,\],\^,_,`,{,\|,},~])/) && word.match(/[a-zA-Z0-9_]/))
+            ) {
+                return score;
+            }
+
+            return 0;
+        }, 2, true);
+        \$password.pwstrength('addRule', '_wordOneSpecialChar', function (options, word, score) {
+            return word.match(/(.[!,\",#,$,%,&,',\(,\),*,+,\,,-,.,/,:,;,<,=,>,?,@,\[,\,\],\^,_,`,{,\|,},~])/) && score;
+        }, 3, ".(empty($requirements['min']['specials']) ? 'false' : 'true').");
+        \$password.pwstrength('addRule', '_wordTwoSpecialChar', function (options, word, score) {
+            return word.match(/(.*[!,\",#,$,%,&,',\(,\),*,+,\,,-,.,/,:,;,<,=,>,?,@,\[,\,\],\^,_,`,{,\|,},~].*[!,\",#,$,%,&,',\(,\),*,+,\,,-,.,/,:,;,<,=,>,?,@,\[,\,\],\^,_,`,{,\|,},~])/) && score;
+        }, 5, ".(empty($requirements['min']['specials']) ? 'false' : 'true').");
+        \$password.pwstrength('addRule', '_wordLetterNumberCharCombo', function (options, word, score) {
+            var foo = word.match(/([a-zA-Z0-9].*[!,\",#,$,%,&,',\(,\),*,+,\,,-,.,/,:,;,<,=,>,?,@,\[,\,\],\^,_,`,{,\|,},~])|([!,\",#,$,%,&,',\(,\),*,+,\,,-,.,/,:,;,<,=,>,?,@,\[,\,\],\^,_,`,{,\|,},~].*[a-zA-Z0-9])/);
+            return foo && score;
+        }, 2, ".(empty($requirements['min']['numeric']) && empty($requirements['min']['specials']) ? 'false' : 'true').");
     });
     </script>";
 

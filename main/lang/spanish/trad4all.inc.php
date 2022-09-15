@@ -8913,4 +8913,25 @@ $EnterListOfAnswersOneAnswerByLine = "Ingrese una lista de respuestas (una respu
 $OrSelectCsvFileWithListOfAnswers = "O seleccione un archivo CSV con una lista de respuestas";
 $ConvertToMultipleAnswerDropdown = "Convertir a respuesta múltiple desplegable";
 $MultipleAnswerDropdown = "Respuesta múltiple desplegable";
+$Highlighted = "Destacado";
+$SeeHighlights = "Ver destacados";
+$XAddedYRequired = "%d agregados / %s requeridos";
+$RequiredNumberOfItems = "Número requerido de elementos";
+$RequiredNumberOfComments = "Número requerido de comentarios";
+$UnmarkAsHighlighted = "Desmarcar como destacado";
+$MarkAsHighlighted = "Marcar como destacado";
+$UpdatedDateX = "Actualizado %s";
+$UpdatedOnDateXByUserY = "Actualizado el %s por %s";
+$UpdatedDateXByUserY = "Actualizado %s por %s";
+$MarkedAsHighlighted = "Marcado como destacado";
+$UnmarkedAsHighlighted = "Desmarcado como destacado";
+$PortfolioItemSetAsTemplate = "Elemento del portafolio convertido en una nueva plantilla";
+$PortfolioItemUnsetAsTemplate = "El elemento del portafolio ha dejado de ser una plantilla";
+$MultipleAnswerDropdownGlobal = "Respuesta múltiple desplegable global";
+$PortfolioAlertNewCommentSubject = "[Portfolio] Nuevo comentario en el post %s";
+$CoursePortfolioAlertNewCommentContent = "Hay un nuevo comentario en el post %s del portfolio del curso %s. Para verlo <a href='%s'>click aqui</a>";
+$PortfolioCommentSetAsTemplate = "Comentario de portfolio establecido como nueva plantilla";
+$PortfolioCommentUnsetAsTemplate = "Comentario de portfolio retirado de las plantillas";
+$MakeVisibleForTeachers = "Pasar a visible para los profesores";
+$EmailToTeachersAndStudentWhenNewComment = "Alerta por email para profesores y estudiante cuando hay un nuevo commentario en el portfolio";
 ?>

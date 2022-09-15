@@ -8885,4 +8885,25 @@ $EnterListOfAnswersOneAnswerByLine = "Enter a list of answers (one answer by lin
 $OrSelectCsvFileWithListOfAnswers = "Or select a CSV file with a list of answers";
 $ConvertToMultipleAnswerDropdown = "Convert to multiple answer dropdown";
 $MultipleAnswerDropdown = "Multiple answer dropdown";
+$Highlighted = "Highlighted";
+$SeeHighlights = "See highlights";
+$XAddedYRequired = "%d added / %d required";
+$RequiredNumberOfItems = "Required number of items";
+$RequiredNumberOfComments = "Required number of comments";
+$UnmarkAsHighlighted = "Unmark as highlighted";
+$MarkAsHighlighted = "Mark as highlighted";
+$UpdatedDateX = "Updated %s";
+$UpdatedOnDateXByUserY = "Updated on %s by %s";
+$UpdatedDateXByUserY = "Updated %s by %s";
+$MarkedAsHighlighted = "Marked as highlighted";
+$UnmarkedAsHighlighted = "Unmarked as highlighted";
+$PortfolioItemSetAsTemplate = "Portfolio item set as a new template";
+$PortfolioItemUnsetAsTemplate = "Portfolio item unset as template";
+$MultipleAnswerDropdownGlobal = "Global multiple answer dropdown";
+$PortfolioAlertNewCommentSubject = "[Portfolio] New comment in post %s";
+$CoursePortfolioAlertNewCommentContent = "There is a new comment in the post <i>%s</i> from the <i>%s</i> course portfolio. To view it <a href='%s'>go here</a>.";
+$PortfolioCommentSetAsTemplate = "Portfolio comment set as a new template";
+$PortfolioCommentUnsetAsTemplate = "Portfolio comment unset as template";
+$MakeVisibleForTeachers = "Make visible for teachers";
+$EmailToTeachersAndStudentWhenNewComment = "Email alert to Teachers and Student on new comment in Portfolio";
 ?>

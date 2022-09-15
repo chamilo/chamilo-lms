@@ -13658,6 +13658,10 @@ EOD;
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
         $extraParams = api_get_cidreq(true, true, 'learnpath').'&session_id='.$session_id;
+        // It adds lti parameter
+        if (isset($_REQUEST['lti_launch_id'])) {
+            $extraParams .= '&lti_launch_id='.Security::remove_XSS($_REQUEST['lti_launch_id']);
+        }
 
         switch ($type) {
             case 'dir':

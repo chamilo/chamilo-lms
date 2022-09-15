@@ -112,7 +112,11 @@ if (!$is_allowed_to_edit) {
 
 $platform_theme = api_get_setting('stylesheets');
 $my_style = $platform_theme;
-$ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq();
+$extraParams = '';
+if (isset($_REQUEST['lti_launch_id'])) {
+    $extraParams .= '&lti_launch_id='.Security::remove_XSS($_REQUEST['lti_launch_id']);
+}
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq().$extraParams;
 $htmlHeadXtra[] = '<script>
 <!--
 var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';

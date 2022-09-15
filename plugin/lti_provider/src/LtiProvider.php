@@ -61,6 +61,10 @@ class LtiProvider
             Session::erase('objExercise');
             Session::erase('questionList');
         }
+        Session::erase('is_allowed_in_course');
+        Session::erase('_real_cid');
+        Session::erase('_cid');
+        Session::erase('_course');
     }
 
     /**
@@ -135,5 +139,31 @@ class LtiProvider
         }
 
         return $login;
+    }
+
+    /**
+     * It checks if request is from lti customer.
+     *
+     * @param $request
+     * @param $session
+     *
+     * @return bool
+     */
+    public function isLtiRequest($request, $session)
+    {
+        $isLti = false;
+        if (isset($request['lti_message_hint'])) {
+            $isLti = true;
+        } else if (isset($request['state'])) {
+            $isLti = true;
+        } else if (isset($request['lti_launch_id']) && 'learnpath' === api_get_origin()) {
+            $isLti = true;
+        } else if(isset($request['lti_launch_id'])) {
+            $isLti = true;
+        } else if (isset($session['oLP']->lti_launch_id)) {
+            $isLti = true;
+        }
+
+        return $isLti;
     }
 }

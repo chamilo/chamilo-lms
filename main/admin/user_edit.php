@@ -240,10 +240,7 @@ $group[] = $form->createElement(
 $form->addGroup(
     $group,
     'password',
-    [
-        null,
-        Security::getPasswordRequirementsToString(),
-    ],
+    '',
     null,
     false
 );

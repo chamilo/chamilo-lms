@@ -235,10 +235,7 @@ $group[] = $form->createElement(
 $form->addGroup(
     $group,
     'password',
-    [
-        get_lang('Password'),
-        Security::getPasswordRequirementsToString(),
-    ]
+    get_lang('Password')
 );
 $form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);

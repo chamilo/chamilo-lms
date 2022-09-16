@@ -216,48 +216,52 @@ $form->addHtml('</div>');
 
 // COURSE ACCESS
 $group = [];
-$group[] = $form->createElement(
-    'radio',
-    'visibility',
-    get_lang('CourseAccess'),
-    get_lang('OpenToTheWorld'),
-    COURSE_VISIBILITY_OPEN_WORLD
-);
-$group[] = $form->createElement(
-    'radio',
-    'visibility',
-    null,
-    get_lang('OpenToThePlatform'),
-    COURSE_VISIBILITY_OPEN_PLATFORM
-);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
-$group[] = $form->createElement(
-    'radio',
-    'visibility',
-    null,
-    get_lang('CourseVisibilityClosed'),
-    COURSE_VISIBILITY_CLOSED
-);
-
-// The "hidden" visibility is only available to portal admins
-if (api_is_platform_admin()) {
+$groupElement = '';
+$visibilityChangeable = !api_get_configuration_value('course_visibility_change_only_admin');
+if ($visibilityChangeable) {
+    $group[] = $form->createElement(
+        'radio',
+        'visibility',
+        get_lang('CourseAccess'),
+        get_lang('OpenToTheWorld'),
+        COURSE_VISIBILITY_OPEN_WORLD
+    );
     $group[] = $form->createElement(
         'radio',
         'visibility',
         null,
-        get_lang('CourseVisibilityHidden'),
-        COURSE_VISIBILITY_HIDDEN
+        get_lang('OpenToThePlatform'),
+        COURSE_VISIBILITY_OPEN_PLATFORM
+    );
+    $group[] = $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
+    $group[] = $form->createElement(
+        'radio',
+        'visibility',
+        null,
+        get_lang('CourseVisibilityClosed'),
+        COURSE_VISIBILITY_CLOSED
+    );
+
+    // The "hidden" visibility is only available to portal admins
+    if (api_is_platform_admin()) {
+        $group[] = $form->createElement(
+            'radio',
+            'visibility',
+            null,
+            get_lang('CourseVisibilityHidden'),
+            COURSE_VISIBILITY_HIDDEN
+        );
+    }
+
+    $groupElement = $form->addGroup(
+        $group,
+        '',
+        [get_lang('CourseAccess'), get_lang('CourseAccessConfigTip')],
+        null,
+        null,
+        true
     );
 }
-
-$groupElement = $form->addGroup(
-    $group,
-    '',
-    [get_lang('CourseAccess'), get_lang('CourseAccessConfigTip')],
-    null,
-    null,
-    true
-);
 
 $url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=1";
 $url = Display::url($url, $url);
@@ -1107,7 +1111,11 @@ if ($form->validate() && is_settings_editable()) {
         );
     }
 
-    $visibility = $updateValues['visibility'];
+    if ($visibilityChangeable && isset($updateValues['visibility'])) {
+        $visibility = $updateValues['visibility'];
+    } else {
+        $visibility = $_course['visibility'];
+    }
     $deletePicture = isset($updateValues['delete_picture']) ? $updateValues['delete_picture'] : '';
 
     if ($deletePicture) {
@@ -1161,7 +1169,6 @@ if ($form->validate() && is_settings_editable()) {
         'category_code' => $updateValues['category_code'],
         'department_name' => $updateValues['department_name'],
         'department_url' => $updateValues['department_url'],
-        'visibility' => $updateValues['visibility'],
         'subscribe' => $updateValues['subscribe'],
         'unsubscribe' => $updateValues['unsubscribe'],
         'legal' => $updateValues['legal'],
@@ -1169,6 +1176,9 @@ if ($form->validate() && is_settings_editable()) {
         'registration_code' => $updateValues['course_registration_password'],
         'show_score' => $updateValues['show_score'],
     ];
+    if ($visibilityChangeable && isset($updateValues['visibility'])) {
+        $params['visibility'] = $visibility;
+    }
     $table = Database::get_main_table(TABLE_MAIN_COURSE);
     Database::update($table, $params, ['id = ?' => $courseId]);
     CourseManager::saveSettingChanges($_course, $params);

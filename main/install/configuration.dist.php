@@ -2287,6 +2287,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Disable tab to add classes in course session for non-admins
 //$_configuration['session_classes_tab_disable'] = false;
 
+// Disable the possibility for teachers to edit course visibility
+//$_configuration['course_visibility_change_only_admin'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

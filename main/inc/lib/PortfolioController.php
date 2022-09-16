@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Chamilo\CoreBundle\Entity\PortfolioRelTag;
+use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Mpdf\MpdfException;
@@ -517,7 +519,11 @@ class PortfolioController
         }
 
         $extraField = new ExtraField('portfolio');
-        $extra = $extraField->addElements($form);
+        $extra = $extraField->addElements(
+            $form,
+            0,
+            $this->course ? [] : ['tags']
+        );
 
         $this->addAttachmentsFieldToForm($form);
 
@@ -764,7 +770,11 @@ class PortfolioController
         }
 
         $extraField = new ExtraField('portfolio');
-        $extra = $extraField->addElements($form, $item->getId());
+        $extra = $extraField->addElements(
+            $form,
+            $item->getId(),
+            $this->course ? [] : ['tags']
+        );
 
         $attachmentList = $this->generateAttachmentList($item, false);
 
@@ -993,6 +1003,13 @@ class PortfolioController
                     $this->baseUrl
                 );
             }
+        }
+
+        if (api_is_allowed_to_edit()) {
+            $actions[] = Display::url(
+                Display::return_icon('tickets.png', get_lang('Tags'), [], ICON_SIZE_MEDIUM),
+                $this->baseUrl.'action=tags'
+            );
         }
 
         $frmStudentList = null;
@@ -2638,6 +2655,182 @@ class PortfolioController
         exit;
     }
 
+    public function listTags(HttpRequest $request)
+    {
+        global $interbreadcrumb;
+
+        api_protect_course_script();
+        api_protect_teacher_script();
+
+        $em = Database::getManager();
+        $tagRepo = $em->getRepository(Tag::class);
+
+        $tagsQuery = $tagRepo->findForPortfolioInCourseQuery($this->course, $this->session);
+
+        $tag = $request->query->has('id')
+            ? $tagRepo->find($request->query->getInt('id'))
+            : null;
+
+        $formAction = ['action' => $request->query->get('action')];
+
+        if ($tag) {
+            $formAction['id'] = $tag->getId();
+        }
+
+        $form = new FormValidator('frm_add_tag', 'post', $this->baseUrl.http_build_query($formAction));
+        $form->addText('name', get_lang('Tag'));
+
+        if ($tag) {
+            $form->addButtonUpdate(get_lang('Edit'));
+        } else {
+            $form->addButtonCreate(get_lang('Add'));
+        }
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $extraFieldInfo = (new ExtraField('portfolio'))->get_handler_field_info_by_field_variable('tags');
+
+            if (!$tag) {
+                $tag = (new Tag())->setCount(0);
+
+                $portfolioRelTag = (new PortfolioRelTag())
+                    ->setTag($tag)
+                    ->setCourse($this->course)
+                    ->setSession($this->session)
+                ;
+
+                $em->persist($tag);
+                $em->persist($portfolioRelTag);
+            }
+
+            $tag
+                ->setTag($values['name'])
+                ->setFieldId((int) $extraFieldInfo['id'])
+            ;
+
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('TagSaved'), 'success')
+            );
+
+            header('Location: '.$this->baseUrl.http_build_query($formAction));
+            exit();
+        } else {
+            $form->protect();
+
+            if ($tag) {
+                $form->setDefaults(['name' => $tag->getTag()]);
+            }
+        }
+
+        $langTags = get_lang('Tags');
+        $langEdit = get_lang('Edit');
+
+        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
+        $editIcon = Display::return_icon('edit.png', $langEdit);
+
+        $table = new SortableTable(
+            'portfolio_tags',
+            function () use ($tagsQuery) {
+                return (int) $tagsQuery
+                    ->select('COUNT(t)')
+                    ->getQuery()
+                    ->getSingleScalarResult()
+                ;
+            },
+            function ($from, $limit, $column, $direction) use ($tagsQuery) {
+                $data = [];
+
+                /** @var array<int, Tag> $tags */
+                $tags = $tagsQuery
+                    ->select('t')
+                    ->orderBy('t.tag', $direction)
+                    ->setFirstResult($from)
+                    ->setMaxResults($limit)
+                    ->getQuery()
+                    ->getResult();
+
+                foreach ($tags as $tag) {
+                    $data[] = [
+                        $tag->getTag(),
+                        $tag->getId(),
+                    ];
+                }
+
+                return $data;
+            },
+            0,
+            40
+        );
+        $table->set_header(0, get_lang('Name'));
+        $table->set_header(1, get_lang('Actions'), false, ['class' => 'text-right'], ['class' => 'text-right']);
+        $table->set_column_filter(
+            1,
+            function ($id) use ($editIcon, $deleteIcon) {
+                $editParams = http_build_query(['action' => 'edit_tag', 'id' => $id]);
+                $deleteParams = http_build_query(['action' => 'delete_tag', 'id' => $id]);
+
+                return Display::url($editIcon, $this->baseUrl.$editParams).PHP_EOL
+                    .Display::url($deleteIcon, $this->baseUrl.$deleteParams).PHP_EOL;
+            }
+        );
+        $table->set_additional_parameters(
+            [
+                'action' => 'tags',
+                'cidReq' => $this->course->getCode(),
+                'id_session' => $this->session ? $this->session->getId() : 0,
+                'gidReq' => 0,
+            ]
+        );
+
+        $content = $form->returnForm().PHP_EOL
+            .$table->return_table();
+
+        $interbreadcrumb[] = [
+            'name' => get_lang('Portfolio'),
+            'url' => $this->baseUrl,
+        ];
+
+        $pageTitle = $langTags;
+
+        if ($tag) {
+            $pageTitle = $langEdit;
+
+            $interbreadcrumb[] = [
+                'name' => $langTags,
+                'url' => $this->baseUrl.'action=tags',
+            ];
+        }
+
+        $this->renderView($content, $pageTitle);
+    }
+
+    public function deleteTag(Tag $tag)
+    {
+        api_protect_course_script();
+        api_protect_teacher_script();
+
+        $em = Database::getManager();
+        $portfolioTagRepo = $em->getRepository(PortfolioRelTag::class);
+
+        $portfolioTag = $portfolioTagRepo
+            ->findOneBy(['tag' => $tag, 'course' => $this->course, 'session' => $this->session]);
+
+        if ($portfolioTag) {
+            $em->remove($portfolioTag);
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('TagDeleted'), 'success')
+            );
+        }
+
+        header('Location: '.$this->baseUrl.http_build_query(['action' => 'tags']));
+        exit();
+    }
+
     /**
      * @param bool $showHeader
      */
@@ -2786,15 +2979,12 @@ class PortfolioController
 
     private function createFormTagFilter(bool $listByUser = false): FormValidator
     {
-        $extraField = new ExtraField('portfolio');
-        $tagFieldInfo = $extraField->get_handler_field_info_by_tags('tags');
-
-        $selectTagOptions = array_map(
-            function (array $tagOption) {
-                return $tagOption['tag'];
-            },
-            $tagFieldInfo['options'] ?? []
-        );
+        $tags = Database::getManager()
+            ->getRepository(Tag::class)
+            ->findForPortfolioInCourseQuery($this->course, $this->session)
+            ->getQuery()
+            ->getResult()
+        ;
 
         $frmTagList = new FormValidator(
             'frm_tag_list',
@@ -2807,11 +2997,13 @@ class PortfolioController
 
         $frmTagList->addDatePicker('date', get_lang('CreationDate'));
 
-        $frmTagList->addSelect(
+        $frmTagList->addSelectFromCollection(
             'tags',
             get_lang('Tags'),
-            $selectTagOptions,
-            ['multiple' => 'multiple']
+            $tags,
+            ['multiple' => 'multiple'],
+            false,
+            'getTag'
         );
 
         $frmTagList->addText('text', get_lang('Search'), false)->setIcon('search');

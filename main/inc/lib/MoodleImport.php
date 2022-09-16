@@ -722,7 +722,7 @@ class MoodleImport
                 continue;
             }
             foreach ($entry->childNodes as $item) {
-                if (in_array($item->nodeName, ['name', 'intro', 'duedate', 'grade'])) {
+                if (in_array($item->nodeName, ['name', 'intro', 'duedate', 'cutoffdate', 'grade'])) {
                     $info[$item->nodeName] = $item->nodeValue;
                 }
             }
@@ -966,12 +966,18 @@ class MoodleImport
             require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
             $values = [];
             $values['new_dir'] = $assign['name'];
-            $values['enableEndDate'] = 1;
-            $values['ends_on'] = date('Y-m-d H:i', $assign['duedate']);
+            if (!empty($assign['cutoffdate'])) {
+                $values['enableEndDate'] = 1;
+                $values['ends_on'] = date('Y-m-d H:i', $assign['cutoffdate']);
+            }
+            if (!empty($assign['duedate'])) {
+                $values['enableExpiryDate'] = 1;
+                $values['expires_on'] = date('Y-m-d H:i', $assign['duedate']);
+            }
             $values['work_title'] = $assign['name'];
             $values['description'] = api_utf8_decode($assign['intro']);
-            $values['qualification'] = '';
-            $values['weight'] = $assign['grade'];
+            $values['qualification'] = (int) $assign['grade'];
+            $values['weight'] = (int) $assign['grade'];
             $values['allow_text_assignment'] = 2;
 
             $assignId = addDir(

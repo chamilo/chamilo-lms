@@ -8821,4 +8821,25 @@ $EnterListOfAnswersOneAnswerByLine = "Saisir une liste de réponses (une répons
 $OrSelectCsvFileWithListOfAnswers = "Ou sélectionnez un fichier CSV avec une liste de réponses";
 $ConvertToMultipleAnswerDropdown = "Convertir en liste déroulante de réponses multiples";
 $MultipleAnswerDropdown = "Liste déroulante de réponses multiples";
+$Highlighted = "Mis en avant";
+$SeeHighlights = "Voir ceux mis en avant";
+$XAddedYRequired = "%d ajouté(s) / %d requis";
+$RequiredNumberOfItems = "Nombre d'items requis";
+$RequiredNumberOfComments = "Nombre de commentaires requis";
+$UnmarkAsHighlighted = "Retirer des mis en avant";
+$MarkAsHighlighted = "Marquer pour mise en avant";
+$UpdatedDateX = "Mis à jour le %s";
+$UpdatedOnDateXByUserY = "Mis à jour le %s par %s";
+$UpdatedDateXByUserY = "Mise à jour de %s par %s";
+$MarkedAsHighlighted = "Marqué comme mis en avant";
+$UnmarkedAsHighlighted = "Démarqué de mis en avant";
+$PortfolioItemSetAsTemplate = "Item de Portfolio enregistré comme modèle";
+$PortfolioItemUnsetAsTemplate = "Item de portfolio retiré des modèles";
+$MultipleAnswerDropdownGlobal = "Liste déroulante de réponses multiples avec score global";
+$PortfolioAlertNewCommentSubject = "[Portfolio] Nouveau commentaire sur le post %s";
+$CoursePortfolioAlertNewCommentContent = "Il y a un nouveau commentaire sur le post %s du portfolio du cours %s. Pour le voir <a href='%s'>aller ici</a>.";
+$PortfolioCommentSetAsTemplate = "Commentaire de portfolio rajouté comme nouveau modèle";
+$PortfolioCommentUnsetAsTemplate = "Commentaire de portfolio retiré des modèles";
+$MakeVisibleForTeachers = "Rendre visible pour les professeurs";
+$EmailToTeachersAndStudentWhenNewComment = "Alerte par email aux professeurs et apprenant quand il y a un nouveau commentaire dans le portfolio";
 ?>

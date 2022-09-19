@@ -28,9 +28,9 @@ $form->addHidden('token', $token);
 $form->addElement(
     'password',
     'pass1',
+    get_lang('Password'),
     [
-        get_lang('Password'),
-        Security::getPasswordRequirementsToString(),
+        'show_hide' => true,
     ]
 );
 $form->addElement(
@@ -93,6 +93,8 @@ if ($form->validate()) {
         );
     }
 }
+
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#reset_pass1');
 
 $tpl = new Template(null);
 $tpl->assign('content', $form->toHtml());

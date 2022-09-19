@@ -54,7 +54,38 @@
             <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
         {% endif %}
 
+        {% if found_comments and uncategorized_items %}
+            <h4 class="page-header">{{ 'Posts'|get_lang }}</h4>
+        {% endif %}
+
         {{ items.display(uncategorized_items, 0, _c, _u, _p) }}
+
+        {% if found_comments %}
+            <section>
+                <h4 class="page-header">{{ 'Comments'|get_lang }}</h4>
+
+                {% for comment in found_comments %}
+                    {% set commentItem = comment.item %}
+                    <div>
+                        <article>
+                            <footer class="fa-lg">
+                                <p>
+                                    {{ 'CommentByUserXInItemY'|get_lang|format(comment.author.completeName, commentItem.title) }}
+                                </p>
+                                <p class="text-muted">
+                                    <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
+                                    {{ comment.date|date_to_time_ago }}
+                                </p>
+                            </footer>
+                            <p>
+                                {{ comment.excerpt(290) }}
+                                <a href="{{ baseurl ~ {'action':'view', 'id':commentItem.id}|url_encode ~ '#comment-' ~ comment.id }}">{{ 'SeeMore'|get_lang }}</a>
+                            </p>
+                        </article>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endif %}
 
         {% for category in portfolio %}
             <div class="panel panel-info">

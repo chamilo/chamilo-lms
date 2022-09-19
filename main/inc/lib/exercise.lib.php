@@ -5190,7 +5190,13 @@ EOT;
         }
 
         // Display text when test is finished #4074 and for LP #4227
-        $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished());
+        // Allows to do a remove_XSS for end text result of exercise with 
+        // user status COURSEMANAGERLOWSECURITY BT#20194
+        if (true === api_get_configuration_value('exercise_result_end_text_html_strict_filtering')) {
+            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished(),COURSEMANAGERLOWSECURITY);
+        } else {
+            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished());
+        }
         if (!empty($endOfMessage)) {
             echo Display::div(
                 $endOfMessage,

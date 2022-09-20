@@ -3915,7 +3915,9 @@ class Exercise
         }
 
         if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])) {
-            $questionScore = $questionWeighting;
+            if (MULTIPLE_ANSWER_DROPDOWN_GLOBAL == $answerType) {
+                $questionScore = $questionWeighting;
+            }
 
             if ($from_database) {
                 $studentChoices = Database::store_result(
@@ -3941,7 +3943,9 @@ class Exercise
 
             $correctChoices = array_keys($correctChoices);
 
-            if (array_diff($studentChoices, $correctChoices) || array_diff($correctChoices, $studentChoices)) {
+            if (MULTIPLE_ANSWER_DROPDOWN_GLOBAL == $answerType
+                && (array_diff($studentChoices, $correctChoices) || array_diff($correctChoices, $studentChoices))
+            ) {
                 $questionScore = 0;
             }
 
@@ -4103,6 +4107,7 @@ class Exercise
                     $totalScore = $questionScore;
                     break;
                 case MULTIPLE_ANSWER:
+                case MULTIPLE_ANSWER_DROPDOWN:
                     if ($from_database) {
                         $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
@@ -4122,7 +4127,9 @@ class Exercise
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         $real_answers[$answerId] = (bool) $studentChoice;
 
-                        if (isset($studentChoice)) {
+                        if (isset($studentChoice)
+                            || (MULTIPLE_ANSWER_DROPDOWN == $answerType && in_array($answerAutoId, $choice))
+                        ) {
                             $correctAnswerId[] = $answerAutoId;
                             $questionScore += $answerWeighting;
                         }

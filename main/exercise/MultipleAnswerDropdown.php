@@ -98,7 +98,7 @@ class MultipleAnswerDropdown extends Question
                 $isCorrect = (int) $objAnswer->correct[$i];
             }
 
-            $objAnswer->createAnswer($line, $isCorrect, '', $objAnswer->weighting[$i], $i++);
+            $objAnswer->createAnswer($line, $isCorrect, '', $objAnswer->weighting[$i] ?? 0, $i++);
         }
 
         $objAnswer->save();

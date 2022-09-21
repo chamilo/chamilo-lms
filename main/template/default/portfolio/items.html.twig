@@ -5,7 +5,7 @@
     {% set delete_img = 'delete.png'|img(22, 'Delete'|get_lang) %}
     {% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
 
-    <div class="portfolio-items">
+    <section class="portfolio-items">
         {% for item in items %}
             {% set item_url = baseurl ~ {'action':'view', 'id':item.id}|url_encode %}
             {% set comments = item.lastComments %}
@@ -134,5 +134,5 @@
                 </article>
             </div>
         {% endfor %}
-    </div>
+    </section>
 {% endmacro %}

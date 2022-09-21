@@ -1034,10 +1034,14 @@ class PortfolioController
             $portfolio = $this->getCategoriesForIndex();
         }
 
+        $foundComments = [];
+
         if ($listHighlighted) {
             $items = $this->getHighlightedItems();
         } else {
             $items = $this->getItemsForIndex($listByUser, $frmTagList);
+
+            $foundComments = $this->getCommentsForIndex($frmTagList);
         }
 
         // it gets and translate the sub-categories
@@ -1070,6 +1074,7 @@ class PortfolioController
         $template->assign('category_id', $categoryId);
         $template->assign('subcategories', $subcategories);
         $template->assign('subcategory_ids', $subCategoryIds);
+        $template->assign('found_comments', $foundComments);
 
         $js = '<script>
             $(function() {
@@ -3714,5 +3719,41 @@ class PortfolioController
         $variableLanguage = $this->getLanguageVariable($defaultDisplayText);
 
         return isset($GLOBALS[$variableLanguage]) ? $GLOBALS[$variableLanguage] : $defaultDisplayText;
+    }
+
+    private function getCommentsForIndex(FormValidator $frmFilterList = null): array
+    {
+        if (!$frmFilterList->validate()) {
+            return [];
+        }
+
+        $values = $frmFilterList->exportValues();
+
+        if (empty($values['date']) && empty($values['text'])) {
+            return [];
+        }
+
+        $queryBuilder = $this->em->createQueryBuilder()
+            ->select('c')
+            ->from(PortfolioComment::class, 'c')
+        ;
+
+        if (!empty($values['date'])) {
+            $queryBuilder
+                ->andWhere('c.date >= :date')
+                ->setParameter(':date', api_get_utc_datetime($values['date'], false, true))
+            ;
+        }
+
+        if (!empty($values['text'])) {
+            $queryBuilder
+                ->andWhere('c.content LIKE :text')
+                ->setParameter('text', '%'.$values['text'].'%')
+            ;
+        }
+
+        $queryBuilder->orderBy('c.date', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

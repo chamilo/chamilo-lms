@@ -8842,4 +8842,9 @@ $PortfolioCommentSetAsTemplate = "Commentaire de portfolio rajouté comme nouvea
 $PortfolioCommentUnsetAsTemplate = "Commentaire de portfolio retiré des modèles";
 $MakeVisibleForTeachers = "Rendre visible pour les professeurs";
 $EmailToTeachersAndStudentWhenNewComment = "Alerte par email aux professeurs et apprenant quand il y a un nouveau commentaire dans le portfolio";
+$Tag = "Tag";
+$TagSaved = "Tag enregistré";
+$TagDeleted = "Tag supprimé";
+$CommentByUserXInItemY = "Commentaire de %s sur %s";
+$PortfolioPostAddHelp = "Introduction de l'outil Portfolio";
 ?>

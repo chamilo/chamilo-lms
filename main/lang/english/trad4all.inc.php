@@ -8906,4 +8906,9 @@ $PortfolioCommentSetAsTemplate = "Portfolio comment set as a new template";
 $PortfolioCommentUnsetAsTemplate = "Portfolio comment unset as template";
 $MakeVisibleForTeachers = "Make visible for teachers";
 $EmailToTeachersAndStudentWhenNewComment = "Email alert to Teachers and Student on new comment in Portfolio";
+$Tag = "Tag";
+$TagSaved = "Tag saved";
+$TagDeleted = "Tag deleted";
+$CommentByUserXInItemY = "Comment by %s in <em>%s</em>";
+$PortfolioPostAddHelp = "Portfolio tool introduction";
 ?>

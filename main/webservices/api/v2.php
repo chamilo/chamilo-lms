@@ -513,6 +513,10 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::DELETE_USER:
+            if (!api_is_platform_admin()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
             $result = UserManager::delete_user($_REQUEST['user_id']);
             $restResponse->setData(['status' => $result]);
             break;
@@ -580,6 +584,10 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::DELETE_COURSE:
+            if (!api_is_platform_admin()) {
+                throw new Exception(get_lang('NotAllowed'));
+            }
+
             $courseCode = $_REQUEST['course_code'] ?? '';
             $courseId = $_REQUEST['course_id'] ?? 0;
 

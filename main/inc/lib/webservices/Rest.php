@@ -389,9 +389,17 @@ class Rest extends WebService
 
     /**
      * Get the user courses.
+     *
+     * @throws Exception
      */
     public function getUserCourses($userId = 0): array
     {
+        if (!empty($userId)) {
+            if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+                self::throwNotAllowedException();
+            }
+        }
+
         if (empty($userId)) {
             $userId = $this->user->getId();
         }
@@ -1373,10 +1381,12 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * @throws Exception
      */
-    public function getUsersCampus(array $params)
+    public function getUsersCampus(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $conditions = [
             'status' => $params['status'],
         ];
@@ -1416,10 +1426,12 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * @throws Exception
      */
-    public function addSession(array $params)
+    public function addSession(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $name = $params['name'];
         $coach_username = (int) $params['coach_username'];
         $startDate = $params['access_start_date'];
@@ -1469,6 +1481,8 @@ class Rest extends WebService
 
     public function addCourse(array $courseParam): array
     {
+        self::protectAdminEndpoint();
+
         $idCampus = isset($courseParam['id_campus']) ? $courseParam['id_campus'] : 1;
         $title = isset($courseParam['title']) ? $courseParam['title'] : '';
         $wantedCode = isset($courseParam['wanted_code']) ? $courseParam['wanted_code'] : null;
@@ -1525,11 +1539,11 @@ class Rest extends WebService
      * @param $userParam
      *
      * @throws Exception
-     *
-     * @return array
      */
-    public function addUser($userParam)
+    public function addUser($userParam): array
     {
+        self::protectAdminEndpoint();
+
         $firstName = $userParam['firstname'];
         $lastName = $userParam['lastname'];
         $status = $userParam['status'];
@@ -1663,12 +1677,16 @@ class Rest extends WebService
      */
     public function updateUserApiKey(int $userId, string $oldApiKey): array
     {
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
+
         if (false === $currentApiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME)) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         if (current($currentApiKeys) !== $oldApiKey) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         UserManager::update_api_key($userId, self::SERVICE_NAME);
@@ -1683,16 +1701,18 @@ class Rest extends WebService
     /**
      * Subscribe User to Course.
      *
-     * @param array $params
-     *
-     * @return array
+     * @throws Exception
      */
-    public function subscribeUserToCourse($params)
+    public function subscribeUserToCourse(array $params): array
     {
         $course_id = $params['course_id'];
         $course_code = $params['course_code'];
         $user_id = $params['user_id'];
         $status = $params['status'] ?? STUDENT;
+
+        if (!api_is_platform_admin() && $user_id != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
 
         if (!$course_id && !$course_code) {
             return [false];
@@ -1728,11 +1748,18 @@ class Rest extends WebService
         throw new Exception(get_lang('CourseRegistrationCodeIncorrect'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function unSubscribeUserToCourse(array $params): array
     {
         $courseId = $params['course_id'];
         $courseCode = $params['course_code'];
         $userId = $params['user_id'];
+
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
 
         if (!$courseId && !$courseCode) {
             return [false];
@@ -1858,14 +1885,14 @@ class Rest extends WebService
 
     /**
      * @throws Exception
-     *
-     * @return array
      */
-    public function addCoursesSession(array $params)
+    public function addCoursesSession(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $sessionId = $params['id_session'];
         $courseList = $params['list_courses'];
-        $importAssignments = isset($params['import_assignments']) ? 1 === (int) $params['import_assignments'] : false;
+        $importAssignments = isset($params['import_assignments']) && 1 === (int) $params['import_assignments'];
 
         $result = SessionManager::add_courses_to_session(
             $sessionId,
@@ -1890,15 +1917,19 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * @throws Exception
      */
-    public function addUsersSession(array $params)
+    public function addUsersSession(array $params): array
     {
         $sessionId = $params['id_session'];
         $userList = $params['list_users'];
 
         if (!is_array($userList)) {
             $userList = [];
+        }
+
+        if (!api_is_platform_admin() && !in_array($this->user->getId(), $userList)) {
+            self::throwNotAllowedException();
         }
 
         SessionManager::subscribeUsersToSession(
@@ -1921,6 +1952,8 @@ class Rest extends WebService
      */
     public function createSessionFromModel(HttpRequest $request): int
     {
+        self::protectAdminEndpoint();
+
         $modelSessionId = $request->request->getInt('modelSessionId');
         $sessionName = $request->request->get('sessionName');
         $startDate = $request->request->get('startDate');
@@ -2028,14 +2061,9 @@ class Rest extends WebService
     /**
      * subscribes a user to a session.
      *
-     * @param int    $sessionId the session id
-     * @param string $loginName the user's login name
-     *
      * @throws Exception
-     *
-     * @return boolean, whether it worked
      */
-    public function subscribeUserToSessionFromUsername($sessionId, $loginName)
+    public function subscribeUserToSessionFromUsername(int $sessionId, string $loginName): bool
     {
         if (!SessionManager::isValidId($sessionId)) {
             throw new Exception(get_lang('SessionNotFound'));
@@ -2044,6 +2072,10 @@ class Rest extends WebService
         $userId = UserManager::get_user_id_from_username($loginName);
         if (false === $userId) {
             throw new Exception(get_lang('UserNotFound'));
+        }
+
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
         }
 
         $subscribed = SessionManager::subscribeUsersToSession(
@@ -2096,19 +2128,15 @@ class Rest extends WebService
     }
 
     /**
-     * updates a user identified by its login name.
-     *
-     * @param array $parameters
+     * Updates a user identified by its login name.
      *
      * @throws Exception on failure
-     *
-     * @return boolean, true on success
      */
-    public function updateUserFromUserName($parameters)
+    public function updateUserFromUserName(array $parameters): bool
     {
         // find user
         $userId = null;
-        if (!is_array($parameters) || empty($parameters)) {
+        if (empty($parameters)) {
             throw new Exception('NoData');
         }
         foreach ($parameters as $name => $value) {
@@ -2123,6 +2151,11 @@ class Rest extends WebService
         if (is_null($userId)) {
             throw new Exception(get_lang('NoData'));
         }
+
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
+
         /** @var User $user */
         $user = UserManager::getRepository()->find($userId);
         if (empty($user)) {
@@ -2365,6 +2398,8 @@ class Rest extends WebService
      */
     public function updateSession(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $id = $params['session_id'];
         $reset = $params['reset'] ?? null;
         $name = $params['name'] ?? null;
@@ -2613,7 +2648,7 @@ class Rest extends WebService
         );
 
         if (false === $result) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         return $result;
@@ -3101,7 +3136,7 @@ class Rest extends WebService
         if (false === api_get_configuration_value('webservice_enable_adminonly_api')
             || !UserManager::is_admin($this->user->getId())
         ) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         $limitOffset = ($page - 1) * $length;
@@ -3150,7 +3185,7 @@ class Rest extends WebService
         if (false === api_get_configuration_value('webservice_enable_adminonly_api')
             || !UserManager::is_admin($this->user->getId())
         ) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         $userInfo = api_get_user_info_from_username($username);

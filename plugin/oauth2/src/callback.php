@@ -82,6 +82,8 @@ ConditionalLogin::check_conditions($userInfo);
 
 $userInfo['uidReset'] = true;
 
+$_GET['redirect_after_not_allow_page'] = 1;
+
 ChamiloSession::write('_user', $userInfo);
 ChamiloSession::write('_user_auth_source', 'oauth2');
 

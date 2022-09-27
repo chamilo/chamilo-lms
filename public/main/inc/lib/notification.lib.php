@@ -318,8 +318,8 @@ class Notification extends Model
                                 $userInfo['mail'],
                                 Security::filter_terms($titleToNotification),
                                 Security::filter_terms($content),
-                                $this->adminName,
-                                $this->adminEmail,
+                                !empty($senderInfo['complete_name']) ? $senderInfo['complete_name'] : $this->adminName,
+                                !empty($senderInfo['email']) ? $senderInfo['email'] : $this->adminEmail,
                                 $extraHeaders,
                                 $attachments,
                                 false

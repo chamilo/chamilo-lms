@@ -26,6 +26,8 @@ class IndexController extends BaseController
      * @Route("/account/home", name="account", options={"expose"=true}, name="chamilo_core_account_home")
      *
      * @Route("/social", name="social", options={"expose"=true}, name="chamilo_core_socialnetwork")
+     *
+     * @Route("/admin", name="admin", options={"expose"=true})
      */
     #[Route('/sessions', name: 'sessions')]
     #[Route('/sessions/{extra}', name: 'sessions_options')]

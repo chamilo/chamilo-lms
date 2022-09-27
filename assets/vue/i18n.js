@@ -25,7 +25,8 @@ if (!locale) {
 }
 
 export default createI18n({
+    legacy: false,
     locale: locale,
-    fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+    fallbackLocale: 'en',
     messages: loadLocaleMessages()
 });

@@ -96,6 +96,15 @@ class UserRemoteService
 
         return $this;
     }
+    /**
+     * @return string
+     */
+    public function getAccessURL($pluginName)
+    {
+        $accessUrl = api_get_path(WEB_PLUGIN_PATH) . $pluginName . "/redirect.php?serviceId=" . $this->getId();
+        return $accessUrl;
+    }
+
 
     /**
      * Returns a user-specific URL, with two extra query string parameters : 'username' and 'hash'.
@@ -123,6 +132,38 @@ class UserRemoteService
             http_build_query(
                 [
                     'username' => $username,
+                    'hash' => $hash,
+                ]
+            )
+        );
+    }
+
+
+    /**
+     * Returns a user-specific URL, with two extra query string parameters : 'uid' and 'hash'.
+     * 'hash' is generated using $salt and $userId.
+     *
+     * @param string $userId   the user identifier, to build the hash and to include for the uid parameter
+     * @param string $salt     the salt, to build the hash
+     *
+     * @throws Exception on hash generation failure
+     *
+     * @return string the custom user redirect URL
+     */
+    public function getCustomUserRedirectURL($userId, $salt)
+    {
+        $hash = password_hash($salt.$userId, PASSWORD_BCRYPT);
+        if (false === $hash) {
+            throw new Exception('hash generation failed');
+        }
+
+        return sprintf(
+            '%s%s%s',
+            $this->url,
+            false === strpos($this->url, '?') ? '?' : '&',
+            http_build_query(
+                [
+                    'uid' => $userId,
                     'hash' => $hash,
                 ]
             )

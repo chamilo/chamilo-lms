@@ -8,30 +8,25 @@
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
         <Button
           class="btn btn--primary"
+          icon="mdi mdi-folder-plus"
+          :label="t('New folder')"
           @click="openNew"
-        >
-          <v-icon icon="mdi-folder-plus" />
-          {{ $t('New folder') }}
-        </Button>
+        />
 
         <!--         <Button label="New folder" icon="pi pi-plus" class="p-button-success p-mr-2" @click="addHandler()" />-->
         <!--         <Button label="New document" icon="pi pi-plus" class="p-button-sm p-button-primary p-mr-2" @click="addDocumentHandler()" />-->
         <Button
           class="btn btn--primary"
-          label="{{ $t('New document') }}"
+          :label="t('New document')"
+          icon="mdi mdi-file-plus"
           @click="addDocumentHandler()"
-        >
-          <v-icon icon="mdi-file-plus" />
-          {{ $t('New document') }}
-        </Button>
+        />
         <Button
           class="btn btn--primary"
-          label="{{ $t('Upload') }}"
+          :label="t('Upload')"
+          icon="mdi mdi-file-upload"
           @click="uploadDocumentHandler()"
-        >
-          <v-icon icon="mdi-file-upload" />
-          {{ $t('Upload') }}
-        </Button>
+        />
         <!--
         <Button label="{{ $t('Download') }}" class="btn btn--primary" @click="downloadDocumentHandler()" :disabled="!selectedItems || !selectedItems.length">
           <v-icon icon="mdi-file-download"/>
@@ -41,15 +36,12 @@
         <Button
           :disabled="!selectedItems || !selectedItems.length"
           class="btn btn--danger "
-          label="{{ $t('Delete selected') }}"
+          :label="t('Delete selected')"
+          icon="mdi mdi-delete"
           @click="confirmDeleteMultiple"
-        >
-          <v-icon icon="mdi-delete" />
-          {{ $t('Delete selected') }}
-        </Button>
+        />
       </div>
     </div>
-
   </div>
 
   <DataTable
@@ -90,14 +82,13 @@
           <ResourceFileLink :resource="slotProps.data" />
         </div>
         <div v-else>
-          <a
+          <Button
             v-if="slotProps.data"
-            class="cursor-pointer "
+            class="p-button-text p-button-plain"
+            icon="mdi mdi-folder"
+            :label="slotProps.data.resourceNode.title"
             @click="handleClick(slotProps.data)"
-          >
-            <v-icon icon="mdi-folder" />
-            {{ slotProps.data.resourceNode.title }}
-          </a>
+          />
         </div>
       </template>
     </Column>
@@ -128,42 +119,31 @@
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
           <Button
-            class="btn btn--primary"
+            class="p-button-icon-only"
+            icon="mdi mdi-information"
             @click="showHandler(slotProps.data)"
-          >
-            <v-icon icon="mdi-information" />
-          </Button>
+          />
 
           <Button
             v-if="isAuthenticated && isCurrentTeacher"
-            class="btn btn--primary"
+            class="p-button-icon-only"
+            :icon="RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'mdi mdi-eye' : (RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility ? 'mdi mdi-eye-off' : '')"
             @click="changeVisibilityHandler(slotProps.data, slotProps)"
-          >
-            <v-icon
-              v-if="RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility"
-              icon="mdi-eye"
-            />
-            <v-icon
-              v-if="RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility"
-              icon="mdi-eye-off"
-            />
-          </Button>
+          />
 
           <Button
             v-if="isAuthenticated && isCurrentTeacher"
-            class="btn btn--primary p-mr-2"
+            class="p-button-icon-only"
+            icon="mdi mdi-pencil"
             @click="editHandler(slotProps.data)"
-          >
-            <v-icon icon="mdi-pencil" />
-          </Button>
+          />
 
           <Button
             v-if="isAuthenticated && isCurrentTeacher"
-            class="btn btn--danger"
+            class="p-button-icon-only"
+            icon="mdi mdi-delete"
             @click="confirmDeleteItem(slotProps.data)"
-          >
-            <v-icon icon="mdi-delete" />
-          </Button>
+          />
         </div>
       </template>
     </Column>
@@ -176,20 +156,26 @@
     :style="{width: '450px'}"
     class="p-fluid"
   >
-    <div class="p-field">
-      <label for="name">{{ $t('Name') }}</label>
-      <InputText
-        id="title"
-        v-model.trim="item.title"
-        :class="{'p-invalid': submitted && !item.title}"
-        autocomplete="off"
-        autofocus
-        required="true"
-      />
+    <div class="form__field">
+      <div class="p-float-label">
+        <InputText
+          id="title"
+          v-model.trim="item.title"
+          :class="{'p-invalid': submitted && !item.title}"
+          autocomplete="off"
+          autofocus
+          required="true"
+        />
+        <label
+          v-t="'Name'"
+          for="name"
+        />
+      </div>
       <small
         v-if="submitted && !item.title"
+        v-t="'Title is required'"
         class="p-error"
-      >$t('Title is required')</small>
+      />
     </div>
 
     <template #footer>
@@ -350,6 +336,7 @@ export default {
       item,
       filters,
       submitted,
+      t,
     };
   },
   computed: {

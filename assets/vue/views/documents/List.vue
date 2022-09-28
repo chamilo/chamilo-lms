@@ -1,94 +1,4 @@
 <template>
-  <!--  <Toolbar-->
-  <!--     :handle-add="addHandler"-->
-  <!--     :handle-add-document="addDocumentHandler"-->
-  <!--     :handle-upload-document="uploadDocumentHandler"-->
-  <!--     :handle-download-document="downloadDocumentHandler"-->
-  <!--     :filters="filters"-->
-  <!--     :on-send-filter="onSendFilter"-->
-  <!--     :reset-filter="resetFilter"-->
-  <!--   />-->
-
-  <!--  <DataFilter-->
-  <!--      :handle-filter="onSendFilter"-->
-  <!--      :handle-reset="resetFilter"-->
-  <!--  >-->
-  <!--    <DocumentsFilterForm-->
-  <!--        ref="filterForm"-->
-  <!--        slot="filter"-->
-  <!--        :values="filters"-->
-  <!--    />-->
-  <!--  </DataFilter>-->
-
-  <!--  :filter="filter"-->
-  <!--  :no-data-label="$t('Data unavailable')"-->
-
-  <!--  <div class="q-pa-md" >-->
-  <!--    <q-table-->
-  <!--        dense-->
-  <!--        :rows="items"-->
-  <!--        :columns="columns"-->
-  <!--        row-key="@id"-->
-  <!--        @request="onRequest"-->
-  <!--        v-model:pagination="pagination"-->
-  <!--        :no-results-label="$t('No results')"-->
-  <!--        :loading-label="$t('Loading')"-->
-  <!--        :rows-per-page-label="$t('Records per page:')"-->
-  <!--        :rows-per-page-options="[10, 20, 50, 0]"-->
-  <!--        :loading="isLoading"-->
-  <!--        selection="multiple"-->
-  <!--        v-model:selected="selectedItems"-->
-  <!--    >-->
-  <!--       <template v-slot:body="props">-->
-  <!--          <q-tr :props="props">-->
-  <!--            <q-td auto-width>-->
-  <!--              <q-checkbox dense v-model="props.selected" />-->
-  <!--            </q-td>-->
-
-  <!--            <q-td key="resourceNode.title" :props="props">-->
-  <!--              <div v-if="props.row.resourceNode.resourceFile">-->
-  <!--                <a-->
-  <!--                    data-fancybox="gallery"-->
-  <!--                    :href="props.row.contentUrl"-->
-  <!--                >-->
-  <!--                  <ResourceFileIcon :file="props.row" />-->
-  <!--                  {{ props.row.title }}-->
-  <!--                </a>-->
-  <!--              </div>-->
-  <!--              <div v-else>-->
-  <!--                <a @click="handleClick(props.row)" class="cursor-pointer" >-->
-  <!--                  <v-icon-->
-  <!--                      icon="folder"-->
-  <!--                      size="lg"-->
-  <!--                  />-->
-  <!--                  {{ props.row.resourceNode.title }}-->
-  <!--                </a>-->
-  <!--              </div>-->
-  <!--            </q-td>-->
-
-  <!--            <q-td key="resourceNode.updatedAt" :props="props">-->
-  <!--              {{ $filters.relativeDatetime(props.row.resourceNode.updatedAt) }}-->
-  <!--            </q-td>-->
-
-  <!--            <q-td key="resourceNode.resourceFile.size" :props="props">-->
-  <!--              <span v-if="props.row.resourceNode.resourceFile">-->
-  <!--              {{-->
-  <!--                $filters.prettyBytes(props.row.resourceNode.resourceFile.size)-->
-  <!--              }}-->
-  <!--              </span>-->
-  <!--            </q-td>-->
-
-  <!--            <q-td key="action" :props="props">-->
-  <!--            <ActionCell-->
-  <!--                :handle-show="() => showHandler(props.row)"-->
-  <!--                :handle-edit="() => editHandler(props.row)"-->
-  <!--                :handle-delete="() => deleteHandler(props.row)"-->
-  <!--            />-->
-  <!--            </q-td>-->
-  <!--          </q-tr>-->
-  <!--        </template>-->
-  <!--      </q-table>-->
-  <!--  </div>-->
   <div
     v-if="isAuthenticated && isCurrentTeacher"
     class="q-card"
@@ -140,18 +50,8 @@
       </div>
     </div>
 
-    <!--       <template #right>-->
-    <!--         <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block" />-->
-    <!--         <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)"  />-->
-    <!--       </template>-->
   </div>
 
-  <!--      :filter-change="filterCallback"-->
-  <!--      :filter-apply="filterCallback"-->
-  <!--      :onLazyLoad ="filterCallback($event)"-->
-
-  <!--  :scrollable="true"-->
-  <!--  scrollHeight="height:100%"-->
   <DataTable
     v-model:filters="filters"
     v-model:selection="selectedItems"
@@ -200,21 +100,6 @@
           </a>
         </div>
       </template>
-
-      <!--         <template #filter="{filterModel}">-->
-      <!--           <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>-->
-      <!--         </template>-->
-      <!--         -->
-
-      <!--      <template #filter="{filterModel}">-->
-      <!--        <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by title"/>-->
-      <!--      </template>-->
-      <!--      <template #filterclear="{filterCallback}">-->
-      <!--        <Button type="button" icon="pi pi-times" @click="filterCallback()" class="p-button-secondary"></Button>-->
-      <!--      </template>-->
-      <!--      <template #filterapply="{filterCallback}">-->
-      <!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
-      <!--      </template>-->
     </Column>
 
     <Column
@@ -282,13 +167,6 @@
         </div>
       </template>
     </Column>
-
-    <!--    <template #paginatorLeft>-->
-    <!--      <Button type="button" icon="pi pi-refresh" class="p-button-text" />-->
-    <!--    </template>-->
-    <!--    <template #paginatorRight>-->
-    <!--      <Button type="button" icon="pi pi-cloud" class="p-button-text" />-->
-    <!--    </template>-->
   </DataTable>
 
   <Dialog
@@ -316,13 +194,13 @@
 
     <template #footer>
       <Button
-        class="p-button-text"
+        class="p-button-outlined p-button-plain"
         icon="pi pi-times"
         label="Cancel"
         @click="hideDialog"
       />
       <Button
-        class="p-button-text"
+        class="p-button-secondary"
         icon="pi pi-check"
         label="Save"
         @click="saveItem"
@@ -345,13 +223,13 @@
     </div>
     <template #footer>
       <Button
-        class="p-button-text"
+        class="p-button-outlined p-button-plain"
         icon="pi pi-times"
         label="No"
         @click="deleteItemDialog = false"
       />
       <Button
-        class="p-button-text"
+        class="p-button-secondary"
         icon="pi pi-check"
         label="Yes"
         @click="deleteItemButton"
@@ -374,60 +252,19 @@
     </div>
     <template #footer>
       <Button
-        class="p-button-text"
+        class="p-button-outlined p-button-plain"
         icon="pi pi-times"
         label="No"
         @click="deleteMultipleDialog = false"
       />
       <Button
-        class="p-button-text"
+        class="p-button-secondary"
         icon="pi pi-check"
         label="Yes"
         @click="deleteMultipleItems"
       />
     </template>
   </Dialog>
-
-  <!--          <template v-slot:body="props">-->
-  <!--            <q-tr :props="props">-->
-  <!--              <q-td key="title" :props="props">-->
-  <!--                {{ props.row.title }}-->
-  <!--              </q-td>-->
-  <!--              <q-td key="resourceNode.updatedAt" :props="props">-->
-  <!--                {{ props.row.resourceNode.updatedAt }}-->
-  <!--              </q-td>-->
-  <!--              <q-td key="resourceNode.resourceFile.size" :props="props">-->
-  <!--                {{ props.row.resourceNode.resourceFile.size }}-->
-  <!--              </q-td>-->
-  <!--            </q-tr>-->
-  <!--          </template>-->
-
-  <!--          <template v-slot:body-cell-updatedAt="props">-->
-  <!--            <q-td slot="body-cell-updatedAt" auto-width>-->
-  <!--              {{-->
-  <!--                  moment(props.row.resourceNode.updatedAt).fromNow()-->
-  <!--              }}-->
-  <!--            </q-td>-->
-  <!--          </template>-->
-
-  <!--          <template v-slot:body-cell-size="props">-->
-  <!--            <q-td slot="body-cell-updatedAt" auto-width>-->
-  <!--              <span v-if="props.row.resourceNode.resourceFile">-->
-  <!--                 {{ $filters.prettyBytes(props.row.resourceNode.resourceFile.size)  }}-->
-  <!--              </span>-->
-  <!--            </q-td>-->
-  <!--          </template>-->
-
-  <!--          <template v-slot:body-cell-action="props">-->
-  <!--            <ActionCell-->
-  <!--                slot="body-cell-action"-->
-  <!--                slot-scope="props"-->
-  <!--                :handle-show="() => showHandler(props.row)"-->
-  <!--                :handle-edit="() => editHandler(props.row)"-->
-  <!--                :handle-delete="() => deleteHandler(props.row)"-->
-  <!--            />-->
-  <!--          </template>-->
-  <!--        </q-table>-->
 </template>
 
 <script>
@@ -439,17 +276,22 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from '../../components/r
 import isEmpty from 'lodash/isEmpty';
 import toInteger from 'lodash/toInteger';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import Dialog from 'primevue/dialog';
+import { ref } from 'vue';
 
 export default {
   name: 'DocumentsList',
   servicePrefix: 'Documents',
   components: {
     ResourceFileLink,
+    Dialog,
   },
   mixins: [ListMixin],
   setup () {
     const store = useStore();
     const route = useRoute();
+    const { t } = useI18n();
 
     // Set resource node.
     let nodeId = route.params.node;
@@ -466,8 +308,19 @@ export default {
       let sessionIri = '/api/sessions/' + sid;
       store.dispatch('session/findSession', { id: sessionIri });
     }
-  },
-  data () {
+
+    const item = ref({});
+
+    const itemDialog = ref(false);
+    const deleteItemDialog = ref(false);
+    const deleteMultipleDialog = ref(false);
+
+    const isBusy = ref(false);
+
+    const submitted = ref(false);
+
+    const filters = { 'loadNode': 1 };
+
     return {
       RESOURCE_LINK_PUBLISHED: RESOURCE_LINK_PUBLISHED,
       RESOURCE_LINK_DRAFT: RESOURCE_LINK_DRAFT,
@@ -480,23 +333,23 @@ export default {
       //   {name: 'action', label: this.$i18n.t('Actions'), field: 'action', sortable: false}
       // ],
       columns: [
-        { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true },
-        { label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true },
-        { label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true },
-        { label: this.$i18n.t('Actions'), name: 'action', sortable: false }
+        { label: t('Title'), field: 'title', name: 'title', sortable: true },
+        { label: t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true },
+        { label: t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true },
+        { label: t('Actions'), name: 'action', sortable: false }
       ],
-      pageOptions: [10, 20, 50, this.$i18n.t('All')],
+      pageOptions: [10, 20, 50, t('All')],
       selected: [],
-      isBusy: false,
+      isBusy,
       options: [],
       selectedItems: [],
       // prime vue
-      itemDialog: false,
-      deleteItemDialog: false,
-      deleteMultipleDialog: false,
-      item: {},
-      filters: { 'loadNode': 1 },
-      submitted: false,
+      itemDialog,
+      deleteItemDialog,
+      deleteMultipleDialog,
+      item,
+      filters,
+      submitted,
     };
   },
   computed: {
@@ -529,28 +382,6 @@ export default {
   mounted () {
     this.filters['loadNode'] = 1;
     this.onUpdateOptions(this.options);
-
-    // Detect when scrolled to bottom.
-    /*const listElm = document.querySelector('#documents');
-    listElm.addEventListener('scroll', e => {
-      console.log('aaa');
-      if(listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight) {
-        this.onScroll();
-      }
-    });*/
-    //const tableScrollBody = this.$refs['selectableTable'].$el;
-    /* Consider debouncing the event call */
-    //tableScrollBody.addEventListener("scroll", this.onScroll);
-    //window.addEventListener('scroll', this.onScroll)
-    window.addEventListener('scroll', () => {
-      /*if(window.top.scrollY > window.outerHeight){
-        if (!this.isBusy) {
-          this.fetchItems();
-        }
-      }*/
-    });
-    /*const tableScrollBody = this.$refs['documents'];
-    tableScrollBody.addEventListener("scroll", this.onScroll);*/
   },
   methods: {
     // prime

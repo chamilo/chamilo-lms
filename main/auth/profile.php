@@ -329,18 +329,34 @@ if ($showPassword &&
     is_profile_editable() &&
     api_get_setting('profile', 'password') === 'true'
 ) {
-    $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('TypeCurrentPassword')], ['size' => 40]);
+    $form->addElement(
+        'password',
+        'password0',
+        [get_lang('Pass'), get_lang('TypeCurrentPassword')],
+        [
+            'size' => 40,
+            'show_hide' => true,
+        ]
+    );
     $form->addElement(
         'password',
         'password1',
-        [get_lang('NewPass'), get_lang('EnterYourNewPassword')],
-        ['id' => 'password1', 'size' => 40]
+        get_lang('NewPass'),
+        [
+            'id' => 'password1',
+            'size' => 40,
+            'show_hide' => true,
+            'placeholder' => get_lang('EnterYourNewPassword'),
+        ]
     );
     $form->addElement(
         'password',
         'password2',
         [get_lang('Confirmation'), get_lang('RepeatYourNewPassword')],
-        ['size' => 40]
+        [
+            'size' => 40,
+            'show_hide' => true,
+        ]
     );
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');

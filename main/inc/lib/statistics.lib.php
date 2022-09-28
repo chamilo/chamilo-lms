@@ -1463,6 +1463,7 @@ class Statistics
             $table->setHeaderContents(0, 1, get_lang('ToolLp'));
             $table->setHeaderContents(0, 2, get_lang('LastName'));
             $table->setHeaderContents(0, 3, get_lang('FirstName'));
+            $table->setHeaderContents(0, 4, get_lang('FirstAccess'));
             $i = 1;
             foreach ($result as $item) {
                 if (!empty($item['learnpaths'])) {
@@ -1474,6 +1475,7 @@ class Statistics
                                 $table->setCellContents($i, 1, $lpName);
                                 $table->setCellContents($i, 2, $user['lastname']);
                                 $table->setCellContents($i, 3, $user['firstname']);
+                                $table->setCellContents($i, 4, $user['first_access']);
                                 $i++;
                             }
                         }

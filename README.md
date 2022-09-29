@@ -9,7 +9,7 @@
 
 ## Installation
 
-This installation guide is for development environments only.
+This installation guide is for development environments only. Hello.
 
 ### Install PHP, a web server and MySQL/MariaDB
 

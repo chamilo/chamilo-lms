@@ -3587,9 +3587,9 @@ __metadata:
     postcss-loader: ^7.0.1
     postcss-prefix-selector: ^1.16.0
     pretty-bytes: ^5.6.0
-    primeflex: ^3.2.0
-    primeicons: ^5.0.0
-    primevue: ^3.12.6
+    primeflex: ^3.2.1
+    primeicons: ^6.0.1
+    primevue: ^3.17.0
     purgecss-webpack-plugin: ^4.1.3
     pwstrength-bootstrap: 3.1.1
     qtip2: 3.0.3
@@ -7805,21 +7805,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primeflex@npm:^3.2.0":
+"primeflex@npm:^3.2.1":
   version: 3.2.1
   resolution: "primeflex@npm:3.2.1"
   checksum: 87d2a5e8856328fec68b5541d28c979a49d1fa642ccf9bca7628b0bca23f1ad6dff451bb56624fb10841db6d7c90298376ae9a5d08833183331b1f416d1d8c83
   languageName: node
   linkType: hard
 
-"primeicons@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "primeicons@npm:5.0.0"
-  checksum: f391179f0c774064af417c0d4dbee4c37c714165632f23a2b93083322e4362ef9b1978d3c9aa09ed4ef0187c70dc5501a208b7f40c64c1e88a89462801b7e8c0
+"primeicons@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "primeicons@npm:6.0.1"
+  checksum: a1412fee16ddbd24e06052a7e94b973cf6f68fadb5349192101388f2681f822b3bde077948e6d53e9949f87148b495e4bf2b149ad07242de068d2e7233f4446c
   languageName: node
   linkType: hard
 
-"primevue@npm:^3.12.6":
+"primevue@npm:^3.17.0":
   version: 3.17.0
   resolution: "primevue@npm:3.17.0"
   peerDependencies:

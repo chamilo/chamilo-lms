@@ -268,16 +268,19 @@ if (!$inATest) {
                     );
                 }
 
-                $clone_link = Display::url(
-                    Display::return_icon(
-                        'cd.png',
-                        get_lang('Copy'),
-                        [],
-                        ICON_SIZE_TINY
-                    ),
-                    api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
-                    ['class' => 'btn btn-default btn-sm']
-                );
+                $clone_link = null;
+                if ($objExercise->edit_exercise_in_lp == true) {
+                    $clone_link = Display::url(
+                        Display::return_icon(
+                            'cd.png',
+                            get_lang('Copy'),
+                            [],
+                            ICON_SIZE_TINY
+                        ),
+                        api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
+                        ['class' => 'btn btn-default btn-sm']
+                    );
+                }
 
                 $edit_link = $objQuestionTmp->selectType() == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
                     ? Display::span(

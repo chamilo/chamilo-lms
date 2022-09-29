@@ -5,16 +5,12 @@
   >
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2">
-        <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
         <Button
           class="btn btn--primary"
           icon="mdi mdi-folder-plus"
           :label="t('New folder')"
           @click="openNew"
         />
-
-        <!--         <Button label="New folder" icon="pi pi-plus" class="p-button-success p-mr-2" @click="addHandler()" />-->
-        <!--         <Button label="New document" icon="pi pi-plus" class="p-button-sm p-button-primary p-mr-2" @click="addDocumentHandler()" />-->
         <Button
           class="btn btn--primary"
           :label="t('New document')"
@@ -64,13 +60,12 @@
     @page="onPage($event)"
     @sort="sortingChanged($event)"
   >
-    <span v-if="isCurrentTeacher">
-      <Column
-        :exportable="false"
-        selection-mode="multiple"
-        style="width: 3rem"
-      />
-    </span>
+    <Column
+      v-if="isCurrentTeacher"
+      :exportable="false"
+      selection-mode="multiple"
+      header-style="width: 3rem"
+    />
 
     <Column
       :header="$t('Title')"
@@ -264,7 +259,7 @@ import toInteger from 'lodash/toInteger';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import Dialog from 'primevue/dialog';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 export default {
   name: 'DocumentsList',
@@ -306,29 +301,82 @@ export default {
     const submitted = ref(false);
 
     const filters = { 'loadNode': 1 };
+    const options = ref([]);
+
+    const selected = ref([]);
+    const selectedItems = ref([]);
+
+    const isAuthenticated = computed(() => store.getters['security/isAuthenticated']);
+    const isAdmin = computed(() => store.getters['security/isAdmin']);
+    const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);
+
+    const resourceNode = computed(() => store.getters['resourcenode/getResourceNode']);
+
+    const items = computed(() => store.getters['documents/list']);
+
+    function openNew () {
+      item.value = {};
+      submitted.value = false;
+      itemDialog.value = true;
+    }
+
+    function hideDialog () {
+      itemDialog.value = false;
+      submitted.value = false;
+    }
+
+    function confirmDeleteMultiple () {
+      deleteMultipleDialog.value = true;
+    }
+
+    function confirmDeleteItem (newItem) {
+      item.value = newItem;
+      deleteItemDialog.value = true;
+    }
+
+    function deleteMultipleItems () {
+      store.dispatch('documents/delMultiple', selectedItems);
+
+      /*this.onRequest({
+        pagination: this.pagination,
+      });*/
+      deleteMultipleDialog.value = false;
+      selectedItems.value = [];
+      //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
+    }
+
+    function deleteItemButton () {
+      store.dispatch('documents/del', item)
+      //this.items = this.items.filter(val => val.iid !== this.item.iid);
+      deleteItemDialog.value = false;
+      item.value = {};
+      //this.onUpdateOptions(this.options);
+    }
 
     return {
-      RESOURCE_LINK_PUBLISHED: RESOURCE_LINK_PUBLISHED,
-      RESOURCE_LINK_DRAFT: RESOURCE_LINK_DRAFT,
+      RESOURCE_LINK_PUBLISHED,
+      RESOURCE_LINK_DRAFT,
+
+      isAuthenticated,
+      isAdmin,
+      isCurrentTeacher,
+
+      resourceNode,
+      items,
+
+      openNew,
+      hideDialog,
+      confirmDeleteItem,
+      confirmDeleteMultiple,
+      deleteMultipleItems,
+      deleteItemButton,
+
       sortBy: 'title',
       sortDesc: false,
-      // columnsQua: [
-      //   {align: 'left', name: 'resourceNode.title', label: this.$i18n.t('Title'), field: 'resourceNode.title', sortable: true},
-      //   {align: 'left', name: 'resourceNode.updatedAt', label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', sortable: true},
-      //   {name: 'resourceNode.resourceFile.size', label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', sortable: true},
-      //   {name: 'action', label: this.$i18n.t('Actions'), field: 'action', sortable: false}
-      // ],
-      columns: [
-        { label: t('Title'), field: 'title', name: 'title', sortable: true },
-        { label: t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true },
-        { label: t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true },
-        { label: t('Actions'), name: 'action', sortable: false }
-      ],
-      pageOptions: [10, 20, 50, t('All')],
-      selected: [],
+      selected,
       isBusy,
-      options: [],
-      selectedItems: [],
+      options,
+      selectedItems,
       // prime vue
       itemDialog,
       deleteItemDialog,
@@ -344,12 +392,6 @@ export default {
     ...mapGetters('resourcenode', {
       resourceNode: 'getResourceNode'
     }),
-    ...mapGetters({
-      'isAuthenticated': 'security/isAuthenticated',
-      'isAdmin': 'security/isAdmin',
-      'isCurrentTeacher': 'security/isCurrentTeacher',
-    }),
-
     ...mapGetters('documents', {
       items: 'list',
     }),
@@ -390,15 +432,6 @@ export default {
       // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
       // ctx.sortDesc ==> true if sorting descending, false otherwise
     },
-    openNew () {
-      this.item = {};
-      this.submitted = false;
-      this.itemDialog = true;
-    },
-    hideDialog () {
-      this.itemDialog = false;
-      this.submitted = false;
-    },
     saveItem () {
       this.submitted = true;
 
@@ -424,109 +457,12 @@ export default {
       this.item = { ...item };
       this.itemDialog = true;
     },
-    confirmDeleteItem (item) {
-      this.item = item;
-      this.deleteItemDialog = true;
-    },
-    confirmDeleteMultiple () {
-      this.deleteMultipleDialog = true;
-    },
-    deleteMultipleItems () {
-      console.log('deleteMultipleItems');
-      console.log(this.selectedItems);
-      this.deleteMultipleAction(this.selectedItems);
-      this.onRequest({
-        pagination: this.pagination,
-      });
-      this.deleteMultipleDialog = false;
-      this.selectedItems = null;
-      //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
-    },
-    deleteItemButton () {
-      console.log('deleteItem');
-      this.deleteItem(this.item);
-      //this.items = this.items.filter(val => val.iid !== this.item.iid);
-      this.deleteItemDialog = false;
-      this.item = {};
-      this.onUpdateOptions(this.options);
-    },
-    async fetchItems () {
-      console.log('fetchItems');
-      /* No need to call if all items retrieved */
-      if (this.items.length === this.totalItems) return;
-
-      /* Enable busy state */
-      this.isBusy = true;
-
-      /* Missing error handling if call fails */
-      let currentPage = this.options.page;
-      console.log(currentPage);
-      const startIndex = currentPage++ * this.options.itemsPerPage;
-      const endIndex = startIndex + this.options.itemsPerPage;
-
-      console.log(this.items.length);
-      console.log(this.totalItems);
-      console.log(startIndex, endIndex);
-
-      this.options.page = currentPage;
-
-      await this.fetchNewItems(this.options);
-
-      //const newItems = await this.callDatabase(startIndex, endIndex);
-
-      /* Add new items to existing ones */
-      //this.items = this.items.concat(newItems);
-
-      /* Disable busy state */
-      this.isBusy = false;
-      return true;
-    },
-    onRowSelected (items) {
-      this.selected = items;
-    },
-    selectAllRows () {
-      this.$refs.selectableTable.selectAllRows();
-    },
-    clearSelected () {
-      this.$refs.selectableTable.clearSelected();
-    },
-    async deleteSelected () {
-      console.log('deleteSelected');
-      /*for (let i = 0; i < this.selected.length; i++) {
-        let item = this.selected[i];
-        //this.deleteHandler(item);
-        this.deleteItem(item);
-      }*/
-
-      this.deleteMultipleAction(this.selected);
-      this.onRequest({
-        pagination: this.pagination,
-      });
-
-      /*const promises = this.selected.map(async item => {
-        const result = await this.deleteItem(item);
-
-        console.log('item');
-        return result;
-      });
-
-      const result = await Promise.all(promises);
-
-      console.log(result);
-      if (result) {
-        console.log(result);
-        //this.onUpdateOptions(this.options);
-      }
-*/
-      console.log('end -- deleteSelected');
-    },
     //...actions,
     // From ListMixin
     ...mapActions('documents', {
       getPage: 'fetchAll',
       createWithFormData: 'createWithFormData',
       deleteItem: 'del',
-      deleteMultipleAction: 'delMultiple'
     }),
     ...mapActions('resourcenode', {
       findResourceNode: 'findResourceNode',

@@ -8911,4 +8911,5 @@ $TagSaved = "Tag saved";
 $TagDeleted = "Tag deleted";
 $CommentByUserXInItemY = "Comment by %s in <em>%s</em>";
 $PortfolioPostAddHelp = "Portfolio tool introduction";
+$LearningPathLTI = "Access through LTI to Learning Path";
 ?>

@@ -8847,4 +8847,5 @@ $TagSaved = "Tag enregistré";
 $TagDeleted = "Tag supprimé";
 $CommentByUserXInItemY = "Commentaire de %s sur %s";
 $PortfolioPostAddHelp = "Introduction de l'outil Portfolio";
+$LearningPathLTI = "Accès par LTI aux parcours";
 ?>

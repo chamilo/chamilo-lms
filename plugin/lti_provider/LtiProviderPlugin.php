@@ -192,6 +192,46 @@ class LtiProviderPlugin extends Plugin
         return $publicKey;
     }
 
+    /**
+     * Get the first access date of a user in a tool.
+     *
+     * @param $courseCode
+     * @param $toolId
+     * @param $userId
+     *
+     * @return string
+     */
+    public function getUserFirstAccessOnToolLp($courseCode, $toolId, $userId)
+    {
+        $dql = "SELECT
+                    a.startDate
+                FROM  ChamiloPluginBundle:LtiProvider\Result a
+                WHERE
+                    a.courseCode = '$courseCode' AND
+                    a.toolName = 'lp' AND
+                    a.toolId = $toolId AND
+                    a.userId = $userId
+                ORDER BY a.startDate";
+        $qb = Database::getManager()->createQuery($dql);
+        $result = $qb->getArrayResult();
+
+        $firstDate = '';
+        if (isset($result[0])) {
+            $startDate = $result[0]['startDate'];
+            $firstDate = $startDate->format('Y-m-d H:i');
+        }
+
+        return $firstDate;
+    }
+
+    /**
+     * Get the results of users in tools lti.
+     *
+     * @param $startDate
+     * @param $endDate
+     *
+     * @return array
+     */
     public function getToolLearnPathResult($startDate, $endDate)
     {
         $dql = "SELECT
@@ -212,7 +252,8 @@ class LtiProviderPlugin extends Plugin
                 $issuer = $issuerValue['issuer'];
                 $dqlLp = "SELECT
                     a.toolId,
-                    a.userId
+                    a.userId,
+                    a.courseCode
                 FROM
                     ChamiloPluginBundle:LtiProvider\Result a
                 WHERE
@@ -226,9 +267,11 @@ class LtiProviderPlugin extends Plugin
                 $lps = [];
                 foreach ($lpValues as $lp) {
                     $uinfo = api_get_user_info($lp['userId']);
+                    $firstAccess = self::getUserFirstAccessOnToolLp($lp['courseCode'], $lp['toolId'], $lp['userId']);
                     $lps[$lp['toolId']]['users'][$lp['userId']] = [
                         'firstname' => $uinfo['firstname'],
                         'lastname' => $uinfo['lastname'],
+                        'first_access' => $firstAccess,
                     ];
                 }
                 $result[] = [

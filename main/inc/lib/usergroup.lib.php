@@ -1032,10 +1032,28 @@ class UserGroup extends Model
                 if ($course_info) {
                     if (!empty($user_list)) {
                         foreach ($user_list as $user_id) {
-                            CourseManager::subscribeUser(
+                            $subscribed = CourseManager::subscribeUser(
                                 $user_id,
-                                $course_info['code']
+                                $course_info['code'],
+                                STUDENT,
+                                0,
+                                0,
+                                true,
+                                false
                             );
+                            if (!$subscribed) {
+                                $userInfo = api_get_user_info($user_id);
+                                Display::addFlash(
+                                    Display::return_message(
+                                        sprintf(
+                                            get_lang('UserXNotSubscribedToCourseX'),
+                                            $userInfo['complete_name_with_username'],
+                                            $course_info['title']
+                                        ),
+                                        'error'
+                                    )
+                                );
+                            }
                         }
                     }
                     $params = [
@@ -1210,7 +1228,28 @@ class UserGroup extends Model
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
                         $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::subscribeUser($user_id, $course_info['code']);
+                        $subscribed = CourseManager::subscribeUser(
+                            $user_id,
+                            $course_info['code'],
+                            STUDENT,
+                            0,
+                            0,
+                            true,
+                            false
+                        );
+                        if (!$subscribed) {
+                            $userInfo = api_get_user_info($user_id);
+                            Display::addFlash(
+                                Display::return_message(
+                                    sprintf(
+                                        get_lang('UserXNotSubscribedToCourseX'),
+                                        $userInfo['complete_name_with_username'],
+                                        $course_info['title']
+                                    ),
+                                    'error'
+                                )
+                            );
+                        }
                     }
                 }
                 $params = [

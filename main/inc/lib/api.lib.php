@@ -3052,6 +3052,12 @@ function api_get_setting($variable, $key = null)
  */
 function api_get_plugin_setting($plugin, $variable)
 {
+    $settings = api_get_configuration_value('plugin_settings');
+
+    if (!empty($settings) && isset($settings[$plugin]) && isset($settings[$plugin][$variable])) {
+        return $settings[$plugin][$variable];
+    }
+
     $variableName = $plugin.'_'.$variable;
     $result = api_get_setting($variableName);
 

@@ -1,43 +1,39 @@
 <template>
   <div
     v-if="isAuthenticated && isCurrentTeacher"
-    class="q-card"
+    class="flex flex-row gap-2 mb-3"
   >
-    <div class="p-4 flex flex-row gap-1 mb-2">
-      <div class="flex flex-row gap-2">
-        <Button
-          class="btn btn--primary"
-          icon="mdi mdi-folder-plus"
-          :label="t('New folder')"
-          @click="openNew"
-        />
-        <Button
-          class="btn btn--primary"
-          :label="t('New document')"
-          icon="mdi mdi-file-plus"
-          @click="addDocumentHandler()"
-        />
-        <Button
-          class="btn btn--primary"
-          :label="t('Upload')"
-          icon="mdi mdi-file-upload"
-          @click="uploadDocumentHandler()"
-        />
-        <!--
-        <Button label="{{ $t('Download') }}" class="btn btn--primary" @click="downloadDocumentHandler()" :disabled="!selectedItems || !selectedItems.length">
-          <v-icon icon="mdi-file-download"/>
-          {{ $t('Download') }}
-        </Button>
-        -->
-        <Button
-          :disabled="!selectedItems || !selectedItems.length"
-          class="btn btn--danger "
-          :label="t('Delete selected')"
-          icon="mdi mdi-delete"
-          @click="confirmDeleteMultiple"
-        />
-      </div>
-    </div>
+    <Button
+      class="btn btn--primary"
+      icon="mdi mdi-folder-plus"
+      :label="t('New folder')"
+      @click="openNew"
+    />
+    <Button
+      class="btn btn--primary"
+      :label="t('New document')"
+      icon="mdi mdi-file-plus"
+      @click="addDocumentHandler()"
+    />
+    <Button
+      class="btn btn--primary"
+      :label="t('Upload')"
+      icon="mdi mdi-file-upload"
+      @click="uploadDocumentHandler()"
+    />
+    <!--
+    <Button label="{{ $t('Download') }}" class="btn btn--primary" @click="downloadDocumentHandler()" :disabled="!selectedItems || !selectedItems.length">
+      <v-icon icon="mdi-file-download"/>
+      {{ $t('Download') }}
+    </Button>
+    -->
+    <Button
+      :disabled="!selectedItems || !selectedItems.length"
+      class="btn btn--danger "
+      :label="t('Delete selected')"
+      icon="mdi mdi-delete"
+      @click="confirmDeleteMultiple"
+    />
   </div>
 
   <DataTable
@@ -68,7 +64,7 @@
     />
 
     <Column
-      :header="$t('Title')"
+      :header="t('Title')"
       :sortable="true"
       field="resourceNode.title"
     >
@@ -89,7 +85,7 @@
     </Column>
 
     <Column
-      :header="$t('Size')"
+      :header="t('Size')"
       :sortable="true"
       field="resourceNode.resourceFile.size"
     >
@@ -101,7 +97,7 @@
     </Column>
 
     <Column
-      :header="$t('Modified')"
+      :header="t('Modified')"
       :sortable="true"
       field="resourceNode.updatedAt"
     >
@@ -254,12 +250,13 @@ import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from '../../components/resource_links/visibility';
-import isEmpty from 'lodash/isEmpty';
-import toInteger from 'lodash/toInteger';
+import { isEmpty } from 'lodash';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import Dialog from 'primevue/dialog';
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
+import { useCidReq } from '../../composables/cidReq';
+import { useList } from '../../mixins/list';
 
 export default {
   name: 'DocumentsList',
@@ -274,20 +271,29 @@ export default {
     const route = useRoute();
     const { t } = useI18n();
 
+    const {
+      pagination,
+      filters,
+      options,
+      onRequest,
+      onUpdateOptions
+    } = useList('documents');
+
+    const flashMessageList = inject('flashMessageList');
+
+    const { cid, sid, gid } = useCidReq();
+
     // Set resource node.
     let nodeId = route.params.node;
     if (isEmpty(nodeId)) {
       nodeId = route.query.node;
     }
-    let cid = toInteger(route.query.cid);
-    let courseIri = '/api/courses/' + cid;
-    store.dispatch('course/findCourse', { id: courseIri });
-    store.dispatch('resourcenode/findResourceNode', { id: '/api/resource_nodes/' + nodeId });
 
-    let sid = toInteger(route.query.sid);
+    store.dispatch('course/findCourse', { id: `/api/courses/${cid}` });
+    store.dispatch('resourcenode/findResourceNode', { id: `/api/resource_nodes/${nodeId}` });
+
     if (sid) {
-      let sessionIri = '/api/sessions/' + sid;
-      store.dispatch('session/findSession', { id: sessionIri });
+      store.dispatch('session/findSession', { id: `/api/sessions/${sid}` });
     }
 
     const item = ref({});
@@ -300,8 +306,7 @@ export default {
 
     const submitted = ref(false);
 
-    const filters = { 'loadNode': 1 };
-    const options = ref([]);
+    filters.loadNode = 1;
 
     const selected = ref([]);
     const selectedItems = ref([]);
@@ -313,6 +318,7 @@ export default {
     const resourceNode = computed(() => store.getters['resourcenode/getResourceNode']);
 
     const items = computed(() => store.getters['documents/list']);
+    const isLoading = computed(() => store.getters['documents/isLoading']);
 
     function openNew () {
       item.value = {};
@@ -325,6 +331,31 @@ export default {
       submitted.value = false;
     }
 
+    function saveItem () {
+      submitted.value = true;
+
+      if (item.value.title.trim()) {
+        if (!item.value.id) {
+          item.value.filetype = 'folder';
+          item.value.parentResourceNodeId = route.params.node;
+          item.value.resourceLinkList = JSON.stringify([{
+            gid,
+            sid,
+            cid,
+            visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+          }]);
+
+          store.dispatch('documents/createWithFormData', item.value)
+            .then(() => flashMessageList.value.push({
+              severity: 'success',
+              detail: t('Saved')
+            }));
+        }
+        itemDialog.value = false;
+        item.value = {};
+      }
+    }
+
     function confirmDeleteMultiple () {
       deleteMultipleDialog.value = true;
     }
@@ -335,22 +366,37 @@ export default {
     }
 
     function deleteMultipleItems () {
-      store.dispatch('documents/delMultiple', selectedItems);
+      store.dispatch('documents/delMultiple', selectedItems)
+        .then(() => {
+          deleteMultipleDialog.value = false;
+          selectedItems.value = [];
+        });
 
-      /*this.onRequest({
-        pagination: this.pagination,
-      });*/
-      deleteMultipleDialog.value = false;
-      selectedItems.value = [];
+      onRequest({
+        pagination: pagination,
+      });
       //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
     }
 
     function deleteItemButton () {
-      store.dispatch('documents/del', item)
+      store.dispatch('documents/del', item.value)
+        .then(() => {
+          deleteItemDialog.value = false;
+          item.value = {};
+        })
       //this.items = this.items.filter(val => val.iid !== this.item.iid);
-      deleteItemDialog.value = false;
-      item.value = {};
-      //this.onUpdateOptions(this.options);
+      //this.onUpdateOptions(options.value);
+    }
+
+    function onPage (event) {
+      options.value = {
+        itemsPerPage: event.rows,
+        page: event.page + 1,
+        sortBy: event.sortField,
+        sortDesc: event.sortOrder === -1
+      };
+
+      onUpdateOptions(options.value);
     }
 
     return {
@@ -364,12 +410,17 @@ export default {
       resourceNode,
       items,
 
+      isLoading,
+
       openNew,
       hideDialog,
+      saveItem,
       confirmDeleteItem,
       confirmDeleteMultiple,
       deleteMultipleItems,
       deleteItemButton,
+
+      onPage,
 
       sortBy: 'title',
       sortDesc: false,
@@ -392,9 +443,6 @@ export default {
     ...mapGetters('resourcenode', {
       resourceNode: 'getResourceNode'
     }),
-    ...mapGetters('documents', {
-      items: 'list',
-    }),
 
     //...getters
 
@@ -402,7 +450,6 @@ export default {
     ...mapFields('documents', {
       deletedResource: 'deleted',
       error: 'error',
-      isLoading: 'isLoading',
       resetList: 'resetList',
       totalItems: 'totalItems',
       view: 'view'
@@ -413,15 +460,6 @@ export default {
     this.onUpdateOptions(this.options);
   },
   methods: {
-    // prime
-    onPage (event) {
-      this.options.itemsPerPage = event.rows;
-      this.options.page = event.page + 1;
-      this.options.sortBy = event.sortField;
-      this.options.sortDesc = event.sortOrder === -1;
-
-      this.onUpdateOptions(this.options);
-    },
     sortingChanged (event) {
       console.log('sortingChanged');
       console.log(event);
@@ -432,27 +470,6 @@ export default {
       // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
       // ctx.sortDesc ==> true if sorting descending, false otherwise
     },
-    saveItem () {
-      this.submitted = true;
-
-      if (this.item.title.trim()) {
-        if (!this.item.id) {
-          this.item.filetype = 'folder';
-          this.item.parentResourceNodeId = this.$route.params.node;
-          this.item.resourceLinkList = JSON.stringify([{
-            gid: this.$route.query.gid,
-            sid: this.$route.query.sid,
-            cid: this.$route.query.cid,
-            visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-          }]);
-
-          this.createWithFormData(this.item);
-          this.showMessage('Saved');
-        }
-        this.itemDialog = false;
-        this.item = {};
-      }
-    },
     editItem (item) {
       this.item = { ...item };
       this.itemDialog = true;
@@ -461,7 +478,6 @@ export default {
     // From ListMixin
     ...mapActions('documents', {
       getPage: 'fetchAll',
-      createWithFormData: 'createWithFormData',
       deleteItem: 'del',
     }),
     ...mapActions('resourcenode', {

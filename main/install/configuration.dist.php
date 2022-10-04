@@ -313,6 +313,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // $_configuration['question_exercise_html_strict_filtering'] = true;
 // Allows to do a remove_XSS in exersice result end text with user status COURSEMANAGERLOWSECURITY
 // $_configuration['exercise_result_end_text_html_strict_filtering'] = true;
+// Allows to do a remove_XSS in wiki pages with user status COURSEMANAGERLOWSECURITY
+// $_configuration['wiki_html_strict_filtering'] = true;
 // Prevents the duplicate upload in assignments
 // $_configuration['assignment_prevent_duplicate_upload'] = false;
 //Show student progress in My courses page

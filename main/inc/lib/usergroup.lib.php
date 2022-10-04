@@ -1031,10 +1031,51 @@ class UserGroup extends Model
                 $course_info = api_get_course_info_by_id($course_id);
                 if ($course_info) {
                     if (!empty($user_list)) {
+                        $messageError = [];
+                        $messageOk = [];
                         foreach ($user_list as $user_id) {
-                            CourseManager::subscribeUser(
+                            $subscribed = CourseManager::subscribeUser(
                                 $user_id,
-                                $course_info['code']
+                                $course_info['code'],
+                                STUDENT,
+                                0,
+                                0,
+                                true,
+                                false
+                            );
+                            $userInfo = api_get_user_info($user_id);
+                            if (!$subscribed) {
+                                $messageError[] = sprintf(
+                                    get_lang('UserXNotSubscribedToCourseX'),
+                                    $userInfo['complete_name_with_username'],
+                                    $course_info['title']
+                                );
+                            } else {
+                                $messageOk[] = sprintf(
+                                    get_lang('UserXAddedToCourseX'),
+                                    $userInfo['complete_name_with_username'],
+                                    $course_info['title']
+                                );
+                            }
+                        }
+                        if (!empty($messageError)) {
+                            $strMessagesError = implode('<br>', $messageError);
+                            Display::addFlash(
+                                Display::return_message(
+                                    $strMessagesError,
+                                    'error',
+                                    false
+                                )
+                            );
+                        }
+                        if (!empty($messageOk)) {
+                            $strMessagesOk = implode('<br>', $messageOk);
+                            Display::addFlash(
+                                Display::return_message(
+                                    $strMessagesOk,
+                                    'normal',
+                                    false
+                                )
                             );
                         }
                     }
@@ -1208,9 +1249,53 @@ class UserGroup extends Model
             foreach ($new_items as $user_id) {
                 // Adding courses
                 if (!empty($course_list)) {
+                    $messageError = [];
+                    $messageOk = [];
                     foreach ($course_list as $course_id) {
                         $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::subscribeUser($user_id, $course_info['code']);
+                        $subscribed = CourseManager::subscribeUser(
+                            $user_id,
+                            $course_info['code'],
+                            STUDENT,
+                            0,
+                            0,
+                            true,
+                            false
+                        );
+                        $userInfo = api_get_user_info($user_id);
+                        if (!$subscribed) {
+                            $messageError[] = sprintf(
+                                get_lang('UserXNotSubscribedToCourseX'),
+                                $userInfo['complete_name_with_username'],
+                                $course_info['title']
+                            );
+                        } else {
+                            $messageOk[] = sprintf(
+                                get_lang('UserXAddedToCourseX'),
+                                $userInfo['complete_name_with_username'],
+                                $course_info['title']
+                            );
+                        }
+                    }
+                    if (!empty($messageError)) {
+                        $strMessagesError = implode('<br>', $messageError);
+                        Display::addFlash(
+                            Display::return_message(
+                                $strMessagesError,
+                                'error',
+                                false
+                            )
+                        );
+                    }
+                    if (!empty($messageOk)) {
+                        $strMessagesOk = implode('<br>', $messageOk);
+                        Display::addFlash(
+                            Display::return_message(
+                                $strMessagesOk,
+                                'normal',
+                                false
+                            )
+                        );
                     }
                 }
                 $params = [

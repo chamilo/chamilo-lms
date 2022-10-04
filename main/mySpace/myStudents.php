@@ -681,10 +681,11 @@ while ($row = Database::fetch_array($rs, 'ASSOC')) {
 }
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(), $courseInfo);
+$drhCanAccessAllStudents = (api_drh_can_access_all_session_content() || api_get_configuration_value('drh_allow_access_to_all_students'));
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
-        if (api_drh_can_access_all_session_content()) {
+        if ($drhCanAccessAllStudents) {
         } else {
             if (!$isDrhOfCourse) {
                 if (api_is_drh() &&

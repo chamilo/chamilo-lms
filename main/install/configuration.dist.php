@@ -2296,6 +2296,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Disable the possibility for teachers to edit course visibility
 //$_configuration['course_visibility_change_only_admin'] = false;
 
+// Allow DRH user to access all students from reporting.
+// $_configuration['drh_allow_access_to_all_students'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

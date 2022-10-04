@@ -6500,9 +6500,9 @@ class SessionManager
     ) {
         $userId = api_get_user_id();
         $drhLoaded = false;
-
+        $drhCanAccessAllStudents = (api_drh_can_access_all_session_content() || api_get_configuration_value('drh_allow_access_to_all_students'));
         if (api_is_drh()) {
-            if (api_drh_can_access_all_session_content()) {
+            if ($drhCanAccessAllStudents) {
                 $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
                     'drh_all',
                     $userId,

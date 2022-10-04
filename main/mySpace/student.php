@@ -73,7 +73,8 @@ function get_users($from, $limit, $column, $direction): array
     $students = [];
 
     if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
+        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
+        if (api_drh_can_access_all_session_content() || $allowDhrAccessToAllStudents) {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
                 api_get_user_id(),
@@ -233,8 +234,9 @@ function get_users($from, $limit, $column, $direction): array
                 ['id' => 'details_'.$student_data['username']]
             );
 
+            $userIsFollowed = UserManager::is_user_followed_by_drh($student_id, api_get_user_id());
             $lostPasswordLink = '';
-            if (api_is_drh() || api_is_platform_admin()) {
+            if ((api_is_drh() && $userIsFollowed) || api_is_platform_admin()) {
                 $lostPasswordLink = '&nbsp;'.Display::url(
                         Display::return_icon('edit.png', get_lang('Edit')),
                         $webCodePath.'mySpace/user_edit.php?user_id='.$student_id

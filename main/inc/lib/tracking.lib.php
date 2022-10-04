@@ -2245,21 +2245,7 @@ class Tracking
             );
         } else {
             if (api_is_drh() && $allowDhrAccessToAllStudents) {
-                $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                    'drh_all',
-                    $userId,
-                    false,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    [],
-                    [],
-                    STUDENT
-                );
+                $studentList = UserManager::get_user_list(['status' => STUDENT]);
             } else {
                 $studentList = UserManager::getUsersFollowedByUser(
                     $userId,

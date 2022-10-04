@@ -73,8 +73,7 @@ function get_users($from, $limit, $column, $direction): array
     $students = [];
 
     if (api_is_drh()) {
-        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
-        if (api_drh_can_access_all_session_content() || $allowDhrAccessToAllStudents) {
+        if (api_drh_can_access_all_session_content()) {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
                 api_get_user_id(),
@@ -90,6 +89,11 @@ function get_users($from, $limit, $column, $direction): array
                 null,
                 api_is_student_boss() ? null : STUDENT
             );
+            $drhLoaded = true;
+        }
+        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
+        if ($allowDhrAccessToAllStudents) {
+            $students = UserManager::get_user_list(['status' => STUDENT]);
             $drhLoaded = true;
         }
     }

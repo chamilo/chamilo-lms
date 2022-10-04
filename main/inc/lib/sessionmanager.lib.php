@@ -6521,7 +6521,20 @@ class SessionManager
             }
             $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
             if ($allowDhrAccessToAllStudents) {
-                $count = count(UserManager::get_user_list(['status' => STUDENT]));
+                $conditions = ['status' => STUDENT];
+                if (isset($active)) {
+                    $conditions['active'] = (int) $active;
+                }
+                $students = UserManager::get_user_list(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $keyword,
+                    $lastConnectionDate
+                );
+                $count = count($students);
                 $drhLoaded = true;
             }
         }

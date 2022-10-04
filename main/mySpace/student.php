@@ -93,7 +93,19 @@ function get_users($from, $limit, $column, $direction): array
         }
         $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
         if ($allowDhrAccessToAllStudents) {
-            $students = UserManager::get_user_list(['status' => STUDENT]);
+            $conditions = ['status' => STUDENT];
+            if (isset($active)) {
+                $conditions['active'] = (int) $active;
+            }
+            $students = UserManager::get_user_list(
+                $conditions,
+                [],
+                $from,
+                $limit,
+                null,
+                $keyword,
+                $lastConnectionDate
+            );
             $drhLoaded = true;
         }
     }

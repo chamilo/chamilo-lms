@@ -6500,7 +6500,6 @@ class SessionManager
     ) {
         $userId = api_get_user_id();
         $drhLoaded = false;
-
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
                 $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -6518,6 +6517,24 @@ class SessionManager
                     $studentIdList,
                     $filterUserStatus
                 );
+                $drhLoaded = true;
+            }
+            $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
+            if ($allowDhrAccessToAllStudents) {
+                $conditions = ['status' => STUDENT];
+                if (isset($active)) {
+                    $conditions['active'] = (int) $active;
+                }
+                $students = UserManager::get_user_list(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $keyword,
+                    $lastConnectionDate
+                );
+                $count = count($students);
                 $drhLoaded = true;
             }
         }

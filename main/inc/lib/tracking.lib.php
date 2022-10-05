@@ -2137,31 +2137,9 @@ class Tracking
         $courseCount = 0;
         $assignedCourseCount = 0;
         $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
+        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
 
         if (api_is_drh() && api_drh_can_access_all_session_content()) {
-            $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'drh_all',
-                $userId,
-                false,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                [],
-                [],
-                STUDENT
-            );
-
-            $students = [];
-            if (is_array($studentList)) {
-                foreach ($studentList as $studentData) {
-                    $students[] = $studentData['user_id'];
-                }
-            }
-
             $studentBossesList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
                 $userId,
@@ -2266,22 +2244,26 @@ class Tracking
                 false
             );
         } else {
-            $studentList = UserManager::getUsersFollowedByUser(
-                $userId,
-                STUDENT,
-                false,
-                false,
-                false,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                COURSEMANAGER,
-                null,
-                $checkSessionVisibility
-            );
+            if (api_is_drh() && $allowDhrAccessToAllStudents) {
+                $studentList = UserManager::get_user_list(['status' => STUDENT]);
+            } else {
+                $studentList = UserManager::getUsersFollowedByUser(
+                    $userId,
+                    STUDENT,
+                    false,
+                    false,
+                    false,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    COURSEMANAGER,
+                    null,
+                    $checkSessionVisibility
+                );
+            }
 
             $students = [];
             if (is_array($studentList)) {

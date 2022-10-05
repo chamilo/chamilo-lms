@@ -91,6 +91,23 @@ function get_users($from, $limit, $column, $direction): array
             );
             $drhLoaded = true;
         }
+        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
+        if ($allowDhrAccessToAllStudents) {
+            $conditions = ['status' => STUDENT];
+            if (isset($active)) {
+                $conditions['active'] = (int) $active;
+            }
+            $students = UserManager::get_user_list(
+                $conditions,
+                [],
+                $from,
+                $limit,
+                null,
+                $keyword,
+                $lastConnectionDate
+            );
+            $drhLoaded = true;
+        }
     }
 
     $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
@@ -233,8 +250,9 @@ function get_users($from, $limit, $column, $direction): array
                 ['id' => 'details_'.$student_data['username']]
             );
 
+            $userIsFollowed = UserManager::is_user_followed_by_drh($student_id, api_get_user_id());
             $lostPasswordLink = '';
-            if (api_is_drh() || api_is_platform_admin()) {
+            if ((api_is_drh() && $userIsFollowed) || api_is_platform_admin()) {
                 $lostPasswordLink = '&nbsp;'.Display::url(
                         Display::return_icon('edit.png', get_lang('Edit')),
                         $webCodePath.'mySpace/user_edit.php?user_id='.$student_id

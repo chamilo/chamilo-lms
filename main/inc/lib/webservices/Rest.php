@@ -1046,9 +1046,8 @@ class Rest extends WebService
                     'course_code' => $courseCode,
                     'course_title' => $course['title'],
                     'visible_tests' => $exercises,
-                    'taken_tests' => $takenExercises
+                    'taken_tests' => $takenExercises,
                 ];
-
             }
         }
 
@@ -1099,7 +1098,7 @@ class Rest extends WebService
                 false,
                 false
             );
-            $courses[$courseId]['count_visible_tests']  = count($exercises);
+            $courses[$courseId]['count_visible_tests'] = count($exercises);
         }
 
         return $courses;

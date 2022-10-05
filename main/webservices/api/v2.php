@@ -183,7 +183,28 @@ try {
             $userInfo = $restApi->getUserProfile();
             $restResponse->setData($userInfo);
             break;
+        case Rest::GET_PROFILES_BY_EXTRA_FIELD:
+            $fieldName = $_POST['field_name'];
+            $fieldValue = $_POST['field_value'];
+            $users = $restApi->getUsersProfilesByExtraField($fieldName, $fieldValue);
 
+            $restResponse->setData($users);
+            break;
+        case Rest::GET_COURSES_DETAILS_BY_EXTRA_FIELD:
+            $fieldName = $_POST['field_name'];
+            $fieldValue = $_POST['field_value'];
+            $courses = $restApi->getCoursesByExtraField($fieldName, $fieldValue);
+
+            $restResponse->setData($courses);
+            break;
+        case Rest::GET_USER_COURSES_BY_DATES:
+            $userId = $_POST['user_id'];
+            $startDate = $_POST['start_date'];
+            $endDate = $_POST['end_date'];
+            $courses = $restApi->getUserCoursesByDates($userId, $startDate, $endDate);
+
+            $restResponse->setData($courses);
+            break;
         case Rest::VIEW_MY_COURSES:
             $restApi->viewMyCourses();
             break;

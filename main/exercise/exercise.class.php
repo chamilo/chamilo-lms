@@ -9248,7 +9248,8 @@ class Exercise
         $filterByResultDisabled = 0,
         $filterByAttempt = 0,
         $myActions = null,
-        $returnTable = false
+        $returnTable = false,
+        $isAllowedToEdit = null
     ) {
         //$allowDelete = Exercise::allowAction('delete');
         $allowClean = self::allowAction('clean_results');
@@ -9271,7 +9272,9 @@ class Exercise
             $autoLaunchAvailable = true;
         }
 
-        $is_allowedToEdit = api_is_allowed_to_edit(null, true);
+        if (!isset($isAllowedToEdit)) {
+            $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+        }
         $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : api_get_course_info();
         $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
         $courseId = $courseInfo['real_id'];
@@ -9291,7 +9294,7 @@ class Exercise
         $condition_session = api_get_session_condition($sessionId, true, true, 'e.session_id');
         $content = '';
         $column = 0;
-        if ($is_allowedToEdit) {
+        if ($isAllowedToEdit) {
             $column = 1;
         }
 
@@ -9332,7 +9335,7 @@ class Exercise
         }
 
         // Only for administrators
-        if ($is_allowedToEdit) {
+        if ($isAllowedToEdit) {
             $total_sql = "SELECT count(iid) as count
                           FROM $TBL_EXERCISES e
                           WHERE
@@ -9439,7 +9442,7 @@ class Exercise
         }
 
         //get HotPotatoes files (active and inactive)
-        if ($is_allowedToEdit) {
+        if ($isAllowedToEdit) {
             $sql = "SELECT * FROM $TBL_DOCUMENT
                     WHERE
                         c_id = $courseId AND
@@ -9589,7 +9592,7 @@ class Exercise
                     }
 
                     // Teacher only
-                    if ($is_allowedToEdit) {
+                    if ($isAllowedToEdit) {
                         $lp_blocked = null;
                         if ($exercise->exercise_was_added_in_lp == true) {
                             $lp_blocked = Display::div(
@@ -10128,7 +10131,7 @@ class Exercise
 
                     $currentRow['attempt'] = $attempt_text;
 
-                    if ($is_allowedToEdit) {
+                    if ($isAllowedToEdit) {
                         $additionalActions = ExerciseLib::getAdditionalTeacherActions($row['iid']);
 
                         if (!empty($additionalActions)) {
@@ -10183,7 +10186,7 @@ class Exercise
 
         // end exercise list
         // Hotpotatoes results
-        if ($is_allowedToEdit) {
+        if ($isAllowedToEdit) {
             $sql = "SELECT d.iid, d.path as path, d.comment as comment
                     FROM $TBL_DOCUMENT d
                     WHERE
@@ -10219,7 +10222,7 @@ class Exercise
                 }
 
                 // prof only
-                if ($is_allowedToEdit) {
+                if ($isAllowedToEdit) {
                     $visibility = api_get_item_visibility(
                         ['real_id' => $courseId],
                         TOOL_DOCUMENT,
@@ -10350,7 +10353,7 @@ class Exercise
         }
 
         if (empty($tableRows) && empty($categoryId)) {
-            if ($is_allowedToEdit && $origin !== 'learnpath') {
+            if ($isAllowedToEdit && $origin !== 'learnpath') {
                 $content .= '<div id="no-data-view">';
                 $content .= '<h3>'.get_lang('Quiz').'</h3>';
                 $content .= Display::return_icon('quiz.png', '', [], 64);
@@ -10380,7 +10383,7 @@ class Exercise
                 'category_id' => $categoryId,
             ]);
 
-            if ($is_allowedToEdit) {
+            if ($isAllowedToEdit) {
                 $formActions = [];
                 $formActions['visible'] = get_lang('Activate');
                 $formActions['invisible'] = get_lang('Deactivate');
@@ -10389,12 +10392,12 @@ class Exercise
             }
 
             $i = 0;
-            if ($is_allowedToEdit) {
+            if ($isAllowedToEdit) {
                 $table->set_header($i++, '', false, 'width="18px"');
             }
             $table->set_header($i++, get_lang('ExerciseName'), false);
 
-            if ($is_allowedToEdit) {
+            if ($isAllowedToEdit) {
                 $table->set_header($i++, get_lang('QuantityQuestions'), false);
                 $table->set_header($i++, get_lang('Actions'), false);
             } else {

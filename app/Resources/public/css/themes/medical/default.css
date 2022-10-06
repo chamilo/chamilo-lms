@@ -67,7 +67,7 @@ border: none;
 font-family: 'DIN Next Rounded LT Pro', sans-serif;
 }
 header{
-    background: url(images/background.png);
+    background: url(images/background.png) repeat-x center -25px;
 }
 .navbar{
     margin-bottom: 0;
@@ -166,6 +166,9 @@ background: #F38A1E;
 .nav li a:hover{
     background: transparent;
 }
+.logo {
+    margin: 50px 0;
+}
 .panel-default .panel-heading{
     background-color: #EDEDED;
 }
@@ -196,4 +199,28 @@ footer.bgfooter a:hover{
 }
 .menu-column .panel-heading a{
     font-weight: bold;
+}
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+    .logo {
+        margin: 25px 0;
+    }
+}
+/* Medium-small screens*/
+@media (min-width: 480px) and (max-width: 767px) {
+    .logo {
+        margin: 24px 0;
+    }
+}
+/* Smalls screens */
+@media (min-width: 320px) and (max-width: 479px) {
+    .logo {
+        margin: 10px 0;
+    }
+}
+/* Landscape phones and down */
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+    .logo {
+        margin: 20px 0;
+    }
 }

@@ -212,7 +212,9 @@ if ('true' === api_get_plugin_setting('lti_provider', 'enabled')) {
     $isLtiRequest = LtiProvider::create()->isLtiRequest($_REQUEST, $_SESSION);
     $user = api_get_user_info();
     if (!empty($user) && IMS_LTI_SOURCE === $user['auth_source'] && !$isLtiRequest) {
-        api_not_allowed();
+        LtiProvider::create()->logout();
+        api_not_allowed(false);
+        exit;
     }
 }
 

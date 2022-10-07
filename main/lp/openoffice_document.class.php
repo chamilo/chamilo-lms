@@ -333,11 +333,8 @@ abstract class OpenofficeDocument extends learnpath
             // the following issue:
             // SoapClient::__doRequest(): SSL: Connection reset by peer
         }
-        //$client = new \nusoap_client(null, $options);
         $client = new SoapClient(null, $options);
-
         $result = '';
-
         $file_data = base64_encode(file_get_contents($file['tmp_name']));
         $file_name = $file['name'];
         if (empty($size)) {

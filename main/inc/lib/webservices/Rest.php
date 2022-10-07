@@ -1003,10 +1003,7 @@ class Rest extends WebService
      */
     public function getUserCoursesByDates($userId, $startDate, $endDate)
     {
-        $userCourses = CourseManager::get_courses_list_by_user_id(
-            $userId,
-            true
-        );
+        $userCourses = CourseManager::get_courses_list_by_user_id($userId);
         $courses = [];
         if (!empty($userCourses)) {
             foreach ($userCourses as $course) {

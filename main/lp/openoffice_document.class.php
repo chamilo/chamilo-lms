@@ -333,7 +333,7 @@ abstract class OpenofficeDocument extends learnpath
             // the following issue:
             // SoapClient::__doRequest(): SSL: Connection reset by peer
         }
-        $client = new SoapClient(null, $options);
+        $client = new \nusoap_client(null, $options);
         $result = '';
 
         $file_data = base64_encode(file_get_contents($file['tmp_name']));
@@ -349,7 +349,7 @@ abstract class OpenofficeDocument extends learnpath
         ];
 
         try {
-            $result = $client->__call('wsConvertPpt', ['pptData' => $params]);
+            $result = $client->__call('wsConvertPpt', $params);
         } catch (Exception $e) {
             error_log('['.time().'] Chamilo SOAP call error: '.$e->getMessage());
         }

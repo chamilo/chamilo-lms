@@ -2137,31 +2137,9 @@ class Tracking
         $courseCount = 0;
         $assignedCourseCount = 0;
         $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
+        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
 
         if (api_is_drh() && api_drh_can_access_all_session_content()) {
-            $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'drh_all',
-                $userId,
-                false,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                [],
-                [],
-                STUDENT
-            );
-
-            $students = [];
-            if (is_array($studentList)) {
-                foreach ($studentList as $studentData) {
-                    $students[] = $studentData['user_id'];
-                }
-            }
-
             $studentBossesList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
                 $userId,
@@ -2266,22 +2244,26 @@ class Tracking
                 false
             );
         } else {
-            $studentList = UserManager::getUsersFollowedByUser(
-                $userId,
-                STUDENT,
-                false,
-                false,
-                false,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                COURSEMANAGER,
-                null,
-                $checkSessionVisibility
-            );
+            if (api_is_drh() && $allowDhrAccessToAllStudents) {
+                $studentList = UserManager::get_user_list(['status' => STUDENT]);
+            } else {
+                $studentList = UserManager::getUsersFollowedByUser(
+                    $userId,
+                    STUDENT,
+                    false,
+                    false,
+                    false,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    COURSEMANAGER,
+                    null,
+                    $checkSessionVisibility
+                );
+            }
 
             $students = [];
             if (is_array($studentList)) {
@@ -8261,6 +8243,55 @@ class Tracking
                 WHERE user_id = ".$userId;
             Database::query($sql);
         }
+    }
+
+    /**
+     * Get results of user in exercises by dates.
+     *
+     * @param $userId
+     * @param $courseId
+     * @param $startDate
+     * @param $endDate
+     *
+     * @return array
+     */
+    public static function getUserTrackExerciseByDates(
+        int $userId,
+        int $courseId,
+        string $startDate,
+        string $endDate
+    ) {
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
+
+        $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "SELECT
+                    te.exe_exo_id,
+                    q.title,
+                    MAX((te.exe_result/te.exe_weighting) * 100) as score
+                FROM
+                    $tblTrackExercises te
+                INNER JOIN
+                    $tblQuiz q ON (q.iid = te.exe_exo_id AND q.c_id = te.c_id)
+                WHERE
+                    te.exe_user_id = $userId AND
+                    te.c_id = $courseId AND
+                    te.status = '' AND
+                    te.start_date BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59'
+                GROUP BY
+                    te.exe_exo_id,
+                    q.title
+                ";
+        $rs = Database::query($sql);
+        $result = [];
+        if (Database::num_rows($rs) > 0) {
+            while ($row = Database::fetch_array($rs)) {
+                $result[] = $row;
+            }
+        }
+
+        return $result;
     }
 
     private static function generateQuizzesTable(array $courseInfo, int $sessionId = 0): string

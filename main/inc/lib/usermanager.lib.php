@@ -2120,7 +2120,9 @@ class UserManager
         $order_by = [],
         $limit_from = false,
         $limit_to = false,
-        $idCampus = null
+        $idCampus = null,
+        $keyword = null,
+        $lastConnectionDate = null
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -2138,6 +2140,36 @@ class UserManager
                       WHERE url_user.access_url_id = $urlId";
         } else {
             $sql .= " WHERE 1=1 ";
+        }
+
+        if (!empty($keyword)) {
+            $keyword = trim(Database::escape_string($keyword));
+            $keywordParts = array_filter(explode(' ', $keyword));
+            $extraKeyword = '';
+            if (!empty($keywordParts)) {
+                $keywordPartsFixed = Database::escape_string(implode('%', $keywordParts));
+                if (!empty($keywordPartsFixed)) {
+                    $extraKeyword .= " OR
+                        CONCAT(user.firstname, ' ', user.lastname) LIKE '%$keywordPartsFixed%' OR
+                        CONCAT(user.lastname, ' ', user.firstname) LIKE '%$keywordPartsFixed%' ";
+                }
+            }
+
+            $sql .= " AND (
+                user.username LIKE '%$keyword%' OR
+                user.firstname LIKE '%$keyword%' OR
+                user.lastname LIKE '%$keyword%' OR
+                user.official_code LIKE '%$keyword%' OR
+                user.email LIKE '%$keyword%' OR
+                CONCAT(user.firstname, ' ', user.lastname) LIKE '%$keyword%' OR
+                CONCAT(user.lastname, ' ', user.firstname) LIKE '%$keyword%'
+                $extraKeyword
+            )";
+        }
+
+        if (!empty($lastConnectionDate)) {
+            $lastConnectionDate = Database::escape_string($lastConnectionDate);
+            $sql .= " AND user.last_login <= '$lastConnectionDate' ";
         }
 
         if (count($conditions) > 0) {

@@ -36,10 +36,12 @@ class Rest extends WebService
     public const VIEW_MESSAGE = 'view_message';
 
     public const GET_USER_COURSES = 'user_courses';
+    public const GET_USER_COURSES_BY_DATES = 'user_courses_by_dates';
     public const GET_USER_SESSIONS = 'user_sessions';
 
     public const VIEW_PROFILE = 'view_user_profile';
     public const GET_PROFILE = 'user_profile';
+    public const GET_PROFILES_BY_EXTRA_FIELD = 'users_profiles_by_extra_field';
 
     public const VIEW_MY_COURSES = 'view_my_courses';
     public const VIEW_COURSE_HOME = 'view_course_home';
@@ -58,6 +60,7 @@ class Rest extends WebService
     public const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     public const GET_COURSE_LINKS = 'course_links';
     public const GET_COURSE_WORKS = 'course_works';
+    public const GET_COURSES_DETAILS_BY_EXTRA_FIELD = 'courses_details_by_extra_field';
 
     public const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
 
@@ -987,6 +990,154 @@ class Rest extends WebService
             },
             $categories
         );
+    }
+
+    /**
+     * It gets the courses and visible tests of a user by dates.
+     *
+     * @param $userId
+     * @param $startDate
+     * @param $endDate
+     *
+     * @return array
+     */
+    public function getUserCoursesByDates($userId, $startDate, $endDate)
+    {
+        $userCourses = CourseManager::get_courses_list_by_user_id(
+            $userId,
+            true
+        );
+        $courses = [];
+        if (!empty($userCourses)) {
+            foreach ($userCourses as $course) {
+                $courseCode = $course['code'];
+                $courseId = $course['real_id'];
+                $exercises = Exercise::exerciseGrid(
+                    0,
+                    '',
+                    0,
+                    $courseId,
+                    0,
+                    true,
+                    0,
+                    0,
+                    0,
+                    null,
+                    false,
+                    false
+                );
+                $trackExercises = Tracking::getUserTrackExerciseByDates(
+                    $userId,
+                    $courseId,
+                    $startDate,
+                    $endDate
+                );
+                $takenExercises = [];
+                if (!empty($trackExercises)) {
+                    $totalSore = 0;
+                    foreach ($trackExercises as $track) {
+                        $takenExercises[] = $track['title'];
+                        $totalSore += $track['score'];
+                    }
+                    $avgScore = round($totalSore / count($trackExercises));
+                    $takenExercises['avg_score'] = $avgScore;
+                }
+                $courses[] = [
+                    'course_code' => $courseCode,
+                    'course_title' => $course['title'],
+                    'visible_tests' => $exercises,
+                    'taken_tests' => $takenExercises,
+                ];
+            }
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Get the list of courses from extra field included count of visible exercises.
+     *
+     * @param $fieldName
+     * @param $fieldValue
+     *
+     * @return array
+     */
+    public function getCoursesByExtraField($fieldName, $fieldValue)
+    {
+        $extraField = new ExtraField('course');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($fieldName);
+
+        if (empty($extraFieldInfo)) {
+            throw new Exception("$fieldName not found");
+        }
+
+        $extraFieldValue = new ExtraFieldValue('course');
+        $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $fieldName,
+            $fieldValue,
+            false,
+            false,
+            true
+        );
+
+        $courses = [];
+        foreach ($items as $item) {
+            $courseId = $item['item_id'];
+            $courses[$courseId] = api_get_course_info_by_id($courseId);
+            $exercises = Exercise::exerciseGrid(
+                0,
+                '',
+                0,
+                $courseId,
+                0,
+                true,
+                0,
+                0,
+                0,
+                null,
+                false,
+                false
+            );
+            $courses[$courseId]['count_visible_tests'] = count($exercises);
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Get the list of users from extra field.
+     *
+     * @param $fieldName
+     * @param $fieldValue
+     *
+     * @return array
+     */
+    public function getUsersProfilesByExtraField($fieldName, $fieldValue)
+    {
+        $users = [];
+        $extraValues = UserManager::get_extra_user_data_by_value(
+            $fieldName,
+            $fieldValue
+        );
+        if (!empty($extraValues)) {
+            foreach ($extraValues as $value) {
+                $userId = (int) $value;
+                $user = api_get_user_entity($userId);
+                $pictureInfo = UserManager::get_user_picture_path_by_id($user->getId(), 'web');
+                $users[$userId] = [
+                    'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
+                    'id' => $userId,
+                    'status' => $user->getStatus(),
+                    'fullName' => UserManager::formatUserFullName($user),
+                    'username' => $user->getUsername(),
+                    'officialCode' => $user->getOfficialCode(),
+                    'phone' => $user->getPhone(),
+                    'extra' => [],
+                ];
+            }
+        }
+
+        return $users;
     }
 
     /**

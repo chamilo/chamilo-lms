@@ -103,6 +103,23 @@ function get_users($from, $limit, $column, $direction)
             );
             $drhLoaded = true;
         }
+        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
+        if ($allowDhrAccessToAllStudents) {
+            $conditions = ['status' => STUDENT];
+            if (isset($active)) {
+                $conditions['active'] = (int) $active;
+            }
+            $students = UserManager::get_user_list(
+                $conditions,
+                [],
+                $from,
+                $limit,
+                null,
+                $keyword,
+                $lastConnectionDate
+            );
+            $drhLoaded = true;
+        }
     }
 
     if (false === $drhLoaded) {

@@ -4779,7 +4779,7 @@ function move_post_form()
         $values = $form->exportValues();
         store_move_post($values);
     } else {
-       return $form->returnForm();
+        return $form->returnForm();
     }
 }
 

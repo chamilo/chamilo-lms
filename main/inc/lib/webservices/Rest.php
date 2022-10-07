@@ -995,14 +995,11 @@ class Rest extends WebService
     /**
      * It gets the courses and visible tests of a user by dates.
      *
-     * @param $userId
-     * @param $startDate
-     * @param $endDate
-     *
-     * @return array
+     * @throws Exception
      */
-    public function getUserCoursesByDates($userId, $startDate, $endDate)
+    public function getUserCoursesByDates(int $userId, string $startDate, string $endDate): array
     {
+        self::protectAdminEndpoint();
         $userCourses = CourseManager::get_courses_list_by_user_id($userId);
         $courses = [];
         if (!empty($userCourses)) {
@@ -1054,13 +1051,11 @@ class Rest extends WebService
     /**
      * Get the list of courses from extra field included count of visible exercises.
      *
-     * @param $fieldName
-     * @param $fieldValue
-     *
-     * @return array
+     * @throws Exception
      */
-    public function getCoursesByExtraField($fieldName, $fieldValue)
+    public function getCoursesByExtraField(string $fieldName, string $fieldValue): array
     {
+        self::protectAdminEndpoint();
         $extraField = new ExtraField('course');
         $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($fieldName);
 
@@ -1104,13 +1099,11 @@ class Rest extends WebService
     /**
      * Get the list of users from extra field.
      *
-     * @param $fieldName
-     * @param $fieldValue
-     *
-     * @return array
+     * @throws Exception
      */
-    public function getUsersProfilesByExtraField($fieldName, $fieldValue)
+    public function getUsersProfilesByExtraField(string $fieldName, string $fieldValue): array
     {
+        self::protectAdminEndpoint();
         $users = [];
         $extraValues = UserManager::get_extra_user_data_by_value(
             $fieldName,
@@ -1138,9 +1131,9 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * Get one's own profile
      */
-    public function getUserProfile()
+    public function getUserProfile(): array
     {
         $pictureInfo = UserManager::get_user_picture_path_by_id($this->user->getId(), 'web');
 
@@ -1170,7 +1163,10 @@ class Rest extends WebService
         return $result;
     }
 
-    public function getCourseLpProgress()
+    /**
+     * Get one's own (avg) progress in learning paths
+     */
+    public function getCourseLpProgress(): array
     {
         $sessionId = $this->session ? $this->session->getId() : 0;
         $userId = $this->user->getId();
@@ -1185,10 +1181,8 @@ class Rest extends WebService
 
     /**
      * @throws Exception
-     *
-     * @return array
      */
-    public function getCourseLearnPaths()
+    public function getCourseLearnPaths(): array
     {
         Event::event_access_tool(TOOL_LEARNPATH);
 
@@ -1301,11 +1295,9 @@ class Rest extends WebService
     }
 
     /**
-     * Start login for a user. Then make a redirect to show the learnpath.
-     *
-     * @param int $lpId
+     * Start login for a user. Then make a redirect to show the learnpath
      */
-    public function showLearningPath($lpId)
+    public function showLearningPath(int $lpId)
     {
         $loggedUser['user_id'] = $this->user->getId();
         $loggedUser['status'] = $this->user->getStatus();

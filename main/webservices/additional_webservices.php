@@ -151,8 +151,12 @@ function pptConverterGetCommandBaseParams()
     return $cmd;
 }
 
-$webPath = api_get_path(WEB_PATH);
-$webCodePath = api_get_path(WEB_CODE_PATH);
+
+$uri = api_get_path(WEB_CODE_PATH).'webservices/';
+$server = new SoapServer(null, ['uri' => $uri]);
+$server->addFunction("wsConvertPpt");
+$server->handle();
+/*
 $options = [
     'uri' => $webPath,
     'location' => $webCodePath.'webservices/additional_webservices.php',
@@ -173,3 +177,4 @@ $soapServer->register(
 );
 $soapServer->configureWSDL('wsConvertPpt');
 $soapServer->service($HTTP_RAW_POST_DATA);
+*/

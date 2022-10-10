@@ -2122,12 +2122,19 @@ class UserManager
         $limit_to = false,
         $idCampus = null,
         $keyword = null,
-        $lastConnectionDate = null
+        $lastConnectionDate = null,
+        $getCount = false,
+        $filterUsers = null
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = [];
-        $sql = "SELECT user.* FROM $user_table user ";
+
+        if ($getCount) {
+            $sql = "SELECT count(user.id) as nbUsers FROM $user_table user ";
+        } else {
+            $sql = "SELECT user.* FROM $user_table user ";
+        }
 
         if (api_is_multiple_url_enabled()) {
             if ($idCampus) {
@@ -2180,6 +2187,10 @@ class UserManager
             }
         }
 
+        if (!empty($filterUsers)) {
+            $sql .= " AND user.id IN(".implode(',', $filterUsers).")";
+        }
+
         if (count($order_by) > 0) {
             $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
         }
@@ -2190,6 +2201,13 @@ class UserManager
             $sql .= " LIMIT $limit_from, $limit_to";
         }
         $sql_result = Database::query($sql);
+
+        if ($getCount) {
+            $result = Database::fetch_array($sql_result);
+
+            return $result['nbUsers'];
+        }
+
         while ($result = Database::fetch_array($sql_result)) {
             $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
             $return_array[] = $result;
@@ -5480,7 +5498,8 @@ class UserManager
         $lastConnectionDate = null,
         $status = null,
         $keyword = null,
-        $checkSessionVisibility = false
+        $checkSessionVisibility = false,
+        $filterUsers = null
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -5554,6 +5573,10 @@ class UserManager
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+        }
+
+        if (!empty($filterUsers)) {
+            $userConditions .= " AND u.id IN(".implode(',', $filterUsers).")";
         }
 
         $sessionConditionsCoach = null;

@@ -47,12 +47,12 @@ if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) &&
 
 function get_count_users(): int
 {
-    $users = get_users(null, null, 0, 3);
+    $users = get_users(null, null, 0, 3, true);
 
-    return count($users);
+    return $users['count_users'];
 }
 
-function get_users($from, $limit, $column, $direction): array
+function get_users($from, $limit, $column = 0, $direction = 3, $getCount = false): array
 {
     global $export_csv;
     $active = $_GET['active'] ?? 1;
@@ -66,71 +66,6 @@ function get_users($from, $limit, $column, $direction): array
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
-    $is_western_name_order = api_is_western_name_order();
-    $coach_id = api_get_user_id();
-    $column = 'u.user_id';
-    $drhLoaded = false;
-    $students = [];
-
-    if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
-            $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'drh_all',
-                api_get_user_id(),
-                false,
-                $from,
-                $limit,
-                $column,
-                $direction,
-                $keyword,
-                $active,
-                $lastConnectionDate,
-                null,
-                null,
-                api_is_student_boss() ? null : STUDENT
-            );
-            $drhLoaded = true;
-        }
-        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
-        if ($allowDhrAccessToAllStudents) {
-            $conditions = ['status' => STUDENT];
-            if (isset($active)) {
-                $conditions['active'] = (int) $active;
-            }
-            $students = UserManager::get_user_list(
-                $conditions,
-                [],
-                $from,
-                $limit,
-                null,
-                $keyword,
-                $lastConnectionDate
-            );
-            $drhLoaded = true;
-        }
-    }
-
-    $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
-    if (false === $drhLoaded) {
-        $students = UserManager::getUsersFollowedByUser(
-            api_get_user_id(),
-            api_is_student_boss() ? null : STUDENT,
-            false,
-            false,
-            false,
-            $from,
-            $limit,
-            $column,
-            $direction,
-            $active,
-            $lastConnectionDate,
-            api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
-            $keyword,
-            $checkSessionVisibility
-        );
-    }
-
-    $url = $webCodePath.'mySpace/myStudents.php';
 
     // Filter by Extra Fields
     $useExtraFields = false;
@@ -151,7 +86,6 @@ function get_users($from, $limit, $column, $direction): array
             }
         }
     }
-
     $filterUsers = [];
     if ($useExtraFields) {
         if (count($extraFieldResult) > 1) {
@@ -165,16 +99,84 @@ function get_users($from, $limit, $column, $direction): array
         }
     }
 
+    $is_western_name_order = api_is_western_name_order();
+    $coach_id = api_get_user_id();
+    $column = 'u.user_id';
+    $drhLoaded = false;
+    $students = [];
+
+    if (api_is_drh()) {
+        if (api_drh_can_access_all_session_content()) {
+            $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'drh_all',
+                api_get_user_id(),
+                $getCount,
+                $from,
+                $limit,
+                $column,
+                $direction,
+                $keyword,
+                $active,
+                $lastConnectionDate,
+                null,
+                null,
+                api_is_student_boss() ? null : STUDENT,
+                $filterUsers
+            );
+            $drhLoaded = true;
+        }
+        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
+        if ($allowDhrAccessToAllStudents) {
+            $conditions = ['status' => STUDENT];
+            if (isset($active)) {
+                $conditions['active'] = (int) $active;
+            }
+            $students = UserManager::get_user_list(
+                $conditions,
+                [],
+                $from,
+                $limit,
+                null,
+                $keyword,
+                $lastConnectionDate,
+                $getCount,
+                $filterUsers
+            );
+            $drhLoaded = true;
+        }
+    }
+
+    $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
+    if (false === $drhLoaded) {
+        $students = UserManager::getUsersFollowedByUser(
+            api_get_user_id(),
+            api_is_student_boss() ? null : STUDENT,
+            false,
+            false,
+            $getCount,
+            $from,
+            $limit,
+            $column,
+            $direction,
+            $active,
+            $lastConnectionDate,
+            api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
+            $keyword,
+            $checkSessionVisibility,
+            $filterUsers
+        );
+    }
+
+    if ($getCount) {
+        return ['count_users' => (int) $students];
+    }
+
+    $url = $webCodePath.'mySpace/myStudents.php';
+
     $all_datas = [];
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
         $student_data = api_get_user_info($student_id);
-
-        if ($useExtraFields) {
-            if (!in_array($student_id, $filterUsers)) {
-                continue;
-            }
-        }
 
         if (isset($_GET['id_session'])) {
             $courses = Tracking::get_course_list_in_session_from_student($student_id, $sessionId);

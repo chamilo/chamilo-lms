@@ -2130,12 +2130,14 @@ class Tracking
     public static function getStats($userId, $getCount = false)
     {
         $courses = [];
+        $students = [];
         $assignedCourses = [];
         $drhCount = 0;
         $teachersCount = 0;
         $studentBossCount = 0;
         $courseCount = 0;
         $assignedCourseCount = 0;
+        $studentCount = 0;
         $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
         $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
 
@@ -2245,14 +2247,23 @@ class Tracking
             );
         } else {
             if (api_is_drh() && $allowDhrAccessToAllStudents) {
-                $studentList = UserManager::get_user_list(['status' => STUDENT]);
+                    $studentList = UserManager::get_user_list(
+                        ['status' => STUDENT],
+                        [],
+                        false,
+                        false,
+                        null,
+                        null,
+                        null,
+                        $getCount
+                    );
             } else {
                 $studentList = UserManager::getUsersFollowedByUser(
                     $userId,
                     STUDENT,
                     false,
                     false,
-                    false,
+                    $getCount,
                     null,
                     null,
                     null,
@@ -2265,10 +2276,14 @@ class Tracking
                 );
             }
 
-            $students = [];
-            if (is_array($studentList)) {
-                foreach ($studentList as $studentData) {
-                    $students[] = $studentData['user_id'];
+            if ($getCount) {
+                $studentCount = (int) $studentList;
+            } else {
+                $students = [];
+                if (is_array($studentList)) {
+                    foreach ($studentList as $studentData) {
+                        $students[] = $studentData['user_id'];
+                    }
                 }
             }
 
@@ -2404,7 +2419,7 @@ class Tracking
             return [
                 'drh' => $drhCount,
                 'teachers' => $teachersCount,
-                'student_count' => count($students),
+                'student_count' => $studentCount,
                 'student_list' => $students,
                 'student_bosses' => $studentBossCount,
                 'courses' => $courseCount,

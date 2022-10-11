@@ -6090,7 +6090,8 @@ class SessionManager
         $lastConnectionDate = null,
         $sessionIdList = [],
         $studentIdList = [],
-        $filterByStatus = null
+        $filterByStatus = null,
+        $filterUsers = null
     ) {
         $filterByStatus = (int) $filterByStatus;
         $userId = (int) $userId;
@@ -6202,6 +6203,10 @@ class SessionManager
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+        }
+
+        if (!empty($filterUsers)) {
+            $userConditions .= " AND u.id IN(".implode(',', $filterUsers).")";
         }
 
         if (!empty($keyword)) {

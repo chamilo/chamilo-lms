@@ -6,10 +6,10 @@ The following versions are currently being supported with security updates.
 | Version | Supported          |
 | ------- | ------------------ |
 | 2.0     | :x: (to be released) |
-| 1.11.16 | :x: (to be released) |
+| 1.11.18 | :x: (to be released) |
+| 1.11.16 | :white_check_mark: |
 | 1.11.14 | :white_check_mark: |
-| 1.11.12 | :white_check_mark: |
-| <1.11.12 | :x: |
+| <1.11.14 | :x: |
 
 ## Reporting a Vulnerability
 

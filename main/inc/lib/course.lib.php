@@ -810,7 +810,7 @@ class CourseManager
                 return false;
             }
 
-            if ($checkTeacherPermission && !api_is_course_admin()) {
+            if ($checkTeacherPermission && !api_is_course_admin() && !api_is_session_admin()) {
                 // Check in advance whether subscription is allowed or not for this course.
                 if ((int) $courseInfo['subscribe'] === SUBSCRIBE_NOT_ALLOWED) {
                     if ($displayFlashMessages) {

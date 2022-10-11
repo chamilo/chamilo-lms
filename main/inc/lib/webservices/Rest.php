@@ -1530,7 +1530,7 @@ class Rest extends WebService
         $conditions = [
             'status' => $params['status'],
         ];
-        $idCampus = $params['id_campus'];
+        $idCampus = !empty($params['id_campus']) ?? 1;
         $users = UserManager::get_user_list($conditions, ['firstname'], false, false, $idCampus);
         $list = [];
         foreach ($users as $item) {

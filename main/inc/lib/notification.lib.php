@@ -293,7 +293,7 @@ class Notification extends Model
                 $userSetting = $defaultStatus;
 
                 if (!empty($settingInfo)) {
-                    $extra_data = UserManager::get_extra_user_data($user_id);
+                    $extra_data = UserManager::get_extra_user_data_by_field($user_id, $settingToCheck);
 
                     if (isset($extra_data[$settingToCheck])) {
                         $userSetting = $extra_data[$settingToCheck];

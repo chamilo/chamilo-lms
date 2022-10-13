@@ -70,7 +70,7 @@ class UserRemoteServicePlugin extends Plugin
     }
 
     /**
-     * @return boolean the value of hide_link_from_navigation_menu setting
+     * @return bool the value of hide_link_from_navigation_menu setting
      */
     public function get_hide_link_from_navigation_menu()
     {
@@ -296,7 +296,7 @@ class UserRemoteServicePlugin extends Plugin
      *
      * @throws Exception on hash generation failure
      *
-     * @return string the specific user redirect URL 
+     * @return string the specific user redirect URL
      */
     public function getActiveServiceSpecificUserUrl()
     {

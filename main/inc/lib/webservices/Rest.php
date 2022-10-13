@@ -1131,7 +1131,7 @@ class Rest extends WebService
     }
 
     /**
-     * Get one's own profile
+     * Get one's own profile.
      */
     public function getUserProfile(): array
     {
@@ -1164,7 +1164,7 @@ class Rest extends WebService
     }
 
     /**
-     * Get one's own (avg) progress in learning paths
+     * Get one's own (avg) progress in learning paths.
      */
     public function getCourseLpProgress(): array
     {
@@ -1295,7 +1295,7 @@ class Rest extends WebService
     }
 
     /**
-     * Start login for a user. Then make a redirect to show the learnpath
+     * Start login for a user. Then make a redirect to show the learnpath.
      */
     public function showLearningPath(int $lpId)
     {

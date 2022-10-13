@@ -96,15 +96,16 @@ class UserRemoteService
 
         return $this;
     }
+
     /**
      * @return string
      */
     public function getAccessURL($pluginName)
     {
-        $accessUrl = api_get_path(WEB_PLUGIN_PATH) . $pluginName . "/redirect.php?serviceId=" . $this->getId();
+        $accessUrl = api_get_path(WEB_PLUGIN_PATH).$pluginName."/redirect.php?serviceId=".$this->getId();
+
         return $accessUrl;
     }
-
 
     /**
      * Returns a user-specific URL, with two extra query string parameters : 'username' and 'hash'.
@@ -138,13 +139,12 @@ class UserRemoteService
         );
     }
 
-
     /**
      * Returns a user-specific URL, with two extra query string parameters : 'uid' and 'hash'.
      * 'hash' is generated using $salt and $userId.
      *
-     * @param string $userId   the user identifier, to build the hash and to include for the uid parameter
-     * @param string $salt     the salt, to build the hash
+     * @param string $userId the user identifier, to build the hash and to include for the uid parameter
+     * @param string $salt   the salt, to build the hash
      *
      * @throws Exception on hash generation failure
      *

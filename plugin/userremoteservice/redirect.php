@@ -11,4 +11,3 @@ $plugin = UserRemoteServicePlugin::create();
 
 header('Location: '.$plugin->getActiveServiceSpecificUserUrl());
 exit;
-

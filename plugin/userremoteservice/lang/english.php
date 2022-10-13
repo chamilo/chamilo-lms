@@ -3,7 +3,7 @@
 
 $strings['plugin_title'] = 'User Remote Services';
 $strings['plugin_comment'] = 'Appends site-specific iframe-targetted user-identifying links to the menu bar.';
- 
+
 $strings['salt'] = 'Salt';
 $strings['salt_help'] =
 'Secret character string, used to generate the <em>hash</em> URL parameter. The longest, the best.

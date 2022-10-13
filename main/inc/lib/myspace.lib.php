@@ -3250,11 +3250,6 @@ class MySpace
      * Get all the data for the sortable table of the reporting progress of
      * all users and all the courses the user is subscribed to.
      *
-     * @param int    $from
-     * @param int    $numberItems
-     * @param int    $column
-     * @param string $direction
-     *
      * @return array
      */
     public static function get_user_data_tracking_overview(int $from, int $numberItems, int $column, string $direction)

@@ -1097,7 +1097,7 @@ class Wiki
             }
         } else {
             if (true === api_get_configuration_value('wiki_html_strict_filtering')) {
-                $content = Security::remove_XSS($row['content'],COURSEMANAGERLOWSECURITY);
+                $content = Security::remove_XSS($row['content'], COURSEMANAGERLOWSECURITY);
             } else {
                 $content = Security::remove_XSS($row['content']);
             }

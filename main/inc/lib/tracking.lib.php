@@ -2247,7 +2247,7 @@ class Tracking
             );
         } else {
             if (api_is_drh() && $allowDhrAccessToAllStudents) {
-                    $studentList = UserManager::get_user_list(
+                $studentList = UserManager::get_user_list(
                         ['status' => STUDENT],
                         [],
                         false,

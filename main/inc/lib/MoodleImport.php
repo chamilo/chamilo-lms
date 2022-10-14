@@ -464,6 +464,27 @@ class MoodleImport
             }
         }
 
+        if (!empty($sectionLpValues)) {
+            foreach ($sectionLpValues as $section) {
+                if (!empty($section['sectionPath'])) {
+                    $documentPath = '/'.$section['sectionPath'];
+                    $baseWorkDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+                    $checkDir = $baseWorkDir.$documentPath;
+                    if ($this->isEmptyDir($checkDir)) {
+                        $document = DocumentManager::getDocumentByPathInCourse($courseInfo, $documentPath);
+                        my_delete($checkDir);
+                        // Hard delete.
+                        DocumentManager::deleteDocumentFromDb(
+                            $document[0]['iid'],
+                            $courseInfo,
+                            api_get_session_id(),
+                            true
+                        );
+                    }
+                }
+            }
+        }
+
         if ($debug) {
             error_log('Finish');
         }
@@ -2175,5 +2196,19 @@ class MoodleImport
                 }
             }
         }
+    }
+
+    /**
+     * Check if folder is empty or not.
+     *
+     * @param $dir
+     *
+     * @return bool
+     */
+    private function isEmptyDir($dir)
+    {
+        $iterator = new FilesystemIterator($dir);
+        $isDirEmpty = !$iterator->valid();
+        return $isDirEmpty;
     }
 }

@@ -68,7 +68,7 @@ if ($bbb->pluginEnabled) {
                 }
 
                 $meetingParams = [];
-                $meetingParams['meeting_name'] = $bbb->getCurrentVideoConferenceName();
+                $meetingParams['meeting_name'] = $bbb->generateVideoConferenceName($_GET['name'] ?? null);
                 $url = null;
                 if ($bbb->meetingExists($meetingParams['meeting_name'])) {
                     $joinUrl = $bbb->joinMeeting($meetingParams['meeting_name']);

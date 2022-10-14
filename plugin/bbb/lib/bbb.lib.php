@@ -398,9 +398,9 @@ class bbb
                 api_get_session_id()
             );
 
-            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName();
-            $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
-            $record = isset($params['record']) && $params['record'] ? 'true' : 'false';
+            $meetingName = $params['meeting_name'] ?? $this->generateVideoConferenceName();
+            $welcomeMessage = $params['welcome_msg'] ?? null;
+            $record = $params['record'] ? 'true' : 'false';
             //$duration = isset($params['duration']) ? intval($params['duration']) : 0;
             // This setting currently limits the maximum conference duration,
             // to avoid lingering sessions on the video-conference server #6261
@@ -499,23 +499,109 @@ class bbb
     }
 
     /**
-     * @return string
+     * Get the info from the current open videoconference.
+     * Otherwise, return false.
+     *
+     * @return array|bool
      */
-    public function getCurrentVideoConferenceName()
+    public function getCurrentVideoConference()
     {
+        $whereConditions = [
+            'status = ?' => 1,
+        ];
+
         if ($this->isGlobalConferencePerUserEnabled()) {
-            return 'url_'.$this->userId.'_'.api_get_current_access_url_id();
+            $whereConditions[' AND user_id = ?'] = $this->userId;
         }
 
         if ($this->isGlobalConference()) {
-            return 'url_'.api_get_current_access_url_id();
+            $whereConditions[' AND access_url = ?'] = api_get_current_access_url_id();
         }
 
         if ($this->hasGroupSupport()) {
-            return api_get_course_id().'-'.api_get_session_id().'-'.api_get_group_id();
+            $whereConditions[' AND group_id = ?'] = api_get_group_id();
         }
 
-        return api_get_course_id().'-'.api_get_session_id();
+        $cId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        if ($cId) {
+            $whereConditions[' AND c_id = ?'] = api_get_course_int_id();
+        }
+
+        if ($sessionId) {
+            $whereConditions[' AND session_id = ?'] = api_get_session_id();
+        }
+
+        return Database::select(
+            '*',
+            $this->table,
+            [
+                'where' => $whereConditions,
+                'order' => 'created_at DESC',
+            ],
+            'first'
+        );
+    }
+
+    public function generateVideoConferenceName(string $defaultName = null): string
+    {
+        $nameFilter = function ($name) {
+            return URLify::filter(
+                $name,
+                64,
+                '',
+                true,
+                true,
+                true,
+                false
+            );
+        };
+
+        if (!empty($defaultName)) {
+            $name = $nameFilter($defaultName);
+
+            if (!empty($name)) {
+                return $name;
+            }
+        }
+
+        $urlId = api_get_current_access_url_id();
+
+        if ($this->isGlobalConferencePerUserEnabled()) {
+            return $nameFilter("url_{$this->userId}_$urlId");
+        }
+
+        if ($this->isGlobalConference()) {
+            return $nameFilter("url_$urlId");
+        }
+
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+        $group = api_get_group_entity();
+
+        if ($this->hasGroupSupport()) {
+            $name = implode(
+                '-',
+                [
+                    $course->getCode(),
+                    $session ? $session->getName() : '',
+                    $group ? $group->getName() : '',
+                ]
+            );
+
+            return $nameFilter($name);
+        }
+
+        $name = implode(
+            '-',
+            [
+                $course->getCode(),
+                $session ? $session->getName() : '',
+            ]
+        );
+
+        return $nameFilter($name);
     }
 
     /**
@@ -990,6 +1076,7 @@ class bbb
         $newMeetingList = array();
         foreach ($meetingList as $meetingDB) {
             $item = array();
+            $item['metting_name'] = $meetingDB['meeting_name'];
             $courseId = $meetingDB['c_id'];
             $courseInfo = api_get_course_info_by_id($courseId);
             $courseCode = '';

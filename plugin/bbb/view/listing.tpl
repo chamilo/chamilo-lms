@@ -12,39 +12,40 @@
 </style>
 <div class ="row">
 {% if bbb_status == true %}
-    <div class ="col-md-12" style="text-align:center">
+    <div class ="col-md-12">
         {{ form }}
         {% if show_join_button == true %}
-            {{ enter_conference_links.0 }}
-            <br />
-            <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
-            <div class="well">
-                <div class="form-inline">
-                    <div class="form-group">
-                        <input id="share_button"
-                               type="text"
-                               style="width:600px"
-                               class="form-control" readonly value="{{ conference_url }}">
-                        <button onclick="copyTextToClipBoard('share_button');" class="btn btn-default">
-                            <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
-                        </button>
+            {{ enter_conference_links }}
+            <div class="text-center">
+                <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
+                <div class="well">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input id="share_button"
+                                   type="text"
+                                   style="width:600px"
+                                   class="form-control" readonly value="{{ conference_url }}">
+                            <button onclick="copyTextToClipBoard('share_button');" class="btn btn-default">
+                                <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <p>
+                <p>
                 <span id="users_online" class="label label-warning">
                     {{ 'XUsersOnLine'| get_plugin_lang('BBBPlugin') | format(users_online) }}
                 </span>
-            </p>
+                </p>
 
-            {% if max_users_limit > 0 %}
-                {% if conference_manager == true %}
-                    <p>{{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
-                {% elseif users_online >= max_users_limit/2 %}
-                    <p>{{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
+                {% if max_users_limit > 0 %}
+                    {% if conference_manager == true %}
+                        <p>{{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
+                    {% elseif users_online >= max_users_limit/2 %}
+                        <p>{{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
+            </div>
         </div>
         {% elseif max_users_limit > 0 %}
             {% if conference_manager == true %}
@@ -61,6 +62,7 @@
         </div>
         <table class="table">
             <tr>
+                <th>{{ 'Name'|get_lang }}</th>
                 <th>{{ 'CreatedAt'| get_plugin_lang('BBBPlugin') }}</th>
                 <th>{{ 'Status'| get_lang }}</th>
                 <th>{{ 'Records'| get_plugin_lang('BBBPlugin') }}</th>
@@ -71,6 +73,7 @@
             {% for meeting in meetings %}
             <tr>
                 <!-- td>{{ meeting.id }}</td -->
+                <td>{{ meeting.metting_name }}</td>
                 {% if meeting.visibility == 0 %}
                     <td class="muted">{{ meeting.created_at }}</td>
                 {% else %}

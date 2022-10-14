@@ -2176,6 +2176,22 @@ class Rest extends WebService
             throw new Exception(get_lang('CoursesNotAddedToSession'));
         }
 
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $courseListOrdered = SessionManager::get_course_list_by_session_id($modelSessionId, null, 'position');
+        $position = [];
+        $count = 0;
+        foreach ($courseListOrdered as $course) {
+            if ($course['position'] == '') {
+                $course['position'] = $count;
+            }
+            $position[$course['code']] = $course['position'];
+            // Saving order.
+            $sql = "UPDATE $table SET position = " . $course['position'] . "
+                    WHERE session_id = $newSessionId AND c_id = '".$course['real_id']."'";
+            Database::query($sql);
+            $count++;
+        }
+
         if ($duplicateAgendaContent) {
             foreach ($courseList as $courseId) {
                 SessionManager::importAgendaFromSessionModel($modelSessionId, $newSessionId, $courseId);

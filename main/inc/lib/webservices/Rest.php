@@ -2184,7 +2184,7 @@ class Rest extends WebService
                 $course['position'] = $count;
             }
             // Saving order.
-            $sql = "UPDATE $table SET position = " . $course['position'] . "
+            $sql = "UPDATE $table SET position = ".$course['position']."
                     WHERE session_id = $newSessionId AND c_id = '".$course['real_id']."'";
             Database::query($sql);
             $count++;

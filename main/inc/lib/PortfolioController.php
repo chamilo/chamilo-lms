@@ -1368,7 +1368,7 @@ class PortfolioController
         } else {
             $actions[] = Display::url(
                 Display::return_icon('copy.png', get_lang('CopyToMyPortfolio'), [], ICON_SIZE_MEDIUM),
-                $this->baseUrl.http_build_query(['action' => 'copy', 'id' => $item->getId()])
+                $this->baseUrl.http_build_query(['action' => 'copy', 'copy' => 'item', 'id' => $item->getId()])
             );
         }
 
@@ -3760,6 +3760,10 @@ class PortfolioController
 
     private function getCommentsForIndex(FormValidator $frmFilterList = null): array
     {
+        if (null === $frmFilterList) {
+            return [];
+        }
+
         if (!$frmFilterList->validate()) {
             return [];
         }

@@ -2178,13 +2178,11 @@ class Rest extends WebService
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $courseListOrdered = SessionManager::get_course_list_by_session_id($modelSessionId, null, 'position');
-        $position = [];
         $count = 0;
         foreach ($courseListOrdered as $course) {
             if ($course['position'] == '') {
                 $course['position'] = $count;
             }
-            $position[$course['code']] = $course['position'];
             // Saving order.
             $sql = "UPDATE $table SET position = " . $course['position'] . "
                     WHERE session_id = $newSessionId AND c_id = '".$course['real_id']."'";

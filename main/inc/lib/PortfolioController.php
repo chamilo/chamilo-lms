@@ -462,6 +462,8 @@ class PortfolioController
     {
         global $interbreadcrumb;
 
+        $this->blockIsNotAllowed();
+
         $templates = $this->em
             ->getRepository(Portfolio::class)
             ->findBy(
@@ -989,14 +991,16 @@ class PortfolioController
             );
         } else {
             if ($currentUserId == $this->owner->getId()) {
-                $actions[] = Display::url(
-                    Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
-                    $this->baseUrl.'action=add_item'
-                );
-                $actions[] = Display::url(
-                    Display::return_icon('waiting_list.png', get_lang('PortfolioDetails'), [], ICON_SIZE_MEDIUM),
-                    $this->baseUrl.'action=details'
-                );
+                if ($this->isAllowed()) {
+                    $actions[] = Display::url(
+                        Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+                        $this->baseUrl.'action=add_item'
+                    );
+                    $actions[] = Display::url(
+                        Display::return_icon('waiting_list.png', get_lang('PortfolioDetails'), [], ICON_SIZE_MEDIUM),
+                        $this->baseUrl.'action=details'
+                    );
+                }
             } else {
                 $actions[] = Display::url(
                     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
@@ -1406,6 +1410,8 @@ class PortfolioController
      */
     public function copyItem(Portfolio $originItem)
     {
+        $this->blockIsNotAllowed();
+
         $currentTime = api_get_utc_datetime(null, false, true);
 
         $portfolio = new Portfolio();
@@ -1475,6 +1481,8 @@ class PortfolioController
      */
     public function teacherCopyItem(Portfolio $originItem)
     {
+        api_protect_teacher_script();
+
         $actionParams = http_build_query(['action' => 'teacher_copy', 'copy' => 'item', 'id' => $originItem->getId()]);
 
         $form = new FormValidator('teacher_copy_portfolio', 'post', $this->baseUrl.$actionParams);
@@ -1674,6 +1682,8 @@ class PortfolioController
      */
     public function details(HttpRequest $httpRequest)
     {
+        $this->blockIsNotAllowed();
+
         $currentUserId = api_get_user_id();
         $isAllowedToFilterStudent = $this->course && api_is_allowed_to_edit();
 
@@ -2834,6 +2844,33 @@ class PortfolioController
 
         header('Location: '.$this->baseUrl.http_build_query(['action' => 'tags']));
         exit();
+    }
+
+    private function isAllowed(): bool
+    {
+        $isSubscribedInCourse = false;
+
+        if ($this->course) {
+            $isSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
+                api_get_user_id(),
+                $this->course->getCode(),
+                (bool) $this->session,
+                $this->session ? $this->session->getId() : 0
+            );
+        }
+
+        if (!$this->course || $isSubscribedInCourse) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function blockIsNotAllowed()
+    {
+        if (!$this->isAllowed()) {
+            api_not_allowed(true);
+        }
     }
 
     /**

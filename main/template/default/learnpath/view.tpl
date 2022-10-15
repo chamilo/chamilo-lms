@@ -241,7 +241,22 @@
                     'style',
                     'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
                 );
-                $('#wrapper-iframe').before('<a style="position:fixed;right:5px;top:5px;z-index:1001;" target="_blank" href="{{ iframe_src }}" >Open PDF on Safari</a>');
+                $('<a>')
+                    .attr({
+                        'target': '_blank',
+                        'href': '{{ iframe_src }}'
+                    })
+                    .css({
+                        'position': 'absolute',
+                        'right': '5px',
+                        'top': '5px',
+                        'z-index': '9999',
+                        'font-weight': 'bold'
+                    })
+                    .addClass('btn btn-default btn-sm')
+                    .text('{{ 'OpenContentInNewTab'|get_lang|escape('js') }}')
+                    .prependTo('#wrapper-iframe');
+                $('#wrapper-iframe').css('position', 'relative');
                 // Fix another issue whereby buttons do not react to click below
                 // second screen in learning paths on Apple devices
                 document.getElementById('content_id').setAttribute('style', 'overflow: auto;');

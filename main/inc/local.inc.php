@@ -208,13 +208,19 @@ if (array_key_exists('forceCASAuthentication', $_POST)) {
 
 // Not allowed for users with auth_source ims_lti outsite a tool provider
 if ('true' === api_get_plugin_setting('lti_provider', 'enabled')) {
+    global $cidReset;
     require_once api_get_path(SYS_PLUGIN_PATH).'lti_provider/src/LtiProvider.php';
     $isLtiRequest = LtiProvider::create()->isLtiRequest($_REQUEST, $_SESSION);
     $user = api_get_user_info();
+    if ($cidReset) {
+        $isLtiRequest = false;
+    }
     if (!empty($user) && IMS_LTI_SOURCE === $user['auth_source'] && !$isLtiRequest) {
-        LtiProvider::create()->logout();
-        api_not_allowed(false);
-        exit;
+        if (isset($_SESSION['_ltiProvider']) && !empty($_SESSION['_ltiProvider']['launch_url'])) {
+            $redirectLti = $_SESSION['_ltiProvider']['launch_url'].'&from=lti_provider';
+            header('Location: '.$redirectLti);
+            exit;
+        }
     }
 }
 

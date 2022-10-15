@@ -1944,15 +1944,20 @@ function api_get_user_entity($userId)
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_username($username)
+function api_get_user_info_from_username($username, $authSource = null)
 {
     if (empty($username)) {
         return false;
     }
     $username = trim($username);
 
+    $andAuthSource = "";
+    if (isset($authSource)) {
+        $authSource = Database::escape_string($authSource);
+        $andAuthSource = " AND auth_source = '$authSource'";
+    }
     $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-            WHERE username='".Database::escape_string($username)."'";
+            WHERE username='".Database::escape_string($username)."' $andAuthSource";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $resultArray = Database::fetch_array($result);

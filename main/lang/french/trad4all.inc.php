@@ -8849,4 +8849,5 @@ $CommentByUserXInItemY = "Commentaire de %s sur %s";
 $PortfolioPostAddHelp = "Introduction de l'outil Portfolio";
 $LearningPathLTI = "Accès par LTI aux parcours";
 $UserXNotSubscribedToCourseX = "L'utilisateur %s n'a pas été inscrit au cours %s";
+$OpenContentInNewTab = "Ouvrir le contenu dans un nouvel onglet";
 ?>

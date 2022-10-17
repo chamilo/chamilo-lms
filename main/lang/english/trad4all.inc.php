@@ -8913,4 +8913,5 @@ $CommentByUserXInItemY = "Comment by %s in <em>%s</em>";
 $PortfolioPostAddHelp = "Portfolio tool introduction";
 $LearningPathLTI = "Access through LTI to Learning Path";
 $UserXNotSubscribedToCourseX = "User %s has no been registered to course %s";
+$OpenContentInNewTab = "Open content in a new tab";
 ?>

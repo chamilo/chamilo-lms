@@ -16,6 +16,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
+if (api_get_course_int_id()) {
+    api_protect_course_script(true);
+}
+
 if (false === api_get_configuration_value('allow_portfolio_tool')) {
     api_not_allowed(true);
 }
@@ -199,10 +203,7 @@ switch ($action) {
 
         break;
     case 'mark_important':
-        if (!api_is_allowed_to_edit()) {
-            api_not_allowed(true);
-            break;
-        }
+        api_protect_teacher_script();
 
         $item = $em->find(Portfolio::class, $httpRequest->query->getInt('item'));
         $comment = $em->find(PortfolioComment::class, $httpRequest->query->getInt('id'));
@@ -225,11 +226,7 @@ switch ($action) {
         $controller->exportZip($httpRequest);
         break;
     case 'qualify':
-        api_protect_course_script(true);
-
-        if (!api_is_allowed_to_edit()) {
-            api_not_allowed(true);
-        }
+        api_protect_teacher_script();
 
         if ($httpRequest->query->has('item')) {
             if ('1' !== api_get_course_setting('qualify_portfolio_item')) {

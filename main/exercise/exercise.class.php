@@ -4453,7 +4453,7 @@ class Exercise
                                 $studentAnswerToShow = $studentAnswer;
 
                                 if (empty($studentAnswer)) {
-                                    break;
+                                    continue;
                                 }
 
                                 if ($debug) {
@@ -4471,10 +4471,13 @@ class Exercise
 
                                 $found = false;
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
-                                    $correctAnswer = $listTeacherAnswerTemp[$j];
+                                    $correctAnswer = isset($listTeacherAnswerTemp[$j]) ? $listTeacherAnswerTemp[$j] : '';
+                                    if (is_array($listTeacherAnswerTemp)) {
+                                        $correctAnswer = implode('||', $listTeacherAnswerTemp);
+                                    }
 
                                     if (empty($correctAnswer)) {
-                                        break;
+                                        continue;
                                     }
 
                                     if (FillBlanks::isStudentAnswerGood(
@@ -4485,7 +4488,15 @@ class Exercise
                                     )) {
                                         $questionScore += $answerWeighting[$i];
                                         $totalScore += $answerWeighting[$i];
-                                        $listTeacherAnswerTemp[$j] = null;
+                                        if (is_array($listTeacherAnswerTemp)) {
+                                            $searchAnswer = array_search(api_htmlentities($studentAnswer), $listTeacherAnswerTemp);
+                                            if (false !== $searchAnswer) {
+                                                // Remove from array
+                                                unset($listTeacherAnswerTemp[$searchAnswer]);
+                                            }
+                                        } else {
+                                            $listTeacherAnswerTemp[$j] = null;
+                                        }
                                         $found = true;
                                     }
 

@@ -131,19 +131,19 @@ try {
                 ? array_map('intval', $_POST['messages'])
                 : [];
 
-        $messagesId = array_filter($messagesId);
-        if (empty($messagesId)) {
-            throw new Exception(get_lang('NoData'));
-        }
-        $messageStatus = $action === Rest::POST_USER_MESSAGE_READ ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
-        $data = array_flip($messagesId);
-        Event::addEvent(LOG_WS.$action, 'messages_id', implode(',', $messagesId));
+            $messagesId = array_filter($messagesId);
+            if (empty($messagesId)) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $messageStatus = $action === Rest::POST_USER_MESSAGE_READ ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
+            $data = array_flip($messagesId);
+            Event::addEvent(LOG_WS.$action, 'messages_id', implode(',', $messagesId));
 
-        foreach ($messagesId as $messageId) {
-            $data[$messageId] = MessageManager::update_message_status(
-                    $restApi->getUser()->getId(),
-                    $messageId,
-                    $messageStatus
+            foreach ($messagesId as $messageId) {
+                $data[$messageId] = MessageManager::update_message_status(
+                        $restApi->getUser()->getId(),
+                        $messageId,
+                        $messageStatus
                 );
             }
 

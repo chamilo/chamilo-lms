@@ -185,7 +185,7 @@ class MoodleImport
 
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($assignId)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'student_publication', $assignId, $moduleValues['name'], $n);
+                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'student_publication', $assignId, $moduleValues['name'], $n);
                         $n++;
                     }
                     break;
@@ -215,7 +215,7 @@ class MoodleImport
 
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($documentId)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'document', $documentId, $moduleValues['name'], $n);
+                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'document', $documentId, $moduleValues['name'], $n);
                         $n++;
                     }
                     break;
@@ -253,7 +253,7 @@ class MoodleImport
                     $forumId = store_forum($forumValues, $courseInfo, true);
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($forumId)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'forum', $forumId, $moduleValues['name'], $n);
+                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'forum', $forumId, $moduleValues['name'], $n);
                         $n++;
                     }
                     break;
@@ -387,7 +387,7 @@ class MoodleImport
                     }
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($exercise->iid)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'quiz', $exercise->iid, $title, $n);
+                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'quiz', $exercise->iid, $title, $n);
                         $n++;
                     }
                     break;
@@ -425,7 +425,7 @@ class MoodleImport
                         $resourcesFiles[] = $files;
                         // It is added as item in Learnpath
                         if (!empty($currentItem['sectionid']) && !empty($documentData['iid'])) {
-                            $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'document', $documentData['iid'], $fileInfo['title'], $n);
+                            $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'document', $documentData['iid'], $fileInfo['title'], $n);
                             $n++;
                         }
                     }
@@ -457,7 +457,7 @@ class MoodleImport
                     $linkId = Link::addlinkcategory('link');
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($linkId)) {
-                        $lastLpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'link', $linkId, $moduleValues['name'], $n);
+                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'link', $linkId, $moduleValues['name'], $n);
                         $n++;
                     }
                     break;
@@ -499,6 +499,7 @@ class MoodleImport
      * Replace the path from @@PLUGINFILE@@ to a correct chamilo path.
      *
      * @param $text
+     * @param string $sectionPath
      *
      * @return string
      */
@@ -525,8 +526,9 @@ class MoodleImport
      * @param $itemType
      * @param $itemId
      * @param $itemTitle
+     * @param int $dspOrder
      *
-     * @return int
+     * @return void
      */
     public function processSectionItem($lpId, $itemType, $itemId, $itemTitle, $dspOrder = 0)
     {
@@ -548,8 +550,6 @@ class MoodleImport
             0,
             $dspOrder
         );
-
-        return $lpItemId;
     }
 
     /**
@@ -2209,6 +2209,7 @@ class MoodleImport
     {
         $iterator = new FilesystemIterator($dir);
         $isDirEmpty = !$iterator->valid();
+
         return $isDirEmpty;
     }
 }

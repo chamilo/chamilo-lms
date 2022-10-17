@@ -1787,8 +1787,7 @@ class MoodleImport
                         $qtype,
                         $subQuestion['plugin_qtype_'.$qtype.'_question'],
                         $placeholder,
-                        $slot + 1,
-                        $importedFiles
+                        $slot + 1
                     );
                 }
 
@@ -1828,7 +1827,6 @@ class MoodleImport
                     $questionList,
                     $placeholder,
                     0,
-                    $importedFiles,
                     $sectionPath
                 );
 
@@ -2026,7 +2024,6 @@ class MoodleImport
      * @param array  $answerValues
      * @param string $placeholder
      * @param int    $position
-     * @param array  $importedFiles
      *
      * @return int db response
      */
@@ -2036,11 +2033,8 @@ class MoodleImport
         $answerValues,
         &$placeholder,
         $position,
-        $importedFiles = [],
         $sectionPath = ''
     ) {
-        $coursePath = api_get_course_path();
-
         switch ($questionType) {
             case 'multichoice':
                 $optionsValues = [];

@@ -3930,6 +3930,9 @@ function api_is_anonymous($user_id = null, $db_check = false)
         //if ($_user['user_id'] == 0) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
         // Occurs in agenda for admin links - YW
+        // it occurs when pages are opened directly without entering first the course home page. To fix it add
+        // $use_anonymous = true;
+        // before including global.inc.php in the page
         global $use_anonymous;
         if (isset($use_anonymous) && $use_anonymous) {
             api_set_anonymous();

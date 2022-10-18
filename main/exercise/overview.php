@@ -7,6 +7,7 @@
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
+$use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 Exercise::cleanSessionVariables();

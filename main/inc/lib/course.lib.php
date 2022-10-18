@@ -5071,7 +5071,7 @@ class CourseManager
      * @param string $from
      * @param string $to
      */
-    public static function update_all_course_languages(string $from, string $to)
+    public static function updateAllCourseLanguages(string $from, string $to):bool
     {
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $from = Database::escape_string($from);
@@ -5079,8 +5079,9 @@ class CourseManager
         if (!empty($to) && !empty($from)) {
             $sql = "UPDATE $tableCourse SET course_language = '$to'
                     WHERE course_language = '$from'";
-            Database::query($sql);
+            return Database::query($sql);
         }
+        return false;
     }
 
     /**

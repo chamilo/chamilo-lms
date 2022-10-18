@@ -241,7 +241,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
         SubLanguageManager::make_unavailable_language($_GET['id']);
         $platform_language = api_get_setting('platformLanguage');
         UserManager::update_all_user_languages($language_info['english_name'], $platform_language);
-        CourseManager::update_all_course_languages($language_info['english_name'], $platform_language);
+        CourseManager::updateAllCourseLanguages($language_info['english_name'], $platform_language);
         Display::addFlash(Display::return_message(get_lang('LanguageIsNowHidden'), 'confirm'));
     }
 }

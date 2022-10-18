@@ -5833,7 +5833,6 @@ $LowerCaseUser = "gebruiker";
 $GenerateCertificates = "Certificaten maken";
 $ExportAllCertificatesToPDF = "Exporteer alle certificaten naar PDF";
 $DeleteAllCertificates = "Verwijder alle certificaten";
-$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Er zijn gebruikers die deze taal gebruiken. Wilt u deze taal uitschakelen en alle gebruikers de standaard portal taal laten gebruiken?";
 $dateFormatLongNoDay = "%d %B &Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Ga terug naar de cursuslijst";
@@ -6882,4 +6881,5 @@ $YourNextModule = "Jouw eerstvolgende lesmoment voor de module";
 $FirstLesson = "Eerste lesmoment";
 $UserGuides = "Gidsen voor gebruikers";
 $OngoingTraining = "Lopende opleiding(en)";
+$ThereAreUsersOrCoursesUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersAndCoursesWithTheDefaultPortalLanguage = "Er zijn gebruikers of cursussen die deze taal gebruiken. Wilt u deze taal uitschakelen en alle gebruikers en cursussen de standaard portal taal laten gebruiken?";
 ?>

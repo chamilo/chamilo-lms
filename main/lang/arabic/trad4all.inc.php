@@ -5943,7 +5943,6 @@ $LowerCaseUser = "مستخدم";
 $GenerateCertificates = "توليد شهادات";
 $ExportAllCertificatesToPDF = "PDF تصدير كافة الشهادات الى ملف";
 $DeleteAllCertificates = "حذف كافة الشهادات";
-$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "يوجد مستخدمين يستخدمون هذه اللغة، هل تود تعطيل هذه اللغة وجعل كافة المستخدمين يستخدمون لغة النظام الافتراضية";
 $dateFormatLongNoDay = "%d %B %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "العودة الى قائمة المقررات";

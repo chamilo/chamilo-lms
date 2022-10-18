@@ -5887,7 +5887,6 @@ $LowerCaseUser = "user";
 $GenerateCertificates = "Generate certificates";
 $ExportAllCertificatesToPDF = "Export all certificates to PDF";
 $DeleteAllCertificates = "Delete all certificates";
-$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Αυτή τη στιγμή, υπάρχουν χρήστες που χρησιμοποιούν αυτή την γλώσσα. Θέλετε να την απενεργοποιήσετε και να οριστεί ως γλώσσα των χρηστών η προκαθορισμένη?";
 $dateFormatLongNoDay = "%d %B %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Επιστροφή στην λίστα μαθημάτων";

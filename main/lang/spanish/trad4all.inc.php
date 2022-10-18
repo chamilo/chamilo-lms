@@ -5923,7 +5923,6 @@ $LowerCaseUser = "usuario";
 $GenerateCertificates = "Generar certificados";
 $ExportAllCertificatesToPDF = "Exportar todos los certificados a PDF";
 $DeleteAllCertificates = "Eliminar todos los certificados";
-$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Existen usuarios usando este idioma. ¿Desea deshabilitar este idioma y actualizar estos usuarios con el idioma por defecto de la plataforma?";
 $dateFormatLongNoDay = "%d de %B de %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Regreso a lista de cursos";
@@ -8942,4 +8941,5 @@ $PortfolioPostAddHelp = "Introducción a la herramienta de Portfolio";
 $LearningPathLTI = "Accesso por LTI a lecciones";
 $UserXNotSubscribedToCourseX = "El usuario %s no ha sido registrado al curso %s";
 $OpenContentInNewTab = "Abrir contenido en una nueva pestaña";
+$ThereAreUsersOrCoursesUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersAndCoursesWithTheDefaultPortalLanguage = "Existen usuarios o cursos usando este idioma. ¿Desea deshabilitar este idioma y actualizar estos usuarios y cursos con el idioma por defecto de la plataforma?";
 ?>

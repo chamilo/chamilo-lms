@@ -5683,7 +5683,6 @@ $LowerCaseUser = "utilizator";
 $GenerateCertificates = "Creati certificate";
 $ExportAllCertificatesToPDF = "Exportati toate certificatele in PDF";
 $DeleteAllCertificates = "Eliminati toate certificatele";
-$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Există utilizatori care folosesc acest limbaj. Vrei să dezactivați această limbă și actualiza acești utilizatori cu limba implicită a platformei?";
 $dateFormatLongNoDay = "%d %B %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Înapoi la lista de cursuri";

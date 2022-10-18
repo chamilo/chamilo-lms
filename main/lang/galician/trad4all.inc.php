@@ -5934,7 +5934,6 @@ $LowerCaseUser = "usuario";
 $GenerateCertificates = "Xerar certificados";
 $ExportAllCertificatesToPDF = "Exportar todos os certificados a PDF";
 $DeleteAllCertificates = "Eliminar todos os certificados";
-$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Hai usuarios usando esta linguaxe. Quere desabilitar esta linguaxe e asignar a todos os usuarios a linguaxe por defecto do portal?";
 $dateFormatLongNoDay = "%d %B %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Regreso á lista de curso";

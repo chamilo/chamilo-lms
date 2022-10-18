@@ -5882,7 +5882,6 @@ $LowerCaseUser = "Benutzer";
 $GenerateCertificates = "Zertifikate erstellen";
 $ExportAllCertificatesToPDF = "Alle Zertifikate als PDF exportieren";
 $DeleteAllCertificates = "Alle Zertifikate löschen";
-$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Es sind Benutzer mit dieser Sprache vorhanden. Dennoch diese Sprache deaktivieren und die Standard-Sprache der Installation setzen?";
 $dateFormatLongNoDay = "%d %B %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Zurück zur Kursliste";
@@ -8002,4 +8001,5 @@ $UpdateSessionStatus = "Sitzungsstand aktualisieren";
 $SessionListCustom = "Überblick";
 $NoStatus = "kein Status";
 $CAS3Text = "CAS 3";
+$ThereAreUsersOrCoursesUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersAndCoursesWithTheDefaultPortalLanguage = "Es sind Benutzer oder Kurse mit dieser Sprache vorhanden. Dennoch diese Sprache deaktivieren und die Standard-Sprache der Installation setzen?";
 ?>

@@ -5066,6 +5066,24 @@ class CourseManager
     }
 
     /**
+     * Updates the language for all courses
+     *
+     * @param string $from
+     * @param string $to
+     */
+    public static function update_all_course_languages(string $from, string $to)
+    {
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $from = Database::escape_string($from);
+        $to = Database::escape_string($to);
+        if (!empty($to) && !empty($from)) {
+            $sql = "UPDATE $tableCourse SET course_language = '$to'
+                    WHERE course_language = '$from'";
+            Database::query($sql);
+        }
+    }
+
+    /**
      * Add user vote to a course.
      *
      * @param   int user id

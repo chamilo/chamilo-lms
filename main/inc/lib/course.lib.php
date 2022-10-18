@@ -5071,7 +5071,7 @@ class CourseManager
      * @param string $from
      * @param string $to
      */
-    public static function updateAllCourseLanguages(string $from, string $to):bool
+    public static function updateAllCourseLanguages(string $from, string $to): bool
     {
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $from = Database::escape_string($from);

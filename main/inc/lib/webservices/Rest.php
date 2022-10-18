@@ -1926,9 +1926,14 @@ class Rest extends WebService
         }
     }
 
-    public function setMessageRead($messageId)
+    /**
+     * Set a given message as already read
+     * @param $messageId
+     */
+    public function setMessageRead(int $messageId)
     {
-        MessageManager::update_message($this->user->getId(), $messageId);
+        // MESSAGE_STATUS_NEW is also used for messages that have been "read"
+        MessageManager::update_message_status($this->user->getId(), $messageId, MESSAGE_STATUS_NEW);
     }
 
     /**

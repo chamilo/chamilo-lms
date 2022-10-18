@@ -2156,6 +2156,11 @@ function api_get_anonymous_id()
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
+            $email = ' anonymous@localhost.local';
+            if (api_get_setting('login_is_email') == 'true') {
+                $login = $login . "@localhost.local";
+                $email = $login;
+            }
             $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
             if (count($anonList) >= $max) {
                 foreach ($anonList as $userToDelete) {
@@ -2168,7 +2173,7 @@ function api_get_anonymous_id()
                 $login,
                 'anon',
                 ANONYMOUS,
-                ' anonymous@localhost',
+                $email,
                 $login,
                 $login
             );

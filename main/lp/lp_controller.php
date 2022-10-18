@@ -48,7 +48,11 @@ $(window).on("load", function () {
     setFocus();
 });
 </script>';
-$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?'.api_get_cidreq();
+$extraParams = '';
+if (isset($_REQUEST['lti_launch_id'])) {
+    $extraParams .= '&lti_launch_id='.Security::remove_XSS($_REQUEST['lti_launch_id']);
+}
+$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?'.api_get_cidreq().$extraParams;
 $htmlHeadXtra[] = '
 <script>
     /*

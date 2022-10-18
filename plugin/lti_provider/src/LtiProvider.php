@@ -61,6 +61,10 @@ class LtiProvider
             Session::erase('objExercise');
             Session::erase('questionList');
         }
+        Session::erase('is_allowed_in_course');
+        Session::erase('_real_cid');
+        Session::erase('_cid');
+        Session::erase('_course');
     }
 
     /**
@@ -78,7 +82,7 @@ class LtiProvider
     }
 
     /**
-     * Verify if email user is in the platform to create it and login (true) or not (false).
+     * Verify if user is in the provider platform to create it and login (true) or not (false).
      */
     public function validateUser(array $launchData, string $courseCode, string $toolName): bool
     {
@@ -86,26 +90,27 @@ class LtiProvider
             return false;
         }
 
-        $firstName = $launchData['given_name'];
-        $lastName = $launchData['family_name'];
-        $email = $launchData['email'];
-        $status = STUDENT;
-
-        $userInfo = api_get_user_info_from_email($email);
+        $authSource = IMS_LTI_SOURCE;
+        $username = md5($launchData['iss'].'_'.$launchData['sub']);
+        $userInfo = api_get_user_info_from_username($username, $authSource);
         if (empty($userInfo)) {
-            // We create the user
-            $username = $launchData['https://purl.imsglobal.org/spec/lti/claim/ext']['user_username'];
-            if (!UserManager::is_username_available($username)) {
-                $username = UserManager::create_unique_username(
-                    $firstName,
-                    $lastName
-                );
+            $email = $username.'@'.$authSource.'.com';
+            if (!empty($launchData['email'])) {
+                $email = $launchData['email'];
+            }
+            $firstName = $launchData['aud'];
+            if (!empty($launchData['given_name'])) {
+                $firstName = $launchData['given_name'];
+            }
+            $lastName = $launchData['sub'];
+            if (!empty($launchData['family_name'])) {
+                $lastName = $launchData['family_name'];
             }
             $password = api_generate_password();
             $userId = UserManager::create_user(
                 $firstName,
                 $lastName,
-                $status,
+                STUDENT,
                 $email,
                 $username,
                 $password,
@@ -113,14 +118,14 @@ class LtiProvider
                 '',
                 '',
                 '',
-                IMS_LTI_SOURCE
+                $authSource
             );
         } else {
             $userId = $userInfo['user_id'];
         }
 
         if (!CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
-            CourseManager::subscribeUser($userId, $courseCode, $status);
+            CourseManager::subscribeUser($userId, $courseCode);
         }
 
         $this->logout($toolName);
@@ -135,5 +140,31 @@ class LtiProvider
         }
 
         return $login;
+    }
+
+    /**
+     * It checks if request is from lti customer.
+     *
+     * @param $request
+     * @param $session
+     *
+     * @return bool
+     */
+    public function isLtiRequest($request, $session)
+    {
+        $isLti = false;
+        if (isset($request['lti_message_hint'])) {
+            $isLti = true;
+        } else if (isset($request['state'])) {
+            $isLti = true;
+        } else if (isset($request['lti_launch_id']) && 'learnpath' === api_get_origin()) {
+            $isLti = true;
+        } else if(isset($request['lti_launch_id'])) {
+            $isLti = true;
+        } else if (isset($session['oLP']->lti_launch_id)) {
+            $isLti = true;
+        }
+
+        return $isLti;
     }
 }

@@ -206,6 +206,24 @@ if (array_key_exists('forceCASAuthentication', $_POST)) {
     }
 }
 
+// Not allowed for users with auth_source ims_lti outsite a tool provider
+if ('true' === api_get_plugin_setting('lti_provider', 'enabled')) {
+    global $cidReset;
+    require_once api_get_path(SYS_PLUGIN_PATH).'lti_provider/src/LtiProvider.php';
+    $isLtiRequest = LtiProvider::create()->isLtiRequest($_REQUEST, $_SESSION);
+    $user = api_get_user_info();
+    if ($cidReset) {
+        $isLtiRequest = false;
+    }
+    if (!empty($user) && IMS_LTI_SOURCE === $user['auth_source'] && !$isLtiRequest) {
+        if (isset($_SESSION['_ltiProvider']) && !empty($_SESSION['_ltiProvider']['launch_url'])) {
+            $redirectLti = $_SESSION['_ltiProvider']['launch_url'].'&from=lti_provider';
+            header('Location: '.$redirectLti);
+            exit;
+        }
+    }
+}
+
 if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
@@ -1150,6 +1168,7 @@ if (($sessionIdFromGet !== false && $sessionIdFromGet !== $sessionIdFromSession)
     // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
     Session::erase('_real_cid');
     Session::erase('_cid');
+    Session::erase('oLP');
     Session::erase('_course');
     Session::erase('_gid');
 }
@@ -1168,6 +1187,7 @@ if ($checkFromDatabase && !empty($sessionIdFromGet)) {
         // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
         Session::erase('_real_cid');
         Session::erase('_cid');
+        Session::erase('oLP');
         Session::erase('_course');
         Session::erase('_gid');
         api_not_allowed(true);
@@ -1214,6 +1234,7 @@ if ($cidReset) {
             Event::courseLogout($logoutInfo);
         }
         Session::erase('_cid');
+        Session::erase('oLP');
         Session::erase('_real_cid');
         Session::erase('_course');
         Session::erase('session_name');
@@ -1325,6 +1346,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                     Session::erase('id_session');
                     Session::erase('_real_cid');
                     Session::erase('_cid');
+                    Session::erase('oLP');
                     Session::erase('_course');
                     Session::erase('_gid');
                     Session::erase('is_courseAdmin');
@@ -1531,6 +1553,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
 
                             Session::erase('_real_cid');
                             Session::erase('_cid');
+                            Session::erase('oLP');
                             Session::erase('_course');
 
                             header('Location: '.$url);

@@ -49,6 +49,11 @@ $autocomplete_when_80pct = 0;
 $user = api_get_user_info();
 $userId = api_get_user_id();
 
+$extraParams = '';
+if (isset($oLP->lti_launch_id)) {
+    $extraParams .= '&lti_launch_id='.Security::remove_XSS($oLP->lti_launch_id);
+}
+
 header('Content-type: text/javascript');
 
 ?>var scorm_logs=<?php echo (empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
@@ -217,7 +222,7 @@ olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
 olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 
-var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id;
+var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id+'<?php echo $extraParams; ?>';
 var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
 
 /**

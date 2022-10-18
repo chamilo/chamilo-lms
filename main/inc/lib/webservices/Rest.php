@@ -1672,6 +1672,7 @@ class Rest extends WebService
         $results = [];
         if (!empty($courseInfo)) {
             $results['status'] = true;
+            $results['id'] = $courseInfo['real_id'];
             $results['code_course'] = $courseInfo['code'];
             $results['title_course'] = $courseInfo['title'];
             $extraFieldValues = new ExtraFieldValue('course');

@@ -140,10 +140,10 @@ try {
 
             foreach ($messagesId as $messageId) {
                 $data[$messageId] = MessageManager::update_message_status(
-                            $restApi->getUser()->getId(),
-                            $messageId,
-                            $messageStatus
-                    );
+                    $restApi->getUser()->getId(),
+                    $messageId,
+                    $messageStatus
+                );
             }
             Event::addEvent(LOG_WS.$action, 'messages_id', implode(',', $messagesId));
 
@@ -154,7 +154,7 @@ try {
             $subject = !empty($_POST['subject']) ? $_POST['subject'] : null;
             $text = !empty($_POST['text']) ? $_POST['text'] : null;
             $data = $restApi->saveUserMessage($subject, $text, $receivers);
-            Event::addEvent(LOG_WS.$action, 'success', $data['sent']);
+            Event::addEvent(LOG_WS.$action, 'username', $username);
             $restResponse->setData($data);
             break;
         case Rest::GET_MESSAGE_USERS:
@@ -193,12 +193,12 @@ try {
             $restResponse->setData($userInfo);
             break;
         case Rest::GET_PROFILES_BY_EXTRA_FIELD:
-            Event::addEvent(LOG_WS.$action, 'extra_field_name', Database::escape_string($_POST['field_name']));
+            Event::addEvent(LOG_WS.$action, 'extra_field_name', $_POST['field_name']);
             $users = $restApi->getUsersProfilesByExtraField($_POST['field_name'], $_POST['field_value']);
             $restResponse->setData($users);
             break;
         case Rest::GET_COURSES_DETAILS_BY_EXTRA_FIELD:
-            Event::addEvent(LOG_WS.$action, 'extra_field_name', Database::escape_string($_POST['field_name']));
+            Event::addEvent(LOG_WS.$action, 'extra_field_name', $_POST['field_name']);
             $courses = $restApi->getCoursesByExtraField($_POST['field_name'], $_POST['field_value']);
             $restResponse->setData($courses);
             break;
@@ -368,7 +368,7 @@ try {
             if (empty($_GET['path'])) {
                 throw new Exception(get_lang('ActionNotAllowed'));
             }
-            Event::addEvent(LOG_WS.$action, 'path', Database::escape_string($_GET['path']));
+            Event::addEvent(LOG_WS.$action, 'path', $_GET['path']);
             $restApi->downloadForumPostAttachment($_GET['path']);
             break;
         case Rest::GET_WORK_LIST:
@@ -414,13 +414,15 @@ try {
                 throw new Exception(get_lang('ActionNotAllowed'));
             }
 
+            $workId = (int) $_GET['work'];
+
             if (!api_is_allowed_to_edit()) {
                 throw new Exception(get_lang('NotAllowed'));
             }
 
-            Event::addEvent(LOG_WS.$action, 'work_id', (int) $_GET['work']);
+            Event::addEvent(LOG_WS.$action, 'work_id', $workId);
             $restResponse->setData(
-                $restApi->getWorkStudentList((int) $_GET['work'])
+                $restApi->getWorkStudentList($workId)
             );
             break;
         case Rest::PUT_WORK_STUDENT_ITEM_VISIBILITY:
@@ -428,16 +430,18 @@ try {
                 throw new Exception(get_lang('ActionNotAllowed'));
             }
 
+            $workId = (int) $_POST['work'];
+
             if (!api_is_allowed_to_edit() && !api_is_coach()) {
                 throw new Exception(get_lang('NotAllowed'));
             }
 
             $data = $restApi->putCourseWorkVisibility(
-                (int) $_POST['work'],
+                $workId,
                 (int) $_POST['status']
             );
 
-            Event::addEvent(LOG_WS.$action, 'status_response', $data ? 'true' : 'false');
+            Event::addEvent(LOG_WS.$action, 'work_id', $workId);
             $restResponse->setData(['status' => $data]);
             break;
         case Rest::DELETE_WORK_STUDENT_ITEM:
@@ -520,12 +524,12 @@ try {
             break;
         case Rest::EDIT_CAMPUS:
             $data = $restApi->editCampusURL($_POST);
-            Event::addEvent(LOG_WS.$action, 'success', $data ? 'true' : 'false');
+            Event::addEvent(LOG_WS.$action, 'campus_id', $_POST['id']);
             $restResponse->setData($data);
             break;
         case Rest::DELETE_CAMPUS:
             $data = $restApi->deleteCampusURL($_POST);
-            Event::addEvent(LOG_WS.$action, 'success', $data['status'] ? 'true' : 'false');
+            Event::addEvent(LOG_WS.$action, 'campus_id', $_POST['id']);
             $restResponse->setData($data);
             break;
         case Rest::GET_USERS:
@@ -534,7 +538,7 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::USERNAME_EXIST:
-            Event::addEvent(LOG_WS.$action, 'username', Database::escape_string($_POST['loginname']));
+            Event::addEvent(LOG_WS.$action, 'username', $_POST['loginname']);
             $data = $restApi->usernameExist($_POST['loginname']);
             $restResponse->setData([$data]);
             break;
@@ -562,7 +566,7 @@ try {
             break;
         case Rest::UPDATE_USER_FROM_USERNAME:
             $data = $restApi->updateUserFromUserName($_POST);
-            Event::addEvent(LOG_WS.$action, 'success', $data ? 'true' : 'false');
+            Event::addEvent(LOG_WS.$action, 'username', $username);
             $restResponse->setData([$data]);
             break;
         case Rest::UPDATE_USER_APIKEY:
@@ -583,7 +587,7 @@ try {
             }
 
             $result = UserManager::delete_user($_REQUEST['user_id']);
-            Event::addEvent(LOG_WS.$action, 'success', $result ? 'true' : 'false');
+            Event::addEvent(LOG_WS.$action, 'user_id', (int) $_REQUEST['user_id']);
             $restResponse->setData(['status' => $result]);
             break;
         case Rest::GET_USERS_API_KEYS:
@@ -654,7 +658,7 @@ try {
             break;
         case Rest::SAVE_COURSE:
             $data = $restApi->addCourse($_POST);
-            Event::addEvent(LOG_WS.$action, 'success', $data['status'] ? 'true' : 'false');
+            Event::addEvent(LOG_WS.$action, 'course_id', $data['id']);
             $restResponse->setData($data);
             break;
         case Rest::DELETE_COURSE:

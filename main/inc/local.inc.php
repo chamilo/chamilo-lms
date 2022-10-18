@@ -1826,23 +1826,9 @@ if (isset($_cid)) {
 
 // direct login to course
 if (isset($doNotRedirectToCourse)) {
-} elseif ($logging_in && exist_firstpage_parameter()) {
-    $redirectCourseDir = api_get_firstpage_parameter();
+} elseif (exist_firstpage_parameter()) {
+    // The GotoCourse cookie is probably deprecated
     api_delete_firstpage_parameter(); // delete the cookie
-
-    if (!isset($_SESSION['request_uri'])) {
-        if (CourseManager::getCourseCodeFromDirectory($redirectCourseDir)) {
-            $_SESSION['noredirection'] = false;
-            $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir.'/';
-        }
-    }
-} elseif (api_user_is_login() && exist_firstpage_parameter()) {
-    $redirectCourseDir = api_get_firstpage_parameter();
-    api_delete_firstpage_parameter(); // delete the cookie
-    if (CourseManager::getCourseCodeFromDirectory($redirectCourseDir)) {
-        $_SESSION['noredirection'] = false;
-        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir.'/';
-    }
 }
 
 Event::eventCourseLoginUpdate(

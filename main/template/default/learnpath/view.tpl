@@ -243,6 +243,7 @@
                 );
                 $('<a>')
                     .attr({
+                        'id': 'btn-content-new-tab',
                         'target': '_blank',
                         'href': '{{ iframe_src }}'
                     })
@@ -326,6 +327,8 @@
         $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
             $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
             $('.lp-view-tabs').animate({opacity: 1}, 500);
+
+            document.getElementById('btn-content-new-tab').href = this.src;
         });
 
         {% if lp_mode == 'embedded' %}

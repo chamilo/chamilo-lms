@@ -377,7 +377,8 @@ if ($is_allowedToEdit) {
                     case 'delete':
                         // deletes an exercise
                         if ($allowDelete) {
-                            $result = $objExerciseTmp->delete();
+                            $deleteQuestions = api_get_configuration_value('quiz_question_delete_automatically_when_deleting_exercise') ? true : false;
+                            $result = $objExerciseTmp->delete(false, $deleteQuestions);
                             if ($result) {
                                 Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
                             }

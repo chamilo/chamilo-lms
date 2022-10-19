@@ -4453,7 +4453,7 @@ class Exercise
                                 $studentAnswerToShow = $studentAnswer;
 
                                 if (empty($studentAnswer)) {
-                                    continue;
+                                    break;
                                 }
 
                                 if ($debug) {
@@ -4477,7 +4477,7 @@ class Exercise
                                     }
 
                                     if (empty($correctAnswer)) {
-                                        continue;
+                                        break;
                                     }
 
                                     if (FillBlanks::isStudentAnswerGood(

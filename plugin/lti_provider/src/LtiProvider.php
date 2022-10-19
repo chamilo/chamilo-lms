@@ -155,13 +155,13 @@ class LtiProvider
         $isLti = false;
         if (isset($request['lti_message_hint'])) {
             $isLti = true;
-        } else if (isset($request['state'])) {
+        } elseif (isset($request['state'])) {
             $isLti = true;
-        } else if (isset($request['lti_launch_id']) && 'learnpath' === api_get_origin()) {
+        } elseif (isset($request['lti_launch_id']) && 'learnpath' === api_get_origin()) {
             $isLti = true;
-        } else if(isset($request['lti_launch_id'])) {
+        } elseif (isset($request['lti_launch_id'])) {
             $isLti = true;
-        } else if (isset($session['oLP']->lti_launch_id)) {
+        } elseif (isset($session['oLP']->lti_launch_id)) {
             $isLti = true;
         }
 

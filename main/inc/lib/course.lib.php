@@ -5066,10 +5066,7 @@ class CourseManager
     }
 
     /**
-     * Updates the language for all courses
-     *
-     * @param string $from
-     * @param string $to
+     * Updates the language for all courses.
      */
     public static function updateAllCourseLanguages(string $from, string $to): bool
     {
@@ -5079,8 +5076,10 @@ class CourseManager
         if (!empty($to) && !empty($from)) {
             $sql = "UPDATE $tableCourse SET course_language = '$to'
                     WHERE course_language = '$from'";
+
             return Database::query($sql);
         }
+
         return false;
     }
 

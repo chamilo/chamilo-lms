@@ -1927,7 +1927,8 @@ class Rest extends WebService
     }
 
     /**
-     * Set a given message as already read
+     * Set a given message as already read.
+     *
      * @param $messageId
      */
     public function setMessageRead(int $messageId)

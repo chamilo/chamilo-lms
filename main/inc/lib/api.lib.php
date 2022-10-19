@@ -2158,7 +2158,7 @@ function api_get_anonymous_id()
             $login = uniqid('anon_');
             $email = ' anonymous@localhost.local';
             if (api_get_setting('login_is_email') == 'true') {
-                $login = $login . "@localhost.local";
+                $login = $login."@localhost.local";
                 $email = $login;
             }
             $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);

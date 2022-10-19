@@ -72,7 +72,8 @@ try {
             if (!$isValid) {
                 throw new Exception(get_lang('InvalideUserDetected'));
             }
-            Event::addEvent(LOG_WS.$action, 'username', $username);
+            $userId = UserManager::get_user_id_from_username($username);
+            Event::addEvent(LOG_WS.$action, 'username', $username, null, $userId);
             $restResponse->setData([
                 'url' => api_get_path(WEB_PATH),
                 'apiKey' => Rest::findUserApiKey($username, Rest::SERVICE_NAME),

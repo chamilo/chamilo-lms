@@ -31,7 +31,7 @@ $parameters['user_active'] = isset($_REQUEST['user_active']) && is_numeric($_REQ
 // PERSON_NAME_DATA_EXPORT is buggy
 $sortByFirstName = api_sort_by_first_name();
 $from_myspace = false;
-$from = isset($_GET['from']) ? $_GET['from'] : null;
+$from = $_GET['from'] ?? null;
 $origin = api_get_origin();
 $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
 if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
@@ -42,7 +42,7 @@ if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_l
 }
 
 // Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 $htmlHeadXtra[] = ' ';
@@ -64,7 +64,7 @@ if (isset($parameters['user_active'])) {
     $additionalParams .= '&user_active='.(int) $parameters['user_active'];
 }
 
-// If the user is a HR director (drh)
+// If the user is an HR director (drh)
 if (api_is_drh()) {
     // Blocking course for drh
     if (api_drh_can_access_all_session_content()) {
@@ -115,8 +115,7 @@ $csv_content = [];
 $visibleIcon = Display::return_icon(
     'visible.png',
     get_lang('HideColumn'),
-    ['align' => 'absmiddle', 'hspace' => '3px'],
-    ICON_SIZE_SMALL
+    ['align' => 'absmiddle', 'hspace' => '3px']
 );
 
 $exportInactiveUsers = api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&'.$additionalParams;
@@ -184,7 +183,7 @@ if ('resume_session' === $origin) {
     ];
 }
 
-$view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
+$view = $_REQUEST['view'] ?? '';
 $nameTools = get_lang('Tracking');
 
 $tpl = new Template($nameTools);
@@ -280,7 +279,7 @@ Display::display_header($nameTools, 'Tracking');
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
 
 $actionsRight = '<div class="pull-right">';
-$actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
+$actionsRight .= '<a href="javascript: void(0);" onclick="window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $users_tracking_per_page = '';
@@ -320,21 +319,18 @@ if ($sessionId) {
     $titleSession = Display::return_icon(
             'session.png',
             get_lang('Session'),
-            [],
-            ICON_SIZE_SMALL
+            []
         ).' '.Security::remove_XSS(api_get_session_name($sessionId));
     $titleCourse = Display::return_icon(
             'course.png',
             get_lang('Course'),
-            [],
-            ICON_SIZE_SMALL
+            []
         ).' '.$course_name;
 } else {
     $titleSession = Display::return_icon(
             'course.png',
             get_lang('Course'),
-            [],
-            ICON_SIZE_SMALL
+            []
         ).' '.$courseInfo['name'];
 }
 
@@ -617,10 +613,10 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
             if ('100%' === $userTracking[5]) {
                 $numberStudentsCompletedLP++;
             }
-            $averageStudentTestScore = substr($userTracking[7], 0, -1);
+            $averageStudentTestScore = (float) substr($userTracking[7], 0, -1);
             $averageStudentsTestScore += $averageStudentTestScore;
 
-            if ('100' === $averageStudentTestScore) {
+            if (100 === $averageStudentTestScore) {
                 $reducedAverage = 9;
             } else {
                 $reducedAverage = floor($averageStudentTestScore / 10);
@@ -764,16 +760,16 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $headerCounter = 0;
     $headers = [];
     // tab of header texts
-    $table->set_header($headerCounter++, get_lang('OfficialCode'), true);
+    $table->set_header($headerCounter++, get_lang('OfficialCode'));
     $headers['official_code'] = get_lang('OfficialCode');
     if ($sortByFirstName) {
-        $table->set_header($headerCounter++, get_lang('FirstName'), true);
-        $table->set_header($headerCounter++, get_lang('LastName'), true);
+        $table->set_header($headerCounter++, get_lang('FirstName'));
+        $table->set_header($headerCounter++, get_lang('LastName'));
         $headers['firstname'] = get_lang('FirstName');
         $headers['lastname'] = get_lang('LastName');
     } else {
-        $table->set_header($headerCounter++, get_lang('LastName'), true);
-        $table->set_header($headerCounter++, get_lang('FirstName'), true);
+        $table->set_header($headerCounter++, get_lang('LastName'));
+        $table->set_header($headerCounter++, get_lang('FirstName'));
         $headers['lastname'] = get_lang('LastName');
         $headers['firstname'] = get_lang('FirstName');
     }
@@ -836,7 +832,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
             $exercise = new Exercise();
             $exercise->read($exerciseId);
-            if ($exercise->iId) {
+            if ($exercise->iid) {
                 $title = get_lang('Exercise').': '.$exercise->get_formated_title();
                 $table->set_header(
                     $headerCounter++,
@@ -844,7 +840,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
                     $allowExtendedSort
                 );
                 $exerciseResultHeaders[] = $title;
-                $headers['exercise_'.$exercise->iId] = $title;
+                $headers['exercise_'.$exercise->iid] = $title;
             }
         }
     }
@@ -926,7 +922,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $html .= $table->return_table();
     $html .= '</div>';
 } else {
-    $html .= Display::return_message(get_lang('NoUsersInCourse'), 'warning', true);
+    $html .= Display::return_message(get_lang('NoUsersInCourse'), 'warning');
 }
 
 $groupContent = '';
@@ -1265,7 +1261,7 @@ if (isset($_GET['csv']) && $_GET['csv'] == 1) {
 }
 Display::display_footer();
 
-function sort_by_order($a, $b)
+function sort_by_order($a, $b): bool
 {
     return $a['score'] <= $b['score'];
 }

@@ -6886,7 +6886,7 @@ class Exercise
 
         // 1.1 Admins, teachers and tutors can access to the exercise
         if ($filterByAdmin) {
-            if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor()) {
+            if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_session_general_coach()) {
                 return ['value' => true, 'message' => ''];
             }
         }

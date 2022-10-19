@@ -3,6 +3,7 @@
 
 namespace Chamilo\ContactBundle\Form\Type;
 
+use Gregwar\CaptchaBundle\Type\CaptchaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -40,6 +41,12 @@ class ContactType extends AbstractType
             ->add('message', 'textarea')
             // Ofaj
             ->add('gdpr_checkbox', CheckboxType::class, ['mapped' => false])
+            ->add('captcha', CaptchaType::class,
+                [
+                    'width' => 200,
+                    'height' => 50,
+                    'length' => 6
+                ])
             /*->add(
                 'gdpr_textarea',
                 'textarea',

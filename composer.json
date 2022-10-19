@@ -156,7 +156,8 @@
         "symfony/dom-crawler": "~2.8",
         "brumann/polyfill-unserialize": "^1.0",
         "yuloh/bccomp-polyfill":  "dev-master",
-        "thenetworg/oauth2-azure": "^1.4"
+        "thenetworg/oauth2-azure": "^1.4",
+	    "gregwar/captcha-bundle": "2.0"
     },
     "require-dev": {
         "behat/behat": "@stable",

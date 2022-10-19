@@ -283,7 +283,7 @@ knp_menu:
 #            client_id:           <client_id>
 #            client_secret:       <client_secret>
 
-#gregwar_captcha:
+gregwar_captcha: ~
 
 # Doctrine audit
 sonata_doctrine_orm_admin:

@@ -653,8 +653,7 @@ class CourseCategory
         $conditions = [],
         $getCount = false,
         $courseLanguageFilter = null
-    )
-    {
+    ){
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
         $keyword = Database::escape_string($keyword);

@@ -4108,6 +4108,7 @@ class UserManager
                     c.visibility,
                     c.id as real_id,
                     c.code as course_code,
+                    c.course_language,
                     sc.position,
                     c.unsubscribe
                 FROM $tbl_session_course_user as scu
@@ -4147,6 +4148,7 @@ class UserManager
                         c.visibility,
                         c.id as real_id,
                         c.code as course_code,
+                        c.course_language,
                         sc.position,
                         c.unsubscribe
                     FROM $tbl_session_course_user as scu

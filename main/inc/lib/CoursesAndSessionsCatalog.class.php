@@ -413,10 +413,18 @@ class CoursesAndSessionsCatalog
      * @param array  $limit
      * @param bool   $justVisible  search only on visible courses in the catalogue
      * @param array  $conditions
+     * @param string $courseLanguageFilter   search only courses in the indicated language
      *
      * @return array an array containing a list of all the courses matching the the search term
      */
-    public static function searchCourses($categoryCode, $keyword, $limit, $justVisible = false, $conditions = [])
+    public static function searchCourses(
+        $categoryCode,
+        $keyword,
+        $limit,
+        $justVisible = false,
+        $conditions = [],
+        $courseLanguageFilter = null
+    )
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $limitFilter = self::getLimitFilterFromArray($limit);
@@ -427,6 +435,7 @@ class CoursesAndSessionsCatalog
         $categoryCode = Database::escape_string($categoryCode);
 
         $sqlInjectJoins = '';
+        $courseLanguageWhere = '';
         $where = 'AND 1 = 1 ';
         $sqlInjectWhere = '';
         $injectExtraFields = '1';
@@ -436,6 +445,12 @@ class CoursesAndSessionsCatalog
             $sqlInjectWhere = $conditions['inject_where'];
             $injectExtraFields = !empty($conditions['inject_extra_fields']) ? $conditions['inject_extra_fields'] : 1;
             $injectExtraFields = rtrim($injectExtraFields, ', ');
+        }
+
+        // If have courseLanguageFilter, search for it
+        if (!empty($courseLanguageFilter)) {
+            $courseLanguageFilter = Database::escape_string($courseLanguageFilter);
+            $courseLanguageWhere = "AND course.course_language = '$courseLanguageFilter'";
         }
 
         $categoryFilter = '';
@@ -459,6 +474,7 @@ class CoursesAndSessionsCatalog
                     $where
                     $categoryFilter
                     $sqlInjectWhere
+                    $courseLanguageWhere
                     $avoidCoursesCondition
                     $visibilityCondition
                 ORDER BY title, visual_code ASC
@@ -527,6 +543,9 @@ class CoursesAndSessionsCatalog
             $courseInfo['registration_code'] = !empty($courseInfo['registration_code']);
             $courseInfo['count_users'] = $countUsers;
             $courseInfo['count_connections'] = $connectionsLastMonth;
+            $courseInfo['course_language'] = api_get_language_info(
+                api_get_language_id($courseInfo['course_language'])
+            )['original_name'];
 
             $courses[] = $courseInfo;
         }
@@ -628,6 +647,7 @@ class CoursesAndSessionsCatalog
      * @param bool     $justVisible  search only on visible courses in the catalogue
      * @param array    $conditions   associative array generated using \ExtraField::parseConditions
      * @param string[] $sortKeys     a subset of the keys of the array returned by courseSortOptions()
+     * @param string   $courseLanguageFilter   search only courses in the indicated language
      *
      * @return array list of all the courses matching the the search term
      */
@@ -637,10 +657,12 @@ class CoursesAndSessionsCatalog
         $limit,
         $justVisible = false,
         $conditions = [],
-        $sortKeys = []
-    ) {
+        $sortKeys = [],
+        $courseLanguageFilter = null
+    )
+    {
         // Get ALL matching courses (no limit)
-        $courses = self::searchCourses($categoryCode, $keyword, null, $justVisible, $conditions);
+        $courses = self::searchCourses($categoryCode, $keyword, null, $justVisible, $conditions, $courseLanguageFilter);
         // Do we have extra fields to sort on ?
         $extraFieldsToSortOn = [];
         foreach (self::getCourseExtraFieldsAvailableForSorting() as $extraField) {
@@ -1987,10 +2009,21 @@ class CoursesAndSessionsCatalog
             ['multiple' => true]
         );
 
+        if (api_get_setting('show_different_course_language') === 'true') {
+            $form->addSelectLanguage(
+                'course_language',
+                get_lang('Language'),
+                ['' => '--'],
+                ['style' => 'width:150px']
+            );
+        }
+
         $sortKeys = isset($_REQUEST['sortKeys']) ? Security::remove_XSS($_REQUEST['sortKeys']) : '';
+        $languageSelect = isset($_REQUEST['course_language']) ? Security::remove_XSS($_REQUEST['course_language']) : '';
         $defaults['sortKeys'] = $sortKeys;
         $defaults['search_term'] = $searchTerm;
         $defaults['category_code'] = $categoryCode;
+        $defaults['course_language'] = $languageSelect;
 
         $conditions = [];
         $fields = [];
@@ -2010,6 +2043,7 @@ class CoursesAndSessionsCatalog
                 $defaults['sortKeys'] = $sortKeys;
                 $defaults['search_term'] = $searchTerm;
                 $defaults['category_code'] = $categoryCode;
+                $defaults['course_language'] = $languageSelect;
             }
 
             $courses = CoursesAndSessionsCatalog::searchAndSortCourses(
@@ -2018,14 +2052,16 @@ class CoursesAndSessionsCatalog
                 self::getLimitArray(),
                 true,
                 $conditions,
-                $sortKeySelect->getValue()
+                $sortKeySelect->getValue(),
+                $languageSelect
             );
             $countCoursesInCategory = CourseCategory::countCoursesInCategory(
                 $categoryCode,
                 $searchTerm,
                 true,
                 true,
-                $conditions
+                $conditions,
+                $languageSelect
             );
         }
 

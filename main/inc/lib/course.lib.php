@@ -4095,6 +4095,7 @@ class CourseManager
                     course.id,
                     course_rel_user.status status,
                     course.code as course_code,
+                    course.course_language,
                     user_course_cat,
                     course_rel_user.sort
                 FROM $TABLECOURS course
@@ -4249,6 +4250,9 @@ class CourseManager
             $params['teachers'] = $teachers;
             $params['extrafields'] = self::getExtraFieldsToBePresented($course_info['real_id']);
             $params['real_id'] = $course_info['real_id'];
+            $params['course_language'] = api_get_language_info(
+                api_get_language_id($course_info['course_language'])
+            )['original_name'];
 
             if (api_get_configuration_value('enable_unsubscribe_button_on_my_course_page') &&
                 '1' === $course_info['unsubscribe'] &&
@@ -4545,6 +4549,9 @@ class CourseManager
 
         $params['title'] = $session_title;
         $params['name'] = $course_info['name'];
+        $params['course_language'] = api_get_language_info(
+            api_get_language_id($course_info['course_language'])
+        )['original_name'];
         $params['edit_actions'] = '';
         $params['document'] = '';
         $params['category'] = $course_info['categoryName'];

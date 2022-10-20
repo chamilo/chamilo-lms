@@ -328,7 +328,7 @@
             $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
             $('.lp-view-tabs').animate({opacity: 1}, 500);
 
-            document.getElementById('btn-content-new-tab').href = this.src;
+            $('#btn-content-new-tab').attr('href', this.src);
         });
 
         {% if lp_mode == 'embedded' %}

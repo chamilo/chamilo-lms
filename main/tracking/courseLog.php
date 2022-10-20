@@ -110,7 +110,6 @@ if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['column
     $columnsToHide = $columnsToHideFromSetting['columns'];
 }
 $columnsToHide = json_encode($columnsToHide);
-$csv_content = [];
 
 $visibleIcon = Display::return_icon(
     'visible.png',
@@ -166,6 +165,10 @@ $TABLETRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCIS
 $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
+
+$userEditionExtraFieldToCheck = api_get_configuration_value('user_edition_extra_field_to_check');
+
+$objExtrafieldUser = new ExtraField('user');
 
 // Breadcrumbs.
 if ('resume_session' === $origin) {
@@ -237,7 +240,7 @@ if (isset($_GET['additional_profile_field'])) {
             $fieldId,
             $user_array
         );
-        $extra_info[$fieldId] = UserManager::get_extra_field_information($fieldId);
+        $extra_info[$fieldId] = $objExtrafieldUser->getFieldInfoByFieldId($fieldId);
     }
 }
 
@@ -252,11 +255,6 @@ if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSett
     $defaultExtraInfo = [];
     $defaultUserProfileInfo = [];
 
-    $userArray = [];
-    foreach ($studentList as $key => $item) {
-        $userArray[] = $key;
-    }
-
     foreach ($defaultExtraFields as $fieldName) {
         $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
 
@@ -264,7 +262,7 @@ if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSett
             // Fetching only the user that are loaded NOT ALL user in the portal.
             $defaultUserProfileInfo[$extraFieldInfo['id']] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
                 $extraFieldInfo['id'],
-                $userArray
+                $user_ids
             );
             $defaultExtraInfo[$extraFieldInfo['id']] = $extraFieldInfo;
         }
@@ -334,33 +332,12 @@ if ($sessionId) {
         ).' '.$courseInfo['name'];
 }
 
-$teacherList = CourseManager::getTeacherListFromCourseCodeToString(
+$html = TrackingCourseLog::getTeachersOrCoachesHtmlHeader(
     $courseInfo['code'],
-    ',',
-    true,
+    $courseInfo['real_id'],
+    $sessionId,
     true
 );
-
-$coaches = null;
-if (!empty($sessionId)) {
-    $coaches = CourseManager::get_coachs_from_course_to_string(
-        $sessionId,
-        $courseInfo['real_id'],
-        ',',
-        true,
-        true
-    );
-}
-$html = '';
-if (!empty($teacherList)) {
-    $html .= Display::page_subheader2(get_lang('Teachers'));
-    $html .= $teacherList;
-}
-
-if (!empty($coaches)) {
-    $html .= Display::page_subheader2(get_lang('Coaches'));
-    $html .= $coaches;
-}
 
 $showReporting = api_get_configuration_value('hide_reporting_session_list') === false;
 if ($showReporting) {
@@ -402,12 +379,13 @@ $trackingColumn = $_GET['users_tracking_column'] ?? null;
 $trackingDirection = $_GET['users_tracking_direction'] ?? null;
 $hideReports = api_get_configuration_value('hide_course_report_graph');
 $allowExtendedSort = false === $hideReports;
-$conditions = [];
 
 $groupList = GroupManager::get_group_list(null, $courseInfo, 1, $sessionId);
 
 $class = new UserGroup();
 $classes = $class->get_all();
+
+$bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
 
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0 || isset($parameters['user_active'])) {
@@ -434,7 +412,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $formClass->addButtonSearch(get_lang('Search'));
 
     // Filter by ex learners
-    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+    if (false !== $userEditionExtraFieldToCheck) {
         $formExLearners = new FormValidator(
             'form_exlearners',
             'get',
@@ -464,20 +442,24 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $formGroup->addSelect('group_id', get_lang('Group'), $groupIdList);
     $formGroup->addButtonSearch(get_lang('Search'));*/
 
-    // Extra fields
-    $formExtraField = new FormValidator(
-        'extra_fields',
-        'get',
-        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
-    );
-    $formExtraField->addHidden('cidReq', $courseCode);
-    $formExtraField->addHidden('id_session', $sessionId);
     if (isset($_GET['additional_profile_field'])) {
+        // Extra fields
+        $formExtraField = new FormValidator(
+            'extra_fields',
+            'get',
+            api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
+        );
+        $formExtraField->addHidden('cidReq', $courseCode);
+        $formExtraField->addHidden('id_session', $sessionId);
+
         foreach ($_GET['additional_profile_field'] as $fieldId) {
             $fieldId = Security::remove_XSS($fieldId);
             $formExtraField->addHidden('additional_profile_field[]', $fieldId);
             $formClass->addHidden('additional_profile_field[]', $fieldId);
         }
+
+        $objExtrafieldUser->addElements($formExtraField, 0, [], true);
+        $formExtraField->addButtonSearch(get_lang('Search'));
     }
 
     // Filter by active users
@@ -496,10 +478,6 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     if (isset($parameters['user_active'])) {
         $formActiveUsers->setDefaults(['user_active' => $parameters['user_active']]);
     }
-
-    $extraField = new ExtraField('user');
-    $extraField->addElements($formExtraField, 0, [], true);
-    $formExtraField->addButtonSearch(get_lang('Search'));
 
     $numberStudentsCompletedLP = 0;
     $averageStudentsTestScore = 0;
@@ -548,7 +526,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
             $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
         }
     }
-    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+    if (false !== $userEditionExtraFieldToCheck) {
         if ($formExLearners->validate()) {
             $formValue = $formExLearners->getSubmitValue('exlearner');
             if (isset($formValue['opt_exlearner']) && 1 == $formValue['opt_exlearner']) {
@@ -557,13 +535,12 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
                     $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                     $joins = " INNER JOIN $tableSessionCourseUser scu ON scu.user_id = user.id ";
                     $whereCondition = " AND scu.status !=  ".COURSE_EXLEARNER." AND scu.c_id = '".api_get_course_int_id()."' AND scu.session_id = $sessionId";
-                    $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
                 } else {
                     $tableCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                     $joins = " INNER JOIN $tableCourseUser cu ON cu.user_id = user.id ";
                     $whereCondition = " AND cu.relation_type !=  ".COURSE_EXLEARNER." AND cu.c_id = '".api_get_course_int_id()."'";
-                    $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
                 }
+                $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
             }
         }
     }
@@ -587,8 +564,8 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         }
     }*/
 
-    if ($formExtraField->validate()) {
-        $extraResult = $extraField->processExtraFieldSearch($_REQUEST, $formExtraField, 'user');
+    if (isset($formExtraField) && $formExtraField->validate()) {
+        $extraResult = $objExtrafieldUser->processExtraFieldSearch($_REQUEST, $formExtraField, 'user');
         if (!empty($extraResult)) {
             $conditions = $extraResult['condition'];
             $fields = $extraResult['fields'];
@@ -613,14 +590,10 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
             if ('100%' === $userTracking[5]) {
                 $numberStudentsCompletedLP++;
             }
-            $averageStudentTestScore = (float) substr($userTracking[7], 0, -1);
+            $averageStudentTestScore = (float) $userTracking[7];
             $averageStudentsTestScore += $averageStudentTestScore;
 
-            if (100 === $averageStudentTestScore) {
-                $reducedAverage = 9;
-            } else {
-                $reducedAverage = floor($averageStudentTestScore / 10);
-            }
+            $reducedAverage = $averageStudentTestScore === 100.0 ? 9 : floor($averageStudentTestScore / 10);
             if (isset($scoresDistribution[$reducedAverage])) {
                 $scoresDistribution[$reducedAverage]++;
             }
@@ -660,16 +633,13 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         $tpl->assign('students_test_score', $averageStudentsTestScore);
         $tpl->assign('students_completed_lp', $numberStudentsCompletedLP);
         $tpl->assign('number_students', $nbStudents);
-        $tpl->assign('top_students', $userScoreList);
+        $tpl->assign('top_students', array_chunk($userScoreList, 3, true));
 
         echo $tpl->fetch($tpl->get_template('tracking/tracking_course_log.tpl'));
     }
-}
 
-$html .= Display::page_subheader2(get_lang('StudentList'));
+    $html .= Display::page_subheader2(get_lang('StudentList'));
 
-$bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
-if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $mainForm = new FormValidator(
         'filter',
         'get',
@@ -679,15 +649,15 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         'advanced_search',
         [get_lang('AdvancedSearch')]
     );
-    $mainForm->addHtml('<div id="advanced_search_options" style="display:none;">');
-    $mainForm->addHtml($formClass->returnForm());
-    $mainForm->addHtml($formExtraField->returnForm());
-    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
-        $mainForm->addHtml($formExLearners->returnForm());
-    }
-    $mainForm->addHtml($formActiveUsers->returnForm());
-    $mainForm->addHtml('</div>');
     $html .= $mainForm->returnForm();
+
+    $html .= '<div id="advanced_search_options" style="display:none;">';
+    $html .= $formClass->returnForm();
+    $html .= isset($formExtraField) ? $formExtraField->returnForm() : '';
+    $html .= false !== $userEditionExtraFieldToCheck ? $formExLearners->returnForm() : '';
+    $html .= $formActiveUsers->returnForm();
+    $html .= '</div>';
+    $html .= '<hr>';
 
     $getLangXDays = get_lang('XDays');
     $form = new FormValidator(
@@ -721,7 +691,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addButtonSend(get_lang('SendNotification'));
     $form->addLabel(get_lang('Export'), '<a id="download-csv" href="#!" class=" btn btn-default " > '.
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_SMALL).
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '').
         get_lang('ExportAsCSV')
     .' </a>');
     $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields($defaultExtraFields);
@@ -732,7 +702,6 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $html .= $form->returnForm();
 
     if ($export_csv) {
-        $csv_content = [];
         //override the SortableTable "per page" limit if CSV
         $_GET['users_tracking_per_page'] = 1000000;
     }
@@ -996,46 +965,13 @@ if (!empty($groupList)) {
                 $totalLpProgress += $totalGroupLpProgress;
             }
 
-            if (!empty($exerciseList)) {
-                foreach ($exerciseList as $exerciseData) {
-                    foreach ($usersInGroup as $userId) {
-                        $results = Event::get_best_exercise_results_by_user(
-                            $exerciseData['iid'],
-                            $courseInfo['real_id'],
-                            0,
-                            $userId
-                        );
-                        $best = 0;
-                        if (!empty($results)) {
-                            foreach ($results as $result) {
-                                if (!empty($result['exe_weighting'])) {
-                                    $score = $result['exe_result'] / $result['exe_weighting'];
-                                    if ($score > $best) {
-                                        $best = $score;
-                                    }
-                                }
-                            }
-                        }
-                        $bestScoreAverageNotInLP += $best;
-                    }
-                }
-                $bestScoreAverageNotInLP = round(
-                    $bestScoreAverageNotInLP / count($exerciseList) * 100 / $userInGroupCount,
-                    2
-                );
+            $bestScoreAverageNotInLP = TrackingCourseLog::calcBestScoreAverageNotInLP(
+                $exerciseList,
+                $usersInGroup,
+                (int) $courseInfo['real_id']
+            );
 
-                $totalBestScoreAverageNotInLP += $bestScoreAverageNotInLP;
-            }
-
-            if (empty($score)) {
-                $score = '';
-            }
-            if (empty($lpProgress)) {
-                $lpProgress = '';
-            }
-            if (empty($bestScoreAverageNotInLP)) {
-                $bestScoreAverageNotInLP = '';
-            }
+            $totalBestScoreAverageNotInLP += $bestScoreAverageNotInLP;
         }
 
         $groupTable->setCellContents($row, $column++, $time);
@@ -1068,12 +1004,8 @@ if (!empty($groupList)) {
         $courseId,
         $sessionId
     );
-    $averageTime = null;
-    if (!empty($timeInSeconds)) {
-        $time = api_time_to_hms($timeInSeconds);
-        $averageTime = $timeInSeconds / $nbStudents;
-        $averageTime = api_time_to_hms($averageTime);
-    }
+    $time = api_time_to_hms($timeInSeconds);
+    $averageTime = api_time_to_hms($timeInSeconds / $nbStudents);
     $totalLpProgress = 0;
     foreach ($studentIdList as $studentId) {
         $lpProgress = Tracking::get_avg_student_progress(
@@ -1091,39 +1023,13 @@ if (!empty($groupList)) {
         $lpProgress = round($totalLpProgress / $nbStudents, 2).' %';
     }
     $totalBestScoreAverageNotInLP = 0;
-    $bestScoreAverageNotInLP = 0;
-    if (!empty($exerciseList)) {
-        foreach ($exerciseList as $exerciseData) {
-            foreach ($studentIdList as $userId) {
-                $results = Event::get_best_exercise_results_by_user(
-                    $exerciseData['iid'],
-                    $courseInfo['real_id'],
-                    $sessionId,
-                    $userId
-                );
-                $best = 0;
-                if (!empty($results)) {
-                    foreach ($results as $result) {
-                        if (!empty($result['exe_weighting'])) {
-                            $score = $result['exe_result'] / $result['exe_weighting'];
-                            if ($score > $best) {
-                                $best = $score;
-                            }
-                        }
-                    }
-                }
-
-                $bestScoreAverageNotInLP += $best;
-            }
-        }
-
-        if (!empty($nbStudents)) {
-            $bestScoreAverageNotInLP = round(
-                    $bestScoreAverageNotInLP / count($exerciseList) * 100 / $nbStudents,
-                    2
-                ).' %';
-        }
-    }
+    $bestScoreAverageNotInLP = (string) TrackingCourseLog::calcBestScoreAverageNotInLP(
+        $exerciseList,
+        $studentIdList,
+        (int) $courseInfo['real_id'],
+        $sessionId,
+        true
+    );
 
     $row = 1;
     $column = 0;
@@ -1134,7 +1040,7 @@ if (!empty($groupList)) {
     $groupTable->setCellContents($row, $column++, $bestScoreAverageNotInLP);
 }
 
-echo Display::panel($groupTable->toHtml(), '');
+echo Display::panel($groupTable->toHtml());
 
 // Send the csv file if asked.
 if ($export_csv) {
@@ -1223,7 +1129,7 @@ if (isset($_GET['csv']) && $_GET['csv'] == 1) {
                     $fieldId,
                     $users
                 );
-                $extra_info[$fieldId] = UserManager::get_extra_field_information($fieldId);
+                $extra_info[$fieldId] = $objExtrafieldUser->getFieldInfoByFieldId($fieldId);
             }
         }
         $csv_content[] = $csv_headers;

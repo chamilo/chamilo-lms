@@ -10018,4 +10018,90 @@ class TrackingCourseLog
 
         return implode('', $items).'&nbsp;';
     }
+
+    public static function getTeachersOrCoachesHtmlHeader(
+        string $courseCode,
+        int $cId,
+        int $sessionId,
+        bool $addLinkToPrfile
+    ): string {
+        $html = '';
+
+        $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
+            $courseCode,
+            ',',
+            $addLinkToPrfile,
+            true
+        );
+
+        if (!empty($teacherList)) {
+            $html .= Display::page_subheader2(get_lang('Teachers'));
+            $html .= $teacherList;
+        }
+
+        if (!empty($sessionId)) {
+            $coaches = CourseManager::get_coachs_from_course_to_string(
+                $sessionId,
+                $cId,
+                ',',
+                $addLinkToPrfile,
+                true
+            );
+
+            if (!empty($coaches)) {
+                $html .= Display::page_subheader2(get_lang('Coaches'));
+                $html .= $coaches;
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * @return float|string
+     */
+    public static function calcBestScoreAverageNotInLP(
+        array $exerciseList,
+        array $usersInGroup,
+        int $cId,
+        int $sessionId = 0,
+        bool $returnFormatted = false
+    ) {
+        if (empty($exerciseList) || empty($usersInGroup)) {
+            return 0;
+        }
+
+        $bestScoreAverageNotInLP = 0;
+
+        foreach ($exerciseList as $exerciseData) {
+            foreach ($usersInGroup as $userId) {
+                $results = Event::get_best_exercise_results_by_user(
+                    $exerciseData['iid'],
+                    $cId,
+                    $sessionId,
+                    $userId
+                );
+
+                $scores = array_map(
+                    function (array $result) {
+                        return empty($result['exe_weighting']) ? 0 : $result['exe_result'] / $result['exe_weighting'];
+                    },
+                    $results
+                );
+
+                $bestScoreAverageNotInLP += $scores ? max($scores) : 0;
+            }
+        }
+
+        $rounded = round(
+            $bestScoreAverageNotInLP / count($exerciseList) * 100 / count($usersInGroup),
+            2
+        );
+
+        if ($returnFormatted) {
+            return sprintf(get_lang('XPercent'), $rounded);
+        }
+
+        return $rounded;
+    }
 }

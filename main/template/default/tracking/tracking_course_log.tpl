@@ -181,9 +181,7 @@ window.onload = function() {
                 <div class="panel-body">
                     <h4 class="tracking-box-title">{{ 'OutstandingStudents'|get_lang }}</h4>
                     <ul class="list-top">
-                        {% for student in top_students %}
-                            {% set counter = counter + 1 %}
-                            {% if counter <= 3 %}
+                        {% for student in top_students.0 %}
                             <li>
                                 <div class="avatar">
                                     <span class="round">
@@ -207,7 +205,6 @@ window.onload = function() {
                                     </div>
                                 </div>
                             </li>
-                            {% endif %}
                         {% endfor %}
                     </ul>
                    <span class="tracking-box-legend">

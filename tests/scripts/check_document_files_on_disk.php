@@ -67,7 +67,7 @@ function checkDocumentFilesOnDisk($courseCode, $removeFileNotFound)
                                     }
                                 } else {
                                     // to move the file to the new doc path
-                                    if (rename($currentPath, $sourcePath.$doc['path'])) {
+                                    if (move($currentPath, $sourcePath.$doc['path'])) {
                                         $log .= "CASE 2 - Checking document table, it doesn't exist in other path, so it is moved to the new doc path {$doc['path']}".PHP_EOL;
                                     }
                                 }

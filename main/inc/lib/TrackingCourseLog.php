@@ -737,7 +737,7 @@ class TrackingCourseLog
             foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
                 $exercise = new Exercise();
                 $exercise->read($exerciseId);
-                if ($exercise->iId) {
+                if ($exercise->iid) {
                     $exerciseResultsToCheck[] = $exercise;
                 }
             }
@@ -830,7 +830,7 @@ class TrackingCourseLog
                 foreach ($exerciseResultsToCheck as $exercise) {
                     $bestExerciseResult = Event::get_best_attempt_exercise_results_per_user(
                         $user['user_id'],
-                        $exercise->iId,
+                        $exercise->iid,
                         $courseId,
                         $session_id,
                         false
@@ -842,7 +842,7 @@ class TrackingCourseLog
                         $best = round($best, 2) * 100;
                         $best .= '%';
                     }
-                    $exerciseResults['exercise_'.$exercise->iId] = $best;
+                    $exerciseResults['exercise_'.$exercise->iid] = $best;
                 }
             }
 

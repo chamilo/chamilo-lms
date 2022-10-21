@@ -461,7 +461,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         ChamiloSession::write(
             self::SESSION_QUIZ_QUESTION,
             [
-                'quiz' => (int) $exercise->iId,
+                'quiz' => (int) $exercise->iid,
                 'question' => (int) $questionId,
                 'url_params' => $_SERVER['QUERY_STRING'],
                 'passed' => false,
@@ -470,7 +470,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 
         $template = new Template('', false, false, false, true, false, false);
         $template->assign('question', $questionId);
-        $template->assign('exercise', $exercise->iId);
+        $template->assign('exercise', $exercise->iid);
         $content = $template->fetch('whispeakauth/view/quiz_question.html.twig');
 
         echo $content;

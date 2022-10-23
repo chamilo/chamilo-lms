@@ -3,6 +3,7 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\TrackELoginAttempt;
 use ChamiloSession as Session;
 
 /**
@@ -50,6 +51,28 @@ class Event
         }
 
         return 1;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function eventLoginAttempt(string $username, bool $success = false)
+    {
+        if ((int) api_get_configuration_value('login_max_attempt_before_blocking_account') <= 0) {
+            return;
+        }
+
+        $attempt = new TrackELoginAttempt();
+        $attempt
+            ->setUsername($username)
+            ->setLoginDate(api_get_utc_datetime(null, false, true))
+            ->setUserIp(api_get_real_ip())
+            ->setSuccess($success)
+        ;
+
+        $em = Database::getManager();
+        $em->persist($attempt);
+        $em->flush();
     }
 
     /**

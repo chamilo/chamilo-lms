@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Tag.
  *
  * @ORM\Table(name="tag")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\TagRepository")
  */
 class Tag
 {

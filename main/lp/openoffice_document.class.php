@@ -335,7 +335,6 @@ abstract class OpenofficeDocument extends learnpath
         }
         $client = new SoapClient(null, $options);
         $result = '';
-
         $file_data = base64_encode(file_get_contents($file['tmp_name']));
         $file_name = $file['name'];
         if (empty($size)) {
@@ -349,7 +348,7 @@ abstract class OpenofficeDocument extends learnpath
         ];
 
         try {
-            $result = $client->__call('wsConvertPpt', ['pptData' => $params]);
+            $result = $client->wsConvertPpt($params);
         } catch (Exception $e) {
             error_log('['.time().'] Chamilo SOAP call error: '.$e->getMessage());
         }

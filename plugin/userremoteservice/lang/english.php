@@ -13,6 +13,7 @@ $strings['salt_help'] =
 <br/><code>$salt</code> is this input value,
 <br/><code>$userId</code> is the number of the user referenced by the <em>username</em> URL parameter value and
 <br/><code>$hash</code> contains the <em>hash</em> URL parameter value.';
+$strings['hide_link_from_navigation_menu'] = 'hide links from the menu';
 
 // Please keep alphabetically sorted
 $strings['CreateService'] = 'Add service to menu bar';
@@ -20,3 +21,4 @@ $strings['DeleteServices'] = 'Remove services from menu bar';
 $strings['ServicesToDelete'] = 'Services to remove from menu bar';
 $strings['ServiceTitle'] = 'Service title';
 $strings['ServiceURL'] = 'Service web site location (URL)';
+$strings['RedirectAccessURL'] = "URL to use in Chamilo to redirect user to the service (URL)";

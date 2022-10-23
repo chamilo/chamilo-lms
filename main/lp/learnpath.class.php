@@ -490,7 +490,8 @@ class learnpath
         $description,
         $prerequisites = 0,
         $max_time_allowed = 0,
-        $userId = 0
+        $userId = 0,
+        $dspOrder = 0
     ) {
         $course_id = $this->course_info['real_id'];
         if (empty($course_id)) {
@@ -578,6 +579,11 @@ class learnpath
             $exercise->save();
         }
 
+        $newDisplayOrder = $display_order + 1;
+        if (!empty($dspOrder)) {
+            $newDisplayOrder = (int) $dspOrder;
+        }
+
         $params = [
             'c_id' => $course_id,
             'lp_id' => $this->get_id(),
@@ -590,7 +596,7 @@ class learnpath
             'parent_item_id' => $parent,
             'previous_item_id' => $previous,
             'next_item_id' => (int) $next,
-            'display_order' => $display_order + 1,
+            'display_order' => $newDisplayOrder,
             'prerequisite' => $prerequisites,
             'max_time_allowed' => $max_time_allowed,
             'min_score' => 0,
@@ -13652,6 +13658,10 @@ EOD;
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
         $extraParams = api_get_cidreq(true, true, 'learnpath').'&session_id='.$session_id;
+        // It adds lti parameter
+        if (isset($_REQUEST['lti_launch_id'])) {
+            $extraParams .= '&lti_launch_id='.Security::remove_XSS($_REQUEST['lti_launch_id']);
+        }
 
         switch ($type) {
             case 'dir':
@@ -14625,8 +14635,13 @@ EOD;
         }
     }
 
-    public static function findLastView(int $lpId, int $studentId, int $courseId, int $sessionId = 0)
-    {
+    public static function findLastView(
+        int $lpId,
+        int $studentId,
+        int $courseId,
+        int $sessionId = 0,
+        bool $createIfNotExists = false
+    ): array {
         $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
 
         $sessionCondition = api_get_session_condition($sessionId);
@@ -14636,7 +14651,25 @@ EOD;
             ORDER BY view_count DESC";
         $result = Database::query($sql);
 
-        return Database::fetch_assoc($result);
+        $lpView = Database::fetch_assoc($result);
+
+        if ($createIfNotExists && empty($lpView)) {
+            $lpViewId = Database::insert(
+                $tblLpView,
+                [
+                    'c_id' => $courseId,
+                    'lp_id' => $lpId,
+                    'user_id' => $studentId,
+                    'view_count' => 1,
+                    'session_id' => $sessionId,
+                ]
+            );
+            Database::update($tblLpView, ['id' => $lpViewId], ['iid = ?' => $lpViewId]);
+
+            return ['iid' => $lpViewId];
+        }
+
+        return empty($lpView) ? [] : $lpView;
     }
 
     /**

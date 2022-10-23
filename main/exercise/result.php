@@ -100,6 +100,10 @@ if ($show_headers) {
     }
 }
 
+if (api_get_configuration_value('allow_skill_rel_items') == true) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
+}
+
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
 

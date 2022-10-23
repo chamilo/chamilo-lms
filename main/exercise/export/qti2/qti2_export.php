@@ -458,7 +458,13 @@ function export_question_qti($questionId, $standalone = true)
         return '';
     }
 
-    $isValid = $qst instanceof UniqueAnswer || $qst instanceof MultipleAnswer || $qst instanceof FreeAnswer;
+    $isValid = $qst instanceof UniqueAnswer
+        || $qst instanceof MultipleAnswer
+        || $qst instanceof FreeAnswer
+        || $qst instanceof MultipleAnswerDropdown
+        || $qst instanceof MultipleAnswerDropdownGlobal
+    ;
+
     if (!$isValid) {
         return '';
     }

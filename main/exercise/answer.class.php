@@ -849,7 +849,7 @@ class Answer
 
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers + 1;
-            while ($this->position[$i]) {
+            while (isset($this->position[$i])) {
                 $position = $this->position[$i];
                 $sql = "DELETE FROM $answerTable
                         WHERE

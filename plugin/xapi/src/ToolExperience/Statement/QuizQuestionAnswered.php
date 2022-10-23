@@ -53,7 +53,7 @@ class QuizQuestionAnswered extends BaseStatement
 
         $rawResult = $this->attempt->getMarks();
         $maxResult = $this->question->getPonderation();
-        $scaledResult = $rawResult / $maxResult;
+        $scaledResult = $maxResult ? ($rawResult / $maxResult) : 0;
 
         $context = $this->generateContext();
         $contextActivities = $context

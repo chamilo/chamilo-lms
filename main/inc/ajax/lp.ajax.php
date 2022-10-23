@@ -19,6 +19,12 @@ if ($debug) {
     error_log('----------lp.ajax-------------- action '.$action);
 }
 
+// We check if a tool provider
+if (isset($_REQUEST['lti_launch_id'])) {
+    $ltiLaunchId = Security::remove_XSS($_REQUEST['lti_launch_id']);
+    $_SESSION['oLP']->lti_launch_id = $ltiLaunchId;
+}
+
 switch ($action) {
     case 'get_lp_list_by_course':
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;

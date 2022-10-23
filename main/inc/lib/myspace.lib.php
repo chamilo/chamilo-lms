@@ -2982,12 +2982,12 @@ class MySpace
 
         // the values of the sortable table
         if ($_GET['tracking_user_overview_page_nr']) {
-            $from = $_GET['tracking_user_overview_page_nr'];
+            $from = (int) $_GET['tracking_user_overview_page_nr'];
         } else {
             $from = 0;
         }
         if ($_GET['tracking_user_overview_column']) {
-            $orderby = $_GET['tracking_user_overview_column'];
+            $orderby = (int) $_GET['tracking_user_overview_column'];
         } else {
             $orderby = 0;
         }
@@ -3250,16 +3250,14 @@ class MySpace
      * Get all the data for the sortable table of the reporting progress of
      * all users and all the courses the user is subscribed to.
      *
-     * @param int    $from
-     * @param int    $numberItems
-     * @param int    $column
-     * @param string $direction
-     *
      * @return array
      */
-    public static function get_user_data_tracking_overview($from, $numberItems, $column, $direction)
+    public static function get_user_data_tracking_overview(int $from, int $numberItems, int $column, string $direction)
     {
         $isWestern = api_is_western_name_order();
+        if ($direction !== 'ASC' && $direction != 'DESC') {
+            $direction = 'ASC';
+        }
 
         switch ($column) {
             case '0':

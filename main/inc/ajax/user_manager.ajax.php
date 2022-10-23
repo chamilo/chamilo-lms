@@ -395,11 +395,13 @@ switch ($action) {
         }
 
         $qb
-            ->andWhere('u.status != '.DRH.' AND u.status != '.ANONYMOUS)
+            ->andWhere(
+                $qb->expr()->in('u.status', UserManager::getAllowedRolesAsTeacher())
+            )
             ->orderBy(
                 $sortByFirstName
-                    ? 'u.firstname, u.firstname'
-                    : 'u.firstname, u.lastname'
+                    ? 'u.firstname, u.lastname'
+                    : 'u.lastname, u.firstname'
             )
             ->setParameter('q', '%'.$_REQUEST['q'].'%');
 

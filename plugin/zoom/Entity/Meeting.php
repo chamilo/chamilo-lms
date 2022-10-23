@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SysAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\PluginBundle\Zoom\API\BaseMeetingTrait;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
@@ -162,12 +163,21 @@ class Meeting
      */
     protected $accountEmail;
 
+    /**
+     * @var SysAnnouncement|null
+     *
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\SysAnnouncement")
+     * @ORM\JoinColumn(name="sys_announcement_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $sysAnnouncement;
+
     public function __construct()
     {
         $this->registrants = new ArrayCollection();
         $this->recordings = new ArrayCollection();
         $this->activities = new ArrayCollection();
         $this->signAttendance = false;
+        $this->sysAnnouncement = null;
     }
 
     /**
@@ -614,6 +624,18 @@ class Meeting
     public function getAgenda(): ?string
     {
         return $this->meetingInfoGet->agenda;
+    }
+
+    public function getSysAnnouncement(): ?SysAnnouncement
+    {
+        return $this->sysAnnouncement;
+    }
+
+    public function setSysAnnouncement(?SysAnnouncement $sysAnnouncement): Meeting
+    {
+        $this->sysAnnouncement = $sysAnnouncement;
+
+        return $this;
     }
 
     /**

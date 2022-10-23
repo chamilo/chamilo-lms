@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Skill as SkillEntity;
 use Chamilo\CoreBundle\Entity\SkillRelUser as SkillRelUserEntity;
 use Chamilo\SkillBundle\Entity\SkillRelCourse;
 use Chamilo\SkillBundle\Entity\SkillRelItem;
+use Chamilo\SkillBundle\Entity\SkillRelItemRelUser;
 use Chamilo\UserBundle\Entity\User;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
@@ -2583,13 +2584,9 @@ class Skill extends Model
     }
 
     /**
-     * @param SkillRelItem        $skillRelItem
      * @param SkillRelItemRelUser $skillRelItemRelUser
-     * @param bool                $addHeader
-     *
-     * @return string
      */
-    public static function getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, $addHeader = true)
+    public static function getUserSkillStatusLabel(SkillRelItem $skillRelItem, SkillRelItemRelUser $skillRelItemRelUser = null, bool $addHeader = true, int $userId = 0): string
     {
         if (empty($skillRelItem)) {
             return '';
@@ -2601,7 +2598,7 @@ class Skill extends Model
         $label = '';
         $skill = $skillRelItem->getSkill();
         if ($addHeader) {
-            $label .= '<span id="'.$skill->getId().'" class="user_skill" style="cursor:pointer">';
+            $label .= '<span id="skill-'.$skill->getId().'-'.$userId.'" class="user_skill" style="cursor:pointer">';
         }
         $label .= Display::label($skill->getName(), $type);
         if ($addHeader) {
@@ -2612,13 +2609,12 @@ class Skill extends Model
     }
 
     /**
-     * Assign a user with a SkilRelItem object.
+     * Attach a list of skills (skill_rel_item) potentially assigned to a user to the given form.
      *
-     * @param int $typeId see ITEM_TYPE_* constants
-     * @param int $itemId
-     * @param int $userId
+     * @param int  $typeId    see ITEM_TYPE_* constants
+     * @param bool $addHeader Whether to show the 'Skills' title for this block
      */
-    public static function addSkillsToUserForm(FormValidator $form, $typeId, $itemId, $userId, $resultId = 0, $addHeader = false)
+    public static function addSkillsToUserForm(FormValidator $form, int $typeId, int $itemId, int $userId, int $resultId = 0, bool $addHeader = false): void
     {
         $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
         if ($allowSkillInTools && !empty($typeId) && !empty($itemId) && !empty($userId)) {
@@ -2641,7 +2637,7 @@ class Skill extends Model
                     'skillRelItem' => $skillRelItem,
                 ];
                 $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
-                $skills .= self::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser);
+                $skills .= self::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, true, $userId);
             }
 
             if (!empty($skills)) {
@@ -2658,19 +2654,21 @@ class Skill extends Model
                 if ($addHeader) {
                     $form->addHtml(Display::page_subheader2(get_lang('Skills')));
                 }
+
+                $skillId = $skillRelItem->getSkill()->getId();
+                $elementId = 'skill-'.$skillId.'-'.$userId;
                 $html = '
                 <script>
                     $(function() {
-                        $(".user_skill").on("click", function() {
-                            var skillId = this.id;
+                        $("#'.$elementId.'").on("click", function() {
                             var params = '.$params.';
                             $.ajax({
                                 type: "GET",
                                 async: false,
                                 data: params,
-                                url: "'.$url.'&skill_id="+skillId,
+                                url: "'.$url.'&skill_id="+'.$skillId.',
                                 success: function(result) {
-                                    $("#" +skillId+ ".user_skill").html(result);
+                                    $("#'.$elementId.'.user_skill").html(result);
                                 }
                             });
                         });
@@ -2684,6 +2682,82 @@ class Skill extends Model
                 }
             }
         }
+    }
+
+    /**
+     * Shows a list of skills (skill_rel_item) potentially assigned to a user
+     * to the given form, with AJAX action on click to save the assignment.
+     * Assigned skills appear in a different colour.
+     *
+     * @param int  $typeId    see ITEM_TYPE_* constants
+     * @param bool $addHeader Whether to show the 'Skills' title for this block
+     */
+    public static function getAddSkillsToUserBlock(int $typeId, int $itemId, int $userId, int $resultId = 0, bool $addHeader = false): string
+    {
+        $block = '';
+        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        if ($allowSkillInTools && !empty($typeId) && !empty($itemId) && !empty($userId)) {
+            $em = Database::getManager();
+            $items = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+                ['itemId' => $itemId, 'itemType' => $typeId]
+            );
+
+            $skills = '';
+            /** @var SkillRelItem $skillRelItem */
+            foreach ($items as $skillRelItem) {
+                $criteria = [
+                    'user' => $userId,
+                    'skillRelItem' => $skillRelItem,
+                ];
+                $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
+                $skills .= self::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, true, $userId);
+            }
+            $block .= $skills;
+
+            if (!empty($skills)) {
+                $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=update_skill_rel_user&'.api_get_cidreq();
+                $params = [
+                    'item_id' => $itemId,
+                    'type_id' => $typeId,
+                    'user_id' => $userId,
+                    'course_id' => api_get_course_int_id(),
+                    'session_id' => api_get_session_id(),
+                    'result_id' => $resultId,
+                ];
+                $params = json_encode($params);
+                if ($addHeader) {
+                    $block .= Display::page_subheader2(get_lang('Skills'));
+                }
+
+                $skillId = $skillRelItem->getSkill()->getId();
+                $elementId = 'skill-'.$skillId.'-'.$userId;
+                $html = '
+                <script>
+                    $(function() {
+                        $("#'.$elementId.'").on("click", function() {
+                            var params = '.$params.';
+                            $.ajax({
+                                type: "GET",
+                                async: false,
+                                data: params,
+                                url: "'.$url.'&skill_id="+'.$skillId.',
+                                success: function(result) {
+                                    $("#'.$elementId.'.user_skill").html(result);
+                                }
+                            });
+                        });
+                    });
+                </script>
+                ';
+                $block .= $html;
+                //$block .= $form->addLabel(get_lang('Skills'), $skills);
+                if ($addHeader) {
+                    $block .= '<br />';
+                }
+            }
+        }
+
+        return $block;
     }
 
     /**
@@ -2900,6 +2974,14 @@ class Skill extends Model
         }
     }
 
+    /**
+     * Builds a list of skills attributable to this course+session in a checkbox input list for FormValidator.
+     *
+     * @param     $courseId
+     * @param int $sessionId
+     *
+     * @return array
+     */
     public static function setSkillsToCourse(FormValidator $form, $courseId, $sessionId = 0)
     {
         $courseId = (int) $courseId;
@@ -2931,6 +3013,16 @@ class Skill extends Model
         return [];
     }
 
+    /**
+     * Show a list of skills attributable to this course+session in a checkbox input list for FormValidator.
+     *
+     * @param       $skills
+     * @param       $courseId
+     * @param       $sessionId
+     * @param array $selectedSkills
+     *
+     * @return HTML_QuickForm_Element|HTML_QuickForm_group
+     */
     public static function skillsToCheckbox(FormValidator $form, $skills, $courseId, $sessionId, $selectedSkills = [])
     {
         $em = Database::getManager();

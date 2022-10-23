@@ -1096,7 +1096,11 @@ class Wiki
                 );
             }
         } else {
-            $content = Security::remove_XSS($row['content']);
+            if (true === api_get_configuration_value('wiki_html_strict_filtering')) {
+                $content = Security::remove_XSS($row['content'], COURSEMANAGERLOWSECURITY);
+            } else {
+                $content = Security::remove_XSS($row['content']);
+            }
             $title = Security::remove_XSS($row['title']);
         }
 

@@ -22,23 +22,24 @@ class InternalLogUtil
             return;
         }
 
-        $internalLog = new InternalLog();
-        $internalLog->setUser($user);
-
-        $languageIso = api_get_language_isocode();
-
-        $internalLog->setVerb(
-            XApiPlugin::extractVerbInLanguage($statement->getVerb()->getDisplay(), $languageIso)
-        );
-
         $statementObject = $statement->getObject();
 
         if (!$statementObject instanceof Activity) {
             return;
         }
 
-        $internalLog->setObjectId($statementObject->getId()->getValue());
-        $internalLog->setStatementId($statement->getId()->getValue());
+        $languageIso = api_get_language_isocode();
+        $statementVerbString = XApiPlugin::extractVerbInLanguage($statement->getVerb()->getDisplay(), $languageIso);
+
+        $internalLog = new InternalLog();
+        $internalLog
+            ->setUser($user)
+            ->setVerb($statementVerbString)
+            ->setObjectId($statementObject->getId()->getValue());
+
+        if (null !== $statementId = $statement->getId()) {
+            $internalLog->setStatementId($statementId->getValue());
+        }
 
         if (null !== $definition = $statementObject->getDefinition()) {
             if (null !== $nameInLanguages = $definition->getName()) {
@@ -81,7 +82,7 @@ class InternalLogUtil
         $em->flush();
     }
 
-    private static function getUserFromActor(Actor $actor)
+    private static function getUserFromActor(Actor $actor): ?object
     {
         if (!$actor instanceof Agent) {
             return null;

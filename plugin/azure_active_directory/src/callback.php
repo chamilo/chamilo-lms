@@ -170,10 +170,17 @@ try {
     exit;
 }
 
-$_user['user_id'] = $userInfo['user_id'];
-$_user['uidReset'] = true;
+$userInfo['uidReset'] = true;
 
-ChamiloSession::write('_user', $_user);
+$_GET['redirect_after_not_allow_page'] = 1;
+
+$redirectAfterNotAllowPage = ChamiloSession::read('redirect_after_not_allow_page');
+
+ChamiloSession::clear();
+
+ChamiloSession::write('redirect_after_not_allow_page', $redirectAfterNotAllowPage);
+
+ChamiloSession::write('_user', $userInfo);
 ChamiloSession::write('_user_auth_source', 'azure_active_directory');
 Event::eventLogin($userInfo['user_id']);
 Redirect::session_request_uri(true, $userInfo['user_id']);

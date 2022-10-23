@@ -92,23 +92,13 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         if (count($users) == 0 || count($courses) == 0) {
             echo Display::return_message(get_lang('AtLeastOneUserAndOneCourse'), 'error');
         } else {
-            $errorDrh = 0;
             foreach ($courses as $course_code) {
                 foreach ($users as $user_id) {
                     $user = api_get_user_info($user_id);
-                    if ($user['status'] != DRH) {
-                        CourseManager::subscribeUser($user_id, $course_code);
-                    } else {
-                        $errorDrh = 1;
-                    }
+                    CourseManager::subscribeUser($user_id, $course_code);
                 }
             }
-
-            if ($errorDrh == 0) {
-                echo Display::return_message(get_lang('UsersAreSubscibedToCourse'), 'confirm');
-            } else {
-                echo Display::return_message(get_lang('HumanResourcesManagerShouldNotBeRegisteredToCourses'), 'error');
-            }
+            echo Display::return_message(get_lang('UsersAreSubscibedToCourse'), 'confirm');
         }
     }
 }

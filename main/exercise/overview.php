@@ -7,6 +7,7 @@
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
+$use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 Exercise::cleanSessionVariables();
@@ -137,7 +138,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
 
 // Exercise description.
 if (!empty($objExercise->description)) {
-    $html .= Display::div(Security::remove_XSS($objExercise->description), ['class' => 'exercise_description']);
+    $html .= Display::div(Security::remove_XSS($objExercise->description, COURSEMANAGERLOWSECURITY), ['class' => 'exercise_description']);
 }
 
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info(

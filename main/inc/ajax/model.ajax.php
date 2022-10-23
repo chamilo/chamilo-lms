@@ -1723,7 +1723,7 @@ switch ($action) {
 
         if (!empty($categoryList)) {
             foreach ($categoryList as $categoryInfo) {
-                $label = 'category_'.$categoryInfo['id'];
+                $label = 'category_'.$categoryInfo['iid'];
                 if ($operation === 'excel') {
                     $columns[] = $label.'_score_percentage';
                     $columns[] = $label.'_only_score';

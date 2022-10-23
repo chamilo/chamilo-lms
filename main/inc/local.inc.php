@@ -206,6 +206,24 @@ if (array_key_exists('forceCASAuthentication', $_POST)) {
     }
 }
 
+// Not allowed for users with auth_source ims_lti outsite a tool provider
+if ('true' === api_get_plugin_setting('lti_provider', 'enabled')) {
+    global $cidReset;
+    require_once api_get_path(SYS_PLUGIN_PATH).'lti_provider/src/LtiProvider.php';
+    $isLtiRequest = LtiProvider::create()->isLtiRequest($_REQUEST, $_SESSION);
+    $user = api_get_user_info();
+    if ($cidReset) {
+        $isLtiRequest = false;
+    }
+    if (!empty($user) && IMS_LTI_SOURCE === $user['auth_source'] && !$isLtiRequest) {
+        if (isset($_SESSION['_ltiProvider']) && !empty($_SESSION['_ltiProvider']['launch_url'])) {
+            $redirectLti = $_SESSION['_ltiProvider']['launch_url'].'&from=lti_provider';
+            header('Location: '.$redirectLti);
+            exit;
+        }
+    }
+}
+
 if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
@@ -449,7 +467,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
         // Lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status, salt
+        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status, salt, last_login
                 FROM $user_table
                 WHERE username = '".Database::escape_string($login)."'";
         $result = Database::query($sql);
@@ -608,13 +626,15 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status'] = $uData['status'];
                                         Session::write('_user', $_user);
+                                        Event::eventLoginAttempt($uData['username'], true);
                                         Event::eventLogin($_user['user_id']);
                                         $logging_in = true;
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');
                                         Session::write('loginFailed', '1');
-
+                                        Event::eventLoginAttempt($uData['username']);
+                                        UserManager::blockIfMaxLoginAttempts($uData);
                                         // Fix cas redirection loop
                                         // https://support.chamilo.org/issues/6124
                                         $location = api_get_path(WEB_PATH)
@@ -631,6 +651,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['status'] = $uData['status'];
                                         Session::write('_user', $_user);
                                         Event::eventLogin($_user['user_id']);
+                                        Event::eventLoginAttempt($uData['username'], true);
                                         $logging_in = true;
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
@@ -640,11 +661,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             $_user['status'] = $uData['status'];
                                             Session::write('_user', $_user);
                                             Event::eventLogin($_user['user_id']);
+                                            Event::eventLoginAttempt($uData['username'], true);
                                             $logging_in = true;
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
                                             Session::write('loginFailed', '1');
+                                            Event::eventLoginAttempt($uData['username']);
+                                            UserManager::blockIfMaxLoginAttempts($uData);
                                             header(
                                                 'Location: '.api_get_path(WEB_PATH)
                                                 .'index.php?loginFailed=1&error=access_url_inactive'
@@ -661,6 +685,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                                 Session::write('_user', $_user);
                                 Event::eventLogin($uData['user_id']);
+                                Event::eventLoginAttempt($uData['username'], true);
                                 $logging_in = true;
                             }
                         } else {
@@ -688,6 +713,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     $loginFailed = true;
                     Session::erase('_uid');
                     Session::write('loginFailed', '1');
+                    Event::eventLoginAttempt($uData['username']);
+                    UserManager::blockIfMaxLoginAttempts($uData);
 
                     if ($allowCaptcha) {
                         if (isset($_SESSION['loginFailedCount'])) {
@@ -768,6 +795,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 );
             }
         } else {
+            Event::eventLoginAttempt($login);
+            UserManager::blockIfMaxLoginAttempts(['username' => $login, 'last_login' => null]);
+
             $extraFieldValue = new ExtraFieldValue('user');
             $uData = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                 'organisationemail',
@@ -1138,6 +1168,7 @@ if (($sessionIdFromGet !== false && $sessionIdFromGet !== $sessionIdFromSession)
     // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
     Session::erase('_real_cid');
     Session::erase('_cid');
+    Session::erase('oLP');
     Session::erase('_course');
     Session::erase('_gid');
 }
@@ -1156,6 +1187,7 @@ if ($checkFromDatabase && !empty($sessionIdFromGet)) {
         // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
         Session::erase('_real_cid');
         Session::erase('_cid');
+        Session::erase('oLP');
         Session::erase('_course');
         Session::erase('_gid');
         api_not_allowed(true);
@@ -1202,6 +1234,7 @@ if ($cidReset) {
             Event::courseLogout($logoutInfo);
         }
         Session::erase('_cid');
+        Session::erase('oLP');
         Session::erase('_real_cid');
         Session::erase('_course');
         Session::erase('session_name');
@@ -1313,6 +1346,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                     Session::erase('id_session');
                     Session::erase('_real_cid');
                     Session::erase('_cid');
+                    Session::erase('oLP');
                     Session::erase('_course');
                     Session::erase('_gid');
                     Session::erase('is_courseAdmin');
@@ -1519,6 +1553,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
 
                             Session::erase('_real_cid');
                             Session::erase('_cid');
+                            Session::erase('oLP');
                             Session::erase('_course');
 
                             header('Location: '.$url);
@@ -1791,23 +1826,9 @@ if (isset($_cid)) {
 
 // direct login to course
 if (isset($doNotRedirectToCourse)) {
-} elseif ($logging_in && exist_firstpage_parameter()) {
-    $redirectCourseDir = api_get_firstpage_parameter();
+} elseif (exist_firstpage_parameter()) {
+    // The GotoCourse cookie is probably deprecated
     api_delete_firstpage_parameter(); // delete the cookie
-
-    if (!isset($_SESSION['request_uri'])) {
-        if (CourseManager::getCourseCodeFromDirectory($redirectCourseDir)) {
-            $_SESSION['noredirection'] = false;
-            $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir.'/';
-        }
-    }
-} elseif (api_user_is_login() && exist_firstpage_parameter()) {
-    $redirectCourseDir = api_get_firstpage_parameter();
-    api_delete_firstpage_parameter(); // delete the cookie
-    if (CourseManager::getCourseCodeFromDirectory($redirectCourseDir)) {
-        $_SESSION['noredirection'] = false;
-        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir.'/';
-    }
 }
 
 Event::eventCourseLoginUpdate(

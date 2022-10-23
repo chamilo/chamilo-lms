@@ -141,6 +141,7 @@ class HTML_QuickForm_RuleRegistry
             'multiple_required' => 'HTML_QuickForm_Rule_MultipleRequired',
             'datetime' => 'DateTimeRule',
             'username_available' => 'HTML_QuickForm_Rule_UsernameAvailable',
+            'no_same_current_password' => 'HTML_QuickForm_Rule_NoSameCurrentPassword',
             'compare_fields' => 'HTML_QuickForm_Compare_Fields',
             'html' => 'HTML_QuickForm_Rule_HTML',
             'CAPTCHA' => 'HTML_QuickForm_Rule_CAPTCHA',

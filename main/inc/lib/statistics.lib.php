@@ -1429,6 +1429,71 @@ class Statistics
     }
 
     /**
+     * It displays learnpath results from lti provider.
+     *
+     * @return false|string
+     */
+    public static function printLtiLearningPath()
+    {
+        $pluginLtiProvider = ('true' === api_get_plugin_setting('lti_provider', 'enabled'));
+
+        if (!$pluginLtiProvider) {
+            return false;
+        }
+
+        $content = Display::page_header(get_lang('LearningPathLTI'));
+        $actions = '';
+        $form = new FormValidator('frm_lti_tool_lp', 'get');
+        $form->addDateRangePicker(
+            'daterange',
+            get_lang('DateRange'),
+            true,
+            ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
+        );
+        $form->addHidden('report', 'lti_tool_lp');
+        $form->addButtonFilter(get_lang('Search'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $result = self::getLtiLeaningPathByDate($values['daterange_start'], $values['daterange_end']);
+
+            $table = new HTML_Table(['class' => 'table table-bordered data_table']);
+            $table->setHeaderContents(0, 0, get_lang('URL'));
+            $table->setHeaderContents(0, 1, get_lang('ToolLp'));
+            $table->setHeaderContents(0, 2, get_lang('LastName'));
+            $table->setHeaderContents(0, 3, get_lang('FirstName'));
+            $table->setHeaderContents(0, 4, get_lang('FirstAccess'));
+            $i = 1;
+            foreach ($result as $item) {
+                if (!empty($item['learnpaths'])) {
+                    foreach ($item['learnpaths'] as $lpId => $lpValues) {
+                        $lpName = learnpath::getLpNameById($lpId);
+                        if (count($lpValues['users']) > 0) {
+                            foreach ($lpValues['users'] as $user) {
+                                $table->setCellContents($i, 0, $item['issuer']);
+                                $table->setCellContents($i, 1, $lpName);
+                                $table->setCellContents($i, 2, $user['lastname']);
+                                $table->setCellContents($i, 3, $user['firstname']);
+                                $table->setCellContents($i, 4, $user['first_access']);
+                                $i++;
+                            }
+                        }
+                    }
+                }
+            }
+            $content = $table->toHtml();
+        }
+
+        $content .= $form->returnForm();
+        if (!empty($actions)) {
+            $content .= Display::toolbarAction('lti_tool_lp_toolbar', [$actions]);
+        }
+
+        return $content;
+    }
+
+    /**
      * Display the Logins By Date report and allow export its result to XLS.
      */
     public static function printLoginsByDate()
@@ -1542,6 +1607,34 @@ class Statistics
         }
 
         return '<table id="table_'.$bossId.'"></table>';
+    }
+
+    /**
+     * It gets lti learnpath results by date.
+     *
+     * @param $startDate
+     * @param $endDate
+     *
+     * @return array
+     */
+    private static function getLtiLeaningPathByDate($startDate, $endDate)
+    {
+        /** @var DateTime $startDate */
+        $startDate = api_get_utc_datetime("$startDate 00:00:00");
+        /** @var DateTime $endDate */
+        $endDate = api_get_utc_datetime("$endDate 23:59:59");
+
+        if (empty($startDate) || empty($endDate)) {
+            return [];
+        }
+
+        require_once api_get_path(SYS_PLUGIN_PATH).'lti_provider/LtiProviderPlugin.php';
+
+        $plugin = LtiProviderPlugin::create();
+
+        $result = $plugin->getToolLearnPathResult($startDate, $endDate);
+
+        return $result;
     }
 
     /**

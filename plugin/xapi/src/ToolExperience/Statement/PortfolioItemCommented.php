@@ -16,6 +16,8 @@ use Xabbuh\XApi\Model\Statement;
 
 class PortfolioItemCommented extends BaseStatement
 {
+    use PortfolioAttachmentsTrait;
+
     /**
      * @var \Chamilo\CoreBundle\Entity\PortfolioComment
      */

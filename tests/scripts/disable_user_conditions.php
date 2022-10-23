@@ -1,6 +1,20 @@
 <?php
 
-/* For licensing terms, see /license.txt */
+/* For licensing terms, see /license.txt 
+ * This script disable users depending on 3 use cases and send an email to the user to inform him
+ * The 3 cases for disabling a user are :
+ *  * Case 1
+ *   If a learner has not validated his terms and conditions and has not connected to the
+ *   platform for more than 3 months then deactivate his account and send an email to the user
+ *  * Case 2
+ *   If a learner has validated his terms and conditions and has not connected to the plateform
+ *   for more than 6 months then deactivate his account and send an email to the learner and to 
+ *   it's superior. The superior of the learner is also removed from this learner (deassignment).
+ *  * Case 3
+ *   If a learner has completed its courses (a learner is considered to have finished their courses
+ *   if he has a generated the general certificate) and has not connected to the platfrom for more 
+ *   than 6 months then deactivate his account and send an email to the learner.
+ * */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 

@@ -12,6 +12,7 @@ use ChamiloSession as Session;
  *    It is included from the script admin.php
  */
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$allowInterCourseLinking = api_get_configuration_value('quiz_question_allow_inter_course_linking');
 
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
@@ -21,7 +22,17 @@ if ($deleteQuestion) {
 
     // if the question exists
     if ($objQuestionTmp = Question::read($deleteQuestion)) {
-        $objQuestionTmp->delete($exerciseId);
+        if ($allowInterCourseLinking === true) {
+            $masterExerciseId = Question::getMasterQuizForQuestion($objQuestionTmp->iid);
+
+            if ($masterExerciseId != $exerciseId) {
+                $objQuestionTmp->delete($exerciseId);
+            } else {
+                $objQuestionTmp->delete();
+            }
+        } else {
+            $objQuestionTmp->delete($exerciseId);
+        }
 
         // if the question has been removed from the exercise
         if ($objExercise->removeFromList($deleteQuestion)) {
@@ -81,6 +92,12 @@ $addImageUrl = api_get_path(WEB_CODE_PATH).'inc/lib/elfinder/filemanager.php?add
 
         $(".opener").click(function () {
             var targetUrl = $(this).attr("href");
+            var otherQuizs = $(this).data("otherquizs");
+
+            if (otherQuizs) {
+                $("#dialog-confirm p").text("<?php echo get_lang('QuestionInOtherExercises'); ?>")
+            }
+
             $("#dialog-confirm").dialog({
                 modal: true,
                 buttons: {
@@ -268,16 +285,19 @@ if (!$inATest) {
                     );
                 }
 
-                $clone_link = Display::url(
-                    Display::return_icon(
-                        'cd.png',
-                        get_lang('Copy'),
-                        [],
-                        ICON_SIZE_TINY
-                    ),
-                    api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
-                    ['class' => 'btn btn-default btn-sm']
-                );
+                $clone_link = null;
+                if ($objExercise->edit_exercise_in_lp == true) {
+                    $clone_link = Display::url(
+                        Display::return_icon(
+                            'cd.png',
+                            get_lang('Copy'),
+                            [],
+                            ICON_SIZE_TINY
+                        ),
+                        api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
+                        ['class' => 'btn btn-default btn-sm']
+                    );
+                }
 
                 $edit_link = $objQuestionTmp->selectType() == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
                     ? Display::span(
@@ -308,24 +328,42 @@ if (!$inATest) {
                     );
                 $delete_link = null;
                 if ($objExercise->edit_exercise_in_lp == true) {
-                    $delete_link = Display::url(
-                        Display::return_icon(
-                            'delete.png',
-                            get_lang('RemoveFromTest'),
-                            [],
-                            ICON_SIZE_TINY
-                        ),
-                        api_get_self().'?'.api_get_cidreq().'&'
-                            .http_build_query([
-                                'exerciseId' => $exerciseId,
-                                'deleteQuestion' => $id,
-                                'page' => $page,
-                            ]),
-                        [
-                            'id' => "delete_$id",
-                            'class' => 'opener btn btn-default btn-sm',
-                        ]
-                    );
+                    $delete = false;
+                    $questionInOtherQuizs = true;
+                    $results = Question::countQuizzesUsingQuestion($id);
+                    if ($results > 1) {
+                        $masterExerciseId = Question::getMasterQuizForQuestion($id);
+                        if ($masterExerciseId == $exerciseId) {
+                            $delete = true;
+                            $questionInOtherQuizs = true;
+                        } else {
+                            $questionInOtherQuizs = false;
+                        }
+                    } else {
+                        $delete = true;
+                    }
+
+                    if ($delete) {
+                        $delete_link = Display::url(
+                            Display::return_icon(
+                                'delete.png',
+                                get_lang('RemoveFromTest'),
+                                [],
+                                ICON_SIZE_TINY
+                            ),
+                            api_get_self().'?'.api_get_cidreq().'&'
+                                .http_build_query([
+                                    'exerciseId' => $exerciseId,
+                                    'deleteQuestion' => $id,
+                                    'page' => $page,
+                                ]),
+                            [
+                                'id' => "delete_$id",
+                                'class' => 'opener btn btn-default btn-sm',
+                                'data-otherquizs' => $questionInOtherQuizs,
+                            ]
+                        );
+                    }
                 }
 
                 if ($limitTeacherAccess && !api_is_platform_admin()) {

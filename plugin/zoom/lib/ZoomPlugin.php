@@ -53,7 +53,7 @@ class ZoomPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '0.4',
+            '0.5',
             'Sébastien Ducoulombier, Julio Montoya, Angel Fernando Quiroz Campos',
             [
                 'tool_enable' => 'boolean',
@@ -93,7 +93,7 @@ class ZoomPlugin extends Plugin
      *
      * @return ZoomPlugin the instance to use
      */
-    public static function create()
+    public static function create(): ZoomPlugin
     {
         static $instance = null;
 

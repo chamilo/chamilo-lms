@@ -656,6 +656,7 @@ class ExtraField extends Model
                 $row['variable'],
                 $row['display_text']
             );
+            $row['options'] = [];
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag
@@ -1426,6 +1427,12 @@ class ExtraField extends Model
                                 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                             }
 
+                            $allowAsTags = 'true';
+
+                            if ('portfolio' === $this->type) {
+                                $allowAsTags = 'false';
+                            }
+
                             $form->setDefaults(
                                 [
                                     'extra_'.$field_details['variable'] => $selectedOptions,
@@ -1444,7 +1451,7 @@ class ExtraField extends Model
                                         }
                                     },
                                     cache: false,
-                                    tags: true,
+                                    tags: $allowAsTags,
                                     tokenSeparators: [','],
                                     placeholder: '".get_lang('StartToType')."'
                                 });

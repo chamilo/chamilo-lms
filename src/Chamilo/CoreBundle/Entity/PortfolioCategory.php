@@ -243,7 +243,7 @@ class PortfolioCategory
 
         if ($onlyVisibles) {
             $criteria->andWhere(
-                Criteria::expr()->eq('isVisible', true)
+                Criteria::expr()->eq('visibility', Portfolio::VISIBILITY_VISIBLE)
             );
         }
 

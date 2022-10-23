@@ -67,17 +67,6 @@ if ($passwordEncryption === 'bcrypt') {
 // Check the PHP version
 api_check_php_version($includePath.'/');
 
-// Specification for usernames:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-
-$defaultUserNameLength = 50;
-if (api_get_setting('login_is_email') == 'true') {
-    $defaultUserNameLength = 100;
-}
-define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
-
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
@@ -320,6 +309,17 @@ if (api_get_setting('server_type') == 'test') {
 }
 
 ini_set('log_errors', '1');
+
+// Specification for usernames:
+// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+// 2. Empty username is formally valid, but it is reserved for the anonymous user.
+// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+$defaultUserNameLength = 50;
+if (api_get_setting('login_is_email') == 'true') {
+    $defaultUserNameLength = 100;
+}
+define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';

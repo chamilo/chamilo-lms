@@ -39,6 +39,11 @@ use ChamiloSession as Session;
  */
 class Security
 {
+    public const CHAR_UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    public const CHAR_LOWER = 'abcdefghijklmnopqrstuvwxyz';
+    public const CHAR_DIGITS = '0123456789';
+    public const CHAR_SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~';
+
     public static $clean = [];
 
     /**
@@ -554,6 +559,7 @@ class Security
                 'uppercase' => 0,
                 'numeric' => 2,
                 'length' => 5,
+                'specials' => 1,
             ],
         ];
 
@@ -562,24 +568,49 @@ class Security
             $requirements = $passwordRequirements;
         }
 
-        return $requirements;
+        return ['min' => $requirements['min']];
     }
 
     /**
      * Gets password requirements in the platform language using get_lang
      * based in platform settings. See function 'self::getPasswordRequirements'.
-     *
-     * @return string
      */
-    public static function getPasswordRequirementsToString($passedConditions = [])
+    public static function getPasswordRequirementsToString(array $evaluatedConditions = []): string
     {
         $output = '';
         $setting = self::getPasswordRequirements();
+
+        $passedIcon = Display::returnFontAwesomeIcon(
+            'check',
+            '',
+            true,
+            'text-success',
+            get_lang('PasswordRequirementPassed')
+        );
+        $pendingIcon = Display::returnFontAwesomeIcon(
+            'times',
+            '',
+            true,
+            'text-danger',
+            get_lang('PasswordRequirementPending')
+        );
+
         foreach ($setting as $type => $rules) {
             foreach ($rules as $rule => $parameter) {
                 if (empty($parameter)) {
                     continue;
                 }
+
+                $evaluatedCondition = $type.'_'.$rule;
+                $icon = $passedIcon;
+
+                if (array_key_exists($evaluatedCondition, $evaluatedConditions)
+                    && false === $evaluatedConditions[$evaluatedCondition]
+                ) {
+                    $icon = $pendingIcon;
+                }
+
+                $output .= empty($evaluatedConditions) ? '' : $icon;
                 $output .= sprintf(
                     get_lang(
                         'NewPasswordRequirement'.ucfirst($type).'X'.ucfirst($rule)

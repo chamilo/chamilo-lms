@@ -6020,7 +6020,6 @@ $LowerCaseUser = "používateľ";
 $GenerateCertificates = "Generovať certifikáty";
 $ExportAllCertificatesToPDF = "Exportovať všetky certifikáty do PDF";
 $DeleteAllCertificates = "Zmazať všetky certifikáty";
-$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Existujú používatelia, ktorí používajú tento jazyk. Chcete zakázať tento jazyk a nastaviť všetkým týmto používateľom predvolený jazyk portálu?";
 $dateFormatLongNoDay = "%d %B %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Späť na zoznam kurzov";

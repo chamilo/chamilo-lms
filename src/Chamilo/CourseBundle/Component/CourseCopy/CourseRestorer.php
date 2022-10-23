@@ -1391,10 +1391,7 @@ class CourseRestorer
                 [$max_order] = Database::fetch_array($result);
 
                 $params = [];
-                if (!empty($session_id)) {
-                    $params['session_id'] = $session_id;
-                }
-
+                $params['session_id'] = (int) $session_id;
                 $params['c_id'] = $this->destination_course_id;
                 $params['url'] = self::DBUTF8($link->url);
                 $params['title'] = self::DBUTF8($link->title);

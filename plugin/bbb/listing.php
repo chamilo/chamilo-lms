@@ -357,18 +357,49 @@ if ($conferenceManager && $allowToEdit) {
     }
 }
 
+if (isset($_GET['page_id'])) {
+    $pageId = (int) $_GET['page_id'];
+}
+
+$meetingsCount = $bbb->getCountMeetings(
+    api_get_course_int_id(),
+    api_get_session_id(),
+    api_get_group_id()
+);
+
+$limit = 10;
+$pageNumber = ceil($meetingsCount / $limit);
+
+if (!isset($pageId)) {
+    $pageId = 1;
+}
+
+$start = ($pageId - 1) * $limit;
+
 $meetings = $bbb->getMeetings(
     api_get_course_int_id(),
     api_get_session_id(),
-    $groupId
+    api_get_group_id(),
+    false,
+    [],
+    $start,
+    $limit
 );
+
+if (empty($meetings)) {
+    $pageId = 0;
+}
+
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
 $usersOnline = $bbb->getUsersOnlineInCurrentRoom();
 $maxUsers = $bbb->getMaxUsersLimit();
 $status = $bbb->isServerRunning();
-$videoConferenceName = $bbb->getCurrentVideoConferenceName();
+$currentOpenConference = $bbb->getCurrentVideoConference();
+$videoConferenceName = $currentOpenConference
+    ? $currentOpenConference['meeting_name']
+    : $bbb->generateVideoConferenceName();
 $meetingExists = $bbb->meetingExists($videoConferenceName);
 $showJoinButton = false;
 
@@ -440,12 +471,39 @@ if ($bbb->isGlobalConference() === false &&
     }
 }
 
-// Default URL
-$urlList[] = Display::url(
-    $plugin->get_lang('EnterConference'),
-    $conferenceUrl,
-    ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
+$frmEnterConference = new FormValidator(
+    'enter_conference',
+    'get',
+    api_get_path(WEB_PLUGIN_PATH).'bbb/start.php',
+    '_blank'
 );
+$frmEnterConference->addText('name', get_lang('Name'));
+$frmEnterConference->applyFilter('name', 'trim');
+$frmEnterConference->addButtonNext($plugin->get_lang('EnterConference'));
+
+$conferenceUrlQueryParams = [];
+
+parse_str(
+    parse_url($conferenceUrl, PHP_URL_QUERY),
+    $conferenceUrlQueryParams
+);
+
+foreach ($conferenceUrlQueryParams as $key => $value) {
+    $frmEnterConference->addHidden($key, $value);
+}
+
+if ($meetingExists) {
+    $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
+
+    if (1 === (int) $meetingInfo['status']) {
+        $frmEnterConference->freeze(['name']);
+    }
+}
+
+$frmEnterConference->setDefaults(['name' => $videoConferenceName]);
+
+// Default URL
+$enterConferenceLink = $frmEnterConference->returnForm();
 
 $tpl = new Template($tool_name);
 
@@ -459,7 +517,9 @@ $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
-$tpl->assign('enter_conference_links', $urlList);
+$tpl->assign('enter_conference_links', $enterConferenceLink);
+$tpl->assign('page_number', $pageNumber);
+$tpl->assign('page_id', $pageId);
 
 $content = $tpl->fetch('bbb/view/listing.tpl');
 

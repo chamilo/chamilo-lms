@@ -17,8 +17,7 @@ $toolsRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 $baseTool = isset($_REQUEST['type']) ? $toolsRepo->find(intval($_REQUEST['type'])) : null;
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : 'add';
 
-/** @var Course $course */
-$course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+$course = api_get_course_entity(api_get_course_int_id());
 $addedTools = $toolsRepo->findBy(['course' => $course]);
 $globalTools = $toolsRepo->findBy(['parent' => null, 'course' => null]);
 
@@ -84,9 +83,7 @@ switch ($action) {
                         ->setRedirectUrl($formValues['redirect_url'])
                         ->setAdvantageServices(
                             [
-                                'ags' => isset($formValues['1p3_ags'])
-                                    ? $formValues['1p3_ags']
-                                    : LtiAssignmentGradesService::AGS_NONE,
+                                'ags' => $formValues['1p3_ags'] ?? LtiAssignmentGradesService::AGS_NONE,
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
                         )
@@ -213,9 +210,7 @@ switch ($action) {
                         ->setRedirectUrl($formValues['redirect_url'])
                         ->setAdvantageServices(
                             [
-                                'ags' => isset($formValues['1p3_ags'])
-                                    ? $formValues['1p3_ags']
-                                    : LtiAssignmentGradesService::AGS_NONE,
+                                'ags' => $formValues['1p3_ags'] ?? LtiAssignmentGradesService::AGS_NONE,
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
                         )
@@ -246,6 +241,9 @@ switch ($action) {
         }
 
         $form->setDefaultValues();
+        break;
+    default:
+        api_not_allowed(true);
         break;
 }
 

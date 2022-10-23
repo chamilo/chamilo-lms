@@ -90,11 +90,7 @@ class StudentFollowPage
         int $sessionId = 0,
         bool $allowEdit = false
     ): string {
-        $lpView = learnpath::findLastView($lpInfo['iid'], $studentId, $courseId, $sessionId);
-
-        if (empty($lpView)) {
-            return '-';
-        }
+        $lpView = learnpath::findLastView($lpInfo['iid'], $studentId, $courseId, $sessionId, true);
 
         $extraField = new ExtraField('lp_view');
         $field = $extraField->get_handler_field_info_by_field_variable(self::VARIABLE_ACQUISITION);
@@ -138,7 +134,7 @@ class StudentFollowPage
             $return .= Display::url(
                 Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_TINY),
                 $editUrl,
-                ['class' => 'ajax', 'data-title' => $lpInfo['lp_name']]
+                ['class' => 'ajax', 'data-title' => strip_tags($lpInfo['lp_name'])]
             );
         }
 

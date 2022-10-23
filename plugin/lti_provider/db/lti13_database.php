@@ -10,21 +10,21 @@ class Lti13Database implements Interfaces\Database
 {
     public function findRegistrationByIssuer($iss, $clientId = null)
     {
+        if (!isset($clientId)) {
+            $clientId = $this->getClientIdByIssuer($iss);
+        }
+
         $ltiCustomers = $this->getLtiConnection();
-        if (empty($ltiCustomers[$iss])) {
+        if (empty($ltiCustomers[$clientId])) {
             return false;
         }
 
-        if (!isset($clientId)) {
-            $clientId = $ltiCustomers[$iss]['client_id'];
-        }
-
         return LtiRegistration::new()
-            ->setAuthLoginUrl($ltiCustomers[$iss]['auth_login_url'])
-            ->setAuthTokenUrl($ltiCustomers[$iss]['auth_token_url'])
+            ->setAuthLoginUrl($ltiCustomers[$clientId]['auth_login_url'])
+            ->setAuthTokenUrl($ltiCustomers[$clientId]['auth_token_url'])
             ->setClientId($clientId)
-            ->setKeySetUrl($ltiCustomers[$iss]['key_set_url'])
-            ->setKid($ltiCustomers[$iss]['kid'])
+            ->setKeySetUrl($ltiCustomers[$clientId]['key_set_url'])
+            ->setKid($ltiCustomers[$clientId]['kid'])
             ->setIssuer($iss)
             ->setToolPrivateKey($this->getPrivateKey());
     }
@@ -32,7 +32,7 @@ class Lti13Database implements Interfaces\Database
     public function findDeployment($iss, $deploymentId, $clientId = null)
     {
         $issSession = Session::read('iss');
-        if (!in_array($deploymentId, $issSession[$iss]['deployment'])) {
+        if (!in_array($deploymentId, $issSession[$clientId]['deployment'])) {
             return false;
         }
 
@@ -46,9 +46,10 @@ class Lti13Database implements Interfaces\Database
 
         $ltiCustomers = [];
         foreach ($platforms as $platform) {
-            $issuer = $platform->getIssuer();
-            $ltiCustomers[$issuer] = [
-                'client_id' => $platform->getClientId(),
+            $clientId = $platform->getClientId();
+            $ltiCustomers[$clientId] = [
+                'client_id' => $clientId,
+                'issuer' => $platform->getIssuer(),
                 'auth_login_url' => $platform->getAuthLoginUrl(),
                 'auth_token_url' => $platform->getAuthTokenUrl(),
                 'key_set_url' => $platform->getKeySetUrl(),
@@ -59,6 +60,20 @@ class Lti13Database implements Interfaces\Database
         Session::write('iss', $ltiCustomers);
 
         return $ltiCustomers;
+    }
+
+    private function getClientIdByIssuer($issuer)
+    {
+        $clientId = '';
+        $platform = Database::getManager()
+            ->getRepository('ChamiloPluginBundle:LtiProvider\Platform')
+            ->findOneBy(['issuer' => $issuer]);
+
+        if ($platform) {
+            $clientId = $platform->getClientId();
+        }
+
+        return $clientId;
     }
 
     private function getPrivateKey()

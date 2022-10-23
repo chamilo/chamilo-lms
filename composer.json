@@ -83,7 +83,6 @@
         "mpdf/mpdf": "^8.0",
         "ocramius/proxy-manager": "~1.0|2.0.*",
         "onelogin/php-saml": "^3.0",
-        "packbackbooks/lti-1p3-tool": "^1.1",
         "paragonie/random-lib": "2.0.0",
         "patchwork/utf8": "~1.2",
         "php-ffmpeg/php-ffmpeg": "0.5.1",
@@ -121,6 +120,7 @@
         "twig/twig": "1.*",
         "webit/eval-math": "1.0.1",
         "yuloh/bccomp-polyfill": "dev-master",
+	    "packbackbooks/lti-1p3-tool": "1.1.1.x-dev",
         "zendframework/zend-config": "~3.0",
         "zendframework/zend-feed": "~2.6|^3.0",
         "zendframework/zend-http": "~2.6|^3.0",
@@ -184,6 +184,11 @@
         {
             "type": "github",
             "url": "https://github.com/AngelFQC/xapi-symfony-serializer.git",
+            "no-api": true
+        },
+	    {
+            "type": "github",
+            "url": "https://github.com/chamilo/lti-1-3-php-library.git",
             "no-api": true
         }
     ],

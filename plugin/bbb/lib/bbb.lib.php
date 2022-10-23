@@ -398,9 +398,9 @@ class bbb
                 api_get_session_id()
             );
 
-            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName();
-            $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
-            $record = isset($params['record']) && $params['record'] ? 'true' : 'false';
+            $meetingName = $params['meeting_name'] ?? $this->generateVideoConferenceName();
+            $welcomeMessage = $params['welcome_msg'] ?? null;
+            $record = $params['record'] ? 'true' : 'false';
             //$duration = isset($params['duration']) ? intval($params['duration']) : 0;
             // This setting currently limits the maximum conference duration,
             // to avoid lingering sessions on the video-conference server #6261
@@ -499,23 +499,109 @@ class bbb
     }
 
     /**
-     * @return string
+     * Get the info from the current open videoconference.
+     * Otherwise, return false.
+     *
+     * @return array|bool
      */
-    public function getCurrentVideoConferenceName()
+    public function getCurrentVideoConference()
     {
+        $whereConditions = [
+            'status = ?' => 1,
+        ];
+
         if ($this->isGlobalConferencePerUserEnabled()) {
-            return 'url_'.$this->userId.'_'.api_get_current_access_url_id();
+            $whereConditions[' AND user_id = ?'] = $this->userId;
         }
 
         if ($this->isGlobalConference()) {
-            return 'url_'.api_get_current_access_url_id();
+            $whereConditions[' AND access_url = ?'] = api_get_current_access_url_id();
         }
 
         if ($this->hasGroupSupport()) {
-            return api_get_course_id().'-'.api_get_session_id().'-'.api_get_group_id();
+            $whereConditions[' AND group_id = ?'] = api_get_group_id();
         }
 
-        return api_get_course_id().'-'.api_get_session_id();
+        $cId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        if ($cId) {
+            $whereConditions[' AND c_id = ?'] = api_get_course_int_id();
+        }
+
+        if ($sessionId) {
+            $whereConditions[' AND session_id = ?'] = api_get_session_id();
+        }
+
+        return Database::select(
+            '*',
+            $this->table,
+            [
+                'where' => $whereConditions,
+                'order' => 'created_at DESC',
+            ],
+            'first'
+        );
+    }
+
+    public function generateVideoConferenceName(string $defaultName = null): string
+    {
+        $nameFilter = function ($name) {
+            return URLify::filter(
+                $name,
+                64,
+                '',
+                true,
+                true,
+                true,
+                false
+            );
+        };
+
+        if (!empty($defaultName)) {
+            $name = $nameFilter($defaultName);
+
+            if (!empty($name)) {
+                return $name;
+            }
+        }
+
+        $urlId = api_get_current_access_url_id();
+
+        if ($this->isGlobalConferencePerUserEnabled()) {
+            return $nameFilter("url_{$this->userId}_$urlId");
+        }
+
+        if ($this->isGlobalConference()) {
+            return $nameFilter("url_$urlId");
+        }
+
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+        $group = api_get_group_entity();
+
+        if ($this->hasGroupSupport()) {
+            $name = implode(
+                '-',
+                [
+                    $course->getCode(),
+                    $session ? $session->getName() : '',
+                    $group ? $group->getName() : '',
+                ]
+            );
+
+            return $nameFilter($name);
+        }
+
+        $name = implode(
+            '-',
+            [
+                $course->getCode(),
+                $session ? $session->getName() : '',
+            ]
+        );
+
+        return $nameFilter($name);
     }
 
     /**
@@ -900,6 +986,8 @@ class bbb
      * @param int   $groupId
      * @param bool  $isAdminReport Optional. Set to true then the report is for admins
      * @param array $dateRange     Optional
+     * @param int   $start         Optional
+     * @param int   $limit         Optional
      *
      * @return array Array of current open meeting rooms
      * @throws Exception
@@ -909,7 +997,9 @@ class bbb
         $sessionId = 0,
         $groupId = 0,
         $isAdminReport = false,
-        $dateRange = []
+        $dateRange = [],
+        $start = 0,
+        $limit = 0
     ) {
         $em = Database::getManager();
         $manager = $this->isConferenceManager();
@@ -945,6 +1035,16 @@ class bbb
                     ),
                 );
             }
+	}
+        if ($this->isGlobalConference()) {
+            $conditions = array(
+                'where' => array(
+                    'c_id = ? AND user_id = ?' => array(
+                        0,
+                        $this->userId,
+                     ),
+                 ),
+            );
         }
 
         if (!empty($dateRange)) {
@@ -963,6 +1063,10 @@ class bbb
 
         $conditions['order'] = 'created_at ASC';
 
+        if ($limit) {
+            $conditions['limit'] = "$start , $limit";
+        }
+
         $meetingList = Database::select(
             '*',
             $this->table,
@@ -972,6 +1076,7 @@ class bbb
         $newMeetingList = array();
         foreach ($meetingList as $meetingDB) {
             $item = array();
+            $item['metting_name'] = $meetingDB['meeting_name'];
             $courseId = $meetingDB['c_id'];
             $courseInfo = api_get_course_info_by_id($courseId);
             $courseCode = '';
@@ -1128,6 +1233,80 @@ class bbb
         }
 
         return $newMeetingList;
+    }
+
+    /**
+     * Counts all the course meetings saved in the plugin_bbb_meeting table.
+     *
+     * @param int   $courseId
+     * @param int   $sessionId
+     * @param int   $groupId
+     * @param array $dateRange
+     *
+     * @return int Count of meetings
+     * @throws Exception
+     */
+    public function getCountMeetings(
+        $courseId = 0,
+        $sessionId = 0,
+        $groupId = 0,
+        $dateRange = []
+    ) {
+        $conditions = [];
+        if ($courseId || $sessionId || $groupId) {
+            $conditions = array(
+                'where' => array(
+                    'c_id = ? AND session_id = ? ' => array($courseId, $sessionId),
+                ),
+            );
+
+            if ($this->hasGroupSupport()) {
+                $conditions = array(
+                    'where' => array(
+                        'c_id = ? AND session_id = ? AND group_id = ? ' => array(
+                            $courseId,
+                            $sessionId,
+                            $groupId,
+                        ),
+                    ),
+                );
+            }
+
+            if ($this->isGlobalConferencePerUserEnabled()) {
+                $conditions = array(
+                    'where' => array(
+                        'c_id = ? AND session_id = ? AND user_id = ?' => array(
+                            $courseId,
+                            $sessionId,
+                            $this->userId,
+                        ),
+                    ),
+                );
+            }
+        }
+
+        if (!empty($dateRange)) {
+            $dateStart = date_create($dateRange['search_meeting_start']);
+            $dateStart = date_format($dateStart, 'Y-m-d H:i:s');
+            $dateEnd = date_create($dateRange['search_meeting_end']);
+            $dateEnd = $dateEnd->add(new DateInterval('P1D'));
+            $dateEnd = date_format($dateEnd, 'Y-m-d H:i:s');
+
+            $conditions = array(
+                'where' => array(
+                    'created_at BETWEEN ? AND ? ' => array($dateStart, $dateEnd),
+                ),
+            );
+        }
+
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            $conditions,
+            'first'
+        );
+
+        return $row['count'];
     }
 
     /**

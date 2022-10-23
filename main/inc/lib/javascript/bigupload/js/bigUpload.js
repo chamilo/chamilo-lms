@@ -175,7 +175,7 @@ function bigUpload () {
 			//this.uploadData.key is then populated with the filename to use for subsequent requests
 			//When this method sends a valid filename (i.e. key != 0), the server will just append the data being sent to that file.
 			xhr = new XMLHttpRequest();
-			xhr.open("POST", parent.settings.scriptPath + '?action=upload&origin=' + parent.settings.origin+'&key=' + parent.uploadData.key, true);
+			xhr.open("POST", parent.settings.scriptPath + '?action=upload' + '&key=' + parent.uploadData.key + (parent.uploadData.key ? '' : '&name=' + parent.uploadData.file.name), true);
 			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 			xhr.onreadystatechange = function() {

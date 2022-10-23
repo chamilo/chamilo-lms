@@ -309,8 +309,12 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Allows to do a remove_XSS in course introduction with user status COURSEMANAGERLOWSECURITY
 // in order to accept all embed type videos (like vimeo, wistia, etc)
 // $_configuration['course_introduction_html_strict_filtering'] = true;
-// Allows to do a remove_XSS in question of exersice with user status COURSEMANAGER
+// Allows to do a remove_XSS in question of exersice with user status COURSEMANAGERLOWSECURITY
 // $_configuration['question_exercise_html_strict_filtering'] = true;
+// Allows to do a remove_XSS in exersice result end text with user status COURSEMANAGERLOWSECURITY
+// $_configuration['exercise_result_end_text_html_strict_filtering'] = true;
+// Allows to do a remove_XSS in wiki pages with user status COURSEMANAGERLOWSECURITY
+// $_configuration['wiki_html_strict_filtering'] = true;
 // Prevents the duplicate upload in assignments
 // $_configuration['assignment_prevent_duplicate_upload'] = false;
 //Show student progress in My courses page
@@ -335,13 +339,16 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Hide rating elements in pages ("Courses catalog" & "Most Popular courses")
 // $_configuration['hide_course_rating'] = false;
 // Customize password generation and verification
+// For this configuration to be taken into account you need to set define('CHECK_PASS_EASY_TO_FIND', true); in app/config/profile.conf.php
 /*$_configuration['password_requirements'] = [
     'min' => [
         'lowercase' => 2,
         'uppercase' => 2,
         'numeric' => 2,
-        'length' => 8
-    ]
+        'length' => 8,
+        'specials' => 1,
+    ],
+    'force_different_password' => false,
 ];*/
 // Customize course session tracking columns
 /*
@@ -712,6 +719,10 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['quiz_confirm_saved_answers'] = false;
 // Allow reuse of questions between courses
 // $_configuration['quiz_question_allow_inter_course_linking'] = false;
+// Delete automatically the questions when a quiz is deleted
+// If questions are reused between courses only deletes the non-reused questions
+// or reused questions where the quiz has the lowest iid value from c_quiz_rel_question
+// $_configuration['quiz_question_delete_automatically_when_deleting_exercise'] = false;
 // Define how many seconds an AJAX request should be started to avoid loss of connection.
 //$_configuration['quiz_keep_alive_ping_interval'] = 0;
 // Hide search form in session list
@@ -969,10 +980,10 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['allow_teachers_to_access_blocked_lp_by_prerequisite'] = false;
 
 // Allow connect skills with course tools (exercises, forum threads, works, etc)
-// 1. Add "@ORM\Entity" in these Entities:
-//SkillRelItemRelUser/SkillRelItem
-// 2. Add "@ORM\OneToMany" in the "Skill.items" variable definition
-// 3. Run DB changes:
+// 1. Add an "@" before "ORM\Entity" in these Entities:
+//SkillRelItemRelUser/SkillRelItem/SkillRelCourse (in src/Chamilo/SkillBundle/Entity/)
+// 2. Add an "@" before "ORM\OneToMany" in the "Skill.items" and "Skill.courses" variable definitions (in src/Chamilo/CoreBundle/Entity/Skill.php)
+// 3. Run the following DB changes:
 /*
 CREATE TABLE skill_rel_item_rel_user (id INT AUTO_INCREMENT NOT NULL, skill_rel_item_id INT NOT NULL, user_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_D1133E0DFD4B12DC (skill_rel_item_id), INDEX IDX_D1133E0DA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 CREATE TABLE skill_rel_item (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, item_type INT NOT NULL, item_id INT NOT NULL, obtain_conditions VARCHAR(255) DEFAULT NULL, requires_validation TINYINT(1) NOT NULL, is_real TINYINT(1) NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_EB5B2A0D5585C142 (skill_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -986,8 +997,14 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (ski
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
 */
-// 4. Set "allow_skill_rel_items" to true
+// 4. Set the following "allow_skill_rel_items" setting to true
 //$_configuration['allow_skill_rel_items'] = false;
+// 5. Insert skills links in the skill_rel_course table directly to have them
+// appear in the skills page for the course in a session, or use the
+// main/cron/import_csv.php script with a file in main/cron/incoming/ with
+// a name matching the following pattern skillset_yyyymmdd.csv
+// 6. Assign skills to users through each supported tool (see skill.lib.php::getItemInfo())
+// 7. Confirm users skills through the gradebook interface (new skill_rel_user.php icon on main page)
 
 // Allows to send a notification when a user has achieved a skill
 //$_configuration['badge_assignation_notification'] = false;
@@ -1045,15 +1062,23 @@ ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062A76ED395 FOREIGN KEY (user_id) R
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id) ON DELETE SET NULL;
+ALTER TABLE portfolio CHANGE is_visible visibility SMALLINT DEFAULT 1 NOT NULL;
+ALTER TABLE portfolio ADD is_highlighted TINYINT(1) DEFAULT '0' NOT NULL;
+ALTER TABLE portfolio ADD is_template TINYINT(1) DEFAULT '0' NOT NULL;
 ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2F675F31B FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2126F525E FOREIGN KEY (item_id) REFERENCES portfolio (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2A977936C FOREIGN KEY (tree_root) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2727ACA70 FOREIGN KEY (parent_id) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
+ALTER TABLE portfolio_comment ADD is_template TINYINT(1) DEFAULT '0' NOT NULL;
 ALTER TABLE portfolio_category ADD parent_id INT(11) NOT NULL DEFAULT 0;
+CREATE TABLE portfolio_rel_tag (id INT AUTO_INCREMENT NOT NULL, tag_id INT NOT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, INDEX IDX_DB734472BAD26311 (tag_id), INDEX IDX_DB73447291D79BD3 (c_id), INDEX IDX_DB734472613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB734472BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE;
+ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB73447291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
+ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB734472613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
 */
 // In 1.11.8, before enabling this feature, you also need to:
-// - edit src/Chamilo/CoreBundle/Entity/Portfolio.php and PortfolioCategory.php
+// - edit src/Chamilo/CoreBundle/Entity/Portfolio.php, PortfolioCategory.php, PortfolioAttachment.php and PortfolioComment.php PortfolioRelTag.php
 //   and follow the instructions about the @ORM\Entity() line
 // - launch composer install to rebuild the autoload.php
 //$_configuration['allow_portfolio_tool'] = false;
@@ -1169,6 +1194,15 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Teachers can CRUD classes
 // ALTER TABLE usergroup ADD author_id INT DEFAULT NULL;
 //$_configuration['allow_teachers_to_classes'] = false;
+
+// Do not unsubscribe users from session nor course when users are unsubscribe to class
+// $_configuration['usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe'] = false;
+
+// Do not unsubscribe users from course when courses are unsubscribe to class
+// $_configuration['usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe'] = false;
+
+// Do not unsubscribe users from session when sessions are unsubscribe to class
+// $_configuration['usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe'] = false;
 
 // Validate user login via a webservice, Chamilo will send a "login" and "password" parameters
 // to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access.
@@ -1378,6 +1412,10 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Allow forum category filter on language
 // Requires new forum_category "language" extra fields (multiple select)
 //$_configuration['allow_forum_category_language_filter'] = false;
+
+//Allows to subscribe to notification of forums of the base course for users subscribed in a session
+//Only works if subscribe_users_to_forum_notifications is set to true in the course's settings
+//$_configuration['subscribe_users_to_forum_notifications_also_in_base_course'] = false;
 
 // Allow to show users in a map, users need to have a coordinates extra field BT#15176
 //$_configuration['allow_social_map_fields'] = ['fields' => ['terms_villedustage', 'terms_ville']];
@@ -2088,6 +2126,24 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Enable admin-only APIs: get_users_api_keys, get_user_api_key
 //$_configuration['webservice_enable_adminonly_api'] = false;
 
+// Block a user account if there are multiple failed login attempts. It requires DB changes:
+/*
+CREATE TABLE track_e_login_attempt
+(
+    login_id   INT AUTO_INCREMENT NOT NULL,
+    username   VARCHAR(100)       NOT NULL,
+    login_date DATETIME           NOT NULL,
+    user_ip    VARCHAR(39)        NOT NULL,
+    success    TINYINT(1)         NOT NULL,
+    INDEX idx_track_e_login_attempt_username_success (username, success),
+    PRIMARY KEY (login_id)
+) DEFAULT CHARACTER SET utf8
+  COLLATE utf8_unicode_ci
+  ENGINE = InnoDB;
+*/
+// Then add the "@" symbol to TrackELoginAttempt class in the ORM\Entity() line.
+//$_configuration['login_max_attempt_before_blocking_account'] = 0;
+
 // Ask user to renew password at first login.
 // Requires a user checkbox extra field called "ask_new_password".
 //$_configuration['force_renew_password_at_first_login'] = true;
@@ -2242,6 +2298,12 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 
 // Disable tab to add classes in course session for non-admins
 //$_configuration['session_classes_tab_disable'] = false;
+
+// Disable the possibility for teachers to edit course visibility
+//$_configuration['course_visibility_change_only_admin'] = false;
+
+// Allow DRH user to access all students from reporting.
+// $_configuration['drh_allow_access_to_all_students'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

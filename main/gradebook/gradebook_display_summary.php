@@ -198,6 +198,10 @@ $interbreadcrumb[] = [
     'url' => '#',
     'name' => get_lang('GradebookListOfStudentsReports'),
 ];
+$allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
+if ($allowSkillRelItem) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
+}
 
 $this_section = SECTION_COURSES;
 Display::display_header('');
@@ -210,8 +214,6 @@ if (count($userList) > 0) {
     echo Display::url(get_lang('ExportAllToPDF'), $url, ['class' => 'btn btn-default']);
 }
 echo '</div>';
-
-$allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
 
 if (count($userList) == 0) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');

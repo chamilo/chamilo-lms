@@ -173,12 +173,26 @@ class BigUploadResponse
     /**
      * Function to rename and move the finished file.
      *
-     * @param string $final_name Name to rename the finished upload to
-     *
      * @return string JSON object with result of rename
      */
-    public function finishUpload($finalName)
+    public function finishUpload()
     {
+        $tempName = $this->getTempName();
+
+        $sessionBigUpload = ChamiloSession::read('bigupload', []);
+
+        if (!isset($sessionBigUpload[$tempName])) {
+            return json_encode(
+                [
+                    'errorStatus' => 1,
+                    'errorText' => get_lang('UnableToDeleteTempFile'),
+                ]
+            );
+        }
+
+        /** @var string $finalName Name to rename the finished upload to */
+        $finalName = $sessionBigUpload[$tempName];
+
         $origin = $_POST['origin'];
         if ($origin == 'document') {
             $tmpFile = $this->getTempDirectory().$this->getTempName();
@@ -250,7 +264,11 @@ class BigUploadResponse
                 $file,
                 api_get_configuration_value('assignment_prevent_duplicate_upload')
             );
-            $redirectUrl = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
+            $extraParams = '';
+            if (!empty($_SESSION['oLP'])) {
+                $extraParams .= '&origin=learnpath';
+            }
+            $redirectUrl = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().$extraParams;
 
             return json_encode(['errorStatus' => 0, 'redirect' => $redirectUrl]);
         }
@@ -283,6 +301,8 @@ class BigUploadResponse
     }
 }
 
+$sessionBigUpload = ChamiloSession::read('bigupload', []);
+
 //Instantiate the class
 $bigUpload = new BigUploadResponse();
 
@@ -294,7 +314,20 @@ if (isset($_GET['key'])) {
 if (isset($_POST['key'])) {
     $tempName = $_POST['key'];
 }
+
+if (!empty($tempName)) {
+    $tempName = api_replace_dangerous_char($tempName);
+    $tempName = disable_dangerous_file($tempName);
+}
+
 $bigUpload->setTempName($tempName);
+
+if (isset($_GET['name'])) {
+    $sessionBigUpload[$bigUpload->getTempName()] = disable_dangerous_file(
+        api_replace_dangerous_char($_GET['name'])
+    );
+    ChamiloSession::write('bigupload', $sessionBigUpload);
+}
 
 switch ($_GET['action']) {
     case 'upload':
@@ -304,7 +337,13 @@ switch ($_GET['action']) {
         print $bigUpload->abortUpload();
         break;
     case 'finish':
-        print $bigUpload->finishUpload($_POST['name']);
+        print $bigUpload->finishUpload();
+
+        if (isset($sessionBigUpload[$bigUpload->getTempName()])) {
+            unset($sessionBigUpload[$bigUpload->getTempName()]);
+
+            ChamiloSession::write('bigupload', $sessionBigUpload);
+        }
         break;
     case 'post-unsupported':
         print $bigUpload->postUnsupported();

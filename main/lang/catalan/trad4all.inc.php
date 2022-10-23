@@ -6280,7 +6280,6 @@ $LowerCaseUser = "usuari";
 $GenerateCertificates = "Genera certificats";
 $ExportAllCertificatesToPDF = "Exporta tots els certificats a PDF";
 $DeleteAllCertificates = "Elimina tots els certificats";
-$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Hi ha usuaris utilitzant aquest idioma. Voleu desactivar aquest idioma i actualitzar aquests usuaris amb l'idioma per defecte de la plataforma?";
 $dateFormatLongNoDay = "%d %B %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Torna a la llista de cursos";

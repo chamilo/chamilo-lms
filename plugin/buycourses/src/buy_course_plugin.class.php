@@ -45,11 +45,6 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_COUPON_SUBSCRIPTION_SALE = 'plugin_buycourses_coupon_rel_subscription_sale';
     public const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
     public const TABLE_TPV_CECABANK = 'plugin_buycourses_cecabank_account';
-    public const COUPON_SUBSCRIPTION_WEEKLY = 7;
-    public const COUPON_SUBSCRIPTION_MONTHLY = 30;
-    public const COUPON_SUBSCRIPTION_QUARTERLY = 60;
-    public const COUPON_SUBSCRIPTION_BIANNUAL = 180;
-    public const COUPON_SUBSCRIPTION_ANNUAL = 360;
     public const PRODUCT_TYPE_COURSE = 1;
     public const PRODUCT_TYPE_SESSION = 2;
     public const PRODUCT_TYPE_SERVICE = 3;

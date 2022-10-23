@@ -574,7 +574,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
 
     if ($hideReports === false) {
         $conditions['include_invited_users'] = false;
-        $usersTracking = TrackingCourseLog::get_user_data(
+        $usersTracking = TrackingCourseLog::getUserData(
             0,
             $nbStudents,
             $trackingColumn,
@@ -694,7 +694,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '').
         get_lang('ExportAsCSV')
     .' </a>');
-    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields($defaultExtraFields);
+    $extraFieldSelect = TrackingCourseLog::displayAdditionalProfileFields($defaultExtraFields);
     if (!empty($extraFieldSelect)) {
         $html .= $extraFieldSelect;
     }
@@ -718,8 +718,8 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         $conditions['include_invited_users'] = true;
         $table = new SortableTable(
             'users_tracking',
-            ['TrackingCourseLog', 'get_number_of_users'],
-            ['TrackingCourseLog', 'get_user_data'],
+            ['TrackingCourseLog', 'getNumberOfUsers'],
+            ['TrackingCourseLog', 'getUserData'],
             1,
             20
         );

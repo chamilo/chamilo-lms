@@ -258,7 +258,7 @@ if (count($a_students) > 0) {
 
     $table = new SortableTable(
         'users_tracking',
-        ['TrackingCourseLog', 'get_number_of_users'],
+        ['TrackingCourseLog', 'getNumberOfUsers'],
         ['TrackingCourseLog', 'getTotalTimeReport'],
         (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
     );

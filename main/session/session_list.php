@@ -196,7 +196,7 @@ switch ($action) {
                     $course_code = $courseCode;
                     $export_csv = true;
 
-                    $csvContentInSession = TrackingCourseLog::get_user_data(
+                    $csvContentInSession = TrackingCourseLog::getUserData(
                         null,
                         $nbStudents,
                         null,

@@ -81,7 +81,6 @@ if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
             $defaults['end_date'] = null;
         }
         $defaults['start_date'] = $defaults['avail_from'];
-
     }
 
     $link_info = GradebookUtils::isResourceInCourseGradebook(

@@ -74,9 +74,15 @@ if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 
     if ($allowSurveyAvailabilityDatetime) {
         $defaults['avail_from'] = api_get_local_time($defaults['avail_from']);
-        $defaults['avail_till'] = api_get_local_time($defaults['avail_till']);
+
+        if (!empty($defaults['avail_till'])) {
+            $defaults['avail_till'] = api_get_local_time($defaults['avail_till']);
+        } else {
+            $defaults['end_date'] = null;
+        }
+
         $defaults['start_date'] = $defaults['avail_from'];
-        $defaults['end_date'] = $defaults['avail_till'];
+
     }
 
     $link_info = GradebookUtils::isResourceInCourseGradebook(
@@ -176,7 +182,6 @@ if ($allowSurveyAvailabilityDatetime) {
 }
 
 $form->setRequired($startDateElement);
-$form->setRequired($endDateElement);
 
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $visibleResults = [
@@ -344,12 +349,15 @@ if ($action == 'add') {
 $form->addRule('survey_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('start_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
 $form->addRule('end_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
-$form->addRule(
-    ['start_date', 'end_date'],
-    get_lang('StartDateShouldBeBeforeEndDate'),
-    'date_compare',
-    'lte'
-);
+
+if (!empty($endDateElement->getCleanValue())) {
+    $form->addRule(
+        ['start_date', 'end_date'],
+        get_lang('StartDateShouldBeBeforeEndDate'),
+        'date_compare',
+        'lte'
+    );
+}
 
 // Setting the default values
 $form->setDefaults($defaults);

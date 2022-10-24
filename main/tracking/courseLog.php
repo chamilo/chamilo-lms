@@ -9,16 +9,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_TRACKING;
 
-$courseInfo = api_get_course_info();
-if (empty($courseInfo)) {
-    api_not_allowed(true);
-}
-$sessionId = api_get_session_id();
-$is_allowedToTrack = Tracking::isAllowToTrack($sessionId);
+TrackingCourseLog::protectIfNotAllowed();
 
-if (!$is_allowedToTrack) {
-    api_not_allowed(true);
-}
+$courseInfo = api_get_course_info();
+$sessionId = api_get_session_id();
 
 //keep course_code form as it is loaded (global) by the table's get_user_data
 $courseCode = $courseInfo['code'];
@@ -62,40 +56,6 @@ if (isset($_GET['additional_profile_field'])) {
 
 if (isset($parameters['user_active'])) {
     $additionalParams .= '&user_active='.(int) $parameters['user_active'];
-}
-
-// If the user is an HR director (drh)
-if (api_is_drh()) {
-    // Blocking course for drh
-    if (api_drh_can_access_all_session_content()) {
-        // If the drh has been configured to be allowed to see all session content, give him access to the session courses
-        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
-        $coursesFromSessionCodeList = [];
-        if (!empty($coursesFromSession)) {
-            foreach ($coursesFromSession as $course) {
-                $coursesFromSessionCodeList[$course['code']] = $course['code'];
-            }
-        }
-
-        $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-        if (!empty($coursesFollowedList)) {
-            $coursesFollowedList = array_keys($coursesFollowedList);
-        }
-
-        if (!in_array($courseCode, $coursesFollowedList)) {
-            if (!in_array($courseCode, $coursesFromSessionCodeList)) {
-                api_not_allowed(true);
-            }
-        }
-    } else {
-        // If the drh has *not* been configured to be allowed to see all session content,
-        // then check if he has also been given access to the corresponding courses
-        $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-        $coursesFollowedList = array_keys($coursesFollowedList);
-        if (!in_array($courseCode, $coursesFollowedList)) {
-            api_not_allowed(true);
-        }
-    }
 }
 
 if ($export_csv || isset($_GET['csv'])) {

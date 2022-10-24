@@ -2,11 +2,16 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use ChamiloSession as Session;
 
 class TrackingCourseLog
 {
+    const HIDE_COURSE_REPORT_GRAPH_SHOWN = 0;
+    const HIDE_COURSE_REPORT_GRAPH_HIDDEN = 1;
+    const HIDE_COURSE_REPORT_GRAPH_CLICK_SHOW = 2;
+
     /**
      * @return mixed
      */
@@ -1294,6 +1299,68 @@ class TrackingCourseLog
         }
 
         return $rounded;
+    }
+
+    public static function protectIfNotAllowed()
+    {
+        $courseInfo = api_get_course_info();
+
+        if (empty($courseInfo)) {
+            api_not_allowed(true);
+        }
+
+        $sessionId = api_get_session_id();
+        $isAllowedToTrack = Tracking::isAllowToTrack($sessionId);
+
+        if (!$isAllowedToTrack) {
+            api_not_allowed(true);
+        }
+
+        $courseCode = $courseInfo['code'];
+
+        // If the user is an HR director (drh)
+        if (!api_is_drh()) {
+            return;
+        }
+
+        // Blocking course for drh
+        if (api_drh_can_access_all_session_content()) {
+            // If the drh has been configured to be allowed to see all session content, give him access to the session courses
+            $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
+            $coursesFromSessionCodeList = [];
+
+            if (!empty($coursesFromSession)) {
+                foreach ($coursesFromSession as $course) {
+                    $coursesFromSessionCodeList[$course['code']] = $course['code'];
+                }
+            }
+
+            $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+
+            if (!empty($coursesFollowedList)) {
+                $coursesFollowedList = array_keys($coursesFollowedList);
+            }
+
+            if (!in_array($courseCode, $coursesFollowedList)
+                && !in_array($courseCode, $coursesFromSessionCodeList)
+            ) {
+                api_not_allowed(true);
+            }
+        } else {
+            // If the drh has *not* been configured to be allowed to see all session content,
+            // then check if he has also been given access to the corresponding courses
+            $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+            $coursesFollowedList = array_keys($coursesFollowedList);
+
+            if (!in_array($courseCode, $coursesFollowedList)) {
+                api_not_allowed(true);
+            }
+        }
+    }
+
+    public static function returnCourseGraphicalReport(array $conditions)
+    {
+
     }
 
     /**

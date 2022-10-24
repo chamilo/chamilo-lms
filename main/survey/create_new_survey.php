@@ -80,7 +80,6 @@ if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
         } else {
             $defaults['end_date'] = null;
         }
-
         $defaults['start_date'] = $defaults['avail_from'];
 
     }

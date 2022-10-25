@@ -622,6 +622,7 @@ class CourseCategory
      * @param bool   $avoidCourses
      * @param bool   $checkHidePrivate
      * @param array  $conditions
+     * @param string $courseLanguageFilter
      *
      * @return int
      */
@@ -630,7 +631,8 @@ class CourseCategory
         $keyword = '',
         $avoidCourses = true,
         $checkHidePrivate = true,
-        $conditions = []
+        $conditions = [],
+        $courseLanguageFilter = null
     ) {
         return self::getCoursesInCategory(
             $category_code,
@@ -638,12 +640,20 @@ class CourseCategory
             $avoidCourses,
             $checkHidePrivate,
             $conditions,
-            true
+            true,
+            $courseLanguageFilter
         );
     }
 
-    public static function getCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $checkHidePrivate = true, $conditions = [], $getCount = false)
-    {
+    public static function getCoursesInCategory(
+        $category_code = '',
+        $keyword = '',
+        $avoidCourses = true,
+        $checkHidePrivate = true,
+        $conditions = [],
+        $getCount = false,
+        $courseLanguageFilter = null
+    ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
         $keyword = Database::escape_string($keyword);
@@ -655,12 +665,19 @@ class CourseCategory
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true, $checkHidePrivate);
 
         $sqlInjectJoins = '';
+        $courseLanguageWhere = '';
         $where = ' AND 1 = 1 ';
         $sqlInjectWhere = '';
         if (!empty($conditions)) {
             $sqlInjectJoins = $conditions['inject_joins'];
             $where = $conditions['where'];
             $sqlInjectWhere = $conditions['inject_where'];
+        }
+
+        // If have courseLanguageFilter, search for it
+        if (!empty($courseLanguageFilter)) {
+            $courseLanguageFilter = Database::escape_string($courseLanguageFilter);
+            $courseLanguageWhere = "AND course.course_language = '$courseLanguageFilter'";
         }
 
         $categoryFilter = '';
@@ -696,6 +713,7 @@ class CourseCategory
                     $urlCondition
                     course.visibility != '0' AND
                     course.visibility != '4'
+                    $courseLanguageWhere
                     $categoryFilter
                     $searchFilter
                     $avoidCoursesCondition

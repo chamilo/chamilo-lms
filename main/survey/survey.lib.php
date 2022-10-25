@@ -465,6 +465,14 @@ class SurveyManager
                 $extraParams['form_fields'] = '';
             }
 
+            if (!empty($values['end_date'])) {
+                $availTill = $allowSurveyAvailabilityDatetime
+                    ? api_get_utc_datetime($values['end_date'].':59')
+                    : $values['end_date'];
+            } else {
+                $availTill = null;
+            }
+
             $params = [
                 'title' => $values['survey_title'],
                 'subtitle' => $values['survey_subtitle'],
@@ -473,9 +481,7 @@ class SurveyManager
                 'avail_from' => $allowSurveyAvailabilityDatetime
                     ? api_get_utc_datetime($values['start_date'].':00')
                     : $values['start_date'],
-                'avail_till' => $allowSurveyAvailabilityDatetime
-                    ? api_get_utc_datetime($values['end_date'].':59')
-                    : $values['end_date'],
+                'avail_till' => $availTill,
                 'is_shared' => $shared_survey_id,
                 'template' => 'template',
                 'intro' => $values['survey_introduction'],

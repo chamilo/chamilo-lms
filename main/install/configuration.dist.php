@@ -1371,8 +1371,13 @@ ALTER TABLE gradebook_evaluation ADD score_weight DOUBLE PRECISION DEFAULT NULL,
 // Disable Chamilo.org announcements at the top of the admin page
 //$_configuration['admin_chamilo_announcements_disable'] = false;
 
-// Disable course report graphs
-//$_configuration['hide_course_report_graph'] = false;
+/*
+ Disable course report graphs
+ 0 = Shown
+ 1 = Hidden
+ 2 = Click to show
+*/
+//$_configuration['hide_course_report_graph'] = 0;
 
 // Visually "fold" forum categories by default
 // $_configuration['forum_fold_categories'] = false;

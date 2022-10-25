@@ -8,9 +8,9 @@ use ChamiloSession as Session;
 
 class TrackingCourseLog
 {
-    const HIDE_COURSE_REPORT_GRAPH_SHOWN = 0;
-    const HIDE_COURSE_REPORT_GRAPH_HIDDEN = 1;
-    const HIDE_COURSE_REPORT_GRAPH_CLICK_SHOW = 2;
+    public const HIDE_COURSE_REPORT_GRAPH_SHOWN = 0;
+    public const HIDE_COURSE_REPORT_GRAPH_HIDDEN = 1;
+    public const HIDE_COURSE_REPORT_GRAPH_CLICK_SHOW = 2;
 
     /**
      * @return mixed
@@ -504,7 +504,7 @@ class TrackingCourseLog
     /**
      * Get number of users for sortable with pagination.
      */
-    public static function getNumberOfUsers(array $conditions): array
+    public static function getNumberOfUsers(array $conditions): int
     {
         $conditions['get_count'] = true;
 
@@ -520,24 +520,23 @@ class TrackingCourseLog
         $column,
         $direction,
         array $conditions = []
-    ): array {
-        global $user_ids, $course_code, $export_csv, $session_id;
+    ) {
         $includeInvitedUsers = $conditions['include_invited_users']; // include the invited users
         $getCount = $conditions['get_count'] ?? false;
 
         $csvContent = [];
-        $course_code = $course_code ? Database::escape_string($course_code) : api_get_course_id();
+        $course_code = isset($GLOBALS['course_code']) ? Database::escape_string($GLOBALS['course_code']) : api_get_course_id();
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
         $tblUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $accessUrlId = api_get_current_access_url_id();
 
         // get all users data from a course for sortable with limit
-        if (is_array($user_ids) && !empty($user_ids)) {
-            $user_ids = array_map('intval', $user_ids);
-            $conditionUser = " WHERE user.id IN (".implode(',', $user_ids).") ";
+        if (!empty($GLOBALS['user_ids']) && is_array($GLOBALS['user_ids'])) {
+            $GLOBALS['user_ids'] = array_map('intval', $GLOBALS['user_ids']);
+            $conditionUser = " WHERE user.id IN (".implode(',', $GLOBALS['user_ids']).") ";
         } else {
-            $user_ids = (int) $user_ids;
-            $conditionUser = " WHERE user.id = $user_ids ";
+            $GLOBALS['user_ids'] = (int) $GLOBALS['user_ids'];
+            $conditionUser = " WHERE user.id = {$GLOBALS['user_ids']} ";
         }
 
         if (!empty($_GET['user_keyword'])) {
@@ -642,16 +641,16 @@ class TrackingCourseLog
         $totalSurveys = 0;
         $totalExercises = ExerciseLib::get_all_exercises(
             $courseInfo,
-            $session_id,
+            $GLOBALS['session_id'],
             false,
             null,
             false,
             3
         );
 
-        if (empty($session_id)) {
+        if (empty($GLOBALS['session_id'])) {
             $surveyUserList = [];
-            $surveyList = SurveyManager::get_surveys($course_code, $session_id);
+            $surveyList = SurveyManager::get_surveys($course_code, $GLOBALS['session_id']);
             if ($surveyList) {
                 $totalSurveys = count($surveyList);
                 foreach ($surveyList as $survey) {
@@ -669,7 +668,7 @@ class TrackingCourseLog
         }
 
         $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$courseCode.
-            '&course='.$course_code.'&origin=tracking_course&id_session='.$session_id;
+            '&course='.$course_code.'&origin=tracking_course&id_session='.$GLOBALS['session_id'];
 
         Session::write('user_id_list', []);
         $userIdList = [];
@@ -704,7 +703,7 @@ class TrackingCourseLog
                 Tracking::get_time_spent_on_the_course(
                     $user['user_id'],
                     $courseId,
-                    $session_id
+                    $GLOBALS['session_id']
                 )
             );
 
@@ -712,14 +711,14 @@ class TrackingCourseLog
                 $user['user_id'],
                 $course_code,
                 [],
-                $session_id
+                $GLOBALS['session_id']
             );
 
             $averageBestScore = Tracking::get_avg_student_score(
                 $user['user_id'],
                 $course_code,
                 [],
-                $session_id,
+                $GLOBALS['session_id'],
                 false,
                 false,
                 true
@@ -729,7 +728,7 @@ class TrackingCourseLog
                 $user['user_id'],
                 $course_code,
                 [],
-                $session_id,
+                $GLOBALS['session_id'],
                 false,
                 false,
                 $lpShowMaxProgress
@@ -744,7 +743,7 @@ class TrackingCourseLog
                 $totalExercises,
                 $user['user_id'],
                 $courseId,
-                $session_id
+                $GLOBALS['session_id']
             );
 
             $user['exercise_progress'] = $totalUserExercise;
@@ -753,7 +752,7 @@ class TrackingCourseLog
                 $totalExercises,
                 $user['user_id'],
                 $courseId,
-                $session_id
+                $GLOBALS['session_id']
             );
 
             $user['exercise_average_best_attempt'] = $totalUserExercise;
@@ -777,7 +776,7 @@ class TrackingCourseLog
                         $user['user_id'],
                         $exercise->iid,
                         $courseId,
-                        $session_id,
+                        $GLOBALS['session_id'],
                         false
                     );
 
@@ -794,28 +793,28 @@ class TrackingCourseLog
             $user['count_assignments'] = Tracking::count_student_assignments(
                 $user['user_id'],
                 $course_code,
-                $session_id
+                $GLOBALS['session_id']
             );
             $user['count_messages'] = Tracking::count_student_messages(
                 $user['user_id'],
                 $course_code,
-                $session_id
+                $GLOBALS['session_id']
             );
             $user['first_connection'] = Tracking::get_first_connection_date_on_the_course(
                 $user['user_id'],
                 $courseId,
-                $session_id,
-                false === $export_csv
+                $GLOBALS['session_id'],
+                false === $GLOBALS['export_csv']
             );
 
             $user['last_connection'] = Tracking::get_last_connection_date_on_the_course(
                 $user['user_id'],
                 $courseInfo,
-                $session_id,
-                false === $export_csv
+                $GLOBALS['session_id'],
+                false === $GLOBALS['export_csv']
             );
 
-            if ($export_csv) {
+            if ($GLOBALS['export_csv']) {
                 if (!empty($user['first_connection'])) {
                     $user['first_connection'] = api_get_local_time($user['first_connection']);
                 } else {
@@ -828,7 +827,7 @@ class TrackingCourseLog
                 }
             }
 
-            if (empty($session_id)) {
+            if (empty($GLOBALS['session_id'])) {
                 $user['survey'] = ($surveyUserList[$user['user_id']] ?? 0).' / '.$totalSurveys;
             }
 
@@ -865,7 +864,7 @@ class TrackingCourseLog
             $userRow['count_messages'] = $user['count_messages'];
 
             $userGroupManager = new UserGroup();
-            if ($export_csv) {
+            if ($GLOBALS['export_csv']) {
                 $userRow['classes'] = implode(
                     ',',
                     $userGroupManager->getNameListByUser($user['user_id'], UserGroup::NORMAL_CLASS)
@@ -877,10 +876,10 @@ class TrackingCourseLog
                 );
             }
 
-            if (empty($session_id)) {
+            if (empty($GLOBALS['session_id'])) {
                 $userRow['survey'] = $user['survey'];
             } else {
-                $userSession = SessionManager::getUserSession($user['user_id'], $session_id);
+                $userSession = SessionManager::getUserSession($user['user_id'], $GLOBALS['session_id']);
                 $userRow['registered_at'] = '';
                 if ($userSession) {
                     $userRow['registered_at'] = api_get_local_time($userSession['registered_at']);
@@ -936,14 +935,14 @@ class TrackingCourseLog
 
             $userRow['link'] = $user['link'];
 
-            if ($export_csv) {
+            if ($GLOBALS['export_csv']) {
                 unset($userRow['link']);
                 $csvContent[] = $userRow;
             }
             $users[] = array_values($userRow);
         }
 
-        if ($export_csv) {
+        if ($GLOBALS['export_csv']) {
             Session::write('csv_content', $csvContent);
         }
 
@@ -1358,9 +1357,161 @@ class TrackingCourseLog
         }
     }
 
-    public static function returnCourseGraphicalReport(array $conditions)
-    {
+    public static function returnCourseGraphicalReport(
+        array $courseInfo,
+        int $sessionId = 0
+    ): string {
+        if (self::HIDE_COURSE_REPORT_GRAPH_HIDDEN == (int) api_get_configuration_value('hide_course_report_graph')) {
+            return '';
+        }
 
+        $args = Session::read(
+            'course_log_args',
+            ['conditions' => [], 'parameters' => []]
+        );
+        Session::erase('course_log_args');
+
+        $conditions = $args['conditions'];
+        $parameters = $args['parameters'];
+
+        $courseCode = $courseInfo['code'];
+
+        if (empty($sessionId)) {
+            // Registered students in a course outside session.
+            $studentList = CourseManager::get_student_list_from_course_code(
+                $courseCode,
+                false,
+                0,
+                null,
+                null,
+                true,
+                0,
+                false,
+                0,
+                0,
+                $parameters['user_active']
+            );
+        } else {
+            // Registered students in session.
+            $studentList = CourseManager::get_student_list_from_course_code(
+                $courseCode,
+                true,
+                $sessionId,
+                null,
+                null,
+                true,
+                0,
+                false,
+                0,
+                0,
+                $parameters['user_active']
+            );
+        }
+
+        $GLOBALS['user_ids'] = array_keys($studentList);
+        $GLOBALS['course_code'] = $courseCode;
+        $GLOBALS['export_csv'] = false;
+        $GLOBALS['session_id'] = $sessionId;
+
+        $nbStudents = count($studentList);
+
+        $conditions['include_invited_users'] = false;
+
+        $usersTracking = TrackingCourseLog::getUserData(
+            0,
+            $nbStudents,
+            0,
+            'ASC',
+            $conditions
+        );
+
+        $numberStudentsCompletedLP = 0;
+        $averageStudentsTestScore = 0;
+        $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $userScoreList = [];
+        $listStudentIds = [];
+        $timeStudent = [];
+        $certificateCount = 0;
+        $category = Category::load(
+            null,
+            null,
+            $courseCode,
+            null,
+            null,
+            $sessionId
+        );
+
+        foreach ($usersTracking as $userTracking) {
+            $userInfo = api_get_user_info_from_username($userTracking[3]);
+
+            if (empty($userInfo)) {
+                continue;
+            }
+
+            $userId = $userInfo['user_id'];
+
+            if ('100%' === $userTracking[5]) {
+                $numberStudentsCompletedLP++;
+            }
+
+            $averageStudentTestScore = (float) $userTracking[7];
+            $averageStudentsTestScore += $averageStudentTestScore;
+
+            $reducedAverage = $averageStudentTestScore === 100.0 ? 9 : floor($averageStudentTestScore / 10);
+
+            if (isset($scoresDistribution[$reducedAverage])) {
+                $scoresDistribution[$reducedAverage]++;
+            }
+
+            $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
+            [$hours, $minutes, $seconds] = preg_split('/:/', $userTracking[4]);
+            $minutes = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
+
+            $certificate = false;
+
+            if (isset($category[0]) && $category[0]->is_certificate_available($userId)) {
+                $certificate = true;
+                $certificateCount++;
+            }
+
+            $listStudent = [
+                'id' => $userId,
+                'fullname' => $userInfo['complete_name'],
+                'score' => floor($scoreStudent / 2),
+                'total_time' => $minutes,
+                'avatar' => $userInfo['avatar'],
+                'certicate' => $certificate,
+            ];
+            $listStudentIds[] = $userId;
+            $userScoreList[] = $listStudent;
+        }
+
+        uasort(
+            $userScoreList,
+            function ($a, $b) {
+                return $a['score'] <= $b['score'];
+            }
+        );
+
+        $averageStudentsTestScore = 0;
+
+        if ($nbStudents > 0) {
+            $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
+        }
+
+        $colors = ChamiloApi::getColorPalette(true, true, 10);
+
+        $tpl = new Template('', false, false, false, true, false, false);
+        $tpl->assign('chart_colors', json_encode($colors));
+        $tpl->assign('certificate_count', $certificateCount);
+        $tpl->assign('score_distribution', json_encode($scoresDistribution));
+        $tpl->assign('json_time_student', json_encode($userScoreList));
+        $tpl->assign('students_test_score', $averageStudentsTestScore);
+        $tpl->assign('students_completed_lp', $numberStudentsCompletedLP);
+        $tpl->assign('number_students', $nbStudents);
+        $tpl->assign('top_students', array_chunk($userScoreList, 3, true));
+
+        return $tpl->fetch($tpl->get_template('tracking/tracking_course_log.tpl'));
     }
 
     /**

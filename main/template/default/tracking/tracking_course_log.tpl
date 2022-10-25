@@ -1,6 +1,6 @@
 <!-- tracking course log -->
 <script>
-window.onload = function() {
+$(function () {
     var scoreStudent = document.getElementById("chart-score").getContext('2d');
     var lastAccess = document.getElementById("chart-access").getContext('2d');
     var jsonfile = {{ json_time_student }};
@@ -99,7 +99,7 @@ window.onload = function() {
             }
         }
     });
-};
+});
 </script>
 
 <div class="tracking-course-summary">

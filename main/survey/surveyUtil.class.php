@@ -4009,7 +4009,8 @@ class SurveyUtil
 				WHERE
                     survey_invitation.user = $user_id AND
                     survey.avail_from <= '$filterDate' AND
-                    survey.avail_till >= '$filterDate' AND
+                    (survey.avail_till >= '$filterDate' OR
+                    survey.avail_till IS NULL) AND
                     survey.c_id = $course_id AND
                     survey_invitation.c_id = $course_id $sessionCondition
 				";

@@ -261,7 +261,7 @@ $(function() {
 });
 
 // This code was moved inside LMSInitialize()
-if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'link') {
     xajax_start_timer();
 }
 
@@ -349,7 +349,7 @@ function LMSInitialize() {
             $("#tab-iframe").addClass("tab-content iframe_"+olms.lms_item_type);
         }
 
-        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'link') {
             xajax_start_timer();
         }
 
@@ -1148,7 +1148,7 @@ function addListeners(){
         return;
     }
     //assign event handlers to objects
-    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.lms_item_type == 'document') {
+    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'link') {
         logit_lms('Chamilo LP or asset');
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
@@ -1212,7 +1212,7 @@ function lms_save_asset() {
         olms.execute_stats = true;
     }
 
-    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'link') {
         logit_lms('lms_save_asset');
         logit_lms('execute_stats :'+ olms.execute_stats);
         xajax_save_item(
@@ -1724,7 +1724,7 @@ function switch_item(current_item, next_item)
     <?php
     } ?>
 
-    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'link') {
         xajax_start_timer();
     }
 
@@ -1907,7 +1907,7 @@ function xajax_save_item(
     params += '&userNavigatesAway='+userNavigatesAway;
     params += '&statusSignalReceived='+statusSignalReceived;
 
-    if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
+    if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'link' || item_type == 'asset') {
         logit_lms('xajax_save_item with params:' + params, 3);
         return $.ajax({
             type:"POST",

@@ -21,6 +21,10 @@
                     <span class="category">{{ course.category }}</span>
                     <div class="cribbon"></div>
                 {% endif %}
+                {% if 'show_different_course_language'| api_get_setting is same as 'true' %}
+                    <span class="course-language grid-course">{{ course.course_language }}</span>
+                    <div class="cribbon  cribbon-course-language-grid"></div>
+                {% endif %}
                 {% if course.edit_actions %}
                     <div class="admin-actions">
                         {% if course.document == '' %}

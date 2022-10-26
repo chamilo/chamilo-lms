@@ -183,6 +183,11 @@ foreach ($requirements as $sequence) {
     }
 }
 
+if ($hasRequirements) {
+    $sequenceList = $sequenceResourceRepo->checkRequirementsForUser($requirements, SequenceResource::COURSE_TYPE, $userId);
+    $allowSubscribe = $sequenceResourceRepo->checkSequenceAreCompleted($sequenceList);
+}
+
 $template = new Template($course->getTitle(), true, true, false, true, false);
 
 $template->assign('course', $courseItem);

@@ -107,34 +107,9 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                {% if allow_subscribe == true %}
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        {% if has_requirements %}
-                            <div class="session-subscribe">
-                                <p>
-                                    <button class="btn btn-lg btn-default btn-block" disabled>
-                                        {{ 'Subscribe'|get_lang }}
-                                    </button>
-                                </p>
-                                {{ subscribe_button }}
-                            </div>
-                            <div class="session-requirements">
-                                <h5>{{ 'RequiredCourses'|get_lang }}</h5>
-                                {% for sequence in sequences %}
-                                {% if sequence.requirements %}
-                                <p>
-                                    {{ sequence.name }} :
-                                    {% for requirement in sequence.requirements %}
-                                    <a href="{{ _p.web ~ 'course/' ~ requirement.getId ~ '/about/' }}">
-                                        {{ requirement.title | remove_xss }}
-                                    </a>
-                                    {% endfor %}
-                                </p>
-                                {% endif %}
-                                {% endfor %}
-                            </div>
-                        {% else %}
+                        {% if allow_subscribe == true %}
                             {% if is_premium == false %}
                                 <div class="session-subscribe">
                                     {# public course (open world) #}
@@ -182,10 +157,35 @@
                                     </div>
                                 </div>
                             {% endif %}
+                        {% else %}
+                            <div class="session-subscribe">
+                                <button class="btn btn-lg btn-default btn-block" disabled>
+                                    {{ 'Subscribe'|get_lang }}
+                                </button>
+                            </div>
+                        {% endif %}
+                        {% if has_requirements %}
+                            <div class="session-requirements">
+                                <h5>{{ 'RequiredCourses'|get_lang }}</h5>
+                                <p>
+                                    {{ subscribe_button }}
+                                </p>
+                                {% for sequence in sequences %}
+                                {% if sequence.requirements %}
+                                <p>
+                                    {{ sequence.name }} :
+                                    {% for requirement in sequence.requirements %}
+                                    <a href="{{ _p.web ~ 'course/' ~ requirement.getId ~ '/about/' }}">
+                                        {{ requirement.title | remove_xss }}
+                                    </a>
+                                    {% endfor %}
+                                </p>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
                         {% endif %}
                     </div>
                 </div>
-                {% endif %}
                 {% if course.teachers and not 'course_about_teacher_name_hide'|api_get_configuration_value %}
                     <div class="panel panel-default">
                         <div class="panel-body">

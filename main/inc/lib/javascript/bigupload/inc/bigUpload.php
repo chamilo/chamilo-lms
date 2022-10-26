@@ -63,7 +63,11 @@ class BigUploadResponse
         if ($value) {
             $this->tempName = $value;
         } else {
-            $this->tempName = mt_rand().'.tmp';
+            if ('learnpath' === $_REQUEST['origin'] && !empty($_REQUEST['name'])) {
+                $this->tempName = $_REQUEST['name'];
+            } else {
+                $this->tempName = mt_rand().'.tmp';
+            }
         }
     }
 

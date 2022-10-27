@@ -1755,7 +1755,6 @@ if (empty($details)) {
                     $totalLpTime = isset($lpTime[$lp_id]) ? (int) $lpTime[$lp_id] : 0;
 
                     if (Tracking::minimumTimeAvailable($sessionId, $courseInfo['real_id'])) {
-
                         $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite(
                             $lp_id,
                             $courseInfo['real_id']

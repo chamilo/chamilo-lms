@@ -1880,7 +1880,7 @@ if (empty($details)) {
                 }
                 if (in_array('time', $columnHeadersKeys)) {
                     $contentToExport[] = $formattedLpTime;
-                    echo Display::tag('td', $linkMinTime .' '. $formattedLpTime, ['style' => 'width: 10%']);
+                    echo Display::tag('td', $linkMinTime.$formattedLpTime, ['style' => 'width: 10%']);
                 }
 
                 if (in_array('best_score', $columnHeadersKeys)) {

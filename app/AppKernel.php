@@ -128,7 +128,8 @@ class AppKernel extends Kernel
             /*new Bazinga\Bundle\FakerBundle\BazingaFakerBundle(),
             //new Chamilo\CmsBundle\ChamiloCmsBundle(),
              */
-            new Lunetics\LocaleBundle\LuneticsLocaleBundle()
+            new Lunetics\LocaleBundle\LuneticsLocaleBundle(),
+            new Gregwar\CaptchaBundle\GregwarCaptchaBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Repository\SessionRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use ChamiloSession as PHPSession;
 
 /**
  * @author  Bart Mollet, Julio Montoya lot of fixes
@@ -23,7 +24,7 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : null;
 if (empty($sessionId)) {
     api_not_allowed(true);
 }
-
+PHPSession::write('id_session',$sessionId);
 SessionManager::protectSession($sessionId);
 $codePath = api_get_path(WEB_CODE_PATH);
 

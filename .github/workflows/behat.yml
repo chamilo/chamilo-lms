@@ -38,7 +38,7 @@ jobs:
 
             - name: Get composer cache directory
               id: composer-cache
-              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
 #            - name: Cache composer dependencies
 #              uses: actions/cache@v2
@@ -66,7 +66,7 @@ jobs:
 
             - name: Get yarn cache directory
               id: yarn-cache-dir-path
-              run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+              run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
 #            - name: Cache yarn dependencies
 #              uses: actions/cache@v2

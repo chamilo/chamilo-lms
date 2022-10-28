@@ -216,7 +216,7 @@ class ExtraFieldType extends AbstractType
                     $options = $extraField->getOptions();
                     $choices = [];
                     foreach ($options as $option) {
-                        $choices[$option->getDisplayText()] = $option->getFieldValue();
+                        $choices[$option->getDisplayText()] = $option->getValue();
                     }
                     $defaultOptions['choices'] = $choices;
 

@@ -256,11 +256,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         SerializerInterface $serializer
     ): Response {
         $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
-        
+
         if (!$isCourseTeacher) {
             throw new AccessDeniedHttpException();
         }
-        
+
         $id = $request->attributes->getInt('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['id' => $id]);
 
@@ -271,7 +271,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         /** @var ResourceLink $link */
         $link = $resourceNode->getResourceLinks()->first();
 
-        if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+        if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
             $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
         } else {
             $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
@@ -281,7 +281,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $json = $serializer->serialize(
             $link,
-            'json', [
+            'json',
+            [
                 'groups' => ['ctool:read'],
             ]
         );
@@ -306,7 +307,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if (!$isCourseTeacher) {
             throw new AccessDeniedHttpException();
         }
-        
+
         $visibility = $request->attributes->get('visibility');
 
         $course = $this->getCourse();
@@ -316,7 +317,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             ->addSelect('tool')
             ->innerJoin('resource.tool', 'tool')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         $skipTools = ['course_tool', 'chat', 'notebook', 'wiki'];
 
@@ -327,13 +329,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
 
-            if (!in_array($toolModel->getCategory(), ['authoring', 'interaction'])) {
+            if (!\in_array($toolModel->getCategory(), ['authoring', 'interaction'], true)) {
                 continue;
             }
 
             /** @var ResourceLink $link */
             $link = $item->getResourceNode()->getResourceLinks()->first();
-            
+
             if ('show' === $visibility) {
                 $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
             } elseif ('hide' === $visibility) {

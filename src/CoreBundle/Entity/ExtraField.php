@@ -158,7 +158,7 @@ class ExtraField
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions", mappedBy="field")
      *
-     * @var ExtraFieldOptions[]|Collection
+     * @var Collection<int, ExtraFieldOptions>
      */
     #[Groups(['extra_field:read'])]
     protected Collection $options;
@@ -345,9 +345,9 @@ class ExtraField
     }
 
     /**
-     * @return ExtraFieldOptions[]|Collection
+     * @return Collection<int, ExtraFieldOptions>
      */
-    public function getOptions()
+    public function getOptions(): Collection
     {
         return $this->options;
     }

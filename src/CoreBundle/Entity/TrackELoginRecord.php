@@ -1,12 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,7 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackELoginRecord
 {
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -48,8 +46,6 @@ class TrackELoginRecord
 
     /**
      * Get the username.
-     *
-     * @return string
      */
     public function getUsername(): string
     {
@@ -58,8 +54,6 @@ class TrackELoginRecord
 
     /**
      * Set the username.
-     *
-     * @param string $username
      *
      * @return $this
      */
@@ -72,8 +66,6 @@ class TrackELoginRecord
 
     /**
      * Set Login date.
-     *
-     * @param DateTime $loginDate
      *
      * @return $this
      */
@@ -97,8 +89,6 @@ class TrackELoginRecord
     /**
      * Set user ip.
      *
-     * @param string $userIp
-     *
      * @return $this
      */
     public function setUserIp(string $userIp): self
@@ -120,8 +110,6 @@ class TrackELoginRecord
 
     /**
      * Get the success value.
-     *
-     * @return bool
      */
     public function getSuccess(): bool
     {
@@ -130,8 +118,6 @@ class TrackELoginRecord
 
     /**
      * Set the success value.
-     *
-     * @param bool $boolean
      *
      * @return $this
      */

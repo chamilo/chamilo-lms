@@ -34,7 +34,7 @@ $countNotSent = count($notSentSharedStatements);
 if ($countNotSent > 0) {
     echo '['.time().'] Trying to send '.$countNotSent.' statements to LRS'.PHP_EOL;
 
-    $client = XApiPlugin::create()->getXApiStatementClient();
+    $client = XApiPlugin::create()->getXapiStatementCronClient();
 
     /** @var SharedStatement $notSentSharedStatement */
     foreach ($notSentSharedStatements as $notSentSharedStatement) {

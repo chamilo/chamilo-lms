@@ -73,12 +73,14 @@ class TableSort
         switch ($type) {
             case SORT_NUMERIC:
                 $function = function ($a, $b) use ($column, $compareOperator) {
-                    $result = strip_tags($a[$column]) <= strip_tags($b[$column]);
-                    if ('>' === $compareOperator) {
-                        $result = strip_tags($a[$column]) > strip_tags($b[$column]);
+                    $colA = strip_tags($a[$column]);
+                    $colB = strip_tags($b[$column]);
+
+                    if ('>' === $compareOperator && $colA > $colB) {
+                        return 1;
                     }
 
-                    return $result;
+                    return $colA < $colB ? -1 : 0;
                 };
                 break;
             case SORT_IMAGE:
@@ -86,12 +88,12 @@ class TableSort
                     $result = api_strnatcmp(
                         api_strtolower(strip_tags($a[$column], "<img>")),
                         api_strtolower(strip_tags($b[$column], "<img>"))
-                    ) <= 0;
+                    );
                     if ('>' === $compareOperator) {
                         $result = api_strnatcmp(
                             api_strtolower(strip_tags($a[$column], "<img>")),
                             api_strtolower(strip_tags($b[$column], "<img>"))
-                        ) > 0;
+                        );
                     }
 
                     return $result;
@@ -100,12 +102,14 @@ class TableSort
                 break;
             case SORT_DATE:
                 $function = function ($a, $b) use ($column, $compareOperator) {
-                    $result = strtotime(strip_tags($a[$column])) <= strtotime(strip_tags($b[$column]));
-                    if ('>' === $compareOperator) {
-                        $result = strtotime(strip_tags($a[$column])) > strtotime(strip_tags($b[$column]));
+                    $dateA = strtotime(strip_tags($a[$column]));
+                    $dateB = strtotime(strip_tags($b[$column]));
+
+                    if ('>' === $compareOperator && $dateA > $dateB) {
+                        return 1;
                     }
 
-                    return $result;
+                    return $dateA < $dateB ? -1 : 0;
                 };
                 break;
             case SORT_STRING:
@@ -114,12 +118,12 @@ class TableSort
                     $result = api_strnatcmp(
                         api_strtolower(strip_tags($a[$column])),
                         api_strtolower(strip_tags($b[$column]))
-                    ) <= 0;
+                    );
                     if ('>' === $compareOperator) {
                         $result = api_strnatcmp(
                             api_strtolower(strip_tags($a[$column])),
                             api_strtolower(strip_tags($b[$column]))
-                        ) > 0;
+                        );
                     }
 
                     return $result;

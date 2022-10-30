@@ -1328,22 +1328,22 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
  * @param bool Whether to allow session admins as well
  * @param bool Whether to allow HR directors as well
  * @param string An optional message (already passed through get_lang)
+ * @param bool Whether to allow session coach as well
  *
  * @return bool True if user is allowed, false otherwise.
  *              The function also outputs an error message in case not allowed
  *
  * @author Roan Embrechts (original author)
  */
-function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null)
+function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null, $allow_session_coach = false)
 {
     if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
-        api_not_allowed(true, $message);
-
-        return false;
+        if (!($allow_session_coach && api_is_coach())) {
+            api_not_allowed(true, $message);
+            return false;
+        }
     }
-
     api_block_inactive_user();
-
     return true;
 }
 
@@ -3369,7 +3369,6 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
             $sessionIsCoach = Database::store_result($result);
         }
     }
-
     return count($sessionIsCoach) > 0;
 }
 

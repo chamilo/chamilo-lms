@@ -5914,6 +5914,7 @@ $LowerCaseUser = "utilisateur";
 $GenerateCertificates = "Générer les certificats";
 $ExportAllCertificatesToPDF = "Exporter tous les certificats à PDF";
 $DeleteAllCertificates = "Supprimer tous les certificats";
+$ClickToShowGraphs = "Cliquer pour charger les graphiques";
 $dateFormatLongNoDay = "%d %B %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Retour liste de cours";

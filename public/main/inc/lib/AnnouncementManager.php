@@ -130,12 +130,12 @@ class AnnouncementManager
             if (!empty($readerInfo['extra'])) {
                 foreach ($readerInfo['extra'] as $extra) {
                     if (isset($extra['value'])) {
-                        /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
+                        /** @var ExtraFieldValues $value */
                         $value = $extra['value'];
                         if ($value instanceof ExtraFieldValues) {
                             $field = $value->getField();
                             if ($field instanceof ExtraFieldEntity) {
-                                $data['extra_'.$field->getVariable()] = $value->getValue();
+                                $data['extra_'.$field->getVariable()] = $value->getFieldValue();
                             }
                         }
                     }

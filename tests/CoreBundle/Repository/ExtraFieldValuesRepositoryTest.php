@@ -55,7 +55,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $extraFieldValue = (new ExtraFieldValues())
             ->setField($field)
             ->setItemId($user->getId())
-            ->setValue('test')
+            ->setFieldValue('test')
             ->setComment('comment')
             ->setAsset($asset)
         ;
@@ -65,7 +65,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
 
         $this->assertNotNull($extraFieldValue->getId());
         $this->assertSame('comment', $extraFieldValue->getComment());
-        $this->assertSame('test', $extraFieldValue->getValue());
+        $this->assertSame('test', $extraFieldValue->getFieldValue());
         $this->assertNotNull($extraFieldValue->getAsset());
 
         $this->assertSame(1, $assetRepo->count([]));

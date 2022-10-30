@@ -272,6 +272,7 @@ while ($row = Database::fetch_array($result_select)) {
     $row_td[] = $row['id'];
     // the first column is the original name of the language OR a form containing the original name
     if ($action == 'edit' and $row['id'] == $_GET['id']) {
+        $checked = '';
         if ($row['english_name'] == api_get_setting('platformLanguage')) {
             $checked = ' checked="checked" ';
         }

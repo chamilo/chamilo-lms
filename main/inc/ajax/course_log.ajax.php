@@ -7,8 +7,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 require_once __DIR__.'/../global.inc.php';
 
-api_protect_admin_script();
-
 $httpRequest = HttpRequest::createFromGlobals();
 
 $action = $httpRequest->query->has('a') ? $httpRequest->query->get('a') : $httpRequest->request->get('a');

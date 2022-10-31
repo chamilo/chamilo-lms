@@ -17,6 +17,7 @@ use GuzzleHttp\RequestOptions;
 use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Ramsey\Uuid\Uuid;
+use Xabbuh\XApi\Client\Api\StatementsApiClientInterface;
 use Xabbuh\XApi\Client\XApiClientBuilder;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\IRI;
@@ -30,6 +31,9 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     public const SETTING_LRS_URL = 'lrs_url';
     public const SETTING_LRS_AUTH_USERNAME = 'lrs_auth_username';
     public const SETTING_LRS_AUTH_PASSWORD = 'lrs_auth_password';
+    public const SETTING_CRON_LRS_URL = 'cron_lrs_url';
+    public const SETTING_CRON_LRS_AUTH_USERNAME = 'cron_lrs_auth_username';
+    public const SETTING_CRON_LRS_AUTH_PASSWORD = 'cron_lrs_auth_password';
     public const SETTING_UUID_NAMESPACE = 'uuid_namespace';
     public const SETTING_LRS_LP_ITEM_ACTIVE = 'lrs_lp_item_viewed_active';
     public const SETTING_LRS_LP_ACTIVE = 'lrs_lp_end_active';
@@ -55,6 +59,10 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             self::SETTING_LRS_URL => 'text',
             self::SETTING_LRS_AUTH_USERNAME => 'text',
             self::SETTING_LRS_AUTH_PASSWORD => 'text',
+
+            self::SETTING_CRON_LRS_URL => 'text',
+            self::SETTING_CRON_LRS_AUTH_USERNAME => 'text',
+            self::SETTING_CRON_LRS_AUTH_PASSWORD => 'text',
 
             self::SETTING_LRS_LP_ITEM_ACTIVE => 'boolean',
             self::SETTING_LRS_LP_ACTIVE => 'boolean',
@@ -199,12 +207,24 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             ->getStateApiClient();
     }
 
-    /**
-     * @return \Xabbuh\XApi\Client\Api\StatementsApiClientInterface
-     */
-    public function getXApiStatementClient()
+    public function getXApiStatementClient(): StatementsApiClientInterface
     {
         return $this->createXApiClient()->getStatementsApiClient();
+    }
+
+    public function getXapiStatementCronClient(): StatementsApiClientInterface
+    {
+        $lrsUrl = $this->get(self::SETTING_CRON_LRS_URL);
+        $lrsUsername = $this->get(self::SETTING_CRON_LRS_AUTH_USERNAME);
+        $lrsPassword = $this->get(self::SETTING_CRON_LRS_AUTH_PASSWORD);
+
+        return $this
+            ->createXApiClient(
+                empty($lrsUrl) ? null : $lrsUrl,
+                empty($lrsUsername) ? null : $lrsUsername,
+                empty($lrsPassword) ? null : $lrsPassword
+            )
+            ->getStatementsApiClient();
     }
 
     /**

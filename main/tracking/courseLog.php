@@ -515,7 +515,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
                 function loadGraphs () {
                     $("#tracking-course-summary-wrapper")
                         .html("<p><span class=\"fa fa-spinner fa-spin fa-2x\" aria-hidden=\"true\"></span></p>")
-                        .load(_p.web_ajax + "course_log.ajax.php?a=graph");
+                        .load(_p.web_ajax + "course_log.ajax.php?a=graph&'.api_get_cidreq().'");
                 }
         ';
 

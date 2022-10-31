@@ -903,7 +903,11 @@ if (!empty($groupList)) {
         $sessionId
     );
     $time = api_time_to_hms($timeInSeconds);
-    $averageTime = api_time_to_hms($timeInSeconds / $nbStudents);
+    if (empty($nbStudents)) {
+        $averageTime = api_time_to_hms($timeInSeconds);
+    } else {
+        $averageTime = api_time_to_hms($timeInSeconds / $nbStudents);
+    }
     $totalLpProgress = 0;
     foreach ($studentIdList as $studentId) {
         $lpProgress = Tracking::get_avg_student_progress(

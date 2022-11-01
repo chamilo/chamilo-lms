@@ -111,46 +111,7 @@ if ($form->validate()) {
     exit;
 }
 
-$paymentTypesOptions = $plugin->getPaymentTypes();
-
-if (!$paypalEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL]);
-}
-
-if (!$transferEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER]);
-}
-
-if (!$culqiEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
-}
-
-if (!$tpvRedsysEnable || !file_exists(api_get_path(SYS_PLUGIN_PATH).'buycourses/resources/apiRedsys.php')) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TPV_REDSYS]);
-}
-
-$messagePayment = '';
-$extraField = new ExtraField('user');
-$extraData = $extraField->get_handler_extra_data(api_get_user_id());
-if (empty($extraData['extra_country'])) {
-    $messagePayment = Display::return_message(
-        $plugin->get_lang('CountryEmpty'),
-        'warning'
-    );
-} else {
-    $listCountryPayment = $plugin->getPaymentsByCountry($extraData['extra_country']);
-
-    $paymentTypesRelCountries = [];
-    foreach ($listCountryPayment as $itemCountryPayment) {
-        $paymentTypesRelCountries[] = $itemCountryPayment['payment_type']; 
-    }
-
-    foreach ($paymentTypesOptions as $key => $itemPayment) {
-        if (in_array($key, $paymentTypesRelCountries) === false) {
-            unset($paymentTypesOptions[$key]);
-        }
-    }
-}
+$paymentTypesOptions = $plugin->getPaymentTypes(true);
 
 $count = count($paymentTypesOptions);
 if ($count === 0) {

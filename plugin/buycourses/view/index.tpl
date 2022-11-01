@@ -20,9 +20,7 @@
 {% endif %}
 
 <div class="row">
-    <div class="col-md-1">
-    </div>
-    <div class="col-md-2">
+    <div class="col-md-4">
         <div class="thumbnail">
             <a href="src/course_catalog.php">
                 <img src="resources/img/128/buycourses.png">

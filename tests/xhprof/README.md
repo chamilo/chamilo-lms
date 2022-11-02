@@ -7,7 +7,7 @@ forked it, between other reasons to provide support for PHP 7.
 ## Install procedure
 
 To enable the profiler into Chamilo, you will need to do the following:
-- install the tideways-php library from https://tideways.io/profiler/downloads
+- install the php[version]-tideways library from https://tideways.io/profiler/downloads or your package manager
 - add the following two lines to your Apache VirtualHost or (in a slightly different form) to your php.ini config
   (don't forget to update the path to your Chamilo root directory):
 ```
@@ -19,6 +19,7 @@ To enable the profiler into Chamilo, you will need to do the following:
 ```
 # Deny access
 #RewriteRule ^(tests|.git) - [F,L,NC]
+RewriteRule ^.git - [F,L,NC]
 ```
 
 ## Using XHProf

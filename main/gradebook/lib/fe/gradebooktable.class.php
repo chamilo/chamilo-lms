@@ -431,7 +431,7 @@ class GradebookTable extends SortableTable
 
                     // If the item type is 'Evaluation', or the user is not a student,
                     // or 'gradebook_hide_link_to_item_for_student' it's true, make links
-                    if ($item->get_item_type() === 'E' || $isAllowedToEdit ||  !$hideLinkForStudent) {
+                    if ($item->get_item_type() === 'E' || $isAllowedToEdit || !$hideLinkForStudent) {
                         $name = Security::remove_XSS($this->build_name_link($item, $type));
                     } else {
                         $name = Security::remove_XSS(

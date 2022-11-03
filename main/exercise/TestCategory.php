@@ -804,15 +804,15 @@ class TestCategory
                     continue;
                 }
                 $labels[] = $title;
-                $category_item = $category_list[$category_id];
+                $categoryItem = $category_list[$category_id];
 
                 $table->setCellContents($row, 0, $title);
                 $table->setCellContents(
                     $row,
                     1,
                     ExerciseLib::show_score(
-                        $category_item['score'],
-                        $category_item['total'],
+                        $categoryItem['score'],
+                        $categoryItem['total'],
                         false
                     )
                 );
@@ -820,14 +820,18 @@ class TestCategory
                     $row,
                     2,
                     ExerciseLib::show_score(
-                        $category_item['score'],
-                        $category_item['total'],
+                        $categoryItem['score'],
+                        $categoryItem['total'],
                         true,
                         false,
                         true
                     )
                 );
-                $tempResult[$category_id] = round($category_item['score'] / $category_item['total'] * 10);
+                if ($categoryItem['total'] > 0) {
+                    $tempResult[$category_id] = round($categoryItem['score'] / $categoryItem['total'] * 10);
+                } else {
+                    $tempResult[$category_id] = 0;
+                }
                 $row++;
             }
 

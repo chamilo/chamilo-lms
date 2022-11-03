@@ -300,6 +300,7 @@ class GradebookTable extends SortableTable
         global $certificate_min_score;
 
         $isAllowedToEdit = api_is_allowed_to_edit();
+        $hideLinkForStudent = api_get_configuration_value('gradebook_hide_link_to_item_for_student') ?? false;
         // determine sorting type
         $col_adjust = $isAllowedToEdit ? 1 : 0;
         // By id
@@ -427,7 +428,17 @@ class GradebookTable extends SortableTable
                         '<strong>'.Security::remove_XSS($item->get_name()).'</strong>'.$invisibility_span_close;
                     $main_categories[$item->get_id()]['name'] = $item->get_name();
                 } else {
-                    $name = Security::remove_XSS($this->build_name_link($item, $type));
+
+                    // If the item type is 'Evaluation', or the user is not a student,
+                    // or 'gradebook_hide_link_to_item_for_student' it's true, make links
+                    if ($item->get_item_type() === 'E' || $isAllowedToEdit ||  !$hideLinkForStudent) {
+                        $name = Security::remove_XSS($this->build_name_link($item, $type));
+                    } else {
+                        $name = Security::remove_XSS(
+                            $item->get_name().' '.Display::label($item->get_type_name(), 'info')
+                        );
+                    }
+
                     $row[] = $invisibility_span_open.$name.$invisibility_span_close;
                     $main_categories[$item->get_id()]['name'] = $name;
                 }
@@ -482,8 +493,8 @@ class GradebookTable extends SortableTable
                     $ranking = isset($data['ranking']) ? $data['ranking'] : null;
 
                     $totalResult = [
-                        $data['result_score'][0],
-                        $data['result_score'][1],
+                        $data['result_score'][0] ?? null,
+                        $data['result_score'][1] ?? null,
                     ];
 
                     if (empty($model)) {
@@ -538,7 +549,7 @@ class GradebookTable extends SortableTable
 
                     $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
                     $this->dataForGraph['average'][] = floatval($totalAverageValue);
-                    $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0];
+                    $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0] ?? null;
 
                     if (empty($model)) {
                         // Ranking

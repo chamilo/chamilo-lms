@@ -119,7 +119,7 @@ EOT;
     {
         if (self::LAYOUT_BOX_SEARCH == $this->layout) {
             return '<form {attributes}>
-                    <div class="form__group--inline p-inputgroup">
+                    <div class="form__group form__group--inline p-inputgroup">
                         {content}
                         {hidden}
                     </div>

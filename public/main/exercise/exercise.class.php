@@ -5659,19 +5659,19 @@ class Exercise
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Overlapping areaping area').'</b></td>
                                     <td>'.get_lang('Minimum').' '.$threadhold1.'</td>
-                                    <td class="text-right '.($overlap_color ? 'text-success' : 'text-danger').'">'
+                                    <td class="text-right '.($overlap_color ? 'text-success' : 'text-error').'">'
                                     .$overlap.'</td>
                                 </tr>
                                 <tr>
                                     <td><b>'.get_lang('Excessive areaive area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold2.'</td>
-                                    <td class="text-right '.($excess_color ? 'text-success' : 'text-danger').'">'
+                                    <td class="text-right '.($excess_color ? 'text-success' : 'text-error').'">'
                                     .$excess.'</td>
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Missing area area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold3.'</td>
-                                    <td class="text-right '.($missing_color ? 'text-success' : 'text-danger').'">'
+                                    <td class="text-right '.($missing_color ? 'text-success' : 'text-error').'">'
                                     .$missing.'</td>
                                 </tr>
                             </table>';

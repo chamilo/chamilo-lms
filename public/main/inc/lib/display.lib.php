@@ -916,7 +916,10 @@ class Display
         $html = '';
         $extra = '';
         $default_id = 'id="'.$name.'" ';
-        $extra_attributes = array_merge(['class' => 'form-control'], $extra_attributes);
+        $extra_attributes = array_merge(
+            ['class' => 'p-dropdown p-component p-inputwrapper p-inputwrapper-filled'],
+            $extra_attributes
+        );
         foreach ($extra_attributes as $key => $parameter) {
             if ('id' == $key) {
                 $default_id = '';

@@ -823,7 +823,7 @@ function display_requirements(
         if (count($notWritable) > 0) {
             error_log('Installer: At least one needed directory or file is not writeable');
             $error = true; ?>
-            <div class="text-danger">
+            <div class="text-error">
                 <h3 class="text-center"><?php echo get_lang('Warning !'); ?></h3>
                 <p>
                     <?php printf(get_lang('Some files or folders don\'t have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the %s installation guide %s'), '<a href="../../documentation/installation_guide.html" target="blank">', '</a>'); ?>
@@ -832,7 +832,7 @@ function display_requirements(
             <?php
             echo '<ul>';
             foreach ($notWritable as $value) {
-                echo '<li class="text-danger">'.$value.'</li>';
+                echo '<li class="text-error">'.$value.'</li>';
             }
             echo '</ul>';
         } elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
@@ -858,11 +858,13 @@ function display_requirements(
 
         if (count($deprecatedToRemove) > 0) {
             ?>
-            <p class="text-danger"><?php echo get_lang('Warning !ForDeprecatedDirectoriesForUpgrade'); ?></p>
+            <p class="text-error">
+                <?php echo get_lang("Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>."); ?>
+            </p>
             <ul>
                 <?php foreach ($deprecatedToRemove as $deprecatedDirectory) {
                 ?>
-                    <li class="text-danger"><?php echo $deprecatedDirectory; ?></li>
+                    <li class="text-error"><?php echo $deprecatedDirectory; ?></li>
                 <?php
             } ?>
             </ul>

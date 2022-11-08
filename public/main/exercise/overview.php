@@ -512,7 +512,7 @@ if ($quizCheckButtonEnabled) {
                 btnTest.prop('disabled', true).removeClass('btn--success btn--danger').addClass('btn--plain');
                 iconBtnTest.removeClass('hidden');
 
-                var txtResult = $('#quiz-check-request-text').removeClass('text-success text-danger').hide();
+                var txtResult = $('#quiz-check-request-text').removeClass('text-success text-error').hide();
 
                 $
                     .when(
@@ -537,11 +537,11 @@ if ($quizCheckButtonEnabled) {
                                 txtResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
                             } else {
                                 btnTest.removeClass('btn--plain btn--success').addClass('btn--danger');
-                                txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
+                                txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-error').show();
                             }
                         },
                         function () {
-                            txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
+                            txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-error').show();
                             btnTest.removeClass('btn--plain btn--success').addClass('btn--danger');
                         }
                     )

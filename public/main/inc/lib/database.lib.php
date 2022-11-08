@@ -93,16 +93,16 @@ class Database
         );
 
         AnnotationRegistry::registerFile(
-            $sysPath.'vendor/api-platform/core/src/Annotation/ApiResource.php'
+            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiResource.php'
         );
         AnnotationRegistry::registerFile(
-            $sysPath.'vendor/api-platform/core/src/Annotation/ApiFilter.php'
+            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiFilter.php'
         );
         AnnotationRegistry::registerFile(
-            $sysPath.'vendor/api-platform/core/src/Annotation/ApiProperty.php'
+            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiProperty.php'
         );
         AnnotationRegistry::registerFile(
-            $sysPath.'vendor/api-platform/core/src/Annotation/ApiSubresource.php'
+            $sysPath.'vendor/api-platform/core/src/Core/Annotation/ApiSubresource.php'
         );
 
         $entityManager = EntityManager::create($params, $config, $evm);

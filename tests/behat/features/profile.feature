@@ -10,9 +10,8 @@ Feature: Profile page
     Then I follow "Edit profile"
     Then I fill in the following:
       | profile_firstname | Andrew |
-    And wait for the page to be loaded
     And I press "update_profile"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Updated"
     And I should see "Andrew"
     Then I follow "Edit profile"

@@ -59,14 +59,21 @@ function checkDocumentFilesOnDisk($courseCode, $removeFileNotFound)
                             // The file exists in other paths
                             foreach ($currentDocPaths as $currentPath) {
                                 $log .= "Found on : {$currentPath}".PHP_EOL;
+                                $sourceDir = dirname($sourcePath.$doc['path']);
                                 // it checks if the current path is stored in document table
                                 if (isPathInDocumentTable($currentPath, $course['id'], $sourcePath)) {
                                     // to copy the file to the new doc path
+                                    if (!file_exists($sourceDir)) {
+                                        mkdir($sourceDir, api_get_permissions_for_new_directories(), true);
+                                    }
                                     if (copy($currentPath, $sourcePath.$doc['path'])) {
                                         $log .= "CASE 1 - Checking document table, it exists as document path, so it is copied to the new document path {$doc['path']}".PHP_EOL;
                                     }
                                 } else {
                                     // to move the file to the new doc path
+                                    if (!file_exists($sourceDir)) {
+                                        mkdir($sourceDir, api_get_permissions_for_new_directories(), true);
+                                    }
                                     if (rename($currentPath, $sourcePath.$doc['path'])) {
                                         $log .= "CASE 2 - Checking document table, it doesn't exist in other path, so it is moved to the new doc path {$doc['path']}".PHP_EOL;
                                     }

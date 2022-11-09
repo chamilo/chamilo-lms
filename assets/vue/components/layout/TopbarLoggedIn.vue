@@ -92,16 +92,19 @@ const menuItems = ref([
       return `/main/ticket/tickets.php?project_id=1&cid=${cid}&sid=${sid}&gid=${gid}`;
     })(),
     visible: 'true' !== props.platformSettings['display.show_link_ticket_notification'],
+    items: []
   },
   {
     label: 'Profile',
     icon: 'pi pi-fw pi-user',
     to: '/account/home',
+    items: []
   },
   {
     label: 'Inbox',
     icon: 'pi pi-fw pi-inbox',
-    to: '/resources/messages'
+    to: '/resources/messages',
+    items: []
   },
 ]);
 

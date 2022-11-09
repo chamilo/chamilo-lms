@@ -59,10 +59,10 @@
     @apply min-w-[15rem];
 
     .p-panelmenu-header {
-      > a {
+      > .p-panelmenu-header-content a {
         @apply gap-4 pl-8 py-3 pr-6 mb-1 flex-nowrap;
 
-        .p-panelmenu-icon {
+        .p-submenu-icon {
           @apply order-3 rotate-90 text-body-2-bold;
         }
 
@@ -81,7 +81,7 @@
         }
 
         &[aria-expanded="true"] {
-          .p-panelmenu-icon {
+          .p-submenu-icon {
             @apply rotate-180;
           }
         }
@@ -123,8 +123,8 @@
         sm:block sm:w-[88px];
 
       .p-panelmenu-header {
-        > a {
-          .p-panelmenu-icon {
+        > .p-panelmenu-header-content a {
+          .p-submenu-icon {
             @apply sm:hidden;
           }
 

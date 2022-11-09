@@ -1904,6 +1904,7 @@ class UserManager
      * productions on the filesystem before the removal request has been carried
      * out because they'll have to be re-read afterwards anyway.
      *
+     * @deprecated This method is being removed from chamilo 2.0
      * @param int  $user_id    User id
      * @param bool $force      Optional parameter to force building after a removal request
      * @param bool $showDelete

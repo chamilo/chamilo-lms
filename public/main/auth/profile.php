@@ -273,10 +273,12 @@ if ('true' === api_get_setting('extended_profile')) {
     );
 
     //    MY PRODUCTIONS
+    /*
     $form->addElement('file', 'production', get_lang('My productions'));
     if ($production_list = UserManager::build_production_list(api_get_user_id(), '', true)) {
         $form->addElement('static', 'productions_list', null, $production_list);
     }
+    */
     //    MY PERSONAL OPEN AREA
     $form->addHtmlEditor(
         'openarea',
@@ -460,6 +462,7 @@ if ($form->validate()) {
     }
 
     // Remove production.
+    /*
     if (isset($user_data['remove_production']) &&
         is_array($user_data['remove_production'])
     ) {
@@ -477,7 +480,7 @@ if ($form->validate()) {
             Display:: return_message(get_lang('File deleted'), 'normal', false)
         );
     }
-
+    */
     // upload production if a new one is provided
     /*if (isset($_FILES['production']) && $_FILES['production']['size']) {
         $res = upload_user_production(api_get_user_id());

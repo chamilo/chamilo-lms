@@ -1127,7 +1127,7 @@ class DocumentManager
      *
      * @param array  $_course
      * @param string $path          Path stored in the database
-     * @param string $base_work_dir Path to the documents folder (if not defined, $documentId must be used)
+     * @param string $base_work_dir Path to the "/document" folder of this course. Will be built if not provided.
      * @param int    $sessionId     The ID of the session, if any
      * @param int    $documentId    The document id, if available
      * @param int    $groupId       iid
@@ -1165,7 +1165,12 @@ class DocumentManager
         }
 
         if (empty($base_work_dir)) {
-            return false;
+            if (empty($_course['directory'])) {
+                return false;
+            }
+            $courseDir = $_course['directory'].'/document';
+            $sysCoursePath = api_get_path(SYS_COURSE_PATH);
+            $base_work_dir = $sysCoursePath.$courseDir;
         }
 
         if (empty($documentId)) {

@@ -362,8 +362,8 @@ if ($show_announcement_list) {
         $row[] = $announcement->id;
         $row[] = Display::return_icon(($announcement->visible ? 'accept.png' : 'exclamation.png'), ($announcement->visible ? get_lang('AnnouncementAvailable') : get_lang('AnnouncementNotAvailable')));
         $row[] = $announcement->title;
-        $row[] = api_convert_and_format_date($announcement->date_start);
-        $row[] = api_convert_and_format_date($announcement->date_end);
+        $row[] = $announcement->date_start;
+        $row[] = $announcement->date_end;
 
         $data = (array) $announcement;
         foreach ($visibleList as $key => $value) {
@@ -385,6 +385,12 @@ if ($show_announcement_list) {
     $table->set_header(1, get_lang('Active'));
     $table->set_header(2, get_lang('Title'));
     $table->set_header(3, get_lang('StartTimeWindow'));
+    $table->set_column_filter(3, function ($data) {
+        return api_convert_and_format_date($data);
+    });
+    $table->set_column_filter(4, function ($data) {
+        return api_convert_and_format_date($data);
+    });
     $table->set_header(4, get_lang('EndTimeWindow'));
 
     $count = 5;

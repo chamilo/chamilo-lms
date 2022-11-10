@@ -2081,6 +2081,11 @@ class SessionManager
                 $layoutContent = $tplContent->get_template(
                     'mail/content_subscription_to_session_confirmation.tpl'
                 );
+
+                if (api_get_configuration_value('email_template_subscription_to_session_confirmation_username')) {
+                    $tplContent->assign('username', stripslashes($user_info['username']));
+                }
+
                 $content = $tplContent->fetch($layoutContent);
 
                 api_mail_html(

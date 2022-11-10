@@ -11,13 +11,11 @@ Feature: Profile page
     Then I fill in the following:
       | profile_firstname | Andrew |
     And I press "update_profile"
-    And wait very long for the page to be loaded
-    Then I should see "Updated"
-    And I should see "Andrew"
+    And wait for the page to be loaded
+    And I should see "Andrew Doe"
     Then I follow "Edit profile"
     Then I fill in the following:
       | profile_firstname | Andrea |
     And I press "update_profile"
     And wait for the page to be loaded
-    Then I should see "Updated"
-    And I should see "Andrea"
+    And I should see "Andrea Doe"

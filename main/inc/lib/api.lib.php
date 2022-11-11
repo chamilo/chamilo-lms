@@ -6837,21 +6837,44 @@ function api_get_current_access_url_id()
  * Gets the registered urls from a given user id.
  *
  * @param int $user_id
+ * @param int $checkCourseId the course id to check url access
  *
  * @return array
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-function api_get_access_url_from_user($user_id)
+function api_get_access_url_from_user($user_id, $checkCourseId = null)
 {
     $user_id = (int) $user_id;
     $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $includeIds = "";
+    if (isset($checkCourseId)) {
+        $cid = (int) $checkCourseId;
+        $tblUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT access_url_id
+            FROM $tblUrlCourse url_rel_course
+            INNER JOIN $table_url u
+            ON (url_rel_course.access_url_id = u.id)
+            WHERE c_id = $cid";
+        $rs = Database::query($sql);
+        $courseUrlIds = [];
+        if (Database::num_rows($rs) > 0) {
+            while ($rowC = Database::fetch_array($rs, 'ASSOC')) {
+                $courseUrlIds[] = $rowC['access_url_id'];
+            }
+        }
+        if (!empty($courseUrlIds)) {
+            $includeIds = " AND access_url_id IN (".implode(',', $courseUrlIds).")";
+        }
+    }
+
     $sql = "SELECT access_url_id
             FROM $table_url_rel_user url_rel_user
             INNER JOIN $table_url u
             ON (url_rel_user.access_url_id = u.id)
-            WHERE user_id = ".intval($user_id);
+            WHERE user_id = $user_id $includeIds
+            ORDER BY access_url_id";
     $result = Database::query($sql);
     $list = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {

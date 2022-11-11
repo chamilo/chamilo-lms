@@ -474,8 +474,8 @@ class AnnouncementManager
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a 
-                    href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" 
+                $modify_icons .= "<a
+                    href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\"
                     onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
@@ -1536,6 +1536,7 @@ class AnnouncementManager
      * @param Monolog\Handler\HandlerInterface logger
      * @param int  $senderId
      * @param bool $directMessage
+     * @param bool $checkUrls
      *
      * @return array
      */
@@ -1547,11 +1548,12 @@ class AnnouncementManager
         $sendToDrhUsers = false,
         $logger = null,
         $senderId = 0,
-        $directMessage = false
+        $directMessage = false,
+        $checkUrls = false
     ) {
         $email = new AnnouncementEmail($courseInfo, $sessionId, $announcementId, $logger);
 
-        return $email->send($sendToUsersInSession, $sendToDrhUsers, $senderId, $directMessage);
+        return $email->send($sendToUsersInSession, $sendToDrhUsers, $senderId, $directMessage, $checkUrls);
     }
 
     /**

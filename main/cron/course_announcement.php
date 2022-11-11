@@ -85,7 +85,9 @@ foreach ($result as $announcement) {
                 $sendToUsersInSession,
                 false,
                 null,
-                $senderId
+                $senderId,
+                false,
+                true
             );
         }
     }

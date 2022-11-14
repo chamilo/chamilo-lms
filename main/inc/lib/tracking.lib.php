@@ -2579,6 +2579,50 @@ class Tracking
     }
 
     /**
+     * Return the total time spent in courses (no the total in platform)
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return int
+     */
+    public static function getTotalTimeSpentInCourses(
+        string $dateFrom = '',
+        string $dateUntil = ''
+    )
+    {
+        $tableTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $tableUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        $tableUrl = null;
+        $urlCondition = null;
+        $conditionTime = null;
+        if (api_is_multiple_url_enabled()) {
+            $accessUrlId = api_get_current_access_url_id();
+            $tableUrl = ", ".$tableUrlRelUser." as url_users";
+            $urlCondition = " AND u.login_user_id = url_users.user_id AND access_url_id='$accessUrlId'";
+        }
+
+        if (!empty($dateFrom) && !empty($dateUntil)) {
+            $dateFrom = Database::escape_string($dateFrom);
+            $dateUntil = Database::escape_string($dateUntil);
+            $conditionTime = ' (login_course_date >= "'.$dateFrom.'" AND logout_course_date <= "'.$dateUntil.'" ) ';
+        }
+        $sql = "SELECT SUM(TIMESTAMPDIFF(HOUR, login_course_date, logout_course_date)) diff
+    	        FROM $tableTrackLogin u $tableUrl
+                WHERE $conditionTime $urlCondition";
+
+        $rs = Database::query($sql);
+        $row = Database::fetch_array($rs, 'ASSOC');
+        $diff = $row['diff'];
+
+        if ($diff >= 0) {
+            return $diff;
+        }
+
+        return -1;
+    }
+
+    /**
      * Checks if the "lp_minimum_time" feature is available for the course.
      *
      * @param int $sessionId

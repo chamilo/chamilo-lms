@@ -34,31 +34,43 @@ class Statistics
     /**
      * Count courses.
      *
-     * @param string $categoryCode Code of a course category.
+     * @param string|null $categoryCode Code of a course category.
      *                             Default: count all courses.
      *
+     * @param string|null $dateFrom dateFrom
+     * @param string|null $dateUntil dateUntil
      * @return int Number of courses counted
      */
-    public static function countCourses($categoryCode = null)
+    public static function countCourses(string $categoryCode = null, string $dateFrom = null, string $dateUntil = null)
     {
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $urlId = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number
-                    FROM ".$course_table." as c, $access_url_rel_course_table as u
-                    WHERE u.c_id = c.id AND access_url_id='".$urlId."'";
+                    FROM ".$courseTable." AS c, $accessUrlRelCourseTable AS u
+                    WHERE u.c_id = c.id AND $accessUrlRelCourseTable='".$urlId."'";
             if (isset($categoryCode)) {
                 $sql .= " AND category_code = '".Database::escape_string($categoryCode)."'";
             }
         } else {
             $sql = "SELECT COUNT(*) AS number
-                    FROM $course_table";
+                    FROM $courseTable AS c
+                    WHERE 1 = 1";
             if (isset($categoryCode)) {
-                $sql .= " WHERE category_code = '".Database::escape_string($categoryCode)."'";
+                $sql .= " WHERE c.category_code = '".Database::escape_string($categoryCode)."'";
             }
         }
 
+        if (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $sql .= " AND c.creation_date >= '$dateFrom' ";
+        }
+
+        if (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $sql .= " AND c.creation_date <= '$dateUntil' ";
+        }
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -68,31 +80,56 @@ class Statistics
     /**
      * Count courses by visibility.
      *
-     * @param int $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
-     *
+     * @param array|null $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
+     * @param string|null $dateFrom dateFrom
+     * @param string|null $dateUntil dateUntil
      * @return int Number of courses counted
      */
-    public static function countCoursesByVisibility($visibility = null)
+    public static function countCoursesByVisibility(
+        array $visibility = null,
+        string $dateFrom = null,
+        string $dateUntil = null
+    )
     {
         if (!isset($visibility)) {
             return 0;
+        } else {
+            $visibilityString = '';
+            $auxArrayVisibility = array();
+            if (!is_array($visibility)) {
+                $visibility = [$visibility];
+            }
+            foreach ($visibility as $item) {
+                $auxArrayVisibility[] = (int) $item;
+            }
+            $visibilityString = implode(',', $auxArrayVisibility);
         }
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $urlId = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number
-                    FROM $course_table as c, $access_url_rel_course_table as u
-                    WHERE u.c_id = c.id AND access_url_id='".$urlId."'";
-            if (isset($visibility)) {
-                $sql .= " AND visibility = ".intval($visibility);
-            }
+                    FROM $courseTable AS c, $accessUrlRelCourseTable AS u
+                    WHERE u.c_id = c.id AND u.access_url_id='".$urlId."'";
+
         } else {
-            $sql = "SELECT COUNT(*) AS number FROM $course_table ";
-            if (isset($visibility)) {
-                $sql .= " WHERE visibility = ".intval($visibility);
-            }
+            $sql = "SELECT COUNT(*) AS number
+                    FROM $courseTable AS c
+                    WHERE 1 = 1";
         }
+        $sql .= " AND visibility IN ($visibilityString) ";
+
+        if (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $sql .= " AND c.creation_date >= '$dateFrom' ";
+        }
+
+        if (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $sql .= " AND c.creation_date <= '$dateUntil' ";
+        }
+
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -1643,7 +1680,7 @@ class Statistics
      *
      * @return array
      */
-    private static function getLoginsByDate($startDate, $endDate)
+    public static function getLoginsByDate($startDate, $endDate)
     {
         /** @var DateTime $startDate */
         $startDate = api_get_utc_datetime("$startDate 00:00:00");
@@ -1682,5 +1719,107 @@ class Statistics
         $result = Database::store_result($stmt, 'ASSOC');
 
         return $result;
+    }
+
+    /**
+     * Return de number of certificates generated
+     * @param string|null $dateFrom
+     * @param string|null $dateUntil
+     *
+     * @return int
+     */
+    public static function countCertificatesByQuarter(string $dateFrom = null, string $dateUntil = null)
+    {
+
+        $tableGradebookCertificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+
+        $condition = "";
+
+        if (!empty($dateFrom) && !empty($dateUntil)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $condition = "WHERE (created_at BETWEEN '$dateFrom' AND '$dateUntil')";
+        } elseif (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $condition = "WHERE created_at >= '$dateFrom'";
+        }elseif (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $condition = "WHERE created_at <= '$dateUntil'";
+        }
+
+        $sql = "
+            SELECT count(*) AS count
+            FROM $tableGradebookCertificate
+            $condition
+        ";
+
+        $response = Database::query($sql);
+        $obj = Database::fetch_object($response);
+
+        return $obj->count;
+
+    }
+
+    /**
+     * Get the number of logins by dates.
+     * @param string|null $dateFrom
+     * @param string|null $dateUntil
+     * @return array
+     */
+    public static function getSessionsByDuration(string $dateFrom, string $dateUntil): array
+    {
+
+        $results = [
+            '0' => 0,
+            '5' => 0,
+            '10' => 0,
+            '15' => 0,
+            '30' => 0,
+            '60' => 0,
+        ];
+
+        if (!empty($dateFrom) && !empty($dateUntil)) {
+
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $urlId = api_get_current_access_url_id();
+            $tableUrl = '';
+            $whereUrl = '';
+
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+
+            if (api_is_multiple_url_enabled()) {
+                $tableUrl = ", $accessUrlRelUserTable";
+                $whereUrl = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
+            }
+
+            $sql = "SELECT login_id, TIMESTAMPDIFF(SECOND, login_date, logout_date) AS duration
+            FROM $table $tableUrl
+            WHERE login_date >= '$dateFrom'
+            AND logout_date <= '$dateUntil'
+            $whereUrl
+            ";
+
+            $res = Database::query($sql);
+
+            while ($session = Database::fetch_array($res)) {
+                if ($session['duration'] > 3600) {
+                    $results['60']++;
+                } elseif ($session['duration'] > 1800) {
+                    $results['30']++;
+                } elseif ($session['duration'] > 900) {
+                    $results['15']++;
+                } elseif ($session['duration'] > 600) {
+                    $results['10']++;
+                } elseif ($session['duration'] > 300) {
+                    $results['5']++;
+                } else {
+                    $results['0']++;
+                }
+            }
+        }
+
+        return $results;
     }
 }

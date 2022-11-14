@@ -361,6 +361,7 @@ $tools = [
         'report=activities' => get_lang('ImportantActivities'),
         'report=user_session' => get_lang('PortalUserSessionStats'),
         'report=courses_usage' => get_lang('CoursesUsage'),
+        'report=quarterly_report' => get_lang('QuarterlyReport'),
     ],
     get_lang('Social') => [
         'report=messagereceived' => get_lang('MessagesReceived'),
@@ -1706,6 +1707,120 @@ switch ($report) {
         break;
     case 'lti_tool_lp':
         $content .= Statistics::printLtiLearningPath();
+        break;
+    case 'quarterly_report':
+
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyUsers () {
+                    $("#tracking-report-quarterly-users")
+                        .html("<p><span class=\"fa fa-spinner fa-spin fa-2x\" aria-hidden=\"true\"></span></p>")
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_users");
+            }</script>';
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyCourses () {
+                    $("#tracking-report-quarterly-courses")
+                        .html("<p><span class=\"fa fa-spinner fa-spin fa-2x\" aria-hidden=\"true\"></span></p>")
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_courses");
+            }</script>';
+
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyHoursOfTraining () {
+                    $("#tracking-report-quarterly-hours-of-training")
+                        .html("<p><span class=\"fa fa-spinner fa-spin fa-2x\" aria-hidden=\"true\"></span></p>")
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_hours_of_training");
+            }</script>';
+
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyCertificatesGenerated () {
+                    $("#tracking-report-quarterly-number-of-certificates-generated")
+                        .html("<p><span class=\"fa fa-spinner fa-spin fa-2x\" aria-hidden=\"true\"></span></p>")
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_number_of_certificates_generated");
+            }</script>';
+
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlySessionsByDuration () {
+                    $("#tracking-report-quarterly-sessions-by-duration")
+                        .html("<p><span class=\"fa fa-spinner fa-spin fa-2x\" aria-hidden=\"true\"></span></p>")
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_sessions_by_duration");
+            }</script>';
+
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyCoursesAndSessions () {
+                    $("#tracking-report-quarterly-courses-and-sessions")
+                        .html("<p><span class=\"fa fa-spinner fa-spin fa-2x\" aria-hidden=\"true\"></span></p>")
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_courses_and_sessions");
+            }</script>';
+
+        if (api_get_current_access_url_id() === 1) {
+
+            $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyTotalDiskUsage () {
+                    $("#tracking-report-quarterly-total-disk-usage")
+                        .html("<p><span class=\"fa fa-spinner fa-spin fa-2x\" aria-hidden=\"true\"></span></p>")
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_total_disk_usage");
+            }</script>';
+
+        }
+
+        $content .= Display::tag('H4', get_lang('ReportQuarterlyUsers'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyUsers();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-users', 'style' => 'margin: 30px;']);
+
+        $content .= Display::tag('H4', get_lang('ReportQuarterlyCourses'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyCourses();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-courses', 'style' => 'margin: 30px;']);
+
+        $content .= Display::tag('H4', get_lang('ReportQuarterlyHoursOfTraining'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyHoursOfTraining();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-hours-of-training', 'style' => 'margin: 30px;']);
+
+        $content .= Display::tag('H4', get_lang('ReportQuarterlyNumberOfCertificatesGenerated'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyCertificatesGenerated();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-number-of-certificates-generated', 'style' => 'margin: 30px;']);
+
+        $content .= Display::tag('H4', get_lang('ReportQuarterlySessionsByDuration'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlySessionsByDuration();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-sessions-by-duration', 'style' => 'margin: 30px;']);
+
+        $content .= Display::tag('H4', get_lang('ReportQuarterlyCoursesAndSessions'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyCoursesAndSessions();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-courses-and-sessions', 'style' => 'margin: 30px;']);
+
+        if (api_get_current_access_url_id() === 1) {
+
+            $content .= Display::tag('H4', get_lang('ReportQuarterlyTotalDiskUsage'), ['style' => 'margin-bottom: 25px;']);
+            $content .= Display::url(
+                get_lang('Show'),
+                'javascript://',
+                ['onclick' => 'loadReportQuarterlyTotalDiskUsage();', 'class' => 'btn btn-default']
+            );
+            $content .= Display::div('', ['id' => 'tracking-report-quarterly-total-disk-usage', 'style' => 'margin: 30px;']);
+        }
+
         break;
 }
 

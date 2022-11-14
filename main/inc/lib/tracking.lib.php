@@ -2579,17 +2579,16 @@ class Tracking
     }
 
     /**
-     * Return the total time spent in courses (no the total in platform)
-     * @param string $startDate
-     * @param string $endDate
+     * Return the total time spent in courses (no the total in platform).
      *
+     * @param string $dateFrom
+     * @param string $dateUntil
      * @return int
      */
     public static function getTotalTimeSpentInCourses(
         string $dateFrom = '',
         string $dateUntil = ''
-    )
-    {
+    ) {
         $tableTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tableUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 

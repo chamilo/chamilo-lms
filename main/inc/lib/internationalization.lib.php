@@ -1044,14 +1044,12 @@ function api_sort_by_first_name($language = null)
 
 /**
  * Return an array with the quarter dates.
- * If no DateTime is not sent, use the current date
+ * If no DateTime is not sent, use the current date.
  *
  * @param string|null $date (optional) The date or null.
- * @return array
  */
 function getQuarterDates(string $date = null): array
 {
-
     if (empty($date)) {
         $date = api_get_utc_datetime();
     }
@@ -1059,7 +1057,6 @@ function getQuarterDates(string $date = null): array
     if (strlen($date > 10)) {
         $date = substr($date, 0, 10);
     }
-
 
     $month = substr($date, 5, 2);
     $year = substr($date, 0, 4);
@@ -1096,9 +1093,8 @@ function getQuarterDates(string $date = null): array
     return [
         'quarter_start' => $start,
         'quarter_end' => $end,
-        'quarter_title'=> sprintf(get_lang('QuaerterXQY'), $quarter, $year), // XQ = 'Q%d %d'
+        'quarter_title'=> sprintf(get_lang('QuaerterXQY'), $quarter, $year),
     ];
-
 }
 
 /**

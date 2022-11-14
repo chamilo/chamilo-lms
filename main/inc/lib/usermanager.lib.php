@@ -4554,11 +4554,9 @@ class UserManager
     /**
      * Get the total count of users.
      *
-     * @param int|null $status          Status of users to be counted
-     * @param int|null $access_url_id   Access URL ID (optional)
+     * @param int|null $status        Status of users to be counted
+     * @param int|null $access_url_id Access URL ID (optional)
      * @param int|null $active
-     * @param string|null $dateFrom
-     * @param string|null $dateUntil
      *
      * @return mixed Number of users or false on error
      */
@@ -4568,8 +4566,7 @@ class UserManager
         $active = null,
         string $dateFrom = null,
         string $dateUntil = null
-    )
-    {
+    ) {
         $tableUser = Database::get_main_table(TABLE_MAIN_USER);
         $tableAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
@@ -7722,12 +7719,12 @@ SQL;
     }
 
     /**
-     * Count users in courses and if they have certificate
+     * Count users in courses and if they have certificate.
+     *
      * @return array
      */
     public static function countUsersWhoFinishedCourses()
     {
-
         $courses = [];
         $currentAccessUrlId = api_get_current_access_url_id();
         $sql = "SELECT course.code, cru.user_id
@@ -7741,7 +7738,6 @@ SQL;
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-
             while ($row = Database::fetch_array($res)) {
                 if (!isset($courses[$row['code']])) {
                     $courses[$row['code']] = [
@@ -7808,7 +7804,7 @@ SQL;
                 $gradebook = $repository->findOneBy(
                     [
                         'courseCode' => $row['code'],
-                        'sessionId' => $row['session_id']
+                        'sessionId' => $row['session_id'],
                     ]
                 );
 

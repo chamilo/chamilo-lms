@@ -763,44 +763,44 @@ switch ($action) {
             $pre2QuarterDates['quarter_title'],
             $pre1QuarterDates['quarter_title'],
             get_lang('YoY'),
-            $currentQuarterDates['quarter_title'].'*'
+            $currentQuarterDates['quarter_title'].'*',
         ];
 
         // Get the data for the number of user registered row (2)
-        $countUsersTotal =  UserManager::get_number_of_users(
+        $countUsersTotal = UserManager::get_number_of_users(
             null,
             null,
             null
         );
-        $countUsersPre1Quarter =  UserManager::get_number_of_users(
+        $countUsersPre1Quarter = UserManager::get_number_of_users(
             null,
             null,
             null,
             null,
             $pre1QuarterDates['quarter_end']
         );
-        $countUsersPre2Quarter =  UserManager::get_number_of_users(
+        $countUsersPre2Quarter = UserManager::get_number_of_users(
             null,
             null,
             null,
             null,
             $pre2QuarterDates['quarter_end']
         );
-        $countUsersPre3Quarter =  UserManager::get_number_of_users(
+        $countUsersPre3Quarter = UserManager::get_number_of_users(
             null,
             null,
             null,
             null,
             $pre3QuarterDates['quarter_end']
         );
-        $countUsersPre4Quarter =  UserManager::get_number_of_users(
+        $countUsersPre4Quarter = UserManager::get_number_of_users(
             null,
             null,
             null,
             null,
             $pre4QuarterDates['quarter_end']
         );
-        $countUsersPre5Quarter =  UserManager::get_number_of_users(
+        $countUsersPre5Quarter = UserManager::get_number_of_users(
             null,
             null,
             null,
@@ -887,7 +887,7 @@ switch ($action) {
             $countUsersConnectedPre2Quarter,
             $countUsersConnectedPre1Quarter,
             $percentIncrementUsersConnected,
-            $countUsersConnectedCurrentQuarter
+            $countUsersConnectedCurrentQuarter,
         ];
 
         echo Display::table($headers, $rows, []);
@@ -931,7 +931,7 @@ switch ($action) {
             $pre2QuarterDates['quarter_title'],
             $pre1QuarterDates['quarter_title'],
             get_lang('YoY'),
-            $currentQuarterDates['quarter_title'].'*'
+            $currentQuarterDates['quarter_title'].'*',
         ];
 
         // Get the data for the rows
@@ -945,7 +945,7 @@ switch ($action) {
         $auxArrayVisibilities = [
             COURSE_VISIBILITY_OPEN_WORLD,
             COURSE_VISIBILITY_OPEN_PLATFORM,
-            COURSE_VISIBILITY_REGISTERED
+            COURSE_VISIBILITY_REGISTERED,
         ];
 
         $countCoursesAvailableCurrentQuarter = Statistics::countCoursesByVisibility($auxArrayVisibilities);
@@ -1006,7 +1006,7 @@ switch ($action) {
             $countCoursesAvailablePre2Quarter,
             $countCoursesAvailablePre1Quarter,
             $percentIncrementUsersRegistered,
-            $countCoursesAvailableCurrentQuarter
+            $countCoursesAvailableCurrentQuarter,
         ];
 
         echo Display::table($headers, $rows, []);
@@ -1050,7 +1050,7 @@ switch ($action) {
             $pre2QuarterDates['quarter_title'],
             $pre1QuarterDates['quarter_title'],
             get_lang('YoY'),
-            $currentQuarterDates['quarter_title'].'*'
+            $currentQuarterDates['quarter_title'].'*',
         ];
 
         // Get data for the row
@@ -1139,7 +1139,7 @@ switch ($action) {
             $pre2QuarterDates['quarter_title'],
             $pre1QuarterDates['quarter_title'],
             get_lang('YoY'),
-            $currentQuarterDates['quarter_title'].'*'
+            $currentQuarterDates['quarter_title'].'*',
         ];
 
         // Get data for the row
@@ -1229,7 +1229,7 @@ switch ($action) {
             $pre2QuarterDates['quarter_title'],
             $pre1QuarterDates['quarter_title'],
             get_lang('YoY'),
-            $currentQuarterDates['quarter_title'].'*'
+            $currentQuarterDates['quarter_title'].'*',
         ];
 
         // Get the data for the rows
@@ -1357,13 +1357,13 @@ switch ($action) {
              [
                 get_lang('ListOfCoursesCodes'),
                 get_lang('NumberOfSubscribedUsers').'*',
-                get_lang('NumerOfUsersWhoFinishedCourse')
+                get_lang('NumerOfUsersWhoFinishedCourse'),
             ],
             [
                 get_lang('ListOfCoursesCodesAndSessions'),
                 get_lang('NumberOfSubscribedUsers').'*',
-                get_lang('NumerOfUsersWhoFinishedCourse')
-            ]
+                get_lang('NumerOfUsersWhoFinishedCourse'),
+            ],
         ];
 
         // Get the data fot the first table
@@ -1372,12 +1372,11 @@ switch ($action) {
         //Make de rows for first table
         $rows = [];
         foreach ($courses as $course => $data) {
-
             $course_url = api_get_path(WEB_COURSE_PATH).$course;
             $rows[] = [
                 Display::url($course, $course_url, ['target' => SESSION_LINK_TARGET]),
                 $data['subscribed'],
-                $data['finished']
+                $data['finished'],
             ];
         }
 
@@ -1417,7 +1416,6 @@ switch ($action) {
             $limit = 0;
             if (isset($_configuration[$accessUrlId]['hosting_limit_disk_space'])) {
                 $limit = $_configuration[$accessUrlId]['hosting_limit_disk_space'];
-
             }
             $message = sprintf(get_lang('TotalSpaceUsedByPortalXLimitIsYMB'), $size, $limit);
         }

@@ -35,10 +35,10 @@ class Statistics
      * Count courses.
      *
      * @param string|null $categoryCode Code of a course category.
-     *                             Default: count all courses.
+     *                                  Default: count all courses.
      *
-     * @param string|null $dateFrom dateFrom
-     * @param string|null $dateUntil dateUntil
+     * @param string|null $dateFrom     dateFrom
+     * @param string|null $dateUntil    dateUntil
      * @return int Number of courses counted
      */
     public static function countCourses(string $categoryCode = null, string $dateFrom = null, string $dateUntil = null)
@@ -80,22 +80,21 @@ class Statistics
     /**
      * Count courses by visibility.
      *
-     * @param array|null $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
-     * @param string|null $dateFrom dateFrom
-     * @param string|null $dateUntil dateUntil
+     * @param array|null  $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
+     * @param string|null $dateFrom   dateFrom
+     * @param string|null $dateUntil  dateUntil
      * @return int Number of courses counted
      */
     public static function countCoursesByVisibility(
         array $visibility = null,
         string $dateFrom = null,
         string $dateUntil = null
-    )
-    {
+    ) {
         if (!isset($visibility)) {
             return 0;
         } else {
             $visibilityString = '';
-            $auxArrayVisibility = array();
+            $auxArrayVisibility = [];
             if (!is_array($visibility)) {
                 $visibility = [$visibility];
             }
@@ -112,7 +111,6 @@ class Statistics
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c, $accessUrlRelCourseTable AS u
                     WHERE u.c_id = c.id AND u.access_url_id='".$urlId."'";
-
         } else {
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c
@@ -1647,34 +1645,6 @@ class Statistics
     }
 
     /**
-     * It gets lti learnpath results by date.
-     *
-     * @param $startDate
-     * @param $endDate
-     *
-     * @return array
-     */
-    private static function getLtiLeaningPathByDate($startDate, $endDate)
-    {
-        /** @var DateTime $startDate */
-        $startDate = api_get_utc_datetime("$startDate 00:00:00");
-        /** @var DateTime $endDate */
-        $endDate = api_get_utc_datetime("$endDate 23:59:59");
-
-        if (empty($startDate) || empty($endDate)) {
-            return [];
-        }
-
-        require_once api_get_path(SYS_PLUGIN_PATH).'lti_provider/LtiProviderPlugin.php';
-
-        $plugin = LtiProviderPlugin::create();
-
-        $result = $plugin->getToolLearnPathResult($startDate, $endDate);
-
-        return $result;
-    }
-
-    /**
      * @param string $startDate
      * @param string $endDate
      *
@@ -1722,15 +1692,14 @@ class Statistics
     }
 
     /**
-     * Return de number of certificates generated
+     * Return de number of certificates generated.
+     *
      * @param string|null $dateFrom
      * @param string|null $dateUntil
-     *
      * @return int
      */
-    public static function countCertificatesByQuarter(string $dateFrom = null, string $dateUntil = null)
+    public static function countCertificatesByQuarter(string $dateFrom = null, string $dateUntil = null): int
     {
-
         $tableGradebookCertificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 
         $condition = "";
@@ -1742,7 +1711,7 @@ class Statistics
         } elseif (!empty($dateFrom)) {
             $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
             $condition = "WHERE created_at >= '$dateFrom'";
-        }elseif (!empty($dateUntil)) {
+        } elseif (!empty($dateUntil)) {
             $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
             $condition = "WHERE created_at <= '$dateUntil'";
         }
@@ -1757,13 +1726,13 @@ class Statistics
         $obj = Database::fetch_object($response);
 
         return $obj->count;
-
     }
 
     /**
      * Get the number of logins by dates.
-     * @param string|null $dateFrom
-     * @param string|null $dateUntil
+     *
+     * @param string $dateFrom
+     * @param string $dateUntil
      * @return array
      */
     public static function getSessionsByDuration(string $dateFrom, string $dateUntil): array
@@ -1779,7 +1748,6 @@ class Statistics
         ];
 
         if (!empty($dateFrom) && !empty($dateUntil)) {
-
             $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
             $accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $urlId = api_get_current_access_url_id();
@@ -1821,5 +1789,33 @@ class Statistics
         }
 
         return $results;
+    }
+
+    /**
+     * It gets lti learnpath results by date.
+     *
+     * @param $startDate
+     * @param $endDate
+     *
+     * @return array
+     */
+    private static function getLtiLeaningPathByDate($startDate, $endDate)
+    {
+        /** @var DateTime $startDate */
+        $startDate = api_get_utc_datetime("$startDate 00:00:00");
+        /** @var DateTime $endDate */
+        $endDate = api_get_utc_datetime("$endDate 23:59:59");
+
+        if (empty($startDate) || empty($endDate)) {
+            return [];
+        }
+
+        require_once api_get_path(SYS_PLUGIN_PATH).'lti_provider/LtiProviderPlugin.php';
+
+        $plugin = LtiProviderPlugin::create();
+
+        $result = $plugin->getToolLearnPathResult($startDate, $endDate);
+
+        return $result;
     }
 }

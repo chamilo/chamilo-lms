@@ -1752,14 +1752,12 @@ switch ($report) {
             }</script>';
 
         if (api_get_current_access_url_id() === 1) {
-
             $htmlHeadXtra[] .= '<script>
                 function loadReportQuarterlyTotalDiskUsage () {
                     $("#tracking-report-quarterly-total-disk-usage")
                         .html("<p><span class=\"fa fa-spinner fa-spin fa-2x\" aria-hidden=\"true\"></span></p>")
                         .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_total_disk_usage");
             }</script>';
-
         }
 
         $content .= Display::tag('H4', get_lang('ReportQuarterlyUsers'), ['style' => 'margin-bottom: 25px;']);
@@ -1784,41 +1782,77 @@ switch ($report) {
             'javascript://',
             ['onclick' => 'loadReportQuarterlyHoursOfTraining();', 'class' => 'btn btn-default']
         );
-        $content .= Display::div('', ['id' => 'tracking-report-quarterly-hours-of-training', 'style' => 'margin: 30px;']);
-
-        $content .= Display::tag('H4', get_lang('ReportQuarterlyNumberOfCertificatesGenerated'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::div(
+            '',
+            [
+                'id' => 'tracking-report-quarterly-hours-of-training',
+                'style' => 'margin: 30px;'
+            ]
+        );
+        $content .= Display::tag(
+            'H4',
+            get_lang('ReportQuarterlyNumberOfCertificatesGenerated'),
+            ['style' => 'margin-bottom: 25px;']
+        );
         $content .= Display::url(
             get_lang('Show'),
             'javascript://',
             ['onclick' => 'loadReportQuarterlyCertificatesGenerated();', 'class' => 'btn btn-default']
         );
-        $content .= Display::div('', ['id' => 'tracking-report-quarterly-number-of-certificates-generated', 'style' => 'margin: 30px;']);
-
-        $content .= Display::tag('H4', get_lang('ReportQuarterlySessionsByDuration'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::div(
+            '',
+            ['id' => 'tracking-report-quarterly-number-of-certificates-generated', 'style' => 'margin: 30px;']
+        );
+        $content .= Display::tag(
+            'H4',
+            get_lang('ReportQuarterlySessionsByDuration'),
+            ['style' => 'margin-bottom: 25px;']
+        );
         $content .= Display::url(
             get_lang('Show'),
             'javascript://',
             ['onclick' => 'loadReportQuarterlySessionsByDuration();', 'class' => 'btn btn-default']
         );
-        $content .= Display::div('', ['id' => 'tracking-report-quarterly-sessions-by-duration', 'style' => 'margin: 30px;']);
-
-        $content .= Display::tag('H4', get_lang('ReportQuarterlyCoursesAndSessions'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::div(
+            '',
+            ['id' => 'tracking-report-quarterly-sessions-by-duration', 'style' => 'margin: 30px;']
+        );
+        $content .= Display::tag(
+            'H4',
+            get_lang('ReportQuarterlyCoursesAndSessions'),
+            ['style' => 'margin-bottom: 25px;']
+        );
         $content .= Display::url(
             get_lang('Show'),
             'javascript://',
             ['onclick' => 'loadReportQuarterlyCoursesAndSessions();', 'class' => 'btn btn-default']
         );
-        $content .= Display::div('', ['id' => 'tracking-report-quarterly-courses-and-sessions', 'style' => 'margin: 30px;']);
+        $content .= Display::div(
+            '',
+            [
+                'id' => 'tracking-report-quarterly-courses-and-sessions',
+                'style' => 'margin: 30px;'
+            ]
+        );
 
         if (api_get_current_access_url_id() === 1) {
-
-            $content .= Display::tag('H4', get_lang('ReportQuarterlyTotalDiskUsage'), ['style' => 'margin-bottom: 25px;']);
+            $content .= Display::tag(
+                'H4',
+                get_lang('ReportQuarterlyTotalDiskUsage'),
+                ['style' => 'margin-bottom: 25px;']
+            );
             $content .= Display::url(
                 get_lang('Show'),
                 'javascript://',
                 ['onclick' => 'loadReportQuarterlyTotalDiskUsage();', 'class' => 'btn btn-default']
             );
-            $content .= Display::div('', ['id' => 'tracking-report-quarterly-total-disk-usage', 'style' => 'margin: 30px;']);
+            $content .= Display::div(
+                '',
+                [
+                    'id' => 'tracking-report-quarterly-total-disk-usage',
+                    'style' => 'margin: 30px;'
+                ]
+            );
         }
 
         break;

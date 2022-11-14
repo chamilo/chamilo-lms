@@ -10285,18 +10285,16 @@ function api_filename_has_blacklisted_stream_wrapper(string $filename)
 }
 
 /**
- * Calculate the percent between two numbers
- * @param int $newValue
- * @param int $oldValue
+ * Calculate the percent between two numbers.
+ *
  * @return string
  */
 function apiCalculateIncrementPercent(int $newValue, int $oldValue)
 {
-
     if ($oldValue <= 0) {
         $result = " - %";
     } else {
-        $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2) .' %';
+        $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2).' %';
     }
 
     return $result;

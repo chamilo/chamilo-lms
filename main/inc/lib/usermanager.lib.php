@@ -7774,7 +7774,6 @@ SQL;
      */
     public static function countUsersWhoFinishedCoursesInSessions()
     {
-
         $coursesInSessions = [];
         $currentAccessUrlId = api_get_current_access_url_id();
         $sql = "SELECT course.code, srcru.session_id, srcru.user_id, session.name

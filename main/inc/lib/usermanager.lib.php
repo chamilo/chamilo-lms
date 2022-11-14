@@ -7768,7 +7768,8 @@ SQL;
     }
 
     /**
-     * Count users in sessions and if they have certificate
+     * Count users in sessions and if they have certificate.
+     *
      * @return array
      */
     public static function countUsersWhoFinishedCoursesInSessions()
@@ -7787,7 +7788,6 @@ SQL;
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-
             while ($row = Database::fetch_array($res)) {
                 $index = $row['code'].' ('.$row['name'].')';
                 if (!isset($coursesInSessions[$index])) {

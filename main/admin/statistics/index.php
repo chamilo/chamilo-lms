@@ -1786,7 +1786,7 @@ switch ($report) {
             '',
             [
                 'id' => 'tracking-report-quarterly-hours-of-training',
-                'style' => 'margin: 30px;'
+                'style' => 'margin: 30px;',
             ]
         );
         $content .= Display::tag(
@@ -1831,7 +1831,7 @@ switch ($report) {
             '',
             [
                 'id' => 'tracking-report-quarterly-courses-and-sessions',
-                'style' => 'margin: 30px;'
+                'style' => 'margin: 30px;',
             ]
         );
 
@@ -1850,7 +1850,7 @@ switch ($report) {
                 '',
                 [
                     'id' => 'tracking-report-quarterly-total-disk-usage',
-                    'style' => 'margin: 30px;'
+                    'style' => 'margin: 30px;',
                 ]
             );
         }

@@ -36,9 +36,9 @@ class Statistics
      *
      * @param string|null $categoryCode Code of a course category.
      *                                  Default: count all courses.
-     *
      * @param string|null $dateFrom     dateFrom
      * @param string|null $dateUntil    dateUntil
+     *
      * @return int Number of courses counted
      */
     public static function countCourses(string $categoryCode = null, string $dateFrom = null, string $dateUntil = null)
@@ -83,6 +83,7 @@ class Statistics
      * @param array|null  $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
      * @param string|null $dateFrom   dateFrom
      * @param string|null $dateUntil  dateUntil
+     *
      * @return int Number of courses counted
      */
     public static function countCoursesByVisibility(
@@ -1693,10 +1694,6 @@ class Statistics
 
     /**
      * Return de number of certificates generated.
-     *
-     * @param string|null $dateFrom
-     * @param string|null $dateUntil
-     * @return int
      */
     public static function countCertificatesByQuarter(string $dateFrom = null, string $dateUntil = null): int
     {
@@ -1730,14 +1727,9 @@ class Statistics
 
     /**
      * Get the number of logins by dates.
-     *
-     * @param string $dateFrom
-     * @param string $dateUntil
-     * @return array
      */
     public static function getSessionsByDuration(string $dateFrom, string $dateUntil): array
     {
-
         $results = [
             '0' => 0,
             '5' => 0,

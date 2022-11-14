@@ -2581,8 +2581,6 @@ class Tracking
     /**
      * Return the total time spent in courses (no the total in platform).
      *
-     * @param string $dateFrom
-     * @param string $dateUntil
      * @return int
      */
     public static function getTotalTimeSpentInCourses(

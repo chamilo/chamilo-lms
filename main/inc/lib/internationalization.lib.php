@@ -1093,7 +1093,7 @@ function getQuarterDates(string $date = null): array
     return [
         'quarter_start' => $start,
         'quarter_end' => $end,
-        'quarter_title'=> sprintf(get_lang('QuaerterXQY'), $quarter, $year),
+        'quarter_title' => sprintf(get_lang('QuaerterXQY'), $quarter, $year),
     ];
 }
 

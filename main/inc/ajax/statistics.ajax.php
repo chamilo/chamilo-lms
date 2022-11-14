@@ -996,7 +996,7 @@ switch ($action) {
             $countCoursesPre2Quarter,
             $countCoursesPre1Quarter,
             $percentIncrementCourses,
-            $countCoursesCurrentQuarter
+            $countCoursesCurrentQuarter,
         ];
         $rows[] = [
             get_lang('NumberOfAvailableCourses'),
@@ -1388,11 +1388,10 @@ switch ($action) {
         //Make de rows for second table
         $rows = [];
         foreach ($courses as $course => $data) {
-
             $rows[] = [
                 $course,
                 $data['subscribed'],
-                $data['finished']
+                $data['finished'],
             ];
         }
 

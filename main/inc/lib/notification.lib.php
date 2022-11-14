@@ -239,6 +239,7 @@ class Notification extends Model
      * @param array  $attachments
      * @param array  $smsParameters
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
+     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
      */
     public function saveNotification(
         $messageId,
@@ -249,11 +250,12 @@ class Notification extends Model
         $senderInfo = [],
         $attachments = [],
         $smsParameters = [],
-        $forceTitleWhenSendingEmail = false
+        $forceTitleWhenSendingEmail = false,
+        $checkUrls = false
     ) {
         $this->type = (int) $type;
         $messageId = (int) $messageId;
-        $content = $this->formatContent($messageId, $content, $senderInfo);
+        $content = $this->formatContent($messageId, $content, $senderInfo, $checkUrls);
         $titleToNotification = $this->formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail);
         $settingToCheck = '';
         $avoid_my_self = false;
@@ -370,11 +372,16 @@ class Notification extends Model
      * @param string $content
      * @param array  $senderInfo result of api_get_user_info() or
      *                           GroupPortalManager:get_group_data()
+     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
      *
      * @return string
      * */
-    public function formatContent($messageId, $content, $senderInfo)
-    {
+    public function formatContent(
+        $messageId,
+        $content,
+        $senderInfo,
+        $checkUrls = false
+    ) {
         $hook = HookNotificationContent::create();
         if (!empty($hook)) {
             $hook->setEventData(['content' => $content]);
@@ -382,6 +389,18 @@ class Notification extends Model
             if (isset($data['content'])) {
                 $content = $data['content'];
             }
+        }
+
+        $accessConfig = [];
+        $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
+        if ($useMultipleUrl && $checkUrls) {
+            $accessUrls = api_get_access_url_from_user($senderInfo['user_info']['user_id']);
+            if (!empty($accessUrls)) {
+                $accessConfig['multiple_access_urls'] = true;
+                $accessConfig['access_url'] = (int) $accessUrls[0];
+            }
+            // To replace the current url by access url user
+            $content = str_replace(api_get_path(WEB_PATH), api_get_path(WEB_PATH, $accessConfig), $content);
         }
 
         $newMessageText = $linkToNewMessage = '';
@@ -399,7 +418,7 @@ class Notification extends Model
                 $newMessageText = '';
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
-                    api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
+                    api_get_path(WEB_CODE_PATH, $accessConfig).'messages/view_message.php?id='.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_MESSAGE:
@@ -415,7 +434,7 @@ class Notification extends Model
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
-                    api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
+                    api_get_path(WEB_CODE_PATH, $accessConfig).'messages/view_message.php?id='.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
@@ -427,7 +446,7 @@ class Notification extends Model
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('SeeInvitation'),
-                    api_get_path(WEB_CODE_PATH).'social/invitations.php'
+                    api_get_path(WEB_CODE_PATH, $accessConfig).'social/invitations.php'
                 );
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
@@ -437,15 +456,15 @@ class Notification extends Model
                     $newMessageText = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
                     $senderName = Display::url(
                         $senderInfoName,
-                        api_get_path(WEB_CODE_PATH).'social/profile.php?'.$senderInfo['user_info']['user_id']
+                        api_get_path(WEB_CODE_PATH, $accessConfig).'social/profile.php?'.$senderInfo['user_info']['user_id']
                     );
                     $newMessageText .= '<br />'.get_lang('User').': '.$senderName;
                 }
-                $groupUrl = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$senderInfo['group_info']['id'].'&topic_id='.$senderInfo['group_info']['topic_id'].'&msg_id='.$senderInfo['group_info']['msg_id'].'&topics_page_nr='.$topicPage;
+                $groupUrl = api_get_path(WEB_CODE_PATH, $accessConfig).'social/group_topics.php?id='.$senderInfo['group_info']['id'].'&topic_id='.$senderInfo['group_info']['topic_id'].'&msg_id='.$senderInfo['group_info']['msg_id'].'&topics_page_nr='.$topicPage;
                 $linkToNewMessage = Display::url(get_lang('SeeMessage'), $groupUrl);
                 break;
         }
-        $preferenceUrl = api_get_path(WEB_CODE_PATH).'auth/profile.php';
+        $preferenceUrl = api_get_path(WEB_CODE_PATH, $accessConfig).'auth/profile.php';
 
         // You have received a new message text
         if (!empty($newMessageText)) {

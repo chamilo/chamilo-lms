@@ -212,7 +212,7 @@ class AnnouncementEmail
      * Email message.
      *
      * @param int $receiverUserId
-     * @param bool $checkUrls
+     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
      *
      * @return string
      */
@@ -323,7 +323,7 @@ class AnnouncementEmail
      * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
      * @param int  $senderId             related to the main user
      * @param bool $directMessage
-     * @param bool $checkUrls
+     * @param bool $checkUrls   It checks access url of user when multiple_access_urls = true
      *
      * @return array
      */
@@ -360,7 +360,11 @@ class AnnouncementEmail
                     $message,
                     $senderId,
                     $sendToDrhUsers,
-                    true
+                    true,
+                    [],
+                    true,
+                    [],
+                    $checkUrls
                 );
             } else {
                 if (!empty($this->logger)) {
@@ -397,7 +401,11 @@ class AnnouncementEmail
                                 $message,
                                 $senderId,
                                 false,
-                                true
+                                true,
+                                [],
+                                true,
+                                [],
+                                $checkUrls
                             );
                         }
                     }

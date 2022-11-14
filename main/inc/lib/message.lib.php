@@ -514,6 +514,7 @@ class MessageManager
      * @param bool   $checkCurrentAudioId
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
      * @param int    $status                     Message status
+     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
      *
      * @return bool
      */
@@ -534,7 +535,8 @@ class MessageManager
         $checkCurrentAudioId = false,
         $forceTitleWhenSendingEmail = false,
         $status = 0,
-        array $extraParams = []
+        array $extraParams = [],
+        $checkUrls = false
     ) {
         $group_id = (int) $group_id;
         $receiverUserId = (int) $receiverUserId;
@@ -802,7 +804,8 @@ class MessageManager
                         $sender_info,
                         $attachmentAddedByMail,
                         $smsParameters,
-                        $forceTitleWhenSendingEmail
+                        $forceTitleWhenSendingEmail,
+                        $checkUrls
                     );
                 } else {
                     $usergroup = new UserGroup();
@@ -836,7 +839,9 @@ class MessageManager
                         $content,
                         $group_info,
                         $attachmentAddedByMail,
-                        $smsParameters
+                        $smsParameters,
+                        false,
+                        $checkUrls
                     );
                 }
             }
@@ -857,6 +862,7 @@ class MessageManager
      * @param array  $smsParameters
      * @param bool   $uploadFiles        Do not upload files using the MessageManager class
      * @param array  $attachmentList
+     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
      *
      * @return bool
      */
@@ -869,7 +875,8 @@ class MessageManager
         $directMessage = false,
         $smsParameters = [],
         $uploadFiles = true,
-        $attachmentList = []
+        $attachmentList = [],
+        $checkUrls = false
     ) {
         $files = $_FILES ? $_FILES : [];
         if (false === $uploadFiles) {
@@ -892,7 +899,11 @@ class MessageManager
             $sender_id,
             $directMessage,
             0,
-            $smsParameters
+            $smsParameters,
+            false,
+            0,
+            [],
+            $checkUrls
         );
 
         if ($sendCopyToDrhUsers) {
@@ -911,7 +922,11 @@ class MessageManager
                         $message,
                         $sender_id,
                         false,
-                        $directMessage
+                        $directMessage,
+                        [],
+                        true,
+                        [],
+                        $checkUrls
                     );
                 }
             }

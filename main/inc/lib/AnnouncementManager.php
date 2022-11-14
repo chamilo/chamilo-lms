@@ -1536,7 +1536,7 @@ class AnnouncementManager
      * @param Monolog\Handler\HandlerInterface logger
      * @param int  $senderId
      * @param bool $directMessage
-     * @param bool $checkUrls
+     * @param bool $checkUrls   It checks access url of user when multiple_access_urls = true
      *
      * @return array
      */

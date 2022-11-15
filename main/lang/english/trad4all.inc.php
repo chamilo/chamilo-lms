@@ -8915,4 +8915,5 @@ $LearningPathLTI = "Access through LTI to Learning Path";
 $UserXNotSubscribedToCourseX = "User %s has no been registered to course %s";
 $OpenContentInNewTab = "Open content in a new tab";
 $ThereAreUsersOrCoursesUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersAndCoursesWithTheDefaultPortalLanguage = "There are users or courses using this language. Do you want to disable this language and set all these users and courses with the default portal language?";
+$YourAccountNameRemember = "Please note that your username to access is %s";
 ?>

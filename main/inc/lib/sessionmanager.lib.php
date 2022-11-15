@@ -2083,7 +2083,22 @@ class SessionManager
                 );
 
                 if (api_get_configuration_value('email_template_subscription_to_session_confirmation_username')) {
-                    $tplContent->assign('username', stripslashes($user_info['username']));
+                    $username = sprintf(
+                        get_lang('YourAccountNameRemember'),
+                        stripslashes($user_info['username']));
+
+                    $tplContent->assign('username', $username);
+                }
+
+                if (api_get_configuration_value('email_template_subscription_to_session_confirmation_lost_password')) {
+                    $lostPasswordLink = PHP_EOL
+                        .Display::url(
+                            get_lang('LostPassword'),
+                            api_get_path(WEB_CODE_PATH).'auth/lostPassword.php',
+                            ['target' => '_blank']
+                        );
+
+                    $tplContent->assign('lostPassword', $lostPasswordLink);
                 }
 
                 $content = $tplContent->fetch($layoutContent);

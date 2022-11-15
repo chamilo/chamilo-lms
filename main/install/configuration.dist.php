@@ -2311,7 +2311,10 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // $_configuration['drh_allow_access_to_all_students'] = false;
 
 // Add the username value to the subscription to session confirmation email
-// $_configuration['email_template_subscription_to_session_confirmation_username'] = false;
+//$_configuration['email_template_subscription_to_session_confirmation_username'] = false;
+
+// Add the remember password link to the subscription to session confirmation email
+//$_configuration['email_template_subscription_to_session_confirmation_lost_password'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

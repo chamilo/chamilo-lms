@@ -8943,4 +8943,5 @@ $LearningPathLTI = "Accesso por LTI a lecciones";
 $UserXNotSubscribedToCourseX = "El usuario %s no ha sido registrado al curso %s";
 $OpenContentInNewTab = "Abrir contenido en una nueva pestaña";
 $ThereAreUsersOrCoursesUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersAndCoursesWithTheDefaultPortalLanguage = "Existen usuarios o cursos usando este idioma. ¿Desea deshabilitar este idioma y actualizar estos usuarios y cursos con el idioma por defecto de la plataforma?";
+$YourAccountNameRemember = "Le recordamos que su nombre de usuario para el acceso es %s";
 ?>

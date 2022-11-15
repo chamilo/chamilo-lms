@@ -808,7 +808,7 @@ switch ($action) {
             $pre5QuarterDates['quarter_end']
         );
         // Calculate percent for first row
-        $percentIncrementUsersRegistered = apiCalculateIncrementPercent(
+        $percentIncrementUsersRegistered = api_calculate_increment_percent(
             $countUsersPre1Quarter,
             $countUsersPre5Quarter
         );
@@ -852,7 +852,7 @@ switch ($action) {
         );
 
         // Calculate percent for second row
-        $percentIncrementUsersConnected = apiCalculateIncrementPercent(
+        $percentIncrementUsersConnected = api_calculate_increment_percent(
             $countUsersConnectedPre1Quarter,
             $countUsersConnectedPre5Quarter
         );
@@ -869,6 +869,7 @@ switch ($action) {
             $percentIncrementUsersRegistered,
             $countUsersTotal,
         ];
+        //todo comprobacion + -
         $rows[] = [
             get_lang('NumberOfUsersRegisteredCompared'),
             '-',
@@ -922,7 +923,7 @@ switch ($action) {
                 ->format('Y-m-d')
         );
 
-        // Make de headers for the table
+        // Make the headers for the table
         $headers = [
             '',
             $pre5QuarterDates['quarter_title'],
@@ -976,17 +977,17 @@ switch ($action) {
         );
 
         // Calculate percents for first row
-        $percentIncrementCourses = apiCalculateIncrementPercent(
+        $percentIncrementCourses = api_calculate_increment_percent(
             $countCoursesPre1Quarter,
             $countCoursesPre5Quarter
         );
         // Calculate percents for second row
-        $percentIncrementUsersRegistered = apiCalculateIncrementPercent(
+        $percentIncrementUsersRegistered = api_calculate_increment_percent(
             $countCoursesAvailablePre1Quarter,
             $countCoursesAvailablePre5Quarter
         );
 
-        //Make de rows with the recollected data
+        //Make the rows with the recollected data
         $rows = [];
         $rows[] = [
             get_lang('NumberOfExistingCourses'),
@@ -1041,7 +1042,7 @@ switch ($action) {
                 ->format('Y-m-d')
         );
 
-        // Make de headers for the table
+        // Make the headers for the table
         $headers = [
             '',
             $pre5QuarterDates['quarter_title'],
@@ -1080,12 +1081,12 @@ switch ($action) {
         );
 
         // Calculate percent for the row
-        $percentIncrementTimeSpent = apiCalculateIncrementPercent(
+        $percentIncrementTimeSpent = api_calculate_increment_percent(
             $timeSpentCourses1PreQuarter,
             $timeSpentCourses5PreQuarter
         );
 
-        //Make de row with the recollected data
+        //Make the row with the recollected data
         $rows = [];
         $rows[] = [
             get_lang('NumberOfHoursTrainingFollowed'),
@@ -1130,7 +1131,7 @@ switch ($action) {
                 ->format('Y-m-d')
         );
 
-        // Make de headers for the table
+        // Make the headers for the table
         $headers = [
             '',
             $pre5QuarterDates['quarter_title'],
@@ -1169,12 +1170,12 @@ switch ($action) {
         );
 
         // Calculate percent for the row
-        $percentIncrementCertificateGenerated = apiCalculateIncrementPercent(
+        $percentIncrementCertificateGenerated = api_calculate_increment_percent(
             $certificateGenerated1PreQuarter,
             $certificateGenerated5PreQuarter
         );
 
-        //Make de row with the recollected data
+        //Make the row with the recollected data
         $rows = [];
         $rows[] = [
             get_lang('NumberOfCertificatesGenerated'),
@@ -1220,7 +1221,7 @@ switch ($action) {
                 ->format('Y-m-d')
         );
 
-        // Make de headers for the table
+        // Make the headers for the table
         $headers = [
             get_lang('SessionsByDurationByQuarter'),
             $pre5QuarterDates['quarter_title'],
@@ -1259,35 +1260,35 @@ switch ($action) {
         );
 
         // Calculate percent for the rows
-        $percentIncrementSessionDuration0 = apiCalculateIncrementPercent(
+        $percentIncrementSessionDuration0 = api_calculate_increment_percent(
             $sessionsDuration1PreQuarter['0'],
             $sessionsDuration5PreQuarter['0']
         );
-        $percentIncrementSessionDuration5 = apiCalculateIncrementPercent(
+        $percentIncrementSessionDuration5 = api_calculate_increment_percent(
             $sessionsDuration1PreQuarter['5'],
             $sessionsDuration5PreQuarter['5']
         );
-        $percentIncrementSessionDuration10 = apiCalculateIncrementPercent(
+        $percentIncrementSessionDuration10 = api_calculate_increment_percent(
             $sessionsDuration1PreQuarter['10'],
             $sessionsDuration5PreQuarter['10']
         );
-        $percentIncrementSessionDuration15 = apiCalculateIncrementPercent(
+        $percentIncrementSessionDuration15 = api_calculate_increment_percent(
             $sessionsDuration1PreQuarter['15'],
             $sessionsDuration5PreQuarter['15']
         );
-        $percentIncrementSessionDuration30 = apiCalculateIncrementPercent(
+        $percentIncrementSessionDuration30 = api_calculate_increment_percent(
             $sessionsDuration1PreQuarter['30'],
             $sessionsDuration5PreQuarter['30']
         );
-        $percentIncrementSessionDuration60 = apiCalculateIncrementPercent(
+        $percentIncrementSessionDuration60 = api_calculate_increment_percent(
             $sessionsDuration1PreQuarter['60'],
             $sessionsDuration5PreQuarter['60']
         );
 
-        //Make de rows with the recollected data
+        //Make the rows with the recollected data
         $rows = [];
         $rows[] = [
-            '0-5&#8242',
+            '0-5&#8242;',
             $sessionsDuration5PreQuarter['0'],
             $sessionsDuration4PreQuarter['0'],
             $sessionsDuration3PreQuarter['0'],
@@ -1297,7 +1298,7 @@ switch ($action) {
             $sessionsDurationCurrentQuarter['0'],
         ];
         $rows[] = [
-            '6-10&#8242',
+            '6-10&#8242;',
             $sessionsDuration5PreQuarter['5'],
             $sessionsDuration4PreQuarter['5'],
             $sessionsDuration3PreQuarter['5'],
@@ -1307,7 +1308,7 @@ switch ($action) {
             $sessionsDurationCurrentQuarter['5'],
         ];
         $rows[] = [
-            '11-15&#8242',
+            '11-15&#8242;',
             $sessionsDuration5PreQuarter['10'],
             $sessionsDuration4PreQuarter['10'],
             $sessionsDuration3PreQuarter['10'],
@@ -1317,7 +1318,7 @@ switch ($action) {
             $sessionsDurationCurrentQuarter['10'],
         ];
         $rows[] = [
-            '16-30&#8242',
+            '16-30&#8242;',
             $sessionsDuration5PreQuarter['15'],
             $sessionsDuration4PreQuarter['15'],
             $sessionsDuration3PreQuarter['15'],
@@ -1327,7 +1328,7 @@ switch ($action) {
             $sessionsDurationCurrentQuarter['15'],
         ];
         $rows[] = [
-            '31-60&#8242',
+            '31-60&#8242;',
             $sessionsDuration5PreQuarter['30'],
             $sessionsDuration4PreQuarter['30'],
             $sessionsDuration3PreQuarter['30'],
@@ -1337,7 +1338,7 @@ switch ($action) {
             $sessionsDurationCurrentQuarter['30'],
         ];
         $rows[] = [
-            '60-&#8734&#8242',
+            '60-&#8734;&#8242;',
             $sessionsDuration5PreQuarter['60'],
             $sessionsDuration4PreQuarter['60'],
             $sessionsDuration3PreQuarter['60'],
@@ -1352,7 +1353,7 @@ switch ($action) {
     break;
     case "report_quarterly_courses_and_sessions":
 
-        // Make de headers for the tables
+        // Make the headers for the tables
         $headers = [
              [
                 get_lang('ListOfCoursesCodes'),
@@ -1369,10 +1370,10 @@ switch ($action) {
         // Get the data fot the first table
         $courses = UserManager::countUsersWhoFinishedCourses();
 
-        //Make de rows for first table
+        //Make the rows for first table
         $rows = [];
         foreach ($courses as $course => $data) {
-            $course_url = api_get_path(WEB_COURSE_PATH).$course;
+            $course_url = api_get_path(WEB_CODE_PATH).'course_home/course_home.php?cidReq='.$course;
             $rows[] = [
                 Display::url($course, $course_url, ['target' => SESSION_LINK_TARGET]),
                 $data['subscribed'],
@@ -1385,7 +1386,7 @@ switch ($action) {
         //Get the data for the second table (with sessions)
         $courses = UserManager::countUsersWhoFinishedCoursesInSessions();
 
-        //Make de rows for second table
+        //Make the rows for second table
         $rows = [];
         foreach ($courses as $course => $data) {
             $rows[] = [

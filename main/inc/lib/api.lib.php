@@ -10289,10 +10289,10 @@ function api_filename_has_blacklisted_stream_wrapper(string $filename)
  *
  * @return string
  */
-function apiCalculateIncrementPercent(int $newValue, int $oldValue)
+function api_calculate_increment_percent(int $newValue, int $oldValue)
 {
     if ($oldValue <= 0) {
-        $result = " - %";
+        $result = " - ";
     } else {
         $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2).' %';
     }

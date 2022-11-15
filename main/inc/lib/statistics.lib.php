@@ -91,7 +91,7 @@ class Statistics
         string $dateFrom = null,
         string $dateUntil = null
     ) {
-        if (!isset($visibility)) {
+        if (empty($visibility)) {
             return 0;
         } else {
             $visibilityString = '';
@@ -1694,6 +1694,7 @@ class Statistics
 
     /**
      * Return de number of certificates generated.
+     * This function is resource intensive.
      */
     public static function countCertificatesByQuarter(string $dateFrom = null, string $dateUntil = null): int
     {
@@ -1727,6 +1728,7 @@ class Statistics
 
     /**
      * Get the number of logins by dates.
+     * This function is resource intensive.
      */
     public static function getSessionsByDuration(string $dateFrom, string $dateUntil): array
     {
@@ -1751,7 +1753,7 @@ class Statistics
 
             if (api_is_multiple_url_enabled()) {
                 $tableUrl = ", $accessUrlRelUserTable";
-                $whereUrl = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
+                $whereUrl = " AND login_user_id = user_id AND access_url_id = $urlId";
             }
 
             $sql = "SELECT login_id, TIMESTAMPDIFF(SECOND, login_date, logout_date) AS duration

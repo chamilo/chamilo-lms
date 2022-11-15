@@ -4588,7 +4588,7 @@ class UserManager
             $sql .= " AND u.status = $status ";
         }
 
-        if (!empty($active)) {
+        if (isset($active)) {
             $active = (int) $active;
             $sql .= " AND u.active = $active ";
         }
@@ -7720,6 +7720,7 @@ SQL;
 
     /**
      * Count users in courses and if they have certificate.
+     * This function is resource intensive.
      *
      * @return array
      */
@@ -7769,6 +7770,7 @@ SQL;
 
     /**
      * Count users in sessions and if they have certificate.
+     * This function is resource intensive.
      *
      * @return array
      */

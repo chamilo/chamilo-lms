@@ -1047,6 +1047,9 @@ function api_sort_by_first_name($language = null)
  * If no DateTime is not sent, use the current date.
  *
  * @param string|null $date (optional) The date or null.
+ * @return array            E.G.: ['quarter_start' => '2022-10-11',
+ *                          'quarter_end' => '2022-12-31',
+ *                          'quarter_title' => 'Q4 2022']
  */
 function getQuarterDates(string $date = null): array
 {
@@ -1093,7 +1096,7 @@ function getQuarterDates(string $date = null): array
     return [
         'quarter_start' => $start,
         'quarter_end' => $end,
-        'quarter_title' => sprintf(get_lang('QuaerterXQY'), $quarter, $year),
+        'quarter_title' => sprintf(get_lang('QuarterXQY'), $quarter, $year),
     ];
 }
 

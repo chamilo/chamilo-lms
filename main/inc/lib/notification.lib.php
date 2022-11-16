@@ -331,6 +331,11 @@ class Notification extends Model
                         }
 
                         if (!empty($userInfo['email'])) {
+                            if ($checkUrls) {
+                                $smsParameters['checkUrls'] = true;
+                                $smsParameters['userId'] = $senderInfo['user_id'];
+                                $smsParameters['courseId'] = $courseId;
+                            }
                             api_mail_html(
                                 $userInfo['complete_name'],
                                 $userInfo['mail'],

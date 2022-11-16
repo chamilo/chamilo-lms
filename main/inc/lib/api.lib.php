@@ -9465,6 +9465,19 @@ function api_mail_html(
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
+    if ($additionalParameters['checkUrls']) {
+        $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
+        if ($useMultipleUrl) {
+            $accessConfig = [];
+            $accessUrls = api_get_access_url_from_user($additionalParameters['userId'], $additionalParameters['courseId']);
+            if (!empty($accessUrls)) {
+                $accessConfig['multiple_access_urls'] = true;
+                $accessConfig['access_url'] = (int) $accessUrls[0];
+            }
+            // To replace the current url by access url user
+            $mail->Body = str_replace(api_get_path(WEB_PATH), api_get_path(WEB_PATH, $accessConfig), $mail->Body);
+        }
+    }
     // Attachment.
     if (!empty($data_file)) {
         foreach ($data_file as $file_attach) {

@@ -221,7 +221,7 @@ class AnnouncementEmail
         $content = $this->announcement('content');
         $session_id = $this->session_id;
         $courseCode = $this->course('code');
-        $courseId = $this->course('id');
+        $courseId = $this->course('real_id');
         $content = AnnouncementManager::parseContent(
             $receiverUserId,
             $content,
@@ -331,7 +331,7 @@ class AnnouncementEmail
     {
         $senderId = empty($senderId) ? api_get_user_id() : (int) $senderId;
         $subject = $this->subject($directMessage);
-        $courseId = $this->course('id');
+        $courseId = $this->course('real_id');
         // Send email one by one to avoid antispam
         $users = $this->sent_to();
 

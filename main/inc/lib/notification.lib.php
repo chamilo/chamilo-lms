@@ -239,7 +239,7 @@ class Notification extends Model
      * @param array  $attachments
      * @param array  $smsParameters
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
-     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
+     * @param bool   $checkUrls                  It checks access url of user when multiple_access_urls = true
      */
     public function saveNotification(
         $messageId,
@@ -251,11 +251,12 @@ class Notification extends Model
         $attachments = [],
         $smsParameters = [],
         $forceTitleWhenSendingEmail = false,
-        $checkUrls = false
+        $checkUrls = false,
+        $courseId = null
     ) {
         $this->type = (int) $type;
         $messageId = (int) $messageId;
-        $content = $this->formatContent($messageId, $content, $senderInfo, $checkUrls);
+        $content = $this->formatContent($messageId, $content, $senderInfo, $checkUrls, $courseId);
         $titleToNotification = $this->formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail);
         $settingToCheck = '';
         $avoid_my_self = false;
@@ -372,7 +373,8 @@ class Notification extends Model
      * @param string $content
      * @param array  $senderInfo result of api_get_user_info() or
      *                           GroupPortalManager:get_group_data()
-     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
+     * @param bool   $checkUrls  It checks access url of user when multiple_access_urls = true
+     * @param int    $courseId   The course id will be checked when checkUrls = true
      *
      * @return string
      * */
@@ -380,7 +382,8 @@ class Notification extends Model
         $messageId,
         $content,
         $senderInfo,
-        $checkUrls = false
+        $checkUrls = false,
+        $courseId = null
     ) {
         $hook = HookNotificationContent::create();
         if (!empty($hook)) {
@@ -394,7 +397,7 @@ class Notification extends Model
         $accessConfig = [];
         $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
         if ($useMultipleUrl && $checkUrls) {
-            $accessUrls = api_get_access_url_from_user($senderInfo['user_info']['user_id']);
+            $accessUrls = api_get_access_url_from_user($senderInfo['user_id'], $courseId);
             if (!empty($accessUrls)) {
                 $accessConfig['multiple_access_urls'] = true;
                 $accessConfig['access_url'] = (int) $accessUrls[0];

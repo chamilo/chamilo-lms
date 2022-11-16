@@ -1340,10 +1340,12 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
     if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
         if (!($allow_session_coach && api_is_coach())) {
             api_not_allowed(true, $message);
+
             return false;
         }
     }
     api_block_inactive_user();
+
     return true;
 }
 
@@ -3369,6 +3371,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
             $sessionIsCoach = Database::store_result($result);
         }
     }
+
     return count($sessionIsCoach) > 0;
 }
 

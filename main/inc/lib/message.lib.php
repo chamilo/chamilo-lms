@@ -514,7 +514,7 @@ class MessageManager
      * @param bool   $checkCurrentAudioId
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
      * @param int    $status                     Message status
-     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
+     * @param bool   $checkUrls                  It checks access url of user when multiple_access_urls = true
      *
      * @return bool
      */
@@ -536,7 +536,8 @@ class MessageManager
         $forceTitleWhenSendingEmail = false,
         $status = 0,
         array $extraParams = [],
-        $checkUrls = false
+        $checkUrls = false,
+        $courseId = null
     ) {
         $group_id = (int) $group_id;
         $receiverUserId = (int) $receiverUserId;
@@ -805,7 +806,8 @@ class MessageManager
                         $attachmentAddedByMail,
                         $smsParameters,
                         $forceTitleWhenSendingEmail,
-                        $checkUrls
+                        $checkUrls,
+                        $courseId
                     );
                 } else {
                     $usergroup = new UserGroup();
@@ -841,7 +843,8 @@ class MessageManager
                         $attachmentAddedByMail,
                         $smsParameters,
                         false,
-                        $checkUrls
+                        $checkUrls,
+                        $courseId
                     );
                 }
             }
@@ -862,7 +865,7 @@ class MessageManager
      * @param array  $smsParameters
      * @param bool   $uploadFiles        Do not upload files using the MessageManager class
      * @param array  $attachmentList
-     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
+     * @param bool   $checkUrls          It checks access url of user when multiple_access_urls = true
      *
      * @return bool
      */
@@ -876,7 +879,8 @@ class MessageManager
         $smsParameters = [],
         $uploadFiles = true,
         $attachmentList = [],
-        $checkUrls = false
+        $checkUrls = false,
+        $courseId = null
     ) {
         $files = $_FILES ? $_FILES : [];
         if (false === $uploadFiles) {
@@ -901,9 +905,11 @@ class MessageManager
             0,
             $smsParameters,
             false,
+            false,
             0,
             [],
-            $checkUrls
+            $checkUrls,
+            $courseId
         );
 
         if ($sendCopyToDrhUsers) {
@@ -926,7 +932,8 @@ class MessageManager
                         [],
                         true,
                         [],
-                        $checkUrls
+                        $checkUrls,
+                        $courseId
                     );
                 }
             }

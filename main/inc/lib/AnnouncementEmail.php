@@ -211,8 +211,8 @@ class AnnouncementEmail
     /**
      * Email message.
      *
-     * @param int $receiverUserId
-     * @param bool   $checkUrls   It checks access url of user when multiple_access_urls = true
+     * @param int  $receiverUserId
+     * @param bool $checkUrls      It checks access url of user when multiple_access_urls = true
      *
      * @return string
      */
@@ -221,7 +221,7 @@ class AnnouncementEmail
         $content = $this->announcement('content');
         $session_id = $this->session_id;
         $courseCode = $this->course('code');
-
+        $courseId = $this->course('id');
         $content = AnnouncementManager::parseContent(
             $receiverUserId,
             $content,
@@ -232,7 +232,7 @@ class AnnouncementEmail
         $accessConfig = [];
         $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
         if ($useMultipleUrl && $checkUrls) {
-            $accessUrls = api_get_access_url_from_user($receiverUserId, $courseCode);
+            $accessUrls = api_get_access_url_from_user($receiverUserId, $courseId);
             if (!empty($accessUrls)) {
                 $accessConfig['multiple_access_urls'] = true;
                 $accessConfig['access_url'] = (int) $accessUrls[0];
@@ -323,7 +323,7 @@ class AnnouncementEmail
      * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
      * @param int  $senderId             related to the main user
      * @param bool $directMessage
-     * @param bool $checkUrls   It checks access url of user when multiple_access_urls = true
+     * @param bool $checkUrls            It checks access url of user when multiple_access_urls = true
      *
      * @return array
      */
@@ -331,7 +331,7 @@ class AnnouncementEmail
     {
         $senderId = empty($senderId) ? api_get_user_id() : (int) $senderId;
         $subject = $this->subject($directMessage);
-
+        $courseId = $this->course('id');
         // Send email one by one to avoid antispam
         $users = $this->sent_to();
 
@@ -364,7 +364,8 @@ class AnnouncementEmail
                     [],
                     true,
                     [],
-                    $checkUrls
+                    $checkUrls,
+                    $courseId
                 );
             } else {
                 if (!empty($this->logger)) {
@@ -405,7 +406,8 @@ class AnnouncementEmail
                                 [],
                                 true,
                                 [],
-                                $checkUrls
+                                $checkUrls,
+                                $courseId
                             );
                         }
                     }

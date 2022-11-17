@@ -10285,3 +10285,19 @@ function api_filename_has_blacklisted_stream_wrapper(string $filename)
 
     return false;
 }
+
+/**
+ * Calculate the percent between two numbers.
+ *
+ * @return string
+ */
+function api_calculate_increment_percent(int $newValue, int $oldValue)
+{
+    if ($oldValue <= 0) {
+        $result = " - ";
+    } else {
+        $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2).' %';
+    }
+
+    return $result;
+}

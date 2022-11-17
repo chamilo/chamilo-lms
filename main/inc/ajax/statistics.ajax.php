@@ -860,7 +860,7 @@ switch ($action) {
         //Make de rows with the recollected data
         $rows = [];
         $rows[] = [
-            get_lang('NumberOfUsersRegistered'),
+            get_lang('NumberOfUsersRegisteredTotal'),
             $countUsersPre5Quarter,
             $countUsersPre4Quarter,
             $countUsersPre3Quarter,
@@ -990,7 +990,7 @@ switch ($action) {
         //Make the rows with the recollected data
         $rows = [];
         $rows[] = [
-            get_lang('NumberOfExistingCourses'),
+            get_lang('NumberOfExistingCoursesTotal'),
             $countCoursesPre5Quarter,
             $countCoursesPre4Quarter,
             $countCoursesPre3Quarter,
@@ -1358,12 +1358,12 @@ switch ($action) {
              [
                 get_lang('ListOfCoursesCodes'),
                 get_lang('NumberOfSubscribedUsers').'*',
-                get_lang('NumerOfUsersWhoFinishedCourse'),
+                get_lang('NumberOfUsersWhoFinishedCourse'),
             ],
             [
                 get_lang('ListOfCoursesCodesAndSessions'),
                 get_lang('NumberOfSubscribedUsers').'*',
-                get_lang('NumerOfUsersWhoFinishedCourse'),
+                get_lang('NumberOfUsersWhoFinishedCourse'),
             ],
         ];
 

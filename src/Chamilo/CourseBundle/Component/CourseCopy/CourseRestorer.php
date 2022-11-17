@@ -3078,6 +3078,77 @@ class CourseRestorer
                                 }
                             }
                             $prerequisite_ids[$new_item_id] = $item['prerequisite'];
+
+                            // Upload audio.
+                            if (!empty($item['audio'])) {
+                                $courseInfo = api_get_course_info_by_id($this->destination_course_id);
+                                // Create the audio folder if it does not exist yet.
+                                $filepath = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/document/';
+                                if (!is_dir($filepath.'audio')) {
+                                    mkdir(
+                                        $filepath.'audio',
+                                        api_get_permissions_for_new_directories()
+                                    );
+                                    $audioId = add_document(
+                                        $courseInfo,
+                                        '/audio',
+                                        'folder',
+                                        0,
+                                        'audio',
+                                        '',
+                                        0,
+                                        true,
+                                        null,
+                                        $session_id,
+                                        api_get_user_id()
+                                    );
+                                    api_item_property_update(
+                                        $courseInfo,
+                                        TOOL_DOCUMENT,
+                                        $audioId,
+                                        'FolderCreated',
+                                        api_get_user_id(),
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        $session_id
+                                    );
+                                    api_item_property_update(
+                                        $courseInfo,
+                                        TOOL_DOCUMENT,
+                                        $audioId,
+                                        'invisible',
+                                        api_get_user_id(),
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        $session_id
+                                    );
+                                }
+                                $originAudioFile = $this->course->backup_path.'/document'.$item['audio'];
+                                $uploadedFile = [
+                                    'name' => basename($originAudioFile),
+                                    'tmp_name' => $originAudioFile,
+                                    'size' => filesize($originAudioFile),
+                                    'type' => null,
+                                    'from_file' => true,
+                                    'copy_file' => true,
+                                ];
+                                $filePath = handle_uploaded_document(
+                                    $courseInfo,
+                                    $uploadedFile,
+                                    api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/document',
+                                    '/audio',
+                                    api_get_user_id(),
+                                    '',
+                                    '',
+                                    '',
+                                    '',
+                                    false
+                                );
+                            }
                         }
                     }
 

@@ -2609,10 +2609,13 @@ class Tracking
                 WHERE $conditionTime $urlCondition";
 
         $rs = Database::query($sql);
+        if (Database::num_rows($rs) < 1) {
+            return -1;
+        }
         $row = Database::fetch_array($rs, 'ASSOC');
         $diff = $row['diff'];
 
-        if ($diff >= 0) {
+        if (isset($diff) && $diff >= 0) {
             return $diff;
         }
 

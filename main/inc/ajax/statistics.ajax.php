@@ -1178,7 +1178,7 @@ switch ($action) {
         //Make the row with the recollected data
         $rows = [];
         $rows[] = [
-            get_lang('NumberOfCertificatesGenerated'),
+            get_lang('NumberOfCertificatesGeneratedTotal'),
             $certificateGenerated5PreQuarter,
             $certificateGenerated4PreQuarter,
             $certificateGenerated3PreQuarter,

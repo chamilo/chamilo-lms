@@ -9473,9 +9473,18 @@ function api_mail_html(
             if (!empty($accessUrls)) {
                 $accessConfig['multiple_access_urls'] = true;
                 $accessConfig['access_url'] = (int) $accessUrls[0];
+                $params = ['variable = ? AND access_url = ?' => ['stylesheets', $accessConfig['access_url']]];
+                $settings = api_get_settings_params_simple($params);
+                if (!empty($settings['selected_value'])) {
+                    $accessConfig['theme_dir'] = \Template::getThemeDir($settings['selected_value']);
+                }
+
             }
-            // To replace the current url by access url user
+            // To replace the current urls by access url user
             $mail->Body = str_replace(api_get_path(WEB_PATH), api_get_path(WEB_PATH, $accessConfig), $mail->Body);
+            if (!empty($accessConfig['theme_dir'])) {
+                $mail->Body = str_replace('themes/chamilo/', $accessConfig['theme_dir'], $mail->Body);
+            }
         }
     }
     // Attachment.

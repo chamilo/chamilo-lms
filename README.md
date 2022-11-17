@@ -66,7 +66,7 @@ rm yarn.lock
 yarn install
 yarn dev
 # you can safely ignore any "warning" mentioned by yarn dev
-chmod -R 777 .
+sudo chmod -R 777 .
 ~~~~
 
 In your web server configuration, ensure you allow for the interpretation of .htaccess (`AllowOverride all` and `Require all granted`), and point the `DocumentRoot` to the `public/` subdirectory.
@@ -133,19 +133,19 @@ Load the (your-domain)/main/install/index.php URL to start the installer (which 
 If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully.
 Go back to the beginning of this section and try again.
 
-### Supporting PHP 7.4 and 8.0 in parallel
+### Supporting PHP 7.4 and 8.1 in parallel
 
-Because PHP 8.0 is relatively new, you might want to support PHP 8.0 (for Chamilo 2) and PHP 7.4 (for all other things) on the same server simultaneously. On Ubuntu, you could do it this way:
+You might want to support PHP 8.1 (for Chamilo 2) and PHP 7.4 (for all other things) on the same server simultaneously. On Ubuntu, you could do it this way:
 ```
-add-apt-repository ppa:ondrej/php
-apt update
-apt install php8.0 libapache2-mod-php7.4
-apt remove libapache2-mod-php8.0 php7.4-fpm
-a2enmod proxy_fcgi
-vim /etc/apache2/sites-available/[your-chamilo2-vhost].conf
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+sudo apt install php8.1 libapache2-mod-php7.4 php8.1-{modules} php7.4-{modules}
+sudo apt remove libapache2-mod-php8.1 php7.4-fpm
+sudo a2enmod proxy_fcgi
+sudo vim /etc/apache2/sites-available/[your-chamilo2-vhost].conf
 ```
 
-In the vhost configuration, make sure you set PHP 8.0 FPM to answer this single vhost by adding, somewhere between your `<VirtualHost>` tags, the following:
+In the vhost configuration, make sure you set PHP 8.1 FPM to answer this single vhost by adding, somewhere between your `<VirtualHost>` tags, the following:
 ```
   <IfModule !mod_php8.c>
     <IfModule proxy_fcgi_module>
@@ -153,7 +153,7 @@ In the vhost configuration, make sure you set PHP 8.0 FPM to answer this single 
         SetEnvIfNoCase ^Authorization$ "(.+)" HTTP_AUTHORIZATION=$1
         </IfModule>
         <FilesMatch ".+\.ph(ar|p|tml)$">
-            SetHandler "proxy:unix:/run/php/php8.0-fpm.sock|fcgi://localhost"
+            SetHandler "proxy:unix:/run/php/php8.1-fpm.sock|fcgi://localhost"
         </FilesMatch>
         <FilesMatch ".+\.phps$">
             Require all denied
@@ -167,13 +167,23 @@ In the vhost configuration, make sure you set PHP 8.0 FPM to answer this single 
 
 Then exit and restart Apache:
 ```
-systemctl restart apache2
+sudo systemctl restart apache2
 ```
 
-Finally, remember that PHP settings will have to be changed in /etc/php/8.0/fpm/php.ini and you will have to reload php8.0-fpm to take those config changes into account.
+Finally, remember that PHP settings will have to be changed in /etc/php/8.1/fpm/php.ini and you will have to reload php8.1-fpm to take those config changes into account.
 ```
-systemctl reload php8.0-fpm
+sudo systemctl reload php8.1-fpm
 ```
+
+When using 2 versions, you will also have issues when calling `composer update`, as this one needs to be called by the relevant PHP version.
+This can be done like so:
+```
+/usr/bin/php8.1 /usr/local/bin/composer update
+or, for Chamilo 1.11
+/usr/bin/php7.4 /usr/local/bin/composer update
+```
+If your default php-cli uses PHP7.4 (see `ln -s /etc/alternatives/php`), you might have issues running with a so-called `platform_check.php` script when running `composer update` anyway. This is because this script doesn't user the proper launch context, and you might need to change your default settings on Ubuntu (i.e. change the link /etc/alternatives/php to point to the other php version) before launching `composer update`. You can always revert that operation later on if you need to go back to work on Chamilo 1.11 and Composer complains again.
+
 
 ## Changes from 1.x
 
@@ -188,6 +198,7 @@ systemctl reload php8.0-fpm
   (composer update copies the content inside plugin_name/public inside web/plugins/plugin_name
 * Plugins templates use asset() function instead of using "_p.web_plugin"
 * Remove main/inc/local.inc.php
+* Translations managed through Gettext
 
 Libraries
 

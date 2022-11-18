@@ -1492,7 +1492,7 @@ class Statistics
         if ($form->validate()) {
             $values = $form->exportValues();
 
-            $result = self::getLtiLeaningPathByDate($values['daterange_start'], $values['daterange_end']);
+            $result = self::getLtiLearningPathByDate($values['daterange_start'], $values['daterange_end']);
 
             $table = new HTML_Table(['class' => 'table table-bordered data_table']);
             $table->setHeaderContents(0, 0, get_lang('URL'));
@@ -1793,7 +1793,7 @@ class Statistics
      *
      * @return array
      */
-    private static function getLtiLeaningPathByDate($startDate, $endDate)
+    private static function getLtiLearningPathByDate($startDate, $endDate)
     {
         /** @var DateTime $startDate */
         $startDate = api_get_utc_datetime("$startDate 00:00:00");

@@ -19,7 +19,7 @@ We assume you already have:
 
 - composer 2.x - https://getcomposer.org/download/
 - yarn +2.x - https://yarnpkg.com/getting-started/install
-- Node >= v16+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
+- Node >= v14+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
 - Configuring a virtualhost in a domain, not in a sub folder inside a domain.
 - A working LAMP/WAMP server with PHP 8.1+
 

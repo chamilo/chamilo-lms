@@ -2784,7 +2784,6 @@ class Rest extends WebService
 
     /**
      * Get the list of test with last user attempt and his datetime
-     *
      */
     public function getTestUpdatesList(): array
     {
@@ -2812,10 +2811,11 @@ class Rest extends WebService
                 $resultArray[] = $row;
             }
         }
+
         return $resultArray;
     }
 
-    public function getTestAverageResultsList($ids = [], $fields = []):array
+    public function getTestAverageResultsList($ids = [], $fields = []): array
     {
         self::protectAdminEndpoint();
         $tableTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

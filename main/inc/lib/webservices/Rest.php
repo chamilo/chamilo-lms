@@ -2808,15 +2808,11 @@ class Rest extends WebService
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $resultArray[] = $row;
-
             }
         }
-
         return $resultArray;
-
     }
 
     public function getTestAverageResultsList($ids = [], $fields = []):array
@@ -2877,7 +2873,6 @@ class Rest extends WebService
                     $countSuccess = 0;
 
                     while ($row = Database::fetch_array($result, 'ASSOC')) {
-
                         $passPercentage = ($row['exe_weighting'] < 0.5) ? 0.5 : $row['exe_weighting'];
 
                         if (($row['exe_result'] / $row['exe_weighting']) > $passPercentage) {
@@ -2901,6 +2896,7 @@ class Rest extends WebService
                 }
             }
         }
+
         return $resultArray;
     }
 

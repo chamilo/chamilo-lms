@@ -17,26 +17,33 @@ $plugin = BuyCoursesPlugin::create();
 if (isset($_GET['action'], $_GET['d'], $_GET['n'])) {
     if ($_GET['action'] == 'delete_frequency') {
 
-        $frequency = $plugin->selectFrequency($_GET['d']);
+        if (is_numeric($_GET['d'])) {
+            $frequency = $plugin->selectFrequency($_GET['d']);
 
-        if (!empty($frequency)) {
-            $subscriptionsItems = $plugin->getSubscriptiosnItemsByDuration($_GET['d']);
+            if (!empty($frequency)) {
+                $subscriptionsItems = $plugin->getSubscriptiosnItemsByDuration($_GET['d']);
 
-            if (empty($subscriptionsItems)) {
-                $plugin->deleteFrequency($_GET['d']);
+                if (empty($subscriptionsItems)) {
+                    $plugin->deleteFrequency($_GET['d']);
 
+                    Display::addFlash(
+                        Display::return_message($plugin->get_lang('FrequencyRemoved'), 'success')
+                    );
+                } else {
+                    Display::addFlash(
+                        Display::return_message($plugin->get_lang('SubscriptionPeriodOnUse'), 'error')
+                    );
+                }
+            }
+            else {
                 Display::addFlash(
-                    Display::return_message($plugin->get_lang('FrequencyRemoved'), 'success')
-                );
-            } else {
-                Display::addFlash(
-                    Display::return_message($plugin->get_lang('SubscriptionPeriodOnUse'), 'error')
+                    Display::return_message($plugin->get_lang('FrequencyNotExits'), 'error')
                 );
             }
         }
-        else{
+        else {
             Display::addFlash(
-                Display::return_message($plugin->get_lang('FrequencyNotExits'), 'error')
+                Display::return_message($plugin->get_lang('FrequencyIncorrect'), 'error')
             );
         }
 

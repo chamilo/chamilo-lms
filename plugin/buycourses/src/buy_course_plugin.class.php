@@ -923,15 +923,16 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getSubscriptionItem($itemId, $productType)
+    public function getSubscriptionItem(int $itemId, int $productType)
     {
         return Database::select(
             '*',
             Database::get_main_table(self::TABLE_SUBSCRIPTION),
             [
                 'where' => ['product_id = ? AND product_type = ?' => [
-                     (int) $itemId],
-                     (int) $productType,
+                        $itemId,
+                        $productType,
+                    ],
                 ],
             ],
             'first'
@@ -946,7 +947,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getSubscriptionItemByProduct($productId, $itemType, $coupon =null)
+    public function getSubscriptionItemByProduct(int $productId, int $itemType, $coupon =null)
     {
         $buySubscriptionItemTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
         $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -963,8 +964,8 @@ class BuyCoursesPlugin extends Plugin
             [
                 'where' => [
                     's.product_id = ? AND s.product_type = ?' => [
-                        (int) $productId,
-                        (int) $itemType,
+                        $productId,
+                        $itemType,
                     ],
                 ],
             ],
@@ -987,7 +988,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getSubscriptionsItemsByProduct($productId, $itemType)
+    public function getSubscriptionsItemsByProduct(int $productId, int $itemType)
     {
         $buySubscriptionItemTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
         $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -1004,8 +1005,8 @@ class BuyCoursesPlugin extends Plugin
             [
                 'where' => [
                     's.product_id = ? AND s.product_type = ?' => [
-                        (int) $productId,
-                        (int) $itemType,
+                        $productId,
+                        $itemType,
                     ],
                 ],
             ]
@@ -1029,14 +1030,14 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getSubscriptiosnItemsByDuration($duration)
+    public function getSubscriptiosnItemsByDuration(int $duration)
     {
         return Database::select(
             '*',
             Database::get_main_table(self::TABLE_SUBSCRIPTION),
             [
                 'where' => ['duration = ?' => [
-                     (int) $duration],
+                    $duration],
                 ],
             ]
         );
@@ -1196,10 +1197,11 @@ class BuyCoursesPlugin extends Plugin
      * @param int    $end
      * @param string $name       Optional. The name filter.
      * @param string $typeResult Optional. 'all', 'first' or 'count'.
+     * @param int    $sessionCategory Optional. Session category id
      *
      * @return array|int
      */
-    public function getCatalogSubscriptionSessionList($start, $end, $name = null, $typeResult = 'all', $sessionCategory = 0)
+    public function getCatalogSubscriptionSessionList(int $start, int $end, string $name = null, string $typeResult = 'all', int $sessionCategory = 0)
     {
         $sessions = $this->filterSubscriptionSessionList($start, $end, $name, $typeResult, $sessionCategory);
 
@@ -1269,7 +1271,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array|int
      */
-    public function getCatalogSubscriptionCourseList($first, $pageSize, $name = null, $typeResult = 'all')
+    public function getCatalogSubscriptionCourseList(int $first, int $pageSize, string $name = null, string $typeResult = 'all')
     {
         $courses = $this->filterSubscriptionCourseList($first, $pageSize, $name, $typeResult);
 
@@ -4901,11 +4903,13 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get the a frequency
+     * Get the a frequency.
+     *
+     * @param int $duration The duration of the frequency value
      *
      * @return array
      */
-    public function selectFrequency($duration)
+    public function selectFrequency(int $duration)
     {
         return Database::select(
             '*',

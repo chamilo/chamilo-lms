@@ -305,6 +305,7 @@ $strings['HasSubscriptions'] = "Tiene suscripciones";
 $strings['FrequencyRemoved'] = "Frecuencia eliminada";
 $strings['SubscriptionPeriodOnUse'] = "Período de suscription en uso";
 $strings['FrequencyNotExits'] = "La frecuencia no existe";
+$strings['FrequencyIncorrect'] = "Frequency incorrect";
 $strings['SubscriptionFrequencyValueDays'] = "Valor de la suscripción en días";
 $strings['FrequencyNotUpdated'] = "Frecuencia no actualizada";
 $strings['FrequencyNotSaved'] = "Frequencia no guardada";

@@ -300,6 +300,7 @@ $strings['HasSubscriptions'] = "Has subscriptions";
 $strings['FrequencyRemoved'] = "Frequency removed";
 $strings['SubscriptionPeriodOnUse'] = "Subscription period in use";
 $strings['FrequencyNotExits'] = "Frequency does not exist";
+$strings['FrequencyIncorrect'] = "Frequency incorrect";
 $strings['SubscriptionFrequencyValueDays'] = "Value on days";
 $strings['FrequencyNotUpdated'] = "Frequency not updated";
 $strings['FrequencyNotSaved'] = "Frequency not saved";

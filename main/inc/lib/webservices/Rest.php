@@ -2784,7 +2784,7 @@ class Rest extends WebService
 
     /**
      * Get the list of test with last user attempt and his datetime
-     * @return array
+     *
      * @throws Exception
      */
     public function getTestUpdatesList(): array
@@ -2799,7 +2799,7 @@ class Rest extends WebService
         $sql = "
             SELECT q.iid AS id,
                 q.title,
-                q.type,
+                q.feedback_type AS type,
                 a.start_date AS last_attempt_time,
                 u.username AS last_attempt_username
             FROM $tableCQuiz q
@@ -2821,10 +2821,10 @@ class Rest extends WebService
      * Get tests results data
      * Not support sessions
      * By default, is successful if score greater than 50%
-     * @param array $ids
-     * @param array $fields
-     * @return array  e.g: [ { "id": 4, "title": "aiken", "updated_by": "-", "type": "1", "completion": 0 } ]
+     *
      * @throws Exception
+     *
+     * @return array  e.g: [ { "id": 4, "title": "aiken", "updated_by": "-", "type": "1", "completion": 0 } ]
      */
     public function getTestAverageResultsList(array $ids = [], array $fields = []): array
     {
@@ -2867,7 +2867,7 @@ class Rest extends WebService
                 $queryCQuiz = "
                     SELECT c_id,
                         title,
-                        type,
+                        feedback_type,
                         pass_percentage
                     FROM $tableCQuiz
                     WHERE iid = $item";
@@ -2880,7 +2880,7 @@ class Rest extends WebService
 
                 $cId = $row['c_id'];
                 $title = $row['title'];
-                $type = $row['type'];
+                $type = $row['feedback_type'];
                 $passPercentage = empty($row['pass_percentage']) ? 0.5 : $row['pass_percentage'];
 
                 $sql = "
@@ -2910,7 +2910,6 @@ class Rest extends WebService
                         if ($score >= $passPercentage) {
                             $countSuccess++;
                         }
-
                         $scoreSum += $score;
                         $countAttempts++;
 

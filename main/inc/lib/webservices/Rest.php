@@ -2925,7 +2925,7 @@ class Rest extends WebService
                         'updated_by' => '-',
                         'type' => $type,
                         'completion' => $completion,
-                        'number_of_individual_attempts' => $countAttempts,
+                        'number_of_last_attempts' => $countAttempts,
                         'average_score_in_percent' => $averageScore,
                         'extra' => $extraArray,
                     ];

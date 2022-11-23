@@ -2783,7 +2783,7 @@ class Rest extends WebService
     }
 
     /**
-     * Get the list of test with last user attempt and his datetime
+     * Get the list of test with last user attempt and his datetime.
      *
      * @throws Exception
      */
@@ -2820,11 +2820,11 @@ class Rest extends WebService
     /**
      * Get tests results data
      * Not support sessions
-     * By default, is successful if score greater than 50%
+     * By default, is successful if score greater than 50%.
      *
      * @throws Exception
      *
-     * @return array  e.g: [ { "id": 4, "title": "aiken", "updated_by": "-", "type": "1", "completion": 0 } ]
+     * @return array e.g: [ { "id": 4, "title": "aiken", "updated_by": "-", "type": "1", "completion": 0 } ]
      */
     public function getTestAverageResultsList(array $ids = [], array $fields = []): array
     {
@@ -2912,7 +2912,6 @@ class Rest extends WebService
                         }
                         $scoreSum += $score;
                         $countAttempts++;
-
                     }
                     if ($countAttempts === 0) {
                         continue;

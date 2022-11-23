@@ -2800,11 +2800,12 @@ class Rest extends WebService
             SELECT q.iid AS id,
                 q.title,
                 q.feedback_type AS type,
-                a.start_date AS last_attempt_time,
+                MAX(a.start_date) AS last_attempt_time,
                 u.username AS last_attempt_username
             FROM $tableCQuiz q
             JOIN $tableTrackExercises a ON q.iid = a.exe_exo_id
             JOIN $tableUser u ON a.exe_user_id = u.id
+            GROUP BY q.iid
         ";
 
         $result = Database::query($sql);

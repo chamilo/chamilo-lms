@@ -1266,6 +1266,10 @@ class PortfolioController
                             Display::return_icon('edit.png', get_lang('Edit')),
                             $this->baseUrl.http_build_query(['action' => 'edit_comment', 'id' => $comment->getId()])
                         );
+                        $commentActions[] = Display::url(
+                            Display::return_icon('delete.png', get_lang('Delete')),
+                            $this->baseUrl.http_build_query(['action' => 'delete_comment', 'id' => $comment->getId()])
+                        );
                     }
 
                     $nodeHtml = '<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'.PHP_EOL
@@ -2959,6 +2963,32 @@ class PortfolioController
             get_lang('EditPortfolioComment'),
             $actions
         );
+    }
+
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function deleteComment(PortfolioComment $comment)
+    {
+        if (!$this->commentBelongsToOwner($comment)) {
+            api_not_allowed(true);
+        }
+
+        $this->em->remove($comment);
+
+        $this->em
+            ->getRepository(PortfolioAttachment::class)
+            ->removeFromComment($comment);
+
+        $this->em->flush();
+
+        Display::addFlash(
+            Display::return_message(get_lang('CommentDeleted'), 'success')
+        );
+
+        header("Location: $this->baseUrl");
+        exit;
     }
 
     private function isAllowed(): bool

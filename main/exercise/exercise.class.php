@@ -11702,6 +11702,27 @@ class Exercise
     }
 
     /**
+     * @param int $feedbackType
+     * @return string
+     */
+    public static function getFeedbackTypeLiteral(int $feedbackType): string
+    {
+        $feedbackType = (int) $feedbackType;
+        $result = '';
+        $arrayFeedbackTypes = [
+            EXERCISE_FEEDBACK_TYPE_END => 'ExerciseAtTheEndOfTheTest',
+            EXERCISE_FEEDBACK_TYPE_DIRECT => 'DirectFeedback',
+            EXERCISE_FEEDBACK_TYPE_EXAM => 'NoFeedback',
+            EXERCISE_FEEDBACK_TYPE_POPUP => 'ExerciseDirectPopUp',
+        ];
+
+        if (array_key_exists($feedbackType, $arrayFeedbackTypes)) {
+            $result = $arrayFeedbackTypes[$feedbackType];
+        }
+        return $result;
+    }
+
+    /**
      * Get number of questions in exercise by user attempt.
      *
      * @return int

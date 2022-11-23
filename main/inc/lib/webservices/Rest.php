@@ -2880,7 +2880,7 @@ class Rest extends WebService
 
                 $cId = $row['c_id'];
                 $title = $row['title'];
-                $type = $row['feedback_type'];
+                $type = Exercise::getFeedbackTypeLiteral($row['feedback_type']);
                 $passPercentage = empty($row['pass_percentage']) ? 0.5 : $row['pass_percentage'];
 
                 $sql = "

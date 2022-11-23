@@ -11702,6 +11702,30 @@ class Exercise
     }
 
     /**
+     * Returns a literal for the given numerical feedback type (usually 
+     * coming from the DB or a constant). The literal is also the string
+     * used to get the translation, not the translation itself as it is
+     * more vulnerable to changes.
+     */
+    public static function getFeedbackTypeLiteral(int $feedbackType): string
+    {
+        $feedbackType = (int) $feedbackType;
+        $result = '';
+        static $arrayFeedbackTypes = [
+            EXERCISE_FEEDBACK_TYPE_END => 'ExerciseAtTheEndOfTheTest',
+            EXERCISE_FEEDBACK_TYPE_DIRECT => 'DirectFeedback',
+            EXERCISE_FEEDBACK_TYPE_EXAM => 'NoFeedback',
+            EXERCISE_FEEDBACK_TYPE_POPUP => 'ExerciseDirectPopUp',
+        ];
+
+        if (array_key_exists($feedbackType, $arrayFeedbackTypes)) {
+            $result = $arrayFeedbackTypes[$feedbackType];
+        }
+
+        return $result;
+    }
+
+    /**
      * Get number of questions in exercise by user attempt.
      *
      * @return int

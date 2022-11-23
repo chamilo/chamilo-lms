@@ -810,6 +810,18 @@ try {
             Event::addEvent(LOG_WS.$action, 'success', 'true');
             $restResponse->setData(['status' => true]);
             break;
+        case Rest::GET_TEST_UPDATES_LIST:
+            Event::addEvent(LOG_WS.$action, 'success', 'true');
+            $restResponse->setData(
+                $restApi->getTestUpdatesList()
+            );
+            break;
+        case Rest::GET_TEST_AVERAGE_RESULTS_LIST:
+            Event::addEvent(LOG_WS.$action, 'success', 'true');
+            $restResponse->setData(
+                $restApi->getTestAverageResultsList($_POST['ids'], $_POST['fields'])
+            );
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

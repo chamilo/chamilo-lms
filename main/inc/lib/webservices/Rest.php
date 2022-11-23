@@ -2784,6 +2784,8 @@ class Rest extends WebService
 
     /**
      * Get the list of test with last user attempt and his datetime
+     * @return array
+     * @throws Exception
      */
     public function getTestUpdatesList(): array
     {
@@ -2807,7 +2809,7 @@ class Rest extends WebService
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $resultArray[] = $row;
             }
         }
@@ -2815,7 +2817,16 @@ class Rest extends WebService
         return $resultArray;
     }
 
-    public function getTestAverageResultsList($ids = [], $fields = []): array
+    /**
+     * Get tests results data
+     * Not support sessions
+     * By default, is successful if score greater than 50%
+     * @param array $ids
+     * @param array $fields
+     * @return array  e.g: [ { "id": 4, "title": "aiken", "updated_by": "-", "type": "1", "completion": 0 } ]
+     * @throws Exception
+     */
+    public function getTestAverageResultsList(array $ids = [], array $fields = []): array
     {
         self::protectAdminEndpoint();
         $tableTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
@@ -2852,17 +2863,33 @@ class Rest extends WebService
 
             foreach ($ids as $item) {
                 $item = (int) $item;
+
+                $queryCQuiz = "
+                    SELECT c_id,
+                        title,
+                        type,
+                        pass_percentage
+                    FROM $tableCQuiz
+                    WHERE iid = $item";
+
+                $resultCQuiz = Database::query($queryCQuiz);
+                if (Database::num_rows($resultCQuiz) <= 0) {
+                    continue;
+                }
+                $row = Database::fetch_assoc($resultCQuiz);
+
+                $cId = $row['c_id'];
+                $title = $row['title'];
+                $type = $row['type'];
+                $passPercentage = empty($row['pass_percentage']) ? 0.5 : $row['pass_percentage'];
+
                 $sql = "
                     SELECT a.exe_exo_id AS id,
-                           a.c_id,
-                           q.title,
                            a.exe_user_id,
                            MAX(a.start_date),
                            a.exe_result,
-                           a.exe_weighting,
-                           q.pass_percentage
+                           a.exe_weighting
                     FROM $tableTrackExercises a
-                        JOIN $tableCQuiz q ON a.exe_exo_id = q.iid
                     WHERE a.exe_exo_id = $item
                     GROUP BY a.exe_exo_id, a.exe_user_id
                 ";
@@ -2871,28 +2898,39 @@ class Rest extends WebService
                 if (Database::num_rows($result) > 0) {
                     $countAttempts = 0;
                     $countSuccess = 0;
+                    $scoreSum = 0;
 
-                    while ($row = Database::fetch_array($result, 'ASSOC')) {
-                        $passPercentage = ($row['exe_weighting'] < 0.5) ? 0.5 : $row['exe_weighting'];
+                    while ($row = Database::fetch_assoc($result)) {
 
-                        if (($row['exe_result'] / $row['exe_weighting']) > $passPercentage) {
+                        // If test is badly configured, with all questions at score 0
+                        if ($row['exe_weighting'] == 0) {
+                            continue;
+                        }
+                        $score = $row['exe_result'] / $row['exe_weighting'];
+                        if ($score >= $passPercentage) {
                             $countSuccess++;
                         }
 
+                        $scoreSum += $score;
                         $countAttempts++;
-                        $completion = $countSuccess / $countUsersInCourses[$row['c_id']];
 
-                        $resultArray[] = [
-                            'id' => $row['id'],
-                            'title' => $row['title'],
-                            'updated_by' => '-',
-                            'type' => $row['type'],
-                            'completion' => $completion,
-                            'number_of_individual_attempts' => $countAttempts,
-                            'average_score_in_percent' => '-',
-                            'extra' => $extraArray,
-                        ];
                     }
+                    if ($countAttempts === 0) {
+                        continue;
+                    }
+                    $averageScore = round(($scoreSum / $countAttempts) * 100, 2);
+                    $completion = $countSuccess / $countUsersInCourses[$cId];
+
+                    $resultArray[] = [
+                        'id' => $item,
+                        'title' => $title,
+                        'updated_by' => '-',
+                        'type' => $type,
+                        'completion' => $completion,
+                        'number_of_individual_attempts' => $countAttempts,
+                        'average_score_in_percent' => $averageScore,
+                        'extra' => $extraArray,
+                    ];
                 }
             }
         }

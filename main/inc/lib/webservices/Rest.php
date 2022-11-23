@@ -2827,7 +2827,7 @@ class Rest extends WebService
      *
      * @return array e.g: [ { "id": 4, "title": "aiken", "updated_by": "-", "type": "1", "completion": 0 } ]
      */
-    public function getTestAverageResultsList(array $ids = [], ? array $fields = []): array
+    public function getTestAverageResultsList(array $ids = [], ?array $fields = []): array
     {
         self::protectAdminEndpoint();
         $tableTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

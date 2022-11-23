@@ -2846,7 +2846,7 @@ class Rest extends WebService
             }
 
             foreach ($fields as $field) {
-                $extraArray[$field] = '-';
+                $extraArray[$field] = '';
             }
 
             $queryUsersInCourses = "
@@ -2922,7 +2922,7 @@ class Rest extends WebService
                     $resultArray[] = [
                         'id' => $item,
                         'title' => $title,
-                        'updated_by' => '-',
+                        'updated_by' => '',
                         'type' => $type,
                         'completion' => $completion,
                         'number_of_last_attempts' => $countAttempts,

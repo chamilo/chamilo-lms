@@ -1581,7 +1581,8 @@ class CourseBuilder
                     $obj->subscribe_users,
                     $obj->hide_toc_frame,
                     $items,
-                    $accumulateWorkTime
+                    $accumulateWorkTime,
+                    $obj->prerequisite
                 );
                 $extraFieldValue = new \ExtraFieldValue('lp');
                 $lp->extraFields = $extraFieldValue->getAllValuesByItem($obj->id);

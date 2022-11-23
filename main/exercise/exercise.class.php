@@ -11701,10 +11701,6 @@ class Exercise
         return $questionList;
     }
 
-    /**
-     * @param int $feedbackType
-     * @return string
-     */
     public static function getFeedbackTypeLiteral(int $feedbackType): string
     {
         $feedbackType = (int) $feedbackType;
@@ -11719,6 +11715,7 @@ class Exercise
         if (array_key_exists($feedbackType, $arrayFeedbackTypes)) {
             $result = $arrayFeedbackTypes[$feedbackType];
         }
+
         return $result;
     }
 

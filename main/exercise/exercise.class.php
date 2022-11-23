@@ -11702,7 +11702,7 @@ class Exercise
     }
 
     /**
-     * Returns a literal for the given numerical feedback type (usually 
+     * Returns a literal for the given numerical feedback type (usually
      * coming from the DB or a constant). The literal is also the string
      * used to get the translation, not the translation itself as it is
      * more vulnerable to changes.

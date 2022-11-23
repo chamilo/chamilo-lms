@@ -9478,7 +9478,6 @@ function api_mail_html(
                 if (!empty($settings['selected_value'])) {
                     $accessConfig['theme_dir'] = \Template::getThemeDir($settings['selected_value']);
                 }
-
             }
             // To replace the current urls by access url user
             $mail->Body = str_replace(api_get_path(WEB_PATH), api_get_path(WEB_PATH, $accessConfig), $mail->Body);

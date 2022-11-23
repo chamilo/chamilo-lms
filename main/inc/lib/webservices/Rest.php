@@ -2799,7 +2799,6 @@ class Rest extends WebService
         $sql = "
             SELECT q.iid AS id,
                 q.title,
-                q.feedback_type AS type,
                 MAX(a.start_date) AS last_attempt_time,
                 u.username AS last_attempt_username
             FROM $tableCQuiz q

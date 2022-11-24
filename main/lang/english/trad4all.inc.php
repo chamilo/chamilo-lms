@@ -8939,4 +8939,5 @@ $NumberOfUsersWhoFinishedCourse = "Number of users who finished the course (as d
 $ListOfCoursesCodesAndSessions = "List of course codes and sessions";
 $AllUsersIncludingInactiveIncluded = "*: All users, including inactive, are included";
 $ReportQuarterlyTotalDiskUsage = "Total disk usage";
+$EditPortfolioComment = "Edit portfolio comment";
 ?>

@@ -8940,4 +8940,5 @@ $ListOfCoursesCodesAndSessions = "List of course codes and sessions";
 $AllUsersIncludingInactiveIncluded = "*: All users, including inactive, are included";
 $ReportQuarterlyTotalDiskUsage = "Total disk usage";
 $EditPortfolioComment = "Edit portfolio comment";
+$ExerciseXNotDeleted = "Test '%s' not deleted";
 ?>

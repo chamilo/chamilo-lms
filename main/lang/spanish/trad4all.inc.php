@@ -8968,4 +8968,5 @@ $ListOfCoursesCodesAndSessions = "Lista de códigos de curso y sesiones";
 $AllUsersIncludingInactiveIncluded = "*: Todos los usuarios, inactivos inclusive";
 $ReportQuarterlyTotalDiskUsage = "Uso total del disco";
 $EditPortfolioComment = "Editar comentario de portafolio";
+$ExerciseXNotDeleted = "Ejercicio '%s' no ha sido borrado";
 ?>

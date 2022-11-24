@@ -2805,6 +2805,7 @@ class CourseRestorer
                 $defaultLpVisibility = 'visible';
             }
 
+            $lpIds = [];
             foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
                 $condition_session = '';
                 if (!empty($session_id)) {
@@ -2906,7 +2907,7 @@ class CourseRestorer
                     'debug' => self::DBUTF8($lp->debug),
                     'theme' => '',
                     'session_id' => $session_id,
-                    'prerequisite' => 0,
+                    'prerequisite' => $lp->prerequisite,
                     'hide_toc_frame' => self::DBUTF8(isset($lp->hideTableOfContents) ? $lp->hideTableOfContents : 0),
                     'subscribe_users' => self::DBUTF8(isset($lp->subscribeUsers) ? $lp->subscribeUsers : 0),
                     'seriousgame_mode' => 0,
@@ -2925,8 +2926,8 @@ class CourseRestorer
                 }
 
                 $new_lp_id = Database::insert($table_main, $params);
-
                 if ($new_lp_id) {
+                    $lpIds[$id] = $new_lp_id;
                     // The following only makes sense if a new LP was
                     // created in the destination course
                     $sql = "UPDATE $table_main SET id = iid WHERE iid = $new_lp_id";
@@ -3221,6 +3222,14 @@ class CourseRestorer
                         Database::query($sql);
                     }
                     $this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
+                }
+            }
+            // It updates the current lp id prerequisites
+            if (!empty($lpIds)) {
+                foreach ($lpIds as $oldLpId => $newLpId) {
+                    $sql = "UPDATE $table_main SET prerequisite = '$newLpId'
+                                WHERE c_id = ".$this->destination_course_id." AND prerequisite = '$oldLpId'";
+                    Database::query($sql);
                 }
             }
         }

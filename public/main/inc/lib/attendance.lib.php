@@ -338,7 +338,7 @@ class Attendance
         $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $session_id = api_get_session_id();
         $course_code = $_course['code'];
-        $title_gradebook = $this->attendance_qualify_title;
+        $title_gradebook = (string) $this->attendance_qualify_title;
         $value_calification = 0;
         $weight_calification = api_float_val($this->attendance_weight);
         $course = api_get_course_entity();

@@ -334,57 +334,57 @@ class Attendance
      */
     public function attendance_add($link_to_gradebook = false)
     {
-        $_course = api_get_course_info();
-        $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $session_id = api_get_session_id();
-        $course_code = $_course['code'];
-        $title_gradebook = $this->attendance_qualify_title;
-        $value_calification = 0;
-        $weight_calification = api_float_val($this->attendance_weight);
+        $courseInfo = api_get_course_info();
+        $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $sessionId = api_get_session_id();
+        $courseCode = $courseInfo['code'];
+        $titleGradebook = (string) $this->attendance_qualify_title;
+        $valueCalification = 0;
+        $weightCalification = api_float_val($this->attendance_weight);
         $course = api_get_course_entity();
         $attendance = new CAttendance();
         $attendance
             ->setName($this->name)
             ->setDescription($this->description)
-            ->setAttendanceQualifyTitle($title_gradebook)
-            ->setAttendanceWeight($weight_calification)
+            ->setAttendanceQualifyTitle($titleGradebook)
+            ->setAttendanceWeight($weightCalification)
             ->setParent($course)
             ->addCourseLink($course, api_get_session_entity())
         ;
 
         $repo = Container::getAttendanceRepository();
         $repo->create($attendance);
-        $last_id = $attendance->getIid();
+        $lastId = $attendance->getIid();
 
         // add link to gradebook
         if ($link_to_gradebook && !empty($this->category_id)) {
             $description = '';
-            $link_info = GradebookUtils::isResourceInCourseGradebook(
-                $course_code,
+            $linkInfo = GradebookUtils::isResourceInCourseGradebook(
+                $courseCode,
                 7,
-                $last_id,
-                $session_id
+                $lastId,
+                $sessionId
             );
-            $link_id = $link_info['id'];
-            if (!$link_info) {
+            $linkId = $linkInfo['id'];
+            if (!$linkInfo) {
                 GradebookUtils::add_resource_to_course_gradebook(
                     $this->category_id,
-                    $course_code,
+                    $courseCode,
                     7,
-                    $last_id,
-                    $title_gradebook,
-                    $weight_calification,
-                    $value_calification,
+                    $lastId,
+                    $titleGradebook,
+                    $weightCalification,
+                    $valueCalification,
                     $description,
                     1,
-                    $session_id
+                    $sessionId
                 );
             } else {
-                Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE iid='.$link_id.'');
+                Database::query("UPDATE $tableLink SET weight = $weightCalification WHERE iid = $linkId");
             }
         }
 
-        return $last_id;
+        return $lastId;
     }
 
     /**

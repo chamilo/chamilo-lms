@@ -23,7 +23,7 @@
       </router-link>
     </template>
     <template #footer>
-      <TeacherBar :teachers="teachers"/>
+      <TeacherBar :teachers="teachers" />
     </template>
   </Card>
 </template>

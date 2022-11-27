@@ -17,12 +17,14 @@
 @import "atoms/checkbox";
 @import "atoms/dropdown";
 @import "atoms/form";
+@import "atoms/inline_message";
 @import "atoms/input_switch";
 @import "atoms/input_text";
 @import "atoms/messages";
 @import "atoms/overlay";
 @import "atoms/radio";
 @import "atoms/skeleton";
+@import "atoms/tags";
 
 @import "molecules/course_tool";
 @import "molecules/datepicker";
@@ -34,6 +36,8 @@
 @import "organisms/modals";
 @import "organisms/menu";
 @import "organisms/sidebar";
+@import "organisms/tables";
+@import "organisms/install";
 
 @import "components/badges";
 //@import 'announcement';

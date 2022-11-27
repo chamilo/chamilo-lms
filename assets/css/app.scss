@@ -61,27 +61,6 @@
     border: 0;
   }
 
-  // Tables
-  table {
-      @apply min-w-full divide-y;
-  }
-
-  table thead {
-  }
-
-  table tbody {
-  }
-
-  table thead th,
-  table tbody th,
-  table tbody td {
-    @apply px-2 py-1;
-  }
-
-  .table td img {
-    display: inline-block;
-  }
-
   // List
 
   .list-group {
@@ -217,6 +196,9 @@
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';
 //@import "~primeicons/primeicons.css";
+
+@import 'primeflex/src/_variables.scss';
+@import 'primeflex/src/_formlayout.scss';
 
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";

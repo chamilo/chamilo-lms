@@ -878,41 +878,16 @@ class Display
     }
 
     /**
-     * @param $name
-     * @param $value
-     * @param array $attributes
-     *
-     * @return string
-     */
-    public static function button($name, $value, $attributes = [])
-    {
-        if (!empty($name)) {
-            $attributes['name'] = $name;
-        }
-
-        return self::tag('button', $value, $attributes);
-    }
-
-    /**
      * Displays an HTML select tag.
-     *
-     * @param string $name
-     * @param array  $values
-     * @param int    $default
-     * @param array  $extra_attributes
-     * @param bool   $show_blank_item
-     * @param string $blank_item_text
-     *
-     * @return string
      */
     public static function select(
-        $name,
-        $values,
-        $default = -1,
-        $extra_attributes = [],
-        $show_blank_item = true,
-        $blank_item_text = ''
-    ) {
+        string $name,
+        array $values,
+        mixed $default = -1,
+        array $extra_attributes = [],
+        bool $show_blank_item = true,
+        string $blank_item_text = ''
+    ): string {
         $html = '';
         $extra = '';
         $default_id = 'id="'.$name.'" ';
@@ -966,6 +941,22 @@ class Display
         $html .= '</select>';
 
         return $html;
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     * @param array $attributes
+     *
+     * @return string
+     */
+    public static function button($name, $value, $attributes = [])
+    {
+        if (!empty($name)) {
+            $attributes['name'] = $name;
+        }
+
+        return self::tag('button', $value, $attributes);
     }
 
     /**

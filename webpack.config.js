@@ -25,6 +25,7 @@ Encore
     .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
     .addEntry('lp', './assets/js/lp.js')
     .addEntry('vue', './assets/vue/main.js')
+    .addEntry('vue_installer', './assets/vue/main_installer.js')
     .addEntry('translatehtml', './assets/js/translatehtml.js')
     .addEntry('document', './assets/js/document.js')
 

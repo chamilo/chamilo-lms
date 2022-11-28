@@ -2310,6 +2310,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Allow DRH user to access all students from reporting.
 // $_configuration['drh_allow_access_to_all_students'] = false;
 
+// Disable links in gradebook view for students
+// $_configuration['gradebook_hide_link_to_item_for_student'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

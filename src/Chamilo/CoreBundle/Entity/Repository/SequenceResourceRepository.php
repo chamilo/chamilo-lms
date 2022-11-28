@@ -4,13 +4,17 @@
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
+use Category;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Vertex;
+use SessionManager;
 
 /**
  * Class SequenceResourceRepository.
@@ -22,10 +26,8 @@ class SequenceResourceRepository extends EntityRepository
      *
      * @param int $resourceId
      * @param int $type
-     *
-     * @return SequenceResource
      */
-    public function findRequirementForResource($resourceId, $type)
+    public function findRequirementForResource($resourceId, $type): ?SequenceResource
     {
         return $this->findOneBy(['resourceId' => $resourceId, 'type' => $type]);
     }
@@ -35,10 +37,8 @@ class SequenceResourceRepository extends EntityRepository
      *
      * @param int $resourceId
      * @param int $type
-     *
-     * @return array
      */
-    public function getRequirementAndDependencies($resourceId, $type)
+    public function getRequirementAndDependencies($resourceId, $type): array
     {
         $sequence = $this->findRequirementForResource($resourceId, $type);
         $result = ['requirements' => [], 'dependencies' => []];
@@ -50,7 +50,7 @@ class SequenceResourceRepository extends EntityRepository
             foreach ($from as $subVertex) {
                 $vertexId = $subVertex->getId();
                 $sessionInfo = api_get_session_info($vertexId);
-                $sessionInfo['admin_link'] = '<a href="'.\SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
+                $sessionInfo['admin_link'] = '<a href="'.SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
                 $result['requirements'][] = $sessionInfo;
             }
 
@@ -58,7 +58,7 @@ class SequenceResourceRepository extends EntityRepository
             foreach ($to as $subVertex) {
                 $vertexId = $subVertex->getId();
                 $sessionInfo = api_get_session_info($vertexId);
-                $sessionInfo['admin_link'] = '<a href="'.\SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
+                $sessionInfo['admin_link'] = '<a href="'.SessionManager::getAdminPath($vertexId).'">'.$sessionInfo['name'].'</a>';
                 $result['dependencies'][] = $sessionInfo;
             }
         }
@@ -68,10 +68,13 @@ class SequenceResourceRepository extends EntityRepository
 
     /**
      * Deletes a node and check in all the dependencies if the node exists in
-     * order to deleted.
+     * order to delete.
      *
      * @param int $resourceId
      * @param int $type
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function deleteResource($resourceId, $type)
     {
@@ -106,10 +109,8 @@ class SequenceResourceRepository extends EntityRepository
      *
      * @param int $resourceId The resource ID
      * @param int $type       The type of sequence resource
-     *
-     * @return array
      */
-    public function getRequirements($resourceId, $type)
+    public function getRequirements($resourceId, $type): array
     {
         $sequencesResource = $this->findBy(['resourceId' => $resourceId, 'type' => $type]);
         $em = $this->getEntityManager();
@@ -161,13 +162,8 @@ class SequenceResourceRepository extends EntityRepository
 
     /**
      * Get the requirements and dependencies within a sequence for a resource.
-     *
-     * @param int $resourceId The resource ID
-     * @param int $type       The type of sequence resource
-     *
-     * @return array
      */
-    public function getRequirementsAndDependenciesWithinSequences($resourceId, $type)
+    public function getRequirementsAndDependenciesWithinSequences(int $resourceId, int $type): array
     {
         $sequencesResource = $this->findBy([
             'resourceId' => $resourceId,
@@ -208,10 +204,8 @@ class SequenceResourceRepository extends EntityRepository
      * @param int   $type      The type of sequence resource
      * @param int   $userId
      * @param int   $sessionId
-     *
-     * @return array
      */
-    public function checkRequirementsForUser(array $sequences, $type, $userId, $sessionId = 0)
+    public function checkRequirementsForUser(array $sequences, int $type, $userId, $sessionId = 0): array
     {
         $sequenceList = [];
         $em = $this->getEntityManager();
@@ -263,9 +257,9 @@ class SequenceResourceRepository extends EntityRepository
                             );
 
                             foreach ($gradebooks as $gradebook) {
-                                $category = \Category::createCategoryObjectFromEntity($gradebook);
+                                $category = Category::createCategoryObjectFromEntity($gradebook);
                                 if (!empty($userId)) {
-                                    $resourceItem['status'] = $resourceItem['status'] && \Category::userFinishedCourse(
+                                    $resourceItem['status'] = $resourceItem['status'] && Category::userFinishedCourse(
                                         $userId,
                                         $category
                                     );
@@ -282,7 +276,7 @@ class SequenceResourceRepository extends EntityRepository
                         $status = $this->checkCourseRequirements($userId, $resource, $checkSessionId);
 
                         if (false === $status) {
-                            $sessionsInCourse = \SessionManager::get_session_by_course($id);
+                            $sessionsInCourse = SessionManager::get_session_by_course($id);
                             foreach ($sessionsInCourse as $session) {
                                 if (in_array($session['id'], $sessionUserList)) {
                                     $status = $this->checkCourseRequirements($userId, $resource, $session['id']);
@@ -313,7 +307,7 @@ class SequenceResourceRepository extends EntityRepository
         return $sequenceList;
     }
 
-    public function checkCourseRequirements($userId, Course $course, $sessionId)
+    public function checkCourseRequirements($userId, Course $course, $sessionId): bool
     {
         $em = $this->getEntityManager();
         $sessionId = (int) $sessionId;
@@ -333,8 +327,8 @@ class SequenceResourceRepository extends EntityRepository
 
         $status = true;
         foreach ($gradebooks as $gradebook) {
-            $category = \Category::createCategoryObjectFromEntity($gradebook);
-            $userFinishedCourse = \Category::userFinishedCourse(
+            $category = Category::createCategoryObjectFromEntity($gradebook);
+            $userFinishedCourse = Category::userFinishedCourse(
                 $userId,
                 $category,
                 true
@@ -357,12 +351,8 @@ class SequenceResourceRepository extends EntityRepository
 
     /**
      * Check if at least one sequence are completed.
-     *
-     * @param array $sequences The sequences
-     *
-     * @return bool
      */
-    public function checkSequenceAreCompleted(array $sequences)
+    public function checkSequenceAreCompleted(array $sequences): bool
     {
         foreach ($sequences as $sequence) {
             $status = true;
@@ -381,13 +371,8 @@ class SequenceResourceRepository extends EntityRepository
 
     /**
      * Get sessions from vertices.
-     *
-     * @param Vertices $verticesEdges The vertices
-     * @param int      $type
-     *
-     * @return array
      */
-    protected function findVerticesEdges(Vertices $verticesEdges, $type)
+    protected function findVerticesEdges(Vertices $verticesEdges, int $type): array
     {
         $sessionVertices = [];
         $em = $this->getEntityManager();

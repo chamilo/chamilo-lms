@@ -5083,8 +5083,8 @@ class CourseManager
         if (!empty($to) && !empty($from)) {
             $sql = "UPDATE $tableCourse SET course_language = '$to'
                     WHERE course_language = '$from'";
-
-            return Database::query($sql);
+            Database::query($sql);
+            return true;
         }
 
         return false;

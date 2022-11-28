@@ -1,8 +1,14 @@
-.p-inputtext {
-  @apply bg-white border border-solid border-gray-50 px-4 py-3 rounded-lg transition;
+input.p-inputtext {
+  @apply bg-white border border-solid border-support-3 p-3.5 rounded-lg transition
+    hover:border-primary focus:border-primary;
 
-  &:enabled {
-    @apply hover:border-primary focus:border-primary;
+  &:focus,
+  &.p-filled {
+    ~ {
+      label {
+        @apply text-caption text-primary;
+      }
+    }
   }
 
   &.p-invalid.p-component {
@@ -15,6 +21,13 @@
 
   &.p-inputtext-lg {
     @apply px-6 py-5;
+  }
+
+  &.p-invalid {
+    ~ label,
+    &:focus ~ label {
+      @apply text-error;
+    }
   }
 }
 
@@ -29,50 +42,18 @@
 }
 
 .p-float-label {
-  input,
-  textarea,
-  select {
-    &:focus {
-      ~ {
-        label {
-          @apply top-0 text-primary text-caption;
-        }
-      }
-    }
-
+  input.p-inputtext {
+    &:focus,
     &.p-filled {
       ~ {
         label {
-          @apply top-0 text-caption;
+          @apply top-0;
         }
-      }
-    }
-  }
-
-  .p-inputwrapper-focus {
-    ~ {
-      label {
-        @apply top-0 text-primary text-caption;
-      }
-    }
-  }
-
-  .p-inputwrapper-filled {
-    ~ {
-      label {
-        @apply top-0 text-caption;
       }
     }
   }
 
   > label {
-    @apply bg-white duration-200 left-2 px-1 text-black;
-  }
-
-  > .p-invalid {
-    + label,
-    &:focus ~ label {
-      @apply text-error;
-    }
+    @apply bg-white duration-200 left-2 px-1 text-support-3;
   }
 }

@@ -1,5 +1,5 @@
 .badge {
-  @apply font-semibold py-1 px-4 rounded-full text-white;
+  @apply box-decoration-clone font-semibold py-1 px-4 rounded-full text-white inline-block;
 
   &--default {
     @apply bg-gray-50;

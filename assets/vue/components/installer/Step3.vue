@@ -154,6 +154,7 @@
         <div class="p-float-label">
           <Dropdown
             v-model="contact.companyCountry"
+            :filter="true"
             :options="installerData.stepData.countriesList"
             :placeholder="t('Select one')"
             input-id="country"
@@ -184,6 +185,7 @@
         <div class="p-float-label">
           <Dropdown
             v-model="contact.contactLanguage"
+            :filter="true"
             :options="installerData.stepData.languagesList"
             :placeholder="t('Select one')"
             input-id="language"

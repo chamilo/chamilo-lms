@@ -14,6 +14,7 @@
       <div class="p-float-label">
         <Dropdown
           v-model="installerData.langIso"
+          :filter="true"
           :options="languages"
           input-id="language_list"
           option-label="english_name"

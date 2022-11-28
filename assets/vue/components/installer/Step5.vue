@@ -201,6 +201,7 @@
           <Dropdown
             v-if="'update' !== installerData.installType"
             v-model="installerData.stepData.languageForm"
+            :filter="true"
             :options="languages"
             input-id="language_form_list"
             option-label="english_name"

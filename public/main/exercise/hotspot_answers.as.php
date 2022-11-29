@@ -168,13 +168,13 @@ if (!$hideExpectedAnswer) {
     $qb
         ->select('a')
         ->from(CQuizAnswer::class, 'a')
-        ->where($qb->expr()->eq('a.cId', $courseId));
+        ->where($qb->expr()->eq('a.iid', $courseId));
 
     if (HOT_SPOT_DELINEATION == $objQuestion->getType()) {
         $qb
             ->andWhere($qb->expr()->eq('a.question', $questionId))
             ->andWhere($qb->expr()->neq('a.hotspotType', 'noerror'))
-            ->orderBy('a.id', 'ASC');
+            ->orderBy('a.iid', 'ASC');
     } else {
         $qb
             ->andWhere($qb->expr()->eq('a.question', $questionId))

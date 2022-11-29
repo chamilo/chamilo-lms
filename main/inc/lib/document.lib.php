@@ -5106,13 +5106,14 @@ class DocumentManager
                     WHERE
                         filetype = 'folder' AND
                         c_id = $course_id AND
-                        path IN ('".$folder_sql."')";
+                        path IN ('".$folder_sql."')
+                        ORDER BY path";
             $res = Database::query($sql);
             $folder_titles = [];
             while ($obj = Database::fetch_object($res)) {
                 $folder_titles[$obj->path] = $obj->title;
             }
-            natcasesort($folder_titles);
+            //natcasesort($folder_titles);
         }
 
         if (empty($form)) {

@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Category;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
@@ -21,6 +22,9 @@ use SessionManager;
  */
 class SequenceResourceRepository extends EntityRepository
 {
+    public const VERTICES_TYPE_REQ = 'requirements';
+    public const VERTICES_TYPE_DEP = 'dependents';
+
     /**
      * Find the SequenceResource based in the resourceId and type.
      *
@@ -112,52 +116,15 @@ class SequenceResourceRepository extends EntityRepository
      */
     public function getRequirements($resourceId, $type): array
     {
-        $sequencesResource = $this->findBy(['resourceId' => $resourceId, 'type' => $type]);
-        $em = $this->getEntityManager();
-        $result = [];
-        /** @var SequenceResource $sequenceResource */
-        foreach ($sequencesResource as $sequenceResource) {
-            if (!$sequenceResource->hasGraph()) {
-                continue;
-            }
+        return $this->getRequirementsOrDependents($resourceId, $type, self::VERTICES_TYPE_REQ);
+    }
 
-            $sequence = $sequenceResource->getSequence();
-            $graph = $sequence->getUnSerializeGraph();
-            $vertex = $graph->getVertex($resourceId);
-            $from = $vertex->getVerticesEdgeFrom();
-
-            $sequenceInfo = [
-                'name' => $sequence->getName(),
-                'requirements' => [],
-            ];
-
-            foreach ($from as $subVertex) {
-                $vertexId = $subVertex->getId();
-                $resource = null;
-                switch ($type) {
-                    case SequenceResource::SESSION_TYPE:
-                        $repo = $em->getRepository('ChamiloCoreBundle:Session');
-                        $resource = $repo->find($vertexId);
-
-                        break;
-                    case SequenceResource::COURSE_TYPE:
-                        $repo = $em->getRepository('ChamiloCoreBundle:Course');
-                        $resource = $repo->find($vertexId);
-
-                        break;
-                }
-
-                if (null === $resource) {
-                    continue;
-                }
-
-                $sequenceInfo['requirements'][$vertexId] = $resource;
-            }
-
-            $result[$sequence->getId()] = $sequenceInfo;
-        }
-
-        return $result;
+    /**
+     * Get the requirements for a resource only.
+     */
+    public function getDependents(int $resourceId, int $type): array
+    {
+        return $this->getRequirementsOrDependents($resourceId, $type, self::VERTICES_TYPE_DEP);
     }
 
     /**
@@ -207,13 +174,139 @@ class SequenceResourceRepository extends EntityRepository
      */
     public function checkRequirementsForUser(array $sequences, int $type, $userId, $sessionId = 0): array
     {
+        return $this->checkRequirementsOrDependentsForUser(
+            $sequences,
+            $type,
+            self::VERTICES_TYPE_REQ,
+            $userId,
+            $sessionId
+        );
+    }
+
+    /**
+     * Check if the ser has completed the requirements for the sequences.
+     *
+     * @param array $sequences The sequences
+     * @param int   $type      The type of sequence resource
+     * @param int   $userId
+     * @param int   $sessionId
+     */
+    public function checkDependentsForUser(array $sequences, int $type, $userId, $sessionId = 0): array
+    {
+        return $this->checkRequirementsOrDependentsForUser(
+            $sequences,
+            $type,
+            self::VERTICES_TYPE_DEP,
+            $userId,
+            $sessionId
+        );
+    }
+
+    public function checkCourseRequirements($userId, Course $course, $sessionId): bool
+    {
+        $em = $this->getEntityManager();
+        $sessionId = (int) $sessionId;
+
+        $gradebookCategoryRepo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+        $gradebooks = $gradebookCategoryRepo->findBy(
+            [
+                'courseCode' => $course->getCode(),
+                'sessionId' => $sessionId,
+                'isRequirement' => true,
+            ]
+        );
+
+        if (empty($gradebooks)) {
+            return false;
+        }
+
+        $status = true;
+        foreach ($gradebooks as $gradebook) {
+            $category = Category::createCategoryObjectFromEntity($gradebook);
+            $userFinishedCourse = Category::userFinishedCourse(
+                $userId,
+                $category,
+                true
+            );
+            if (0 === $sessionId) {
+                if (false === $userFinishedCourse) {
+                    $status = false;
+                    break;
+                }
+            } else {
+                if (false === $userFinishedCourse) {
+                    $status = false;
+                    break;
+                }
+            }
+        }
+
+        return $status;
+    }
+
+    /**
+     * Check if at least one sequence are completed.
+     */
+    public function checkSequenceAreCompleted(array $sequences, $itemType = self::VERTICES_TYPE_REQ): bool
+    {
+        foreach ($sequences as $sequence) {
+            $status = true;
+
+            foreach ($sequence[$itemType] as $item) {
+                $status = $status && $item['status'];
+            }
+
+            if ($status) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get sessions from vertices.
+     */
+    protected function findVerticesEdges(Vertices $verticesEdges, int $type): array
+    {
+        $sessionVertices = [];
+        $em = $this->getEntityManager();
+
+        foreach ($verticesEdges as $supVertex) {
+            $vertexId = $supVertex->getId();
+            switch ($type) {
+                case SequenceResource::SESSION_TYPE:
+                    $resource = $em->getRepository('ChamiloCoreBundle:Session')->find($vertexId);
+                    break;
+                case SequenceResource::COURSE_TYPE:
+                    $resource = $em->getRepository('ChamiloCoreBundle:Course')->find($vertexId);
+                    break;
+            }
+
+            if (empty($resource)) {
+                continue;
+            }
+
+            $sessionVertices[$vertexId] = $resource;
+        }
+
+        return $sessionVertices;
+    }
+
+    private function checkRequirementsOrDependentsForUser(
+        array $sequences,
+        int $resourceType,
+        string $itemType,
+        int $userId,
+        int $sessionId = 0
+    ): array {
         $sequenceList = [];
         $em = $this->getEntityManager();
-        $gradebookCategoryRepo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+        $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
 
         $sessionUserList = [];
         $checkOnlySameSession = api_get_configuration_value('course_sequence_valid_only_in_same_session');
-        if (SequenceResource::COURSE_TYPE == $type) {
+        if (SequenceResource::COURSE_TYPE === $resourceType) {
             if ($checkOnlySameSession) {
                 $sessionUserList = [$sessionId];
             } else {
@@ -231,12 +324,12 @@ class SequenceResourceRepository extends EntityRepository
         foreach ($sequences as $sequenceId => $sequence) {
             $item = [
                 'name' => $sequence['name'],
-                'requirements' => [],
+                $itemType => [],
             ];
             $resourceItem = null;
 
-            foreach ($sequence['requirements'] as $resource) {
-                switch ($type) {
+            foreach ($sequence[$itemType] as $resource) {
+                switch ($resourceType) {
                     case SequenceResource::SESSION_TYPE:
                         /** @var Session $resource */
                         $id = $resource->getId();
@@ -289,6 +382,7 @@ class SequenceResourceRepository extends EntityRepository
 
                         $resourceItem = [
                             'name' => $resource->getTitle(),
+                            'code' => $resource->getCode(),
                             'status' => $status,
                         ];
 
@@ -299,7 +393,7 @@ class SequenceResourceRepository extends EntityRepository
                     continue;
                 }
 
-                $item['requirements'][$id] = $resourceItem;
+                $item[$itemType][$id] = $resourceItem;
             }
             $sequenceList[$sequenceId] = $item;
         }
@@ -307,94 +401,63 @@ class SequenceResourceRepository extends EntityRepository
         return $sequenceList;
     }
 
-    public function checkCourseRequirements($userId, Course $course, $sessionId): bool
+    /**
+     * Get the requirements or dependants for a resource only.
+     */
+    private function getRequirementsOrDependents($resourceId, int $resourceType, string $itemType): array
     {
         $em = $this->getEntityManager();
-        $sessionId = (int) $sessionId;
 
-        $gradebookCategoryRepo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
-        $gradebooks = $gradebookCategoryRepo->findBy(
-            [
-                'courseCode' => $course->getCode(),
-                'sessionId' => $sessionId,
-                'isRequirement' => true,
-            ]
-        );
+        $sequencesResource = $this->findBy(['resourceId' => $resourceId, 'type' => $resourceType]);
+        $result = [];
 
-        if (empty($gradebooks)) {
-            return false;
-        }
-
-        $status = true;
-        foreach ($gradebooks as $gradebook) {
-            $category = Category::createCategoryObjectFromEntity($gradebook);
-            $userFinishedCourse = Category::userFinishedCourse(
-                $userId,
-                $category,
-                true
-            );
-            if (0 === $sessionId) {
-                if (false === $userFinishedCourse) {
-                    $status = false;
-                    break;
-                }
-            } else {
-                if (false === $userFinishedCourse) {
-                    $status = false;
-                    break;
-                }
-            }
-        }
-
-        return $status;
-    }
-
-    /**
-     * Check if at least one sequence are completed.
-     */
-    public function checkSequenceAreCompleted(array $sequences): bool
-    {
-        foreach ($sequences as $sequence) {
-            $status = true;
-
-            foreach ($sequence['requirements'] as $item) {
-                $status = $status && $item['status'];
-            }
-
-            if ($status) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Get sessions from vertices.
-     */
-    protected function findVerticesEdges(Vertices $verticesEdges, int $type): array
-    {
-        $sessionVertices = [];
-        $em = $this->getEntityManager();
-
-        foreach ($verticesEdges as $supVertex) {
-            $vertexId = $supVertex->getId();
-            switch ($type) {
-                case SequenceResource::SESSION_TYPE:
-                    $resource = $em->getRepository('ChamiloCoreBundle:Session')->find($vertexId);
-                    break;
-                case SequenceResource::COURSE_TYPE:
-                    $resource = $em->getRepository('ChamiloCoreBundle:Course')->find($vertexId);
-                    break;
-            }
-
-            if (empty($resource)) {
+        /** @var SequenceResource $sequenceResource */
+        foreach ($sequencesResource as $sequenceResource) {
+            if (!$sequenceResource->hasGraph()) {
                 continue;
             }
 
-            $sessionVertices[$vertexId] = $resource;
+            $sequence = $sequenceResource->getSequence();
+            $graph = $sequence->getUnSerializeGraph();
+            $vertex = $graph->getVertex($resourceId);
+
+            if (self::VERTICES_TYPE_REQ === $itemType) {
+                $edges = $vertex->getVerticesEdgeFrom();
+            } else {
+                $edges = $vertex->getVerticesEdgeTo();
+            }
+
+            $sequenceInfo = [
+                'name' => $sequence->getName(),
+                $itemType => [],
+            ];
+
+            foreach ($edges as $edge) {
+                $vertexId = $edge->getId();
+                $resource = null;
+                switch ($resourceType) {
+                    case SequenceResource::SESSION_TYPE:
+                        $repo = $em->getRepository(Session::class);
+                        $resource = $repo->find($vertexId);
+
+                        break;
+                    case SequenceResource::COURSE_TYPE:
+                        $repo = $em->getRepository(Course::class);
+                        $resource = $repo->find($vertexId);
+
+                        break;
+                }
+
+                if (null === $resource) {
+                    continue;
+                }
+
+                $sequenceInfo[$itemType][$vertexId] = $resource;
+            }
+
+            $result[$sequence->getId()] = $sequenceInfo;
         }
 
-        return $sessionVertices;
+        return $result;
     }
 }

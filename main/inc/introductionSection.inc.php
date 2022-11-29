@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 
 /**
@@ -363,7 +364,18 @@ if (!api_is_anonymous()) {
     $intro_content = AnnouncementManager::parseContent(api_get_user_id(), $intro_content, api_get_course_id());
 }
 
-$introduction_section .= '<div class="col-md-12">';
+$showSequencesBlock = false;
+
+if (api_get_configuration_value('resource_sequence_show_dependency_in_course_intro')) {
+    $sequenceResourceRepo = $em->getRepository(SequenceResource::class);
+    $sequences = $sequenceResourceRepo->getDependents($course_id, SequenceResource::COURSE_TYPE);
+    $firstSequence = current($sequences);
+
+    $showSequencesBlock = !empty($firstSequence['dependents']);
+}
+
+$introduction_section .= $showSequencesBlock ? '<div class="col-md-10">' : '<div class="col-md-12">';
+
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {
         $introduction_section .= '<div class="page-course">';
@@ -380,7 +392,29 @@ if ($intro_dispDefault) {
 
 $introduction_section .= $toolbar;
 $introduction_section .= '</div>';
-$introduction_section .= '</div>';
+
+if ($showSequencesBlock) {
+    $sequenceUrl = http_build_query(
+        [
+            'a' => 'get_dependents',
+            'id' => $course_id,
+            'type' => SequenceResource::COURSE_TYPE,
+            'sid' => $session_id,
+        ]
+    );
+
+    $introduction_section .= '<div class="col-md-2 text-center" id="resource-sequence">
+            <span class="fa fa-spinner fa-spin fa-fw" aria-hidden="true"></span>
+        </div>
+        <script>
+        $(function () {
+            $(\'#resource-sequence\').load(_p.web_ajax + \'sequence.ajax.php?'.$sequenceUrl.'\')
+        });
+        </script>
+    ';
+}
+
+$introduction_section .= '</div>'; //div.row
 
 $browser = api_get_navigator();
 

@@ -48,7 +48,7 @@ switch ($action) {
                 echo Display::img(
                     $graphImage,
                     get_lang('GraphDependencyTree'),
-                    ['class' => 'center-block'],
+                    ['class' => 'center-block img-responsive'],
                     false
                 );
             } catch (UnexpectedValueException $e) {
@@ -401,6 +401,7 @@ switch ($action) {
 
         break;
     case 'get_requirements':
+    case 'get_dependents':
         $sessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : 0;
         $userId = api_get_user_id();
         $resourceName = '';
@@ -408,6 +409,7 @@ switch ($action) {
         switch ($type) {
             case SequenceResource::SESSION_TYPE:
                 $resourceData = api_get_session_info($id);
+
                 $resourceName = $resourceData['name'];
                 $template = 'session_requirements.tpl';
                 break;
@@ -422,19 +424,38 @@ switch ($action) {
             exit;
         }
 
-        $sequences = $sequenceResourceRepository->getRequirements($id, $type);
+        if ('get_requirements' === $action) {
+            $sequences = $sequenceResourceRepository->getRequirements($id, $type);
+            $sequenceList = $sequenceResourceRepository->checkRequirementsForUser($sequences, $type, $userId, $sessionId);
 
-        if (empty($sequences)) {
-            exit;
+            $allowSubscription = $sequenceResourceRepository->checkSequenceAreCompleted($sequenceList);
+        } else {
+            $sequences = $sequenceResourceRepository->getDependents($id, $type);
+            $sequenceList = $sequenceResourceRepository->checkDependentsForUser($sequences, $type, $userId, $sessionId);
+
+            $allowSubscription = $sequenceResourceRepository->checkSequenceAreCompleted(
+                $sequenceList,
+                SequenceResourceRepository::VERTICES_TYPE_DEP
+            );
         }
-
-        $sequenceList = $sequenceResourceRepository->checkRequirementsForUser($sequences, $type, $userId, $sessionId);
-        $allowSubscription = $sequenceResourceRepository->checkSequenceAreCompleted($sequenceList);
 
         $view = new Template(null, false, false, false, false, false);
         $view->assign('sequences', $sequenceList);
         $view->assign('sequence_type', $type);
         $view->assign('allow_subscription', $allowSubscription);
+        $view->assign(
+            'item_type',
+            'get_requirements' === $action
+                ? SequenceResourceRepository::VERTICES_TYPE_REQ
+                : SequenceResourceRepository::VERTICES_TYPE_DEP
+        );
+        $course = api_get_course_entity();
+        if ($course) {
+            $view->assign(
+                'current_requirement_is_completed',
+                $sequenceResourceRepository->checkCourseRequirements($userId, $course, $sessionId)
+            );
+        }
 
         if ($allowSubscription) {
             $view->assign(

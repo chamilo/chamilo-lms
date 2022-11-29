@@ -1028,6 +1028,7 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
         'hide_lp_arrow_navigation' => false,
         'show_toolbar_by_default' => false,
         'navigation_in_the_middle' => false,
+        'add_extra_quit_to_home_icon' => false,
     ],
 ];*/
 

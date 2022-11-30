@@ -33,6 +33,7 @@ $em = Database::getManager();
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
 $session_id = api_get_session_id();
 $blogParam = isset($_GET['blog_id']) ? ('&blog_id='.(int) $_GET['blog_id']) : '';
+$cidReq = api_get_cidreq();
 
 $introduction_section = '';
 
@@ -47,7 +48,7 @@ if (!empty($courseId)) {
     $form = new FormValidator(
         'introduction_text',
         'post',
-        api_get_self().'?'.api_get_cidreq().$blogParam
+        api_get_self().'?'.$cidReq.$blogParam
     );
 } else {
     $form = new FormValidator('introduction_text');
@@ -208,7 +209,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
     if (!empty($thematic_advance_info)) {
         $thematic_advance = get_lang('CourseThematicAdvance');
         $thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
-        $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
+        $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.$cidReq;
 
         $thematic_advance_info['thematic_id'] = isset($thematic_advance_info['thematic_id']) ? $thematic_advance_info['thematic_id'] : 0;
         $thematic_advance_info['start_date'] = isset($thematic_advance_info['start_date']) ? $thematic_advance_info['start_date'] : null;
@@ -296,7 +297,7 @@ $editIconButton = '';
 if (api_is_allowed_to_edit() && empty($session_id)) {
     $editIconButton = Display::url(
         '<em class="fa fa-wrench"></em> ',
-        api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
+        api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.$cidReq,
         ['class' => 'btn btn-default', 'title' => get_lang('CustomizeIcons')]
     );
 }
@@ -315,7 +316,7 @@ if ($intro_dispCommand) {
         $toolbar .= '<div class="toolbar-edit">';
         $toolbar .= '<div class="btn-group pull-right" role="group">';
         if (!empty($courseId)) {
-            $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1">';
+            $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.$cidReq.$blogParam.'&intro_cmdAdd=1">';
             $textIntro .= '<em class="fa fa-file-text"></em> ';
             $textIntro .= "</a>";
             $toolbar .= $textIntro.$editIconButton.$toolAllShowHide;
@@ -330,10 +331,10 @@ if ($intro_dispCommand) {
         $toolbar .= '<div class="btn-group pull-right" rol="group">';
         if (!empty($courseId)) {
             $toolbar .=
-                '<a class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
+                '<a class="btn btn-default" href="'.api_get_self().'?'.$cidReq.$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em></a>';
             $toolbar .= $editIconButton.$toolAllShowHide;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1\" onclick=\"javascript:
+            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".$cidReq.$blogParam."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
         } else {
@@ -342,7 +343,7 @@ if ($intro_dispCommand) {
                 <em class="fa fa-pencil"></em>
                 </a>"';
             $toolbar .= $editIconButton.$toolAllShowHide;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
+            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".$cidReq."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
         }
@@ -408,7 +409,7 @@ if ($showSequencesBlock) {
         </div>
         <script>
         $(function () {
-            $(\'#resource-sequence\').load(_p.web_ajax + \'sequence.ajax.php?'.$sequenceUrl.'\')
+            $(\'#resource-sequence\').load(_p.web_ajax + \'sequence.ajax.php?'.$sequenceUrl.'&'.$cidReq.'\')
         });
         </script>
     ';

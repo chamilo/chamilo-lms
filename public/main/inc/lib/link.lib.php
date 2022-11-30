@@ -492,12 +492,16 @@ class Link extends Model
             ->setTarget($values['target'])
         ;
 
-        if (!empty($values['category_id'])) {
+            $category = null;
             $repoCategory = Container::getLinkCategoryRepository();
-            /** @var CLinkCategory $category */
-            $category = $repoCategory->find($categoryId);
-            $link->setCategory($category);
-        }
+            if (!empty($categoryId)) {
+                /** @var CLinkCategory $category */
+                $category = $repoCategory->find($categoryId);
+                $link->setCategory($category)->setParent($category);
+            } else {
+                $courseEntity = api_get_course_entity($course_id);
+                $link->setCategory($category)->setParent($courseEntity);
+            }
 
         $repo->update($link);
 
@@ -1523,7 +1527,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             $title = $linkInfo['title'];
             $description = $linkInfo['description'];
             $category = $linkInfo['category_id'];
-            if (0 != $linkInfo['on_homepage']) {
+            if (isset($linkInfo['on_homepage']) && 0 != $linkInfo['on_homepage']) {
                 $onhomepage = 1;
             }
             $target_link = $linkInfo['target'];

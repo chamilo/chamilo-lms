@@ -78,6 +78,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         $resource->getResourceNode()->setUpdatedAt(new DateTime());
         $resource->getResourceNode()->setTitle($resource->getResourceName());
+        if ($resource->getParent()->resourceNode) {
+            $resource->getResourceNode()->setParent($resource->getParent()->resourceNode);
+        }
         $em->persist($resource);
 
         if ($andFlush) {

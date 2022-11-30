@@ -8877,4 +8877,9 @@ $AllUsersIncludingInactiveIncluded = "*: Tous les utilisateurs, dont inactifs, s
 $ReportQuarterlyTotalDiskUsage = "Utilisation totale du disque";
 $EditPortfolioComment = "Éditer le commentaire";
 $ExerciseXNotDeleted = "Exercice '%s' non supprimé";
+$RemoveUsers = "Retirer des utilisateurs";
+$SendFileToOtherUsers = "Envoyer le fichier à d'autres utilisateurs";
+$RemoveFileFromSelectedUsers = "Retirer le fichier aux utilisateurs sélectionnés";
+$SendOtherUsers = "Envoyer à autres utilisateurs";
+$SendToUsers = "Envoyer aux utilisateurs";
 ?>

@@ -8941,4 +8941,11 @@ $AllUsersIncludingInactiveIncluded = "*: All users, including inactive, are incl
 $ReportQuarterlyTotalDiskUsage = "Total disk usage";
 $EditPortfolioComment = "Edit portfolio comment";
 $ExerciseXNotDeleted = "Test '%s' not deleted";
+$GroupEmpted = "Group empted";
+$ConversionFailed = "Conversion Failed";
+$RemoveUsers = "Remove users";
+$SendFileToOtherUsers = "Send file to other users";
+$RemoveFileFromSelectedUsers = "Remove file from selected users";
+$SendOtherUsers = "Send to other users";
+$SendToUsers = "Send to users";
 ?>

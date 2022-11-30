@@ -8969,4 +8969,9 @@ $AllUsersIncludingInactiveIncluded = "*: Todos los usuarios, inactivos inclusive
 $ReportQuarterlyTotalDiskUsage = "Uso total del disco";
 $EditPortfolioComment = "Editar comentario de portafolio";
 $ExerciseXNotDeleted = "Ejercicio '%s' no ha sido borrado";
+$RemoveUsers = "Eliminar usuarios";
+$SendFileToOtherUsers = "Enviar archivo a otros usuarios";
+$RemoveFileFromSelectedUsers = "Eliminar archivo de usuarios seleccionados";
+$SendOtherUsers = "Enviar a otros usuarios";
+$SendToUsers = "Enviar a los usuarios";
 ?>

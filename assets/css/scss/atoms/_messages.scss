@@ -1,11 +1,11 @@
 .p-message {
   @apply mb-4 shadow-sm rounded-md border-0;
 
-  .p-message-wrapper {
+  &-wrapper {
     @apply gap-3.5 py-3 px-4;
   }
 
-  .p-message-close {
+  &-close {
     @apply rounded-full transition duration-200 min-w-[1rem] min-h-[1rem];
 
     &:hover {
@@ -16,7 +16,9 @@
     }
   }
 
-  .p-message-text {
+  &-text {
+    @apply w-full;
+
     a {
       @apply font-semibold;
     }

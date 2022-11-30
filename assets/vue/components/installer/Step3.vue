@@ -54,6 +54,7 @@
     <Fieldset
       :legend="t('Contact information')"
       :toggleable="true"
+      class="mt-4"
     >
       <p
         v-t="'Dear user'"
@@ -227,7 +228,7 @@
         </div>
       </div>
 
-      <div class="field">
+      <div class="formgroup-inline">
         <Button
           :label="t('Send information')"
           :loading="sendingContactInformation"

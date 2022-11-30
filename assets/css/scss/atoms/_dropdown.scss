@@ -78,6 +78,7 @@ $color_1: #3f3f46;
 
       &:not(.p-highlight) {
         &:not(.p-disabled) {
+          &.p-focus,
           &:hover {
             @apply text-gray-90;
           }

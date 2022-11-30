@@ -72,7 +72,7 @@ Event::event_access_tool(TOOL_LINK);
 /*	Action Handling */
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $scope = isset($_REQUEST['scope']) ? $_REQUEST['scope'] : null;
-$show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'none']) ? $_REQUEST['show'] : '';
+$show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'none']) ? $_REQUEST['show'] : 'all';
 $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : '';
 $linkListUrl = api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryId.'&show='.$show;
 $content = '';

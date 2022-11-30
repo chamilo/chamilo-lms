@@ -5084,6 +5084,7 @@ class CourseManager
             $sql = "UPDATE $tableCourse SET course_language = '$to'
                     WHERE course_language = '$from'";
             Database::query($sql);
+
             return true;
         }
 

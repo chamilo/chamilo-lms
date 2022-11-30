@@ -178,7 +178,7 @@ $thematic_description_html = '';
 $thematicItemTwo = '';
 
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
-    // Only show this if we're on the course homepage and we're not currently editing
+    // Only show this if we're on the course homepage, and we're not currently editing
     $thematic = new Thematic();
     $displayMode = api_get_course_setting('display_info_advance_inside_homecourse');
     $class1 = '';
@@ -211,13 +211,13 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
         $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.$cidReq;
 
-        $thematic_advance_info['thematic_id'] = isset($thematic_advance_info['thematic_id']) ? $thematic_advance_info['thematic_id'] : 0;
-        $thematic_advance_info['start_date'] = isset($thematic_advance_info['start_date']) ? $thematic_advance_info['start_date'] : null;
-        $thematic_advance_info['content'] = isset($thematic_advance_info['content']) ? $thematic_advance_info['content'] : '';
-        $thematic_advance_info['duration'] = isset($thematic_advance_info['duration']) ? $thematic_advance_info['duration'] : 0;
+        $thematic_advance_info['thematic_id'] = $thematic_advance_info['thematic_id'] ?? 0;
+        $thematic_advance_info['start_date'] = $thematic_advance_info['start_date'] ?? null;
+        $thematic_advance_info['content'] = $thematic_advance_info['content'] ?? '';
+        $thematic_advance_info['duration'] = $thematic_advance_info['duration'] ?? 0;
 
         $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
-        $thematic_info['title'] = isset($thematic_info['title']) ? $thematic_info['title'] : '';
+        $thematic_info['title'] = $thematic_info['title'] ?? '';
 
         if (!empty($thematic_advance_info['start_date'])) {
             $thematic_advance_info['start_date'] = api_get_local_time(
@@ -311,10 +311,10 @@ if (api_is_allowed_to_edit() && empty($session_id)) {
 $toolbar = '';
 $textIntro = '';
 if ($intro_dispCommand) {
+    $toolbar .= '<div class="toolbar-edit">';
+    $toolbar .= '<div class="btn-group pull-right" role="group">';
     if (empty($intro_content)) {
         // Displays "Add intro" commands
-        $toolbar .= '<div class="toolbar-edit">';
-        $toolbar .= '<div class="btn-group pull-right" role="group">';
         if (!empty($courseId)) {
             $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.$cidReq.$blogParam.'&intro_cmdAdd=1">';
             $textIntro .= '<em class="fa fa-file-text"></em> ';
@@ -324,17 +324,14 @@ if ($intro_dispCommand) {
             $toolbar .= '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdAdd=1">'.get_lang('AddIntro').'</a>';
             $toolbar .= $editIconButton.$toolAllShowHide;
         }
-        $toolbar .= '</div></div>';
     } else {
         // Displays "edit intro && delete intro" commands
-        $toolbar .= '<div class="toolbar-edit">';
-        $toolbar .= '<div class="btn-group pull-right" rol="group">';
         if (!empty($courseId)) {
             $toolbar .=
                 '<a class="btn btn-default" href="'.api_get_self().'?'.$cidReq.$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em></a>';
             $toolbar .= $editIconButton.$toolAllShowHide;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".$cidReq.$blogParam."&intro_cmdDel=1\" onclick=\"javascript:
+            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".$cidReq.$blogParam."&intro_cmdDel=1\" onclick=\"
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
         } else {
@@ -343,7 +340,7 @@ if ($intro_dispCommand) {
                 <em class="fa fa-pencil"></em>
                 </a>"';
             $toolbar .= $editIconButton.$toolAllShowHide;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".$cidReq."&intro_cmdDel=1\" onclick=\"javascript:
+            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".$cidReq."&intro_cmdDel=1\" onclick=\"
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
         }
@@ -354,6 +351,7 @@ if ($intro_dispCommand) {
             header('X-XSS-Protection: 0');
         }
     }
+    $toolbar .= '</div></div>';
 }
 
 $nameSection = get_lang('AddCustomCourseIntro');

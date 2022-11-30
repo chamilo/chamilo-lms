@@ -331,20 +331,21 @@ if ($intro_dispCommand) {
                 '<a class="btn btn-default" href="'.api_get_self().'?'.$cidReq.$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em></a>';
             $toolbar .= $editIconButton.$toolAllShowHide;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".$cidReq.$blogParam."&intro_cmdDel=1\" onclick=\"
-                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
+            $toolbar .= "<a class=\"btn btn-default\"
+                    href=\"".api_get_self()."?".$cidReq.$blogParam."&intro_cmdDel=1\"
+                    onclick=\"if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\"
+                ><em class=\"fa fa-trash-o\"></em></a>";
         } else {
             $toolbar .=
                 '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em>
                 </a>"';
             $toolbar .= $editIconButton.$toolAllShowHide;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".$cidReq."&intro_cmdDel=1\" onclick=\"
-                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
+            $toolbar .= "<a class=\"btn btn-default\"
+                    href=\"".api_get_self()."?".$cidReq."&intro_cmdDel=1\"
+                    onclick=\"if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\"
+                ><em class=\"fa fa-trash-o\"></em></a>";
         }
-        $toolbar .= "</div></div>";
         // Fix for chrome XSS filter for videos in iframes - BT#7930
         $browser = api_get_navigator();
         if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {

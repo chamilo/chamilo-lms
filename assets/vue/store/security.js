@@ -68,7 +68,7 @@ export default {
             state.user = null;
         },
         [AUTHENTICATING_SUCCESS](state, user) {
-            state.isLoading = false;
+            state.isLoading = true;
             state.error = null;
             state.isAuthenticated = true;
             state.user = user;

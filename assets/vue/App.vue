@@ -49,7 +49,7 @@ const router = useRouter();
 
 const layout = computed(
   () => {
-    const queryParams = new URLSearchParams(window.location.href);
+    const queryParams = new URLSearchParams(window.location.search);
 
     if (queryParams.has('lp')
       || (queryParams.has('origin') && 'learnpath' === queryParams.get('origin'))

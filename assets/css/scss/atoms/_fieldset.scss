@@ -1,0 +1,40 @@
+.p-fieldset {
+  @apply border border-solid border-support-3 rounded-lg p-3.5;
+
+  &-legend {
+    @apply text-body-1-bold px-2;
+  }
+
+  &-content {
+    @apply p-0;
+  }
+
+  .p-fieldset-legend {
+    @apply text-primary;
+  }
+}
+
+.p-fieldset.p-fieldset-toggleable {
+
+  .p-fieldset-legend {
+    @apply text-support-3;
+
+    a {
+      @apply outline-none;
+
+      .p-fieldset-toggler {
+        @apply mr-1;
+      }
+
+      &:focus,
+      &:hover,
+      &[aria-expanded="true"] {
+        @apply text-primary;
+      }
+    }
+  }
+
+  .p-fieldset-content {
+    @apply p-0;
+  }
+}

@@ -20,10 +20,6 @@
   }
 
   // Buttons with icons.
-  .btn > .mdi {
-    @apply -ml-1 mr-1 h-4 w-5 fill-current ;
-  }
-
   .btn > .svg {
     @apply -ml-1 mr-1 h-4 w-5 fill-current ;
   }
@@ -43,22 +39,6 @@
   }
 
   .has-error .ch-form-control {
-  }
-
-  legend {
-    float: left;
-    width: 100%;
-    padding: 0;
-    margin-bottom: 0.5rem;
-    font-size: calc(1.275rem + 0.3vw);
-    line-height: inherit;
-  }
-
-  fieldset {
-    min-width: 0;
-    padding: 0;
-    margin: 0;
-    border: 0;
   }
 
   // List

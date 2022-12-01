@@ -366,7 +366,7 @@ if (!api_is_anonymous()) {
 
 $showSequencesBlock = false;
 
-if (api_get_configuration_value('resource_sequence_show_dependency_in_course_intro')) {
+if (api_get_configuration_value('resource_sequence_show_dependency_in_course_intro' && $tool == TOOL_COURSE_HOMEPAGE)) {
     $sequenceResourceRepo = $em->getRepository(SequenceResource::class);
     $sequences = $sequenceResourceRepo->getDependents($course_id, SequenceResource::COURSE_TYPE);
     $firstSequence = current($sequences);

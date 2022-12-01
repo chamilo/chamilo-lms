@@ -1526,7 +1526,7 @@ class CourseBuilder
                         $assetAudio = new Asset(
                             $audioTitle,
                             '/document'.$obj_item->audio,
-                            '/document'.$obj_item->audio,
+                            '/document'.$obj_item->audio
                         );
                         $this->course->add_resource($assetAudio);
                     }

@@ -1263,13 +1263,19 @@ class ImportCsv
                 // Check session dates.
                 if ($sessionInfo && !empty($sessionInfo['access_start_date'])) {
                     $date = new \DateTime($sessionInfo['access_start_date']);
-                    $interval = new \DateInterval('P7D');
+                    $intervalInput = '7';
+                    if (!empty($sessionInfo['dateinterval'])) {
+                        if ((int) $sessionInfo['dateinterval'] >= 0) {
+                            $intervalInput = (int) $sessionInfo['dateinterval'];
+                        }
+                    }
+                    $interval = new \DateInterval('P'.$intervalInput.'D');
                     $date->sub($interval);
                     if ($date->getTimestamp() > time()) {
                         $this->logger->addInfo(
                             "Calendar event # ".$row['external_calendar_itemID']."
                             in session [$externalSessionId] was not added
-                            because the startdate is more than 7 days in the future: ".$sessionInfo['access_start_date']
+                            because the startdate is more than $intervalInput days in the future: ".$sessionInfo['access_start_date']
                         );
                         $errorFound = true;
                     }

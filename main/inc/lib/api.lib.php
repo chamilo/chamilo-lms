@@ -9465,7 +9465,7 @@ function api_mail_html(
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
-    if ($additionalParameters['checkUrls']) {
+    if (isset($additionalParameters['checkUrls'])) {
         $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
         if ($useMultipleUrl) {
             $accessConfig = [];

@@ -449,9 +449,11 @@ foreach ($questionList as $questionId) {
         case UPLOAD_ANSWER:
         case ORAL_EXPRESSION:
         case MATCHING:
+        case MATCHING_GLOBAL:
         case DRAGGABLE:
         case READING_COMPREHENSION:
         case MATCHING_DRAGGABLE:
+        case MATCHING_DRAGGABLE_GLOBAL:
         case MULTIPLE_ANSWER_DROPDOWN:
         case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
             $question_result = $objExercise->manage_answer(

@@ -334,6 +334,14 @@ if ($is_allowed_to_edit) {
             }
         }
 
+        if (true === api_get_configuration_value('documents_hide_download_icon')) {
+            $extraFieldValue = new ExtraFieldValue('document');
+            $fieldValues = [];
+            $fieldValues['item_id'] = $document_id;
+            $fieldValues['extra_can_be_downloaded'] = (int) $_REQUEST['download']['can_download'];
+            $extraFieldValue->saveFieldValues($fieldValues);
+        }
+
         $url = 'document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : '');
 
         $redirectToEditPage = isset($_POST['button_ck']) && 1 === (int) $_POST['button_ck'];
@@ -457,6 +465,16 @@ if ($owner_id == api_get_user_id() ||
         );
     } else {
         $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
+    }
+
+    // Define if a document can be downloaded or not.
+    if (true === api_get_configuration_value('documents_hide_download_icon')) {
+        $itemId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $group = [];
+        $group[] = $form->createElement('radio', 'can_download', null, get_lang('Yes'), 1, ['id' => 'can_download_yes']);
+        $group[] = $form->createElement('radio', 'can_download', null, get_lang('No'), 0, ['id' => 'can_download_no']);
+        $form->addGroup($group, 'download', get_lang('DefineIfDocumentCanBeDownloaded'));
+        $defaults['download']['can_download'] = DocumentManager::getHideDownloadIcon($itemId);
     }
 
     if ($file_type != 'link') {

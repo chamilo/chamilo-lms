@@ -2317,6 +2317,14 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Disable links in gradebook view for students
 // $_configuration['gradebook_hide_link_to_item_for_student'] = false;
 
+// It adds option to define if a document can be downloaded or not.
+// Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(23, 1, 'can_be_downloaded', 'CanBeDownloaded', '', 0, 1, 0, 1, 0, NOW());
+*/
+// $_configuration['documents_hide_download_icon'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

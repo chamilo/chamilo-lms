@@ -171,6 +171,9 @@ class ExtraField extends Model
             case 'message':
                 $this->extraFieldType = EntityExtraField::MESSAGE_TYPE;
                 break;
+            case 'document':
+                $this->extraFieldType = EntityExtraField::DOCUMENT_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;

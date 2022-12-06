@@ -45,7 +45,16 @@ if ($add_result_form->validate()) {
         if (!empty($row) || $row == '0') {
             $res->set_score($row);
         }
-        $res->add();
+
+        //To prevent error editing when going back in the browser,
+        //check if exits a record for this user and evaluation_id
+        if ($res->exists()) {
+            $res->addResultLog($userId, $values['evaluation_id']);
+            $res->save();
+        } else {
+            $res->add();
+        }
+
         next($scores);
     }
 

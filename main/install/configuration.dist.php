@@ -2318,11 +2318,7 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // $_configuration['gradebook_hide_link_to_item_for_student'] = false;
 
 // It adds option to define if a document can be downloaded or not.
-// Requires DB changes:
-/*
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
-(23, 1, 'can_be_downloaded', 'CanBeDownloaded', '', 0, 1, 0, 1, 0, NOW());
-*/
+// Create an extra field document named "CanBeDownloaded" of type "Yes/No" that is set to "No" by default.
 // $_configuration['documents_hide_download_icon'] = false;
 
 // KEEP THIS AT THE END

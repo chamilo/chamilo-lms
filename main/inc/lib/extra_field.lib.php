@@ -207,6 +207,7 @@ class ExtraField extends Model
             'lp_view',
             'course_announcement',
             'message',
+            'document'
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {

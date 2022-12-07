@@ -154,7 +154,7 @@ if (isset($_POST['formSent'])) {
             }
 
             // Courses
-            $sql = "SELECT DISTINCT c.code, sc.id, c_id
+            $sql = "SELECT DISTINCT c.code, sc.c_id
                     FROM $tbl_course c
                     INNER JOIN $tbl_session_course_user sc
                     ON c.id = sc.c_id AND sc.session_id = '".$row['id']."'";

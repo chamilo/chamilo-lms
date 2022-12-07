@@ -66,7 +66,6 @@ if (isset($_POST['formSent'])) {
                     ORDER BY id";
             }
         }
-
     } else {
         $sql = "SELECT s.id,name,username,access_start_date,access_end_date,visibility,session_category_id
                 FROM $tbl_session s
@@ -136,14 +135,14 @@ if (isset($_POST['formSent'])) {
                     INNER JOIN $tbl_session_user
                     ON
                         $tbl_user.user_id = $tbl_session_user.user_id AND
-                        $tbl_session_user.relation_type<>" . SESSION_RELATION_TYPE_RRHH . " AND
-                        $tbl_session_user.session_id = '" . $row['id'] . "'";
+                        $tbl_session_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
+                        $tbl_session_user.session_id = '".$row['id']."'";
 
                 $rsUsers = Database::query($sql);
 
                 while ($rowUsers = Database::fetch_array($rsUsers)) {
                     if ($cvs) {
-                        $users .= str_replace(';', ',', $rowUsers['username']) . '|';
+                        $users .= str_replace(';', ',', $rowUsers['username']).'|';
                     } else {
                         $users .= "\t\t<User>$rowUsers[username]</User>\n";
                     }
@@ -238,7 +237,7 @@ if (isset($_POST['formSent'])) {
                     $extraData = CourseManager::getExtraData($rowCourses['c_id'], ['special_course']);
                     $extraData = array_map(
                         function ($variable, $value) use ($cvs) {
-                            $value = str_replace(';', ',',  $value);
+                            $value = str_replace(';', ',', $value);
 
                             return $cvs
                                 ? '{'.$variable.'='.$value.'}'
@@ -363,7 +362,7 @@ $form->addCheckBox(
     'no_include_users',
     [
         get_lang('Users'),
-        get_lang('ReportDoesNotIncludeListOfUsersNeitherForSessionNorForEachCourse')
+        get_lang('ReportDoesNotIncludeListOfUsersNeitherForSessionNorForEachCourse'),
     ],
     get_lang('DoNotIncludeUsers')
 );

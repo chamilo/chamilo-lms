@@ -243,7 +243,6 @@ if (isset($_POST['formSent'])) {
             if (!empty($courses) && $cvs) {
                 $courses = api_substr($courses, 0, api_strlen($courses) - 1);
             }
-            $add = $courses;
 
             if (in_array($file_type, ['csv', 'xls'])) {
                 $exportContent = [
@@ -270,8 +269,13 @@ if (isset($_POST['formSent'])) {
                     ."\t\t<DateStart>$row[access_start_date]</DateStart>\n"
                     ."\t\t<DateEnd>$row[access_end_date]</DateEnd>\n"
                     ."\t\t<Visibility>$row[visibility]</Visibility>\n"
-                    ."\t\t<SessionCategory>$row[session_category]</SessionCategory>\n"
-                    ."\t</Session>\n";
+                    ."\t\t<SessionCategory>$row[session_category]</SessionCategory>\n";
+
+                if ($includeUsers) {
+                    $add .= $courses;
+                }
+
+                $add .= "\t</Session>\n";
 
                 fputs($fp, $add);
             }

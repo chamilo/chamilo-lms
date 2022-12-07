@@ -5328,31 +5328,41 @@ class DocumentManager
         $document_data['file_extension'] = $extension;
 
         if (!$show_as_icon) {
-            if ($filetype == 'folder') {
-                if ($isAllowedToEdit ||
-                    api_is_platform_admin() ||
-                    api_get_setting('students_download_folders') == 'true'
-                ) {
-                    // filter: when I am into a shared folder, I can only show "my shared folder" for donwload
-                    if (self::is_shared_folder($curdirpath, $sessionId)) {
-                        if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
-                            preg_match('/shared_folder_session_'.$sessionId.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
-                            $isAllowedToEdit || api_is_platform_admin()
+            // to force download if a document can be downloaded or not
+            $hideDownloadIcon = false;
+            if (true === api_get_configuration_value('documents_hide_download_icon')) {
+                $hideDownloadIcon = true;
+            }
+            if (self::getHideDownloadIcon($document_data['id'])) {
+                $hideDownloadIcon = false;
+            }
+            if (!$hideDownloadIcon) {
+                if ($filetype == 'folder') {
+                    if ($isAllowedToEdit ||
+                        api_is_platform_admin() ||
+                        api_get_setting('students_download_folders') == 'true'
+                    ) {
+                        // filter: when I am into a shared folder, I can only show "my shared folder" for donwload
+                        if (self::is_shared_folder($curdirpath, $sessionId)) {
+                            if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
+                                preg_match('/shared_folder_session_'.$sessionId.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
+                                $isAllowedToEdit || api_is_platform_admin()
+                            ) {
+                                $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
+                                    Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
+                            }
+                        } elseif (!preg_match('/shared_folder/', urldecode($forcedownload_link)) ||
+                            $isAllowedToEdit ||
+                            api_is_platform_admin()
                         ) {
                             $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                                 Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                         }
-                    } elseif (!preg_match('/shared_folder/', urldecode($forcedownload_link)) ||
-                        $isAllowedToEdit ||
-                        api_is_platform_admin()
-                    ) {
-                        $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
-                            Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                     }
+                } else {
+                    $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
+                        Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                 }
-            } else {
-                $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
-                    Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
             }
 
             // Copy files to user's myfiles
@@ -7460,5 +7470,24 @@ class DocumentManager
         }
 
         return $btn;
+    }
+
+    /**
+     * It gest extra value to define if download icon is visible or not.
+     *
+     * @param $documentId
+     *
+     * @return bool
+     */
+    public static function getHideDownloadIcon($documentId)
+    {
+        $extraFieldValue = new ExtraFieldValue('document');
+        $extraValue = $extraFieldValue->get_values_by_handler_and_field_variable($documentId, 'can_be_downloaded');
+        $canBeDownloadedIcon = false;
+        if (!empty($extraValue) && isset($extraValue['value'])) {
+            $canBeDownloadedIcon = (bool) $extraValue['value'];
+        }
+
+        return $canBeDownloadedIcon;
     }
 }

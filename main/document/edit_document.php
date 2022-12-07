@@ -334,6 +334,12 @@ if ($is_allowed_to_edit) {
             }
         }
 
+        // It saves extra fields values
+        $extraFieldValue = new ExtraFieldValue('document');
+        $values = $_REQUEST;
+        $values['item_id'] = $document_id;
+        $extraFieldValue->saveFieldValues($values);
+
         $url = 'document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : '');
 
         $redirectToEditPage = isset($_POST['button_ck']) && 1 === (int) $_POST['button_ck'];
@@ -458,6 +464,19 @@ if ($owner_id == api_get_user_id() ||
     } else {
         $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
     }
+
+    $itemId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    $extraField = new ExtraField('document');
+    $extraField->addElements(
+        $form,
+        $itemId,
+        [], //exclude
+        false, // filter
+        false, // tag as select
+        [], //show only fields
+        [], // order fields
+        [] // extra data
+    );
 
     if ($file_type != 'link') {
         if ($owner_id == api_get_user_id() || api_is_platform_admin()) {

@@ -33,8 +33,10 @@ $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionLi
 set_time_limit(0);
 if (isset($_POST['formSent'])) {
     $formSent = $_POST['formSent'];
-    $file_type = isset($_POST['file_type']) ? $_POST['file_type'] : 'csv';
+    $file_type = $_POST['file_type'] ?? 'csv';
     $session_id = $_POST['session_id'];
+    $includeUsers = !isset($_POST['no_include_users']);
+
     if (empty($session_id)) {
         $sql = "SELECT
                     s.id,
@@ -64,22 +66,22 @@ if (isset($_POST['formSent'])) {
             }
         }
 
-        $result = Database::query($sql);
     } else {
         $sql = "SELECT s.id,name,username,access_start_date,access_end_date,visibility,session_category_id
                 FROM $tbl_session s
                 INNER JOIN $tbl_user
                     ON $tbl_user.user_id = s.id_coach
                 WHERE s.id='$session_id'";
-        $result = Database::query($sql);
     }
+
+    $result = Database::query($sql);
 
     if (Database::num_rows($result)) {
         $sessionListToExport = [];
         if (in_array($file_type, ['csv', 'xls'])) {
             $archiveFile = 'export_sessions_'.$session_id.'_'.api_get_local_time();
             $cvs = true;
-            $sessionListToExport[] = [
+            $exportHeaders = [
                 'SessionId',
                 'SessionName',
                 'Coach',
@@ -87,9 +89,15 @@ if (isset($_POST['formSent'])) {
                 'DateEnd',
                 'Visibility',
                 'SessionCategory',
-                'Users',
-                'Courses',
             ];
+
+            if ($includeUsers) {
+                $exportHeaders[] = 'Users';
+            }
+
+            $exportHeaders[] = 'Courses';
+
+            $sessionListToExport[] = $exportHeaders;
         } else {
             if (!file_exists($archivePath)) {
                 mkdir($archivePath, api_get_permissions_for_new_directories(), true);
@@ -119,26 +127,30 @@ if (isset($_POST['formSent'])) {
             $row['visibility'] = str_replace(';', ',', $row['visibility']);
             $row['session_category'] = str_replace(';', ',', $row['session_category_id']);
             // users
-            $sql = "SELECT DISTINCT $tbl_user.username
+            $users = '';
+
+            if ($includeUsers) {
+                $sql = "SELECT DISTINCT $tbl_user.username
                     FROM $tbl_user
                     INNER JOIN $tbl_session_user
                     ON
                         $tbl_user.user_id = $tbl_session_user.user_id AND
-                        $tbl_session_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
-                        $tbl_session_user.session_id = '".$row['id']."'";
+                        $tbl_session_user.relation_type<>" . SESSION_RELATION_TYPE_RRHH . " AND
+                        $tbl_session_user.session_id = '" . $row['id'] . "'";
 
-            $rsUsers = Database::query($sql);
-            $users = '';
-            while ($rowUsers = Database::fetch_array($rsUsers)) {
-                if ($cvs) {
-                    $users .= str_replace(';', ',', $rowUsers['username']).'|';
-                } else {
-                    $users .= "\t\t<User>$rowUsers[username]</User>\n";
+                $rsUsers = Database::query($sql);
+
+                while ($rowUsers = Database::fetch_array($rsUsers)) {
+                    if ($cvs) {
+                        $users .= str_replace(';', ',', $rowUsers['username']) . '|';
+                    } else {
+                        $users .= "\t\t<User>$rowUsers[username]</User>\n";
+                    }
                 }
-            }
 
-            if (!empty($users) && $cvs) {
-                $users = api_substr($users, 0, api_strlen($users) - 1);
+                if (!empty($users) && $cvs) {
+                    $users = api_substr($users, 0, api_strlen($users) - 1);
+                }
             }
 
             // Courses
@@ -171,15 +183,22 @@ if (isset($_POST['formSent'])) {
 
                 if ($cvs) {
                     $courses .= str_replace(';', ',', $rowCourses['code']);
-                    $courses .= '['.str_replace(';', ',', $coachs).'][';
+                    $courses .= '['.str_replace(';', ',', $coachs).']';
+
+                    if ($includeUsers) {
+                        $courses .= '[';
+                    }
                 } else {
                     $courses .= "\t\t<Course>\n";
                     $courses .= "\t\t\t<CourseCode>$rowCourses[code]</CourseCode>\n";
                     $courses .= "\t\t\t<Coach>$coachs</Coach>\n";
                 }
 
-                // rel user courses
-                $sql = "SELECT DISTINCT u.username
+                $userscourse = '';
+
+                if ($includeUsers) {
+                    // rel user courses
+                    $sql = "SELECT DISTINCT u.username
                         FROM $tbl_session_course_user scu
                         INNER JOIN $tbl_session_user su
                         ON
@@ -192,26 +211,30 @@ if (isset($_POST['formSent'])) {
                             scu.c_id='".$rowCourses['c_id']."' AND
                             scu.session_id='".$row['id']."'";
 
-                $rsUsersCourse = Database::query($sql);
-                $userscourse = '';
-                while ($rowUsersCourse = Database::fetch_array($rsUsersCourse)) {
+                    $rsUsersCourse = Database::query($sql);
+                    while ($rowUsersCourse = Database::fetch_array($rsUsersCourse)) {
+                        if ($cvs) {
+                            $userscourse .= str_replace(';', ',', $rowUsersCourse['username']).',';
+                        } else {
+                            $courses .= "\t\t\t<User>$rowUsersCourse[username]</User>\n";
+                        }
+                    }
+
                     if ($cvs) {
-                        $userscourse .= str_replace(';', ',', $rowUsersCourse['username']).',';
-                    } else {
-                        $courses .= "\t\t\t<User>$rowUsersCourse[username]</User>\n";
+                        if (!empty($userscourse)) {
+                            $userscourse = api_substr(
+                                $userscourse,
+                                0,
+                                api_strlen($userscourse) - 1
+                            );
+                        }
+
+                        $courses .= $userscourse.']';
                     }
                 }
 
                 if ($cvs) {
-                    if (!empty($userscourse)) {
-                        $userscourse = api_substr(
-                            $userscourse,
-                            0,
-                            api_strlen($userscourse) - 1
-                        );
-                    }
-
-                    $courses .= $userscourse.']|';
+                    $courses .= '|';
                 } else {
                     $courses .= "\t\t</Course>\n";
                 }
@@ -223,7 +246,7 @@ if (isset($_POST['formSent'])) {
             $add = $courses;
 
             if (in_array($file_type, ['csv', 'xls'])) {
-                $sessionListToExport[] = [
+                $exportContent = [
                     $row['id'],
                     $row['name'],
                     $row['username'],
@@ -231,22 +254,25 @@ if (isset($_POST['formSent'])) {
                     $row['access_end_date'],
                     $row['visibility'],
                     $row['session_category'],
-                    $users,
-                    $courses,
                 ];
+
+                if ($includeUsers) {
+                    $exportContent[] = $users;
+                }
+
+                $exportContent[] = $courses;
+                $sessionListToExport[] = $exportContent;
             } else {
                 $add = "\t<Session>\n"
-                         ."\t\t<SessionId>$row[id]</SessionId>\n"
-                         ."\t\t<SessionName>$row[name]</SessionName>\n"
-                         ."\t\t<Coach>$row[username]</Coach>\n"
-                         ."\t\t<DateStart>$row[access_start_date]</DateStart>\n"
-                         ."\t\t<DateEnd>$row[access_end_date]</DateEnd>\n"
-                         ."\t\t<Visibility>$row[visibility]</Visibility>\n"
-                         ."\t\t<SessionCategory>$row[session_category]</SessionCategory>\n";
-            }
+                    ."\t\t<SessionId>$row[id]</SessionId>\n"
+                    ."\t\t<SessionName>$row[name]</SessionName>\n"
+                    ."\t\t<Coach>$row[username]</Coach>\n"
+                    ."\t\t<DateStart>$row[access_start_date]</DateStart>\n"
+                    ."\t\t<DateEnd>$row[access_end_date]</DateEnd>\n"
+                    ."\t\t<Visibility>$row[visibility]</Visibility>\n"
+                    ."\t\t<SessionCategory>$row[session_category]</SessionCategory>\n"
+                    ."\t</Session>\n";
 
-            if (!$cvs) {
-                $add .= "\t</Session>\n";
                 fputs($fp, $add);
             }
         }
@@ -264,7 +290,6 @@ if (isset($_POST['formSent'])) {
             case 'xls':
                 Export::arrayToXls($sessionListToExport, $archiveFile);
                 exit;
-                break;
         }
     }
 }
@@ -310,6 +335,14 @@ foreach ($Sessions as $enreg) {
 }
 
 $form->addElement('select', 'session_id', get_lang('WhichSessionToExport'), $options);
+$form->addCheckBox(
+    'no_include_users',
+    [
+        get_lang('Users'),
+        get_lang('ReportDoesNotIncludeListOfUsersNeitherForSessionNorForEachCourse')
+    ],
+    get_lang('DoNotIncludeUsers')
+);
 $form->addButtonExport(get_lang('ExportSession'));
 
 $defaults = [];

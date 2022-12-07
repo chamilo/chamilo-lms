@@ -36,6 +36,7 @@ if (isset($_POST['formSent'])) {
     $file_type = $_POST['file_type'] ?? 'csv';
     $session_id = $_POST['session_id'];
     $includeUsers = !isset($_POST['no_include_users']);
+    $includeCourseExtraFields = isset($_POST['include_course_fields']);
 
     if (empty($session_id)) {
         $sql = "SELECT
@@ -233,6 +234,25 @@ if (isset($_POST['formSent'])) {
                     }
                 }
 
+                if ($includeCourseExtraFields) {
+                    $extraData = CourseManager::getExtraData($rowCourses['c_id'], ['special_course']);
+                    $extraData = array_map(
+                        function ($variable, $value) use ($cvs) {
+                            $value = str_replace(';', ',',  $value);
+
+                            return $cvs
+                                ? '{'.$variable.'='.$value.'}'
+                                : "<Variable>$variable</Variable><Value>$value</Value>";
+                        },
+                        array_keys($extraData),
+                        array_values($extraData)
+                    );
+
+                    $courses .= $cvs
+                        ? '['.implode('', $extraData).']'
+                        : "\t\t\t<ExtraField>".implode("\n", $extraData)."</ExtraField>\n";
+                }
+
                 if ($cvs) {
                     $courses .= '|';
                 } else {
@@ -347,6 +367,7 @@ $form->addCheckBox(
     ],
     get_lang('DoNotIncludeUsers')
 );
+$form->addCheckBox('include_course_fields', get_lang('Courses'), get_lang('IncludeExtraFields'));
 $form->addButtonExport(get_lang('ExportSession'));
 
 $defaults = [];

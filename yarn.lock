@@ -3734,7 +3734,7 @@ __metadata:
     textcomplete: ^0.18.2
     timeago: ^1.6.7
     timepicker: ^1.13.19
-    tinymce: ^5.10.6
+    tinymce: ^5.10.7
     ts-loader: ^9.4.1
     typescript: ^4.7.2
     video.js: ^7.19.2
@@ -9233,7 +9233,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinymce@npm:^5.10.6, tinymce@npm:^5.5.0":
+"tinymce@npm:^5.10.7":
+  version: 5.10.7
+  resolution: "tinymce@npm:5.10.7"
+  checksum: fe471f1004a29523d5ac39fc5023c2aa30efee653366dfd1c3c6649be2178bd04f87985c9cec00662465cd623a4f3572734ee1009c4edcf0f5af339dd7a544ad
+  languageName: node
+  linkType: hard
+
+"tinymce@npm:^5.5.0":
   version: 5.10.6
   resolution: "tinymce@npm:5.10.6"
   checksum: 806cd733fde872f97d84b22ed267d2ee0404aa003d89b6c295b91867ac8b2bafc99542bf04924f253cf093c920a9da4b37a7ef73a00ff57b2b75490fb9705caf
@@ -9350,10 +9357,11 @@ __metadata:
 
 "typescript@patch:typescript@^4.7.2#~builtin<compat/typescript>":
   version: 4.8.4
-  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=701156"
+  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=7ad353"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
+  checksum: 563a0ef47abae6df27a9a3ab38f75fc681f633ccf1a3502b1108e252e187787893de689220f4544aaf95a371a4eb3141e4a337deb9895de5ac3c1ca76430e5f0
   languageName: node
   linkType: hard
 

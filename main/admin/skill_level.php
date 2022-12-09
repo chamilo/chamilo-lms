@@ -75,7 +75,8 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
             if (isset($values['profile_id']) && !empty($values['profile_id'])) {
-                $profile = $em->getRepository('ChamiloSkillBundle:Profile')->find($values['profile_id']);
+                $profileId = (int) $values['profile_id'];
+                $profile = $em->getRepository('ChamiloSkillBundle:Profile')->find($profileId);
                 if ($profile) {
                     $item = new Level();
                     $item->setName($values['name']);
@@ -91,7 +92,7 @@ switch ($action) {
                 Display::addFlash(Display::return_message(get_lang('YouNeedToCreateASkillProfile')));
             }
             if (isset($values['submit_plus'])) {
-                header('Location: '.$listAction.'?action=add');
+                header('Location: '.$listAction.'?action=add&profile_id='.$profileId);
                 exit;
             }
             header('Location: '.$listAction);

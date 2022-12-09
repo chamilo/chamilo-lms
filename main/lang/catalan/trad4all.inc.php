@@ -7249,7 +7249,6 @@ $ExamsReporting = "Informes d'exàmens";
 $MyReporting = "Els meus informes";
 $SearchSkills = "Cerca competències";
 $SaveThisSearch = "Desa aquesta cerca";
-$SkillProfiles = "Perfils de competències desats";
 $Matches = "Coincidències";
 $WelcomeUserXToTheSiteX = "%s, benvingut al portal %s";
 $CheckUsersWithId = "Utilitza l'ID de l'usuari de l'arxiu per al registre";

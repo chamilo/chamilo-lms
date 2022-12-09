@@ -6731,7 +6731,6 @@ $ExamsReporting = "דוחות מבחנים";
 $MyReporting = "הדוחות שלי";
 $SearchSkills = "חיפוש כישורים";
 $SaveThisSearch = "שמור את החיפוש הזה";
-$SkillProfiles = "פרופילי מיומנויות מאוחסנים";
 $Matches = "התאמות";
 $WelcomeUserXToTheSiteX = "%s, ברוכים הבאים ל-%s";
 $CheckUsersWithId = "השתמש במזהי המשתמש מהקובץ כדי להירשם אליהם";

@@ -6396,7 +6396,6 @@ $ExamsReporting = "Raporty z egzaminów";
 $MyReporting = "Moje raporty";
 $SearchSkills = "Szukaj umiejętności";
 $SaveThisSearch = "Zapisz to wyszukiwanie";
-$SkillProfiles = "Przechowywane profile umiejętności";
 $Matches = "Pasuje";
 $WelcomeUserXToTheSiteX = "s%, witaj w %s";
 $CheckUsersWithId = "Użyj identyfikatorów użytkownika z pliku aby je zapisać";

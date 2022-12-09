@@ -6603,7 +6603,6 @@ $ExamsReporting = "Relatórios do exames";
 $MyReporting = "Meus relatórios";
 $SearchSkills = "Pesquisar competências";
 $SaveThisSearch = "Salve esta pesquisa";
-$SkillProfiles = "Perfis do competências salvos";
 $CantUploadDeleteYourPaperFirst = "Não pode enviar este trabalho/tarefa. Por favor apague o anterior primeiro";
 $ShowAdminToolbarComment = "Mostra uma barra global de ferramentas no topo da página para as funções de usuário designados. Esta barra de ferramentas, muito semelhante ao Wordpress e barras de ferramentas pretas do Google, pode realmente acelerar acções complicadas e melhorar o espaço que você tem disponível para o conteúdo de aprendizagem, mas pode ser confuso para alguns usuários";
 $SessionList = "Lista de sessões";

@@ -6989,7 +6989,6 @@ $ExamsReporting = "Správy skúšok";
 $MyReporting = "Moje hlásenia";
 $SearchSkills = "Hľadať zručnosti";
 $SaveThisSearch = "Uložit toto hľadanie";
-$SkillProfiles = "Uložené profily zručností";
 $Matches = "Zhoda";
 $WelcomeUserXToTheSiteX = "%s, vitajte do %s";
 $CheckUsersWithId = "Použite ID používateľa zo súboru pre zápis";

@@ -6831,7 +6831,6 @@ $ExamsReporting = "Αναφορές εξετάσεων";
 $MyReporting = "Οι αναφορές μου";
 $SearchSkills = "Search skills";
 $SaveThisSearch = "Save this search";
-$SkillProfiles = "Stored skills profiles";
 $Matches = "Matches";
 $WelcomeUserXToTheSiteX = "%s, welcome to %s";
 $CheckUsersWithId = "Use user's IDs from the file to subscribe them";

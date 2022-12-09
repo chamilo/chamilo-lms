@@ -6829,7 +6829,6 @@ $ExamsReporting = "Relatórios das provas";
 $MyReporting = "Meus relatórios";
 $SearchSkills = "Procurar habilidades";
 $SaveThisSearch = "Salve esta pesquisa";
-$SkillProfiles = "Perfis de habilidades armazenadas";
 $Matches = "Concordâncias";
 $WelcomeUserXToTheSiteX = "%s, bem-vindo ao %s";
 $CheckUsersWithId = "Usar IDs de usuário do arquivo para registrá-los";

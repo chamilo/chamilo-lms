@@ -6533,7 +6533,6 @@ $ExamsReporting = "Rapoartele de examinare";
 $MyReporting = "Rapoartele mele";
 $SearchSkills = "Cautati competente";
 $SaveThisSearch = "Salvați această căutare";
-$SkillProfiles = "Profile de competențe salvate";
 $Matches = "Corespondenta";
 $CheckUsersWithId = "Utilizați ID de utilizator pentru înregistrare";
 $WhoAndWhere = "Cine și unde";

@@ -20,6 +20,7 @@ const initialState = () => ({
   resourceNode: null,
   course: null,
   session: null,
+  recents: [],
 });
 
 const handleError = (commit, e) => {
@@ -58,6 +59,7 @@ export const ACTIONS = {
   SET_UPDATED: 'SET_UPDATED',
   SET_VIEW: 'SET_VIEW',
   SET_VIOLATIONS: 'SET_VIOLATIONS',
+  SET_RECENTS: 'SET_RECENTS',
   TOGGLE_LOADING: 'TOGGLE_LOADING',
   ADD_RESOURCE_NODE: 'ADD_RESOURCE_NODE',
   ADD_COURSE: 'ADD_COURSE',
@@ -131,21 +133,17 @@ export default function makeCrudModule({
       delMultiple: ({ commit }, items) => {
         commit(ACTIONS.TOGGLE_LOADING);
         const promises = items.map(async item => {
-          const result = await service.del(item).then(() => {
-            //commit(ACTIONS.TOGGLE_LOADING);
-            commit(ACTIONS.SET_DELETED_MULTIPLE, item);
-          });
+          const result = await service.del(item);
+
+          commit(ACTIONS.SET_DELETED_MULTIPLE, item);
 
           return result;
         });
 
-        const result = Promise.all(promises);
-
-        if (result) {
-          commit(ACTIONS.TOGGLE_LOADING);
-        }
-
-        return result;
+        return Promise.all(promises)
+            .then(() => {
+              commit(ACTIONS.TOGGLE_LOADING);
+            });
       },
       findAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
@@ -176,6 +174,7 @@ export default function makeCrudModule({
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.SET_TOTAL_ITEMS, retrieved['hydra:totalItems']);
             commit(ACTIONS.SET_VIEW, retrieved['hydra:view']);
+            commit(ACTIONS.SET_RECENTS, retrieved['hydra:member']);
             if (true === state.resetList) {
               commit(ACTIONS.RESET_LIST);
             }
@@ -383,6 +382,18 @@ export default function makeCrudModule({
       getSession: (state) => {
         return state.session;
       },
+      getDeleted (state) {
+        return state.deleted;
+      },
+      getTotalItems: (state) => {
+        return state.totalItems;
+      },
+      getRecents: (state) => {
+        return state.recents;
+      },
+      isLoading (state) {
+          return state.isLoading;
+      }
     },
     mutations: {
       updateField,
@@ -420,6 +431,7 @@ export default function makeCrudModule({
         }
         state.allIds.push(item['@id']);
       },
+      [ACTIONS.SET_RECENTS]: (state, items) => state.recents = items,
       [ACTIONS.RESET_CREATE]: state => {
         Object.assign(state, {
           isLoading: false,

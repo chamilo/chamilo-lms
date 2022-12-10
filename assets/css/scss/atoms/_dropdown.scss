@@ -3,7 +3,7 @@ select.p-dropdown {
 }
 
 .p-dropdown {
-  @apply bg-white border border-solid border-support-3 p-3.5 rounded-lg transition
+  @apply bg-white border border-solid border-support-3 p-3.5 rounded-lg transition gap-3
     hover:border-primary;
 
   .p-dropdown-label {
@@ -33,6 +33,8 @@ select.p-dropdown {
 
 .p-float-label {
   .p-dropdown {
+    @apply w-full;
+
     &.p-inputwrapper-focus {
       @apply border-primary;
 

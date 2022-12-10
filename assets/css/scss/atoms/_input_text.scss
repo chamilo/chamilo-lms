@@ -1,5 +1,5 @@
 input.p-inputtext {
-  @apply bg-white border border-solid border-support-3 p-3.5 rounded-lg transition
+  @apply bg-white border border-solid border-support-3 p-3.5 rounded-lg transition outline-none
     hover:border-primary focus:border-primary;
 
   &:focus,
@@ -43,6 +43,8 @@ input.p-inputtext {
 
 .p-float-label {
   input.p-inputtext {
+    @apply w-full;
+
     &:focus,
     &.p-filled {
       ~ {

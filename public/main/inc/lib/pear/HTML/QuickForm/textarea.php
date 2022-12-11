@@ -130,7 +130,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
             return '
-                <div class="form__field">
+                <div class="field">
                     <div class="p-float-label">
                         {element}
                         {icon}

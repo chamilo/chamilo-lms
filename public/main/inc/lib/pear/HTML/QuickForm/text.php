@@ -97,12 +97,12 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     {
         $this->updateAttributes(array('maxlength' => $maxlength));
     }
-    
+
     public function getTemplate(string $layout): string
     {
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
             return '
-                <div class="form__field">
+                <div class="field">
                     <div class="p-float-label">
                         {element}
                         {icon}
@@ -124,7 +124,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                     <!-- END error -->
                 </div>';
         }
-        
+
         return parent::getTemplate($layout);
     }
 

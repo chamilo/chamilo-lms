@@ -1,5 +1,5 @@
 input.p-inputtext {
-  @apply bg-white border border-solid border-support-3 p-3.5 rounded-lg transition outline-none
+  @apply bg-white border border-solid border-support-3 p-3.5 rounded-lg transition outline-none w-full
     hover:border-primary focus:border-primary;
 
   &:focus,

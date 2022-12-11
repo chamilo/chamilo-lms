@@ -50,7 +50,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         ?array $attributes = []
     ) {
         $this->labelClass = isset($attributes['label-class']) ? $attributes['label-class'] : '';
-        $this->checkboxClass = isset($attributes['checkbox-class']) ? $attributes['checkbox-class'] : 'checkbox';
+        $this->checkboxClass = isset($attributes['checkbox-class']) ? $attributes['checkbox-class'] : 'field-checkbox';
 
         if (isset($attributes['label-class'])) {
             unset($attributes['label-class']);
@@ -130,7 +130,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             $name = $this->_attributes['name'];
             $id = $this->getAttribute('id');
 
-            return '<div id="'.$name.'" class="'.$checkClass.' flex gap-2">
+            return '<div id="'.$name.'" class="'.$checkClass.'">
                     '.parent::toHtml().'
                     <label for="'.$id.'" class="'.$labelClass.'">
                         '.$this->_text.

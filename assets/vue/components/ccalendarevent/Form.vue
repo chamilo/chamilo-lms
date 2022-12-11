@@ -1,6 +1,6 @@
 <template>
   <form>
-    <div class="form__field">
+    <div class="field">
       <div class="p-float-label">
         <InputText
           id="item_title"
@@ -22,7 +22,7 @@
 
     <div class="flex flex-col md:flex-row gap-5">
       <div class="md:w-1/2 flex flex-col gap-5">
-        <div class="form__field">
+        <div class="field">
           <div class="p-float-label">
             <Calendar
               id="start_date"
@@ -43,7 +43,7 @@
           />
         </div>
 
-        <div class="form__field">
+        <div class="field">
           <div class="p-float-label">
             <Calendar
               id="end_date"
@@ -100,7 +100,7 @@
           :show-status="false"
         />
 
-        <div class="form__field flex-row">
+        <div class="field flex-row">
           <Checkbox
             id="is_collective"
             v-model="item.collective"

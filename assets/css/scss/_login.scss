@@ -2,10 +2,6 @@
   @apply flex justify-center flex-col;
   min-height: calc(100vh - 4.5rem - 2rem - 1px);
 
-  form {
-    @apply gap-6;
-  }
-
   .p-inputtext {
     @apply border-none py-4 pl-4 text-support-3;
 
@@ -50,12 +46,12 @@
     }
   }
 
-  &__remember-me.form__field {
-    @apply flex-row justify-center;
+  &__remember-me {
+    @apply flex flex-row justify-center gap-2;
   }
 
-  &__buttons.form__field {
-    @apply flex-row gap-4;
+  &__buttons {
+    @apply flex flex-row gap-4;
 
     a.btn,
     .p-button {

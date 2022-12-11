@@ -262,18 +262,18 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     public function getTemplate(string $layout): string
     {
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
-            return '<div class="form__field">
+            return '<div class="field">
                 <label><!-- BEGIN required --><span class="form_required">*</span><!-- END required -->{label}</label>
                 {element}
                 {icon}
                 <!-- BEGIN label_2 -->
                     <small>{label_2}</small>
                 <!-- END label_2 -->
-    
+
                  <!-- BEGIN label_3 -->
                     <small>{label_3}</small>
                 <!-- END label_3 -->
-    
+
                 <!-- BEGIN error -->
                     <small class="p-error">{error}</small>
                 <!-- END error -->

@@ -6,29 +6,29 @@
     />
 
     <form
-      class="login-section__form"
+      class="login-section__form p-input-filled"
       @submit.prevent="performLogin"
     >
-      <div class="form__field p-input-filled">
+      <div class="field">
         <InputText
+          id="login"
           v-model="login"
           :placeholder="t('Username')"
-          id="login"
           type="text"
         />
       </div>
 
-      <div class="form__field p-input-filled">
+      <div class="field">
         <Password
           v-model="password"
           :feedback="false"
           :placeholder="t('Password')"
-          inputId="password"
+          input-id="password"
           toggle-mask
         />
       </div>
 
-      <div class="form__field login-section__remember-me">
+      <div class="field login-section__remember-me">
         <InputSwitch
           id="binary"
           v-model="remember"
@@ -42,7 +42,7 @@
         />
       </div>
 
-      <div class="form__field login-section__buttons">
+      <div class="field login-section__buttons">
         <Button
           :label="t('Sign in')"
           :loading="isLoading"
@@ -57,11 +57,11 @@
         />
       </div>
 
-      <div class="form__field text-center">
+      <div class="field text-center">
         <a
           id="forgot"
           v-t="'Forgot your password?'"
-          class="form__field"
+          class="field"
           href="/main/auth/lostPassword.php"
           tabindex="5"
         />

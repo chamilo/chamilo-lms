@@ -638,7 +638,7 @@ class HTML_QuickForm_element extends HTML_Common
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 $template = '
-                <div class="form__field '.$size[0].'">
+                <div class="field '.$size[0].'">
                     <div class="'.$size[1].'">
                         {icon}
                         <label {label-for} class="'.$height.' {error_class}">

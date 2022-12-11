@@ -55,7 +55,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         ?array $attributes = []
     ) {
         $this->labelClass = $attributes['label-class'] ?? '';
-        $this->radioClass = $attributes['radio-class'] ?? '';
+        $this->radioClass = $attributes['radio-class'] ?? 'field-radiobutton';
 
         if (isset($attributes['label-class'])) {
             unset($attributes['label-class']);
@@ -81,7 +81,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
     public function getTemplate(string $layout): string
     {
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
-            return '<div class="form__field">
+            return '<div class="field">
                 {icon}
                 <label><!-- BEGIN required --><span class="form_required">*</span><!-- END required -->{label}</label>
                 {element}
@@ -125,10 +125,8 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             $radioClass = $this->radioClass;
             $id = $this->getAttribute('id');
 
-            return '<div class="form__radio-field">
-                <div class="'.$radioClass.'">
-                    '.parent::toHtml().'
-                </div>
+            return '<div class="'.$radioClass.'">
+                '.parent::toHtml().'
                 <label for="'.$id.'" class="'.$labelClass.'">'.$this->_text.'</label>
                 </div>';
         }

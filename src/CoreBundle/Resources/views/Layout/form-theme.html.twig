@@ -10,7 +10,7 @@ vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig #}
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
-    <div class="form__field">
+    <div class="field">
         <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
             {{- form_widget(form, widget_attr) -}}
             {{- form_label(form) -}}

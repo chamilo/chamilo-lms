@@ -352,7 +352,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     public function getTemplate(string $layout): string
     {
         if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
-            return '<div class="form__field">
+            return '<div class="field">
                     <div class="p-float-label">
                         {element}
                         {icon}
@@ -374,7 +374,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                     <!-- END error -->
                 </div>';
         }
-        
+
         return parent::getTemplate($layout);
     }
 

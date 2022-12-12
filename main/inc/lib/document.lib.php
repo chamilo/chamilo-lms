@@ -5148,19 +5148,20 @@ class DocumentManager
                         $label = ' &mdash; '.$folder_titles[$folder];
                     }
                     $label = Security::remove_XSS($label);
-                    $foldersSortedByTitles[$folder_titles[$folder]] = [
+                    $foldersSortedByTitles[$folder_id] = [
                         'id' => $folder_id,
+                        'title' => $folder_titles[$folder],
                         'selected' => $selected,
                         'label' => $label,
                     ];
                 }
-                foreach ($folder_titles as $title) {
+                foreach ($folders as $id => $title) {
                     $parent_select->addOption(
-                        $foldersSortedByTitles[$title]['label'],
-                        $foldersSortedByTitles[$title]['id']
+                        $foldersSortedByTitles[$id]['label'],
+                        $foldersSortedByTitles[$id]['id']
                     );
-                    if ($foldersSortedByTitles[$title]['selected'] != '') {
-                        $parent_select->setSelected($foldersSortedByTitles[$title]['id']);
+                    if ($foldersSortedByTitles[$id]['selected'] != '') {
+                        $parent_select->setSelected($foldersSortedByTitles[$id]['id']);
                     }
                 }
             }

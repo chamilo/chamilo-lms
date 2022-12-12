@@ -1120,9 +1120,10 @@ class MoodleImport
                     $path = $file['file']['filepath'];
                     if (1 == count(explode('/', trim($path, '/')))) {
                         $safePath = api_replace_dangerous_char($path);
+                        $newSafePath = !empty($safePath) ? '/'.$sectionPath.'/'.$safeMainFolderName.'/'.$safePath : '/'.$sectionPath.'/'.$safeMainFolderName;
                         $data = DocumentManager::upload_document(
                             $file,
-                            '/'.$sectionPath.'/'.$safeMainFolderName.'/'.$safePath,
+                            $newSafePath,
                             $title,
                             '',
                             null,
@@ -1887,48 +1888,29 @@ class MoodleImport
         }
 
         $activities = $moduleDoc->getElementsByTagName('file');
-        $currentItem = [];
+        $filesInfo = [];
+        $i = 0;
         foreach ($activities as $activity) {
             if (empty($activity->childNodes->length)) {
                 continue;
             }
-            $isThisItemThatIWant = false;
             foreach ($activity->childNodes as $item) {
-                if (!$isThisItemThatIWant && $item->nodeName == 'contenthash') {
-                    $currentItem['contenthash'] = $item->nodeValue;
+                if (in_array($item->nodeName, ['filename', 'filesize', 'contenthash', 'contextid', 'filesize', 'mimetype'])) {
+                    $filesInfo[$i][$item->nodeName] = $item->nodeValue;
                 }
-                if ($item->nodeName == 'contextid' &&
-                    (int) $item->nodeValue == (int) $contextId &&
-                    !$isThisItemThatIWant
-                ) {
-                    $isThisItemThatIWant = true;
-                    continue;
-                }
-
-                if ($isThisItemThatIWant && $item->nodeName == 'filename') {
-                    $currentItem['filename'] = $item->nodeValue;
-                }
-
-                if ($isThisItemThatIWant && $item->nodeName == 'filesize') {
-                    $currentItem['filesize'] = $item->nodeValue;
-                }
-
-                if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
-                    $item->nodeValue == 'document/unknown'
-                ) {
-                    break;
-                }
-
-                if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
-                    $item->nodeValue !== 'document/unknown'
-                ) {
-                    $currentItem['mimetype'] = $item->nodeValue;
-                    break 2;
+            }
+            $i++;
+        }
+        $currentItem = [];
+        if (!empty($filesInfo)) {
+            foreach ($filesInfo as $info) {
+                if (!empty($info['filesize'])) {
+                    $currentItem[$info['contextid']] = $info;
                 }
             }
         }
 
-        return $currentItem;
+        return $currentItem[$contextId];
     }
 
     /**

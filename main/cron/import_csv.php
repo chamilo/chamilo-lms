@@ -3606,8 +3606,9 @@ class ImportCsv
             fwrite($f, '";');
         }*/
     }
+
     /**
-     * Get custom tpl for mail welcome
+     * Get custom tpl for mail welcome.
      */
     private function getCustomMailTemplate(): string
     {
@@ -3626,6 +3627,7 @@ class ImportCsv
         // If none has been found, it means we don't have a custom mail
         // welcome message, so use the .dist version
         $alternateName = 'mail/custom_calendar_welcome.dist.tpl';
+
         return 'default/'.$alternateName;
     }
 }

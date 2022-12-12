@@ -49,7 +49,7 @@ if (api_is_cas_activated()) {
             }
         }
 
-	phpCAS::client($version, $hostname, $port, $uri, $serviceBaseUrl);
+        phpCAS::client($version, $hostname, $port, $uri, $serviceBaseUrl);
 
         if (is_array($cas) && array_key_exists('noCasServerValidation', $cas) && $cas['noCasServerValidation']) {
             phpCAS::setNoCasServerValidation();

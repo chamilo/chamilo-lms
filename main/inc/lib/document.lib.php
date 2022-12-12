@@ -7016,6 +7016,25 @@ class DocumentManager
     }
 
     /**
+     * It gest extra value to define if download icon is visible or not.
+     *
+     * @param $documentId
+     *
+     * @return bool
+     */
+    public static function getHideDownloadIcon($documentId)
+    {
+        $extraFieldValue = new ExtraFieldValue('document');
+        $extraValue = $extraFieldValue->get_values_by_handler_and_field_variable($documentId, 'can_be_downloaded');
+        $canBeDownloadedIcon = false;
+        if (!empty($extraValue) && isset($extraValue['value'])) {
+            $canBeDownloadedIcon = (bool) $extraValue['value'];
+        }
+
+        return $canBeDownloadedIcon;
+    }
+
+    /**
      * Parse file information into a link.
      *
      * @param array  $userInfo        Current user info
@@ -7470,24 +7489,5 @@ class DocumentManager
         }
 
         return $btn;
-    }
-
-    /**
-     * It gest extra value to define if download icon is visible or not.
-     *
-     * @param $documentId
-     *
-     * @return bool
-     */
-    public static function getHideDownloadIcon($documentId)
-    {
-        $extraFieldValue = new ExtraFieldValue('document');
-        $extraValue = $extraFieldValue->get_values_by_handler_and_field_variable($documentId, 'can_be_downloaded');
-        $canBeDownloadedIcon = false;
-        if (!empty($extraValue) && isset($extraValue['value'])) {
-            $canBeDownloadedIcon = (bool) $extraValue['value'];
-        }
-
-        return $canBeDownloadedIcon;
     }
 }

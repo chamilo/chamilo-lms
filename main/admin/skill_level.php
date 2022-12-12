@@ -59,7 +59,7 @@ if (!empty($item)) {
     ]);
 } elseif (!empty($profileId)) {
     $form->setDefaults([
-        'profile_id' => $profileId
+        'profile_id' => $profileId,
     ]);
 }
 

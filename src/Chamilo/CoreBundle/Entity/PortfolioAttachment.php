@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="portfolio_attachment")
  * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioAttachmentRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioAttachmentRepository")
  */
 class PortfolioAttachment
 {

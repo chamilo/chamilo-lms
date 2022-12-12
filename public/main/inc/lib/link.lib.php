@@ -492,16 +492,16 @@ class Link extends Model
             ->setTarget($values['target'])
         ;
 
-            $category = null;
-            $repoCategory = Container::getLinkCategoryRepository();
-            if (!empty($categoryId)) {
-                /** @var CLinkCategory $category */
-                $category = $repoCategory->find($categoryId);
-                $link->setCategory($category)->setParent($category);
-            } else {
-                $courseEntity = api_get_course_entity($course_id);
-                $link->setCategory($category)->setParent($courseEntity);
-            }
+        $category = null;
+        $repoCategory = Container::getLinkCategoryRepository();
+        if (!empty($categoryId)) {
+            /** @var CLinkCategory $category */
+            $category = $repoCategory->find($categoryId);
+            $link->setCategory($category)->setParent($category);
+        } else {
+            $courseEntity = api_get_course_entity($course_id);
+            $link->setCategory($category)->setParent($courseEntity);
+        }
 
         $repo->update($link);
 

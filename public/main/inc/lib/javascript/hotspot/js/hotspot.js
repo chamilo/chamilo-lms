@@ -913,13 +913,6 @@ window.HotspotQuestion = (function () {
 
                     self.answersCollection.get(answerIndex).set('x', point.x);
                     self.answersCollection.get(answerIndex).set('y', point.y);
-                })
-                .on('mouseup', function (e) {
-                    if (!isMoving) {
-                        return;
-                    }
-
-                    e.preventDefault();
 
                     $('[name="hotspot[' + config.questionId + '][' + hotspot.id + ']"]').val(function () {
                         return [point.x, point.y].join(';');
@@ -927,6 +920,12 @@ window.HotspotQuestion = (function () {
                     $('[name="choice[' + config.questionId + '][' + hotspot.id + ']"]').val(function () {
                         return [point.x, point.y].join(';');
                     });
+                })
+                .on('mouseup', function (e) {
+                    e.preventDefault();
+                    if (!isMoving) {
+                        return;
+                    }
 
                     isMoving = false;
                 });

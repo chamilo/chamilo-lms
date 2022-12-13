@@ -396,6 +396,15 @@ if (api_is_platform_admin()) {
         'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin',
         'label' => get_lang('GlobalAgenda'),
     ];
+
+    if (true === api_get_configuration_value('agenda_reminders')) {
+        $items[] = [
+            'class' => 'item-agenda-reminders',
+            'url' => api_get_path(WEB_CODE_PATH).'admin/import_course_agenda_reminders.php',
+            'label' => get_lang('AgendaReminders'),
+        ];
+    }
+
     $items[] = [
         'class' => 'item-homepage',
         'url' => 'configure_homepage.php',

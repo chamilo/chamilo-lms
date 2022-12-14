@@ -2918,7 +2918,14 @@ class Rest extends WebService
                         continue;
                     }
                     $averageScore = round(($scoreSum / $countAttempts) * 100, 2);
-                    $completion = $countSuccess / $countUsersInCourses[$cId];
+                    $completionMethod = 'Success on users count';
+                    if (empty($countUsersInCourses[$cId])) {
+                        // Users might have all been unsubscribed from the course since taking the test
+                        $completion = $countSuccess / $countAttempts;
+                        $completionMethod = 'Success on attempts count';
+                    } else {
+                        $completion = $countSuccess / $countUsersInCourses[$cId];
+                    }
 
                     $resultArray[] = [
                         'id' => $item,
@@ -2926,6 +2933,7 @@ class Rest extends WebService
                         'updated_by' => '',
                         'type' => $type,
                         'completion' => $completion,
+                        'completion_method' => $completionMethod,
                         'number_of_last_attempts' => $countAttempts,
                         'average_score_in_percent' => $averageScore,
                         'extra' => $extraArray,

@@ -1603,7 +1603,7 @@ class learnpath
      *
      * @return int The number of items currently completed
      */
-    public function get_complete_items_count($failedStatusException = false)
+    public function get_complete_items_count($failedStatusException = false, $typeListNotToCount = [])
     {
         $i = 0;
         $completedStatusList = [
@@ -1622,10 +1622,17 @@ class learnpath
             error_log('Counting steps with status in: '.print_r($completedStatusList, 1));
         }
 
+        $chapters = self::getChapterTypes();
+        if (!empty($typeListNotToCount)) {
+            $typeListNotToCount = array_merge($typeListNotToCount, $chapters);
+        } else {
+            $typeListNotToCount = $chapters;
+        }
+
         foreach ($this->items as $id => $dummy) {
             // Trying failed and browsed considered "progressed" as well.
             if ($this->items[$id]->status_is($completedStatusList) &&
-                $this->items[$id]->get_type() !== 'dir'
+                !in_array($this->items[$id]->get_type(), $typeListNotToCount)
             ) {
                 $i++;
             }
@@ -1683,10 +1690,15 @@ class learnpath
      *
      * @return int The total no-chapters number of items
      */
-    public function getTotalItemsCountWithoutDirs()
+    public function getTotalItemsCountWithoutDirs($typeListNotToCount = [])
     {
         $total = 0;
-        $typeListNotToCount = self::getChapterTypes();
+        $chapters = self::getChapterTypes();
+        if (!empty($typeListNotToCount)) {
+            $typeListNotToCount = array_merge($typeListNotToCount, $chapters);
+        } else {
+            $typeListNotToCount = $chapters;
+        }
         foreach ($this->items as $temp2) {
             if (!in_array($temp2->get_type(), $typeListNotToCount)) {
                 $total++;
@@ -14673,6 +14685,26 @@ EOD;
     }
 
     /**
+     * Check and obtain the lp final item if exist.
+     *
+     * @return learnpathItem
+     */
+    public function getFinalItem()
+    {
+        if (empty($this->items)) {
+            return null;
+        }
+
+        foreach ($this->items as $item) {
+            if ($item->type !== 'final_item') {
+                continue;
+            }
+
+            return $item;
+        }
+    }
+
+    /**
      * Get the depth level of LP item.
      *
      * @param array $items
@@ -14726,26 +14758,6 @@ EOD;
     private static function format_scorm_type_item($in_type)
     {
         return str_replace(' ', '_', $in_type);
-    }
-
-    /**
-     * Check and obtain the lp final item if exist.
-     *
-     * @return learnpathItem
-     */
-    private function getFinalItem()
-    {
-        if (empty($this->items)) {
-            return null;
-        }
-
-        foreach ($this->items as $item) {
-            if ($item->type !== 'final_item') {
-                continue;
-            }
-
-            return $item;
-        }
     }
 
     /**

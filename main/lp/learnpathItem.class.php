@@ -3629,6 +3629,23 @@ class learnpathItem
         }
     }
 
+    public function isLpItemsCompleted()
+    {
+        $lp = new Learnpath(api_get_course_id(), $this->lp_id, api_get_user_id());
+        $count = $lp->getTotalItemsCountWithoutDirs([TOOL_LP_FINAL_ITEM]);
+        $completed = $lp->get_complete_items_count(true, [TOOL_LP_FINAL_ITEM]);
+        $isCompleted = ($count - $completed == 0);
+
+        return $isCompleted;
+    }
+
+    public function getLpFinalItem()
+    {
+        $lp = new Learnpath(api_get_course_id(), $this->lp_id, api_get_user_id());
+
+        return $lp->getFinalItem();
+    }
+
     /**
      * Writes the current data to the database.
      *
@@ -3657,6 +3674,15 @@ class learnpathItem
             }
             // If the user is an invitee, we don't write anything to DB
             return true;
+        }
+
+        // Final item is checked when previous are completed.
+        if ($this->type == 'final_item') {
+            if ($debug) {
+                error_log('learnpathItem::write_to_db() , It is a final item so is not updated.', 0);
+            }
+
+            return false;
         }
 
         $courseId = api_get_course_int_id();
@@ -4122,6 +4148,41 @@ class learnpathItem
 
         if ($debug) {
             error_log('End of learnpathItem::write_to_db()', 0);
+        }
+
+        // Check if lp is completed to validate the final item
+        if ($this->isLpItemsCompleted()) {
+            $lpFinalItem = $this->getLpFinalItem();
+            if ($lpFinalItem) {
+                $sql = "SELECT iid
+                        FROM $item_view_table
+                        WHERE
+                            c_id = $courseId AND
+                            lp_item_id = {$lpFinalItem->get_id()} AND
+                            lp_view_id = {$this->view_id} AND
+                            status != 'completed'";
+                $rs = Database::query($sql);
+                if (Database::num_rows($rs) > 0) {
+                    $params = [
+                        'total_time' => $this->get_total_time(),
+                        'start_time' => $this->get_current_start_time(),
+                        'score' => $this->get_score(),
+                        'status' => 'completed',
+                        'max_score' => $this->get_max(),
+                        'suspend_data' => $this->current_data,
+                        'lesson_location' => $this->lesson_location,
+                    ];
+                    $where = [
+                        'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
+                            $courseId,
+                            $lpFinalItem->get_id(),
+                            $this->view_id,
+                            $this->get_attempt_id(),
+                        ],
+                    ];
+                    Database::update($item_view_table, $params, $where);
+                }
+            }
         }
 
         return true;

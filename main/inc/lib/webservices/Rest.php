@@ -2914,19 +2914,21 @@ class Rest extends WebService
                         $scoreSum += $score;
                         $countAttempts++;
                     }
-                    if ($countAttempts === 0) {
-                        continue;
-                    }
-                    $averageScore = round(($scoreSum / $countAttempts) * 100, 2);
                     $completionMethod = 'Success on users count';
-                    if (empty($countUsersInCourses[$cId])) {
-                        // Users might have all been unsubscribed from the course since taking the test
-                        $completion = $countSuccess / $countAttempts;
-                        $completionMethod = 'Success on attempts count';
+                    if ($countAttempts === 0) {
+                        // In some cases, there are no attempts at all. Return 0 completion & score.
+                        $averageScore = 0;
+                        $completion = 0;
                     } else {
-                        $completion = $countSuccess / $countUsersInCourses[$cId];
+                        $averageScore = round(($scoreSum / $countAttempts) * 100, 2);
+                        if (empty($countUsersInCourses[$cId])) {
+                            // Users might have all been unsubscribed from the course since taking the test
+                            $completion = $countSuccess / $countAttempts;
+                            $completionMethod = 'Success on attempts count';
+                        } else {
+                            $completion = $countSuccess / $countUsersInCourses[$cId];
+                        }
                     }
-
                     $resultArray[] = [
                         'id' => $item,
                         'title' => $title,

@@ -2166,16 +2166,25 @@ class Display
             return '';
         }
 
-        $col = count($contentList);
-        $html = ' <div id="'.$id.'" class="q-card p-2 mb-4">';
-        $html .= ' <div class="flex justify-between '.$col.'">';
-        foreach ($contentList as $item) {
-            $html .= '<div class="flex p-2 gap-2 ">'.$item.'</div>';
-        }
-        $html .= '</div>';
-        $html .= '</div>';
+        $count = count($contentList);
 
-        return $html;
+        $start = $contentList[0];
+        $center = '';
+        $end = '';
+
+        if (2 === $count) {
+            $end = $contentList[1];
+        } elseif (3 === $count) {
+            $center = $contentList[1];
+            $end = $contentList[2];
+        }
+
+        return '<div id="'.$id.'" class="p-toolbar p-component" role="toolbar">
+                <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
+                <div class="p-toolbar-group-center">'.$center.'</div>
+                <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>
+            </div>
+        ';
     }
 
     public static function getMdiIcon(string $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string

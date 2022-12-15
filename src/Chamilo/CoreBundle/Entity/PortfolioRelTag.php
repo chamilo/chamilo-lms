@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="portfolio_rel_tag")
- * @ORM\Entity()
+ * ORM\Entity()
  */
 class PortfolioRelTag
 {

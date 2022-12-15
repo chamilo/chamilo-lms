@@ -248,6 +248,13 @@ class ResourceListener
      */
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
     {
+        $resourceNode = $resource->getResourceNode();
+        $parentResourceNode = $resource->getParent()?->resourceNode;
+
+        if ($parentResourceNode) {
+            $resourceNode->setParent($parentResourceNode);
+        }
+
         //error_log('Resource listener preUpdate');
         //$this->setLinks($resource, $eventArgs->getEntityManager());
     }

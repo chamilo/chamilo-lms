@@ -492,13 +492,22 @@ class Link extends Model
             ->setTarget($values['target'])
         ;
 
-        if (!empty($values['category_id'])) {
+        $courseEntity = api_get_course_entity($course_id);
+
+        if ($categoryId) {
             $repoCategory = Container::getLinkCategoryRepository();
             /** @var CLinkCategory $category */
             $category = $repoCategory->find($categoryId);
-            $link->setCategory($category);
+            $link
+                ->setCategory($category)
+                ->setParent($category);
+        } else {
+            $link
+                ->setCategory(null)
+                ->setParent($courseEntity);
         }
 
+        $repo->updateNodeForResource($link);
         $repo->update($link);
 
         // Update search enchine and its values table if enabled.
@@ -1523,7 +1532,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             $title = $linkInfo['title'];
             $description = $linkInfo['description'];
             $category = $linkInfo['category_id'];
-            if (0 != $linkInfo['on_homepage']) {
+            if (isset($linkInfo['on_homepage']) && 0 != $linkInfo['on_homepage']) {
                 $onhomepage = 1;
             }
             $target_link = $linkInfo['target'];

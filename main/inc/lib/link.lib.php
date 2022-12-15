@@ -1747,6 +1747,27 @@ class Link extends Model
     }
 
     /**
+     * It gets the category by a specific name.
+     *
+     * @param string $name
+     *
+     * @return array
+     */
+    public static function getCategoryByName($name)
+    {
+        $table = Database::get_course_table(TABLE_LINK_CATEGORY);
+        $courseId = api_get_course_int_id();
+        $name = Database::escape_string($name);
+
+        $sql = "SELECT * FROM $table
+                WHERE category_title = '$name' AND c_id = $courseId";
+        $result = Database::query($sql);
+        $category = Database::fetch_array($result, 'ASSOC');
+
+        return $category;
+    }
+
+    /**
      * Move a link up in its category.
      *
      * @param int $id

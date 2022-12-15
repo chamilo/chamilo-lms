@@ -5106,13 +5106,14 @@ class DocumentManager
                     WHERE
                         filetype = 'folder' AND
                         c_id = $course_id AND
-                        path IN ('".$folder_sql."')";
+                        path IN ('".$folder_sql."')
+                        ORDER BY path";
             $res = Database::query($sql);
             $folder_titles = [];
             while ($obj = Database::fetch_object($res)) {
                 $folder_titles[$obj->path] = $obj->title;
             }
-            natcasesort($folder_titles);
+            //natcasesort($folder_titles);
         }
 
         if (empty($form)) {
@@ -5147,19 +5148,20 @@ class DocumentManager
                         $label = ' &mdash; '.$folder_titles[$folder];
                     }
                     $label = Security::remove_XSS($label);
-                    $foldersSortedByTitles[$folder_titles[$folder]] = [
+                    $foldersSortedByTitles[$folder_id] = [
                         'id' => $folder_id,
+                        'title' => $folder_titles[$folder],
                         'selected' => $selected,
                         'label' => $label,
                     ];
                 }
-                foreach ($folder_titles as $title) {
+                foreach ($folders as $id => $title) {
                     $parent_select->addOption(
-                        $foldersSortedByTitles[$title]['label'],
-                        $foldersSortedByTitles[$title]['id']
+                        $foldersSortedByTitles[$id]['label'],
+                        $foldersSortedByTitles[$id]['id']
                     );
-                    if ($foldersSortedByTitles[$title]['selected'] != '') {
-                        $parent_select->setSelected($foldersSortedByTitles[$title]['id']);
+                    if ($foldersSortedByTitles[$id]['selected'] != '') {
+                        $parent_select->setSelected($foldersSortedByTitles[$id]['id']);
                     }
                 }
             }

@@ -2630,6 +2630,13 @@ class PortfolioController
 
         Database::getManager()->flush();
 
+        if ($item->isHighlighted()) {
+            HookPortfolioItemHighlighted::create()
+                ->setEventData(['item' => $item])
+                ->notifyItemHighlighted()
+            ;
+        }
+
         Display::addFlash(
             Display::return_message(
                 $item->isHighlighted() ? get_lang('MarkedAsHighlighted') : get_lang('UnmarkedAsHighlighted'),

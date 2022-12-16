@@ -2159,6 +2159,11 @@ class PortfolioController
             .($this->course ? '_'.$this->course->getCode() : '')
             .'_'.get_lang('Portfolio');
 
+        HookPortfolioDownloaded::create()
+            ->setEventData(['owner' => $this->owner])
+            ->notifyPortfolioDownloaded()
+        ;
+
         $pdf = new PDF();
         $pdf->content_to_pdf(
             $pdfContent,
@@ -2361,6 +2366,11 @@ class PortfolioController
         foreach ($filenames as $filename) {
             $zip->add($filename, PCLZIP_OPT_REMOVE_PATH, $tempPortfolioDirectory);
         }
+
+        HookPortfolioDownloaded::create()
+            ->setEventData(['owner' => $this->owner])
+            ->notifyPortfolioDownloaded()
+        ;
 
         DocumentManager::file_send_for_download($tempZipFile, true, "$zipName.zip");
 

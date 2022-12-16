@@ -149,6 +149,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $portfolioItemAddedHook = XApiPortfolioItemAddedHookObserver::create();
         $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
         $portfolioItemHighlightedHook = XApiPortfolioItemHighlightedHookObserver::create();
+        $portfolioDownloaded = XApiPortfolioDownloadedHookObserver::create();
 
         HookLearningPathItemViewed::create()->detach($learningPathItemViewedHook);
         HookLearningPathEnd::create()->detach($learningPathEndHook);
@@ -158,6 +159,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         HookPortfolioItemAdded::create()->detach($portfolioItemAddedHook);
         HookPortfolioItemCommented::create()->detach($portfolioItemCommentedHook);
         HookPortfolioItemHighlighted::create()->detach($portfolioItemHighlightedHook);
+        HookPortfolioDownloaded::create()->detach($portfolioDownloaded);
 
         return 1;
     }
@@ -244,6 +246,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
         $portfolioItemViewedHook = XApiPortfolioItemViewedHookObserver::create();
         $portfolioItemHighlightedHook = XApiPortfolioItemHighlightedHookObserver::create();
+        $portfolioDownloadedHook = XApiPortfolioDownloadedHookObserver::create();
 
         $learningPathItemViewedEvent = HookLearningPathItemViewed::create();
         $learningPathEndEvent = HookLearningPathEnd::create();
@@ -253,6 +256,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $portfolioItemCommentedEvent = HookPortfolioItemCommented::create();
         $portfolioItemViewedEvent = HookPortfolioItemViewed::create();
         $portfolioItemHighlightedEvent = HookPortfolioItemHighlighted::create();
+        $portfolioDownloadedEvent = HookPortfolioDownloaded::create();
 
         if ('true' === $this->get(self::SETTING_LRS_LP_ITEM_ACTIVE)) {
             $learningPathItemViewedEvent->attach($learningPathItemViewedHook);
@@ -283,11 +287,13 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $portfolioItemCommentedEvent->attach($portfolioItemCommentedHook);
             $portfolioItemViewedEvent->attach($portfolioItemViewedHook);
             $portfolioItemHighlightedEvent->attach($portfolioItemHighlightedHook);
+            $portfolioDownloadedEvent->attach($portfolioDownloadedHook);
         } else {
             $portfolioItemAddedEvent->detach($portfolioItemAddedHook);
             $portfolioItemCommentedEvent->detach($portfolioItemCommentedHook);
             $portfolioItemViewedEvent->detach($portfolioItemViewedHook);
             $portfolioItemHighlightedEvent->detach($portfolioItemHighlightedHook);
+            $portfolioDownloadedEvent->detach($portfolioDownloadedHook);
         }
 
         return $this;

@@ -1427,7 +1427,7 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
-            ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
+            ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
             ->setTitle(
                 sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName())
             )
@@ -1461,7 +1461,7 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
-            ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
+            ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
             ->setTitle(
                 sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName())
             )
@@ -1545,7 +1545,7 @@ class PortfolioController
 
                 $portfolio = new Portfolio();
                 $portfolio
-                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
+                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
                     ->setTitle($values['title'])
                     ->setContent($values['content'])
                     ->setUser($owner)
@@ -1636,7 +1636,7 @@ class PortfolioController
 
                 $portfolio = new Portfolio();
                 $portfolio
-                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
+                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
                     ->setTitle($values['title'])
                     ->setContent($values['content'])
                     ->setUser($owner)

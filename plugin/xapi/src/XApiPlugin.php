@@ -150,6 +150,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
         $portfolioItemHighlightedHook = XApiPortfolioItemHighlightedHookObserver::create();
         $portfolioDownloaded = XApiPortfolioDownloadedHookObserver::create();
+        $portfolioItemScoredHook = XApiPortfolioItemScoredHookObserver::create();
+        $portfolioCommentedScoredHook = XApiPortfolioCommentScoredHookObserver::create();
 
         HookLearningPathItemViewed::create()->detach($learningPathItemViewedHook);
         HookLearningPathEnd::create()->detach($learningPathEndHook);
@@ -160,6 +162,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         HookPortfolioItemCommented::create()->detach($portfolioItemCommentedHook);
         HookPortfolioItemHighlighted::create()->detach($portfolioItemHighlightedHook);
         HookPortfolioDownloaded::create()->detach($portfolioDownloaded);
+        HookPortfolioItemScored::create()->detach($portfolioItemScoredHook);
+        HookPortfolioCommentScored::create()->detach($portfolioCommentedScoredHook);
 
         return 1;
     }
@@ -247,6 +251,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $portfolioItemViewedHook = XApiPortfolioItemViewedHookObserver::create();
         $portfolioItemHighlightedHook = XApiPortfolioItemHighlightedHookObserver::create();
         $portfolioDownloadedHook = XApiPortfolioDownloadedHookObserver::create();
+        $portfolioItemScoredHook = XApiPortfolioItemScoredHookObserver::create();
+        $portfolioCommentScoredHook = XApiPortfolioCommentScoredHookObserver::create();
 
         $learningPathItemViewedEvent = HookLearningPathItemViewed::create();
         $learningPathEndEvent = HookLearningPathEnd::create();
@@ -257,6 +263,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $portfolioItemViewedEvent = HookPortfolioItemViewed::create();
         $portfolioItemHighlightedEvent = HookPortfolioItemHighlighted::create();
         $portfolioDownloadedEvent = HookPortfolioDownloaded::create();
+        $portfolioItemScoredEvent = HookPortfolioItemScored::create();
+        $portfolioCommentScoredEvent = HookPortfolioCommentScored::create();
 
         if ('true' === $this->get(self::SETTING_LRS_LP_ITEM_ACTIVE)) {
             $learningPathItemViewedEvent->attach($learningPathItemViewedHook);
@@ -288,12 +296,16 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $portfolioItemViewedEvent->attach($portfolioItemViewedHook);
             $portfolioItemHighlightedEvent->attach($portfolioItemHighlightedHook);
             $portfolioDownloadedEvent->attach($portfolioDownloadedHook);
+            $portfolioItemScoredEvent->attach($portfolioItemScoredHook);
+            $portfolioCommentScoredEvent->attach($portfolioCommentScoredHook);
         } else {
             $portfolioItemAddedEvent->detach($portfolioItemAddedHook);
             $portfolioItemCommentedEvent->detach($portfolioItemCommentedHook);
             $portfolioItemViewedEvent->detach($portfolioItemViewedHook);
             $portfolioItemHighlightedEvent->detach($portfolioItemHighlightedHook);
             $portfolioDownloadedEvent->detach($portfolioDownloadedHook);
+            $portfolioItemScoredEvent->detach($portfolioItemScoredHook);
+            $portfolioCommentScoredEvent->detach($portfolioCommentScoredHook);
         }
 
         return $this;

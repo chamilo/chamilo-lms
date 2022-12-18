@@ -2407,6 +2407,11 @@ class PortfolioController
             $em->persist($item);
             $em->flush();
 
+            HookPortfolioItemScored::create()
+                ->setEventData(['item' => $item])
+                ->notifyItemScored()
+            ;
+
             Display::addFlash(
                 Display::return_message(get_lang('PortfolioItemGraded'), 'success')
             );
@@ -2475,6 +2480,11 @@ class PortfolioController
 
             $em->persist($comment);
             $em->flush();
+
+            HookPortfolioCommentScored::create()
+                ->setEventData(['comment' => $comment])
+                ->notifyCommentScored()
+            ;
 
             Display::addFlash(
                 Display::return_message(get_lang('PortfolioCommentGraded'), 'success')

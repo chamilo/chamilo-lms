@@ -4,7 +4,6 @@
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
-use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as PortfolioItemActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Scored;
@@ -20,11 +19,6 @@ class PortfolioItemScored extends PortfolioItem
     {
         $user = api_get_user_entity(api_get_user_id());
 
-        $itemAttachments = \Database::getManager()
-            ->getRepository(PortfolioAttachment::class)
-            ->findFromItem($this->item)
-        ;
-
         $maxScore = (float) api_get_course_setting('portfolio_max_score');
         $rawScore = $this->item->getScore();
         $scaled = $maxScore ? ($rawScore / $maxScore) : 0;
@@ -33,7 +27,7 @@ class PortfolioItemScored extends PortfolioItem
         $verb = new Scored();
         $object = new PortfolioItemActivity($this->item);
         $context = $this->generateContext();
-        $attachments = $this->generateAttachments($itemAttachments, $this->item->getUser());
+        $attachments = $this->generateAttachmentsForItem($this->item);
         $score = new Score($scaled, $rawScore, 0, $maxScore);
         $result = new Result($score);
 

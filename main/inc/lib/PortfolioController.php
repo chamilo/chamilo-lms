@@ -830,6 +830,11 @@ class PortfolioController
             $this->em->persist($item);
             $this->em->flush();
 
+            HookPortfolioItemEdited::create()
+                ->setEventData(['item' => $item])
+                ->notifyItemEdited()
+            ;
+
             $this->processAttachments(
                 $form,
                 $item->getUser(),
@@ -2948,6 +2953,11 @@ class PortfolioController
                 $comment->getId(),
                 PortfolioAttachment::TYPE_COMMENT
             );
+
+            HookPortfolioCommentEdited::create()
+                ->setEventData(['comment' => $comment])
+                ->notifyCommentEdited()
+            ;
 
             Display::addFlash(
                 Display::return_message(get_lang('ItemUpdated'), 'success')

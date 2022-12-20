@@ -114,6 +114,8 @@ if (api_is_allowed_to_edit(null, true) ||
             Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
             Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_xls&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
+            Display::return_icon('export_excel.png', get_lang('ExportToXLS'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a style="float:left;" title="QR"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_qrcode&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
             Display::return_icon('paint.png', get_lang('DownloadQr'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsRight = $form->returnForm();
@@ -270,7 +272,8 @@ if (api_is_allowed_to_edit(null, true) ||
             foreach ($attendant_calendar as $calendar) {
                 $date = $calendar['date'];
                 $time = $calendar['time'];
-                $datetime = '<div class="grey">'.$date.' - '.$time.'</div>';
+                $duration = !empty($calendar['duration']) ? get_lang('Duration').' : '.$calendar['duration'] : '';
+                $datetime = '<div class="grey">'.$date.' - '.$time.' '.$duration.'</div>';
 
                 $img_lock = Display::return_icon(
                             'lock-closed.png',
@@ -394,12 +397,20 @@ if (api_is_allowed_to_edit(null, true) ||
                     echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
                     echo '<div class="check">';
 
+                    $commentBtnIcon = '';
+                    if ($allowComment) {
+                        $commentBtnIcon = '&nbsp;&nbsp;<a id="comment-'.$user['user_id'].'-'.$calendar['id'].'" title="'.get_lang('Comment').'" class="attendance-comment" href="javascript:void(0)">
+                                            <em class="fa fa-commenting-o" style="font-size: 24px;"></em>
+                                            </a>';
+                    }
+
                     if (api_is_allowed_to_edit(null, true)) {
                         if (!$is_locked_attendance || api_is_platform_admin()) {
                             if ($allowSignature) {
                                 if ($signed) {
                                     echo Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY);
                                     echo '<input type="hidden" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" />';
+                                    echo $commentBtnIcon;
                                     echo '<div class="list-data">
                                         <span class="item"></span>
                                         <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign-view" href="javascript:void(0)">
@@ -409,6 +420,7 @@ if (api_is_allowed_to_edit(null, true) ||
                                 } else {
                                     echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
                                     echo '<span class="anchor_'.$calendar['id'].'"></span>';
+                                    echo $commentBtnIcon;
                                     echo '<div class="list-data">
                                         <span class="item"></span>
                                         <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
@@ -419,6 +431,7 @@ if (api_is_allowed_to_edit(null, true) ||
                             } else {
                                 echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
                                 echo '<span class="anchor_'.$calendar['id'].'"></span>';
+                                echo $commentBtnIcon;
                             }
                         } else {
                             echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
@@ -564,4 +577,6 @@ if (api_is_allowed_to_edit(null, true) ||
 if ($allowSignature) {
     include_once 'attendance_signature.inc.php';
 }
-?>
+if ($allowComment) {
+    include_once 'attendance_comment.inc.php';
+}

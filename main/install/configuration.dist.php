@@ -2321,6 +2321,12 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Create a document extra field with field label "can_be_downloaded" of type "Checkbox options".
 // $_configuration['documents_hide_download_icon'] = false;
 
+// Enable comments in attendance sheet for users
+// Require DB changes:
+// ALTER TABLE c_attendance_sheet ADD comment longtext NULL;
+// Requires edit Entity CAttendanceSheet : src/Chamilo/CourseBundle/Entity/CAttendanceSheet.php uncomment "comment" variable.
+//$_configuration['attendance_allow_comments'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

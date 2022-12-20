@@ -37,6 +37,7 @@ $actions = [
     'attendance_set_visible_select',
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
+    'attendance_sheet_export_to_xls',
     'attendance_sheet_list_no_edit',
     'calendar_logins',
     'lock_attendance',
@@ -349,6 +350,18 @@ switch ($action) {
             $student_id,
             $course_id
         );
+        break;
+    case 'attendance_sheet_export_to_xls':
+        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
+        $filter = isset($_REQUEST['filter']) ? $_REQUEST['filter'] : null;
+        $attendanceController->attendanceSheetExportToXls(
+            $attendance_id,
+            $student_id,
+            $course_id,
+            $groupId,
+            $filter
+        );
+
         break;
     case 'attendance_sheet_add':
         if ($allowToEdit) {

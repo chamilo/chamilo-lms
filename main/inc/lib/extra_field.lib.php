@@ -174,6 +174,9 @@ class ExtraField extends Model
             case 'document':
                 $this->extraFieldType = EntityExtraField::DOCUMENT_TYPE;
                 break;
+            case 'attendance_calendar':
+                $this->extraFieldType = EntityExtraField::ATTENDANCE_CALENDAR_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -208,6 +211,7 @@ class ExtraField extends Model
             'course_announcement',
             'message',
             'document',
+            'attendance_calendar',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {

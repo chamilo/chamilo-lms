@@ -830,6 +830,11 @@ class PortfolioController
             $this->em->persist($item);
             $this->em->flush();
 
+            HookPortfolioItemEdited::create()
+                ->setEventData(['item' => $item])
+                ->notifyItemEdited()
+            ;
+
             $this->processAttachments(
                 $form,
                 $item->getUser(),
@@ -1427,7 +1432,7 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
-            ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
+            ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
             ->setTitle(
                 sprintf(get_lang('PortfolioItemFromXUser'), $originItem->getUser()->getCompleteName())
             )
@@ -1461,7 +1466,7 @@ class PortfolioController
 
         $portfolio = new Portfolio();
         $portfolio
-            ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
+            ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
             ->setTitle(
                 sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName())
             )
@@ -1545,7 +1550,7 @@ class PortfolioController
 
                 $portfolio = new Portfolio();
                 $portfolio
-                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
+                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
                     ->setTitle($values['title'])
                     ->setContent($values['content'])
                     ->setUser($owner)
@@ -1636,7 +1641,7 @@ class PortfolioController
 
                 $portfolio = new Portfolio();
                 $portfolio
-                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN)
+                    ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
                     ->setTitle($values['title'])
                     ->setContent($values['content'])
                     ->setUser($owner)
@@ -2159,6 +2164,11 @@ class PortfolioController
             .($this->course ? '_'.$this->course->getCode() : '')
             .'_'.get_lang('Portfolio');
 
+        HookPortfolioDownloaded::create()
+            ->setEventData(['owner' => $this->owner])
+            ->notifyPortfolioDownloaded()
+        ;
+
         $pdf = new PDF();
         $pdf->content_to_pdf(
             $pdfContent,
@@ -2362,6 +2372,11 @@ class PortfolioController
             $zip->add($filename, PCLZIP_OPT_REMOVE_PATH, $tempPortfolioDirectory);
         }
 
+        HookPortfolioDownloaded::create()
+            ->setEventData(['owner' => $this->owner])
+            ->notifyPortfolioDownloaded()
+        ;
+
         DocumentManager::file_send_for_download($tempZipFile, true, "$zipName.zip");
 
         $fs->remove($tempPortfolioDirectory);
@@ -2396,6 +2411,11 @@ class PortfolioController
 
             $em->persist($item);
             $em->flush();
+
+            HookPortfolioItemScored::create()
+                ->setEventData(['item' => $item])
+                ->notifyItemScored()
+            ;
 
             Display::addFlash(
                 Display::return_message(get_lang('PortfolioItemGraded'), 'success')
@@ -2465,6 +2485,11 @@ class PortfolioController
 
             $em->persist($comment);
             $em->flush();
+
+            HookPortfolioCommentScored::create()
+                ->setEventData(['comment' => $comment])
+                ->notifyCommentScored()
+            ;
 
             Display::addFlash(
                 Display::return_message(get_lang('PortfolioCommentGraded'), 'success')
@@ -2629,6 +2654,13 @@ class PortfolioController
         );
 
         Database::getManager()->flush();
+
+        if ($item->isHighlighted()) {
+            HookPortfolioItemHighlighted::create()
+                ->setEventData(['item' => $item])
+                ->notifyItemHighlighted()
+            ;
+        }
 
         Display::addFlash(
             Display::return_message(
@@ -2921,6 +2953,11 @@ class PortfolioController
                 $comment->getId(),
                 PortfolioAttachment::TYPE_COMMENT
             );
+
+            HookPortfolioCommentEdited::create()
+                ->setEventData(['comment' => $comment])
+                ->notifyCommentEdited()
+            ;
 
             Display::addFlash(
                 Display::return_message(get_lang('ItemUpdated'), 'success')

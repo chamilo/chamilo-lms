@@ -4,13 +4,12 @@
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
-use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem;
+use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioComment as PortfolioCommentActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
-use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItem as PortfolioItemStatement;
-use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Viewed;
+use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Edited;
 use Xabbuh\XApi\Model\Statement;
 
-class PortfolioItemViewed extends PortfolioItemStatement
+class PortfolioCommentEdited extends PortfolioComment
 {
     use PortfolioAttachmentsTrait;
 
@@ -19,22 +18,22 @@ class PortfolioItemViewed extends PortfolioItemStatement
         $user = api_get_user_entity(api_get_user_id());
 
         $actor = new User($user);
-        $verb = new Viewed();
-        $object = new PortfolioItem($this->item);
+        $verb = new Edited();
+        $object = new PortfolioCommentActivity($this->comment);
         $context = $this->generateContext();
-        $attachments = $this->generateAttachmentsForItem($this->item);
+        $attachements = $this->generateAttachmentsForComment($this->comment);
 
         return new Statement(
-            $this->generateStatementId('portfolio-item'),
+            $this->generateStatementId('portfolio-comment'),
             $actor->generate(),
             $verb->generate(),
             $object->generate(),
             null,
             null,
-            $this->item->getCreationDate(),
+            api_get_utc_datetime(null, false, true),
             null,
             $context,
-            $attachments
+            $attachements
         );
     }
 }

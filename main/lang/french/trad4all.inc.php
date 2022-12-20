@@ -8881,6 +8881,18 @@ $DoNotIncludeUsers = "Ne pas inclure les utilisateurs";
 $ReportDoesNotIncludeListOfUsersNeitherForSessionNorForEachCourse = "Le rapport ne va pas inclure la liste des utilisateurs ni de la session ni de chaque cours.";
 $IncludeExtraFields = "Inclure les champs extra de cours";
 $SkillLevels = "Niveaux de compétence";
+$ImportCourseEvents = "Importer les événements du cours";
+$TagsCanBeUsed = "Les tags peuvent être utilisés";
+$ImportCourseAgendaReminderTitleDefault = "Invitation au cours ((course_title))";
+$ImportCourseAgendaReminderDescriptionDefault = "Bonjour ((user_complete_name)).
+
+Vous devez suivre le cours ((course_title)) entre le ((date_start)) et le ((date_end)). Vous pouvez accéder à ce cours en suivant ce lien ((course_link)).
+
+Cordialement";
+$XUserPortfolioItems = "items de portfolio de %s";
+$Scored = "Noté";
+$Edited = "Édité";
+$Downloaded = "Téléchargé";
 $RemoveUsers = "Retirer des utilisateurs";
 $SendFileToOtherUsers = "Envoyer le fichier à d'autres utilisateurs";
 $RemoveFileFromSelectedUsers = "Retirer le fichier aux utilisateurs sélectionnés";

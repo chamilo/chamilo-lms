@@ -948,6 +948,11 @@ class PortfolioController
             api_not_allowed(true);
         }
 
+        HookPortfolioItemDeleted::create()
+            ->setEventData(['item' => $item])
+            ->notifyItemDeleted()
+        ;
+
         $this->em->remove($item);
         $this->em->flush();
 

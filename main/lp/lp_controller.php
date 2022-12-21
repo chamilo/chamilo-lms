@@ -830,6 +830,11 @@ switch ($action) {
                     $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
                     $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
+                    HookLearningPathCreated::create()
+                        ->setEventData(['lp' => $_SESSION['oLP']])
+                        ->notifyCreated()
+                    ;
+
                     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id).'&'.api_get_cidreq();
                     header("Location: $url&isStudentView=false");
                     exit;

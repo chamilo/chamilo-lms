@@ -566,6 +566,12 @@ if (!empty($display)) {
     $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
     $navigationInTheMiddle = isset($display['navigation_in_the_middle']) && $display['navigation_in_the_middle'] ? 1 : 0;
     $addExtraQuitToHomeIcon = $display['add_extra_quit_to_home_icon'] ?? false;
+
+    $value = (new ExtraFieldValue('lp'))->get_values_by_handler_and_field_variable($lp_id, 'add_extra_quit_button');
+
+    if (is_array($value)) {
+        $addExtraQuitToHomeIcon = $value['value'] !== '0';
+    }
 }
 
 $template->assign('show_toolbar_by_default', $showMenu);

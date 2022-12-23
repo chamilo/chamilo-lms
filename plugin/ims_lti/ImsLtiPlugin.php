@@ -11,6 +11,7 @@ use Chamilo\PluginBundle\Entity\ImsLti\Platform;
 use Chamilo\PluginBundle\Entity\ImsLti\Token;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Tools\SchemaTool;
+use Firebase\JWT\JWK;
 
 /**
  * Description of MsiLti.
@@ -581,6 +582,34 @@ class ImsLtiPlugin extends Plugin
         return $children->map(function (ImsLtiTool $tool) {
             return $tool->getCourse();
         });
+    }
+
+    /**
+     * It gets the public key from jwks or rsa keys.
+     *
+     * @param ImsLtiTool $tool
+     *
+     * @return mixed|string|null
+     */
+    public static function getToolPublicKey(ImsLtiTool $tool)
+    {
+        $publicKey = '';
+        if (!empty($tool->getJwksUrl())) {
+            $publicKeySet = json_decode(file_get_contents($tool->getJwksUrl()), true);
+            $pk = [];
+            foreach ($publicKeySet['keys'] as $key) {
+                $pk = openssl_pkey_get_details(
+                    JWK::parseKeySet(['keys' => [$key]])[$key['kid']]
+                );
+            }
+            if (!empty($pk)) {
+                $publicKey = $pk['key'];
+            }
+        } else {
+            $publicKey = $tool->publicKey;
+        };
+
+        return $publicKey;
     }
 
     /**

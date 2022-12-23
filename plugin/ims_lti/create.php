@@ -57,6 +57,7 @@ if ($form->validate()) {
                     'ags' => $formValues['1p3_ags'],
                 ]
             )
+            ->setJwksUrl($formValues['jwks_url'])
             ->publicKey = $formValues['public_key'];
     } else {
         if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {

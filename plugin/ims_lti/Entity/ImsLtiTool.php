@@ -135,6 +135,13 @@ class ImsLtiTool
     private $redirectUrl;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="jwks_url", type="string", nullable=true)
+     */
+    private $jwksUrl;
+
+    /**
      * @var array
      *
      * @ORM\Column(name="advantage_services", type="json", nullable=true)
@@ -183,7 +190,7 @@ class ImsLtiTool
         $this->consumerKey = null;
         $this->sharedSecret = null;
         $this->lineItems = new ArrayCollection();
-        $this->version = \ImsLti::V_1P1;
+        $this->version = \ImsLti::V_1P3;
         $this->launchPresentation = [
             'document_target' => 'iframe',
         ];
@@ -622,6 +629,30 @@ class ImsLtiTool
     public function setRedirectUrl($redirectUrl)
     {
         $this->redirectUrl = $redirectUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get jwksUrl.
+     *
+     * @return string|null
+     */
+    public function getJwksUrl()
+    {
+        return $this->jwksUrl;
+    }
+
+    /**
+     * Set jwksUrl.
+     *
+     * @param string|null $jwksUrl
+     *
+     * @return ImsLtiTool
+     */
+    public function setJwksUrl($jwksUrl)
+    {
+        $this->jwksUrl = $jwksUrl;
 
         return $this;
     }

@@ -73,11 +73,24 @@ class FrmAdd extends FormValidator
             $this->addText('shared_secret', $plugin->get_lang('SharedSecret'), false);
             $this->addHtml('</div>');
             $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: block;">');
+            $this->addRadio(
+                'public_key_type',
+                $plugin->get_lang('PublicKeyType'),
+                [
+                    ImsLti::LTI_JWK_KEYSET => $plugin->get_lang('KeySetUrl'),
+                    ImsLti::LTI_RSA_KEY => $plugin->get_lang('RsaKey'),
+                ]
+            );
+            $this->addHtml('<div class="'.ImsLti::LTI_JWK_KEYSET.'" style="display: block;">');
+            $this->addUrl('jwks_url', $plugin->get_lang('PublicKeyset'), false);
+            $this->addHtml('</div>');
+            $this->addHtml('<div class="'.ImsLti::LTI_RSA_KEY.'" style="display: none;">');
             $this->addTextarea(
                 'public_key',
                 $plugin->get_lang('PublicKey'),
                 ['style' => 'font-family: monospace;', 'rows' => 5]
             );
+            $this->addHtml('</div>');
             $this->addUrl('login_url', $plugin->get_lang('LoginUrl'), false);
             $this->addUrl('redirect_url', $plugin->get_lang('RedirectUrl'), false);
             $this->addHtml('</div>');
@@ -178,6 +191,7 @@ class FrmAdd extends FormValidator
     {
         $defaults = [];
         $defaults['version'] = ImsLti::V_1P3;
+        $defaults['public_key_type'] = ImsLti::LTI_JWK_KEYSET;
 
         if ($this->baseTool) {
             $defaults['name'] = $this->baseTool->getName();
@@ -208,6 +222,12 @@ class FrmAdd extends FormValidator
                 \$(function () {
                     \$('[name=\"version\"]').on('change', function () {
                         $('.".ImsLti::V_1P1.", .".ImsLti::V_1P3."').hide();
+
+                        $('.' + this.value).show();
+                    })
+                    \$('[name=\"public_key_type\"]').on('change', function () {
+                        $('.".ImsLti::LTI_JWK_KEYSET.", .".ImsLti::LTI_RSA_KEY."').hide();
+                        $('[name=\"public_key\"], [name=\"jwks_url\"]').val('');
 
                         $('.' + this.value).show();
                     })

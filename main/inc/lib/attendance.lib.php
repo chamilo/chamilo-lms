@@ -1964,6 +1964,10 @@ class Attendance
      */
     public static function getAttendanceCalendarExtraFieldValue($variable, $calendarId)
     {
+        if (true !== api_get_configuration_value('attendance_calendar_set_duration')) {
+            return false;
+        }
+
         $extraFieldValues = new ExtraFieldValue('attendance_calendar');
         $result = $extraFieldValues->get_values_by_handler_and_field_variable($calendarId, $variable);
         if (!empty($result['value'])) {

@@ -9557,7 +9557,7 @@ function api_mail_html(
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
     }
 
-    if ($mail->SMTPDebug > 1) {
+    if ($mail->SMTPDebug >= 1) {
         error_log(
             "Mail debug:: ".
             "Protocol: ".$mail->Mailer.' :: '.

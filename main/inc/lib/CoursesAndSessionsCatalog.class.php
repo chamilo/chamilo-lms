@@ -372,11 +372,6 @@ class CoursesAndSessionsCatalog
         while ($row = Database::fetch_array($result)) {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = CourseManager::get_users_count_in_course($row['code']);
-            $connectionsLastMonth = Tracking::get_course_connections_count(
-                $row['id'],
-                0,
-                api_get_utc_datetime(time() - (30 * 86400))
-            );
 
             if ($row['tutor_name'] == '0') {
                 $row['tutor_name'] = get_lang('NoManager');
@@ -397,7 +392,6 @@ class CoursesAndSessionsCatalog
                 'visibility' => $row['visibility'],
                 'category' => $row['category_code'],
                 'count_users' => $count_users,
-                'count_connections' => $connectionsLastMonth,
             ];
         }
 
@@ -531,17 +525,11 @@ class CoursesAndSessionsCatalog
                 null,
                 true
             );
-            $connectionsLastMonth = Tracking::get_course_connections_count(
-                $courseId,
-                0,
-                api_get_utc_datetime(time() - (30 * 86400))
-            );
 
             $courseInfo['point_info'] = CourseManager::get_course_ranking($courseId, 0);
             $courseInfo['tutor'] = $courseInfo['tutor_name'];
             $courseInfo['registration_code'] = !empty($courseInfo['registration_code']);
             $courseInfo['count_users'] = $countUsers;
-            $courseInfo['count_connections'] = $connectionsLastMonth;
             $courseInfo['course_language'] = api_get_language_info(
                 api_get_language_id($courseInfo['course_language'])
             )['original_name'];

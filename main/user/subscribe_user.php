@@ -133,22 +133,20 @@ $sort_by_first_name = api_sort_by_first_name();
 $htmlHeadXtra[] = '<script>
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
-        $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
+        $("#advanced_search_form").css("display", "block");
+        $("#img_plus_and_minus").html(\''.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
     } else {
-        $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
+        $("#advanced_search_form").css("display", "none");
+        $("#img_plus_and_minus").html(\''.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
     }
 }
 </script>';
 
-$searchAdvanced = '
-<a id="advanced_params" href="javascript://"
-    class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
-    <span id="img_plus_and_minus">&nbsp;
-    '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
-    </span>
-</a>';
+$searchAdvanced = '<a id="advanced_params" class="btn btn-default advanced_options" onclick="display_advanced_search_form();">'.
+    '<span id="img_plus_and_minus">'.
+    Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').
+    '</span>'.
+    '</a>';
 
 // Build table
 if (api_get_configuration_value('session_course_users_subscription_limited_to_session_users') && !empty($sessionId)) {
@@ -217,13 +215,12 @@ if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_
         Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
 }
 
-$extraForm = '
-<a id="advanced_params" href="javascript://"
-￼    class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
-￼    <span id="img_plus_and_minus">&nbsp;
-￼    '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
-￼    </span>
-￼</a>';
+$extraForm = '<a id="advanced_params" class="btn btn-default advanced_options" onclick="display_advanced_search_form();">'.
+    '<span id="img_plus_and_minus">'.
+    Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').
+    '</span>'.
+    '</a>';
+
 if (api_get_setting('ProfilingFilterAddingUsers') === 'true') {
     $extraForm .= display_extra_profile_fields_filter();
 }
@@ -515,7 +512,7 @@ function get_number_of_users()
     }
 
     // when there is a keyword then we are searching and we have to change the SQL statement
-    if (isset($_GET['keyword_firstname'])) {
+    if (!empty($_GET['keyword_firstname']) || !empty($_GET['keyword_lastname']) || !empty($_GET['keyword_username']) || !empty($_GET['keyword_email']) || !empty($_GET['keyword_officialcode'])) {
         $condition = '';
         $keywords = [
             'firstname' => Security::remove_XSS($_GET['keyword_firstname']),
@@ -528,7 +525,7 @@ function get_number_of_users()
         foreach ($keywords as $keyword => $value) {
             if (!empty($value)) {
                 if (!empty($condition)) {
-                    $condition .= ' OR ';
+                    $condition .= ' AND ';
                 }
                 $condition .= $keyword." LIKE '%".$value."%'";
             }
@@ -548,7 +545,7 @@ function get_number_of_users()
             $sql .= ' AND ('.$condition.')';
             $sql .= " AND u.status != ".ANONYMOUS." ";
         }
-    } elseif (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+    } elseif (!empty($_GET['keyword'])) {
         // when there is a keyword then we are searching and we have to change the SQL statement
         $keyword = Database::escape_string(trim($_REQUEST['keyword']));
         $sql .= " AND (
@@ -815,7 +812,29 @@ function get_user_data($from, $number_of_items, $column, $direction)
     }
 
     // adding additional WHERE statements to the SQL for the search functionality
-    if (isset($_REQUEST['keyword'])) {
+    if (!empty($_GET['keyword_firstname']) || !empty($_GET['keyword_lastname']) || !empty($_GET['keyword_username']) || !empty($_GET['keyword_email']) || !empty($_GET['keyword_officialcode'])) {
+        $condition = '';
+        $keywords = [
+            'firstname' => Security::remove_XSS($_GET['keyword_firstname']),
+            'lastname' => Security::remove_XSS($_GET['keyword_lastname']),
+            'username' => Security::remove_XSS($_GET['keyword_username']),
+            'email' => Security::remove_XSS($_GET['keyword_email']),
+            'official_code' => Security::remove_XSS($_GET['keyword_officialcode']),
+        ];
+
+        foreach ($keywords as $keyword => $value) {
+            if (!empty($value)) {
+                if (!empty($condition)) {
+                    $condition .= ' AND ';
+                }
+                $condition .= "u.".$keyword." LIKE '%".$value."%'";
+            }
+        }
+
+        if (!empty($condition)) {
+            $sql .= ' AND ('.$condition.')';
+        }
+    } elseif (!empty($_REQUEST['keyword'])) {
         $keyword = Database::escape_string(trim($_REQUEST['keyword']));
         $sql .= " AND (
                     firstname LIKE '%".$keyword."%' OR
@@ -841,30 +860,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
         }
         foreach ($a_course_users as $user_id => $course_user) {
             $users_of_course[] = $course_user['user_id'];
-        }
-    }
-
-    if (isset($_GET['keyword_firstname'])) {
-        $condition = '';
-        $keywords = [
-            'firstname' => Security::remove_XSS($_GET['keyword_firstname']),
-            'lastname' => Security::remove_XSS($_GET['keyword_lastname']),
-            'username' => Security::remove_XSS($_GET['keyword_username']),
-            'email' => Security::remove_XSS($_GET['keyword_email']),
-            'official_code' => Security::remove_XSS($_GET['keyword_officialcode']),
-        ];
-
-        foreach ($keywords as $keyword => $value) {
-            if (!empty($value)) {
-                if (!empty($condition)) {
-                    $condition .= ' OR ';
-                }
-                $condition .= "u.".$keyword." LIKE '%".$value."%'";
-            }
-        }
-
-        if (!empty($condition)) {
-            $sql .= ' AND ('.$condition.')';
         }
     }
 

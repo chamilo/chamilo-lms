@@ -515,11 +515,11 @@ function get_number_of_users()
     if (!empty($_GET['keyword_firstname']) || !empty($_GET['keyword_lastname']) || !empty($_GET['keyword_username']) || !empty($_GET['keyword_email']) || !empty($_GET['keyword_officialcode'])) {
         $condition = '';
         $keywords = [
-            'firstname' => Security::remove_XSS($_GET['keyword_firstname']),
-            'lastname' => Security::remove_XSS($_GET['keyword_lastname']),
-            'username' => Security::remove_XSS($_GET['keyword_username']),
-            'email' => Security::remove_XSS($_GET['keyword_email']),
-            'official_code' => Security::remove_XSS($_GET['keyword_officialcode']),
+            'firstname' => Security::remove_XSS(Database::escape_string($_GET['keyword_firstname'])),
+            'lastname' => Security::remove_XSS(Database::escape_string($_GET['keyword_lastname'])),
+            'username' => Security::remove_XSS(Database::escape_string($_GET['keyword_username'])),
+            'email' => Security::remove_XSS(Database::escape_string($_GET['keyword_email'])),
+            'official_code' => Security::remove_XSS(Database::escape_string($_GET['keyword_officialcode'])),
         ];
 
         foreach ($keywords as $keyword => $value) {
@@ -815,11 +815,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
     if (!empty($_GET['keyword_firstname']) || !empty($_GET['keyword_lastname']) || !empty($_GET['keyword_username']) || !empty($_GET['keyword_email']) || !empty($_GET['keyword_officialcode'])) {
         $condition = '';
         $keywords = [
-            'firstname' => Security::remove_XSS($_GET['keyword_firstname']),
-            'lastname' => Security::remove_XSS($_GET['keyword_lastname']),
-            'username' => Security::remove_XSS($_GET['keyword_username']),
-            'email' => Security::remove_XSS($_GET['keyword_email']),
-            'official_code' => Security::remove_XSS($_GET['keyword_officialcode']),
+            'firstname' => Security::remove_XSS(Database::escape_string($_GET['keyword_firstname'])),
+            'lastname' => Security::remove_XSS(Database::escape_string($_GET['keyword_lastname'])),
+            'username' => Security::remove_XSS(Database::escape_string($_GET['keyword_username'])),
+            'email' => Security::remove_XSS(Database::escape_string($_GET['keyword_email'])),
+            'official_code' => Security::remove_XSS(Database::escape_string($_GET['keyword_officialcode'])),
         ];
 
         foreach ($keywords as $keyword => $value) {

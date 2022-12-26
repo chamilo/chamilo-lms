@@ -8953,6 +8953,7 @@ $XUserPortfolioItems = "%s's portfolio items";
 $Scored = "Scored";
 $Edited = "Edited";
 $Downloaded = "Downloaded";
+$YouCanOnlyCopyThisCourseToACourseYouTeach = "You can only copy this course to a course for which you are a teacher";
 $RemoveUsers = "Remove users";
 $SendFileToOtherUsers = "Send file to other users";
 $RemoveFileFromSelectedUsers = "Remove file from selected users";

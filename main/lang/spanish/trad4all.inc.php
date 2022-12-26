@@ -8981,6 +8981,7 @@ $XUserPortfolioItems = "Artículos del portafolio de %s";
 $Scored = "Calificado";
 $Edited = "Editado";
 $Downloaded = "Descargado";
+$YouCanOnlyCopyThisCourseToACourseYouTeach = "Solamente se puede copiar a un curso en el que seas profesor";
 $RemoveUsers = "Eliminar usuarios";
 $SendFileToOtherUsers = "Enviar archivo a otros usuarios";
 $RemoveFileFromSelectedUsers = "Eliminar archivo de usuarios seleccionados";

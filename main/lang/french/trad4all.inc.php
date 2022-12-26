@@ -8893,6 +8893,7 @@ $XUserPortfolioItems = "items de portfolio de %s";
 $Scored = "Noté";
 $Edited = "Édité";
 $Downloaded = "Téléchargé";
+$YouCanOnlyCopyThisCourseToACourseYouTeach = "Vous ne pouvez copier ce cours que vers un cours dont vous êtes enseignant";
 $RemoveUsers = "Retirer des utilisateurs";
 $SendFileToOtherUsers = "Envoyer le fichier à d'autres utilisateurs";
 $RemoveFileFromSelectedUsers = "Retirer le fichier aux utilisateurs sélectionnés";

@@ -175,7 +175,6 @@ function save_courses_data($courses)
                 }
             }
         }
-
     }
 
     if (!empty($msg)) {

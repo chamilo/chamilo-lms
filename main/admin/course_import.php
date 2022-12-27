@@ -170,7 +170,7 @@ function save_courses_data($courses)
                     Database::update(
                         Database::get_course_table(TABLE_TOOL_LIST),
                         ['visibility' => $row['visibility']],
-                        ['c_id = ? and name = ?' => [$courseInfo['real_id'], $row['name'] ]]
+                        ['c_id = ? and name = ?' => [$courseInfo['real_id'], $row['name']]]
                     );
                 }
             }

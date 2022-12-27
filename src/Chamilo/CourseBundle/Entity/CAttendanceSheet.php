@@ -62,14 +62,7 @@ class CAttendanceSheet
      *
      * @ORM\Column(name="signature", type="string", nullable=true)
      */
-    //protected $signature;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
-    //protected $comment;
+    protected $signature;
 
     /**
      * Set presence.
@@ -195,29 +188,5 @@ class CAttendanceSheet
     public function getSignature()
     {
         return $this->signature;
-    }
-
-    /**
-     * Set comment.
-     *
-     * @param string $comment
-     *
-     * @return CAttendanceSheet
-     */
-    public function setComment($comment)
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
     }
 }

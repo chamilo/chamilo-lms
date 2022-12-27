@@ -12,6 +12,7 @@
  */
 
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CourseBundle\Entity\CAttendanceResultComment;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 
 class Attendance
@@ -2803,7 +2804,20 @@ class Attendance
         $comment = "";
         if ($attendanceSheet) {
             /** @var CAttendanceSheet $attendanceSheet */
-            $comment = $attendanceSheet->getComment();
+            $attendanceSheetId = $attendanceSheet->getIid();
+
+            $criteria = [
+                'userId' => $userId,
+                'attendanceSheetId' => $attendanceSheetId,
+            ];
+
+            $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceResultComment');
+            $attendanceResultComment = $repo->findOneBy($criteria);
+
+            /** @var CAttendanceResultComment $attendanceResultComment */
+            if ($attendanceResultComment) {
+                $comment = $attendanceResultComment->getComment();
+            }
         }
 
         return $comment;
@@ -2814,7 +2828,8 @@ class Attendance
      *
      * @param $userId
      * @param $attendanceCalendarId
-     * @param $comment string
+     * @param $comment
+     * @param $attendanceId
      *
      * @return false or void when it is saved.
      */
@@ -2841,23 +2856,46 @@ class Attendance
         $attendanceSheet = $repo->findOneBy($criteria);
 
         /** @var CAttendanceSheet $attendanceSheet */
-        if ($attendanceSheet) {
-            $attendanceSheet->setComment($comment);
-            $em->persist($attendanceSheet);
-            $em->flush();
-        } else {
+        if (!$attendanceSheet) {
             $attendanceSheet = new CAttendanceSheet();
             $attendanceSheet
                 ->setCId($courseId)
                 ->setPresence(0)
                 ->setUserId($userId)
-                ->setAttendanceCalendarId($attendanceCalendarId)
-                ->setComment($comment);
+                ->setAttendanceCalendarId($attendanceCalendarId);
 
             $em->persist($attendanceSheet);
             $em->flush();
         }
         $this->updateUsersResults([$userId], $attendanceId);
+
+        $attendanceSheetId = $attendanceSheet->getIid();
+
+        // It saves the comment in the current attendance sheet
+        $criteria = [
+            'userId' => $userId,
+            'attendanceSheetId' => $attendanceSheetId,
+        ];
+
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceResultComment');
+        $attendanceResultComment = $repo->findOneBy($criteria);
+
+        /** @var CAttendanceResultComment $attendanceResultComment */
+        if ($attendanceResultComment) {
+            $attendanceResultComment->setComment($comment);
+            $attendanceResultComment->setUpdatedAt(api_get_utc_datetime(null, false, true));
+            $em->persist($attendanceResultComment);
+            $em->flush();
+        } else {
+            $attendanceResultComment = new CAttendanceResultComment();
+            $attendanceResultComment
+                ->setAttendanceSheetId($attendanceSheetId)
+                ->setUserId($userId)
+                ->setComment($comment);
+
+            $em->persist($attendanceResultComment);
+            $em->flush();
+        }
     }
 
     /**

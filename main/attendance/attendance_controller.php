@@ -548,7 +548,7 @@ class AttendanceController
     }
 
     /**
-     * It checks the attendance sheet to export XLS
+     * It checks the attendance sheet to export XLS.
      *
      * @param        $attendanceId
      * @param int    $studentId

@@ -115,7 +115,7 @@ if (api_is_allowed_to_edit(null, true) ||
         $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
             Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_xls&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
-            Display::return_icon('export_excel.png', get_lang('ExportToXLS'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('export_excel.png', get_lang('ExportToXls'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a style="float:left;" title="QR"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_qrcode&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
             Display::return_icon('paint.png', get_lang('DownloadQr'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsRight = $form->returnForm();
@@ -411,22 +411,16 @@ if (api_is_allowed_to_edit(null, true) ||
                                     echo Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY);
                                     echo '<input type="hidden" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" />';
                                     echo $commentBtnIcon;
-                                    echo '<div class="list-data">
-                                        <span class="item"></span>
-                                        <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign-view" href="javascript:void(0)">
-                                            <em class="fa fa-search"></em> '.get_lang('SignView').'
-                                        </a>
-                                    </div>';
+                                    echo '&nbsp;<a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" title="'.get_lang('SignView').'" class="attendance-sign-view" href="javascript:void(0)">
+                                            <em class="fa fa-search" style="font-size: 24px;"></em>
+                                        </a>';
                                 } else {
                                     echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
                                     echo '<span class="anchor_'.$calendar['id'].'"></span>';
                                     echo $commentBtnIcon;
-                                    echo '<div class="list-data">
-                                        <span class="item"></span>
-                                        <a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" class="btn btn-primary attendance-sign" href="javascript:void(0)">
-                                            <em class="fa fa-pencil"></em> '.get_lang('Sign').'
-                                        </a>
-                                    </div>';
+                                    echo '&nbsp;<a id="sign-'.$user['user_id'].'-'.$calendar['id'].'" title="'.get_lang('Sign').'" class="attendance-sign" href="javascript:void(0)">
+                                            <em class="fa fa-pencil" style="font-size: 24px;"></em>
+                                        </a>';
                                 }
                             } else {
                                 echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';

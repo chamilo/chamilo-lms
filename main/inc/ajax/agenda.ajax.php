@@ -51,6 +51,7 @@ switch ($action) {
         $notificationPeriod = $_REQUEST['notification_period'] ?? [];
         $careerId = $_REQUEST['career_id'] ?? 0;
         $promotionId = $_REQUEST['promotion_id'] ?? 0;
+        $color = isset($_REQUEST['color']) ? $_REQUEST['color'] : null;
 
         $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -66,7 +67,7 @@ switch ($action) {
             [],
             null,
             $comment,
-            '',
+            $color,
             $inviteesList,
             $isCollective,
             $reminders,
@@ -85,13 +86,19 @@ switch ($action) {
         }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
+        $color = isset($_REQUEST['color']) ? $_REQUEST['color'] : null;
         $agenda->editEvent(
             $id,
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],
             $title,
-            $content
+            $content,
+            [],
+            [],
+            [],
+            null,
+            $color
         );
         break;
     case 'delete_event':

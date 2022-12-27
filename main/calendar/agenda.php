@@ -174,6 +174,7 @@ if ($allowToEdit) {
                 $notificationPeriod = $_REQUEST['notification_period'] ?? [];
                 $careerId = $_REQUEST['career_id'] ?? 0;
                 $promotionId = $_REQUEST['promotion_id'] ?? 0;
+                $color = $values['color'];
 
                 $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -189,7 +190,7 @@ if ($allowToEdit) {
                     $attachmentList,
                     $attachmentCommentList,
                     $comment,
-                    '',
+                    $color,
                     $values['invitees'] ?? [],
                     $values['collective'] ?? false,
                     $reminders,
@@ -246,6 +247,7 @@ if ($allowToEdit) {
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
+                $color = $values['color'];
                 $sendAttachment = isset($_FILES) && !empty($_FILES);
                 $attachmentList = $sendAttachment ? $_FILES : [];
                 $attachmentCommentList = $values['legend'] ?? '';
@@ -273,7 +275,7 @@ if ($allowToEdit) {
                         $attachmentList,
                         $attachmentCommentList,
                         $comment,
-                        '',
+                        $color,
                         $values['invitees'] ?? [],
                         $values['collective'] ?? false,
                         $reminders
@@ -299,7 +301,7 @@ if ($allowToEdit) {
                     $attachmentList,
                     $attachmentCommentList,
                     $comment,
-                    '',
+                    $color,
                     $addAsAnnouncement,
                     true,
                     0,

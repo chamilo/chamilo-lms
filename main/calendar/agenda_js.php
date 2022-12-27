@@ -255,6 +255,10 @@ $form->addElement('label', get_lang('To'), '<p id="visible_to_read_only_users" c
 $form->addHtml('</div>');
 
 $form->addElement('label', get_lang('Agenda'), '<p class="form-control-static"><span id ="color_calendar"></span></p>');
+$defaults['color'] = $agenda->event_course_color;
+$form->setDefaults($defaults);
+$form->addElement('color', 'color', get_lang('Color'));
+
 $form->addElement(
     'label',
     get_lang('Date'), '<p class="form-control-static"><span id="start_date"></span><span id="end_date"></span></p>'

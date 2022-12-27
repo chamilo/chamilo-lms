@@ -1668,6 +1668,7 @@ class Agenda
 
                 if ($agendaCollectiveInvitations) {
                     $eventRepo = Database::getManager()->getRepository('ChamiloCoreBundle:PersonalAgenda');
+                    /** @var Chamilo\CoreBundle\Entity\PersonalAgenda $event */
                     $event = $eventRepo->findOneByIdAndInvitee($id, $user);
 
                     if ($event && $event->isCollective()) {
@@ -1785,6 +1786,11 @@ class Agenda
                 $event['editable'] = true;
                 $event['sent_to'] = get_lang('Me');
                 $event['type'] = 'personal';
+                $event['backgroundColor'] = $this->event_personal_color;
+
+                if (!empty($row['color'])) {
+                    $event['backgroundColor'] = $row['color'];
+                }
 
                 if (!empty($row['date'])) {
                     $event['start'] = $this->formatEventDate($row['date']);
@@ -1800,6 +1806,7 @@ class Agenda
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
                 $event['parent_event_id'] = 0;
                 $event['has_children'] = 0;
+                $event['borderColor'] = $event['backgroundColor'];
 
                 if ($agendaCollectiveInvitations) {
                     $event['collective'] = (bool) $row['collective'];
@@ -2734,6 +2741,7 @@ class Agenda
         }
 
         $form->addElement('text', 'title', get_lang('ItemTitle'));
+        $form->addElement('color', 'color', get_lang('Color'));
 
         if (isset($groupId) && !empty($groupId)) {
             $form->addElement(

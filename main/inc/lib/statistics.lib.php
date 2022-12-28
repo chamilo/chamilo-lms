@@ -49,7 +49,7 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number
                     FROM ".$courseTable." AS c, $accessUrlRelCourseTable AS u
-                    WHERE u.c_id = c.id AND $accessUrlRelCourseTable='".$urlId."'";
+                    WHERE u.c_id = c.id AND u.access_url_id ='".$urlId."'";
             if (isset($categoryCode)) {
                 $sql .= " AND category_code = '".Database::escape_string($categoryCode)."'";
             }

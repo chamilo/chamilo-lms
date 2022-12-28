@@ -853,7 +853,7 @@ class SurveyUtil
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset, $lpItemId);
             } elseif ($question['type'] === 'open' || $question['type'] === 'comment') {
-                echo '<div class="open-question">';
+                echo '<div class="open-question" style="padding: 1px 0;">';
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE

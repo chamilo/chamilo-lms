@@ -49,7 +49,7 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number
                     FROM ".$courseTable." AS c, $accessUrlRelCourseTable AS u
-                    WHERE u.c_id = c.id AND u.access_url_id ='".$urlId."'";
+                    WHERE u.c_id = c.id AND u.access_url_id = $urlId";
             if (isset($categoryCode)) {
                 $sql .= " AND category_code = '".Database::escape_string($categoryCode)."'";
             }
@@ -111,7 +111,7 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c, $accessUrlRelCourseTable AS u
-                    WHERE u.c_id = c.id AND u.access_url_id='".$urlId."'";
+                    WHERE u.c_id = c.id AND u.access_url_id = $urlId";
         } else {
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c
@@ -165,7 +165,7 @@ class Statistics
                     FROM $user_table as u, $access_url_rel_user_table as url
                     WHERE
                         u.user_id = url.user_id AND
-                        access_url_id = '".$urlId."'
+                        access_url_id = $urlId
                         $status_filter $active_filter";
             if (isset($categoryCode)) {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
@@ -174,7 +174,7 @@ class Statistics
                             c.id = cu.c_id AND
                             c.category_code = '".Database::escape_string($categoryCode)."' AND
                             cu.user_id = url.user_id AND
-                            access_url_id='".$urlId."'
+                            access_url_id = $urlId
                             $status_filter $active_filter";
             }
         } else {
@@ -219,7 +219,7 @@ class Statistics
             $sql = "SELECT DISTINCT(t.c_id) FROM $table t , $access_url_rel_course_table a
                     WHERE
                         t.c_id = a.c_id AND
-                        access_url_id='".$urlId."' AND
+                        access_url_id = $urlId AND
                         access_date BETWEEN '$startDate' AND '$endDate'
                     ";
         } else {
@@ -250,7 +250,7 @@ class Statistics
                     WHERE
                         default_user_id = user.user_id AND
                         user.user_id=url.user_id AND
-                        access_url_id = '".$urlId."'";
+                        access_url_id = $urlId";
         } else {
             $sql = "SELECT count(default_id) AS total_number_of_items
                     FROM $track_e_default, $table_user user
@@ -326,7 +326,7 @@ class Statistics
                     WHERE
                         track_default.default_user_id = user.user_id AND
                         url.user_id = user.user_id AND
-                        access_url_id= $urlId ";
+                        access_url_id = $urlId";
         } else {
             $sql = "SELECT
                        default_event_type  as col0,
@@ -680,7 +680,7 @@ class Statistics
         $where_url_last = ' WHERE login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " WHERE login_user_id=user_id AND access_url_id='".$urlId."'";
+            $where_url = " WHERE login_user_id=user_id AND access_url_id = $urlId";
             $where_url_last = ' AND login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
         }
 
@@ -780,7 +780,7 @@ class Statistics
         $where_url = '';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
+            $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
         }
 
         $now = api_get_utc_datetime();
@@ -870,7 +870,7 @@ class Statistics
         $where_url = '';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
+            $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
         }
 
         $now = api_get_utc_datetime();
@@ -940,7 +940,7 @@ class Statistics
                     WHERE
                         access_tool IN ('".implode("','", $tools)."') AND
                         t.c_id = a.c_id AND
-                        access_url_id='".$urlId."'
+                        access_url_id = $urlId
                         GROUP BY access_tool
                     ";
         } else {
@@ -986,7 +986,7 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT course_language, count( c.code ) AS number_of_courses
                     FROM $table as c, $access_url_rel_course_table as u
-                    WHERE u.c_id = c.id AND access_url_id='".$urlId."'
+                    WHERE u.c_id = c.id AND access_url_id = $urlId
                     GROUP BY course_language
                     ORDER BY number_of_courses DESC";
         } else {
@@ -1015,8 +1015,8 @@ class Statistics
         $url_condition2 = null;
         $table = null;
         if (api_is_multiple_url_enabled()) {
-            $url_condition = ", $access_url_rel_user_table as url WHERE url.user_id=u.user_id AND access_url_id='".$urlId."'";
-            $url_condition2 = " AND url.user_id=u.user_id AND access_url_id='".$urlId."'";
+            $url_condition = ", $access_url_rel_user_table as url WHERE url.user_id=u.user_id AND access_url_id = $urlId";
+            $url_condition2 = " AND url.user_id=u.user_id AND access_url_id = $urlId";
             $table = ", $access_url_rel_user_table as url ";
         }
         $sql = "SELECT COUNT(*) AS n FROM $user_table as u ".$url_condition;
@@ -1128,7 +1128,7 @@ class Statistics
             $sql = "SELECT * FROM $table t , $access_url_rel_course_table a
                    WHERE
                         t.c_id = a.c_id AND
-                        access_url_id='".$urlId."'
+                        access_url_id = $urlId
                    GROUP BY t.c_id
                    HAVING t.c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
@@ -1204,7 +1204,7 @@ class Statistics
             $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
                 FROM $access_url_rel_user_table as url, $message_table m
                 LEFT JOIN $user_table u ON m.$field = u.user_id
-                WHERE  url.user_id = m.$field AND  access_url_id='".$urlId."'
+                WHERE  url.user_id = m.$field AND  access_url_id = $urlId
                 GROUP BY m.$field
                 ORDER BY count_message DESC ";
         } else {
@@ -1247,7 +1247,7 @@ class Statistics
                     WHERE
                         uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND
                         uf.user_id = url.user_id AND
-                        access_url_id = '".$urlId."'
+                        access_url_id = $urlId
                     GROUP BY uf.user_id
                     ORDER BY count_friend DESC ";
         } else {
@@ -1281,7 +1281,7 @@ class Statistics
         $total = self::countUsers();
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
+            $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
         } else {
             $table_url = '';
             $where_url = '';

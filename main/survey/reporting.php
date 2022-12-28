@@ -147,6 +147,8 @@ function formExportSubmit(formId) {
     $("#"+formId).submit();
 }
 async function exportToPdf() {
+    window.scrollTo(0, 0);
+    
     $("#dialog-confirm").dialog({
         autoOpen: false,
         show: "blind",
@@ -162,8 +164,8 @@ async function exportToPdf() {
     $(".question-item audio, #pdf_table audio").hide();
 
     var doc = document.getElementById("question_results");
-    var pdf = new jsPDF("", "pt", "a4");
-    //var a4Height = 841.89;
+    var pdf = new jsPDF("p", "pt", "a4");
+    //A4 height = 842 pts ; A4 width = 595 pts
 
     // Adding title
     pdf.setFontSize(16);
@@ -171,11 +173,10 @@ async function exportToPdf() {
 
     const table = document.getElementById("pdf_table");
     var headerY = 0;
-    await html2canvas(table).then(function(canvas) {
-        var pageData = canvas.toDataURL("image/jpeg", 1);
-        headerY = 530.28/canvas.width * canvas.height;
-        pdf.addImage(pageData, "JPEG", 35, 60, 530, headerY);
-    });
+    var canvas = await html2canvas(table);
+    var pageData = canvas.toDataURL("image/jpeg", 1);
+    headerY = 515/canvas.width * canvas.height;
+    pdf.addImage(pageData, "JPEG", 35, 60, 515, headerY);
 
     var divs = doc.getElementsByClassName("question-item");
     var pages = [];
@@ -201,38 +202,37 @@ async function exportToPdf() {
 
         const title = $(divs[i]).find(".title-question");
         pdf.setFontSize(10);
-        pdf.text(40, positionY, title.text());
+        const lines = pdf.splitTextToSize(title.text(), 515);
+        pdf.text(40, positionY, lines);
 
         var svg = divs[i].querySelector("svg");
         if (svg) {
             svg2pdf(svg, pdf, {
                   xOffset: 150,
-                  yOffset: positionY,
-                  scale: 0.45,
+                  yOffset: positionY + (lines.length * 1),
+                  scale: 0.4,
             });
         }
         var tables = divs[i].getElementsByClassName("display-survey");
         var config= {};
         for (var j = 0; j < tables.length; j += 1) {
-            await html2canvas(tables[j], config).then(function(canvas) {
-                var pageData = canvas.toDataURL("image/jpeg", 0.7);
-                if (pageData) {
-                    pdf.addImage(pageData, "JPEG", 40, positionY + 180, 500, 500/canvas.width * canvas.height);
-                }
-            });
+            const canvas = await html2canvas(tables[j], config);
+            var pageData = canvas.toDataURL("image/jpeg", 0.7);
+            if (pageData) {
+                pdf.addImage(pageData, "JPEG", 40, positionY + 180, 500, 500 / canvas.width * canvas.height);
+            }
         }
 
         var tables = divs[i].getElementsByClassName("open-question");
         for (var j = 0; j < tables.length; j += 1) {
-            await html2canvas(tables[j], config).then(function(canvas) {
-                var pageData = canvas.toDataURL("image/jpeg", 0.7);
-                if (pageData) {
-                    pdf.addImage(pageData, "JPEG", 40, positionY + 10, 500, 500/canvas.width * canvas.height);
-                }
-            });
+            var canvas = await html2canvas(tables[j], config);
+            var pageData = canvas.toDataURL("image/jpeg", 0.7);
+            if (pageData) {
+                pdf.addImage(pageData, "JPEG", 40, positionY + (10 * lines.length), 500, 500 / canvas.width * canvas.height);
+            }
         }
 
-        if (i > 0 && (i -1) % 2 === 0 && (i+1 != divs.length)) {
+        if (i > 0 && (i -1) % 2 === 0 && (i+1 !== divs.length)) {
              pdf.addPage();
              page++;
         }

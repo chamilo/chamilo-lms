@@ -8959,4 +8959,5 @@ $SendFileToOtherUsers = "Send file to other users";
 $RemoveFileFromSelectedUsers = "Remove file from selected users";
 $SendOtherUsers = "Send to other users";
 $SendToUsers = "Send to users";
+$FirstLoginForceUsersToChangePassword = "Force users to change their password when they first log in";
 ?>

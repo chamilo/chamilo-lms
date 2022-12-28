@@ -8899,4 +8899,5 @@ $SendFileToOtherUsers = "Envoyer le fichier à d'autres utilisateurs";
 $RemoveFileFromSelectedUsers = "Retirer le fichier aux utilisateurs sélectionnés";
 $SendOtherUsers = "Envoyer à autres utilisateurs";
 $SendToUsers = "Envoyer aux utilisateurs";
+$FirstLoginForceUsersToChangePassword = "Forcer les utilisateurs à changer de mot de passe à la première connexion";
 ?>

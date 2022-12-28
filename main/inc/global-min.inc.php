@@ -151,7 +151,7 @@ ChamiloSession::start($alreadyInstalled);
 if ($_configuration['access_url'] != 1) {
     $url_info = api_get_access_url($_configuration['access_url']);
     if ($url_info['active'] == 1) {
-        $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+        $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
         foreach ($settings_by_access as &$row) {
             if (empty($row['variable'])) {
                 $row['variable'] = 0;
@@ -167,7 +167,7 @@ if ($_configuration['access_url'] != 1) {
     }
 }
 
-$result = &api_get_settings(null, 'list', 1);
+$result = api_get_settings(null, 'list', 1);
 foreach ($result as &$row) {
     if ($_configuration['access_url'] != 1) {
         if ($url_info['active'] == 1) {
@@ -208,7 +208,7 @@ foreach ($result as &$row) {
     }
 }
 
-$result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
+$result = api_get_settings('Plugins', 'list', $_configuration['access_url']);
 $_plugins = [];
 foreach ($result as &$row) {
     $key = &$row['variable'];

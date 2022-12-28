@@ -6388,7 +6388,7 @@ function api_get_access_url($id, $returnDefault = true)
  *
  * @return array Array of database results for the current settings of the current access URL
  */
-function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
+function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
@@ -8384,7 +8384,7 @@ function api_set_settings_and_plugins()
     if ($access_url_id != 1) {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {
-            $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+            $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
             foreach ($settings_by_access as &$row) {
                 if (empty($row['variable'])) {
                     $row['variable'] = 0;

@@ -6390,6 +6390,25 @@ function api_get_access_url($id, $returnDefault = true)
  */
 function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
 {
+    // Try getting settings from cache first (avoids query w/ ~375 rows result)
+    $apcVarName = '';
+    $apcVar = [];
+    $cacheAvailable = api_get_configuration_value('apc');
+    if ($cacheAvailable) {
+        $apcVarName = api_get_configuration_value('apc_prefix').
+            'settings_'.
+            $access_url
+        ;
+        $catName = (empty($cat) ? 'global' : $cat);
+
+        if (apcu_exists($apcVarName)) {
+            $apcVar = apcu_fetch($apcVarName);
+            if (!empty($apcVar[$catName]) && !empty($apcVar[$catName][$ordering]) && isset($apcVar[$catName][$ordering][$url_changeable])) {
+                return $apcVar[$catName][$ordering][$url_changeable];
+            }
+        }
+    }
+    // Could not find settings in cache (or already expired), so query DB
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
     $where_condition = '';
@@ -6417,6 +6436,18 @@ function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url
     }
     $result = Database::store_result($result, 'ASSOC');
 
+    if ($cacheAvailable) {
+        // If we got here, it means cache is available but the settings
+        // were not recently stored, so now we have them, let's store them
+        if (empty($apcVar[$catName])) {
+            $apcVar[$catName] = [];
+        }
+        if (empty($apcVar[$catName][$ordering])) {
+            $apcVar[$catName][$ordering] = [];
+        }
+        $apcVar[$catName][$ordering][$url_changeable] = $result;
+        apcu_store($apcVarName, $apcVar, 600);
+    }
     return $result;
 }
 

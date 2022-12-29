@@ -429,6 +429,8 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
             Display::return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
             Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="stats_attempts.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
+            Display::return_icon('survey_reporting_complete.png', get_lang('ReportByAttempts'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= Display::url(

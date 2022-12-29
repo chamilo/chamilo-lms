@@ -1925,6 +1925,112 @@ HOTSPOT;
     }
 
     /**
+     * Get the table as array of results of exercises attempts with questions score.
+     *
+     * @param Exercise $objExercise
+     *
+     * @return array
+     */
+    public static function getTrackExerciseAttemptsTable(Exercise $objExercise)
+    {
+        $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $exerciseId = $objExercise->iid;
+        $courseId = $objExercise->course_id;
+        $sessionId = $objExercise->sessionId;
+        $questionList = $objExercise->getQuestionForTeacher(0, $objExercise->getQuestionCount());
+
+        $headers = [
+            get_lang('UserName'),
+            get_lang('Email'),
+        ];
+
+        $extraField = new ExtraField('user');
+        $extraFieldValue = new ExtraFieldValue('user');
+
+        $extraFields = $extraField->get_all(['filter = ?' => 1]);
+        $userExtraFields = [];
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $extra) {
+                $headers[] = $extra['display_text'];
+                $userExtraFields[] = $extra['variable'];
+            }
+        }
+
+        $headersXls = $headers;
+        if (!empty($questionList)) {
+            foreach ($questionList as $questionId) {
+                $questionObj = Question::read($questionId);
+                $questionName = cut($questionObj->question, 200);
+                $headers[] = '<a href="#" title="'.$questionName.'">'.$questionId.'</a>';
+                $headersXls[] = $questionName;
+            }
+        }
+
+        $sql = "SELECT
+                    te.exe_id,
+                    te.exe_user_id
+                FROM
+                    $tblTrackExercises te
+                INNER JOIN
+                    $tblQuiz q ON (q.iid = te.exe_exo_id AND q.c_id = te.c_id)
+                WHERE
+                    te.c_id = $courseId AND
+                    te.session_id = $sessionId AND
+                    te.status = '' AND
+                    te.exe_exo_id = $exerciseId
+                ";
+        $rs = Database::query($sql);
+        $data = [];
+        if (Database::num_rows($rs) > 0) {
+            $x = 0;
+            while ($row = Database::fetch_array($rs)) {
+                $userInfo = api_get_user_info($row['exe_user_id']);
+                $data[$x]['username'] = $userInfo['username'];
+                $data[$x]['email'] = $userInfo['email'];
+                if (!empty($userExtraFields)) {
+                    foreach ($userExtraFields as $variable) {
+                        $extra = $extraFieldValue->get_values_by_handler_and_field_variable(
+                            $row['exe_user_id'],
+                            $variable
+                        );
+                        $data[$x][$variable] = $extra['value'] ?? '';
+                    }
+                }
+
+                // the questions
+                if (!empty($questionList)) {
+                    foreach ($questionList as $questionId) {
+                        $questionObj = Question::read($questionId);
+                        $questionName = cut($questionObj->question, 200);
+                        $questionResult = $objExercise->manage_answer(
+                            $row['exe_id'],
+                            $questionId,
+                            '',
+                            'exercise_show',
+                            [],
+                            false,
+                            true,
+                            false,
+                            $objExercise->selectPropagateNeg()
+                        );
+                        $questionModalUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=show_question&exercise='.$exerciseId.'&question='.$questionId;
+                        $data[$x][$questionId] = '<a href="'.$questionModalUrl.'" class="ajax" data-title="'.$questionName.'" title="'.get_lang('ClicToSeeDetails').'">'.$questionResult['score'].'</a>';
+                    }
+                }
+                $x++;
+            }
+        }
+
+        $table['headers'] = $headers;
+        $table['headers_xls'] = $headersXls;
+        $table['rows'] = $data;
+
+        return $table;
+    }
+
+    /**
      * @param int $exeId
      *
      * @return array

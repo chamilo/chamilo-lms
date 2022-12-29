@@ -311,8 +311,8 @@ class Result
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = "SELECT COUNT(*) AS count
                 FROM $table gr
-                WHERE gr.evaluation_id = $this->evaluation
-                AND gr.user_id = $this->user_id
+                WHERE gr.evaluation_id = {$this->evaluation}
+                AND gr.user_id = {$this->user_id}
         ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);

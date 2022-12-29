@@ -270,7 +270,7 @@ class Result
         if (isset($this->id)) {
             $sql .= " WHERE id = {$this->id}";
         } else {
-            $sql .= " WHERE evaluation_id = $this->evaluation
+            $sql .= " WHERE evaluation_id = {$this->evaluation}
                 AND user_id = {$this->user_id}
             ";
         }

@@ -46,8 +46,8 @@ if ($add_result_form->validate()) {
             $res->set_score($row);
         }
 
-        //To prevent error editing when going back in the browser,
-        //check if a record exists for this user and evaluation_id
+        // To prevent error editing when going back in the browser,
+        // check if a record exists for this user and evaluation_id
         if ($res->exists()) {
             $res->addResultLog($userId, $values['evaluation_id']);
             $res->save();

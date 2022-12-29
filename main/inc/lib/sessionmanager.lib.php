@@ -2091,14 +2091,13 @@ class SessionManager
                 }
 
                 if (api_get_configuration_value('email_template_subscription_to_session_confirmation_lost_password')) {
-                    $lostPasswordLink = PHP_EOL
-                        .Display::url(
-                            get_lang('LostPassword'),
-                            api_get_path(WEB_CODE_PATH).'auth/lostPassword.php',
-                            ['target' => '_blank']
-                        );
+                    $urlLostPw = api_get_path(WEB_CODE_PATH).'auth/lostPassword.php';
 
-                    $tplContent->assign('lostPassword', $lostPasswordLink);
+                    $forgotPassword = sprintf(
+                        get_lang('InstructionsLostPassword'),
+                        $urlLostPw);
+
+                    $tplContent->assign('lostPassword', $forgotPassword);
                 }
 
                 $content = $tplContent->fetch($layoutContent);

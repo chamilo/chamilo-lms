@@ -9922,8 +9922,8 @@ class SessionManager
     /**
      * Check if a session is assigned on access url.
      *
-     * @param int $sessionId
-     * @param int $urlId
+     * @param int $sessionId The session ID.
+     * @param int $urlId     The access url ID.
      *
      * @return bool
      */

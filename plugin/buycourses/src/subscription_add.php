@@ -59,7 +59,7 @@ if ($editingCourse) {
         'tax_perc' => $courseItem['tax_perc'],
         'currency_id' => $currency['id'],
     ];
-} else if ($editingSession) {
+} elseif ($editingSession) {
     if (!$includeSession) {
         api_not_allowed(true);
     }

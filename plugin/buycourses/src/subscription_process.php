@@ -177,9 +177,9 @@ if ($formSubscription->validate()) {
 $frequencies = $plugin->getFrequencies();
 $selectedFrequencies = [];
 
-foreach($subscriptionItems as $si) {
+foreach ($subscriptionItems as $si) {
     if (isset($frequencies[$si['duration']])) {
-        $selectedFrequencies[$si['duration']] = $frequencies[$si['duration']].' - '.$si['price_formatted'] . ' ' . $si['iso_code'];
+        $selectedFrequencies[$si['duration']] = $frequencies[$si['duration']].' - '.$si['price_formatted'].' '.$si['iso_code'];
     }
 }
 

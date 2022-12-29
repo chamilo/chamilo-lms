@@ -51,11 +51,11 @@ if (empty($currency)) {
     );
 }
 
-$subscriptions = $plugin->getSubscriptions($type, $id );
+$subscriptions = $plugin->getSubscriptions($type, $id);
 
 $taxtPerc = 0;
 
-if (isset($subscriptions) && !empty($subscriptions )) {
+if (isset($subscriptions) && !empty($subscriptions)) {
     $taxtPerc = $subscriptions[0]['tax_perc'];
 }
 
@@ -78,7 +78,7 @@ if ($editingCourse) {
         'visible' => $courseItem['visible'],
         'tax_perc' => $taxtPerc,
     ];
-} else if ($editingSession) {
+} elseif ($editingSession) {
     if (!$includeSession) {
         api_not_allowed(true);
     }
@@ -180,7 +180,7 @@ $frequencyForm->addElement(
     false,
     [
         'step' => 1,
-        'cols-size' => [3, 8, 1]
+        'cols-size' => [3, 8, 1],
     ]
 );
 

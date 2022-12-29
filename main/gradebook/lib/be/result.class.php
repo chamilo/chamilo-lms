@@ -268,10 +268,10 @@ class Result
             $sql .= 'null';
         }
         if (isset($this->id)) {
-            $sql .= " WHERE id = $this->id";
+            $sql .= " WHERE id = {$this->id}";
         } else {
             $sql .= " WHERE evaluation_id = $this->evaluation
-                AND user_id = $this->user_id
+                AND user_id = {$this->user_id}
             ";
         }
 

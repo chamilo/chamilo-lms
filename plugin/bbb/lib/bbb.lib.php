@@ -409,6 +409,7 @@ class bbb
             if (!empty($meetingDuration)) {
                 $duration = $meetingDuration;
             }
+            $url = api_get_access_url(api_get_current_access_url_id())['url'];
             $bbbParams = array(
                 'meetingId' => $params['remote_id'], // REQUIRED
                 'meetingName' => $meetingName, // REQUIRED
@@ -422,6 +423,7 @@ class bbb
                 'maxParticipants' => $max, // Optional. -1 = unlimitted. Not supported in BBB. [number]
                 'record' => $record, // New. 'true' will tell BBB to record the meeting.
                 'duration' => $duration, // Default = 0 which means no set duration in minutes. [number]
+                'meta_OriginURL' => $url, // Add url information to BBB meeting info (see 'meta' info at https://docs.bigbluebutton.org/dev/api.html#create)
                 //'meta_category' => '',  // Use to pass additional info to BBB server. See API docs.
             );
 

@@ -95,6 +95,8 @@ $form_search_html = $form_search->returnForm();
 $url_id = api_get_current_access_url_id();
 
 $settings = null;
+$flushSettings = false;
+$cacheAvailable = api_get_configuration_value('apc');
 
 // Build the form.
 if (!empty($_GET['category']) &&
@@ -105,6 +107,7 @@ if (!empty($_GET['category']) &&
     $settings = $settings_array['settings'];
     $settings_by_access_list = $settings_array['settings_by_access_list'];
     $form = generateSettingsForm($settings, $settings_by_access_list);
+    $multipleUrlsEnabled = false;
 
     if ($form->validate()) {
         $values = $form->exportValues();
@@ -113,6 +116,7 @@ if (!empty($_GET['category']) &&
         $un_mark_all = false;
 
         if (api_is_multiple_url_enabled()) {
+            $multipleUrlsEnabled = true;
             if (isset($values['buttons_in_action_right']) &&
                 isset($values['buttons_in_action_right']['mark_all'])
             ) {
@@ -147,6 +151,7 @@ if (!empty($_GET['category']) &&
                                 ];
                                 api_set_setting_simple($params);
                             }
+                            $flushSettings = true;
                         }
                     }
                 }
@@ -208,6 +213,7 @@ if (!empty($_GET['category']) &&
                         access_url = ".intval($url_id)." AND
                         type IN ('checkbox', 'radio') ";
             $res = Database::query($sql);
+            $flushSettings = true;
         }
 
         // Save the settings.
@@ -286,6 +292,7 @@ if (!empty($_GET['category']) &&
                 foreach ($value as $subkey => $subvalue) {
                     $result = api_set_setting($key, 'true', $subkey, null, $url_id);
                 }
+                $flushSettings = true;
             }
         }
 
@@ -299,7 +306,25 @@ if (!empty($_GET['category']) &&
             api_get_utc_datetime(),
             $user_id
         );
-
+        if ($cacheAvailable && $flushSettings) {
+            // Delete the APCu-stored settings array, if present
+            $apcRootVarName = api_get_configuration_value('apc_prefix').'settings_';
+            $apcVarName = $apcRootVarName.$url_id;
+            apcu_delete($apcVarName);
+            if ($multipleUrlsEnabled && $url_id === 1) {
+                // if we are on the main URL of a multi-url portal, we must
+                // invalidate the cache for all other URLs as well as some
+                // main settings span multiple URLs
+                $urls = api_get_access_urls();
+                foreach ($urls as $i => $row) {
+                    if ($row['id'] == 1) {
+                        continue;
+                    }
+                    $apcVarName = $apcRootVarName.$row['id'];
+                    apcu_delete($apcVarName);
+                }
+            }
+        }
         // Add event configuration settings variable to the system log.
         if (is_array($keys) && count($keys) > 0) {
             foreach ($keys as $variable) {

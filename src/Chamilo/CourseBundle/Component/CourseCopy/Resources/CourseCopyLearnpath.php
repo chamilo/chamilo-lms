@@ -86,6 +86,11 @@ class CourseCopyLearnpath extends Resource
     public $author;
 
     /**
+     * Lp previous requisite.
+     */
+    public $prerequisite;
+
+    /**
      * Author's image.
      */
     public $preview_image;
@@ -117,6 +122,7 @@ class CourseCopyLearnpath extends Resource
      * @param int    $categoryId
      * @param array  $items
      * @param int    $accumulateWorkTime
+     * @param int    $prerequisite
      */
     public function __construct(
         $id,
@@ -149,7 +155,8 @@ class CourseCopyLearnpath extends Resource
         $subscribeUsers,
         $hideTableOfContents,
         $items,
-        $accumulateWorkTime
+        $accumulateWorkTime,
+        $prerequisite
     ) {
         parent::__construct($id, RESOURCE_LEARNPATH);
         $this->lp_type = $type;
@@ -182,6 +189,7 @@ class CourseCopyLearnpath extends Resource
         $this->hideTableOfContents = $hideTableOfContents;
         $this->items = $items;
         $this->accumulateWorkTime = $accumulateWorkTime;
+        $this->prerequisite = $prerequisite;
     }
 
     /**

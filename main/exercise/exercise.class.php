@@ -11115,8 +11115,12 @@ class Exercise
                     $tempResult = [];
                     foreach ($labelsWithId as $category_id => $title) {
                         if (isset($categoryList[$category_id])) {
-                            $category_item = $categoryList[$category_id];
-                            $tempResult[] = round($category_item['score'] / $category_item['total'] * 10);
+                            $categoryItem = $categoryList[$category_id];
+                            if ($categoryItem['total'] > 0) {
+                                $tempResult[] = round($categoryItem['score'] / $categoryItem['total'] * 10);
+                            } else {
+                                $tempResult[] = 0;
+                            }
                         } else {
                             $tempResult[] = 0;
                         }
@@ -11175,11 +11179,12 @@ class Exercise
                     $categoryList = $stats['category_list'];
                     foreach ($labelsWithId as $category_id => $title) {
                         if (isset($categoryList[$category_id])) {
-                            $category_item = $categoryList[$category_id];
+                            $categoryItem = $categoryList[$category_id];
                             if (!isset($tempResult[$exerciseId][$category_id])) {
                                 $tempResult[$exerciseId][$category_id] = 0;
                             }
-                            $tempResult[$exerciseId][$category_id] += $category_item['score'] / $category_item['total'] * 10;
+                            $tempResult[$exerciseId][$category_id] +=
+                                $categoryItem['score'] / $categoryItem['total'] * 10;
                         }
                     }
                 }
@@ -11699,6 +11704,30 @@ class Exercise
         }
 
         return $questionList;
+    }
+
+    /**
+     * Returns a literal for the given numerical feedback type (usually
+     * coming from the DB or a constant). The literal is also the string
+     * used to get the translation, not the translation itself as it is
+     * more vulnerable to changes.
+     */
+    public static function getFeedbackTypeLiteral(int $feedbackType): string
+    {
+        $feedbackType = (int) $feedbackType;
+        $result = '';
+        static $arrayFeedbackTypes = [
+            EXERCISE_FEEDBACK_TYPE_END => 'ExerciseAtTheEndOfTheTest',
+            EXERCISE_FEEDBACK_TYPE_DIRECT => 'DirectFeedback',
+            EXERCISE_FEEDBACK_TYPE_EXAM => 'NoFeedback',
+            EXERCISE_FEEDBACK_TYPE_POPUP => 'ExerciseDirectPopUp',
+        ];
+
+        if (array_key_exists($feedbackType, $arrayFeedbackTypes)) {
+            $result = $arrayFeedbackTypes[$feedbackType];
+        }
+
+        return $result;
     }
 
     /**

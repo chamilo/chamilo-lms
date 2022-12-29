@@ -1028,6 +1028,7 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
         'hide_lp_arrow_navigation' => false,
         'show_toolbar_by_default' => false,
         'navigation_in_the_middle' => false,
+        'add_extra_quit_to_home_icon' => false,
     ],
 ];*/
 
@@ -1992,6 +1993,9 @@ $_configuration['auth_password_links'] = [
 // Resource sequence: Validate course in the same session.
 //$_configuration['course_sequence_valid_only_in_same_session'] = false;
 
+// Allows to show the sequence graphic in the course intro
+//$_configuration['resource_sequence_show_dependency_in_course_intro'] = false;
+
 // Allow time per question. BT#17791
 // Requires a question text extra field called "time", value in seconds.
 // ALTER TABLE track_e_attempt ADD COLUMN seconds_spent INT;
@@ -2309,6 +2313,13 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 
 // Allow DRH user to access all students from reporting.
 // $_configuration['drh_allow_access_to_all_students'] = false;
+
+// Disable links in gradebook view for students
+// $_configuration['gradebook_hide_link_to_item_for_student'] = false;
+
+// It adds option to define if a document can be downloaded or not.
+// Create a document extra field with field label "can_be_downloaded" of type "Checkbox options".
+// $_configuration['documents_hide_download_icon'] = false;
 
 // Add the username value to the subscription to session confirmation email
 //$_configuration['email_template_subscription_to_session_confirmation_username'] = false;

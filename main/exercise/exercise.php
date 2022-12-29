@@ -279,7 +279,11 @@ if (!empty($action) && $is_allowedToEdit) {
             switch ($action) {
                 case 'delete':
                     if ($allowDelete) {
-                        $objExerciseTmp->delete();
+                        if ($objExerciseTmp->sessionId == $sessionId) {
+                            $objExerciseTmp->delete();
+                        } else {
+                            Display::addFlash(Display::return_message(sprintf(get_lang('ExerciseXNotDeleted'), $objExerciseTmp->name), 'error'));
+                        }
                     }
                     break;
                 case 'visible':

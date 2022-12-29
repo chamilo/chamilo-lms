@@ -289,8 +289,14 @@ class CourseCategory
      *
      * @return bool
      */
-    public static function editNode($code, $name, $canHaveCourses, $old_code)
-    {
+    public static function editNode(
+        $code,
+        $name,
+        $canHaveCourses,
+        $old_code,
+        ?string $newParentCode = null,
+        ?string $oldParentCode = null
+    ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
@@ -317,6 +323,15 @@ class CourseCategory
         $sql = "UPDATE $tbl_course SET category_code = '$code'
             WHERE category_code = '$old_code' ";
         Database::query($sql);
+
+        Database::update(
+            $tbl_category,
+            ['parent_id' => $newParentCode ?: null],
+            ['code = ?' => $code]
+        );
+
+        self::updateParentCategoryChildrenCount($oldParentCode, -1);
+        self::updateParentCategoryChildrenCount($newParentCode, 1);
 
         return true;
     }

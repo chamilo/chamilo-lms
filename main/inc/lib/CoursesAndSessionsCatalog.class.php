@@ -372,11 +372,6 @@ class CoursesAndSessionsCatalog
         while ($row = Database::fetch_array($result)) {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = CourseManager::get_users_count_in_course($row['code']);
-            $connectionsLastMonth = Tracking::get_course_connections_count(
-                $row['id'],
-                0,
-                api_get_utc_datetime(time() - (30 * 86400))
-            );
 
             if ($row['tutor_name'] == '0') {
                 $row['tutor_name'] = get_lang('NoManager');
@@ -397,7 +392,6 @@ class CoursesAndSessionsCatalog
                 'visibility' => $row['visibility'],
                 'category' => $row['category_code'],
                 'count_users' => $count_users,
-                'count_connections' => $connectionsLastMonth,
             ];
         }
 
@@ -531,17 +525,11 @@ class CoursesAndSessionsCatalog
                 null,
                 true
             );
-            $connectionsLastMonth = Tracking::get_course_connections_count(
-                $courseId,
-                0,
-                api_get_utc_datetime(time() - (30 * 86400))
-            );
 
             $courseInfo['point_info'] = CourseManager::get_course_ranking($courseId, 0);
             $courseInfo['tutor'] = $courseInfo['tutor_name'];
             $courseInfo['registration_code'] = !empty($courseInfo['registration_code']);
             $courseInfo['count_users'] = $countUsers;
-            $courseInfo['count_connections'] = $connectionsLastMonth;
             $courseInfo['course_language'] = api_get_language_info(
                 api_get_language_id($courseInfo['course_language'])
             )['original_name'];
@@ -1154,13 +1142,65 @@ class CoursesAndSessionsCatalog
             $action = 'subscribe_course_validation';
         }
 
-        return Display::url(
-            Display::returnFontAwesomeIcon('check').PHP_EOL.$title,
-            api_get_path(WEB_CODE_PATH).'auth/courses.php'
+        $em = Database::getManager();
+        /** @var SequenceResourceRepository $sequenceResourceRepo */
+        $sequenceResourceRepo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
+        $requirements = $sequenceResourceRepo->getRequirements(
+            $course['real_id'],
+            SequenceResource::COURSE_TYPE
+        );
+        $hasRequirements = false;
+        foreach ($requirements as $sequence) {
+            if (!empty($sequence['requirements'])) {
+                $hasRequirements = true;
+                break;
+            }
+        }
+        $allowSubscribe = true;
+        $reqSubscribeBlock = '';
+        $btnSubscribe = '';
+        if ($hasRequirements) {
+            $sequenceList = $sequenceResourceRepo->checkRequirementsForUser($requirements, SequenceResource::COURSE_TYPE, api_get_user_id());
+            $allowSubscribe = $sequenceResourceRepo->checkSequenceAreCompleted($sequenceList);
+            $btnReqSubscribe = CoursesAndSessionsCatalog::getRequirements(
+                $course['real_id'],
+                SequenceResource::COURSE_TYPE,
+                true,
+                true
+            );
+            $reqSubscribeBlock = '<div class="session-requirements2">
+                                <h5>'.get_lang('RequiredCourses').'</h5>
+                                <p>'.$btnReqSubscribe.'</p>';
+            $seq = '';
+            foreach ($requirements as $sequence) {
+                if (!empty($sequence['requirements'])) {
+                    $seq .= $sequence['name'].':';
+                    foreach ($sequence['requirements'] as $req) {
+                        $seq .= '<a href="'.api_get_path(WEB_PATH).'course/'.$req->getId().'/about/">'.$req->getTitle().'</a>';
+                    }
+                }
+            }
+            $reqSubscribeBlock .= '<p>'.$seq.'</p>';
+            $reqSubscribeBlock .= '</div>';
+        }
+
+        if ($allowSubscribe) {
+            $btnSubscribe = Display::url(
+                Display::returnFontAwesomeIcon('check').PHP_EOL.$title,
+                api_get_path(WEB_CODE_PATH).'auth/courses.php'
                 .'?action='.$action.'&sec_token='.$stok
                 .'&course_code='.$course['code'].'&search_term='.$search_term.'&category_code='.$categoryCode,
-            ['class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title]
-        );
+                ['class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title]
+            );
+        } else {
+            $btnSubscribe = Display::url(
+                Display::returnFontAwesomeIcon('check').PHP_EOL.$title,
+                '#',
+                ['class' => 'btn btn-default btn-sm', 'title' => $title, 'aria-label' => $title, 'disabled' => true]
+            );
+        }
+
+        return $reqSubscribeBlock.$btnSubscribe;
     }
 
     /**

@@ -5694,7 +5694,6 @@ $ExamsReporting = "Eksāmenu atskaites";
 $MyReporting = "Manas atskaites";
 $SearchSkills = "Meklēt prasmes";
 $SaveThisSearch = "Saglabāt šo meklējumu";
-$SkillProfiles = "Saglabātie prasmju profili";
 $Matches = "Sakritības";
 $WelcomeUserXToTheSiteX = "%s, laipni aicināti %s";
 $CheckUsersWithId = "Lai pierakstītu Lietotāju izmantot Lietotāja ID no faila";

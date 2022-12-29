@@ -1519,6 +1519,17 @@ class CourseBuilder
                     $item['audio'] = $obj_item->audio;
                     $items[] = $item;
                     $this->itemListToAdd[$obj_item->item_type][] = $obj_item->path;
+
+                    if (!empty($obj_item->audio)) {
+                        $audioTitle = basename($obj_item->audio);
+                        // Add LP item audio
+                        $assetAudio = new Asset(
+                            $audioTitle,
+                            '/document'.$obj_item->audio,
+                            '/document'.$obj_item->audio
+                        );
+                        $this->course->add_resource($assetAudio);
+                    }
                 }
 
                 $sql = "SELECT id FROM $table_tool
@@ -1570,7 +1581,8 @@ class CourseBuilder
                     $obj->subscribe_users,
                     $obj->hide_toc_frame,
                     $items,
-                    $accumulateWorkTime
+                    $accumulateWorkTime,
+                    $obj->prerequisite
                 );
                 $extraFieldValue = new \ExtraFieldValue('lp');
                 $lp->extraFields = $extraFieldValue->getAllValuesByItem($obj->id);

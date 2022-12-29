@@ -171,6 +171,9 @@ class ExtraField extends Model
             case 'message':
                 $this->extraFieldType = EntityExtraField::MESSAGE_TYPE;
                 break;
+            case 'document':
+                $this->extraFieldType = EntityExtraField::DOCUMENT_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -204,6 +207,7 @@ class ExtraField extends Model
             'lp_view',
             'course_announcement',
             'message',
+            'document',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {

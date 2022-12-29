@@ -52,7 +52,7 @@ $form = new LinkAddEditForm(
     api_get_self().'?selectcat='.$linkcat.'&editlink='.$linkedit.'&'.api_get_cidreq()
 );
 if ($form->validate()) {
-    $values = $form->exportValues();
+    $values = $form->getSubmitValues();
     $parent_cat = Category::load($values['select_gradebook']);
     $final_weight = $values['weight_mask'];
     $link->set_weight($final_weight);
@@ -77,10 +77,10 @@ if ($form->validate()) {
     }
 
     //Update weight into forum thread
-    $sql = 'UPDATE '.$tbl_forum_thread.' SET 
+    $sql = 'UPDATE '.$tbl_forum_thread.' SET
                 thread_weight = '.api_float_val($final_weight).'
-            WHERE 
-			    c_id = '.$course_id.' AND 
+            WHERE
+			    c_id = '.$course_id.' AND
 			    thread_id = (
                     SELECT ref_id FROM '.$tbl_grade_links.'
 			        WHERE id='.intval($_GET['editlink']).' AND type = 5

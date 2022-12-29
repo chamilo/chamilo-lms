@@ -561,13 +561,16 @@ $showMenu = 0;
 $settings = api_get_configuration_value('lp_view_settings');
 $display = isset($settings['display']) ? $settings['display'] : false;
 $navigationInTheMiddle = false;
+$addExtraQuitToHomeIcon = false;
 if (!empty($display)) {
     $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
     $navigationInTheMiddle = isset($display['navigation_in_the_middle']) && $display['navigation_in_the_middle'] ? 1 : 0;
+    $addExtraQuitToHomeIcon = $display['add_extra_quit_to_home_icon'] ?? false;
 }
 
 $template->assign('show_toolbar_by_default', $showMenu);
 $template->assign('navigation_in_the_middle', $navigationInTheMiddle);
+$template->assign('add_extra_quit_to_home_icon', $addExtraQuitToHomeIcon);
 
 if ($gamificationMode == 1) {
     $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));

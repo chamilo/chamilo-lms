@@ -1764,7 +1764,7 @@ class Agenda
             $startDate = api_get_utc_datetime($start, true, true);
             $startCondition = "AND date >= '".$startDate->format('Y-m-d H:i:s')."'";
         }
-        if ($start !== 0) {
+        if ($end !== 0) {
             $endDate = api_get_utc_datetime($end, false, true);
             $endCondition = "AND (enddate <= '".$endDate->format('Y-m-d H:i:s')."' OR enddate IS NULL)";
         }

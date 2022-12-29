@@ -6904,7 +6904,6 @@ $ExamsReporting = "تقارير الامتحانات";
 $MyReporting = "تقريري";
 $SearchSkills = "البحث عن المهارات";
 $SaveThisSearch = "حفظ هذا البحث";
-$SkillProfiles = "مهارات الحسابات المحفوظة";
 $Matches = "التطابقات";
 $WelcomeUserXToTheSiteX = "%s, مرحبا في %s";
 $CheckUsersWithId = "استخدم هويات الطلبة من الملف من اجل تسجيلهم";

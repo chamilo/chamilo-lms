@@ -251,6 +251,41 @@ class MoodleImport
                     $forumValues['moderated'] = 0;
 
                     $forumId = store_forum($forumValues, $courseInfo, true);
+                    if (!empty($moduleValues['discussions'])) {
+                        $forum = get_forums($forumId);
+                        foreach ($moduleValues['discussions'] as $discussion) {
+                            $moduleValues['intro'] = $this->replaceMoodleChamiloCoursePath($moduleValues['intro'], $sectionPath);
+                            if ($importedFiles) {
+                                $this->fixPathInText($importedFiles, $moduleValues['intro']);
+                            }
+                            $postText = '';
+                            if (!empty($discussion['posts'])) {
+                                $postText = $discussion['posts'][0]['message'];
+                                $postText = $this->replaceMoodleChamiloCoursePath($postText, $sectionPath);
+                                if ($importedFiles) {
+                                    $this->fixPathInText($importedFiles, $postText);
+                                }
+                            }
+                            store_thread(
+                                $forum,
+                                [
+                                    'forum_id' => $forumId,
+                                    'thread_id' => 0,
+                                    'gradebook' => 0,
+                                    'post_title' => $discussion['name'],
+                                    'post_text' => $postText,
+                                    'category_id' => 1,
+                                    'numeric_calification' => 0,
+                                    'calification_notebook_title' => 0,
+                                    'weight_calification' => 0.00,
+                                    'thread_peer_qualify' => 0,
+                                    'lp_item_id' => 0,
+                                ],
+                                [],
+                                false
+                            );
+                        }
+                    }
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($forumId)) {
                         $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'forum', $forumId, $moduleValues['name'], $n);
@@ -391,6 +426,41 @@ class MoodleImport
                         $n++;
                     }
                     break;
+                case 'folder':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $filesXml = @file_get_contents($destinationDir.'/files.xml');
+                    $moduleValues = $this->readFolderModule($moduleXml);
+                    $mainFileModuleValues = $this->readFolderModuleFilesXml(
+                        $filesXml,
+                        $moduleValues['contextid']
+                    );
+                    $resourcesFiles = [];
+                    $currentResourceFilePath = $destinationDir.'/files/';
+                    $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
+                    foreach (new RecursiveIteratorIterator($dirs) as $file) {
+                        foreach ($mainFileModuleValues['files'] as $info) {
+                            if (!is_file($file) || false === strpos($file, $info['contenthash'])) {
+                                continue;
+                            }
+                            $files = [];
+                            $files['file']['name'] = $info['filename'];
+                            $files['file']['tmp_name'] = $file->getPathname();
+                            $files['file']['type'] = $info['mimetype'];
+                            $files['file']['error'] = 0;
+                            $files['file']['size'] = $info['filesize'];
+                            $files['file']['from_file'] = true;
+                            $files['file']['move_file'] = true;
+                            $files['file']['filepath'] = $info['filepath'];
+                            $resourcesFiles[] = $files;
+                        }
+                    }
+                    $sectionPath = isset($sectionLpValues[$currentItem['sectionid']]) ? $sectionLpValues[$currentItem['sectionid']]['sectionPath'] : '';
+                    $lpId = (int) $sectionLpValues[$currentItem['sectionid']]['lpId'];
+                    $this->processSectionFolderModule($mainFileModuleValues, $sectionPath, $moduleValues['name'], $resourcesFiles, $lpId, $n);
+                    $n++;
+
+                    break;
                 case 'resource':
                     // Read the current resource module xml.
                     $moduleDir = $currentItem['directory'];
@@ -423,14 +493,14 @@ class MoodleImport
                         $_POST['moodle_import'] = true;
 
                         $resourcesFiles[] = $files;
-                        // It is added as item in Learnpath
-                        if (!empty($currentItem['sectionid']) && !empty($documentData['iid'])) {
-                            $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'document', $documentData['iid'], $fileInfo['title'], $n);
-                            $n++;
-                        }
                     }
                     if (!empty($resourcesFiles)) {
-                        $importedFiles = $this->processSectionMultimedia($resourcesFiles, $sectionPath);
+                        $lpId = 0;
+                        if (!empty($currentItem['sectionid'])) {
+                            $lpId = $sectionLpValues[$currentItem['sectionid']]['lpId'];
+                        }
+                        $importedFiles = $this->processSectionMultimedia($resourcesFiles, $sectionPath, $lpId, $n);
+                        $n++;
                     }
 
                     break;
@@ -440,6 +510,17 @@ class MoodleImport
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                     $moduleValues = $this->readUrlModule($moduleXml);
                     $sectionPath = isset($sectionLpValues[$currentItem['sectionid']]) ? $sectionLpValues[$currentItem['sectionid']]['sectionPath'] : '';
+                    $categoryId = 0;
+                    if (!empty($sectionPath)) {
+                        $category = Link::getCategoryByName($sectionPath);
+                        if (!empty($category)) {
+                            $categoryId = $category['iid'];
+                        } else {
+                            $_POST['category_title'] = $sectionPath;
+                            $_POST['description'] = '';
+                            $categoryId = Link::addlinkcategory('category');
+                        }
+                    }
                     $contextId = $moduleValues['attributes']['contextid'];
                     if (isset($allFiles[$contextId])) {
                         $importedFiles = $this->processSectionMultimedia($allFiles[$contextId], $sectionPath);
@@ -451,7 +532,7 @@ class MoodleImport
                         $this->fixPathInText($importedFiles, $moduleValues['intro']);
                     }
                     $_POST['description'] = $moduleValues['intro'];
-                    $_POST['category_id'] = 0;
+                    $_POST['category_id'] = $categoryId;
                     $_POST['target'] = '_blank';
 
                     $linkId = Link::addlinkcategory('link');
@@ -788,6 +869,38 @@ class MoodleImport
                 }
             }
         }
+
+        $configOpts = $doc->getElementsByTagName('plugin_config');
+        $config = [];
+        $counter = 0;
+        foreach ($configOpts as $opt) {
+            if (empty($opt->childNodes->length)) {
+                continue;
+            }
+            $pluginName = '';
+            foreach ($opt->childNodes as $item) {
+                if ('#text' == $item->nodeName) {
+                    continue;
+                }
+                if ('plugin' == $item->nodeName && !in_array($item->nodeValue, ['onlinetext', 'file'])) {
+                    break;
+                }
+                if ('subtype' == $item->nodeName && 'assignsubmission' != $item->nodeValue) {
+                    break;
+                }
+                if ('name' == $item->nodeName && 'enabled' != $item->nodeValue) {
+                    break;
+                }
+                if ('plugin' == $item->nodeName) {
+                    $pluginName = $item->nodeValue;
+                }
+                if ('value' == $item->nodeName) {
+                    $config[$pluginName]['enabled'] = (int) $item->nodeValue;
+                }
+            }
+            $counter++;
+        }
+        $info['config'] = $config;
         $attributes = $this->getDocActivityAttributes($doc);
         $info['attributes'] = $attributes;
 
@@ -912,6 +1025,140 @@ class MoodleImport
     }
 
     /**
+     * It addes the files from a resources type folder.
+     *
+     * @param     $files
+     * @param     $mainFolderName
+     * @param     $sectionPath
+     * @param int $lpId
+     * @param int $n
+     */
+    public function processSectionFolderModule($mainFileModuleValues, $sectionPath, $mainFolderName, $resourcesFiles, $lpId = 0, $dspOrder = 0)
+    {
+        if (!empty($mainFileModuleValues['folder'])) {
+            $courseInfo = api_get_course_info();
+            $chapters = [];
+            $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+            // It creates the first lp chapter (module folder name)
+            $safeMainFolderName = api_replace_dangerous_char($mainFolderName);
+            $documentData = create_unexisting_directory(
+                $courseInfo,
+                api_get_user_id(),
+                api_get_session_id(),
+                api_get_group_id(),
+                null,
+                $documentPath,
+                '/'.$sectionPath.'/'.$safeMainFolderName,
+                $mainFolderName,
+                0
+            );
+            if (!empty($lpId) && !empty($documentData['iid'])) {
+                $lp = new \learnpath(
+                    api_get_course_id(),
+                    $lpId,
+                    api_get_user_id()
+                );
+                $lpItemId = $lp->add_item(
+                    0,
+                    0,
+                    'dir',
+                    $documentData['iid'],
+                    $mainFolderName,
+                    '',
+                    0,
+                    0,
+                    0,
+                    $dspOrder
+                );
+                $chapters['/'] = $lpItemId;
+            }
+            // It checks the subfolder for second level.
+            foreach ($mainFileModuleValues['folder'] as $folder) {
+                if ('/' == $folder['filepath']) {
+                    continue;
+                }
+                $folder['filepath'] = trim($folder['filepath'], '/');
+                $arrFolderPath = explode('/', $folder['filepath']);
+                if (1 == count($arrFolderPath)) {
+                    $folderName = $arrFolderPath[0];
+                    $safeFolderName = api_replace_dangerous_char($folderName);
+                    $documentSubData = create_unexisting_directory(
+                        $courseInfo,
+                        api_get_user_id(),
+                        api_get_session_id(),
+                        api_get_group_id(),
+                        null,
+                        $documentPath,
+                        '/'.$sectionPath.'/'.$safeMainFolderName.'/'.$safeFolderName,
+                        $folderName,
+                        0
+                    );
+                    if (!empty($lpId) && !empty($documentSubData['iid'])) {
+                        $lp = new \learnpath(
+                            api_get_course_id(),
+                            $lpId,
+                            api_get_user_id()
+                        );
+                        $lpItemId = $lp->add_item(
+                            $chapters['/'],
+                            0,
+                            'dir',
+                            $documentSubData['iid'],
+                            $folderName,
+                            '',
+                            0,
+                            0,
+                            0
+                        );
+                        $chapters["/$folderName/"] = $lpItemId;
+                    }
+                }
+            }
+            if (!empty($resourcesFiles)) {
+                foreach ($resourcesFiles as $file) {
+                    $title = pathinfo($file['file']['name'], PATHINFO_FILENAME);
+                    $path = $file['file']['filepath'];
+                    if (1 == count(explode('/', trim($path, '/')))) {
+                        $safePath = api_replace_dangerous_char($path);
+                        $newSafePath = !empty($safePath) ? '/'.$sectionPath.'/'.$safeMainFolderName.'/'.$safePath : '/'.$sectionPath.'/'.$safeMainFolderName;
+                        $data = DocumentManager::upload_document(
+                            $file,
+                            $newSafePath,
+                            $title,
+                            '',
+                            null,
+                            'overwrite',
+                            true,
+                            true,
+                            'file',
+                            false
+                        );
+                        if (!empty($lpId) && !empty($data['iid'])) {
+                            // It is added as item in Learnpath
+                            $lp = new \learnpath(
+                                api_get_course_id(),
+                                $lpId,
+                                api_get_user_id()
+                            );
+                            $lpItemId = $lp->add_item(
+                                $chapters[$path],
+                                0,
+                                'document',
+                                $data['iid'],
+                                $title,
+                                '',
+                                0,
+                                0,
+                                0
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * It reorganizes files imported to documents.
      *
      * @param $files
@@ -919,7 +1166,7 @@ class MoodleImport
      *
      * @return array
      */
-    public function processSectionMultimedia($files, $sectionPath)
+    public function processSectionMultimedia($files, $sectionPath, $lpId = 0, $n = 0)
     {
         $importedFiles = [];
         if (!empty($files)) {
@@ -944,9 +1191,10 @@ class MoodleImport
             }
             foreach ($files as $file) {
                 $title = pathinfo($file['file']['name'], PATHINFO_FILENAME);
+                $path = !empty($lpId) ? $sectionPath : $sectionPath.'/Multimedia';
                 $data = DocumentManager::upload_document(
                     $file,
-                    $sectionPath.'/Multimedia',
+                    $path,
                     $title,
                     '',
                     null,
@@ -958,6 +1206,10 @@ class MoodleImport
                 );
                 if ($data) {
                     $importedFiles[$file['file']['name']] = basename($data['path']);
+                    // It is added as item in Learnpath
+                    if (!empty($lpId) && !empty($data['iid'])) {
+                        $this->processSectionItem($lpId, 'document', $data['iid'], $title, $n);
+                    }
                 }
             }
         }
@@ -1156,6 +1408,15 @@ class MoodleImport
             $values['qualification'] = (int) $assign['grade'];
             $values['weight'] = (int) $assign['grade'];
             $values['allow_text_assignment'] = 2;
+            if (!empty($assign['config'])) {
+                if (1 == (int) $assign['config']['onlinetext']['enabled'] && 1 == (int) $assign['config']['file']['enabled']) {
+                    $values['allow_text_assignment'] = 0;
+                } elseif (1 == (int) $assign['config']['onlinetext']['enabled'] && empty($assign['config']['file']['enabled'])) {
+                    $values['allow_text_assignment'] = 1;
+                } elseif (empty($assign['config']['onlinetext']['enabled']) && 1 == (int) $assign['config']['file']['enabled']) {
+                    $values['allow_text_assignment'] = 2;
+                }
+            }
 
             $assignId = addDir(
                 $values,
@@ -1348,10 +1609,69 @@ class MoodleImport
         foreach ($activities as $activity) {
             if ($activity->childNodes->length) {
                 foreach ($activity->childNodes as $item) {
+                    if (in_array($item->nodeName, ['type', 'name', 'intro', 'grade_forum'])) {
+                        $currentItem[$item->nodeName] = $item->nodeValue;
+                    }
+                }
+            }
+        }
+
+        $discussions = $moduleDoc->getElementsByTagName('discussion');
+
+        $discussionsList = [];
+        $counter = 0;
+        foreach ($discussions as $discussion) {
+            if ($discussion->childNodes->length) {
+                foreach ($discussion->childNodes as $item) {
+                    $discussionsList[$counter][$item->nodeName] = $item->nodeValue;
+                }
+                $i = 0;
+                $postsNodes = $discussion->getElementsByTagName("post");
+                $posts = [];
+                foreach ($postsNodes as $post) {
+                    foreach ($post->childNodes as $n) {
+                        $posts[$i][$n->nodeName] = $n->nodeValue;
+                    }
+                    $i++;
+                }
+                $discussionsList[$counter]['posts'] = $posts;
+                $counter++;
+            }
+        }
+        $currentItem['discussions'] = $discussionsList;
+        $attributes = $this->getDocActivityAttributes($moduleDoc);
+        $currentItem['attributes'] = $attributes;
+
+        return $currentItem;
+    }
+
+    /**
+     * Read and validate the folder module XML.
+     *
+     * @param resource $moduleXml XML file
+     *
+     * @return mixed|array if is a valid xml file, false otherwise
+     */
+    public function readFolderModule($moduleXml)
+    {
+        $moduleDoc = new DOMDocument();
+        $moduleRes = @$moduleDoc->loadXML($moduleXml);
+        if (empty($moduleRes)) {
+            return false;
+        }
+        $activities = $moduleDoc->getElementsByTagName('folder');
+        $mainActivity = $moduleDoc->getElementsByTagName('activity');
+        $contextId = $mainActivity->item(0)->getAttribute('contextid');
+        $currentItem = [];
+        foreach ($activities as $activity) {
+            if ($activity->childNodes->length) {
+                foreach ($activity->childNodes as $item) {
                     $currentItem[$item->nodeName] = $item->nodeValue;
                 }
             }
         }
+
+        $currentItem['contextid'] = $contextId;
         $attributes = $this->getDocActivityAttributes($moduleDoc);
         $currentItem['attributes'] = $attributes;
 
@@ -1506,6 +1826,51 @@ class MoodleImport
     }
 
     /**
+     * Search the files of a resource type folder in main Files XML.
+     *
+     * @param resource $filesXml  XML file
+     * @param int      $contextId
+     *
+     * @return mixed|array if is a valid xml file, false otherwise
+     */
+    public function readFolderModuleFilesXml($filesXml, $contextId = null)
+    {
+        $moduleDoc = new DOMDocument();
+        $moduleRes = @$moduleDoc->loadXML($filesXml);
+
+        if (empty($moduleRes)) {
+            return false;
+        }
+        $activities = $moduleDoc->getElementsByTagName('file');
+        $filesInfo = [];
+        $i = 0;
+        foreach ($activities as $activity) {
+            if (empty($activity->childNodes->length)) {
+                continue;
+            }
+            foreach ($activity->childNodes as $item) {
+                if (in_array($item->nodeName, ['filename', 'filesize', 'contenthash', 'contextid', 'filepath', 'filesize', 'mimetype'])) {
+                    $filesInfo[$i][$item->nodeName] = $item->nodeValue;
+                }
+            }
+            $i++;
+        }
+        $currentItem = [];
+        if (!empty($filesInfo)) {
+            foreach ($filesInfo as $info) {
+                if (!empty($info['filesize'])) {
+                    $currentItem[$info['contextid']]['files'][] = $info;
+                } else {
+                    $currentItem[$info['contextid']]['folder'][] = $info;
+                }
+            }
+        }
+        $files = isset($contextId) ? $currentItem[$contextId] : $currentItem;
+
+        return $files;
+    }
+
+    /**
      * Search the current file resource in main Files XML.
      *
      * @param resource $filesXml  XML file
@@ -1523,48 +1888,29 @@ class MoodleImport
         }
 
         $activities = $moduleDoc->getElementsByTagName('file');
-        $currentItem = [];
+        $filesInfo = [];
+        $i = 0;
         foreach ($activities as $activity) {
             if (empty($activity->childNodes->length)) {
                 continue;
             }
-            $isThisItemThatIWant = false;
             foreach ($activity->childNodes as $item) {
-                if (!$isThisItemThatIWant && $item->nodeName == 'contenthash') {
-                    $currentItem['contenthash'] = $item->nodeValue;
+                if (in_array($item->nodeName, ['filename', 'filesize', 'contenthash', 'contextid', 'filesize', 'mimetype'])) {
+                    $filesInfo[$i][$item->nodeName] = $item->nodeValue;
                 }
-                if ($item->nodeName == 'contextid' &&
-                    (int) $item->nodeValue == (int) $contextId &&
-                    !$isThisItemThatIWant
-                ) {
-                    $isThisItemThatIWant = true;
-                    continue;
-                }
-
-                if ($isThisItemThatIWant && $item->nodeName == 'filename') {
-                    $currentItem['filename'] = $item->nodeValue;
-                }
-
-                if ($isThisItemThatIWant && $item->nodeName == 'filesize') {
-                    $currentItem['filesize'] = $item->nodeValue;
-                }
-
-                if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
-                    $item->nodeValue == 'document/unknown'
-                ) {
-                    break;
-                }
-
-                if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
-                    $item->nodeValue !== 'document/unknown'
-                ) {
-                    $currentItem['mimetype'] = $item->nodeValue;
-                    break 2;
+            }
+            $i++;
+        }
+        $currentItem = [];
+        if (!empty($filesInfo)) {
+            foreach ($filesInfo as $info) {
+                if (!empty($info['filesize'])) {
+                    $currentItem[$info['contextid']] = $info;
                 }
             }
         }
 
-        return $currentItem;
+        return $currentItem[$contextId];
     }
 
     /**

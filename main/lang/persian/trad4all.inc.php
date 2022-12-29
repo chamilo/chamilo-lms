@@ -4072,7 +4072,6 @@ $ExamsReporting = "گزارش آزمون ها";
 $MyReporting = "گزارش های من";
 $SearchSkills = "جستجوی مهارت ها";
 $SaveThisSearch = "ذخیره کردن جستجو";
-$SkillProfiles = "نگهداری مشخصات مهارت ها";
 $Matches = "مطابقت ها";
 $WelcomeUserXToTheSiteX = "%s، خوش آمدید به %s";
 $CantUploadDeleteYourPaperFirst = "شما قادر به ارسال این تکلیف نیستید. لطفا ابتدا قبلی را حذف کنید.";

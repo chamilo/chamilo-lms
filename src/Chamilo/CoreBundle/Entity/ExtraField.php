@@ -41,6 +41,7 @@ class ExtraField extends BaseAttribute
     public const LP_VIEW_TYPE = 20;
     public const COURSE_ANNOUNCEMENT = 21;
     public const MESSAGE_TYPE = 22;
+    public const DOCUMENT_TYPE = 23;
 
     /**
      * @var int

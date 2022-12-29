@@ -6892,7 +6892,6 @@ $ExamsReporting = "Informes de exames";
 $MyReporting = "O meu informe";
 $SearchSkills = "Procurar competencias";
 $SaveThisSearch = "Gardar esta búsqueda";
-$SkillProfiles = "Almacenar perfís de competencias";
 $Matches = "Relacións";
 $WelcomeUserXToTheSiteX = "%s, benvido a %s";
 $CheckUsersWithId = "Usar o ID do usuario do arquivo para o rexistro";

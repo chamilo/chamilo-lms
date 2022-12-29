@@ -6829,7 +6829,6 @@ $ExamsReporting = "Prüfungs-Berichte";
 $MyReporting = "Meine Berichte";
 $SearchSkills = "Suche Fähigkeiten";
 $SaveThisSearch = "Diese Suche speichern";
-$SkillProfiles = "gespeicherte Fähigkeitsprofile";
 $Matches = "Treffer";
 $WelcomeUserXToTheSiteX = "%s, willkommen zu/auf %s";
 $CheckUsersWithId = "Die User-ID aus der Datei zur Registrierung verwenden";

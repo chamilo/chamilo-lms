@@ -689,6 +689,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     $checkUniqueEmail = isset($_POST['check_unique_email']) ? $_POST['check_unique_email'] : null;
     $sendMail = $_POST['sendMail'] ? true : false;
     $resume = isset($_POST['resume_import']) ? true : false;
+    $askNewPassword = isset($_POST['ask_new_password']) ? true : false;
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
     $targetFolder = null;
@@ -731,7 +732,14 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         }
+        if ($askNewPassword) {
+            foreach ($users as $userId => $user) {
+                $users[$userId]['ask_new_password'] = 1;
+            }
+        }
 
+        // processUsers() triggers save_data() which uses the $extra_fields
+        // variable defined above as a global list of fields to treat
         processUsers($users, $sendMail, $targetFolder);
 
         if ($error_kind_file) {
@@ -885,6 +893,15 @@ $form->addElement(
     '',
     get_lang('ResumeImport')
 );
+
+if (api_get_configuration_value('force_renew_password_at_first_login') == true) {
+    $form->addElement(
+        'checkbox',
+        'ask_new_password',
+        '',
+        get_lang('FirstLoginForceUsersToChangePassword')
+    );
+}
 
 $form->addButtonImport(get_lang('Import'));
 

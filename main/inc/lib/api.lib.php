@@ -1340,10 +1340,12 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
     if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
         if (!($allow_session_coach && api_is_coach())) {
             api_not_allowed(true, $message);
+
             return false;
         }
     }
     api_block_inactive_user();
+
     return true;
 }
 
@@ -3369,6 +3371,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
             $sessionIsCoach = Database::store_result($result);
         }
     }
+
     return count($sessionIsCoach) > 0;
 }
 
@@ -6385,8 +6388,27 @@ function api_get_access_url($id, $returnDefault = true)
  *
  * @return array Array of database results for the current settings of the current access URL
  */
-function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
+function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
 {
+    // Try getting settings from cache first (avoids query w/ ~375 rows result)
+    $apcVarName = '';
+    $apcVar = [];
+    $cacheAvailable = api_get_configuration_value('apc');
+    if ($cacheAvailable) {
+        $apcVarName = api_get_configuration_value('apc_prefix').
+            'settings_'.
+            $access_url
+        ;
+        $catName = (empty($cat) ? 'global' : $cat);
+
+        if (apcu_exists($apcVarName)) {
+            $apcVar = apcu_fetch($apcVarName);
+            if (!empty($apcVar[$catName]) && !empty($apcVar[$catName][$ordering]) && isset($apcVar[$catName][$ordering][$url_changeable])) {
+                return $apcVar[$catName][$ordering][$url_changeable];
+            }
+        }
+    }
+    // Could not find settings in cache (or already expired), so query DB
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
     $where_condition = '';
@@ -6414,6 +6436,18 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
     }
     $result = Database::store_result($result, 'ASSOC');
 
+    if ($cacheAvailable) {
+        // If we got here, it means cache is available but the settings
+        // were not recently stored, so now we have them, let's store them
+        if (empty($apcVar[$catName])) {
+            $apcVar[$catName] = [];
+        }
+        if (empty($apcVar[$catName][$ordering])) {
+            $apcVar[$catName][$ordering] = [];
+        }
+        $apcVar[$catName][$ordering][$url_changeable] = $result;
+        apcu_store($apcVarName, $apcVar, 600);
+    }
     return $result;
 }
 
@@ -6837,21 +6871,44 @@ function api_get_current_access_url_id()
  * Gets the registered urls from a given user id.
  *
  * @param int $user_id
+ * @param int $checkCourseId the course id to check url access
  *
  * @return array
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-function api_get_access_url_from_user($user_id)
+function api_get_access_url_from_user($user_id, $checkCourseId = null)
 {
     $user_id = (int) $user_id;
     $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $includeIds = "";
+    if (isset($checkCourseId)) {
+        $cid = (int) $checkCourseId;
+        $tblUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT access_url_id
+            FROM $tblUrlCourse url_rel_course
+            INNER JOIN $table_url u
+            ON (url_rel_course.access_url_id = u.id)
+            WHERE c_id = $cid";
+        $rs = Database::query($sql);
+        $courseUrlIds = [];
+        if (Database::num_rows($rs) > 0) {
+            while ($rowC = Database::fetch_array($rs, 'ASSOC')) {
+                $courseUrlIds[] = $rowC['access_url_id'];
+            }
+        }
+        if (!empty($courseUrlIds)) {
+            $includeIds = " AND access_url_id IN (".implode(',', $courseUrlIds).")";
+        }
+    }
+
     $sql = "SELECT access_url_id
             FROM $table_url_rel_user url_rel_user
             INNER JOIN $table_url u
             ON (url_rel_user.access_url_id = u.id)
-            WHERE user_id = ".intval($user_id);
+            WHERE user_id = $user_id $includeIds
+            ORDER BY access_url_id";
     $result = Database::query($sql);
     $list = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -8358,7 +8415,7 @@ function api_set_settings_and_plugins()
     if ($access_url_id != 1) {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {
-            $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+            $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
             foreach ($settings_by_access as &$row) {
                 if (empty($row['variable'])) {
                     $row['variable'] = 0;
@@ -9439,6 +9496,27 @@ function api_mail_html(
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
+    if (isset($additionalParameters['checkUrls'])) {
+        $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
+        if ($useMultipleUrl) {
+            $accessConfig = [];
+            $accessUrls = api_get_access_url_from_user($additionalParameters['userId'], $additionalParameters['courseId']);
+            if (!empty($accessUrls)) {
+                $accessConfig['multiple_access_urls'] = true;
+                $accessConfig['access_url'] = (int) $accessUrls[0];
+                $params = ['variable = ? AND access_url = ?' => ['stylesheets', $accessConfig['access_url']]];
+                $settings = api_get_settings_params_simple($params);
+                if (!empty($settings['selected_value'])) {
+                    $accessConfig['theme_dir'] = \Template::getThemeDir($settings['selected_value']);
+                }
+            }
+            // To replace the current urls by access url user
+            $mail->Body = str_replace(api_get_path(WEB_PATH), api_get_path(WEB_PATH, $accessConfig), $mail->Body);
+            if (!empty($accessConfig['theme_dir'])) {
+                $mail->Body = str_replace('themes/chamilo/', $accessConfig['theme_dir'], $mail->Body);
+            }
+        }
+    }
     // Attachment.
     if (!empty($data_file)) {
         foreach ($data_file as $file_attach) {
@@ -9510,7 +9588,7 @@ function api_mail_html(
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
     }
 
-    if ($mail->SMTPDebug > 1) {
+    if ($mail->SMTPDebug >= 1) {
         error_log(
             "Mail debug:: ".
             "Protocol: ".$mail->Mailer.' :: '.
@@ -10281,4 +10359,20 @@ function api_filename_has_blacklisted_stream_wrapper(string $filename)
     }
 
     return false;
+}
+
+/**
+ * Calculate the percent between two numbers.
+ *
+ * @return string
+ */
+function api_calculate_increment_percent(int $newValue, int $oldValue)
+{
+    if ($oldValue <= 0) {
+        $result = " - ";
+    } else {
+        $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2).' %';
+    }
+
+    return $result;
 }

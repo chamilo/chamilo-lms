@@ -8,6 +8,8 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 /**
  * Class PortfolioAttachmentRepository.
@@ -26,6 +28,9 @@ class PortfolioAttachmentRepository extends EntityRepository
         );
     }
 
+    /**
+     * @return array<int, PortfolioComment>
+     */
     public function findFromComment(PortfolioComment $comment): array
     {
         return $this->findBy(
@@ -34,5 +39,18 @@ class PortfolioAttachmentRepository extends EntityRepository
                 'originType' => PortfolioAttachment::TYPE_COMMENT,
             ]
         );
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    public function removeFromComment(PortfolioComment $comment)
+    {
+        $comments = $this->findFromComment($comment);
+
+        foreach ($comments as $comment) {
+            $this->_em->remove($comment);
+        }
     }
 }

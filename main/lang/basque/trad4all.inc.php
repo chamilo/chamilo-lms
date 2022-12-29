@@ -6834,7 +6834,6 @@ $ExamsReporting = "Azterketen txostenak";
 $MyReporting = "Nire txostenak";
 $SearchSkills = "Bilatu gaitasunak";
 $SaveThisSearch = "Gorde bilaketa hau";
-$SkillProfiles = "Gorde diren gaitasunen profilak";
 $Matches = "Egokitzapenak";
 $WelcomeUserXToTheSiteX = "%s, ongi etorri %s lekura";
 $CheckUsersWithId = "Erabili erabiltzailearen IDak fitxategitik, inskribatzeko";

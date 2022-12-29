@@ -305,6 +305,25 @@ switch ($action) {
 
         $controller->markAsTemplateComment($comment);
         break;
+    case 'edit_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (!empty($comment)) {
+            $controller->editComment($comment);
+        }
+
+        break;
+    case 'delete_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (!empty($comment)) {
+            $controller->deleteComment($comment);
+        }
+        break;
     case 'tags':
     case 'edit_tag':
         $controller->listTags($httpRequest);

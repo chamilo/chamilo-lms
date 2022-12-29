@@ -3384,6 +3384,25 @@ class CourseManager
         return null;
     }
 
+    public static function getExtraData(int $courseId, array $avoid = [])
+    {
+        $fields = (new ExtraField('course'))->getDataAndFormattedValues($courseId);
+
+        if ($avoid) {
+            $fields = array_filter(
+                $fields,
+                function (array $field) use ($avoid): bool {
+                    return !in_array($field['variable'], $avoid);
+                }
+            );
+        }
+
+        $keys = array_column($fields, 'text');
+        $values = array_column($fields, 'value');
+
+        return array_combine($keys, $values);
+    }
+
     /**
      * Gets extra field value data and formatted values of a course
      * for extra fields listed in configuration.php in my_course_course_extrafields_to_be_presented
@@ -5083,8 +5102,9 @@ class CourseManager
         if (!empty($to) && !empty($from)) {
             $sql = "UPDATE $tableCourse SET course_language = '$to'
                     WHERE course_language = '$from'";
+            Database::query($sql);
 
-            return Database::query($sql);
+            return true;
         }
 
         return false;

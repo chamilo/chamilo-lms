@@ -24,7 +24,7 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : null;
 if (empty($sessionId)) {
     api_not_allowed(true);
 }
-PHPSession::write('id_session',$sessionId);
+PHPSession::write('id_session', $sessionId);
 SessionManager::protectSession($sessionId);
 $codePath = api_get_path(WEB_CODE_PATH);
 

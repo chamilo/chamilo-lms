@@ -6881,7 +6881,6 @@ $ExamsReporting = "Resoconti Esami";
 $MyReporting = "I miei resoconti";
 $SearchSkills = "Cerca competenze";
 $SaveThisSearch = "Salva questa ricerca";
-$SkillProfiles = "Profili competenze archiviate";
 $Matches = "Corrispondenze";
 $WelcomeUserXToTheSiteX = "%s, benvenuto su %s";
 $CheckUsersWithId = "Usa gli ID utente dal file per iscriverli";

@@ -47,7 +47,7 @@
         "ext-zip": "*",
         "ext-zlib": "*",
         "angelfqc/vimeo-api": "2.0.6",
-        "apereo/phpcas": "^1.3",
+        "apereo/phpcas": "^1.6",
         "brumann/polyfill-unserialize": "^1.0",
         "chamilo/pclzip": "~2.8",
         "clue/graph": "~0.9.0",

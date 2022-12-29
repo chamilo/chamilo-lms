@@ -6840,7 +6840,6 @@ $ExamsReporting = "Poročila preverjanj";
 $MyReporting = "Moja poročila";
 $SearchSkills = "Išči kompetence";
 $SaveThisSearch = "Shrani to iskanje";
-$SkillProfiles = "Shranjeni kompetenčni profili";
 $Matches = "Ustreza";
 $WelcomeUserXToTheSiteX = "%s, dobrodošli k %s";
 $CheckUsersWithId = "Za vpis uporabnika uporabi uporabnikov ID iz datoteke";

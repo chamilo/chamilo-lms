@@ -34,7 +34,7 @@ if (api_is_multiple_url_enabled()) {
     $accessUrlId = api_get_current_access_url_id();
     $sessionOnUrl = SessionManager::sessionIsAssignedToUrl($sessionId, $accessUrlId);
 
-    if(!$sessionOnUrl) {
+    if (!$sessionOnUrl) {
         api_not_allowed(true);
     }
 }

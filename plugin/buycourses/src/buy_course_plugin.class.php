@@ -942,8 +942,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the item data.
      *
-     * @param int   $productId The item ID
-     * @param int   $itemType  The item type
+     * @param int $productId The item ID
+     * @param int $itemType  The item type
      *
      * @return array
      */
@@ -984,8 +984,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the item data.
      *
-     * @param int   $productId The item ID
-     * @param int   $itemType  The item type
+     * @param int $productId The item ID
+     * @param int $itemType  The item type
      *
      * @return array
      */
@@ -1025,9 +1025,9 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get registered item data.by duration.
+     * Get registered item data by duration.
      *
-     * @param int $duration    The subscription duration
+     * @param int $duration The subscription duration
      *
      * @return array
      */
@@ -1194,8 +1194,8 @@ class BuyCoursesPlugin extends Plugin
      *
      * It can return the number of rows when $typeResult is 'count'.
      *
-     * @param int    $start
-     * @param int    $end
+     * @param int    $start           Pagination start.
+     * @param int    $end             Pagination end.
      * @param string $name            Optional. The name filter.
      * @param string $typeResult      Optional. 'all', 'first' or 'count'.
      * @param int    $sessionCategory Optional. Session category id
@@ -4653,7 +4653,7 @@ class BuyCoursesPlugin extends Plugin
         return $listExport;
     }
 
-   /**
+    /**
      * Get a list of subscription sales by the user.
      *
      * @param string $term The search term

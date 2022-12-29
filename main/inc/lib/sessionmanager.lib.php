@@ -9920,6 +9920,32 @@ class SessionManager
     }
 
     /**
+     * Check if a session is assigned on access url.
+     *
+     * @param string $sessionId
+     * @param int    $urlId
+     *
+     * @return bool
+     */
+    public static function sessionIsAssignedToUrl(int $sessionId, int $urlId = 0)
+    {
+        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
+
+        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+        $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+
+        $sql = " SELECT
+                COUNT(*) as count
+            FROM $session_table s
+            INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+            WHERE s.id = $sessionId AND ar.access_url_id = $urlId ";
+
+        $result = Database::fetch_array(Database::query($sql));
+
+        return $result['count'] > 0;
+    }
+
+    /**
      * @param int $id
      *
      * @return bool

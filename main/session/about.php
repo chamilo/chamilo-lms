@@ -29,6 +29,16 @@ $session = api_get_session_entity($sessionId);
 if (!$session) {
     api_not_allowed(true);
 }
+
+if (api_is_multiple_url_enabled()) {
+    $accessUrlId = api_get_current_access_url_id();
+    $sessionOnUrl = SessionManager::sessionIsAssignedToUrl($sessionId, $accessUrlId);
+
+    if(!$sessionOnUrl) {
+        api_not_allowed(true);
+    }
+}
+
 $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 $courses = [];
 $sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);

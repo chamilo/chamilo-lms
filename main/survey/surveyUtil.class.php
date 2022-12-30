@@ -264,7 +264,7 @@ class SurveyUtil
     public static function handle_reporting_actions($survey_data, $people_filled)
     {
         $action = isset($_GET['action']) ? $_GET['action'] : '';
-
+        $lpItemId = isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : 0;
         // Getting the number of question
         $questions = SurveyManager::get_questions($survey_data['survey_id']);
 
@@ -303,7 +303,7 @@ class SurveyUtil
                         $actionBar .= '</div>';
                         echo $actionBar;
                         foreach ($surveysAnswered as $survey) {
-                            echo self::displayCompleteReport($survey_data, 0, false, true, !$survey_data['anonymous'], $survey->getLpItemId());
+                            echo self::displayCompleteReport($survey_data, 0, true, true, !$survey_data['anonymous'], $survey->getLpItemId());
                         }
                     }
                 } else {
@@ -311,7 +311,7 @@ class SurveyUtil
                 }
                 break;
             case 'deleteuserreport':
-                self::delete_user_report($_GET['survey_id'], $_GET['user']);
+                self::delete_user_report($_GET['survey_id'], $_GET['user'], $lpItemId);
                 break;
         }
     }
@@ -326,7 +326,7 @@ class SurveyUtil
      *
      * @version November 2008
      */
-    public static function delete_user_report($survey_id, $user_id)
+    public static function delete_user_report($survey_id, $user_id, $lpItemId = 0)
     {
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
@@ -345,9 +345,14 @@ class SurveyUtil
                 $sessionCondition = api_get_session_condition($sessionId);
             }
 
+            $lpItemCondition = '';
+            if (api_get_configuration_value('allow_survey_tool_in_lp')) {
+                $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+            }
+
             // delete data from survey_answer by user_id and survey_id
             $sql = "DELETE FROM $table_survey_answer
-			        WHERE c_id = $course_id AND survey_id = '".$survey_id."' AND user = '".$user_id."' $sessionCondition";
+			        WHERE c_id = $course_id AND survey_id = '".$survey_id."' AND user = '".$user_id."' $sessionCondition $lpItemCondition";
             Database::query($sql);
             // update field answered from survey_invitation by user_id and survey_id
             $sql = "UPDATE $table_survey_invitation SET answered = '0'
@@ -846,9 +851,9 @@ class SurveyUtil
 
             if ('score' === $question['type']) {
                 /** @todo This function should return the options as this is needed further in the code */
-                $options = self::display_question_report_score($survey_data, $question, $offset);
+                $options = self::display_question_report_score($survey_data, $question, $offset, $lpItemId);
             } elseif ($question['type'] === 'open' || $question['type'] === 'comment') {
-                echo '<div class="open-question">';
+                echo '<div class="open-question" style="padding: 1px 0;">';
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE
@@ -1035,7 +1040,7 @@ class SurveyUtil
      * @param    array    Question info
      * @param    int    The offset of results shown
      */
-    public static function display_question_report_score($survey_data, $question, $offset)
+    public static function display_question_report_score($survey_data, $question, $offset, $lpItemId = 0)
     {
         // Database table definitions
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
@@ -1065,6 +1070,11 @@ class SurveyUtil
             $options[$row['question_option_id']] = $row;
         }
 
+        $lpItemCondition = '';
+        if (api_get_configuration_value('allow_survey_tool_in_lp')) {
+            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+        }
+
         // Getting the answers
         $sql = "SELECT *, count(answer_id) as total
                 FROM $table_survey_answer
@@ -1073,6 +1083,7 @@ class SurveyUtil
                    survey_id= $surveyId AND
                    question_id = '".Database::escape_string($question['question_id'])."'
                    $sessionCondition
+                   $lpItemCondition
                 GROUP BY option_id, value";
         $result = Database::query($sql);
         $number_of_answers = 0;
@@ -1191,6 +1202,7 @@ class SurveyUtil
 
         // To select the answers by lp item
         $lpItemCondition = '';
+        $lpItemId = (int) $lpItemId;
         if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
             $lpItemCondition = " AND c_lp_item_id = $lpItemId";
         }
@@ -1200,9 +1212,12 @@ class SurveyUtil
         }
 
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+        $paramLpItem = '';
         $content = '';
-
+        $suffixLpItem = '';
         if (!empty($lpItemId)) {
+            $suffixLpItem = '-item'.$lpItemId;
+            $paramLpItem = '&lp_item_id='.$lpItemId;
             $tableLp = Database::get_course_table(TABLE_LP_MAIN);
             $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT l.name,
@@ -1224,46 +1239,48 @@ class SurveyUtil
 
         if ($addActionBar) {
             $content .= '<div class="actions">';
-            $content .= '<a
+            if (empty($lpItemId)) {
+                $content .= '<a
                 href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
-                .Display::return_icon(
-                    'back.png',
-                    get_lang('BackTo').' '.get_lang('ReportingOverview'),
-                    [],
-                    ICON_SIZE_MEDIUM
-                )
-                .'</a>';
-            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">'
+                    .Display::return_icon(
+                        'back.png',
+                        get_lang('BackTo').' '.get_lang('ReportingOverview'),
+                        [],
+                        ICON_SIZE_MEDIUM
+                    )
+                    .'</a>';
+            }
+            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="formExportSubmit(\'form1a'.$suffixLpItem.'\')">'
                 .Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">'
+            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="formExportSubmit(\'form1b'.$suffixLpItem.'\')">'
                 .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1c.submit();">'
+            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="formExportSubmit(\'form1c'.$suffixLpItem.'\')">'
                 .Display::return_icon('export_compact_csv.png', get_lang('ExportAsCompactCSV'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
 
             // The form
-            $content .= '<form id="form1a" name="form1a" method="post" action="'.api_get_self(
+            $content .= '<form id="form1a'.$suffixLpItem.'" name="form1a'.$suffixLpItem.'" method="post" action="'.api_get_self(
                 ).'?action='.$action.'&survey_id='
-                .$surveyId.'&'.api_get_cidreq().'">';
+                .$surveyId.'&'.api_get_cidreq().$paramLpItem.'">';
             $content .= '<input type="hidden" name="export_report" value="export_report">';
             $content .= '<input type="hidden" name="export_format" value="csv">';
             $content .= '</form>';
-            $content .= '<form id="form1b" name="form1b" method="post" action="'.api_get_self(
+            $content .= '<form id="form1b'.$suffixLpItem.'" name="form1b'.$suffixLpItem.'" method="post" action="'.api_get_self(
                 ).'?action='.$action.'&survey_id='
-                .$surveyId.'&'.api_get_cidreq().'">';
+                .$surveyId.'&'.api_get_cidreq().$paramLpItem.'">';
             $content .= '<input type="hidden" name="export_report" value="export_report">';
             $content .= '<input type="hidden" name="export_format" value="xls">';
             $content .= '</form>';
-            $content .= '<form id="form1c" name="form1c" method="post" action="'.api_get_self(
+            $content .= '<form id="form1c'.$suffixLpItem.'" name="form1c'.$suffixLpItem.'" method="post" action="'.api_get_self(
                 ).'?action='.$action.'&survey_id='
-                .$surveyId.'&'.api_get_cidreq().'">';
+                .$surveyId.'&'.api_get_cidreq().$paramLpItem.'">';
             $content .= '<input type="hidden" name="export_report" value="export_report">';
             $content .= '<input type="hidden" name="export_format" value="csv-compact">';
             $content .= '</form>';
         }
 
         $content .= '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='
-            .$surveyId.'&'.api_get_cidreq().'">';
+            .$surveyId.'&'.api_get_cidreq().$paramLpItem.'">';
 
         // The table
         $content .= '<br /><table class="table table-hover table-striped data_table" border="1">';
@@ -1272,26 +1289,26 @@ class SurveyUtil
         $content .= '		<th>';
 
         if ($addFilters) {
-            if ((isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
-                (isset($_POST['export_report']) && $_POST['export_report'])
+            if ((isset($_POST['submit_question_filter'.$suffixLpItem]) && $_POST['submit_question_filter'.$suffixLpItem]) ||
+                (isset($_POST['export_report'.$suffixLpItem]) && $_POST['export_report'.$suffixLpItem])
             ) {
                 $content .= '<button class="cancel"
                                 type="submit"
-                                name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'">'.
+                                name="reset_question_filter'.$suffixLpItem.'" value="'.get_lang('ResetQuestionFilter').'">'.
                                 get_lang('ResetQuestionFilter').'</button>';
             }
             $content .= '<button
                             class = "save"
-                            type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'">'.
+                            type="submit" name="submit_question_filter'.$suffixLpItem.'" value="'.get_lang('SubmitQuestionFilter').'">'.
                             get_lang('SubmitQuestionFilter').'</button>';
             $content .= '</th>';
         }
 
         $display_extra_user_fields = false;
         if ($addExtraFields) {
-            if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
-                    isset($_POST['export_report']) && $_POST['export_report']) ||
-                !empty($_POST['fields_filter'])
+            if (!(isset($_POST['submit_question_filter'.$suffixLpItem]) && $_POST['submit_question_filter'.$suffixLpItem] ||
+                    isset($_POST['export_report'.$suffixLpItem]) && $_POST['export_report'.$suffixLpItem]) ||
+                !empty($_POST['fields_filter'.$suffixLpItem])
             ) {
                 // Show user fields section with a big th colspan that spans over all fields
                 $extra_user_fields = UserManager::get_extra_fields(
@@ -1307,7 +1324,7 @@ class SurveyUtil
                     $content .= '<th '.($num > 0 ? ' colspan="'.$num.'"' : '').'>';
                     $content .= '<label>';
                     if ($addFilters) {
-                        $content .= '<input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
+                        $content .= '<input type="checkbox" name="fields_filter'.$suffixLpItem.'" value="1" checked="checked"/> ';
                     }
                     $content .= get_lang('UserFields');
                     $content .= '</label>';
@@ -1337,9 +1354,9 @@ class SurveyUtil
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
-            if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
-                (is_array($_POST['questions_filter']) &&
-                in_array($row['question_id'], $_POST['questions_filter']))
+            if (!(isset($_POST['submit_question_filter'.$suffixLpItem]) && $_POST['submit_question_filter'.$suffixLpItem]) ||
+                (is_array($_POST['questions_filter'.$suffixLpItem]) &&
+                in_array($row['question_id'], $_POST['questions_filter'.$suffixLpItem]))
             ) {
                 // We do not show comment and pagebreak question types
                 if ('pagebreak' !== $row['type']) {
@@ -1352,7 +1369,7 @@ class SurveyUtil
                     if ($addFilters) {
                         $content .= '<input
                                 type="checkbox"
-                                name="questions_filter[]" value="'.$row['question_id'].'" checked="checked"/>';
+                                name="questions_filter'.$suffixLpItem.'[]" value="'.$row['question_id'].'" checked="checked"/>';
                     }
                     $content .= Security::remove_XSS($row['survey_question']);
                     $content .= '</label>';
@@ -1368,8 +1385,8 @@ class SurveyUtil
         $content .= '	<tr>';
         $content .= '		<th>&nbsp;</th>'; // the user column
 
-        if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
-            isset($_POST['export_report']) && $_POST['export_report']) || !empty($_POST['fields_filter'])
+        if (!(isset($_POST['submit_question_filter'.$suffixLpItem]) && $_POST['submit_question_filter'.$suffixLpItem] ||
+            isset($_POST['export_report'.$suffixLpItem]) && $_POST['export_report'.$suffixLpItem]) || !empty($_POST['fields_filter'.$suffixLpItem])
         ) {
             if ($addExtraFields) {
                 // show the fields names for user fields
@@ -1407,8 +1424,8 @@ class SurveyUtil
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a question filter but the question is selected for display
-            if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
-                (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
+            if (!(isset($_POST['submit_question_filter'.$suffixLpItem]) && $_POST['submit_question_filter'.$suffixLpItem]) ||
+                (is_array($_POST['questions_filter'.$suffixLpItem]) && in_array($row['question_id'], $_POST['questions_filter'.$suffixLpItem]))
             ) {
                 // we do not show comment and pagebreak question types
                 if ('open' === $row['type'] || 'comment' === $row['type']) {
@@ -1560,8 +1577,11 @@ class SurveyUtil
                 false,
                 true
             );
-            foreach ($user_fields_values as &$value) {
-                $content .= '<td align="center">'.$value.'</td>';
+            if (!empty($user_fields_values)) {
+                foreach ($user_fields_values as $fieldName => $value) {
+                    $fieldValue = is_array($value) ? $value[$fieldName] : $value;
+                    $content .= '<td align="center">'.$fieldValue.'</td>';
+                }
             }
         }
 
@@ -1630,7 +1650,7 @@ class SurveyUtil
      *
      * @version February 2007
      */
-    public static function export_complete_report($survey_data, $user_id = 0, $compact = false)
+    public static function export_complete_report($survey_data, $user_id = 0, $compact = false, $lpItemId = 0)
     {
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 
@@ -1676,7 +1696,7 @@ class SurveyUtil
         if (!$survey_data['anonymous']) {
             $return .= str_repeat(';', $num);
         }
-
+        $suffixLpItem = !empty($lpItemId) ? '-item'.$lpItemId : '';
         $sql = "SELECT
                     questions.question_id,
                     questions.type,
@@ -1703,10 +1723,10 @@ class SurveyUtil
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a question filter but the question is selected for display
-            if (!(isset($_POST['submit_question_filter'])) ||
-                (isset($_POST['submit_question_filter']) &&
-                    is_array($_POST['questions_filter']) &&
-                    in_array($row['question_id'], $_POST['questions_filter']))
+            if (!(isset($_POST['submit_question_filter'.$suffixLpItem])) ||
+                (isset($_POST['submit_question_filter'.$suffixLpItem]) &&
+                    is_array($_POST['questions_filter'.$suffixLpItem]) &&
+                    in_array($row['question_id'], $_POST['questions_filter'.$suffixLpItem]))
             ) {
                 if ($row['number_of_options'] == 0 || $compact) {
                     $return .= str_replace(
@@ -1778,9 +1798,9 @@ class SurveyUtil
             if ($translate) {
                 $row['option_text'] = api_get_filtered_multilingual_HTML_string($row['option_text'], $course['language']);
             }
-            if (!(isset($_POST['submit_question_filter'])) || (
-                is_array($_POST['questions_filter']) &&
-                in_array($row['question_id'], $_POST['questions_filter'])
+            if (!(isset($_POST['submit_question_filter'.$suffixLpItem])) || (
+                is_array($_POST['questions_filter'.$suffixLpItem]) &&
+                in_array($row['question_id'], $_POST['questions_filter'.$suffixLpItem])
             )
             ) {
                 $row['option_text'] = str_replace(["\r", "\n"], ['', ''], $row['option_text']);
@@ -1796,6 +1816,12 @@ class SurveyUtil
 
         $return .= "\n";
 
+        // To select the answers by Lp item
+        $lpItemCondition = '';
+        if (api_get_configuration_value('allow_survey_tool_in_lp')) {
+            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+        }
+
         // Getting all the answers of the users
         $old_user = '';
         $answers_of_user = [];
@@ -1804,6 +1830,7 @@ class SurveyUtil
 		          c_id = $course_id AND
 		          survey_id = $surveyId
                   $sessionCondition
+                  $lpItemCondition
 		          ";
         if ($user_id != 0) {
             $user_id = (int) $user_id;
@@ -1905,8 +1932,9 @@ class SurveyUtil
                 false,
                 true
             );
-            foreach ($user_fields_values as &$value) {
-                $return .= '"'.str_replace('"', '""', api_html_entity_decode(strip_tags($value), ENT_QUOTES)).'";';
+            foreach ($user_fields_values as $fieldName => $value) {
+                $fieldValue = is_array($value) ? $value[$fieldName] : $value;
+                $return .= '"'.str_replace('"', '""', api_html_entity_decode(strip_tags($fieldValue), ENT_QUOTES)).'";';
             }
         }
 
@@ -1988,7 +2016,7 @@ class SurveyUtil
      *
      * @version February 2007
      */
-    public static function export_complete_report_xls($survey_data, $filename, $user_id = 0, $returnFile = false)
+    public static function export_complete_report_xls($survey_data, $filename, $user_id = 0, $returnFile = false, $lpItemId = 0)
     {
         $course_id = api_get_course_int_id();
         $user_id = (int) $user_id;
@@ -2036,7 +2064,7 @@ class SurveyUtil
                 $sessionCondition = api_get_session_condition($sessionId);
             }
         }
-
+        $suffixLpItem = !empty($lpItemId) ? '-item'.$lpItemId : '';
         // First line (questions)
         $sql = "SELECT
                     questions.question_id,
@@ -2060,9 +2088,9 @@ class SurveyUtil
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a question filter but the question is selected for display
-            if (!(isset($_POST['submit_question_filter'])) ||
-                (isset($_POST['submit_question_filter']) && is_array($_POST['questions_filter']) &&
-                in_array($row['question_id'], $_POST['questions_filter']))
+            if (!(isset($_POST['submit_question_filter'.$suffixLpItem])) ||
+                (isset($_POST['submit_question_filter'.$suffixLpItem]) && is_array($_POST['questions_filter'.$suffixLpItem]) &&
+                in_array($row['question_id'], $_POST['questions_filter'.$suffixLpItem]))
             ) {
                 if ($row['number_of_options'] == 0 && ($row['type'] === 'open' || $row['type'] === 'comment')) {
                     $worksheet->setCellValueByColumnAndRow(
@@ -2134,9 +2162,9 @@ class SurveyUtil
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
-            if (!isset($_POST['submit_question_filter']) ||
-                (isset($_POST['questions_filter']) && is_array($_POST['questions_filter']) &&
-                in_array($row['question_id'], $_POST['questions_filter']))
+            if (!isset($_POST['submit_question_filter'.$suffixLpItem]) ||
+                (isset($_POST['questions_filter'.$suffixLpItem]) && is_array($_POST['questions_filter'.$suffixLpItem]) &&
+                in_array($row['question_id'], $_POST['questions_filter'.$suffixLpItem]))
             ) {
                 $worksheet->setCellValueByColumnAndRow(
                     $column,
@@ -2152,13 +2180,19 @@ class SurveyUtil
             }
         }
 
+        // To select the answers by Lp item
+        $lpItemCondition = '';
+        if (api_get_configuration_value('allow_survey_tool_in_lp')) {
+            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+        }
+
         // Getting all the answers of the users
         $line++;
         $column = 0;
         $old_user = '';
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
-                WHERE c_id = $course_id AND survey_id = $surveyId $sessionCondition";
+                WHERE c_id = $course_id AND survey_id = $surveyId $sessionCondition $lpItemCondition";
         if ($user_id != 0) {
             $sql .= " AND user='".$user_id."' ";
         }
@@ -2265,8 +2299,9 @@ class SurveyUtil
                 false,
                 true
             );
-            foreach ($user_fields_values as $value) {
-                $return[] = api_html_entity_decode(strip_tags($value), ENT_QUOTES);
+            foreach ($user_fields_values as $fieldName => $value) {
+                $fieldValue = is_array($value) ? $value[$fieldName] : $value;
+                $return[] = api_html_entity_decode(strip_tags($fieldValue), ENT_QUOTES);
             }
         }
 
@@ -3974,7 +4009,8 @@ class SurveyUtil
 				WHERE
                     survey_invitation.user = $user_id AND
                     survey.avail_from <= '$filterDate' AND
-                    survey.avail_till >= '$filterDate' AND
+                    (survey.avail_till >= '$filterDate' OR
+                    survey.avail_till IS NULL) AND
                     survey.c_id = $course_id AND
                     survey_invitation.c_id = $course_id $sessionCondition
 				";

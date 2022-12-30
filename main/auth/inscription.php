@@ -203,7 +203,7 @@ if ($user_already_registered_show_terms === false &&
         'password',
         'pass1',
         get_lang('Pass'),
-        ['id' => 'pass1', 'size' => 20, 'autocomplete' => 'off']
+        ['id' => 'pass1', 'size' => 20, 'autocomplete' => 'off', 'show_hide' => true]
     );
 
     $form->addElement(

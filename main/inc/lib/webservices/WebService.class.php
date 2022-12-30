@@ -118,4 +118,22 @@ class WebService
     {
         return $this->user;
     }
+
+    /**
+     * @throws Exception
+     */
+    protected static function throwNotAllowedException()
+    {
+        throw new Exception(get_lang('NotAllowed'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected static function protectAdminEndpoint()
+    {
+        if (!api_is_platform_admin()) {
+            self::throwNotAllowedException();
+        }
+    }
 }

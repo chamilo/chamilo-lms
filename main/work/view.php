@@ -28,6 +28,9 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('StudentPublications'),
 ];
+if (api_get_configuration_value('allow_skill_rel_items') == true) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
+}
 
 $folderData = get_work_data_by_id($work['parent_id']);
 $currentUserId = api_get_user_id();

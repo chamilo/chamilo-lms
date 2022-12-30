@@ -5,7 +5,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-api_protect_admin_script(true, true);
+api_protect_admin_script(true, true, null, true);
 
 $export = [];
 $export['file_type'] = isset($_REQUEST['file_type']) ? $_REQUEST['file_type'] : null;

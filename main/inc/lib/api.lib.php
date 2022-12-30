@@ -171,6 +171,7 @@ define('SECTION_CUSTOMPAGE', 'custompage');
 define('PLATFORM_AUTH_SOURCE', 'platform');
 define('CAS_AUTH_SOURCE', 'cas');
 define('LDAP_AUTH_SOURCE', 'extldap');
+define('IMS_LTI_SOURCE', 'ims_lti');
 
 // CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES', '/HotPotatoes_files');
@@ -192,6 +193,10 @@ define('LOG_GROUP_PORTAL_REL_USER_ARRAY', 'soc_gr_user_array');
 define('LOG_GROUP_PORTAL_USER_SUBSCRIBED', 'soc_gr_u_subs');
 define('LOG_GROUP_PORTAL_USER_UNSUBSCRIBED', 'soc_gr_u_unsubs');
 define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE', 'soc_gr_update_role');
+define('LOG_GROUP_PORTAL_COURSE_SUBSCRIBED', 'soc_gr_c_subs');
+define('LOG_GROUP_PORTAL_COURSE_UNSUBSCRIBED', 'soc_gr_c_unsubs');
+define('LOG_GROUP_PORTAL_SESSION_SUBSCRIBED', 'soc_gr_s_subs');
+define('LOG_GROUP_PORTAL_SESSION_UNSUBSCRIBED', 'soc_gr_s_unsubs');
 
 define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_CREATE', 'user_created');
@@ -291,6 +296,8 @@ define('LOG_SURVEY_ID', 'survey_id');
 define('LOG_SURVEY_CREATED', 'survey_created');
 define('LOG_SURVEY_DELETED', 'survey_deleted');
 define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
+
+define('LOG_WS', 'access_ws_');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.\$-]/');
 
@@ -524,6 +531,8 @@ define('MATCHING_GLOBAL', 24);
 define('MATCHING_DRAGGABLE_GLOBAL', 25);
 define('HOT_SPOT_GLOBAL', 26);
 define('FILL_IN_BLANKS_GLOBAL', 27);
+define('MULTIPLE_ANSWER_DROPDOWN_GLOBAL', 28);
+define('MULTIPLE_ANSWER_DROPDOWN', 29);
 
 define('EXERCISE_CATEGORY_RANDOM_SHUFFLED', 1);
 define('EXERCISE_CATEGORY_RANDOM_ORDERED', 2);
@@ -1319,20 +1328,22 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
  * @param bool Whether to allow session admins as well
  * @param bool Whether to allow HR directors as well
  * @param string An optional message (already passed through get_lang)
+ * @param bool Whether to allow session coach as well
  *
  * @return bool True if user is allowed, false otherwise.
  *              The function also outputs an error message in case not allowed
  *
  * @author Roan Embrechts (original author)
  */
-function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null)
+function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null, $allow_session_coach = false)
 {
     if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
-        api_not_allowed(true, $message);
+        if (!($allow_session_coach && api_is_coach())) {
+            api_not_allowed(true, $message);
 
-        return false;
+            return false;
+        }
     }
-
     api_block_inactive_user();
 
     return true;
@@ -1937,15 +1948,20 @@ function api_get_user_entity($userId)
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_username($username)
+function api_get_user_info_from_username($username, $authSource = null)
 {
     if (empty($username)) {
         return false;
     }
     $username = trim($username);
 
+    $andAuthSource = "";
+    if (isset($authSource)) {
+        $authSource = Database::escape_string($authSource);
+        $andAuthSource = " AND auth_source = '$authSource'";
+    }
     $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-            WHERE username='".Database::escape_string($username)."'";
+            WHERE username='".Database::escape_string($username)."' $andAuthSource";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $resultArray = Database::fetch_array($result);
@@ -2142,6 +2158,11 @@ function api_get_anonymous_id()
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
+            $email = ' anonymous@localhost.local';
+            if (api_get_setting('login_is_email') == 'true') {
+                $login = $login."@localhost.local";
+                $email = $login;
+            }
             $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
             if (count($anonList) >= $max) {
                 foreach ($anonList as $userToDelete) {
@@ -2154,7 +2175,7 @@ function api_get_anonymous_id()
                 $login,
                 'anon',
                 ANONYMOUS,
-                ' anonymous@localhost',
+                $email,
                 $login,
                 $login
             );
@@ -2504,8 +2525,9 @@ function api_generate_password($length = 8)
         $length = 2;
     }
 
-    $charactersLowerCase = 'abcdefghijkmnopqrstuvwxyz';
-    $charactersUpperCase = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    $charactersLowerCase = Security::CHAR_LOWER;
+    $charactersUpperCase = Security::CHAR_UPPER;
+
     $minNumbers = 2;
     $length = $length - $minNumbers;
     $minLowerCase = round($length / 2);
@@ -2515,19 +2537,25 @@ function api_generate_password($length = 8)
     $passwordRequirements = api_get_configuration_value('password_requirements');
 
     $factory = new RandomLib\Factory();
-    $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
+    $generator = $factory->getMediumStrengthGenerator();
 
     if (!empty($passwordRequirements)) {
         $length = $passwordRequirements['min']['length'];
         $minNumbers = $passwordRequirements['min']['numeric'];
         $minLowerCase = $passwordRequirements['min']['lowercase'];
         $minUpperCase = $passwordRequirements['min']['uppercase'];
+        $minSpecials = $passwordRequirements['min']['specials'];
 
-        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase;
+        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase - $minSpecials;
         // Add the rest to fill the length requirement
         if ($rest > 0) {
-            $password .= $generator->generateString($rest, $charactersLowerCase.$charactersUpperCase);
+            $password .= $generator->generateString(
+                $rest,
+                $charactersLowerCase.$charactersUpperCase
+            );
         }
+
+        $password .= $generator->generateString($minSpecials, Security::CHAR_SYMBOLS);
     }
 
     // Min digits default 2
@@ -2567,6 +2595,7 @@ function api_check_password($password)
     // Optional
     $minLowerCase = $passwordRequirements['min']['lowercase'];
     $minUpperCase = $passwordRequirements['min']['uppercase'];
+    $minSpecials = $passwordRequirements['min']['specials'];
 
     $minLetters = $minLowerCase + $minUpperCase;
     $passwordLength = api_strlen($password);
@@ -2578,6 +2607,7 @@ function api_check_password($password)
     $digits = 0;
     $lowerCase = 0;
     $upperCase = 0;
+    $specials = 0;
 
     for ($i = 0; $i < $passwordLength; $i++) {
         $currentCharacterCode = api_ord(api_substr($password, $i, 1));
@@ -2591,6 +2621,10 @@ function api_check_password($password)
         if ($currentCharacterCode >= 48 && $currentCharacterCode <= 57) {
             $digits++;
         }
+
+        if (false !== strpos(Security::CHAR_SYMBOLS, $currentCharacterCode)) {
+            $specials++;
+        }
     }
 
     // Min number of digits
@@ -2603,7 +2637,11 @@ function api_check_password($password)
 
     if (!empty($minLowerCase)) {
         // Lowercase
-        $conditions['min_lowercase'] = $upperCase >= $minLowerCase;
+        $conditions['min_lowercase'] = $lowerCase >= $minLowerCase;
+    }
+
+    if (!empty($minSpecials)) {
+        $conditions['min_specials'] = $specials >= $minSpecials;
     }
 
     // Min letters
@@ -3028,6 +3066,12 @@ function api_get_setting($variable, $key = null)
  */
 function api_get_plugin_setting($plugin, $variable)
 {
+    $settings = api_get_configuration_value('plugin_settings');
+
+    if (!empty($settings) && isset($settings[$plugin]) && isset($settings[$plugin][$variable])) {
+        return $settings[$plugin][$variable];
+    }
+
     $variableName = $plugin.'_'.$variable;
     $result = api_get_setting($variableName);
 
@@ -3888,6 +3932,9 @@ function api_is_anonymous($user_id = null, $db_check = false)
         //if ($_user['user_id'] == 0) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
         // Occurs in agenda for admin links - YW
+        // it occurs when pages are opened directly without entering first the course home page. To fix it add
+        // $use_anonymous = true;
+        // before including global.inc.php in the page
         global $use_anonymous;
         if (isset($use_anonymous) && $use_anonymous) {
             api_set_anonymous();
@@ -6341,8 +6388,27 @@ function api_get_access_url($id, $returnDefault = true)
  *
  * @return array Array of database results for the current settings of the current access URL
  */
-function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
+function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
 {
+    // Try getting settings from cache first (avoids query w/ ~375 rows result)
+    $apcVarName = '';
+    $apcVar = [];
+    $cacheAvailable = api_get_configuration_value('apc');
+    if ($cacheAvailable) {
+        $apcVarName = api_get_configuration_value('apc_prefix').
+            'settings_'.
+            $access_url
+        ;
+        $catName = (empty($cat) ? 'global' : $cat);
+
+        if (apcu_exists($apcVarName)) {
+            $apcVar = apcu_fetch($apcVarName);
+            if (!empty($apcVar[$catName]) && !empty($apcVar[$catName][$ordering]) && isset($apcVar[$catName][$ordering][$url_changeable])) {
+                return $apcVar[$catName][$ordering][$url_changeable];
+            }
+        }
+    }
+    // Could not find settings in cache (or already expired), so query DB
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
     $where_condition = '';
@@ -6370,6 +6436,18 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
     }
     $result = Database::store_result($result, 'ASSOC');
 
+    if ($cacheAvailable) {
+        // If we got here, it means cache is available but the settings
+        // were not recently stored, so now we have them, let's store them
+        if (empty($apcVar[$catName])) {
+            $apcVar[$catName] = [];
+        }
+        if (empty($apcVar[$catName][$ordering])) {
+            $apcVar[$catName][$ordering] = [];
+        }
+        $apcVar[$catName][$ordering][$url_changeable] = $result;
+        apcu_store($apcVarName, $apcVar, 600);
+    }
     return $result;
 }
 
@@ -6793,21 +6871,44 @@ function api_get_current_access_url_id()
  * Gets the registered urls from a given user id.
  *
  * @param int $user_id
+ * @param int $checkCourseId the course id to check url access
  *
  * @return array
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-function api_get_access_url_from_user($user_id)
+function api_get_access_url_from_user($user_id, $checkCourseId = null)
 {
     $user_id = (int) $user_id;
     $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $includeIds = "";
+    if (isset($checkCourseId)) {
+        $cid = (int) $checkCourseId;
+        $tblUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT access_url_id
+            FROM $tblUrlCourse url_rel_course
+            INNER JOIN $table_url u
+            ON (url_rel_course.access_url_id = u.id)
+            WHERE c_id = $cid";
+        $rs = Database::query($sql);
+        $courseUrlIds = [];
+        if (Database::num_rows($rs) > 0) {
+            while ($rowC = Database::fetch_array($rs, 'ASSOC')) {
+                $courseUrlIds[] = $rowC['access_url_id'];
+            }
+        }
+        if (!empty($courseUrlIds)) {
+            $includeIds = " AND access_url_id IN (".implode(',', $courseUrlIds).")";
+        }
+    }
+
     $sql = "SELECT access_url_id
             FROM $table_url_rel_user url_rel_user
             INNER JOIN $table_url u
             ON (url_rel_user.access_url_id = u.id)
-            WHERE user_id = ".intval($user_id);
+            WHERE user_id = $user_id $includeIds
+            ORDER BY access_url_id";
     $result = Database::query($sql);
     $list = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -8314,7 +8415,7 @@ function api_set_settings_and_plugins()
     if ($access_url_id != 1) {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {
-            $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+            $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
             foreach ($settings_by_access as &$row) {
                 if (empty($row['variable'])) {
                     $row['variable'] = 0;
@@ -8505,64 +8606,71 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         return null;
     }
 
-    $translations = [
-        'wordLength' => get_lang('PasswordIsTooShort'),
-        'wordNotEmail' => get_lang('YourPasswordCannotBeTheSameAsYourEmail'),
-        'wordSimilarToUsername' => get_lang('YourPasswordCannotContainYourUsername'),
-        'wordTwoCharacterClasses' => get_lang('WordTwoCharacterClasses'),
-        'wordRepetitions' => get_lang('TooManyRepetitions'),
-        'wordSequences' => get_lang('YourPasswordContainsSequences'),
-        'errorList' => get_lang('ErrorsFound'),
-        'veryWeak' => get_lang('PasswordVeryWeak'),
-        'weak' => get_lang('PasswordWeak'),
-        'normal' => get_lang('PasswordNormal'),
-        'medium' => get_lang('PasswordMedium'),
-        'strong' => get_lang('PasswordStrong'),
-        'veryStrong' => get_lang('PasswordVeryStrong'),
+    $minRequirements = Security::getPasswordRequirements()['min'];
+
+    $options = [
+        'rules' => [],
     ];
 
-    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
+    if ($minRequirements['length'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['length'],
+            'pattern' => '.',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXLength'),
+                $minRequirements['length']
+            ),
+        ];
+    }
+
+    if ($minRequirements['lowercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['lowercase'],
+            'pattern' => '[a-z]',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXLowercase'),
+                $minRequirements['lowercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['uppercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['uppercase'],
+            'pattern' => '[A-Z]',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXUppercase'),
+                $minRequirements['uppercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['numeric'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['numeric'],
+            'pattern' => '[0-9]',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXNumeric'),
+                $minRequirements['numeric']
+            ),
+        ];
+    }
+
+    if ($minRequirements['specials'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['specials'],
+            'pattern' => '[!"#$%&\'()*+,\-./\\\:;<=>?@[\\]^_`{|}~]',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXSpecials'),
+                $minRequirements['specials']
+            ),
+        ];
+    }
+
+    $js = api_get_js('password-checker/password-checker.js');
     $js .= "<script>
-    var errorMessages = {
-        password_to_short : \"".get_lang('PasswordIsTooShort')."\",
-        same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
-    };
-
     $(function() {
-        var lang = ".json_encode($translations).";
-        var options = {
-            common: {
-                onLoad: function () {
-                    //$('#messages').text('Start typing password');
-
-                    var inputGroup = $('".$passwordInputId."').parents('.input-group');
-
-                    if (inputGroup.length > 0) {
-                        inputGroup.find('.progress').insertAfter(inputGroup);
-                    }
-                }
-            },
-            ui: {
-                showVerdictsInsideProgressBar: true
-            },
-            onKeyUp: function (evt) {
-                $(evt.target).pwstrength('outputErrorList');
-            },
-            errorMessages : errorMessages,
-            viewports: {
-                progress: '#password_progress',
-                verdict: '#password-verdict',
-                errors: '#password-errors'
-            },
-            usernameField: '$usernameInputId'
-        };
-        options.i18n = {
-            t: function (key) {
-                var result = lang[key];
-                return result === key ? '' : result; // This assumes you return the
-            }
-        };
-        $('".$passwordInputId."').pwstrength(options);
+        $('".$passwordInputId."').passwordChecker(".json_encode($options).");
     });
     </script>";
 
@@ -9398,6 +9506,27 @@ function api_mail_html(
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
+    if (isset($additionalParameters['checkUrls'])) {
+        $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
+        if ($useMultipleUrl) {
+            $accessConfig = [];
+            $accessUrls = api_get_access_url_from_user($additionalParameters['userId'], $additionalParameters['courseId']);
+            if (!empty($accessUrls)) {
+                $accessConfig['multiple_access_urls'] = true;
+                $accessConfig['access_url'] = (int) $accessUrls[0];
+                $params = ['variable = ? AND access_url = ?' => ['stylesheets', $accessConfig['access_url']]];
+                $settings = api_get_settings_params_simple($params);
+                if (!empty($settings['selected_value'])) {
+                    $accessConfig['theme_dir'] = \Template::getThemeDir($settings['selected_value']);
+                }
+            }
+            // To replace the current urls by access url user
+            $mail->Body = str_replace(api_get_path(WEB_PATH), api_get_path(WEB_PATH, $accessConfig), $mail->Body);
+            if (!empty($accessConfig['theme_dir'])) {
+                $mail->Body = str_replace('themes/chamilo/', $accessConfig['theme_dir'], $mail->Body);
+            }
+        }
+    }
     // Attachment.
     if (!empty($data_file)) {
         foreach ($data_file as $file_attach) {
@@ -9469,7 +9598,7 @@ function api_mail_html(
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
     }
 
-    if ($mail->SMTPDebug > 1) {
+    if ($mail->SMTPDebug >= 1) {
         error_log(
             "Mail debug:: ".
             "Protocol: ".$mail->Mailer.' :: '.
@@ -10240,4 +10369,20 @@ function api_filename_has_blacklisted_stream_wrapper(string $filename)
     }
 
     return false;
+}
+
+/**
+ * Calculate the percent between two numbers.
+ *
+ * @return string
+ */
+function api_calculate_increment_percent(int $newValue, int $oldValue)
+{
+    if ($oldValue <= 0) {
+        $result = " - ";
+    } else {
+        $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2).' %';
+    }
+
+    return $result;
 }

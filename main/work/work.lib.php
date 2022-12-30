@@ -2303,7 +2303,12 @@ function get_work_user_list(
                 if ($work['qualification'] == '') {
                     $qualification_string = Display::label('-');
                 } else {
-                    $qualification_string = formatWorkScore($work['qualification'], $work_data['qualification']);
+                    if (empty($work['qualificator_id'])) {
+                        $finalScore = '?? / '.$work_data['qualification'];
+                        $qualification_string = Display::label($finalScore, 'warning');
+                    } else {
+                        $qualification_string = formatWorkScore($work['qualification'], $work_data['qualification']);
+                    }
                 }
             }
 
@@ -2376,11 +2381,6 @@ function get_work_user_list(
                     $work['qualification'] = $qualification_string.$feedback;
                 } else {
                     $work['qualification'] = $qualification_string.$feedback.$hasCorrection;
-                }
-
-                if (empty($work['qualificator_id'])) {
-                    $finalScore = '?? / '.$work_data['qualification'];
-                    $work['qualification'] = Display::label($finalScore, 'warning');
                 }
 
                 $work['qualification_only'] = $qualification_string;

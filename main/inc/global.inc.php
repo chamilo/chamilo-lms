@@ -67,17 +67,6 @@ if ($passwordEncryption === 'bcrypt') {
 // Check the PHP version
 api_check_php_version($includePath.'/');
 
-// Specification for usernames:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-
-$defaultUserNameLength = 50;
-if (api_get_setting('login_is_email') == 'true') {
-    $defaultUserNameLength = 100;
-}
-define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
-
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
@@ -233,7 +222,7 @@ ChamiloSession::start($alreadyInstalled);
 if ($_configuration['access_url'] != 1) {
     $url_info = api_get_access_url($_configuration['access_url']);
     if ($url_info['active'] == 1) {
-        $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+        $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
         foreach ($settings_by_access as &$row) {
             if (empty($row['variable'])) {
                 $row['variable'] = 0;
@@ -249,7 +238,7 @@ if ($_configuration['access_url'] != 1) {
     }
 }
 
-$result = &api_get_settings(null, 'list', 1);
+$result = api_get_settings(null, 'list', 1);
 foreach ($result as &$row) {
     if ($_configuration['access_url'] != 1) {
         if ($url_info['active'] == 1) {
@@ -290,7 +279,7 @@ foreach ($result as &$row) {
     }
 }
 
-$result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
+$result = api_get_settings('Plugins', 'list', $_configuration['access_url']);
 $_plugins = [];
 foreach ($result as &$row) {
     $key = &$row['variable'];
@@ -320,6 +309,17 @@ if (api_get_setting('server_type') == 'test') {
 }
 
 ini_set('log_errors', '1');
+
+// Specification for usernames:
+// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+// 2. Empty username is formally valid, but it is reserved for the anonymous user.
+// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+$defaultUserNameLength = 50;
+if (api_get_setting('login_is_email') == 'true') {
+    $defaultUserNameLength = 100;
+}
+define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';

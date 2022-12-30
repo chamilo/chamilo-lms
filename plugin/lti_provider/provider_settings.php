@@ -32,10 +32,6 @@ try {
     }
 
     $html = '<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('Name').'</strong></div>'
-        .'<div class="col-xs-10">'.$name.'</div>'
-        .'</div>'
-        .'<div class="row">'
         .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('LaunchUrl').'</strong></div>'
         .'<div class="col-xs-10">'.$launchUrl.'</div>'
         .'</div>'

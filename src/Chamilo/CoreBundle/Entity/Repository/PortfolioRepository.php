@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class PortfolioRepository extends EntityRepository
 {
-    public function findItemsByUser(User $user, ?Course $course, ?Session $session, ?array $orderBy = null): array
+    public function findItemsByUser(User $user, ?Course $course, ?Session $session, ?array $orderBy = null, array $visibility = []): array
     {
         $criteria = [];
         $criteria['user'] = $user;
@@ -24,6 +24,10 @@ class PortfolioRepository extends EntityRepository
         if ($course) {
             $criteria['course'] = $course;
             $criteria['session'] = $session;
+        }
+
+        if ($visibility) {
+            $criteria['visibility'] = $visibility;
         }
 
         return $this->findBy($criteria, $orderBy);

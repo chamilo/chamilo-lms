@@ -751,7 +751,8 @@ class CourseManager
         $status = STUDENT,
         $sessionId = 0,
         $userCourseCategoryId = 0,
-        $checkTeacherPermission = true
+        $checkTeacherPermission = true,
+        $displayFlashMessages = true
     ) {
         $userId = (int) $userId;
         $status = (int) $status;
@@ -763,7 +764,9 @@ class CourseManager
         $courseInfo = api_get_course_info($courseCode);
 
         if (empty($courseInfo)) {
-            Display::addFlash(Display::return_message(get_lang('CourseDoesNotExist'), 'warning'));
+            if ($displayFlashMessages) {
+                Display::addFlash(Display::return_message(get_lang('CourseDoesNotExist'), 'warning'));
+            }
 
             return false;
         }
@@ -771,7 +774,9 @@ class CourseManager
         $userInfo = api_get_user_info($userId);
 
         if (empty($userInfo)) {
-            Display::addFlash(Display::return_message(get_lang('UserDoesNotExist'), 'warning'));
+            if ($displayFlashMessages) {
+                Display::addFlash(Display::return_message(get_lang('UserDoesNotExist'), 'warning'));
+            }
 
             return false;
         }
@@ -798,15 +803,19 @@ class CourseManager
                         c_id = $courseId
                     ";
             if (Database::num_rows(Database::query($sql)) > 0) {
-                Display::addFlash(Display::return_message(get_lang('AlreadyRegisteredToCourse'), 'warning'));
+                if ($displayFlashMessages) {
+                    Display::addFlash(Display::return_message(get_lang('AlreadyRegisteredToCourse'), 'warning'));
+                }
 
                 return false;
             }
 
-            if ($checkTeacherPermission && !api_is_course_admin()) {
+            if ($checkTeacherPermission && !api_is_course_admin() && !api_is_session_admin()) {
                 // Check in advance whether subscription is allowed or not for this course.
                 if ((int) $courseInfo['subscribe'] === SUBSCRIBE_NOT_ALLOWED) {
-                    Display::addFlash(Display::return_message(get_lang('SubscriptionNotAllowed'), 'warning'));
+                    if ($displayFlashMessages) {
+                        Display::addFlash(Display::return_message(get_lang('SubscriptionNotAllowed'), 'warning'));
+                    }
 
                     return false;
                 }
@@ -835,7 +844,10 @@ class CourseManager
                         );
 
                         if ($count >= $maxStudents) {
-                            Display::addFlash(Display::return_message(get_lang('MaxNumberSubscribedStudentsReached'), 'warning'));
+                            if ($displayFlashMessages) {
+                                Display::addFlash(Display::return_message(get_lang('MaxNumberSubscribedStudentsReached'),
+                                    'warning'));
+                            }
 
                             return false;
                         }
@@ -851,15 +863,17 @@ class CourseManager
                 ['status' => $status, 'sort' => $maxSort, 'user_course_cat' => $userCourseCategoryId]
             );
 
-            Display::addFlash(
-                Display::return_message(
-                    sprintf(
-                        get_lang('UserXAddedToCourseX'),
-                        $userInfo['complete_name_with_username'],
-                        $courseInfo['title']
+            if ($displayFlashMessages) {
+                Display::addFlash(
+                    Display::return_message(
+                        sprintf(
+                            get_lang('UserXAddedToCourseX'),
+                            $userInfo['complete_name_with_username'],
+                            $courseInfo['title']
+                        )
                     )
-                )
-            );
+                );
+            }
 
             $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $courseInfo);
 
@@ -3370,6 +3384,25 @@ class CourseManager
         return null;
     }
 
+    public static function getExtraData(int $courseId, array $avoid = [])
+    {
+        $fields = (new ExtraField('course'))->getDataAndFormattedValues($courseId);
+
+        if ($avoid) {
+            $fields = array_filter(
+                $fields,
+                function (array $field) use ($avoid): bool {
+                    return !in_array($field['variable'], $avoid);
+                }
+            );
+        }
+
+        $keys = array_column($fields, 'text');
+        $values = array_column($fields, 'value');
+
+        return array_combine($keys, $values);
+    }
+
     /**
      * Gets extra field value data and formatted values of a course
      * for extra fields listed in configuration.php in my_course_course_extrafields_to_be_presented
@@ -4081,6 +4114,7 @@ class CourseManager
                     course.id,
                     course_rel_user.status status,
                     course.code as course_code,
+                    course.course_language,
                     user_course_cat,
                     course_rel_user.sort
                 FROM $TABLECOURS course
@@ -4235,6 +4269,9 @@ class CourseManager
             $params['teachers'] = $teachers;
             $params['extrafields'] = self::getExtraFieldsToBePresented($course_info['real_id']);
             $params['real_id'] = $course_info['real_id'];
+            $params['course_language'] = api_get_language_info(
+                api_get_language_id($course_info['course_language'])
+            )['original_name'];
 
             if (api_get_configuration_value('enable_unsubscribe_button_on_my_course_page') &&
                 '1' === $course_info['unsubscribe'] &&
@@ -4531,6 +4568,9 @@ class CourseManager
 
         $params['title'] = $session_title;
         $params['name'] = $course_info['name'];
+        $params['course_language'] = api_get_language_info(
+            api_get_language_id($course_info['course_language'])
+        )['original_name'];
         $params['edit_actions'] = '';
         $params['document'] = '';
         $params['category'] = $course_info['categoryName'];
@@ -5049,6 +5089,25 @@ class CourseManager
         }
 
         return $result;
+    }
+
+    /**
+     * Updates the language for all courses.
+     */
+    public static function updateAllCourseLanguages(string $from, string $to): bool
+    {
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $from = Database::escape_string($from);
+        $to = Database::escape_string($to);
+        if (!empty($to) && !empty($from)) {
+            $sql = "UPDATE $tableCourse SET course_language = '$to'
+                    WHERE course_language = '$from'";
+            Database::query($sql);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -5840,9 +5899,12 @@ class CourseManager
 
         if (api_get_configuration_value('allow_portfolio_tool')) {
             $courseSettings[] = 'email_alert_teachers_new_post';
+            $courseSettings[] = 'email_alert_teachers_student_new_comment';
             $courseSettings[] = 'qualify_portfolio_item';
             $courseSettings[] = 'qualify_portfolio_comment';
             $courseSettings[] = 'portfolio_max_score';
+            $courseSettings[] = 'portfolio_number_items';
+            $courseSettings[] = 'portfolio_number_comments';
         }
 
         if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {

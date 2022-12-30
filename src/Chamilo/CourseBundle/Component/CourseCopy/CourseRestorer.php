@@ -1391,10 +1391,7 @@ class CourseRestorer
                 [$max_order] = Database::fetch_array($result);
 
                 $params = [];
-                if (!empty($session_id)) {
-                    $params['session_id'] = $session_id;
-                }
-
+                $params['session_id'] = (int) $session_id;
                 $params['c_id'] = $this->destination_course_id;
                 $params['url'] = self::DBUTF8($link->url);
                 $params['title'] = self::DBUTF8($link->title);
@@ -2808,6 +2805,7 @@ class CourseRestorer
                 $defaultLpVisibility = 'visible';
             }
 
+            $lpIds = [];
             foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
                 $condition_session = '';
                 if (!empty($session_id)) {
@@ -2909,7 +2907,7 @@ class CourseRestorer
                     'debug' => self::DBUTF8($lp->debug),
                     'theme' => '',
                     'session_id' => $session_id,
-                    'prerequisite' => 0,
+                    'prerequisite' => $lp->prerequisite,
                     'hide_toc_frame' => self::DBUTF8(isset($lp->hideTableOfContents) ? $lp->hideTableOfContents : 0),
                     'subscribe_users' => self::DBUTF8(isset($lp->subscribeUsers) ? $lp->subscribeUsers : 0),
                     'seriousgame_mode' => 0,
@@ -2928,8 +2926,8 @@ class CourseRestorer
                 }
 
                 $new_lp_id = Database::insert($table_main, $params);
-
                 if ($new_lp_id) {
+                    $lpIds[$id] = $new_lp_id;
                     // The following only makes sense if a new LP was
                     // created in the destination course
                     $sql = "UPDATE $table_main SET id = iid WHERE iid = $new_lp_id";
@@ -3081,6 +3079,77 @@ class CourseRestorer
                                 }
                             }
                             $prerequisite_ids[$new_item_id] = $item['prerequisite'];
+
+                            // Upload audio.
+                            if (!empty($item['audio'])) {
+                                $courseInfo = api_get_course_info_by_id($this->destination_course_id);
+                                // Create the audio folder if it does not exist yet.
+                                $filepath = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/document/';
+                                if (!is_dir($filepath.'audio')) {
+                                    mkdir(
+                                        $filepath.'audio',
+                                        api_get_permissions_for_new_directories()
+                                    );
+                                    $audioId = add_document(
+                                        $courseInfo,
+                                        '/audio',
+                                        'folder',
+                                        0,
+                                        'audio',
+                                        '',
+                                        0,
+                                        true,
+                                        null,
+                                        $session_id,
+                                        api_get_user_id()
+                                    );
+                                    api_item_property_update(
+                                        $courseInfo,
+                                        TOOL_DOCUMENT,
+                                        $audioId,
+                                        'FolderCreated',
+                                        api_get_user_id(),
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        $session_id
+                                    );
+                                    api_item_property_update(
+                                        $courseInfo,
+                                        TOOL_DOCUMENT,
+                                        $audioId,
+                                        'invisible',
+                                        api_get_user_id(),
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        $session_id
+                                    );
+                                }
+                                $originAudioFile = $this->course->backup_path.'/document'.$item['audio'];
+                                $uploadedFile = [
+                                    'name' => basename($originAudioFile),
+                                    'tmp_name' => $originAudioFile,
+                                    'size' => filesize($originAudioFile),
+                                    'type' => null,
+                                    'from_file' => true,
+                                    'copy_file' => true,
+                                ];
+                                $filePath = handle_uploaded_document(
+                                    $courseInfo,
+                                    $uploadedFile,
+                                    api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/document',
+                                    '/audio',
+                                    api_get_user_id(),
+                                    '',
+                                    '',
+                                    '',
+                                    '',
+                                    false
+                                );
+                            }
                         }
                     }
 
@@ -3153,6 +3222,14 @@ class CourseRestorer
                         Database::query($sql);
                     }
                     $this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
+                }
+            }
+            // It updates the current lp id prerequisites
+            if (!empty($lpIds)) {
+                foreach ($lpIds as $oldLpId => $newLpId) {
+                    $sql = "UPDATE $table_main SET prerequisite = '$newLpId'
+                                WHERE c_id = ".$this->destination_course_id." AND prerequisite = '$oldLpId'";
+                    Database::query($sql);
                 }
             }
         }

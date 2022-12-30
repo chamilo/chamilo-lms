@@ -452,7 +452,7 @@ switch ($action) {
                     $em->flush();
                 }
             }
-            echo Skill::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, false);
+            echo Skill::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, false, $userId);
         }
         break;
     case 'assign_user_to_skill':

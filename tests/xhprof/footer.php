@@ -5,12 +5,13 @@
 /**
  * Init
  */
+use Tideways\Profiler;
 
 $isAjaxRequest = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
 
-if (extension_loaded('tideways') && !$isAjaxRequest) {
+if (extension_loaded('tideways_xhprof') && !$isAjaxRequest) {
     $profiler_namespace = 'chamilolms';  // namespace for your application
-    $xhprof_data = tideways_disable();
+    $xhprof_data = tideways_xhprof_disable();
     //$xhprof_runs = new XHProfRuns_Default();
     //$run_id = $xhprof_runs->save_run($xhprof_data, $profiler_namespace);
     $run_id = uniqid();

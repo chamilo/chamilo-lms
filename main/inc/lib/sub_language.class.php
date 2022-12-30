@@ -82,7 +82,7 @@ class SubLanguageManager
         $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $parent_id = intval($parent_id);
         $sub_language_id = intval($sub_language_id);
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE
                     parent_id = $parent_id AND
                     id = $sub_language_id";
@@ -352,12 +352,20 @@ class SubLanguageManager
         $language_info = self::get_all_information_of_language($language_id);
         $table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT count(*) AS count FROM '.$table.'
-                WHERE language ="'.Database::escape_string($language_info['english_name']).'"';
+                WHERE language = "'.Database::escape_string($language_info['english_name']).'"';
+
         $rs = Database::query($sql);
+
         if (Database::num_rows($rs) > 0 && Database::result($rs, '0', 'count') >= 1) {
             return true;
         } else {
-            return false;
+            $table = Database::get_main_table(TABLE_MAIN_COURSE);
+            $sql = 'SELECT count(*) AS count FROM '.$table.'
+                WHERE course_language = "'.Database::escape_string($language_info['english_name']).'"';
+
+            $rs = Database::query($sql);
+
+            return Database::num_rows($rs) > 0 && Database::result($rs, '0', 'count') >= 1;
         }
     }
 

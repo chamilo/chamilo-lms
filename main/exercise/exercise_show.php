@@ -176,6 +176,10 @@ if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 }
 
+if (api_get_configuration_value('allow_skill_rel_items') == true) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
+}
+
 if ($action !== 'export') {
     $scoreJsCode = ExerciseLib::getJsCode();
     if ($origin !== 'learnpath') {
@@ -445,9 +449,13 @@ foreach ($questionList as $questionId) {
         case UPLOAD_ANSWER:
         case ORAL_EXPRESSION:
         case MATCHING:
+        case MATCHING_GLOBAL:
         case DRAGGABLE:
         case READING_COMPREHENSION:
         case MATCHING_DRAGGABLE:
+        case MATCHING_DRAGGABLE_GLOBAL:
+        case MULTIPLE_ANSWER_DROPDOWN:
+        case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
             $question_result = $objExercise->manage_answer(
                 $id,
                 $questionId,

@@ -1763,11 +1763,17 @@ class SessionManager
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $trackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
+        $tbl_dropbox = Database::get_course_table(TABLE_DROPBOX_FILE);
+        $trackEExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $trackEAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $ticket = Database::get_main_table(TABLE_TICKET_TICKET);
         $em = Database::getManager();
         $userId = api_get_user_id();
 
+        // If this session is involved in any sequence, cancel deletion and ask
+        // for the sequence update before deleting.
         /** @var SequenceResourceRepository $repo */
         $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
         $sequenceResource = $repo->findRequirementForResource(
@@ -1786,6 +1792,8 @@ class SessionManager
             return false;
         }
 
+        // If the $id_checked param is an array, split it into individual
+        // sessions deletion.
         if (is_array($id_checked)) {
             foreach ($id_checked as $sessionId) {
                 self::delete($sessionId);
@@ -1794,6 +1802,9 @@ class SessionManager
             $id_checked = intval($id_checked);
         }
 
+        // Check permissions from the person launching the deletion.
+        // If the call is issued from a web service or automated process,
+        // we assume the caller checks for permissions ($from_ws).
         if (self::allowed($id_checked) && !$from_ws) {
             $qb = $em
                 ->createQuery('
@@ -1811,11 +1822,14 @@ class SessionManager
 
         $sessionInfo = api_get_session_info($id_checked);
 
-        // Delete documents inside a session
+        // Delete documents and assignments inside a session
         $courses = self::getCoursesInSession($id_checked);
         foreach ($courses as $courseId) {
             $courseInfo = api_get_course_info_by_id($courseId);
+            // Delete documents
             DocumentManager::deleteDocumentsFromSession($courseInfo, $id_checked);
+
+            // Delete assignments
             $works = Database::select(
                 '*',
                 $tbl_student_publication,
@@ -1823,13 +1837,68 @@ class SessionManager
                     'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]],
                 ]
             );
-
             $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
             foreach ($works as $index => $work) {
                 if ($work['filetype'] = 'folder') {
                     Database::query("DELETE FROM $tbl_student_publication_assignment WHERE publication_id = $index");
                 }
                 my_delete($currentCourseRepositorySys.'/'.$work['url']);
+            }
+
+            // Delete learning paths
+            $learnpaths = Database::select(
+                'iid',
+                $tbl_learnpath,
+                [
+                    'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]],
+                ]
+            );
+            $courseInfo = api_get_course_info_by_id($courseId);
+            foreach ($learnpaths as $lpData) {
+                $lp = new learnpath($courseInfo['code'], $lpData['iid'], $userId);
+                $lp->delete($courseInfo, $lpData['iid'], true);
+                unset($lp);
+            }
+
+            // Delete dropbox documents
+            $dropboxes = Database::select(
+                'iid',
+                $tbl_dropbox,
+                [
+                    'where' => ['session_id = ? AND c_id = ?' => [$id_checked, $courseId]],
+                ]
+            );
+            require_once __DIR__.'/../../dropbox/dropbox_functions.inc.php';
+            foreach ($dropboxes as $dropbox) {
+                $dropboxPerson = new Dropbox_Person(
+                    $userId,
+                    true,
+                    false,
+                    $courseId,
+                    $id_checked
+                );
+                $dropboxPerson->deleteReceivedWork($dropbox['iid'], $courseId, $id_checked);
+                $dropboxPerson->deleteSentWork($dropbox['iid'], $courseId, $id_checked);
+            }
+
+            // TODO: Delete audio files from test answers
+            $attempts = Database::select(
+                ['id', 'user_id', 'exe_id'],
+                $trackEAttempt,
+                [
+                    'where' => [
+                        'session_id = ? AND c_id = ? AND (filename IS NOT NULL AND filename != \'\')' => [
+                            $id_checked,
+                            $courseId,
+                        ],
+                    ],
+                ]
+            );
+            foreach ($attempts as $attempt) {
+                $oral = new OralExpression();
+                $oral->initFile($id_checked, $attempt['user_id'], 0, $attempt['exe_id'], $courseId);
+                $filename = $oral->getAbsoluteFilePath(true);
+                my_delete($filename);
             }
         }
 
@@ -2327,12 +2396,6 @@ class SessionManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
-        $forums = [];
-        if ($subscribe === 1) {
-            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-            $forums = get_forums(0, $course_code, true, $session_id);
-        }
 
         if ($removeUsersNotInList) {
             $currentUsers = self::getUsersByCourseSession($session_id, $courseInfo, 0);
@@ -2360,16 +2423,6 @@ class SessionManager
             $session_id,
             ['visibility' => $session_visibility]
         );
-
-        if (!empty($forums)) {
-            foreach ($user_list as $enreg_user) {
-                $userInfo = api_get_user_info($enreg_user);
-                foreach ($forums as $forum) {
-                    $forumId = $forum['iid'];
-                    set_notification('forum', $forumId, false, $userInfo, $courseInfo);
-                }
-            }
-        }
     }
 
     /**
@@ -2584,7 +2637,8 @@ class SessionManager
                 // Copy gradebook categories and links (from base course)
                 // to the new course session
                 if ($copyEvaluation) {
-                    $cats = Category::load(null, null, $courseInfo['code']);
+                    // it gets the main categories ordered by parent
+                    $cats = Category::load(null, null, $courseInfo['code'], null, null, null, 'ORDER BY parent_id ASC');
                     if (!empty($cats)) {
                         $sessionCategory = Category::load(
                             null,
@@ -2596,25 +2650,32 @@ class SessionManager
                             false
                         );
 
-                        // @todo remove commented code
+                        $sessionCategoriesId = [];
                         if (empty($sessionCategory)) {
-                            // There is no category for this course+session, so create one
-                            $cat = new Category();
-                            $sessionName = $session->getName();
-                            $cat->set_name($courseInfo['code'].' - '.get_lang('Session').' '.$sessionName);
-                            $cat->set_session_id($sessionId);
-                            $cat->set_course_code($courseInfo['code']);
-                            $cat->set_description(null);
-                            //$cat->set_user_id($stud_id);
-                            $cat->set_parent_id(0);
-                            $cat->set_weight(100);
-                            $cat->set_visible(0);
-                            $cat->set_certificate_min_score(75);
-                            $cat->add();
-                            $sessionGradeBookCategoryId = $cat->get_id();
+                            // It sets the values from the main categories to be copied
+                            foreach ($cats as $origCat) {
+                                $cat = new Category();
+                                $sessionName = $session->getName();
+                                $cat->set_name($origCat->get_name().' - '.get_lang('Session').' '.$sessionName);
+                                $cat->set_session_id($sessionId);
+                                $cat->set_course_code($origCat->get_course_code());
+                                $cat->set_description($origCat->get_description());
+                                $cat->set_parent_id($origCat->get_parent_id());
+                                $cat->set_weight($origCat->get_weight());
+                                $cat->set_visible(0);
+                                $cat->set_certificate_min_score($origCat->getCertificateMinScore());
+                                $cat->add();
+                                $sessionGradeBookCategoryId = $cat->get_id();
+                                $sessionCategoriesId[$origCat->get_id()] = $sessionGradeBookCategoryId;
+
+                                // it updates the new parent id
+                                if ($origCat->get_parent_id() > 0) {
+                                    $cat->updateParentId($sessionCategoriesId[$origCat->get_parent_id()], $sessionGradeBookCategoryId);
+                                }
+                            }
                         } else {
                             if (!empty($sessionCategory[0])) {
-                                $sessionGradeBookCategoryId = $sessionCategory[0]->get_id();
+                                $sessionCategoriesId[0] = $sessionCategory[0]->get_id();
                             }
                         }
 
@@ -2633,23 +2694,11 @@ class SessionManager
                                 0
                             );
 
-                            //$cat->set_session_id($sessionId);
-                            //$oldCategoryId = $cat->get_id();
-                            //$newId = $cat->add();
-                            //$newCategoryIdList[$oldCategoryId] = $newId;
-                            //$parentId = $cat->get_parent_id();
-
-                            /*if (!empty($parentId)) {
-                                $newParentId = $newCategoryIdList[$parentId];
-                                $cat->set_parent_id($newParentId);
-                                $cat->save();
-                            }*/
-
                             if (!empty($links)) {
                                 /** @var AbstractLink $link */
                                 foreach ($links as $link) {
-                                    //$newCategoryId = $newCategoryIdList[$link->get_category_id()];
-                                    $link->set_category_id($sessionGradeBookCategoryId);
+                                    $newCategoryId = isset($sessionCategoriesId[$link->getCategory()->get_id()]) ? $sessionCategoriesId[$link->getCategory()->get_id()] : $sessionCategoriesId[0];
+                                    $link->set_category_id($newCategoryId);
                                     $link->add();
                                 }
                             }
@@ -2664,8 +2713,8 @@ class SessionManager
                             if (!empty($evaluationList)) {
                                 /** @var Evaluation $evaluation */
                                 foreach ($evaluationList as $evaluation) {
-                                    //$evaluationId = $newCategoryIdList[$evaluation->get_category_id()];
-                                    $evaluation->set_category_id($sessionGradeBookCategoryId);
+                                    $newCategoryId = isset($sessionCategoriesId[$evaluation->getCategory()->get_id()]) ? $sessionCategoriesId[$evaluation->getCategory()->get_id()] : $sessionCategoriesId[0];
+                                    $evaluation->set_category_id($newCategoryId);
                                     $evaluation->add();
                                 }
                             }
@@ -3421,9 +3470,10 @@ class SessionManager
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
 
+        $allowedTeachers = implode(',', UserManager::getAllowedRolesAsTeacher());
+
         // check if user is a teacher
-        $sql = "SELECT * FROM $tblUser
-                WHERE status = 1 AND user_id = $userId";
+        $sql = "SELECT * FROM $tblUser WHERE status IN ($allowedTeachers) AND user_id = $userId";
 
         $rsCheckUser = Database::query($sql);
 
@@ -6036,7 +6086,8 @@ class SessionManager
         $lastConnectionDate = null,
         $sessionIdList = [],
         $studentIdList = [],
-        $filterByStatus = null
+        $filterByStatus = null,
+        $filterUsers = null
     ) {
         $filterByStatus = (int) $filterByStatus;
         $userId = (int) $userId;
@@ -6148,6 +6199,10 @@ class SessionManager
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+        }
+
+        if (!empty($filterUsers)) {
+            $userConditions .= " AND u.id IN(".implode(',', $filterUsers).")";
         }
 
         if (!empty($keyword)) {
@@ -6446,7 +6501,6 @@ class SessionManager
     ) {
         $userId = api_get_user_id();
         $drhLoaded = false;
-
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
                 $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -6464,6 +6518,24 @@ class SessionManager
                     $studentIdList,
                     $filterUserStatus
                 );
+                $drhLoaded = true;
+            }
+            $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
+            if ($allowDhrAccessToAllStudents) {
+                $conditions = ['status' => STUDENT];
+                if (isset($active)) {
+                    $conditions['active'] = (int) $active;
+                }
+                $students = UserManager::get_user_list(
+                    $conditions,
+                    [],
+                    false,
+                    false,
+                    null,
+                    $keyword,
+                    $lastConnectionDate
+                );
+                $count = count($students);
                 $drhLoaded = true;
             }
         }
@@ -9624,6 +9696,18 @@ class SessionManager
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $courseCode = $courseInfo['code'];
+        $subscribeToForums = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
+        if ($subscribeToForums) {
+            $forums = [];
+            $forumsBaseCourse = [];
+            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+            $forums = get_forums(0, $courseCode, true, $sessionId);
+            if (api_get_configuration_value('subscribe_users_to_forum_notifications_also_in_base_course')) {
+                $forumsBaseCourse = get_forums(0, $courseCode, true, 0);
+            }
+        }
 
         $sessionCourseUser = [
             'session_id' => $sessionId,
@@ -9650,6 +9734,21 @@ class SessionManager
                 Database::insert($tblSessionCourseUser, $sessionCourseUser);
 
                 Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+                if ($subscribeToForums) {
+                    $userInfo = api_get_user_info($studentID);
+                    if (!empty($forums)) {
+                        foreach ($forums as $forum) {
+                            $forumId = $forum['iid'];
+                            set_notification('forum', $forumId, false, $userInfo, $courseInfo);
+                        }
+                    }
+                    if (!empty($forumsBaseCourse)) {
+                        foreach ($forumsBaseCourse as $forum) {
+                            $forumId = $forum['iid'];
+                            set_notification('forum', $forumId, false, $userInfo, $courseInfo);
+                        }
+                    }
+                }
             }
 
             if ($updateSession) {

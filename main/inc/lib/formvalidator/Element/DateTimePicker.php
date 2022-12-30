@@ -134,6 +134,8 @@ class DateTimePicker extends HTML_QuickForm_text
      */
     private function getElementJS()
     {
+        $timeIncrement = FormValidator::getTimepickerIncrement();
+
         $js = null;
         $id = $this->getAttribute('id');
         //timeFormat: 'hh:mm'
@@ -149,6 +151,9 @@ class DateTimePicker extends HTML_QuickForm_text
                     .datetimepicker({
                         defaultDate: '".$this->getValue()."',
                         dateFormat: 'yy-mm-dd',
+                        controlType: 'select',
+                        oneLine: true,
+                        stepMinute: $timeIncrement,
                         timeFormat: 'HH:mm',
                         altField: '#{$id}_alt',
                         altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",

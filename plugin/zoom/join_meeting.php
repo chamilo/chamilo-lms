@@ -38,6 +38,7 @@ if ($meeting->isCourseMeeting()) {
 $startJoinURL = '';
 $detailsURL = '';
 $signature = '';
+$btnAnnouncement = '';
 
 $currentUser = api_get_user_entity(api_get_user_id());
 $isConferenceManager = $plugin->userIsConferenceManager($meeting);
@@ -60,6 +61,35 @@ try {
     if ($isConferenceManager) {
         $detailsURL = api_get_path(WEB_PLUGIN_PATH).'zoom/meeting.php?meetingId='.$meeting->getMeetingId();
     }
+
+    if (api_is_platform_admin()) {
+        $announcementUrl = '';
+
+        if ($announcement = $meeting->getSysAnnouncement()) {
+            $announcementUrl = api_get_path(WEB_CODE_PATH).'admin/system_announcements.php?'
+                .http_build_query(
+                    [
+                        'action' => 'edit',
+                        'id' => $announcement->getId(),
+                    ]
+                );
+        } else {
+            $announcementUrl = api_get_path(WEB_CODE_PATH).'admin/system_announcements.php?'
+                .http_build_query(
+                    [
+                        'action' => 'add',
+                        'type' => 'zoom_conference',
+                        'meeting' => $meeting->getMeetingId(),
+                    ]
+                );
+        }
+
+        $btnAnnouncement = Display::toolbarButton(
+            $announcement ? get_lang('EditSystemAnnouncement') : get_lang('AddSystemAnnouncement'),
+            $announcementUrl,
+            'bullhorn'
+        );
+    }
 } catch (Exception $exception) {
     Display::addFlash(
         Display::return_message($exception->getMessage(), 'warning')
@@ -72,6 +102,7 @@ $tpl = new Template($meeting->getMeetingId());
 $tpl->assign('meeting', $meeting);
 $tpl->assign('start_url', $startJoinURL);
 $tpl->assign('details_url', $detailsURL);
+$tpl->assign('btn_announcement', $btnAnnouncement);
 $tpl->assign('is_conference_manager', $isConferenceManager);
 $tpl->assign('signature', $signature);
 $content = $tpl->fetch('zoom/view/join.tpl');

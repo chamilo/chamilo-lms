@@ -45,7 +45,7 @@
     {% endif %}
 
     <!-- START CONTENT -->
-    <section id="cm-content">
+    <section id="cm-content"{{ html_content_extra_class }}>
         <div class="container">
             {% if show_header == true %}
                 {% if show_course_shortcut is not null %}

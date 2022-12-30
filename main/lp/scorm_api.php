@@ -49,6 +49,11 @@ $autocomplete_when_80pct = 0;
 $user = api_get_user_info();
 $userId = api_get_user_id();
 
+$extraParams = '';
+if (isset($oLP->lti_launch_id)) {
+    $extraParams .= '&lti_launch_id='.Security::remove_XSS($oLP->lti_launch_id);
+}
+
 header('Content-type: text/javascript');
 
 ?>var scorm_logs=<?php echo (empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
@@ -217,7 +222,7 @@ olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
 olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 
-var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id;
+var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id+'<?php echo $extraParams; ?>';
 var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
 
 /**
@@ -256,7 +261,7 @@ $(function() {
 });
 
 // This code was moved inside LMSInitialize()
-if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+if (olms.lms_item_type != 'sco') {
     xajax_start_timer();
 }
 
@@ -344,7 +349,7 @@ function LMSInitialize() {
             $("#tab-iframe").addClass("tab-content iframe_"+olms.lms_item_type);
         }
 
-        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+        if (olms.lms_item_type != 'sco') {
             xajax_start_timer();
         }
 
@@ -1143,7 +1148,7 @@ function addListeners(){
         return;
     }
     //assign event handlers to objects
-    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.lms_item_type == 'document') {
+    if (olms.lms_item_type != 'sco') {
         logit_lms('Chamilo LP or asset');
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
@@ -1207,7 +1212,7 @@ function lms_save_asset() {
         olms.execute_stats = true;
     }
 
-    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+    if (olms.lms_item_type != 'sco') {
         logit_lms('lms_save_asset');
         logit_lms('execute_stats :'+ olms.execute_stats);
         xajax_save_item(
@@ -1719,7 +1724,7 @@ function switch_item(current_item, next_item)
     <?php
     } ?>
 
-    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+    if (olms.lms_item_type != 'sco') {
         xajax_start_timer();
     }
 
@@ -1902,7 +1907,7 @@ function xajax_save_item(
     params += '&userNavigatesAway='+userNavigatesAway;
     params += '&statusSignalReceived='+statusSignalReceived;
 
-    if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
+    if (item_type != 'sco') {
         logit_lms('xajax_save_item with params:' + params, 3);
         return $.ajax({
             type:"POST",
@@ -2624,5 +2629,14 @@ function save_suspend_data_in_local()
             }
         }
     }
+}
+
+/**
+* It launchs results for lti provider
+*/
+function sendLtiLaunch(ltiLaunchId, lpId)
+{
+    var url = "<?php echo api_get_path(WEB_PLUGIN_PATH).'lti_provider/tool/api/score.php?'.api_get_cidreq(); ?>&lti_tool=lp&launch_id="+ltiLaunchId+"&lti_result_id="+lpId;
+    $.get(url);
 }
 

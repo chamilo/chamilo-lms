@@ -73,6 +73,8 @@ abstract class Question
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
         UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
+        MULTIPLE_ANSWER_DROPDOWN => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown'],
+        MULTIPLE_ANSWER_DROPDOWN_GLOBAL => ['MultipleAnswerDropdownGlobal.php', 'MultipleAnswerDropdownGlobal'],
     ];
 
     /**
@@ -1443,10 +1445,17 @@ abstract class Question
 
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
+            $courseFilter = " AND c_id = $courseId";
+
+            if (true === api_get_configuration_value('quiz_question_allow_inter_course_linking')) {
+                $courseFilter = '';
+            }
+
             //update the question_order of each question to avoid inconsistencies
             $sql = "SELECT exercice_id, question_order
                     FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $courseId AND question_id = $id";
+                    WHERE question_id = $id
+                        $courseFilter";
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1455,16 +1464,17 @@ abstract class Question
                         $sql = "UPDATE $TBL_EXERCISE_QUESTION
                                 SET question_order = question_order-1
                                 WHERE
-                                    c_id = $courseId AND
                                     exercice_id = ".intval($row['exercice_id'])." AND
-                                    question_order > ".$row['question_order'];
+                                    question_order > ".$row['question_order']
+                                    .$courseFilter;
                         Database::query($sql);
                     }
                 }
             }
 
             $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $courseId AND question_id = $id";
+                    WHERE question_id = $id
+                        $courseFilter";
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS
@@ -1478,8 +1488,8 @@ abstract class Question
             // remove the category of this question in the question_rel_category table
             $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
                     WHERE
-                        c_id = $courseId AND
-                        question_id = $id";
+                        question_id = $id
+                        $courseFilter";
             Database::query($sql);
 
             // Add extra fields.
@@ -1820,6 +1830,8 @@ abstract class Question
             global $text;
             switch ($this->type) {
                 case UNIQUE_ANSWER:
+                case MULTIPLE_ANSWER_DROPDOWN:
+                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
                     $buttonGroup = [];
                     $buttonGroup[] = $form->addButtonSave(
                         $text,
@@ -1829,7 +1841,7 @@ abstract class Question
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToMultipleAnswer'),
-                        'dot-circle-o',
+                        'check-square-o',
                         'default',
                         null,
                         null,
@@ -1848,6 +1860,16 @@ abstract class Question
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToUniqueAnswer'),
+                        'dot-circle-o',
+                        'default',
+                        null,
+                        null,
+                        null,
+                        true
+                    );
+                    $buttonGroup[] = $form->addButton(
+                        'convertAnswerAlt',
+                        get_lang('ConvertToMultipleAnswerDropdown'),
                         'check-square-o',
                         'default',
                         null,
@@ -2549,13 +2571,15 @@ abstract class Question
      *
      * @return UniqueAnswer|MultipleAnswer
      */
-    public function swapSimpleAnswerTypes()
+    public function swapSimpleAnswerTypes($index = 0)
     {
         $oppositeAnswers = [
-            UNIQUE_ANSWER => MULTIPLE_ANSWER,
-            MULTIPLE_ANSWER => UNIQUE_ANSWER,
+            UNIQUE_ANSWER => [MULTIPLE_ANSWER],
+            MULTIPLE_ANSWER => [UNIQUE_ANSWER, MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL],
+            MULTIPLE_ANSWER_DROPDOWN => [MULTIPLE_ANSWER],
+            MULTIPLE_ANSWER_DROPDOWN_GLOBAL => [MULTIPLE_ANSWER],
         ];
-        $this->type = $oppositeAnswers[$this->type];
+        $this->type = $oppositeAnswers[$this->type][$index];
         Database::update(
             Database::get_course_table(TABLE_QUIZ_QUESTION),
             ['type' => $this->type],
@@ -2564,11 +2588,16 @@ abstract class Question
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',
             MULTIPLE_ANSWER => 'MultipleAnswer',
+            MULTIPLE_ANSWER_DROPDOWN => 'MultipleAnswerDropdown',
+            MULTIPLE_ANSWER_DROPDOWN_GLOBAL => 'MultipleAnswerDropdownGlobal',
         ];
         $swappedAnswer = new $answerClasses[$this->type]();
         foreach ($this as $key => $value) {
             $swappedAnswer->$key = $value;
         }
+
+        $objAnswer = new Answer($swappedAnswer->iid);
+        $_POST['nb_answers'] = $objAnswer->nbrAnswers;
 
         return $swappedAnswer;
     }
@@ -2691,6 +2720,69 @@ abstract class Question
         );
 
         return (int) $result['c'];
+    }
+
+    /**
+     * Count the number of quizzes that use a question.
+     *
+     * @param int $questionId - question ID
+     *
+     * @return int - The number of quizzes where the question is used
+     */
+    public static function countQuizzesUsingQuestion(int $questionId)
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $result = Database::select(
+            'count(*) as count',
+            $table,
+            [
+                'where' => [
+                    'question_id = ? ' => [
+                        $questionId,
+                    ],
+                ],
+            ],
+            'first'
+        );
+
+        if ($result && isset($result['count'])) {
+            return $result['count'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * Gets the first quiz ID that uses a given question.
+     * The c_quiz_rel_question result with lower iid is the master quiz.
+     *
+     * @param int $questionId - question ID
+     *
+     * @return int The quiz ID
+     */
+    public static function getMasterQuizForQuestion($questionId)
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+        $row = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'question_id = ?' => [
+                        $questionId,
+                    ],
+                ],
+                'order' => 'iid ASC',
+            ],
+            'first'
+        );
+
+        if (is_array($row) && isset($row['exercice_id'])) {
+            return $row['exercice_id'];
+        } else {
+            return false;
+        }
     }
 
     /**

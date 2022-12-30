@@ -155,6 +155,18 @@
         <div class="lp-view-zone-container">
             <div class="lp-view-tabs">
                 <div id="navTabsbar" class="nav-tabs-bar">
+                    {% if add_extra_quit_to_home_icon %}
+                        <a style="margin: 3px 10px 0 0; position: relative; z-index: 10"
+                           role="button"
+                           title="{{ 'Close'|get_lang }}"
+                           href="{{ button_home_url }}"
+                           class="icon-toolbar pull-right" target="_self"
+                           onclick="window.parent.API.save_asset();"
+                        >
+                            <em class="fa fa-times" aria-hidden="true"></em>
+                        </a>
+                    {% endif %}
+
                     <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                         <li role="presentation" class="active">
                             <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}"
@@ -241,7 +253,23 @@
                     'style',
                     'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
                 );
-                $('#wrapper-iframe').before('<a style="position:fixed;right:5px;top:5px;z-index:1001;" target="_blank" href="{{ iframe_src }}" >Open PDF on Safari</a>');
+                $('<a>')
+                    .attr({
+                        'id': 'btn-content-new-tab',
+                        'target': '_blank',
+                        'href': '{{ iframe_src }}'
+                    })
+                    .css({
+                        'position': 'absolute',
+                        'right': '5px',
+                        'top': '5px',
+                        'z-index': '9999',
+                        'font-weight': 'bold'
+                    })
+                    .addClass('btn btn-default btn-sm')
+                    .text('{{ 'OpenContentInNewTab'|get_lang|escape('js') }}')
+                    .prependTo('#wrapper-iframe');
+                $('#wrapper-iframe').css('position', 'relative');
                 // Fix another issue whereby buttons do not react to click below
                 // second screen in learning paths on Apple devices
                 document.getElementById('content_id').setAttribute('style', 'overflow: auto;');
@@ -311,6 +339,8 @@
         $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
             $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
             $('.lp-view-tabs').animate({opacity: 1}, 500);
+
+            $('#btn-content-new-tab').attr('href', this.src);
         });
 
         {% if lp_mode == 'embedded' %}

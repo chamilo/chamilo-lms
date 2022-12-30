@@ -52,9 +52,9 @@ if (!empty($shibbLogin)) {
  * Array of connection parameters
  **/
 $extldap_config = array(
-  //base dommain string
+  //base domain string
   'base_dn' => 'DC=cblue,DC=be',
-  //admin distinguished name
+  //admin distinguished name - might be just a term like "elearning" rather than a whole string
   'admin_dn' => 'CN=admin,dc=cblue,dc=be',
   //admin password
   'admin_password' => 'pass',
@@ -89,7 +89,7 @@ if (!empty($ldapConfig)) {
 }
 
 /**
- * Correspondance array between chamilo user info and ldap user info
+ * Matching array between chamilo user info and ldap user info
  * This array is of this form :
  *  '<chamilo_field> => <ldap_field>
  *
@@ -155,6 +155,10 @@ $langMainInfoDetail .= '<p>More information on OpenID is available at <a href="h
  * CAS
  */
 $cas = [
+    'service_base_url' => '', //The base url of your service required by phpCAS since compliance with 
+    //https://github.com/advisories/GHSA-8q72-6qq8-xv64 in version 1.6 
+    //with this https://github.com/apereo/phpCAS/commit/b759361d904a2cb2a3bcee9411fc348cfde5d163
+    //It should be the URL of you Chamilo or an array of all the URLs in case of a multiURL installation including https and / at the end
     'force_redirect' => false,
     'replace_login_form' => false,
     //'skip_force_redirect_in' => ['/main/webservices'],

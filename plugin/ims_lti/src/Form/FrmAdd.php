@@ -68,11 +68,11 @@ class FrmAdd extends FormValidator
                     ImsLti::V_1P3 => 'LTI 1.3.0',
                 ]
             );
-            $this->addHtml('<div class="'.ImsLti::V_1P1.'" style="display: block;">');
+            $this->addHtml('<div class="'.ImsLti::V_1P1.'" style="display: none;">');
             $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'), false);
             $this->addText('shared_secret', $plugin->get_lang('SharedSecret'), false);
             $this->addHtml('</div>');
-            $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: none;">');
+            $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: block;">');
             $this->addTextarea(
                 'public_key',
                 $plugin->get_lang('PublicKey'),
@@ -177,7 +177,7 @@ class FrmAdd extends FormValidator
     public function setDefaultValues()
     {
         $defaults = [];
-        $defaults['version'] = ImsLti::V_1P1;
+        $defaults['version'] = ImsLti::V_1P3;
 
         if ($this->baseTool) {
             $defaults['name'] = $this->baseTool->getName();

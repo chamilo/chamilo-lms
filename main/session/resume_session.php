@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Repository\SessionRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use ChamiloSession as PHPSession;
 
 /**
  * @author  Bart Mollet, Julio Montoya lot of fixes
@@ -23,7 +24,7 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : null;
 if (empty($sessionId)) {
     api_not_allowed(true);
 }
-
+PHPSession::write('id_session', $sessionId);
 SessionManager::protectSession($sessionId);
 $codePath = api_get_path(WEB_CODE_PATH);
 
@@ -34,6 +35,11 @@ $interbreadcrumb[] = [
 ];
 
 $orig_param = '&origin=resume_session';
+
+$allowSkills = api_get_configuration_value('allow_skill_rel_items');
+if ($allowSkills) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
+}
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -201,8 +207,6 @@ if ($session->getNbrCourses() === 0) {
         $courseList = $newCourseList;
     }
 
-    $allowSkills = api_get_configuration_value('allow_skill_rel_items');
-
     /** @var Course $course */
     foreach ($courseList as $course) {
         // Select the number of users
@@ -267,7 +271,7 @@ if ($session->getNbrCourses() === 0) {
 
         if ($allowSkills) {
             $courseItem .= Display::url(
-                Display::return_icon('skills.png', get_lang('Skills')),
+                Display::return_icon('skill-badges.png', get_lang('Skills')),
                 $codePath.'admin/skill_rel_course.php?session_id='.$sessionId.'&course_id='.$course->getId()
             );
         }

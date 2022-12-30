@@ -937,20 +937,33 @@ class UserGroup extends Model
 
             // Deleting items
             if (!empty($delete_items)) {
+                $sessions = '';
                 foreach ($delete_items as $session_id) {
-                    if (!empty($user_list)) {
-                        foreach ($user_list as $user_id) {
-                            SessionManager::unsubscribe_user_from_session($session_id, $user_id);
+                    if (!api_get_configuration_value('usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe')) {
+                        if (!empty($user_list)) {
+                            foreach ($user_list as $user_id) {
+                                SessionManager::unsubscribe_user_from_session($session_id, $user_id);
+                            }
                         }
                     }
                     Database::delete(
                         $this->usergroup_rel_session_table,
                         ['usergroup_id = ? AND session_id = ?' => [$usergroup_id, $session_id]]
                     );
+                    $sessions .= $session_id.',';
                 }
+                // Add event to system log
+                Event::addEvent(
+                    LOG_GROUP_PORTAL_SESSION_UNSUBSCRIBED,
+                    LOG_GROUP_PORTAL_ID,
+                    'gid: '.$usergroup_id.' - sids: '.substr($sessions, 0, -1),
+                    api_get_utc_datetime(),
+                    api_get_user_id()
+                );
             }
         }
 
+        $sessions = '';
         // Adding new relationships.
         if (!empty($new_items)) {
             foreach ($new_items as $session_id) {
@@ -964,8 +977,17 @@ class UserGroup extends Model
                         null,
                         false
                     );
+                    $sessions .= $session_id.',';
                 }
             }
+            // Add event to system log
+            Event::addEvent(
+                LOG_GROUP_PORTAL_SESSION_SUBSCRIBED,
+                LOG_GROUP_PORTAL_ID,
+                'gid: '.$usergroup_id.' - sids: '.substr($sessions, 0, -1),
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
         }
     }
 
@@ -1004,14 +1026,56 @@ class UserGroup extends Model
 
         // Adding new relationships
         if (!empty($new_items)) {
+            $courses = '';
             foreach ($new_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
                 if ($course_info) {
                     if (!empty($user_list)) {
+                        $messageError = [];
+                        $messageOk = [];
                         foreach ($user_list as $user_id) {
-                            CourseManager::subscribeUser(
+                            $subscribed = CourseManager::subscribeUser(
                                 $user_id,
-                                $course_info['code']
+                                $course_info['code'],
+                                STUDENT,
+                                0,
+                                0,
+                                true,
+                                false
+                            );
+                            $userInfo = api_get_user_info($user_id);
+                            if (!$subscribed) {
+                                $messageError[] = sprintf(
+                                    get_lang('UserXNotSubscribedToCourseX'),
+                                    $userInfo['complete_name_with_username'],
+                                    $course_info['title']
+                                );
+                            } else {
+                                $messageOk[] = sprintf(
+                                    get_lang('UserXAddedToCourseX'),
+                                    $userInfo['complete_name_with_username'],
+                                    $course_info['title']
+                                );
+                            }
+                        }
+                        if (!empty($messageError)) {
+                            $strMessagesError = implode('<br>', $messageError);
+                            Display::addFlash(
+                                Display::return_message(
+                                    $strMessagesError,
+                                    'error',
+                                    false
+                                )
+                            );
+                        }
+                        if (!empty($messageOk)) {
+                            $strMessagesOk = implode('<br>', $messageOk);
+                            Display::addFlash(
+                                Display::return_message(
+                                    $strMessagesOk,
+                                    'normal',
+                                    false
+                                )
                             );
                         }
                     }
@@ -1024,7 +1088,16 @@ class UserGroup extends Model
                         $params
                     );
                 }
+                $courses .= $course_id.',';
             }
+            // Add event to system log
+            Event::addEvent(
+                LOG_GROUP_PORTAL_COURSE_SUBSCRIBED,
+                LOG_GROUP_PORTAL_ID,
+                'gid: '.$usergroup_id.' - cids: '.substr($courses, 0, -1),
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
         }
     }
 
@@ -1037,18 +1110,20 @@ class UserGroup extends Model
         // Deleting items.
         if (!empty($delete_items)) {
             $user_list = $this->get_users_by_usergroup($usergroup_id);
+            $courses = '';
             foreach ($delete_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
                 if ($course_info) {
-                    if (!empty($user_list)) {
-                        foreach ($user_list as $user_id) {
-                            CourseManager::unsubscribe_user(
-                                $user_id,
-                                $course_info['code']
-                            );
+                    if (!api_get_configuration_value('usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe')) {
+                        if (!empty($user_list)) {
+                            foreach ($user_list as $user_id) {
+                                CourseManager::unsubscribe_user(
+                                    $user_id,
+                                    $course_info['code']
+                                );
+                            }
                         }
                     }
-
                     Database::delete(
                         $this->usergroup_rel_course_table,
                         [
@@ -1058,8 +1133,17 @@ class UserGroup extends Model
                             ],
                         ]
                     );
+                    $courses .= $course_id.',';
                 }
             }
+            // Add event to system log
+            Event::addEvent(
+                LOG_GROUP_PORTAL_COURSE_UNSUBSCRIBED,
+                LOG_GROUP_PORTAL_ID,
+                'gid: '.$usergroup_id.' - cids: '.substr($courses, 0, -1),
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
         }
     }
 
@@ -1104,17 +1188,19 @@ class UserGroup extends Model
         // Deleting items
         if (!empty($delete_items) && $delete_users_not_present_in_list) {
             foreach ($delete_items as $user_id) {
-                // Removing courses
-                if (!empty($course_list)) {
-                    foreach ($course_list as $course_id) {
-                        $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
+                if (!api_get_configuration_value('usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe')) {
+                    // Removing courses
+                    if (!empty($course_list)) {
+                        foreach ($course_list as $course_id) {
+                            $course_info = api_get_course_info_by_id($course_id);
+                            CourseManager::unsubscribe_user($user_id, $course_info['code']);
+                        }
                     }
-                }
-                // Removing sessions
-                if (!empty($session_list)) {
-                    foreach ($session_list as $session_id) {
-                        SessionManager::unsubscribe_user_from_session($session_id, $user_id);
+                    // Removing sessions
+                    if (!empty($session_list)) {
+                        foreach ($session_list as $session_id) {
+                            SessionManager::unsubscribe_user_from_session($session_id, $user_id);
+                        }
                     }
                 }
 
@@ -1140,6 +1226,14 @@ class UserGroup extends Model
                         ]
                     );
                 }
+                // Add event to system log
+                Event::addEvent(
+                    LOG_GROUP_PORTAL_USER_UNSUBSCRIBED,
+                    LOG_GROUP_PORTAL_ID,
+                    'gid: '.$usergroup_id.' - uid: '.$user_id,
+                    api_get_utc_datetime(),
+                    api_get_user_id()
+                );
             }
         }
 
@@ -1155,9 +1249,53 @@ class UserGroup extends Model
             foreach ($new_items as $user_id) {
                 // Adding courses
                 if (!empty($course_list)) {
+                    $messageError = [];
+                    $messageOk = [];
                     foreach ($course_list as $course_id) {
                         $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::subscribeUser($user_id, $course_info['code']);
+                        $subscribed = CourseManager::subscribeUser(
+                            $user_id,
+                            $course_info['code'],
+                            STUDENT,
+                            0,
+                            0,
+                            true,
+                            false
+                        );
+                        $userInfo = api_get_user_info($user_id);
+                        if (!$subscribed) {
+                            $messageError[] = sprintf(
+                                get_lang('UserXNotSubscribedToCourseX'),
+                                $userInfo['complete_name_with_username'],
+                                $course_info['title']
+                            );
+                        } else {
+                            $messageOk[] = sprintf(
+                                get_lang('UserXAddedToCourseX'),
+                                $userInfo['complete_name_with_username'],
+                                $course_info['title']
+                            );
+                        }
+                    }
+                    if (!empty($messageError)) {
+                        $strMessagesError = implode('<br>', $messageError);
+                        Display::addFlash(
+                            Display::return_message(
+                                $strMessagesError,
+                                'error',
+                                false
+                            )
+                        );
+                    }
+                    if (!empty($messageOk)) {
+                        $strMessagesOk = implode('<br>', $messageOk);
+                        Display::addFlash(
+                            Display::return_message(
+                                $strMessagesOk,
+                                'normal',
+                                false
+                            )
+                        );
                     }
                 }
                 $params = [
@@ -1166,6 +1304,14 @@ class UserGroup extends Model
                     'relation_type' => $relationType,
                 ];
                 Database::insert($this->usergroup_rel_user_table, $params);
+                // Add event to system log
+                Event::addEvent(
+                    LOG_GROUP_PORTAL_USER_SUBSCRIBED,
+                    LOG_GROUP_PORTAL_ID,
+                    'gid: '.$usergroup_id.' - uid: '.$user_id,
+                    api_get_utc_datetime(),
+                    api_get_user_id()
+                );
             }
         }
     }
@@ -1459,6 +1605,14 @@ class UserGroup extends Model
                     $this->update($params);
                 }
             }
+            // Add event to system log
+            Event::addEvent(
+                LOG_GROUP_PORTAL_CREATED,
+                LOG_GROUP_PORTAL_ID,
+                'id: '.$id,
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
 
             return $id;
         }
@@ -1494,6 +1648,14 @@ class UserGroup extends Model
         if (isset($values['delete_picture'])) {
             $this->delete_group_picture($values['id']);
         }
+        // Add event to system log
+        Event::addEvent(
+            LOG_GROUP_PORTAL_UPDATED,
+            LOG_GROUP_PORTAL_ID,
+            'id: '.$values['id'],
+            api_get_utc_datetime(),
+            api_get_user_id()
+        );
 
         return true;
     }
@@ -1693,6 +1855,14 @@ class UserGroup extends Model
         Database::query($sql);
 
         parent::delete($id);
+        // Add event to system log
+        Event::addEvent(
+            LOG_GROUP_PORTAL_DELETED,
+            LOG_GROUP_PORTAL_ID,
+            'id: '.$id,
+            api_get_utc_datetime(),
+            api_get_user_id()
+        );
     }
 
     /**
@@ -2170,6 +2340,7 @@ class UserGroup extends Model
 
         if (is_array($user_list) && is_array($group_list)) {
             foreach ($group_list as $group_id) {
+                $usersList = '';
                 foreach ($user_list as $user_id) {
                     $user_id = (int) $user_id;
                     $group_id = (int) $group_id;
@@ -2189,7 +2360,16 @@ class UserGroup extends Model
                             $result_array[$group_id][$user_id] = 0;
                         }
                     }
+                    $usersList .= $user_id.',';
                 }
+                // Add event to system log
+                Event::addEvent(
+                    LOG_GROUP_PORTAL_USER_SUBSCRIBED,
+                    LOG_GROUP_PORTAL_ID,
+                    'gid: '.$group_id.' - uids: '.substr($usersList, 0, -1),
+                    api_get_utc_datetime(),
+                    api_get_user_id()
+                );
             }
         }
 
@@ -2221,6 +2401,14 @@ class UserGroup extends Model
                     usergroup_id = $groupId";
 
         $result = Database::query($sql);
+        // Add event to system log
+        Event::addEvent(
+            LOG_GROUP_PORTAL_USER_UNSUBSCRIBED,
+            LOG_GROUP_PORTAL_ID,
+            'gid: '.$groupId.' - uid: '.$userId,
+            api_get_utc_datetime(),
+            api_get_user_id()
+        );
 
         return $result;
     }
@@ -2239,16 +2427,27 @@ class UserGroup extends Model
     public function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
     {
         $table_url_rel_group = $this->usergroup_rel_user_table;
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+        $relation_type = (int) $relation_type;
         if (!empty($user_id) && !empty($group_id)) {
             $role = $this->get_user_group_role($user_id, $group_id);
 
             if ($role == 0) {
                 $sql = "INSERT INTO $table_url_rel_group
            				SET
-           				    user_id = ".intval($user_id).",
-           				    usergroup_id = ".intval($group_id).",
-           				    relation_type = ".intval($relation_type);
+           				    user_id = ".$user_id.",
+           				    usergroup_id = ".$group_id.",
+           				    relation_type = ".$relation_type;
                 Database::query($sql);
+                // Add event to system log
+                Event::addEvent(
+                    LOG_GROUP_PORTAL_USER_SUBSCRIBED,
+                    LOG_GROUP_PORTAL_ID,
+                    'gid: '.$group_id.' - uid: '.$user_id,
+                    api_get_utc_datetime(),
+                    api_get_user_id()
+                );
             } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
                 //if somebody already invited me I can be added
                 self::update_user_role($user_id, $group_id, GROUP_USER_PERMISSION_READER);
@@ -2769,7 +2968,7 @@ class UserGroup extends Model
      *
      * @return array
      */
-    public function get_all_group_tags($tag, $from = 0, $number_of_items = 10, $getCount = false)
+    public function get_all_group_tags($tag = '', $from = 0, $number_of_items = 10, $getCount = false)
     {
         $group_table = $this->table;
         $tag = Database::escape_string($tag);

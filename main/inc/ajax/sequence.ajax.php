@@ -16,16 +16,16 @@ use Graphp\GraphViz\GraphViz;
  */
 require_once __DIR__.'/../global.inc.php';
 
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
-$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-$sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
+$action = $_REQUEST['a'] ?? null;
+$id = (int) ($_REQUEST['id'] ?? null);
+$type = (int) ($_REQUEST['type'] ?? null);
+$sequenceId = $_REQUEST['sequence_id'] ?? 0;
 
 $em = Database::getManager();
 /** @var SequenceRepository $sequenceRepository */
-$sequenceRepository = $em->getRepository('ChamiloCoreBundle:Sequence');
+$sequenceRepository = $em->getRepository(Sequence::class);
 /** @var SequenceResourceRepository $sequenceResourceRepository */
-$sequenceResourceRepository = $em->getRepository('ChamiloCoreBundle:SequenceResource');
+$sequenceResourceRepository = $em->getRepository(SequenceResource::class);
 
 switch ($action) {
     case 'graph':
@@ -48,7 +48,7 @@ switch ($action) {
                 echo Display::img(
                     $graphImage,
                     get_lang('GraphDependencyTree'),
-                    ['class' => 'center-block'],
+                    ['class' => 'center-block img-responsive'],
                     false
                 );
             } catch (UnexpectedValueException $e) {
@@ -68,7 +68,7 @@ switch ($action) {
         api_block_anonymous_users();
         api_protect_admin_script();
 
-        $showDelete = isset($_REQUEST['show_delete']) ? $_REQUEST['show_delete'] : false;
+        $showDelete = $_REQUEST['show_delete'] ?? false;
         $image = Display::return_icon('item-sequence.png', null, null, ICON_SIZE_LARGE);
 
         if (empty($id)) {
@@ -97,7 +97,7 @@ switch ($action) {
             exit;
         }
 
-        if (!empty($resourceData) && $showDelete) {
+        if ($showDelete) {
             $linkDelete = Display::toolbarButton(
                 get_lang('Delete'),
                 '#',
@@ -145,7 +145,7 @@ switch ($action) {
         api_block_anonymous_users();
         api_protect_admin_script();
 
-        $vertexId = isset($_REQUEST['vertex_id']) ? $_REQUEST['vertex_id'] : null;
+        $vertexId = $_REQUEST['vertex_id'] ?? null;
 
         /** @var Sequence $sequence */
         $sequence = $sequenceRepository->find($sequenceId);
@@ -251,7 +251,7 @@ switch ($action) {
         api_protect_admin_script();
 
         // children or parent
-        $loadResourceType = isset($_REQUEST['load_resource_type']) ? $_REQUEST['load_resource_type'] : null;
+        $loadResourceType = $_REQUEST['load_resource_type'] ?? null;
 
         /** @var Sequence $sequence */
         $sequence = $sequenceRepository->find($sequenceId);
@@ -306,7 +306,7 @@ switch ($action) {
         api_block_anonymous_users();
         api_protect_admin_script();
 
-        $parents = isset($_REQUEST['parents']) ? $_REQUEST['parents'] : '';
+        $parents = $_REQUEST['parents'] ?? '';
 
         if (empty($parents) || empty($sequenceId) || empty($type)) {
             exit;
@@ -401,6 +401,7 @@ switch ($action) {
 
         break;
     case 'get_requirements':
+    case 'get_dependents':
         $sessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : 0;
         $userId = api_get_user_id();
         $resourceName = '';
@@ -408,6 +409,7 @@ switch ($action) {
         switch ($type) {
             case SequenceResource::SESSION_TYPE:
                 $resourceData = api_get_session_info($id);
+
                 $resourceName = $resourceData['name'];
                 $template = 'session_requirements.tpl';
                 break;
@@ -422,19 +424,38 @@ switch ($action) {
             exit;
         }
 
-        $sequences = $sequenceResourceRepository->getRequirements($id, $type);
+        if ('get_requirements' === $action) {
+            $sequences = $sequenceResourceRepository->getRequirements($id, $type);
+            $sequenceList = $sequenceResourceRepository->checkRequirementsForUser($sequences, $type, $userId, $sessionId);
 
-        if (empty($sequences)) {
-            exit;
+            $allowSubscription = $sequenceResourceRepository->checkSequenceAreCompleted($sequenceList);
+        } else {
+            $sequences = $sequenceResourceRepository->getDependents($id, $type);
+            $sequenceList = $sequenceResourceRepository->checkDependentsForUser($sequences, $type, $userId, $sessionId);
+
+            $allowSubscription = $sequenceResourceRepository->checkSequenceAreCompleted(
+                $sequenceList,
+                SequenceResourceRepository::VERTICES_TYPE_DEP
+            );
         }
-
-        $sequenceList = $sequenceResourceRepository->checkRequirementsForUser($sequences, $type, $userId, $sessionId);
-        $allowSubscription = $sequenceResourceRepository->checkSequenceAreCompleted($sequenceList);
 
         $view = new Template(null, false, false, false, false, false);
         $view->assign('sequences', $sequenceList);
         $view->assign('sequence_type', $type);
         $view->assign('allow_subscription', $allowSubscription);
+        $view->assign(
+            'item_type',
+            'get_requirements' === $action
+                ? SequenceResourceRepository::VERTICES_TYPE_REQ
+                : SequenceResourceRepository::VERTICES_TYPE_DEP
+        );
+        $course = api_get_course_entity();
+        if ($course) {
+            $view->assign(
+                'current_requirement_is_completed',
+                $sequenceResourceRepository->checkCourseRequirements($userId, $course, $sessionId)
+            );
+        }
 
         if ($allowSubscription) {
             $view->assign(

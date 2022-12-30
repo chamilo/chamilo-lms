@@ -1263,13 +1263,19 @@ class ImportCsv
                 // Check session dates.
                 if ($sessionInfo && !empty($sessionInfo['access_start_date'])) {
                     $date = new \DateTime($sessionInfo['access_start_date']);
-                    $interval = new \DateInterval('P7D');
+                    $intervalInput = '7';
+                    if (!empty($sessionInfo['dateinterval'])) {
+                        if ((int) $sessionInfo['dateinterval'] >= 0) {
+                            $intervalInput = (int) $sessionInfo['dateinterval'];
+                        }
+                    }
+                    $interval = new \DateInterval('P'.$intervalInput.'D');
                     $date->sub($interval);
                     if ($date->getTimestamp() > time()) {
                         $this->logger->addInfo(
                             "Calendar event # ".$row['external_calendar_itemID']."
                             in session [$externalSessionId] was not added
-                            because the startdate is more than 7 days in the future: ".$sessionInfo['access_start_date']
+                            because the startdate is more than $intervalInput days in the future: ".$sessionInfo['access_start_date']
                         );
                         $errorFound = true;
                     }
@@ -1605,7 +1611,7 @@ class ImportCsv
 
                         $tpl->assign('teachers', $teachersToString);
 
-                        $templateName = $tpl->get_template('mail/custom_calendar_welcome.tpl');
+                        $templateName = $this->getCustomMailTemplate();
                         $emailBody = $tpl->fetch($templateName);
 
                         $coaches = SessionManager::getCoachesByCourseSession(
@@ -3599,6 +3605,30 @@ class ImportCsv
             fseek($f, -1, SEEK_CUR);
             fwrite($f, '";');
         }*/
+    }
+
+    /**
+     * Get custom tpl for mail welcome.
+     */
+    private function getCustomMailTemplate(): string
+    {
+        $name = 'mail/custom_calendar_welcome.tpl';
+        $sysTemplatePath = api_get_path(SYS_TEMPLATE_PATH);
+        if (is_readable($sysTemplatePath.'overrides/'.$name)) {
+            return 'overrides/'.$name;
+        }
+        $customThemeFolder = api_get_configuration_value('default_template');
+        if (is_readable($sysTemplatePath.$customThemeFolder.'/'.$name)) {
+            return $customThemeFolder.'/'.$name;
+        }
+        if (is_readable($sysTemplatePath.'default/'.$name)) {
+            return 'default/'.$name;
+        }
+        // If none has been found, it means we don't have a custom mail
+        // welcome message, so use the .dist version
+        $alternateName = 'mail/custom_calendar_welcome.dist.tpl';
+
+        return 'default/'.$alternateName;
     }
 }
 

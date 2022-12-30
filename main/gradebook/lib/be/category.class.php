@@ -727,6 +727,22 @@ class Category implements GradebookItem
     }
 
     /**
+     * Update the current parent id.
+     *
+     * @param $parentId
+     * @param $catId
+     *
+     * @throws Exception
+     */
+    public function updateParentId($parentId, $catId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $parentId = (int) $parentId;
+        $upd = 'UPDATE '.$table.' SET parent_id = '.$parentId.' WHERE id = '.$catId;
+        Database::query($upd);
+    }
+
+    /**
      * Get the value to Allow skill by subcategory.
      *
      * @return bool
@@ -813,13 +829,11 @@ class Category implements GradebookItem
     }
 
     /**
-     * Show message resource delete.
+     * Show message about the resource having been deleted.
      *
-     * @param string $courseCode
-     *
-     * @return mixed
+     * @return string|bool
      */
-    public function show_message_resource_delete($courseCode)
+    public function show_message_resource_delete(string $courseCode)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT count(*) AS num

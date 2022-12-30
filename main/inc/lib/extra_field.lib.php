@@ -171,6 +171,9 @@ class ExtraField extends Model
             case 'message':
                 $this->extraFieldType = EntityExtraField::MESSAGE_TYPE;
                 break;
+            case 'document':
+                $this->extraFieldType = EntityExtraField::DOCUMENT_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -204,6 +207,7 @@ class ExtraField extends Model
             'lp_view',
             'course_announcement',
             'message',
+            'document',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -656,6 +660,7 @@ class ExtraField extends Model
                 $row['variable'],
                 $row['display_text']
             );
+            $row['options'] = [];
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag
@@ -1426,6 +1431,12 @@ class ExtraField extends Model
                                 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                             }
 
+                            $allowAsTags = 'true';
+
+                            if ('portfolio' === $this->type) {
+                                $allowAsTags = 'false';
+                            }
+
                             $form->setDefaults(
                                 [
                                     'extra_'.$field_details['variable'] => $selectedOptions,
@@ -1444,7 +1455,7 @@ class ExtraField extends Model
                                         }
                                     },
                                     cache: false,
-                                    tags: true,
+                                    tags: $allowAsTags,
                                     tokenSeparators: [','],
                                     placeholder: '".get_lang('StartToType')."'
                                 });

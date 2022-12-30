@@ -164,7 +164,7 @@ switch ($action) {
                         foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
                             $exercise = new Exercise();
                             $exercise->read($exerciseId);
-                            if ($exercise->iId) {
+                            if ($exercise->iid) {
                                 $title = get_lang('Exercise').': '.$exercise->get_formated_title();
                                 $table->set_header(
                                     $headerCounter++,
@@ -172,7 +172,7 @@ switch ($action) {
                                     false
                                 );
                                 $exerciseResultHeaders[] = $title;
-                                $headers['exercise_'.$exercise->iId] = $title;
+                                $headers['exercise_'.$exercise->iid] = $title;
                             }
                         }
                     }
@@ -196,7 +196,7 @@ switch ($action) {
                     $course_code = $courseCode;
                     $export_csv = true;
 
-                    $csvContentInSession = TrackingCourseLog::get_user_data(
+                    $csvContentInSession = TrackingCourseLog::getUserData(
                         null,
                         $nbStudents,
                         null,

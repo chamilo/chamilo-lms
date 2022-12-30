@@ -1925,9 +1925,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
                                     subkeytext='".$rowkeys['subkeytext']."' AND
                                     access_url =  $access_url";
                         $result_access = Database::query($sql);
-                        $row_access = Database::fetch_array($result_access);
-                        if ($row_access['selected_value'] === 'true' && !$form->isSubmitted()) {
-                            $element->setChecked(true);
+                        if (Database::num_rows($result_access) > 0) {
+                            $row_access = Database::fetch_assoc($result_access);
+                            if ($row_access['selected_value'] === 'true' && !$form->isSubmitted()) {
+                                $element->setChecked(true);
+                            }
                         }
                     } else {
                         if ($rowkeys['selected_value'] === 'true' && !$form->isSubmitted()) {

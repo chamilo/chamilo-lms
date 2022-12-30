@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+use Chamilo\CoreBundle\Entity\TrackELoginAttempt;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Repository\UserRepository;
 use ChamiloSession as Session;
@@ -133,7 +134,7 @@ class UserManager
      * @param string $encoded The encrypted password
      * @param string $salt    The user salt, if any
      */
-    public static function detectPasswordEncryption(string $encoded, string $salt): bool
+    public static function detectPasswordEncryption(string $encoded, string $salt): string
     {
         $encryption = false;
 
@@ -179,11 +180,14 @@ class UserManager
                 $encoder = new \Chamilo\UserBundle\Security\Encoder($detectedEncryption);
                 $result = $encoder->isPasswordValid($encoded, $raw, $salt);
                 if ($result) {
+                    $raw = $encoder->encodePassword($encoded, $salt);
                     self::updatePassword($userId, $raw);
                 }
+            } else {
+                $result = self::isPasswordValid($encoded, $raw, $salt);
             }
         } else {
-            return self::isPasswordValid($encoded, $raw, $salt);
+            $result = self::isPasswordValid($encoded, $raw, $salt);
         }
 
         return $result;
@@ -2116,12 +2120,21 @@ class UserManager
         $order_by = [],
         $limit_from = false,
         $limit_to = false,
-        $idCampus = null
+        $idCampus = null,
+        $keyword = null,
+        $lastConnectionDate = null,
+        $getCount = false,
+        $filterUsers = null
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = [];
-        $sql = "SELECT user.* FROM $user_table user ";
+
+        if ($getCount) {
+            $sql = "SELECT count(user.id) as nbUsers FROM $user_table user ";
+        } else {
+            $sql = "SELECT user.* FROM $user_table user ";
+        }
 
         if (api_is_multiple_url_enabled()) {
             if ($idCampus) {
@@ -2136,12 +2149,46 @@ class UserManager
             $sql .= " WHERE 1=1 ";
         }
 
+        if (!empty($keyword)) {
+            $keyword = trim(Database::escape_string($keyword));
+            $keywordParts = array_filter(explode(' ', $keyword));
+            $extraKeyword = '';
+            if (!empty($keywordParts)) {
+                $keywordPartsFixed = Database::escape_string(implode('%', $keywordParts));
+                if (!empty($keywordPartsFixed)) {
+                    $extraKeyword .= " OR
+                        CONCAT(user.firstname, ' ', user.lastname) LIKE '%$keywordPartsFixed%' OR
+                        CONCAT(user.lastname, ' ', user.firstname) LIKE '%$keywordPartsFixed%' ";
+                }
+            }
+
+            $sql .= " AND (
+                user.username LIKE '%$keyword%' OR
+                user.firstname LIKE '%$keyword%' OR
+                user.lastname LIKE '%$keyword%' OR
+                user.official_code LIKE '%$keyword%' OR
+                user.email LIKE '%$keyword%' OR
+                CONCAT(user.firstname, ' ', user.lastname) LIKE '%$keyword%' OR
+                CONCAT(user.lastname, ' ', user.firstname) LIKE '%$keyword%'
+                $extraKeyword
+            )";
+        }
+
+        if (!empty($lastConnectionDate)) {
+            $lastConnectionDate = Database::escape_string($lastConnectionDate);
+            $sql .= " AND user.last_login <= '$lastConnectionDate' ";
+        }
+
         if (count($conditions) > 0) {
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
                 $sql .= " AND $field = '$value'";
             }
+        }
+
+        if (!empty($filterUsers)) {
+            $sql .= " AND user.id IN(".implode(',', $filterUsers).")";
         }
 
         if (count($order_by) > 0) {
@@ -2154,6 +2201,13 @@ class UserManager
             $sql .= " LIMIT $limit_from, $limit_to";
         }
         $sql_result = Database::query($sql);
+
+        if ($getCount) {
+            $result = Database::fetch_array($sql_result);
+
+            return $result['nbUsers'];
+        }
+
         while ($result = Database::fetch_array($sql_result)) {
             $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
             $return_array[] = $result;
@@ -4072,6 +4126,7 @@ class UserManager
                     c.visibility,
                     c.id as real_id,
                     c.code as course_code,
+                    c.course_language,
                     sc.position,
                     c.unsubscribe
                 FROM $tbl_session_course_user as scu
@@ -4111,6 +4166,7 @@ class UserManager
                         c.visibility,
                         c.id as real_id,
                         c.code as course_code,
+                        c.course_language,
                         sc.position,
                         c.unsubscribe
                     FROM $tbl_session_course_user as scu
@@ -4500,27 +4556,32 @@ class UserManager
     /**
      * Get the total count of users.
      *
-     * @param int $status        Status of users to be counted
-     * @param int $access_url_id Access URL ID (optional)
-     * @param int $active
+     * @param int|null $status        Status of users to be counted
+     * @param int|null $access_url_id Access URL ID (optional)
+     * @param int|null $active
      *
      * @return mixed Number of users or false on error
      */
-    public static function get_number_of_users($status = 0, $access_url_id = 1, $active = null)
-    {
-        $t_u = Database::get_main_table(TABLE_MAIN_USER);
-        $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    public static function get_number_of_users(
+        $status = 0,
+        $access_url_id = 1,
+        $active = null,
+        string $dateFrom = null,
+        string $dateUntil = null
+    ) {
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT count(u.id)
-                    FROM $t_u u
-                    INNER JOIN $t_a url_user
+                    FROM $tableUser u
+                    INNER JOIN $tableAccessUrlRelUser url_user
                     ON (u.id = url_user.user_id)
                     WHERE url_user.access_url_id = $access_url_id
             ";
         } else {
             $sql = "SELECT count(u.id)
-                    FROM $t_u u
+                    FROM $tableUser u
                     WHERE 1 = 1 ";
         }
 
@@ -4529,9 +4590,19 @@ class UserManager
             $sql .= " AND u.status = $status ";
         }
 
-        if ($active !== null) {
+        if (isset($active)) {
             $active = (int) $active;
             $sql .= " AND u.active = $active ";
+        }
+
+        if (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $sql .= " AND u.registration_date >= '$dateFrom' ";
+        }
+
+        if (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $sql .= " AND u.registration_date <= '$dateUntil' ";
         }
 
         $res = Database::query($sql);
@@ -5444,7 +5515,8 @@ class UserManager
         $lastConnectionDate = null,
         $status = null,
         $keyword = null,
-        $checkSessionVisibility = false
+        $checkSessionVisibility = false,
+        $filterUsers = null
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -5518,6 +5590,10 @@ class UserManager
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+        }
+
+        if (!empty($filterUsers)) {
+            $userConditions .= " AND u.id IN(".implode(',', $filterUsers).")";
         }
 
         $sessionConditionsCoach = null;
@@ -6179,9 +6255,14 @@ class UserManager
                     }
                 }
 
+                $tblUserGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+                $tblUserGroupRelCourse = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
+                $tblUserGroupRelSession = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+                $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+                $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
                 // To check in main course
                 if (!empty($coursesTocheck)) {
-                    $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                     foreach ($coursesTocheck as $courseId) {
                         $sql = "SELECT id FROM $tblCourseUser
                                 WHERE user_id = $userId AND c_id = $courseId";
@@ -6198,7 +6279,6 @@ class UserManager
                 // To check in sessions
                 if (!empty($coursesTocheck)) {
                     $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-                    $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
                     $sessionsToCheck = [];
                     foreach ($coursesTocheck as $courseId) {
                         $sql = "SELECT id, session_id FROM $tblSessionCourseUser
@@ -6231,10 +6311,6 @@ class UserManager
                     }
                 }
                 // To check users inside a class
-                $tblUserGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
-                $tblUserGroupRelCourse = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
-                $tblUserGroupRelSession = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
-
                 $rsUser = Database::query("SELECT usergroup_id FROM $tblUserGroupRelUser WHERE user_id = $userId");
                 if (Database::num_rows($rsUser) > 0) {
                     while ($rowUser = Database::fetch_array($rsUser)) {
@@ -6807,6 +6883,58 @@ SQL;
         }
 
         return [];
+    }
+
+    public static function blockIfMaxLoginAttempts(array $userInfo)
+    {
+        if (false === (bool) $userInfo['active'] || null === $userInfo['last_login']) {
+            return;
+        }
+
+        $maxAllowed = (int) api_get_configuration_value('login_max_attempt_before_blocking_account');
+
+        if ($maxAllowed <= 0) {
+            return;
+        }
+
+        $em = Database::getManager();
+
+        $countFailedAttempts = $em
+            ->getRepository(TrackELoginAttempt::class)
+            ->createQueryBuilder('la')
+            ->select('COUNT(la)')
+            ->where('la.username = :username')
+            ->andWhere('la.loginDate >= :last_login')
+            ->andWhere('la.success <> TRUE')
+            ->setParameters(
+                [
+                    'username' => $userInfo['username'],
+                    'last_login' => $userInfo['last_login'],
+                ]
+            )
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        if ($countFailedAttempts >= $maxAllowed) {
+            Database::update(
+                Database::get_main_table(TABLE_MAIN_USER),
+                ['active' => false],
+                ['username = ?' => $userInfo['username']]
+            );
+
+            Display::addFlash(
+                Display::return_message(
+                    sprintf(
+                        get_lang('XAccountDisabledByYAttempts'),
+                        $userInfo['username'],
+                        $countFailedAttempts
+                    ),
+                    'error',
+                    false
+                )
+            );
+        }
     }
 
     /**
@@ -7582,6 +7710,119 @@ SQL;
         }
 
         return $dates;
+    }
+
+    public static function getAllowedRolesAsTeacher(): array
+    {
+        return [
+            COURSEMANAGER,
+            SESSIONADMIN,
+        ];
+    }
+
+    /**
+     * Count users in courses and if they have certificate.
+     * This function is resource intensive.
+     *
+     * @return array
+     */
+    public static function countUsersWhoFinishedCourses()
+    {
+        $courses = [];
+        $currentAccessUrlId = api_get_current_access_url_id();
+        $sql = "SELECT course.code, cru.user_id
+                FROM course_rel_user cru
+                    JOIN course ON cru.c_id = course.id
+                    JOIN access_url_rel_user auru on cru.user_id = auru.user_id
+                    JOIN access_url_rel_course ON course.id = access_url_rel_course.c_id
+                WHERE access_url_rel_course.access_url_id = $currentAccessUrlId
+                ORDER BY course.code
+        ";
+
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res)) {
+                if (!isset($courses[$row['code']])) {
+                    $courses[$row['code']] = [
+                        'subscribed' => 0,
+                        'finished' => 0,
+                    ];
+                }
+
+                $courses[$row['code']]['subscribed']++;
+                $entityManager = Database::getManager();
+                $repository = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
+                //todo check when have more than 1 gradebook
+                /** @var \Chamilo\CoreBundle\Entity\GradebookCategory $gradebook */
+                $gradebook = $repository->findOneBy(['courseCode' => $row['code']]);
+
+                if (!empty($gradebook)) {
+                    $finished = 0;
+                    $gb = Category::createCategoryObjectFromEntity($gradebook);
+                    $finished = $gb->is_certificate_available($row['user_id']);
+                    if (!empty($finished)) {
+                        $courses[$row['code']]['finished']++;
+                    }
+                }
+            }
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Count users in sessions and if they have certificate.
+     * This function is resource intensive.
+     *
+     * @return array
+     */
+    public static function countUsersWhoFinishedCoursesInSessions()
+    {
+        $coursesInSessions = [];
+        $currentAccessUrlId = api_get_current_access_url_id();
+        $sql = "SELECT course.code, srcru.session_id, srcru.user_id, session.name
+                FROM session_rel_course_rel_user srcru
+                    JOIN course ON srcru.c_id = course.id
+                    JOIN access_url_rel_session aurs on srcru.session_id = aurs.session_id
+                    JOIN session ON srcru.session_id = session.id
+                WHERE aurs.access_url_id = $currentAccessUrlId
+                ORDER BY course.code, session.name
+        ";
+
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res)) {
+                $index = $row['code'].' ('.$row['name'].')';
+                if (!isset($coursesInSessions[$index])) {
+                    $coursesInSessions[$index] = [
+                        'subscribed' => 0,
+                        'finished' => 0,
+                    ];
+                }
+
+                $coursesInSessions[$index]['subscribed']++;
+                $entityManager = Database::getManager();
+                $repository = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
+                /** @var \Chamilo\CoreBundle\Entity\GradebookCategory $gradebook */
+                $gradebook = $repository->findOneBy(
+                    [
+                        'courseCode' => $row['code'],
+                        'sessionId' => $row['session_id'],
+                    ]
+                );
+
+                if (!empty($gradebook)) {
+                    $finished = 0;
+                    $gb = Category::createCategoryObjectFromEntity($gradebook);
+                    $finished = $gb->is_certificate_available($row['user_id']);
+                    if (!empty($finished)) {
+                        $coursesInSessions[$index]['finished']++;
+                    }
+                }
+            }
+        }
+
+        return $coursesInSessions;
     }
 
     /**

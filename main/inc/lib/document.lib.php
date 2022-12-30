@@ -1127,7 +1127,7 @@ class DocumentManager
      *
      * @param array  $_course
      * @param string $path          Path stored in the database
-     * @param string $base_work_dir Path to the documents folder (if not defined, $documentId must be used)
+     * @param string $base_work_dir Path to the "/document" folder of this course. Will be built if not provided.
      * @param int    $sessionId     The ID of the session, if any
      * @param int    $documentId    The document id, if available
      * @param int    $groupId       iid
@@ -1165,7 +1165,12 @@ class DocumentManager
         }
 
         if (empty($base_work_dir)) {
-            return false;
+            if (empty($_course['directory'])) {
+                return false;
+            }
+            $courseDir = $_course['directory'].'/document';
+            $sysCoursePath = api_get_path(SYS_COURSE_PATH);
+            $base_work_dir = $sysCoursePath.$courseDir;
         }
 
         if (empty($documentId)) {
@@ -2057,20 +2062,24 @@ class DocumentManager
         $info_grade_certificate = UserManager::get_info_gradebook_certificate($courseCode, $sessionId, $user_id);
         $date_long_certificate = '';
         $date_certificate = '';
+        $date_short_no_time = '';
         $url = '';
         if ($info_grade_certificate) {
             $date_certificate = $info_grade_certificate['created_at'];
             $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
         }
         $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
+        $date_short_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_NUMBER);
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
             $date_no_time = api_convert_and_format_date($date_certificate, DATE_FORMAT_LONG_NO_DAY);
+            $date_short_no_time = api_convert_and_format_date($date_certificate, DATE_FORMAT_NUMBER);
         }
 
         if ($is_preview) {
             $date_long_certificate = api_convert_and_format_date(api_get_utc_datetime());
             $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
+            $date_short_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_NUMBER);
         }
 
         $externalStyleFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/certificate.css';
@@ -2126,6 +2135,7 @@ class DocumentManager
             $official_code,
             $date_long_certificate,
             $date_no_time,
+            $date_short_no_time,
             $courseCode,
             $course_info['name'],
             isset($info_grade_certificate['grade']) ? $info_grade_certificate['grade'] : '',
@@ -2151,6 +2161,7 @@ class DocumentManager
             '((official_code))',
             '((date_certificate))',
             '((date_certificate_no_time))',
+            '((date_simple_certificate))',
             '((course_code))',
             '((course_title))',
             '((gradebook_grade))',
@@ -5095,13 +5106,14 @@ class DocumentManager
                     WHERE
                         filetype = 'folder' AND
                         c_id = $course_id AND
-                        path IN ('".$folder_sql."')";
+                        path IN ('".$folder_sql."')
+                        ORDER BY path";
             $res = Database::query($sql);
             $folder_titles = [];
             while ($obj = Database::fetch_object($res)) {
                 $folder_titles[$obj->path] = $obj->title;
             }
-            natcasesort($folder_titles);
+            //natcasesort($folder_titles);
         }
 
         if (empty($form)) {
@@ -5136,19 +5148,20 @@ class DocumentManager
                         $label = ' &mdash; '.$folder_titles[$folder];
                     }
                     $label = Security::remove_XSS($label);
-                    $foldersSortedByTitles[$folder_titles[$folder]] = [
+                    $foldersSortedByTitles[$folder_id] = [
                         'id' => $folder_id,
+                        'title' => $folder_titles[$folder],
                         'selected' => $selected,
                         'label' => $label,
                     ];
                 }
-                foreach ($folder_titles as $title) {
+                foreach ($folders as $id => $title) {
                     $parent_select->addOption(
-                        $foldersSortedByTitles[$title]['label'],
-                        $foldersSortedByTitles[$title]['id']
+                        $foldersSortedByTitles[$id]['label'],
+                        $foldersSortedByTitles[$id]['id']
                     );
-                    if ($foldersSortedByTitles[$title]['selected'] != '') {
-                        $parent_select->setSelected($foldersSortedByTitles[$title]['id']);
+                    if ($foldersSortedByTitles[$id]['selected'] != '') {
+                        $parent_select->setSelected($foldersSortedByTitles[$id]['id']);
                     }
                 }
             }
@@ -5317,31 +5330,41 @@ class DocumentManager
         $document_data['file_extension'] = $extension;
 
         if (!$show_as_icon) {
-            if ($filetype == 'folder') {
-                if ($isAllowedToEdit ||
-                    api_is_platform_admin() ||
-                    api_get_setting('students_download_folders') == 'true'
-                ) {
-                    // filter: when I am into a shared folder, I can only show "my shared folder" for donwload
-                    if (self::is_shared_folder($curdirpath, $sessionId)) {
-                        if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
-                            preg_match('/shared_folder_session_'.$sessionId.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
-                            $isAllowedToEdit || api_is_platform_admin()
+            // to force download if a document can be downloaded or not
+            $hideDownloadIcon = false;
+            if (true === api_get_configuration_value('documents_hide_download_icon')) {
+                $hideDownloadIcon = true;
+            }
+            if (self::getHideDownloadIcon($document_data['id'])) {
+                $hideDownloadIcon = false;
+            }
+            if (!$hideDownloadIcon) {
+                if ($filetype == 'folder') {
+                    if ($isAllowedToEdit ||
+                        api_is_platform_admin() ||
+                        api_get_setting('students_download_folders') == 'true'
+                    ) {
+                        // filter: when I am into a shared folder, I can only show "my shared folder" for donwload
+                        if (self::is_shared_folder($curdirpath, $sessionId)) {
+                            if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
+                                preg_match('/shared_folder_session_'.$sessionId.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
+                                $isAllowedToEdit || api_is_platform_admin()
+                            ) {
+                                $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
+                                    Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
+                            }
+                        } elseif (!preg_match('/shared_folder/', urldecode($forcedownload_link)) ||
+                            $isAllowedToEdit ||
+                            api_is_platform_admin()
                         ) {
                             $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                                 Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                         }
-                    } elseif (!preg_match('/shared_folder/', urldecode($forcedownload_link)) ||
-                        $isAllowedToEdit ||
-                        api_is_platform_admin()
-                    ) {
-                        $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
-                            Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                     }
+                } else {
+                    $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
+                        Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                 }
-            } else {
-                $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
-                    Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
             }
 
             // Copy files to user's myfiles
@@ -6992,6 +7015,25 @@ class DocumentManager
 
             return false;
         }
+    }
+
+    /**
+     * It gest extra value to define if download icon is visible or not.
+     *
+     * @param $documentId
+     *
+     * @return bool
+     */
+    public static function getHideDownloadIcon($documentId)
+    {
+        $extraFieldValue = new ExtraFieldValue('document');
+        $extraValue = $extraFieldValue->get_values_by_handler_and_field_variable($documentId, 'can_be_downloaded');
+        $canBeDownloadedIcon = false;
+        if (!empty($extraValue) && isset($extraValue['value'])) {
+            $canBeDownloadedIcon = (bool) $extraValue['value'];
+        }
+
+        return $canBeDownloadedIcon;
     }
 
     /**

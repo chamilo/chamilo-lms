@@ -2123,6 +2123,8 @@ class SocialManager extends UserManager
      *
      * @param int $id id message to delete
      *
+     * @throws Exception if file cannot be deleted in delete_message_attachment_file()
+     *
      * @return bool status query
      */
     public static function deleteMessage($id)

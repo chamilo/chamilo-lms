@@ -279,7 +279,11 @@ if (!empty($action) && $is_allowedToEdit) {
             switch ($action) {
                 case 'delete':
                     if ($allowDelete) {
-                        $objExerciseTmp->delete();
+                        if ($objExerciseTmp->sessionId == $sessionId) {
+                            $objExerciseTmp->delete();
+                        } else {
+                            Display::addFlash(Display::return_message(sprintf(get_lang('ExerciseXNotDeleted'), $objExerciseTmp->name), 'error'));
+                        }
                     }
                     break;
                 case 'visible':
@@ -377,7 +381,8 @@ if ($is_allowedToEdit) {
                     case 'delete':
                         // deletes an exercise
                         if ($allowDelete) {
-                            $result = $objExerciseTmp->delete();
+                            $deleteQuestions = api_get_configuration_value('quiz_question_delete_automatically_when_deleting_exercise') ? true : false;
+                            $result = $objExerciseTmp->delete(false, $deleteQuestions);
                             if ($result) {
                                 Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
                             }
@@ -520,7 +525,7 @@ if ($is_allowedToEdit) {
                         exit();
                     case 'send_reminder':
                         $users = Exercise::getUsersInExercise(
-                            $objExerciseTmp->id,
+                            $objExerciseTmp->iid,
                             $courseId,
                             $sessionId
                         );

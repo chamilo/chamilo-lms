@@ -26,6 +26,13 @@
                 <div class="cribbon"></div>
             {% endif %}
 
+            {% if 'show_different_course_language'| api_get_setting is same as 'true' %}
+                <span class="course-language course-language-catalog">
+                    {{ course.course_language }}
+                </span>
+                <div class="cribbon cribbon-course-language-catalog"></div>
+            {% endif %}
+
             {% block course_description_button %}
                 <div class="user-actions">
                     {{ course.description_button }}

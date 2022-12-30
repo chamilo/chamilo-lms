@@ -46,7 +46,7 @@ $formToDisplay = $form->returnForm();
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('ManageSkillsLevels')];
-$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('SkillProfile')];
+$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('SkillLevelProfiles')];
 
 $toolbar = null;
 

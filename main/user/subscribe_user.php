@@ -130,6 +130,24 @@ if (isset($_POST['action'])) {
 $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
 
+$htmlHeadXtra[] = '<script>
+function display_advanced_search_form () {
+    if ($("#advanced_search_form").css("display") == "none") {
+        $("#advanced_search_form").css("display", "block");
+        $("#img_plus_and_minus").html(\''.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
+    } else {
+        $("#advanced_search_form").css("display", "none");
+        $("#img_plus_and_minus").html(\''.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
+    }
+}
+</script>';
+
+$searchAdvanced = '<a id="advanced_params" class="btn btn-default advanced_options" onclick="display_advanced_search_form();">'.
+    '<span id="img_plus_and_minus">'.
+    Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').
+    '</span>'.
+    '</a>';
+
 // Build table
 if (api_get_configuration_value('session_course_users_subscription_limited_to_session_users') && !empty($sessionId)) {
     $table = new SortableTable(
@@ -196,9 +214,15 @@ if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_
     $actionsLeft .= '<a href="subscribe_user.php?type='.$type.'">'.
         Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
 }
-$extraForm = '';
+
+$extraForm = '<a id="advanced_params" class="btn btn-default advanced_options" onclick="display_advanced_search_form();">'.
+    '<span id="img_plus_and_minus">'.
+    Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').
+    '</span>'.
+    '</a>';
+
 if (api_get_setting('ProfilingFilterAddingUsers') === 'true') {
-    $extraForm = display_extra_profile_fields_filter();
+    $extraForm .= display_extra_profile_fields_filter();
 }
 
 // Build search-form
@@ -215,6 +239,30 @@ $form->addElement('hidden', 'type', $type);
 $form->addElement('hidden', 'cidReq', api_get_course_id());
 $form->addButtonSearch(get_lang('Search'));
 echo Display::toolbarAction('toolbar-subscriber', [$actionsLeft, $extraForm, $form->returnForm()], [4, 4, 4]);
+
+$advancedForm = new FormValidator(
+    'advanced_search',
+    'get',
+    '',
+    '',
+    [],
+    FormValidator::LAYOUT_HORIZONTAL
+);
+
+$advancedForm->addElement('html', '<div id="advanced_search_form" style="display:none;">');
+$advancedForm->addElement('header', get_lang('AdvancedSearch'));
+$advancedForm->addText('keyword_firstname', get_lang('FirstName'), false);
+$advancedForm->addText('keyword_lastname', get_lang('LastName'), false);
+$advancedForm->addText('keyword_username', get_lang('LoginName'), false);
+$advancedForm->addText('keyword_email', get_lang('Email'), false);
+$advancedForm->addText('keyword_officialcode', get_lang('OfficialCode'), false);
+$advancedForm->addElement('hidden', 'type', $type);
+$advancedForm->addElement('hidden', 'cidReq', api_get_course_id());
+$advancedForm->addButtonSearch(get_lang('SearchUsers'));
+$advancedForm->addElement('html', '</div>');
+
+$advancedForm = $advancedForm->returnForm();
+echo $advancedForm;
 
 $option = $type == COURSEMANAGER ? 2 : 1;
 echo UserManager::getUserSubscriptionTab($option);
@@ -330,6 +378,7 @@ function get_number_of_users()
     $sessionId = api_get_session_id();
 
     if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
+        $allowedRoles = implode(',', UserManager::getAllowedRolesAsTeacher());
         if (api_get_session_id() != 0) {
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
@@ -340,7 +389,7 @@ function get_number_of_users()
                         session_id ='".$sessionId."'
                     WHERE
                         cu.user_id IS NULL AND
-                        u.status = 1 AND
+                        u.status IN ($allowedRoles) AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
             if (api_is_multiple_url_enabled()) {
@@ -358,7 +407,7 @@ function get_number_of_users()
                             WHERE
                                 cu.user_id IS NULL AND
                                 access_url_id= $url_access_id AND
-                                u.status = 1 AND
+                                u.status IN ($allowedRoles) AND
                                 (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
                             ";
                 }
@@ -368,7 +417,7 @@ function get_number_of_users()
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
                     ON u.id = cu.user_id and c_id='".api_get_course_int_id()."'
-                    WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+                    WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles)";
 
             if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
@@ -381,7 +430,7 @@ function get_number_of_users()
                         ON u.id = cu.user_id AND c_id='".api_get_course_int_id()."'
                         INNER JOIN  $tbl_url_rel_user as url_rel_user
                         ON (url_rel_user.user_id = u.id)
-                        WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+                        WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles) AND access_url_id= $url_access_id ";
                 }
             }
         }
@@ -463,7 +512,41 @@ function get_number_of_users()
     }
 
     // when there is a keyword then we are searching and we have to change the SQL statement
-    if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+    if (!empty($_GET['keyword_firstname']) || !empty($_GET['keyword_lastname']) || !empty($_GET['keyword_username']) || !empty($_GET['keyword_email']) || !empty($_GET['keyword_officialcode'])) {
+        $condition = '';
+        $keywords = [
+            'firstname' => Security::remove_XSS(Database::escape_string($_GET['keyword_firstname'])),
+            'lastname' => Security::remove_XSS(Database::escape_string($_GET['keyword_lastname'])),
+            'username' => Security::remove_XSS(Database::escape_string($_GET['keyword_username'])),
+            'email' => Security::remove_XSS(Database::escape_string($_GET['keyword_email'])),
+            'official_code' => Security::remove_XSS(Database::escape_string($_GET['keyword_officialcode'])),
+        ];
+
+        foreach ($keywords as $keyword => $value) {
+            if (!empty($value)) {
+                if (!empty($condition)) {
+                    $condition .= ' AND ';
+                }
+                $condition .= $keyword." LIKE '%".$value."%'";
+            }
+        }
+
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseId = api_get_course_int_id();
+
+        $sql = "SELECT COUNT(u.id)
+                FROM $user_table u
+                LEFT JOIN $course_user_table cu
+                ON u.user_id = cu.user_id AND c_id = '".$courseId."' WHERE u.status <> ".DRH."";
+
+        if (!empty($condition)) {
+            $sql .= ' AND cu.user_id IS NULL';
+            $sql .= ' AND ('.$condition.')';
+            $sql .= " AND u.status != ".ANONYMOUS." ";
+        }
+    } elseif (!empty($_GET['keyword'])) {
+        // when there is a keyword then we are searching and we have to change the SQL statement
         $keyword = Database::escape_string(trim($_REQUEST['keyword']));
         $sql .= " AND (
             firstname LIKE '%".$keyword."%' OR
@@ -548,6 +631,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 u.user_id              AS col5";
     }
     if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
+        $allowedRoles = implode(',', UserManager::getAllowedRolesAsTeacher());
         // adding a teacher through a session
         if (!empty($sessionId)) {
             $sql = "SELECT $select_fields
@@ -571,12 +655,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         ON field_values.item_id = u.user_id
                     WHERE
                         cu.user_id IS NULL AND
-                        u.status = 1 AND
+                        u.status IN ($allowedRoles) AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+                $sql .= "WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles) AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
             $sql .= " AND access_url_id = $url_access_id";
         } else {
@@ -595,11 +679,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $table_user_field_values field_values
                         ON field_values.item_id = u.user_id
                     WHERE
-                        cu.user_id IS NULL AND u.status<>".DRH." AND
+                        cu.user_id IS NULL AND u.status IN ($allowedRoles) AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
+                $sql .= "WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles) ";
             }
 
             // adding a teacher NOT trough a session on a portal with multiple URLs
@@ -623,11 +707,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
                                 ON field_values.item_id = u.user_id
                             WHERE
                                 cu.user_id IS NULL AND
-                                u.status<>".DRH." AND
+                                u.status IN ($allowedRoles) AND
                                 field_values.field_id = '".intval($field_identification[0])."' AND
                                 field_values.value = '".Database::escape_string($field_identification[1])."'";
                     } else {
-                        $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." AND access_url_id= $url_access_id ";
+                        $sql .= "WHERE cu.user_id IS NULL AND u.status IN ($allowedRoles) AND access_url_id= $url_access_id ";
                     }
                 }
             }
@@ -728,7 +812,29 @@ function get_user_data($from, $number_of_items, $column, $direction)
     }
 
     // adding additional WHERE statements to the SQL for the search functionality
-    if (isset($_REQUEST['keyword'])) {
+    if (!empty($_GET['keyword_firstname']) || !empty($_GET['keyword_lastname']) || !empty($_GET['keyword_username']) || !empty($_GET['keyword_email']) || !empty($_GET['keyword_officialcode'])) {
+        $condition = '';
+        $keywords = [
+            'firstname' => Security::remove_XSS(Database::escape_string($_GET['keyword_firstname'])),
+            'lastname' => Security::remove_XSS(Database::escape_string($_GET['keyword_lastname'])),
+            'username' => Security::remove_XSS(Database::escape_string($_GET['keyword_username'])),
+            'email' => Security::remove_XSS(Database::escape_string($_GET['keyword_email'])),
+            'official_code' => Security::remove_XSS(Database::escape_string($_GET['keyword_officialcode'])),
+        ];
+
+        foreach ($keywords as $keyword => $value) {
+            if (!empty($value)) {
+                if (!empty($condition)) {
+                    $condition .= ' AND ';
+                }
+                $condition .= "u.".$keyword." LIKE '%".$value."%'";
+            }
+        }
+
+        if (!empty($condition)) {
+            $sql .= ' AND ('.$condition.')';
+        }
+    } elseif (!empty($_REQUEST['keyword'])) {
         $keyword = Database::escape_string(trim($_REQUEST['keyword']));
         $sql .= " AND (
                     firstname LIKE '%".$keyword."%' OR

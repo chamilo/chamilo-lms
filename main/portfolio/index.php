@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Chamilo\CoreBundle\Entity\Tag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 // Make sure we void the course context if we are in the social network section
@@ -14,6 +15,10 @@ if (empty($_GET['cidReq'])) {
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
+
+if (api_get_course_int_id()) {
+    api_protect_course_script(true);
+}
 
 if (false === api_get_configuration_value('allow_portfolio_tool')) {
     api_not_allowed(true);
@@ -126,8 +131,7 @@ switch ($action) {
         $controller->editItem($item);
 
         return;
-    case 'hide_item':
-    case 'show_item':
+    case 'visibility':
         $id = $httpRequest->query->getInt('id');
 
         /** @var Portfolio $item */
@@ -199,10 +203,7 @@ switch ($action) {
 
         break;
     case 'mark_important':
-        if (!api_is_allowed_to_edit()) {
-            api_not_allowed(true);
-            break;
-        }
+        api_protect_teacher_script();
 
         $item = $em->find(Portfolio::class, $httpRequest->query->getInt('item'));
         $comment = $em->find(PortfolioComment::class, $httpRequest->query->getInt('id'));
@@ -225,11 +226,7 @@ switch ($action) {
         $controller->exportZip($httpRequest);
         break;
     case 'qualify':
-        api_protect_course_script(true);
-
-        if (!api_is_allowed_to_edit()) {
-            api_not_allowed(true);
-        }
+        api_protect_teacher_script();
 
         if ($httpRequest->query->has('item')) {
             if ('1' !== api_get_course_setting('qualify_portfolio_item')) {
@@ -270,6 +267,77 @@ switch ($action) {
         break;
     case 'delete_attachment':
         $controller->deleteAttachment($httpRequest);
+        break;
+    case 'highlighted':
+        api_protect_teacher_script();
+
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio $item */
+        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->markAsHighlighted($item);
+        break;
+    case 'template':
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio $item */
+        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->markAsTemplate($item);
+        break;
+    case 'template_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (empty($comment)) {
+            break;
+        }
+
+        $controller->markAsTemplateComment($comment);
+        break;
+    case 'edit_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (!empty($comment)) {
+            $controller->editComment($comment);
+        }
+
+        break;
+    case 'delete_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (!empty($comment)) {
+            $controller->deleteComment($comment);
+        }
+        break;
+    case 'tags':
+    case 'edit_tag':
+        $controller->listTags($httpRequest);
+        break;
+    case 'delete_tag':
+        $id = $httpRequest->query->getInt('id');
+
+        $tag = $em->find(Tag::class, $id);
+
+        if (empty($tag)) {
+            break;
+        }
+
+        $controller->deleteTag($tag);
         break;
     case 'list':
     default:

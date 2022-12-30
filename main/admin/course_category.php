@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-$category = isset($_GET['category']) ? $_GET['category'] : null;
+$category = $_GET['category'] ?? null;
 
 $parentInfo = [];
 if (!empty($category)) {
@@ -51,12 +51,14 @@ if (!empty($action)) {
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit();
     } elseif (($action === 'add' || $action === 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
+        $newParentCategoryCode = $_POST['parent_id'] ?? $category;
+
         if ($action === 'add') {
             $ret = CourseCategory::addNode(
                 $_POST['code'],
                 $_POST['name'],
                 $_POST['auth_course_child'],
-                $category
+                $newParentCategoryCode
             );
 
             $errorMsg = Display::return_message(get_lang('Created'));
@@ -65,7 +67,9 @@ if (!empty($action)) {
                 $_POST['code'],
                 $_POST['name'],
                 $_POST['auth_course_child'],
-                $categoryId
+                $categoryId,
+                $newParentCategoryCode,
+                $category
             );
             $categoryInfo = CourseCategory::getCategory($_POST['code']);
             $ret = $categoryInfo['id'];
@@ -161,6 +165,19 @@ if ($action === 'add' || $action === 'edit') {
     }
 
     $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
+
+    $categories = ['' => get_lang('Select')];
+
+    foreach (CourseCategory::getAllCategories() as $categoryItemInfo) {
+        if ($categoryId === $categoryItemInfo['code']) {
+            continue;
+        }
+
+        $categories[$categoryItemInfo['code']] = $categoryItemInfo['name'];
+    }
+
+    $form->addSelect('parent_id', get_lang('ParentCategory'), $categories);
+
     $group = [
         $form->createElement(
             'radio',
@@ -210,7 +227,12 @@ if ($action === 'add' || $action === 'edit') {
     } else {
         $class = 'add';
         $text = get_lang('AddCategory');
-        $form->setDefaults(['auth_course_child' => 'TRUE']);
+        $form->setDefaults(
+            [
+                'auth_course_child' => 'TRUE',
+                'parent_id' => $category,
+            ]
+        );
         $form->addButtonCreate($text);
     }
     $form->display();

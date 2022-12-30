@@ -73,56 +73,74 @@ class TableSort
         switch ($type) {
             case SORT_NUMERIC:
                 $function = function ($a, $b) use ($column, $compareOperator) {
-                    $result = strip_tags($a[$column]) <= strip_tags($b[$column]);
-                    if ('>' === $compareOperator) {
-                        $result = strip_tags($a[$column]) > strip_tags($b[$column]);
+                    $colA = strip_tags($a[$column]);
+                    $colB = strip_tags($b[$column]);
+
+                    if ('<=' === $compareOperator) {
+                        return $colA < $colB
+                            ? 1
+                            : ($colA > $colB ? -1 : 0);
                     }
 
-                    return $result;
+                    if ('>' === $compareOperator) {
+                        return $colB < $colA
+                            ? 1
+                            : ($colB > $colA ? -1 : 0);
+                    }
+
+                    return 0;
                 };
                 break;
             case SORT_IMAGE:
                 $function = function ($a, $b) use ($column, $compareOperator) {
-                    $result = api_strnatcmp(
-                        api_strtolower(strip_tags($a[$column], "<img>")),
-                        api_strtolower(strip_tags($b[$column], "<img>"))
-                    ) <= 0;
-                    if ('>' === $compareOperator) {
-                        $result = api_strnatcmp(
-                            api_strtolower(strip_tags($a[$column], "<img>")),
-                            api_strtolower(strip_tags($b[$column], "<img>"))
-                        ) > 0;
+                    if ('<=' === $compareOperator) {
+                        return api_strnatcmp(
+                            api_strtolower(strip_tags($b[$column], '<img>')),
+                            api_strtolower(strip_tags($a[$column], '<img>'))
+                        );
                     }
 
-                    return $result;
+                    return api_strnatcmp(
+                        api_strtolower(strip_tags($a[$column], '<img>')),
+                        api_strtolower(strip_tags($b[$column], '<img>'))
+                    );
                 };
 
                 break;
             case SORT_DATE:
                 $function = function ($a, $b) use ($column, $compareOperator) {
-                    $result = strtotime(strip_tags($a[$column])) <= strtotime(strip_tags($b[$column]));
-                    if ('>' === $compareOperator) {
-                        $result = strtotime(strip_tags($a[$column])) > strtotime(strip_tags($b[$column]));
+                    $dateA = strtotime(strip_tags($a[$column]));
+                    $dateB = strtotime(strip_tags($b[$column]));
+
+                    if ('<=' === $compareOperator) {
+                        return $dateA < $dateB
+                            ? 1
+                            : ($dateA > $dateB ? -1 : 0);
                     }
 
-                    return $result;
+                    if ('>' === $compareOperator) {
+                        return $dateB < $dateA
+                            ? 1
+                            : ($dateB > $dateA ? -1 : 0);
+                    }
+
+                    return 0;
                 };
                 break;
             case SORT_STRING:
             default:
                 $function = function ($a, $b) use ($column, $compareOperator) {
-                    $result = api_strnatcmp(
-                        api_strtolower(strip_tags($a[$column])),
-                        api_strtolower(strip_tags($b[$column]))
-                    ) <= 0;
-                    if ('>' === $compareOperator) {
-                        $result = api_strnatcmp(
-                            api_strtolower(strip_tags($a[$column])),
-                            api_strtolower(strip_tags($b[$column]))
-                        ) > 0;
+                    if ('<=' === $compareOperator) {
+                        return api_strnatcmp(
+                            api_strtolower(strip_tags($b[$column])),
+                            api_strtolower(strip_tags($a[$column]))
+                        );
                     }
 
-                    return $result;
+                    return api_strnatcmp(
+                        api_strtolower(strip_tags($a[$column])),
+                        api_strtolower(strip_tags($b[$column]))
+                    );
                 };
                 break;
         }

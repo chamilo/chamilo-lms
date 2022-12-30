@@ -2,23 +2,16 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_TRACKING;
 
-$courseInfo = api_get_course_info();
-if (empty($courseInfo)) {
-    api_not_allowed(true);
-}
-$sessionId = api_get_session_id();
-$is_allowedToTrack = Tracking::isAllowToTrack($sessionId);
+TrackingCourseLog::protectIfNotAllowed();
 
-if (!$is_allowedToTrack) {
-    api_not_allowed(true);
-}
+$courseInfo = api_get_course_info();
+$sessionId = api_get_session_id();
 
 //keep course_code form as it is loaded (global) by the table's get_user_data
 $courseCode = $courseInfo['code'];
@@ -31,7 +24,7 @@ $parameters['user_active'] = isset($_REQUEST['user_active']) && is_numeric($_REQ
 // PERSON_NAME_DATA_EXPORT is buggy
 $sortByFirstName = api_sort_by_first_name();
 $from_myspace = false;
-$from = isset($_GET['from']) ? $_GET['from'] : null;
+$from = $_GET['from'] ?? null;
 $origin = api_get_origin();
 $lpShowMaxProgress = api_get_configuration_value('lp_show_max_progress_instead_of_average');
 if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_level_redefinition')) {
@@ -42,7 +35,7 @@ if (api_get_configuration_value('lp_show_max_progress_or_average_enable_course_l
 }
 
 // Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 $htmlHeadXtra[] = ' ';
@@ -64,40 +57,6 @@ if (isset($parameters['user_active'])) {
     $additionalParams .= '&user_active='.(int) $parameters['user_active'];
 }
 
-// If the user is a HR director (drh)
-if (api_is_drh()) {
-    // Blocking course for drh
-    if (api_drh_can_access_all_session_content()) {
-        // If the drh has been configured to be allowed to see all session content, give him access to the session courses
-        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
-        $coursesFromSessionCodeList = [];
-        if (!empty($coursesFromSession)) {
-            foreach ($coursesFromSession as $course) {
-                $coursesFromSessionCodeList[$course['code']] = $course['code'];
-            }
-        }
-
-        $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-        if (!empty($coursesFollowedList)) {
-            $coursesFollowedList = array_keys($coursesFollowedList);
-        }
-
-        if (!in_array($courseCode, $coursesFollowedList)) {
-            if (!in_array($courseCode, $coursesFromSessionCodeList)) {
-                api_not_allowed(true);
-            }
-        }
-    } else {
-        // If the drh has *not* been configured to be allowed to see all session content,
-        // then check if he has also been given access to the corresponding courses
-        $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-        $coursesFollowedList = array_keys($coursesFollowedList);
-        if (!in_array($courseCode, $coursesFollowedList)) {
-            api_not_allowed(true);
-        }
-    }
-}
-
 if ($export_csv || isset($_GET['csv'])) {
     if (!empty($sessionId)) {
         Session::write('id_session', $sessionId);
@@ -110,13 +69,11 @@ if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['column
     $columnsToHide = $columnsToHideFromSetting['columns'];
 }
 $columnsToHide = json_encode($columnsToHide);
-$csv_content = [];
 
 $visibleIcon = Display::return_icon(
     'visible.png',
     get_lang('HideColumn'),
-    ['align' => 'absmiddle', 'hspace' => '3px'],
-    ICON_SIZE_SMALL
+    ['align' => 'absmiddle', 'hspace' => '3px']
 );
 
 $exportInactiveUsers = api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&'.$additionalParams;
@@ -168,6 +125,10 @@ $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
+$userEditionExtraFieldToCheck = api_get_configuration_value('user_edition_extra_field_to_check');
+
+$objExtrafieldUser = new ExtraField('user');
+
 // Breadcrumbs.
 if ('resume_session' === $origin) {
     $interbreadcrumb[] = [
@@ -184,7 +145,7 @@ if ('resume_session' === $origin) {
     ];
 }
 
-$view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
+$view = $_REQUEST['view'] ?? '';
 $nameTools = get_lang('Tracking');
 
 $tpl = new Template($nameTools);
@@ -238,7 +199,7 @@ if (isset($_GET['additional_profile_field'])) {
             $fieldId,
             $user_array
         );
-        $extra_info[$fieldId] = UserManager::get_extra_field_information($fieldId);
+        $extra_info[$fieldId] = $objExtrafieldUser->getFieldInfoByFieldId($fieldId);
     }
 }
 
@@ -253,11 +214,6 @@ if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSett
     $defaultExtraInfo = [];
     $defaultUserProfileInfo = [];
 
-    $userArray = [];
-    foreach ($studentList as $key => $item) {
-        $userArray[] = $key;
-    }
-
     foreach ($defaultExtraFields as $fieldName) {
         $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
 
@@ -265,7 +221,7 @@ if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSett
             // Fetching only the user that are loaded NOT ALL user in the portal.
             $defaultUserProfileInfo[$extraFieldInfo['id']] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
                 $extraFieldInfo['id'],
-                $userArray
+                $user_ids
             );
             $defaultExtraInfo[$extraFieldInfo['id']] = $extraFieldInfo;
         }
@@ -280,7 +236,7 @@ Display::display_header($nameTools, 'Tracking');
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
 
 $actionsRight = '<div class="pull-right">';
-$actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
+$actionsRight .= '<a href="javascript: void(0);" onclick="window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $users_tracking_per_page = '';
@@ -313,58 +269,21 @@ echo Display::toolbarAction(
     [$actionsLeft, $form_search->returnForm(), $actionsRight],
     [4, 6, 2]
 );
-
-$course_name = get_lang('Course').' '.$courseInfo['name'];
-
-if ($sessionId) {
-    $titleSession = Display::return_icon(
-            'session.png',
-            get_lang('Session'),
-            [],
-            ICON_SIZE_SMALL
-        ).' '.Security::remove_XSS(api_get_session_name($sessionId));
-    $titleCourse = Display::return_icon(
-            'course.png',
-            get_lang('Course'),
-            [],
-            ICON_SIZE_SMALL
-        ).' '.$course_name;
-} else {
-    $titleSession = Display::return_icon(
-            'course.png',
-            get_lang('Course'),
-            [],
-            ICON_SIZE_SMALL
-        ).' '.$courseInfo['name'];
-}
-
-$teacherList = CourseManager::getTeacherListFromCourseCodeToString(
-    $courseInfo['code'],
-    ',',
-    true,
-    true
+echo Display::page_header(
+    Display::return_icon('course.png', get_lang('Course')).PHP_EOL
+        .$courseInfo['name'],
+    $sessionId
+        ? Display::return_icon('session.png', get_lang('Session')).PHP_EOL
+            .Security::remove_XSS(api_get_session_name($sessionId))
+        : null
 );
 
-$coaches = null;
-if (!empty($sessionId)) {
-    $coaches = CourseManager::get_coachs_from_course_to_string(
-        $sessionId,
-        $courseInfo['real_id'],
-        ',',
-        true,
-        true
-    );
-}
-$html = '';
-if (!empty($teacherList)) {
-    $html .= Display::page_subheader2(get_lang('Teachers'));
-    $html .= $teacherList;
-}
-
-if (!empty($coaches)) {
-    $html .= Display::page_subheader2(get_lang('Coaches'));
-    $html .= $coaches;
-}
+$html = TrackingCourseLog::getTeachersOrCoachesHtmlHeader(
+    $courseInfo['code'],
+    $courseInfo['real_id'],
+    $sessionId,
+    true
+);
 
 $showReporting = api_get_configuration_value('hide_reporting_session_list') === false;
 if ($showReporting) {
@@ -404,14 +323,14 @@ if ($showReporting) {
 
 $trackingColumn = $_GET['users_tracking_column'] ?? null;
 $trackingDirection = $_GET['users_tracking_direction'] ?? null;
-$hideReports = api_get_configuration_value('hide_course_report_graph');
-$allowExtendedSort = false === $hideReports;
-$conditions = [];
+$hideReports = (int) api_get_configuration_value('hide_course_report_graph');
 
 $groupList = GroupManager::get_group_list(null, $courseInfo, 1, $sessionId);
 
 $class = new UserGroup();
 $classes = $class->get_all();
+
+$bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
 
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0 || isset($parameters['user_active'])) {
@@ -438,7 +357,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $formClass->addButtonSearch(get_lang('Search'));
 
     // Filter by ex learners
-    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+    if (false !== $userEditionExtraFieldToCheck) {
         $formExLearners = new FormValidator(
             'form_exlearners',
             'get',
@@ -468,20 +387,24 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $formGroup->addSelect('group_id', get_lang('Group'), $groupIdList);
     $formGroup->addButtonSearch(get_lang('Search'));*/
 
-    // Extra fields
-    $formExtraField = new FormValidator(
-        'extra_fields',
-        'get',
-        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
-    );
-    $formExtraField->addHidden('cidReq', $courseCode);
-    $formExtraField->addHidden('id_session', $sessionId);
     if (isset($_GET['additional_profile_field'])) {
+        // Extra fields
+        $formExtraField = new FormValidator(
+            'extra_fields',
+            'get',
+            api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
+        );
+        $formExtraField->addHidden('cidReq', $courseCode);
+        $formExtraField->addHidden('id_session', $sessionId);
+
         foreach ($_GET['additional_profile_field'] as $fieldId) {
             $fieldId = Security::remove_XSS($fieldId);
             $formExtraField->addHidden('additional_profile_field[]', $fieldId);
             $formClass->addHidden('additional_profile_field[]', $fieldId);
         }
+
+        $objExtrafieldUser->addElements($formExtraField, 0, [], true);
+        $formExtraField->addButtonSearch(get_lang('Search'));
     }
 
     // Filter by active users
@@ -500,26 +423,6 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     if (isset($parameters['user_active'])) {
         $formActiveUsers->setDefaults(['user_active' => $parameters['user_active']]);
     }
-
-    $extraField = new ExtraField('user');
-    $extraField->addElements($formExtraField, 0, [], true);
-    $formExtraField->addButtonSearch(get_lang('Search'));
-
-    $numberStudentsCompletedLP = 0;
-    $averageStudentsTestScore = 0;
-    $scoresDistribution = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    $userScoreList = [];
-    $listStudentIds = [];
-    $timeStudent = [];
-    $certificateCount = 0;
-    $category = Category::load(
-        null,
-        null,
-        $courseCode,
-        null,
-        null,
-        $sessionId
-    );
 
     $conditions = [];
     $fields = [];
@@ -552,7 +455,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
             $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
         }
     }
-    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+    if (false !== $userEditionExtraFieldToCheck) {
         if ($formExLearners->validate()) {
             $formValue = $formExLearners->getSubmitValue('exlearner');
             if (isset($formValue['opt_exlearner']) && 1 == $formValue['opt_exlearner']) {
@@ -561,13 +464,12 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
                     $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                     $joins = " INNER JOIN $tableSessionCourseUser scu ON scu.user_id = user.id ";
                     $whereCondition = " AND scu.status !=  ".COURSE_EXLEARNER." AND scu.c_id = '".api_get_course_int_id()."' AND scu.session_id = $sessionId";
-                    $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
                 } else {
                     $tableCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                     $joins = " INNER JOIN $tableCourseUser cu ON cu.user_id = user.id ";
                     $whereCondition = " AND cu.relation_type !=  ".COURSE_EXLEARNER." AND cu.c_id = '".api_get_course_int_id()."'";
-                    $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
                 }
+                $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
             }
         }
     }
@@ -591,89 +493,103 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         }
     }*/
 
-    if ($formExtraField->validate()) {
-        $extraResult = $extraField->processExtraFieldSearch($_REQUEST, $formExtraField, 'user');
+    if (isset($formExtraField) && $formExtraField->validate()) {
+        $extraResult = $objExtrafieldUser->processExtraFieldSearch($_REQUEST, $formExtraField, 'user');
         if (!empty($extraResult)) {
             $conditions = $extraResult['condition'];
             $fields = $extraResult['fields'];
         }
     }
 
-    if ($hideReports === false) {
-        $conditions['include_invited_users'] = false;
-        $usersTracking = TrackingCourseLog::get_user_data(
-            0,
-            $nbStudents,
-            $trackingColumn,
-            $trackingDirection,
-            $conditions
+    if (TrackingCourseLog::HIDE_COURSE_REPORT_GRAPH_HIDDEN !== $hideReports) {
+        Session::write(
+            'course_log_args',
+            [
+                'parameters' => $parameters,
+                'conditions' => $conditions,
+            ]
         );
-        foreach ($usersTracking as $userTracking) {
-            $userInfo = api_get_user_info_from_username($userTracking[3]);
-            if (empty($userInfo)) {
-                continue;
-            }
-            $userId = $userInfo['user_id'];
-            if ('100%' === $userTracking[5]) {
-                $numberStudentsCompletedLP++;
-            }
-            $averageStudentTestScore = substr($userTracking[7], 0, -1);
-            $averageStudentsTestScore += $averageStudentTestScore;
 
-            if ('100' === $averageStudentTestScore) {
-                $reducedAverage = 9;
-            } else {
-                $reducedAverage = floor($averageStudentTestScore / 10);
-            }
-            if (isset($scoresDistribution[$reducedAverage])) {
-                $scoresDistribution[$reducedAverage]++;
-            }
-            $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
-            [$hours, $minutes, $seconds] = preg_split('/:/', $userTracking[4]);
-            $minutes = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
+        echo '<script>
+            $(function () {
+                function loadGraphs () {
+                    $("#tracking-course-summary-wrapper .skeleton").addClass("skeleton--loading");
+                    $("#tracking-course-summary-wrapper")
+                        .load(_p.web_ajax + "course_log.ajax.php?a=graph&'.api_get_cidreq().'");
+                }
+        ';
 
-            $certificate = false;
-            if (isset($category[0]) && $category[0]->is_certificate_available($userId)) {
-                $certificate = true;
-                $certificateCount++;
-            }
-
-            $listStudent = [
-                'id' => $userId,
-                'fullname' => $userInfo['complete_name'],
-                'score' => floor($scoreStudent / 2),
-                'total_time' => $minutes,
-                'avatar' => $userInfo['avatar'],
-                'certicate' => $certificate,
-            ];
-            $listStudentIds[] = $userId;
-            $userScoreList[] = $listStudent;
+        if (TrackingCourseLog::HIDE_COURSE_REPORT_GRAPH_SHOWN === $hideReports) {
+            echo 'loadGraphs();';
         }
 
-        uasort($userScoreList, 'sort_by_order');
-        $averageStudentsTestScore = 0;
-        if ($nbStudents > 0) {
-            $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
+        if (TrackingCourseLog::HIDE_COURSE_REPORT_GRAPH_CLICK_SHOW === $hideReports) {
+            echo '$("#tracking-course-summary-loader").click(function () {
+                    $(this).remove();
+                    loadGraphs();
+                });
+            ';
         }
 
-        $colors = ChamiloApi::getColorPalette(true, true, 10);
-        $tpl->assign('chart_colors', json_encode($colors));
-        $tpl->assign('certificate_count', $certificateCount);
-        $tpl->assign('score_distribution', json_encode($scoresDistribution));
-        $tpl->assign('json_time_student', json_encode($userScoreList));
-        $tpl->assign('students_test_score', $averageStudentsTestScore);
-        $tpl->assign('students_completed_lp', $numberStudentsCompletedLP);
-        $tpl->assign('number_students', $nbStudents);
-        $tpl->assign('top_students', $userScoreList);
+        echo '});
+            </script>
+            <style>
+                #tracking-course-summary-wrapper {
+                    position: relative;
+                    z-index: 998;
+                }
+                #tracking-course-summary-loader {
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    -webkit-transform: translate(-50%, -50%);
+                    -moz-transform: translate(-50%, -50%);
+                    -o-transform: translate(-50%, -50%);
+                    transform: translate(-50%, -50%);
+                    z-index: 999;
+                }
+            </style>
+            <div id="tracking-course-summary-wrapper">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-3">
+                        <div class="skeleton" style="height: 82px;"></div>
+                    </div>
+                    <div class="col-lg-3 col-sm-3">
+                        <div class="skeleton" style="height: 82px;"></div>
+                    </div>
+                    <div class="col-lg-3 col-sm-3">
+                        <div class="skeleton" style="height: 82px;"></div>
+                    </div>
+                    <div class="col-lg-3 col-sm-3">
+                        <div class="skeleton" style="height: 82px;"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="skeleton" style="height: 241px;"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="skeleton" style="height: 241px;"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="skeleton" style="height: 241px;"></div>
+                    </div>
+                </div>
+        ';
 
-        echo $tpl->fetch($tpl->get_template('tracking/tracking_course_log.tpl'));
+        if (TrackingCourseLog::HIDE_COURSE_REPORT_GRAPH_CLICK_SHOW === $hideReports) {
+            echo '<button type="button" class="btn btn-info" id="tracking-course-summary-loader">'
+                .Display::returnFontAwesomeIcon('bar-chart', '', true)
+                .get_lang('ClickToShowGraphs')
+                .'</button>
+            ';
+        }
+
+        echo '</div>';
     }
-}
 
-$html .= Display::page_subheader2(get_lang('StudentList'));
+    $html .= Display::page_subheader2(get_lang('StudentList'));
 
-$bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
-if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $mainForm = new FormValidator(
         'filter',
         'get',
@@ -683,20 +599,20 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         'advanced_search',
         [get_lang('AdvancedSearch')]
     );
-    $mainForm->addHtml('<div id="advanced_search_options" style="display:none;">');
-    $mainForm->addHtml($formClass->returnForm());
-    $mainForm->addHtml($formExtraField->returnForm());
-    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
-        $mainForm->addHtml($formExLearners->returnForm());
-    }
-    $mainForm->addHtml($formActiveUsers->returnForm());
-    $mainForm->addHtml('</div>');
     $html .= $mainForm->returnForm();
+
+    $html .= '<div id="advanced_search_options" style="display:none;">';
+    $html .= $formClass->returnForm();
+    $html .= isset($formExtraField) ? $formExtraField->returnForm() : '';
+    $html .= false !== $userEditionExtraFieldToCheck ? $formExLearners->returnForm() : '';
+    $html .= $formActiveUsers->returnForm();
+    $html .= '</div>';
+    $html .= '<hr>';
 
     $getLangXDays = get_lang('XDays');
     $form = new FormValidator(
         'reminder_form',
-        'post',
+        'get',
         api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
         null,
         ['style' => 'margin-bottom: 10px']
@@ -725,10 +641,10 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addButtonSend(get_lang('SendNotification'));
     $form->addLabel(get_lang('Export'), '<a id="download-csv" href="#!" class=" btn btn-default " > '.
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_SMALL).
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '').
         get_lang('ExportAsCSV')
     .' </a>');
-    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields($defaultExtraFields);
+    $extraFieldSelect = TrackingCourseLog::displayAdditionalProfileFields($defaultExtraFields);
     if (!empty($extraFieldSelect)) {
         $html .= $extraFieldSelect;
     }
@@ -736,55 +652,44 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $html .= $form->returnForm();
 
     if ($export_csv) {
-        $csv_content = [];
         //override the SortableTable "per page" limit if CSV
         $_GET['users_tracking_per_page'] = 1000000;
     }
 
-    if ($hideReports === false) {
-        $table = new SortableTableFromArray(
-            $usersTracking,
-            1,
-            20,
-            'users_tracking'
-        );
-        $table->total_number_of_items = $nbStudents;
-    } else {
-        $conditions['include_invited_users'] = true;
-        $table = new SortableTable(
-            'users_tracking',
-            ['TrackingCourseLog', 'get_number_of_users'],
-            ['TrackingCourseLog', 'get_user_data'],
-            1,
-            20
-        );
-        $table->setDataFunctionParams($conditions);
-    }
+    $conditions['include_invited_users'] = true;
+    $table = new SortableTable(
+        'users_tracking',
+        ['TrackingCourseLog', 'getNumberOfUsers'],
+        ['TrackingCourseLog', 'getUserData'],
+        1,
+        20
+    );
+    $table->setDataFunctionParams($conditions);
 
     $headerCounter = 0;
     $headers = [];
     // tab of header texts
-    $table->set_header($headerCounter++, get_lang('OfficialCode'), true);
+    $table->set_header($headerCounter++, get_lang('OfficialCode'));
     $headers['official_code'] = get_lang('OfficialCode');
     if ($sortByFirstName) {
-        $table->set_header($headerCounter++, get_lang('FirstName'), true);
-        $table->set_header($headerCounter++, get_lang('LastName'), true);
+        $table->set_header($headerCounter++, get_lang('FirstName'));
+        $table->set_header($headerCounter++, get_lang('LastName'));
         $headers['firstname'] = get_lang('FirstName');
         $headers['lastname'] = get_lang('LastName');
     } else {
-        $table->set_header($headerCounter++, get_lang('LastName'), true);
-        $table->set_header($headerCounter++, get_lang('FirstName'), true);
+        $table->set_header($headerCounter++, get_lang('LastName'));
+        $table->set_header($headerCounter++, get_lang('FirstName'));
         $headers['lastname'] = get_lang('LastName');
         $headers['firstname'] = get_lang('FirstName');
     }
-    $table->set_header($headerCounter++, get_lang('Login'), $allowExtendedSort);
+    $table->set_header($headerCounter++, get_lang('Login'), false);
     $headers['login'] = get_lang('Login');
 
     $table->set_header(
         $headerCounter++,
         get_lang('TrainingTime').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), [], ICON_SIZE_TINY),
-        $allowExtendedSort
+        false
     );
     $headers['training_time'] = get_lang('TrainingTime');
 
@@ -793,7 +698,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         $headerCounter++,
         get_lang('CourseProgress').'&nbsp;'.
         Display::return_icon('info3.gif', $courseProgressHeadTitle, [], ICON_SIZE_TINY),
-        $allowExtendedSort
+        false
     );
     $headers['course_progress'] = get_lang('CourseProgress');
 
@@ -801,14 +706,14 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         $headerCounter++,
         get_lang('ExerciseProgress').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), [], ICON_SIZE_TINY),
-        $allowExtendedSort
+        false
     );
     $headers['exercise_progress'] = get_lang('ExerciseProgress');
     $table->set_header(
         $headerCounter++,
         get_lang('ExerciseAverage').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), [], ICON_SIZE_TINY),
-        $allowExtendedSort
+        false
     );
     $headers['exercise_average'] = get_lang('ExerciseAverage');
 
@@ -816,7 +721,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         $headerCounter++,
         get_lang('Score').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), [], ICON_SIZE_TINY),
-        $allowExtendedSort
+        false
     );
     $headers['score'] = get_lang('Score');
 
@@ -824,7 +729,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         $headerCounter++,
         $bestScoreLabel.'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), [], ICON_SIZE_TINY),
-        $allowExtendedSort
+        false
     );
     $headers['score_best'] = $bestScoreLabel;
 
@@ -836,47 +741,47 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
             $exercise = new Exercise();
             $exercise->read($exerciseId);
-            if ($exercise->iId) {
+            if ($exercise->iid) {
                 $title = get_lang('Exercise').': '.$exercise->get_formated_title();
                 $table->set_header(
                     $headerCounter++,
                     $title,
-                    $allowExtendedSort
+                    false
                 );
                 $exerciseResultHeaders[] = $title;
-                $headers['exercise_'.$exercise->iId] = $title;
+                $headers['exercise_'.$exercise->iid] = $title;
             }
         }
     }
 
-    $table->set_header($headerCounter++, get_lang('Student_publication'), $allowExtendedSort);
+    $table->set_header($headerCounter++, get_lang('Student_publication'), false);
     $headers['student_publication'] = get_lang('Student_publication');
-    $table->set_header($headerCounter++, get_lang('Messages'), $allowExtendedSort);
+    $table->set_header($headerCounter++, get_lang('Messages'), false);
     $headers['messages'] = get_lang('Messages');
-    $table->set_header($headerCounter++, get_lang('Classes'), $allowExtendedSort);
+    $table->set_header($headerCounter++, get_lang('Classes'), false);
     $headers['classes'] = get_lang('Classes');
 
     if (empty($sessionId)) {
-        $table->set_header($headerCounter++, get_lang('Survey'), $allowExtendedSort);
+        $table->set_header($headerCounter++, get_lang('Survey'), false);
         $headers['survey'] = get_lang('Survey');
     } else {
-        $table->set_header($headerCounter++, get_lang('RegisteredDate'), $allowExtendedSort);
+        $table->set_header($headerCounter++, get_lang('RegisteredDate'), false);
         $headers['registered_at'] = get_lang('RegisteredDate');
     }
-    $table->set_header($headerCounter++, get_lang('FirstLoginInCourse'), $allowExtendedSort);
+    $table->set_header($headerCounter++, get_lang('FirstLoginInCourse'), false);
     $headers['first_login'] = get_lang('FirstLoginInCourse');
-    $table->set_header($headerCounter++, get_lang('LatestLoginInCourse'), $allowExtendedSort);
+    $table->set_header($headerCounter++, get_lang('LatestLoginInCourse'), false);
     $headers['latest_login'] = get_lang('LatestLoginInCourse');
 
     $counter = $headerCounter;
     if (api_get_setting('show_email_addresses') === 'true') {
-        $table->set_header($counter, get_lang('Email'), $allowExtendedSort);
+        $table->set_header($counter, get_lang('Email'), false);
         $headers['email'] = get_lang('Email');
         $counter++;
     }
     if (isset($_GET['additional_profile_field'])) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {
-            $table->set_header($counter, $extra_info[$fieldId]['display_text'], $allowExtendedSort);
+            $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
             $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
             $counter++;
             $parameters['additional_profile_field'] = $fieldId;
@@ -885,13 +790,13 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     if (isset($defaultExtraFields)) {
         if (!empty($defaultExtraInfo)) {
             foreach ($defaultExtraInfo as $field) {
-                $table->set_header($counter, $field['display_text'], $allowExtendedSort);
+                $table->set_header($counter, $field['display_text'], false);
                 $headers[$field['variable']] = $field['display_text'];
                 $counter++;
             }
         }
     }
-    $table->set_header($counter, get_lang('Details'), $allowExtendedSort);
+    $table->set_header($counter, get_lang('Details'), false);
     $headers['Details'] = get_lang('Details');
 
     if (!empty($fields)) {
@@ -926,11 +831,11 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $html .= $table->return_table();
     $html .= '</div>';
 } else {
-    $html .= Display::return_message(get_lang('NoUsersInCourse'), 'warning', true);
+    $html .= Display::return_message(get_lang('NoUsersInCourse'), 'warning');
 }
 
 $groupContent = '';
-echo Display::panel($html, $titleSession);
+echo Display::panel($html);
 
 $groupTable = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
 $column = 0;
@@ -1000,46 +905,13 @@ if (!empty($groupList)) {
                 $totalLpProgress += $totalGroupLpProgress;
             }
 
-            if (!empty($exerciseList)) {
-                foreach ($exerciseList as $exerciseData) {
-                    foreach ($usersInGroup as $userId) {
-                        $results = Event::get_best_exercise_results_by_user(
-                            $exerciseData['iid'],
-                            $courseInfo['real_id'],
-                            0,
-                            $userId
-                        );
-                        $best = 0;
-                        if (!empty($results)) {
-                            foreach ($results as $result) {
-                                if (!empty($result['exe_weighting'])) {
-                                    $score = $result['exe_result'] / $result['exe_weighting'];
-                                    if ($score > $best) {
-                                        $best = $score;
-                                    }
-                                }
-                            }
-                        }
-                        $bestScoreAverageNotInLP += $best;
-                    }
-                }
-                $bestScoreAverageNotInLP = round(
-                    $bestScoreAverageNotInLP / count($exerciseList) * 100 / $userInGroupCount,
-                    2
-                );
+            $bestScoreAverageNotInLP = TrackingCourseLog::calcBestScoreAverageNotInLP(
+                $exerciseList,
+                $usersInGroup,
+                (int) $courseInfo['real_id']
+            );
 
-                $totalBestScoreAverageNotInLP += $bestScoreAverageNotInLP;
-            }
-
-            if (empty($score)) {
-                $score = '';
-            }
-            if (empty($lpProgress)) {
-                $lpProgress = '';
-            }
-            if (empty($bestScoreAverageNotInLP)) {
-                $bestScoreAverageNotInLP = '';
-            }
+            $totalBestScoreAverageNotInLP += $bestScoreAverageNotInLP;
         }
 
         $groupTable->setCellContents($row, $column++, $time);
@@ -1072,11 +944,11 @@ if (!empty($groupList)) {
         $courseId,
         $sessionId
     );
-    $averageTime = null;
-    if (!empty($timeInSeconds)) {
-        $time = api_time_to_hms($timeInSeconds);
-        $averageTime = $timeInSeconds / $nbStudents;
-        $averageTime = api_time_to_hms($averageTime);
+    $time = api_time_to_hms($timeInSeconds);
+    if (empty($nbStudents)) {
+        $averageTime = api_time_to_hms($timeInSeconds);
+    } else {
+        $averageTime = api_time_to_hms($timeInSeconds / $nbStudents);
     }
     $totalLpProgress = 0;
     foreach ($studentIdList as $studentId) {
@@ -1095,39 +967,13 @@ if (!empty($groupList)) {
         $lpProgress = round($totalLpProgress / $nbStudents, 2).' %';
     }
     $totalBestScoreAverageNotInLP = 0;
-    $bestScoreAverageNotInLP = 0;
-    if (!empty($exerciseList)) {
-        foreach ($exerciseList as $exerciseData) {
-            foreach ($studentIdList as $userId) {
-                $results = Event::get_best_exercise_results_by_user(
-                    $exerciseData['iid'],
-                    $courseInfo['real_id'],
-                    $sessionId,
-                    $userId
-                );
-                $best = 0;
-                if (!empty($results)) {
-                    foreach ($results as $result) {
-                        if (!empty($result['exe_weighting'])) {
-                            $score = $result['exe_result'] / $result['exe_weighting'];
-                            if ($score > $best) {
-                                $best = $score;
-                            }
-                        }
-                    }
-                }
-
-                $bestScoreAverageNotInLP += $best;
-            }
-        }
-
-        if (!empty($nbStudents)) {
-            $bestScoreAverageNotInLP = round(
-                    $bestScoreAverageNotInLP / count($exerciseList) * 100 / $nbStudents,
-                    2
-                ).' %';
-        }
-    }
+    $bestScoreAverageNotInLP = (string) TrackingCourseLog::calcBestScoreAverageNotInLP(
+        $exerciseList,
+        $studentIdList,
+        (int) $courseInfo['real_id'],
+        $sessionId,
+        true
+    );
 
     $row = 1;
     $column = 0;
@@ -1138,7 +984,7 @@ if (!empty($groupList)) {
     $groupTable->setCellContents($row, $column++, $bestScoreAverageNotInLP);
 }
 
-echo Display::panel($groupTable->toHtml(), '');
+echo Display::panel($groupTable->toHtml());
 
 // Send the csv file if asked.
 if ($export_csv) {
@@ -1227,7 +1073,7 @@ if (isset($_GET['csv']) && $_GET['csv'] == 1) {
                     $fieldId,
                     $users
                 );
-                $extra_info[$fieldId] = UserManager::get_extra_field_information($fieldId);
+                $extra_info[$fieldId] = $objExtrafieldUser->getFieldInfoByFieldId($fieldId);
             }
         }
         $csv_content[] = $csv_headers;
@@ -1264,8 +1110,3 @@ if (isset($_GET['csv']) && $_GET['csv'] == 1) {
     }
 }
 Display::display_footer();
-
-function sort_by_order($a, $b)
-{
-    return $a['score'] <= $b['score'];
-}

@@ -214,34 +214,13 @@ if ($session_id) {
         ICON_SIZE_SMALL
     ).' '.$courseInfo['name'];
 }
-$teacherList = CourseManager::getTeacherListFromCourseCodeToString(
+
+$html = TrackingCourseLog::getTeachersOrCoachesHtmlHeader(
     $courseInfo['code'],
-    ',',
-    false,
-    true
+    $courseInfo['real_id'],
+    $session_id,
+    false
 );
-
-$coaches = null;
-if (!empty($session_id)) {
-    $coaches = CourseManager::get_coachs_from_course_to_string(
-        $session_id,
-        $courseInfo['real_id'],
-        ',',
-        false,
-        true
-    );
-}
-$html = '';
-
-if (!empty($teacherList)) {
-    $html .= Display::page_subheader2(get_lang('Teachers'));
-    $html .= $teacherList;
-}
-
-if (!empty($coaches)) {
-    $html .= Display::page_subheader2(get_lang('Coaches'));
-    $html .= $coaches;
-}
 
 if (api_is_platform_admin(true) ||
     api_is_session_general_coach()
@@ -279,7 +258,7 @@ if (count($a_students) > 0) {
 
     $table = new SortableTable(
         'users_tracking',
-        ['TrackingCourseLog', 'get_number_of_users'],
+        ['TrackingCourseLog', 'getNumberOfUsers'],
         ['TrackingCourseLog', 'getTotalTimeReport'],
         (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
     );

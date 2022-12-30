@@ -1922,14 +1922,15 @@ class Exercise
      * Note: leaves the questions in the database as "orphan" questions
      * (unless used by other tests).
      *
-     * @param bool $delete Whether to really delete the test (true) or only mark it (false = default)
+     * @param bool $delete          Whether to really delete the test (true) or only mark it (false = default)
+     * @param bool $deleteQuestions Whether to delete the test questions (true)
      *
      * @return bool Whether the operation was successful or not
      *
      * @author Olivier Brouckaert
      * @author Yannick Warnier
      */
-    public function delete(bool $delete = false): bool
+    public function delete(bool $delete = false, bool $deleteQuestions = false): bool
     {
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
@@ -1985,9 +1986,26 @@ class Exercise
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
         }
 
+        $questions = [];
+
+        if ($delete || $deleteQuestions) {
+            $questions = $this->getQuestionOrderedList(true);
+        }
+
+        if ($deleteQuestions) {
+            // Delete the questions of the test (this could delete questions reused on other tests)
+            foreach ($questions as $order => $questionId) {
+                $masterExerciseId = Question::getMasterQuizForQuestion($questionId);
+                if ($masterExerciseId == $this->iid) {
+                    $objQuestionTmp = Question::read($questionId);
+                    $objQuestionTmp->delete();
+                    $this->removeFromList($questionId);
+                }
+            }
+        }
+
         if ($delete) {
-            // Really delete the test (and orphan its questions)
-            $questions = $this->getQuestionOrderedList();
+            // Really delete the test (if questions were not previously deleted these will be orphaned)
             foreach ($questions as $order => $questionId) {
                 $question = Question::read($questionId, $this->course);
                 $question->delete($this->course_id);
@@ -3914,6 +3932,52 @@ class Exercise
             );
         }
 
+        if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])) {
+            if (MULTIPLE_ANSWER_DROPDOWN_GLOBAL == $answerType) {
+                $questionScore = $questionWeighting;
+            }
+
+            if ($from_database) {
+                $studentChoices = Database::store_result(
+                    Database::query(
+                        "SELECT answer FROM $TBL_TRACK_ATTEMPT WHERE exe_id = $exeId AND question_id = $questionId"
+                    ),
+                    'ASSOC'
+                );
+                $studentChoices = array_column($studentChoices, 'answer');
+            } else {
+                $studentChoices = array_values($choice);
+            }
+
+            $correctChoices = array_filter(
+                $answerMatching,
+                function ($answerId) use ($objAnswerTmp) {
+                    $index = array_search($answerId, $objAnswerTmp->iid);
+
+                    return true === (bool) $objAnswerTmp->correct[$index];
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+
+            $correctChoices = array_keys($correctChoices);
+
+            if (MULTIPLE_ANSWER_DROPDOWN_GLOBAL == $answerType
+                && (array_diff($studentChoices, $correctChoices) || array_diff($correctChoices, $studentChoices))
+            ) {
+                $questionScore = 0;
+            }
+
+            if ($show_result) {
+                echo ExerciseShowFunctions::displayMultipleAnswerDropdown(
+                    $this,
+                    $objAnswerTmp,
+                    $correctChoices,
+                    $studentChoices,
+                    $showTotalScoreAndUserChoicesInLastAttempt
+                );
+            }
+        }
+
         if ($debug) {
             error_log('-- Start answer loop --');
         }
@@ -4061,6 +4125,7 @@ class Exercise
                     $totalScore = $questionScore;
                     break;
                 case MULTIPLE_ANSWER:
+                case MULTIPLE_ANSWER_DROPDOWN:
                     if ($from_database) {
                         $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
@@ -4080,7 +4145,9 @@ class Exercise
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         $real_answers[$answerId] = (bool) $studentChoice;
 
-                        if (isset($studentChoice)) {
+                        if (isset($studentChoice)
+                            || (MULTIPLE_ANSWER_DROPDOWN == $answerType && in_array($answerAutoId, $choice))
+                        ) {
                             $correctAnswerId[] = $answerAutoId;
                             $questionScore += $answerWeighting;
                         }
@@ -4422,7 +4489,10 @@ class Exercise
 
                                 $found = false;
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
-                                    $correctAnswer = $listTeacherAnswerTemp[$j];
+                                    $correctAnswer = isset($listTeacherAnswerTemp[$j]) ? $listTeacherAnswerTemp[$j] : '';
+                                    if (is_array($listTeacherAnswerTemp)) {
+                                        $correctAnswer = implode('||', $listTeacherAnswerTemp);
+                                    }
 
                                     if (empty($correctAnswer)) {
                                         break;
@@ -4436,7 +4506,15 @@ class Exercise
                                     )) {
                                         $questionScore += $answerWeighting[$i];
                                         $totalScore += $answerWeighting[$i];
-                                        $listTeacherAnswerTemp[$j] = null;
+                                        if (is_array($listTeacherAnswerTemp)) {
+                                            $searchAnswer = array_search(api_htmlentities($studentAnswer), $listTeacherAnswerTemp);
+                                            if (false !== $searchAnswer) {
+                                                // Remove from array
+                                                unset($listTeacherAnswerTemp[$searchAnswer]);
+                                            }
+                                        } else {
+                                            $listTeacherAnswerTemp[$j] = null;
+                                        }
                                         $found = true;
                                     }
 
@@ -6182,9 +6260,24 @@ class Exercise
                         $questionDuration
                     );
                 }
-            } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
+            } elseif (
+                in_array(
+                    $answerType,
+                    [
+                        MULTIPLE_ANSWER,
+                        GLOBAL_MULTIPLE_ANSWER,
+                        MULTIPLE_ANSWER_DROPDOWN,
+                        MULTIPLE_ANSWER_DROPDOWN_GLOBAL,
+                    ]
+                )
+            ) {
                 if ($choice != 0) {
-                    $reply = array_keys($choice);
+                    if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])) {
+                        $reply = array_values($choice);
+                    } else {
+                        $reply = array_keys($choice);
+                    }
+
                     for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt(
@@ -6811,7 +6904,7 @@ class Exercise
 
         // 1.1 Admins, teachers and tutors can access to the exercise
         if ($filterByAdmin) {
-            if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor()) {
+            if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_session_general_coach()) {
                 return ['value' => true, 'message' => ''];
             }
         }
@@ -9184,7 +9277,8 @@ class Exercise
         $filterByResultDisabled = 0,
         $filterByAttempt = 0,
         $myActions = null,
-        $returnTable = false
+        $returnTable = false,
+        $isAllowedToEdit = null
     ) {
         //$allowDelete = Exercise::allowAction('delete');
         $allowClean = self::allowAction('clean_results');
@@ -9207,7 +9301,9 @@ class Exercise
             $autoLaunchAvailable = true;
         }
 
-        $is_allowedToEdit = api_is_allowed_to_edit(null, true);
+        if (!isset($isAllowedToEdit)) {
+            $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+        }
         $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : api_get_course_info();
         $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
         $courseId = $courseInfo['real_id'];
@@ -9227,7 +9323,7 @@ class Exercise
         $condition_session = api_get_session_condition($sessionId, true, true, 'e.session_id');
         $content = '';
         $column = 0;
-        if ($is_allowedToEdit) {
+        if ($isAllowedToEdit) {
             $column = 1;
         }
 
@@ -9268,7 +9364,7 @@ class Exercise
         }
 
         // Only for administrators
-        if ($is_allowedToEdit) {
+        if ($isAllowedToEdit) {
             $total_sql = "SELECT count(iid) as count
                           FROM $TBL_EXERCISES e
                           WHERE
@@ -9375,7 +9471,7 @@ class Exercise
         }
 
         //get HotPotatoes files (active and inactive)
-        if ($is_allowedToEdit) {
+        if ($isAllowedToEdit) {
             $sql = "SELECT * FROM $TBL_DOCUMENT
                     WHERE
                         c_id = $courseId AND
@@ -9525,7 +9621,7 @@ class Exercise
                     }
 
                     // Teacher only
-                    if ($is_allowedToEdit) {
+                    if ($isAllowedToEdit) {
                         $lp_blocked = null;
                         if ($exercise->exercise_was_added_in_lp == true) {
                             $lp_blocked = Display::div(
@@ -10064,7 +10160,7 @@ class Exercise
 
                     $currentRow['attempt'] = $attempt_text;
 
-                    if ($is_allowedToEdit) {
+                    if ($isAllowedToEdit) {
                         $additionalActions = ExerciseLib::getAdditionalTeacherActions($row['iid']);
 
                         if (!empty($additionalActions)) {
@@ -10119,7 +10215,7 @@ class Exercise
 
         // end exercise list
         // Hotpotatoes results
-        if ($is_allowedToEdit) {
+        if ($isAllowedToEdit) {
             $sql = "SELECT d.iid, d.path as path, d.comment as comment
                     FROM $TBL_DOCUMENT d
                     WHERE
@@ -10155,7 +10251,7 @@ class Exercise
                 }
 
                 // prof only
-                if ($is_allowedToEdit) {
+                if ($isAllowedToEdit) {
                     $visibility = api_get_item_visibility(
                         ['real_id' => $courseId],
                         TOOL_DOCUMENT,
@@ -10286,7 +10382,7 @@ class Exercise
         }
 
         if (empty($tableRows) && empty($categoryId)) {
-            if ($is_allowedToEdit && $origin !== 'learnpath') {
+            if ($isAllowedToEdit && $origin !== 'learnpath') {
                 $content .= '<div id="no-data-view">';
                 $content .= '<h3>'.get_lang('Quiz').'</h3>';
                 $content .= Display::return_icon('quiz.png', '', [], 64);
@@ -10316,7 +10412,7 @@ class Exercise
                 'category_id' => $categoryId,
             ]);
 
-            if ($is_allowedToEdit) {
+            if ($isAllowedToEdit) {
                 $formActions = [];
                 $formActions['visible'] = get_lang('Activate');
                 $formActions['invisible'] = get_lang('Deactivate');
@@ -10325,12 +10421,12 @@ class Exercise
             }
 
             $i = 0;
-            if ($is_allowedToEdit) {
+            if ($isAllowedToEdit) {
                 $table->set_header($i++, '', false, 'width="18px"');
             }
             $table->set_header($i++, get_lang('ExerciseName'), false);
 
-            if ($is_allowedToEdit) {
+            if ($isAllowedToEdit) {
                 $table->set_header($i++, get_lang('QuantityQuestions'), false);
                 $table->set_header($i++, get_lang('Actions'), false);
             } else {
@@ -11019,8 +11115,12 @@ class Exercise
                     $tempResult = [];
                     foreach ($labelsWithId as $category_id => $title) {
                         if (isset($categoryList[$category_id])) {
-                            $category_item = $categoryList[$category_id];
-                            $tempResult[] = round($category_item['score'] / $category_item['total'] * 10);
+                            $categoryItem = $categoryList[$category_id];
+                            if ($categoryItem['total'] > 0) {
+                                $tempResult[] = round($categoryItem['score'] / $categoryItem['total'] * 10);
+                            } else {
+                                $tempResult[] = 0;
+                            }
                         } else {
                             $tempResult[] = 0;
                         }
@@ -11079,11 +11179,12 @@ class Exercise
                     $categoryList = $stats['category_list'];
                     foreach ($labelsWithId as $category_id => $title) {
                         if (isset($categoryList[$category_id])) {
-                            $category_item = $categoryList[$category_id];
+                            $categoryItem = $categoryList[$category_id];
                             if (!isset($tempResult[$exerciseId][$category_id])) {
                                 $tempResult[$exerciseId][$category_id] = 0;
                             }
-                            $tempResult[$exerciseId][$category_id] += $category_item['score'] / $category_item['total'] * 10;
+                            $tempResult[$exerciseId][$category_id] +=
+                                $categoryItem['score'] / $categoryItem['total'] * 10;
                         }
                     }
                 }
@@ -11603,6 +11704,30 @@ class Exercise
         }
 
         return $questionList;
+    }
+
+    /**
+     * Returns a literal for the given numerical feedback type (usually
+     * coming from the DB or a constant). The literal is also the string
+     * used to get the translation, not the translation itself as it is
+     * more vulnerable to changes.
+     */
+    public static function getFeedbackTypeLiteral(int $feedbackType): string
+    {
+        $feedbackType = (int) $feedbackType;
+        $result = '';
+        static $arrayFeedbackTypes = [
+            EXERCISE_FEEDBACK_TYPE_END => 'ExerciseAtTheEndOfTheTest',
+            EXERCISE_FEEDBACK_TYPE_DIRECT => 'DirectFeedback',
+            EXERCISE_FEEDBACK_TYPE_EXAM => 'NoFeedback',
+            EXERCISE_FEEDBACK_TYPE_POPUP => 'ExerciseDirectPopUp',
+        ];
+
+        if (array_key_exists($feedbackType, $arrayFeedbackTypes)) {
+            $result = $arrayFeedbackTypes[$feedbackType];
+        }
+
+        return $result;
     }
 
     /**

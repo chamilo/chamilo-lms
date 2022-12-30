@@ -122,6 +122,11 @@ class ExerciseLib
             $objAnswerTmp = new Answer($questionId, $course_id, $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
             $quizQuestionOptions = Question::readQuestionOption($questionId, $course_id);
+            $selectableOptions = [];
+
+            for ($i = 1; $i <= $objAnswerTmp->nbrAnswers; $i++) {
+                $selectableOptions[$objAnswerTmp->iid[$i]] = $objAnswerTmp->answer[$i];
+            }
 
             // For "matching" type here, we need something a little bit special
             // because the match between the suggestions and the answers cannot be
@@ -335,6 +340,18 @@ class ExerciseLib
                     );
                     $form->addHtml('</div>');
                     $s .= $form->returnForm();
+                    break;
+                case MULTIPLE_ANSWER_DROPDOWN:
+                case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+                    if ($debug_mark_answer) {
+                        $s .= '<p><strong>'
+                            .(
+                                MULTIPLE_ANSWER_DROPDOWN == $answerType
+                                    ? '<span class="pull-right">'.get_lang('Weighting').'</span>'
+                                    : ''
+                            )
+                            .get_lang('CorrectAnswer').'</strong></p>';
+                    }
                     break;
             }
 
@@ -1451,11 +1468,70 @@ HTML;
                             $matching_correct_answer++;
                         }
                         break;
+                    case MULTIPLE_ANSWER_DROPDOWN:
+                    case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+                        if ($debug_mark_answer && $answerCorrect) {
+                            $s .= '<p>'
+                                .(
+                                    MULTIPLE_ANSWER_DROPDOWN == $answerType
+                                        ? '<span class="pull-right">'.$objAnswerTmp->weighting[$answerId].'</span>'
+                                        : ''
+                                )
+                                .Display::returnFontAwesomeIcon('check-square-o', '', true);
+                            $s .= Security::remove_XSS($objAnswerTmp->answer[$answerId]).'</p>';
+                        }
+                        break;
                 }
             }
 
+            if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_GLOBAL])
+                && !$debug_mark_answer
+            ) {
+                $userChoiceList = array_unique($userChoiceList);
+                $input_id = "choice-$questionId";
+
+                $s .= Display::input('hidden', "choice2[$questionId]", '0')
+                    .'<p>'
+                    .Display::select(
+                        "choice[$questionId][]",
+                        $selectableOptions,
+                        $userChoiceList,
+                        [
+                            'id' => $input_id,
+                            'multiple' => 'multiple',
+                        ],
+                        false
+                    )
+                    .'</p>'
+                    .'<script>$(function () {
+                            $(\'#'.$input_id.'\').select2({
+                                selectOnClose: false,
+                                placeholder: {id: -2, text: "'.get_lang('None').'"}
+                            });
+                        });</script>'
+                    .'<style>
+                        .select2-container--default .select2-selection--multiple .select2-selection__rendered li {
+                            display:block;
+                            width: 100%;
+                            white-space: break-spaces;
+                        }</style>'
+                ;
+            }
+
             if ($show_comment) {
-                $s .= '</table>';
+                if (in_array(
+                    $answerType,
+                    [
+                        MULTIPLE_ANSWER,
+                        MULTIPLE_ANSWER_COMBINATION,
+                        UNIQUE_ANSWER,
+                        UNIQUE_ANSWER_IMAGE,
+                        UNIQUE_ANSWER_NO_OPTION,
+                        GLOBAL_MULTIPLE_ANSWER,
+                    ]
+                )) {
+                    $s .= '</table>';
+                }
             } elseif (in_array(
                 $answerType,
                 [
@@ -5114,7 +5190,13 @@ EOT;
         }
 
         // Display text when test is finished #4074 and for LP #4227
-        $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished());
+        // Allows to do a remove_XSS for end text result of exercise with
+        // user status COURSEMANAGERLOWSECURITY BT#20194
+        if (true === api_get_configuration_value('exercise_result_end_text_html_strict_filtering')) {
+            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished(), COURSEMANAGERLOWSECURITY);
+        } else {
+            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished());
+        }
         if (!empty($endOfMessage)) {
             echo Display::div(
                 $endOfMessage,
@@ -5176,8 +5258,8 @@ EOT;
                     continue;
                 }
 
-                $total_score += $result['score'];
-                $total_weight += $result['weight'];
+                $total_score += (float) $result['score'];
+                $total_weight += (float) $result['weight'];
 
                 $question_list_answers[] = [
                     'question' => $result['open_question'],
@@ -6131,6 +6213,8 @@ EOT;
             UPLOAD_ANSWER,
             MATCHING_GLOBAL,
             FILL_IN_BLANKS_GLOBAL,
+            MULTIPLE_ANSWER_DROPDOWN,
+            MULTIPLE_ANSWER_DROPDOWN_GLOBAL,
         ];
         $defaultTypes = [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE];
         $types = $defaultTypes;

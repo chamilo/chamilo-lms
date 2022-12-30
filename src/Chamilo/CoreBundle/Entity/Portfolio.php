@@ -31,6 +31,10 @@ class Portfolio
     public const TYPE_ITEM = 1;
     public const TYPE_COMMENT = 2;
 
+    public const VISIBILITY_HIDDEN = 0;
+    public const VISIBILITY_VISIBLE = 1;
+    public const VISIBILITY_HIDDEN_EXCEPT_TEACHER = 2;
+
     /**
      * @var int
      *
@@ -94,9 +98,9 @@ class Portfolio
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_visible", type="boolean", options={"default": true})
+     * @ORM\Column(name="visibility", type="smallint", options={"default": 1})
      */
-    protected $isVisible = true;
+    protected $visibility = 1;
 
     /**
      * @var \Chamilo\CoreBundle\Entity\PortfolioCategory
@@ -132,6 +136,20 @@ class Portfolio
      * @ORM\Column(name="score", type="float", nullable=true)
      */
     private $score;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_highlighted", type="boolean", options={"default": false})
+     */
+    private $isHighlighted = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_template", type="boolean", options={"default": false})
+     */
+    private $isTemplate = false;
 
     /**
      * Portfolio constructor.
@@ -224,11 +242,13 @@ class Portfolio
 
     /**
      * Get title.
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle(bool $stripTags = false): string
     {
+        if ($stripTags) {
+            return strip_tags($this->title);
+        }
+
         return $this->title;
     }
 
@@ -312,26 +332,20 @@ class Portfolio
 
     /**
      * Set isVisible.
-     *
-     * @param bool $isVisible
-     *
-     * @return Portfolio
      */
-    public function setIsVisible($isVisible)
+    public function setVisibility(int $visibility): Portfolio
     {
-        $this->isVisible = $isVisible;
+        $this->visibility = $visibility;
 
         return $this;
     }
 
     /**
      * Get isVisible.
-     *
-     * @return bool
      */
-    public function isVisible()
+    public function getVisibility(): int
     {
-        return $this->isVisible;
+        return $this->visibility;
     }
 
     /**
@@ -414,5 +428,29 @@ class Portfolio
     public function setScore(?float $score): void
     {
         $this->score = $score;
+    }
+
+    public function isHighlighted(): bool
+    {
+        return $this->isHighlighted;
+    }
+
+    public function setIsHighlighted(bool $isHighlighted): Portfolio
+    {
+        $this->isHighlighted = $isHighlighted;
+
+        return $this;
+    }
+
+    public function isTemplate(): bool
+    {
+        return $this->isTemplate;
+    }
+
+    public function setIsTemplate(bool $isTemplate): Portfolio
+    {
+        $this->isTemplate = $isTemplate;
+
+        return $this;
     }
 }

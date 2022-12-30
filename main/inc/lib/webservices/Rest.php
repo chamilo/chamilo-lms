@@ -36,10 +36,12 @@ class Rest extends WebService
     public const VIEW_MESSAGE = 'view_message';
 
     public const GET_USER_COURSES = 'user_courses';
+    public const GET_USER_COURSES_BY_DATES = 'user_courses_by_dates';
     public const GET_USER_SESSIONS = 'user_sessions';
 
     public const VIEW_PROFILE = 'view_user_profile';
     public const GET_PROFILE = 'user_profile';
+    public const GET_PROFILES_BY_EXTRA_FIELD = 'users_profiles_by_extra_field';
 
     public const VIEW_MY_COURSES = 'view_my_courses';
     public const VIEW_COURSE_HOME = 'view_course_home';
@@ -58,6 +60,7 @@ class Rest extends WebService
     public const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     public const GET_COURSE_LINKS = 'course_links';
     public const GET_COURSE_WORKS = 'course_works';
+    public const GET_COURSES_DETAILS_BY_EXTRA_FIELD = 'courses_details_by_extra_field';
 
     public const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
 
@@ -124,6 +127,8 @@ class Rest extends WebService
     public const CHECK_CONDITIONAL_LOGIN = 'check_conditional_login';
     public const GET_LEGAL_CONDITIONS = 'get_legal_conditions';
     public const UPDATE_CONDITION_ACCEPTED = 'update_condition_accepted';
+    public const GET_TEST_UPDATES_LIST = 'get_test_updates_list';
+    public const GET_TEST_AVERAGE_RESULTS_LIST = 'get_test_average_results_list';
 
     /**
      * @var Session
@@ -389,9 +394,17 @@ class Rest extends WebService
 
     /**
      * Get the user courses.
+     *
+     * @throws Exception
      */
     public function getUserCourses($userId = 0): array
     {
+        if (!empty($userId)) {
+            if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+                self::throwNotAllowedException();
+            }
+        }
+
         if (empty($userId)) {
             $userId = $this->user->getId();
         }
@@ -982,9 +995,147 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * It gets the courses and visible tests of a user by dates.
+     *
+     * @throws Exception
      */
-    public function getUserProfile()
+    public function getUserCoursesByDates(int $userId, string $startDate, string $endDate): array
+    {
+        self::protectAdminEndpoint();
+        $userCourses = CourseManager::get_courses_list_by_user_id($userId);
+        $courses = [];
+        if (!empty($userCourses)) {
+            foreach ($userCourses as $course) {
+                $courseCode = $course['code'];
+                $courseId = $course['real_id'];
+                $exercises = Exercise::exerciseGrid(
+                    0,
+                    '',
+                    0,
+                    $courseId,
+                    0,
+                    true,
+                    0,
+                    0,
+                    0,
+                    null,
+                    false,
+                    false
+                );
+                $trackExercises = Tracking::getUserTrackExerciseByDates(
+                    $userId,
+                    $courseId,
+                    $startDate,
+                    $endDate
+                );
+                $takenExercises = [];
+                if (!empty($trackExercises)) {
+                    $totalSore = 0;
+                    foreach ($trackExercises as $track) {
+                        $takenExercises[] = $track['title'];
+                        $totalSore += $track['score'];
+                    }
+                    $avgScore = round($totalSore / count($trackExercises));
+                    $takenExercises['avg_score'] = $avgScore;
+                }
+                $courses[] = [
+                    'course_code' => $courseCode,
+                    'course_title' => $course['title'],
+                    'visible_tests' => $exercises,
+                    'taken_tests' => $takenExercises,
+                ];
+            }
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Get the list of courses from extra field included count of visible exercises.
+     *
+     * @throws Exception
+     */
+    public function getCoursesByExtraField(string $fieldName, string $fieldValue): array
+    {
+        self::protectAdminEndpoint();
+        $extraField = new ExtraField('course');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($fieldName);
+
+        if (empty($extraFieldInfo)) {
+            throw new Exception("$fieldName not found");
+        }
+
+        $extraFieldValue = new ExtraFieldValue('course');
+        $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $fieldName,
+            $fieldValue,
+            false,
+            false,
+            true
+        );
+
+        $courses = [];
+        foreach ($items as $item) {
+            $courseId = $item['item_id'];
+            $courses[$courseId] = api_get_course_info_by_id($courseId);
+            $exercises = Exercise::exerciseGrid(
+                0,
+                '',
+                0,
+                $courseId,
+                0,
+                true,
+                0,
+                0,
+                0,
+                null,
+                false,
+                false
+            );
+            $courses[$courseId]['count_visible_tests'] = count($exercises);
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Get the list of users from extra field.
+     *
+     * @throws Exception
+     */
+    public function getUsersProfilesByExtraField(string $fieldName, string $fieldValue): array
+    {
+        self::protectAdminEndpoint();
+        $users = [];
+        $extraValues = UserManager::get_extra_user_data_by_value(
+            $fieldName,
+            $fieldValue
+        );
+        if (!empty($extraValues)) {
+            foreach ($extraValues as $value) {
+                $userId = (int) $value;
+                $user = api_get_user_entity($userId);
+                $pictureInfo = UserManager::get_user_picture_path_by_id($user->getId(), 'web');
+                $users[$userId] = [
+                    'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
+                    'id' => $userId,
+                    'status' => $user->getStatus(),
+                    'fullName' => UserManager::formatUserFullName($user),
+                    'username' => $user->getUsername(),
+                    'officialCode' => $user->getOfficialCode(),
+                    'phone' => $user->getPhone(),
+                    'extra' => [],
+                ];
+            }
+        }
+
+        return $users;
+    }
+
+    /**
+     * Get one's own profile.
+     */
+    public function getUserProfile(): array
     {
         $pictureInfo = UserManager::get_user_picture_path_by_id($this->user->getId(), 'web');
 
@@ -1014,7 +1165,10 @@ class Rest extends WebService
         return $result;
     }
 
-    public function getCourseLpProgress()
+    /**
+     * Get one's own (avg) progress in learning paths.
+     */
+    public function getCourseLpProgress(): array
     {
         $sessionId = $this->session ? $this->session->getId() : 0;
         $userId = $this->user->getId();
@@ -1029,10 +1183,8 @@ class Rest extends WebService
 
     /**
      * @throws Exception
-     *
-     * @return array
      */
-    public function getCourseLearnPaths()
+    public function getCourseLearnPaths(): array
     {
         Event::event_access_tool(TOOL_LEARNPATH);
 
@@ -1146,10 +1298,8 @@ class Rest extends WebService
 
     /**
      * Start login for a user. Then make a redirect to show the learnpath.
-     *
-     * @param int $lpId
      */
-    public function showLearningPath($lpId)
+    public function showLearningPath(int $lpId)
     {
         $loggedUser['user_id'] = $this->user->getId();
         $loggedUser['status'] = $this->user->getStatus();
@@ -1373,14 +1523,16 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * @throws Exception
      */
-    public function getUsersCampus(array $params)
+    public function getUsersCampus(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $conditions = [
             'status' => $params['status'],
         ];
-        $idCampus = $params['id_campus'];
+        $idCampus = !empty($params['id_campus']) ?? 1;
         $users = UserManager::get_user_list($conditions, ['firstname'], false, false, $idCampus);
         $list = [];
         foreach ($users as $item) {
@@ -1416,10 +1568,12 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * @throws Exception
      */
-    public function addSession(array $params)
+    public function addSession(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $name = $params['name'];
         $coach_username = (int) $params['coach_username'];
         $startDate = $params['access_start_date'];
@@ -1469,6 +1623,8 @@ class Rest extends WebService
 
     public function addCourse(array $courseParam): array
     {
+        self::protectAdminEndpoint();
+
         $idCampus = isset($courseParam['id_campus']) ? $courseParam['id_campus'] : 1;
         $title = isset($courseParam['title']) ? $courseParam['title'] : '';
         $wantedCode = isset($courseParam['wanted_code']) ? $courseParam['wanted_code'] : null;
@@ -1507,6 +1663,7 @@ class Rest extends WebService
         $results = [];
         if (!empty($courseInfo)) {
             $results['status'] = true;
+            $results['id'] = $courseInfo['real_id'];
             $results['code_course'] = $courseInfo['code'];
             $results['title_course'] = $courseInfo['title'];
             $extraFieldValues = new ExtraFieldValue('course');
@@ -1525,11 +1682,11 @@ class Rest extends WebService
      * @param $userParam
      *
      * @throws Exception
-     *
-     * @return array
      */
-    public function addUser($userParam)
+    public function addUser($userParam): array
     {
+        self::protectAdminEndpoint();
+
         $firstName = $userParam['firstname'];
         $lastName = $userParam['lastname'];
         $status = $userParam['status'];
@@ -1663,12 +1820,16 @@ class Rest extends WebService
      */
     public function updateUserApiKey(int $userId, string $oldApiKey): array
     {
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
+
         if (false === $currentApiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME)) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         if (current($currentApiKeys) !== $oldApiKey) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         UserManager::update_api_key($userId, self::SERVICE_NAME);
@@ -1683,16 +1844,18 @@ class Rest extends WebService
     /**
      * Subscribe User to Course.
      *
-     * @param array $params
-     *
-     * @return array
+     * @throws Exception
      */
-    public function subscribeUserToCourse($params)
+    public function subscribeUserToCourse(array $params): array
     {
         $course_id = $params['course_id'];
         $course_code = $params['course_code'];
         $user_id = $params['user_id'];
         $status = $params['status'] ?? STUDENT;
+
+        if (!api_is_platform_admin() && $user_id != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
 
         if (!$course_id && !$course_code) {
             return [false];
@@ -1728,11 +1891,18 @@ class Rest extends WebService
         throw new Exception(get_lang('CourseRegistrationCodeIncorrect'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function unSubscribeUserToCourse(array $params): array
     {
         $courseId = $params['course_id'];
         $courseCode = $params['course_code'];
         $userId = $params['user_id'];
+
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
 
         if (!$courseId && !$courseCode) {
             return [false];
@@ -1758,9 +1928,15 @@ class Rest extends WebService
         }
     }
 
-    public function setMessageRead($messageId)
+    /**
+     * Set a given message as already read.
+     *
+     * @param $messageId
+     */
+    public function setMessageRead(int $messageId)
     {
-        MessageManager::update_message($this->user->getId(), $messageId);
+        // MESSAGE_STATUS_NEW is also used for messages that have been "read"
+        MessageManager::update_message_status($this->user->getId(), $messageId, MESSAGE_STATUS_NEW);
     }
 
     /**
@@ -1858,14 +2034,14 @@ class Rest extends WebService
 
     /**
      * @throws Exception
-     *
-     * @return array
      */
-    public function addCoursesSession(array $params)
+    public function addCoursesSession(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $sessionId = $params['id_session'];
         $courseList = $params['list_courses'];
-        $importAssignments = isset($params['import_assignments']) ? 1 === (int) $params['import_assignments'] : false;
+        $importAssignments = isset($params['import_assignments']) && 1 === (int) $params['import_assignments'];
 
         $result = SessionManager::add_courses_to_session(
             $sessionId,
@@ -1890,15 +2066,19 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * @throws Exception
      */
-    public function addUsersSession(array $params)
+    public function addUsersSession(array $params): array
     {
         $sessionId = $params['id_session'];
         $userList = $params['list_users'];
 
         if (!is_array($userList)) {
             $userList = [];
+        }
+
+        if (!api_is_platform_admin() && !in_array($this->user->getId(), $userList)) {
+            self::throwNotAllowedException();
         }
 
         SessionManager::subscribeUsersToSession(
@@ -1921,6 +2101,8 @@ class Rest extends WebService
      */
     public function createSessionFromModel(HttpRequest $request): int
     {
+        self::protectAdminEndpoint();
+
         $modelSessionId = $request->request->getInt('modelSessionId');
         $sessionName = $request->request->get('sessionName');
         $startDate = $request->request->get('startDate');
@@ -2003,6 +2185,20 @@ class Rest extends WebService
             throw new Exception(get_lang('CoursesNotAddedToSession'));
         }
 
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $courseListOrdered = SessionManager::get_course_list_by_session_id($modelSessionId, null, 'position');
+        $count = 0;
+        foreach ($courseListOrdered as $course) {
+            if ($course['position'] == '') {
+                $course['position'] = $count;
+            }
+            // Saving order.
+            $sql = "UPDATE $table SET position = ".$course['position']."
+                    WHERE session_id = $newSessionId AND c_id = '".$course['real_id']."'";
+            Database::query($sql);
+            $count++;
+        }
+
         if ($duplicateAgendaContent) {
             foreach ($courseList as $courseId) {
                 SessionManager::importAgendaFromSessionModel($modelSessionId, $newSessionId, $courseId);
@@ -2028,14 +2224,9 @@ class Rest extends WebService
     /**
      * subscribes a user to a session.
      *
-     * @param int    $sessionId the session id
-     * @param string $loginName the user's login name
-     *
      * @throws Exception
-     *
-     * @return boolean, whether it worked
      */
-    public function subscribeUserToSessionFromUsername($sessionId, $loginName)
+    public function subscribeUserToSessionFromUsername(int $sessionId, string $loginName): bool
     {
         if (!SessionManager::isValidId($sessionId)) {
             throw new Exception(get_lang('SessionNotFound'));
@@ -2044,6 +2235,10 @@ class Rest extends WebService
         $userId = UserManager::get_user_id_from_username($loginName);
         if (false === $userId) {
             throw new Exception(get_lang('UserNotFound'));
+        }
+
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
         }
 
         $subscribed = SessionManager::subscribeUsersToSession(
@@ -2096,19 +2291,15 @@ class Rest extends WebService
     }
 
     /**
-     * updates a user identified by its login name.
-     *
-     * @param array $parameters
+     * Updates a user identified by its login name.
      *
      * @throws Exception on failure
-     *
-     * @return boolean, true on success
      */
-    public function updateUserFromUserName($parameters)
+    public function updateUserFromUserName(array $parameters): bool
     {
         // find user
         $userId = null;
-        if (!is_array($parameters) || empty($parameters)) {
+        if (empty($parameters)) {
             throw new Exception('NoData');
         }
         foreach ($parameters as $name => $value) {
@@ -2123,6 +2314,11 @@ class Rest extends WebService
         if (is_null($userId)) {
             throw new Exception(get_lang('NoData'));
         }
+
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
+
         /** @var User $user */
         $user = UserManager::getRepository()->find($userId);
         if (empty($user)) {
@@ -2365,6 +2561,8 @@ class Rest extends WebService
      */
     public function updateSession(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $id = $params['session_id'];
         $reset = $params['reset'] ?? null;
         $name = $params['name'] ?? null;
@@ -2584,6 +2782,171 @@ class Rest extends WebService
         );
     }
 
+    /**
+     * Get the list of test with last user attempt and his datetime.
+     *
+     * @throws Exception
+     */
+    public function getTestUpdatesList(): array
+    {
+        self::protectAdminEndpoint();
+
+        $tableCQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tableTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $resultArray = [];
+
+        $sql = "
+            SELECT q.iid AS id,
+                q.title,
+                MAX(a.start_date) AS last_attempt_time,
+                u.username AS last_attempt_username
+            FROM $tableCQuiz q
+            JOIN $tableTrackExercises a ON q.iid = a.exe_exo_id
+            JOIN $tableUser u ON a.exe_user_id = u.id
+            GROUP BY q.iid
+        ";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_assoc($result)) {
+                $resultArray[] = $row;
+            }
+        }
+
+        return $resultArray;
+    }
+
+    /**
+     * Get tests results data
+     * Not support sessions
+     * By default, is successful if score greater than 50%.
+     *
+     * @throws Exception
+     *
+     * @return array e.g: [ { "id": 4, "title": "aiken", "updated_by": "-", "type": "1", "completion": 0 } ]
+     */
+    public function getTestAverageResultsList(array $ids = [], ?array $fields = []): array
+    {
+        self::protectAdminEndpoint();
+        $tableTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tableCQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $resultArray = [];
+        $countUsersInCourses = [];
+        $extraArray = [];
+
+        if (!empty($ids)) {
+            if (!is_array($ids)) {
+                $ids = [$ids];
+            }
+            if (!is_array($fields)) {
+                $fields = [$fields];
+            }
+            if (!empty($fields)) {
+                foreach ($fields as $field) {
+                    $extraArray[$field] = '-';
+                }
+            }
+
+            $queryUsersInCourses = "
+                SELECT c_id, count(*)
+                FROM $tableCourseRelUser
+                GROUP BY c_id
+                ORDER BY c_id;
+            ";
+
+            $resultUsersInCourses = Database::query($queryUsersInCourses);
+            while ($row = Database::fetch_array($resultUsersInCourses)) {
+                $countUsersInCourses[$row[0]] = $row[1];
+            }
+
+            foreach ($ids as $item) {
+                $item = (int) $item;
+
+                $queryCQuiz = "
+                    SELECT c_id,
+                        title,
+                        feedback_type,
+                        pass_percentage
+                    FROM $tableCQuiz
+                    WHERE iid = $item";
+
+                $resultCQuiz = Database::query($queryCQuiz);
+                if (Database::num_rows($resultCQuiz) <= 0) {
+                    continue;
+                }
+                $row = Database::fetch_assoc($resultCQuiz);
+
+                $cId = $row['c_id'];
+                $title = $row['title'];
+                $type = Exercise::getFeedbackTypeLiteral($row['feedback_type']);
+                $passPercentage = empty($row['pass_percentage']) ? 0.5 : $row['pass_percentage'];
+
+                $sql = "
+                    SELECT a.exe_exo_id AS id,
+                           a.exe_user_id,
+                           MAX(a.start_date),
+                           a.exe_result,
+                           a.exe_weighting
+                    FROM $tableTrackExercises a
+                    WHERE a.exe_exo_id = $item
+                    GROUP BY a.exe_exo_id, a.exe_user_id
+                ";
+
+                $result = Database::query($sql);
+                if (Database::num_rows($result) > 0) {
+                    $countAttempts = 0;
+                    $countSuccess = 0;
+                    $scoreSum = 0;
+
+                    while ($row = Database::fetch_assoc($result)) {
+
+                        // If test is badly configured, with all questions at score 0
+                        if ($row['exe_weighting'] == 0) {
+                            continue;
+                        }
+                        $score = $row['exe_result'] / $row['exe_weighting'];
+                        if ($score >= $passPercentage) {
+                            $countSuccess++;
+                        }
+                        $scoreSum += $score;
+                        $countAttempts++;
+                    }
+                    $completionMethod = 'Success on users count';
+                    if ($countAttempts === 0) {
+                        // In some cases, there are no attempts at all. Return 0 completion & score.
+                        $averageScore = 0;
+                        $completion = 0;
+                    } else {
+                        $averageScore = round(($scoreSum / $countAttempts) * 100, 2);
+                        if (empty($countUsersInCourses[$cId])) {
+                            // Users might have all been unsubscribed from the course since taking the test
+                            $completion = $countSuccess / $countAttempts;
+                            $completionMethod = 'Success on attempts count';
+                        } else {
+                            $completion = $countSuccess / $countUsersInCourses[$cId];
+                        }
+                    }
+                    $resultArray[] = [
+                        'id' => $item,
+                        'title' => $title,
+                        'updated_by' => '',
+                        'type' => $type,
+                        'completion' => $completion,
+                        'completion_method' => $completionMethod,
+                        'number_of_last_attempts' => $countAttempts,
+                        'average_score_in_percent' => $averageScore,
+                        'extra' => $extraArray,
+                    ];
+                }
+            }
+        }
+
+        return $resultArray;
+    }
+
     public function logout()
     {
         online_logout($this->user->getId());
@@ -2613,7 +2976,7 @@ class Rest extends WebService
         );
 
         if (false === $result) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         return $result;
@@ -3101,7 +3464,7 @@ class Rest extends WebService
         if (false === api_get_configuration_value('webservice_enable_adminonly_api')
             || !UserManager::is_admin($this->user->getId())
         ) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         $limitOffset = ($page - 1) * $length;
@@ -3150,7 +3513,7 @@ class Rest extends WebService
         if (false === api_get_configuration_value('webservice_enable_adminonly_api')
             || !UserManager::is_admin($this->user->getId())
         ) {
-            throw new Exception(get_lang('NotAllowed'));
+            self::throwNotAllowedException();
         }
 
         $userInfo = api_get_user_info_from_username($username);

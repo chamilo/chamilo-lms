@@ -402,7 +402,8 @@ echo Display::input('hidden', 'add_type', null);
             <div class="input-group">
                 <input id="first_letter_user" name="firstLetterUser" type="text" class="form-control"
                        value="<?php echo Security::remove_XSS($first_letter_user); ?>"
-                       placeholder="<?php echo get_lang('Search'); ?>">
+                       placeholder="<?php echo get_lang('Search'); ?>"
+                       onkeydown="return 13 !== event.keyCode;">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" onclick="change_select();">
                         <?php echo get_lang('Filter'); ?>

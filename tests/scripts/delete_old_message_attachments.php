@@ -11,22 +11,33 @@
  */
 exit;
 require __DIR__.'/../../main/inc/global.inc.php';
-$beforeDate = '2021-08-31'; // message must be older than date to be considered
 $simulate = false;
 $userBasePath = api_get_path(SYS_UPLOAD_PATH).'users/';
 
 if (PHP_SAPI !== 'cli') {
     die('This script can only be executed from the command line');
 }
-echo PHP_EOL."Usage: php ".basename(__FILE__)." [options]".PHP_EOL;
-echo "Where [options] can be ".PHP_EOL;
-echo "  -s         Simulate execution - Do not delete anything, just show numbers".PHP_EOL.PHP_EOL;
-echo "Processing...".PHP_EOL.PHP_EOL;
 
-if (!empty($argv[1]) && $argv[1] == '-s') {
+if (!empty($argv[1]) && $argv[1] == '--from') {
+    $from = $argv[2];
+}
+if (!empty($argv[3]) && $argv[3] == '--until') {
+    $until = $argv[4];
+}
+if (!empty($argv[5]) && $argv[5] == '-s') {
     $simulate = true;
     echo "Simulation mode is enabled".PHP_EOL;
 }
+if (empty($from) or empty($until)) {
+    echo PHP_EOL."Usage: sudo php ".basename(__FILE__)." [options]".PHP_EOL;
+    echo "Where [options] can be ".PHP_EOL;
+    echo "  --from yyyy-mm-dd    Date from which the content should be removed (e.g. 2017-08-31)".PHP_EOL.PHP_EOL;
+    echo "  --until yyyy-mm-dd   Date up to which the content should be removed (e.g. 2020-08-31)".PHP_EOL.PHP_EOL;
+    echo "  -s                   (optional) Simulate execution - Do not delete anything, just show numbers".PHP_EOL.PHP_EOL;
+    die('Please make sure --from and --until are defined.');
+}
+
+echo "Processing...".PHP_EOL.PHP_EOL;
 
 echo "[".time()."] Querying messages\n";
 $sql = "SELECT m.id mid, m.msg_status, m.user_sender_id,
@@ -34,7 +45,7 @@ $sql = "SELECT m.id mid, m.msg_status, m.user_sender_id,
         FROM message m, message_attachment ma
         WHERE m.id = ma.message_id
           AND m.msg_status IN (0,1,3,4)
-          AND m.send_date < '$beforeDate'";
+          AND m.send_date > '$from 00:00:00' AND m.send_date <= '$until 23:59:59'";
 
 $res = Database::query($sql);
 
@@ -50,7 +61,7 @@ if ($resc === false) {
 }
 $countAllMessages = Database::result($resc, 0, 'nbr');
 echo "[".time()."]"
-    ." Found $countMessages messages before $beforeDate with attachments on a total of $countAllMessages messages."."\n";
+    ." Found $countMessages messages between $from and $until with attachments on a total of $countAllMessages messages."."\n";
 
 $sqlDeleteAttach = "DELETE FROM message_attachment WHERE id = ";
 /**
@@ -162,7 +173,7 @@ foreach ($senderMessagesList as $usi => $userArray) {
 }
 
 echo "[".time()."] ".($simulate ? "Would delete" : "Deleted")
-    ." attachments from $countMessages messages before $beforeDate on a total of $countAllMessages"
+    ." attachments from $countMessages messages between $from and $until on a total of $countAllMessages"
     ." messages, for a total estimated size of "
     .round($totalSize / (1024 * 1024))." MB.".PHP_EOL;
 exit;

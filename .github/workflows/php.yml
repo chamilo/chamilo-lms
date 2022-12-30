@@ -2,6 +2,9 @@ name: Behat tests 1.11.x 🐞
 
 on: [push, pull_request]
 
+permissions:
+    contents: read
+
 jobs:
     build:
         name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
@@ -13,16 +16,21 @@ jobs:
                 operating-system: [ubuntu-latest]
                 php-versions: ['7.2', '7.3', '7.4']
 
-#        services:
-#            mysql:
-#                image: mysql:5.7
-#                env:
-#                    MYSQL_ALLOW_EMPTY_PASSWORD: false
-#                    MYSQL_ROOT_PASSWORD: chamilo
-#                    MYSQL_DATABASE: chamilo
-#                ports:
-#                    - 3306/tcp
-#                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        services:
+          mysql:
+            image: mysql:latest
+            env:
+              MYSQL_ALLOW_EMPTY_PASSWORD: false
+              MYSQL_ROOT_PASSWORD: root
+              MYSQL_DATABASE: chamilo
+              MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
+            ports:
+              - 3306/tcp
+            options: >-
+              --health-cmd="mysqladmin ping"
+              --health-interval=10s
+              --health-timeout=5s
+              --health-retries=3
         steps:
             - name: Checkout
               uses: actions/checkout@v2

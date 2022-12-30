@@ -147,7 +147,10 @@ background: #020202;
 .navbar-default .navbar-link:hover {
   color: #ededed;
 }
-
+.logo {
+  margin: 47px 0;
+}
+/* Medium-small screens*/
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: #ffffff;
@@ -158,6 +161,9 @@ background: #020202;
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #ededed;
     background-color: #0099c0;
+  }
+  .logo {
+    margin: 24px 0;
   }
 }
 footer.bgfooter{
@@ -190,4 +196,22 @@ footer.bgfooter a:hover{
   color: #2c3e50;
   background-color:#ECF0F1;
   border-color: #ECF0F1;
+}
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+  .logo {
+    margin: 25px 0;
+  }
+}
+/* Smalls screens */
+@media (min-width: 320px) and (max-width: 479px) {
+  .logo {
+    margin: 10px 0;
+  }
+}
+/* Landscape phones and down */
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  .logo {
+    margin: 35px 0;
+  }
 }

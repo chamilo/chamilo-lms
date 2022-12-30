@@ -465,6 +465,14 @@ class SurveyManager
                 $extraParams['form_fields'] = '';
             }
 
+            if (!empty($values['end_date'])) {
+                $availTill = $allowSurveyAvailabilityDatetime
+                    ? api_get_utc_datetime($values['end_date'].':59')
+                    : $values['end_date'];
+            } else {
+                $availTill = null;
+            }
+
             $params = [
                 'title' => $values['survey_title'],
                 'subtitle' => $values['survey_subtitle'],
@@ -473,9 +481,7 @@ class SurveyManager
                 'avail_from' => $allowSurveyAvailabilityDatetime
                     ? api_get_utc_datetime($values['start_date'].':00')
                     : $values['start_date'],
-                'avail_till' => $allowSurveyAvailabilityDatetime
-                    ? api_get_utc_datetime($values['end_date'].':59')
-                    : $values['end_date'],
+                'avail_till' => $availTill,
                 'is_shared' => $shared_survey_id,
                 'template' => 'template',
                 'intro' => $values['survey_introduction'],
@@ -658,6 +664,15 @@ class SurveyManager
 
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
+        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+
+        $sql = "SELECT code
+                FROM $table_survey WHERE survey_id = $survey_id";
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        if ($row) {
+            $survey_code = $row['code'];
+        }
 
         if ($shared) {
             $table_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
@@ -688,6 +703,11 @@ class SurveyManager
 
         // Deleting the questions of the survey
         self::delete_all_survey_questions($survey_id, $shared);
+
+        // Deleting invitations of the survey
+        $sql = "DELETE FROM $table_survey_invitation
+                WHERE c_id = $course_id AND survey_code = '".$survey_code."'";
+        Database::query($sql);
 
         // Update into item_property (delete)
         api_item_property_update(

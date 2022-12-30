@@ -25,7 +25,7 @@ if (!$is_allowedToTrack) {
 }
 
 if ($export_csv || $exportXls) {
-    $csvData = TrackingCourseLog::get_item_resources_data(0, 0, '', '');
+    $csvData = TrackingCourseLog::getItemResourcesData(0, 0, '', '');
     array_walk(
         $csvData,
         function (&$item) {
@@ -137,8 +137,8 @@ echo '</div>';
 
 $table = new SortableTable(
     'resources',
-    ['TrackingCourseLog', 'count_item_resources'],
-    ['TrackingCourseLog', 'get_item_resources_data'],
+    ['TrackingCourseLog', 'countItemResources'],
+    ['TrackingCourseLog', 'getItemResourcesData'],
     6,
     20,
     'DESC'

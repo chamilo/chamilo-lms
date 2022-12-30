@@ -2,12 +2,12 @@
 <ul>
     <li>
         <a href="{{ _p.web_main }}{{ 'admin/skill_profile.php' }}">
-            {{ 'AddProfile' | get_lang }}
+            {{ 'SkillLevelProfiles' | get_lang }}
         </a>
     </li>
     <li>
         <a href="{{ _p.web_main }}{{ 'admin/skill_level.php' }}">
-            {{ 'AddLevel' | get_lang }}
+            {{ 'SkillLevels' | get_lang }}
         </a>
     </li>
 </ul>

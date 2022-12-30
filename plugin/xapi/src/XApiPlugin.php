@@ -17,6 +17,7 @@ use GuzzleHttp\RequestOptions;
 use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Ramsey\Uuid\Uuid;
+use Xabbuh\XApi\Client\Api\StatementsApiClientInterface;
 use Xabbuh\XApi\Client\XApiClientBuilder;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\IRI;
@@ -30,6 +31,9 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     public const SETTING_LRS_URL = 'lrs_url';
     public const SETTING_LRS_AUTH_USERNAME = 'lrs_auth_username';
     public const SETTING_LRS_AUTH_PASSWORD = 'lrs_auth_password';
+    public const SETTING_CRON_LRS_URL = 'cron_lrs_url';
+    public const SETTING_CRON_LRS_AUTH_USERNAME = 'cron_lrs_auth_username';
+    public const SETTING_CRON_LRS_AUTH_PASSWORD = 'cron_lrs_auth_password';
     public const SETTING_UUID_NAMESPACE = 'uuid_namespace';
     public const SETTING_LRS_LP_ITEM_ACTIVE = 'lrs_lp_item_viewed_active';
     public const SETTING_LRS_LP_ACTIVE = 'lrs_lp_end_active';
@@ -55,6 +59,10 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             self::SETTING_LRS_URL => 'text',
             self::SETTING_LRS_AUTH_USERNAME => 'text',
             self::SETTING_LRS_AUTH_PASSWORD => 'text',
+
+            self::SETTING_CRON_LRS_URL => 'text',
+            self::SETTING_CRON_LRS_AUTH_USERNAME => 'text',
+            self::SETTING_CRON_LRS_AUTH_PASSWORD => 'text',
 
             self::SETTING_LRS_LP_ITEM_ACTIVE => 'boolean',
             self::SETTING_LRS_LP_ACTIVE => 'boolean',
@@ -140,6 +148,12 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $createCourseHook = XApiCreateCourseHookObserver::create();
         $portfolioItemAddedHook = XApiPortfolioItemAddedHookObserver::create();
         $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
+        $portfolioItemHighlightedHook = XApiPortfolioItemHighlightedHookObserver::create();
+        $portfolioDownloaded = XApiPortfolioDownloadedHookObserver::create();
+        $portfolioItemScoredHook = XApiPortfolioItemScoredHookObserver::create();
+        $portfolioCommentedScoredHook = XApiPortfolioCommentScoredHookObserver::create();
+        $portfolioItemEditedHook = XApiPortfolioItemEditedHookObserver::create();
+        $portfolioCommentEditedHook = XApiPortfolioCommentEditedHookObserver::create();
 
         HookLearningPathItemViewed::create()->detach($learningPathItemViewedHook);
         HookLearningPathEnd::create()->detach($learningPathEndHook);
@@ -148,6 +162,12 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         HookCreateCourse::create()->detach($createCourseHook);
         HookPortfolioItemAdded::create()->detach($portfolioItemAddedHook);
         HookPortfolioItemCommented::create()->detach($portfolioItemCommentedHook);
+        HookPortfolioItemHighlighted::create()->detach($portfolioItemHighlightedHook);
+        HookPortfolioDownloaded::create()->detach($portfolioDownloaded);
+        HookPortfolioItemScored::create()->detach($portfolioItemScoredHook);
+        HookPortfolioCommentScored::create()->detach($portfolioCommentedScoredHook);
+        HookPortfolioItemEdited::create()->detach($portfolioItemEditedHook);
+        HookPortfolioCommentEdited::create()->detach($portfolioCommentEditedHook);
 
         return 1;
     }
@@ -199,12 +219,24 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             ->getStateApiClient();
     }
 
-    /**
-     * @return \Xabbuh\XApi\Client\Api\StatementsApiClientInterface
-     */
-    public function getXApiStatementClient()
+    public function getXApiStatementClient(): StatementsApiClientInterface
     {
         return $this->createXApiClient()->getStatementsApiClient();
+    }
+
+    public function getXapiStatementCronClient(): StatementsApiClientInterface
+    {
+        $lrsUrl = $this->get(self::SETTING_CRON_LRS_URL);
+        $lrsUsername = $this->get(self::SETTING_CRON_LRS_AUTH_USERNAME);
+        $lrsPassword = $this->get(self::SETTING_CRON_LRS_AUTH_PASSWORD);
+
+        return $this
+            ->createXApiClient(
+                empty($lrsUrl) ? null : $lrsUrl,
+                empty($lrsUsername) ? null : $lrsUsername,
+                empty($lrsPassword) ? null : $lrsPassword
+            )
+            ->getStatementsApiClient();
     }
 
     /**
@@ -220,6 +252,13 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $quizEndHook = XApiQuizEndHookObserver::create();
         $portfolioItemAddedHook = XApiPortfolioItemAddedHookObserver::create();
         $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
+        $portfolioItemViewedHook = XApiPortfolioItemViewedHookObserver::create();
+        $portfolioItemHighlightedHook = XApiPortfolioItemHighlightedHookObserver::create();
+        $portfolioDownloadedHook = XApiPortfolioDownloadedHookObserver::create();
+        $portfolioItemScoredHook = XApiPortfolioItemScoredHookObserver::create();
+        $portfolioCommentScoredHook = XApiPortfolioCommentScoredHookObserver::create();
+        $portfolioItemEditedHook = XApiPortfolioItemEditedHookObserver::create();
+        $portfolioCommentEditedHook = XApiPortfolioCommentEditedHookObserver::create();
 
         $learningPathItemViewedEvent = HookLearningPathItemViewed::create();
         $learningPathEndEvent = HookLearningPathEnd::create();
@@ -227,6 +266,13 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $quizEndEvent = HookQuizEnd::create();
         $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
         $portfolioItemCommentedEvent = HookPortfolioItemCommented::create();
+        $portfolioItemViewedEvent = HookPortfolioItemViewed::create();
+        $portfolioItemHighlightedEvent = HookPortfolioItemHighlighted::create();
+        $portfolioDownloadedEvent = HookPortfolioDownloaded::create();
+        $portfolioItemScoredEvent = HookPortfolioItemScored::create();
+        $portfolioCommentScoredEvent = HookPortfolioCommentScored::create();
+        $portfolioItemEditedEvent = HookPortfolioItemEdited::create();
+        $portfolioCommentEditedEvent = HookPortfolioCommentEdited::create();
 
         if ('true' === $this->get(self::SETTING_LRS_LP_ITEM_ACTIVE)) {
             $learningPathItemViewedEvent->attach($learningPathItemViewedHook);
@@ -255,9 +301,23 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         if ('true' === $this->get(self::SETTING_LRS_PORTFOLIO_ACTIVE)) {
             $portfolioItemAddedEvent->attach($portfolioItemAddedHook);
             $portfolioItemCommentedEvent->attach($portfolioItemCommentedHook);
+            $portfolioItemViewedEvent->attach($portfolioItemViewedHook);
+            $portfolioItemHighlightedEvent->attach($portfolioItemHighlightedHook);
+            $portfolioDownloadedEvent->attach($portfolioDownloadedHook);
+            $portfolioItemScoredEvent->attach($portfolioItemScoredHook);
+            $portfolioCommentScoredEvent->attach($portfolioCommentScoredHook);
+            $portfolioItemEditedEvent->attach($portfolioItemEditedHook);
+            $portfolioCommentEditedEvent->attach($portfolioCommentEditedHook);
         } else {
             $portfolioItemAddedEvent->detach($portfolioItemAddedHook);
-            $portfolioItemCommentedEvent->attach($portfolioItemCommentedHook);
+            $portfolioItemCommentedEvent->detach($portfolioItemCommentedHook);
+            $portfolioItemViewedEvent->detach($portfolioItemViewedHook);
+            $portfolioItemHighlightedEvent->detach($portfolioItemHighlightedHook);
+            $portfolioDownloadedEvent->detach($portfolioDownloadedHook);
+            $portfolioItemScoredEvent->detach($portfolioItemScoredHook);
+            $portfolioCommentScoredEvent->detach($portfolioCommentScoredHook);
+            $portfolioItemEditedEvent->detach($portfolioItemEditedHook);
+            $portfolioCommentEditedEvent->detach($portfolioCommentEditedHook);
         }
 
         return $this;

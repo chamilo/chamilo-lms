@@ -47,8 +47,11 @@ $form = new FormValidator(
         'enctype' => 'multipart/form-data',
     ]
 );
+$firstPart = explode("/", $lp->path, 2);
+$zipFileName = $firstPart[0].".zip";
+
 $form->addHeader(get_lang('UpdateFile'));
-$form->addHtml(Display::return_message(get_lang('TheScormPackageWillBeUpdatedYouMustUploadTheFileWithTheSameName')));
+$form->addHtml(Display::return_message(get_lang('TheScormPackageWillBeUpdatedYouMustUploadTheFileWithTheSameName')." ".get_lang('FileName')." : ".$zipFileName));
 $form->addLabel(null, Display::return_icon('scorm_logo.jpg', null, ['style' => 'width:230px;height:100px']));
 $form->addElement('hidden', 'curdirpath', '');
 $form->addElement('file', 'user_file', get_lang('FileToUpload'));

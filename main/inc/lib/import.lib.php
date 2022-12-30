@@ -69,6 +69,26 @@ class Import
         return [];
     }
 
+    public static function csvColumnToArray($filename, $columnIndex = 0): array
+    {
+        if (empty($filename)) {
+            return [];
+        }
+
+        $reader = Reader::createFromPath($filename, 'r');
+
+        if (!$reader) {
+            return [];
+        }
+
+        $reader->setDelimiter(';');
+        $reader->stripBom(true);
+
+        $iterator = $reader->fetchColumn($columnIndex);
+
+        return iterator_to_array($iterator);
+    }
+
     /**
      * @param string $filename
      *

@@ -169,6 +169,12 @@ class EvalForm extends FormValidator
                 </form>';
         $renderer->setFormTemplate($form_template);
 
+        $skillRelItemsEnabled = api_get_configuration_value('allow_skill_rel_items');
+        $columnSkill = '';
+        if ($skillRelItemsEnabled) {
+            $columnSkill = '<th>'.get_lang('Skills').'</th>';
+        }
+
         if (api_is_western_name_order()) {
             $renderer->setHeaderTemplate(
                 '<tr>
@@ -177,6 +183,7 @@ class EvalForm extends FormValidator
     		      <th>'.get_lang('FirstName').'</th>
     		      <th>'.get_lang('LastName').'</th>
     		      <th>'.get_lang('Qualify').'</th>
+    		      '.$columnSkill.'
     		   </tr>'
             );
         } else {
@@ -187,6 +194,7 @@ class EvalForm extends FormValidator
                   <th>'.get_lang('LastName').'</th>
                   <th>'.get_lang('FirstName').'</th>
                   <th>'.get_lang('Qualify').'</th>
+    		      '.$columnSkill.'
                </tr>'
             );
         }
@@ -196,6 +204,7 @@ class EvalForm extends FormValidator
             {element}
             <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
             </td>
+            '.($skillRelItemsEnabled ? '<td></td>' : '').'
             </tr>';
 
         $results_and_users = [];
@@ -210,8 +219,14 @@ class EvalForm extends FormValidator
 
         foreach ($results_and_users as $result_and_user) {
             $user = $result_and_user['user'];
+            /** @var \Result $result */
             $result = $result_and_user['result'];
             $renderer = &$this->defaultRenderer();
+
+            $columnSkillResult = '';
+            if ($skillRelItemsEnabled) {
+                $columnSkillResult = '<td>'.Skill::getAddSkillsToUserBlock(ITEM_TYPE_GRADEBOOK_EVALUATION, $result->get_evaluation_id(), $result->get_user_id(), $result->get_id()).'</td>';
+            }
 
             if (api_is_western_name_order()) {
                 $user_info = '<td align="left" >'.$user['firstname'].'</td>';
@@ -228,6 +243,7 @@ class EvalForm extends FormValidator
 		      <td align="left">{element} / '.$this->evaluation_object->get_max().'
 		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
 		      </td>
+		      '.$columnSkillResult.'
 		   </tr>';
 
             if (empty($model)) {
@@ -269,6 +285,7 @@ class EvalForm extends FormValidator
                   '.$user_info.'
                    <td align="left">{element} <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
                   </td>
+		          '.$columnSkillResult.'
                </tr>';
             }
             $renderer->setElementTemplate($template, 'score['.$result->get_id().']');

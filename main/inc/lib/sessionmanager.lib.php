@@ -10065,4 +10065,21 @@ class SessionManager
             return -1;
         }
     }
+
+    /**
+     * @param array $listA
+     * @param array $listB
+     *
+     * @return int
+     */
+    private static function compareByCourse($listA, $listB)
+    {
+        if ($listA['title'] == $listB['title']) {
+            return 0;
+        } elseif ($listA['title'] > $listB['title']) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 }

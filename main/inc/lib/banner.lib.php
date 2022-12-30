@@ -863,10 +863,10 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             $html .= Display::tag('div', $view_as_student_link, ['id' => 'view_as_link', 'class' => 'pull-right']);
         }
 
-        if ($sessionId &&
+        if ($sessionId && !empty($courseInfo) &&
             (
                 api_is_platform_admin()
-                || ($courseInfo && CourseManager::is_course_teacher($user_id, $courseInfo['code']))
+                || (CourseManager::is_course_teacher($user_id, $courseInfo['code']))
             )
         ) {
             $url = Display::url(

@@ -8989,5 +8989,5 @@ $SendOtherUsers = "Enviar a otros usuarios";
 $SendToUsers = "Enviar a los usuarios";
 $FirstLoginForceUsersToChangePassword = "Forzar los usuarios a cambiar de contraseña durante la primera conexión";
 $YourUsernameToAccessIsX = "Le recordamos que su nombre de usuario para el acceso es %s";
-$InstructionsLostPasswordWithLinkX = "Nota: Si no recuerda su contraseña, haga clic en <a href=\\"%s\\">\\"¿Ha olvidado su contraseña?\\"</a>, introduzca su usuario y siga las instrucciones";
+$InstructionsLostPasswordWithLinkX = "Nota: Si no recuerda su contraseña, haga clic en <a href=\"%s\">\"¿Ha olvidado su contraseña?\"</a>, introduzca su usuario y siga las instrucciones";
 ?>

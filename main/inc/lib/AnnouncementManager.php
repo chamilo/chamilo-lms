@@ -1915,7 +1915,7 @@ class AnnouncementManager
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if (!in_array($row['id'], $displayed)) {
                 $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'
-                    .api_get_cidreq_params($courseInfo['code'], $session_id, $row['to_group_id']);
+                    .api_get_cidreq_params($courseInfo['code'], $session_id, $group_id);
                 $sent_to_icon = '';
                 // the email icon
                 if ($row['email_sent'] == '1') {

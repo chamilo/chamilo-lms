@@ -9371,9 +9371,14 @@ function api_mail_html(
         }
     }
 
-    $extendedFooterMessage = api_get_configuration_value('notifications_extended_footer_message');
-    if ($extendedFooterMessage) {
-        $message .= '<br /><hr><i>'.'<p>'.implode('<br/><br/>', $extendedFooterMessage['paragraphs']).'</p>';
+    $extendedFooterMessageConfig = api_get_configuration_value('notifications_extended_footer_message');
+    if ($extendedFooterMessageConfig) {
+        $platformLanguage = api_get_interface_language();
+        $extendedFooterMessage = api_get_configuration_value('notifications_extended_footer_message')[$platformLanguage];
+
+        if ($extendedFooterMessage) {
+            $message .= '<br /><hr><i>'.'<p>'.implode('<br/><br/>', $extendedFooterMessage['paragraphs']).'</p>';
+        }
     }
 
     $mailView = new Template(null, false, false, false, false, false, false);

@@ -2321,6 +2321,12 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Create a document extra field with field label "can_be_downloaded" of type "Checkbox options".
 // $_configuration['documents_hide_download_icon'] = false;
 
+// Add the username value to the "subscription to session" confirmation email
+//$_configuration['email_template_subscription_to_session_confirmation_username'] = false;
+
+// Add the "remember password" link to the "subscription to session" confirmation email
+//$_configuration['email_template_subscription_to_session_confirmation_lost_password'] = false;
+
 // Add a custom extra footer for notificacions emails for a specific language, for example for
 // privacy policy notices. Multiple languages and paragraphs can be added.
 /*$_configuration['notifications_extended_footer_message'] = ['english' => ['paragraphs' => [

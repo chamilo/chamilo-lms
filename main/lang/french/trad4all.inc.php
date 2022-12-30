@@ -8900,4 +8900,6 @@ $RemoveFileFromSelectedUsers = "Retirer le fichier aux utilisateurs sélectionn�
 $SendOtherUsers = "Envoyer à autres utilisateurs";
 $SendToUsers = "Envoyer aux utilisateurs";
 $FirstLoginForceUsersToChangePassword = "Forcer les utilisateurs à changer de mot de passe à la première connexion";
+$YourUsernameToAccessIsX = "Votre nom d'utilisateur pour y accéder est %s";
+$InstructionsLostPasswordWithLinkX = "Note: Si vous ne vous souvenez pas de votre mot de passe, cliquez sur <a href=\\"%s\\">\\"Mot de passe oublié\\"</a>, introduisez votre nom d'utilisateur et suivez les instructions.";
 ?>

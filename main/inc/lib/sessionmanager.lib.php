@@ -2081,6 +2081,25 @@ class SessionManager
                 $layoutContent = $tplContent->get_template(
                     'mail/content_subscription_to_session_confirmation.tpl'
                 );
+
+                if (api_get_configuration_value('email_template_subscription_to_session_confirmation_username')) {
+                    $username = sprintf(
+                        get_lang('YourUsernameToAccessIsX'),
+                        stripslashes($user_info['username']));
+
+                    $tplContent->assign('username', $username);
+                }
+
+                if (api_get_configuration_value('email_template_subscription_to_session_confirmation_lost_password')) {
+                    $urlLostPw = api_get_path(WEB_CODE_PATH).'auth/lostPassword.php';
+
+                    $forgotPassword = sprintf(
+                        get_lang('InstructionsLostPasswordWithLinkX'),
+                        $urlLostPw);
+
+                    $tplContent->assign('lostPassword', $forgotPassword);
+                }
+
                 $content = $tplContent->fetch($layoutContent);
 
                 api_mail_html(

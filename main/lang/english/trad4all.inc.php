@@ -8960,4 +8960,6 @@ $RemoveFileFromSelectedUsers = "Remove file from selected users";
 $SendOtherUsers = "Send to other users";
 $SendToUsers = "Send to users";
 $FirstLoginForceUsersToChangePassword = "Force users to change their password when they first log in";
+$YourUsernameToAccessIsX = "Please note that your username to access is %s";
+$InstructionsLostPasswordWithLinkX = "Note: If you do not remember your password, click on <a href=\\"%s\\">\\"Forgot your password?\\"</a>, enter your username and follow the instructions.";
 ?>

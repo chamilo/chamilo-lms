@@ -2321,10 +2321,10 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Create a document extra field with field label "can_be_downloaded" of type "Checkbox options".
 // $_configuration['documents_hide_download_icon'] = false;
 
-// Add the username value to the subscription to session confirmation email
+// Add the username value to the "subscription to session" confirmation email
 //$_configuration['email_template_subscription_to_session_confirmation_username'] = false;
 
-// Add the remember password link to the subscription to session confirmation email
+// Add the "remember password" link to the "subscription to session" confirmation email
 //$_configuration['email_template_subscription_to_session_confirmation_lost_password'] = false;
 
 // KEEP THIS AT THE END

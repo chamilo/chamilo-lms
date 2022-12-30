@@ -2084,7 +2084,7 @@ class SessionManager
 
                 if (api_get_configuration_value('email_template_subscription_to_session_confirmation_username')) {
                     $username = sprintf(
-                        get_lang('YourAccountNameRemember'),
+                        get_lang('YourUsernameToAccessIsX'),
                         stripslashes($user_info['username']));
 
                     $tplContent->assign('username', $username);
@@ -2094,7 +2094,7 @@ class SessionManager
                     $urlLostPw = api_get_path(WEB_CODE_PATH).'auth/lostPassword.php';
 
                     $forgotPassword = sprintf(
-                        get_lang('InstructionsLostPassword'),
+                        get_lang('InstructionsLostPasswordWithLinkX'),
                         $urlLostPw);
 
                     $tplContent->assign('lostPassword', $forgotPassword);

@@ -37,8 +37,12 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_COUPON = 'plugin_buycourses_coupon';
     public const TABLE_COUPON_ITEM = 'plugin_buycourses_coupon_rel_item';
     public const TABLE_COUPON_SERVICE = 'plugin_buycourses_coupon_rel_service';
+    public const TABLE_SUBSCRIPTION = 'plugin_buycourses_subscription';
+    public const TABLE_SUBSCRIPTION_SALE = 'plugin_buycourses_subscription_rel_sale';
+    public const TABLE_SUBSCRIPTION_PERIOD = 'plugin_buycourses_subscription_period';
     public const TABLE_COUPON_SALE = 'plugin_buycourses_coupon_rel_sale';
     public const TABLE_COUPON_SERVICE_SALE = 'plugin_buycourses_coupon_rel_service_sale';
+    public const TABLE_COUPON_SUBSCRIPTION_SALE = 'plugin_buycourses_coupon_rel_subscription_sale';
     public const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
     public const TABLE_TPV_CECABANK = 'plugin_buycourses_cecabank_account';
     public const PRODUCT_TYPE_COURSE = 1;
@@ -131,7 +135,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function isEnabled($checkEnabled = false)
+    public function isEnabled(bool $checkEnabled = false)
     {
         return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
     }
@@ -159,8 +163,12 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_COUPON,
             self::TABLE_COUPON_ITEM,
             self::TABLE_COUPON_SERVICE,
+            self::TABLE_SUBSCRIPTION,
+            self::TABLE_SUBSCRIPTION_SALE,
+            self::TABLE_SUBSCRIPTION_PERIOD,
             self::TABLE_COUPON_SALE,
             self::TABLE_COUPON_SERVICE_SALE,
+            self::TABLE_COUPON_SUBSCRIPTION_SALE,
             self::TABLE_STRIPE,
             self::TABLE_TPV_CECABANK,
         ];
@@ -199,8 +207,12 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_COUPON,
             self::TABLE_COUPON_ITEM,
             self::TABLE_COUPON_SERVICE,
+            self::TABLE_SUBSCRIPTION,
+            self::TABLE_SUBSCRIPTION_SALE,
+            self::TABLE_SUBSCRIPTION_PERIOD,
             self::TABLE_COUPON_SALE,
             self::TABLE_COUPON_SERVICE_SALE,
+            self::TABLE_COUPON_SUBSCRIPTION_SALE,
             self::TABLE_STRIPE,
         ];
 
@@ -403,6 +415,51 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
+        $table = self::TABLE_SUBSCRIPTION;
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            product_type int unsigned NOT NULL,
+            product_id int unsigned NOT NULL,
+            duration int unsigned NOT NULL,
+            currency_id int unsigned NOT NULL,
+            price decimal(10, 2) NOT NULL,
+            tax_perc int unsigned,
+            PRIMARY KEY (product_type, product_id, duration)
+        )";
+        Database::query($sql);
+
+        $table = self::TABLE_SUBSCRIPTION_SALE;
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            currency_id int unsigned NOT NULL,
+            reference varchar(255) NOT NULL,
+            date datetime NOT NULL,
+            user_id int unsigned NOT NULL,
+            product_type int NOT NULL,
+            product_name varchar(255) NOT NULL,
+            product_id int unsigned NOT NULL,
+            price decimal(10,2) NOT NULL,
+            price_without_tax decimal(10,2) NULL,
+            tax_perc int unsigned NULL,
+            tax_amount decimal(10,2) NULL,
+            status int NOT NULL,
+            payment_type int NOT NULL,
+            invoice int NOT NULL,
+            price_without_discount decimal(10,2),
+            discount_amount decimal(10,2),
+            subscription_end datetime NOT NULL,
+            expired tinyint NULL,
+            PRIMARY KEY (id)
+        )";
+        Database::query($sql);
+
+        $table = self::TABLE_SUBSCRIPTION_PERIOD;
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            duration int unsigned NOT NULL,
+            name varchar(50) NOT NULL,
+            PRIMARY KEY (duration)
+        )";
+        Database::query($sql);
+
         $table = self::TABLE_COUPON_SALE;
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
@@ -417,6 +474,15 @@ class BuyCoursesPlugin extends Plugin
             id int unsigned NOT NULL AUTO_INCREMENT,
             coupon_id int unsigned NOT NULL,
             service_sale_id int unsigned NOT NULL,
+            PRIMARY KEY (id)
+        )";
+        Database::query($sql);
+
+        $table = self::TABLE_COUPON_SUBSCRIPTION_SALE;
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            coupon_id int unsigned NOT NULL,
+            sale_id int unsigned NOT NULL,
             PRIMARY KEY (id)
         )";
         Database::query($sql);
@@ -496,7 +562,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return mixed bool|string html
      */
-    public function buyCoursesForGridCatalogValidator($productId, $productType)
+    public function buyCoursesForGridCatalogValidator(int $productId, int $productType)
     {
         $return = [];
         $paypal = $this->get('paypal_enable') === 'true';
@@ -536,10 +602,10 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return string $html
      */
-    public function returnBuyCourseButton($productId, $productType)
+    public function returnBuyCourseButton(int $productId, int $productType)
     {
-        $productId = (int) $productId;
-        $productType = (int) $productType;
+        $productId = $productId;
+        $productType = $productType;
         $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$productId.'&t='.$productType;
         $html = '<a class="btn btn-success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
             Display::returnFontAwesomeIcon('shopping-cart').'</a>';
@@ -582,7 +648,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param int $selectedId The currency Id
      */
-    public function saveCurrency($selectedId)
+    public function saveCurrency(int $selectedId)
     {
         $currencyTable = Database::get_main_table(
             self::TABLE_CURRENCY
@@ -595,7 +661,7 @@ class BuyCoursesPlugin extends Plugin
         Database::update(
             $currencyTable,
             ['status' => 1],
-            ['id = ?' => (int) $selectedId]
+            ['id = ?' => $selectedId]
         );
     }
 
@@ -606,7 +672,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int Rows affected. Otherwise return false
      */
-    public function savePaypalParams($params)
+    public function savePaypalParams(array $params)
     {
         return Database::update(
             Database::get_main_table(self::TABLE_PAYPAL),
@@ -653,11 +719,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Save the tpv Redsys configuration params.
      *
-     * @param array $params
-     *
      * @return int Rows affected. Otherwise return false
      */
-    public function saveTpvRedsysParams($params)
+    public function saveTpvRedsysParams(array $params)
     {
         return Database::update(
             Database::get_main_table(self::TABLE_TPV_REDSYS),
@@ -677,11 +741,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Save Stripe configuration params.
      *
-     * @param array $params
-     *
      * @return int Rows affected. Otherwise return false
      */
-    public function saveStripeParameters($params)
+    public function saveStripeParameters(array $params)
     {
         return Database::update(
             Database::get_main_table(self::TABLE_STRIPE),
@@ -714,9 +776,9 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param array $params The transfer account
      *
-     * @return int Rows affected. Otherwise return false
+     * @return int Rows affected. Otherwise, return false
      */
-    public function saveTransferAccount($params)
+    public function saveTransferAccount(array $params)
     {
         return Database::insert(
             Database::get_main_table(self::TABLE_TRANSFER),
@@ -735,7 +797,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int Rows affected. Otherwise return false
      */
-    public function saveTransferInfoEmail($params)
+    public function saveTransferInfoEmail(array $params)
     {
         return Database::update(
             Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
@@ -779,11 +841,11 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int Rows affected. Otherwise return false
      */
-    public function deleteTransferAccount($id)
+    public function deleteTransferAccount(int $id)
     {
         return Database::delete(
             Database::get_main_table(self::TABLE_TRANSFER),
-            ['id = ?' => (int) $id]
+            ['id = ?' => $id]
         );
     }
 
@@ -794,13 +856,13 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getItem($itemId)
+    public function getItem(int $itemId)
     {
         return Database::select(
             '*',
             Database::get_main_table(self::TABLE_ITEM),
             [
-                'where' => ['id = ?' => (int) $itemId],
+                'where' => ['id = ?' => $itemId],
             ],
             'first'
         );
@@ -815,7 +877,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getItemByProduct($productId, $itemType, $coupon = null)
+    public function getItemByProduct(int $productId, int $itemType, array $coupon = null)
     {
         $buyItemTable = Database::get_main_table(self::TABLE_ITEM);
         $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -832,8 +894,8 @@ class BuyCoursesPlugin extends Plugin
             [
                 'where' => [
                     'i.product_id = ? AND i.product_type = ?' => [
-                        (int) $productId,
-                        (int) $itemType,
+                        $productId,
+                        $itemType,
                     ],
                 ],
             ],
@@ -850,11 +912,141 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Get registered item data.
+     *
+     * @param int $itemId      The product ID
+     * @param int $productType The product type
+     *
+     * @return array
+     */
+    public function getSubscriptionItem(int $itemId, int $productType)
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SUBSCRIPTION),
+            [
+                'where' => ['product_id = ? AND product_type = ?' => [
+                        $itemId,
+                        $productType,
+                    ],
+                ],
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Get the item data.
+     *
+     * @param int $productId The item ID
+     * @param int $itemType  The item type
+     * @param array $coupon Array with at least 'discount_type' and 'discount_amount' elements
+     *
+     * @return array
+     */
+    public function getSubscriptionItemByProduct(int $productId, int $itemType, array $coupon = null)
+    {
+        $buySubscriptionItemTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
+        $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+
+        $fakeItemFrom = "
+            $buySubscriptionItemTable s
+            INNER JOIN $buyCurrencyTable c
+                ON s.currency_id = c.id
+        ";
+
+        $item = Database::select(
+            ['s.*', 'c.iso_code'],
+            $fakeItemFrom,
+            [
+                'where' => [
+                    's.product_id = ? AND s.product_type = ?' => [
+                        $productId,
+                        $itemType,
+                    ],
+                ],
+            ],
+            'first'
+        );
+
+        if (empty($item)) {
+            return false;
+        }
+
+        $this->setPriceSettings($item, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+
+        return $item;
+    }
+
+    /**
+     * Get the item data.
+     *
+     * @param int $productId The item ID
+     * @param int $itemType  The item type
+     *
+     * @return array
+     */
+    public function getSubscriptionsItemsByProduct(int $productId, int $itemType)
+    {
+        $buySubscriptionItemTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
+        $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+
+        $fakeItemFrom = "
+            $buySubscriptionItemTable s
+            INNER JOIN $buyCurrencyTable c
+                ON s.currency_id = c.id
+        ";
+
+        $items = Database::select(
+            ['s.*', 'c.iso_code'],
+            $fakeItemFrom,
+            [
+                'where' => [
+                    's.product_id = ? AND s.product_type = ?' => [
+                        $productId,
+                        $itemType,
+                    ],
+                ],
+            ]
+        );
+
+        for ($i = 0; $i < count($items); $i++) {
+            $this->setPriceSettings($items[$i], self::TAX_APPLIES_TO_ONLY_COURSE);
+        }
+
+        if (empty($items)) {
+            return false;
+        }
+
+        return $items;
+    }
+
+    /**
+     * Get registered item data by duration.
+     *
+     * @param int $duration The subscription duration
+     *
+     * @return array
+     */
+    public function getSubscriptionsItemsByDuration(int $duration)
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SUBSCRIPTION),
+            [
+                'where' => [
+                    'duration = ?' => [$duration, ],
+                ],
+            ]
+        );
+    }
+
+    /**
      * List courses details from the configuration page.
      *
      * @return array
      */
-    public function getCourseList($first, $maxResults)
+    public function getCourseList(int $first, int $maxResults)
     {
         return $this->getCourses($first, $maxResults);
     }
@@ -873,7 +1065,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array|int
      */
-    public function getCatalogSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all', $sessionCategory = 0)
+    public function getCatalogSessionList(int $start, int $end, string $name = null, int $min = 0, int $max = 0, string $typeResult = 'all', $sessionCategory = 0)
     {
         $sessions = $this->filterSessionList($start, $end, $name, $min, $max, $typeResult, $sessionCategory);
 
@@ -942,7 +1134,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array|int
      */
-    public function getCatalogCourseList($first, $pageSize, $name = null, $min = 0, $max = 0, $typeResult = 'all')
+    public function getCatalogCourseList(int $first, int $pageSize, string $name = null, int $min = 0, int $max = 0, string $typeResult = 'all')
     {
         $courses = $this->filterCourseList($first, $pageSize, $name, $min, $max, $typeResult);
 
@@ -995,12 +1187,138 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * @param $price
-     * @param $isoCode
+     * Lists current user subscription session details, including each session course details.
      *
-     * @return string
+     * It can return the number of rows when $typeResult is 'count'.
+     *
+     * @param int    $start           Pagination start.
+     * @param int    $end             Pagination end.
+     * @param string $name            Optional. The name filter.
+     * @param string $typeResult      Optional. 'all', 'first' or 'count'.
+     * @param int    $sessionCategory Optional. Session category id
+     *
+     * @return array|int
      */
-    public function getPriceWithCurrencyFromIsoCode($price, $isoCode)
+    public function getCatalogSubscriptionSessionList(int $start, int $end, string $name = null, string $typeResult = 'all', int $sessionCategory = 0)
+    {
+        $sessions = $this->filterSubscriptionSessionList($start, $end, $name, $typeResult, $sessionCategory);
+
+        if ($typeResult === 'count') {
+            return $sessions;
+        }
+
+        $sessionCatalog = [];
+        // loop through all sessions
+        foreach ($sessions as $session) {
+            $sessionCourses = $session->getCourses();
+
+            if (empty($sessionCourses)) {
+                continue;
+            }
+
+            $item = $this->getSubscriptionItemByProduct(
+                $session->getId(),
+                self::PRODUCT_TYPE_SESSION
+            );
+
+            if (empty($item)) {
+                continue;
+            }
+
+            $sessionData = $this->getSubscriptionSessionInfo($session->getId());
+            $sessionData['coach'] = $session->getGeneralCoach()->getCompleteName();
+            $sessionData['enrolled'] = $this->getUserStatusForSubscriptionSession(
+                api_get_user_id(),
+                $session
+            );
+            $sessionData['courses'] = [];
+
+            foreach ($sessionCourses as $sessionCourse) {
+                $course = $sessionCourse->getCourse();
+
+                $sessionCourseData = [
+                    'title' => $course->getTitle(),
+                    'coaches' => [],
+                ];
+
+                $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
+                    $course,
+                    Chamilo\CoreBundle\Entity\Session::COACH
+                );
+
+                foreach ($userCourseSubscriptions as $userCourseSubscription) {
+                    $user = $userCourseSubscription->getUser();
+                    $sessionCourseData['coaches'][] = $user->getCompleteName();
+                }
+                $sessionData['courses'][] = $sessionCourseData;
+            }
+
+            $sessionCatalog[] = $sessionData;
+        }
+
+        return $sessionCatalog;
+    }
+
+    /**
+     * Lists current user subscription course details.
+     *
+     * @param string $typeResult Optional. 'all', 'first' or 'count'.
+     *
+     * @return array|int
+     */
+    public function getCatalogSubscriptionCourseList(int $first, int $pageSize, string $name = null, string $typeResult = 'all')
+    {
+        $courses = $this->filterSubscriptionCourseList($first, $pageSize, $name, $typeResult);
+
+        if ($typeResult === 'count') {
+            return $courses;
+        }
+
+        if (empty($courses)) {
+            return [];
+        }
+
+        $courseCatalog = [];
+        foreach ($courses as $course) {
+            $item = $this->getSubscriptionItemByProduct(
+                $course->getId(),
+                self::PRODUCT_TYPE_COURSE
+            );
+
+            if (empty($item)) {
+                continue;
+            }
+
+            $courseItem = [
+                'id' => $course->getId(),
+                'title' => $course->getTitle(),
+                'code' => $course->getCode(),
+                'course_img' => null,
+                'item' => $item,
+                'teachers' => [],
+                'enrolled' => $this->getUserStatusForSubscriptionCourse(api_get_user_id(), $course),
+            ];
+
+            foreach ($course->getTeachers() as $courseUser) {
+                $teacher = $courseUser->getUser();
+                $courseItem['teachers'][] = $teacher->getCompleteName();
+            }
+
+            // Check images
+            $possiblePath = api_get_path(SYS_COURSE_PATH);
+            $possiblePath .= $course->getDirectory();
+            $possiblePath .= '/course-pic.png';
+
+            if (file_exists($possiblePath)) {
+                $courseItem['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
+            }
+            $courseCatalog[] = $courseItem;
+        }
+
+        return $courseCatalog;
+    }
+
+    public function getPriceWithCurrencyFromIsoCode(float $price, string $isoCode): string
     {
         $useSymbol = $this->get('use_currency_symbol') === 'true';
 
@@ -1020,11 +1338,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get course info.
      *
-     * @param int $courseId The course ID
-     *
      * @return array
      */
-    public function getCourseInfo($courseId, $coupon = null)
+    public function getCourseInfo(int $courseId, array $coupon = null)
     {
         $entityManager = Database::getManager();
         $course = $entityManager->find('ChamiloCoreBundle:Course', $courseId);
@@ -1091,11 +1407,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get session info.
      *
-     * @param array $sessionId The session ID
-     *
      * @return array
      */
-    public function getSessionInfo($sessionId, $coupon = null)
+    public function getSessionInfo(int $sessionId, array $coupon = null)
     {
         $entityManager = Database::getManager();
         $session = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);
@@ -1178,6 +1492,164 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Get course info.
+     *
+     * @return array
+     */
+    public function getSubscriptionCourseInfo(int $courseId, array $coupon = null)
+    {
+        $entityManager = Database::getManager();
+        $course = $entityManager->find('ChamiloCoreBundle:Course', $courseId);
+
+        if (empty($course)) {
+            return [];
+        }
+
+        $item = $this->getSubscriptionItemByProduct(
+            $course->getId(),
+            self::PRODUCT_TYPE_COURSE,
+            $coupon
+        );
+
+        if (empty($item)) {
+            return [];
+        }
+
+        $courseDescription = $entityManager->getRepository('ChamiloCourseBundle:CCourseDescription')
+            ->findOneBy(
+                [
+                    'cId' => $course->getId(),
+                    'sessionId' => 0,
+                ],
+                [
+                    'descriptionType' => 'ASC',
+                ]
+            );
+
+        $globalParameters = $this->getGlobalParameters();
+        $courseInfo = [
+            'id' => $course->getId(),
+            'title' => $course->getTitle(),
+            'description' => $courseDescription ? $courseDescription->getContent() : null,
+            'code' => $course->getCode(),
+            'visual_code' => $course->getVisualCode(),
+            'teachers' => [],
+            'item' => $item,
+            'tax_name' => $globalParameters['tax_name'],
+            'tax_enable' => $this->checkTaxEnabledInProduct(self::TAX_APPLIES_TO_ONLY_COURSE),
+            'course_img' => null,
+        ];
+
+        $courseTeachers = $course->getTeachers();
+
+        foreach ($courseTeachers as $teachers) {
+            $user = $teachers->getUser();
+            $teacher['id'] = $user->getId();
+            $teacher['name'] = $user->getCompleteName();
+            $courseInfo['teachers'][] = $teacher;
+        }
+
+        $possiblePath = api_get_path(SYS_COURSE_PATH);
+        $possiblePath .= $course->getDirectory();
+        $possiblePath .= '/course-pic.png';
+
+        if (file_exists($possiblePath)) {
+            $courseInfo['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
+        }
+
+        return $courseInfo;
+    }
+
+    /**
+     * Get session info.
+     *
+     * @param array $sessionId The session ID
+     *
+     * @return array
+     */
+    public function getSubscriptionSessionInfo(int $sessionId, array $coupon = null)
+    {
+        $entityManager = Database::getManager();
+        $session = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);
+
+        if (empty($session)) {
+            return [];
+        }
+
+        $item = $this->getSubscriptionItemByProduct(
+            $session->getId(),
+            self::PRODUCT_TYPE_SESSION,
+            $coupon
+        );
+
+        if (empty($item)) {
+            return [];
+        }
+
+        $sessionDates = SessionManager::parseSessionDates(
+            [
+                'display_start_date' => $session->getDisplayStartDate(),
+                'display_end_date' => $session->getDisplayEndDate(),
+                'access_start_date' => $session->getAccessStartDate(),
+                'access_end_date' => $session->getAccessEndDate(),
+                'coach_access_start_date' => $session->getCoachAccessStartDate(),
+                'coach_access_end_date' => $session->getCoachAccessEndDate(),
+            ]
+        );
+
+        $globalParameters = $this->getGlobalParameters();
+        $sessionInfo = [
+            'id' => $session->getId(),
+            'name' => $session->getName(),
+            'description' => $session->getDescription(),
+            'dates' => $sessionDates,
+            'courses' => [],
+            'tax_name' => $globalParameters['tax_name'],
+            'tax_enable' => $this->checkTaxEnabledInProduct(self::TAX_APPLIES_TO_ONLY_SESSION),
+            'image' => null,
+            'nbrCourses' => $session->getNbrCourses(),
+            'nbrUsers' => $session->getNbrUsers(),
+            'item' => $item,
+            'duration' => $session->getDuration(),
+        ];
+
+        $fieldValue = new ExtraFieldValue('session');
+        $sessionImage = $fieldValue->get_values_by_handler_and_field_variable(
+            $session->getId(),
+            'image'
+        );
+
+        if (!empty($sessionImage)) {
+            $sessionInfo['image'] = api_get_path(WEB_UPLOAD_PATH).$sessionImage['value'];
+        }
+
+        $sessionCourses = $session->getCourses();
+        foreach ($sessionCourses as $sessionCourse) {
+            $course = $sessionCourse->getCourse();
+            $sessionCourseData = [
+                'title' => $course->getTitle(),
+                'coaches' => [],
+            ];
+
+            $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
+                $course,
+                Chamilo\CoreBundle\Entity\Session::COACH
+            );
+
+            foreach ($userCourseSubscriptions as $userCourseSubscription) {
+                $user = $userCourseSubscription->getUser();
+                $coaches['id'] = $user->getUserId();
+                $coaches['name'] = $user->getCompleteName();
+                $sessionCourseData['coaches'][] = $coaches;
+            }
+
+            $sessionInfo['courses'][] = $sessionCourseData;
+        }
+
+        return $sessionInfo;
+    }
+
+    /**
      * Register a sale.
      *
      * @param int    $itemId      The product ID
@@ -1186,7 +1658,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function registerSale($itemId, $paymentType, $couponId = null)
+    public function registerSale(int $itemId, int $paymentType, string $couponId = null)
     {
         if (!in_array(
                 $paymentType,
@@ -1284,7 +1756,7 @@ class BuyCoursesPlugin extends Plugin
             'tax_perc' => $taxPerc,
             'tax_amount' => $taxAmount,
             'status' => self::SALE_STATUS_PENDING,
-            'payment_type' => (int) $paymentType,
+            'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
         ];
@@ -1295,30 +1767,25 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Update the sale reference.
      *
-     * @param int $saleId        The sale ID
-     * @param int $saleReference The new saleReference
-     *
      * @return bool
      */
-    public function updateSaleReference($saleId, $saleReference)
+    public function updateSaleReference(int $saleId, int $saleReference)
     {
         $saleTable = Database::get_main_table(self::TABLE_SALE);
 
         return Database::update(
             $saleTable,
             ['reference' => $saleReference],
-            ['id = ?' => (int) $saleId]
+            ['id = ?' => $saleId]
         );
     }
 
     /**
      * Get sale data by ID.
      *
-     * @param int $saleId The sale ID
-     *
      * @return array
      */
-    public function getSale($saleId)
+    public function getSale(int $saleId)
     {
         return Database::select(
             '*',
@@ -1332,8 +1799,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Get sale data by reference.
-     *
-     * @param string $reference The sale reference
      *
      * @return array
      */
@@ -1356,7 +1821,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The sale list. Otherwise return false
      */
-    public function getSaleListByPaymentType($paymentType = self::PAYMENT_TYPE_PAYPAL)
+    public function getSaleListByPaymentType(int $paymentType = self::PAYMENT_TYPE_PAYPAL)
     {
         $saleTable = Database::get_main_table(self::TABLE_SALE);
         $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -1373,7 +1838,7 @@ class BuyCoursesPlugin extends Plugin
             [
                 'where' => [
                     's.payment_type = ? AND s.status = ?' => [
-                        (int) $paymentType,
+                        $paymentType,
                         self::SALE_STATUS_COMPLETED,
                     ],
                 ],
@@ -1390,7 +1855,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The sale data
      */
-    public function getDataSaleInvoice($saleId, $isService)
+    public function getDataSaleInvoice(int $saleId, int $isService)
     {
         if ($isService) {
             $sale = $this->getServiceSale($saleId);
@@ -1414,7 +1879,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The invoice data
      */
-    public function getDataInvoice($saleId, $isService)
+    public function getDataInvoice(int $saleId, int $isService)
     {
         return Database::select(
             '*',
@@ -1437,7 +1902,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return string
      */
-    public function getNumInvoice($saleId, $isService)
+    public function getNumInvoice(int $saleId, int $isService)
     {
         $dataInvoice = $this->getDataInvoice($saleId, $isService);
         if (empty($dataInvoice)) {
@@ -1454,13 +1919,13 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getCurrency($currencyId)
+    public function getCurrency(int $currencyId)
     {
         return Database::select(
             '*',
             Database::get_main_table(self::TABLE_CURRENCY),
             [
-                'where' => ['id = ?' => (int) $currencyId],
+                'where' => ['id = ?' => $currencyId],
             ],
             'first'
         );
@@ -1469,11 +1934,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Complete sale process. Update sale status to completed.
      *
-     * @param int $saleId The sale ID
-     *
      * @return bool
      */
-    public function completeSale($saleId)
+    public function completeSale(int $saleId)
     {
         $sale = $this->getSale($saleId);
 
@@ -1514,7 +1977,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param int $saleId The sale ID
      */
-    public function cancelSale($saleId)
+    public function cancelSale(int $saleId)
     {
         $this->updateSaleStatus($saleId, self::SALE_STATUS_CANCELED);
     }
@@ -1572,7 +2035,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int $saleId    The sale ID
      * @param int $isService The service type to filter (default : 0)
      */
-    public function setInvoice($saleId, $isService = 0)
+    public function setInvoice(int $saleId, int $isService = 0)
     {
         $invoiceTable = Database::get_main_table(self::TABLE_INVOICE);
         $year = date('Y');
@@ -1650,7 +2113,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The sale list. Otherwise return false
      */
-    public function getSaleListByStatus($status = self::SALE_STATUS_PENDING)
+    public function getSaleListByStatus(int $status = self::SALE_STATUS_PENDING)
     {
         $saleTable = Database::get_main_table(self::TABLE_SALE);
         $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -1665,7 +2128,7 @@ class BuyCoursesPlugin extends Plugin
             ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
             [
-                'where' => ['s.status = ?' => (int) $status],
+                'where' => ['s.status = ?' => $status],
                 'order' => 'id DESC',
             ]
         );
@@ -1674,14 +2137,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the list statuses for sales.
      *
-     * @param string $dateStart
-     * @param string $dateEnd
-     *
      * @throws Exception
      *
      * @return array
      */
-    public function getSaleListReport($dateStart = null, $dateEnd = null)
+    public function getSaleListReport(string $dateStart = null, string $dateEnd = null)
     {
         $saleTable = Database::get_main_table(self::TABLE_SALE);
         $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -1852,7 +2312,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Generates a random text (used for order references).
      *
-     * @param int  $length    Optional. Length of characters
+     * @param int  $length    Optional. Length of characters (defaults to 6)
      * @param bool $lowercase Optional. Include lowercase characters
      * @param bool $uppercase Optional. Include uppercase characters
      * @param bool $numbers   Optional. Include numbers
@@ -1860,11 +2320,11 @@ class BuyCoursesPlugin extends Plugin
      * @return string
      */
     public static function randomText(
-        $length = 6,
-        $lowercase = true,
-        $uppercase = true,
-        $numbers = true
-    ) {
+        int $length = 6,
+        bool $lowercase = true,
+        bool $uppercase = true,
+        bool $numbers = true
+    ): string {
         $salt = $lowercase ? 'abchefghknpqrstuvwxyz' : '';
         $salt .= $uppercase ? 'ACDEFHKNPRSTUVWXYZ' : '';
         $salt .= $numbers ? (strlen($salt) ? '2345679' : '0123456789') : '';
@@ -1894,7 +2354,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return string
      */
-    public function generateReference($userId, $productType, $productId)
+    public function generateReference(int $userId, int $productType, int $productId): string
     {
         return vsprintf(
             '%d-%d-%d-%s',
@@ -1909,7 +2369,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The sale list. Otherwise return false
      */
-    public function getSaleListByUser($term)
+    public function getSaleListByUser(string $term)
     {
         $term = trim($term);
 
@@ -1946,7 +2406,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The sale list. Otherwise return false
      */
-    public function getSaleListByUserId($id)
+    public function getSaleListByUserId(int $id)
     {
         if (empty($id)) {
             return [];
@@ -1981,7 +2441,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The sale list. Otherwise return false
      */
-    public function getSaleListByDate($dateStart, $dateEnd)
+    public function getSaleListByDate(string $dateStart, string $dateEnd)
     {
         $dateStart = trim($dateStart);
         $dateEnd = trim($dateEnd);
@@ -2019,7 +2479,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The sale list. Otherwise return false
      */
-    public function getSaleListByEmail($term)
+    public function getSaleListByEmail(string $term)
     {
         $term = trim($term);
         if (empty($term)) {
@@ -2052,7 +2512,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getCourseForConfiguration(Course $course, $defaultCurrency = null)
+    public function getCourseForConfiguration(Course $course, array $defaultCurrency = null)
     {
         $courseItem = [
             'item_id' => null,
@@ -2089,7 +2549,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getSessionForConfiguration(Session $session, $defaultCurrency = null)
+    public function getSessionForConfiguration(Session $session, array $defaultCurrency = null)
     {
         $buyItemTable = Database::get_main_table(self::TABLE_ITEM);
         $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -2159,7 +2619,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The beneficiaries. Otherwise return false
      */
-    public function getItemBeneficiaries($itemId)
+    public function getItemBeneficiaries(int $itemId)
     {
         $beneficiaryTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
 
@@ -2168,7 +2628,7 @@ class BuyCoursesPlugin extends Plugin
             $beneficiaryTable,
             [
                 'where' => [
-                    'item_id = ?' => (int) $itemId,
+                    'item_id = ?' => $itemId,
                 ],
             ]
         );
@@ -2181,12 +2641,12 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int The number of affected rows. Otherwise return false
      */
-    public function deleteItem($itemId)
+    public function deleteItem(int $itemId)
     {
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $affectedRows = Database::delete(
             $itemTable,
-            ['id = ?' => (int) $itemId]
+            ['id = ?' => $itemId]
         );
 
         if (!$affectedRows) {
@@ -2219,7 +2679,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int The number of affected rows. Otherwise return false
      */
-    public function updateItem(array $itemData, $productId, $productType)
+    public function updateItem(array $itemData, int $productId, int $productType)
     {
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
 
@@ -2227,7 +2687,7 @@ class BuyCoursesPlugin extends Plugin
             $itemTable,
             $itemData,
             [
-                'product_id = ? AND ' => (int) $productId,
+                'product_id = ? AND ' => $productId,
                 'product_type' => $productType,
             ]
         );
@@ -2240,13 +2700,13 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int The number of affected rows. Otherwise return false
      */
-    public function deleteItemBeneficiaries($itemId)
+    public function deleteItemBeneficiaries(int $itemId)
     {
         $beneficiaryTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
 
         return Database::delete(
             $beneficiaryTable,
-            ['item_id = ?' => (int) $itemId]
+            ['item_id = ?' => $itemId]
         );
     }
 
@@ -2256,7 +2716,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int   $itemId  The item ID
      * @param array $userIds The beneficiary user ID and Teachers commissions if enabled
      */
-    public function registerItemBeneficiaries($itemId, array $userIds)
+    public function registerItemBeneficiaries(int $itemId, array $userIds)
     {
         $beneficiaryTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
 
@@ -2266,7 +2726,7 @@ class BuyCoursesPlugin extends Plugin
             Database::insert(
                 $beneficiaryTable,
                 [
-                    'item_id' => (int) $itemId,
+                    'item_id' => $itemId,
                     'user_id' => (int) $userId,
                     'commissions' => (int) $commissions,
                 ]
@@ -2301,7 +2761,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getBeneficiariesBySale($saleId)
+    public function getBeneficiariesBySale(int $saleId)
     {
         $sale = $this->getSale($saleId);
         $item = $this->getItemByProduct($sale['product_id'], $sale['product_type']);
@@ -2320,12 +2780,12 @@ class BuyCoursesPlugin extends Plugin
      * @return array
      */
     public function getPayouts(
-        $status = self::PAYOUT_STATUS_PENDING,
-        $payoutId = false,
-        $userId = false
+        int $status = self::PAYOUT_STATUS_PENDING,
+        int $payoutId = 0,
+        int $userId = 0
     ) {
-        $condition = ($payoutId) ? 'AND p.id = '.((int) $payoutId) : '';
-        $condition2 = ($userId) ? ' AND p.user_id = '.((int) $userId) : '';
+        $condition = ($payoutId) ? 'AND p.id = '.($payoutId) : '';
+        $condition2 = ($userId) ? ' AND p.user_id = '.($userId) : '';
         $typeResult = ($condition) ? 'first' : 'all';
         $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
         $saleTable = Database::get_main_table(self::TABLE_SALE);
@@ -2374,7 +2834,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return true if the user have a paypal account, false if not
      */
-    public function verifyPaypalAccountByBeneficiary($userId)
+    public function verifyPaypalAccountByBeneficiary(int $userId)
     {
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
         $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -2397,7 +2857,7 @@ class BuyCoursesPlugin extends Plugin
             'value',
             $extraFieldValues,
             [
-                'where' => ['field_id = ? AND item_id = ?' => [(int) $paypalFieldId, (int) $userId]],
+                'where' => ['field_id = ? AND item_id = ?' => [(int) $paypalFieldId, $userId]],
             ],
             'first'
         );
@@ -2416,11 +2876,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register the users payouts.
      *
-     * @param int $saleId The sale ID
-     *
      * @return array
      */
-    public function storePayouts($saleId)
+    public function storePayouts(int $saleId)
     {
         $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
         $platformCommission = $this->getPlatformCommission();
@@ -2440,7 +2898,46 @@ class BuyCoursesPlugin extends Plugin
                 [
                     'date' => $sale['date'],
                     'payout_date' => api_get_utc_datetime(),
-                    'sale_id' => (int) $saleId,
+                    'sale_id' => $saleId,
+                    'user_id' => $beneficiary['user_id'],
+                    'commission' => number_format(
+                        (floatval($teachersCommission) * $beneficiaryCommission) / 100,
+                        2
+                    ),
+                    'status' => self::PAYOUT_STATUS_PENDING,
+                ]
+            );
+        }
+    }
+
+    /**
+     * Register the users payouts.
+     *
+     * @param int $saleId The subscription sale ID
+     *
+     * @return array
+     */
+    public function storeSubscriptionPayouts(int $saleId)
+    {
+        $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
+        $platformCommission = $this->getPlatformCommission();
+
+        $sale = $this->getSubscriptionSale($saleId);
+        $commission = (int) $platformCommission['commission'];
+        $teachersCommission = number_format(
+            (floatval($sale['price']) * $commission) / 100,
+            2
+        );
+
+        $beneficiaries = $this->getBeneficiariesBySale($saleId);
+        foreach ($beneficiaries as $beneficiary) {
+            $beneficiaryCommission = (int) $beneficiary['commissions'];
+            Database::insert(
+                $payoutsTable,
+                [
+                    'date' => $sale['date'],
+                    'payout_date' => api_get_utc_datetime(),
+                    'sale_id' => $saleId,
                     'user_id' => $beneficiary['user_id'],
                     'commission' => number_format(
                         (floatval($teachersCommission) * $beneficiaryCommission) / 100,
@@ -2460,7 +2957,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function setStatusPayouts($payoutId, $status)
+    public function setStatusPayouts(int $payoutId, int $status)
     {
         $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
 
@@ -2489,11 +2986,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Update the platform commission.
      *
-     * @param int $params platform commission
+     * @param array $params platform commission
      *
      * @return int The number of affected rows. Otherwise return false
      */
-    public function updateCommission($params)
+    public function updateCommission(array $params)
     {
         $commissionTable = Database::get_main_table(self::TABLE_COMMISSION);
 
@@ -2510,7 +3007,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return mixed response
      */
-    public function storeService($service)
+    public function storeService(array $service)
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
 
@@ -2543,7 +3040,7 @@ class BuyCoursesPlugin extends Plugin
             Database::update(
                 $servicesTable,
                 ['image' => 'simg-'.$return.'.png'],
-                ['id = ?' => (int) $return]
+                ['id = ?' => $return]
             );
         }
 
@@ -2558,7 +3055,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return mixed response
      */
-    public function updateService($service, $id)
+    public function updateService(array $service, int $id)
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         if (!empty($service['picture_crop_image_base_64'])) {
@@ -2584,7 +3081,7 @@ class BuyCoursesPlugin extends Plugin
                 'video_url' => $service['video_url'],
                 'service_information' => $service['service_information'],
             ],
-            ['id = ?' => (int) $id]
+            ['id = ?' => $id]
         );
     }
 
@@ -2595,27 +3092,27 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int Rows affected. Otherwise return false
      */
-    public function deleteService($id)
+    public function deleteService(int $id)
     {
         Database::delete(
             Database::get_main_table(self::TABLE_SERVICES_SALE),
-            ['service_id = ?' => (int) $id]
+            ['service_id = ?' => $id]
         );
 
         return Database::delete(
             Database::get_main_table(self::TABLE_SERVICES),
-            ['id = ?' => (int) $id]
+            ['id = ?' => $id]
         );
     }
 
     /**
      * @param array $product
      * @param int   $productType
-     * @param array $coupon
+     * @param array $coupon Array with at least 'discount_type' and 'discount_amount' elements
      *
      * @return bool
      */
-    public function setPriceSettings(&$product, $productType, $coupon = null)
+    public function setPriceSettings(array &$product, int $productType, array $coupon = null): bool
     {
         if (empty($product)) {
             return false;
@@ -2678,6 +3175,8 @@ class BuyCoursesPlugin extends Plugin
                 $product['iso_code']
             );
         }
+
+        return true;
     }
 
     /**
@@ -2686,10 +3185,8 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getService($id, $coupon = null)
+    public function getService(int $id, array $coupon = null)
     {
-        $id = (int) $id;
-
         if (empty($id)) {
             return [];
         }
@@ -2750,19 +3247,12 @@ class BuyCoursesPlugin extends Plugin
     /**
      * List additional services.
      *
-     * @param int    $start
-     * @param int    $end
-     * @param string $typeResult
-     *
      * @return array|int
      */
-    public function getServices($start, $end, $typeResult = 'all')
+    public function getServices(int $start, int $end, string $typeResult = 'all')
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
-        $start = (int) $start;
-        $end = (int) $end;
 
         $conditions = ['limit' => "$start, $end"];
         $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
@@ -2810,17 +3300,13 @@ class BuyCoursesPlugin extends Plugin
      * @return array
      */
     public function getServiceSales(
-        $buyerId = 0,
-        $status = 0,
-        $nodeType = 0,
-        $nodeId = 0
+        int $buyerId = 0,
+        int $status = 0,
+        int $nodeType = 0,
+        int $nodeId = 0
     ) {
         $conditions = null;
         $groupBy = '';
-        $buyerId = (int) $buyerId;
-        $status = (int) $status;
-        $nodeType = (int) $nodeType;
-        $nodeId = (int) $nodeId;
 
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
@@ -2881,7 +3367,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getServiceSale($id)
+    public function getServiceSale(int $id)
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
@@ -2936,7 +3422,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function cancelServiceSale($serviceSaleId)
+    public function cancelServiceSale(int $serviceSaleId)
     {
         $this->updateServiceSaleStatus(
             $serviceSaleId,
@@ -2953,7 +3439,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function completeServiceSale($serviceSaleId)
+    public function completeServiceSale(int $serviceSaleId)
     {
         $serviceSale = $this->getServiceSale($serviceSaleId);
         if ($serviceSale['status'] == self::SERVICE_STATUS_COMPLETED) {
@@ -2975,15 +3461,17 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Lists current service details.
      *
-     * @param string $name      Optional. The name filter
-     * @param int    $min       Optional. The minimum price filter
-     * @param int    $max       Optional. The maximum price filter
-     * @param mixed  $appliesTo optional
-     *
      * @return array|int
      */
-    public function getCatalogServiceList($start, $end, $name = null, $min = 0, $max = 0, $appliesTo = '', $typeResult = 'all')
-    {
+    public function getCatalogServiceList(
+        int $start,
+        int $end,
+        string $name = null,
+        int $min = 0,
+        int $max = 0,
+        mixed $appliesTo = '',
+        string $typeResult = 'all'
+    ) {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -3006,9 +3494,6 @@ class BuyCoursesPlugin extends Plugin
         if (!$appliesTo == '') {
             $whereConditions['AND s.applies_to = ?'] = $appliesTo;
         }
-
-        $start = (int) $start;
-        $end = (int) $end;
 
         $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
         $return = Database::select(
@@ -3039,7 +3524,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function registerServiceSale($serviceId, $paymentType, $infoSelect, $couponId = null)
+    public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, int $couponId = null)
     {
         if (!in_array(
             $paymentType,
@@ -3104,7 +3589,7 @@ class BuyCoursesPlugin extends Plugin
             'tax_perc' => $taxPerc,
             'tax_amount' => $taxAmount,
             'node_type' => $service['applies_to'],
-            'node_id' => (int) $infoSelect,
+            'node_id' => $infoSelect,
             'buyer_id' => $userId,
             'buy_date' => api_get_utc_datetime(),
             'date_start' => api_get_utc_datetime(),
@@ -3116,7 +3601,7 @@ class BuyCoursesPlugin extends Plugin
                 'Y-m-d H:i:s'
             ),
             'status' => self::SERVICE_STATUS_PENDING,
-            'payment_type' => (int) $paymentType,
+            'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
         ];
@@ -3133,7 +3618,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int Rows affected. Otherwise return false
      */
-    public function saveCulqiParameters($params)
+    public function saveCulqiParameters(array $params)
     {
         return Database::update(
             Database::get_main_table(self::TABLE_CULQI),
@@ -3166,7 +3651,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function saveCecabankParameters($params)
+    public function saveCecabankParameters(array $params)
     {
         return Database::update(
             Database::get_main_table(self::TABLE_TPV_CECABANK),
@@ -3202,11 +3687,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Save Global Parameters.
      *
-     * @param array $params
-     *
      * @return int Rows affected. Otherwise return false
      */
-    public function saveGlobalParameters($params)
+    public function saveGlobalParameters(array $params)
     {
         $sqlParams = [
             'terms_and_conditions' => $params['terms_and_conditions'],
@@ -3255,7 +3738,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function checkTaxEnabledInProduct($productType)
+    public function checkTaxEnabledInProduct(int $productType)
     {
         if (empty($this->get('tax_enable') === 'true')) {
             return false;
@@ -3329,7 +3812,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int
      */
-    public function registerCouponSale($saleId, $couponId)
+    public function registerCouponSale(int $saleId, int $couponId)
     {
         $sale = $this->getSale($saleId);
 
@@ -3338,8 +3821,8 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $values = [
-            'coupon_id' => (int) $couponId,
-            'sale_id' => (int) $saleId,
+            'coupon_id' => $couponId,
+            'sale_id' => $saleId,
         ];
 
         return Database::insert(self::TABLE_COUPON_SALE, $values);
@@ -3353,7 +3836,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int
      */
-    public function registerCouponServiceSale($saleId, $couponId)
+    public function registerCouponServiceSale(int $saleId, int $couponId)
     {
         $sale = $this->getSale($saleId);
 
@@ -3362,11 +3845,35 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $values = [
-            'coupon_id' => (int) $couponId,
-            'service_sale_id' => (int) $saleId,
+            'coupon_id' => $couponId,
+            'service_sale_id' => $saleId,
         ];
 
         return Database::insert(self::TABLE_COUPON_SERVICE_SALE, $values);
+    }
+
+    /**
+     * Register a coupon sale.
+     *
+     * @param int $saleId   The sale ID
+     * @param int $couponId The coupon ID
+     *
+     * @return int
+     */
+    public function registerCouponSubscriptionSale(int $saleId, int $couponId)
+    {
+        $sale = $this->getSubscriptionSale($saleId);
+
+        if (empty($sale)) {
+            return false;
+        }
+
+        $values = [
+            'coupon_id' => (int) $couponId,
+            'sale_id' => (int) $saleId,
+        ];
+
+        return Database::insert(self::TABLE_COUPON_SUBSCRIPTION_SALE, $values);
     }
 
     /**
@@ -3376,7 +3883,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function addNewCoupon($coupon)
+    public function addNewCoupon(int $coupon)
     {
         $couponId = $this->registerCoupon($coupon);
         if ($couponId) {
@@ -3419,7 +3926,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function updateCouponData($coupon)
+    public function updateCouponData(array $coupon)
     {
         $this->updateCoupon($coupon);
         $this->deleteCouponItemsByCoupon(self::PRODUCT_TYPE_COURSE, $coupon['id']);
@@ -3454,15 +3961,13 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function updateCouponDelivered($couponId)
+    public function updateCouponDelivered(int $couponId)
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
-        $couponId = (int) $couponId;
 
         $sql = "UPDATE $couponTable
         SET delivered = delivered+1
-        WHERE
-            id = $couponId";
+        WHERE id = $couponId";
 
         Database::query($sql);
     }
@@ -3470,11 +3975,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get coupon info.
      *
-     * @param int $couponCode The coupon ID
+     * @param int $couponId The coupon ID
      *
      * @return array The coupon data
      */
-    public function getCouponInfo($couponId)
+    public function getCouponInfo(int $couponId)
     {
         $coupon = $this->getDataCoupon($couponId);
 
@@ -3496,7 +4001,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array Coupons data
      */
-    public function getCouponsListByStatus($status)
+    public function getCouponsListByStatus(int $status)
     {
         $coupons = $this->getDataCoupons($status);
 
@@ -3506,13 +4011,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the coupon data.
      *
-     * @param int $couponCode  The coupon ID
-     * @param int $productId   The product ID
-     * @param int $productType The product type
-     *
      * @return array The coupon data
      */
-    public function getCoupon($couponId, $productType, $productId)
+    public function getCoupon(int $couponId, int $productType, int $productId)
     {
         $coupon = $this->getDataCoupon($couponId, $productType, $productId);
 
@@ -3528,7 +4029,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    public function getCouponByCode($couponCode, $productType = null, $productId = null)
+    public function getCouponByCode(string $couponCode, int $productType = null, int $productId = null)
     {
         $coupon = $this->getDataCouponByCode($couponCode, $productType, $productId);
 
@@ -3543,7 +4044,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    public function getCouponService($couponId, $serviceId)
+    public function getCouponService(int $couponId, int $serviceId)
     {
         $coupon = $this->getDataCouponService($couponId, $serviceId);
 
@@ -3558,7 +4059,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    public function getCouponServiceByCode($couponCode, $serviceId)
+    public function getCouponServiceByCode(string $couponCode, int $serviceId)
     {
         $coupon = $this->getDataCouponServiceByCode($couponCode, $serviceId);
 
@@ -3568,11 +4069,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the coupon code of a item sale.
      *
-     * @param string $saleId The sale ID
+     * @param int $saleId The sale ID
      *
      * @return string The coupon code
      */
-    public function getSaleCouponCode($saleId)
+    public function getSaleCouponCode(int $saleId)
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponSaleTable = Database::get_main_table(self::TABLE_COUPON_SALE);
@@ -3588,7 +4089,7 @@ class BuyCoursesPlugin extends Plugin
             $couponFrom,
             [
                 'where' => [
-                    's.sale_id = ? ' => (int) $saleId,
+                    's.sale_id = ? ' => $saleId,
                 ],
             ],
             'first'
@@ -3600,11 +4101,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the coupon code of a service sale.
      *
-     * @param string $serviceSaleId The service sale ID
+     * @param int $serviceSaleId The service sale ID
      *
      * @return string The coupon code
      */
-    public function getServiceSaleCouponCode($serviceSaleId)
+    public function getServiceSaleCouponCode(int $serviceSaleId)
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceSaleTable = Database::get_main_table(self::TABLE_COUPON_SERVICE_SALE);
@@ -3620,7 +4121,7 @@ class BuyCoursesPlugin extends Plugin
             $couponFrom,
             [
                 'where' => [
-                    's.service_sale_id = ? ' => (int) $serviceSaleId,
+                    's.service_sale_id = ? ' => $serviceSaleId,
                 ],
             ],
             'first'
@@ -3654,6 +4155,762 @@ class BuyCoursesPlugin extends Plugin
         $signature = strtolower($sha256);
 
         return $signature;
+    }
+
+    /**
+     * Register a subscription sale.
+     *
+     * @param int    $productId   The product ID
+     * @param int    $productType The product type
+     * @param int    $paymentType The payment type
+     * @param int    $duration    The subscription duration
+     * @param int    $couponId    The coupon ID
+     *
+     * @return int
+     */
+    public function registerSubscriptionSale(
+        int $productId,
+        int $productType,
+        int $paymentType,
+        int $duration,
+        int $couponId = null
+    ) {
+        if (!in_array(
+            $paymentType,
+            [
+                self::PAYMENT_TYPE_PAYPAL,
+                self::PAYMENT_TYPE_TRANSFER,
+                self::PAYMENT_TYPE_CULQI,
+                self::PAYMENT_TYPE_TPV_REDSYS,
+                self::PAYMENT_TYPE_STRIPE,
+                self::PAYMENT_TYPE_TPV_CECABANK,
+            ]
+        )
+        ) {
+            return false;
+        }
+
+        $entityManager = Database::getManager();
+        $item = $this->getSubscriptionItem($productId, $productType);
+
+        if (empty($item)) {
+            return false;
+        }
+
+        $productName = '';
+        if ($item['product_type'] == self::PRODUCT_TYPE_COURSE) {
+            $course = $entityManager->find('ChamiloCoreBundle:Course', $item['product_id']);
+
+            if (empty($course)) {
+                return false;
+            }
+
+            $productName = $course->getTitle();
+        } elseif ($item['product_type'] == self::PRODUCT_TYPE_SESSION) {
+            $session = $entityManager->find('ChamiloCoreBundle:Session', $item['product_id']);
+
+            if (empty($session)) {
+                return false;
+            }
+
+            $productName = $session->getName();
+        }
+
+        if ($couponId != null) {
+            $coupon = $this->getCoupon($couponId, $item['product_type'], $item['product_id']);
+        }
+
+        $couponDiscount = 0;
+        $priceWithoutDiscount = 0;
+        if ($coupon != null) {
+            if ($coupon['discount_type'] == self::COUPON_DISCOUNT_TYPE_AMOUNT) {
+                $couponDiscount = $coupon['discount_amount'];
+            } elseif ($coupon['discount_type'] == self::COUPON_DISCOUNT_TYPE_PERCENTAGE) {
+                $couponDiscount = ($item['price'] * $coupon['discount_amount']) / 100;
+            }
+            $priceWithoutDiscount = $item['price'];
+        }
+        $item['price'] = $item['price'] - $couponDiscount;
+        $price = $item['price'];
+        $priceWithoutTax = null;
+        $taxPerc = null;
+        $taxAmount = 0;
+        $taxEnable = $this->get('tax_enable') === 'true';
+        $globalParameters = $this->getGlobalParameters();
+        $taxAppliesTo = $globalParameters['tax_applies_to'];
+
+        if ($taxEnable &&
+            (
+                $taxAppliesTo == self::TAX_APPLIES_TO_ALL ||
+                ($taxAppliesTo == self::TAX_APPLIES_TO_ONLY_COURSE && $item['product_type'] == self::PRODUCT_TYPE_COURSE) ||
+                ($taxAppliesTo == self::TAX_APPLIES_TO_ONLY_SESSION && $item['product_type'] == self::PRODUCT_TYPE_SESSION)
+            )
+        ) {
+            $priceWithoutTax = $item['price'];
+            $globalTaxPerc = $globalParameters['global_tax_perc'];
+            $precision = 2;
+            $taxPerc = is_null($item['tax_perc']) ? $globalTaxPerc : $item['tax_perc'];
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        }
+
+        $subscriptionEnd = date('y:m:d', strtotime('+'.$duration.' days'));
+
+        $values = [
+            'reference' => $this->generateReference(
+                api_get_user_id(),
+                $item['product_type'],
+                $item['product_id']
+            ),
+            'currency_id' => $item['currency_id'],
+            'date' => api_get_utc_datetime(),
+            'user_id' => api_get_user_id(),
+            'product_type' => $item['product_type'],
+            'product_name' => $productName,
+            'product_id' => $item['product_id'],
+            'price' => $price,
+            'price_without_tax' => $priceWithoutTax,
+            'tax_perc' => $taxPerc,
+            'tax_amount' => $taxAmount,
+            'status' => self::SALE_STATUS_PENDING,
+            'payment_type' => $paymentType,
+            'price_without_discount' => $priceWithoutDiscount,
+            'discount_amount' => $couponDiscount,
+            'subscription_end' => $subscriptionEnd,
+        ];
+
+        return Database::insert(self::TABLE_SUBSCRIPTION_SALE, $values);
+    }
+
+    /**
+     * Add a new subscription.
+     *
+     * @param array $subscription
+     *
+     * @return bool
+     */
+    public function addNewSubscription(array $subscription)
+    {
+        $result = false;
+
+        if (isset($subscription['frequencies'])) {
+            foreach ($subscription['frequencies'] as $frequency) {
+                $subscriptionDb = $this->getSubscription($subscription['product_type'], $subscription['product_id'], $frequency['duration']);
+
+                if (!isset($subscriptionDb) || empty($subscription)) {
+                    Display::addFlash(
+                        Display::return_message(
+                            $this->get_lang('SubscriptionAlreadyExists').' ('.$frequency['duration'].')',
+                            'error',
+                            false
+                        )
+                    );
+
+                    return false;
+                } else {
+                    $subscriptionId = $this->registerSubscription($subscription, $frequency);
+                    if ($subscriptionId) {
+                        $result = true;
+                    } else {
+                        Display::addFlash(
+                            Display::return_message(
+                                $this->get_lang('SubscriptionErrorInsert'),
+                                'error',
+                                false
+                            )
+                        );
+
+                        return false;
+                    }
+                }
+            }
+        } else {
+            Display::addFlash(
+                Display::return_message(
+                    $this->get_lang('FrequenciesNotSetError'),
+                    'error',
+                    false
+                )
+            );
+
+            return false;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Add a new subscription.
+     *
+     * @return bool
+     */
+    public function updateSubscriptions(int $productType, int $productId, int $taxPerc)
+    {
+        $this->updateSubscription($productType, $productId, $taxPerc);
+    }
+
+    /**
+     * Delete a subscription.
+     *
+     * @return int
+     */
+    public function deleteSubscription(int $productType, int $productId, int $duration)
+    {
+        return Database::delete(
+            Database::get_main_table(self::TABLE_SUBSCRIPTION),
+            [
+                'product_type = ? AND ' => (int) $productType,
+                'product_id = ? AND ' => (int) $productId,
+                'duration = ? ' => (int) $duration,
+            ]
+        );
+    }
+
+    /**
+     * Get a list of subscriptions by product ID and type.
+     *
+     * @param string $productId   The product ID
+     * @param int    $productType The product type
+     *
+     * @return array Subscriptions data
+     */
+    public function getSubscriptions($productType, $productId)
+    {
+        $subscriptions = $this->getDataSubscriptions($productType, $productId);
+
+        return $subscriptions;
+    }
+
+    /**
+     * Get data of the subscription.
+     *
+     * @return array The subscription data
+     */
+    public function getSubscription(int $productType, int $productId, int $duration, array $coupon = null)
+    {
+        $subscription = $this->getDataSubscription($productType, $productId, $duration);
+
+        $currency = $this->getSelectedCurrency();
+        $isoCode = $currency['iso_code'];
+
+        $subscription['iso_code'] = $isoCode;
+
+        $this->setPriceSettings($subscription, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+
+        return $subscription;
+    }
+
+    /**
+     * Get subscription sale data by ID.
+     *
+     * @param int $saleId The sale ID
+     *
+     * @return array
+     */
+    public function getSubscriptionSale(int $saleId)
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE),
+            [
+                'where' => ['id = ?' => $saleId],
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Complete subscription sale process. Update sale status to completed.
+     *
+     * @param int $saleId The subscription sale ID
+     *
+     * @return bool
+     */
+    public function completeSubscriptionSale(int $saleId)
+    {
+        $sale = $this->getSubscriptionSale($saleId);
+
+        if ($sale['status'] == self::SALE_STATUS_COMPLETED) {
+            return true;
+        }
+
+        $saleIsCompleted = false;
+        switch ($sale['product_type']) {
+            case self::PRODUCT_TYPE_COURSE:
+                $course = api_get_course_info_by_id($sale['product_id']);
+                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $course['code']);
+                break;
+            case self::PRODUCT_TYPE_SESSION:
+                SessionManager::subscribeUsersToSession(
+                    $sale['product_id'],
+                    [$sale['user_id']],
+                    api_get_session_visibility($sale['product_id']),
+                    false
+                );
+
+                $saleIsCompleted = true;
+                break;
+        }
+
+        if ($saleIsCompleted) {
+            $this->updateSubscriptionSaleStatus($sale['id'], self::SALE_STATUS_COMPLETED);
+            if ($this->get('invoicing_enable') === 'true') {
+                $this->setInvoice($sale['id']);
+            }
+        }
+
+        return $saleIsCompleted;
+    }
+
+    /**
+     * Update subscription sale status to canceled.
+     *
+     * @param int $saleId The subscription sale ID
+     */
+    public function cancelSubscriptionSale(int $saleId)
+    {
+        $this->updateSubscriptionSaleStatus($saleId, self::SALE_STATUS_CANCELED);
+    }
+
+    /**
+     * Get a list of subscription sales by the status.
+     *
+     * @param int $status The status to filter
+     *
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSubscriptionSaleListByStatus(int $status = self::SALE_STATUS_PENDING)
+    {
+        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => ['s.status = ?' => $status],
+                'order' => 'id DESC',
+            ]
+        );
+    }
+
+    /**
+     * Get the list statuses for subscriptions sales.
+     *
+     * @param string $dateStart
+     * @param string $dateEnd
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    public function getSubscriptionSaleListReport(string $dateStart = null, string $dateEnd = null)
+    {
+        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+        $list = Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'order' => 'id DESC',
+            ]
+        );
+        $listExportTemp = [];
+        $listExport = [];
+        $textStatus = null;
+        $paymentTypes = $this->getPaymentTypes();
+        $productTypes = $this->getProductTypes();
+        foreach ($list as $item) {
+            $statusSaleOrder = $item['status'];
+            switch ($statusSaleOrder) {
+                case 0:
+                    $textStatus = $this->get_lang('SaleStatusPending');
+                    break;
+                case 1:
+                    $textStatus = $this->get_lang('SaleStatusCompleted');
+                    break;
+                case -1:
+                    $textStatus = $this->get_lang('SaleStatusCanceled');
+                    break;
+            }
+            $dateFilter = new DateTime($item['date']);
+            $listExportTemp[] = [
+                'id' => $item['id'],
+                'reference' => $item['reference'],
+                'status' => $textStatus,
+                'status_filter' => $item['status'],
+                'date' => $dateFilter->format('Y-m-d'),
+                'order_time' => $dateFilter->format('H:i:s'),
+                'price' => $item['iso_code'].' '.$item['price'],
+                'product_type' => $productTypes[$item['product_type']],
+                'product_name' => $item['product_name'],
+                'payment_type' => $paymentTypes[$item['payment_type']],
+                'complete_user_name' => api_get_person_name($item['firstname'], $item['lastname']),
+                'email' => $item['email'],
+            ];
+        }
+        $listExport[] = [
+            get_lang('Number'),
+            $this->get_lang('OrderStatus'),
+            $this->get_lang('OrderDate'),
+            $this->get_lang('OrderTime'),
+            $this->get_lang('PaymentMethod'),
+            $this->get_lang('SalePrice'),
+            $this->get_lang('ProductType'),
+            $this->get_lang('ProductName'),
+            $this->get_lang('UserName'),
+            get_lang('Email'),
+        ];
+        //Validation Export
+        $dateStart = strtotime($dateStart);
+        $dateEnd = strtotime($dateEnd);
+        foreach ($listExportTemp as $item) {
+            $dateFilter = strtotime($item['date']);
+            if (($dateFilter >= $dateStart) && ($dateFilter <= $dateEnd)) {
+                $listExport[] = [
+                    'id' => $item['id'],
+                    'status' => $item['status'],
+                    'date' => $item['date'],
+                    'order_time' => $item['order_time'],
+                    'payment_type' => $item['payment_type'],
+                    'price' => $item['price'],
+                    'product_type' => $item['product_type'],
+                    'product_name' => $item['product_name'],
+                    'complete_user_name' => $item['complete_user_name'],
+                    'email' => $item['email'],
+                ];
+            }
+        }
+
+        return $listExport;
+    }
+
+    /**
+     * Get a list of subscription sales by the user.
+     *
+     * @param string $term The search term
+     *
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSubscriptionSaleListByUser(string $term)
+    {
+        $term = trim($term);
+
+        if (empty($term)) {
+            return [];
+        }
+
+        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => [
+                    'u.username LIKE %?% OR ' => $term,
+                    'u.lastname LIKE %?% OR ' => $term,
+                    'u.firstname LIKE %?%' => $term,
+                ],
+                'order' => 'id DESC',
+            ]
+        );
+    }
+
+    /**
+     * Get a list of subscription sales by the user id.
+     *
+     * @param int $id The user id
+     *
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSubscriptionSaleListByUserId(int $id)
+    {
+        if (empty($id)) {
+            return [];
+        }
+
+        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => [
+                    'u.id = ? AND s.status = ?' => [$id, self::SALE_STATUS_COMPLETED],
+                ],
+                'order' => 'id DESC',
+            ]
+        );
+    }
+
+    /**
+     * Get a list of subscription sales by date range.
+     *
+     * @param string $dateStart
+     * @param string $dateEnd
+     *
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSubscriptionSaleListByDate(string $dateStart, string $dateEnd)
+    {
+        $dateStart = trim($dateStart);
+        $dateEnd = trim($dateEnd);
+        if (empty($dateStart)) {
+            return [];
+        }
+        if (empty($dateEnd)) {
+            return [];
+        }
+        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => [
+                    's.date BETWEEN ? AND ' => $dateStart,
+                    ' ? ' => $dateEnd,
+                ],
+                'order' => 'id DESC',
+            ]
+        );
+    }
+
+    /**
+     * Get a list of subscription sales by the user Email.
+     *
+     * @param string $term The search term
+     *
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSubscriptionSaleListByEmail(string $term)
+    {
+        $term = trim($term);
+        if (empty($term)) {
+            return [];
+        }
+        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => [
+                    'u.email LIKE %?% ' => $term,
+                ],
+                'order' => 'id DESC',
+            ]
+        );
+    }
+
+    /**
+     * Get subscription sale data by ID.
+     *
+     * @param string $date The date
+     *
+     * @return array
+     */
+    public function getSubscriptionsDue(string $date)
+    {
+        return Database::select(
+            'id, user_id, product_id, product_type',
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE),
+            [
+                'where' => ['subscription_end < ? AND status <> ? AND (expired is NULL OR expired <> ?)' => [
+                    $date,
+                    self::SALE_STATUS_COMPLETED,
+                    1,
+                    ],
+                ],
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Get subscription sale data by ID.
+     *
+     * @param int $userId      The user ID
+     * @param int $productId   The product ID
+     * @param int $productType The product type
+     *
+     * @return array
+     */
+    public function checkItemSubscriptionActive(int $userId, int $productId, int $productType)
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE),
+            [
+                'where' => ['subscription_end >= ? AND userId = ? AND productId = ? AND productType = ? AND status <> ?' => [
+                    api_get_utc_datetime(),
+                    $userId,
+                    $productId,
+                    $productType,
+                    self::SALE_STATUS_COMPLETED,
+                    ],
+                ],
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Get subscription sale data by ID.
+     *
+     * @return array
+     */
+    public function updateSubscriptionSaleExpirationStatus(int $id)
+    {
+        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+
+        return Database::update(
+            $saleTable,
+            ['expired' => 1],
+            ['id = ?' => $id]
+        );
+    }
+
+    /**
+     * Get the list of frequencies discount types.
+     *
+     * @return array
+     */
+    public function getFrequencies()
+    {
+        $data = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_PERIOD),
+            []
+        );
+
+        $frequenciesList = $this->getFrequenciesList();
+        $frequencies = [];
+
+        foreach ($data as $key => $items) {
+            $frequencies[$items['duration']] = $items['name'];
+        }
+
+        return $frequencies;
+    }
+
+    /**
+     * Get the list of frequencies discount types.
+     *
+     * @return array
+     */
+    public function getFrequenciesList()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_PERIOD),
+            []
+        );
+    }
+
+    /**
+     * Get the a frequency.
+     *
+     * @param int $duration The duration of the frequency value
+     *
+     * @return array
+     */
+    public function selectFrequency(int $duration)
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_PERIOD),
+            [
+                'where' => [
+                    'duration = ?' => [
+                        (int) $duration,
+                    ],
+                ],
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Add a new subscription frequency.
+     *
+     * @return array
+     */
+    public function addFrequency(int $duration, string $name)
+    {
+        $values = [
+            'duration' => $duration,
+            'name' => $name,
+        ];
+
+        return Database::insert(self::TABLE_SUBSCRIPTION_PERIOD, $values);
+    }
+
+    /**
+     * Update a subscription frequency.
+     *
+     * @return array
+     */
+    public function updateFrequency(int $duration, string $name)
+    {
+        $periodTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_PERIOD);
+
+        return Database::update(
+            $periodTable,
+            ['name' => $name],
+            ['duration = ?' => $duration]
+        );
+    }
+
+    /**
+     * Delete a subscription frequency.
+     *
+     * @return array
+     */
+    public function deleteFrequency(int $duration)
+    {
+        return Database::delete(
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_PERIOD),
+            [
+                'duration = ?' => $duration,
+            ]
+        );
     }
 
     /**
@@ -3694,10 +4951,10 @@ class BuyCoursesPlugin extends Plugin
      * @return string
      */
     public static function returnPagination(
-        $baseUrl,
-        $currentPage,
-        $pagesCount,
-        $totalItems,
+        string $baseUrl,
+        string $currentPage,
+        string $pagesCount,
+        string $totalItems,
         array $extraQueryParams = []
     ) {
         $queryParams = HttpRequest::createFromGlobals()->query->all();
@@ -3713,11 +4970,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Returns the javascript to set the sales report table for courses.
-     *
-     * @param array $sales
-     * @param bool  $invoicingEnable
      */
-    public static function getSalesReportScript($sales = [], $invoicingEnable = false)
+    public static function getSalesReportScript(array $sales = [], bool $invoicingEnable = false)
     {
         $cols = "
     '".preg_replace("/'/", "\\'", get_plugin_lang('OrderReference', 'BuyCoursesPlugin'))."',
@@ -3822,7 +5076,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Filter the registered courses for show in plugin catalog.
      */
-    private function getCourses($first, $maxResults)
+    private function getCourses(int $first, int $maxResults)
     {
         $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
@@ -3878,7 +5132,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return string
      */
-    private function getUserStatusForSession($userId, Session $session)
+    private function getUserStatusForSession(int $userId, Session $session)
     {
         if (empty($userId)) {
             return 'NO';
@@ -3931,7 +5185,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return string
      */
-    private function getUserStatusForCourse($userId, Course $course)
+    private function getUserStatusForCourse(int $userId, Course $course)
     {
         if (empty($userId)) {
             return 'NO';
@@ -3983,7 +5237,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    private function updateSaleStatus($saleId, $newStatus = self::SALE_STATUS_PENDING)
+    private function updateSaleStatus(int $saleId, int $newStatus = self::SALE_STATUS_PENDING)
     {
         $saleTable = Database::get_main_table(self::TABLE_SALE);
 
@@ -4000,21 +5254,24 @@ class BuyCoursesPlugin extends Plugin
      * @param int    $start
      * @param int    $end
      * @param string $name            Optional. The name filter
-     * @param int    $min             Optional. The minimun price filter
+     * @param int    $min             Optional. The minimum price filter
      * @param int    $max             Optional. The maximum price filter
-     * @param string $max             Optional. all and count
+     * @param string $typeResult      Optional. 'all' and 'count'
      * @param int    $sessionCategory Optional. Session category id
      *
      * @return array
      */
-    private function filterSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all', $sessionCategory = 0)
-    {
+    private function filterSessionList(
+        int $start,
+        int $end,
+        string $name = null,
+        int $min = 0,
+        int $max = 0,
+        string $typeResult = 'all',
+        int $sessionCategory = 0
+    ) {
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        $min = floatval($min);
-        $max = floatval($max);
-        $sessionCategory = (int) $sessionCategory;
 
         $innerJoin = "$itemTable i ON s.id = i.product_id";
         $whereConditions = [
@@ -4032,9 +5289,6 @@ class BuyCoursesPlugin extends Plugin
         if (!empty($max)) {
             $whereConditions['AND i.price <= ?'] = $max;
         }
-
-        $start = (int) $start;
-        $end = (int) $end;
 
         if ($sessionCategory != 0) {
             $whereConditions['AND s.session_category_id = ?'] = $sessionCategory;
@@ -4076,8 +5330,14 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    private function filterCourseList($start, $end, $name = '', $min = 0, $max = 0, $typeResult = 'all')
-    {
+    private function filterCourseList(
+        int $start,
+        int $end,
+        string $name = '',
+        int $min = 0,
+        int $max = 0,
+        string $typeResult = 'all'
+    ) {
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -4104,14 +5364,134 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $whereConditions['AND url.access_url_id = ?'] = $urlId;
-        $start = (int) $start;
-        $end = (int) $end;
 
         $courseIds = Database::select(
             'c.id',
             "$courseTable c
             INNER JOIN $itemTable i
             ON c.id = i.product_id
+            INNER JOIN $urlTable url
+            ON c.id = url.c_id
+            ",
+            ['where' => $whereConditions, 'limit' => "$start, $end"],
+            $typeResult
+        );
+
+        if ($typeResult === 'count') {
+            return $courseIds;
+        }
+
+        if (!$courseIds) {
+            return [];
+        }
+
+        $courses = [];
+        foreach ($courseIds as $courseId) {
+            $courses[] = Database::getManager()->find(
+                'ChamiloCoreBundle:Course',
+                $courseId
+            );
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Search filtered sessions by name, and range of price.
+     *
+     * @param int    $start
+     * @param int    $end
+     * @param string $name            Optional. The name filter
+     * @param int    $sessionCategory Optional. Session category id
+     *
+     * @return array
+     */
+    private function filterSubscriptionSessionList(
+        int $start,
+        int $end,
+        string $name = null,
+        string $typeResult = 'all',
+        int $sessionCategory = 0
+    ) {
+        $subscriptionTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        $innerJoin = "$subscriptionTable st ON s.id = st.product_id";
+        $whereConditions = [
+            'st.product_type = ? ' => self::PRODUCT_TYPE_SESSION,
+        ];
+
+        if (!empty($name)) {
+            $whereConditions['AND s.name LIKE %?%'] = $name;
+        }
+
+        if ($sessionCategory != 0) {
+            $whereConditions['AND s.session_category_id = ?'] = $sessionCategory;
+        }
+
+        $sessionIds = Database::select(
+            'DISTINCT s.id',
+            "$sessionTable s INNER JOIN $innerJoin",
+            ['where' => $whereConditions, 'limit' => "$start, $end"],
+            $typeResult
+        );
+
+        if ($typeResult === 'count') {
+            return $sessionIds;
+        }
+
+        if (!$sessionIds) {
+            return [];
+        }
+
+        $sessions = [];
+
+        foreach ($sessionIds as $sessionId) {
+            $sessions[] = Database::getManager()->find(
+                'ChamiloCoreBundle:Session',
+                $sessionId
+            );
+        }
+
+        return $sessions;
+    }
+
+    /**
+     * Search filtered subscriptions courses by name, and range of price.
+     *
+     * @param int    $start
+     * @param int    $end
+     * @param string $name            Optional. The name filter
+     *
+     * @return array
+     */
+    private function filterSubscriptionCourseList(
+        int $start,
+        int $end,
+        string $name = '',
+        string $typeResult = 'all'
+    ) {
+        $subscriptionTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+        $urlId = api_get_current_access_url_id();
+
+        $whereConditions = [
+            'st.product_type = ? ' => self::PRODUCT_TYPE_COURSE,
+        ];
+
+        if (!empty($name)) {
+            $whereConditions['AND c.title LIKE %?%'] = $name;
+        }
+
+        $whereConditions['AND url.access_url_id = ?'] = $urlId;
+
+        $courseIds = Database::select(
+            'DISTINCT c.id',
+            "$courseTable c
+            INNER JOIN $subscriptionTable st
+            ON c.id = st.product_id
             INNER JOIN $urlTable url
             ON c.id = url.c_id
             ",
@@ -4147,31 +5527,26 @@ class BuyCoursesPlugin extends Plugin
      * @return bool
      */
     private function updateServiceSaleStatus(
-        $serviceSaleId,
-        $newStatus = self::SERVICE_STATUS_PENDING
+        int $serviceSaleId,
+        int $newStatus = self::SERVICE_STATUS_PENDING
     ) {
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
 
         return Database::update(
             $serviceSaleTable,
-            ['status' => (int) $newStatus],
-            ['id = ?' => (int) $serviceSaleId]
+            ['status' => $newStatus],
+            ['id = ?' => $serviceSaleId]
         );
     }
 
     /**
      * Get the items (courses or sessions) of a coupon.
      *
-     * @param string $couponId    The coupon ID
-     * @param int    $productType The product type
-     *
      * @return array The item data
      */
-    private function getItemsCoupons($couponId, $productType)
+    private function getItemsCoupons(int $couponId, int $productType)
     {
         $couponItemTable = Database::get_main_table(self::TABLE_COUPON_ITEM);
-        $productType = (int) $productType;
-        $couponId = (int) $couponId;
 
         if ($productType == self::PRODUCT_TYPE_COURSE) {
             $itemTable = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -4201,11 +5576,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the services of a coupon.
      *
-     * @param string $couponId The coupon ID
+     * @param int $couponId The coupon ID
      *
      * @return array The service data
      */
-    private function getServicesCoupons($couponId)
+    private function getServicesCoupons(int $couponId)
     {
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
         $serviceTable = Database::get_main_table(self::TABLE_SERVICES);
@@ -4221,7 +5596,7 @@ class BuyCoursesPlugin extends Plugin
             $couponFrom,
             [
                 'where' => [
-                    'cs.coupon_id = ? ' => (int) $couponId,
+                    'cs.coupon_id = ? ' => $couponId,
                 ],
             ]
         );
@@ -4234,7 +5609,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array Coupons data
      */
-    private function getDataCoupons($status = null)
+    private function getDataCoupons(int $status = null)
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
 
@@ -4269,7 +5644,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCoupon($couponId, $productType = null, $productId = null)
+    private function getDataCoupon(int $couponId, int $productType = null, int $productId = null)
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
 
@@ -4279,7 +5654,7 @@ class BuyCoursesPlugin extends Plugin
                 $couponTable,
                 [
                     'where' => [
-                        'id = ? ' => (int) $couponId,
+                        'id = ? ' => $couponId,
                     ],
                 ],
                 'first'
@@ -4299,11 +5674,11 @@ class BuyCoursesPlugin extends Plugin
                 $couponFrom,
                 [
                     'where' => [
-                        'c.id = ? AND ' => (int) $couponId,
+                        'c.id = ? AND ' => $couponId,
                         'c.valid_start <= ? AND ' => $dtmNow,
                         'c.valid_end >= ? AND ' => $dtmNow,
-                        'ci.product_type = ? AND ' => (int) $productType,
-                        'ci.product_id = ?' => (int) $productId,
+                        'ci.product_type = ? AND ' => $productType,
+                        'ci.product_id = ?' => $productId,
                     ],
                 ],
                 'first'
@@ -4320,7 +5695,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponByCode($couponCode, $productType = null, $productId = null)
+    private function getDataCouponByCode(string $couponCode, int $productType = null, int $productId = null)
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponItemTable = Database::get_main_table(self::TABLE_COUPON_ITEM);
@@ -4332,7 +5707,7 @@ class BuyCoursesPlugin extends Plugin
                 $couponTable,
                 [
                     'where' => [
-                        'code = ? ' => (string) $couponCode,
+                        'code = ? ' => $couponCode,
                     ],
                 ],
                 'first'
@@ -4349,11 +5724,11 @@ class BuyCoursesPlugin extends Plugin
                 $couponFrom,
                 [
                     'where' => [
-                        'c.code = ? AND ' => (string) $couponCode,
+                        'c.code = ? AND ' => $couponCode,
                         'c.valid_start <= ? AND ' => $dtmNow,
                         'c.valid_end >= ? AND ' => $dtmNow,
-                        'ci.product_type = ? AND ' => (int) $productType,
-                        'ci.product_id = ?' => (int) $productId,
+                        'ci.product_type = ? AND ' => $productType,
+                        'ci.product_id = ?' => $productId,
                     ],
                 ],
                 'first'
@@ -4369,7 +5744,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponService($couponId, $serviceId)
+    private function getDataCouponService(int $couponId, int $serviceId)
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
@@ -4386,10 +5761,10 @@ class BuyCoursesPlugin extends Plugin
             $couponFrom,
             [
                 'where' => [
-                    'c.id = ? AND ' => (int) $couponId,
+                    'c.id = ? AND ' => $couponId,
                     'c.valid_start <= ? AND ' => $dtmNow,
                     'c.valid_end >= ? AND ' => $dtmNow,
-                    'cs.service_id = ?' => (int) $serviceId,
+                    'cs.service_id = ?' => $serviceId,
                 ],
             ],
             'first'
@@ -4404,7 +5779,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponServiceByCode($couponCode, $serviceId)
+    private function getDataCouponServiceByCode(string $couponCode, int $serviceId)
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
@@ -4421,10 +5796,10 @@ class BuyCoursesPlugin extends Plugin
             $couponFrom,
             [
                 'where' => [
-                    'c.code = ? AND ' => (string) $couponCode,
+                    'c.code = ? AND ' => $couponCode,
                     'c.valid_start <= ? AND ' => $dtmNow,
                     'c.valid_end >= ? AND ' => $dtmNow,
-                    'cs.service_id = ?' => (int) $serviceId,
+                    'cs.service_id = ?' => $serviceId,
                 ],
             ],
             'first'
@@ -4434,11 +5809,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Update a coupon.
      *
-     * @param int $coupon
-     *
      * @return int
      */
-    private function updateCoupon($coupon)
+    private function updateCoupon(array $coupon)
     {
         $couponExist = $this->getCouponByCode($coupon['code']);
         if (!$couponExist) {
@@ -4469,11 +5842,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a coupon.
      *
-     * @param int $coupon
+     * @param array $coupon
      *
      * @return int
      */
-    private function registerCoupon($coupon)
+    private function registerCoupon(array $coupon)
     {
         $couponExist = $this->getCouponByCode($coupon['code']);
         if ($couponExist) {
@@ -4510,7 +5883,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int
      */
-    private function registerCouponItem($couponId, $productType, $productId)
+    private function registerCouponItem(int $couponId, int $productType, int $productId)
     {
         $coupon = $this->getDataCoupon($couponId);
         if (empty($coupon)) {
@@ -4526,9 +5899,9 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $values = [
-            'coupon_id' => (int) $couponId,
-            'product_type' => (int) $productType,
-            'product_id' => (int) $productId,
+            'coupon_id' => $couponId,
+            'product_type' => $productType,
+            'product_id' => $productId,
         ];
 
         return Database::insert(self::TABLE_COUPON_ITEM, $values);
@@ -4538,17 +5911,17 @@ class BuyCoursesPlugin extends Plugin
      * Remove all coupon items for a product type and coupon ID.
      *
      * @param int $productType The product type
-     * @param int $coupon_id   The coupon ID
+     * @param int $couponId   The coupon ID
      *
      * @return int Rows affected. Otherwise return false
      */
-    private function deleteCouponItemsByCoupon($productType, $couponId)
+    private function deleteCouponItemsByCoupon(int $productType, int $couponId)
     {
         return Database::delete(
             Database::get_main_table(self::TABLE_COUPON_ITEM),
             [
-                'product_type = ? AND ' => (int) $productType,
-                'coupon_id = ?' => (int) $couponId,
+                'product_type = ? AND ' => $productType,
+                'coupon_id = ?' => $couponId,
             ]
         );
     }
@@ -4561,7 +5934,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int
      */
-    private function registerCouponService($couponId, $serviceId)
+    private function registerCouponService(int $couponId, int $serviceId)
     {
         $coupon = $this->getDataCoupon($couponId);
         if (empty($coupon)) {
@@ -4577,8 +5950,8 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $values = [
-            'coupon_id' => (int) $couponId,
-            'service_id' => (int) $serviceId,
+            'coupon_id' => $couponId,
+            'service_id' => $serviceId,
         ];
 
         return Database::insert(self::TABLE_COUPON_SERVICE, $values);
@@ -4587,12 +5960,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Remove all coupon services for a product type and coupon ID.
      *
-     * @param int $productType The product type
-     * @param int $coupon_id   The coupon ID
-     *
-     * @return int Rows affected. Otherwise return false
+     * @return int Rows affected. Otherwise, return false
      */
-    private function deleteCouponServicesByCoupon($couponId)
+    private function deleteCouponServicesByCoupon(int $couponId)
     {
         return Database::delete(
             Database::get_main_table(self::TABLE_COUPON_SERVICE),
@@ -4600,5 +5970,226 @@ class BuyCoursesPlugin extends Plugin
                 'coupon_id = ?' => (int) $couponId,
             ]
         );
+    }
+
+    /**
+     * Get an array of subscriptions.
+     *
+     * @return array Subscriptions data
+     */
+    private function getDataSubscriptions(int $productType, int $productId)
+    {
+        $subscriptionTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
+
+        return Database::select(
+            ['*'],
+            $subscriptionTable,
+            [
+                'where' => [
+                    'product_type = ? AND ' => (int) $productType,
+                    'product_id = ?  ' => (int) $productId,
+                ],
+                'order' => 'duration ASC',
+            ]
+        );
+    }
+
+    /**
+     * Get data of a subscription for a product (course or service) by the subscription ID.
+     *
+     * @param int $productType The product type
+     * @param int $productId   The product ID
+     * @param int $duration    The duration (in seconds)
+     *
+     * @return array The subscription data
+     */
+    private function getDataSubscription(int $productType, int $productId, int $duration)
+    {
+        $subscriptionTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
+
+        return Database::select(
+            ['*'],
+            $subscriptionTable,
+            [
+                'where' => [
+                    'product_type = ? AND ' => $productType,
+                    'product_id = ? AND ' => $productId,
+                    'duration = ? ' => $duration,
+                ],
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Update a subscription.
+     *
+     * @return int
+     */
+    private function updateSubscription(int $productType, int $productId, int $taxPerc)
+    {
+        $values = [
+            'tax_perc' => $taxPerc,
+        ];
+
+        return Database::update(
+            self::TABLE_SUBSCRIPTION,
+            $values,
+            [
+                'product_type = ? AND ' => $productType,
+                'product_id = ?' => $productId,
+            ]
+        );
+
+        return true;
+    }
+
+    /**
+     * Register a subscription.
+     *
+     * @param array $subscription
+     *
+     * @return int
+     */
+    private function registerSubscription(array $subscription, array $frequency)
+    {
+        $values = [
+            'product_type' => (int) $subscription['product_type'],
+            'product_id' => (int) $subscription['product_id'],
+            'duration' => (int) $frequency['duration'],
+            'currency_id' => (int) $subscription['currency_id'],
+            'tax_perc' => (int) $subscription['tax_perc'],
+            'price' => (float) $frequency['price'],
+        ];
+
+        Database::insert(self::TABLE_SUBSCRIPTION, $values);
+
+        return true;
+    }
+
+    /**
+     * Update the subscription sale status.
+     *
+     * @param int $saleId    The sale ID
+     * @param int $newStatus The new status
+     *
+     * @return bool
+     */
+    private function updateSubscriptionSaleStatus(int $saleId, int $newStatus = self::SALE_STATUS_PENDING)
+    {
+        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+
+        return Database::update(
+            $saleTable,
+            ['status' => $newStatus],
+            ['id = ?' => $saleId]
+        );
+    }
+
+    /**
+     * Get the user status for the subscription session.
+     *
+     * @param int     $userId  The user ID
+     * @param Session $session The session
+     *
+     * @return string
+     */
+    private function getUserStatusForSubscriptionSession(int $userId, Session $session)
+    {
+        if (empty($userId)) {
+            return 'NO';
+        }
+
+        $entityManager = Database::getManager();
+        $scuRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourseRelUser');
+
+        $buySaleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+
+        // Check if user bought the course
+        $sale = Database::select(
+            'COUNT(1) as qty',
+            $buySaleTable,
+            [
+                'where' => [
+                    'user_id = ? AND product_type = ? AND product_id = ? AND status = ? AND (expired is NULL OR expired <> ?)' => [
+                        $userId,
+                        self::PRODUCT_TYPE_SESSION,
+                        $session->getId(),
+                        self::SALE_STATUS_PENDING,
+                        1,
+                    ],
+                ],
+            ],
+            'first'
+        );
+
+        if ($sale['qty'] > 0) {
+            return 'TMP';
+        }
+
+        // Check if user is already subscribe to session
+        $userSubscription = $scuRepo->findBy([
+            'session' => $session,
+            'user' => $userId,
+        ]);
+
+        if (!empty($userSubscription)) {
+            return 'YES';
+        }
+
+        return 'NO';
+    }
+
+    /**
+     * Get the user status for the subscription course.
+     *
+     * @param int    $userId The user Id
+     * @param Course $course The course
+     *
+     * @return string
+     */
+    private function getUserStatusForSubscriptionCourse(int $userId, Course $course)
+    {
+        if (empty($userId)) {
+            return 'NO';
+        }
+
+        $entityManager = Database::getManager();
+        $cuRepo = $entityManager->getRepository('ChamiloCoreBundle:CourseRelUser');
+        $buySaleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
+
+        // Check if user bought the course
+        $sale = Database::select(
+            'COUNT(1) as qty',
+            $buySaleTable,
+            [
+                'where' => [
+                    'user_id = ? AND product_type = ? AND product_id = ? AND status = ? AND (expired is NULL OR expired <> ?)' => [
+                        $userId,
+                        self::PRODUCT_TYPE_COURSE,
+                        $course->getId(),
+                        self::SALE_STATUS_PENDING,
+                        1,
+                    ],
+                ],
+            ],
+            'first'
+        );
+
+        if ($sale['qty'] > 0) {
+            return 'TMP';
+        }
+
+        // Check if user is already subscribe to course
+        $userSubscription = $cuRepo->findBy([
+            'course' => $course,
+            'user' => $userId,
+        ]);
+
+        if (!empty($userSubscription)) {
+            return 'YES';
+        }
+
+        return 'NO';
     }
 }

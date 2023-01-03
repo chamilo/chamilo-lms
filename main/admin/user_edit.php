@@ -250,16 +250,38 @@ $form->addNoSamePasswordRule('password', $userEntity);
 // Status
 $status = UserManager::getUserStatusList();
 
-$form->addElement(
-    'select',
-    'status',
-    get_lang('Profile'),
-    $status,
-    [
-        'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();',
-    ]
-);
+$hideSelectProfile = false;
+// to hide the status list if it is not enabled with user_status_show_option for admin sessions.
+if (api_is_session_admin()) {
+    if (true === api_get_configuration_value('user_status_show_options_enabled')) {
+        $userStatusConfig = api_get_configuration_value('user_status_show_option');
+        if (!empty($userStatusConfig)) {
+            $statusConfigHidden = [];
+            foreach ($userStatusConfig as $role => $enabled) {
+                $constStatus = constant($role);
+                if (!$enabled) {
+                    $statusConfigHidden[] = $constStatus;
+                }
+            }
+            $hideSelectProfile = in_array($user_data['status'], $statusConfigHidden);
+        }
+    }
+}
+
+if (!$hideSelectProfile) {
+    $form->addElement(
+        'select',
+        'status',
+        get_lang('Profile'),
+        $status,
+        [
+            'id' => 'status_select',
+            'onchange' => 'javascript: display_drh_list();',
+        ]
+    );
+} else {
+    $form->addElement('hidden', 'status', $user_data['status']);
+}
 
 $display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
 

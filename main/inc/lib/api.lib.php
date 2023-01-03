@@ -6448,6 +6448,7 @@ function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url
         $apcVar[$catName][$ordering][$url_changeable] = $result;
         apcu_store($apcVarName, $apcVar, 600);
     }
+
     return $result;
 }
 

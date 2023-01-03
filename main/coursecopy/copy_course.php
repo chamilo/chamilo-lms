@@ -120,7 +120,7 @@ if (Security::check_token('post') && (
             'destination_course',
             [
                 get_lang('SelectDestinationCourse'),
-                get_lang('YouCanOnlyCopyThisCourseToACourseYouTeach')
+                get_lang('YouCanOnlyCopyThisCourseToACourseYouTeach'),
             ],
             $courses
         );

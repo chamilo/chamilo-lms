@@ -403,8 +403,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      * Check if the WhispeakAuth plugin is installed and enabled.
      *
      * @param bool $checkEnabled Check if, additionnally to being installed, the plugin is enabled
-     *
-     * @return bool
      */
     public function isEnabled(bool $checkEnabled = false): bool
     {

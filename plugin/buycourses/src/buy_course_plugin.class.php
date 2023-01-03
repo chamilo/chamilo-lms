@@ -132,8 +132,6 @@ class BuyCoursesPlugin extends Plugin
      * Check if plugin is enabled.
      *
      * @param bool $checkEnabled Check if, additionnally to being installed, the plugin is enabled
-     *
-     * @return bool
      */
     public function isEnabled(bool $checkEnabled = false): bool
     {
@@ -597,9 +595,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Return the buyCourses plugin button to buy the course.
      *
-     * @param int $productId
-     * @param int $productType
-     *
      * @return string $html
      */
     public function returnBuyCourseButton(int $productId, int $productType)
@@ -667,8 +662,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Save the PayPal configuration params.
-     *
-     * @param array $params
      *
      * @return int Rows affected. Otherwise return false
      */
@@ -938,9 +931,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the item data.
      *
-     * @param int $productId The item ID
-     * @param int $itemType  The item type
-     * @param array $coupon Array with at least 'discount_type' and 'discount_amount' elements
+     * @param int   $productId The item ID
+     * @param int   $itemType  The item type
+     * @param array $coupon    Array with at least 'discount_type' and 'discount_amount' elements
      *
      * @return array
      */
@@ -1035,7 +1028,7 @@ class BuyCoursesPlugin extends Plugin
             Database::get_main_table(self::TABLE_SUBSCRIPTION),
             [
                 'where' => [
-                    'duration = ?' => [$duration, ],
+                    'duration = ?' => [$duration],
                 ],
             ]
         );
@@ -1056,8 +1049,6 @@ class BuyCoursesPlugin extends Plugin
      *
      * It can return the number of rows when $typeResult is 'count'.
      *
-     * @param int    $start
-     * @param int    $end
      * @param string $name       Optional. The name filter.
      * @param int    $min        Optional. The minimum price filter.
      * @param int    $max        Optional. The maximum price filter.
@@ -2316,8 +2307,6 @@ class BuyCoursesPlugin extends Plugin
      * @param bool $lowercase Optional. Include lowercase characters
      * @param bool $uppercase Optional. Include uppercase characters
      * @param bool $numbers   Optional. Include numbers
-     *
-     * @return string
      */
     public static function randomText(
         int $length = 6,
@@ -2351,8 +2340,6 @@ class BuyCoursesPlugin extends Plugin
      * @param int $userId      The user ID
      * @param int $productType The course/session type
      * @param int $productId   The course/session ID
-     *
-     * @return string
      */
     public function generateReference(int $userId, int $productType, int $productId): string
     {
@@ -2435,9 +2422,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Get a list of sales by date range.
-     *
-     * @param string $dateStart
-     * @param string $dateEnd
      *
      * @return array The sale list. Otherwise return false
      */
@@ -2775,7 +2759,6 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param int $status   - default 0 - pending
      * @param int $payoutId - for get an individual payout if want all then false
-     * @param int $userId
      *
      * @return array
      */
@@ -2829,8 +2812,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Verify if the beneficiary have a paypal account.
-     *
-     * @param int $userId
      *
      * @return true if the user have a paypal account, false if not
      */
@@ -3050,9 +3031,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * update a service.
      *
-     * @param array $service
-     * @param int   $id
-     *
      * @return mixed response
      */
     public function updateService(array $service, int $id)
@@ -3106,11 +3084,7 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * @param array $product
-     * @param int   $productType
      * @param array $coupon Array with at least 'discount_type' and 'discount_amount' elements
-     *
-     * @return bool
      */
     public function setPriceSettings(array &$product, int $productType, array $coupon = null): bool
     {
@@ -3180,7 +3154,6 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * @param int   $id
      * @param array $coupon
      *
      * @return array
@@ -3614,8 +3587,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Save Culqi configuration params.
      *
-     * @param array $params
-     *
      * @return int Rows affected. Otherwise return false
      */
     public function saveCulqiParameters(array $params)
@@ -3734,8 +3705,6 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * @param int $productType
-     *
      * @return bool
      */
     public function checkTaxEnabledInProduct(int $productType)
@@ -3879,8 +3848,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Add a new coupon.
      *
-     * @param int $coupon
-     *
      * @return bool
      */
     public function addNewCoupon(int $coupon)
@@ -3921,8 +3888,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Add a new coupon.
-     *
-     * @param array $coupon
      *
      * @return bool
      */
@@ -4160,11 +4125,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a subscription sale.
      *
-     * @param int    $productId   The product ID
-     * @param int    $productType The product type
-     * @param int    $paymentType The payment type
-     * @param int    $duration    The subscription duration
-     * @param int    $couponId    The coupon ID
+     * @param int $productId   The product ID
+     * @param int $productType The product type
+     * @param int $paymentType The payment type
+     * @param int $duration    The subscription duration
+     * @param int $couponId    The coupon ID
      *
      * @return int
      */
@@ -4284,8 +4249,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Add a new subscription.
-     *
-     * @param array $subscription
      *
      * @return bool
      */
@@ -4670,9 +4633,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get a list of subscription sales by date range.
      *
-     * @param string $dateStart
-     * @param string $dateEnd
-     *
      * @return array The sale list. Otherwise return false
      */
     public function getSubscriptionSaleListByDate(string $dateStart, string $dateEnd)
@@ -4943,11 +4903,6 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * @param string $baseUrl
-     * @param string $currentPage
-     * @param string $pagesCount
-     * @param string $totalItems
-     *
      * @return string
      */
     public static function returnPagination(
@@ -5251,8 +5206,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Search filtered sessions by name, and range of price.
      *
-     * @param int    $start
-     * @param int    $end
      * @param string $name            Optional. The name filter
      * @param int    $min             Optional. The minimum price filter
      * @param int    $max             Optional. The maximum price filter
@@ -5399,8 +5352,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Search filtered sessions by name, and range of price.
      *
-     * @param int    $start
-     * @param int    $end
      * @param string $name            Optional. The name filter
      * @param int    $sessionCategory Optional. Session category id
      *
@@ -5459,9 +5410,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Search filtered subscriptions courses by name, and range of price.
      *
-     * @param int    $start
-     * @param int    $end
-     * @param string $name            Optional. The name filter
+     * @param string $name Optional. The name filter
      *
      * @return array
      */
@@ -5842,8 +5791,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a coupon.
      *
-     * @param array $coupon
-     *
      * @return int
      */
     private function registerCoupon(array $coupon)
@@ -5911,7 +5858,7 @@ class BuyCoursesPlugin extends Plugin
      * Remove all coupon items for a product type and coupon ID.
      *
      * @param int $productType The product type
-     * @param int $couponId   The coupon ID
+     * @param int $couponId    The coupon ID
      *
      * @return int Rows affected. Otherwise return false
      */
@@ -6046,8 +5993,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Register a subscription.
-     *
-     * @param array $subscription
      *
      * @return int
      */

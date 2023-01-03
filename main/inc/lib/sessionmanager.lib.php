@@ -9570,7 +9570,7 @@ class SessionManager
         $default = 'all';
         $view = api_get_configuration_value('default_session_list_view');
 
-        if (!empty($view)) {
+        if (!empty($view) && ( $view == 'all' || $view == 'close' || $view == 'active' || $view == 'custom' )) {
             $default = $view;
         }
 

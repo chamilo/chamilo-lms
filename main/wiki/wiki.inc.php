@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Entity\CWikiCategory;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Driver\Statement;
 
@@ -291,7 +293,7 @@ class Wiki
         $tbl_wiki_conf = $this->tbl_wiki_conf;
 
         $_course = $this->courseInfo;
-        $time = api_get_utc_datetime();
+        $time = api_get_utc_datetime(null, false, true);
         $session_id = api_get_session_id();
         $groupId = api_get_group_id();
         $userId = api_get_user_id();
@@ -366,35 +368,40 @@ class Wiki
         $values['assignment'] = $values['assignment'] ?? 0;
         $values['page_id'] = $values['page_id'] ?? 0;
 
-        $params = [
-            'c_id' => $course_id,
-            'addlock' => 1,
-            'visibility' => 1,
-            'visibility_disc' => 1,
-            'addlock_disc' => 1,
-            'ratinglock_disc' => 1,
-            'page_id' => $pageId,
-            'reflink' => trim($values['reflink']),
-            'title' => trim($values['title']),
-            'content' => $values['content'],
-            'user_id' => $userId,
-            'group_id' => $groupId,
-            'dtime' => $time,
-            'assignment' => $values['assignment'],
-            'comment' => $values['comment'],
-            'progress' => $values['progress'],
-            'version' => $version,
-            'linksto' => $linkTo,
-            'user_ip' => $_SERVER['REMOTE_ADDR'],
-            'session_id' => $session_id,
-            'page_id' => $values['page_id'],
-            'editlock' => 0,
-            'is_editing' => 0,
-            'time_edit' => $time,
-            'tag' => '',
-        ];
+        $em = Database::getManager();
 
-        $id = Database::insert($tbl_wiki, $params);
+        $newWiki = (new CWiki())
+            ->setCId($course_id)
+            ->setAddlock(1)
+            ->setVisibility(1)
+            ->setVisibilityDisc(1)
+            ->setAddlockDisc(1)
+            ->setRatinglockDisc(1)
+            ->setPageId($pageId)
+            ->setReflink(trim($values['reflink']))
+            ->setTitle(trim($values['title']))
+            ->setContent($values['content'])
+            ->setUserId($userId)
+            ->setGroupId($groupId)
+            ->setDtime($time)
+            ->setAssignment($values['assignment'])
+            ->setComment($values['comment'])
+            ->setProgress($values['progress'])
+            ->setVersion($version)
+            ->setLinksto($linkTo)
+            ->setUserIp($_SERVER['REMOTE_ADDR'])
+            ->setSessionId($session_id)
+            ->setPageId($values['page_id'])
+            ->setEditlock(0)
+            ->setIsEditing(0)
+            ->setTimeEdit($time)
+            ->setTag('')
+        ;
+
+        $em->persist($newWiki);
+        $em->flush();
+
+        $id = $newWiki->getIid();
 
         if ($id > 0) {
             $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
@@ -415,6 +422,8 @@ class Wiki
                         WHERE c_id = '.$course_id.' AND iid ="'.$id.'"';
                 Database::query($sql);
             }
+
+            self::assignCategoriesToWiki($newWiki, $values['category']);
         }
 
         // Update wiki config
@@ -592,7 +601,7 @@ class Wiki
      *
      * @todo consider merging this with the function save_wiki into one single function.
      */
-    private function save_new_wiki($values)
+    public function save_new_wiki($values)
     {
         $tbl_wiki = $this->tbl_wiki;
         $tbl_wiki_conf = $this->tbl_wiki_conf;
@@ -700,29 +709,39 @@ class Wiki
                     '<a href="index.php?action=edit&title='.$var.'&group_id='.$group_id.'">'.
                     $values['title'].'</a>';
             } else {
-                $dtime = api_get_utc_datetime();
+                $em = Database::getManager();
+                $dtime = api_get_utc_datetime(null, false, true);
 
-                $params = [
-                    'c_id' => $course_id,
-                    'reflink' => $_clean['reflink'],
-                    'title' => $_clean['title'],
-                    'content' => $_clean['content'],
-                    'user_id' => $_clean['user_id'],
-                    'group_id' => $groupId,
-                    'dtime' => $dtime,
-                    'visibility' => $_clean['visibility'],
-                    'visibility_disc' => $_clean['visibility_disc'],
-                    'ratinglock_disc' => $_clean['ratinglock_disc'],
-                    'assignment' => $_clean['assignment'],
-                    'comment' => $_clean['comment'],
-                    'progress' => $_clean['progress'],
-                    'version' => $_clean['version'],
-                    'linksto' => $_clean['linksto'],
-                    'user_ip' => $_SERVER['REMOTE_ADDR'],
-                    'session_id' => $session_id,
-                    'addlock_disc' => 1,
-                ];
-                $id = Database::insert($tbl_wiki, $params);
+                $newWiki = (new CWiki())
+                    ->setCId($course_id)
+                    ->setReflink($_clean['reflink'])
+                    ->setTitle($_clean['title'])
+                    ->setContent($_clean['content'])
+                    ->setUserId($_clean['user_id'])
+                    ->setGroupId($groupId)
+                    ->setDtime($dtime)
+                    ->setVisibility($_clean['visibility'])
+                    ->setVisibilityDisc($_clean['visibility_disc'])
+                    ->setRatinglockDisc($_clean['ratinglock_disc'])
+                    ->setAssignment($_clean['assignment'])
+                    ->setComment($_clean['comment'])
+                    ->setProgress($_clean['progress'])
+                    ->setVersion($_clean['version'])
+                    ->setLinksto($_clean['linksto'])
+                    ->setUserIp($_SERVER['REMOTE_ADDR'])
+                    ->setSessionId($session_id)
+                    ->setAddlock(0)
+                    ->setAddlockDisc(1)
+                    ->setEditlock(0)
+                    ->setIsEditing(0)
+                    ->setTag('')
+                ;
+
+                $em->persist($newWiki);
+                $em->flush();
+
+                $id = $newWiki->getIid();
+
                 if ($id > 0) {
                     $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
                     Database::query($sql);
@@ -760,6 +779,8 @@ class Wiki
                     ];
 
                     Database::insert($tbl_wiki_conf, $params);
+
+                    self::assignCategoriesToWiki($newWiki, $values['category']);
 
                     $this->setWikiData($id);
                     self::check_emailcue(0, 'A');
@@ -802,6 +823,25 @@ class Wiki
             get_lang('Progress'),
             $progress
         );
+
+        if (true === api_get_configuration_value('wiki_categories_enabled')) {
+            $em = Database::getManager();
+
+            $categories = $em->getRepository(CWikiCategory::class)
+                ->findByCourse(
+                    api_get_course_entity(),
+                    api_get_session_entity()
+                );
+
+            $form->addSelectFromCollection(
+                'category',
+                get_lang('Categories'),
+                $categories,
+                ['multiple' => 'multiple'],
+                false,
+                'getNodeName'
+            );
+        }
 
         if ((api_is_allowed_to_edit(false, true) ||
             api_is_platform_admin()) &&
@@ -1361,8 +1401,15 @@ class Wiki
         $footerWiki = '<ul class="list-inline" style="margin-bottom: 0;">'
             .'<li>'.get_lang('Progress').': '.$pageProgress.'%</li>'
             .'<li>'.get_lang('Rating').': '.$pageScore.'</li>'
-            .'<li>'.get_lang('Words').': '.self::word_count($content).'</li>'
-            .'</ul>';
+            .'<li>'.get_lang('Words').': '.self::word_count($content).'</li>';
+
+        if (true === api_get_configuration_value('wiki_categories_enabled') && $row) {
+            $wiki = Database::getManager()->find(CWiki::class, $row['id']);
+
+            $footerWiki .= '<li class="pull-right">'.implode(', ', $wiki->getCategories()->getValues()).'</li>';
+        }
+
+        $footerWiki .= '</ul>';
         // wikicontent require to print wiki document
         echo '<div id="wikicontent">'.Display::panel($pageWiki, $pageTitle, $footerWiki).'</div>'; //end filter visibility
     }
@@ -5965,7 +6012,21 @@ class Wiki
         $lock_unlock_addnew = null;
         $protect_addnewpage = null;
 
-        if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
+        if (
+            true === api_get_configuration_value('wiki_categories_enabled')
+            && (api_is_allowed_to_edit(false, true) || api_is_platform_admin())
+        ) {
+            $actionsLeft .= Display::url(
+                Display::return_icon('folder.png', get_lang('Categories'), [], ICON_SIZE_MEDIUM),
+                'index.php?'.http_build_query([
+                    'cidReq' => $_course['id'],
+                    'session_id' => $session_id,
+                    'id_session' => $session_id,
+                    'group_id' => $groupId,
+                    'action' => 'category',
+                ])
+            );
+
             // page action: enable or disable the adding of new pages
             if (self::check_addnewpagelock() == 0) {
                 $protect_addnewpage = Display::return_icon(
@@ -6381,6 +6442,14 @@ class Wiki
                 $row['page_id'] = $page_id;
                 $row['reflink'] = $page;
                 $row['content'] = $content;
+
+                if (true === api_get_configuration_value('wiki_categories_enabled')) {
+                    $wiki = Database::getManager()->find(CWiki::class, $row['id']);
+
+                    foreach ($wiki->getCategories() as $category) {
+                        $row['category'][] = $category->getId();
+                    }
+                }
 
                 $form->setDefaults($row);
                 $form->display();
@@ -6986,6 +7055,12 @@ class Wiki
                 self::exportTo($_GET['id'], 'odt');
                 exit;
                 break;
+            case 'category':
+                $this->addCategory();
+                break;
+            case 'delete_category':
+                $this->deleteCategory();
+                break;
         }
     }
 
@@ -7051,5 +7126,193 @@ class Wiki
         }
 
         return Database::query($query);
+    }
+
+    private function deleteCategory()
+    {
+        if (!api_is_allowed_to_edit(false, true) && !api_is_platform_admin()) {
+            api_not_allowed(true);
+        }
+
+        if (true !== api_get_configuration_value('wiki_categories_enabled')) {
+            api_not_allowed(true);
+        }
+
+        $em = Database::getManager();
+
+        $category = null;
+
+        if (isset($_GET['id'])) {
+            $category = $em->find(CWikiCategory::class, $_GET['id']);
+
+            if (!$category) {
+                api_not_allowed(true);
+            }
+        }
+
+        $em->remove($category);
+        $em->flush();
+
+        Display::addFlash(
+            Display::return_message(get_lang('CategoryDeleted'), 'success')
+        );
+
+        header('Location: index.php?'.api_get_cidreq().'&action=category');
+        exit;
+    }
+
+    private function addCategory()
+    {
+        if (!api_is_allowed_to_edit(false, true) && !api_is_platform_admin()) {
+            api_not_allowed(true);
+        }
+
+        if (true !== api_get_configuration_value('wiki_categories_enabled')) {
+            api_not_allowed(true);
+        }
+
+        $categoryRepo = Database::getManager()->getRepository(CWikiCategory::class);
+
+        $categoryToEdit = null;
+
+        if (isset($_GET['id'])) {
+            $categoryToEdit = $categoryRepo->find($_GET['id']);
+
+            if (!$categoryToEdit) {
+                api_not_allowed(true);
+            }
+        }
+
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        if ($categoryToEdit
+            && ($course !== $categoryToEdit->getCourse() || $session !== $categoryToEdit->getSession())
+        ) {
+            api_not_allowed(true);
+        }
+
+        $self = api_get_self();
+        $cidReq = api_get_cidreq();
+        $iconEdit = Display::return_icon('edit.png', get_lang('Edit'));
+        $iconDelete = Display::return_icon('delete.png', get_lang('Delete'));
+
+        $categories = $categoryRepo->findByCourse($course, $session);
+        $categoryList = array_map(
+            function (CWikiCategory $category) use ($self, $cidReq, $iconEdit, $iconDelete) {
+                $actions = [];
+                $actions[] = Display::url(
+                    $iconEdit,
+                    "$self?$cidReq&".http_build_query(['action' => 'category', 'id' => $category->getId()])
+                );
+                $actions[] = Display::url(
+                    $iconDelete,
+                    "$self?$cidReq&".http_build_query(['action' => 'delete_category', 'id' => $category->getId()])
+                );
+
+                return [
+                    $category->getNodeName(),
+                    implode(PHP_EOL, $actions),
+                ];
+            },
+            $categories
+        );
+
+        $table = new SortableTableFromArray($categoryList);
+        $table->set_header(0, get_lang('Name'), false);
+        $table->set_header(1, get_lang('Actions'), false, ['class' => 'text-right'], ['class' => 'text-right']);
+
+        $form = $this->createCategoryForm($categoryToEdit);
+        $form->display();
+        echo '<hr>';
+        $table->display();
+    }
+
+    private function createCategoryForm(CWikiCategory $category = null): FormValidator
+    {
+        $em = Database::getManager();
+        $categoryRepo = $em->getRepository(CWikiCategory::class);
+
+        $course = api_get_course_entity($this->courseInfo['real_id']);
+        $session = api_get_session_entity($this->session_id);
+
+        $categories = $categoryRepo->findByCourse($course, $session);
+
+        $formAction = api_get_self().'?'.http_build_query([
+            'cidReq' => $course->getCode(),
+            'session_id' => $session ? $session->getId() : 0,
+            'id_session' => $session ? $session->getId() : 0,
+            'group_id' => $this->group_id,
+            'action' => 'category',
+            'id' => $category ? $category->getId() : null,
+        ]);
+
+        $form = new FormValidator('category', 'post', $formAction);
+        $form->addHeader(get_lang('AddCategory'));
+        $form->addSelectFromCollection('parent', get_lang('Parent'), $categories, [], true, 'getNodeName');
+        $form->addText('name', get_lang('Name'));
+
+        if ($category) {
+            $form->addButtonUpdate(get_lang('Update'));
+        } else {
+            $form->addButtonSave(get_lang('Save'));
+        }
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+            $parent = $categoryRepo->find($values['parent']);
+
+            if (!$category) {
+                $category = (new CWikiCategory())
+                    ->setCourse($course)
+                    ->setSession($session)
+                ;
+
+                $em->persist($category);
+
+                Display::addFlash(
+                    Display::return_message(get_lang('CategoryAdded'), 'success')
+                );
+            } else {
+                Display::addFlash(
+                    Display::return_message(get_lang('CategoryEdited'), 'success')
+                );
+            }
+
+            $category
+                ->setName($values['name'])
+                ->setParent($parent)
+            ;
+
+            $em->flush();
+
+            header('Location: index.php?'.api_get_cidreq().'&action=category');
+            exit;
+        }
+
+        if ($category) {
+            $form->setDefaults([
+                'parent' => $category->getParent() ? $category->getParent()->getId() : 0,
+                'name' => $category->getName(),
+            ]);
+        }
+
+        return $form;
+    }
+
+    private static function assignCategoriesToWiki(CWiki $wiki, array $categoriesIdList)
+    {
+        if (true !== api_get_configuration_value('wiki_categories_enabled')) {
+            return;
+        }
+
+        $em = Database::getManager();
+
+        foreach ($categoriesIdList as $categoryId) {
+            $category = $em->find(CWikiCategory::class, $categoryId);
+            $wiki->addCategory($category);
+        }
+
+        $em->flush();
     }
 }

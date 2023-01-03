@@ -20,7 +20,7 @@ if (isset($_GET['action'], $_GET['d'], $_GET['n'])) {
             $frequency = $plugin->selectFrequency($_GET['d']);
 
             if (!empty($frequency)) {
-                $subscriptionsItems = $plugin->getSubscriptiosnItemsByDuration($_GET['d']);
+                $subscriptionsItems = $plugin->getSubscriptionsItemsByDuration($_GET['d']);
 
                 if (empty($subscriptionsItems)) {
                     $plugin->deleteFrequency($_GET['d']);

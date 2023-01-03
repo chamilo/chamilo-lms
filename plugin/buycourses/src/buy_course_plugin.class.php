@@ -2781,8 +2781,8 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getPayouts(
         int $status = self::PAYOUT_STATUS_PENDING,
-        int $payoutId = false,
-        int $userId = false
+        int $payoutId = 0,
+        int $userId = 0
     ) {
         $condition = ($payoutId) ? 'AND p.id = '.($payoutId) : '';
         $condition2 = ($userId) ? ' AND p.user_id = '.($userId) : '';
@@ -3175,6 +3175,8 @@ class BuyCoursesPlugin extends Plugin
                 $product['iso_code']
             );
         }
+
+        return true;
     }
 
     /**

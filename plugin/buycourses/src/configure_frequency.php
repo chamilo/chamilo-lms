@@ -96,7 +96,7 @@ if ($form->validate()) {
     exit;
 }
 
-$form->setDefaults($formDefaults);
+//$form->setDefaults($formDefaults);
 
 $templateName = $plugin->get_lang('FrequencyAdd');
 $interbreadcrumb[] = [

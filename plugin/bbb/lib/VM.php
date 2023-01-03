@@ -30,7 +30,7 @@ class VM
      * @param   bool    $checkEnabled   Check if, additionnally to being installed, the plugin is enabled
      * @return bool
      */
-    public function isEnabled($checkEnabled = false)
+    public function isEnabled(bool $checkEnabled = false): bool
     {
         $config = $this->getConfig();
 

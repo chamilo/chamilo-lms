@@ -135,7 +135,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function isEnabled(bool $checkEnabled = false)
+    public function isEnabled(bool $checkEnabled = false): bool
     {
         return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
     }
@@ -3469,7 +3469,7 @@ class BuyCoursesPlugin extends Plugin
         string $name = null,
         int $min = 0,
         int $max = 0,
-        mixed $appliesTo = '',
+        $appliesTo = '',
         string $typeResult = 'all'
     ) {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);

@@ -406,7 +406,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      *
      * @return bool
      */
-    public function isEnabled($checkEnabled = false)
+    public function isEnabled(bool $checkEnabled = false): bool
     {
         return parent::isEnabled() && 'true' === api_get_plugin_setting('whispeakauth', self::SETTING_ENABLE);
     }

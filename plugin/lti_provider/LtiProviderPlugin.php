@@ -32,6 +32,8 @@ class LtiProviderPlugin extends Plugin
         $launchUrlHtml = '';
         $loginUrlHtml = '';
         $redirectUrlHtml = '';
+        $jwksUrlHtml = '';
+
         if ($this->areTablesCreated()) {
             $publicKey = $this->getPublicKey();
 

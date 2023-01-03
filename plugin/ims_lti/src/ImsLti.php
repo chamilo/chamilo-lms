@@ -13,6 +13,8 @@ class ImsLti
 {
     const V_1P1 = 'lti1p1';
     const V_1P3 = 'lti1p3';
+    const LTI_RSA_KEY = 'rsa_key';
+    const LTI_JWK_KEYSET = 'jwk_keyset';
 
     /**
      * @param Session|null $session    Optional.

@@ -87,6 +87,7 @@ switch ($action) {
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
                         )
+                        ->setJwksUrl($formValues['jwks_url'])
                         ->publicKey = $formValues['public_key'];
                 } elseif (ImsLti::V_1P1 === $formValues['version']) {
                     if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
@@ -214,6 +215,7 @@ switch ($action) {
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
                         )
+                        ->setJwksUrl($formValues['jwks_url'])
                         ->publicKey = $formValues['public_key'];
                 } elseif ($tool->getVersion() === ImsLti::V_1P1) {
                     $tool

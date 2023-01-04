@@ -36,6 +36,7 @@ class AnnouncementManager
             '((user_firstname))',
             '((user_lastname))',
             '((user_picture))',
+            '((user_complete_name))',
             '((user_official_code))',
             '((course_title))',
             '((course_link))',
@@ -99,6 +100,7 @@ class AnnouncementManager
         $data['user_name'] = '';
         $data['user_firstname'] = '';
         $data['user_lastname'] = '';
+        $data['user_complete_name'] = '';
         $data['user_official_code'] = '';
         $data['user_email'] = '';
         if (!empty($readerInfo)) {
@@ -107,6 +109,7 @@ class AnnouncementManager
             $data['user_firstname'] = $readerInfo['firstname'];
             $data['user_lastname'] = $readerInfo['lastname'];
             $data['user_official_code'] = $readerInfo['official_code'];
+            $data['user_complete_name'] = $readerInfo['complete_name'];
         }
 
         $data['user_picture'] = UserManager::getUserPicture($userId, USER_IMAGE_SIZE_ORIGINAL);

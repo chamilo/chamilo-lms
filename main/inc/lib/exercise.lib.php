@@ -1927,8 +1927,6 @@ HOTSPOT;
     /**
      * Get the table as array of results of exercises attempts with questions score.
      *
-     * @param Exercise $objExercise
-     *
      * @return array
      */
     public static function getTrackExerciseAttemptsTable(Exercise $objExercise)

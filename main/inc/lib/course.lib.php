@@ -7300,6 +7300,26 @@ class CourseManager
         return $data;
     }
 
+   /**
+     * returns an array with all the courses codes of the plateform
+     * @return array
+     */
+    public static function getAllCoursesCode()
+    {
+        $sql = "select id, code from course";
+        $result = Database::query($sql);
+        $num_rows = Database::num_rows($result);
+        $coursesCode = [];
+        $coursesList = [];
+        if ($num_rows > 0) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $coursesList[$row['id']] = $row;
+            }
+            $coursesCode = array_column($coursesList, 'code');
+	}   
+        return $coursesCode;
+    }
+    
     /**
      * Check if a specific access-url-related setting is a problem or not.
      *

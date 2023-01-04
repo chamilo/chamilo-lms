@@ -2327,6 +2327,12 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Add the "remember password" link to the "subscription to session" confirmation email
 //$_configuration['email_template_subscription_to_session_confirmation_lost_password'] = false;
 
+// Add a custom extra footer for notificacions emails for a specific language, for example for
+// privacy policy notices. Multiple languages and paragraphs can be added.
+/*$_configuration['notifications_extended_footer_message'] = ['english' => ['paragraphs' => [
+    'Change or delete this paragraph or add another one'
+]]];*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

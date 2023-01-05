@@ -2752,14 +2752,25 @@ class Wiki
         $subGroupfilter = ' s2.group_id = '.$this->group_id.' ';
         $subSessionCondition = api_get_session_condition($this->session_id, true, false, 's2.session_id').' ';
         $categoryIdList = array_map('intval', $categoryIdList);
-        $categoriesJoin = $categoryIdList
-            ? "INNER JOIN c_wiki_rel_category AS wrc ON (wp.iid = wrc.wiki_id)
-                INNER JOIN c_wiki_category AS wc ON (wrc.category_id = wc.id) "
-            : '';
+        $categoriesJoin = '';
 
-        $categoriesCondition = $matchAllCategories
-            ? ($categoryIdList ? ' AND (wc.id = '.implode(' AND wc.id = ', $categoryIdList).')' : '')
-            : ($categoryIdList ? 'AND wc.id IN ('.implode(', ', $categoryIdList).')' : '');
+        if ($categoryIdList) {
+            if ($matchAllCategories) {
+                foreach ($categoryIdList as $categoryId) {
+                    $categoriesJoin .= "INNER JOIN c_wiki_rel_category AS wrc$categoryId
+                            ON (wp.iid = wrc$categoryId.wiki_id AND wrc$categoryId.category_id = $categoryId)
+                        INNER JOIN c_wiki_category AS wc$categoryId
+                            ON (wrc$categoryId.category_id = wc$categoryId.id) ";
+                }
+            } else {
+                $categoriesJoin = 'INNER JOIN c_wiki_rel_category AS wrc ON (wp.iid = wrc.wiki_id)
+                    INNER JOIN c_wiki_category AS wc ON (wrc.category_id = wc.id) ';
+            }
+        }
+
+        $categoriesCondition = !$matchAllCategories
+            ? ($categoryIdList ? 'AND wc.id IN ('.implode(', ', $categoryIdList).')' : '')
+            : '';
 
         $course_id = api_get_course_int_id();
         echo '<legend>'.get_lang('WikiSearchResults').': '.Security::remove_XSS($search_term).'</legend>';
@@ -2769,62 +2780,62 @@ class Wiki
             if ($all_vers == '1') {
                 $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
                     WHERE wp.c_id = $course_id
-                        AND wp.title LIKE '%".Database::escape_string($search_term)."%' ";
+                        AND (wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
                 if ($search_content == '1') {
                     $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
-                $sql .= "AND ".$groupfilter.$sessionCondition.$categoriesCondition;
+                $sql .= ") AND ".$groupfilter.$sessionCondition.$categoriesCondition;
             } else {
                 // warning don't use group by reflink because don't return the last version
-                $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
+                $sql = "SELECT * FROM $tbl_wiki AS wp
                     WHERE wp.c_id = $course_id
-                        AND wp.title LIKE '%".Database::escape_string($search_term)."%' ";
+                        AND (wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
                 if ($search_content == '1') {
                     // warning don't use group by reflink because don't return the last version
                     $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
-                $sql .= "AND wp.id IN (
+                $sql .= ") AND wp.id IN (
                     SELECT MAX(s2.id)
-                    FROM ".$tbl_wiki." s2
+                    FROM ".$tbl_wiki." s2 $categoriesJoin
                     WHERE s2.c_id = $course_id
-                        AND ".$subGroupfilter.$subSessionCondition."
-                    GROUP BY s2.reflink
-                ) $categoriesCondition";
+                        AND s2.reflink = wp.reflink
+                        AND ".$subGroupfilter.$subSessionCondition.$categoriesCondition."
+                )";
             }
         } else {
             if ($all_vers == '1') {
                 $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
                     WHERE wp.c_id = $course_id
                         AND wp.visibility = 1
-                        AND wp.title LIKE '%".Database::escape_string($search_term)."%' ";
+                        AND (wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
                 if ($search_content == '1') {
                     //search all pages and all versions
                     $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
-                $sql .= "AND ".$groupfilter.$sessionCondition.$categoriesCondition;
+                $sql .= ") AND ".$groupfilter.$sessionCondition.$categoriesCondition;
             } else {
                 // warning don't use group by reflink because don't return the last version
-                $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
+                $sql = "SELECT * FROM $tbl_wiki AS wp 
                     WHERE wp.c_id = $course_id
                         AND wp.visibility = 1
-                        AND wp.title LIKE '%".Database::escape_string($search_term)."%' ";
+                        AND (wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
                 if ($search_content == '1') {
                     $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
-                $sql .= "AND wp.id IN (
-                        SELECT MAX(s2.id) FROM $tbl_wiki s2
+                $sql .= ") AND wp.id IN (
+                        SELECT MAX(s2.id) FROM $tbl_wiki s2 $categoriesJoin
                         WHERE s2.c_id = $course_id
-                            AND ".$subGroupfilter.$subSessionCondition."
-                        GROUP BY s2.reflink
-                    ) $categoriesCondition";
+                            AND s2.reflink = wp.reflink
+                            AND ".$subGroupfilter.$subSessionCondition.$categoriesCondition."
+                    )";
             }
         }
 

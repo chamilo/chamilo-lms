@@ -2337,6 +2337,16 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
     'Change or delete this paragraph or add another one'
 ]]];*/
 
+// Option to define duration for a calendar in attendance sheet.
+// Create an attendance calendar extra field with field label "duration" of type "text".
+// $_configuration['attendance_calendar_set_duration'] = false;
+
+// Enable comments in attendance sheet for users
+// Require DB changes:
+//CREATE TABLE c_attendance_result_comment (iid int not null PRIMARY KEY AUTO_INCREMENT, attendance_sheet_id int not null, user_id int not null, created_at datetime not null, updated_at datetime not null, comment text not null);
+//CREATE INDEX c_attendance_sheet_user ON track_e_access_complete (attendance_sheet_id, user_id);
+//$_configuration['attendance_allow_comments'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

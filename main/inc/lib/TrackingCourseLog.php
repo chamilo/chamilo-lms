@@ -814,6 +814,20 @@ class TrackingCourseLog
                 false === $GLOBALS['export_csv']
             );
 
+            $user['lp_finalization_date'] = Tracking::getCourseLpFinalizationDate(
+                $user['user_id'],
+                $courseId,
+                $GLOBALS['session_id'],
+                false === $GLOBALS['export_csv']
+            );
+
+            $user['quiz_finalization_date'] = Tracking::getCourseQuizLastFinalizationDate(
+                $user['user_id'],
+                $courseId,
+                $GLOBALS['session_id'],
+                false === $GLOBALS['export_csv']
+            );
+
             if ($GLOBALS['export_csv']) {
                 if (!empty($user['first_connection'])) {
                     $user['first_connection'] = api_get_local_time($user['first_connection']);
@@ -824,6 +838,16 @@ class TrackingCourseLog
                     $user['last_connection'] = api_get_local_time($user['last_connection']);
                 } else {
                     $user['last_connection'] = '-';
+                }
+                if (!empty($user['lp_finalization_date'])) {
+                    $user['lp_finalization_date'] = api_get_local_time($user['lp_finalization_date']);
+                } else {
+                    $user['lp_finalization_date'] = '-';
+                }
+                if (!empty($user['quiz_finalization_date'])) {
+                    $user['quiz_finalization_date'] = api_get_local_time($user['quiz_finalization_date']);
+                } else {
+                    $user['quiz_finalization_date'] = '-';
                 }
             }
 
@@ -888,6 +912,9 @@ class TrackingCourseLog
 
             $userRow['first_connection'] = $user['first_connection'];
             $userRow['last_connection'] = $user['last_connection'];
+
+            $userRow['lp_finalization_date'] = $user['lp_finalization_date'];
+            $userRow['quiz_finalization_date'] = $user['quiz_finalization_date'];
 
             // we need to display an additional profile field
             if (isset($_GET['additional_profile_field'])) {

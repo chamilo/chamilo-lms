@@ -2738,83 +2738,93 @@ class Wiki
 
     /**
      * Displays the results of a wiki search.
-     *
-     * @param   string  Search term
-     * @param   int     Whether to search the contents (1) or just the titles (0)
-     * @param int
      */
     public function display_wiki_search_results(
         $search_term,
         $search_content = 0,
-        $all_vers = 0
+        $all_vers = 0,
+        array $categoryIdList = [],
+        bool $matchAllCategories = false
     ) {
         $tbl_wiki = $this->tbl_wiki;
-        $condition_session = $this->condition_session;
-        $groupfilter = $this->groupfilter;
+        $sessionCondition = api_get_session_condition($this->session_id, true, false, 'wp.session_id');
+        $groupfilter = ' wp.group_id = '.$this->group_id.' ';
+        $subGroupfilter = ' s2.group_id = '.$this->group_id.' ';
+        $subSessionCondition = api_get_session_condition($this->session_id, true, false, 's2.session_id').' ';
+        $categoryIdList = array_map('intval', $categoryIdList);
+        $categoriesJoin = $categoryIdList
+            ? "INNER JOIN c_wiki_rel_category AS wrc ON (wp.iid = wrc.wiki_id)
+                INNER JOIN c_wiki_category AS wc ON (wrc.category_id = wc.id) "
+            : '';
+
+        $categoriesCondition = $matchAllCategories
+            ? ($categoryIdList ? ' AND (wc.id = '.implode(' AND wc.id = ', $categoryIdList).')' : '')
+            : ($categoryIdList ? 'AND wc.id IN ('.implode(', ', $categoryIdList).')' : '');
+
         $course_id = api_get_course_int_id();
         echo '<legend>'.get_lang('WikiSearchResults').': '.Security::remove_XSS($search_term).'</legend>';
 
         //only by professors when page is hidden
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             if ($all_vers == '1') {
-                $sql = "SELECT * FROM $tbl_wiki
-                    WHERE c_id = $course_id
-                        AND title LIKE '%".Database::escape_string($search_term)."%' ";
+                $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
+                    WHERE wp.c_id = $course_id
+                        AND wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
                 if ($search_content == '1') {
-                    $sql .= "OR content LIKE '%".Database::escape_string($search_term)."%' ";
+                    $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
-                $sql .= "AND ".$groupfilter.$condition_session;
+                $sql .= "AND ".$groupfilter.$sessionCondition.$categoriesCondition;
             } else {
                 // warning don't use group by reflink because don't return the last version
-                $sql = "SELECT * FROM $tbl_wiki s1
-                    WHERE s1.c_id = $course_id
-                        AND title LIKE '%".Database::escape_string($search_term)."%' ";
+                $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
+                    WHERE wp.c_id = $course_id
+                        AND wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
                 if ($search_content == '1') {
                     // warning don't use group by reflink because don't return the last version
-                    $sql .= "OR content LIKE '%".Database::escape_string($search_term)."%' ";
+                    $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
-                $sql .= "AND id = (
+                $sql .= "AND wp.id IN (
                     SELECT MAX(s2.id)
                     FROM ".$tbl_wiki." s2
                     WHERE s2.c_id = $course_id
-                        AND s1.reflink = s2.reflink
-                        AND ".$groupfilter.$condition_session."
-                )";
+                        AND ".$subGroupfilter.$subSessionCondition."
+                    GROUP BY s2.reflink
+                ) $categoriesCondition";
             }
         } else {
             if ($all_vers == '1') {
-                $sql = "SELECT * FROM $tbl_wiki
-                    WHERE c_id = $course_id
-                        AND visibility = 1
-                        AND title LIKE '%".Database::escape_string($search_term)."%' ";
+                $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
+                    WHERE wp.c_id = $course_id
+                        AND wp.visibility = 1
+                        AND wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
                 if ($search_content == '1') {
                     //search all pages and all versions
-                    $sql .= "OR content LIKE '%".Database::escape_string($search_term)."%' ";
+                    $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
-                $sql .= "AND ".$groupfilter.$condition_session;
+                $sql .= "AND ".$groupfilter.$sessionCondition.$categoriesCondition;
             } else {
                 // warning don't use group by reflink because don't return the last version
-                $sql = "SELECT * FROM $tbl_wiki s1
-                    WHERE s1.c_id = $course_id
-                        AND visibility = 1
-                        AND title LIKE '%".Database::escape_string($search_term)."%' ";
+                $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
+                    WHERE wp.c_id = $course_id
+                        AND wp.visibility = 1
+                        AND wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
                 if ($search_content == '1') {
-                    $sql .= "OR content LIKE '%".Database::escape_string($search_term)."%' ";
+                    $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
-                $sql .= "AND id = (
+                $sql .= "AND wp.id IN (
                         SELECT MAX(s2.id) FROM $tbl_wiki s2
                         WHERE s2.c_id = $course_id
-                            AND s1.reflink = s2.reflink
-                            AND ".$groupfilter.$condition_session."
-                    )";
+                            AND ".$subGroupfilter.$subSessionCondition."
+                        GROUP BY s2.reflink
+                    ) $categoriesCondition";
             }
         }
 
@@ -4941,11 +4951,15 @@ class Wiki
                 $_GET['search_term'] = $_POST['search_term'] ?? '';
                 $_GET['search_content'] = $_POST['search_content'] ?? '';
                 $_GET['all_vers'] = $_POST['all_vers'] ?? '';
+                $_GET['categories'] = $_POST['categories'] ?? [];
+                $_GET['match_all_categories'] = isset($_POST['match_all_categories']);
             }
             $this->display_wiki_search_results(
                 $_GET['search_term'],
                 $_GET['search_content'],
-                $_GET['all_vers']
+                $_GET['all_vers'],
+                $_GET['categories'],
+                $_GET['match_all_categories']
             );
         } else {
             // initiate the object
@@ -4966,6 +4980,28 @@ class Wiki
             );
             $form->addCheckBox('search_content', '', get_lang('AlsoSearchContent'));
             $form->addCheckbox('all_vers', '', get_lang('IncludeAllVersions'));
+
+            if (true === api_get_configuration_value('wiki_categories_enabled')) {
+                $categories = Database::getManager()
+                    ->getRepository(CWikiCategory::class)
+                    ->findByCourse(api_get_course_entity(), api_get_session_entity())
+                ;
+
+                $form->addSelectFromCollection(
+                    'categories',
+                    get_lang('Categories'),
+                    $categories,
+                    ['multiple' => 'multiple'],
+                    false,
+                    'getNodeName'
+                );
+                $form->addCheckBox(
+                    'match_all_categories',
+                    '',
+                    get_lang('OnlyThoseThatCorrespondToAllTheSelectedCategories')
+                );
+            }
+
             $form->addButtonSearch(get_lang('Search'), 'SubmitWikiSearch');
 
             // setting the rules
@@ -4982,7 +5018,9 @@ class Wiki
                 $this->display_wiki_search_results(
                     $values['search_term'],
                     $values['search_content'],
-                    $values['all_vers']
+                    $values['all_vers'],
+                    $values['categories'] ?? [],
+                    isset($values['match_all_categories'])
                 );
             } else {
                 $form->display();

@@ -401,7 +401,7 @@ if (api_is_platform_admin()) {
         $items[] = [
             'class' => 'item-agenda-reminders',
             'url' => api_get_path(WEB_CODE_PATH).'admin/import_course_agenda_reminders.php',
-            'label' => get_lang('AgendaReminders'),
+            'label' => get_lang('ImportCourseEvents'),
         ];
     }
 

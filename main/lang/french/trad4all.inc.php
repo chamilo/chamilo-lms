@@ -8881,14 +8881,11 @@ $DoNotIncludeUsers = "Ne pas inclure les utilisateurs";
 $ReportDoesNotIncludeListOfUsersNeitherForSessionNorForEachCourse = "Le rapport ne va pas inclure la liste des utilisateurs ni de la session ni de chaque cours.";
 $IncludeExtraFields = "Inclure les champs extra de cours";
 $SkillLevels = "Niveaux de compétence";
-$ImportCourseEvents = "Importer les événements du cours";
+$ImportCourseEvents = "Importer des événements de cours";
 $TagsCanBeUsed = "Les tags peuvent être utilisés";
 $ImportCourseAgendaReminderTitleDefault = "Invitation au cours ((course_title))";
-$ImportCourseAgendaReminderDescriptionDefault = "Bonjour ((user_complete_name)).
-
-Vous devez suivre le cours ((course_title)) entre le ((date_start)) et le ((date_end)). Vous pouvez accéder à ce cours en suivant ce lien ((course_link)).
-
-Cordialement";
+$ImportCourseAgendaReminderDescriptionDefault = "<p>Bonjour ((user_complete_name)).</p>
+<p>Vous devrez suivre le cours ((course_title)) entre le ((date_start)) et le ((date_end)). Vous pouvez y accéder en suivant ce lien : ((course_link)).</p>";
 $XUserPortfolioItems = "items de portfolio de %s";
 $Scored = "Noté";
 $Edited = "Édité";
@@ -8902,4 +8899,9 @@ $SendToUsers = "Envoyer aux utilisateurs";
 $FirstLoginForceUsersToChangePassword = "Forcer les utilisateurs à changer de mot de passe à la première connexion";
 $YourUsernameToAccessIsX = "Votre nom d'utilisateur pour y accéder est %s";
 $InstructionsLostPasswordWithLinkX = "Note: Si vous ne vous souvenez pas de votre mot de passe, cliquez sur <a href=\"%s\">\"Mot de passe oublié\"</a>, introduisez votre nom d'utilisateur et suivez les instructions.";
+$RepeatBiweekly = "Bi-semanal";
+$RepeatXDays = "Tous les x jours";
+$NumberOfDays = "Nombre de jours";
+$WriteAComment = "Faire un commentaire";
+$ProvideACommentFirst = "Veuillez d'abord écrire un commentaire";
 ?>

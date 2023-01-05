@@ -8948,7 +8948,9 @@ $SkillLevels = "Skill levels";
 $ImportCourseEvents = "Import course events";
 $TagsCanBeUsed = "Tags can be used";
 $ImportCourseAgendaReminderTitleDefault = "Invitation to the ((course_title)) course";
-$ImportCourseAgendaReminderDescriptionDefault = "<p>Hello ((user_complete_name)).</p><p>You have to take the course ((course_title)) from ((date_start)) to ((date_end)). You can access the course at this link ((course_link)).</p><p>Cheers.</p>";
+$ImportCourseAgendaReminderDescriptionDefault = "<p>Hello ((user_complete_name)).</p>
+<p>You have to take course ((course_title)) between ((date_start)) and ((date_end)). You can access it here: ((course_link)).</p>
+<p>Cheers.</p>";
 $XUserPortfolioItems = "%s's portfolio items";
 $Scored = "Scored";
 $Edited = "Edited";
@@ -8962,4 +8964,9 @@ $SendToUsers = "Send to users";
 $FirstLoginForceUsersToChangePassword = "Force users to change their password when they first log in";
 $YourUsernameToAccessIsX = "Please note that your username to access is %s";
 $InstructionsLostPasswordWithLinkX = "Note: If you do not remember your password, click on <a href=\"%s\">\"Forgot your password?\"</a>, enter your username and follow the instructions.";
+$RepeatBiweekly = "Bi-weekly";
+$RepeatXDays = "Every x days";
+$NumberOfDays = "Number of days";
+$WriteAComment = "Leave a comment";
+$ProvideACommentFirst = "Please leave a comment first";
 ?>

@@ -8990,4 +8990,9 @@ $SendToUsers = "Enviar a los usuarios";
 $FirstLoginForceUsersToChangePassword = "Forzar los usuarios a cambiar de contraseña durante la primera conexión";
 $YourUsernameToAccessIsX = "Le recordamos que su nombre de usuario para el acceso es %s";
 $InstructionsLostPasswordWithLinkX = "Nota: Si no recuerda su contraseña, haga clic en <a href=\"%s\">\"¿Ha olvidado su contraseña?\"</a>, introduzca su usuario y siga las instrucciones";
+$RepeatBiweekly = "Bi-semanal";
+$RepeatXDays = "Cada x días";
+$NumberOfDays = "Número de días";
+$WriteAComment = "Dejar un comentario";
+$ProvideACommentFirst = "Por favor deje un comentario primero";
 ?>

@@ -20,12 +20,13 @@ switch ($action) {
     case 'comment_attendance':
         $selected = $_REQUEST['selected'];
         $comment = $_REQUEST['comment'];
-        $attendanceId = $_REQUEST['attendance_id'];
+        $attendanceId = (int) $_REQUEST['attendance_id'];
         if (!empty($selected)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
             $attendance = new Attendance();
-            $attendance->saveComment($userId,
-                $attendanceCalendarId,
+            $attendance->saveComment(
+                (int) $userId,
+                (int) $attendanceCalendarId,
                 $comment,
                 $attendanceId
             );
@@ -39,7 +40,10 @@ switch ($action) {
         if (!empty($selected)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
             $attendance = new Attendance();
-            $comment = $attendance->getComment($userId, $attendanceCalendarId);
+            $comment = $attendance->getComment(
+                (int) $userId,
+                (int) $attendanceCalendarId
+            );
             echo $comment;
         }
         break;

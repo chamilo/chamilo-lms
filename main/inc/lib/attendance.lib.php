@@ -1921,7 +1921,7 @@ class Attendance
 
         // 86400 = 24 hours in seconds
         // 604800 = 1 week in seconds
-        // 1296000 = 1 biweek in seconds
+        // 1296000 = 2 weeks in seconds
         // 2419200 = 1 month in seconds
         // 86400 x xdays = interval by x days (in seconds)
         // Saves repeated dates
@@ -2677,22 +2677,15 @@ class Attendance
     }
 
     /**
-     * It exports the attendance sheet to Xls format.
-     *
-     * @param $attendanceId
-     * @param $studentId
-     * @param $courseId
-     * @param $groupId
-     * @param $filterType
-     * @param $myCalendarId
+     * Exports the attendance sheet to Xls format.
      */
     public function exportAttendanceSheetToXls(
-        $attendanceId,
-        $studentId,
-        $courseId,
-        $groupId,
-        $filterType,
-        $myCalendarId
+        int $attendanceId,
+        int $studentId,
+        string $courseCode,
+        int $groupId,
+        string $filterType,
+        int $myCalendarId
     ) {
         $users = $this->get_users_rel_course($attendanceId, $groupId);
         $calendar = $this->get_attendance_calendar(
@@ -2703,11 +2696,11 @@ class Attendance
         );
 
         if (!empty($studentId)) {
-            $userId = (int) $studentId;
+            $userId = $studentId;
         } else {
             $userId = api_get_user_id();
         }
-        $courseInfo = api_get_course_info($courseId);
+        $courseInfo = api_get_course_info($courseCode);
 
         $userPresence = [];
         $faults = [];
@@ -2776,14 +2769,11 @@ class Attendance
     /**
      * Get the user comment in attendance sheet.
      *
-     * @param $userId
-     * @param $attendanceCalendarId
-     *
      * @return false|string
      */
     public function getComment(
-        $userId,
-        $attendanceCalendarId
+        int $userId,
+        int $attendanceCalendarId
     ) {
         $allowComment = api_get_configuration_value('attendance_allow_comments');
         if (!$allowComment) {
@@ -2824,20 +2814,15 @@ class Attendance
     }
 
     /**
-     * It saves the user comment from attendance sheet.
+     * Saves the user comment from attendance sheet.
      *
-     * @param $userId
-     * @param $attendanceCalendarId
-     * @param $comment
-     * @param $attendanceId
-     *
-     * @return false or void when it is saved.
+     * @return false
      */
     public function saveComment(
-        $userId,
-        $attendanceCalendarId,
-        $comment,
-        $attendanceId
+        int $userId,
+        int $attendanceCalendarId,
+        string $comment,
+        int $attendanceId
     ) {
         $allowComment = api_get_configuration_value('attendance_allow_comments');
         if (!$allowComment) {

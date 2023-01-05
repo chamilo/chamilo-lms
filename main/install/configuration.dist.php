@@ -2321,7 +2321,7 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Create a document extra field with field label "can_be_downloaded" of type "Checkbox options".
 // $_configuration['documents_hide_download_icon'] = false;
 
-// It adds option to define duration for a calendar in attendance sheet.
+// Option to define duration for a calendar in attendance sheet.
 // Create an attendance calendar extra field with field label "duration" of type "text".
 // $_configuration['attendance_calendar_set_duration'] = false;
 

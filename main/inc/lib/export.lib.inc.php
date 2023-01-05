@@ -93,11 +93,12 @@ class Export
     /**
      * Export tabular data to XLS-file included comments.
      *
-     * @param array  $data     The comment by cell should be added with the prefix [comment] to be added ($txtCellValue.'[comment]'.$txtComment)
-     * @param string $filename
+     * @param array $data The comment by cell should be added with the prefix [comment] to be added ($txtCellValue.'[comment]'.$txtComment)
      */
-    public static function arrayToXlsAndComments($data, $filename = 'export', $encoding = 'utf-8')
-    {
+    public static function arrayToXlsAndComments(
+        array $data,
+        string $filename = 'export'
+    ) {
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
         $file = new \SplFileObject($filePath, 'w');
 

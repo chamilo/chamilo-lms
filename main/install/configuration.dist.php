@@ -1031,6 +1031,10 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
         'add_extra_quit_to_home_icon' => false,
     ],
 ];*/
+// To enable the add_extra_quit_to_home_icon feature for single LP, add the following extrafield:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (6, 13, 'add_extra_quit_button', 'Add extra quit button', '', 0, 1, 0, 1, 0, NOW());
+*/
 
 // Force to hide the invisible course documents in sessions
 //$_configuration['hide_invisible_course_documents_in_sessions'] = false;

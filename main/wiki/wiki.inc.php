@@ -1403,11 +1403,11 @@ class Wiki
             .'<li>'.get_lang('Rating').': '.$pageScore.'</li>'
             .'<li>'.get_lang('Words').': '.self::word_count($content).'</li>';
 
-        if (true === api_get_configuration_value('wiki_categories_enabled') && $row) {
-            $wiki = Database::getManager()->find(CWiki::class, $row['id']);
-
-            $footerWiki .= '<li class="pull-right">'.implode(', ', $wiki->getCategories()->getValues()).'</li>';
-        }
+        $footerWiki .= $this->returnCategoriesBlock(
+            !empty($row['id']) ? $row['id'] : 0,
+            '<li class="pull-right">',
+            '</li>'
+        );
 
         $footerWiki .= '</ul>';
         // wikicontent require to print wiki document
@@ -2869,28 +2869,21 @@ class Wiki
                 $row = [];
                 $row[] = $ShowAssignment;
 
+                $wikiLinkParams = [
+                    'action' => 'showpage',
+                    'title' => api_htmlentities($obj->reflink),
+                    'session_id' => $_GET['session_id'],
+                    'group_id' => $_GET['group_id'],
+                ];
+
                 if ($all_vers == '1') {
-                    $row[] = Display::url(
-                        api_htmlentities($obj->title),
-                        "$self?$cidReq&".http_build_query([
-                            'action' => 'showpage',
-                            'title' => api_htmlentities($obj->reflink),
-                            'view' => $obj->id,
-                            'session_id' => $_GET['session_id'],
-                            'group_id' => $_GET['group_id'],
-                        ])
-                    );
-                } else {
-                    $row[] = Display::url(
-                        $obj->title,
-                        "$self?$cidReq&".http_build_query([
-                            'action' => 'showpage',
-                            'title' => api_htmlentities($obj->reflink),
-                            'session_id' => $_GET['session_id'],
-                            'group_id' => $_GET['group_id'],
-                        ])
-                    );
+                    $wikiLinkParams['view'] = $obj->id;
                 }
+
+                $row[] = Display::url(
+                    api_htmlentities($obj->title),
+                    "$self?$cidReq&".http_build_query($wikiLinkParams)
+                ).$this->returnCategoriesBlock($obj->iid, '<div><small>', '</small></div>');
 
                 $row[] = ($obj->user_id != 0 && $userinfo !== false)
                     ? UserManager::getUserProfileLink($userinfo)
@@ -4450,7 +4443,7 @@ class Wiki
                 while ($data = Database::fetch_assoc($result)) {
                     $rows[] = [
                         $data['col0'],
-                        [$data['col1'], $data['reflink']],
+                        [$data['col1'], $data['reflink'], $data['iid']],
                         [$data['col2'], $data['user_ip']],
                         $data['col3'],
                         $data['reflink'],
@@ -4533,13 +4526,14 @@ class Wiki
         $table->set_column_filter(
             1,
             function ($value) use ($_course) {
-                list($title, $refLink) = $value;
+                list($title, $refLink, $iid) = $value;
 
                 return '<a href="'.api_get_self().'?cidReq='.$_course['code']
                     .'&action=showpage&title='.api_htmlentities(urlencode($refLink))
                     .'&session_id='.api_htmlentities($_GET['session_id'] ?? '')
                     .'&group_id='.api_htmlentities($_GET['group_id']).'">
-                    '.api_htmlentities($title).'</a>';
+                    '.api_htmlentities($title).'</a>'
+                    .$this->returnCategoriesBlock($iid, '<div><small>', '</small></div>');
             }
         );
         $table->set_column_filter(
@@ -7068,6 +7062,17 @@ class Wiki
         return false;
     }
 
+    private function returnCategoriesBlock(int $wikiId, string $tagStart = '<div>', string $tagEnd = '</div>'): string
+    {
+        if (true !== api_get_configuration_value('wiki_categories_enabled') || empty($wikiId)) {
+            return '';
+        }
+
+        $wiki = Database::getManager()->find(CWiki::class, $wikiId);
+
+        return $tagStart.implode(', ', $wiki->getCategories()->getValues()).$tagEnd;
+    }
+
     private function gelAllPagesQuery(
         $onlyCount = false,
         $from = 0,
@@ -7079,7 +7084,7 @@ class Wiki
 
         $fields = $onlyCount
             ? 'COUNT(s1.iid) AS nbr'
-            : 's1.assignment AS col0, s1.title AS col1, s1.user_id AS col2, s1.dtime AS col3, s1.reflink, s1.user_ip';
+            : 's1.assignment col0, s1.title col1, s1.user_id col2, s1.dtime col3, s1.reflink, s1.user_ip, s1.iid';
 
         $query = 'SELECT '.$fields.' FROM '.$tblWiki.' s1 WHERE s1.c_id = '.$this->course_id.' ';
 

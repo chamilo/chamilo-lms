@@ -3350,26 +3350,17 @@ class Tracking
     /**
      * It gets the last finalization date of learnpaths in a course.
      *
-     * @param int  $userId
-     * @param int  $courseId
-     * @param int  $sessionId
-     * @param bool $convertDate
-     *
-     * @return false|mixed|string
+     * @return string finalization date formatted or false if it is empty.
      */
     public static function getCourseLpFinalizationDate(
-        $userId,
-        $courseId,
-        $sessionId,
-        $convertDate = true
+        int $userId,
+        int $courseId,
+        int $sessionId,
+        bool $convertDate = true
     ) {
         $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
         $tblLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-
-        $courseId = (int) $courseId;
-        $userId = (int) $userId;
-        $sessionId = (int) $sessionId;
 
         $sql = "SELECT FROM_UNIXTIME(liv.start_time) as start_date
                 FROM $tblLpItemView liv
@@ -3403,24 +3394,15 @@ class Tracking
     /**
      * It gets the last finalization date of exercises in a course.
      *
-     * @param int  $userId
-     * @param int  $courseId
-     * @param int  $sessionId
-     * @param bool $convertDate
-     *
-     * @return false|mixed|string
+     * @return string finalization date formatted or false if it is empty.
      */
     public static function getCourseQuizLastFinalizationDate(
-        $userId,
-        $courseId,
-        $sessionId,
-        $convertDate = true
+        int $userId,
+        int $courseId,
+        int $sessionId,
+        bool $convertDate = true
     ) {
         $tblTrackExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-        $courseId = (int) $courseId;
-        $userId = (int) $userId;
-        $sessionId = (int) $sessionId;
 
         $sql = "SELECT ex.exe_date
                 FROM $tblTrackExercise AS ex

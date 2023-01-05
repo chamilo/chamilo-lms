@@ -3679,7 +3679,7 @@ class learnpathItem
         // Final item is checked when previous are completed.
         if ($this->type == 'final_item') {
             if ($debug) {
-                error_log('learnpathItem::write_to_db() , It is a final item so is not updated.', 0);
+                error_log('learnpathItem::write_to_db() , final item, so not updated.', 0);
             }
 
             return false;

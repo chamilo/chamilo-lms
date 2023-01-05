@@ -2703,12 +2703,10 @@ class Attendance
         $courseInfo = api_get_course_info($courseCode);
 
         $userPresence = [];
-        $faults = [];
         if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
             $userPresence = $this->get_users_attendance_sheet($attendanceId, 0, $groupId);
         } else {
             $userPresence = $this->get_users_attendance_sheet($attendanceId, $userId, $groupId);
-            $faults = $this->get_faults_of_user($userId, $attendanceId, $groupId);
         }
 
         // Set headers pdf.

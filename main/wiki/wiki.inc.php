@@ -500,49 +500,62 @@ class Wiki
         $r_version,
         $r_linksto
     ) {
-        $tbl_wiki = $this->tbl_wiki;
         $_course = $this->courseInfo;
         $r_user_id = api_get_user_id();
         $r_dtime = api_get_utc_datetime();
+        $dTime = api_get_utc_datetime(null, false, true);
         $r_version = $r_version + 1;
         $r_comment = get_lang('RestoredFromVersion').': '.$c_version;
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $groupInfo = GroupManager::get_group_properties($r_group_id);
 
-        $params = [
-            'c_id' => $course_id,
-            'page_id' => $r_page_id,
-            'reflink' => $r_reflink,
-            'title' => $r_title,
-            'content' => $r_content,
-            'user_id' => $r_user_id,
-            'group_id' => $r_group_id,
-            'dtime' => $r_dtime,
-            'assignment' => $r_assignment,
-            'comment' => $r_comment,
-            'progress' => $r_progress,
-            'version' => $r_version,
-            'linksto' => $r_linksto,
-            'user_ip' => $_SERVER['REMOTE_ADDR'],
-            'session_id' => $session_id,
-        ];
-        $id = Database::insert($tbl_wiki, $params);
+        $em = Database::getManager();
 
-        if ($id) {
-            $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
-            Database::query($sql);
+        $newWiki = (new CWiki())
+            ->setCId($course_id)
+            ->setPageId($r_page_id)
+            ->setReflink($r_reflink)
+            ->setTitle($r_title)
+            ->setContent($r_content)
+            ->setUserId($r_user_id)
+            ->setGroupId($r_group_id)
+            ->setDtime($dTime)
+            ->setAssignment($r_assignment)
+            ->setComment($r_comment)
+            ->setProgress($r_progress)
+            ->setVersion($r_version)
+            ->setLinksto($r_linksto)
+            ->setUserIp(api_get_real_ip())
+            ->setSessionId($session_id)
+            ->setAddlock(0)
+            ->setEditlock(0)
+            ->setVisibility(0)
+            ->setAddlockDisc(0)
+            ->setVisibilityDisc(0)
+            ->setRatinglockDisc(0)
+            ->setIsEditing(0)
+            ->setTag('')
+        ;
 
-            api_item_property_update(
-                $_course,
-                'wiki',
-                $id,
-                'WikiAdded',
-                api_get_user_id(),
-                $groupInfo
-            );
-            self::check_emailcue($r_reflink, 'P', $r_dtime, $r_user_id);
-        }
+        $em->persist($newWiki);
+        $em->flush();
+
+        $newWiki->setId(
+            $newWiki->getIid()
+        );
+
+        $em->flush();
+
+        api_item_property_update(
+            $_course,
+            'wiki',
+            $newWiki->getIid(),
+            'WikiAdded',
+            api_get_user_id(),
+            $groupInfo
+        );
+        self::check_emailcue($r_reflink, 'P', $r_dtime, $r_user_id);
 
         return get_lang('PageRestored');
     }
@@ -2126,7 +2139,7 @@ class Wiki
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $group_properties = GroupManager::get_group_properties($groupId);
-        $group_name = $group_properties['name'];
+        $group_name = $group_properties ? $group_properties['name'] : '';
         $allow_send_mail = false; //define the variable to below
         $email_assignment = null;
         if ($type == 'P') {
@@ -5451,8 +5464,6 @@ class Wiki
      * Check last version.
      *
      * @param int $view
-     *
-     * @return bool
      */
     public function checkLastVersion($view)
     {
@@ -5500,9 +5511,7 @@ class Wiki
                     $_GET['view']
                 ).'">'.
                 get_lang("Restore").'</a></center>';
-            Display::addFlash(
-                Display::return_message($message, 'warning', false)
-            );
+            echo Display::return_message($message, 'warning', false);
         }
     }
 

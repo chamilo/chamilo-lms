@@ -7300,8 +7300,9 @@ class CourseManager
         return $data;
     }
 
-   /**
-     * returns an array with all the courses codes of the plateform
+    /**
+     * returns an array with all the courses codes of the plateform.
+     *
      * @return array
      */
     public static function getAllCoursesCode()
@@ -7316,10 +7317,11 @@ class CourseManager
                 $coursesList[$row['id']] = $row;
             }
             $coursesCode = array_column($coursesList, 'code');
-	}   
+        }
+
         return $coursesCode;
     }
-    
+
     /**
      * Check if a specific access-url-related setting is a problem or not.
      *

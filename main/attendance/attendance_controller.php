@@ -548,23 +548,17 @@ class AttendanceController
     }
 
     /**
-     * It checks the attendance sheet to export XLS.
-     *
-     * @param        $attendanceId
-     * @param int    $studentId
-     * @param string $courseId
-     * @param null   $groupId
-     * @param null   $filter
+     * Checks the attendance sheet to export XLS.
      */
     public function attendanceSheetExportToXls(
-        $attendanceId,
-        $studentId = 0,
-        $courseId = '',
-        $groupId = null,
-        $filter = null
+        int $attendanceId,
+        int $studentId = 0,
+        string $courseCode = '',
+        ?int $groupId,
+        ?string $filter
     ) {
         $attendance = new Attendance();
-        $courseInfo = api_get_course_info($courseId);
+        $courseInfo = api_get_course_info($courseCode);
         $attendance->set_course_id($courseInfo['code']);
 
         $filterType = 'today';
@@ -581,7 +575,7 @@ class AttendanceController
         $attendance->exportAttendanceSheetToXls(
             $attendanceId,
             $studentId,
-            $courseId,
+            $courseCode,
             $groupId,
             $filterType,
             $myCalendarId

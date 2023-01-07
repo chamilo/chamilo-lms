@@ -58,6 +58,7 @@ class Wiki
             $this->groupfilter = ' group_id="'.$this->group_id.'"';
         }
         $this->courseInfo = api_get_course_info();
+        $this->courseCode = api_get_course_id();
         $this->url = api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq();
     }
 
@@ -423,7 +424,7 @@ class Wiki
                 Database::query($sql);
             }
 
-            self::assignCategoriesToWiki($newWiki, $values['category']);
+            self::assignCategoriesToWiki($newWiki, $values['category'] ?? []);
         }
 
         // Update wiki config
@@ -2753,9 +2754,9 @@ class Wiki
      * Displays the results of a wiki search.
      */
     public function display_wiki_search_results(
-        $search_term,
-        $search_content = 0,
-        $all_vers = 0,
+        string $search_term,
+        int $search_content = 0,
+        int $all_vers = 0,
         array $categoryIdList = [],
         bool $matchAllCategories = false
     ) {
@@ -2790,12 +2791,12 @@ class Wiki
 
         //only by professors when page is hidden
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            if ($all_vers == '1') {
+            if (1 === $all_vers) {
                 $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
                     WHERE wp.c_id = $course_id
                         AND (wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
-                if ($search_content == '1') {
+                if (1 === $search_content) {
                     $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
@@ -2806,7 +2807,7 @@ class Wiki
                     WHERE wp.c_id = $course_id
                         AND (wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
-                if ($search_content == '1') {
+                if (1 === $search_content) {
                     // warning don't use group by reflink because don't return the last version
                     $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
@@ -2820,13 +2821,13 @@ class Wiki
                 )";
             }
         } else {
-            if ($all_vers == '1') {
+            if (1 === $all_vers) {
                 $sql = "SELECT * FROM $tbl_wiki AS wp $categoriesJoin
                     WHERE wp.c_id = $course_id
                         AND wp.visibility = 1
                         AND (wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
-                if ($search_content == '1') {
+                if (1 === $search_content) {
                     //search all pages and all versions
                     $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
@@ -2839,7 +2840,7 @@ class Wiki
                         AND wp.visibility = 1
                         AND (wp.title LIKE '%".Database::escape_string($search_term)."%' ";
 
-                if ($search_content == '1') {
+                if (1 === $search_content) {
                     $sql .= "OR wp.content LIKE '%".Database::escape_string($search_term)."%' ";
                 }
 
@@ -2885,11 +2886,11 @@ class Wiki
                 $wikiLinkParams = [
                     'action' => 'showpage',
                     'title' => api_htmlentities($obj->reflink),
-                    'session_id' => $_GET['session_id'],
-                    'group_id' => $_GET['group_id'],
+                    'session_id' => (int) $_GET['session_id'],
+                    'group_id' => (int) $_GET['group_id'],
                 ];
 
-                if ($all_vers == '1') {
+                if (1 === $all_vers) {
                     $wikiLinkParams['view'] = $obj->id;
                 }
 
@@ -2903,7 +2904,7 @@ class Wiki
                     : get_lang('Anonymous').' ('.$obj->user_ip.')';
                 $row[] = api_convert_and_format_date($obj->dtime);
 
-                if ($all_vers == '1') {
+                if (1 === $all_vers) {
                     $row[] = $obj->version;
                 } else {
                     $showdelete = '';
@@ -2913,7 +2914,7 @@ class Wiki
                             "$self?$cidReq&".http_build_query([
                                 'action' => 'delete',
                                 'title' => api_htmlentities($obj->reflink),
-                                'group_id' => $_GET['group_id'],
+                                'group_id' => (int) $_GET['group_id'],
                             ])
                         );
                     }
@@ -2923,7 +2924,7 @@ class Wiki
                             "$self?$cidReq&".http_build_query([
                                 'action' => 'edit',
                                 'title' => api_htmlentities($obj->reflink),
-                                'group_id' => $_GET['group_id'],
+                                'group_id' => (int) $_GET['group_id'],
                             ])
                         )
                         .Display::url(
@@ -2931,8 +2932,8 @@ class Wiki
                             "$self?$cidReq&".http_build_query([
                                 'action' => 'discuss',
                                 'title' => api_htmlentities($obj->reflink),
-                                'session_id' => $_GET['session_id'],
-                                'group_id' => $_GET['group_id'],
+                                'session_id' => (int) $_GET['session_id'],
+                                'group_id' => (int) $_GET['group_id'],
                             ])
                         )
                         .Display::url(
@@ -2940,8 +2941,8 @@ class Wiki
                             "$self?$cidReq&".http_build_query([
                                 'action' => 'history',
                                 'title' => api_htmlentities($obj->reflink),
-                                'session_id' => $_GET['session_id'],
-                                'group_id' => $_GET['group_id'],
+                                'session_id' => (int) $_GET['session_id'],
+                                'group_id' => (int) $_GET['group_id'],
                             ])
                         )
                         .Display::url(
@@ -2949,7 +2950,7 @@ class Wiki
                             "$self?$cidReq&".http_build_query([
                                 'action' => 'links',
                                 'title' => api_htmlentities($obj->reflink),
-                                'group_id' => $_GET['group_id'],
+                                'group_id' => (int) $_GET['group_id'],
                             ])
                         )
                         .$showdelete;
@@ -2968,9 +2969,10 @@ class Wiki
             );
             $table->set_additional_parameters(
                 [
-                    'cidReq' => $_GET['cidReq'],
+                    'cidReq' => $this->courseCode,
+                    'gidReq' => $this->group_id,
+                    'id_session' => $this->session_id,
                     'action' => $_GET['action'],
-                    'group_id' => intval($_GET['group_id']),
                     'mode_table' => 'yes2',
                     'search_term' => $search_term,
                     'search_content' => $search_content,
@@ -2984,7 +2986,7 @@ class Wiki
                 ['style' => 'width:30px;']
             );
             $table->set_header(1, get_lang('Title'));
-            if ($all_vers == '1') {
+            if (1 === $all_vers) {
                 $table->set_header(2, get_lang('Author'));
                 $table->set_header(3, get_lang('Date'));
                 $table->set_header(4, get_lang('Version'));
@@ -3917,27 +3919,17 @@ class Wiki
                 $userinfo = api_get_user_info($obj->user_id);
                 $row = [];
                 if ($obj->user_id != 0 && $userinfo !== false) {
-                    $row[] = UserManager::getUserProfileLink($userinfo).'
-                            <a href="'.api_get_self(
-                        ).'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.urlencode(
-                            $obj->user_id
-                        ).
-                        '&session_id='.api_htmlentities(
-                            $_GET['session_id']
-                        ).'&group_id='.api_htmlentities(
-                            $_GET['group_id']
-                        ).'"></a>';
+                    $row[] = Display::url(
+                        $userinfo['complete_name_with_username'],
+                        $this->url.'&'.http_build_query(['action' => 'usercontrib', 'user_id' => (int) $obj->user_id])
+                    );
                 } else {
                     $row[] = get_lang('Anonymous').' ('.$obj->user_ip.')';
                 }
-                $row[] = '<a href="'.api_get_self(
-                    ).'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.urlencode(
-                        $obj->user_id
-                    ).'&session_id='.api_htmlentities(
-                        $_GET['session_id']
-                    ).'&group_id='.api_htmlentities(
-                        $_GET['group_id']
-                    ).'">'.$obj->NUM_EDIT.'</a>';
+                $row[] = Display::url(
+                    $obj->NUM_EDIT,
+                    $this->url.'&'.http_build_query(['action' => 'usercontrib', 'user_id' => (int) $obj->user_id])
+                );
                 $rows[] = $row;
             }
 
@@ -3952,10 +3944,10 @@ class Wiki
             );
             $table->set_additional_parameters(
                 [
-                    'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                    'cidReq' => $this->courseCode,
+                    'gidReq' => $this->group_id,
+                    'id_session' => $this->session_id,
                     'action' => Security::remove_XSS($action),
-                    'session_id' => Security::remove_XSS($_GET['session_id']),
-                    'group_id' => Security::remove_XSS($_GET['group_id']),
                 ]
             );
             $table->set_header(0, get_lang('Author'), true);
@@ -4468,9 +4460,10 @@ class Wiki
         );
         $table->set_additional_parameters(
             [
-                'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                'cidReq' => $this->courseCode,
+                'gidReq' => $this->group_id,
+                'id_session' => $this->session_id,
                 'action' => Security::remove_XSS($action),
-                'group_id' => Security::remove_XSS($_GET['group_id']),
             ]
         );
         $table->set_header(
@@ -4541,11 +4534,10 @@ class Wiki
             function ($value) use ($_course) {
                 list($title, $refLink, $iid) = $value;
 
-                return '<a href="'.api_get_self().'?cidReq='.$_course['code']
-                    .'&action=showpage&title='.api_htmlentities(urlencode($refLink))
-                    .'&session_id='.api_htmlentities($_GET['session_id'] ?? '')
-                    .'&group_id='.api_htmlentities($_GET['group_id']).'">
-                    '.api_htmlentities($title).'</a>'
+                return Display::url(
+                        api_htmlentities($title),
+                        $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($refLink)])
+                    )
                     .$this->returnCategoriesBlock($iid, '<div><small>', '</small></div>');
             }
         );
@@ -4575,37 +4567,31 @@ class Wiki
                 $actions = '';
 
                 if (api_is_allowed_to_session_edit(false, true)) {
-                    $actions = '<a href="'.api_get_self(
-                        ).'?cidReq='.$_course['code']
-                        .'&action=edit&title='.api_htmlentities(urlencode($value))
-                        .'&session_id='.api_htmlentities($_GET['session_id'] ?? '')
-                        .'&group_id='.api_htmlentities($_GET['group_id']).'">'
-                        .Display::return_icon('edit.png', get_lang('EditPage'))
-                        .'</a> <a href="'.api_get_self().'?cidReq='.$_course['code']
-                        .'&action=discuss&title='.api_htmlentities(urlencode($value))
-                        .'&group_id='.api_htmlentities($_GET['group_id']).'">'
-                        .Display::return_icon('discuss.png', get_lang('Discuss'))
-                        .'</a> <a href="'.api_get_self().'?cidReq='.$_course['code']
-                        .'&action=history&title='.api_htmlentities(urlencode($value))
-                        .'&session_id='.api_htmlentities($_GET['session_id'] ?? '')
-                        .'&group_id='.api_htmlentities($_GET['group_id']).'">'
-                        .Display::return_icon('history.png', get_lang('History'))
-                        .'</a> <a href="'.api_get_self().'?cidReq='.$_course['code']
-                        .'&action=links&title='.api_htmlentities(urlencode($value))
-                        .'&session_id='.api_htmlentities($_GET['session_id'] ?? '').'&group_id='
-                        .api_htmlentities($_GET['group_id']).'">'.
-                        Display::return_icon('what_link_here.png', get_lang('LinksPages')).'</a>';
+                    $actions = Display::url(
+                            Display::return_icon('edit.png', get_lang('EditPage')),
+                            $this->url.'&'.http_build_query(['action' => 'edit', 'title' => api_htmlentities($value)])
+                        )
+                        .Display::url(
+                            Display::return_icon('discuss.png', get_lang('Discuss')),
+                            $this->url.'&'.http_build_query(['action' => 'discuss', 'title' => api_htmlentities($value)])
+                        )
+                        .Display::url(
+                            Display::return_icon('history.png', get_lang('History')),
+                            $this->url.'&'.http_build_query(['action' => 'history', 'title' => api_htmlentities($value)])
+                        )
+                        .Display::url(
+                            Display::return_icon('what_link_here.png', get_lang('LinksPages')),
+                            $this->url.'&'.http_build_query(['action' => 'links', 'title' => api_htmlentities($value)])
+                        )
+                    ;
                 }
 
-                if (api_is_allowed_to_edit(
-                        false,
-                        true
-                    ) || api_is_platform_admin()) {
-                    $actions .= ' <a href="'.api_get_self().'?cidReq='.$_course['code']
-                        .'&action=delete&title='.api_htmlentities(urlencode($value))
-                        .'&session_id='.api_htmlentities($_GET['session_id'] ?? '')
-                        .'&group_id='.api_htmlentities($_GET['group_id']).'">'
-                        .Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+                if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
+                    $actions .= Display::url(
+                            Display::return_icon('delete.png', get_lang('Delete')),
+                            $this->url.'&'.http_build_query(['action' => 'delete', 'title' => api_htmlentities($value)])
+                        )
+                    ;
                 }
 
                 return $actions;
@@ -4750,10 +4736,10 @@ class Wiki
             );
             $table->set_additional_parameters(
                 [
-                    'cidReq' => api_get_course_id(),
+                    'cidReq' => $this->courseCode,
+                    'gidReq' => $this->group_id,
+                    'id_session' => $this->session_id,
                     'action' => Security::remove_XSS($action),
-                    'session_id' => api_get_session_id(),
-                    'group_id' => api_get_group_id(),
                 ]
             );
             $table->set_header(
@@ -4836,17 +4822,14 @@ class Wiki
                 $page = 'index';
             }
 
-            echo '<div id="wikititle">';
-            echo get_lang(
-                    'LinksPagesFrom'
-                ).': '.$ShowAssignment.' <a href="'.api_get_self(
-                ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                    urlencode($page)
-                ).'&session_id='.api_htmlentities(
-                    $_GET['session_id']
-                ).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
-                api_htmlentities($row['title']).'</a>';
-            echo '</div>';
+            echo '<div id="wikititle">'
+                .get_lang('LinksPagesFrom').": $ShowAssignment "
+                .Display::url(
+                    api_htmlentities($row['title']),
+                    $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($page)])
+                )
+                .'</div>'
+            ;
 
             //fix index to title Main page into linksto
 
@@ -4912,13 +4895,10 @@ class Wiki
 
                     $row = [];
                     $row[] = $ShowAssignment;
-                    $row[] = '<a href="'.api_get_self(
-                        ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                            urlencode($obj->reflink)
-                        ).'&session_id='.api_htmlentities(
-                            $_GET['session_id']
-                        ).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
-                        api_htmlentities($obj->title).'</a>';
+                    $row[] = Display::url(
+                        api_htmlentities($obj->title),
+                        $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($obj->reflink)])
+                    );
                     if ($userinfo !== false) {
                         $row[] = UserManager::getUserProfileLink($userinfo);
                     } else {
@@ -4939,9 +4919,10 @@ class Wiki
                 );
                 $table->set_additional_parameters(
                     [
-                        'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                        'cidReq' => $this->courseCode,
+                        'gidReq' => $this->group_id,
+                        'id_session' => $this->session_id,
                         'action' => Security::remove_XSS($action),
-                        'group_id' => intval($_GET['group_id']),
                     ]
                 );
                 $table->set_header(
@@ -4974,8 +4955,8 @@ class Wiki
             }
             $this->display_wiki_search_results(
                 $_GET['search_term'],
-                $_GET['search_content'],
-                $_GET['all_vers'],
+                (int) $_GET['search_content'],
+                (int) $_GET['all_vers'],
                 $_GET['categories'],
                 $_GET['match_all_categories']
             );
@@ -4984,8 +4965,7 @@ class Wiki
             $form = new FormValidator(
                 'wiki_search',
                 'post',
-                api_get_self().'?cidReq='.api_get_course_id().'&action='.api_htmlentities($action)
-                    .'&session_id='.api_get_session_id().'&group_id='.api_get_group_id().'&mode_table=yes1'
+                $this->url.'&'.http_build_query(['action' => api_htmlentities($action), 'mode_table' => 'yes1'])
             );
 
             // Setting the form elements
@@ -5035,8 +5015,8 @@ class Wiki
                 $values = $form->exportValues();
                 $this->display_wiki_search_results(
                     $values['search_term'],
-                    $values['search_content'],
-                    $values['all_vers'],
+                    (int) $values['search_content'],
+                    (int) $values['all_vers'],
                     $values['categories'] ?? [],
                     isset($values['match_all_categories'])
                 );
@@ -5057,14 +5037,15 @@ class Wiki
         $course_id = $this->course_id;
         $condition_session = $this->condition_session;
         $groupfilter = $this->groupfilter;
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $userinfo = api_get_user_info($userId);
         if ($userinfo !== false) {
-            echo '<div class="actions">'.
-                get_lang('UserContributions').': '.UserManager::getUserProfileLink($userinfo).
-                '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.$userId.
-                '&session_id='.$this->session_id.'&group_id='.$this->group_id.'">'.
-                '</a></div>';
+            echo '<div class="actions">'
+                .Display::url(
+                    get_lang('UserContributions').': '.$userinfo['complete_name_with_username'],
+                    $this->url.'&'.http_build_query(['action' => 'usercontrib', 'user_id' => $userId])
+                )
+            ;
         }
 
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
@@ -5114,12 +5095,15 @@ class Wiki
                 $row = [];
                 $row[] = api_get_local_time($obj->dtime);
                 $row[] = $ShowAssignment;
-                $row[] = '<a href="'.api_get_self(
-                    ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                        urlencode($obj->reflink)
-                    ).'&view='.$obj->id.'&session_id='.api_get_session_id(
-                    ).'&group_id='.api_get_group_id().'">'.
-                    api_htmlentities($obj->title).'</a>';
+                $row[] = Display::url(
+                    api_htmlentities($obj->title),
+                    $this->url.'&'
+                        .http_build_query([
+                            'action' => 'showpage',
+                            'title' => api_htmlentities($obj->reflink),
+                            'view' => (int) $obj->id,
+                        ])
+                );
                 $row[] = Security::remove_XSS($obj->version);
                 $row[] = Security::remove_XSS($obj->comment);
                 $row[] = Security::remove_XSS($obj->progress).' %';
@@ -5138,11 +5122,11 @@ class Wiki
             );
             $table->set_additional_parameters(
                 [
-                    'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                    'cidReq' => $this->courseCode,
+                    'gidReq' => $this->group_id,
+                    'id_session' => $this->session_id,
                     'action' => Security::remove_XSS($action),
                     'user_id' => intval($userId),
-                    'session_id' => intval($_GET['session_id']),
-                    'group_id' => intval($_GET['group_id']),
                 ]
             );
             $table->set_header(
@@ -5246,13 +5230,10 @@ class Wiki
 
                 $row = [];
                 $row[] = $ShowAssignment;
-                $row[] = '<a href="'.api_get_self(
-                    ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                        urlencode($obj->reflink)
-                    ).'&session_id='.api_htmlentities(
-                        $_GET['session_id']
-                    ).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
-                    api_htmlentities($obj->title).'</a>';
+                $row[] = Display::url(
+                    api_htmlentities($obj->title),
+                    $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($obj->reflink)])
+                );
                 $row[] = $obj->MAX;
                 $rows[] = $row;
             }
@@ -5268,10 +5249,10 @@ class Wiki
             );
             $table->set_additional_parameters(
                 [
-                    'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                    'cidReq' => $this->courseCode,
+                    'gidReq' => $this->group_id,
+                    'id_session' => $this->session_id,
                     'action' => Security::remove_XSS($action),
-                    'session_id' => intval($_GET['session_id']),
-                    'group_id' => intval($_GET['group_id']),
                 ]
             );
             $table->set_header(
@@ -5430,10 +5411,11 @@ class Wiki
                                     $current_row['version'],
                                     $last_row['version'],
                                     $current_row['linksto']
-                                ).': <a href="index.php?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                                    urlencode($last_row['reflink'])
-                                ).'&session_id='.$last_row['session_id'].'&group_id='.$last_row['group_id'].'">'.
-                                api_htmlentities($last_row['title']).'</a>',
+                                ).': '
+                                .Display::url(
+                                    api_htmlentities($last_row['title']),
+                                    $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($last_row['reflink'])])
+                                ),
                                 'confirmation',
                                 false
                             )
@@ -5489,28 +5471,34 @@ class Wiki
         $last_row = Database::fetch_array($result);
 
         if ($view < $last_row['id']) {
-            $message = '<center>'.get_lang('NoAreSeeingTheLastVersion').'<br />
-            '.get_lang("Version").' (
-            <a href="index.php?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                    urlencode($current_row['reflink'])
-                ).'&group_id='.$current_row['group_id'].'&session_id='.$current_row['session_id'].'&view='.api_htmlentities(
-                    $_GET['view']
-                ).'" title="'.get_lang('CurrentVersion').'">
-            '.$current_row['version'].'
-            </a> /
-            <a href="index.php?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                    urlencode($last_row['reflink'])
-                ).'&group_id='.$last_row['group_id'].'&session_id='.$last_row['session_id'].'" title="'.get_lang(
-                    'LastVersion'
-                ).'">
-            '.$last_row['version'].'
-            </a>) <br />'.get_lang("ConvertToLastVersion").':
-            <a href="index.php?cidReq='.$_course['id'].'&action=restorepage&title='.api_htmlentities(
-                    urlencode($last_row['reflink'])
-                ).'&group_id='.$last_row['group_id'].'&session_id='.$last_row['session_id'].'&view='.api_htmlentities(
-                    $_GET['view']
-                ).'">'.
-                get_lang("Restore").'</a></center>';
+            $message = '<center>'.get_lang('NoAreSeeingTheLastVersion').'<br />'
+                .get_lang("Version").' ('
+                .Display::url(
+                    $current_row['version'],
+                    $this->url.'&'.http_build_query([
+                        'action' => 'showpage',
+                        'title' => api_htmlentities($current_row['reflink']),
+                        'view' => (int) $_GET['view']
+                    ]),
+                    ['title' => get_lang('CurrentVersion')]
+                )
+                .' / '
+                .Display::url(
+                    $last_row['version'],
+                    $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($last_row['reflink'])]),
+                    ['title' => get_lang('LastVersion')]
+                )
+                .')<br>'.get_lang('ConvertToLastVersion').': '
+                .Display::url(
+                    get_lang("Restore"),
+                    $this->url.'&'.http_build_query([
+                        'action' => 'restorepage',
+                        'title' => api_htmlentities($last_row['reflink']),
+                        'view' => (int) $_GET['view'],
+                    ])
+                )
+                .'</center>'
+            ;
             echo Display::return_message($message, 'warning', false);
         }
     }
@@ -5585,13 +5573,10 @@ class Wiki
         $rows = [];
         foreach ($linked as $linked_show) {
             $row = [];
-            $row[] = '<a href="'.api_get_self(
-                ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                    urlencode(str_replace('_', ' ', $linked_show))
-                ).'&session_id='.api_htmlentities(
-                    $_GET['session_id']
-                ).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
-                str_replace('_', ' ', $linked_show).'</a>';
+            $row[] = Display::url(
+                str_replace('_', ' ', $linked_show),
+                $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => str_replace('_', ' ', $linked_show)])
+            );
             $rows[] = $row;
         }
 
@@ -5606,10 +5591,10 @@ class Wiki
         );
         $table->set_additional_parameters(
             [
-                'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                'cidReq' => $this->courseCode,
+                'gidReq' => $this->group_id,
+                'id_session' => $this->session_id,
                 'action' => Security::remove_XSS($this->action),
-                'session_id' => intval($_GET['session_id']),
-                'group_id' => intval($_GET['group_id']),
             ]
         );
         $table->set_header(0, get_lang('Title'), true);
@@ -5723,13 +5708,10 @@ class Wiki
             //show table
             $row = [];
             $row[] = $ShowAssignment;
-            $row[] = '<a href="'.api_get_self(
-                ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                    urlencode($orphaned_show)
-                ).'&session_id='.api_htmlentities(
-                    $_GET['session_id']
-                ).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
-                api_htmlentities($orphaned_title).'</a>';
+            $row[] = Display::url(
+                api_htmlentities($orphaned_title),
+                $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($orphaned_show)])
+            );
             $rows[] = $row;
         }
 
@@ -5744,10 +5726,10 @@ class Wiki
         );
         $table->set_additional_parameters(
             [
-                'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                'cidReq' => $this->courseCode,
+                'gidReq' => $this->group_id,
+                'id_session' => $this->session_id,
                 'action' => Security::remove_XSS($this->action),
-                'session_id' => intval($_GET['session_id']),
-                'group_id' => intval($_GET['group_id']),
             ]
         );
         $table->set_header(
@@ -5819,21 +5801,11 @@ class Wiki
         foreach ($wanted as $wanted_show) {
             $row = [];
             $wanted_show = Security::remove_XSS($wanted_show);
-            $row[] = '<a href="'.api_get_path(
-                    WEB_PATH
-                ).'main/wiki/index.php?cidReq=&action=addnew&title='.str_replace(
-                    '_',
-                    ' ',
-                    $wanted_show
-                ).'&session_id='.api_htmlentities(
-                    $_GET['session_id']
-                ).'&group_id='.api_htmlentities(
-                    $_GET['group_id']
-                ).'" class="new_wiki_link">'.str_replace(
-                    '_',
-                    ' ',
-                    $wanted_show
-                ).'</a>'; //meter un remove xss en lugar de htmlentities
+            $row[] = Display::url(
+                str_replace('_', ' ', $wanted_show),
+                $this->url.'&'.http_build_query(['action' => 'addnew', 'title' => str_replace('_', ' ', $wanted_show)]),
+                ['class' => 'new_wiki_link']
+            );
             $rows[] = $row;
         }
 
@@ -5848,10 +5820,10 @@ class Wiki
         );
         $table->set_additional_parameters(
             [
-                'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                'cidReq' => $this->courseCode,
+                'gidReq' => $this->group_id,
+                'id_session' => $this->session_id,
                 'action' => Security::remove_XSS($this->action),
-                'session_id' => intval($_GET['session_id']),
-                'group_id' => intval($_GET['group_id']),
             ]
         );
         $table->set_header(0, get_lang('Title'), true);
@@ -5915,13 +5887,10 @@ class Wiki
 
                 $row = [];
                 $row[] = $ShowAssignment;
-                $row[] = '<a href="'.api_get_self(
-                    ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
-                        urlencode($obj->reflink)
-                    ).'&session_id='.api_htmlentities(
-                        $_GET['session_id']
-                    ).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
-                    api_htmlentities($obj->title).'</a>';
+                $row[] = Display::url(
+                    api_htmlentities($obj->title),
+                    $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($obj->reflink)])
+                );
                 $row[] = $obj->tsum;
                 $rows[] = $row;
             }
@@ -5937,10 +5906,10 @@ class Wiki
             );
             $table->set_additional_parameters(
                 [
-                    'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                    'cidReq' => $this->courseCode,
+                    'gidReq' => $this->group_id,
+                    'id_session' => $this->session_id,
                     'action' => Security::remove_XSS($this->action),
-                    'session_id' => intval($_GET['session_id']),
-                    'group_id' => intval($_GET['group_id']),
                 ]
             );
             $table->set_header(
@@ -5964,29 +5933,16 @@ class Wiki
         $session_id = $this->session_id;
         $groupId = $this->group_id;
         $page = $this->page;
-        $actionsLeft = '<a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.
-            Display::return_icon(
-                'home.png',
-                get_lang('Home'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
+        $actionsLeft = Display::url(
+            Display::return_icon('home.png', get_lang('Home'), [], ICON_SIZE_MEDIUM),
+            $this->url.'&'.http_build_query(['action' => 'showpage', 'title' => 'index'])
+        );
 
         if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit()) {
             // menu add page
-            $actionsLeft .= '<a href="index.php?cidReq='.$_course['id'].'&action=addnew&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab(
-                    'addnew'
-                ).'>'
-                .Display::return_icon(
-                    'new_document.png',
-                    get_lang('AddNew'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ).'</a>';
+            $actionsLeft .= '<a href="'.$this->url.'&action=addnew" '.self::is_active_navigation_tab('addnew').'>'
+                .Display::return_icon('new_document.png', get_lang('AddNew'), [], ICON_SIZE_MEDIUM).'</a>';
         }
-
-        $lock_unlock_addnew = null;
-        $protect_addnewpage = null;
 
         if (
             true === api_get_configuration_value('wiki_categories_enabled')
@@ -5994,13 +5950,7 @@ class Wiki
         ) {
             $actionsLeft .= Display::url(
                 Display::return_icon('folder.png', get_lang('Categories'), [], ICON_SIZE_MEDIUM),
-                'index.php?'.http_build_query([
-                    'cidReq' => $_course['id'],
-                    'session_id' => $session_id,
-                    'id_session' => $session_id,
-                    'group_id' => $groupId,
-                    'action' => 'category',
-                ])
+                $this->url.'&action=category'
             );
 
             // page action: enable or disable the adding of new pages
@@ -6020,46 +5970,19 @@ class Wiki
         }
 
         // menu find
-        $actionsLeft .= '<a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab(
-                'searchpages'
-            ).'>'.
-            Display::return_icon(
-                'search.png',
-                get_lang('SearchPages'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
+        $actionsLeft .= '<a href="'.$this->url.'&action=searchpages"' .self::is_active_navigation_tab('searchpages').'>'
+            .Display::return_icon('search.png', get_lang('SearchPages'), '', ICON_SIZE_MEDIUM).'</a>';
         ///menu more
-        $actionsLeft .= '<a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'&action=more&title='.api_htmlentities(
-                urlencode($page)
-            ).'"'.self::is_active_navigation_tab('more').'>'.
-            Display::return_icon(
-                'statistics.png',
-                get_lang('Statistics'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
+        $actionsLeft .= '<a href="'.$this->url.'&action=more&title='.api_htmlentities(urlencode($page)).'" '
+            .self::is_active_navigation_tab('more').'>'
+            .Display::return_icon('statistics.png', get_lang('Statistics'), [], ICON_SIZE_MEDIUM).'</a>';
 
         // menu all pages
-        $actionsLeft .= '<a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab(
-                'allpages'
-            ).'>'.
-            Display::return_icon(
-                'list_badges.png',
-                get_lang('AllPages'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
+        $actionsLeft .= '<a href="'.$this->url.'&action=allpages" '.self::is_active_navigation_tab('allpages').'>'
+            .Display::return_icon('list_badges.png', get_lang('AllPages'), [], ICON_SIZE_MEDIUM).'</a>';
         // menu recent changes
-        $actionsLeft .= '<a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab(
-                'recentchanges'
-            ).'>'.
-            Display::return_icon(
-                'history.png',
-                get_lang('RecentChanges'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
+        $actionsLeft .= '<a href="'.$this->url.'&action=recentchanges" '.self::is_active_navigation_tab('recentchanges').'>'
+            .Display::return_icon('history.png', get_lang('RecentChanges'), [], ICON_SIZE_MEDIUM).'</a>';
         echo Display::toolbarAction('toolbar-wiki', [$actionsLeft]);
     }
 
@@ -6790,42 +6713,28 @@ class Wiki
         echo '    <td>';
         echo '      <ul>';
         //Submenu Most active users
-        echo '        <li><a href="index.php?cidReq='.$_course['code'].'&action=mactiveusers&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang(
-                'MostActiveUsers'
-            ).'</a></li>';
+        echo '        <li><a href="'.$this->url.'&action=mactiveusers">'.get_lang('MostActiveUsers').'</a></li>';
         //Submenu Most visited pages
-        echo '        <li><a href="index.php?cidReq='.$_course['code'].'&action=mvisited&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang(
-                'MostVisitedPages'
-            ).'</a></li>';
+        echo '        <li><a href="'.$this->url.'&action=mvisited">'.get_lang('MostVisitedPages').'</a></li>';
         //Submenu Most changed pages
-        echo '        <li><a href="index.php?cidReq='.$_course['code'].'&action=mostchanged&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang(
-                'MostChangedPages'
-            ).'</a></li>';
+        echo '        <li><a href="'.$this->url.'&action=mostchanged">'.get_lang('MostChangedPages').'</a></li>';
         echo '      </ul>';
         echo '    </td>';
         echo '    <td>';
         echo '      <ul>';
         // Submenu Orphaned pages
-        echo '        <li><a href="index.php?cidReq='.$_course['code'].'&action=orphaned&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang(
-                'OrphanedPages'
-            ).'</a></li>';
+        echo '        <li><a href="'.$this->url.'&action=orphaned">'.get_lang('OrphanedPages').'</a></li>';
         // Submenu Wanted pages
-        echo '        <li><a href="index.php?cidReq='.$_course['code'].'&action=wanted&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang(
-                'WantedPages'
-            ).'</a></li>';
+        echo '        <li><a href="'.$this->url.'&action=wanted">'.get_lang('WantedPages').'</a></li>';
         // Submenu Most linked pages
-        echo '<li><a href="index.php?cidReq='.$_course['code'].'&action=mostlinked&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang(
-                'MostLinkedPages'
-            ).'</a></li>';
+        echo '<li><a href="'.$this->url.'&action=mostlinked">'.get_lang('MostLinkedPages').'</a></li>';
         echo '</ul>';
         echo '</td>';
         echo '<td style="vertical-align:top">';
         echo '<ul>';
         // Submenu Statistics
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=statistics&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang(
-                    'Statistics'
-                ).'</a></li>';
+            echo '<li><a href="'.$this->url.'&action=statistics">'.get_lang('Statistics').'</a></li>';
         }
         echo '      </ul>';
         echo '    </td>';
@@ -7227,14 +7136,10 @@ class Wiki
 
         $categories = $categoryRepo->findByCourse($course, $session);
 
-        $formAction = api_get_self().'?'.http_build_query([
-            'cidReq' => $course->getCode(),
-            'session_id' => $session ? $session->getId() : 0,
-            'id_session' => $session ? $session->getId() : 0,
-            'group_id' => $this->group_id,
-            'action' => 'category',
-            'id' => $category ? $category->getId() : null,
-        ]);
+        $formAction = $this->url.'&'.http_build_query([
+                'action' => 'category',
+                'id' => $category ? $category->getId() : null,
+            ]);
 
         $form = new FormValidator('category', 'post', $formAction);
         $form->addHeader(get_lang('AddCategory'));

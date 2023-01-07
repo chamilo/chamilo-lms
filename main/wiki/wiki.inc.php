@@ -4531,7 +4531,7 @@ class Wiki
         );
         $table->set_column_filter(
             1,
-            function ($value) use ($_course) {
+            function ($value) {
                 list($title, $refLink, $iid) = $value;
 
                 return Display::url(
@@ -4563,7 +4563,7 @@ class Wiki
         );
         $table->set_column_filter(
             4,
-            function ($value) use ($_course) {
+            function ($value) {
                 $actions = '';
 
                 if (api_is_allowed_to_session_edit(false, true)) {
@@ -5478,7 +5478,7 @@ class Wiki
                     $this->url.'&'.http_build_query([
                         'action' => 'showpage',
                         'title' => api_htmlentities($current_row['reflink']),
-                        'view' => (int) $_GET['view']
+                        'view' => (int) $_GET['view'],
                     ]),
                     ['title' => get_lang('CurrentVersion')]
                 )
@@ -5970,7 +5970,7 @@ class Wiki
         }
 
         // menu find
-        $actionsLeft .= '<a href="'.$this->url.'&action=searchpages"' .self::is_active_navigation_tab('searchpages').'>'
+        $actionsLeft .= '<a href="'.$this->url.'&action=searchpages"'.self::is_active_navigation_tab('searchpages').'>'
             .Display::return_icon('search.png', get_lang('SearchPages'), '', ICON_SIZE_MEDIUM).'</a>';
         ///menu more
         $actionsLeft .= '<a href="'.$this->url.'&action=more&title='.api_htmlentities(urlencode($page)).'" '

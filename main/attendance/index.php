@@ -352,12 +352,12 @@ switch ($action) {
         );
         break;
     case 'attendance_sheet_export_to_xls':
-        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
+        $groupId = isset($_REQUEST['group_id']) ? (int) $_REQUEST['group_id'] : null;
         $filter = isset($_REQUEST['filter']) ? $_REQUEST['filter'] : null;
         $attendanceController->attendanceSheetExportToXls(
             $attendance_id,
-            $student_id,
-            $course_id,
+            (int) $student_id,
+            (string) $course_id,
             $groupId,
             $filter
         );

@@ -1936,7 +1936,7 @@ HOTSPOT;
 
         $exerciseId = $objExercise->iid;
         $courseId = $objExercise->course_id;
-        $sessionId = $objExercise->sessionId;
+        $sessionId = (int) $objExercise->sessionId;
         $questionList = $objExercise->getQuestionForTeacher(0, $objExercise->getQuestionCount());
 
         $headers = [
@@ -2013,7 +2013,7 @@ HOTSPOT;
                             false,
                             $objExercise->selectPropagateNeg()
                         );
-                        $questionModalUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=show_question&exercise='.$exerciseId.'&question='.$questionId;
+                        $questionModalUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=show_question_attempt&exercise='.$exerciseId.'&question='.$questionId.'&exe_id='.$row['exe_id'];
                         $data[$x][$questionId] = '<a href="'.$questionModalUrl.'" class="ajax" data-title="'.$questionName.'" title="'.get_lang('ClicToSeeDetails').'">'.$questionResult['score'].'</a>';
                     }
                 }

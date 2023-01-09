@@ -3348,6 +3348,86 @@ class Tracking
     }
 
     /**
+     * It gets the last finalization date of learnpaths in a course.
+     *
+     * @return string finalization date formatted or false if it is empty.
+     */
+    public static function getCourseLpFinalizationDate(
+        int $userId,
+        int $courseId,
+        int $sessionId,
+        bool $convertDate = true
+    ) {
+        $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+
+        $sql = "SELECT FROM_UNIXTIME(liv.start_time) as start_date
+                FROM $tblLpItemView liv
+                INNER JOIN
+                    $tblLpView lv ON lv.iid = liv.lp_view_id
+                INNER JOIN
+                    $tblLpItem li ON li.iid = liv.lp_item_id
+                WHERE
+                    lv.user_id = $userId AND
+                    lv.c_id = $courseId AND
+                    lv.session_id = $sessionId AND
+                    li.item_type = '".TOOL_LP_FINAL_ITEM."' AND
+                    liv.status = 'completed'
+                ORDER BY start_date DESC
+                LIMIT 1";
+
+        $rs = Database::query($sql);
+        $lpFinalDate = Database::result($rs, 0, 0);
+
+        if (empty($lpFinalDate)) {
+            return false;
+        }
+
+        if ($convertDate) {
+            return api_convert_and_format_date($lpFinalDate, DATE_FORMAT_SHORT);
+        }
+
+        return $lpFinalDate;
+    }
+
+    /**
+     * It gets the last finalization date of exercises in a course.
+     *
+     * @return string finalization date formatted or false if it is empty.
+     */
+    public static function getCourseQuizLastFinalizationDate(
+        int $userId,
+        int $courseId,
+        int $sessionId,
+        bool $convertDate = true
+    ) {
+        $tblTrackExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sql = "SELECT ex.exe_date
+                FROM $tblTrackExercise AS ex
+                WHERE
+                    ex.c_id = $courseId AND
+                    ex.session_id  = $sessionId AND
+                    ex.exe_user_id = $userId AND
+                    ex.status = ''
+                ORDER BY ex.exe_date DESC
+                LIMIT 1";
+        $rs = Database::query($sql);
+        $exeDate = Database::result($rs, 0, 0);
+
+        if (empty($exeDate)) {
+            return false;
+        }
+
+        if ($convertDate) {
+            return api_convert_and_format_date($exeDate, DATE_FORMAT_SHORT);
+        }
+
+        return $exeDate;
+    }
+
+    /**
      * Get count student's exercise progress.
      *
      * @param array $exercise_list

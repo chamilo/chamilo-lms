@@ -21,11 +21,20 @@ $tags[] = '((date_end))';
 $tagsHelp = '<strong>'.get_lang('Tags').'</strong>'
     .'<pre>'.implode("\n", $tags).'</pre>';
 
+$fileHelpText = get_lang('ImportCSVFileLocation').'<br>'
+    .Display::url(
+        get_lang('ExampleCSVFile'),
+        'importCourseEventsExample.csv',
+        ['target' => '_blank', 'download' => 'importCourseEventsExample.csv']
+    )
+    .'<pre>CourseCode;UserName;StartDate;EndDate
+xxx;xxx;YYYY-MM-DD HH:ii:ss;YYYY-MM-DD HH:ii:ss</pre>';
+
 $form = new FormValidator('agenda_reminders');
 $form->addHeader(get_lang('CsvImport'));
 $form->addFile(
     'events_file',
-    [get_lang('ImportAsCSV'), get_lang('ImportCSVFileLocation')],
+    [get_lang('ImportAsCSV'), $fileHelpText],
     ['accept' => 'text/csv']
 );
 $form->addRule('events_file', get_lang('ThisFieldIsRequired'), 'required');

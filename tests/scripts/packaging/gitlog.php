@@ -147,7 +147,12 @@ foreach ($logs as $log) {
         if ($hasRefs = stripos($log['message'], ' -refs ')) {
             $log['message'] = substr($log['message'], 0, $hasRefs);
         }
-
+        if ($hasRefs = stripos($log['message'], ' - refs ')) {
+            $log['message'] = substr($log['message'], 0, $hasRefs);
+        }
+        if ($hasRefs = stripos($log['message'], ' '.$matches[0][0])) {
+            $log['message'] = substr($log['message'], 0, $hasRefs);
+        }
     }
     $commitLink = '';
     if ($formatHTML) {

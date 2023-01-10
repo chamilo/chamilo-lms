@@ -234,7 +234,14 @@ class BigUploadResponse
             return json_encode(['errorStatus' => 0, 'redirect' => $redirectUrl]);
         } elseif ($origin == 'learnpath') {
             unset($_REQUEST['origin']);
-            $redirectUrl = api_get_path(WEB_CODE_PATH).'upload/upload.php?'.api_get_cidreq().'&from=bigUpload&name='.$this->getTempName();
+            $redirectUrl = api_get_path(WEB_CODE_PATH).'upload/upload.php?'.api_get_cidreq().'&'
+                .http_build_query(
+                    [
+                        'from' => 'bigUpload',
+                        'name' => $this->getTempName(),
+                        'use_max_score' => $_POST['use_max_score'] ?? 0,
+                    ]
+                );
 
             return json_encode(['errorStatus' => 0, 'redirect' => $redirectUrl]);
         } elseif ($origin == 'work') {

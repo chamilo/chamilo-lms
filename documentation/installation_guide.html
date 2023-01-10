@@ -820,14 +820,14 @@ If you have issues with files taking a long time to download, make sure you reco
   }
 
   location /main {
-    rewrite ^/main/admin/?$ /main/admin/index.php last;
+    rewrite ^/main/([^/]+)/?$ /main/$1/index.php last;
   }
 
   location ~ \.php$ {
     client_max_body_size 20M;
     try_files $uri @rewrite;
 
-    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_pass unix:/var/run/php7.4-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

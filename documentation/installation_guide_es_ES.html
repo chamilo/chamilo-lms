@@ -916,56 +916,57 @@ Nginx no es compatible con las reglas de .htaccess, por lo que no tiene otra opc
 (tenga en cuenta que la configuración de back-end de PHP puede variar). Estas son solo las reglas de redireccionamiento
 que se colocarán dentro de un bloque de servidor {}, ya que otras configuraciones pueden diferir de una instalación a otra.
 <pre>
-# Add your own "server {" header here with listen, server_name, access_log, error_log, index, root and error_page params
+  # Add your own "server {" header here with listen, server_name, access_log, error_log, index, root and error_page params
 
-charset utf-8;
+  charset utf-8;
 
-location @rewrite{
-  rewrite ^certificates/$ certificates/index.php last;
-  rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
-  rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-  rewrite ^/courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/scorm/$2 last;
-  rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
-  # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
-  # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
+  location @rewrite{
+    rewrite ^certificates/$ certificates/index.php last;
+    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/scorm/$2 last;
+    rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
+    # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
+    # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
 
-  rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
-  rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
-  rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ /main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
-  rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
-  rewrite ^/courses/([^/]+)/upload/course_home_icons/(.*([\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 last;
-  rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
-  rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
-  rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
-  rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
-  rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
-  rewrite ^/main/exercice/(.*)$ /main/exercise/$1 last;
-  rewrite ^/main/newscorm/(.*)$ /main/lp/$1 last;
-  rewrite ^/service/(\d+)$ /plugin/buycourses/src/service_information.php?service_id=$1 last;
-  rewrite "^/main/upload/users/(.*)/(.*)/my_files/(.*)$" /app/upload/users/$1/$2/my_files/$3 last;
+    rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
+    rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ /main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
+    rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/upload/course_home_icons/(.*([\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 last;
+    rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
+    rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/course/([^/]+)/about/?$ /main/course_info/about.php?course_id=$1 last;
+    rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/main/exercice/(.*)$ /main/exercise/$1 last;
+    rewrite ^/main/newscorm/(.*)$ /main/lp/$1 last;
+    rewrite ^/service/(\d+)$ /plugin/buycourses/src/service_information.php?service_id=$1 last;
+    rewrite "^/main/upload/users/(.*)/(.*)/my_files/(.*)$" /app/upload/users/$1/$2/my_files/$3 last;
 
-  try_files $uri /index.php$is_args$args;
-  break;
-}
+    try_files $uri /index.php$is_args$args;
+    break;
+  }
 
-location / {
- try_files $uri @rewrite;
-}
+  location / {
+    try_files $uri @rewrite;
+  }
 
-location /main {
-  rewrite ^/main/admin/?$ /main/admin/index.php last;
-}
+  location /main {
+    rewrite ^/main/([^/]+)/?$ /main/$1/index.php last;
+  }
 
-location ~ \.php$ {
-  client_max_body_size 20M;
-  try_files $uri @rewrite;
+  location ~ \.php$ {
+    client_max_body_size 20M;
+    try_files $uri @rewrite;
 
-  fastcgi_pass unix:/var/run/php5-fpm.sock;
-  fastcgi_split_path_info ^(.+\.php)(/.*)$;
-  include fastcgi_params;
-  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-  fastcgi_param HTTPS off;
-}
+    fastcgi_pass unix:/var/run/php7.4-fpm.sock;
+    fastcgi_split_path_info ^(.+\.php)(/.*)$;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param HTTPS off;
+  }
 
   # Serve static files directly
   location ~* \.(png|jpe?g|gif|ico|js|css|mp3|swf|flv|mp4|ogg|woff|woff2)$ {
@@ -982,12 +983,13 @@ location ~ \.php$ {
     try_files $uri @rewrite;
   }
 
-location ~ ~\.(ht|git){
-  deny all;
-}
-location ^~ /tests/ {
-  deny all;
-}
+  location ~ ~\.(ht|git){
+    deny all;
+  }
+  location ^~ /tests/ {
+    deny all;
+  }
+
 </pre>
 <h3>Apple en servidores OS X</h3>
 <p>

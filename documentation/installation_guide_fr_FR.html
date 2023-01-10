@@ -842,6 +842,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
     # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
     # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
+
     rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ /main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
@@ -849,6 +850,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/upload/course_home_icons/(.*([\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 last;
     rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/course/([^/]+)/about/?$ /main/course_info/about.php?course_id=$1 last;
     rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
     rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
@@ -862,30 +864,18 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
   }
 
   location / {
-    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
-    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
     try_files $uri @rewrite;
   }
 
   location /main {
-    rewrite ^/main/admin/$ /main/admin/index.php last;
+    rewrite ^/main/([^/]+)/?$ /main/$1/index.php last;
   }
 
   location ~ \.php$ {
     client_max_body_size 20M;
-    try_files $uri /index.php$is_args$args;
+    try_files $uri @rewrite;
 
-    rewrite ^/certificates/$ /certificates/index.php?id=%1  last;
-    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
-    rewrite ^/badge/([^/]+) /main/badge/issued.php?issue=$1 last;
-    rewrite ^/main/exercice/(.+)$ /main/exercise/$1 last;
-    rewrite ^/main/newscorm/(.+)$ /main/lp/$1 last;
-
-    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_pass unix:/var/run/php7.4-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -913,6 +903,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
   location ^~ /tests/ {
     deny all;
   }
+
 </pre>
             <h3>IIS</h3>
             <div>

@@ -1320,6 +1320,7 @@ class Attendance
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
                     while ($row = Database::fetch_array($res)) {
+                        $row['duration'] = Attendance::getAttendanceCalendarExtraFieldValue('duration', $row['calendar_id']);
                         $row['date_time'] = api_convert_and_format_date($row['date_time'], null, date_default_timezone_get());
                         $data[$user_id][] = $row;
                     }
@@ -2685,7 +2686,7 @@ class Attendance
         string $courseCode,
         int $groupId,
         string $filterType,
-        int $myCalendarId
+        ?int $myCalendarId
     ) {
         $users = $this->get_users_rel_course($attendanceId, $groupId);
         $calendar = $this->get_attendance_calendar(

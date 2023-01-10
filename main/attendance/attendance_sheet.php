@@ -273,7 +273,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 $date = $calendar['date'];
                 $time = $calendar['time'];
                 $duration = !empty($calendar['duration']) ? get_lang('Duration').' : '.$calendar['duration'] : '';
-                $datetime = '<div class="grey">'.$date.' - '.$time.' '.$duration.'</div>';
+                $datetime = '<div class="grey">'.$date.' - '.$time.'</div>';
 
                 $img_lock = Display::return_icon(
                             'lock-closed.png',
@@ -316,6 +316,7 @@ if (api_is_allowed_to_edit(null, true) ||
 
                 $result .= '<th>';
                 $result .= '<div class="date-attendance">'.$datetime.'&nbsp;';
+                $result .= $duration;
                 if (api_is_allowed_to_edit(null, true)) {
                     if (!empty($iconFullScreen)) {
                         $result .= '<span class="attendance-fullscreen">'.$iconFullScreen.'</span>&nbsp;';
@@ -513,6 +514,7 @@ if (api_is_allowed_to_edit(null, true) ||
         if (!empty($users_presence)) {
             $i = 0;
             foreach ($users_presence[$user_id] as $presence) {
+                $duration = !empty($presence['duration']) ? get_lang('Duration').' : '.$presence['duration'] : '';
                 $signed = false;
                 if ($allowSignature) {
                     $attendance = new Attendance();
@@ -534,7 +536,7 @@ if (api_is_allowed_to_edit(null, true) ||
                     <td>
                         <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY); ?>
                         <?php echo "&nbsp; ".$presence['date_time']; ?>
-
+                        <?php echo "&nbsp; ".$duration; ?>
                         <?php
 
                         if ($allowSignature) {

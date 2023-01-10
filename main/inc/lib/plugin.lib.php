@@ -233,6 +233,7 @@ class AppPlugin
             'embedregistry',
             'exercise_signature',
             'ext_auth_chamilo_logout_button_behaviour',
+            'externalnotificationconnect',
             'follow_buttons',
             'formLogin_hide_unhide',
             'google_maps',

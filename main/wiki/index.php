@@ -71,7 +71,7 @@ if ($groupId) {
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true);
 
 // The page we are dealing with
-$page = isset($_GET['title']) ? $_GET['title'] : 'index';
+$page = $_GET['title'] ?? 'index';
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'showpage';
 $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 
@@ -88,8 +88,8 @@ $wiki->blockConcurrentEditions(api_get_user_id(), $action);
 /* MAIN WIKI AREA */
 
 ob_start();
-$handleAction = $wiki->handleAction($action);
-if (!$handleAction && $action == 'export_to_pdf') {
+$wiki->handleAction($action);
+if ($action == 'export_to_pdf') {
     $wiki->handleAction('showpage');
 }
 $content = ob_get_contents();

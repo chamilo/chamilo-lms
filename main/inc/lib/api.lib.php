@@ -9067,6 +9067,9 @@ function api_get_configuration_value($variable)
                 // Try to found element with id = 1 (master portal)
                 if (array_key_exists(1, $_configuration[$variable])) {
                     return $_configuration[$variable][1];
+                } else {
+                    // The value was there for other URLs but not the main URL nor the current URL
+                    return null;
                 }
             }
         }

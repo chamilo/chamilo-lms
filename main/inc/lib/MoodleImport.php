@@ -510,13 +510,14 @@ class MoodleImport
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                     $moduleValues = $this->readUrlModule($moduleXml);
                     $sectionPath = isset($sectionLpValues[$currentItem['sectionid']]) ? $sectionLpValues[$currentItem['sectionid']]['sectionPath'] : '';
+                    $sectionName = isset($sectionLpValues[$currentItem['sectionid']]) ? $sectionLpValues[$currentItem['sectionid']]['sectionName'] : '';
                     $categoryId = 0;
-                    if (!empty($sectionPath)) {
-                        $category = Link::getCategoryByName($sectionPath);
+                    if (!empty($sectionName)) {
+                        $category = Link::getCategoryByName($sectionName);
                         if (!empty($category)) {
                             $categoryId = $category['iid'];
                         } else {
-                            $_POST['category_title'] = $sectionPath;
+                            $_POST['category_title'] = $sectionName;
                             $_POST['description'] = '';
                             $categoryId = Link::addlinkcategory('category');
                         }
@@ -531,7 +532,7 @@ class MoodleImport
                     if ($importedFiles) {
                         $this->fixPathInText($importedFiles, $moduleValues['intro']);
                     }
-                    $_POST['description'] = $moduleValues['intro'];
+                    $_POST['description'] = strip_tags($moduleValues['intro']);
                     $_POST['category_id'] = $categoryId;
                     $_POST['target'] = '_blank';
 
@@ -680,6 +681,7 @@ class MoodleImport
                 $lpAdded[$sectionId] = [
                     'lpId' => $lpId,
                     'sectionPath' => $dirName,
+                    'sectionName' => $lpName,
                 ];
                 $i++;
             }

@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\PluginBundle\ExternalNotificationConnect\Traits\RequestTrait\RequestTrait;
 
 class ExternalNotificationConnectLearningPathCreatedHookObserver extends ExternalNotificationConnectHookObserver implements HookLearningPathCreatedObserverInterface
@@ -10,7 +11,7 @@ class ExternalNotificationConnectLearningPathCreatedHookObserver extends Externa
 
     public function hookCreated(HookLearningPathCreatedEventInterface $hookEvent)
     {
-        /** @var learnpath $lp */
+        /** @var CLp $lp */
         $lp = $hookEvent->getEventData()['lp'];
         $userId = api_get_user_id();
         $courseCode = api_get_course_id();
@@ -22,7 +23,7 @@ class ExternalNotificationConnectLearningPathCreatedHookObserver extends Externa
         $url .= http_build_query(
             [
                 'action' => 'view',
-                'lp_id' => $lp->lp_id,
+                'lp_id' => $lp->getIid(),
                 'isStudentView' => 'true',
             ]
         );
@@ -32,10 +33,10 @@ class ExternalNotificationConnectLearningPathCreatedHookObserver extends Externa
                 [
                     'user_id' => $userId,
                     'course_code' => $courseCode,
-                    'content_id' => $lp->get_id(),
+                    'content_id' => $lp->getIid(),
                     'content_type' => 'lp',
                     'content_url' => $url,
-                    'post_title' => $lp->get_name(),
+                    'post_title' => $lp->getName(),
                 ]
             );
         } catch (Exception $e) {

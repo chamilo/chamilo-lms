@@ -2347,6 +2347,22 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 //CREATE INDEX c_attendance_sheet_user ON track_e_access_complete (attendance_sheet_id, user_id);
 //$_configuration['attendance_allow_comments'] = false;
 
+// Enable categories in Wiki tool.
+// 1. Run the following DB changes:
+/*
+CREATE TABLE c_wiki_rel_category (wiki_id INT NOT NULL, category_id INT NOT NULL, INDEX IDX_AC88945BAA948DBE (wiki_id), INDEX IDX_AC88945B12469DE2 (category_id), PRIMARY KEY(wiki_id, category_id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE c_wiki_category (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, INDEX IDX_17F1099A91D79BD3 (c_id), INDEX IDX_17F1099A613FECDF (session_id), INDEX IDX_17F1099AA977936C (tree_root), INDEX IDX_17F1099A727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+ALTER TABLE c_wiki_rel_category ADD CONSTRAINT FK_AC88945BAA948DBE FOREIGN KEY (wiki_id) REFERENCES c_wiki (iid) ON DELETE CASCADE;
+ALTER TABLE c_wiki_rel_category ADD CONSTRAINT FK_AC88945B12469DE2 FOREIGN KEY (category_id) REFERENCES c_wiki_category (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099AA977936C FOREIGN KEY (tree_root) REFERENCES c_wiki_category (id) ON DELETE CASCADE;
+ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A727ACA70 FOREIGN KEY (parent_id) REFERENCES c_wiki_category (id) ON DELETE CASCADE;
+*/
+// 2. Add an "@" before "ORM\ManyToMany" and "@ORM\JoinTable" in the "CWiki::$categories" property definition (in src/Chamilo/CourseBundle/Entity/CWiki.php)
+// 3. Add an "@" before "ORM\Entity" in the "CWikiCategory" class definition (in src/Chamilo/CourseBundle/Entity/CWikiCategory.php)
+//$_configuration['wiki_categories_enabled'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -260,7 +260,7 @@ class CLp
     protected $expiredOn;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="accumulate_scorm_time", type="integer", nullable=false, options={"default":1})
      */
@@ -1020,20 +1020,12 @@ class CLp
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getAccumulateScormTime()
+    public function getAccumulateScormTime(): int
     {
         return $this->accumulateScormTime;
     }
 
-    /**
-     * @param string $accumulateScormTime
-     *
-     * @return CLp
-     */
-    public function setAccumulateScormTime($accumulateScormTime)
+    public function setAccumulateScormTime(int $accumulateScormTime): CLp
     {
         $this->accumulateScormTime = $accumulateScormTime;
 
@@ -1058,5 +1050,24 @@ class CLp
     public function getSubscribeUsers()
     {
         return $this->subscribeUsers;
+    }
+
+    public function setSubscribeUsers(int $subscribeUsers): CLp
+    {
+        $this->subscribeUsers = $subscribeUsers;
+
+        return $this;
+    }
+
+    public function getMaxAttempts(): int
+    {
+        return $this->maxAttempts;
+    }
+
+    public function setMaxAttempts(int $maxAttempts): CLp
+    {
+        $this->maxAttempts = $maxAttempts;
+
+        return $this;
     }
 }

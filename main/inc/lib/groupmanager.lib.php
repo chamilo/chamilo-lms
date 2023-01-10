@@ -2789,6 +2789,7 @@ class GroupManager
         if ($loadUsers) {
             $data[0][] = 'students';
             $data[0][] = 'tutors';
+            $data[0][] = 'emails';
         }
 
         if (false == $loadUsers) {
@@ -2827,9 +2828,11 @@ class GroupManager
 
             $users = self::getStudents($groupInfo['iid']);
             $userList = [];
+            $emailList = [];
             foreach ($users as $user) {
                 $user = api_get_user_info($user['user_id']);
                 $userList[] = $user['username'];
+                $emailList[] = $user['email'];
             }
 
             $tutors = self::getTutors($groupInfo);
@@ -2837,6 +2840,7 @@ class GroupManager
             foreach ($tutors as $user) {
                 $user = api_get_user_info($user['user_id']);
                 $tutorList[] = $user['username'];
+                $emailList[] = $user['email'];
             }
 
             $userListToString = null;
@@ -2869,6 +2873,9 @@ class GroupManager
             if ($loadUsers) {
                 $data[$count][] = $userListToString;
                 $data[$count][] = $tutorListToString;
+                if (!empty($emailList)) {
+                    $data[$count][] = implode(',', $emailList);
+                }
             }
 
             if (!empty($groupId)) {

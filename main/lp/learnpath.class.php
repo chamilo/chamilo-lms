@@ -759,6 +759,7 @@ class learnpath
             $courseInfo = api_get_course_info();
         }
 
+        $em = Database::getManager();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         // Check course code exists.
         // Check lp_name doesn't exist, otherwise append something.
@@ -777,7 +778,13 @@ class learnpath
         if (empty($expired_on)) {
             $expired_on = null;
         } else {
-            $expired_on = Database::escape_string(api_get_utc_datetime($expired_on));
+            $expired_on = api_get_utc_datetime($expired_on, false, true);
+        }
+
+        if (empty($publicated_on)) {
+            $publicated_on = null;
+        } else {
+            $publicated_on = api_get_utc_datetime($publicated_on, false, true);
         }
 
         $check_name = "SELECT * FROM $tbl_lp
@@ -824,64 +831,69 @@ class learnpath
                     $dsp = $row[0] + 1;
                 }
 
-                $params = [
-                    'c_id' => $course_id,
-                    'lp_type' => $type,
-                    'name' => $name,
-                    'description' => $description,
-                    'path' => '',
-                    'default_view_mod' => 'embedded',
-                    'default_encoding' => 'UTF-8',
-                    'display_order' => $dsp,
-                    'content_maker' => 'Chamilo',
-                    'content_local' => 'local',
-                    'js_lib' => '',
-                    'session_id' => $session_id,
-                    'created_on' => api_get_utc_datetime(),
-                    'modified_on' => api_get_utc_datetime(),
-                    'publicated_on' => $publicated_on,
-                    'expired_on' => $expired_on,
-                    'category_id' => $categoryId,
-                    'force_commit' => 0,
-                    'content_license' => '',
-                    'debug' => 0,
-                    'theme' => '',
-                    'preview_image' => '',
-                    'author' => '',
-                    'prerequisite' => 0,
-                    'hide_toc_frame' => 0,
-                    'seriousgame_mode' => 0,
-                    'autolaunch' => 0,
-                    'max_attempts' => 0,
-                    'subscribe_users' => 0,
-                    'accumulate_scorm_time' => 1,
-                ];
-                $id = Database::insert($tbl_lp, $params);
+                $newLp = (new CLp())
+                    ->setCId($course_id)
+                    ->setLpType($type)
+                    ->setName($name)
+                    ->setDescription($description)
+                    ->setPath('')
+                    ->setDefaultViewMod('embedded')
+                    ->setDefaultEncoding('UTF-8')
+                    ->setDisplayOrder($dsp)
+                    ->setContentMaker('Chamilo')
+                    ->setContentLocal('local')
+                    ->setJsLib('')
+                    ->setSessionId($session_id)
+                    ->setCreatedOn(api_get_utc_datetime(null, false, true))
+                    ->setModifiedOn(api_get_utc_datetime(null, false, true))
+                    ->setPublicatedOn($publicated_on)
+                    ->setExpiredOn($expired_on)
+                    ->setCategoryId($categoryId)
+                    ->setForceCommit(false)
+                    ->setContentLicense('')
+                    ->setDebug(false)
+                    ->setTheme('')
+                    ->setPreviewImage('')
+                    ->setAuthor('')
+                    ->setPrerequisite(0)
+                    ->setHideTocFrame(false)
+                    ->setSeriousgameMode(false)
+                    ->setAutolaunch(0)
+                    ->setMaxAttempts(0)
+                    ->setSubscribeUsers(0)
+                    ->setAccumulateScormTime(1)
+                ;
 
-                if ($id > 0) {
-                    $sql = "UPDATE $tbl_lp SET id = iid WHERE iid = $id";
-                    Database::query($sql);
+                $em->persist($newLp);
+                $em->flush();
 
-                    // Insert into item_property.
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_LEARNPATH,
-                        $id,
-                        'LearnpathAdded',
-                        $userId
-                    );
-                    api_set_default_visibility(
-                        $id,
-                        TOOL_LEARNPATH,
-                        0,
-                        $courseInfo,
-                        $session_id,
-                        $userId
-                    );
+                HookLearningPathCreated::create()
+                    ->setEventData(['lp' => $newLp])
+                    ->notifyCreated()
+                ;
 
-                    return $id;
-                }
-                break;
+                $newLp->setId($newLp->getIid());
+
+                $em->flush();
+
+                // Insert into item_property.
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_LEARNPATH,
+                    $newLp->getIid(),
+                    'LearnpathAdded',
+                    $userId
+                );
+                api_set_default_visibility(
+                    $newLp->getIid(),
+                    TOOL_LEARNPATH,
+                    0,
+                    $courseInfo,
+                    $session_id,
+                    $userId
+                );
+
+                return $newLp->getIid();
         }
     }
 

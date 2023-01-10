@@ -1946,6 +1946,7 @@ HOTSPOT;
 
         $extraField = new ExtraField('user');
         $extraFieldValue = new ExtraFieldValue('user');
+        $extraFieldQuestion = new ExtraFieldValue('question');
 
         $extraFields = $extraField->get_all(['filter = ?' => 1]);
         $userExtraFields = [];
@@ -2013,8 +2014,30 @@ HOTSPOT;
                             false,
                             $objExercise->selectPropagateNeg()
                         );
+
+                        $displayValue = $questionResult['score'];
+                        $differentiation = $extraFieldQuestion->get_values_by_handler_and_field_variable($questionId, 'differentiation');
+                        if (!empty($differentiation['value'])) {
+                            $answerType = $questionObj->selectType();
+                            $objAnswerTmp = new Answer($questionId, api_get_course_int_id());
+                            $userChoice = [];
+                            if (!empty($questionResult['correct_answer_id']) && HOT_SPOT_DELINEATION != $answerType) {
+                                foreach ($questionResult['correct_answer_id'] as $answerId) {
+                                    $answer = $objAnswerTmp->getAnswerByAutoId($answerId);
+                                    if (!empty($answer)) {
+                                        $userChoice[] = $answer['answer'];
+                                    } else {
+                                        $answer = $objAnswerTmp->selectAnswer($answerId);
+                                        $userChoice[] = $answer;
+                                    }
+                                }
+                            }
+                            if (!empty($userChoice)) {
+                                $displayValue = implode('|', $userChoice);
+                            }
+                        }
                         $questionModalUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=show_question_attempt&exercise='.$exerciseId.'&question='.$questionId.'&exe_id='.$row['exe_id'];
-                        $data[$x][$questionId] = '<a href="'.$questionModalUrl.'" class="ajax" data-title="'.$questionName.'" title="'.get_lang('ClicToSeeDetails').'">'.$questionResult['score'].'</a>';
+                        $data[$x][$questionId] = '<a href="'.$questionModalUrl.'" class="ajax" data-title="'.$questionName.'" title="'.get_lang('ClicToSeeDetails').'">'.$displayValue.'</a>';
                     }
                 }
                 $x++;

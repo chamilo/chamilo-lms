@@ -142,7 +142,6 @@ $(function() {
     ".$result['js']."
     $('#system_template').on('change', function() {
         var sessionId = $(this).find('option:selected').val();
-        console.log('system_template CHANGE');
         $.ajax({
             type: 'GET',
             dataType: 'json',
@@ -183,7 +182,6 @@ $(function() {
                     variables.forEach(function(variable) {
                         var variableName = variable + '_to_local_time';
                         if (data[variableName]) {
-                            console.log(data[variableName]);
                             let parsedDate = data[variableName];
                             if (parsedDate) {
                                  var item = $('#'+variable);

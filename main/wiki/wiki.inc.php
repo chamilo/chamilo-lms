@@ -2909,6 +2909,8 @@ class Wiki
                     'search_term' => $search_term,
                     'search_content' => $search_content,
                     'all_vers' => $all_vers,
+                    'categories' => $categoryIdList,
+                    'match_all_categories' => $matchAllCategories,
                 ]
             );
             $table->set_header(
@@ -4873,7 +4875,7 @@ class Wiki
                 $_GET['search_content'] = $_POST['search_content'] ?? '';
                 $_GET['all_vers'] = $_POST['all_vers'] ?? '';
                 $_GET['categories'] = $_POST['categories'] ?? [];
-                $_GET['match_all_categories'] = isset($_POST['match_all_categories']);
+                $_GET['match_all_categories'] = !empty($_POST['match_all_categories']);
             }
             $this->display_wiki_search_results(
                 $_GET['search_term'],
@@ -4940,7 +4942,7 @@ class Wiki
                     (int) $values['search_content'],
                     (int) $values['all_vers'],
                     $values['categories'] ?? [],
-                    isset($values['match_all_categories'])
+                    !empty($values['match_all_categories'])
                 );
             } else {
                 $form->display();

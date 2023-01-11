@@ -1515,7 +1515,7 @@ function api_get_navigator()
     return ['name' => $navigator, 'version' => $version];
 }
 /**
- * Check if it is a desktop or mobile browser
+ * Check if it is a desktop or mobile browser.
  */
 function api_is_browser_mobile(): bool
 {
@@ -1534,6 +1534,7 @@ function api_is_browser_mobile(): bool
     } else {
         $isMobile = false;
     }
+
     return $isMobile;
 }
 

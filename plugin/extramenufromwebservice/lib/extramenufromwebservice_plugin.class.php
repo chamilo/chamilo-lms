@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Define the ExtraMenuFromWebservice class as an extension of Plugin to
+ * Define the ExtraMenuFromWebservice class as an extension of Plugin
  * install/uninstall the plugin.
  */
 class ExtraMenuFromWebservicePlugin extends Plugin
@@ -29,7 +29,6 @@ class ExtraMenuFromWebservicePlugin extends Plugin
             'Borja Sanchez',
             $settings
         );
-
     }
 
     public static function create()
@@ -46,7 +45,6 @@ class ExtraMenuFromWebservicePlugin extends Plugin
 
     public function uninstall()
     {
-
         $settings = [
             'tool_enable',
             'authentication_url',
@@ -67,12 +65,11 @@ class ExtraMenuFromWebservicePlugin extends Plugin
             $sql = "DELETE FROM $tableSettings WHERE variable = '$variable' AND access_url = $urlId";
             Database::query($sql);
         }
-
     }
 
     /**
-     * Get a token through the WS indicated in plugin configuration
-    */
+     * Get a token through the WS indicated in plugin configuration.
+     */
     public function getToken()
     {
         $response = [];
@@ -81,10 +78,9 @@ class ExtraMenuFromWebservicePlugin extends Plugin
         $authenticationPassword = (string) $this->get('authentication_password');
 
         if (!empty($authenticationUrl) && !empty($authenticationEmail) && !empty($authenticationPassword)) {
-
             $curl = curl_init();
 
-            curl_setopt_array($curl, array(
+            curl_setopt_array($curl, [
                 CURLOPT_URL => $authenticationUrl,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
@@ -96,14 +92,14 @@ class ExtraMenuFromWebservicePlugin extends Plugin
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS =>'{
+                CURLOPT_POSTFIELDS => '{
                     "email": "'.$authenticationEmail.'",
                     "password": "'.$authenticationPassword.'"
                 }',
-                CURLOPT_HTTPHEADER => array(
+                CURLOPT_HTTPHEADER => [
                     'Content-Type: application/json'
-                ),
-            ));
+                ],
+            ]);
 
             $curlResponse = curl_exec($curl);
             curl_close($curl);
@@ -120,22 +116,20 @@ class ExtraMenuFromWebservicePlugin extends Plugin
     }
 
     /**
-     * Get the menu from the WS indicated in plugin configuration
+     * Get the menu from the WS indicated in plugin configuration.
      * */
     public function getMenu(
         string $token,
         string $userEmail,
         bool $isMobile = false
-    ): array
-    {
+    ): array {
         $response = [];
         $menuUrl = $isMobile ? (string) $this->get('mobile_menu_url') : (string) $this->get('normal_menu_url');
         if (!empty($menuUrl) && !empty($token) && !empty($userEmail)) {
-
             $menuUrl = substr($menuUrl, -1) === '/' ? $menuUrl : $menuUrl.'/';
             $curl = curl_init();
 
-            curl_setopt_array($curl, array(
+            curl_setopt_array($curl, [
                 CURLOPT_URL => $menuUrl.$userEmail,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
@@ -145,10 +139,10 @@ class ExtraMenuFromWebservicePlugin extends Plugin
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'GET',
-                CURLOPT_HTTPHEADER => array(
+                CURLOPT_HTTPHEADER => [
                     "Authorization: Bearer $token"
-                ),
-            ));
+                ],
+            ]);
 
             $curlResponse = curl_exec($curl);
             if (false !== $curlResponse) {
@@ -165,31 +159,31 @@ class ExtraMenuFromWebservicePlugin extends Plugin
             }
             curl_close($curl);
         }
+
         return $response;
     }
 
     /**
-     * Checks if the login token is expired
-     * */
+     * Checks if the login token is expired.
+     */
     public static function tokenIsExpired(int $tokenStartTime, int $pluginSessionTimeout): bool
     {
         $now = api_get_utc_datetime(null, false, true)->getTimestamp();
+
         return ($now - $tokenStartTime) > $pluginSessionTimeout;
     }
 
     /**
-     * Get the list of CSS or fonts indicated in plugin configuration
+     * Get the list of CSS or fonts indicated in plugin configuration.
      */
     public static function getImports(string $list = '')
     {
         $importsArray = [];
 
         if (!empty($list)) {
-
             $importsArray = explode(";", $list);
         }
 
         return $importsArray;
     }
-
 }

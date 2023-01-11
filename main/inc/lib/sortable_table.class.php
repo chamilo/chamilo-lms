@@ -422,8 +422,15 @@ class SortableTable extends HTML_Table
 
         if (!empty($this->additional_parameters)) {
             foreach ($this->additional_parameters as $key => $value) {
-                $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'
-                    .Security::remove_XSS($value).'" />';
+                if (is_array($value)) {
+                    foreach ($value as $subKey => $subValue) {
+                        $html .= '<input type="hidden" name ="'.Security::remove_XSS($subKey).'" value ="'
+                            .Security::remove_XSS($subValue).'" />';
+                    }
+                } else {
+                    $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'
+                        .Security::remove_XSS($value).'" />';
+                }
             }
         }
         $html .= '<input type="hidden" name="action">';
@@ -805,7 +812,13 @@ class SortableTable extends HTML_Table
         }
 
         foreach ($param as $key => &$value) {
-            $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
+            if (is_array($value)) {
+                foreach ($value as $subKey => $subValue) {
+                    $result[] = '<input type="hidden" name="'.$subKey.'" value="'.$subValue.'"/>';
+                }
+            } else {
+                $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
+            }
         }
         $result[] = '<select style="width: auto;" class="form-control" name="'.$this->param_prefix
             .'per_page" onchange="javascript: this.form.submit();">';
@@ -942,13 +955,7 @@ class SortableTable extends HTML_Table
      */
     public function get_additional_url_paramstring()
     {
-        $param_string_parts = [];
-        if (is_array($this->additional_parameters) && count($this->additional_parameters) > 0) {
-            foreach ($this->additional_parameters as $key => $value) {
-                $param_string_parts[] = urlencode($key).'='.urlencode($value);
-            }
-        }
-        $result = implode('&amp;', $param_string_parts);
+        $result = http_build_query($this->additional_parameters);
         foreach ($this->other_tables as $index => &$tablename) {
             $param = [];
             if (isset($_GET[$tablename.'_direction'])) {
@@ -968,12 +975,8 @@ class SortableTable extends HTML_Table
             if (isset($_GET[$tablename.'_column'])) {
                 $param[$tablename.'_column'] = intval($_GET[$tablename.'_column']);
             }
-            $param_string_parts = [];
-            foreach ($param as $key => &$value) {
-                $param_string_parts[] = urlencode($key).'='.urlencode($value);
-            }
-            if (count($param_string_parts) > 0) {
-                $result .= '&amp;'.implode('&amp;', $param_string_parts);
+            if (count($param) > 0) {
+                $result .= '&'.http_build_query($param);
             }
         }
 

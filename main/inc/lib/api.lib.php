@@ -1514,6 +1514,28 @@ function api_get_navigator()
 
     return ['name' => $navigator, 'version' => $version];
 }
+/**
+ * Check if it is a desktop or mobile browser
+ */
+function api_is_browser_mobile(): bool
+{
+    if (empty($_SERVER['HTTP_USER_AGENT'])) {
+        static $isMobile = false;
+    } elseif (
+        strpos($_SERVER['HTTP_USER_AGENT'], 'Mobile') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Silk/') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Kindle') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'BlackBerry') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera Mini') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera Mobi') !== false
+    ) {
+        $isMobile = true;
+    } else {
+        $isMobile = false;
+    }
+    return $isMobile;
+}
 
 /**
  * @return true if user self registration is allowed, false otherwise

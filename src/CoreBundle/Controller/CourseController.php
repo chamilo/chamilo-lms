@@ -38,6 +38,7 @@ use Event;
 use Exercise;
 use ExtraFieldValue;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -575,10 +576,9 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
-    public function getToolIntro(Request $request, Course $course): Response
+    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
     {
-        $session = api_get_session_entity();
-        $em = Database::getManager();
+        $session = $this->getSession();
         $responseData = [];
         $ctoolRepo = $em->getRepository(CTool::class);
         $createInSession = false;
@@ -614,25 +614,16 @@ class CourseController extends ToolBaseController
             ]
         );
 
-        return new Response(
-            $json,
-            Response::HTTP_OK,
-            [
-                'Content-type' => 'application/json',
-            ]
-        );
+        return new JsonResponse($json);
     }
 
     #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
-    public function addToolIntro(Request $request, Course $course): Response
+    public function addToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
     {
-        $em = Database::getManager();
-
         $data = $request->getContent();
         $data = json_decode($data);
         $ctoolintroId = $data->iid;
-        $sid = $data->sid;
-        $session = api_get_session_entity($sid);
+        $session = $this->getSession();
 
         $ctool = $em->getRepository(CTool::class);
         $check = $ctool->findOneBy(['name' => 'course_homepage', 'session' => $session]);
@@ -669,13 +660,8 @@ class CourseController extends ToolBaseController
             ]
         );
 
-        return new Response(
-            $json,
-            Response::HTTP_OK,
-            [
-                'Content-type' => 'application/json',
-            ]
-        );
+        return new JsonResponse($json);
+
     }
 
     private function autoLaunch(): void

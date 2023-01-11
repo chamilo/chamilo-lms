@@ -97,7 +97,7 @@ class ExtraMenuFromWebservicePlugin extends Plugin
                     "password": "'.$authenticationPassword.'"
                 }',
                 CURLOPT_HTTPHEADER => [
-                    'Content-Type: application/json'
+                    'Content-Type: application/json',
                 ],
             ]);
 
@@ -140,7 +140,7 @@ class ExtraMenuFromWebservicePlugin extends Plugin
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'GET',
                 CURLOPT_HTTPHEADER => [
-                    "Authorization: Bearer $token"
+                    "Authorization: Bearer $token",
                 ],
             ]);
 

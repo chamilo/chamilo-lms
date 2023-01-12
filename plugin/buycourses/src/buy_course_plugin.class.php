@@ -5286,7 +5286,7 @@ class BuyCoursesPlugin extends Plugin
     private function filterCourseList(
         int $start,
         int $end,
-        string $name = '',
+        string $name = null,
         int $min = 0,
         int $max = 0,
         string $typeResult = 'all'

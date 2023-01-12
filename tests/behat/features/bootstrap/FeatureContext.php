@@ -188,7 +188,7 @@ class FeatureContext extends MinkContext
         );
         $this->pressButton('submit');
         $this->visit('/main/course_info/infocours.php?cidReq='.$code);
-        $this->clickLink('Course access');
+        $this->clickLink('course-access');
         $this->waitForThePageToBeLoaded();
         $this->assertPageContainsText('Course registration password');
         $this->fillField('update_course_course_registration_password', $password);

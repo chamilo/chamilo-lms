@@ -1020,7 +1020,7 @@ EOT;
             '
             <div class="panel-heading" role="tab" id="heading-'.$name.'-settings">
                 <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" id="'.$name.'"
                        href="#collapse-'.$name.'-settings" aria-expanded="false" aria-controls="collapse-'.$name.'-settings">
         '
         );

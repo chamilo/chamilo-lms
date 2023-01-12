@@ -191,7 +191,7 @@ class FeatureContext extends MinkContext
         $this->clickLink('Course access');
         $this->waitForThePageToBeLoaded();
         $this->assertPageContainsText('Course registration password');
-        $this->fillField('course_registration_password', $password);
+        $this->fillField('update_course_course_registration_password', $password);
         $this->pressButton('update_course_submit_save_access');
         $this->assertFieldContains('course_registration_password', $password);
     }

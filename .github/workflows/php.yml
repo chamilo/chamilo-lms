@@ -109,9 +109,9 @@ jobs:
             # https://github.com/marketplace/actions/setup-chromedriver
             - name: Start chromedriver
               uses: nanasess/setup-chromedriver@master
-              with:
-                  # Optional: do not specify to match Chrome's version
-                  chromedriver-version: '108.0.5359.71'
+#              with:
+#                  # Optional: do not specify to match Chrome's version
+#                  chromedriver-version: '108.0.5359.71'
 
             - run: |
                 export DISPLAY=:99

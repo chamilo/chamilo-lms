@@ -4888,16 +4888,23 @@ class Wiki
             // initiate the object
             $form = new FormValidator(
                 'wiki_search',
-                'post',
+                'get',
                 $this->url.'&'.http_build_query(['action' => api_htmlentities($action), 'mode_table' => 'yes1'])
             );
+
+            $form->addHidden('cidReq', $this->courseCode);
+            $form->addHidden('id_session', $this->session_id);
+            $form->addHidden('gidReq', $this->group_id);
+            $form->addHidden('gradebook', '0');
+            $form->addHidden('origin', '');
+            $form->addHidden('action', 'searchpages');
 
             // Setting the form elements
 
             $form->addText(
                 'search_term',
                 get_lang('SearchTerm'),
-                true,
+                false,
                 ['autofocus' => 'autofocus']
             );
             $form->addCheckBox('search_content', '', get_lang('AlsoSearchContent'));
@@ -4939,8 +4946,8 @@ class Wiki
                 $values = $form->exportValues();
                 $this->display_wiki_search_results(
                     $values['search_term'],
-                    (int) $values['search_content'],
-                    (int) $values['all_vers'],
+                    (int) ($values['search_content'] ?? ''),
+                    (int) ($values['all_vers'] ?? ''),
                     $values['categories'] ?? [],
                     !empty($values['match_all_categories'])
                 );
@@ -6862,9 +6869,31 @@ class Wiki
             return '';
         }
 
-        $wiki = Database::getManager()->find(CWiki::class, $wikiId);
+        try {
+            $wiki = Database::getManager()->find(CWiki::class, $wikiId);
+        } catch (Exception $e) {
+            return '';
+        }
 
-        return $tagStart.implode(', ', $wiki->getCategories()->getValues()).$tagEnd;
+        $categoryLinks = array_map(
+            function (CWikiCategory $category) {
+                $urlParams = [
+                    'search_term' => '',
+                    'SubmitWikiSearch' => '',
+                    '_qf__wiki_search' => '',
+                    'action' => 'searchpages',
+                    'categories' => ['' => $category->getId()],
+                ];
+
+                return Display::url(
+                    $category->getName(),
+                    $this->url.'&'.http_build_query($urlParams)
+                );
+            },
+            $wiki->getCategories()->getValues()
+        );
+
+        return $tagStart.implode(', ', $categoryLinks).$tagEnd;
     }
 
     private function gelAllPagesQuery(

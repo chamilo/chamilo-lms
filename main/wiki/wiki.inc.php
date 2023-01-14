@@ -1377,9 +1377,10 @@ class Wiki
             );
         }
 
-        echo Display::toolbarAction(
+        $contentHtml = Display::toolbarAction(
             'toolbar-wikistudent',
-            [$actionsLeft, $actionsRight]
+            [$actionsLeft, $actionsRight],
+            [3, 9]
         );
 
         $pageWiki = self::detect_news_link($content);
@@ -1403,7 +1404,9 @@ class Wiki
 
         $footerWiki .= '</ul>';
         // wikicontent require to print wiki document
-        echo '<div id="wikicontent">'.Display::panel($pageWiki, $pageTitle, $footerWiki).'</div>'; //end filter visibility
+        $contentHtml .= '<div id="wikicontent">'.Display::panel($pageWiki, $pageTitle, $footerWiki).'</div>'; //end filter visibility
+
+        $this->renderShowPage($contentHtml);
     }
 
     /**
@@ -6861,6 +6864,68 @@ class Wiki
         }
 
         return false;
+    }
+
+    private function renderShowPage(string $contentHtml)
+    {
+        $wikiCategoriesEnabled = api_get_configuration_value('wiki_categories_enabled');
+
+        if ($wikiCategoriesEnabled) {
+            $em = Database::getManager();
+            $categoryRepo = $em->getRepository(CWikiCategory::class);
+
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+
+            $count = $categoryRepo->countByCourse($course, $session);
+            $tree = get_lang('NoCategories');
+
+            if ($count) {
+                $tree = $categoryRepo->buildCourseTree(
+                    $course,
+                $session,
+                [
+                    'decorate' => true,
+                    'rootOpen' => '<ul class="list-unstyled">',
+                    'nodeDecorator' => function ($node) {
+                        $prefix = '';
+
+                        if ($node['lvl'] >= 1) {
+                            $prefix .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $node['lvl'] - 1);
+                            $prefix .= '&nbsp;&middot;&middot;&middot; ';
+                        }
+
+                        $urlParams = [
+                            'search_term' => '',
+                            'SubmitWikiSearch' => '',
+                            '_qf__wiki_search' => '',
+                            'action' => 'searchpages',
+                            'categories' => ['' => $node['id']],
+                        ];
+
+                        return Display::url(
+                            '<small aria-hidden="true" class="text-muted">'.$prefix.'</small>'.$node['name'],
+                            $this->url.'&'.http_build_query($urlParams)
+                        );
+                    },
+                ]
+                );
+            }
+
+            echo '<div class="row">';
+            echo '<aside class="col-sm-3">';
+            echo $count > 0 ? '<h4>'.get_lang('Categories').'</h4>' : '';
+            echo $tree;
+            echo "</aside>"; // .col-sm-3
+            echo '<div class="col-sm-9">';
+        }
+
+        echo $contentHtml;
+
+        if ($wikiCategoriesEnabled) {
+            echo "</div>"; // .col-sm-9
+            echo "</div>"; // .row
+        }
     }
 
     private function returnCategoriesBlock(int $wikiId, string $tagStart = '<div>', string $tagEnd = '</div>'): string

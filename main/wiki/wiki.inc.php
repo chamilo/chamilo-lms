@@ -5900,7 +5900,20 @@ class Wiki
         // menu recent changes
         $actionsLeft .= '<a href="'.$this->url.'&action=recentchanges" '.self::is_active_navigation_tab('recentchanges').'>'
             .Display::return_icon('history.png', get_lang('RecentChanges'), [], ICON_SIZE_MEDIUM).'</a>';
-        echo Display::toolbarAction('toolbar-wiki', [$actionsLeft]);
+
+        $frmSearch = new FormValidator('wiki_search', 'get', '', '', [], FormValidator::LAYOUT_INLINE);
+        $frmSearch->addText('search_term', get_lang('SearchTerm'), false);
+        $frmSearch->addHidden('cidReq', $this->courseCode);
+        $frmSearch->addHidden('id_session', $this->session_id);
+        $frmSearch->addHidden('gidReq', $this->group_id);
+        $frmSearch->addHidden('gradebook', '0');
+        $frmSearch->addHidden('origin', '');
+        $frmSearch->addHidden('action', 'searchpages');
+        $frmSearch->addButtonSearch(get_lang('Search'));
+
+        $actionsRight = $frmSearch->returnForm();
+
+        echo Display::toolbarAction('toolbar-wiki', [$actionsLeft, $actionsRight]);
     }
 
     /**

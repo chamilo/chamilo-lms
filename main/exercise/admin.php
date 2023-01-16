@@ -381,7 +381,8 @@ if ($inATest) {
         $originalSelectionType = $objExercise->questionSelectionType;
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
 
-        $fullQuestionsScore = array_reduce(
+        $out_max_score = 0;
+        $out_max_score = array_reduce(
             $objExercise->selectQuestionList(true, true),
             function ($acc, $questionId) {
                 $objQuestionTmp = Question::read($questionId);
@@ -396,7 +397,7 @@ if ($inATest) {
         $alert .= sprintf(
             get_lang('XQuestionsWithTotalScoreY'),
             $nbrQuestions,
-            $fullQuestionsScore
+            $out_max_score
         );
     }
     if ($objExercise->random > 0) {

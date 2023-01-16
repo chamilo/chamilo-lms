@@ -77,7 +77,7 @@ if (isset($form)) {
                 '',
                 '',
                 '',
-                api_get_current_access_url_id(),
+                $accessUrlId,
                 1
             );
         }
@@ -88,6 +88,7 @@ if (isset($form)) {
             $pluginName,
             api_get_utc_datetime()
         );
+        api_flush_settings_cache($accessUrlId);
 
         if (!empty($pluginInfo['plugin_class'])) {
             /** @var \Plugin $objPlugin */

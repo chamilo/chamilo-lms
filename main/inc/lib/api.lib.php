@@ -10390,3 +10390,34 @@ function api_calculate_increment_percent(int $newValue, int $oldValue)
 
     return $result;
 }
+
+/**
+ * Erase settings from cache (because of some update) if applicable
+ * @param   int $url_id The ID of the present URL
+ */
+function api_flush_settings_cache(int $url_id): bool
+{
+    $cacheAvailable = api_get_configuration_value('apc');
+    if (!$cacheAvailable) {
+        return false;
+    }
+    $apcRootVarName = api_get_configuration_value('apc_prefix').'settings_';
+    // Delete the APCu-stored settings array, if present
+    $apcVarName = $apcRootVarName.$url_id;
+    apcu_delete($apcVarName);
+    if (api_is_multiple_url_enabled() && $url_id === 1) {
+        // if we are on the main URL of a multi-url portal, we must
+        // invalidate the cache for all other URLs as well as some
+        // main settings span multiple URLs
+        $urls = api_get_access_urls();
+        foreach ($urls as $i => $row) {
+            if ($row['id'] == 1) {
+                continue;
+            }
+            $apcVarName = $apcRootVarName.$row['id'];
+            apcu_delete($apcVarName);
+        }
+    }
+
+    return true;
+}

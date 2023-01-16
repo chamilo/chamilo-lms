@@ -96,7 +96,11 @@ $url_id = api_get_current_access_url_id();
 
 $settings = null;
 $flushSettings = false;
-$cacheAvailable = api_get_configuration_value('apc');
+$multipleUrlsEnabled = false;
+
+if (api_is_multiple_url_enabled()) {
+    $multipleUrlsEnabled = true;
+}
 
 // Build the form.
 if (!empty($_GET['category']) &&
@@ -107,7 +111,6 @@ if (!empty($_GET['category']) &&
     $settings = $settings_array['settings'];
     $settings_by_access_list = $settings_array['settings_by_access_list'];
     $form = generateSettingsForm($settings, $settings_by_access_list);
-    $multipleUrlsEnabled = false;
 
     if ($form->validate()) {
         $values = $form->exportValues();
@@ -115,8 +118,7 @@ if (!empty($_GET['category']) &&
         $mark_all = false;
         $un_mark_all = false;
 
-        if (api_is_multiple_url_enabled()) {
-            $multipleUrlsEnabled = true;
+        if ($multipleUrlsEnabled) {
             if (isset($values['buttons_in_action_right']) &&
                 isset($values['buttons_in_action_right']['mark_all'])
             ) {
@@ -306,24 +308,8 @@ if (!empty($_GET['category']) &&
             api_get_utc_datetime(),
             $user_id
         );
-        if ($cacheAvailable && $flushSettings) {
-            // Delete the APCu-stored settings array, if present
-            $apcRootVarName = api_get_configuration_value('apc_prefix').'settings_';
-            $apcVarName = $apcRootVarName.$url_id;
-            apcu_delete($apcVarName);
-            if ($multipleUrlsEnabled && $url_id === 1) {
-                // if we are on the main URL of a multi-url portal, we must
-                // invalidate the cache for all other URLs as well as some
-                // main settings span multiple URLs
-                $urls = api_get_access_urls();
-                foreach ($urls as $i => $row) {
-                    if ($row['id'] == 1) {
-                        continue;
-                    }
-                    $apcVarName = $apcRootVarName.$row['id'];
-                    apcu_delete($apcVarName);
-                }
-            }
+        if ($flushSettings) {
+            api_flush_settings_cache($url_id);
         }
         // Add event configuration settings variable to the system log.
         if (is_array($keys) && count($keys) > 0) {
@@ -458,6 +444,7 @@ if (!empty($_GET['category'])) {
     switch ($_GET['category']) {
         case 'Regions':
             handleRegions();
+            $flushSettings = true;
             break;
         case 'Plugins':
             // Displaying the extensions: Plugins.
@@ -510,16 +497,19 @@ if (!empty($_GET['category'])) {
             echo '</div>';
 
             echo '</div>';
+            $flushSettings = true;
             break;
         case 'Stylesheets':
             // Displaying the extensions: Stylesheets.
             handleStylesheets();
+            $flushSettings = true;
             break;
         case 'Search':
             handleSearch();
             break;
         case 'Templates':
             handleTemplates();
+            $flushSettings = true;
             break;
         case 'search_setting':
             if (isset($_REQUEST['search_field'])) {
@@ -534,6 +524,9 @@ if (!empty($_GET['category'])) {
     }
 }
 $content = ob_get_clean();
+if ($flushSettings) {
+    api_flush_settings_cache($url_id);
+}
 
 // Including the header (banner).
 Display::display_header($tool_name);

@@ -68,6 +68,7 @@ if (isset($_POST['activeExtension'])) {
             Database::query($sql);
             break;
     }
+    api_flush_settings_cache(api_get_current_access_url_id());
 }
 
 $listActiveServices = [];

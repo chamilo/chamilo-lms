@@ -6883,32 +6883,27 @@ class Wiki
             if ($count) {
                 $tree = $categoryRepo->buildCourseTree(
                     $course,
-                $session,
-                [
-                    'decorate' => true,
-                    'rootOpen' => '<ul class="list-unstyled">',
-                    'nodeDecorator' => function ($node) {
-                        $prefix = '';
+                    $session,
+                    [
+                        'decorate' => true,
+                        'rootOpen' => '<ul class="fa-ul">',
+                        'nodeDecorator' => function ($node) {
+                            $prefix = '<span aria-hidden="true" class="fa fa-li fa-angle-right text-muted"></span>';
 
-                        if ($node['lvl'] >= 1) {
-                            $prefix .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $node['lvl'] - 1);
-                            $prefix .= '&nbsp;&middot;&middot;&middot; ';
-                        }
+                            $urlParams = [
+                                'search_term' => '',
+                                'SubmitWikiSearch' => '',
+                                '_qf__wiki_search' => '',
+                                'action' => 'searchpages',
+                                'categories' => ['' => $node['id']],
+                            ];
 
-                        $urlParams = [
-                            'search_term' => '',
-                            'SubmitWikiSearch' => '',
-                            '_qf__wiki_search' => '',
-                            'action' => 'searchpages',
-                            'categories' => ['' => $node['id']],
-                        ];
-
-                        return Display::url(
-                            '<small aria-hidden="true" class="text-muted">'.$prefix.'</small>'.$node['name'],
-                            $this->url.'&'.http_build_query($urlParams)
-                        );
-                    },
-                ]
+                            return Display::url(
+                                $prefix.$node['name'],
+                                $this->url.'&'.http_build_query($urlParams)
+                            );
+                        },
+                    ]
                 );
             }
 

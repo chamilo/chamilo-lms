@@ -6951,7 +6951,7 @@ class Wiki
         $categoryLinks = array_map(
             function (CWikiCategory $category) {
                 $urlParams = [
-                    'search_term' => '',
+                    'search_term' => isset($_GET['search_term']) ? Security::remove_XSS($_GET['search_term']) : '',
                     'SubmitWikiSearch' => '',
                     '_qf__wiki_search' => '',
                     'action' => 'searchpages',

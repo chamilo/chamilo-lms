@@ -40,11 +40,16 @@ switch ($action) {
         if (!empty($selected)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
             $attendance = new Attendance();
-            $comment = $attendance->getComment(
+            $commentInfo = $attendance->getComment(
                 (int) $userId,
                 (int) $attendanceCalendarId
             );
-            echo $comment;
+            echo json_encode(
+              [
+                  'comment' => $commentInfo['comment'],
+                  'author' => !empty($commentInfo['author']) ? get_lang('Author').': '.$commentInfo['author'] : '',
+              ]
+            );
         }
         break;
     case 'block_attendance_calendar':

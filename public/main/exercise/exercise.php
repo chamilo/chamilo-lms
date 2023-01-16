@@ -404,8 +404,7 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
 if ($is_allowedToEdit) {
     echo Display::toolbarAction(
         'toolbarUser',
-        [$actionsLeft, '', $actionsRight],
-        [6, 1, 5]
+        [$actionsLeft, $actionsRight]
     );
 }
 

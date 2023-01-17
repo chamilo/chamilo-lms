@@ -28,7 +28,7 @@ class AnnouncementManager
     /**
      * @return array
      */
-    public static function getTags()
+    public static function getTags(array $excluded = [])
     {
         $tags = [
             '((user_name))',
@@ -58,6 +58,10 @@ class AnnouncementManager
             $tags[] = '((general_coach_email))';
         }
 
+        if ($excluded) {
+            return array_diff($tags, $excluded);
+        }
+
         return $tags;
     }
 
@@ -72,11 +76,11 @@ class AnnouncementManager
     public static function parseContent(
         $userId,
         $content,
-        $courseCode,
+        $courseCode = '',
         $sessionId = 0
     ) {
         $readerInfo = api_get_user_info($userId, false, false, true, true, false, true);
-        $courseInfo = api_get_course_info($courseCode);
+        $courseInfo = $courseCode ? api_get_course_info($courseCode) : [];
         $teacherList = '';
         if ($courseInfo) {
             $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code']);
@@ -86,10 +90,9 @@ class AnnouncementManager
         $coaches = '';
         if (!empty($sessionId)) {
             $sessionInfo = api_get_session_info($sessionId);
-            $coaches = CourseManager::get_coachs_from_course_to_string(
-                $sessionId,
-                $courseInfo['real_id']
-            );
+            $coaches = $courseInfo
+                ? CourseManager::get_coachs_from_course_to_string($sessionId, $courseInfo['real_id'])
+                : '';
 
             $generalCoach = api_get_user_info($sessionInfo['id_coach']);
             $generalCoachName = $generalCoach['complete_name'];
@@ -114,7 +117,7 @@ class AnnouncementManager
 
         $data['user_picture'] = UserManager::getUserPicture($userId, USER_IMAGE_SIZE_ORIGINAL);
         $data['course_title'] = $courseInfo['name'] ?? '';
-        $courseLink = api_get_course_url($courseCode, $sessionId);
+        $courseLink = $courseCode ? api_get_course_url($courseCode, $sessionId) : '';
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $data['teachers'] = $teacherList;
 
@@ -152,7 +155,7 @@ class AnnouncementManager
         $tags = self::getTags();
         foreach ($tags as $tag) {
             $simpleTag = str_replace(['((', '))'], '', $tag);
-            $value = isset($data[$simpleTag]) ? $data[$simpleTag] : '';
+            $value = $data[$simpleTag] ?? '';
             $content = str_replace($tag, $value, $content);
         }
 

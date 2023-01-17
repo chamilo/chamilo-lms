@@ -109,6 +109,16 @@
             </td>
         </tr>
     {% endif %}
+    
+    {% if true == 'agenda_reminders'|api_get_configuration_value %}
+        <tr>
+            <td colspan="2">
+                <a href="{{ _p.web_main }}session/import_course_agenda_reminders.php?session_id={{ session.id }}">
+                    {{ 'ImportCourseEvents'|get_lang }}
+                </a>
+            </td>
+        </tr>
+    {% endif %}
 </table>
 
 {{ course_list }}

@@ -269,7 +269,7 @@ class TestCategory
         $categories = [];
         if (!empty($categoriesInExercise)) {
             foreach ($categoriesInExercise as $category) {
-                $categories[$category['id']] = $category;
+                $categories[$category['iid']] = $category;
             }
         }
 
@@ -320,14 +320,13 @@ class TestCategory
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
 
         foreach ($categories as $catInfo) {
-            $categoryId = $catInfo['id'];
+            $categoryId = $catInfo['iid'];
             if (!empty($categoryId)) {
                 $result[$categoryId] = [
                     'id' => $categoryId,
                     'title' => $catInfo['title'],
                     //'parent_id' =>  $catInfo['parent_id'],
                     'parent_id' => '',
-                    'c_id' => $catInfo['c_id'],
                 ];
             }
         }
@@ -1051,13 +1050,9 @@ class TestCategory
     public static function get_category_id_for_title($title, $courseId = 0)
     {
         $out_res = 0;
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
-        $courseId = (int) $courseId;
-        $tbl_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT id FROM $tbl_cat
-                WHERE c_id = $courseId AND title = '".Database::escape_string($title)."'";
+        $tableCategory = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $sql = "SELECT iid FROM $tableCategory
+                WHERE title = '".Database::escape_string($title)."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);

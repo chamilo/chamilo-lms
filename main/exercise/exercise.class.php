@@ -8312,7 +8312,7 @@ class Exercise
      */
     public function get_max_score()
     {
-        $out_max_score = 0;
+        $outMaxScore = 0;
         // list of question's id !!! the array key start at 1 !!!
         $questionList = $this->selectQuestionList(true);
 
@@ -8336,18 +8336,18 @@ class Exercise
             foreach ($tab_categories_scores as $tab_scores) {
                 rsort($tab_scores);
                 for ($i = 0; $i < min($numberRandomQuestions, count($tab_scores)); $i++) {
-                    $out_max_score += $tab_scores[$i];
+                    $outMaxScore += $tab_scores[$i];
                 }
             }
         } else {
             // standard test, just add each question score
             foreach ($questionList as $questionId) {
                 $question = Question::read($questionId, $this->course);
-                $out_max_score += $question->weighting;
+                $outMaxScore += $question->weighting;
             }
         }
 
-        return $out_max_score;
+        return $outMaxScore;
     }
 
     /**

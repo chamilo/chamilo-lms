@@ -283,6 +283,7 @@ class AppPlugin
             'whispeakauth',
             'zoom',
             'xapi',
+            'ai_helper',
         ];
 
         return $officialPlugins;

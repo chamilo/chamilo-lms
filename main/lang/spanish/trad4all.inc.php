@@ -8995,4 +8995,12 @@ $RepeatXDays = "Cada x días";
 $NumberOfDays = "Número de días";
 $WriteAComment = "Dejar un comentario";
 $ProvideACommentFirst = "Por favor deje un comentario primero";
+$QuizFinalizationDate = "Última fecha de finalización de un ejercicio";
+$LpFinalizationDate = "Última fecha de finalización de una lección";
+$OnlyThoseThatCorrespondToAllTheSelectedCategories = "Tiene que estar en TODAS las categorias seleccionadas";
+$reportByAttempts = "Reporte por intento";
+$QuestionsTopic = "Tema de preguntas";
+$QuestionsTopicHelp = "El tema de las preguntas será usado de un lado como título del ejercicio creado, y de otro lado para enviar al generador de inteligencia artificial (IA) para que genere preguntas en el idioma de este curso, pidiendo también que estén generadas en el formato Aiken para poder importarlas en el curso. Podrá validar/modificar las propuestas de preguntas a bajo antes de finalizar la importación.";
+$AIQuestionsGenerator = "Generador de preguntas por IA";
+$AIQuestionsGeneratorNumberHelper = "La mayoría de los generadores de IA son limitados en número de caracteres que pueden devolver, y vuestra organización muchas veces será facturada en base a la cantidad de caracteres devueltos. Por lo tanto, recomendamos proceder con moderación, solicitando bajas cantidades de preguntas en un primer momento, y extendiendo mientra va tomando confianza. Un buen número inicial es de 3 preguntas.";
 ?>

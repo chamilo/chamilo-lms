@@ -8969,4 +8969,13 @@ $RepeatXDays = "Every x days";
 $NumberOfDays = "Number of days";
 $WriteAComment = "Leave a comment";
 $ProvideACommentFirst = "Please leave a comment first";
+$QuizFinalizationDate = "Last quiz finalization date";
+$LpFinalizationDate = "Last lp's finalization date";
+$OnlyThoseThatCorrespondToAllTheSelectedCategories = "Must be in ALL the selected categories";
+$reportByAttempts = "Report by attempts";
+$QuestionsTopic = "Questions topic";
+$QuestionsTopicHelp = "The questions topic will be used as the name of the test and will be sent to the AI generator to generate questions in the language configured for this course, asking for them to be generated in the Aiken format so they can easily be imported into this course.";
+$AIQuestionsGenerator = "AI Questions Generator";
+$AIQuestionsGeneratorNumberHelper = "Most AI generators are limited in the number of characters they can return, and often your organization will be charged based on the number of characters returned, so please use with moderation, asking for smaller numbers first, then extending as you gain confidence.
+A good number for a first test is 3 questions.";
 ?>

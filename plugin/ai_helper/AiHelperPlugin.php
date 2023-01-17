@@ -70,7 +70,6 @@ class AiHelperPlugin extends Plugin
      */
     public function install()
     {
-
     }
 
     /**
@@ -78,6 +77,5 @@ class AiHelperPlugin extends Plugin
      */
     public function uninstall()
     {
-
     }
 }

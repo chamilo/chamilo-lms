@@ -864,9 +864,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the item data.
      *
-     * @param int   $productId The item ID
-     * @param int   $itemType  The item type
-     * @param array|null $coupon
+     * @param int $productId The item ID
+     * @param int $itemType  The item type
      *
      * @return array
      */
@@ -3847,8 +3846,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Add a new coupon.
-     *
-     * @return bool
      */
     public function addNewCoupon(array $coupon): bool
     {

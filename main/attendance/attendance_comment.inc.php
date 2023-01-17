@@ -1,6 +1,7 @@
 <div id="comment-popup" style="display: none">
     <div id="comment-area" class="well">
         <textarea id="txt-comment" style="width: 100%;height: 150px;" placeholder="<?php echo get_lang('WriteAComment'); ?>"></textarea>
+        <div id="comment-author"></div>
     </div>
     <span id="save-comment-controls">
         <span id="comment-results"></span>
@@ -54,6 +55,7 @@
             $('#save-comment-controls').show();
             $('#comment-area').show();
             $("#txt-comment").val('');
+            $("#comment-author").text('');
         });
 
         $(".attendance-comment").on("click", function() {
@@ -67,22 +69,20 @@
             $("#comment-results").hide();
             $("#save-comment-controls").show();
             $('#comment-area').show();
-            var comment = getComment(selected);
-            $("#txt-comment").val(comment);
+            setComment(selected);
         });
 
-        function getComment(selected) {
-            var response = $.ajax({
-                data:  "a=get_attendance_comment&selected="+selected,
-                url:   urlAjax,
-                async: false,
-                success: function (comment) {
-                    response = comment;
-                },
-                type:  'post'
+        function setComment(selected) {
+            $('#txt-comment').val('...');
+            $("#comment-author").text('');
+            $.getJSON(urlAjax + "&a=get_attendance_comment&selected=" + selected).done(function (data) {
+                if (data.comment) {
+                    $('#txt-comment').val(data.comment);
+                }
+                if (data.author) {
+                    $("#comment-author").text(data.author);
+                }
             });
-
-            return response.responseText;
         }
     });
 </script>

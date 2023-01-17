@@ -64,6 +64,13 @@ class CAttendanceResultComment
     protected $updatedAt;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="author_user_id", type="integer", nullable=false)
+     */
+    protected $authorUserId;
+
+    /**
      * Project constructor.
      */
     public function __construct()
@@ -178,5 +185,29 @@ class CAttendanceResultComment
     public function getComment()
     {
         return $this->comment;
+    }
+
+    /**
+     * Set authorUserId.
+     *
+     * @param int $authorUserId
+     *
+     * @return CAttendanceResultComment
+     */
+    public function setAuthorUserId($authorUserId)
+    {
+        $this->authorUserId = $authorUserId;
+
+        return $this;
+    }
+
+    /**
+     * Get authorUserId.
+     *
+     * @return int
+     */
+    public function getAuthorUserId()
+    {
+        return $this->authorUserId;
     }
 }

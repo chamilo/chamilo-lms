@@ -2741,7 +2741,14 @@ class Attendance
                 $result['count'] = $count;
                 $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);
                 foreach ($calendar as $classDay) {
-                    $comment = $this->getComment($user['user_id'], $classDay['id']);
+                    $commentInfo = $this->getComment($user['user_id'], $classDay['id']);
+                    $comment = '';
+                    if (!empty($commentInfo['comment'])) {
+                        $comment .= $commentInfo['comment'];
+                    }
+                    if (!empty($commentInfo['author'])) {
+                        $comment .= ' - '.get_lang('Author').': '.$commentInfo['author'];
+                    }
                     $txtComment = !empty($comment) ? '[comment]'.$comment : '';
                     if (1 == (int) $classDay['done_attendance']) {
                         if (1 == (int) $dataUsersPresence[$user['user_id']][$classDay['id']]['presence']) {
@@ -2768,7 +2775,7 @@ class Attendance
     /**
      * Get the user comment in attendance sheet.
      *
-     * @return false|string
+     * @return false|array The comment text and the author.
      */
     public function getComment(
         int $userId,
@@ -2803,13 +2810,24 @@ class Attendance
             $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceResultComment');
             $attendanceResultComment = $repo->findOneBy($criteria);
 
+            $author = '';
             /** @var CAttendanceResultComment $attendanceResultComment */
             if ($attendanceResultComment) {
                 $comment = $attendanceResultComment->getComment();
+                $authorId = $attendanceResultComment->getAuthorUserId();
+                if (!empty($authorId)) {
+                    $authorInfo = api_get_user_info($authorId);
+                    $author = api_get_person_name($authorInfo['firstname'], $authorInfo['lastname']);
+                }
             }
         }
 
-        return $comment;
+        $commentInfo = [
+            'comment' => $comment,
+            'author' => $author,
+        ];
+
+        return $commentInfo;
     }
 
     /**
@@ -2868,6 +2886,7 @@ class Attendance
         if ($attendanceResultComment) {
             $attendanceResultComment->setComment($comment);
             $attendanceResultComment->setUpdatedAt(api_get_utc_datetime(null, false, true));
+            $attendanceResultComment->setAuthorUserId(api_get_user_id());
             $em->persist($attendanceResultComment);
             $em->flush();
         } else {
@@ -2875,7 +2894,8 @@ class Attendance
             $attendanceResultComment
                 ->setAttendanceSheetId($attendanceSheetId)
                 ->setUserId($userId)
-                ->setComment($comment);
+                ->setComment($comment)
+                ->setAuthorUserId(api_get_user_id());
 
             $em->persist($attendanceResultComment);
             $em->flush();

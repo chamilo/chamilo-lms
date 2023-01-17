@@ -4,7 +4,17 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-api_protect_admin_script();
+$courseCode = api_get_course_id();
+$sessionId = api_get_session_id();
+$loadFromCourse = !empty($courseCode) && api_is_allowed_to_edit(false, true);
+$selfUrl = api_get_self();
+
+if ($loadFromCourse) {
+    api_protect_teacher_script();
+    $selfUrl = api_get_self().'?'.api_get_cidreq().'&type=course';
+} else {
+    api_protect_admin_script();
+}
 
 $isAgendaRemindersEnabled = api_get_configuration_value('agenda_reminders');
 
@@ -24,13 +34,20 @@ $tagsHelp = '<strong>'.get_lang('Tags').'</strong>'
 $fileHelpText = get_lang('ImportCSVFileLocation').'<br>'
     .Display::url(
         get_lang('ExampleCSVFile'),
-        'importCourseEventsExample.csv',
-        ['target' => '_blank', 'download' => 'importCourseEventsExample.csv']
-    )
-    .'<pre>CourseCode;UserName;StartDate;EndDate
-xxx;xxx;YYYY-MM-DD HH:ii:ss;YYYY-MM-DD HH:ii:ss</pre>';
+        $loadFromCourse ? 'importCourseEventInCourseExample.csv' : 'importCourseEventsExample.csv',
+        [
+            'target' => '_blank',
+            'download' => $loadFromCourse ? 'importCourseEventInCourseExample.csv' : 'importCourseEventsExample.csv',
+        ]
+    );
 
-$form = new FormValidator('agenda_reminders');
+if ($loadFromCourse) {
+    $fileHelpText .= '<pre>UserName;StartDate;EndDate<br>xxx;YYYY-MM-DD HH:ii:ss;YYYY-MM-DD HH:ii:ss</pre>';
+} else {
+    $fileHelpText .= '<pre>CourseCode;UserName;StartDate;EndDate<br>xxx;xxx;YYYY-MM-DD HH:ii:ss;YYYY-MM-DD HH:ii:ss</pre>';
+}
+
+$form = new FormValidator('agenda_reminders', 'post', $selfUrl);
 $form->addHeader(get_lang('CsvImport'));
 $form->addFile(
     'events_file',
@@ -95,22 +112,26 @@ if ($form->validate()) {
     foreach ($csvEvents as $csvEvent) {
         $hashDate = base64_encode($csvEvent['StartDate'].'||'.$csvEvent['EndDate']);
 
-        $courseInfo = api_get_course_info($csvEvent['CourseCode']);
-
-        if (!$courseInfo) {
-            continue;
-        }
-
         $userInfo = api_get_user_info_from_username($csvEvent['UserName']);
 
         if (!$userInfo) {
             continue;
         }
 
-        $grouppedData[$courseInfo['code']][$hashDate][] = $userInfo['id'];
+        if ($loadFromCourse) {
+            $grouppedData[$courseCode][$hashDate][] = $userInfo['id'];
+        } else {
+            $courseInfo = api_get_course_info($csvEvent['CourseCode']);
+
+            if (!$courseInfo) {
+                continue;
+            }
+
+            $grouppedData[$courseInfo['code']][$hashDate][] = $userInfo['id'];
+        }
     }
 
-    foreach ($grouppedData as $courseCode => $eventInfo) {
+    foreach ($grouppedData as $dataCourseCode => $eventInfo) {
         foreach ($eventInfo as $hashDate => $userIdList) {
             $dateRange = base64_decode($hashDate);
             list($dateStart, $dateEnd) = explode('||', $dateRange);
@@ -122,8 +143,8 @@ if ($form->validate()) {
             $strDateEnd = api_format_date($dateEnd, DATE_TIME_FORMAT_LONG_24H);
 
             foreach ($userIdList as $userId) {
-                $title = AnnouncementManager::parseContent($userId, $values['title'], $courseCode);
-                $content = AnnouncementManager::parseContent($userId, $values['description'], $courseCode);
+                $title = AnnouncementManager::parseContent($userId, $values['title'], $dataCourseCode, $sessionId);
+                $content = AnnouncementManager::parseContent($userId, $values['description'], $dataCourseCode, $sessionId);
 
                 $title = str_replace(['((date_start))', '((date_end))'], [$strDateStart, $strDateEnd], $title);
                 $content = str_replace(['((date_start))', '((date_end))'], [$strDateStart, $strDateEnd], $content);
@@ -153,7 +174,7 @@ if ($form->validate()) {
         Display::return_message(get_lang('FileImported'), 'success')
     );
 
-    header('Location: '.api_get_self());
+    header("Location: $selfUrl");
     exit;
 }
 
@@ -170,9 +191,22 @@ $htmlHeadXtra[] = '<script>$(function () {'
 
 $pageTitle = get_lang('ImportCourseEvents');
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$actions = '';
+
+if (!$loadFromCourse) {
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+} else {
+    $interbreadcrumb[] = [
+        "url" => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq(),
+        "name" => get_lang('Agenda'),
+    ];
+
+    $agenda = new Agenda('course');
+    $actions = $agenda->displayActions('calendar');
+}
 
 $template = new Template($pageTitle);
 $template->assign('header', $pageTitle);
+$template->assign('actions', $actions);
 $template->assign('content', $form->returnForm());
 $template->display_one_col_template();

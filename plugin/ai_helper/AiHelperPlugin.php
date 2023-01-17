@@ -15,7 +15,7 @@ class AiHelperPlugin extends Plugin
         $version = '1.0';
         $author = 'Christian Beeznest';
 
-        $message = Display::return_message($this->get_lang('Description'));
+        $message = 'Description';
 
         $settings = [
             $message => 'html',
@@ -39,7 +39,7 @@ class AiHelperPlugin extends Plugin
     public function getApiList()
     {
         $list = [
-            self::OPENAI_API => $this->get_lang('OpenAi'),
+            self::OPENAI_API => 'OpenAI',
         ];
 
         return $list;

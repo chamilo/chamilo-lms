@@ -60,9 +60,9 @@ function generateAikenForm()
         null,
     );
     $form->addElement('header', get_lang('AIQuestionsGenerator'));
-    $form->addElement('text', 'quiz_name', get_lang('Topic'));
+    $form->addElement('text', 'quiz_name', [get_lang('QuestionsTopic'),get_lang('QuestionsTopicHelp')]);
     $form->addRule('quiz_name', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('number', 'nro_questions', get_lang('NumberOfQuestions'));
+    $form->addElement('number', 'nro_questions', [get_lang('NumberOfQuestions'), get_lang('AIQuestionsGeneratorNumberHelper')]);
     $form->addRule('nro_questions', get_lang('ThisFieldIsRequired'), 'required');
 
     $options = [

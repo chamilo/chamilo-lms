@@ -444,7 +444,6 @@ if (!empty($_GET['category'])) {
     switch ($_GET['category']) {
         case 'Regions':
             handleRegions();
-            $flushSettings = true;
             break;
         case 'Plugins':
             // Displaying the extensions: Plugins.
@@ -509,7 +508,6 @@ if (!empty($_GET['category'])) {
             break;
         case 'Templates':
             handleTemplates();
-            $flushSettings = true;
             break;
         case 'search_setting':
             if (isset($_REQUEST['search_field'])) {

@@ -36,6 +36,7 @@ function handleRegions()
             api_get_utc_datetime(),
             $user_id
         );
+        api_flush_settings_cache(api_get_current_access_url_id());
         echo Display::return_message(get_lang('SettingsStored'), 'confirmation');
     }
 
@@ -1561,6 +1562,7 @@ function addEditTemplate()
                 echo Display::return_message(get_lang('TemplateEdited'), 'confirm');
             }
         }
+        api_flush_settings_cache(api_get_current_access_url_id());
         Security::clear_token('frm');
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Templates');
         exit;

@@ -8904,4 +8904,12 @@ $RepeatXDays = "Tous les x jours";
 $NumberOfDays = "Nombre de jours";
 $WriteAComment = "Faire un commentaire";
 $ProvideACommentFirst = "Veuillez d'abord écrire un commentaire";
+$QuizFinalizationDate = "Dernière date de fin d'un exercice";
+$LpFinalizationDate = "Dernière date de fin d'un parcours";
+$OnlyThoseThatCorrespondToAllTheSelectedCategories = "Doit être dans TOUTES les catégories sélectionnées";
+$reportByAttempts = "Rapport par tentative";
+$QuestionsTopic = "Sujet des questions";
+$QuestionsTopicHelp = "Le sujet des questions sera utilisé à la fois comme titre de l'exercice créé et comme requête envoyée au générateur de questions par Intelligence Artificielle (IA) pour qu'il génère des questions sur ce sujet dans la langue configurée de ce cours. Vous pourrez réviser ces propositions de questions ci-dessous avant de les importer.";
+$AIQuestionsGenerator = "Générateur de questions par IA";
+$AIQuestionsGeneratorNumberHelper = "La plupart des générateurs basés sur l'IA limitent le nombre de caractères qu'ils peuvent renvoyer, et votre organisation sera souvent facturée sur base du nombre de caractères renvoyés. Utilisez donc cette fonctionnalité avec modération, en demandant d'abord de petits nombres de questions, puis en augmentant quand vous commencer à prendre confiance. Un bon nombre de départ est de 3 questions.";
 ?>

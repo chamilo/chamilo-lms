@@ -3084,7 +3084,7 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * @param array $coupon Array with at least 'discount_type' and 'discount_amount' elements
+     * @param array|null $coupon Array with at least 'discount_type' and 'discount_amount' elements
      */
     public function setPriceSettings(array &$product, int $productType, array $coupon = null): bool
     {

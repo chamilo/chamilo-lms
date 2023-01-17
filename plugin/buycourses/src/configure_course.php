@@ -40,6 +40,7 @@ if (empty($currency)) {
     Display::addFlash(
         Display::return_message($plugin->get_lang('CurrencyIsNotConfigured'), 'error')
     );
+    $currency = null;
 }
 
 $currencyIso = null;
@@ -69,30 +70,44 @@ if ($editingCourse) {
         $defaultBeneficiaries[] = $teacher->getId();
     }
 
-    $currentBeneficiaries = $plugin->getItemBeneficiaries($courseItem['item_id']);
-    if (!empty($currentBeneficiaries)) {
-        $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
-        if ($commissionsEnable === 'true') {
-            $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
-            foreach ($defaultCommissions as $defaultCommission) {
-                $commissions .= $defaultCommission.',';
+    if (!empty($courseItem['item_id'])) {
+        $currentBeneficiaries = $plugin->getItemBeneficiaries($courseItem['course_id']);
+        if (!empty($currentBeneficiaries)) {
+            $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
+            if ($commissionsEnable === 'true') {
+                $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
+                foreach ($defaultCommissions as $defaultCommission) {
+                    $commissions .= $defaultCommission.',';
+                }
+                $commissions = substr($commissions, 0, -1);
             }
-            $commissions = substr($commissions, 0, -1);
         }
-    }
 
-    $currencyIso = $courseItem['currency'];
-    $formDefaults = [
-        'product_type' => get_lang('Course'),
-        'id' => $courseItem['course_id'],
-        'type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
-        'name' => $courseItem['course_title'],
-        'visible' => $courseItem['visible'],
-        'price' => $courseItem['price'],
-        'tax_perc' => $courseItem['tax_perc'],
-        'beneficiaries' => $defaultBeneficiaries,
-        $commissionsEnable == 'true' ? 'commissions' : '' => $commissionsEnable == 'true' ? $commissions : '',
-    ];
+        $currencyIso = $courseItem['currency'];
+        $formDefaults = [
+            'product_type' => get_lang('Course'),
+            'id' => $courseItem['course_id'],
+            'type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
+            'name' => $courseItem['course_title'],
+            'visible' => $courseItem['visible'],
+            'price' => $courseItem['price'],
+            'tax_perc' => $courseItem['tax_perc'],
+            'beneficiaries' => $defaultBeneficiaries,
+            $commissionsEnable == 'true' ? 'commissions' : '' => $commissionsEnable == 'true' ? $commissions : '',
+        ];
+    } else {
+        $formDefaults = [
+            'product_type' => get_lang('Course'),
+            'id' => $courseItem['course_id'],
+            'type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
+            'name' => $courseItem['course_title'],
+            'visible' => false,
+            'price' => 0,
+            'tax_perc' => 0,
+            'beneficiaries' => [],
+            $commissionsEnable == 'true' ? 'commissions' : '' => $commissionsEnable == 'true' ? '' : '',
+        ];
+    }
 } elseif ($editingSession) {
     if (!$includeSession) {
         api_not_allowed(true);
@@ -175,7 +190,7 @@ if ($commissionsEnable === 'true') {
                 } else {
                     showSliders(100, 'default', '".$commissions."');
                 }
-                
+
                 var maxPercentage = 100;
                 $('#selectBox').on('change', function() {
                     $('#panelSliders').html('');

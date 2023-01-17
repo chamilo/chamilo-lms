@@ -190,7 +190,7 @@ $frequencyForm->addHidden('tax_perc', $taxtPerc);
 $frequencyForm->addHidden('currency_id', $currency['id']);
 $frequencyForm->addButtonCreate('Add');
 
-for ($i = 0; $i <= count($subscriptions); $i++) {
+for ($i = 0; $i < count($subscriptions); $i++) {
     if ($subscriptions[$i]['duration'] > 0) {
         $subscriptions[$i]['durationName'] = $frequenciesOptions[$subscriptions[$i]['duration']];
     }

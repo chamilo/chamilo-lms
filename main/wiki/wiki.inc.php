@@ -1377,9 +1377,10 @@ class Wiki
             );
         }
 
-        echo Display::toolbarAction(
+        $contentHtml = Display::toolbarAction(
             'toolbar-wikistudent',
-            [$actionsLeft, $actionsRight]
+            [$actionsLeft, $actionsRight],
+            [3, 9]
         );
 
         $pageWiki = self::detect_news_link($content);
@@ -1403,7 +1404,9 @@ class Wiki
 
         $footerWiki .= '</ul>';
         // wikicontent require to print wiki document
-        echo '<div id="wikicontent">'.Display::panel($pageWiki, $pageTitle, $footerWiki).'</div>'; //end filter visibility
+        $contentHtml .= '<div id="wikicontent">'.Display::panel($pageWiki, $pageTitle, $footerWiki).'</div>'; //end filter visibility
+
+        $this->renderShowPage($contentHtml);
     }
 
     /**
@@ -4888,16 +4891,23 @@ class Wiki
             // initiate the object
             $form = new FormValidator(
                 'wiki_search',
-                'post',
+                'get',
                 $this->url.'&'.http_build_query(['action' => api_htmlentities($action), 'mode_table' => 'yes1'])
             );
+
+            $form->addHidden('cidReq', $this->courseCode);
+            $form->addHidden('id_session', $this->session_id);
+            $form->addHidden('gidReq', $this->group_id);
+            $form->addHidden('gradebook', '0');
+            $form->addHidden('origin', '');
+            $form->addHidden('action', 'searchpages');
 
             // Setting the form elements
 
             $form->addText(
                 'search_term',
                 get_lang('SearchTerm'),
-                true,
+                false,
                 ['autofocus' => 'autofocus']
             );
             $form->addCheckBox('search_content', '', get_lang('AlsoSearchContent'));
@@ -4939,8 +4949,8 @@ class Wiki
                 $values = $form->exportValues();
                 $this->display_wiki_search_results(
                     $values['search_term'],
-                    (int) $values['search_content'],
-                    (int) $values['all_vers'],
+                    (int) ($values['search_content'] ?? ''),
+                    (int) ($values['all_vers'] ?? ''),
                     $values['categories'] ?? [],
                     !empty($values['match_all_categories'])
                 );
@@ -5890,7 +5900,20 @@ class Wiki
         // menu recent changes
         $actionsLeft .= '<a href="'.$this->url.'&action=recentchanges" '.self::is_active_navigation_tab('recentchanges').'>'
             .Display::return_icon('history.png', get_lang('RecentChanges'), [], ICON_SIZE_MEDIUM).'</a>';
-        echo Display::toolbarAction('toolbar-wiki', [$actionsLeft]);
+
+        $frmSearch = new FormValidator('wiki_search', 'get', '', '', [], FormValidator::LAYOUT_INLINE);
+        $frmSearch->addText('search_term', get_lang('SearchTerm'), false);
+        $frmSearch->addHidden('cidReq', $this->courseCode);
+        $frmSearch->addHidden('id_session', $this->session_id);
+        $frmSearch->addHidden('gidReq', $this->group_id);
+        $frmSearch->addHidden('gradebook', '0');
+        $frmSearch->addHidden('origin', '');
+        $frmSearch->addHidden('action', 'searchpages');
+        $frmSearch->addButtonSearch(get_lang('Search'));
+
+        $actionsRight = $frmSearch->returnForm();
+
+        echo Display::toolbarAction('toolbar-wiki', [$actionsLeft, $actionsRight]);
     }
 
     /**
@@ -6856,15 +6879,94 @@ class Wiki
         return false;
     }
 
+    private function renderShowPage(string $contentHtml)
+    {
+        $wikiCategoriesEnabled = api_get_configuration_value('wiki_categories_enabled');
+
+        if ($wikiCategoriesEnabled) {
+            $em = Database::getManager();
+            $categoryRepo = $em->getRepository(CWikiCategory::class);
+
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+
+            $count = $categoryRepo->countByCourse($course, $session);
+            $tree = get_lang('NoCategories');
+
+            if ($count) {
+                $tree = $categoryRepo->buildCourseTree(
+                    $course,
+                    $session,
+                    [
+                        'decorate' => true,
+                        'rootOpen' => '<ul class="fa-ul">',
+                        'nodeDecorator' => function ($node) {
+                            $prefix = '<span aria-hidden="true" class="fa fa-li fa-angle-right text-muted"></span>';
+
+                            $urlParams = [
+                                'search_term' => '',
+                                'SubmitWikiSearch' => '',
+                                '_qf__wiki_search' => '',
+                                'action' => 'searchpages',
+                                'categories' => ['' => $node['id']],
+                            ];
+
+                            return Display::url(
+                                $prefix.$node['name'],
+                                $this->url.'&'.http_build_query($urlParams)
+                            );
+                        },
+                    ]
+                );
+            }
+
+            echo '<div class="row">';
+            echo '<aside class="col-sm-3">';
+            echo $count > 0 ? '<h4>'.get_lang('Categories').'</h4>' : '';
+            echo $tree;
+            echo "</aside>"; // .col-sm-3
+            echo '<div class="col-sm-9">';
+        }
+
+        echo $contentHtml;
+
+        if ($wikiCategoriesEnabled) {
+            echo "</div>"; // .col-sm-9
+            echo "</div>"; // .row
+        }
+    }
+
     private function returnCategoriesBlock(int $wikiId, string $tagStart = '<div>', string $tagEnd = '</div>'): string
     {
         if (true !== api_get_configuration_value('wiki_categories_enabled') || empty($wikiId)) {
             return '';
         }
 
-        $wiki = Database::getManager()->find(CWiki::class, $wikiId);
+        try {
+            $wiki = Database::getManager()->find(CWiki::class, $wikiId);
+        } catch (Exception $e) {
+            return '';
+        }
 
-        return $tagStart.implode(', ', $wiki->getCategories()->getValues()).$tagEnd;
+        $categoryLinks = array_map(
+            function (CWikiCategory $category) {
+                $urlParams = [
+                    'search_term' => isset($_GET['search_term']) ? Security::remove_XSS($_GET['search_term']) : '',
+                    'SubmitWikiSearch' => '',
+                    '_qf__wiki_search' => '',
+                    'action' => 'searchpages',
+                    'categories' => ['' => $category->getId()],
+                ];
+
+                return Display::url(
+                    $category->getName(),
+                    $this->url.'&'.http_build_query($urlParams)
+                );
+            },
+            $wiki->getCategories()->getValues()
+        );
+
+        return $tagStart.implode(', ', $categoryLinks).$tagEnd;
     }
 
     private function gelAllPagesQuery(

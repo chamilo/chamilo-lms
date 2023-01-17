@@ -17,7 +17,7 @@ class CWikiCategoryRepository extends NestedTreeRepository
 
     public function countByCourse(Course $course, ?Session $session): int
     {
-        return $this->count(['couse' => $course, 'session' => $session]);
+        return $this->count(['course' => $course, 'session' => $session]);
     }
 
     /**

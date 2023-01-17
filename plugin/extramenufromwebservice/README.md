@@ -7,6 +7,4 @@ This plugin adds a little menu with data provided by external webservice.
 To install, enable the plugin, then go to "Regions" in the administration panel
 and add the region "header right" to the plugin. Save.
 The plugin should appear as a menu in the upper-right side of the Chamilo portal header.
-This plugin requires the installation of the php-curl extension.
-
-## Migrating from a non-official version
+This plugin requires the php-curl extension to be installed and enabled (a standard Chamilo requirement anyway).

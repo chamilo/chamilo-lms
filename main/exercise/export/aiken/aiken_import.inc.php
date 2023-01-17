@@ -60,7 +60,7 @@ function generateAikenForm()
         null,
     );
     $form->addElement('header', get_lang('AIQuestionsGenerator'));
-    $form->addElement('text', 'quiz_name', [get_lang('QuestionsTopic'),get_lang('QuestionsTopicHelp')]);
+    $form->addElement('text', 'quiz_name', [get_lang('QuestionsTopic'), get_lang('QuestionsTopicHelp')]);
     $form->addRule('quiz_name', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('number', 'nro_questions', [get_lang('NumberOfQuestions'), get_lang('AIQuestionsGeneratorNumberHelper')]);
     $form->addRule('nro_questions', get_lang('ThisFieldIsRequired'), 'required');
@@ -208,7 +208,7 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
  * Main function to import the Aiken exercise.
  *
  * @param string $file
- * @param array $request
+ * @param array  $request
  *
  * @return mixed True on success, error message on failure
  */

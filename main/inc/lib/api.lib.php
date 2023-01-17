@@ -10415,8 +10415,9 @@ function api_calculate_increment_percent(int $newValue, int $oldValue)
 }
 
 /**
- * Erase settings from cache (because of some update) if applicable
- * @param   int $url_id The ID of the present URL
+ * Erase settings from cache (because of some update) if applicable.
+ *
+ * @param int $url_id The ID of the present URL
  */
 function api_flush_settings_cache(int $url_id): bool
 {

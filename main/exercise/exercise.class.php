@@ -8312,27 +8312,11 @@ class Exercise
      */
     public function get_max_score()
     {
-        $out_max_score = 0;
+        $outMaxScore = 0;
         // list of question's id !!! the array key start at 1 !!!
         $questionList = $this->selectQuestionList(true);
 
-        // test is randomQuestions - see field random of test
-        if ($this->random > 0 && 0 == $this->randomByCat) {
-            $numberRandomQuestions = $this->random;
-            $questionScoreList = [];
-            foreach ($questionList as $questionId) {
-                $tmpobj_question = Question::read($questionId);
-                if (is_object($tmpobj_question)) {
-                    $questionScoreList[] = $tmpobj_question->weighting;
-                }
-            }
-
-            rsort($questionScoreList);
-            // add the first $numberRandomQuestions value of score array to get max_score
-            for ($i = 0; $i < min($numberRandomQuestions, count($questionScoreList)); $i++) {
-                $out_max_score += $questionScoreList[$i];
-            }
-        } elseif ($this->random > 0 && $this->randomByCat > 0) {
+        if ($this->random > 0 && $this->randomByCat > 0) {
             // test is random by category
             // get the $numberRandomQuestions best score question of each category
             $numberRandomQuestions = $this->random;
@@ -8352,18 +8336,18 @@ class Exercise
             foreach ($tab_categories_scores as $tab_scores) {
                 rsort($tab_scores);
                 for ($i = 0; $i < min($numberRandomQuestions, count($tab_scores)); $i++) {
-                    $out_max_score += $tab_scores[$i];
+                    $outMaxScore += $tab_scores[$i];
                 }
             }
         } else {
             // standard test, just add each question score
             foreach ($questionList as $questionId) {
                 $question = Question::read($questionId, $this->course);
-                $out_max_score += $question->weighting;
+                $outMaxScore += $question->weighting;
             }
         }
 
-        return $out_max_score;
+        return $outMaxScore;
     }
 
     /**

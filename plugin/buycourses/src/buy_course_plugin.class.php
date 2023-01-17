@@ -3850,7 +3850,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return bool
      */
-    public function addNewCoupon(int $coupon)
+    public function addNewCoupon(array $coupon): bool
     {
         $couponId = $this->registerCoupon($coupon);
         if ($couponId) {

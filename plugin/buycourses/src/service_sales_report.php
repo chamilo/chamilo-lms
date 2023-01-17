@@ -34,7 +34,7 @@ $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses, ['co
 $form->addText('user', get_lang('User'), false, ['cols-size' => [0, 0, 0]]);
 $form->addButtonSearch(get_lang('Search'), 'search');
 
-$servicesSales = $plugin->getServiceSales(null, $selectedStatus);
+$servicesSales = $plugin->getServiceSales(0, $selectedStatus);
 
 foreach ($servicesSales as &$sale) {
     if (isset($sale['discount_amount']) && $sale['discount_amount'] != 0) {

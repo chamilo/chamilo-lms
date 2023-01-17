@@ -13,7 +13,7 @@ class AiHelperPlugin extends Plugin
     protected function __construct()
     {
         $version = '1.0';
-        $author = 'Christian Beeznest';
+        $author = 'Christian Fasanando';
 
         $message = 'Description';
 

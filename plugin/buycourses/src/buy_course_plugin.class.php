@@ -79,7 +79,7 @@ class BuyCoursesPlugin extends Plugin
     public const COUPON_STATUS_ACTIVE = 1;
     public const COUPON_STATUS_DISABLE = 0;
 
-    public $isAdminPlugin = true;
+    public $isAdminPlugin = false;
 
     /**
      * BuyCoursesPlugin constructor.
@@ -866,7 +866,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param int   $productId The item ID
      * @param int   $itemType  The item type
-     * @param array $coupon
+     * @param array|null $coupon
      *
      * @return array
      */

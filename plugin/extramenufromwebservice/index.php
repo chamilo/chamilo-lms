@@ -76,7 +76,7 @@ if (!api_is_anonymous()) {
                 );
             }
 
-            $fh = '<div class="navFromWebservice">';
+            $fh = '<div class="nav-from-webservice">';
 
             if (isset($cssListToImport)) {
                 foreach ($cssListToImport as $cssUrl) {

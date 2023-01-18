@@ -89,12 +89,17 @@
     specific feature has been made available in Chamilo. If you would like a
     shorter, more visual, list of features or a list of overall features,
     please check our version releases announcements on our website:
-    <a href="http://www.chamilo.org/">http://www.chamilo.org/</a></p>
-<p><i>Note: most #wxyz references are issue numbers you can find in
-    <a href="http://support.chamilo.org/projects/chamilo-18/issues"
+    <a href="http://www.chamilo.org/">http://www.chamilo.org/</a>. You can
+    also find a list of official providers of services on the same website if,
+    for any reason, you are stuck with an upgrade or want a professional team
+    to help you out accelerate your adoption of Chamilo. These providers all
+    contribute regularly to Chamilo, so you're supporting the project indirectly
+    by asking them for paid support.</p>
+<p><i>Note: Some #wxyz references are issue numbers you can either find
+    <a href="https://github.com/chamilo/chamilo-lms/issues">on Github</a> or (for very old ones) on
+    <a href="https://support.chamilo.org/projects/chamilo-18/issues"
        target="_blank">our previous public bug tracking system (in which case
-    they will be prefixed by the marker "CT")</a> or
-    <a href="https://github.com/chamilo/chamilo-lms/issues">on Github</a>.
+    they will be prefixed by the marker "CT")</a>.
     <br />
     Some references marked BT#xyz are developments made externally for BeezNest
     customers and integrated into Chamilo. The details of these tasks cannot
@@ -108,11 +113,12 @@
     <div class="version" aria-label="1.11.18">
         <a id="1.11.18"></a>
 
-        <h1>Chamilo 1.11.18 -  [TBD], 18/01/2023</h1>
+        <h1>Chamilo 1.11.18 - Grünheide, 18/01/2023</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.18 is a minor security and bug fix release on top of 1.11.16.</p>
         <h3>Release name</h3>
-        <p>To be defined</p>
+        <p><a href="https://de.wikipedia.org/wiki/Gr%C3%BCnheide_(Mark)">Grünheide</a> is a small municipality in the neighborhood of Berlin, Germany.
+We feel it shares significance with this Chamilo version because, as we are preparing for a gigantic jump forward in development as we are nearing the release of the Chamilo 2.0 version, it is also the chosen site for an infamous electric automaker to lay foundations of their massive European factory, which will highly contribute to make our civilisation jump out of the fossil fuel era and into era of shared prosperity, as we believe Chamilo 2.0 (and subsequent versions) will massively increase the potential for Open Source software to help develop equalitarian education for all.</p>
         <h3>Security fixes</h3>
         Many vulnerabilities (more than in any previous version) have been reported to us (see <a href="https://support.chamilo.org/projects/1/wiki/Security_issues">our security page</a>) and swiflty and safely fixed. Thanks to all white hat hackers for helping us out (see their nicknames on the page).<br />
         We actively encourage all Chamilo administrators to update their system to this version as soon as possible.
@@ -125,7 +131,6 @@
             <li>[2022-10-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/c24824fb2d1693259f198f1de3180c7df3ccb87b">c24824fb</a> - <a href="https://task.beeznest.com/issues/20231">BT#20231</a>) Webservice: Add security checks to admin-type-impact webservices + improve PHPDoc</li>
             <li>[2022-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/37b205d258070fc983f87e8496497baec1ef3517">37b205d2</a> - <a href="https://task.beeznest.com/issues/20295">BT#20295</a>) Security: Add forbidden access to .yml and .yml.dist in .htaccess</li>
             <li>[2022-12-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/3c5b82bc8acd858838100f6d8395c9f59b2af0d9">3c5b82bc</a>) Security: Multiple URL: Fix vulnerability whereby a user could access a session was assigned to another campus in which the user was not registered</li>
-        <ul>
         </ul>
 
         <h3>Notable new Features</h3>
@@ -134,8 +139,9 @@
         A few notable improvements are part of 1.11.18 which are split in many smaller improvements are listed first below.
         They might require complex activation processes, but they are available and of potentially great usefulness:
         <ul aria-live="off">
-        <li>
+        <li>Highlights:
         <ul>
+            <li>Assisted generation of exam questions by artificial intelligence systems (ChatGPT in this first iteration)</li>
             <li>Comments, absence types, durations and signatures in attendances</li>
             <li>Portfolio tool to be completed by students as evidence of their development</li>
             <li>Wiki page categories</li>
@@ -197,6 +203,9 @@
             <li>[2022-12-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/a173fe8c6d0b08c3d94a8ae2ade01386a770e21f">a173fe8c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4139">GH#4139</a>) Plugin: BigBlueButton: Adding meta information for the host</li>
             <li>[2022-12-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/b9f71455b0adbf22ef546fafeb5cc11ad1a8246d">b9f71455</a> - <a href="https://task.beeznest.com/issues/20366">BT#20366</a>) Exercise: Add report of exercise attempts ("Report by attempts") with questions score as exercise/stats_attempts.php</li>
             <li>[2022-12-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/e25066ac466e8af3dfc61627e16da38049965c2a">e25066ac</a> - <a href="https://task.beeznest.com/issues/20443">BT#20443</a>) Plugin: External notification connect: Creation</li>
+            <li>[2023-01-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/13c12a4fabc171a07e306a2470592725ba3a524b">13c12a4f</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4534">GH#4534</a>) Plugin: Add new AI Helper plugin (ChatGPT only for now) for questions generation</li>
+            <li>[2023-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/60d486f9aa6c40adc51ec0c07b1cde3988aa4e10">60d486f9</a>) Wiki: Add category block + link to search by category - refs BT20357</li>
+            <li>[2023-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/84350f397ce900a5a57567d688f0dc0dd52a8737">84350f39</a> - <a href="https://task.beeznest.com/issues/20442">BT#20442</a>) Plugin: ExtraMenuFromWebservice: Add an extra floating menu from a webservice</li>
         </ul>
         <h4>For developers and sysadmins</h4>
         Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
@@ -304,6 +313,25 @@
         </ul>
 <h3>Improvements (minor features) and debug</h3>
         <ul aria-live="off">
+            <li>[2023-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/33658ffa24cd6918e13886aac9db3a66f2b5bef2">33658ffa</a> - <a href="https://task.beeznest.com/issues/20488">BT#20488</a>) Plagiarism: Compilatio: fix batch compilatio verification</li>
+            <li>[2023-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/41bbb7ff45bf35e336e9f547b32723fc5a9e7897">41bbb7ff</a> - <a href="https://task.beeznest.com/issues/20356">BT#20356</a>) Session: add session_name tag for agenda reminder creacion</li>
+            <li>[2023-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/2dc0a1f4e285442dc3144d389ad162fb63fe075b">2dc0a1f4</a>) Plugin: Add Shibboleth login button: Remove readme.txt + improve documentation</li>
+            <li>[2023-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/acecfc4108378391d7c95b52bee9117304243676">acecfc41</a>) Internal: Improve APCu cache invalidation process</li>
+            <li>[2023-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/b3807cb25f8e64f5df92e1e3a435227de11d272b">b3807cb2</a> - <a href="https://task.beeznest.com/issues/20356">BT#20356</a>) Session: Allow import course agenda reminders for session students</li>
+            <li>[2023-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/b7f817368c5c083aec2184483ee1fa5afcd22206">b7f81736</a> - <a href="https://task.beeznest.com/issues/20356">BT#20356</a>) Calendar: Allow teachers/coaches to import course agenda reminders</li>
+            <li>[2023-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/1a41e322e31c50b74381065d4456a674c851681e">1a41e322</a>) Plugin: AI Helper: Finetuning documentation and query before release</li>
+            <li>[2023-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/93cab617580fbae02133c3a85c91032d93955d86">93cab617</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3612">GH#3612</a>) Learnpath: Fix prerequisite on test with random questions shows wrong maximum</li>
+            <li>[2023-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe8267af6df7a6567930005e8128542f8ceb5698">fe8267af</a>) Plugin: BuyCourses: Fix errors due to recent parameter types introduction</li>
+            <li>[2023-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/9a70ef66e52be5833a9dfbba8395a8d04be544ea">9a70ef66</a>) Plugin: BuyCourses: Remove isAdminPlugin property and extend allowed param type in getItemByProduct()</li>
+            <li>[2023-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/82e0562bfdb492d33996c97ce267031b0c9e6909">82e0562b</a>) Plugin: BuyCourses: Add information in README to avoid enabling in regions (which give blank pages)</li>
+            <li>[2023-01-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/4caa233d2ca54218de76cdde1b3e6a5701abefb0">4caa233d</a> - <a href="https://task.beeznest.com/issues/20363">BT#20363</a>) Attendance: Add author of the comment</li>
+            <li>[2023-01-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe97b2dd72dc25c9064a1a0a5a916503a4cf65a4">fe97b2dd</a> - <a href="https://task.beeznest.com/issues/20482">BT#20482</a>) System: fix synchronisation script to get configuration values per URL after modification in commit f6c7cd25c79</li>
+            <li>[2023-01-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/5c6281ebf39a3a810c6a567ac4022cd9e67111bb">5c6281eb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4405">GH#4405</a>) Internal: Add APCu cache cleaning triggers. Complements commit b5d44b38.</li>
+            <li>[2023-01-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed4382a7a4a1986807930219f9c2d9d73d05242d">ed4382a7</a> - <a href="https://task.beeznest.com/issues/20443">BT#20443</a>) Plugin: externalnotificationconnect add french translation</li>
+            <li>[2023-01-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/66779f9529b2c1e429932e07920a6eea0dec98d5">66779f95</a>) Plugin: BuyCourses: Fix parameter type to allow for null values</li>
+            <li>[2023-01-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/2997989df966bda6d821a0a346ddcb844fb43201">2997989d</a> - <a href="https://task.beeznest.com/issues/20443">BT#20443</a>) Plugin: externalnotificationconnect: adding information to the README file</li>
+            <li>[2023-01-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/7f58bfbc039540a6003cdfddcb1f3c7ae2881fc1">7f58bfbc</a> - <a href="https://task.beeznest.com/issues/20357">BT#20357</a>) Wiki: Fix search params in results pagination</li>
+            <li>[2023-01-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/31eff37739d33c6419f49dd2fe23289e221db1a3">31eff377</a> - <a href="https://task.beeznest.com/issues/20357">BT#20357</a>) Allow set multi array as additional params to sortable table</li>
             <li>[2023-01-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed5937346a9e54ffdffd4b51dc668d23e9637e0f">ed593734</a> - <a href="https://task.beeznest.com/issues/20357">BT#20357</a>) Wiki: Fix URL params with cidReq</li>
             <li>[2023-01-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/6591c8c09a9dfe2526444eae403120a92596cd47">6591c8c0</a> - <a href="https://task.beeznest.com/issues/20060">BT#20060</a>) Maintenance: Course import: Improve links imported from Moodle</li>
             <li>[2023-01-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/f6c7cd25c7933d4c495fd7d460c041b11bdc6421">f6c7cd25</a>) Admin: Add validation for multi-URLs with undefined settings in api_get_configuration_value(). Fix setting a default view for the administrative session list on one site of a multi-URL environment could break the list on the other sites Author: @juan-cortizas-ponte</li>
@@ -1093,6 +1121,7 @@
         <h3>Stylesheets and theming</h3>
         <ul aria-live="off">
             <li>[2022-10-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/9f5ac6e347dd566a869d5d78ef2266af04dcd3ef">9f5ac6e3</a>) Display: Fix banner image display for various themes and minors visual fixes for this</li>
+            <li>[2023-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/03c7b4750ab99cb5680a34b28dfed0602f421387">03c7b475</a> - <a href="https://task.beeznest.com/issues/20362">BT#20362</a>) Learnpath: Change icon and help text for final item</li>
         </ul>
         <h3>Web services</h3>
         <ul aria-live="off">

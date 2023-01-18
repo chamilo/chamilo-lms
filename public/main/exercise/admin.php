@@ -207,7 +207,7 @@ if (!empty($clone_question) && !empty($objExercise->getId())) {
 
     // Save category to the destination course
     if (!empty($old_question_obj->category)) {
-        $new_question_obj->saveCategory($old_question_obj->category, api_get_course_int_id());
+        $new_question_obj->saveCategory($old_question_obj->category);
     }
 
     // This should be moved to the duplicate function

@@ -21,7 +21,7 @@ if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
     $docs = explode('a', $_REQUEST['doc']);
     for ($k = 0; $k < count($docs) - 1; $k++) {
         $documentId = 0;
-        if (!isset($docs[$k])) {
+        if (isset($docs[$k])) {
             $documentId = (int) $docs[$k];
         }
 

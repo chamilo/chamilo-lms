@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
-$strings['plugin_title'] = 'IMS/LTI';
-$strings['plugin_comment'] = 'IMS/LTI';
+$strings['plugin_title'] = 'Cliente IMS/LTI';
+$strings['plugin_comment'] = 'Añade el soporte de actividades IMS/LTI donde Chamilo actua como cliente.';
 
 $strings['enabled'] = 'Activado';
 $strings['client_id'] = 'ID cliente';

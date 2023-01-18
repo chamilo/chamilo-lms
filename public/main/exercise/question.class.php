@@ -404,6 +404,7 @@ abstract class Question
                 }
             }
         }
+
         return true;
     }
 

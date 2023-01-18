@@ -3,7 +3,7 @@
 
 $strings['plugin_title'] = "SEPE manager";
 $strings['sepe_enable'] = "SEPE enable";
-$strings['plugin_comment'] = "Configuration of the formative actions of SEPE.";
+$strings['plugin_comment'] = "Configuration of the formative actions of SEPE (from the Spanish ministry of labour).";
 $strings['Options'] = "Options";
 $strings['Setting'] = "Setting";
 $strings['sepe_url'] = "URL SEPE";

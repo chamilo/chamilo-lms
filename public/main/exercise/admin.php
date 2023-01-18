@@ -67,7 +67,7 @@ $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
 $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
 $modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
 $deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
-$clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
+$cloneQuestion = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
 if (empty($questionId)) {
     $questionId = Session::read('questionId');
 }
@@ -197,8 +197,8 @@ if ($cancelQuestion) {
     }
 }
 
-if (!empty($clone_question) && !empty($objExercise->getId())) {
-    $oldQuestionObj = Question::read($clone_question);
+if (!empty($cloneQuestion) && !empty($objExercise->getId())) {
+    $oldQuestionObj = Question::read($cloneQuestion);
     $oldQuestionObj->question = $oldQuestionObj->question.' - '.get_lang('Copy');
 
     $newId = $oldQuestionObj->duplicate(api_get_course_info());
@@ -211,9 +211,9 @@ if (!empty($clone_question) && !empty($objExercise->getId())) {
     }
 
     // This should be moved to the duplicate function
-    $new_answer_obj = new Answer($clone_question);
-    $new_answer_obj->read();
-    $new_answer_obj->duplicate($newQuestionObj);
+    $newAnswerObj = new Answer($cloneQuestion);
+    $newAnswerObj->read();
+    $newAnswerObj->duplicate($newQuestionObj);
 
     // Reloading tne $objExercise obj
     $objExercise->read($objExercise->getId(), false);

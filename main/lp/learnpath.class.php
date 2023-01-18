@@ -6344,7 +6344,7 @@ class learnpath
                     $icon = Display::return_icon('lp_'.$icon_name.'.gif');
                 } else {
                     if ($arrLP[$i]['item_type'] === TOOL_LP_FINAL_ITEM) {
-                        $icon = Display::return_icon('certificate.png');
+                        $icon = Display::return_icon('flag_checkered.png');
                     } elseif (TOOL_XAPI === $arrLP[$i]['item_type']) {
                         $icon = Display::return_icon('import_scorm.png');
                     } elseif (TOOL_SURVEY === $arrLP[$i]['item_type']) {
@@ -7714,7 +7714,7 @@ class learnpath
             $items[] = $xApiPlugin->getLpResourceBlock($this->lp_id);
         }
 
-        $headers[] = Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG);
+        $headers[] = Display::return_icon('flag_checkered.png', get_lang('Certificate'), [], ICON_SIZE_BIG);
         $items[] = $finish;
 
         echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
@@ -13493,13 +13493,6 @@ EOD;
         $form = new FormValidator('final_item', 'POST', $url);
         $form->addText('title', get_lang('Title'));
         $form->addButtonSave($buttonText);
-        $form->addHtml(
-            Display::return_message(
-                'Variables :</br></br> <b>((certificate))</b> </br> <b>((skill))</b>',
-                'normal',
-                false
-            )
-        );
 
         $renderer = $form->defaultRenderer();
         $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp_certificate');
@@ -13511,6 +13504,13 @@ EOD;
             false,
             $editorConfig,
             true
+        );
+        $form->addHtml(
+            Display::return_message(
+                get_lang('LPEndStepAddTagsToShowCertificateOrSkillAutomatically') . '</br></br> <b>((certificate))</b> </br> <b>((skill))</b>',
+                'normal',
+                false
+            )
         );
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));

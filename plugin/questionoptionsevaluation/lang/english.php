@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = 'Question options evaluation';
-$strings['plugin_comment'] = 'Allow recalulate the options score in questions';
+$strings['plugin_comment'] = "Allow re-calculation of the options' scores in questions";
 
 $strings['enable'] = 'Enable';
 $strings['exercise_max_score'] = 'Max score in exercises';

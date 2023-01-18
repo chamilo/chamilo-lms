@@ -8,7 +8,7 @@
  * @package chamilo.plugin.tour
  */
 $strings['plugin_title'] = 'Tour';
-$strings['plugin_comment'] = 'This plugin shows people how to use your Chamilo LMS. You must activar one region (e.g. "header-right") to show the button that allows the tour to start.';
+$strings['plugin_comment'] = 'This plugin shows people how to use your Chamilo LMS. You must activate the plugin in one region (e.g. "header-right") to show the button that allows the tour to start.';
 
 /* Strings for settings */
 $strings['show_tour'] = 'Show the tour';

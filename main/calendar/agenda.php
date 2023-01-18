@@ -369,6 +369,14 @@ if ($allowToEdit) {
                 $content = $agenda->deleteEvent($eventId);
             }
             break;
+        case 'import_course_agenda_reminders':
+            if (!empty($course_info)) {
+                header('Location: '.api_get_path(WEB_CODE_PATH)
+                    .'admin/import_course_agenda_reminders.php?'.api_get_cidreq().'&type=course'
+                );
+
+                exit();
+            }
     }
 }
 

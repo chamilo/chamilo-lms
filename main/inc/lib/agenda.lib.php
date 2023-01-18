@@ -3380,24 +3380,17 @@ class Agenda
         return false;
     }
 
-    /**
-     * @param int    $filter
-     * @param string $view
-     *
-     * @return string
-     */
-    public function displayActions($view, $filter = 0)
+    public function displayActions(string $view, ?string $filter = ''): string
     {
         $groupInfo = GroupManager::get_group_properties(api_get_group_id());
-        $groupIid = isset($groupInfo['iid']) ? $groupInfo['iid'] : 0;
+        $groupIid = $groupInfo['iid'] ?? 0;
 
         $codePath = api_get_path(WEB_CODE_PATH);
 
         $currentUserId = api_get_user_id();
         $cidReq = api_get_cidreq();
 
-        $actionsLeft = '';
-        $actionsLeft .= Display::url(
+        $actionsLeft = Display::url(
             Display::return_icon('calendar.png', get_lang('Calendar'), [], ICON_SIZE_MEDIUM),
             $codePath."calendar/agenda_js.php?type={$this->type}&$cidReq"
         );
@@ -3406,10 +3399,12 @@ class Agenda
             $codePath."calendar/agenda_list.php?type={$this->type}&$cidReq"
         );
 
+        $isAllowedToEdit = api_is_allowed_to_edit(false, true);
+
         $form = '';
-        if (api_is_allowed_to_edit(false, true) ||
-            ('personal' === $this->type && !api_is_anonymous() && 'true' === api_get_setting('allow_personal_agenda')) ||
-            (
+        if ($isAllowedToEdit
+            || ('personal' === $this->type && !api_is_anonymous() && 'true' === api_get_setting('allow_personal_agenda'))
+            || (
                 '1' === api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() &&
                 api_is_allowed_to_session_edit(false, true))
             || (
@@ -3445,6 +3440,18 @@ class Agenda
                     $this->showToForm($form, $selectedValues, $attributes);
                     $form = $form->returnForm();
                 }
+
+                if (true === api_get_configuration_value('agenda_reminders') && $isAllowedToEdit) {
+                    $actionsLeft .= Display::url(
+                        Display::return_icon(
+                            'course_request_pending.png',
+                            get_lang('ImportCourseEvents'),
+                            [],
+                            ICON_SIZE_MEDIUM
+                        ),
+                        $codePath."calendar/agenda.php?action=import_course_agenda_reminders&type={$this->type}&$cidReq"
+                    );
+                }
             }
         }
 
@@ -3462,15 +3469,15 @@ class Agenda
             }
         }
 
-        if (api_is_platform_admin() ||
-            api_is_teacher() ||
-            api_is_student_boss() ||
-            api_is_drh() ||
-            api_is_session_admin() ||
-            api_is_coach()
+        if (api_is_platform_admin()
+            || api_is_teacher()
+            || api_is_student_boss()
+            || api_is_drh()
+            || api_is_session_admin()
+            || api_is_coach()
         ) {
             if ($this->type == 'personal') {
-                $form = null;
+                $form = '';
                 if (!isset($_GET['action'])) {
                     $form = new FormValidator(
                         'form-search',
@@ -3516,12 +3523,10 @@ class Agenda
             $actionsRight .= $form;
         }
 
-        $toolbar = Display::toolbarAction(
+        return Display::toolbarAction(
             'toolbar-agenda',
             [$actionsLeft, $actionsRight]
         );
-
-        return $toolbar;
     }
 
     /**

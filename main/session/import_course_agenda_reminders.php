@@ -2,19 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
-$courseCode = api_get_course_id();
 $sessionId = api_get_session_id();
-$loadFromCourse = !empty($courseCode) && api_is_allowed_to_edit(false, true);
-$selfUrl = api_get_self();
+$sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
+$selfUrl = api_get_self()."?session_id=$sessionId";
 
-if ($loadFromCourse) {
-    api_protect_teacher_script();
-    $selfUrl = api_get_self().'?'.api_get_cidreq().'&type=course';
-} else {
-    api_protect_admin_script();
-}
+api_protect_admin_script(true);
 
 $isAgendaRemindersEnabled = api_get_configuration_value('agenda_reminders');
 
@@ -24,9 +20,15 @@ if (!$isAgendaRemindersEnabled) {
 
 $tblPersonalAgenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
 
-$tags = AnnouncementManager::getTags();
+$tags = AnnouncementManager::getTags([
+    '((course_title))',
+    '((course_link))',
+    '((teachers))',
+    '((coaches))',
+]);
 $tags[] = '((date_start))';
 $tags[] = '((date_end))';
+$tags[] = '((session_name))';
 
 $tagsHelp = '<strong>'.get_lang('Tags').'</strong>'
     .'<pre>'.implode("\n", $tags).'</pre>';
@@ -34,18 +36,13 @@ $tagsHelp = '<strong>'.get_lang('Tags').'</strong>'
 $fileHelpText = get_lang('ImportCSVFileLocation').'<br>'
     .Display::url(
         get_lang('ExampleCSVFile'),
-        $loadFromCourse ? 'importCourseEventInCourseExample.csv' : 'importCourseEventsExample.csv',
+        'importCourseEventInSessionExample.csv',
         [
             'target' => '_blank',
-            'download' => $loadFromCourse ? 'importCourseEventInCourseExample.csv' : 'importCourseEventsExample.csv',
+            'download' => 'importCourseEventInSessionExample.csv',
         ]
-    );
-
-if ($loadFromCourse) {
-    $fileHelpText .= '<pre>UserName;StartDate;EndDate<br>xxx;YYYY-MM-DD HH:ii:ss;YYYY-MM-DD HH:ii:ss</pre>';
-} else {
-    $fileHelpText .= '<pre>CourseCode;UserName;StartDate;EndDate<br>xxx;xxx;YYYY-MM-DD HH:ii:ss;YYYY-MM-DD HH:ii:ss</pre>';
-}
+    )
+    .'<pre>StartDate;EndDate<br>YYYY-MM-DD HH:ii:ss;YYYY-MM-DD HH:ii:ss</pre>';
 
 $form = new FormValidator('agenda_reminders', 'post', $selfUrl);
 $form->addHeader(get_lang('CsvImport'));
@@ -87,6 +84,7 @@ if ($form->validate()) {
     $uploadInfo = pathinfo($_FILES['events_file']['name']);
     $notificationCount = $_POST['notification_count'] ?? [];
     $notificationPeriod = $_POST['notification_period'] ?? [];
+    $session = api_get_session_entity($sessionId);
 
     $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -109,47 +107,36 @@ if ($form->validate()) {
 
     $grouppedData = [];
 
+    $studentList = SessionManager::get_users_by_session($sessionId, Session::STUDENT);
+
     foreach ($csvEvents as $csvEvent) {
         $hashDate = base64_encode($csvEvent['StartDate'].'||'.$csvEvent['EndDate']);
 
-        $userInfo = api_get_user_info_from_username($csvEvent['UserName']);
-
-        if (!$userInfo) {
-            continue;
-        }
-
-        if ($loadFromCourse) {
-            $grouppedData[$courseCode][$hashDate][] = $userInfo['id'];
-        } else {
-            $courseInfo = api_get_course_info($csvEvent['CourseCode']);
-
-            if (!$courseInfo) {
-                continue;
-            }
-
-            $grouppedData[$courseInfo['code']][$hashDate][] = $userInfo['id'];
+        foreach ($studentList as $studentInfo) {
+            $grouppedData[$hashDate][] = $studentInfo['user_id'];
         }
     }
 
-    foreach ($grouppedData as $dataCourseCode => $eventInfo) {
-        foreach ($eventInfo as $hashDate => $userIdList) {
-            $dateRange = base64_decode($hashDate);
-            list($dateStart, $dateEnd) = explode('||', $dateRange);
+    foreach ($grouppedData as $hashDate => $userIdList) {
+        $dateRange = base64_decode($hashDate);
+        list($dateStart, $dateEnd) = explode('||', $dateRange);
 
-            $dateStart = api_get_utc_datetime($dateStart);
-            $dateEnd = api_get_utc_datetime($dateEnd);
+        $dateStart = api_get_utc_datetime($dateStart);
+        $dateEnd = api_get_utc_datetime($dateEnd);
 
-            $strDateStart = api_format_date($dateStart, DATE_TIME_FORMAT_LONG_24H);
-            $strDateEnd = api_format_date($dateEnd, DATE_TIME_FORMAT_LONG_24H);
+        $strDateStart = api_format_date($dateStart, DATE_TIME_FORMAT_LONG_24H);
+        $strDateEnd = api_format_date($dateEnd, DATE_TIME_FORMAT_LONG_24H);
 
-            foreach ($userIdList as $userId) {
-                $title = AnnouncementManager::parseContent($userId, $values['title'], $dataCourseCode, $sessionId);
-                $content = AnnouncementManager::parseContent($userId, $values['description'], $dataCourseCode, $sessionId);
+        foreach ($userIdList as $userId) {
+            $title = AnnouncementManager::parseContent($userId, $values['title'], '', $sessionId);
+            $content = AnnouncementManager::parseContent($userId, $values['description'], '', $sessionId);
 
-                $title = str_replace(['((date_start))', '((date_end))'], [$strDateStart, $strDateEnd], $title);
-                $content = str_replace(['((date_start))', '((date_end))'], [$strDateStart, $strDateEnd], $content);
+            $title = str_replace(['((date_start))', '((date_end))', '((session_name))'], [$strDateStart, $strDateEnd, $session->getName()], $title);
+            $content = str_replace(['((date_start))', '((date_end))', '((session_name))'], [$strDateStart, $strDateEnd, $session->getName()], $content);
 
-                $attributes = [
+            $eventId = Database::insert(
+                $tblPersonalAgenda,
+                [
                     'user' => $userId,
                     'title' => $title,
                     'text' => $content,
@@ -157,14 +144,12 @@ if ($form->validate()) {
                     'enddate' => $dateEnd,
                     'all_day' => 0,
                     'color' => '',
-                ];
+                ]
+            );
 
-                $eventId = Database::insert($tblPersonalAgenda, $attributes);
-
-                if ($isAgendaRemindersEnabled) {
-                    foreach ($reminders as $reminder) {
-                        $agenda->addReminder($eventId, $reminder[0], $reminder[1]);
-                    }
+            if ($isAgendaRemindersEnabled) {
+                foreach ($reminders as $reminder) {
+                    $agenda->addReminder($eventId, $reminder[0], $reminder[1]);
                 }
             }
         }
@@ -180,8 +165,8 @@ if ($form->validate()) {
 
 $form->setDefaults(
     [
-        'title' => get_lang('ImportCourseAgendaReminderTitleDefault'),
-        'description' => get_lang('ImportCourseAgendaReminderDescriptionDefault'),
+        'title' => get_lang('ImportSessionAgendaReminderTitleDefault'),
+        'description' => get_lang('ImportSessionAgendaReminderDescriptionDefault'),
     ]
 );
 
@@ -191,22 +176,17 @@ $htmlHeadXtra[] = '<script>$(function () {'
 
 $pageTitle = get_lang('ImportCourseEvents');
 
-$actions = '';
-
-if (!$loadFromCourse) {
-    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-} else {
-    $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq(),
-        "name" => get_lang('Agenda'),
-    ];
-
-    $agenda = new Agenda('course');
-    $actions = $agenda->displayActions('calendar');
-}
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = [
+    'url' => 'session_list.php',
+    'name' => get_lang('SessionList'),
+];
+$interbreadcrumb[] = [
+    'url' => $sessionUrl,
+    'name' => get_lang('SessionOverview'),
+];
 
 $template = new Template($pageTitle);
 $template->assign('header', $pageTitle);
-$template->assign('actions', $actions);
 $template->assign('content', $form->returnForm());
 $template->display_one_col_template();

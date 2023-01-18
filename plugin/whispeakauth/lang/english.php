@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = 'Speech authentication with Whispeak';
-$strings['plugin_comment'] = 'Allow speech authentication in Chamilo.';
+$strings['plugin_comment'] = 'Allow speech authentication in Chamilo, which can integrate to the login or inside tests.';
 
 $strings['enable'] = 'Enable';
 $strings['enable_help'] = 'Add <code>$_configuration[\'whispeak_auth_enabled\'] = true;</code> in the <code>configuration.php</code> file';

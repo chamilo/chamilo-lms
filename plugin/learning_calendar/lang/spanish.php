@@ -2,7 +2,7 @@
 /* For license terms, see /license.txt */
 
 $strings['plugin_title'] = 'Learning calendar';
-$strings['plugin_comment'] = '';
+$strings['plugin_comment'] = 'Plugin avanzado permitiendo el tutorado de alumnos que tienen un plazo específico para terminar sus estudios en estudios alternados.';
 $strings['enabled'] = 'Activado';
 $strings['LearningCalendar'] = 'Calendario de aprendizaje';
 $strings['NumberDaysAccumulatedInCalendar'] = 'Número de días acumulados en el calendario: ';

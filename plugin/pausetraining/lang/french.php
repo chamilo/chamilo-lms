@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = "Pause training";
-$strings['plugin_comment'] = "";
+$strings['plugin_comment'] = "Ajoute un onglet 'Pause formation' sur la page d'édition du profil de l'utilisateur, permettant à l'utilisateur d'indiquer qu'il doit être considéré en pause de formation entre (optionnellement) des dates spécifiques. Cet événement peut envoyer une alerte courriel pour signifier cette pause à une adresse spécifique.";
 $strings['tool_enable'] = 'Enable plugin';
 $strings['tool_enable_help'] = '';
 $strings['PauseTraining'] = "Pause training";

@@ -28,6 +28,7 @@ $tags = AnnouncementManager::getTags([
 ]);
 $tags[] = '((date_start))';
 $tags[] = '((date_end))';
+$tags[] = '((session_name))';
 
 $tagsHelp = '<strong>'.get_lang('Tags').'</strong>'
     .'<pre>'.implode("\n", $tags).'</pre>';
@@ -41,7 +42,7 @@ $fileHelpText = get_lang('ImportCSVFileLocation').'<br>'
             'download' => 'importCourseEventInSessionExample.csv',
         ]
     )
-    .'<pre>StartDate;EndDate<br>xxx;YYYY-MM-DD HH:ii:ss;YYYY-MM-DD HH:ii:ss</pre>';
+    .'<pre>StartDate;EndDate<br>YYYY-MM-DD HH:ii:ss;YYYY-MM-DD HH:ii:ss</pre>';
 
 $form = new FormValidator('agenda_reminders', 'post', $selfUrl);
 $form->addHeader(get_lang('CsvImport'));
@@ -83,6 +84,7 @@ if ($form->validate()) {
     $uploadInfo = pathinfo($_FILES['events_file']['name']);
     $notificationCount = $_POST['notification_count'] ?? [];
     $notificationPeriod = $_POST['notification_period'] ?? [];
+    $session = api_get_session_entity($sessionId);
 
     $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
@@ -129,8 +131,8 @@ if ($form->validate()) {
             $title = AnnouncementManager::parseContent($userId, $values['title'], '', $sessionId);
             $content = AnnouncementManager::parseContent($userId, $values['description'], '', $sessionId);
 
-            $title = str_replace(['((date_start))', '((date_end))'], [$strDateStart, $strDateEnd], $title);
-            $content = str_replace(['((date_start))', '((date_end))'], [$strDateStart, $strDateEnd], $content);
+            $title = str_replace(['((date_start))', '((date_end))', '((session_name))'], [$strDateStart, $strDateEnd, $session->getName()], $title);
+            $content = str_replace(['((date_start))', '((date_end))', '((session_name))'], [$strDateStart, $strDateEnd, $session->getName()], $content);
 
             $eventId = Database::insert(
                 $tblPersonalAgenda,

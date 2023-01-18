@@ -255,7 +255,7 @@ function handlePlugins()
     echo '<table class="table table-hover table-striped table-bordered">';
     echo '<tr>';
     echo '<th width="20px">';
-    echo get_lang('Action');
+    echo get_lang('Installed');
     echo '</th><th>';
     echo get_lang('Description');
     echo '</th>';

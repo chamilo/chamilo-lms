@@ -113,7 +113,7 @@
     <div class="version" aria-label="1.11.18">
         <a id="1.11.18"></a>
 
-        <h1>Chamilo 1.11.18 - Grünheide, 18/01/2023</h1>
+        <h1>Chamilo 1.11.18 - Grünheide, 19/01/2023</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.18 is a minor security and bug fix release on top of 1.11.16.</p>
         <h3>Release name</h3>
@@ -312,7 +312,12 @@ We feel it shares significance with this Chamilo version because, as we are prep
             <li>[2023-01-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/2efeb868850386dfeb56a13e9bd3f8b3535bcef7">2efeb868</a> - <a href="https://task.beeznest.com/issues/20357">BT#20357</a>) Wiki: Add support for page categories</li>
         </ul>
 <h3>Improvements (minor features) and debug</h3>
+        In reverse chronological order...
         <ul aria-live="off">
+            <li>[2023-01-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/4bf9b7bde1ec32e5a7add4c0e7291b3bf2bef0dd">4bf9b7bd</a> - <a href="https://task.beeznest.com/issues/20488">BT#20488</a>) Plagiarism: Compilatio: enable hash to be 40 or 32 caracters because Compilatio changed</li>
+            <li>[2023-01-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/1154647d87c6a6d88fae6d5c55cfe534f5c2b7ef">1154647d</a> - <a href="https://task.beeznest.com/issues/20496">BT#20496</a>) Plugin: Test2PDF: Add Fill in the blank type support</li>
+            <li>[2023-01-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/362cf5a080ad2b0170d664a2933997ae3249cf7d">362cf5a0</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4537">GH#4537</a>) Plugin: Zoom: Update configuration instructions</li>
+            <li>[2023-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/8b231d2ac32e2e6a426ee355f8b7c221869d842c">8b231d2a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4547">GH#4547</a>) Exercise: Add parameter cidReq in RTC audio recorded</li>
             <li>[2023-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/33658ffa24cd6918e13886aac9db3a66f2b5bef2">33658ffa</a> - <a href="https://task.beeznest.com/issues/20488">BT#20488</a>) Plagiarism: Compilatio: fix batch compilatio verification</li>
             <li>[2023-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/41bbb7ff45bf35e336e9f547b32723fc5a9e7897">41bbb7ff</a> - <a href="https://task.beeznest.com/issues/20356">BT#20356</a>) Session: add session_name tag for agenda reminder creacion</li>
             <li>[2023-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/2dc0a1f4e285442dc3144d389ad162fb63fe075b">2dc0a1f4</a>) Plugin: Add Shibboleth login button: Remove readme.txt + improve documentation</li>
@@ -1152,12 +1157,14 @@ We feel it shares significance with this Chamilo version because, as we are prep
             <li>[2022-11-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/5eb07401b41253dd9d31838e5e3b50f9597574a6">5eb07401</a> - <a href="https://task.beeznest.com/issues/20290">BT#20290</a>) Webservice: Add 'get_test_updates_list' and 'get_test_average_results_list' services</li>
             <li>[2022-12-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/9b8322a2131c3a901c8aee25693625f7fa733a4c">9b8322a2</a> - <a href="https://task.beeznest.com/issues/20290">BT#20290</a>) Webservice: Add fix for cases where there are not attempts to a test, in get_test_average_results_list</li>
             <li>[2022-12-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/1635f46ab6a7cfc0e9879816b651d5c1a59152a3">1635f46a</a> - <a href="https://task.beeznest.com/issues/20290">BT#20290</a>) Webservice: Add fix for cases where users have been unsubscribed from a course after taking a test, in get_test_average_results_list</li>
+            <li>[2023-01-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/a7cd2e10e4f1895d5ed47b29eae24be25de338bc">a7cd2e10</a> - <a href="https://task.beeznest.com/issues/20478">BT#20478</a>) Webservice: Add course_exercises to get a list of tests from a course</li>
         </ul>
         <h3>Removals</h3>
         <ul aria-live="off">
         </ul>
         <h3>Known issues</h3>
         <ul aria-live="off">
+            <li>Plugin: Zoom: A multi-user account will fail to open a webinar with the right user (contact your official provider of choice if this is a big issue)</li>
         </ul>
     </div>
 

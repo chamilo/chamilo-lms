@@ -8,33 +8,43 @@ conference and student to join it.
 ## Configuration
 
 The Zoom API uses JSON Web Tokens (JWT) to authenticate account-level access. JWT apps provide an API Key and Secret
-required to authenticate with JWT. To get them, create a JWT App:
+required to authenticate with JWT. To get them, create a JWT App or a Server-to-Sever OAuth app:
 
-1. Log into your [Zoom profile page]()
+> From June 1, 2023, Zoom recommend that you create a Server-to-Server OAuth application to replace the funcionality of
+> a JWT app in your account.
+
+1. Log into your [Zoom profile page](https://zoom.us/profile)
 2. Click on Advanced / Application Marketplace
-3. Click on [Develop / build App](https://marketplace.zoom.us/develop/create)
-4. Choose JWT / Create
+3. Click on [Develop / Build App](https://marketplace.zoom.us/develop/create)
+4. Choose JWT or Server-to-Serve OAuth and then Create
 5. Information: Fill in fields about your "App" (application and company names, contact name and email address)
 6. Click on Continue
-7. App Credentials: Copy your API Key and Secret to these fields below
-8. Click on Continue
+7. App Credentials
+   1. For a JWT application: Copy your API Key and Secret to the plugin configuration
+   2. For a Server-to-Server OAuth application: Copy your *Account ID*, *Client ID* anf *Client secret* to the plugin
+      configuration
+8. Click on Continue 
 9. Feature: enable Event Subscriptions to add a new one with endpoint
-   URL https://your.chamilo.url/plugin/zoom/endpoint.php and add these event types:
+   URL `https://your.chamilo.url/plugin/zoom/endpoint.php` (validate the endpoint to allow to activate the app) and add
+   these event types:
 
-     - Start Meeting
-     - End Meeting
-     - Participant/Host joined meeting
-     - Participant/Host left meeting
-     - Start Webinar
-     - End Webinar
-     - Participant/Host joined webinar
-     - Participant/Host left webinar
-     - All Recordings have completed
-     - Recording transcript files have completed
+      - Start Meeting
+      - End Meeting
+      - Participant/Host joined meeting
+      - Participant/Host left meeting
+      - Start Webinar
+      - End Webinar
+      - Participant/Host joined webinar
+      - Participant/Host left webinar
+      - All Recordings have completed
+      - Recording transcript files have completed
 
-    Then click on Done then on Save and copy your Verification Token to the field below.
+   Then click on Done then on Save and copy your *Verification Token* if you have a JWT application or the *Secret
+   Token* if you have an Server-to-Server OAuth application to the plugin configuration
 10. click on Continue
-
+11. Scopes (only for Server-to-Server OAuth application): Click on Add Scopes and select *meeting:write:admin*,
+    *webinar:write:admin*, *recording:write:admin*. Then click on Done.
+    
 ## Changelog
 
 **v0.5**

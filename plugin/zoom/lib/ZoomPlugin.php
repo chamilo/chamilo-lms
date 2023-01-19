@@ -12,6 +12,7 @@ use Chamilo\PluginBundle\Zoom\API\MeetingRegistrant;
 use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
 use Chamilo\PluginBundle\Zoom\API\RecordingFile;
 use Chamilo\PluginBundle\Zoom\API\RecordingList;
+use Chamilo\PluginBundle\Zoom\API\ServerToServerOAuthClient;
 use Chamilo\PluginBundle\Zoom\API\WebinarRegistrantSchema;
 use Chamilo\PluginBundle\Zoom\API\WebinarSchema;
 use Chamilo\PluginBundle\Zoom\API\WebinarSettings;
@@ -38,6 +39,11 @@ class ZoomPlugin extends Plugin
     public const RECORDING_TYPE_CLOUD = 'cloud';
     public const RECORDING_TYPE_LOCAL = 'local';
     public const RECORDING_TYPE_NONE = 'none';
+    public const SETTING_ACCOUNT_ID = 'account_id';
+    public const SETTING_CLIENT_ID = 'client_id';
+    public const SETTING_CLIENT_SECRET = 'client_secret';
+    public const SETTING_SECRET_TOKEN = 'secret_token';
+
     public $isCoursePlugin = true;
 
     /**
@@ -60,6 +66,10 @@ class ZoomPlugin extends Plugin
                 'apiKey' => 'text',
                 'apiSecret' => 'text',
                 'verificationToken' => 'text',
+                self::SETTING_ACCOUNT_ID => 'text',
+                self::SETTING_CLIENT_ID => 'text',
+                self::SETTING_CLIENT_SECRET => 'text',
+                self::SETTING_SECRET_TOKEN => 'text',
                 'enableParticipantRegistration' => 'boolean',
                 'enableCloudRecording' => [
                     'type' => 'select',
@@ -85,7 +95,16 @@ class ZoomPlugin extends Plugin
         );
 
         $this->isAdminPlugin = true;
-        $this->jwtClient = new JWTClient($this->get('apiKey'), $this->get('apiSecret'));
+
+        $accountId = $this->get(self::SETTING_ACCOUNT_ID);
+        $clientId = $this->get(self::SETTING_CLIENT_ID);
+        $clientSecret = $this->get(self::SETTING_CLIENT_SECRET);
+
+        if (!empty($accountId) && !empty($clientId) && !empty($clientSecret)) {
+            $this->jwtClient = new ServerToServerOAuthClient($accountId, $clientId, $clientSecret);
+        } else {
+            $this->jwtClient = new JWTClient($this->get('apiKey'), $this->get('apiSecret'));
+        }
     }
 
     /**

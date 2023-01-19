@@ -1517,6 +1517,7 @@ CREATE TABLE c_plagiarism_compilatio_docs (
 ALTER TABLE c_plagiarism_compilatio_docs drop primary key;
 ALTER TABLE c_plagiarism_compilatio_docs ADD COLUMN id INT AUTO_INCREMENT NOT NULL PRIMARY KEY;
 ALTER TABLE c_plagiarism_compilatio_docs CHANGE COLUMN id_doc document_id INT NOT NULL;
+ALTER TABLE c_plagiarism_compilatio_docs MODIFY compilatio_id VARCHAR(40) NOT NULL;
 
 requires extension "php-soap"  sudo apt-get install php-soap
 */

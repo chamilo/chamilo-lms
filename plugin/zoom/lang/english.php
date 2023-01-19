@@ -34,37 +34,46 @@ Once enabled, it will show as an additional course tool in all courses' homepage
 teachers will be able to <strong>launch</strong> a conference and student to <strong>join</strong> it.
 <br/>
 This plugin requires a Zoom account to manage meetings.
-The Zoom API uses JSON Web Tokens (JWT) to authenticate account-level access.
-<br/>
-JWT apps provide an <strong>API <em>Key</em> and <em>Secret</em></strong> required to authenticate with JWT.
-
-To get them, create a <em>JWT App</em> :
-<br/>1. log into <a href=\"https://zoom.us/profile\">your Zoom profile page</a>
-<br/>2. click on <em>Advanced / Application Marketplace</em>
-<br/>3. click on <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
-<br/>4. choose <em>JWT / Create</em>
-<br/>5. Information: fill in fields about your \"App\"
-(application and company names, contact name and email address)
-<br/>6. Click on <em>Continue</em>
-<br/>7. App Credentials: <strong>copy your API Key and Secret to these fields below</strong>
-<br/>8. click on <em>Continue</em>
-<br/>9. Feature:
-enable <em>Event Subscriptions</em> to add a new one with endpoint URL
-<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code>
-and add these event types:
-<br/>- Start Meeting
-<br/>- End Meeting
-<br/>- Participant/Host joined meeting
-<br/>- Participant/Host left meeting
-<br/>- Start Webinar
-<br/>- End Webinar
-<br/>- Participant/Host joined webinar
-<br/>- Participant/Host left webinar
-<br/>- All Recordings have completed
-<br/>- Recording transcript files have completed
-<br/>then click on <em>Done</em> then on <em>Save</em>
-and <strong>copy your Verification Token to the field below</strong>.
-<br/>10. click on <em>Continue</em>
+<p>The Zoom API uses JSON Web Tokens (JWT) to authenticate account-level access. To get them, create a JWT App or a Server-to-Sever OAuth app:</p>
+<blockquote>
+  <p>From June 1, 2023, Zoom recommend that you create a Server-to-Server OAuth application to replace the funcionality of
+  a JWT app in your account.</p>
+</blockquote>
+<ol>
+<li>Log into your <a href=\"https://zoom.us/profile\">Zoom profile page</a></li>
+<li>Click on Advanced / Application Marketplace</li>
+<li>Click on <a href=\"https://marketplace.zoom.us/develop/create\">Develop / Build App</a></li>
+<li>Choose JWT or Server-to-Serve OAuth and then Create</li>
+<li>Information: Fill in fields about your \"App\" (application and company names, contact name and email address)</li>
+<li>Click on Continue</li>
+<li>App Credentials
+<ol>
+<li>For a JWT application: Copy your API Key and Secret to the plugin configuration</li>
+<li>For a Server-to-Server OAuth application: Copy your <em>Account ID</em>, <em>Client ID</em> and <em>Client secret</em> to the plugin
+configuration</li>
+</ol></li>
+<li>Click on Continue</li>
+<li><p>Feature: enable <em>Event Subscriptions</em> to add a new one with endpoint URL
+<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code> (validate the endpoint to allow to activate the app) and add
+these event types:</p>
+<ul>
+<li>Start Meeting</li>
+<li>End Meeting</li>
+<li>Participant/Host joined meeting</li>
+<li>Participant/Host left meeting</li>
+<li>Start Webinar</li>
+<li>End Webinar</li>
+<li>Participant/Host joined webinar</li>
+<li>Participant/Host left webinar</li>
+<li>All Recordings have completed</li>
+<li>Recording transcript files have completed</li>
+</ul>
+<p>Then click on Done then on Save and copy your <em>Verification Token</em> if you have a JWT application or the <em>Secret
+Token</em> if you have an Server-to-Server OAuth application to the plugin configuration</p></li>
+<li>click on Continue</li>
+<li>Scopes (only for Server-to-Server OAuth application): Click on <em>Add Scopes</em> and select <em>meeting:write:admin</em>,
+<em>webinar:write:admin</em>, <em>recording:write:admin</em>. Then click on Done.</li>
+</ol>
 <br/>
 <strong>Attention</strong>:
 <br/>Zoom is <em>NOT</em> free software and specific rules apply to personal data protection.

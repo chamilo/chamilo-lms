@@ -60,6 +60,7 @@ class Rest extends WebService
     public const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     public const GET_COURSE_LINKS = 'course_links';
     public const GET_COURSE_WORKS = 'course_works';
+    public const GET_COURSE_EXERCISES = 'course_exercises';
     public const GET_COURSES_DETAILS_BY_EXTRA_FIELD = 'courses_details_by_extra_field';
 
     public const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
@@ -3051,6 +3052,15 @@ class Rest extends WebService
             },
             $works
         );
+    }
+
+    public function getCourseExercises(): array
+    {
+        Event::event_access_tool(TOOL_QUIZ);
+
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+        return ExerciseLib::get_all_exercises($courseInfo, $sessionId);
     }
 
     /**

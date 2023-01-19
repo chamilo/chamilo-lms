@@ -57,7 +57,7 @@ function generateAikenForm()
         'aiken_generate',
         'post',
         api_get_self()."?".api_get_cidreq(),
-        null,
+        null
     );
     $form->addElement('header', get_lang('AIQuestionsGenerator'));
     $form->addElement('text', 'quiz_name', [get_lang('QuestionsTopic'), get_lang('QuestionsTopicHelp')]);

@@ -266,6 +266,7 @@ function getAnswerFillInBlanks($answer)
                     $trimChars .= $tabBlankChar[$i];
                 }
                 $value = trim($value, $trimChars);
+                $key = trim($key);
             },
             [$blankCharStart, $blankCharEnd]
         );

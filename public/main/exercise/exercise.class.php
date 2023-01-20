@@ -810,7 +810,6 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED: // 3
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'title ASC',
                     false,
                     true
@@ -835,7 +834,6 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     null,
                     true,
                     true
@@ -857,7 +855,6 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM: // 5
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'title ASC',
                     false,
                     true
@@ -892,7 +889,6 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED:
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     null,
                     true,
                     true
@@ -916,7 +912,6 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED: // 9
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'root ASC, lft ASC',
                     false,
                     true
@@ -938,7 +933,6 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM: // 10
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'root, lft ASC',
                     false,
                     true
@@ -7295,7 +7289,7 @@ class Exercise
         if (!empty($this->getId())) {
             $sql = "SELECT SUM(count_questions) count_questions
                     FROM $table
-                    WHERE exercise_id = {$this->getId()} AND c_id = {$this->course_id}";
+                    WHERE exercise_id = {$this->getId()}";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -7317,12 +7311,11 @@ class Exercise
         if (!empty($categories) && !empty($this->getId())) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table
-                    WHERE exercise_id = {$this->getId()} AND c_id = {$this->course_id}";
+                    WHERE exercise_id = {$this->getId()}";
             Database::query($sql);
-            if (!empty($categories)) {
-                foreach ($categories as $categoryId => $countQuestions) {
+            foreach ($categories as $categoryId => $countQuestions) {
+                if ($categoryId !== 0) {
                     $params = [
-                        'c_id' => $this->course_id,
                         'exercise_id' => $this->getId(),
                         'category_id' => $categoryId,
                         'count_questions' => $countQuestions,

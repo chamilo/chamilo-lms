@@ -113,7 +113,8 @@ if ($_GET['type'] == 'answer' || $_GET['type'] == 'all') {
                     foreach ($infoAnswer as $key2 => $value2) {
                         $listAnswerInfo = getAnswerFillInBlanks($value2['answer']);
                         if (!empty($listAnswerInfo['words'])) {
-                            $answers .= implode(', ', $listAnswerInfo['words']);
+                            $answersList = implode(', ', $listAnswerInfo['words']);
+                            $answers .= clearStudentAnswer($answersList);
                         }
                     }
                 } else {

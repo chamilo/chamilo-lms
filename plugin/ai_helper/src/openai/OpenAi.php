@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'Url.php';
+require_once 'OpenAiUrl.php';
 
 class OpenAi
 {
@@ -35,7 +35,7 @@ class OpenAi
      */
     public function listModels()
     {
-        $url = Url::fineTuneModel();
+        $url = OpenAiUrl::fineTuneModel();
 
         return $this->sendRequest($url, 'GET');
     }
@@ -48,7 +48,7 @@ class OpenAi
     public function retrieveModel($model)
     {
         $model = "/$model";
-        $url = Url::fineTuneModel().$model;
+        $url = OpenAiUrl::fineTuneModel().$model;
 
         return $this->sendRequest($url, 'GET');
     }
@@ -70,7 +70,7 @@ class OpenAi
         }
 
         $opts['model'] = $opts['model'] ?? $this->model;
-        $url = Url::completionsURL();
+        $url = OpenAiUrl::completionsURL();
 
         return $this->sendRequest($url, 'POST', $opts);
     }
@@ -82,7 +82,7 @@ class OpenAi
      */
     public function createEdit($opts)
     {
-        $url = Url::editsUrl();
+        $url = OpenAiUrl::editsUrl();
 
         return $this->sendRequest($url, 'POST', $opts);
     }
@@ -94,7 +94,7 @@ class OpenAi
      */
     public function image($opts)
     {
-        $url = Url::imageUrl()."/generations";
+        $url = OpenAiUrl::imageUrl()."/generations";
 
         return $this->sendRequest($url, 'POST', $opts);
     }
@@ -106,7 +106,7 @@ class OpenAi
      */
     public function imageEdit($opts)
     {
-        $url = Url::imageUrl()."/edits";
+        $url = OpenAiUrl::imageUrl()."/edits";
 
         return $this->sendRequest($url, 'POST', $opts);
     }
@@ -118,7 +118,7 @@ class OpenAi
      */
     public function createImageVariation($opts)
     {
-        $url = Url::imageUrl()."/variations";
+        $url = OpenAiUrl::imageUrl()."/variations";
 
         return $this->sendRequest($url, 'POST', $opts);
     }
@@ -130,7 +130,7 @@ class OpenAi
      */
     public function moderation($opts)
     {
-        $url = Url::moderationUrl();
+        $url = OpenAiUrl::moderationUrl();
 
         return $this->sendRequest($url, 'POST', $opts);
     }
@@ -142,7 +142,7 @@ class OpenAi
      */
     public function uploadFile($opts)
     {
-        $url = Url::filesUrl();
+        $url = OpenAiUrl::filesUrl();
 
         return $this->sendRequest($url, 'POST', $opts);
     }
@@ -152,7 +152,7 @@ class OpenAi
      */
     public function listFiles()
     {
-        $url = Url::filesUrl();
+        $url = OpenAiUrl::filesUrl();
 
         return $this->sendRequest($url, 'GET');
     }
@@ -165,7 +165,7 @@ class OpenAi
     public function retrieveFile($fileId)
     {
         $fileId = "/$fileId";
-        $url = Url::filesUrl().$fileId;
+        $url = OpenAiUrl::filesUrl().$fileId;
 
         return $this->sendRequest($url, 'GET');
     }
@@ -178,7 +178,7 @@ class OpenAi
     public function retrieveFileContent($fileId)
     {
         $fileId = "/$fileId/content";
-        $url = Url::filesUrl().$fileId;
+        $url = OpenAiUrl::filesUrl().$fileId;
 
         return $this->sendRequest($url, 'GET');
     }
@@ -191,7 +191,7 @@ class OpenAi
     public function deleteFile($fileId)
     {
         $fileId = "/$fileId";
-        $url = Url::filesUrl().$fileId;
+        $url = OpenAiUrl::filesUrl().$fileId;
 
         return $this->sendRequest($url, 'DELETE');
     }
@@ -203,7 +203,7 @@ class OpenAi
      */
     public function createFineTune($opts)
     {
-        $url = Url::fineTuneUrl();
+        $url = OpenAiUrl::fineTuneUrl();
 
         return $this->sendRequest($url, 'POST', $opts);
     }
@@ -213,7 +213,7 @@ class OpenAi
      */
     public function listFineTunes()
     {
-        $url = Url::fineTuneUrl();
+        $url = OpenAiUrl::fineTuneUrl();
 
         return $this->sendRequest($url, 'GET');
     }
@@ -226,7 +226,7 @@ class OpenAi
     public function retrieveFineTune($fineTuneId)
     {
         $fineTuneId = "/$fineTuneId";
-        $url = Url::fineTuneUrl().$fineTuneId;
+        $url = OpenAiUrl::fineTuneUrl().$fineTuneId;
 
         return $this->sendRequest($url, 'GET');
     }
@@ -239,7 +239,7 @@ class OpenAi
     public function cancelFineTune($fineTuneId)
     {
         $fineTuneId = "/$fineTuneId/cancel";
-        $url = Url::fineTuneUrl().$fineTuneId;
+        $url = OpenAiUrl::fineTuneUrl().$fineTuneId;
 
         return $this->sendRequest($url, 'POST');
     }
@@ -252,7 +252,7 @@ class OpenAi
     public function listFineTuneEvents($fineTuneId)
     {
         $fineTuneId = "/$fineTuneId/events";
-        $url = Url::fineTuneUrl().$fineTuneId;
+        $url = OpenAiUrl::fineTuneUrl().$fineTuneId;
 
         return $this->sendRequest($url, 'GET');
     }
@@ -265,7 +265,7 @@ class OpenAi
     public function deleteFineTune($fineTuneId)
     {
         $fineTuneId = "/$fineTuneId";
-        $url = Url::fineTuneModel().$fineTuneId;
+        $url = OpenAiUrl::fineTuneModel().$fineTuneId;
 
         return $this->sendRequest($url, 'DELETE');
     }
@@ -277,7 +277,7 @@ class OpenAi
      */
     public function embeddings($opts)
     {
-        $url = Url::embeddings();
+        $url = OpenAiUrl::embeddings();
 
         return $this->sendRequest($url, 'POST', $opts);
     }

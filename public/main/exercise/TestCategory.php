@@ -446,8 +446,7 @@ class TestCategory
         array $checkInQuestionList = [],
         array $categoriesAddedInExercise = [],
         $onlyMandatory = false
-    ): array
-    {
+    ): array {
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tblExerciseQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $tblQuestionRelCategory = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
@@ -820,8 +819,7 @@ class TestCategory
         string   $order = null,
         bool     $shuffle = false,
         bool $excludeCategoryWithNoQuestions = true
-    ): array
-    {
+    ): array {
         if (empty($exercise)) {
             return [];
         }

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class Url
+class OpenAiUrl
 {
     public const ORIGIN = 'https://api.openai.com';
     public const API_VERSION = 'v1';

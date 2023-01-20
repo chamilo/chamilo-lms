@@ -215,8 +215,10 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
 function aikenImportExercise($file = null, $request = [])
 {
     $exerciseInfo = [];
+    $fileIsSet = false;
 
     if (isset($file)) {
+        $fileIsSet = true;
         // The import is from aiken file format.
         $archivePath = api_get_path(SYS_ARCHIVE_PATH).'aiken/';
         $baseWorkDir = $archivePath;
@@ -379,7 +381,9 @@ function aikenImportExercise($file = null, $request = [])
             }
 
             // Delete the temp dir where the exercise was unzipped
-            my_delete($baseWorkDir.$uploadPath);
+            if ($fileIsSet) {
+                my_delete($baseWorkDir.$uploadPath);
+            }
 
             return $lastExerciseId;
         }

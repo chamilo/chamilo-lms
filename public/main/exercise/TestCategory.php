@@ -812,7 +812,7 @@ class TestCategory
     }
 
     /**
-     * Get the category in exercise tree
+     * Get the category in exercise tree.
      *
      */
     public function getCategoryExerciseTree(

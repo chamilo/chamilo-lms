@@ -323,6 +323,23 @@ function escapeForRegexp($inChar)
 }
 
 /**
+ * Clear the answer entered.
+ *
+ * @param string $answer
+ *
+ * @return string
+ */
+function clearStudentAnswer($answer)
+{
+    $answer = api_html_entity_decode($answer);
+    $answer = api_preg_replace('/\s\s+/', ' ', $answer); // replace excess white spaces
+    $answer = str_replace('&#39;', '&#039;', $answer);
+    $answer = strtr($answer, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
+
+    return trim($answer);
+}
+
+/**
  * Remove all html tag.
  *
  * @param string $string The string to be stripped of HTML

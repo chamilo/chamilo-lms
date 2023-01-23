@@ -7839,7 +7839,7 @@ class learnpath
 
                 // Get the lp_item_view with the highest view_count.
                 $learnpathItemViewResult = $em
-                    ->getRepository('ChamiloCourseBundle:CLpItemView')
+                    ->getRepository(CLpItemView::class)
                     ->findBy(
                         ['item' => $rowItem->getIid(), 'view' => $lpViewId],
                         ['viewCount' => 'DESC'],

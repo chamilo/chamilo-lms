@@ -784,13 +784,13 @@ class Exercise
      * Selecting question list depending in the exercise-category
      * relationship (category table in exercise settings).
      *
-     * @param array $question_list
+     * @param array $questionList
      * @param int   $questionSelectionType
      *
      * @return array
      */
     public function getQuestionListWithCategoryListFilteredByCategorySettings(
-        $question_list,
+        $questionList,
         $questionSelectionType
     ) {
         $result = [
@@ -815,16 +815,16 @@ class Exercise
                     true
                 );
 
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
 
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     false
                 );
@@ -838,15 +838,15 @@ class Exercise
                     true,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     false
                 );
@@ -859,9 +859,9 @@ class Exercise
                     false,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
                 $questionsByCategoryMandatory = [];
@@ -870,15 +870,15 @@ class Exercise
                 ) {
                     $questionsByCategoryMandatory = TestCategory::getQuestionsByCat(
                         $this->id,
-                        $question_list,
+                        $questionList,
                         $categoriesAddedInExercise,
                         true
                     );
                 }
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     true,
                     $questionsByCategoryMandatory
@@ -894,16 +894,16 @@ class Exercise
                     true
                 );
 
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
 
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     true
                 );
@@ -916,15 +916,15 @@ class Exercise
                     false,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     false
                 );
@@ -937,15 +937,15 @@ class Exercise
                     false,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     true
                 );
@@ -953,16 +953,16 @@ class Exercise
                 break;
         }
 
-        $result['question_list'] = isset($question_list) ? $question_list : [];
-        $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : [];
+        $result['question_list'] = $questionList ?? [];
+        $result['category_with_questions_list'] = $questionsByCategory ?? [];
         $parentsLoaded = [];
         // Adding category info in the category list with question list:
-        if (!empty($questions_by_category)) {
+        if (!empty($questionsByCategory)) {
             $newCategoryList = [];
             $em = Database::getManager();
             $repo = $em->getRepository(CQuizRelQuestionCategory::class);
 
-            foreach ($questions_by_category as $categoryId => $questionList) {
+            foreach ($questionsByCategory as $categoryId => $questionList) {
                 $category = new TestCategory();
                 $cat = (array) $category->getCategory($categoryId);
                 if ($cat) {
@@ -1660,7 +1660,7 @@ class Exercise
             }
         }
 
-        $this->save_categories_in_exercise($this->categories);
+        $this->saveCategoriesInExercise($this->categories);
 
         return $id;
     }
@@ -2994,7 +2994,7 @@ class Exercise
                 foreach ($categories as $category) {
                     $newCategoryList[$category['category_id']] = $category['count_questions'];
                 }
-                $exerciseObject->save_categories_in_exercise($newCategoryList);
+                $exerciseObject->saveCategoriesInExercise($newCategoryList);
             }
         }
     }
@@ -7302,11 +7302,11 @@ class Exercise
     }
 
     /**
-     * Save categories in the TABLE_QUIZ_REL_CATEGORY table.
+     * Save categories in the TABLE_QUIZ_REL_CATEGORY table
      *
      * @param array $categories
      */
-    public function save_categories_in_exercise($categories)
+    public function saveCategoriesInExercise($categories)
     {
         if (!empty($categories) && !empty($this->getId())) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);

@@ -118,15 +118,15 @@ switch ($action) {
                     $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
 
-                if (!empty($lp_item['publicated_on'])) {
-                    $date = substr($lp_item['publicated_on'], 0, 10);
+                if (!empty($lp_item['published_on'])) {
+                    $date = substr($lp_item['published_on'], 0, 10);
                 } else {
                     $date = '-';
                 }
 
                 // Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on'])) {
-                    if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
+                if (!empty($lp_item['published_on'])) {
+                    if ($now < api_strtotime($lp_item['published_on'], 'UTC')) {
                         continue;
                     }
                 }
@@ -144,7 +144,7 @@ switch ($action) {
                 ];
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp'] = $lp_item['lp_name'];
-                $temp[$count]['date'] = $lp_item['publicated_on'];
+                $temp[$count]['date'] = $lp_item['published_on'];
                 $count++;
             }
         }
@@ -220,7 +220,7 @@ switch ($action) {
                 api_get_user_id(),
                 api_get_course_info($item['code']),
                 $session_id,
-                'lp.publicatedOn DESC'
+                'lp.publishedOn DESC'
             );
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
@@ -255,16 +255,16 @@ switch ($action) {
                     $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
 
-                if (!empty($lp_item['publicated_on'])) {
-                    $date = substr($lp_item['publicated_on'], 0, 10);
+                if (!empty($lp_item['published_on'])) {
+                    $date = substr($lp_item['published_on'], 0, 10);
                 } else {
                     $date = '-';
                 }
 
                 // Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on'])) {
-                    $week_data = date('Y', api_strtotime($lp_item['publicated_on'], 'UTC')).' - '.get_week_from_day($lp_item['publicated_on']);
-                    if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
+                if (!empty($lp_item['published_on'])) {
+                    $week_data = date('Y', api_strtotime($lp_item['published_on'], 'UTC')).' - '.get_week_from_day($lp_item['published_on']);
+                    if ($now < api_strtotime($lp_item['published_on'], 'UTC')) {
                         continue;
                     }
                 } else {
@@ -393,15 +393,15 @@ switch ($action) {
                 if (strtotime($last_date) < strtotime($lp_date)) {
                     $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
-                if (!empty($lp_item['publicated_on'])) {
-                    $date = substr($lp_item['publicated_on'], 0, 10);
+                if (!empty($lp_item['published_on'])) {
+                    $date = substr($lp_item['published_on'], 0, 10);
                 } else {
                     $date = '-';
                 }
 
                 // Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on'])) {
-                    if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
+                if (!empty($lp_item['published_on'])) {
+                    if ($now < api_strtotime($lp_item['published_on'], 'UTC')) {
                         continue;
                     }
                 }
@@ -417,7 +417,7 @@ switch ($action) {
                 ];
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp'] = $lp_item['lp_name'];
-                $temp[$count]['date'] = $lp_item['publicated_on'];
+                $temp[$count]['date'] = $lp_item['published_on'];
                 $count++;
             }
         }

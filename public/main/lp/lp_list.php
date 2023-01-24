@@ -255,8 +255,8 @@ foreach ($categories as $category) {
 
             $start_time = $end_time = '';
             if ($is_allowed_to_edit) {
-                if (!empty($details['publicated_on'])) {
-                    $start_time = api_convert_and_format_date($details['publicated_on'], DATE_TIME_FORMAT_SHORT);
+                if (!empty($details['published_on'])) {
+                    $start_time = api_convert_and_format_date($details['published_on'], DATE_TIME_FORMAT_SHORT);
                 }
                 if (!empty($details['expired_on'])) {
                     $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_SHORT);
@@ -275,8 +275,8 @@ foreach ($categories as $category) {
 
                 if ($time_limits) {
                     // Check if start time
-                    if (!empty($details['publicated_on']) && !empty($details['expired_on'])) {
-                        $start_time = api_strtotime($details['publicated_on'], 'UTC');
+                    if (!empty($details['published_on']) && !empty($details['expired_on'])) {
+                        $start_time = api_strtotime($details['published_on'], 'UTC');
                         $end_time = api_strtotime($details['expired_on'], 'UTC');
                         $is_actived_time = false;
                         if ($now > $start_time && $end_time > $now) {

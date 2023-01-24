@@ -168,7 +168,7 @@ $defaults['category_id'] = $learnPath->getCategoryId();
 $defaults['accumulate_scorm_time'] = $learnPath->getAccumulateScormTime();
 
 $expired_on = $learnPath->expired_on;
-$publicated_on = $learnPath->publicated_on;
+$published_on = $learnPath->published_on;
 
 // Prerequisites
 $learnPath->display_lp_prerequisites_list($form);
@@ -200,13 +200,13 @@ $form->addElement(
 );
 
 $display_date = 'none';
-if (!empty($publicated_on) && '0000-00-00 00:00:00' !== $publicated_on) {
+if (!empty($published_on) && '0000-00-00 00:00:00' !== $published_on) {
     $display_date = 'block';
     $defaults['activate_start_date_check'] = 1;
 }
 
 $form->addElement('html', '<div id="start_date_div" style="display:'.$display_date.';">');
-$form->addDateTimePicker('publicated_on', get_lang('Publication date'));
+$form->addDateTimePicker('published_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
 //End date
@@ -305,8 +305,8 @@ $(function() {
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 
-$defaults['publicated_on'] = !empty($publicated_on) && '0000-00-00 00:00:00' !== $publicated_on
-    ? api_get_local_time($publicated_on)
+$defaults['published_on'] = !empty($published_on) && '0000-00-00 00:00:00' !== $published_on
+    ? api_get_local_time($published_on)
     : null;
 $defaults['expired_on'] = (!empty($expired_on))
     ? api_get_local_time($expired_on)
@@ -322,9 +322,9 @@ if ($form->validate()) {
         $hide_toc_frame = 1;
     }
 
-    $publicated_on = null;
+    $published_on = null;
     if (isset($_REQUEST['activate_start_date_check']) && 1 == $_REQUEST['activate_start_date_check']) {
-        $publicated_on = $_REQUEST['publicated_on'];
+        $published_on = $_REQUEST['published_on'];
     }
 
     $expired_on = null;
@@ -356,7 +356,7 @@ if ($form->validate()) {
         ->setUseMaxScore(isset($_POST['use_max_score']) ? 1 : 0)
         ->setDefaultEncoding($_REQUEST['lp_encoding'])
         ->setAccumulateScormTime(isset($_REQUEST['accumulate_scorm_time']) ? 1 : 0)
-        ->setPublicatedOn(api_get_utc_datetime($publicated_on, true, true))
+        ->setPublishedOn(api_get_utc_datetime($published_on, true, true))
         ->setExpiredOn(api_get_utc_datetime($expired_on, true, true))
         ->setCategory($category)
         ->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0)

@@ -113,7 +113,7 @@ if (!empty($courseList)) {
             api_get_user_id(),
             api_get_course_info($course_data['code']),
             $session_id,
-            'lp.publicatedOn ASC',
+            'lp.publishedOn ASC',
             true,
             null,
             true
@@ -152,7 +152,7 @@ if (!empty($courseList)) {
                 $label = get_lang('Learning path updated');
             }
 
-            $mutation_date = api_strtotime($item['publicated_on']) > api_strtotime($lp_date_original) ? $item['publicated_on'] : $lp_date_original;
+            $mutation_date = api_strtotime($item['published_on']) > api_strtotime($lp_date_original) ? $item['published_on'] : $lp_date_original;
 
             if (api_strtotime($mutation_date) > api_strtotime($max_mutation_date)) {
                 $max_mutation_date = $mutation_date;

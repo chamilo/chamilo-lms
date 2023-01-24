@@ -7913,6 +7913,7 @@ class Exercise
                     $outMaxScore += $tabScores[$i];
                 }
             }
+
             return $outMaxScore;
         }
 

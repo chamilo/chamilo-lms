@@ -7883,7 +7883,7 @@ class Exercise
     /**
      * Calculate the max_score of the quiz, depending of question inside, and quiz advanced option.
      */
-    public function get_max_score()
+    public function getMaxScore()
     {
         $outMaxScore = 0;
         // list of question's id !!! the array key start at 1 !!!
@@ -7908,16 +7908,18 @@ class Exercise
             // here we've got an array with first key, the category_id, second key, score of question for this cat
             foreach ($tabCategoriesScores as $tabScores) {
                 rsort($tabScores);
-                for ($i = 0; $i < min($numberRandomQuestions, count($tabScores)); $i++) {
+                $tabScoresCount = count($tabScores);
+                for ($i = 0; $i < min($numberRandomQuestions, $tabScoresCount); $i++) {
                     $outMaxScore += $tabScores[$i];
                 }
             }
-        } else {
-            // standard test, just add each question score
-            foreach ($questionList as $questionId) {
-                $question = Question::read($questionId, $this->course);
-                $outMaxScore += $question->weighting;
-            }
+            return $outMaxScore;
+        }
+
+        // standard test, just add each question score
+        foreach ($questionList as $questionId) {
+            $question = Question::read($questionId, $this->course);
+            $outMaxScore += $question->weighting;
         }
 
         return $outMaxScore;
@@ -8675,7 +8677,7 @@ class Exercise
                         ->setUserScoreList($students)
                         ->setBestScore($bestResult)
                         ->setAverageScore($average)
-                        ->setScoreWeight($this->get_max_score());
+                        ->setScoreWeight($this->getMaxScore());
                     $em->persist($exerciseLink);
                     $em->flush();
                 }

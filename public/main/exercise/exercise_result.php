@@ -188,7 +188,7 @@ if (!empty($exercise_stat_info)) {
     $total_score = $exercise_stat_info['score'];
 }
 
-$max_score = $objExercise->get_max_score();
+$max_score = $objExercise->getMaxScore();
 
 if ('embeddable' === $origin) {
     $pageTop .= showEmbeddableFinishButton();

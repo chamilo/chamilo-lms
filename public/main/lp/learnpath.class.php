@@ -433,7 +433,7 @@ class learnpath
             // Disabling the exercise if we add it inside a LP
             $exercise = new Exercise($course_id);
             $exercise->read($id);
-            $max_score = $exercise->get_max_score();
+            $max_score = $exercise->getMaxScore();
 
             $exercise->disable();
             $exercise->save();
@@ -6139,11 +6139,11 @@ class learnpath
                     /** @var CLpItem $itemEntity */
                     $itemEntity = $lpItemRepo->find($itemId);
                     $exercise->read($item['path']);
-                    $itemEntity->setMaxScore($exercise->get_max_score());
+                    $itemEntity->setMaxScore($exercise->getMaxScore());
                     $em->persist($itemEntity);
                     $em->flush($itemEntity);
 
-                    $item['maxScore'] = $exercise->get_max_score();
+                    $item['maxScore'] = $exercise->getMaxScore();
 
                     if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
                         // Backwards compatibility with 1.9.x use mastery_score as min value

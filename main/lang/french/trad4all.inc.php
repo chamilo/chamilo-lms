@@ -8912,4 +8912,9 @@ $QuestionsTopic = "Sujet des questions";
 $QuestionsTopicHelp = "Le sujet des questions sera utilisé à la fois comme titre de l'exercice créé et comme requête envoyée au générateur de questions par Intelligence Artificielle (IA) pour qu'il génère des questions sur ce sujet dans la langue configurée de ce cours. Vous pourrez réviser ces propositions de questions ci-dessous avant de les importer.";
 $AIQuestionsGenerator = "Générateur de questions par IA";
 $AIQuestionsGeneratorNumberHelper = "La plupart des générateurs basés sur l'IA limitent le nombre de caractères qu'ils peuvent renvoyer, et votre organisation sera souvent facturée sur base du nombre de caractères renvoyés. Utilisez donc cette fonctionnalité avec modération, en demandant d'abord de petits nombres de questions, puis en augmentant quand vous commencer à prendre confiance. Un bon nombre de départ est de 3 questions.";
+$LPEndStepAddTagsToShowCertificateOrSkillAutomatically = "Utilisez une (ou plusieurs) des balises proposées suivantes pour générer automatiquement un certificat ou une compétence et les afficher ici lorsque l'étudiant arrive à cette étape, qui nécessite que toutes les autres étapes soient terminées en premier.";
+$ImportSessionAgendaReminderDescriptionDefault = "Bonjour ((user_complete_name)).
+
+Vous devrez suivre la session ((session_name)) entre le ((date_start)) et le ((date_end)).";
+$ImportSessionAgendaReminderTitleDefault = "Invitation à la session ((session_name))";
 ?>

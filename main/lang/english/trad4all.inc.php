@@ -8978,4 +8978,9 @@ $QuestionsTopicHelp = "The questions topic will be used as the name of the test 
 $AIQuestionsGenerator = "AI Questions Generator";
 $AIQuestionsGeneratorNumberHelper = "Most AI generators are limited in the number of characters they can return, and often your organization will be charged based on the number of characters returned, so please use with moderation, asking for smaller numbers first, then extending as you gain confidence.
 A good number for a first test is 3 questions.";
+$LPEndStepAddTagsToShowCertificateOrSkillAutomatically = "Use one (or more) of the following proposed tags to automatically generate a certificate or a skill and show them here when the student gets to this step, which requires all other steps to be finished first.";
+$ImportSessionAgendaReminderDescriptionDefault = "Hi ((user_complete_name)).
+
+You are invited to follow the session ((session_name)) from the ((date_start)) until the ((date_end)). ";
+$ImportSessionAgendaReminderTitleDefault = "Invitation to session ((session_name))";
 ?>

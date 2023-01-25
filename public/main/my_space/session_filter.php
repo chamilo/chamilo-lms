@@ -331,7 +331,7 @@ echo Display::page_header(get_lang('CertificatesSessions'));
 $actions = '';
 $actions .= Display::url(
     Display::return_icon('back.png', get_lang('Back'), [], 32),
-    api_get_path(WEB_CODE_PATH).'mySpace'
+    api_get_path(WEB_CODE_PATH).'my_space'
 );
 
 if ($allowCustomCertificate) {

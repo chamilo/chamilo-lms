@@ -48,7 +48,7 @@ $actions = [
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'.http_build_query([
+        api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?'.http_build_query([
             'student' => $userId,
         ]),
         ['title' => get_lang('Reporting')]
@@ -316,7 +316,7 @@ if (count($sessions) > 0) {
 
             $tools = Display::url(
                 Display::return_icon('statistics.png', get_lang('Statistics')),
-                api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&sid='.$sessionId.'&course='.$courseCode
+                api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&student='.$userId.'&sid='.$sessionId.'&course='.$courseCode
             );
             $tools .= '&nbsp;<a href="course_information.php?id='.$courseId.'&id_session='.$sessionId.'">'.
                 Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
@@ -363,7 +363,7 @@ if (count($sessions) > 0) {
 
         $certificateLink = Display::url(
             Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+            api_get_path(WEB_CODE_PATH).'my_space/session.php?'
             .http_build_query(
                 [
                     'action' => 'export_to_pdf',
@@ -425,7 +425,7 @@ if (count($courseRelUserList) > 0) {
         $courseUrl = api_get_course_url($courseId);
         $tools = Display::url(
             Display::return_icon('statistics.png', get_lang('Statistics')),
-            api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&student='.$userId.'&sid=0&course='.$courseCode
+            api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&student='.$userId.'&sid=0&course='.$courseCode
         );
         $tools .= '&nbsp;<a href="course_information.php?id='.$courseId.'">'.
             Display::return_icon('info2.png', get_lang('Overview')).'</a>'.

@@ -268,7 +268,7 @@ if ('true' === $allowTutors) {
                         '.$user_link.'
                     </td>
                     <td>
-                        <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.
+                        <a href="../my_space/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.
                         Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
                         <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.
                         Display::return_icon('course.png', get_lang('Block user from courses in this session')).'</a>&nbsp;

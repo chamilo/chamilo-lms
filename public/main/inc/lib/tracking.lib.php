@@ -8641,7 +8641,7 @@ class TrackingCourseLog
             }
         }
 
-        $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cid='.$courseId.
+        $urlBase = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&cid='.$courseId.
             '&origin=tracking_course&sid='.$sessionId;
 
         $sortByFirstName = api_sort_by_first_name();
@@ -9010,7 +9010,7 @@ class TrackingCourseLog
             $user['link'] = '
                 <center>
                  <a
-                    href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&cid='.$courseId.'&origin=tracking_course&sid='.$sessionId.'">
+                    href="../my_space/myStudents.php?student='.$user['user_id'].'&details=true&cid='.$courseId.'&origin=tracking_course&sid='.$sessionId.'">
                     '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
                  </a>
                 </center>';

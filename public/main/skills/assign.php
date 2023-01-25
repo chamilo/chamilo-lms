@@ -372,22 +372,22 @@ $form->freeze(['user_name']);
 
 if (api_is_drh()) {
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
+        'url' => api_get_path(WEB_CODE_PATH).'my_space/index.php',
         "name" => get_lang('Reporting'),
     ];
     if (COURSEMANAGER == $user->getStatus()) {
         $interbreadcrumb[] = [
-            "url" => api_get_path(WEB_CODE_PATH).'mySpace/teachers.php',
+            "url" => api_get_path(WEB_CODE_PATH).'my_space/teachers.php',
             'name' => get_lang('Trainers'),
         ];
     } else {
         $interbreadcrumb[] = [
-            "url" => api_get_path(WEB_CODE_PATH).'mySpace/student.php',
+            "url" => api_get_path(WEB_CODE_PATH).'my_space/student.php',
             'name' => get_lang('My learners'),
         ];
     }
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId,
+        'url' => api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$userId,
         'name' => UserManager::formatUserFullName($user),
     ];
 } else {

@@ -195,7 +195,7 @@ $tpl->assign('users', $items);
 $tpl->assign('form', $form->returnForm());
 $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?';
 $tpl->assign('post_url', $url);
-$url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?';
+$url = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?';
 $tpl->assign('my_students_url', $url);
 $tpl->assign('pagination', $pagination);
 $tpl->assign('care_title', $plugin->get_lang('Student care detail view'));

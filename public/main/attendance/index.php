@@ -180,7 +180,7 @@ if (api_is_drh() && isset($_GET['student_id'])) {
     $student_param = '&student_id='.$student_id;
     $student_info = api_get_user_info($student_id);
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id,
+        'url' => api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$student_id,
         'name' => $student_info['complete_name'],
     ];
 }

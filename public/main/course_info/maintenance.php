@@ -29,19 +29,19 @@ echo Display::page_header($nameTools);
 <div class="sectioncomment">
     <ul>
         <li>
-            <a href="../coursecopy/create_backup.php?<?php echo api_get_cidreq(); ?>">
+            <a href="../course_copy/create_backup.php?<?php echo api_get_cidreq(); ?>">
                 <?php echo get_lang('Create a backup and import and import'); ?>
             </a><br/>
             <?php echo get_lang('Create a backup and import and importInfo'); ?>
         </li>
         <li>
-            <a href="../coursecopy/import_backup.php?<?php echo api_get_cidreq(); ?>">
+            <a href="../course_copy/import_backup.php?<?php echo api_get_cidreq(); ?>">
                 <?php echo get_lang('Import backup and import and import'); ?>
             </a><br/>
             <?php echo get_lang('Import backup and import and importInfo'); ?>
         </li>
         <li>
-            <a href="../coursecopy/import_moodle.php?<?php echo api_get_cidreq(); ?>">
+            <a href="../course_copy/import_moodle.php?<?php echo api_get_cidreq(); ?>">
                 <?php echo get_lang('Import from Moodle'); ?>
             </a><br/>
             <?php echo get_lang('Import from MoodleInfo'); ?>
@@ -51,7 +51,7 @@ echo Display::page_header($nameTools);
 
 <div class="sectiontitle">
     <?php echo Display::return_icon('copy.gif', get_lang('Copy course')); ?>&nbsp;&nbsp;
-    <a href="../coursecopy/copy_course.php?<?php echo api_get_cidreq(); ?>">
+    <a href="../course_copy/copy_course.php?<?php echo api_get_cidreq(); ?>">
         <?php echo get_lang('Copy course'); ?></a>
 </div>
 <div class="sectioncomment"><?php echo get_lang('DescriptionCopy course'); ?>
@@ -59,7 +59,7 @@ echo Display::page_header($nameTools);
 
 <div class="sectiontitle">
     <?php echo Display::return_icon('delete.png', get_lang('Empty this course')); ?>&nbsp;&nbsp;
-    <a href="../coursecopy/recycle_course.php?<?php echo api_get_cidreq(); ?>">
+    <a href="../course_copy/recycle_course.php?<?php echo api_get_cidreq(); ?>">
         <?php echo get_lang('Empty this course'); ?>
     </a>
 </div>

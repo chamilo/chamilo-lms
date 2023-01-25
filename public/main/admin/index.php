@@ -236,7 +236,7 @@ if (api_is_platform_admin()) {
 
     if (api_is_global_platform_admin()) {
         $items[] = [
-            'url' => '../coursecopy/copy_course_session.php',
+            'url' => '../course_copy/copy_course_session.php',
             'label' => get_lang('Copy from course in session to another session'),
         ];
     }

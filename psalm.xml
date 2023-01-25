@@ -22,7 +22,7 @@
         <directory name="public/main/course_home"/>
         <directory name="public/main/course_info"/>
         <directory name="public/main/course_progress"/>
-        <directory name="public/main/coursecopy"/>
+        <directory name="public/main/course_copy"/>
         <directory name="public/main/create_course"/>
 <!--        <directory name="public/main/cron"/>-->
         <directory name="public/main/dashboard"/>

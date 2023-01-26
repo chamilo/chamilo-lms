@@ -269,7 +269,7 @@ class TestCategory
         $categories = [];
         if (!empty($categoriesInExercise)) {
             foreach ($categoriesInExercise as $category) {
-                $categories[$category['id']] = $category;
+                $categories[$category['iid']] = $category;
             }
         }
 
@@ -320,14 +320,13 @@ class TestCategory
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
 
         foreach ($categories as $catInfo) {
-            $categoryId = $catInfo['id'];
+            $categoryId = $catInfo['iid'];
             if (!empty($categoryId)) {
                 $result[$categoryId] = [
                     'id' => $categoryId,
                     'title' => $catInfo['title'],
                     //'parent_id' =>  $catInfo['parent_id'],
                     'parent_id' => '',
-                    'c_id' => $catInfo['c_id'],
                 ];
             }
         }
@@ -441,50 +440,41 @@ class TestCategory
      * $categories[1][30] = 10, array with category id = 1 and question_id = 10
      * A question has "n" categories.
      *
-     * @param int   $exerciseId
-     * @param array $check_in_question_list
-     * @param array $categoriesAddedInExercise
-     *
-     * @return array
      */
     public static function getQuestionsByCat(
-        $exerciseId,
-        $check_in_question_list = [],
-        $categoriesAddedInExercise = [],
+        int   $exerciseId,
+        array $checkInQuestionList = [],
+        array $categoriesAddedInExercise = [],
         $onlyMandatory = false
-    ) {
+    ): array {
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $tblExerciseQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $tblQuestionRelCategory = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $exerciseId = (int) $exerciseId;
-        $courseId = api_get_course_int_id();
 
         $mandatoryCondition = '';
         if ($onlyMandatory) {
             $mandatoryCondition = ' AND qrc.mandatory = 1';
         }
         $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
-                FROM $TBL_QUESTION_REL_CATEGORY qrc
-                INNER JOIN $TBL_EXERCICE_QUESTION eq
-                ON (eq.question_id = qrc.question_id AND qrc.c_id = eq.c_id)
+                FROM $tblQuestionRelCategory qrc
+                INNER JOIN $tblExerciseQuestion eq
+                ON (eq.question_id = qrc.question_id)
                 INNER JOIN $categoryTable c
-                ON (c.id = qrc.category_id AND c.c_id = eq.c_id)
+                ON (c.iid = qrc.category_id)
                 INNER JOIN $tableQuestion q
-                ON (q.id = qrc.question_id AND q.c_id = eq.c_id)
+                ON (q.iid = qrc.question_id)
                 WHERE
-                    quiz_id = $exerciseId AND
-                    qrc.c_id = $courseId
+                    quiz_id = $exerciseId
                     $mandatoryCondition
                 ";
 
         $res = Database::query($sql);
         $categories = [];
         while ($data = Database::fetch_array($res)) {
-            if (!empty($check_in_question_list)) {
-                if (!in_array($data['question_id'], $check_in_question_list)) {
-                    continue;
-                }
+            if (!empty($checkInQuestionList) && !in_array($data['question_id'], $checkInQuestionList)) {
+                continue;
             }
 
             if (!isset($categories[$data['category_id']]) ||
@@ -516,7 +506,7 @@ class TestCategory
 
             // Select questions that don't have any category related
             if ($checkQuestionsWithNoCategory) {
-                $originalQuestionList = $check_in_question_list;
+                $originalQuestionList = $checkInQuestionList;
                 foreach ($originalQuestionList as $questionId) {
                     $categoriesFlatten = array_flatten($categories);
                     if (!in_array($questionId, $categoriesFlatten)) {
@@ -821,34 +811,27 @@ class TestCategory
     }
 
     /**
-     * @param Exercise $exercise
-     * @param int      $courseId
-     * @param string   $order
-     * @param bool     $shuffle
-     * @param bool     $excludeCategoryWithNoQuestions
+     * Get the category in exercise tree.
      *
-     * @return array
      */
     public function getCategoryExerciseTree(
-        $exercise,
-        $courseId,
-        $order = null,
-        $shuffle = false,
-        $excludeCategoryWithNoQuestions = true
-    ) {
+        Exercise $exercise,
+        string   $order = null,
+        bool     $shuffle = false,
+        bool $excludeCategoryWithNoQuestions = true
+    ): array {
         if (empty($exercise)) {
             return [];
         }
 
-        $courseId = (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $exercise->id = (int) $exercise->id;
 
         $sql = "SELECT * FROM $table qc
                 LEFT JOIN $categoryTable c
-                ON (qc.c_id = c.c_id AND c.id = qc.category_id)
-                WHERE qc.c_id = $courseId AND exercise_id = {$exercise->id} ";
+                ON (qc.category_id = c.iid)
+                WHERE exercise_id = {$exercise->id} ";
 
         if (!empty($order)) {
             $order = Database::escape_string($order);
@@ -859,10 +842,8 @@ class TestCategory
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if ($excludeCategoryWithNoQuestions) {
-                    if (0 == $row['count_questions']) {
-                        continue;
-                    }
+                if ($excludeCategoryWithNoQuestions && 0 == $row['count_questions']) {
+                    continue;
                 }
                 if (empty($row['title']) && empty($row['category_id'])) {
                     $row['title'] = get_lang('General');
@@ -1051,13 +1032,9 @@ class TestCategory
     public static function get_category_id_for_title($title, $courseId = 0)
     {
         $out_res = 0;
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
-        $courseId = (int) $courseId;
-        $tbl_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT id FROM $tbl_cat
-                WHERE c_id = $courseId AND title = '".Database::escape_string($title)."'";
+        $tableCategory = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $sql = "SELECT iid FROM $tableCategory
+                WHERE title = '".Database::escape_string($title)."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);

@@ -784,13 +784,13 @@ class Exercise
      * Selecting question list depending in the exercise-category
      * relationship (category table in exercise settings).
      *
-     * @param array $question_list
+     * @param array $questionList
      * @param int   $questionSelectionType
      *
      * @return array
      */
     public function getQuestionListWithCategoryListFilteredByCategorySettings(
-        $question_list,
+        $questionList,
         $questionSelectionType
     ) {
         $result = [
@@ -810,22 +810,21 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED: // 3
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'title ASC',
                     false,
                     true
                 );
 
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
 
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     false
                 );
@@ -835,20 +834,19 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     null,
                     true,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     false
                 );
@@ -857,14 +855,13 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM: // 5
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'title ASC',
                     false,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
                 $questionsByCategoryMandatory = [];
@@ -873,15 +870,15 @@ class Exercise
                 ) {
                     $questionsByCategoryMandatory = TestCategory::getQuestionsByCat(
                         $this->id,
-                        $question_list,
+                        $questionList,
                         $categoriesAddedInExercise,
                         true
                     );
                 }
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     true,
                     $questionsByCategoryMandatory
@@ -892,22 +889,21 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED:
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     null,
                     true,
                     true
                 );
 
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
 
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     true
                 );
@@ -916,20 +912,19 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED: // 9
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'root ASC, lft ASC',
                     false,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     false
                 );
@@ -938,20 +933,19 @@ class Exercise
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM: // 10
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
-                    $this->course['real_id'],
                     'root, lft ASC',
                     false,
                     true
                 );
-                $questions_by_category = TestCategory::getQuestionsByCat(
+                $questionsByCategory = TestCategory::getQuestionsByCat(
                     $this->getId(),
-                    $question_list,
+                    $questionList,
                     $categoriesAddedInExercise
                 );
-                $question_list = $this->pickQuestionsPerCategory(
+                $questionList = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
-                    $question_list,
-                    $questions_by_category,
+                    $questionList,
+                    $questionsByCategory,
                     true,
                     true
                 );
@@ -959,16 +953,16 @@ class Exercise
                 break;
         }
 
-        $result['question_list'] = isset($question_list) ? $question_list : [];
-        $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : [];
+        $result['question_list'] = $questionList ?? [];
+        $result['category_with_questions_list'] = $questionsByCategory ?? [];
         $parentsLoaded = [];
         // Adding category info in the category list with question list:
-        if (!empty($questions_by_category)) {
+        if (!empty($questionsByCategory)) {
             $newCategoryList = [];
             $em = Database::getManager();
             $repo = $em->getRepository(CQuizRelQuestionCategory::class);
 
-            foreach ($questions_by_category as $categoryId => $questionList) {
+            foreach ($questionsByCategory as $categoryId => $questionList) {
                 $category = new TestCategory();
                 $cat = (array) $category->getCategory($categoryId);
                 if ($cat) {
@@ -1666,7 +1660,7 @@ class Exercise
             }
         }
 
-        $this->save_categories_in_exercise($this->categories);
+        $this->saveCategoriesInExercise($this->categories);
 
         return $id;
     }
@@ -3000,7 +2994,7 @@ class Exercise
                 foreach ($categories as $category) {
                     $newCategoryList[$category['category_id']] = $category['count_questions'];
                 }
-                $exerciseObject->save_categories_in_exercise($newCategoryList);
+                $exerciseObject->saveCategoriesInExercise($newCategoryList);
             }
         }
     }
@@ -7295,7 +7289,7 @@ class Exercise
         if (!empty($this->getId())) {
             $sql = "SELECT SUM(count_questions) count_questions
                     FROM $table
-                    WHERE exercise_id = {$this->getId()} AND c_id = {$this->course_id}";
+                    WHERE exercise_id = {$this->getId()}";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -7308,21 +7302,20 @@ class Exercise
     }
 
     /**
-     * Save categories in the TABLE_QUIZ_REL_CATEGORY table.
+     * Save categories in the TABLE_QUIZ_REL_CATEGORY table
      *
      * @param array $categories
      */
-    public function save_categories_in_exercise($categories)
+    public function saveCategoriesInExercise($categories)
     {
         if (!empty($categories) && !empty($this->getId())) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table
-                    WHERE exercise_id = {$this->getId()} AND c_id = {$this->course_id}";
+                    WHERE exercise_id = {$this->getId()}";
             Database::query($sql);
-            if (!empty($categories)) {
-                foreach ($categories as $categoryId => $countQuestions) {
+            foreach ($categories as $categoryId => $countQuestions) {
+                if ($categoryId !== 0) {
                     $params = [
-                        'c_id' => $this->course_id,
                         'exercise_id' => $this->getId(),
                         'category_id' => $categoryId,
                         'count_questions' => $countQuestions,

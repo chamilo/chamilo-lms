@@ -359,32 +359,21 @@ abstract class Question
      * in this version, a question can only have 1 category
      * if category is 0, then question has no category then delete the category entry.
      *
-     * @param int $categoryId
-     * @param int $courseId
-     *
-     * @return bool
-     *
      * @author Hubert Borderiou 12-10-2011
      */
-    public function saveCategory($categoryId, $courseId = 0)
+    public function saveCategory(int $categoryId): bool
     {
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-
-        if (empty($courseId)) {
-            return false;
-        }
-
         if ($categoryId <= 0) {
-            $this->deleteCategory($courseId);
+            $this->deleteCategory();
         } else {
             // update or add category for a question
             $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
             $categoryId = (int) $categoryId;
-            $question_id = (int) $this->id;
+            $questionId = (int) $this->id;
             $sql = "SELECT count(*) AS nb FROM $table
                     WHERE
-                        question_id = $question_id AND
-                        c_id = ".$courseId;
+                        question_id = $questionId
+                    ";
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
             $allowMandatory = api_get_configuration_value('allow_mandatory_question_in_category');
@@ -397,11 +386,13 @@ abstract class Question
                         SET category_id = $categoryId
                         $extraMandatoryCondition
                         WHERE
-                            question_id = $question_id ";
+                            question_id = $questionId
+                        ";
                 Database::query($sql);
             } else {
                 $sql = "INSERT INTO $table (question_id, category_id)
-                        VALUES ($question_id, $categoryId)";
+                        VALUES ($questionId, $categoryId)
+                        ";
                 Database::query($sql);
                 if ($allowMandatory) {
                     $id = Database::insert_id();
@@ -412,33 +403,28 @@ abstract class Question
                     }
                 }
             }
-
-            return true;
         }
+
+        return true;
     }
 
     /**
      * @author hubert borderiou 12-10-2011
      *
-     * @param int $courseId
      *                      delete any category entry for question id
      *                      delete the category for question
-     *
-     * @todo Check if deprecated
-     *
-     * @return bool
      */
-    public function deleteCategory($courseId = 0)
+    public function deleteCategory(): bool
     {
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $questionId = (int) $this->id;
-        if (empty($courseId) || empty($questionId)) {
+        if (empty($questionId)) {
             return false;
         }
         $sql = "DELETE FROM $table
                 WHERE
-                    question_id = $questionId";
+                    question_id = $questionId
+                ";
         Database::query($sql);
 
         return true;

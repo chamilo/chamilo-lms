@@ -90,10 +90,10 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionCategory", inversedBy="questions")
      * @ORM\JoinTable(name="c_quiz_question_rel_category",
      *     joinColumns={
-     *         @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
+     *         @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      *     },
      *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
+     *         @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      *     }
      * )
      */

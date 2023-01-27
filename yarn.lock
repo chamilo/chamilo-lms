@@ -3623,7 +3623,7 @@ __metadata:
     jsplumb: ^2.15.6
     linkifyjs: 3.0.5
     litepicker: ^2.0.12
-    luxon: ^2.5.0
+    luxon: ^2.5.2
     mathjax: ^2.7.9
     mediaelement: ^5.1.0
     mediaelement-plugins: "https://github.com/chamilo/mediaelement-plugins"
@@ -6384,10 +6384,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "luxon@npm:2.5.0"
-  checksum: 2fccce6bbdfc8f13c5a8c148ff045ab3b10f4f80cac28dd92575588fffce9b2d7197096d7fedcc61a6245b59f4233507797f530e63f22b9ae4c425dff2909ae3
+"luxon@npm:^2.5.2":
+  version: 2.5.2
+  resolution: "luxon@npm:2.5.2"
+  checksum: d8b671ffd2ff0b438af862ac11082a81b3aedd9f8b6a4ca636f944224f8dd381125cd4d274ca0a8aedcaf2cfca0fc2ca96fe4cc1b16a28b7af701afb95c0bff8
   languageName: node
   linkType: hard
 

@@ -682,4 +682,15 @@ class FeatureContext extends MinkContext
             $i++;
         }
     }
+
+    /**
+     * @Then I click the :selector element
+     */
+    public function iClickTheElement($selector)
+    {
+        $page = $this->getSession()->getPage();
+        $element = $page->find('css', $selector);
+
+        $element->click();
+    }
 }

@@ -264,7 +264,7 @@
         class="p-button-success"
         icon="mdi mdi-progress-download"
         name="button_step6"
-        type="submit"
+        type="button"
         @click="btnStep6OnClick"
       />
     </div>
@@ -326,5 +326,7 @@ function btnStep6OnClick () {
   loading.value= true;
 
   isExecutable.value = 'step6';
+
+  document.getElementById('install_form').submit();
 }
 </script>

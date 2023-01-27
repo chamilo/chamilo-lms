@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
@@ -21,7 +21,7 @@ final class Version20230116184632 extends AbstractMigrationChamilo
     }
 
     /**
-     * Process one step up in the migration
+     * Process one step up in the migration.
      */
     public function up(Schema $schema): void
     {

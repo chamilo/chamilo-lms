@@ -60,6 +60,9 @@ jobs:
 
             - name: Install Yarn
               run: |
+                  sudo npm i -g npm
+                  node --version
+                  npm --version
                   sudo corepack enable
                   yarn set version stable
                   yarn --version

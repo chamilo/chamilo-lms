@@ -3900,6 +3900,16 @@ class Exercise
             $answerMatching[$real_answer['iid']] = $real_answer['answer'];
         }
 
+        // Get correct answers for multiple answers.
+        $sql = "SELECT iid
+                FROM $table_ans
+                WHERE question_id = $questionId AND correct = 1";
+        $resMAnswer = Database::query($sql);
+        $correctMultipleAnswers = [];
+        while ($rowMAanswer = Database::fetch_array($resMAnswer)) {
+            $correctMultipleAnswers[] = $rowMAanswer['iid'];
+        }
+
         // Get first answer needed for global question, no matter the answer shuffle option;
         $firstAnswer = [];
         if ($answerType == MULTIPLE_ANSWER_COMBINATION ||
@@ -4155,6 +4165,7 @@ class Exercise
                     $totalScore += $answerWeighting;
                     break;
                 case GLOBAL_MULTIPLE_ANSWER:
+                    $validAnswer = false;
                     if ($from_database) {
                         $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
@@ -4163,14 +4174,20 @@ class Exercise
                         while ($row = Database::fetch_array($resultans)) {
                             $choice[$row['answer']] = 1;
                         }
+                        if (!empty($choice) && count($choice) == count($correctMultipleAnswers)) {
+                            $validAnswer = (0 == count(array_diff(array_keys($choice), $correctMultipleAnswers)));
+                        }
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         $real_answers[$answerId] = (bool) $studentChoice;
-                        if ($studentChoice) {
+                        if ($studentChoice && $validAnswer) {
                             $questionScore += $answerWeighting;
                         }
                     } else {
+                        if (!empty($choice) && count($choice) == count($correctMultipleAnswers)) {
+                            $validAnswer = (0 == count(array_diff(array_keys($choice), $correctMultipleAnswers)));
+                        }
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-                        if (isset($studentChoice)) {
+                        if (isset($studentChoice) && $validAnswer) {
                             $questionScore += $answerWeighting;
                         }
                         $real_answers[$answerId] = (bool) $studentChoice;

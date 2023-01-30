@@ -24,7 +24,7 @@ class LtiProviderPlugin extends Plugin
 
     protected function __construct()
     {
-        $version = '1.0';
+        $version = '1.1';
         $author = 'Christian Beeznest';
 
         $message = Display::return_message($this->get_lang('Description'));

@@ -65,3 +65,12 @@ CREATE TABLE plugin_lti_provider_result (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ```
+
+## v1.1
+### Database changes
+You need to execute this SQL query in your database after updating your Chamilo after version 1.11.18 if the plugin was already installed before.
+
+```sql
+ALTER TABLE plugin_lti_provider_result MODIFY client_uid varchar(255) NOT NULL;
+```
+

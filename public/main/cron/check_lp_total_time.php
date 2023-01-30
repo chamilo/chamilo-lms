@@ -111,7 +111,7 @@ function compareLpTimeAndCourseTime($user, Course $course, $sessionId = 0)
 
         $content = PHP_EOL.'User: '.$user['user_id']." - Total course: $totalCourseTimeFormatted / Total LP: $totalLpTimeFormatted".PHP_EOL;
         $content .= PHP_EOL.'Diff: '.api_time_to_hms($diff).PHP_EOL;
-        $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId.'&course='.$courseCode.'&id_session='.$sessionId;
+        $url = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$userId.'&course='.$courseCode.'&id_session='.$sessionId;
         $content .= Display::url('Check', $url, ['target' => '_blank']);
         $content .= PHP_EOL;
 
@@ -134,7 +134,7 @@ function compareLpTimeAndCourseTime($user, Course $course, $sessionId = 0)
             $content .= 'Top 1 high lp item times'.PHP_EOL.PHP_EOL;
             foreach ($results as $item) {
                 $lpId = $item['lp_id'];
-                $link = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?cidReq='.$courseCode.
+                $link = api_get_path(WEB_CODE_PATH).'my_space/lp_tracking.php?cidReq='.$courseCode.
                     '&course='.$courseCode.'&origin=&lp_id='.$lpId.'&student_id='.$userId.'&id_session='.$sessionId;
                 $content .= 'total_time to be reduced = '.api_time_to_hms($item['total_time']).PHP_EOL;
                 $content .= Display::url('See report before update', $link, ['target' => '_blank']).PHP_EOL;

@@ -1884,7 +1884,7 @@ switch ($action) {
                 $detailButtons = [];
                 $detailButtons[] = Display::url(
                     $pdfIcon,
-                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    api_get_path(WEB_CODE_PATH).'my_space/session.php?'
                     .http_build_query(
                         [
                             'action' => 'export_to_pdf',
@@ -1897,17 +1897,17 @@ switch ($action) {
                 );
                 $detailButtons[] = Display::url(
                     Display::return_icon('works.png', get_lang('WorksReport')),
-                    api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']
+                    api_get_path(WEB_CODE_PATH).'my_space/works_in_session_report.php?session='.$session['id']
                 );
                 $detailButtons[] = Display::url(
                     Display::return_icon('2rightarrow.png'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/course.php?sid='.$session['id']
+                    api_get_path(WEB_CODE_PATH).'my_space/course.php?sid='.$session['id']
                 );
 
                 $item = [
                     'name' => Display::url(
                         $session['name'],
-                        api_get_path(WEB_CODE_PATH).'mySpace/course.php?sid='.$session['id']
+                        api_get_path(WEB_CODE_PATH).'my_space/course.php?sid='.$session['id']
                     ),
                     'date' => $dateToString,
                     'course_per_session' => $count_courses_in_session,

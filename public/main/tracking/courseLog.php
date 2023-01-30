@@ -319,7 +319,7 @@ if ($showReporting) {
                     continue;
                 }
             }
-            //$url = $urlWebCode.'mySpace/course.php?sid='.$session['id'].'&cid='.$courseId;
+            //$url = $urlWebCode.'my_space/course.php?sid='.$session['id'].'&cid='.$courseId;
             $url = $urlWebCode.'tracking/courseLog.php?cid='.$courseId.'&sid='.$session['id'].'&gid=0';
             $table->setCellContents($row++, 0, $icon.' '.Display::url($session['name'], $url));
         }

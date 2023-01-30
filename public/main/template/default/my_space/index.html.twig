@@ -16,7 +16,7 @@
             <div class="card">
                 <div class="content">
                     <div class="card-title">
-                        <a href="{{ url('legacy_main', {'name' : 'mySpace/student.php'}) }}">
+                        <a href="{{ url('legacy_main', {'name' : 'my_space/student.php'}) }}">
                             {{ 'Followed students' | trans }}
                         </a>
                     </div>
@@ -39,7 +39,7 @@
             <div class="card">
                 <div class="content">
                     <div class="card-title">
-                        <a href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}?status={{ studentboss }}">
+                        <a href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}?status={{ studentboss }}">
                             {{ 'Followed student bosses' | trans }}
                         </a>
                     </div>
@@ -62,7 +62,7 @@
             <div class="card">
                 <div class="content">
                     <div class="card-title">
-                        <a href="{{ url('legacy_main', {'name' : 'mySpace/teachers.php'}) }}">
+                        <a href="{{ url('legacy_main', {'name' : 'my_space/teachers.php'}) }}">
                             {{ 'Followed teachers' | trans }}
                         </a>
                     </div>
@@ -86,7 +86,7 @@
             <div class="card">
                 <div class="content">
                     <div class="card-title">
-                        <a href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}?status={{ drh }}">
+                        <a href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}?status={{ drh }}">
                             {{ 'Followed HR directors' | trans }}
                         </a>
                     </div>
@@ -117,7 +117,7 @@
                             <span class="percent">{{ total_user }}</span>
                         </div>
                         <div class="easypiechart-link">
-                            <a class="btn btn--plain" href="{{ url('legacy_main', {'name' : 'mySpace/users.php'}) }}">
+                            <a class="btn btn--plain" href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}">
                                 {{ 'Followed users' | trans }}
                             </a>
                         </div>
@@ -139,7 +139,7 @@
                         </div>
                         <div class="easypiechart-link">
                             <a class="btn btn--plain"
-                               href="{{ url('legacy_main', {'name' : 'mySpace/course.php'}) }}"
+                               href="{{ url('legacy_main', {'name' : 'my_space/course.php'}) }}"
                             >
                                 {{ 'Assigned courses' | trans }}
                             </a>
@@ -147,7 +147,7 @@
                     </div>
                     {% if app.user.status == 1 %}
                         <a
-                            href="{{ url('legacy_main', {'name' : 'mySpace/course.php'}) }}"
+                            href="{{ url('legacy_main', {'name' : 'my_space/course.php'}) }}"
                            class="btn btn--plain btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
@@ -160,7 +160,7 @@
                         </div>
                         <div class="easypiechart-link">
                             <a class="btn btn--plain"
-                               href="{{ url('legacy_main', {'name' : 'mySpace/course.php?follow'}) }}"
+                               href="{{ url('legacy_main', {'name' : 'my_space/course.php?follow'}) }}"
                             >
                                 {{ 'Followed courses' | trans }}
                             </a>
@@ -168,7 +168,7 @@
                     </div>
                     {% if app.user.status == 1 %}
                         <a
-                            href="{{ url('legacy_main', {'name' : 'mySpace/course.php?follow'}) }}"
+                            href="{{ url('legacy_main', {'name' : 'my_space/course.php?follow'}) }}"
                             class="btn btn--plain btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
@@ -181,7 +181,7 @@
                         </div>
                         <div class="easypiechart-link">
                             <a class="btn btn--plain"
-                               href="{{ url('legacy_main', {'name' : 'mySpace/session.php'}) }}"
+                               href="{{ url('legacy_main', {'name' : 'my_space/session.php'}) }}"
                             >
                                 {{ 'Followed sessions' | trans }}
                             </a>

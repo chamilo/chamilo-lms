@@ -118,7 +118,7 @@ function getData(User $hrm, $status = HRM_REQUEST)
 
     foreach ($requests as $request) {
         $line = [];
-        $studentLink = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$request['user_id'];
+        $studentLink = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$request['user_id'];
         $line[] = '<a href="'.$studentLink.'">'.api_get_person_name($request['firstname'], $request['lastname']).'</a>';
         if (HRM_REQUEST == $status) {
             $line[] = Display::url(

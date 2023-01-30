@@ -225,7 +225,7 @@ function action_formatter(cellvalue, options, rowObject) {
     var value = rowObject[5];
     return \''.
     '&nbsp;'.$link.
-    '&nbsp;<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.$reportingIcon.'</a>'.
+    '&nbsp;<a href="'.$urlStats.'my_space/myStudents.php?student=\'+options.rowId+\'">'.$reportingIcon.'</a>'.
     ' '.$deleteButton.' \';
 }
 
@@ -244,7 +244,7 @@ function extra_formatter(cellvalue, options, rowObject) {
     return calendarName;
 
     return \''.
-    '&nbsp;<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="'.$urlStats.'my_space/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>'.
     ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>\';
 }';
 

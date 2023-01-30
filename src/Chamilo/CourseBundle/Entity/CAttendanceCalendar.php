@@ -67,9 +67,9 @@ class CAttendanceCalendar
     /**
      * @var bool
      *
-     * @ORM\Column(name="blocked", type="boolean", nullable=true)
+     * ORM\Column(name="blocked", type="boolean", nullable=true)
      */
-    //protected $blocked;
+    protected $blocked;
 
     /**
      * Set attendanceId.

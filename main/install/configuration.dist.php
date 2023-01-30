@@ -2298,8 +2298,8 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Require DB changes:
 // ALTER TABLE c_attendance_sheet ADD signature longtext NULL;
 // ALTER TABLE c_attendance_calendar ADD blocked tinyint(1) NULL;
-// Requires edit Entity CAttendanceSheet : src/Chamilo/CourseBundle/Entity/CAttendanceSheet.php uncomment "signature" variable.
-// Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php uncomment "blocked" variable.
+// Requires edit Entity CAttendanceSheet : src/Chamilo/CourseBundle/Entity/CAttendanceSheet.php  add the @ symbol for attribute $signature into ORM\Column() line.
+// Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php add the @ symbol for attribute $blocked into ORM\Column() line.
 //$_configuration['enable_sign_attendance_sheet'] = false;
 
 // Make sessions by duration always accessible to coaches (otherwise
@@ -2346,6 +2346,7 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Require DB changes:
 //CREATE TABLE c_attendance_result_comment (iid int not null PRIMARY KEY AUTO_INCREMENT, attendance_sheet_id int not null, user_id int not null, created_at datetime not null, updated_at datetime not null, comment text not null, author_user_id int not null);
 //CREATE INDEX c_attendance_sheet_user ON track_e_access_complete (attendance_sheet_id, user_id);
+// Then add the "@" symbol to CAttendanceResultComment class in the ORM\Entity() line.
 //$_configuration['attendance_allow_comments'] = false;
 
 // Enable categories in Wiki tool.

@@ -2298,8 +2298,8 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Require DB changes:
 // ALTER TABLE c_attendance_sheet ADD signature longtext NULL;
 // ALTER TABLE c_attendance_calendar ADD blocked tinyint(1) NULL;
-// Requires edit Entity CAttendanceSheet : src/Chamilo/CourseBundle/Entity/CAttendanceSheet.php uncomment "signature" variable.
-// Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php uncomment "blocked" variable.
+// Requires edit Entity CAttendanceSheet : src/Chamilo/CourseBundle/Entity/CAttendanceSheet.php  add the @ symbol for attribute $signature into ORM\Column() line.
+// Requires edit Entity CAttendanceCalendar : src/Chamilo/CourseBundle/Entity/CAttendanceCalendar.php add the @ symbol for attribute $blocked into ORM\Column() line.
 //$_configuration['enable_sign_attendance_sheet'] = false;
 
 // Make sessions by duration always accessible to coaches (otherwise

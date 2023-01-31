@@ -252,7 +252,7 @@ if (api_is_drh()) {
     );
     $actionsLeft .= Display::url(
         Display::return_icon('statistics.png', get_lang("Corporate report"), [], ICON_SIZE_MEDIUM),
-        $webCodePath.'mySpace/company_reports.php'
+        $webCodePath.'my_space/company_reports.php'
     );
     $actionsLeft .= Display::url(
         Display::return_icon(
@@ -332,7 +332,7 @@ if ($export_csv) {
 $form = new FormValidator(
     'search_user',
     'get',
-    $webCodePath.'mySpace/users.php'
+    $webCodePath.'my_space/users.php'
 );
 $form->addSelect(
     'status',

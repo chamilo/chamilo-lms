@@ -41,7 +41,7 @@
 
         <directory name="public/main/link" />
 <!--        <directory name="public/main/lp" />-->
-<!--        <directory name="public/main/mySpace" />-->
+<!--        <directory name="public/main/my_space" />-->
         <directory name="public/main/notebook" />
         <directory name="public/main/session" />
         <directory name="public/main/social" />

@@ -1153,7 +1153,7 @@ if ($userToLoad) {
     $button .= '<br /><br />';
     $userReportButton = Display::url(
         get_lang('Diagnostic Validate LearningPath'),
-        api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userToLoad,
+        api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$userToLoad,
         ['class' => 'btn btn--primary']
     );
 }

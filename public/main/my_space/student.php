@@ -126,7 +126,7 @@ function get_users($from, $limit, $column, $direction)
         );
     }
 
-    $url = $webCodePath.'mySpace/myStudents.php';
+    $url = $webCodePath.'my_space/myStudents.php';
 
     $all_datas = [];
     foreach ($students as $student_data) {
@@ -207,7 +207,7 @@ function get_users($from, $limit, $column, $direction)
         if (api_is_drh() || api_is_platform_admin()) {
             $lostPasswordLink = '&nbsp;'.Display::url(
                 Display::return_icon('edit.png', get_lang('Edit')),
-                    $webCodePath.'mySpace/user_edit.php?user_id='.$student_id
+                    $webCodePath.'my_space/user_edit.php?user_id='.$student_id
             );
         }
 
@@ -271,12 +271,12 @@ if (api_is_drh()) {
     );
     $actionsLeft .= Display::url(
         Display::return_icon('statistics.png', get_lang('Corporate report'), [], ICON_SIZE_MEDIUM),
-        $webCodePath.'mySpace/company_reports.php'
+        $webCodePath.'my_space/company_reports.php'
     );
 
     $actionsLeft .= Display::url(
         Display::return_icon('calendar-user.png', get_lang('MyStudentsSchedule'), [], ICON_SIZE_MEDIUM),
-        $webCodePath.'mySpace/calendar_plan.php'
+        $webCodePath.'my_space/calendar_plan.php'
     );
 
     $actionsLeft .= Display::url(
@@ -356,7 +356,7 @@ if ($export_csv) {
 $form = new FormValidator(
     'search_user',
     'get',
-    $webCodePath.'mySpace/student.php'
+    $webCodePath.'my_space/student.php'
 );
 $form = Tracking::setUserSearchForm($form);
 $form->setDefaults($params);

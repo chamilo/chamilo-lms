@@ -231,7 +231,7 @@ if (api_is_student_boss()) {
     );
     $actions .= Display::url(
         Display::return_icon('user.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'mySpace/student.php'
+        api_get_path(WEB_CODE_PATH).'my_space/student.php'
     );
     $actions .= Display::url(
         Display::return_icon('statistics.png', get_lang('Corporate report'), [], ICON_SIZE_MEDIUM),
@@ -254,7 +254,7 @@ if (!empty($actions)) {
 }
 $content .= Display::url(
     get_lang("Corporate reportResumed"),
-    api_get_path(WEB_CODE_PATH).'mySpace/company_reports_resumed.php',
+    api_get_path(WEB_CODE_PATH).'my_space/company_reports_resumed.php',
     [
         'class' => 'btn btn--success',
     ]

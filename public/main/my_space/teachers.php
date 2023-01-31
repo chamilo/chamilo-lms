@@ -112,7 +112,7 @@ function get_users($from, $limit, $column, $direction)
         );
     }
     $all_datas = [];
-    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php';
+    $url = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php';
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
         $student_data = api_get_user_info($student_id);
@@ -274,7 +274,7 @@ if ($export_csv) {
     }
 }
 
-$form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/teachers.php');
+$form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'my_space/teachers.php');
 $form = Tracking::setUserSearchForm($form);
 $form->setDefaults($params);
 

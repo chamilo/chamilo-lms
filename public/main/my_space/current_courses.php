@@ -242,8 +242,8 @@ foreach ($array as $row_table) {
 }
 
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace">'.Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php?export=1">'.Display::return_icon('export_excel.png', get_lang('Current coursesReport'), [], 32).'</a> ';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/index.php">'.Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/current_courses.php?export=1">'.Display::return_icon('export_excel.png', get_lang('Current coursesReport'), [], 32).'</a> ';
 echo '</div>';
 echo '<div style="overflow:auto;">';
 echo $table->toHtml();

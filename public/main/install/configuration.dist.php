@@ -631,7 +631,7 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Block access to any user to "my progress" page
 //$_configuration['block_my_progress_page'] = false;
 
-// Add user extra fields in report: main/mySpace/exercise_category_report.php
+// Add user extra fields in report: main/my_space/exercise_category_report.php
 //$_configuration['exercise_category_report_user_extra_fields'] = ['fields' => ['skype', 'rssfeeds']];
 
 // Order sessions by position in user session list (UserManager::get_sessions_by_category)
@@ -1397,7 +1397,7 @@ $_configuration['auth_password_links'] = [
 // VALUES (2, 13, 'popular_courses', 'Popular course', 1, 1, NOW());
 // $_configuration['popular_courses_handpicked'] = false;
 
-// Default items per page in main/mySpace/users.php
+// Default items per page in main/my_space/users.php
 // $_configuration['my_space_users_items_per_page'] = 10;
 
 // Add teachers column in course list.

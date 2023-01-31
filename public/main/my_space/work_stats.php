@@ -68,7 +68,7 @@ function get_users($from, $number_of_items, $column, $direction)
         null,
         false
     );
-    $url = $webCodePath.'mySpace/myStudents.php';
+    $url = $webCodePath.'my_space/myStudents.php';
 
     $workList = getWorkListTeacher(0, 100, null, null, null);
 

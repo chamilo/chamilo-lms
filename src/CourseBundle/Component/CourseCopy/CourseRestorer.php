@@ -2770,12 +2770,12 @@ class CourseRestorer
                     ) {
                         $lp->created_on = api_get_utc_datetime();
                         $lp->modified_on = api_get_utc_datetime();
-                        $lp->publicated_on = null;
+                        $lp->published_on = null;
                     }
                 }
 
                 $lp->expired_on = isset($lp->expired_on) && '0000-00-00 00:00:00' === $lp->expired_on ? null : $lp->expired_on;
-                $lp->publicated_on = isset($lp->publicated_on) && '0000-00-00 00:00:00' === $lp->publicated_on ? null : $lp->publicated_on;
+                $lp->published_on = isset($lp->published_on) && '0000-00-00 00:00:00' === $lp->published_on ? null : $lp->published_on;
 
                 if (isset($lp->categoryId)) {
                     $lp->categoryId = (int) $lp->categoryId;
@@ -2809,7 +2809,7 @@ class CourseRestorer
                     'autolaunch' => self::DBUTF8(isset($lp->autolaunch) ? $lp->autolaunch : ''),
                     'created_on' => empty($lp->created_on) ? api_get_utc_datetime() : self::DBUTF8($lp->created_on),
                     'modified_on' => empty($lp->modified_on) ? api_get_utc_datetime() : self::DBUTF8($lp->modified_on),
-                    'publicated_on' => empty($lp->publicated_on) ? api_get_utc_datetime() : self::DBUTF8($lp->publicated_on),
+                    'published_on' => empty($lp->published_on) ? api_get_utc_datetime() : self::DBUTF8($lp->published_on),
                     'expired_on' => self::DBUTF8($lp->expired_on),
                     'debug' => self::DBUTF8($lp->debug),
                     'theme' => '',

@@ -294,7 +294,7 @@ final class UserToJsonNormalizer
             $date = $item->getAccessDate()->format($dateFormat);
             $list = [
                 'Course #'.$item->getCId(),
-                'Session # '.$item->getAccessSessionId(),
+                'Session # '.$item->getSessionId(),
                 'Tool: '.$item->getAccessTool(),
                 'Access date: '.$date,
             ];

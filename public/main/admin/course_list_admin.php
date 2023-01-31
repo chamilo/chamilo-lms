@@ -186,7 +186,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         );
         $actions[] = Display::url(
             Display::return_icon('backup.png', get_lang('Create a backup')),
-            $path.'coursecopy/create_backup.php?'.api_get_cidreq_params($courseId)
+            $path.'course_copy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),

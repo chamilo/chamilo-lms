@@ -106,7 +106,7 @@ if (Security::check_token('post') && (
         $form = new FormValidator(
             'copy_course',
             'post',
-            api_get_path(WEB_CODE_PATH).'coursecopy/copy_course.php?'.api_get_cidreq()
+            api_get_path(WEB_CODE_PATH).'course_copy/copy_course.php?'.api_get_cidreq()
         );
         $form->addSelect('destination_course', get_lang('Select target course'), $courses);
 

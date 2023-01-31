@@ -333,7 +333,7 @@ if (api_is_platform_admin(true, true)) {
 
     $menu_items[] = Display::url(
         Display::return_icon('works.png', get_lang('Assignments report'), [], ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php'
+        api_get_path(WEB_CODE_PATH).'my_space/works_in_session_report.php'
     );
     $menu_items[] = Display::url(
         Display::return_icon('clock.png', get_lang('Teachers time report by session'), [], ICON_SIZE_MEDIUM),
@@ -350,7 +350,7 @@ if (api_is_platform_admin(true, true)) {
     if (api_is_drh()) {
         $menu_items[] = Display::url(
             Display::return_icon('session.png', get_lang('SessionFilterReport'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'mySpace/session_filter.php'
+            api_get_path(WEB_CODE_PATH).'my_space/session_filter.php'
         );
     }
 
@@ -395,7 +395,7 @@ if (api_is_platform_admin(true, true)) {
 $form = new FormValidator(
     'search_course',
     'post',
-    api_get_path(WEB_CODE_PATH).'mySpace/session.php'
+    api_get_path(WEB_CODE_PATH).'my_space/session.php'
 );
 $form->addElement('text', 'keyword', get_lang('Keyword'));
 

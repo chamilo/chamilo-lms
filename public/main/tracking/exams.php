@@ -109,17 +109,17 @@ if (!$exportToXLS) {
 
         $menuItems[] = Display::url(
             Display::return_icon('teacher.png', get_lang('Trainer View'), [], 32),
-            api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=teacher'
+            api_get_path(WEB_CODE_PATH).'my_space/index.php?view=teacher'
         );
         if (api_is_platform_admin()) {
             $menuItems[] = Display::url(
                 Display::return_icon('star.png', get_lang('Admin view'), [], 32),
-                api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
+                api_get_path(WEB_CODE_PATH).'my_space/admin_view.php'
             );
         } else {
             $menuItems[] = Display::url(
                 Display::return_icon('star.png', get_lang('Coach interface'), [], 32),
-                api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=coach'
+                api_get_path(WEB_CODE_PATH).'my_space/index.php?view=coach'
             );
         }
         $menuItems[] = '<a href="#">'.Display::return_icon('quiz_na.png', get_lang('Exam tracking'), [], 32).'</a>';

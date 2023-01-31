@@ -1519,7 +1519,7 @@ class CourseBuilder
                     $obj->autolaunch,
                     $obj->created_on,
                     $obj->modified_on,
-                    $obj->publicated_on,
+                    $obj->published_on,
                     $obj->expired_on,
                     $obj->session_id,
                     $obj->category_id,

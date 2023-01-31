@@ -145,7 +145,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 }
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
+    'url' => api_get_path(WEB_CODE_PATH).'my_space/index.php',
     'name' => get_lang('Reporting'),
 ];
 

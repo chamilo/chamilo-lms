@@ -261,7 +261,7 @@ if (api_is_platform_admin(true) ||
 
         $html .= '<ul class="session-list">';
         foreach ($sessionList as $session) {
-            $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?sid='
+            $url = api_get_path(WEB_CODE_PATH).'my_space/course.php?sid='
                 .$session['id'].'&cidReq='.$courseInfo['code'];
             $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
         }

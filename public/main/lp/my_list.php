@@ -34,10 +34,10 @@ if (!empty($courses)) {
     $order = ' ORDER BY lp.createdOn ASC, lp.name ASC';
     $now = api_get_utc_datetime();
     $conditions = " (
-                (lp.publicatedOn IS NOT NULL AND lp.publicatedOn < '$now' AND lp.expiredOn IS NOT NULL AND lp.expiredOn > '$now') OR
-                (lp.publicatedOn IS NOT NULL AND lp.publicatedOn < '$now' AND lp.expiredOn IS NULL) OR
-                (lp.publicatedOn IS NULL AND lp.expiredOn IS NOT NULL AND lp.expiredOn > '$now') OR
-                (lp.publicatedOn IS NULL AND lp.expiredOn IS NULL )
+                (lp.publishedOn IS NOT NULL AND lp.publishedOn < '$now' AND lp.expiredOn IS NOT NULL AND lp.expiredOn > '$now') OR
+                (lp.publishedOn IS NOT NULL AND lp.publishedOn < '$now' AND lp.expiredOn IS NULL) OR
+                (lp.publishedOn IS NULL AND lp.expiredOn IS NOT NULL AND lp.expiredOn > '$now') OR
+                (lp.publishedOn IS NULL AND lp.expiredOn IS NULL )
                 )
             ";
 

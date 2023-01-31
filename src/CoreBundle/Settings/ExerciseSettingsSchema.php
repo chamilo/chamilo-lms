@@ -32,8 +32,8 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             )
         ;
         $allowedTypes = [
-            'exercise_min_score' => ['string'],
-            'exercise_max_score' => ['string'],
+            'exercise_min_score' => ['string', 'null'],
+            'exercise_max_score' => ['string', 'null'],
             'enable_quiz_scenario' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);

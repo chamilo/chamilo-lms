@@ -126,7 +126,7 @@ if ('learnpath' === $origin) {
     ';
 }
 
-$i = $total_score = $max_score = 0;
+$i = $total_score = $maxScore = 0;
 $remainingMessage = '';
 $attemptButton = '';
 
@@ -188,7 +188,7 @@ if (!empty($exercise_stat_info)) {
     $total_score = $exercise_stat_info['score'];
 }
 
-$max_score = $objExercise->get_max_score();
+$maxScore = $objExercise->getMaxScore();
 
 if ('embeddable' === $origin) {
     $pageTop .= showEmbeddableFinishButton();
@@ -298,7 +298,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     Session::write('attempt_remaining', $remainingMessage);
 
     // Record the results in the learning path, using the SCORM interface (API)
-    $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
+    $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$maxScore', 0, 'completed');</script>";
     $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
 
     $showFooter = false;

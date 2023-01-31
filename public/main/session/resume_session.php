@@ -304,7 +304,7 @@ if (!empty($sessionRelUsers)) {
 
         $reportingLink = Display::url(
             Display::return_icon('statistics.gif', get_lang('Reporting')),
-            $codePath.'mySpace/myStudents.php?student='.$userId.''.$orig_param.'&id_session='
+            $codePath.'my_space/myStudents.php?student='.$userId.''.$orig_param.'&id_session='
             .$sessionId
         );
 

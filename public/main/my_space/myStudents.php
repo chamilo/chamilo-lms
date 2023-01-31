@@ -508,7 +508,7 @@ switch ($action) {
                 $bossList = UserManager::getStudentBossList($studentId);
 
                 if (!empty($bossList)) {
-                    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
+                    $url = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$studentId;
                     $link = Display::url($url, $url);
 
                     foreach ($bossList as $boss) {
@@ -733,7 +733,7 @@ $actions .= '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_
 
 $actions .= Display::url(
     Display::return_icon('attendance.png', get_lang('Access details'), '', ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$studentId
+    api_get_path(WEB_CODE_PATH).'my_space/access_details_session.php?user_id='.$studentId
 );
 $email = $user->getEmail();
 if (!empty($email)) {
@@ -786,7 +786,7 @@ if (SkillModel::isAllowed($studentId, false)) {
             null,
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?action=all_attendance&student='.$studentId
+        api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?action=all_attendance&student='.$studentId
     );
 }
 
@@ -1507,7 +1507,7 @@ if (empty($details)) {
             if (!empty($sId)) {
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
-                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    api_get_path(WEB_CODE_PATH).'my_space/session.php?'
                     .http_build_query(
                         [
                             'student' => $studentId,
@@ -1519,7 +1519,7 @@ if (empty($details)) {
                 );
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
-                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    api_get_path(WEB_CODE_PATH).'my_space/session.php?'
                     .http_build_query(
                         [
                             'student' => $studentId,
@@ -1818,7 +1818,7 @@ if (empty($details)) {
                     }
                     $link = Display::url(
                         Display::return_icon('2rightarrow.png', get_lang('Details')),
-                        $codePath.'mySpace/lp_tracking.php?cid='.$courseId.'&course='.$courseCode.$from.'&origin='.$origin
+                        $codePath.'my_space/lp_tracking.php?cid='.$courseId.'&course='.$courseCode.$from.'&origin='.$origin
                         .'&lp_id='.$lp_id.'&student_id='.$studentId.'&sid='.$sessionId
                     );
                     echo Display::tag('td', $link);

@@ -63,7 +63,7 @@ if ($is_platform_admin) {
         );
         $menu_items[] = Display::url(
             Display::return_icon('star_na.png', get_lang('Admin view'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
+            api_get_path(WEB_CODE_PATH).'my_space/admin_view.php'
         );
         $menu_items[] = Display::url(
             Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
@@ -71,7 +71,7 @@ if ($is_platform_admin) {
         );
         $menu_items[] = Display::url(
             Display::return_icon('statistics.png', get_lang('Current courses report'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
+            api_get_path(WEB_CODE_PATH).'my_space/current_courses.php'
         );
     /*
     $menu_items[] = Display::url(
@@ -92,7 +92,7 @@ if ($is_platform_admin) {
         $menu_items[] = Display::url(
             Display::return_icon('star.png', get_lang('Admin view'), [], ICON_SIZE_MEDIUM),
             //api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin'
-            api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
+            api_get_path(WEB_CODE_PATH).'my_space/admin_view.php'
         );
         $menu_items[] = Display::url(
             Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
@@ -100,7 +100,7 @@ if ($is_platform_admin) {
         );
         $menu_items[] = Display::url(
             Display::return_icon('statistics.png', get_lang('Current courses report'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
+            api_get_path(WEB_CODE_PATH).'my_space/current_courses.php'
         );
         /*
         $menu_items[] = Display::url(
@@ -306,7 +306,7 @@ $view->assign('stats', $stats);
 $form = new FormValidator(
     'search_user',
     'get',
-    api_get_path(WEB_CODE_PATH).'mySpace/student.php'
+    api_get_path(WEB_CODE_PATH).'my_space/student.php'
 );
 $form = Tracking::setUserSearchForm($form);
 

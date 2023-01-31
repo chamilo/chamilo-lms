@@ -56,7 +56,7 @@ $template = new Template(get_lang('Import from Moodle'));
 $infoMsg = Display::return_message(get_lang('Import from MoodleInstructions'), 'normal', false);
 $template->assign('info_msg', $infoMsg);
 $template->assign('form', $form->returnForm());
-$templateName = $template->get_template('coursecopy/import_moodle.tpl');
+$templateName = $template->get_template('course_copy/import_moodle.tpl');
 $content = $template->fetch($templateName);
 
 $template->assign('header', get_lang('Import from Moodle'));

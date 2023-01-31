@@ -100,16 +100,16 @@ if (api_is_platform_admin(true, true)) {
         );
         $menu_items[] = Display::url(
             Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'mySpace/session.php'
+            api_get_path(WEB_CODE_PATH).'my_space/session.php'
         );
         $menu_items[] = Display::url(
             get_lang('Question stats'),
-            api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global.php'
+            api_get_path(WEB_CODE_PATH).'my_space/question_stats_global.php'
         );
 
         $menu_items[] = Display::url(
             get_lang('Detailed questions stats'),
-            api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global_detail.php'
+            api_get_path(WEB_CODE_PATH).'my_space/question_stats_global_detail.php'
         );
         if (api_can_login_as($user_id)) {
             $link = '<a
@@ -388,7 +388,7 @@ $table->set_header(7, get_lang('Assignments'), false);
 $table->set_header(8, get_lang('Attendances'), false);
 $table->set_header(9, get_lang('Details'), false);
 
-$form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/course.php');
+$form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'my_space/course.php');
 $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addButtonSearch(get_lang('Search'));
 $form->addElement('hidden', 'sid', $sessionId);

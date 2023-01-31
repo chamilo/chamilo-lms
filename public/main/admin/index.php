@@ -236,7 +236,7 @@ if (api_is_platform_admin()) {
 
     if (api_is_global_platform_admin()) {
         $items[] = [
-            'url' => '../coursecopy/copy_course_session.php',
+            'url' => '../course_copy/copy_course_session.php',
             'label' => get_lang('Copy from course in session to another session'),
         ];
     }
@@ -354,7 +354,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'configure_inscription.php', 'label' => get_lang('Setting the registration page')];
     $items[] = ['url' => 'statistics/index.php', 'label' => get_lang('Statistics')];
     $items[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'mySpace/company_reports.php',
+        'url' => api_get_path(WEB_CODE_PATH).'my_space/company_reports.php',
         'label' => get_lang('Reports'),
     ];
     $items[] = [

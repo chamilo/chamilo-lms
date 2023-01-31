@@ -123,7 +123,7 @@ class BlockDaily extends Block
         $content .= $data_table;
         if (!empty($course_data)) {
             $content .= '<div style="text-align:right;margin-top:10px;">
-            <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php">'.get_lang('See more').'</a></div>';
+            <a href="'.api_get_path(WEB_CODE_PATH).'my_space/course.php">'.get_lang('See more').'</a></div>';
         }
         //$content .= '</div>';
         return $content;

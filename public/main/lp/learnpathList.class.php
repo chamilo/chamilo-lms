@@ -69,10 +69,10 @@ class LearnpathList
         $now = api_get_utc_datetime();
         if ($check_publication_dates) {
             $qb->andWhere(
-                " (resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
-                  (resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NULL) OR
-                  (resource.publicatedOn IS NULL AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
-                  (resource.publicatedOn IS NULL AND resource.expiredOn IS NULL) "
+                " (resource.publishedOn IS NOT NULL AND resource.publishedOn < '$now' AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
+                  (resource.publishedOn IS NOT NULL AND resource.publishedOn < '$now' AND resource.expiredOn IS NULL) OR
+                  (resource.publishedOn IS NULL AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
+                  (resource.publishedOn IS NULL AND resource.expiredOn IS NULL) "
             );
         }
 
@@ -155,7 +155,7 @@ class LearnpathList
                 'autolaunch' => $lp->getAutolaunch(),
                 'created_on' => $lp->getCreatedOn() ? $lp->getCreatedOn()->format('Y-m-d H:i:s') : null,
                 'modified_on' => $lp->getModifiedOn() ? $lp->getModifiedOn()->format('Y-m-d H:i:s') : null,
-                'publicated_on' => $lp->getPublicatedOn() ? $lp->getPublicatedOn()->format('Y-m-d H:i:s') : null,
+                'published_on' => $lp->getPublishedOn() ? $lp->getPublishedOn()->format('Y-m-d H:i:s') : null,
                 'expired_on' => $lp->getExpiredOn() ? $lp->getExpiredOn()->format('Y-m-d H:i:s') : null,
                 //'category_id'       => $lp['category_id'],
                 'subscribe_users' => $lp->getSubscribeUsers(),

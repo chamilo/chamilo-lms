@@ -7883,60 +7883,47 @@ class Exercise
     /**
      * Calculate the max_score of the quiz, depending of question inside, and quiz advanced option.
      */
-    public function get_max_score()
+    public function getMaxScore()
     {
-        $out_max_score = 0;
+        $outMaxScore = 0;
         // list of question's id !!! the array key start at 1 !!!
         $questionList = $this->selectQuestionList(true);
 
-        // test is randomQuestions - see field random of test
-        if ($this->random > 0 && 0 == $this->randomByCat) {
-            $numberRandomQuestions = $this->random;
-            $questionScoreList = [];
-            foreach ($questionList as $questionId) {
-                $tmpobj_question = Question::read($questionId);
-                if (is_object($tmpobj_question)) {
-                    $questionScoreList[] = $tmpobj_question->weighting;
-                }
-            }
-
-            rsort($questionScoreList);
-            // add the first $numberRandomQuestions value of score array to get max_score
-            for ($i = 0; $i < min($numberRandomQuestions, count($questionScoreList)); $i++) {
-                $out_max_score += $questionScoreList[$i];
-            }
-        } elseif ($this->random > 0 && $this->randomByCat > 0) {
+        if ($this->random > 0 && $this->randomByCat > 0) {
             // test is random by category
             // get the $numberRandomQuestions best score question of each category
             $numberRandomQuestions = $this->random;
-            $tab_categories_scores = [];
+            $tabCategoriesScores = [];
             foreach ($questionList as $questionId) {
-                $question_category_id = TestCategory::getCategoryForQuestion($questionId);
-                if (!is_array($tab_categories_scores[$question_category_id])) {
-                    $tab_categories_scores[$question_category_id] = [];
+                $questionCategoryId = TestCategory::getCategoryForQuestion($questionId);
+                if (!is_array($tabCategoriesScores[$questionCategoryId])) {
+                    $tabCategoriesScores[$questionCategoryId] = [];
                 }
-                $tmpobj_question = Question::read($questionId);
-                if (is_object($tmpobj_question)) {
-                    $tab_categories_scores[$question_category_id][] = $tmpobj_question->weighting;
+                $tmpObjQuestion = Question::read($questionId);
+                if (is_object($tmpObjQuestion)) {
+                    $tabCategoriesScores[$questionCategoryId][] = $tmpObjQuestion->weighting;
                 }
             }
 
             // here we've got an array with first key, the category_id, second key, score of question for this cat
-            foreach ($tab_categories_scores as $tab_scores) {
-                rsort($tab_scores);
-                for ($i = 0; $i < min($numberRandomQuestions, count($tab_scores)); $i++) {
-                    $out_max_score += $tab_scores[$i];
+            foreach ($tabCategoriesScores as $tabScores) {
+                rsort($tabScores);
+                $tabScoresCount = count($tabScores);
+                for ($i = 0; $i < min($numberRandomQuestions, $tabScoresCount); $i++) {
+                    $outMaxScore += $tabScores[$i];
                 }
             }
-        } else {
-            // standard test, just add each question score
-            foreach ($questionList as $questionId) {
-                $question = Question::read($questionId, $this->course);
-                $out_max_score += $question->weighting;
-            }
+
+            return $outMaxScore;
         }
 
-        return $out_max_score;
+        // standard test, just add each question score
+        foreach ($questionList as $questionId) {
+            $question = Question::read($questionId, $this->course);
+            $outMaxScore += $question->weighting;
+        }
+
+        return $outMaxScore;
     }
 
     /**
@@ -8691,7 +8678,7 @@ class Exercise
                         ->setUserScoreList($students)
                         ->setBestScore($bestResult)
                         ->setAverageScore($average)
-                        ->setScoreWeight($this->get_max_score());
+                        ->setScoreWeight($this->getMaxScore());
                     $em->persist($exerciseLink);
                     $em->flush();
                 }

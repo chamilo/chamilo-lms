@@ -70,7 +70,7 @@ class PersonalAgenda
     protected int $allDay;
 
     /**
-     * @ORM\Column(name="color", type="string", length=255, nullable=true)
+     * @ORM\Column(name="color", type="string", length=20, nullable=true)
      */
     protected ?string $color = null;
 

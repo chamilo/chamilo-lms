@@ -105,7 +105,7 @@ class learnpath
     public $subscribeUsers = 0; // Subscribe users or not
     public $created_on = '';
     public $modified_on = '';
-    public $publicated_on = '';
+    public $published_on = '';
     public $expired_on = '';
     public $ref;
     public $course_int_id;
@@ -163,8 +163,8 @@ class learnpath
 
             $this->accumulateScormTime = $entity->getAccumulateWorkTime();
 
-            if (!empty($entity->getPublicatedOn())) {
-                $this->publicated_on = $entity->getPublicatedOn()->format('Y-m-d H:i:s');
+            if (!empty($entity->getPublishedOn())) {
+                $this->published_on = $entity->getPublishedOn()->format('Y-m-d H:i:s');
             }
 
             if (!empty($entity->getExpiredOn())) {
@@ -401,7 +401,7 @@ class learnpath
      * @param string  $title
      * @param string  $description
      * @param int     $prerequisites
-     * @param int     $max_time_allowed
+     * @param int     $maxTimeAllowed
      * @param int     $userId
      *
      * @return int
@@ -414,7 +414,7 @@ class learnpath
         $title,
         $description = '',
         $prerequisites = 0,
-        $max_time_allowed = 0
+        $maxTimeAllowed = 0
     ) {
         $type = empty($type) ? 'dir' : $type;
         $course_id = $this->course_info['real_id'];
@@ -424,16 +424,16 @@ class learnpath
             $course_id = $this->course_info['real_id'];
         }
         $id = (int) $id;
-        $max_time_allowed = (int) $max_time_allowed;
-        if (empty($max_time_allowed)) {
-            $max_time_allowed = 0;
+        $maxTimeAllowed = (int) $maxTimeAllowed;
+        if (empty($maxTimeAllowed)) {
+            $maxTimeAllowed = 0;
         }
-        $max_score = 100;
+        $maxScore = 100;
         if ('quiz' === $type && $id) {
             // Disabling the exercise if we add it inside a LP
             $exercise = new Exercise($course_id);
             $exercise->read($id);
-            $max_score = $exercise->get_max_score();
+            $maxScore = $exercise->getMaxScore();
 
             $exercise->disable();
             $exercise->save();
@@ -446,8 +446,8 @@ class learnpath
             ->setPath($id)
             ->setLp(api_get_lp_entity($this->get_id()))
             ->setItemType($type)
-            ->setMaxScore($max_score)
-            ->setMaxTimeAllowed($max_time_allowed)
+            ->setMaxScore($maxScore)
+            ->setMaxTimeAllowed($maxTimeAllowed)
             ->setPrerequisite($prerequisites)
             //->setDisplayOrder($display_order + 1)
             //->setNextItemId((int) $next)
@@ -525,7 +525,7 @@ class learnpath
      * @param string $learnpath
      * @param string $origin
      * @param string $zipname       Zip file containing the learnpath or directory containing the learnpath
-     * @param string $publicated_on
+     * @param string $published_on
      * @param string $expired_on
      * @param int    $categoryId
      * @param int    $userId
@@ -539,7 +539,7 @@ class learnpath
         $learnpath = 'guess',
         $origin = 'zip',
         $zipname = '',
-        $publicated_on = '',
+        $published_on = '',
         $expired_on = '',
         $categoryId = 0,
         $userId = 0
@@ -556,10 +556,10 @@ class learnpath
 
         $categoryId = (int) $categoryId;
 
-        if (empty($publicated_on)) {
-            $publicated_on = null;
+        if (empty($published_on)) {
+            $published_on = null;
         } else {
-            $publicated_on = api_get_utc_datetime($publicated_on, true, true);
+            $published_on = api_get_utc_datetime($published_on, true, true);
         }
 
         if (empty($expired_on)) {
@@ -613,7 +613,7 @@ class learnpath
                     ->setDescription($description)
                     ->setDisplayOrder($dsp)
                     ->setCategory($category)
-                    ->setPublicatedOn($publicated_on)
+                    ->setPublishedOn($published_on)
                     ->setExpiredOn($expired_on)
                     ->setParent($courseEntity)
                     ->addCourseLink($courseEntity, $sessionEntity)
@@ -1786,8 +1786,8 @@ class learnpath
             // Also check the time availability of the LP
             if ($is_visible) {
                 // Adding visibility restrictions
-                if (null !== $lp->getPublicatedOn()) {
-                    if ($now < $lp->getPublicatedOn()->getTimestamp()) {
+                if (null !== $lp->getPublishedOn()) {
+                    if ($now < $lp->getPublishedOn()->getTimestamp()) {
                         $is_visible = false;
                     }
                 }
@@ -1796,7 +1796,7 @@ class learnpath
                 if (isset($_custom['lps_hidden_when_no_start_date']) &&
                     $_custom['lps_hidden_when_no_start_date']
                 ) {
-                    if (null !== $lp->getPublicatedOn()) {
+                    if (null !== $lp->getPublishedOn()) {
                         $is_visible = false;
                     }
                 }
@@ -6009,9 +6009,9 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_item_prerequisites_form(CLpItem $lpItem)
+    public function displayItemPrerequisitesForm(CLpItem $lpItem)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $preRequisiteId = $lpItem->getPrerequisite();
         $itemId = $lpItem->getIid();
 
@@ -6039,8 +6039,8 @@ class learnpath
         $return .= '</tr>';
 
         // @todo use entitites
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $tbl_lp_item
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM $tblLpItem
                 WHERE lp_id = ".$this->lp_id;
         $result = Database::query($sql);
 
@@ -6063,32 +6063,28 @@ class learnpath
         $currentItemId = $itemId;
         $options = [
             'decorate' => true,
-            'rootOpen' => function() {
+            'rootOpen' => function () {
                 return '';
             },
-            'rootClose' => function() {
+            'rootClose' => function () {
                 return '';
             },
-            'childOpen' => function() {
+            'childOpen' => function () {
                 return '';
             },
             'childClose' => '',
             'nodeDecorator' => function ($item) use (
                 $currentItemId,
                 $preRequisiteId,
-                $course_id,
+                $courseId,
                 $selectedMaxScore,
                 $selectedMinScore,
                 $displayOrder,
                 $lpItemRepo,
                 $em
             ) {
-                $mainUrl = '';
-                $fullTitle = $item['title'];
-                $title = cut($fullTitle, self::MAX_LP_ITEM_TITLE_LENGTH);
                 $itemId = $item['iid'];
                 $type = $item['itemType'];
-                $lpId = $this->get_id();
                 $iconName = str_replace(' ', '', $type);
                 $icon = Display::return_icon(
                     'lp_'.$iconName.'.png',
@@ -6096,7 +6092,6 @@ class learnpath
                     [],
                     ICON_SIZE_TINY
                 );
-                $url = $mainUrl.'&view=build&id='.$itemId.'&lp_id='.$lpId;
 
                 if ($itemId == $currentItemId) {
                     return '';
@@ -6134,16 +6129,16 @@ class learnpath
                 $return .= '</td>';
 
                 if (TOOL_QUIZ == $type) {
-                    // lets update max_score Tests information depending of the Tests Advanced properties
-                    $exercise = new Exercise($course_id);
+                    // let's update max_score Tests information depending of the Tests Advanced properties
+                    $exercise = new Exercise($courseId);
                     /** @var CLpItem $itemEntity */
                     $itemEntity = $lpItemRepo->find($itemId);
                     $exercise->read($item['path']);
-                    $itemEntity->setMaxScore($exercise->get_max_score());
+                    $itemEntity->setMaxScore($exercise->getMaxScore());
                     $em->persist($itemEntity);
                     $em->flush($itemEntity);
 
-                    $item['maxScore'] = $exercise->get_max_score();
+                    $item['maxScore'] = $exercise->getMaxScore();
 
                     if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
                         // Backwards compatibility with 1.9.x use mastery_score as min value

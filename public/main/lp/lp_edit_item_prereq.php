@@ -61,7 +61,7 @@ if (isset($is_success) && true == $is_success) {
     $right .= Display::return_message(get_lang('Prerequisites to the current learning object have been added.'));
 } else {
     $right .= $lp->displayItemMenu($lpItem);
-    $right .= $lp->display_item_prerequisites_form($lpItem);
+    $right .= $lp->displayItemPrerequisitesForm($lpItem);
 }
 
 $tpl = new Template(get_lang('Prerequisites'));

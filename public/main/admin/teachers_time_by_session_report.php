@@ -163,9 +163,9 @@ if (isset($_GET['export']) && $session && $coursesInfo && $usersInfo) {
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'mySpace/', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'my_space/', 'name' => get_lang('Reporting')];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'mySpace/session.php',
+    'url' => api_get_path(WEB_CODE_PATH).'my_space/session.php',
     'name' => get_lang('Followed sessions'),
 ];
 

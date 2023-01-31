@@ -578,7 +578,7 @@ function modify_filter($user_id, $url_params, $row)
             get_lang('Reporting')
         );
     } else {
-        $result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.
+        $result .= '<a href="../my_space/myStudents.php?student='.$user_id.'">'.
             Display::getMdiIcon(
                 'chart-box',
                 'ch-tool-icon',

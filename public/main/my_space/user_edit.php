@@ -172,7 +172,7 @@ if ($form->validate()) {
 }
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH)."mySpace/student.php",
+    'url' => api_get_path(WEB_CODE_PATH)."my_space/student.php",
     "name" => get_lang('User list'),
 ];
 

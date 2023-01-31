@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="track_e_lastaccess", indexes={
  *     @ORM\Index(name="access_user_id", columns={"access_user_id"}),
  *     @ORM\Index(name="access_c_id", columns={"c_id"}),
- *     @ORM\Index(name="access_session_id", columns={"access_session_id"})
+ *     @ORM\Index(name="session_id", columns={"session_id"})
  * })
  * @ORM\Entity
  */
@@ -42,9 +42,9 @@ class TrackELastaccess
     protected ?string $accessTool = null;
 
     /**
-     * @ORM\Column(name="access_session_id", type="integer", nullable=true)
+     * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
-    protected ?int $accessSessionId = null;
+    protected ?int $sessionId = null;
 
     /**
      * @ORM\Column(name="access_id", type="bigint")
@@ -142,25 +142,25 @@ class TrackELastaccess
     }
 
     /**
-     * Set accessSessionId.
+     * Set sessionId.
      *
      * @return TrackELastaccess
      */
-    public function setAccessSessionId(int $accessSessionId)
+    public function setSessionId(int $sessionId)
     {
-        $this->accessSessionId = $accessSessionId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
 
     /**
-     * Get accessSessionId.
+     * Get sessionId.
      *
      * @return int
      */
-    public function getAccessSessionId()
+    public function getSessionId()
     {
-        return $this->accessSessionId;
+        return $this->sessionId;
     }
 
     /**

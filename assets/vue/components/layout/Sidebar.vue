@@ -135,7 +135,7 @@ const items = ref([
       },
       {
         label: t('Reporting'),
-        url: '/main/mySpace/index.php',
+        url: '/main/my_space/index.php',
       },
     ],
   },

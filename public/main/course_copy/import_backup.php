@@ -146,7 +146,7 @@ if (Security::check_token('post') && ('course_select_form' === $action || 'full_
     $form = new FormValidator(
         'import_backup_form',
         'post',
-        api_get_path(WEB_CODE_PATH).'coursecopy/import_backup.php?'.api_get_cidreq(),
+        api_get_path(WEB_CODE_PATH).'course_copy/import_backup.php?'.api_get_cidreq(),
         '',
         ['enctype' => 'multipart/form-data']
     );

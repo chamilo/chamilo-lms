@@ -119,7 +119,7 @@ $form->addCheckBox(
     ['onclick' => 'activate_start_date()']
 );
 $form->addElement('html', '<div id="start_date_div" style="display:block;">');
-$form->addDatePicker('publicated_on', get_lang('Publication date'));
+$form->addDatePicker('published_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
 //End date
@@ -156,18 +156,18 @@ if ('true' === api_get_setting('scorm_cumulative_session_time')) {
     $defaults['accumulate_scorm_time'] = 1;
 }
 
-$defaults['publicated_on'] = api_get_local_time();
+$defaults['published_on'] = api_get_local_time();
 $defaults['expired_on'] = api_get_local_time(time() + 86400);
 
 $form->setDefaults($defaults);
 $form->addButtonCreate(get_lang('Continue'));
 
 if ($form->validate()) {
-    $publicated_on = null;
+    $published_on = null;
     if (isset($_REQUEST['activate_start_date_check']) &&
         1 == $_REQUEST['activate_start_date_check']
     ) {
-        $publicated_on = $_REQUEST['publicated_on'];
+        $published_on = $_REQUEST['published_on'];
     }
 
     $expired_on = null;
@@ -184,7 +184,7 @@ if ($form->validate()) {
         'chamilo',
         'manual',
         '',
-        $publicated_on,
+        $published_on,
         $expired_on,
         $_REQUEST['category_id']
     );

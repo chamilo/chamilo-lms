@@ -401,7 +401,7 @@ class learnpath
      * @param string  $title
      * @param string  $description
      * @param int     $prerequisites
-     * @param int     $max_time_allowed
+     * @param int     $maxTimeAllowed
      * @param int     $userId
      *
      * @return int
@@ -414,7 +414,7 @@ class learnpath
         $title,
         $description = '',
         $prerequisites = 0,
-        $max_time_allowed = 0
+        $maxTimeAllowed = 0
     ) {
         $type = empty($type) ? 'dir' : $type;
         $course_id = $this->course_info['real_id'];
@@ -424,16 +424,16 @@ class learnpath
             $course_id = $this->course_info['real_id'];
         }
         $id = (int) $id;
-        $max_time_allowed = (int) $max_time_allowed;
-        if (empty($max_time_allowed)) {
-            $max_time_allowed = 0;
+        $maxTimeAllowed = (int) $maxTimeAllowed;
+        if (empty($maxTimeAllowed)) {
+            $maxTimeAllowed = 0;
         }
-        $max_score = 100;
+        $maxScore = 100;
         if ('quiz' === $type && $id) {
             // Disabling the exercise if we add it inside a LP
             $exercise = new Exercise($course_id);
             $exercise->read($id);
-            $max_score = $exercise->get_max_score();
+            $maxScore = $exercise->getMaxScore();
 
             $exercise->disable();
             $exercise->save();
@@ -446,8 +446,8 @@ class learnpath
             ->setPath($id)
             ->setLp(api_get_lp_entity($this->get_id()))
             ->setItemType($type)
-            ->setMaxScore($max_score)
-            ->setMaxTimeAllowed($max_time_allowed)
+            ->setMaxScore($maxScore)
+            ->setMaxTimeAllowed($maxTimeAllowed)
             ->setPrerequisite($prerequisites)
             //->setDisplayOrder($display_order + 1)
             //->setNextItemId((int) $next)
@@ -6009,9 +6009,9 @@ class learnpath
      *
      * @return string HTML form
      */
-    public function display_item_prerequisites_form(CLpItem $lpItem)
+    public function displayItemPrerequisitesForm(CLpItem $lpItem)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $preRequisiteId = $lpItem->getPrerequisite();
         $itemId = $lpItem->getIid();
 
@@ -6039,8 +6039,8 @@ class learnpath
         $return .= '</tr>';
 
         // @todo use entitites
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $tbl_lp_item
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM $tblLpItem
                 WHERE lp_id = ".$this->lp_id;
         $result = Database::query($sql);
 
@@ -6063,32 +6063,28 @@ class learnpath
         $currentItemId = $itemId;
         $options = [
             'decorate' => true,
-            'rootOpen' => function() {
+            'rootOpen' => function () {
                 return '';
             },
-            'rootClose' => function() {
+            'rootClose' => function () {
                 return '';
             },
-            'childOpen' => function() {
+            'childOpen' => function () {
                 return '';
             },
             'childClose' => '',
             'nodeDecorator' => function ($item) use (
                 $currentItemId,
                 $preRequisiteId,
-                $course_id,
+                $courseId,
                 $selectedMaxScore,
                 $selectedMinScore,
                 $displayOrder,
                 $lpItemRepo,
                 $em
             ) {
-                $mainUrl = '';
-                $fullTitle = $item['title'];
-                $title = cut($fullTitle, self::MAX_LP_ITEM_TITLE_LENGTH);
                 $itemId = $item['iid'];
                 $type = $item['itemType'];
-                $lpId = $this->get_id();
                 $iconName = str_replace(' ', '', $type);
                 $icon = Display::return_icon(
                     'lp_'.$iconName.'.png',
@@ -6096,7 +6092,6 @@ class learnpath
                     [],
                     ICON_SIZE_TINY
                 );
-                $url = $mainUrl.'&view=build&id='.$itemId.'&lp_id='.$lpId;
 
                 if ($itemId == $currentItemId) {
                     return '';
@@ -6134,16 +6129,16 @@ class learnpath
                 $return .= '</td>';
 
                 if (TOOL_QUIZ == $type) {
-                    // lets update max_score Tests information depending of the Tests Advanced properties
-                    $exercise = new Exercise($course_id);
+                    // let's update max_score Tests information depending of the Tests Advanced properties
+                    $exercise = new Exercise($courseId);
                     /** @var CLpItem $itemEntity */
                     $itemEntity = $lpItemRepo->find($itemId);
                     $exercise->read($item['path']);
-                    $itemEntity->setMaxScore($exercise->get_max_score());
+                    $itemEntity->setMaxScore($exercise->getMaxScore());
                     $em->persist($itemEntity);
                     $em->flush($itemEntity);
 
-                    $item['maxScore'] = $exercise->get_max_score();
+                    $item['maxScore'] = $exercise->getMaxScore();
 
                     if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
                         // Backwards compatibility with 1.9.x use mastery_score as min value

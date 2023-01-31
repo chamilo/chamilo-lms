@@ -10,6 +10,7 @@ Feature: Profile page
     And I wait for the page to be loaded
     And I fill in the following:
       | profile_firstname | Andrew |
+      | profile_lastname  | Doe    |
     And I press "update_profile"
     And I wait for the page to be loaded
     Then I should see "Andrew Doe"
@@ -17,6 +18,7 @@ Feature: Profile page
     And I wait for the page to be loaded
     And I fill in the following:
       | profile_firstname | Andrea |
+      | profile_lastname  | Costea |
     And I press "update_profile"
     And wait for the page to be loaded
-    Then I should see "Andrea Doe"
+    Then I should see "Andrea Costea"

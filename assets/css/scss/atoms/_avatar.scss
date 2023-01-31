@@ -1,0 +1,27 @@
+.p-avatar {
+  @apply rounded-md bg-gray-25;
+
+  &.p-avatar-lg {
+    @apply h-12 w-12;
+    font-size: 1.5rem;
+
+    .p-avatar-icon {
+      font-size: 1.5rem;
+    }
+  }
+
+  &.p-avatar-xl {
+    @apply h-16 w-16;
+    font-size: 2rem;
+
+    .p-avatar-icon {
+      font-size: 2rem;
+    }
+  }
+}
+
+.p-avatar-group {
+  .p-avatar {
+    @apply border border-solid border-white;
+  }
+}

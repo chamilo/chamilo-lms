@@ -1,47 +1,55 @@
 <template>
-  <v-card>
+  <div id="account-home">
+    <div class="flex mb-4">
+      <Avatar
+        :image="user.illustrationUrl + '?w=80&h=80&fit=crop'"
+        shape="circle"
+        size="large"
+        class="flex-none mr-2"
+      />
+      <div class="flex-1">
+        <p class="text-body-1">
+          {{ user.fullName }}
+        </p>
+        <p class="text-caption">
+          {{ user.username }}
+        </p>
+      </div>
+    </div>
 
-    <q-item>
-      <q-item-section side>
-        <q-avatar size="64px">
-          <img :src="user.illustrationUrl + '?w=80&h=80&fit=crop'" />
-        </q-avatar>
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>{{ user.fullName }}</q-item-label>
-        <q-item-label caption>{{ user.username }}</q-item-label>
-      </q-item-section>
-    </q-item>
+    <Button
+      class="p-button-sm mb-4"
+      label="Edit profile"
+      @click="btnEditProfileOnClick"
+    />
 
-    <q-tabs align="left" dense inline-label no-caps>
-      <q-route-tab to="/resources/friends" label="My friends" />
-      <q-route-tab to="/resources/personal_files" label="My files" />
-    </q-tabs>
-
-    <a href="/account/edit" class="btn btn--primary">
-      Edit profile
-    </a>
-  </v-card>
+    <p>
+      <router-link to="/resources/friends">
+        {{ t('My friends') }}
+      </router-link>
+    </p>
+    <p>
+      <router-link to="/resources/personal_files">
+        {{ t('My files') }}
+      </router-link>
+    </p>
+  </div>
 </template>
 
-<script>
-import { useRoute } from 'vue-router'
-import axios from "axios";
-import { ENTRYPOINT } from '../../config/entrypoint';
-import {computed, reactive, ref, toRefs} from 'vue'
-import {mapGetters, useStore} from "vuex";
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
-export default {
-  name: 'Home',
-  components: {
-  },
-  setup() {
-    const state = reactive({user: []});
-    const store = useStore();
-    state.user = computed(() => store.getters['security/getUser']);
-    state.isAuthenticated = computed(() => store.getters['security/isAuthenticated']);
+import Avatar from 'primevue/avatar';
+import { useI18n } from 'vue-i18n';
 
-    return toRefs(state);
-  },
-};
+const store = useStore();
+
+const { t } = useI18n();
+
+const user = computed(() => store.getters['security/getUser']);
+
+function btnEditProfileOnClick () {
+  window.location = '/account/edit';
+}
 </script>

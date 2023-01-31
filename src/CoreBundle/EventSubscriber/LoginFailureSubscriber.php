@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventSubscriber;
 
 use Chamilo\CoreBundle\Entity\TrackELoginRecord;
-use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use DateTime;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -15,6 +15,11 @@ use Symfony\Component\Security\Http\Event\LoginFailureEvent;
 
 class LoginFailureSubscriber implements EventSubscriberInterface
 {
+    public function __construct(
+        private TrackELoginRecordRepository $trackELoginRecordingRepository
+    ) {
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -37,7 +42,6 @@ class LoginFailureSubscriber implements EventSubscriberInterface
             ->setUserIp(api_get_real_ip())
             ->setSuccess(false)
         ;
-        $repo = Container::getTrackELoginRecordRepository();
-        $repo->create($trackELoginRecord);
+        $this->trackELoginRecordingRepository->create($trackELoginRecord);
     }
 }

@@ -4,7 +4,7 @@ default:
             base_url: http://localhost
             show_cmd: 'open %s'
             selenium2:
-                wd_host: "http://127.0.0.1:4444/wd/hub"
+                wd_host: "http://172.18.0.1:4444"
                 browser: chrome
                 capabilities:
                     extra_capabilities:

@@ -30,7 +30,7 @@ echo Display::page_subheader(
     ).'&nbsp;&nbsp;'.get_lang('Backup and import and import')
 );
 
-$url = api_get_path(WEB_CODE_PATH).'coursecopy/copy_course_session_selected.php?'.api_get_cidreq();
+$url = api_get_path(WEB_CODE_PATH).'course_copy/copy_course_session_selected.php?'.api_get_cidreq();
 
 $link = Display::url(get_lang('Copy course'), $url);
 ?>

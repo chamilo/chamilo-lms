@@ -6775,6 +6775,9 @@ class learnpath
     {
         $return = '';
         foreach ($elements as $key => $item) {
+            if (TOOL_LP_FINAL_ITEM === $item['type']) {
+                $key = 'final_item';
+            }
             if (isset($item['load_data']) || empty($item['data'])) {
                 $item['data'] = $default_data[$item['load_data']];
                 $item['type'] = $default_content[$item['load_data']]['item_type'];
@@ -13507,7 +13510,7 @@ EOD;
         );
         $form->addHtml(
             Display::return_message(
-                get_lang('LPEndStepAddTagsToShowCertificateOrSkillAutomatically') . '</br></br> <b>((certificate))</b> </br> <b>((skill))</b>',
+                get_lang('LPEndStepAddTagsToShowCertificateOrSkillAutomatically').'</br></br> <b>((certificate))</b> </br> <b>((skill))</b>',
                 'normal',
                 false
             )

@@ -154,7 +154,7 @@ class TrackEAccess
      */
     public function setSessionId(int $sessionId)
     {
-        $this->accessSessionId = $sessionId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }

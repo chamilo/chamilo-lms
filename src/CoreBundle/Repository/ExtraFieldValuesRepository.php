@@ -103,7 +103,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             $em->persist($extraFieldValues);
             $em->flush();
         } else {
-            $extraFieldValues->setValue($data);
+            $extraFieldValues->setFieldValue($data);
             $em->persist($extraFieldValues);
             $em->flush();
         }

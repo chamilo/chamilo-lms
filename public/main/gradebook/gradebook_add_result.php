@@ -43,12 +43,21 @@ if ($add_result_form->validate()) {
     foreach ($scores as $userId => $row) {
         $res = new Result();
         $res->set_evaluation_id($values['evaluation_id']);
-        $res->set_user_id(key($scores));
+        $res->set_user_id($userId);
         //if no scores are given, don't set the score
         if (!empty($row) || '0' == $row) {
             $res->set_score($row);
         }
-        $res->add();
+
+        //To prevent error editing when going back in the browser,
+        //check if exist a record for this user and evaluation_id
+        if ($res->exists()) {
+            $res->addResultLog($userId, $values['evaluation_id']);
+            $res->save();
+        } else {
+            $res->add();
+        }
+
         next($scores);
     }
 

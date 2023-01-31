@@ -4098,7 +4098,7 @@ class Tracking
                     DATE_SUB('$now',INTERVAL $last_days DAY) <= access_date AND
                     c_id = '$courseId' AND
                     access_tool='".TOOL_CHAT."' AND
-                    access_session_id = '$session_id' ";
+                    session_id = '$session_id' ";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_row($result);
@@ -4137,7 +4137,7 @@ class Tracking
                      access_tool='".TOOL_CHAT."' AND
                      access_user_id='$student_id' AND
                      c_id = $courseId AND
-                     access_session_id = '$session_id'
+                     session_id = '$session_id'
                 ORDER BY access_date DESC limit 1";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
@@ -4175,7 +4175,7 @@ class Tracking
                 WHERE
                     links_user_id= '.$student_id.' AND
                     c_id = "'.$courseId.'" AND
-                    links_session_id = '.$session_id.' ';
+                    session_id = '.$session_id.' ';
 
         $rs = Database::query($sql);
 
@@ -4204,7 +4204,7 @@ class Tracking
                 FROM '.$table.'
                 WHERE down_user_id = '.$student_id.'
                 AND c_id  = "'.$courseId.'"
-                AND down_session_id = '.$session_id.' ';
+                AND session_id = '.$session_id.' ';
         $rs = Database::query($sql);
 
         return Database::num_rows($rs);
@@ -4358,7 +4358,7 @@ class Tracking
         $condition_session = '';
         if (isset($session_id)) {
             $session_id = (int) $session_id;
-            $condition_session = ' AND access_session_id = '.$session_id;
+            $condition_session = ' AND session_id = '.$session_id;
         }
         $sql = "SELECT
                     access_tool,
@@ -4406,7 +4406,7 @@ class Tracking
         $condition_session = '';
         $session_id = intval($session_id);
         if (!empty($session_id)) {
-            $condition_session = ' AND down_session_id = '.$session_id;
+            $condition_session = ' AND session_id = '.$session_id;
         }
         $sql = "SELECT
                     down_doc_path,
@@ -4452,7 +4452,7 @@ class Tracking
         $condition_session = '';
         if (isset($session_id)) {
             $session_id = intval($session_id);
-            $condition_session = ' AND sl.links_session_id = '.$session_id;
+            $condition_session = ' AND sl.session_id = '.$session_id;
         }
 
         $sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title) as count_visits
@@ -7031,7 +7031,7 @@ class Tracking
         $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
                 WHERE
                     c_id = $course_id AND
-                    access_session_id = $origin_session_id AND
+                    session_id = $origin_session_id AND
                     access_user_id = $user_id ";
         $res = Database::query($sql);
         $list = [];
@@ -7043,7 +7043,7 @@ class Tracking
             foreach ($list as $id) {
                 if ($update_database) {
                     $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS
-                            SET access_session_id = $new_session_id
+                            SET session_id = $new_session_id
                             WHERE access_id = $id";
                     if ($debug) {
                         echo $sql;

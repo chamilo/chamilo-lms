@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     indexes={
  *         @ORM\Index(name="course", columns={"c_id"}),
  *         @ORM\Index(name="upload_user_id", columns={"upload_user_id"}),
- *         @ORM\Index(name="upload_session_id", columns={"upload_session_id"})
+ *         @ORM\Index(name="session_id", columns={"session_id"})
  *     }
  * )
  * @ORM\Entity
@@ -52,9 +52,9 @@ class TrackEUploads
     protected int $uploadWorkId;
 
     /**
-     * @ORM\Column(name="upload_session_id", type="integer", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
-    protected int $uploadSessionId;
+    protected int $sessionId;
 
     /**
      * Set uploadUserId.
@@ -145,25 +145,25 @@ class TrackEUploads
     }
 
     /**
-     * Set uploadSessionId.
+     * Set sessionId.
      *
      * @return TrackEUploads
      */
-    public function setUploadSessionId(int $uploadSessionId)
+    public function setSessionId(int $sessionId)
     {
-        $this->uploadSessionId = $uploadSessionId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
 
     /**
-     * Get uploadSessionId.
+     * Get sessionId.
      *
      * @return int
      */
-    public function getUploadSessionId()
+    public function getSessionId()
     {
-        return $this->uploadSessionId;
+        return $this->sessionId;
     }
 
     /**

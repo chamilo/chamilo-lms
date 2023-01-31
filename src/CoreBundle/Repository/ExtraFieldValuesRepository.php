@@ -91,6 +91,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->setParameter('field', $extraField)
         ;
 
+        /** @var ?ExtraFieldValues $extraFieldValues */
         $extraFieldValues = $qb->getQuery()->getOneOrNullResult();
         $em = $this->getEntityManager();
 
@@ -101,12 +102,11 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
                 ->setFieldValue($data)
             ;
             $em->persist($extraFieldValues);
-            $em->flush();
         } else {
-            $extraFieldValues->setValue($data);
-            $em->persist($extraFieldValues);
-            $em->flush();
+            $extraFieldValues->setFieldValue($data);
         }
+
+        $em->flush();
 
         return $extraFieldValues;
     }

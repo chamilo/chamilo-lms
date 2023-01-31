@@ -2029,7 +2029,7 @@ class UserManager
         $params = [
             'item_id' => $userId,
             'variable' => $variable,
-            'value' => $value,
+            'field_value' => $value,
         ];
 
         return $extraFieldValue->save($params);

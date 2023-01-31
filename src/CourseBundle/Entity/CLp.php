@@ -183,9 +183,9 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected DateTime $modifiedOn;
 
     /**
-     * @ORM\Column(name="publicated_on", type="datetime", nullable=true)
+     * @ORM\Column(name="published_on", type="datetime", nullable=true)
      */
-    protected ?DateTime $publicatedOn;
+    protected ?DateTime $publishedOn;
 
     /**
      * @ORM\Column(name="expired_on", type="datetime", nullable=true)
@@ -225,7 +225,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         $now = new DateTime();
         $this->createdOn = $now;
         $this->modifiedOn = $now;
-        $this->publicatedOn = $now;
+        $this->publishedOn = $now;
         $this->accumulateScormTime = 1;
         $this->accumulateWorkTime = 0;
         $this->author = '';
@@ -641,16 +641,16 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this->modifiedOn;
     }
 
-    public function setPublicatedOn(DateTime $publicatedOn): self
+    public function setPublishedOn(DateTime $publishedOn): self
     {
-        $this->publicatedOn = $publicatedOn;
+        $this->publishedOn = $publishedOn;
 
         return $this;
     }
 
-    public function getPublicatedOn(): ?DateTime
+    public function getPublishedOn(): ?DateTime
     {
-        return $this->publicatedOn;
+        return $this->publishedOn;
     }
 
     public function setExpiredOn(?DateTime $expiredOn): self

@@ -870,8 +870,8 @@ class Rest extends WebService
                 }
 
                 if ($timeLimits) {
-                    if (!empty($lpDetails['publicated_on']) && !empty($lpDetails['expired_on'])) {
-                        $startTime = api_strtotime($lpDetails['publicated_on'], 'UTC');
+                    if (!empty($lpDetails['published_on']) && !empty($lpDetails['expired_on'])) {
+                        $startTime = api_strtotime($lpDetails['published_on'], 'UTC');
                         $endTime = api_strtotime($lpDetails['expired_on'], 'UTC');
                         $now = time();
                         $isActiveTime = false;

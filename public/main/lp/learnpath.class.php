@@ -105,7 +105,7 @@ class learnpath
     public $subscribeUsers = 0; // Subscribe users or not
     public $created_on = '';
     public $modified_on = '';
-    public $publicated_on = '';
+    public $published_on = '';
     public $expired_on = '';
     public $ref;
     public $course_int_id;
@@ -163,8 +163,8 @@ class learnpath
 
             $this->accumulateScormTime = $entity->getAccumulateWorkTime();
 
-            if (!empty($entity->getPublicatedOn())) {
-                $this->publicated_on = $entity->getPublicatedOn()->format('Y-m-d H:i:s');
+            if (!empty($entity->getPublishedOn())) {
+                $this->published_on = $entity->getPublishedOn()->format('Y-m-d H:i:s');
             }
 
             if (!empty($entity->getExpiredOn())) {
@@ -525,7 +525,7 @@ class learnpath
      * @param string $learnpath
      * @param string $origin
      * @param string $zipname       Zip file containing the learnpath or directory containing the learnpath
-     * @param string $publicated_on
+     * @param string $published_on
      * @param string $expired_on
      * @param int    $categoryId
      * @param int    $userId
@@ -539,7 +539,7 @@ class learnpath
         $learnpath = 'guess',
         $origin = 'zip',
         $zipname = '',
-        $publicated_on = '',
+        $published_on = '',
         $expired_on = '',
         $categoryId = 0,
         $userId = 0
@@ -556,10 +556,10 @@ class learnpath
 
         $categoryId = (int) $categoryId;
 
-        if (empty($publicated_on)) {
-            $publicated_on = null;
+        if (empty($published_on)) {
+            $published_on = null;
         } else {
-            $publicated_on = api_get_utc_datetime($publicated_on, true, true);
+            $published_on = api_get_utc_datetime($published_on, true, true);
         }
 
         if (empty($expired_on)) {
@@ -613,7 +613,7 @@ class learnpath
                     ->setDescription($description)
                     ->setDisplayOrder($dsp)
                     ->setCategory($category)
-                    ->setPublicatedOn($publicated_on)
+                    ->setPublishedOn($published_on)
                     ->setExpiredOn($expired_on)
                     ->setParent($courseEntity)
                     ->addCourseLink($courseEntity, $sessionEntity)
@@ -1786,8 +1786,8 @@ class learnpath
             // Also check the time availability of the LP
             if ($is_visible) {
                 // Adding visibility restrictions
-                if (null !== $lp->getPublicatedOn()) {
-                    if ($now < $lp->getPublicatedOn()->getTimestamp()) {
+                if (null !== $lp->getPublishedOn()) {
+                    if ($now < $lp->getPublishedOn()->getTimestamp()) {
                         $is_visible = false;
                     }
                 }
@@ -1796,7 +1796,7 @@ class learnpath
                 if (isset($_custom['lps_hidden_when_no_start_date']) &&
                     $_custom['lps_hidden_when_no_start_date']
                 ) {
-                    if (null !== $lp->getPublicatedOn()) {
+                    if (null !== $lp->getPublishedOn()) {
                         $is_visible = false;
                     }
                 }

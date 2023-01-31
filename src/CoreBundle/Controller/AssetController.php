@@ -72,8 +72,7 @@ class AssetController
                 $fileName
             );
             $response->headers->set('Content-Disposition', $disposition);
-
-            //$response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+            $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
 
             return $response;
         }

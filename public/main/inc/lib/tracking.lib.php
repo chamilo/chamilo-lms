@@ -4837,7 +4837,7 @@ class Tracking
                     );*/
 
                     $qb = Container::getQuizRepository()->findAllByCourse($course, null, null, 1, false);
-                    /** @var CQuiz[] $exerciseList */
+                    /** @var CQuiz[] $exercises */
                     $exercises = $qb->getQuery()->getResult();
                     $countExercises = count($exercises);
                     foreach ($exercises as $exercise_data) {

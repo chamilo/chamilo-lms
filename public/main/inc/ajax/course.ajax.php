@@ -180,7 +180,7 @@ switch ($action) {
 
                 $results['items'][] = [
                     'id' => $course['id'],
-                    'text' => $title,
+                    'text' => $title.' ('.$course['code'].') ',
                 ];
             }
 

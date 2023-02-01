@@ -325,10 +325,15 @@ class Evaluation implements GradebookItem
                 $category = $em->getRepository(GradebookCategory::class)->find($this->get_category_id());
             }
 
+            $courseId = 0;
+            if (!empty($this->course_code)) {
+                $courseId = api_get_course_int_id($this->course_code);
+            }
+
             $evaluation = new GradebookEvaluation();
             $evaluation
                 ->setDescription($this->description)
-                ->setCourse(api_get_course_entity())
+                ->setCourse(api_get_course_entity($courseId))
                 ->setName($this->get_name())
                 ->setCategory($category)
                 ->setUser(api_get_user_entity($this->get_user_id()))

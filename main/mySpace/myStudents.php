@@ -506,8 +506,9 @@ switch ($action) {
     case 'send_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
         // @ofaj
-        if ($isBoss || api_is_platform_admin()) {
+        if (($isBoss || api_is_platform_admin()) && Security::check_token('get')) {
             LegalManager::sendLegal($student_id);
+            Security::clear_token();
             /*
                 $currentUserInfo = api_get_user_info();
                 $subject = get_lang('SendLegalSubject');
@@ -525,7 +526,7 @@ switch ($action) {
         break;
     case 'delete_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
-        if ($isBoss || api_is_platform_admin()) {
+        if (($isBoss || api_is_platform_admin()) && Security::check_token('get')) {
             $extraFieldValue = new ExtraFieldValue('user');
             $value = $extraFieldValue->get_values_by_handler_and_field_variable(
                 $student_id,
@@ -535,6 +536,7 @@ switch ($action) {
             if ($result) {
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
             }
+            Security::clear_token();
         }
         break;
     case 'reset_lp':
@@ -1152,13 +1154,13 @@ $userInfo = [
                             $icon = Display::return_icon('accept.png').' '.api_get_local_time($legalTime);
                             $icon .= ' '.Display::url(
                                     get_lang('DeleteLegal'),
-                                    api_get_self().'?action=delete_legal&student='.$student_id.'&course='.$course_code,
+                                    api_get_self().'?action=delete_legal&sec_token='.$token.'&student='.$student_id.'&course='.$course_code,
                                     ['class' => 'btn btn-danger btn-xs']
                                 );
                         } else {
                             $icon .= ' '.Display::url(
                                     get_lang('SendLegal'),
-                                    api_get_self().'?action=send_legal&student='.$student_id.'&course='.$course_code,
+                                    api_get_self().'?action=send_legal&sec_token='.$token.'&student='.$student_id.'&course='.$course_code,
                                     ['class' => 'btn btn-primary btn-xs']
                                 );
                         }

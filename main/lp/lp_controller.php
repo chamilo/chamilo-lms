@@ -102,7 +102,7 @@ $htmlHeadXtra[] = '
         $(".li_container .order_items").click(function(e) {
             var dir = $(this).data("dir");
             var itemId = $(this).data("id");
-            var jItems = $("#lp_item_list li.li_container");
+            var jItems = $("#lp_item_list li.li_container:not(#final_item)");
             var jItem = $("#"+ itemId);
             var index = jItems.index(jItem);
             var total = jItems.length;

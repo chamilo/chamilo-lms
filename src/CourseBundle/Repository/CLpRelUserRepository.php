@@ -66,7 +66,7 @@ final class CLpRelUserRepository extends ResourceRepository
         $deleteUsers = true
     ) {
         $em = $this->getEntityManager();
-        $user = $em->getRepository('ChamiloCoreBundle:User');
+        $user = $em->getRepository(User::class);
 
         $usersSubscribedToItem = $this->getUsersSubscribedToItem(
             $lp,
@@ -104,19 +104,20 @@ final class CLpRelUserRepository extends ResourceRepository
         foreach ($newUserList as $userId) {
             if (!in_array($userId, $alreadyAddedUsers)) {
                 $userObj = $user->find($userId);
+                if ($userObj) {
+                    $item = new CLpRelUser();
+                    $item
+                        ->setUser($userObj)
+                        ->setCourse($course)
+                        ->setLp($lp)
+                        ->setCreatedAt(api_get_utc_datetime(null, false, true))
+                        ->setCreatorUser(api_get_user_entity());
 
-                $item = new CLpRelUser();
-                $item
-                    ->setUser($userObj)
-                    ->setCourse($course)
-                    ->setLp($lp)
-                    ->setCreatedAt(api_get_utc_datetime(null, false, true))
-                    ->setCreatorUser(api_get_user_entity());
-
-                if (!empty($session)) {
-                    $item->setSession($session);
+                    if (!empty($session)) {
+                        $item->setSession($session);
+                    }
+                    $em->persist($item); //$em is an instance of EntityManager
                 }
-                $em->persist($item); //$em is an instance of EntityManager
             }
         }
 

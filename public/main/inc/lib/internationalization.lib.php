@@ -68,7 +68,7 @@ function get_lang($variable)
 
     $locale = api_get_language_isocode();
     $userInfo = api_get_user_info();
-    if (isset($userInfo)) {
+    if (is_array($userInfo) && !empty($userInfo['language'])) {
         $locale = $userInfo['language'];
     }
 

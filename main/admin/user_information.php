@@ -517,29 +517,15 @@ if (api_is_multiple_url_enabled()) {
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'send_legal':
-            /*$subject = get_lang('SendLegalSubject');
-            $content = sprintf(
-                get_lang('SendLegalDescriptionToUrlX'),
-                api_get_path(WEB_PATH)
-            );
-            MessageManager::send_message_simple($userId, $subject, $content);
-        Display::addFlash(Display::return_message(get_lang('Sent')));*/
             // ofaj
             LegalManager::sendLegal($userId);
-            break;
+            header('Location: '.$currentUrl);
+            exit;
     case 'delete_legal':
             // ofaj
             LegalManager::deleteLegal($userId);
-            /*$extraFieldValue = new ExtraFieldValue('user');
-            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                $userId,
-                'legal_accept'
-            );
-            $result = $extraFieldValue->delete($value['id']);
-            if ($result) {
-                Display::addFlash(Display::return_message(get_lang('Deleted')));
-        }*/
-            break;
+            header('Location: '.$currentUrl);
+            exit;
         case 'unsubscribe':
             $courseId = !empty($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
             $sessionId = !empty($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -560,7 +546,6 @@ if (isset($_GET['action'])) {
             }
             header('Location: '.$currentUrl);
             exit;
-            break;
         case 'unsubscribe_session_course':
             $courseId = !empty($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
             $sessionId = !empty($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -573,14 +558,12 @@ if (isset($_GET['action'])) {
             Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
             header('Location: '.$currentUrl);
             exit;
-            break;
         case 'export':
             Export::arrayToCsv(
                 $csvContent,
                 'user_information_'.$user['user_id']
             );
             exit;
-            break;
     }
 }
 

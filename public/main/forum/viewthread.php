@@ -309,6 +309,13 @@ if (($current_forum_category &&
 ) {
     // The link should only appear when the user is logged in or when anonymous posts are allowed.
     if ($_user['user_id'] || (1 == $forumEntity->getAllowAnonymous() && !$_user['user_id'])) {
+
+        // back link inside lp
+        if ('learnpath' == $origin && !empty($threadId)) {
+            $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
+                .Display::return_icon('back.png', get_lang('Back to forum'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
+
         // reply link
         if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
             $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='

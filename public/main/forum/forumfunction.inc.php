@@ -4887,7 +4887,7 @@ function editAttachedFile($array, $id, $courseId = null)
         $setString = substr($setString, 0, strlen($setString) - 2);
         $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
         $sql = "UPDATE $forumAttachmentTable
-                SET $setString WHERE c_id = $courseId AND id = $id";
+                SET $setString WHERE c_id = $courseId AND iid = $id";
         $result = Database::query($sql);
         if (false !== $result) {
             $affectedRows = Database::affected_rows($result);

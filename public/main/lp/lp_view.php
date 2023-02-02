@@ -125,7 +125,7 @@ $allowLpItemTip = false === api_get_configuration_value('hide_accessibility_labe
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
     $(function() {
-         /*$(".scorm_item_normal").qtip({
+         $(".scorm_item_normal").qtip({
             content: {
                 text: function(event, api) {
                     var item = $(this);
@@ -145,13 +145,13 @@ if ($allowLpItemTip) {
                             textToShow = content;
                             api.set("style.classes", "qtip-red qtip-shadow");
                         }
-
+                        api.set("content.text", textToShow);
                         return textToShow;
                     });
                     return textToShow;
                 }
             }
-        });*/
+        });
     });
     </script>';
 }

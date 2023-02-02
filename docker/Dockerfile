@@ -3,7 +3,7 @@ FROM composer:2 as composer
 FROM php:8-apache
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y --no-install-recommends\ 
         libfreetype6-dev \
         libjpeg62-turbo-dev \

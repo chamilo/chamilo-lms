@@ -1592,18 +1592,6 @@ class GradebookUtils
         $gradebooktable->hideNavigation = true;
         $gradebooktable->userId = $userId;
 
-        if (api_is_allowed_to_edit(null, true)) {
-        } else {
-            if (empty($model)) {
-                $gradebooktable->td_attributes = [
-                    3 => 'class=centered',
-                    4 => 'class=centered',
-                    5 => 'class=centered',
-                    6 => 'class=centered',
-                    7 => 'class=centered',
-                ];
-            }
-        }
         $table = $gradebooktable->return_table();
 
         $graph = '';

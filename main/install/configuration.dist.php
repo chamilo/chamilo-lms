@@ -1088,8 +1088,16 @@ ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB734472613FECDF FOREIGN KEY (se
 // - launch composer install to rebuild the autoload.php
 //$_configuration['allow_portfolio_tool'] = false;
 
+// DEPRECATED: gradebook_enable_best_score is deprecated. Use gradebook_display_extra_stats instead.
 // Enable best score column in gradebook. Previously called disable_gradebook_stats
 //$_configuration['gradebook_enable_best_score'] = false;
+/*
+Enable specific columns in gradebook table.
+[1] = Ranking
+[2] = Best Score
+[3] = Average
+*/
+//$_configuration['gradebook_display_extra_stats'] = ['columns' => [1, 2, 3]];
 
 // Allow teachers to access student skills BT#14161 (skills setting must be enabled in the platform)
 //$_configuration['allow_teacher_access_student_skills'] = false;

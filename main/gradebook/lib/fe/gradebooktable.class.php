@@ -28,9 +28,9 @@ class GradebookTable extends SortableTable
     /**
      * @var array Indicates which columns should be shown in gradebook
      *
-     * @example [1] For add Ranking column
-     *          [2] For add Best Score column
-     *          [3] For add Average column
+     * @example [1] To add Ranking column
+     *          [2] To add Best Score column
+     *          [3] To add Average column
      */
     private $loadStats = [];
 
@@ -1152,6 +1152,18 @@ class GradebookTable extends SortableTable
         }
 
         return '';
+    }
+
+    public static function getExtraStatsColumnsToDisplay(): array
+    {
+        if (api_get_configuration_value('gradebook_enable_best_score') === true) {
+            return [2];
+        }
+
+        $gradebookDisplayExtraStats = api_get_configuration_value('gradebook_display_extra_stats');
+
+        /** @see GradebookTable::$loadStats */
+        return $gradebookDisplayExtraStats['columns'] ?? [1, 2, 3];
     }
 
     /**

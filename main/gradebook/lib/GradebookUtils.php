@@ -1575,14 +1575,7 @@ class GradebookUtils
         $alleval = $cats[0]->get_evaluations($userId);
         $alllink = $cats[0]->get_links($userId);
 
-        $loadStats = [];
-        if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
-            $loadStats = [1, 2, 3];
-        } else {
-            if (api_get_configuration_value('gradebook_enable_best_score') !== false) {
-                $loadStats = [2];
-            }
-        }
+        $loadStats = GradebookTable::getExtraStatsColumnsToDisplay();
 
         $gradebooktable = new GradebookTable(
             $cat,

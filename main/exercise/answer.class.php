@@ -770,7 +770,7 @@ class Answer
                     $questionType = $this->getQuestionType();
                     if (in_array(
                         $questionType,
-                        [MATCHING, MATCHING_DRAGGABLE, MATCHING_GLOBAL, MATCHING_DRAGGABLE_GLOBAL]
+                        [MATCHING, MATCHING_DRAGGABLE, MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION]
                     )) {
                         $answer = new Answer($this->questionId, $courseId, $this->exercise, false);
                         $answer->read();

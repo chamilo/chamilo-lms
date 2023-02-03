@@ -221,7 +221,7 @@ class Matching extends Question
 
         $form->addHtml('</table>');
 
-        if (MATCHING_GLOBAL === $this->type) {
+        if (MATCHING_COMBINATION === $this->type) {
             //only 1 answer the all deal ...
             $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
             if (!empty($this->iid)) {
@@ -288,7 +288,7 @@ class Matching extends Question
             );
         }
 
-        if (MATCHING_GLOBAL == $this->type) {
+        if (MATCHING_COMBINATION == $this->type) {
             $this->weighting = $form->getSubmitValue('questionWeighting');
         }
 

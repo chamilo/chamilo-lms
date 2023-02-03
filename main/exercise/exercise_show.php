@@ -442,20 +442,20 @@ foreach ($questionList as $questionId) {
         case MULTIPLE_ANSWER:
         case MULTIPLE_ANSWER_TRUE_FALSE:
         case FILL_IN_BLANKS:
-        case FILL_IN_BLANKS_GLOBAL:
+        case FILL_IN_BLANKS_COMBINATION:
         case CALCULATED_ANSWER:
         case GLOBAL_MULTIPLE_ANSWER:
         case FREE_ANSWER:
         case UPLOAD_ANSWER:
         case ORAL_EXPRESSION:
         case MATCHING:
-        case MATCHING_GLOBAL:
+        case MATCHING_COMBINATION:
         case DRAGGABLE:
         case READING_COMPREHENSION:
         case MATCHING_DRAGGABLE:
-        case MATCHING_DRAGGABLE_GLOBAL:
+        case MATCHING_DRAGGABLE_COMBINATION:
         case MULTIPLE_ANSWER_DROPDOWN:
-        case MULTIPLE_ANSWER_DROPDOWN_GLOBAL:
+        case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
             $question_result = $objExercise->manage_answer(
                 $id,
                 $questionId,
@@ -492,7 +492,7 @@ foreach ($questionList as $questionId) {
             $totalScore += $questionResult['score'];
             break;
         case HOT_SPOT:
-        case HOT_SPOT_GLOBAL:
+        case HOT_SPOT_COMBINATION:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
 //                echo '<table class="table table-bordered table-striped"><tr><td>';
             }
@@ -596,7 +596,7 @@ foreach ($questionList as $questionId) {
         echo '</table>';
     }
 
-    if ($show_results && !in_array($answerType, [HOT_SPOT_GLOBAL, HOT_SPOT])) {
+    if ($show_results && !in_array($answerType, [HOT_SPOT_COMBINATION, HOT_SPOT])) {
         echo '</table>';
     }
 

@@ -1809,38 +1809,38 @@ class Tracking
     /**
      * Calculates the time spent on the course.
      *
-     * @param array|int $user_id
+     * @param array|int $userId
      * @param int       $courseId
      * @param int       $sessionId
      *
      * @return int Time in seconds
      */
     public static function get_time_spent_on_the_course(
-        $user_id,
+        $userId,
         $courseId,
         $sessionId = 0
     ) {
         $courseId = (int) $courseId;
 
-        if (empty($courseId) || empty($user_id)) {
+        if (empty($courseId) || empty($userId)) {
             return 0;
         }
 
         if (self::minimumTimeAvailable($sessionId, $courseId)) {
-            $courseTime = self::getCalculateTime($user_id, $courseId, $sessionId);
+            $courseTime = self::getCalculateTime($userId, $courseId, $sessionId);
 
             return isset($courseTime['total_time']) ? $courseTime['total_time'] : 0;
         }
 
         $conditionUser = '';
         $sessionId = (int) $sessionId;
-        if (is_array($user_id)) {
-            $user_id = array_map('intval', $user_id);
-            $conditionUser = " AND user_id IN (".implode(',', $user_id).") ";
+        if (is_array($userId)) {
+            $userId = array_map('intval', $userId);
+            $conditionUser = " AND user_id IN (".implode(',', $userId).") ";
         } else {
-            if (!empty($user_id)) {
-                $user_id = (int) $user_id;
-                $conditionUser = " AND user_id = $user_id ";
+            if (!empty($userId)) {
+                $userId = (int) $userId;
+                $conditionUser = " AND user_id = $userId ";
             }
         }
 
@@ -2589,6 +2589,7 @@ class Tracking
      * course, it will take into account the progress that were not started.
      *
      * @param int|array     $studentId
+     * @param Course        $course          The course object
      * @param array         $lpIdList        Limit average to listed lp ids
      * @param SessionEntity $session         Session id (optional),
      *                                       if parameter $sessionId is null(default) it'll return results including
@@ -2601,7 +2602,7 @@ class Tracking
      */
     public static function get_avg_student_progress(
         $studentId,
-        Course $course,
+        Course $course = null,
         $lpIdList = [],
         SessionEntity $session = null,
         $returnArray = false,
@@ -2609,6 +2610,9 @@ class Tracking
     ) {
         // If there is at least one learning path and one student.
         if (empty($studentId)) {
+            return false;
+        }
+        if (empty($course)) {
             return false;
         }
 

@@ -1238,7 +1238,7 @@ class CourseManager
      * Return user info array of all users registered in a course
      * This only returns the users that are registered in this actual course, not linked courses.
      *
-     * @param string    $courseCode
+     * @param string|null    $courseCode  Cours code is allowed to be null if we want all users
      * @param int       $sessionId
      * @param string    $limit
      * @param string    $order_by         the field to order the users by.
@@ -1351,7 +1351,10 @@ class CourseManager
                 $sessionCondition = " session_course_user.session_id IN ('$sessionIdListToString') ";
             }
 
-            $courseCondition = " course.id = $courseId";
+            $courseCondition = " course.id IS NOT NULL ";
+            if (!empty($courseId)) {
+                $courseCondition = " course.id = $courseId";
+            }
             if (!empty($courseCodeList)) {
                 $courseCodeListForSession = array_map(['Database', 'escape_string'], $courseCodeList);
                 $courseCodeListForSession = implode("','", $courseCodeListForSession);
@@ -1565,7 +1568,7 @@ class CourseManager
 
                         $users[$row_key]['training_hours'] += Tracking::get_time_spent_on_the_course(
                             $user['user_id'],
-                            $courseId,
+                            $user['c_id'],
                             $sessionId
                         );
 
@@ -1587,7 +1590,7 @@ class CourseManager
                         $category = Category:: load(
                             null,
                             null,
-                            $courseCode,
+                            $user['code'],
                             null,
                             null,
                             $sessionId
@@ -1620,7 +1623,7 @@ class CourseManager
                         $report_info['time'] = api_time_to_hms(
                             Tracking::get_time_spent_on_the_course(
                                 $user['user_id'],
-                                empty($user['c_id']) ? $courseId : $user['c_id'],
+                                $user['c_id'],
                                 $sessionId
                             )
                         );
@@ -1628,7 +1631,7 @@ class CourseManager
                         $category = Category:: load(
                             null,
                             null,
-                            $courseCode,
+                            $user['code'],
                             null,
                             null,
                             $sessionId
@@ -1638,7 +1641,7 @@ class CourseManager
                         if (isset($category[0]) && $category[0]->is_certificate_available($user['user_id'])) {
                             $report_info['certificate'] = Display::label(get_lang('Yes'), 'success');
                         }
-
+                        $course = api_get_course_entity($user['c_id']);
                         $progress = (int) Tracking::get_avg_student_progress(
                             $user['user_id'],
                             $course,

@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * MatchingGlobal.
+ * MatchingCombination.
  */
-class MatchingGlobal extends Matching
+class MatchingCombination extends Matching
 {
-    public $typePicture = 'matching_global.png';
-    public $explanationLangVar = 'MatchingGlobal';
+    public $typePicture = 'matching_co.png';
+    public $explanationLangVar = 'MatchingCombination';
 
     /**
      * Constructor.
@@ -15,7 +15,7 @@ class MatchingGlobal extends Matching
     public function __construct()
     {
         parent::__construct();
-        $this->type = MATCHING_GLOBAL;
+        $this->type = MATCHING_COMBINATION;
         $this->isContent = $this->getIsContent();
     }
 }

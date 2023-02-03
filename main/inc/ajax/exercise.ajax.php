@@ -751,7 +751,7 @@ switch ($action) {
                     $session_id,
                     $my_question_id
                 );
-                if (in_array($objQuestionTmp->type, [HOT_SPOT, HOT_SPOT_GLOBAL])) {
+                if (in_array($objQuestionTmp->type, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
                     Event::delete_attempt_hotspot(
                         $exeId,
                         api_get_user_id(),
@@ -961,7 +961,7 @@ switch ($action) {
         }
         echo $id;
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
-        if (in_array($objQuestion->type, [FILL_IN_BLANKS, FILL_IN_BLANKS_GLOBAL])) {
+        if (in_array($objQuestion->type, [FILL_IN_BLANKS, FILL_IN_BLANKS_COMBINATION])) {
             echo '<script>
                 $(function() {
                     $(".selectpicker").selectpicker({});
@@ -974,7 +974,7 @@ switch ($action) {
             echo '<script> MathJax.Hub.Queue(["Typeset",MathJax.Hub]);</script>';
         }
 
-        if (in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_GLOBAL])) {
+        if (in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
             echo '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
         }
 
@@ -1021,7 +1021,7 @@ switch ($action) {
         }
         echo $id;
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
-        if (in_array($objQuestion->type, [FILL_IN_BLANKS, FILL_IN_BLANKS_GLOBAL])) {
+        if (in_array($objQuestion->type, [FILL_IN_BLANKS, FILL_IN_BLANKS_COMBINATION])) {
             echo '<script>
                 $(function() {
                     $(".selectpicker").selectpicker({});

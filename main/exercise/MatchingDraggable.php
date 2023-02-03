@@ -206,7 +206,7 @@ class MatchingDraggable extends Question
 
         $form->addHtml('</table>');
 
-        if (MATCHING_DRAGGABLE_GLOBAL === $this->type) {
+        if (MATCHING_DRAGGABLE_COMBINATION === $this->type) {
             //only 1 answer the all deal ...
             $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
             if (!empty($this->iid)) {
@@ -273,7 +273,7 @@ class MatchingDraggable extends Question
             );
         }
 
-        if (MATCHING_DRAGGABLE_GLOBAL == $this->type) {
+        if (MATCHING_DRAGGABLE_COMBINATION == $this->type) {
             $this->weighting = $form->getSubmitValue('questionWeighting');
         }
 

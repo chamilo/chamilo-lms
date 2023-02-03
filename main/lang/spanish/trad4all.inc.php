@@ -9008,4 +9008,9 @@ $ImportSessionAgendaReminderDescriptionDefault = "Hola ((user_complete_name)).
 
 Está invitado a seguir la sesión ((session_name)) desde ((date_start)) hasta ((date_end)).";
 $ImportSessionAgendaReminderTitleDefault = "Invitación a la sesión ((session_name))";
+$FillBlanksCombination = "Rellenar blancos con combinación exacta";
+$MatchingCombination = "Relacionar con combinación exacta";
+$HotSpotCombination = "Zonas de imagen con combinación exacta";
+$MatchingDraggableCombination = "Coincidencia arrastrable con combinación exacta";
+$MultipleAnswerDropdownCombination = "Respuesta múltiple desplegable con combinación exacta";
 ?>

@@ -8983,4 +8983,9 @@ $ImportSessionAgendaReminderDescriptionDefault = "Hi ((user_complete_name)).
 
 You are invited to follow the session ((session_name)) from the ((date_start)) until the ((date_end)). ";
 $ImportSessionAgendaReminderTitleDefault = "Invitation to session ((session_name))";
+$FillBlanksCombination = "Fill blanks or form with exact selection";
+$MatchingCombination = "Matching with exact selection";
+$HotSpotCombination = "Image zones with exact selection";
+$MatchingDraggableCombination = "Match by dragging with exact selection";
+$MultipleAnswerDropdownCombination = "Multiple answer dropdown with exact selection";
 ?>

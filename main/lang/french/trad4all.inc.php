@@ -8917,4 +8917,9 @@ $ImportSessionAgendaReminderDescriptionDefault = "Bonjour ((user_complete_name))
 
 Vous devrez suivre la session ((session_name)) entre le ((date_start)) et le ((date_end)).";
 $ImportSessionAgendaReminderTitleDefault = "Invitation à la session ((session_name))";
+$FillBlanksCombination = "Remplir les blancs avec combinaison exacte";
+$MatchingCombination = "Apparier avec combinaison exacte";
+$HotSpotCombination = "Zones sur image avec combinaison exacte";
+$MatchingDraggableCombination = "Correspondances glisser-déplacer avec combinaison exacte";
+$MultipleAnswerDropdownCombination = "Liste déroulante de réponses multiples avec combinaison exacte";
 ?>

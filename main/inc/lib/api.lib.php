@@ -9082,7 +9082,7 @@ function api_get_configuration_value($variable)
 
     // Check if variable exists
     if (isset($_configuration[$variable])) {
-        if (is_array($_configuration[$variable])) {
+        if (is_array($_configuration[$variable]) && api_is_multiple_url_enabled()) {
             // Check if it exists for the sub portal
             if (array_key_exists($urlId, $_configuration[$variable])) {
                 return $_configuration[$variable][$urlId];
@@ -9090,7 +9090,7 @@ function api_get_configuration_value($variable)
                 // Try to found element with id = 1 (master portal)
                 if (array_key_exists(1, $_configuration[$variable])) {
                     return $_configuration[$variable][1];
-                } elseif (api_is_multiple_url_enabled()) {
+                } else {
                     // The value was there for other URLs but not the main URL nor the current URL
                     return null;
                 }

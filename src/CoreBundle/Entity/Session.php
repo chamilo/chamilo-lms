@@ -275,6 +275,12 @@ class Session implements ResourceWithAccessUrlInterface
      */
     protected bool $sendSubscriptionNotification;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"remove"} )
+     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected ?Asset $asset = null;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -1168,6 +1174,23 @@ class Session implements ResourceWithAccessUrlInterface
     public function getResourceLinks()
     {
         return $this->resourceLinks;
+    }
+
+    public function getAsset(): ?Asset
+    {
+        return $this->asset;
+    }
+
+    public function setAsset(?Asset $asset): self
+    {
+        $this->asset = $asset;
+
+        return $this;
+    }
+
+    public function hasAsset(): bool
+    {
+        return null !== $this->asset;
     }
 
     /**

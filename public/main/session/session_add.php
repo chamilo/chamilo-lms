@@ -390,30 +390,6 @@ if ($form->validate()) {
         $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
     }
 
-    // Check if the session image will be copied from the template
-    $importImageFromSession = false;
-    $sessionIdToImport = explode('::', $params['extra_image_crop_result']);
-    $sessionIdToImport = isset($sessionIdToImport[1]) ? (int) $sessionIdToImport[1] : 0;
-    if (!empty($sessionIdToImport)) {
-        $extraField = new ExtraField('session');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('image');
-
-        $extraFieldValue = new ExtraFieldValue('session');
-        $extraFieldValueData = $extraFieldValue->get_values_by_handler_and_field_id(
-            $sessionIdToImport,
-            $extraFieldInfo['id']
-        );
-
-        if ($extraFieldValueData) {
-            $repo = Container::getAssetRepository();
-            /** @var Asset $asset */
-            $asset = $repo->find($extraFieldValueData);
-            if ($asset) {
-                $extraFields['extra_image']['id'] = $extraFieldValueData;
-            }
-        }
-    }
-
     $return = SessionManager::create_session(
         $name,
         $startDate,
@@ -437,6 +413,17 @@ if ($form->validate()) {
     );
 
     if ($return == strval(intval($return))) {
+
+        // Add image
+        $picture = $_FILES['picture'];
+        if (!empty($picture['name'])) {
+            SessionManager::updateSessionPicture(
+                $return,
+                $picture,
+                $params['picture_crop_result']
+            );
+        }
+
         // integer => no error on session creation
         header('Location: add_courses_to_session.php?id_session='.$return.'&add=true');
         exit();

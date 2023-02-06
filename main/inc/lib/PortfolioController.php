@@ -2934,7 +2934,7 @@ class PortfolioController
             if ($commmentCourse) {
                 api_item_property_update(
                     api_get_course_info($commmentCourse->getCode()),
-                    TOOL_PORTFOLIO,
+                    TOOL_PORTFOLIO_COMMENT,
                     $comment->getId(),
                     'PortfolioCommentUpdated',
                     api_get_user_id(),
@@ -3996,7 +3996,7 @@ class PortfolioController
         if ($commmentCourse) {
             $propertyInfo = api_get_item_property_info(
                 $commmentCourse->getId(),
-                TOOL_PORTFOLIO,
+                TOOL_PORTFOLIO_COMMENT,
                 $comment->getId(),
                 $commmentSession ? $commmentSession->getId() : 0
             );

@@ -2633,7 +2633,8 @@ function api_check_password($password)
     $specials = 0;
 
     for ($i = 0; $i < $passwordLength; $i++) {
-        $currentCharacterCode = api_ord(api_substr($password, $i, 1));
+        $currentCharacter = api_substr($password, $i, 1);
+        $currentCharacterCode = api_ord($currentCharacter);
         if ($currentCharacterCode >= 65 && $currentCharacterCode <= 90) {
             $upperCase++;
         }

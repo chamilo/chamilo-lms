@@ -2949,7 +2949,7 @@ class CourseRestorer
                     'debug' => self::DBUTF8($lp->debug),
                     'theme' => '',
                     'session_id' => $session_id,
-                    'prerequisite' => $lp->prerequisite,
+                    'prerequisite' => (int) $lp->prerequisite,
                     'hide_toc_frame' => self::DBUTF8(isset($lp->hideTableOfContents) ? $lp->hideTableOfContents : 0),
                     'subscribe_users' => self::DBUTF8(isset($lp->subscribeUsers) ? $lp->subscribeUsers : 0),
                     'seriousgame_mode' => 0,

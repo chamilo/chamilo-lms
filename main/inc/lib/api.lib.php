@@ -2634,7 +2634,8 @@ function api_check_password($password)
     $specials = 0;
 
     for ($i = 0; $i < $passwordLength; $i++) {
-        $currentCharacterCode = api_ord(api_substr($password, $i, 1));
+        $currentCharacter = api_substr($password, $i, 1);
+        $currentCharacterCode = api_ord($currentCharacter);
         if ($currentCharacterCode >= 65 && $currentCharacterCode <= 90) {
             $upperCase++;
         }
@@ -2646,7 +2647,7 @@ function api_check_password($password)
             $digits++;
         }
 
-        if (false !== strpos(Security::CHAR_SYMBOLS, $currentCharacterCode)) {
+        if (false !== strpos(Security::CHAR_SYMBOLS, $currentCharacter)) {
             $specials++;
         }
     }
@@ -9083,7 +9084,7 @@ function api_get_configuration_value($variable)
 
     // Check if variable exists
     if (isset($_configuration[$variable])) {
-        if (is_array($_configuration[$variable])) {
+        if (is_array($_configuration[$variable]) && api_is_multiple_url_enabled()) {
             // Check if it exists for the sub portal
             if (array_key_exists($urlId, $_configuration[$variable])) {
                 return $_configuration[$variable][$urlId];
@@ -9091,7 +9092,7 @@ function api_get_configuration_value($variable)
                 // Try to found element with id = 1 (master portal)
                 if (array_key_exists(1, $_configuration[$variable])) {
                     return $_configuration[$variable][1];
-                } elseif (api_is_multiple_url_enabled()) {
+                } else {
                     // The value was there for other URLs but not the main URL nor the current URL
                     return null;
                 }

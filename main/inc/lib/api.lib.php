@@ -2646,7 +2646,7 @@ function api_check_password($password)
             $digits++;
         }
 
-        if (false !== strpos(Security::CHAR_SYMBOLS, $currentCharacterCode)) {
+        if (false !== strpos(Security::CHAR_SYMBOLS, $currentCharacter)) {
             $specials++;
         }
     }

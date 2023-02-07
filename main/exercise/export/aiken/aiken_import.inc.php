@@ -89,6 +89,7 @@ function generateAikenForm()
                       var nroQ = parseInt($("[name=\'nro_questions\']").val());
                       var qType = $("[name=\'question_type\']").val();
                       var valid = (quizName != \'\' && nroQ > 0);
+                      var qWeight = 1;
 
                       if (valid) {
                         btnGenerate.attr("disabled", true);
@@ -106,6 +107,7 @@ function generateAikenForm()
                           if (data.success && data.success == true) {
                             $("#aiken-area").show();
                             $("#textarea-aiken").text(data.text);
+                            $("input[name=\'ai_total_weight\']").val(nroQ * qWeight);
                             $("#textarea-aiken").focus();
                           } else {
                             alert("'.get_lang('NoSearchResults').'. '.get_lang('PleaseTryAgain').'");
@@ -136,7 +138,7 @@ function generateAikenForm()
             'style' => 'width: 100%; height: 250px;',
         ]
     );
-    $form->addElement('number', 'total_weight', get_lang('TotalWeight'));
+    $form->addElement('number', 'ai_total_weight', get_lang('TotalWeight'));
     $form->addButtonImport(get_lang('Import'), 'submit_aiken_generated');
     $form->addHtml('</div>');
 
@@ -230,6 +232,7 @@ function aikenImportExercise($file = null, $request = [])
 
         // set some default values for the new exercise
         $exerciseInfo['name'] = preg_replace('/.(zip|txt)$/i', '', $file);
+        $exerciseInfo['total_weight'] = !empty($_POST['total_weight']) ? (int) ($_POST['total_weight']) : 20;
         $exerciseInfo['question'] = [];
 
         // if file is not a .zip, then we cancel all
@@ -282,6 +285,7 @@ function aikenImportExercise($file = null, $request = [])
     } elseif (!empty($request)) {
         // The import is from aiken generated in textarea.
         $exerciseInfo['name'] = $request['quiz_name'];
+        $exerciseInfo['total_weight'] = !empty($_POST['ai_total_weight']) ? (int) ($_POST['ai_total_weight']) : 20;
         $exerciseInfo['question'] = [];
         setExerciseInfoFromAikenText($request['aiken_format'], $exerciseInfo);
     }
@@ -290,6 +294,8 @@ function aikenImportExercise($file = null, $request = [])
     if (!empty($exerciseInfo)) {
         $exercise = new Exercise();
         $exercise->exercise = $exerciseInfo['name'];
+        $exercise->disable(); // Invisible by default
+        $exercise->updateResultsDisabled(0); // Auto-evaluation mode: show score and expected answers
         $exercise->save();
         $lastExerciseId = $exercise->selectId();
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -384,6 +390,15 @@ function aikenImportExercise($file = null, $request = [])
             if ($fileIsSet) {
                 my_delete($baseWorkDir.$uploadPath);
             }
+
+            // Invisible by default
+            api_item_property_update(
+                api_get_course_info(),
+                TOOL_QUIZ,
+                $lastExerciseId,
+                'invisible',
+                api_get_user_id()
+            );
 
             return $lastExerciseId;
         }
@@ -496,7 +511,7 @@ function setExerciseInfoFromAikenText($aikenText, &$exerciseInfo)
     }
 
     $totalQuestions = count($exerciseInfo['question']);
-    $totalWeight = !empty($_POST['total_weight']) ? (int) ($_POST['total_weight']) : 20;
+    $totalWeight = (int) $exerciseInfo['total_weight'];
     foreach ($exerciseInfo['question'] as $key => $question) {
         if (!isset($exerciseInfo['question'][$key]['weighting'])) {
             continue;

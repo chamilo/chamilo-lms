@@ -146,7 +146,9 @@ if ($editingCourse) {
         }
     }
 
-    $currentBeneficiaries = $plugin->getItemBeneficiaries($sessionItem['item_id']);
+    if ($sessionItem['item_id']) {
+        $currentBeneficiaries = $plugin->getItemBeneficiaries($sessionItem['item_id']);
+    }
 
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
@@ -320,25 +322,40 @@ if ($form->validate()) {
             $plugin->registerItemBeneficiaries($productItem['id'], $beneficiaries);
         }
     } else {
-        $plugin->deleteItem($productItem['id']);
+        if (!empty($productItem['id'])) {
+            $plugin->deleteItem($productItem['id']);
+        }
     }
-
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/list.php');
+    $url = 'list.php';
+    if ($type == 2) {
+        $url = 'list_session.php';
+    }
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/'.$url);
     exit;
 }
 
 $form->setDefaults($formDefaults);
 
-$templateName = $plugin->get_lang('AvailableCourse');
-
+$templateName = '';
 $interbreadcrumb[] = [
     'url' => 'paymentsetup.php',
     'name' => get_lang('Configuration'),
 ];
-$interbreadcrumb[] = [
-    'url' => 'list.php',
-    'name' => $plugin->get_lang('AvailableCourses'),
-];
+switch($type) {
+    case 2:
+        $interbreadcrumb[] = [
+            'url' => 'list_session.php',
+            'name' => $plugin->get_lang('Sessions'),
+        ];
+        $templateName = $plugin->get_lang('Sessions');
+        break;
+    default:
+        $interbreadcrumb[] = [
+            'url' => 'list.php',
+            'name' => $plugin->get_lang('AvailableCourses'),
+        ];
+        $templateName = $plugin->get_lang('AvailableCourse');
+}
 
 $template = new Template($templateName);
 $template->assign('header', $templateName);

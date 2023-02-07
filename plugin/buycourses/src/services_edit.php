@@ -32,9 +32,14 @@ $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 //view
+// breadcrumbs
 $interbreadcrumb[] = [
-    'url' => 'list.php',
-    'name' => $plugin->get_lang('Configuration'),
+    'url' => api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php',
+    'name' => $plugin->get_lang('plugin_title'),
+];
+$interbreadcrumb[] = [
+    'url' => 'list_service.php',
+    'name' => $plugin->get_lang('Services'),
 ];
 
 $globalSettingsParams = $plugin->getGlobalParameters();
@@ -144,7 +149,7 @@ if ($form->validate()) {
             Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
         );
     }
-    header('Location: list.php');
+    header('Location: list_service.php');
     exit;
 }
 

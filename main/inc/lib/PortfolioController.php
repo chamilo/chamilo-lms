@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Entity\PortfolioRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 use Mpdf\MpdfException;
@@ -43,6 +44,10 @@ class PortfolioController
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
+    /**
+     * @var bool
+     */
+    private $advancedSharingEnabled;
 
     /**
      * PortfolioController constructor.
@@ -57,6 +62,9 @@ class PortfolioController
 
         $cidreq = api_get_cidreq();
         $this->baseUrl = api_get_self().'?'.($cidreq ? $cidreq.'&' : '');
+
+        $this->advancedSharingEnabled = true === api_get_configuration_value('portfolio_advanced_sharing')
+            && $this->course;
     }
 
     /**
@@ -1129,7 +1137,23 @@ class PortfolioController
         global $interbreadcrumb;
 
         if (!$this->itemBelongToOwner($item)) {
-            if ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN
+            if ($this->advancedSharingEnabled) {
+                $courseInfo = api_get_course_info_by_id($this->course->getId());
+                $sessionId = $this->session ? $this->session->getId() : 0;
+
+                $itemPropertyVisiblity = api_get_item_visibility(
+                    $courseInfo,
+                    TOOL_PORTFOLIO,
+                    $item->getId(),
+                    $sessionId,
+                    $this->owner->getId(),
+                    'visible'
+                );
+
+                if ($item->getVisibility() === Portfolio::VISIBILITY_PER_USER && 1 !== $itemPropertyVisiblity) {
+                    api_not_allowed(true);
+                }
+            } elseif ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN
                 || ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER && !api_is_allowed_to_edit())
             ) {
                 api_not_allowed(true);
@@ -1323,7 +1347,7 @@ class PortfolioController
                 $itemSession ? $itemSession->getId() : 0
             );
 
-            if ($propertyInfo) {
+            if ($propertyInfo && empty($propertyInfo['to_user_id'])) {
                 $template->assign(
                     'last_edit',
                     [
@@ -1363,23 +1387,30 @@ class PortfolioController
                 $this->baseUrl.http_build_query(['action' => 'template', 'id' => $item->getId()])
             );
 
-            $visibilityUrl = $this->baseUrl.http_build_query(['action' => 'visibility', 'id' => $item->getId()]);
+            if ($this->advancedSharingEnabled) {
+                $actions[] = Display::url(
+                    Display::return_icon('visible.png', get_lang('ChooseRecipients'), [], ICON_SIZE_MEDIUM),
+                    $this->baseUrl.http_build_query(['action' => 'item_visiblity_choose', 'id' => $item->getId()])
+                );
+            } else {
+                $visibilityUrl = $this->baseUrl.http_build_query(['action' => 'visibility', 'id' => $item->getId()]);
 
-            if ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN) {
-                $actions[] = Display::url(
-                    Display::return_icon('invisible.png', get_lang('MakeVisible'), [], ICON_SIZE_MEDIUM),
-                    $visibilityUrl
-                );
-            } elseif ($item->getVisibility() === Portfolio::VISIBILITY_VISIBLE) {
-                $actions[] = Display::url(
-                    Display::return_icon('visible.png', get_lang('MakeVisibleForTeachers'), [], ICON_SIZE_MEDIUM),
-                    $visibilityUrl
-                );
-            } elseif ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER) {
-                $actions[] = Display::url(
-                    Display::return_icon('eye-slash.png', get_lang('MakeInvisible'), [], ICON_SIZE_MEDIUM),
-                    $visibilityUrl
-                );
+                if ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN) {
+                    $actions[] = Display::url(
+                        Display::return_icon('invisible.png', get_lang('MakeVisible'), [], ICON_SIZE_MEDIUM),
+                        $visibilityUrl
+                    );
+                } elseif ($item->getVisibility() === Portfolio::VISIBILITY_VISIBLE) {
+                    $actions[] = Display::url(
+                        Display::return_icon('visible.png', get_lang('MakeVisibleForTeachers'), [], ICON_SIZE_MEDIUM),
+                        $visibilityUrl
+                    );
+                } elseif ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER) {
+                    $actions[] = Display::url(
+                        Display::return_icon('eye-slash.png', get_lang('MakeInvisible'), [], ICON_SIZE_MEDIUM),
+                        $visibilityUrl
+                    );
+                }
             }
 
             $actions[] = Display::url(
@@ -3033,6 +3064,124 @@ class PortfolioController
         exit;
     }
 
+    public function itemVisibilityChooser(Portfolio $item)
+    {
+        global $interbreadcrumb;
+
+        if (!$this->itemBelongToOwner($item)) {
+            api_not_allowed(true);
+        }
+
+        $em = Database::getManager();
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $formAction = $this->baseUrl.http_build_query(['action' => 'item_visiblity_choose', 'id' => $item->getId()]);
+
+        $form = new FormValidator('visibility', 'post', $formAction);
+        CourseManager::addUserGroupMultiSelect($form, ['USER:'.$this->owner->getId()]);
+        $form->addLabel(
+            '',
+            Display::return_message(
+                get_lang('OnlySelectedUsersWillSeeTheContent')
+                    .'<br>'.get_lang('LeaveEmptyToEnableTheContentForEveryone'),
+                'info',
+                false
+            )
+        );
+        $form->addButtonSave(get_lang('Save'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+            $recipients = CourseManager::separateUsersGroups($values['users'])['users'];
+            $courseInfo = api_get_course_info_by_id($courseId);
+
+            Database::delete(
+                $tblItemProperty,
+                [
+                    'c_id = ? ' => [$courseId],
+                    'AND tool = ? AND ref = ? ' => [TOOL_PORTFOLIO, $item->getId()],
+                    'AND lastedit_type = ? ' => ['visible'],
+                ]
+            );
+
+            foreach ($recipients as $userId) {
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_PORTFOLIO,
+                    $item->getId(),
+                    'visible',
+                    api_get_user_id(),
+                    [],
+                    $userId,
+                    '',
+                    '',
+                    $sessionId
+                );
+            }
+
+            if (empty($recipients)) {
+                $item->setVisibility(Portfolio::VISIBILITY_VISIBLE);
+            } else {
+                $item->setVisibility(Portfolio::VISIBILITY_PER_USER);
+            }
+
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('VisibilityChanged'), 'success')
+            );
+
+            header("Location: $formAction");
+            exit;
+        }
+
+        $result = Database::select(
+            'to_user_id',
+            $tblItemProperty,
+            [
+                'where' => [
+                    'c_id = ? ' => [$courseId],
+                    'AND tool = ? AND ref = ? ' => [TOOL_PORTFOLIO, $item->getId()],
+                    'AND to_user_id IS NOT NULL ' => [],
+                ],
+            ]
+        );
+
+        $recipients = array_map(
+            function (array $item): string {
+                return 'USER:'.$item['to_user_id'];
+            },
+            $result
+        );
+
+        $form->setDefaults(['users' => $recipients]);
+        $form->protect();
+
+        $interbreadcrumb[] = [
+            'name' => get_lang('Portfolio'),
+            'url' => $this->baseUrl,
+        ];
+        $interbreadcrumb[] = [
+            'name' => $item->getTitle(true),
+            'url' => $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]),
+        ];
+
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()])
+        );
+
+        $this->renderView(
+            $form->returnForm(),
+            get_lang('ChooseRecipients'),
+            $actions
+        );
+    }
+
     private function isAllowed(): bool
     {
         $isSubscribedInCourse = false;
@@ -3367,14 +3516,38 @@ class PortfolioController
             $queryBuilder->andWhere('pi.session IS NULL');
         }
 
-        $visibilityCriteria = [Portfolio::VISIBILITY_VISIBLE];
+        if ($this->advancedSharingEnabled) {
+            $queryBuilder
+                ->leftJoin(
+                    CItemProperty::class,
+                    'cip',
+                    Join::WITH,
+                    "cip.ref = pi.id
+                        AND cip.tool = :cip_tool
+                        AND cip.course = pi.course
+                        AND cip.lasteditType = 'visible'
+                        AND cip.toUser = :current_user"
+                )
+                ->andWhere(
+                    sprintf(
+                        'pi.visibility = %d
+                            OR (
+                                pi.visibility = %d AND cip IS NOT NULL OR pi.user = :current_user
+                            )',
+                        Portfolio::VISIBILITY_VISIBLE,
+                        Portfolio::VISIBILITY_PER_USER
+                    )
+                )
+                ->setParameter('cip_tool', TOOL_PORTFOLIO)
+            ;
+        } else {
+            $visibilityCriteria = [Portfolio::VISIBILITY_VISIBLE];
 
-        if (api_is_allowed_to_edit()) {
-            $visibilityCriteria[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
-        }
+            if (api_is_allowed_to_edit()) {
+                $visibilityCriteria[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
+            }
 
-        $queryBuilder
-            ->andWhere(
+            $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
                     'pi.user = :current_user',
                     $queryBuilder->expr()->andX(
@@ -3382,9 +3555,10 @@ class PortfolioController
                         $queryBuilder->expr()->in('pi.visibility', $visibilityCriteria)
                     )
                 )
-            )
-            ->setParameter('current_user', api_get_user_id());
+            );
+        }
 
+        $queryBuilder->setParameter('current_user', api_get_user_id());
         $queryBuilder->orderBy('pi.creationDate', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
@@ -3483,14 +3657,38 @@ class PortfolioController
                     ->setParameter('user', $this->owner);
             }
 
-            $visibilityCriteria = [Portfolio::VISIBILITY_VISIBLE];
+            if ($this->advancedSharingEnabled) {
+                $queryBuilder
+                    ->leftJoin(
+                        CItemProperty::class,
+                        'cip',
+                        Join::WITH,
+                        "cip.ref = pi.id
+                            AND cip.tool = :cip_tool
+                            AND cip.course = pi.course
+                            AND cip.lasteditType = 'visible'
+                            AND cip.toUser = :current_user"
+                    )
+                    ->andWhere(
+                        sprintf(
+                            'pi.visibility = %d
+                            OR (
+                                pi.visibility = %d AND cip IS NOT NULL OR pi.user = :current_user
+                            )',
+                            Portfolio::VISIBILITY_VISIBLE,
+                            Portfolio::VISIBILITY_PER_USER
+                        )
+                    )
+                    ->setParameter('cip_tool', TOOL_PORTFOLIO)
+                ;
+            } else {
+                $visibilityCriteria = [Portfolio::VISIBILITY_VISIBLE];
 
-            if (api_is_allowed_to_edit()) {
-                $visibilityCriteria[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
-            }
+                if (api_is_allowed_to_edit()) {
+                    $visibilityCriteria[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
+                }
 
-            $queryBuilder
-                ->andWhere(
+                $queryBuilder->andWhere(
                     $queryBuilder->expr()->orX(
                         'pi.user = :current_user',
                         $queryBuilder->expr()->andX(
@@ -3498,9 +3696,10 @@ class PortfolioController
                             $queryBuilder->expr()->in('pi.visibility', $visibilityCriteria)
                         )
                     )
-                )
-                ->setParameter('current_user', $currentUserId);
+                );
+            }
 
+            $queryBuilder->setParameter('current_user', $currentUserId);
             $queryBuilder->orderBy('pi.creationDate', 'DESC');
 
             $items = $queryBuilder->getQuery()->getResult();

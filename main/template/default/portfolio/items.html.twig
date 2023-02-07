@@ -4,6 +4,7 @@
     {% set invisible_img = 'invisible.png'|img(22, 'Visible'|get_lang) %}
     {% set delete_img = 'delete.png'|img(22, 'Delete'|get_lang) %}
     {% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
+    {% set is_advanced_sharing_enabled = 'portfolio_advanced_sharing'|api_get_configuration_value and not _c is empty %}
 
     <section class="portfolio-items">
         {% for item in items %}
@@ -17,19 +18,27 @@
                             <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
                                 {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
                             </a>
-                            {% if item.visibility == 0 %}
-                                <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
-                                    {{ 'invisible.png'|img(22, 'MakeVisible'|get_lang) }}
+
+                            {% if is_advanced_sharing_enabled %}
+                                <a href="{{ baseurl ~ {'action':'item_visiblity_choose', 'id':item.id}|url_encode }}">
+                                    {{ 'visible.png'|img(22, 'ChooseRecipients'|get_lang) }}
                                 </a>
-                            {% elseif item.visibility == 1 %}
-                                <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
-                                    {{ 'visible.png'|img(22, 'MakeVisibleForTeachers'|get_lang) }}
-                                </a>
-                            {% elseif item.visibility == 2 %}
-                                <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
-                                    {{ 'eye-slash.png'|img(22, 'MakeInvisible'|get_lang) }}
-                                </a>
+                            {% else %}
+                                {% if item.visibility == 0 %}
+                                    <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
+                                        {{ 'invisible.png'|img(22, 'MakeVisible'|get_lang) }}
+                                    </a>
+                                {% elseif item.visibility == 1 %}
+                                    <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
+                                        {{ 'visible.png'|img(22, 'MakeVisibleForTeachers'|get_lang) }}
+                                    </a>
+                                {% elseif item.visibility == 2 %}
+                                    <a href="{{ baseurl ~ {'action':'visibility', 'id':item.id}|url_encode }}">
+                                        {{ 'eye-slash.png'|img(22, 'MakeInvisible'|get_lang) }}
+                                    </a>
+                                {% endif %}
                             {% endif %}
+
                             <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn-delete">
                                 {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
                             </a>

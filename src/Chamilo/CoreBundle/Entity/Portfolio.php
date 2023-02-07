@@ -34,6 +34,7 @@ class Portfolio
     public const VISIBILITY_HIDDEN = 0;
     public const VISIBILITY_VISIBLE = 1;
     public const VISIBILITY_HIDDEN_EXCEPT_TEACHER = 2;
+    public const VISIBILITY_PER_USER = 3;
 
     /**
      * @var int
@@ -96,7 +97,7 @@ class Portfolio
     protected $updateDate;
 
     /**
-     * @var bool
+     * @var int
      *
      * @ORM\Column(name="visibility", type="smallint", options={"default": 1})
      */

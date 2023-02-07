@@ -122,6 +122,19 @@ if ($is_allowed_to_edit) {
             api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
         );
     }
+
+    if ('true' === api_get_plugin_setting('ai_helper', 'tool_enable')) {
+        $actionLeft .= Display::url(
+            Display::return_icon(
+                'help.png',
+                get_lang('CreateLpWithAiHelper'),
+                [],
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_self().'?'.api_get_cidreq().'&action=ai_helper'
+        );
+    }
+
     $actions = Display::toolbarAction('actions-lp', [$actionLeft]);
 }
 

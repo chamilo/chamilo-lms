@@ -46,6 +46,46 @@ class AiHelperPlugin extends Plugin
     }
 
     /**
+     * Get the completion text from openai.
+     *
+     * @return string
+     */
+    public function openAiGetCompletionText(string $prompt)
+    {
+        require_once __DIR__.'/src/openai/OpenAi.php';
+
+        $apiKey = $this->get('api_key');
+        $organizationId = $this->get('organization_id');
+
+        $ai = new OpenAi($apiKey, $organizationId);
+
+        $temperature = 0.2;
+        $model = 'text-davinci-003';
+        $maxTokens = 2000;
+        $frequencyPenalty = 0;
+        $presencePenalty = 0.6;
+        $topP = 1.0;
+
+        $complete = $ai->completion([
+            'model' => $model,
+            'prompt' => $prompt,
+            'temperature' => $temperature,
+            'max_tokens' => $maxTokens,
+            'frequency_penalty' => $frequencyPenalty,
+            'presence_penalty' => $presencePenalty,
+            'top_p' => $topP,
+        ]);
+
+        $result = json_decode($complete, true);
+        $resultText = '';
+        if (!empty($result['choices'])) {
+            $resultText = trim($result['choices'][0]['text']);
+        }
+
+        return $resultText;
+    }
+
+    /**
      * Get the plugin directory name.
      */
     public function get_name(): string

@@ -327,7 +327,7 @@ if (!$inATest) {
                         ['class' => 'btn btn-default btn-sm']
                     );
                 $delete_link = null;
-                if (!$limitTeacherAccess && api_is_platform_admin() && $objExercise->edit_exercise_in_lp) {
+                if (!$limitTeacherAccess && api_is_allowed_to_edit() && $objExercise->edit_exercise_in_lp) {
                     $questionInOtherQuizs = true;
                     $results = Question::countQuizzesUsingQuestion($id);
 
